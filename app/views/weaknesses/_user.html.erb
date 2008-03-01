@@ -1,0 +1,31 @@
+<% id = "#{dynamic_object_id('user', f)}_#{is_dynamic ? 'NEW_RECORD' : user.id}" -%>
+<% hide = is_dynamic || user.marked_for_destruction? -%>
+<div class="user item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+  <div>
+    <div class="item_field" style="width: 90%;">
+      <% unless readonly -%>
+        <div class="search">
+          <%= hidden_field_tag 'weakness[user_ids][]', user.id,
+            :id => "hidden_user_#{id}", :class => :autocomplete_id_item %>
+          <%= text_field_with_auto_complete :weakness, :nested_user,
+            {:id => "weakness_user_#{id}", :class => :search,
+            :title => t(:'label.search'), :value => user.full_name_with_function},
+            {:indicator => :loading, :skip_style => true,
+            :url => {:action => :auto_complete_for_user},
+            :after_update_element => 'AutoComplete.itemSelected',
+            :param_name => 'user_data',
+            :parameters => ("weakness_id=#{@weakness.id}" unless @weakness.new_record?)} %>
+        </div>
+      <% else -%>
+        <%= text_field_tag "weakness_user_#{id}",
+          user.full_name_with_function(f.object.updated_at), :readonly => true %>
+      <% end -%>
+    </div>
+    <div class="item_field" style="width: 5%;">
+      <%= remove_list_item_link(f) unless readonly -%>
+    </div>
+  </div>
+</div>
+<% if is_dynamic -%>
+  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

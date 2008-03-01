@@ -1,0 +1,10 @@
+<tr class="<%= cycle(:even, :odd) %>">
+  <td></td>
+  <td><%= h index_line.name %></td>
+  <td><%= h truncate(index_line.description, :length => 40, :omission => '...') %></td>
+  <td><%= link_to_show index_line %></td>
+  <td><%= link_to_edit edit_best_practice_path(index_line) %></td>
+  <td><%= button_to_destroy index_line %></td>
+  <td></td>
+</tr>
+<tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>

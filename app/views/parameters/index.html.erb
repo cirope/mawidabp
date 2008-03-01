@@ -1,0 +1,22 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Parameter.human_attribute_name 'name' %></th>
+      <th><%= Parameter.human_attribute_name 'description' %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+  <%= render :partial => 'index_line', :collection => @parameters %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @parameters %>
+<div style="clear: both;"></div>
+</div>

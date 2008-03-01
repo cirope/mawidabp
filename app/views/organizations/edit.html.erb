@@ -1,0 +1,15 @@
+<% if @organization.image_model && @organization.image_model.valid? &&
+    @organization.errors.empty? -%>
+  <div id="organization_logo">
+    <%= image_logo_tag %>
+  </div>
+<% end -%>
+
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.save')} %>
+
+<div id="links">
+<%= link_to t(:'label.show'), @organization %> |
+<%= link_to t(:'label.list'), organizations_path %> |
+<%= link_to_back %>
+</div>

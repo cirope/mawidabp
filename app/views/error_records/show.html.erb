@@ -1,0 +1,26 @@
+<div id="showed_data">
+<p>
+  <b><%= User.human_name %>:</b>
+  <%=h @error_record.user ? @error_record.user.user : t(:'error_record.void_user') %>
+</p>
+
+<p>
+  <b><%= ErrorRecord.human_attribute_name 'error' %>:</b>
+  <%=h @error_record.error_text %>
+</p>
+
+<p>
+  <b><%= ErrorRecord.human_attribute_name 'data' %>:</b>
+  <%=h @error_record.data %>
+</p>
+
+<p>
+  <b><%= ErrorRecord.human_attribute_name 'created_at' %>:</b>
+  <%=l @error_record.created_at, :format => :short if @error_record.created_at %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.list'), error_records_path %> |
+<%= link_to_back %>
+</div>

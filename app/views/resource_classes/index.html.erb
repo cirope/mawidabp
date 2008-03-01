@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= ResourceClass.human_attribute_name 'name' %></th>
+      <th><%= ResourceClass.human_attribute_name 'unit' %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+    <%= render :partial => 'index_line', :collection => @resource_classes %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @resource_classes %>
+<%= link_to t(:'label.new'), new_resource_class_path %>
+<div style="clear: both;"></div>
+</div>

@@ -1,0 +1,22 @@
+<div id="showed_data">
+<p>
+  <b><%= Review.human_attribute_name 'identification' %>:</b>
+  <%=h @review.identification %>
+</p>
+
+<p>
+  <b><%= Review.human_attribute_name 'description' %>:</b>
+  <%=h @review.description %>
+</p>
+
+<p>
+  <b><%= Review.human_attribute_name 'business_unit_id' %>:</b>
+  <%=h @review.business_unit.name %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_review_path(@review) %> |
+<%= link_to t(:'label.list'), reviews_path %> |
+<%= link_to_back %>
+</div>

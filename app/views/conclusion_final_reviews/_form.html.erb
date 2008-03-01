@@ -1,0 +1,123 @@
+<% readonly = !@conclusion_final_review.new_record? -%>
+<!--[form:conclusion_final_review]-->
+<% form_for @conclusion_final_review do |cfr_f| %>
+  <%= cfr_f.error_messages %>
+
+  <div class="form_column_left">
+    <p class="form_item">
+      <% unless @conclusion_final_review.review -%>
+        <%= cfr_f.label :review_id, nil, :class => :inline %>
+        <%= conclusion_final_review_review_field(cfr_f,
+          @conclusion_final_review.review) %>
+      <% else -%>
+        <%= content_tag :label,
+          ConclusionFinalReview.human_attribute_name(:review_id),
+          :class => :inline %>
+        <%= text_field_tag :review,
+          @conclusion_final_review.review.identification,
+          :class => :inline_item, :readonly => true %>
+        <%= cfr_f.hidden_field :review_id %>
+      <% end -%>
+    </p>
+    <p class="form_item">
+      <%= label_tag :business_unit,
+        ConclusionReview.human_attribute_name(:business_unit),
+        :class => :inline %>
+      <%= text_field_tag :business_unit,
+        (@conclusion_final_review.review.business_unit.name if @conclusion_final_review.review),
+        :class => :inline_item, :readonly => true %>
+    </p>
+    <p class="form_item">
+      <%= label_tag :project, ConclusionReview.human_attribute_name(:project),
+        :class => :inline %>
+      <%= text_field_tag :project,
+        (@conclusion_final_review.review.plan_item.project if @conclusion_final_review.review),
+        :class => :inline_item, :readonly => true %>
+    </p>
+    <p>
+      <%= cfr_f.label :applied_procedures %>
+      <%= cfr_f.text_area :applied_procedures, :readonly => readonly %>
+    </p>
+  </div>
+  <div class="form_column_right">
+    <p>
+      <%= cfr_f.label :conclusion %>
+      <%= cfr_f.text_area :conclusion, :readonly => readonly %>
+    </p>
+    <p class="form_item">
+      <%= label_tag :score, Review.human_attribute_name(:score),
+        :class => :inline %>
+      <%= text_field_tag :score,
+        (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
+        :class => :inline_item, :readonly => true %>
+    </p>
+    <p class="form_item">
+      <%= cfr_f.label :issue_date, nil, :class => :inline %>
+      <%= cfr_f.calendar_date_select :issue_date, :class => :inline_item,
+        :readonly => readonly %>
+    </p>
+    <p class="form_item">
+      <%= cfr_f.label :close_date, nil, :class => :inline %>
+      <%= cfr_f.calendar_date_select :close_date, :class => :inline_item,
+        :readonly => readonly %>
+    </p>
+  </div>
+
+  <%= hidden_lock_version(cfr_f) %>
+  
+  <p>
+    <span class="button"><%= cfr_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:conclusion_final_review] -->
+<%= set_focus_to_first_element %>
+<script type="text/javascript">
+//<![CDATA[
+  if($('conclusion_final_review_review_id')) {
+    Event.observe('conclusion_final_review_review_id', 'change', function() {
+      var elementsForUpdate = ['applied_procedures', 'conclusion'];
+
+      if(!$F(this).blank()) {
+        var element = $(this);
+        var url = '<%= new_conclusion_final_review_path :format => :json %>';
+
+        Helper.showLoading(element);
+
+        new Ajax.Request(url, {
+          method: 'get',
+          parameters: { review: $F(element) },
+          onSuccess: function(transport) {
+            if(transport.responseText.isJSON()) {
+              var finalReview = transport.responseText.evalJSON(true).
+                conclusion_final_review;
+
+              $H(finalReview).each(function(pair) {
+                var target = $("conclusion_final_review_#{key}".interpolate(
+                  {key: pair.key}));
+
+                if(elementsForUpdate.include(pair.key) && target) {
+                  target.update(pair.value);
+                }
+              });
+
+              $('business_unit').setValue(
+                finalReview.review.business_unit.name);
+              $('project').setValue(finalReview.review.plan_item.project);
+              $('score').setValue(finalReview.review.score_text);
+              $('conclusion_final_review_applied_procedures').focus();
+            }
+          },
+          onFailure: function() { Helper.hideLoading(element); },
+          onComplete: function() { Helper.hideLoading(element); }
+        });
+      } else {
+        elementsForUpdate.each(function(e) {
+          $("conclusion_final_review_#{key}".interpolate({key: e})).update();
+          $('business_unit').setValue('');
+          $('project').setValue('');
+        });
+      }
+    });
+  }
+//]]>
+</script>

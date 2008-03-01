@@ -1,0 +1,44 @@
+class LoginRecord < ActiveRecord::Base
+  include ParameterSelector
+
+  # Constantes
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :user => {
+      :column => "LOWER(#{User.table_name}.user)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :data => {
+      :column => "LOWER(#{table_name}.data)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    }
+  })
+
+  has_paper_trail :meta => {
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  }
+
+  attr_accessor :request
+
+  # Restricciones
+  validates_presence_of :user_id, :organization_id
+  validates_datetime :start, :allow_nil => true
+  validates_datetime :end, :after => :start, :allow_nil => true
+
+  # Relaciones
+  belongs_to :user
+  belongs_to :organization
+
+  def initialize(attributes = nil)
+    super(attributes)
+
+    self.start ||= Time.now
+
+    if self.request
+      self.data ||= "IP: [#{self.request.ip}], B: [#{self.request.user_agent}]"
+    end
+  end
+
+  def end!
+    self.update_attribute :end, Time.now
+  end
+end

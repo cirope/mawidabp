@@ -1,0 +1,16 @@
+<div id="time_left" style="display: none;">
+  <span class="message"></span>
+</div>
+<script type="text/javascript">
+  State.showMessages[0] = $H({
+    time: <%= time_left - 1 %> * 60,
+    message: '<%= t(:'message.session_expires_in_less_than_a_minute') %>',
+    expired: false
+  });
+
+  State.showMessages[1] = $H({
+    time: <%= time_left %> * 60,
+    message: '<%= t(:'message.session_time_expired') %>',
+    expired: true
+  });
+</script>

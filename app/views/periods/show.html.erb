@@ -1,0 +1,27 @@
+<div id="showed_data">
+<p>
+  <b><%= Period.human_attribute_name :number %>:</b>
+  <%=h @period.number %>
+</p>
+
+<p>
+  <b><%= Period.human_attribute_name :description %>:</b>
+  <%=h @period.description %>
+</p>
+
+<p>
+  <b><%= Period.human_attribute_name :start %>:</b>
+  <%=l @period.start, :format => :long %>
+</p>
+
+<p>
+  <b><%= Period.human_attribute_name :end %>:</b>
+  <%=l @period.end, :format => :long %>
+</p>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.edit'), edit_period_path(@period) %> |
+  <%= link_to t(:'label.list'), periods_path %> |
+  <%= link_to_back %>
+</div>

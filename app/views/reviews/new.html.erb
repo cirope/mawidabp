@@ -1,0 +1,16 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.save')} %>
+
+<div id="links">
+  <%= link_to t(:'label.list'), reviews_path %> |
+  <%= link_to_back %>
+</div>
+
+<script type="text/javascript">
+  $('review_period_id').observe('change', function() {
+    BrowserManipulation.changeLocation('<%= new_review_path %>',
+      $H({period: $F(this)}));
+    
+    Helper.showLoading(this);
+  });
+</script>

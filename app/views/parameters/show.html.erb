@@ -1,0 +1,26 @@
+<div id="showed_data">
+<p>
+  <b><%= Parameter.human_attribute_name 'name' %>:</b>
+  <%=h @parameter.name %>
+</p>
+
+<p>
+  <b><%= Parameter.human_attribute_name 'value' %>:</b>
+  <% if @parameter.value.kind_of?(Array) -%>
+    <span class="pre"><%=h @parameter.value.map {|p| "#{p[0]} => #{p[1]}"}.join("\n") %></span>
+  <% else -%>
+    <%=h @parameter.value %>
+  <% end -%>
+</p>
+
+<p>
+  <b><%= Parameter.human_attribute_name 'description' %>:</b>
+  <%=h @parameter.description %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_parameter_path(params[:type], @parameter) %> |
+<%= link_to t(:'label.list'), parameters_path(:type => params[:type]) %> |
+<%= link_to_back %>
+</div>

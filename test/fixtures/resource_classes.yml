@@ -1,0 +1,11 @@
+human_resources:
+  name: Human resources
+  unit: <%= DEFAULT_PARAMETERS[:admin_resource_units].first[1] %>
+  resource_class_type: <%= ResourceClass::TYPES[:human] %>
+  organization: default_organization
+
+hardware_resources:
+  name: Hardware resources
+  unit: <%= DEFAULT_PARAMETERS[:admin_resource_units].last[1] %>
+  resource_class_type: <%= ResourceClass::TYPES[:material] %>
+  organization: default_organization

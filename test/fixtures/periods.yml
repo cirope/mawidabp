@@ -1,0 +1,41 @@
+current_period:
+  number: 1
+  description: Period one
+  start: <%= 10.days.ago.to_date %>
+  end: <%= 10.days.from_now.to_date %>
+  organization: default_organization
+
+past_period:
+  number: 2
+  description: Period two
+  start: <%= 60.days.ago.to_date %>
+  end: <%= 20.days.ago.to_date %>
+  organization: default_organization
+
+third_period:
+  number: 3
+  description: Third period
+  start: <%= 20.days.from_now.to_date %>
+  end: <%= 60.days.from_now.to_date %>
+  organization: default_organization
+
+unused_period:
+  number: 4
+  description: Unused period four
+  start: <%= 70.days.from_now.to_date %>
+  end: <%= 120.days.from_now.to_date %>
+  organization: default_organization
+
+current_period_second_organization:
+  number: 1
+  description: Period one
+  start: <%= 10.days.ago.to_date %>
+  end: <%= 10.days.from_now.to_date %>
+  organization: second_organization
+
+past_period_second_organization:
+  number: 2
+  description: Period two
+  start: <%= 60.days.ago.to_date %>
+  end: <%= 20.days.ago.to_date %>
+  organization: second_organization

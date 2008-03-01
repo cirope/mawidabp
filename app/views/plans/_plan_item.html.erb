@@ -1,0 +1,109 @@
+<% id = dynamic_object_id('plan_item', f) -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="plan_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+  <div>
+    <div class="item_field" style="margin-right: 1em;">
+      <%= show_plan_item_info(f.object) %>
+    </div>
+    <div class="show_hide_field">
+    <%= link_to_show_hide "resource_utilizations_for_#{id}",
+      t(:'plan.show_resource_utilization'),
+      t(:'plan.hide_resource_utilization') %>
+    </div>
+    <div class="item_field" style="width: 5%;">
+    <%= f.text_field :order_number, :class => :sort_number,
+      :readonly => true %>
+    </div>
+    <div class="item_field" style="width: 20%;">
+      <% unless f.object.business_unit -%>
+      <div class="search">
+        <% errors_on_business_unit = f.object.errors.on(:business_unit_id) -%>
+        <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
+          :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id_item %>
+        <%= text_field_with_auto_complete :plan_item, :business_unit_data,
+          {:id => "plan_item_business_unit_#{id}",
+          :class => "search #{'error_field' unless errors_on_business_unit.blank?}",
+          :title => t(:'label.search'), :value => ''},
+          {:indicator => :loading, :skip_style => true,
+          :url => {:controller => :plans,
+            :action => :auto_complete_for_business_unit_business_unit_id},
+          :after_update_element => 'AutoComplete.itemSelected',
+          :param_name => 'business_unit_data'} %>
+      </div>
+      <% else -%>
+        <%= text_field_tag "plan_item_business_unit_#{id}",
+          f.object.business_unit.name, :readonly => true %>
+        <%= f.hidden_field :business_unit_id,
+          :value => f.object.business_unit_id,
+          :id => "hidden_business_unit_id_#{id}" %>
+      <% end -%>
+    </div>
+    <div class="item_field" style="width: 20%;">
+    <%= f.text_field :project, :maxlength => 255 %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.calendar_date_select :start, :class => :date %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.calendar_date_select :end, :class => :date %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_field :plain_predecessors, :maxlength => 255,
+      :class => (:error_field if f.object.errors.on(:predecessors)) %>
+    </div>
+    <div class="item_field" style="width: 10%;">
+      <%= insert_record_link(f) %> |
+      <%= remove_item_link(f) -%> |
+      <%= link_to_move %>
+    </div>
+
+    <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
+      <div>
+        <div class="column_headers">
+          <div class="item_column" style="width: 30%;">
+            <h3><%= ResourceUtilization.human_attribute_name :resource_id %></h3>
+          </div>
+          <div class="item_column" style="width: 20%;">
+            <h3><%= ResourceUtilization.human_attribute_name :units %></h3>
+          </div>
+          <div class="item_column" style="width: 20%;">
+            <h3><%= ResourceUtilization.human_attribute_name :cost_per_unit %></h3>
+          </div>
+          <div class="item_column" style="width: 10%;"></div>
+          <div style="clear: both;"></div>
+        </div>
+
+        <div class="material_resource_utilizations">
+          <% f.fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| -%>
+            <%= render :partial => 'material_resource_utilization',
+              :locals => {:f => ru_f, :is_dynamic => false} %>
+          <% end -%>
+        </div>
+
+        <div class="human_resource_utilizations">
+          <% f.fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| -%>
+            <%= render :partial => 'human_resource_utilization',
+              :locals => {:f => ru_f, :is_dynamic => false} %>
+          <% end -%>
+        </div>
+
+        <p style="margin-bottom: 1em;">
+          <%= link_to t(:'plan.add_material_resource_utilization'),
+            '#material_resource_utilization', :class => :add_nested_subitem,
+            :rel => 'plan_item material_resource_utilizations' %> |
+          <%= link_to t(:'plan.add_human_resource_utilization'),
+            '#human_resource_utilization', :class => :add_nested_subitem,
+            :rel => 'plan_item human_resource_utilizations' %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  Helper.makeSortable('plan_items', '#plan_items div.plan_item',
+    '#plan_items a.move');
+  FormUtil.completeSortNumbers();
+</script>
+<% if is_dynamic -%>
+<script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

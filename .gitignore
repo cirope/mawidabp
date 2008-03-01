@@ -1,0 +1,21 @@
+.DS_Store
+config/amazon_s3.yml
+config/organizations.yml
+config/organizations/
+config/rackspace_cloudfiles.yml
+doc/
+log/
+nbproject/private/
+private/
+public/error_files/
+# Descomentar cuando esté estable la ayuda
+public/images/help/
+public/files/
+
+tmp/
+
+# Descomentar cuando el plugin esté listo
+vendor/plugins/super_select/
+
+# No ignorar
+!doc/README_FOR_APP

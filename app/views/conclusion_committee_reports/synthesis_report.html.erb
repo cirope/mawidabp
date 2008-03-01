@@ -1,0 +1,71 @@
+<%= render :partial => 'shared/date_filter_form',
+  :locals => {:action => :synthesis_report, :extra_params => {}} %>
+
+<div style="margin: 1em;">
+  <p style="font-size: 1.6em;">
+    <strong>
+      <%= synthesis_report_organization_score_average(@audits_by_business_unit) %>
+    </strong>
+  </p>
+  <p style="font-size: .8em; margin-top: 1em;">
+    <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+      :audit_types => @audits_by_business_unit.map {|data| data[:name]}.to_sentence) %>
+  </p>
+</div>
+
+<% @audits_by_business_unit.each do |data| -%>
+  <% if data[:value] == BusinessUnit::INTERNAL_TYPES.values.sort.first -%>
+    <h1 class="center_title">
+      <%= t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
+    </h1>
+  <% elsif data[:value] == BusinessUnit::EXTERNAL_TYPES.values.sort.first -%>
+    <h1 class="center_title">
+      <%= t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
+    </h1>
+  <% end -%>
+  <h1 style="margin: 1em;"><%= data[:name] %></h1>
+  <% unless data[:column_data].blank? -%>
+    <table class="summary_table" style="margin: 0em 1em;">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name| -%>
+            <% column = data[:columns][col_name] %>
+            <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
+          <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:column_data].each do |row| -%>
+          <tr>
+            <% @column_order.each do |col_name| -%>
+              <td><%= row[col_name].kind_of?(Array) ?
+                array_to_ul(row[col_name], :class => :raw_list) :
+                row[col_name] %></td>
+            <% end -%>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <p style="margin: 1em">
+      <%= synthesis_report_score_average(
+       t(:'conclusion_committee_report.synthesis_report.generic_score_average',
+         :audit_type => data[:name]), data[:review_scores]) %>
+    </p>
+  <% else -%>
+    <p style="margin: 1em;">
+      <em><%= t :'conclusion_committee_report.synthesis_report.without_audits_in_the_period' %></em>
+    </p>
+  <% end -%>
+<% end -%>
+
+<div style="margin: 0em 1em;">
+  <%= simple_format t(:'conclusion_committee_report.synthesis_report.references',
+    :risk_types => @risk_levels.to_sentence) %>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.back'), :action => :index %> |
+  <%= link_to t(:'label.download'), :action => :synthesis_report,
+    :synthesis_report => {:from_date => @from_date, :to_date => @to_date},
+    :download => 1 %>
+</div>

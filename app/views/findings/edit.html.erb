@@ -1,0 +1,12 @@
+<%= render :partial => "#{@auth_user.audited? ? 'audited' : 'auditor'}_form",
+  :locals => {:submit_button_text => t(:'label.modify')} %>
+
+<div id="links">
+<%= link_to t(:'label.show'), finding_path(params[:completed], @finding) %> |
+<%= link_to t(:'label.list'), findings_path(params[:completed]) %> |
+<% unless @auth_user.audited? || @finding.new_record? -%>
+  <%= link_to t(:'finding.follow_up_report.download'),
+    :action => :follow_up_pdf, :id => @finding %> |
+<% end -%>
+<%= link_to_back %>
+</div>

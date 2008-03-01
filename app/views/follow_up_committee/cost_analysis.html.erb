@@ -1,0 +1,67 @@
+<%= render :partial => 'shared/date_filter_form',
+  :locals => {:action => :cost_analysis, :extra_params => {}} %>
+
+<div style="margin: 1em;">
+  <h1><%= t :'follow_up_committee.cost_analysis.weaknesses' %></h1>
+  <% unless @weaknesses_data.blank? -%>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| -%>
+            <th style="width: <%= "#{col_width}%" %>">
+              <%= t "follow_up_committee.cost_analysis.column_#{col_name}" %>
+            </th>
+          <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weaknesses_data.each do |data| -%>
+          <tr>
+            <% @column_order.map(&:first).each do |col_name| -%>
+              <td><%= data[col_name].to_utf8 %></td>
+            <% end -%>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% else -%>
+    <p style="margin: 1em;">
+      <em><%= t :'follow_up_committee.cost_analysis.without_weaknesses' %></em>
+    </p>
+  <% end -%>
+
+  <h1><%= t :'follow_up_committee.cost_analysis.oportunities' %></h1>
+  <% unless @oportunities_data.blank? -%>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| -%>
+            <th style="width: <%= "#{col_width}%" %>">
+              <%= t "follow_up_committee.cost_analysis.column_#{col_name}" %>
+            </th>
+          <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunities_data.each do |data| -%>
+          <tr>
+            <% @column_order.map(&:first).each do |col_name| -%>
+              <td><%= data[col_name].to_utf8 %></td>
+            <% end -%>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% else -%>
+    <p style="margin: 1em;">
+      <em><%= t :'follow_up_committee.cost_analysis.without_oportunities' %></em>
+    </p>
+  <% end -%>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.back'), :action => :index %> |
+  <%= link_to t(:'label.download'), :action => :cost_analysis,
+    :cost_analysis => {:from_date => @from_date, :to_date => @to_date},
+    :download => 1 %>
+</div>

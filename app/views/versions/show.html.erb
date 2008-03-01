@@ -1,0 +1,51 @@
+<div id="showed_data">
+<p>
+  <b><%= Version.human_attribute_name 'created_at' %>:</b>
+  <%=l @version.created_at, :format => :long %>
+</p>
+
+<p>
+  <b><%= Version.human_attribute_name 'whodunnit' %>:</b>
+  <%=h show_whodunnit(@version.whodunnit) %>
+</p>
+
+<p>
+  <b><%= Version.human_attribute_name 'item' %>:</b>
+  <%=h "#{@version.item.class.human_name} (#{@version.reify || @version.item})" %>
+</p>
+
+<p>
+  <b><%= Version.human_attribute_name 'event' %>:</b>
+  <%=h t("version.event_#{@version.event}") %>
+</p>
+
+<h1 style="margin-top: 1em;"><%= t :'version.changes' %></h1>
+<% changes = extract_version_changes(@version) -%>
+<% unless changes.blank? -%>
+  <table class="summary_table">
+    <thead>
+      <tr>
+        <th style="width: 20%;"><%= t :'version.column_attribute' %></th>
+        <th style="width: 40%;"><%= t :'version.column_old_value' %></th>
+        <th style="width: 40%;"><%= t :'version.column_new_value' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% changes.each do |change| -%>
+        <tr>
+          <td><%= change[:attribute] %></td>
+          <td><%= change[:old_value] %></td>
+          <td><%= change[:new_value] %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% else -%>
+  <p><%= t :'version.without_changes' %></p>
+<% end -%>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.list'), security_changes_report_versions_path %> |
+<%= link_to_back %>
+</div>

@@ -1,0 +1,47 @@
+<!--[form:parameter]-->
+<% form_for @parameter, :url => parameter_path(params[:type], @parameter),
+  :html => {:method => :put} do |f| -%>
+  <%= f.error_messages %>
+  <div class="form_column_left">
+  <p class="form_item">
+    <%= label nil, :parameter_name, Parameter.human_attribute_name('name'),
+        :class => :inline %>
+    <%= text_field nil, :parameter_name,
+        :value => t("parameter.#{@parameter.name}"), :readonly => true,
+        :size => nil, :class => :inline_item %>
+  </p>
+  <% if @parameter.value.kind_of? Array -%>
+    <div id="parameter_value" class="items">
+    <% @parameter.value.each do |item| -%>
+      <% if item.kind_of?(Array) && item.size == 2 -%>
+        <%= render :partial => 'parameter_value', :locals => {:number => rand(), :item => item} %>
+      <% end -%>
+    <% end -%>
+    </div>
+    
+    <p class="add_item">
+      <%= add_parameter_value_link t(:'parameter.add_value') %>
+    </p>
+  <% else -%>
+    <p>
+      <%= f.label :value %>
+      <%= f.text_field :value %>
+    </p>
+  <% end -%>
+
+  <p>
+    <%= f.label :description %>
+    <%= f.text_area :description, :rows => 7, :cols => 20 %>
+  </p>
+  <div style="display:none">
+  <%= f.hidden_field :lock_version %>
+  <%= f.hidden_field :organization_id %>
+  <%= hidden_field_tag 'type', 'type', :value => @type %>
+  </div>
+  <p>
+    <span class="button"><%= f.submit submit_button_text %></span>
+  </p>
+  </div>
+<% end -%>
+<!--[eoform:parameter] -->
+<%= set_focus_to_first_element %>

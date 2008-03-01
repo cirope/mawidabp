@@ -1,0 +1,219 @@
+<script type="text/javascript">
+  function autocompleteUserAndCost(text, li) {
+    AutoComplete.itemSelected(text, li);
+    
+    var objectId = $(li).id.strip().match(/id_(\d+)$/)[1];
+    var costPerUnit = $F("cost_of_" + objectId);
+    var jumps = 0;
+    var costField;
+
+    do {
+      costField = $(text).up('div.item_field').next('div.item_field',
+        jumps++).down('input[name*=cost_per_unit]');
+    } while(!costField);
+
+    costField.setValue(costPerUnit);
+  }
+</script>
+<!--[form:workflow]-->
+<% form_for @workflow do |w_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
+  <% end -%>
+  <%= w_f.error_messages %>
+
+  <div class="form_column_left">
+    <p class="form_item">
+      <% if @workflow.new_record? -%>
+        <%= w_f.label :period_id, nil, :class => :inline %>
+        <%= w_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
+          {:prompt => true}, {:class => :inline_item} %>
+        <%= link_to_add new_period_path(:back_to => new_workflow_path) %>
+      <% else -%>
+        <label class="inline"><%= Workflow.human_attribute_name 'period_id' %>:</label>
+        <%= text_field_tag :period_description, @workflow.period.inspect,
+          :class => :inline_item, :size => nil, :readonly => true %>
+        <%=  %>
+      <% end -%>
+    </p>
+  </div>
+  <div class="form_column_right">
+     <p class="form_item">
+      <% if @workflow.new_record? -%>
+        <%= w_f.label :review_id, nil, :class => :inline %>
+        <% with_period = @workflow.period_id && @workflow.period_id > 0 -%>
+        <%= w_f.select :review_id,
+            (with_period ? Review.list_without_final_review.
+              list_all_without_workflow(@workflow.period_id).
+              map { |r| [r.identification, r.id] } : []),
+          {:prompt => true},
+          (with_period && @workflow.new_record? ? {} : {:disabled => true}).merge(:class => :inline_item) %>
+      <% else -%>
+        <label class="inline"><%= Workflow.human_attribute_name 'review_id' %>:</label>
+        <%= text_field_tag :review_description, @workflow.review,
+          :class => :inline_item, :size => nil, :readonly => true %>
+        <%=  %>
+      <% end -%>
+    </p>
+  </div>
+
+  <table class="summary_table" style="clear: both; margin-top: 0em;">
+    <thead>
+      <tr>
+        <th style="width: 10%;"></th>
+        <th style="width: 45%;"><%= t(:'workflow.column_real') %></th>
+        <th style="width: 45%;"><%= t(:'workflow.column_estimated') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b><%= t(:'workflow.row_time') %></b></td>
+        <td><%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %></td>
+        <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
+      </tr>
+      <tr style="vertical-align: text-top;">
+        <td><b><%= t(:'workflow.row_cost') %></b></td>
+        <td><%= t(:'number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
+          <%= link_to_function t(:'workflow.calculate_estimated_amount'),
+            "calculateCost()", :style => 'margin-left: .5em;' %></td>
+        <td>
+          <div id="estimated_amount">
+            <%= render :partial => 'estimated_amount',
+              :locals => {:plan_item => @workflow.plan_item} %>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="items">
+    <div class="column_headers nested_items">
+      <div class="item_column" style="width: 5%;">
+        <h3><%= WorkflowItem.human_attribute_name 'order_number' %></h3>
+      </div>
+      <div class="item_column" style="width: 50%;">
+        <h3><%= WorkflowItem.human_attribute_name 'task' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">
+        <h3><%= WorkflowItem.human_attribute_name 'start' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">
+        <h3><%= WorkflowItem.human_attribute_name 'end' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">
+        <h3><%= WorkflowItem.human_attribute_name 'predecessors' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="workflow_items">
+      <% w_f.fields_for :workflow_items do |wi_f| -%>
+        <% content_for :js_extra do -%>
+          <% hru_template ||= generate_template(wi_f, :resource_utilizations,
+            :object => ResourceUtilization.new(:resource_type => 'User'),
+            :partial => 'human_resource_utilization',
+            :child_index => 'NEW_SUBRECORD') -%>
+          <% mru_template ||= generate_template(wi_f, :resource_utilizations,
+            :object => ResourceUtilization.new(:resource_type => 'Resource'),
+            :partial => 'material_resource_utilization',
+            :child_index => 'NEW_SUBRECORD') -%>
+          <%= "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 -%>
+          <%= "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 -%>
+          <% mru_template = 0 -%>
+          <% hru_template = 0 -%>
+        <% end -%>
+        <%= render :partial => 'workflow_item', :locals =>
+          {:f => wi_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'label.add_item'), '#workflow_item',
+      :class => :add_nested_item, :rel => :workflow_items %>
+  </p>
+
+  <% if @workflow.overloaded? -%>
+    <p class="form_item">
+      <%= w_f.label :allow_overload, t(:'workflow.allow_overload'),
+        :class => 'inline error_field' %>
+      <%= w_f.check_box :allow_overload, :class => :inline_item %>
+    </p>
+  <% end -%>
+
+  <%= hidden_lock_version(w_f) %>
+
+  <p>
+    <span class="button"><%= w_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:workflow] -->
+<%= set_focus_to_first_element %>
+<script type="text/javascript">
+  FormUtil.completeSortNumbers();
+  Helper.makeSortable('workflow_items', '#workflow_items div.workflow_item',
+    '#workflow_items a.move');
+
+  if($('workflow_period_id')) {
+    Event.observe('workflow_period_id', 'change', function() {
+      var element = $('workflow_review_id');
+
+      if($F(this) > 0) {
+          new Ajax.Request('<%= reviews_for_period_workflows_path %>', {
+            method: 'get',
+            parameters: { period: $F(this) },
+            onSuccess: function(transport) {
+              HTMLUtil.updateOptions(element, HTMLUtil.optionsFromArray(
+                transport.responseJSON));
+            },
+            onCreate: function() { Helper.showLoading(element); },
+            onComplete: function() { Helper.hideLoading(null); }
+          });
+      } else {
+        element.selectedIndex = 0;
+        element.disable();
+      }
+    });
+  }
+
+  if($('workflow_review_id')) {
+    Event.observe('workflow_review_id', 'change', function() {
+      var url = '<%= estimated_amount_workflows_path %>';
+      var element = $('workflow_review_id');
+
+      new Ajax.Updater({ success: 'estimated_amount' }, url, {
+        method: 'get',
+        parameters: { id: $F(this) },
+        onCreate: function() { Helper.showLoading(element); },
+        onComplete: function() {
+          Helper.hideLoading(element);
+          new Effect.Highlight('estimated_amount', {duration: 2});
+        }
+      });
+    });
+  }
+
+  function calculateCost() {
+    var costElement = $('workflow_cost');
+    var estimatedCost = 0;
+
+    $$('input[name*=cost_per_unit]').each(function(e) {
+      if($(e).id != costElement.id) {
+        var value = $F(e).sub(/^[^\d.]+/, '');
+        var unitsString = $F($(e).up('div.item_field').previous(
+          'div.item_field').down('input[name*=units]')).sub(/^[^\d.]+/, '');
+        var units = unitsString.match(/^[.\d+]?\d+/) ?
+          parseFloat(unitsString) : 0;
+
+        estimatedCost += value.match(/^[.\d+]?\d+/) ?
+          parseFloat(value) * units : 0;
+      }
+    });
+
+    costElement.update(estimatedCost.toFixed(2));
+    new Effect.Highlight(costElement, {
+      queue: { position: 'end', scope: 'workflow_cost', limit: 1 }
+    });
+  }
+</script>

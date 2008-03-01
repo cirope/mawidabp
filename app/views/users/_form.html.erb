@@ -1,0 +1,83 @@
+<!--[form:user]-->
+<% form_for @user do |u_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var organization_role='#{generate_template(u_f,
+        :organization_roles)}';" %>
+  <% end -%>
+  <%= u_f.error_messages %>
+  <div class="form_column_left">
+    <p>
+      <%= u_f.label :user %>
+      <%= u_f.text_field :user, :maxlength => 30 %>
+    </p>
+    <p>
+      <%= u_f.label :name %>
+      <%= u_f.text_field :name, :maxlength => 100 %>
+    </p>
+    <p>
+      <%= u_f.label :last_name %>
+      <%= u_f.text_field :last_name, :maxlength => 100 %>
+    </p>
+    <p>
+      <%= u_f.label :email %>
+      <%= u_f.text_field :email, :maxlength => 100 %>
+    </p>
+    <p>
+      <%= u_f.label :function %>
+      <%= u_f.text_field :function, :maxlength => 255 %>
+    </p>
+  </div>
+  <div class="form_column_right">
+    <p class="form_item">
+      <%= u_f.label :resource_id, nil, :class => :inline %>
+      <%= user_resource_field(u_f) %>
+    </p>
+    <p class="form_item">
+      <%= u_f.label :language, nil, :class => :inline %>
+      <%= user_language_field(u_f) %>
+    </p>
+    <p class="form_item">
+      <%= u_f.label :logged_in, nil, :class => :inline %>
+      <%= u_f.check_box :logged_in, :class => :inline_item %>
+    </p>
+    <p class="form_item">
+      <%= u_f.label :enable, nil, :class => :inline %>
+      <%= u_f.check_box :enable, :class => :inline_item %>
+    </p>
+    <p class="form_item">
+      <%= u_f.label :send_notification_email, nil, :class => :inline %>
+      <%= u_f.check_box :send_notification_email, {:class => :inline_item}, '1', '' %>
+    </p>
+    <div style="display: none;"><%= u_f.hidden_field :lock_version %></div>
+  </div>
+
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 40%;">
+        <h3><%= OrganizationRole.human_attribute_name 'organization_id' %></h3>
+      </div>
+      <div class="item_column" style="width: 40%;">
+        <h3><%= OrganizationRole.human_attribute_name 'role_id' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="organization_roles">
+      <% u_f.fields_for :organization_roles do |or_f| -%>
+        <%= render :partial => 'organization_role', :locals =>
+          {:f => or_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'label.add_item'), '#organization_role',
+      :class => :add_nested_item, :rel => :organization_roles %>
+  </p>
+  <p>
+    <span class="button"><%= u_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:user] -->
+<%= set_focus_to_first_element %>

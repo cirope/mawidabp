@@ -1,0 +1,69 @@
+<% ALLOWED_MODULES_BY_TYPE[:admin].each do |privilege| %>
+admin_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: admin_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:supervisor].each do |privilege| %>
+supervisor_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: false
+  approval: false
+  role: supervisor_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+auditor_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: false
+  approval: false
+  role: auditor_senior_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:audited].each do |privilege| %>
+audited_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: audited_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:admin].each do |privilege| %>
+admin_second_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: admin_second_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:auditor_senior].each do |privilege| %>
+auditor_second_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: false
+  approval: false
+  role: auditor_second_role
+<% end %>
+
+<% ALLOWED_MODULES_BY_TYPE[:committee].each do |privilege| %>
+committee_<%= privilege %>:
+  module: <%= privilege %>
+  read: true
+  modify: true
+  erase: true
+  approval: true
+  role: committee_role
+<% end %>

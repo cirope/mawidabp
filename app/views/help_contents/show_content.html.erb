@@ -1,0 +1,27 @@
+<% help_root = HelpContent.find_by_language @auth_user.language -%>
+<% can_edit = @auth_user.admin? -%>
+<table id="help_table">
+  <tbody>
+    <tr>
+      <td style="background: #f2f2f2; width: 30%; border-right: 4px solid #47ae00;">
+        <% if can_edit -%>
+          <p style="margin: 0em 1em; float: right;">
+            <%= link_to t(:'label.edit'), edit_help_content_path(help_root) %>
+          </p>
+        <% end -%>
+        <div class="help_toc"><%= help_content_tree_for(help_root) %></div>
+      </td>
+      <td style="padding-left: 2em; padding-right: 1em;">
+        <% if can_edit -%>
+          <p style="margin: 0em 1em; float: right;">
+            <%= link_to t(:'label.edit'), edit_help_item_path(@help_item) if @help_item %>
+          </p>
+        <% end -%>
+        <h1 style="margin-top: 0em;"><%= @help_item.try(:complete_path) %></h1>
+        <div class="help_content">
+          <%= textilize @help_item.try(:description) %>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

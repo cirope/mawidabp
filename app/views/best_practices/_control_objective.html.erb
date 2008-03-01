@@ -1,0 +1,41 @@
+<% id = dynamic_object_id('control_objective', f) -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="control_objective item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+  <div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_area :name, :class => :focused %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_area :control %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_area :design_tests %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_area :compliance_tests %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.text_area :effects %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.select :relevance, f.object.get_parameter(
+      :admin_control_objective_importances, true),
+      {:prompt => true} %>
+    </div>
+    <div class="item_field" style="width: 13%;">
+    <%= f.select :risk, f.object.get_parameter(
+      :admin_control_objective_risk_levels, true),
+      {:prompt => true} %>
+    </div>
+    <div class="item_field" style="width: 5%;">
+    <%= f.hidden_field :order, :class => :sort_number %>
+    <%= insert_record_link(f, :class => :insert_record_subitem,
+      :rel => 'process_control control_objectives') %> |
+    <%= remove_item_link(f) -%>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">FormUtil.completeSortNumbers();</script>
+<% if is_dynamic -%>
+  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

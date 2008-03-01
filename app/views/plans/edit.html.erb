@@ -1,0 +1,11 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.save')} %>
+
+<div id="links">
+  <%= link_to t(:'label.show'), @plan %> |
+  <%= link_to t(:'label.list'), plans_path %> |
+  <%= link_to t(:'plan.download_global_plan'), export_to_pdf_plan_path(@plan) %> |
+  <%= link_to t(:'plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,
+    :include_details => 1) %> |
+  <%= link_to_back %>
+</div>

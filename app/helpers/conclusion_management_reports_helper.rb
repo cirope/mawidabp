@@ -1,0 +1,2 @@
+module ConclusionManagementReportsHelper
+end

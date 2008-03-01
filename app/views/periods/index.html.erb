@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Period.human_attribute_name 'number' %></th>
+      <th><%= Period.human_attribute_name 'description' %></th>
+      <th><%= Period.human_attribute_name 'start' %></th>
+      <th><%= Period.human_attribute_name 'end' %></th>
+      <th><%= Organization.human_name %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>
+    <%= render :partial => 'index_line', :collection => @periods %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @periods %>
+<%= link_to t(:'label.new'), new_period_path %>
+<div style="clear: both;"></div>
+</div>

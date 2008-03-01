@@ -1,0 +1,37 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= InlineHelp.human_attribute_name :language %></th>
+      <th><%= InlineHelp.human_attribute_name :name %></th>
+      <th><%= InlineHelp.human_attribute_name :content %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="6"></td><td></td></tr>
+    <% @inline_helps.each do |inline_help| %>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%= t "lang.#{inline_help.language}" %></td>
+        <td><%=h inline_help.name %></td>
+        <td><%= super_truncate inline_help.content, 25 %></td>
+        <td><%= link_to_show inline_help %></td>
+        <td><%= link_to_edit edit_inline_help_path(inline_help) %></td>
+        <td><%= button_to_destroy inline_help %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="6"></td><td></td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @inline_helps %>
+  <%= link_to t(:'label.new'), new_inline_help_path %>
+  <div style="clear: both;"></div>
+</div>

@@ -1,0 +1,43 @@
+procedure_control_subitem_iso_27001_1_1:
+  control_objective_text: Control objective
+  main_procedures: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].first[1] %>
+  procedure_control_item: procedure_control_item_iso_27001_2
+  control_objective: iso_27000_security_organization_4_1
+  order: 1
+
+procedure_control_subitem_iso_27001_1_2:
+  control_objective_text: Control objective
+  main_procedures: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].first[1] %>
+  procedure_control_item: procedure_control_item_iso_27001_2
+  control_objective: iso_27000_security_organization_4_2
+  order: 2
+
+procedure_control_subitem_bcra_A4609_1_1:
+  control_objective_text: Control objective
+  main_procedures: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].first[1] %>
+  procedure_control_item: procedure_control_item_bcra_A4609_1
+  control_objective: bcra_A4609_security_management_responsible_dependency
+  order: 1
+
+procedure_control_subitem_bcra_A4609_1_2:
+  control_objective_text: Control objective
+  main_procedures: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].first[1] %>
+  procedure_control_item: procedure_control_item_bcra_A4609_1
+  control_objective: bcra_A4609_data_proccessing_impact_analisys
+  order: 2

@@ -1,0 +1,5 @@
+procedure_control_iso_27001:
+  period: current_period
+
+procedure_control_bcra_A4609:
+  period: current_period

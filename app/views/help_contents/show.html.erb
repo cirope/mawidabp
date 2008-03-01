@@ -1,0 +1,17 @@
+<div id="showed_data">
+  <p>
+    <b><%= HelpContent.human_attribute_name :language %>:</b>
+    <%= t "lang.#{@help_content.language}" %>
+  </p>
+  <h3 style="margin-top: 2em;"><%= t(:'help_content.content_title') %></h3>
+  <% @help_content.help_items.each do |help_item| -%>
+    <p style="font-weight: bold;"><%=h help_item.name %></p>
+    <p><%= textilize(help_item.description) %></p>
+  <% end -%>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.edit'), edit_help_content_path(@help_content) %> |
+  <%= link_to t(:'label.list'), help_contents_path %> |
+  <%= link_to_back %>
+</div>

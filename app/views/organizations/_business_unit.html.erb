@@ -1,0 +1,25 @@
+<% id = dynamic_object_id('business_unit', f) -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="business_unit item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+  <div>
+    <div class="item_field" style="width: 40%;">
+      <%= f.text_field :name, :maxlength => 255 %>
+      <%= f.hidden_field :business_unit_type, :value => business_unit_type,
+        :id => "business_unit_type_#{id}" %>
+    </div>
+    <div class="item_field" style="width: 10%;">
+      <%= remove_item_link(f) -%>
+    </div>
+  </div>
+</div>
+<% if is_dynamic -%>
+<script type="text/javascript">
+(function() {
+  var type = $F($('<%= id %>').up('.business_units_container').down(
+    'input.business_unit_type'));
+
+  $('business_unit_type_<%= id %>').setValue(type);
+  Helper.showItem('<%= id %>');
+})();
+</script>
+<% end -%>

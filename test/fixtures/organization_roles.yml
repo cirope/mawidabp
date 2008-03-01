@@ -1,0 +1,99 @@
+admin_role_for_administrator_user_in_default_organization:
+  user: administrator_user
+  organization: default_organization
+  role: admin_role
+
+admin_role_for_administrator_user_in_second_organization:
+  user: administrator_user
+  organization: second_organization
+  role: admin_role
+
+admin_second_role_for_administrator_second_user_in_second_organization:
+  user: administrator_second_user
+  organization: second_organization
+  role: admin_second_role
+
+auditor_senior_role_for_bare_user_in_default_organization:
+  user: bare_user
+  organization: default_organization
+  role: auditor_senior_role
+
+auditor_senior_role_for_first_time_user_in_default_organization:
+  user: first_time_user
+  organization: default_organization
+  role: auditor_senior_role
+
+auditor_senior_role_for_expired_user_in_default_organization:
+  user: expired_user
+  organization: default_organization
+  role: auditor_senior_role
+
+admin_role_for_disabled_user_in_default_organization:
+  user: disabled_user
+  organization: default_organization
+  role: admin_role
+
+admin_role_for_blank_password_user_in_default_organization:
+  user: blank_password_user
+  organization: default_organization
+  role: admin_role
+
+admin_role_for_expired_blank_password_user_in_default_organization:
+  user: expired_blank_password_user
+  organization: default_organization
+  role: admin_role
+
+manager_role_for_manager_user_in_default_organization:
+  user: manager_user
+  organization: default_organization
+  role: manager_role
+
+manager_role_for_manager_second_user_in_default_organization:
+  user: manager_second_user
+  organization: default_organization
+  role: manager_role
+
+supervisor_role_for_supervisor_user_in_default_organization:
+  user: supervisor_user
+  organization: default_organization
+  role: supervisor_role
+
+supervisor_role_for_supervisor_second_user_in_default_organization:
+  user: supervisor_second_user
+  organization: default_organization
+  role: supervisor_role
+
+audited_role_for_audited_user_in_default_organization:
+  user: audited_user
+  organization: default_organization
+  role: audited_role
+
+audited_role_for_audited_user_in_second_organization:
+  user: audited_user
+  organization: second_organization
+  role: audited_role
+
+audited_role_for_audited_second_user_in_default_organization:
+  user: audited_second_user
+  organization: default_organization
+  role: audited_role
+
+audited_role_for_audited_second_user_in_second_organization:
+  user: audited_second_user
+  organization: second_organization
+  role: audited_role
+
+committee_role_for_committee_user_in_default_organization:
+  user: committee_user
+  organization: default_organization
+  role: committee_role
+
+auditor_senior_role_for_auditor_user_in_default_organization:
+  user: auditor_user
+  organization: default_organization
+  role: auditor_senior_role
+
+auditor_senior_role_for_auditor_user_in_second_organization:
+  user: auditor_user
+  organization: second_organization
+  role: auditor_senior_role

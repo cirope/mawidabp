@@ -1,0 +1,67 @@
+<div id="showed_data">
+<p>
+  <b><%= Weakness.human_attribute_name 'description' %>:</b>
+  <%=h @weakness.description %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'review_code' %>:</b>
+  <%=h @weakness.review_code %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'audit_recommendations' %>:</b>
+  <%=h @weakness.audit_recommendations %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'answer' %>:</b>
+  <%=h @weakness.answer %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'effect' %>:</b>
+  <%=h @weakness.effect %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'risk' %>:</b>
+  <%=h @weakness.risk_text %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'priority' %>:</b>
+  <%=h weakness_priority_text @weakness %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'user_ids' %>:</b>
+  <%=h @weakness.users.map { |u| u.full_name }.join(APP_ENUM_SEPARATOR) %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'follow_up_date' %>:</b>
+  <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'audit_comments' %>:</b>
+  <%=h @weakness.audit_comments %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'state' %>:</b>
+  <%=h @weakness.state_text %>
+</p>
+
+<p>
+  <b><%= Weakness.human_attribute_name 'solution_date' %>:</b>
+  <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_weakness_path(@weakness) %> |
+<%= link_to t(:'label.list'), weaknesses_path %> |
+<%= link_to_back %>
+</div>

@@ -1,0 +1,53 @@
+<% controller_name = controller.controller_name.to_sym -%>
+<div id="menu">
+  <div id="session">
+    <div id="user">[ <%= link_to user.user, change_personal_data_user_path(user),
+      {:title => t(:'user.change_personal_data')} %> ]</div>
+    <%= link_to t(:'menu.exit'), logout_user_path(user) %>
+  </div>
+  <ul class="menu_level_0" id="main_menu">
+    <% APP_AUDITOR_MENU_ITEMS.each do |menu_item| -%>
+      <% selected = menu_item.submenu_names.include?(@current_module) -%>
+      <li <%= 'class="selected"' if selected %>>
+        <%= link_to menu_item.to_s, url_for(menu_item.url),
+          :id => "link_#{menu_item.name}", :class => :menu_item_1 %>
+      </li>
+
+      <% content_for :submenu_items_1 do -%>
+        <% unless menu_item.children.blank? -%>
+          <%= render :partial => 'shared/submenu',
+            :locals => {
+              :menu_item => menu_item,
+              :controller_name => controller_name,
+              :display => selected,
+              :level => 1,
+              :include_dynamic => true
+            } %>
+        <% end -%>
+      <% end -%>
+
+      <% content_for :submenu_items_2 do -%>
+        <% menu_item.children.each do |submenu_item| -%>
+          <% selected = submenu_item.submenu_names.include?(@current_module) -%>
+          <% unless submenu_item.children.blank? -%>
+            <%= render :partial => 'shared/submenu',
+              :locals => {
+                :menu_item => submenu_item,
+                :controller_name => controller_name,
+                :display => selected,
+                :level => 2,
+                :include_dynamic => true
+              } %>
+          <% end -%>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+  </ul>
+</div>
+
+<div id="menu_level_1"><%= yield :submenu_items_1 %>&nbsp;</div>
+<div id="menu_level_2"><%= yield :submenu_items_2 %>&nbsp;</div>
+
+<% javascript_tag do -%>
+  <%= yield :javascript_menu %>
+<% end -%>

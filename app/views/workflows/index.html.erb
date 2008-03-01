@@ -1,0 +1,28 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Period.human_name %></th>
+      <th><%= Review.human_name %></th>
+      <th><%= PlanItem.human_attribute_name 'project' %></th>
+      <th><%= Workflow.human_attribute_name 'created_at' %></th>
+      <th><%= Workflow.human_attribute_name 'cost' %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
+    <%= render :partial => 'index_line', :collection => @workflows %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @workflows %>
+<%= link_to t(:'label.new'), new_workflow_path %>
+<div style="clear: both;"></div>
+</div>

@@ -1,0 +1,65 @@
+bcra_A4609_security_management_responsible_dependency:
+  name: Dependencia del área responsable
+  control: "Se considera en la estructura organizacional un área para la protección de los activos de información, con el fin de establecer los mecanismos para la administración y el control de la seguridad sobre el acceso lógico y físico a sus distintos ambientes tecnológicos y recursos de información: equipamiento principal, plataforma de sucursales, equipos departamentales, subsistemas o módulos administradores de seguridad de los sistemas de aplicación, sistemas de transferencias electrónicas de fondos, bases de datos, canales de servicios electrónicos, banca por Internet y otros."
+  effects: "Efectos dependencia del área responsable"
+  design_tests: "Diseño de pruebas dependencia del área responsable"
+  compliance_tests: "Pruebas dependencia del área responsable"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 1
+  process_control: bcra_A4609_security_management
+
+bcra_A4609_data_proccessing_impact_analisys:
+  name: Análisis de impacto
+  control: "La continuidad del procesamiento electrónico de datos, que en definitiva posibilita la continuidad de los negocios, evidencia que se han identificado los eventos que puedan ocasionar interrupciones en sus procesos críticos."
+  effects: "Efectos análisis de impacto"
+  design_tests: "Diseño de pruebas análisis de impacto"
+  compliance_tests: "Pruebas análisis de impacto"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 2
+  process_control: bcra_A4609_security_management
+
+iso_27000_security_policy_3_1:
+  name: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
+  control: "3.1.1 Documentación de la política de seguridad de la información."
+  effects: "Efectos política de seguridad de la información"
+  design_tests: "Diseño de pruebas política de seguridad de la información"
+  compliance_tests: "Pruebas política de seguridad de la información"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 1
+  process_control: iso_27000_security_policy
+
+iso_27000_security_organization_4_1:
+  name: "4.1) Infraestructura de seguridad de la información."
+  control: "4.1.1	Foro gerencial sobre seguridad de la información."
+  effects: "Efectos infraestructura de seguridad de la información"
+  design_tests: "Diseño de pruebas infraestructura de seguridad de la información"
+  compliance_tests: "Pruebas infraestructura de seguridad de la información"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 2
+  process_control: iso_27000_security_policy
+
+iso_27000_security_organization_4_2:
+  name: "4.2) Seguridad frente al acceso por parte de terceros."
+  control: "4.2.1 Identificación de riesgos del acceso de terceras partes."
+  effects: "Efectos seguridad frente al acceso por parte de terceros"
+  design_tests: "Diseño de pruebas seguridad frente al acceso por parte de terceros"
+  compliance_tests: "Pruebas seguridad frente al acceso por parte de terceros"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 3
+  process_control: iso_27000_security_policy
+
+iso_27000_security_organization_4_3:
+  name: "4.3) Seguridad frente al acceso por parte de terceros."
+  control: "4.3.1 Identificación de riesgos del acceso de terceras partes."
+  effects: "Efectos seguridad frente al acceso por parte de terceros"
+  design_tests: "Diseño de pruebas seguridad frente al acceso por parte de terceros"
+  compliance_tests: "Pruebas seguridad frente al acceso por parte de terceros"
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 4
+  process_control: iso_27000_security_policy

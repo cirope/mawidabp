@@ -1,0 +1,67 @@
+<% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="process_control item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+  <div>
+    <div class="show_hide_field">
+    <%= link_to_show_hide "control_objectives_for_#{id}",
+      t(:'best_practice.show_control_objectives'),
+      t(:'best_practice.hide_control_objectives') %>
+    </div>
+    <div class="item_field" style="width: 50%;">
+    <%= f.text_field :name, :maxlength => 255 %>
+    </div>
+    <div class="item_field" style="width: 35%; text-align: left;">
+    <%= f.hidden_field :order, :class => :sort_number %>
+    <%= insert_record_link(f) %> |
+    <%= remove_item_link(f) -%>
+    </div>
+
+    <div class="items hidden_items" id="control_objectives_for_<%= id %>" style="display: none;">
+      <div>
+        <div class="column_headers">
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'name' %></h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'control' %></h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'design_tests' %></h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3>
+              <%= ControlObjective.human_attribute_name 'compliance_tests' %>
+            </h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'effects' %></h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'relevance' %></h3>
+          </div>
+          <div class="item_column" style="width: 13%;">
+            <h3><%= ControlObjective.human_attribute_name 'risk' %></h3>
+          </div>
+          <div class="item_column" style="width: 5%;"></div>
+          <div style="clear: both;"></div>
+        </div>
+
+        <div class="control_objectives">
+          <% f.fields_for :control_objectives do |co_f| -%>
+            <%= render :partial => 'control_objective', :locals =>
+              {:f => co_f, :is_dynamic => false} %>
+          <% end -%>
+        </div>
+        <p style="margin-bottom: 1em;">
+          <%= link_to t(:'best_practice.add_control_objective'),
+            '#control_objective', :class => :add_nested_subitem,
+            :rel => 'process_control control_objectives' %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">FormUtil.completeSortNumbers();</script>
+<% if is_dynamic -%>
+  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

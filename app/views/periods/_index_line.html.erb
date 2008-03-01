@@ -1,0 +1,13 @@
+<tr class="<%= cycle(:even, :odd) %>">
+  <td></td>
+  <td><%= h index_line.number %></td>
+  <td><%= h truncate(index_line.description, :length => 40, :omission => '...') %></td>
+  <td><%= h l(index_line.start, :format => :short) %></td>
+  <td><%= h l(index_line.end, :format => :short) %></td>
+  <td><%= h index_line.organization.name %></td>
+  <td><%= link_to_show index_line %></td>
+  <td><%= link_to_edit edit_period_path(index_line) %></td>
+  <td><%= button_to_destroy index_line %></td>
+  <td></td>
+</tr>
+<tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>

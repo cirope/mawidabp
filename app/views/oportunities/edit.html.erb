@@ -1,0 +1,10 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.modify')} %>
+
+<div id="links">
+<%= link_to t(:'label.show'), @oportunity %> |
+<%= link_to t(:'label.list'), oportunities_path %> |
+<%= link_to t(:'oportunity.edit_control_objective'),
+  edit_control_objective_item_path(@oportunity.control_objective_item) %> |
+<%= link_to_back %>
+</div>

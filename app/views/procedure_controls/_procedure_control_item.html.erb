@@ -1,0 +1,169 @@
+<% id = dynamic_object_id('procedure_control_item', f) -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="procedure_control_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+  <div>
+    <div class="show_hide_field">
+    <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
+      t(:'procedure_control.show_procedure_control_subitems'),
+      t(:'procedure_control.hide_procedure_control_subitems') %>
+    </div>
+    <div class="item_field" style="width: 23%;">
+      <% unless f.object.process_control_id -%>
+        <%= procedure_control_best_practices_select(id) %>
+      <% else -%>
+        <%= text_field_tag "best_practice_#{id}",
+          f.object.process_control.best_practice.name, :readonly => true %>
+      <% end -%>
+    </div>
+    <div class="item_field" style="width: 23%;">
+    <% unless f.object.process_control_id -%>
+      <%= f.select(:process_control_id, [],
+        {:prompt => true},
+        {:id => "#{id}_process_control_id", :disabled => true}) %>
+    <% else -%>
+      <%= f.hidden_field :process_control_id %>
+      <%= text_field_tag "process_control_#{id}", f.object.process_control.name,
+        :readonly => true,
+        :class => (:error_field unless f.object.errors.blank?) %>
+    <% end -%>
+    </div>
+    <div class="item_field" style="width: 23%;">
+    <%= f.select :aproach, parameter_in(@auth_organization.id,
+      :admin_aproach_types, f.object.created_at).map {|item| [item[0], item[1].to_i]} %>
+    </div>
+    <div class="item_field" style="width: 23%;">
+    <%= f.select :frequency, parameter_in(@auth_organization.id,
+      :admin_frequency_types, f.object.created_at) %>
+    </div>
+    <div class="item_field" style="width: 5%;">
+    <%= f.hidden_field :order, :class => :sort_number %>
+    <%= insert_record_link(f) %> |
+    <%= remove_item_link(f) -%>
+    </div>
+
+    <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>" style="display: none;">
+      <div>
+        <div class="column_headers">
+          <div class="item_column" style="width: 15%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'control_objective_id' %></h3>
+          </div>
+          <div class="item_column" style="width: 15%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'control_objective_text' %></h3>
+          </div>
+          <div class="item_column" style="width: 15%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'main_procedures' %></h3>
+          </div>
+          <div class="item_column" style="width: 15%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'design_tests' %></h3>
+          </div>
+          <div class="item_column" style="width: 15%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'compliance_tests' %></h3>
+          </div>
+          <div class="item_column" style="width: 10%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'effects' %></h3>
+          </div>
+          <div class="item_column" style="width: 10%;">
+            <h3><%= ProcedureControlSubitem.human_attribute_name 'risk' %></h3>
+          </div>
+          <div class="item_column" style="width: 5%;"></div>
+          <div style="clear: both;"></div>
+        </div>
+
+        <div class="procedure_control_subitems">
+          <% f.fields_for :procedure_control_subitems do |pcs_f| -%>
+            <%= render :partial => 'procedure_control_subitem',
+              :locals => {:f => pcs_f, :is_dynamic => false,
+              :control_objectives => (f.object.process_control ?
+                  f.object.process_control.control_objectives.map {|co| [co.name, co.id]} :
+                  []) } %>
+          <% end -%>
+        </div>
+
+        <p style="margin-bottom: 1em;">
+          <%= link_to t(:'procedure_control.add_procedure_control_subitem'),
+            '#procedure_control_subitem', :class => :add_nested_subitem,
+            :rel => 'procedure_control_item procedure_control_subitems' %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<% if f.object.new_record? -%>
+  <script type="text/javascript">
+    Event.observe('<%= id %>_best_practice', 'change', function() {
+      var processControlId = '<%= id %>_process_control_id';
+      var subitemsId = 'procedure_control_subitems_for_<%= id %>';
+
+      if(!$F(this).blank()) {
+        var element = $(this);
+        var url = '<%= url_for :action => :get_process_controls %>';
+
+        Helper.showLoading(element);
+
+        new Ajax.Request(url, {
+          method: 'get',
+          parameters: { best_practice: $F(this) },
+          onSuccess: function(transport) {
+            HTMLUtil.updateOptions(processControlId, HTMLUtil.optionsFromArray(
+              transport.responseJSON));
+            clearControlObjectives(subitemsId);
+          },
+          onComplete: function() {
+            Helper.hideLoading(element);
+          }
+        });
+      } else {
+        $(processControlId).selectedIndex = 0;
+        $(processControlId).disable();
+        procedureControlItemHash.unset('<%= id %>');
+
+        clearControlObjectives(subitemsId);
+      }
+    });
+    Event.observe('<%= id %>_process_control_id', 'change', function() {
+      var parentId = 'procedure_control_subitems_for_<%= id %>';
+      
+      if(!$F(this).blank()) {
+        var element = $(this);
+        var url = '<%= url_for :action => :get_control_objectives %>';
+
+        Helper.showLoading(element);
+        $$('#' + parentId + ' select').invoke('disable');
+        
+        new Ajax.Request(url, {
+          method: 'get',
+          parameters: { process_control: $F(this) },
+          onSuccess: function(transport) {
+            procedureControlItemHash.set('<%= id %>',
+              transport.responseJSON);
+
+            $$('#' + parentId + ' select.control_objective').each(function(e) {
+              HTMLUtil.updateOptions(e, HTMLUtil.optionsFromArray(transport.responseJSON));
+            });
+
+            $$('#' + parentId + ' textarea').invoke('clear');
+            $$('#' + parentId + ' select').invoke('enable');
+            $$('#' + parentId + ' select').each(function(select) {
+              select.selectedIndex = 0;
+            });
+          },
+          onComplete: function() {
+            Helper.hideLoading(element);
+          }
+        });
+      } else {
+        clearControlObjectives(parentId);
+      }
+    });
+    FormUtil.completeSortNumbers();
+  </script>
+<% end -%>
+<% if is_dynamic -%>
+<script type="text/javascript">Helper.showItem($('<%= id %>'));</script>
+<% elsif !f.object.new_record? -%>
+  <% content_for :js_extra_bottom do -%>
+    <% options = [[t(:'message.select_one'), '']] +
+        f.object.control_objectives.map { |co| [co.name, co.id] } -%>
+    <%= "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
+  <% end -%>
+<% end -%>

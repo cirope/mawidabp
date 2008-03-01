@@ -1,0 +1,9 @@
+<tr class="<%= cycle(:even, :odd) %>">
+  <td></td>
+  <td><%= t index_line.backup_type == 0 ? :'backup.full' : :'backup.differential' %></td>
+  <td><%= t index_line.work_papers_included ? :'label.yes' : :'label.no' %></td>
+  <td><%= l index_line.created_at, :format => :long %></td>
+  <td><%= link_to_show index_line %></td>
+  <td></td>
+</tr>
+<tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>

@@ -1,0 +1,90 @@
+<!--[form:procedure_control]-->
+<% form_for @procedure_control do |pc_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
+    <%= 'var procedureControlItemHash = new Hash();' %>
+  <% end -%>
+
+  <%= pc_f.error_messages %>
+
+  <div class="form_column_left">
+    <% if (controller.action_name == 'new' || controller.action_name == 'create') -%>
+      <p class="form_item">
+        <%= pc_f.label :period_id, nil, :class => :inline %>
+        <%= pc_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
+          {:prompt => true}, {:class => :inline_item} %>
+        <%= link_to_add new_period_path(:back_to => new_procedure_control_path) %>
+      </p>
+    <% else %>
+      <p class="form_item">
+        <label class="inline"><%= ProcedureControl.human_attribute_name 'period_id' %>:</label>
+        <%= text_field nil, :period_description,
+          :value => @procedure_control.period.try(:inspect), :readonly => true,
+          :size => nil, :class => :inline_item %>
+      </p>
+    <% end -%>
+  </div>
+
+  <div class="items">
+    <div class="column_headers nested_items">
+      <div class="item_column" style="width: 23%;">
+        <h3><%= BestPractice.human_name %></h3>
+      </div>
+      <div class="item_column" style="width: 23%;">
+        <h3><%= ProcessControl.human_name %></h3>
+      </div>
+      <div class="item_column" style="width: 23%;">
+        <h3><%= ProcedureControlItem.human_attribute_name 'aproach' %></h3>
+      </div>
+      <div class="item_column" style="width: 23%;">
+        <h3><%= ProcedureControlItem.human_attribute_name 'frequency' %></h3>
+      </div>
+      <div class="item_column" style="width: 5%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="procedure_control_items">
+      <% pci_template = nil -%>
+      <% pc_f.fields_for :procedure_control_items,
+        @procedure_control.procedure_control_items.sort do |pci_f| -%>
+        <% content_for :js_extra do -%>
+          <% pci_template ||= generate_template(pci_f,
+            :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
+            :locals => {:control_objectives => []}) -%>
+          <%= "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 -%>
+          <% pci_template = 0 -%>
+        <% end -%>
+        <%= render :partial => 'procedure_control_item', :locals =>
+          {:f => pci_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'procedure_control.add_procedure_control_item'),
+      '#procedure_control_item', :class => :add_nested_item,
+      :rel => :procedure_control_items %>
+  </p>
+
+  <div style="display:none">
+  <%= pc_f.hidden_field :lock_version %>
+  </div>
+
+  <p>
+    <span class="button"><%= pc_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:procedure_control] -->
+<%= set_focus_to_first_element %>
+<script type="text/javascript">
+  function clearControlObjectives(procedure_control_subitems_id) {
+    $$('#' + procedure_control_subitems_id + ' select.control_objective').each(
+      function(e) {
+        e.selectedIndex = 0;
+        e.disable();
+      }
+    );
+
+    $$('#' + procedure_control_subitems_id + ' textarea').invoke('clear');
+  }
+</script>

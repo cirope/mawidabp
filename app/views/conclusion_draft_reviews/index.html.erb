@@ -1,0 +1,43 @@
+<table>
+  <thead>
+    <tr>
+      <th colspan="2"></th>
+      <th><%= ConclusionDraftReview.human_attribute_name 'issue_date' %></th>
+      <th><%= Review.human_attribute_name 'period_id' %></th>
+      <th><%= Review.human_attribute_name 'identification' %></th>
+      <th><%= PlanItem.human_attribute_name 'business_unit_id' %></th>
+      <th><%= PlanItem.human_attribute_name 'project' %></th>
+      <th><%= ConclusionDraftReview.human_attribute_name 'approved' %></th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="10"></td><td></td></tr>
+    <% @conclusion_draft_reviews.each do |conclusion_draft_review| -%>
+      <% has_final = conclusion_draft_review.has_final_review? -%>
+      <tr class="<%= cycle(:even, :odd) %> <%= has_final ? :readonly_item : :writable_item %>">
+        <td></td>
+        <td><%= show_has_final_info if has_final %></td>
+        <td><%= l(conclusion_draft_review.issue_date, :format => :short) if conclusion_draft_review.issue_date %></td>
+        <td><%= show_period_with_dates_as_acronym conclusion_draft_review.review.period %></td>
+        <td class="nowrap"><%= h conclusion_draft_review.review.identification %></td>
+        <td><%= super_truncate(conclusion_draft_review.review.plan_item.business_unit.name, 25) %></td>
+        <td><%= super_truncate(conclusion_draft_review.review.plan_item.project, 30) %></td>
+        <td><%= t conclusion_draft_review.approved? ? :'label.yes' : :'label.no' %></td>
+        <td><%= link_to_new_conclusion_final_review new_conclusion_final_review_path(
+              :review => conclusion_draft_review.review_id) if conclusion_draft_review.approved? && !has_final %></td>
+        <td><%= link_to_show(conclusion_draft_review) unless has_final %></td>
+        <td><%= link_to_edit edit_conclusion_draft_review_path(conclusion_draft_review) unless has_final %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="10"></td><td></td></tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @conclusion_draft_reviews %>
+  <%= link_to t(:'label.new'), new_conclusion_draft_review_path %>
+  <div style="clear: both;"></div>
+</div>

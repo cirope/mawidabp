@@ -1,0 +1,65 @@
+<%= render :partial => 'shared/date_filter_form',
+  :locals => {:action => :cost_analysis, :extra_params =>
+    {:include_details => params[:include_details]}} %>
+
+<div style="margin: 1em;">
+  <% unless @total_cost_data.blank? -%>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| -%>
+            <th style="width: <%= "#{col_width}%" %>">
+              <%= t "conclusion_committee_report.cost_analysis.general_column_#{col_name}" %>
+            </th>
+          <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <% @total_cost_data.each do |total_data| -%>
+          <tr>
+            <% @column_order.map(&:first).each do |col_name| %>
+              <td><%= total_data[col_name].to_utf8 %></td>
+            <% end -%>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% else -%>
+    <p style="margin: 1em;">
+      <em><%= t :'conclusion_committee_report.cost_analysis.without_audits_in_the_period' %></em>
+    </p>
+  <% end -%>
+
+  <% unless @detailed_data.blank? -%>
+    <% @detailed_data.each do |detailed_data| -%>
+      <h2 style="margin: 1em 0em;"><%= detailed_data[:review] %></h2>
+      <table class="summary_table">
+        <thead>
+          <tr>
+            <% @detailed_column_order.each do |col_name, col_width| -%>
+              <th style="width: <%= "#{col_width}%" %>">
+                <%= t "conclusion_committee_report.cost_analysis.detailed_column_#{col_name}" %>
+              </th>
+            <% end -%>
+          </tr>
+        </thead>
+        <tbody>
+          <% detailed_data[:data].each do |data| -%>
+            <tr>
+              <% @detailed_column_order.map(&:first).each do |col_name| %>
+                <td><%= data[col_name].to_utf8 %></td>
+              <% end -%>
+            </tr>
+          <% end -%>
+        </tbody>
+      </table>
+    <% end -%>
+  <% end -%>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.back'), :action => :index %> |
+  <%= link_to t(:'label.download'), :action => :cost_analysis,
+    :cost_analysis => {:from_date => @from_date, :to_date => @to_date},
+    :download => 1, :include_details => params[:include_details] %>
+</div>

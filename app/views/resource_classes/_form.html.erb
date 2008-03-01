@@ -1,0 +1,64 @@
+<!--[form:resource_class]-->
+<% form_for @resource_class do |rc_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var resource='#{generate_template(rc_f, :resources)}'" %>
+  <% end -%>
+  <%= rc_f.error_messages %>
+
+  <div class="form_column_left">
+    <p>
+      <%= rc_f.label :name %>
+      <%= rc_f.text_field :name, :maxlength => 255 %>
+    </p>
+    <p class="form_item">
+      <%= rc_f.label :resource_class_type, nil, :class => :inline %>
+      <%= resource_class_type_field(rc_f) %>
+    </p>
+
+    <p class="form_item">
+      <%= rc_f.label :unit, nil, :class => :inline %>
+      <%= rc_f.select :unit, parameter_in(@auth_organization.id,
+        :admin_resource_units, @resource_class.created_at),
+        {:prompt => true}, {:class => :inline_item} %>
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 30%;">
+        <h3><%= Resource.human_attribute_name 'name' %></h3>
+      </div>
+      <div class="item_column" style="width: 50%;">
+        <h3><%= Resource.human_attribute_name 'description' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">
+        <h3><%= Resource.human_attribute_name 'cost_per_unit' %></h3>
+      </div>
+      <div class="item_column" style="width: 5%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="resources">
+      <% rc_f.fields_for :resources do |r_f| -%>
+        <%= render :partial => 'resource', :locals =>
+          {:f => r_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'resource_class.add_resource'), '#resource',
+      :class => :add_nested_item, :rel => :resources %>
+  </p>
+
+  <div style="display:none">
+  <%= rc_f.hidden_field :organization_id %>
+  <%= rc_f.hidden_field :lock_version %>
+  </div>
+
+  <p>
+    <span class="button"><%= rc_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:resource_class] -->
+<%= set_focus_to_first_element %>

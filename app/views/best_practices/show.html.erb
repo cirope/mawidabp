@@ -1,0 +1,17 @@
+<div id="showed_data">
+<p>
+  <b><%= BestPractice.human_attribute_name 'name' %></b>
+  <%=h @best_practice.name %>
+</p>
+
+<p>
+  <b><%= BestPractice.human_attribute_name 'description' %></b>
+  <%=h @best_practice.description %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_best_practice_path(@best_practice) %> |
+<%= link_to t(:'label.list'), best_practices_path %> |
+<%= link_to_back %>
+</div>

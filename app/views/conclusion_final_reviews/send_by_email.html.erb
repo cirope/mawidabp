@@ -1,0 +1,68 @@
+<!--[form:conclusion_final_review]-->
+<% form_for @conclusion_final_review,
+  :url => send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
+  <% content_for :js_extra do -%>
+    <%= "var user='" + escape_javascript(render :partial => 'user',
+      :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
+  <% end -%>
+  <%= f.error_messages %>
+  
+  <div class="form_column_left">
+    <p class="form_item">
+      <%= content_tag :label, t(:'conclusion_review.include_global_score_sheet'),
+        :class => :inline, :for => :conclusion_review_include_global_score_sheet,
+        :style => 'width: 94%;' %>
+      <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
+        true, :class => :inline_item %>
+    </p>
+
+    <p class="form_item">
+      <%= content_tag :label, t(:'conclusion_review.include_score_sheet'),
+        :class => :inline, :for => :conclusion_review_include_score_sheet,
+        :style => 'width: 94%;' %>
+      <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
+        :class => :inline_item %>
+    </p>
+
+    <p class="form_item">
+      <%= content_tag :label, t(:'conclusion_review.email_note'),
+        :for => :conclusion_review_email_note %>
+      <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
+        :cols => 40 %>
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 50%;">
+        <h3><%= User.human_name %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">&nbsp;</div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="users">
+      <% @conclusion_final_review.review.users.each do |user| -%>
+        <%= render :partial => 'user', :locals => {:user => user,
+          :is_dynamic => false} %>
+      <% end %>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'conclusion_review.add_recipient'), '#user',
+      :class => :add_nested_item, :rel => 'users' %>
+  </p>
+
+  <p>
+    <span class="button"><%= f.submit t(:'label.send') %></span>
+  </p>
+<% end %>
+<%= set_focus_to_first_element %>
+<!--[eoform:conclusion_final_review] -->
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
+<%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
+<%= link_to_back %>
+</div>

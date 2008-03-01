@@ -1,0 +1,21 @@
+<div id="showed_data">
+<p>
+  <b><%= LoginRecord.human_attribute_name 'start' %>:</b>
+  <%=h l(@login_record.start, :format => :short) if @login_record.start %>
+</p>
+
+<p>
+  <b><%= LoginRecord.human_attribute_name 'end' %>:</b>
+  <%=h l(@login_record.end, :format => :short) if @login_record.end %>
+</p>
+
+<p>
+  <b><%= LoginRecord.human_attribute_name 'data' %>:</b>
+  <%=h @login_record.data %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.list'), login_records_path %> |
+<%= link_to_back %>
+</div>

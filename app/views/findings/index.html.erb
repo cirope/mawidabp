@@ -1,0 +1,57 @@
+<%= render :partial => 'shared/search', :locals => {
+  :options => {
+    :url => findings_path(:completed => params[:completed]),
+    :extra_parameters => {:completed => params[:completed]}
+  },
+  :columns => @query.blank? ? Finding::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
+<table>
+  <thead  id="column_headers">
+    <tr>
+      <th></th>
+      <%= make_filterable_column Review.human_name, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
+      <%= make_filterable_column Finding.human_attribute_name(:review_code), 'review_code' %>
+      <%= make_filterable_column Finding.human_attribute_name(:description), 'description' %>
+      <%= make_not_available_column Finding.human_attribute_name(:state) %>
+      <%= make_not_available_column Finding.human_attribute_name(
+          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date) %>
+      <%= make_not_available_column Finding.human_attribute_name(:finding_answers) %>
+      <%= make_not_available_column t(:'finding.has_work_papers') %>
+      <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
+    <% @findings.each do |finding| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td class="nowrap"><%= show_review_with_conclusion_status_as_acronym(
+          finding.control_objective_item.review) %></td>
+        <td><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(finding) %></td>
+        <td><%= super_truncate(finding.description, 30) %></td>
+        <td><%= h finding.state_text %></td>
+        <% if params[:completed] == 'complete' -%>
+          <td><%= h l(finding.solution_date, :format => :short) if finding.solution_date %></td>
+        <% else -%>
+          <td><%= finding_follow_up_date_text(finding) %></td>
+        <% end -%>
+        <td><%= h finding.finding_answers.count %></td>
+        <td><%= t finding.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td><%= link_to_show finding_path(params[:completed], finding) %></td>
+        <td><%= link_to_edit edit_finding_path('incomplete', finding) if params[:completed] == 'incomplete' %></td>
+        <td><%= button_to_destroy finding %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @findings %>
+  <div style="clear: both;"></div>
+</div>

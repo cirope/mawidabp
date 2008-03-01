@@ -1,0 +1,24 @@
+<% organization = @conclusion_review.review.try(:organization) if @conclusion_review -%>
+<% extra_options = {
+  :host => (organization ? "#{organization.prefix}.#{URL_HOST}" : URL_HOST),
+  :protocol => URL_PROTOCOL
+} -%>
+<h2><%= organization.name %></h2>
+
+<p><%= textilize @body_title %></p>
+
+<% unless @note.blank? -%>
+  <p><%= textilize h(@note) %></p>
+<% end -%>
+
+<% if @notification -%>
+<p>
+  <%= link_to t(:'notifier.conclusion_review_notification.confirm'),
+    confirm_notification_url(@notification, extra_options) %>
+</p>
+<p>
+  <%= link_to t(:'notifier.conclusion_review_notification.reject'),
+    confirm_notification_url(@notification, extra_options.merge(:reject => 1)) %>
+</p>
+<% end -%>
+<%= render :partial => 'footer' %>

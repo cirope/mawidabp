@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= HelpContent.human_attribute_name 'language' %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+    <% @help_contents.each do |help_content| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%= t "lang.#{help_content.language}" %></td>
+        <td><%= link_to_show help_content %></td>
+        <td><%= link_to_edit edit_help_content_path(help_content) %></td>
+        <td><%= button_to_destroy help_content %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @help_contents %>
+  <%= link_to t(:'label.new'), new_help_content_path %>
+  <div style="clear: both;"></div>
+</div>

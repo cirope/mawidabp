@@ -1,0 +1,377 @@
+class ControlObjectiveItem < ActiveRecord::Base
+  include ParameterSelector
+
+  # Constantes
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :review => {
+      :column => "LOWER(#{Review.table_name}.identification)",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
+    },
+    :control_objective_text => {
+      :column => "LOWER(#{table_name}.control_objective_text)",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
+    }
+  })
+
+  has_paper_trail :meta => {
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  }
+
+  # Asociaciones que deben ser registradas cuando cambien
+  @@associations_attributes_for_log = [:pre_audit_workpaper_ids,
+    :post_audit_workpaper_ids]
+
+  # Atributos no persistentes
+  attr_accessor :included_in_review
+  attr_reader :approval_errors
+
+  # Callbacks
+  before_validation :can_be_modified?
+  before_destroy :can_be_destroyed?
+  before_validation_on_create :fill_control_objective_text
+
+  # Validaciones
+  validates_presence_of :control_objective_text, :control_objective_id
+  validates_numericality_of :control_objective_id, :review_id,
+    :allow_nil => true, :only_integer => true
+  validates_numericality_of :relevance, :only_integer => true,
+    :allow_blank => true, :allow_nil => true, :greater_than_or_equal_to => 0
+  validates_date :audit_date, :allow_nil => true, :allow_blank => true
+  validates_each :audit_date do |record, attr, value|
+    period = record.review.period if record.review
+
+    if period && value && !value.between?(period.start, period.end)
+      record.errors.add attr, :out_of_period
+    end
+  end
+  validates_each :control_objective_id do |record, attr, value|
+    review = record.review
+    
+    is_duplicated = review && review.control_objective_items.any? do |coi|
+      another_record = (!record.new_record? && coi.id != record.id) ||
+        (record.new_record? && coi.object_id != record.object_id)
+
+      coi.control_objective_id == record.control_objective_id &&
+        another_record && !record.marked_for_destruction?
+    end
+
+    record.errors.add attr, :taken if is_duplicated
+  end
+  # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
+  validates_presence_of :post_audit_qualification, :audit_date, :relevance,
+    :effects, :identified_controls, :post_audit_tests, :auditor_comment,
+    :if => :finished
+  validates_presence_of :pre_audit_tests,
+    :if => proc { |coi| coi.finished && coi.pre_audit_qualification }
+  
+  # Relaciones
+  belongs_to :control_objective
+  belongs_to :review
+  has_many :weaknesses, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :oportunities, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :final_weaknesses, :dependent => :destroy, :class_name => 'Weakness',
+    :order => 'review_code ASC', :conditions => {:final => true}
+  has_many :final_oportunities, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'Oportunity',
+    :conditions => {:final => true}
+  has_one :process_control, :through => :control_objective
+  has_many :pre_audit_work_papers, :class_name => 'WorkPaper',
+    :as => :owner, :dependent => :destroy, :order => 'created_at ASC',
+    :before_add => [:check_for_final_review, :prepare_work_paper,
+    :mark_as_pre_audit], :before_remove => :check_for_final_review,
+    :conditions => {:work_paper_type => 'ControlObjectiveItemPreAudit'}
+  has_many :post_audit_work_papers, :class_name => 'WorkPaper',
+    :as => :owner, :dependent => :destroy, :order => 'created_at ASC',
+    :before_add => [:check_for_final_review, :prepare_work_paper,
+    :mark_as_post_audit], :before_remove => :check_for_final_review,
+    :conditions => {:work_paper_type => 'ControlObjectiveItemPostAudit'}
+
+  accepts_nested_attributes_for :pre_audit_work_papers, :allow_destroy => true
+  accepts_nested_attributes_for :post_audit_work_papers, :allow_destroy => true
+
+  def initialize(attributes = nil)
+    super(attributes)
+
+    if self.control_objective
+      self.relevance ||= self.control_objective.relevance
+    end
+
+    self.finished ||= false
+  end
+
+  def check_for_final_review(_)
+    if self.review && self.review.is_frozen?
+      raise 'Conclusion Final Review frozen'
+    end
+  end
+
+  def prepare_work_paper(work_paper)
+    work_paper.code_prefix = self.get_parameter(
+      :admin_code_prefix_for_work_papers_in_control_objectives)
+    work_paper.neighbours = (self.review.try(:work_papers) || []) +
+      self.work_papers.reject { |wp| wp == work_paper }
+  end
+
+  def mark_as_pre_audit(work_paper)
+    work_paper.work_paper_type = 'ControlObjectiveItemPreAudit'
+  end
+
+  def mark_as_post_audit(work_paper)
+    work_paper.work_paper_type = 'ControlObjectiveItemPostAudit'
+  end
+
+  def effectiveness
+    parameter_qualifications = self.get_parameter(
+      :admin_control_objective_qualifications)
+    highest_qualification =
+      parameter_qualifications.map { |item| item[1].to_i }.max || 0
+    qualifications = []
+
+    if highest_qualification > 0
+      if self.post_audit_qualification
+        post_audit = self.post_audit_qualification * 100.0 /
+          highest_qualification
+        qualifications << post_audit.round
+      end
+
+      if self.pre_audit_qualification
+        pre_audit = self.pre_audit_qualification * 100.0 /
+          highest_qualification
+        qualifications << pre_audit.round
+      end
+    end
+
+    qualifications.empty? ? 100 :
+      (qualifications.sum / qualifications.size).round
+  end
+
+  def fill_control_objective_text
+    self.control_objective_text ||= self.control_objective.try(:name)
+  end
+
+  def work_papers
+    self.pre_audit_work_papers + self.post_audit_work_papers
+  end
+
+  def must_be_approved?
+    errors = []
+
+    if !self.finished?
+      errors << I18n.t(:'control_objective_item.errors.not_finished')
+    end
+
+    if !self.post_audit_qualification?
+      errors << I18n.t(
+        :'control_objective_item.errors.without_post_audit_quelification')
+    end
+
+    if self.relevance && self.relevance <= 0
+      errors << I18n.t(:'control_objective_item.errors.without_relevance')
+    end
+
+    if self.audit_date.blank?
+      errors << I18n.t(:'control_objective_item.errors.without_audit_date')
+    end
+
+    if self.effects.blank?
+      errors << I18n.t(:'control_objective_item.errors.without_effects')
+    end
+
+    if self.identified_controls.blank?
+      errors << I18n.t(
+        :'control_objective_item.errors.without_identified_controls')
+    end
+
+    if self.post_audit_tests.blank?
+      errors << I18n.t(
+        :'control_objective_item.errors.without_post_audit_tests')
+    end
+
+    if self.auditor_comment.blank?
+      errors << I18n.t(:'control_objective_item.errors.without_auditor_comment')
+    end
+
+    if self.pre_audit_qualification && self.pre_audit_tests.blank?
+      errors << I18n.t(:'control_objective_item.errors.without_pre_audit_tests')
+    end
+
+    (@approval_errors = errors).blank?
+  end
+
+  def can_be_modified?
+    unless self.is_in_a_final_review? && self.changed?
+      true
+    else
+      msg = I18n.t(:'control_objective_item.readonly')
+      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+
+      false
+    end
+  end
+
+  def can_be_destroyed?
+    self.is_in_a_final_review? ? false : true
+  end
+
+  def is_in_a_final_review?
+    self.review && self.review.has_final_review?
+  end
+
+  def relevance_text(show_value = false)
+    relevances = self.get_parameter(:admin_control_objective_importances)
+    relevance = relevances.detect { |r| r.last == self.relevance }
+
+    relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
+        relevance.first) : ''
+  end
+
+  def post_audit_qualification_text(show_value = false)
+    post_audit_qualifications = self.get_parameter(
+      :admin_control_objective_qualifications)
+    post_audit_qualification = post_audit_qualifications.detect do |r|
+      r.last == self.relevance
+    end
+
+    post_audit_qualification ? (show_value ?
+        "#{post_audit_qualification.first} (#{post_audit_qualification.last})" :
+        post_audit_qualification.first) : ''
+  end
+
+  def to_pdf(organization = nil)
+    pdf = PDF::Writer.create_generic_pdf(:portrait, false)
+
+    pdf.add_review_header organization, self.review.identification.strip,
+      self.review.plan_item.project.strip
+
+    pdf.move_pointer 28
+
+    pdf.add_description_item(ProcessControl.human_name,
+      self.process_control.try(:name), 0, false, 14)
+    pdf.add_description_item(ControlObjectiveItem.human_name,
+      self.control_objective_text, 0, false, 14)
+
+    pdf.move_pointer 28
+
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'relevance'), self.relevance_text(true), 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'audit_date'),
+      (I18n.l(self.audit_date, :format => :long) if self.audit_date), 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'effects'), self.effects, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'identified_controls'), self.identified_controls, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'post_audit_tests'), self.post_audit_tests, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'auditor_comment'), self.auditor_comment, 0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'post_audit_qualification'), self.post_audit_qualification_text(true),
+      0, false)
+    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
+        'effectiveness'), "#{self.effectiveness}%", 0, false)
+
+    unless self.work_papers.blank?
+      pdf.start_new_page
+      pdf.move_pointer 36
+
+      pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
+        18, :center, false)
+
+      pdf.move_pointer 36
+
+      self.work_papers.each do |wp|
+        pdf.text wp.inspect, :justification => :center, :font_size => 12
+      end
+    else
+      pdf.add_footnote(I18n.t(:'control_objective_item.without_work_papers'))
+    end
+
+    pdf.custom_save_as(self.pdf_name, ControlObjectiveItem.table_name,
+      self.id)
+  end
+
+  def absolute_pdf_path
+    PDF::Writer.absolute_path(self.pdf_name, ControlObjectiveItem.table_name,
+      self.id)
+  end
+
+  def relative_pdf_path
+    PDF::Writer.relative_path(self.pdf_name, ControlObjectiveItem.table_name,
+      self.id)
+  end
+
+  def pdf_name
+    "#{self.class.human_name.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
+  end
+
+  def pdf_column_data(finding, pc_id)
+    body = String.new
+    weakness = finding.kind_of?(Weakness)
+    head = "<b>#{ControlObjective.human_name}:</b> " +
+      "#{self.control_objective_text.chomp}\n"
+
+    unless finding.review_code.blank?
+      head << "<b>#{finding.class.human_attribute_name('review_code')}:</b> " +
+        "#{finding.review_code.chomp}\n"
+    end
+
+    unless finding.description.blank?
+      head << "<b>#{finding.class.human_attribute_name('description')}:</b> " +
+        finding.description.chomp
+    end
+
+    if weakness && !finding.risk_text.blank?
+      body << "<b>#{Weakness.human_attribute_name('risk')}:</b> " +
+        "#{finding.risk_text.chomp}\n"
+    end
+
+    if weakness && !finding.effect.blank?
+      body << "<b>#{Weakness.human_attribute_name('effect')}:</b> " +
+        "#{finding.effect.chomp}\n"
+    end
+
+    if weakness && !finding.audit_recommendations.blank?
+      body << "<b>#{Weakness.human_attribute_name('audit_recommendations')}: " +
+        "</b>#{finding.audit_recommendations}\n"
+    end
+
+    unless finding.answer.blank?
+      body << "<b>#{finding.class.human_attribute_name('answer')}:</b> " +
+        "#{finding.answer.chomp}\n"
+    end
+
+    if weakness && !finding.implemented_audited?
+      unless finding.follow_up_date.blank?
+        body << "<b>#{Weakness.human_attribute_name('follow_up_date')}:</b> " +
+          "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
+      end
+    elsif !finding.solution_date.blank?
+      body << "<b>#{finding.class.human_attribute_name('solution_date')}:"+
+        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
+    end
+
+    audited_users = finding.users.select { |u| u.audited? }
+
+    unless audited_users.blank?
+      body << "<b>#{finding.class.human_attribute_name('user_ids')}:</b> " +
+        "#{audited_users.map { |u| u.full_name }.join('; ')}\n"
+    end
+
+    unless finding.audit_comments.blank?
+      body << "<b>#{finding.class.human_attribute_name('audit_comments')}:" +
+        "</b> #{finding.audit_comments.chomp}\n"
+    end
+
+    unless finding.state_text.blank?
+      body << "<b>#{finding.class.human_attribute_name('state')}:</b> " +
+        finding.state_text.chomp
+    end
+
+    [{ pc_id => head.to_iso }, { pc_id => body.to_iso }]
+  end
+end

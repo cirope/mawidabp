@@ -1,0 +1,34 @@
+<% url = url_for({:action => action}.merge(extra_params)) -%>
+<div id="date_filter">
+  <div>
+    <% form_for action, :url => url, :html => {:method => :get} do |f| -%>
+      <table style="border: none; margin: 0em;">
+        <tbody>
+          <tr>
+            <td style="padding-right: 1em;">
+              <p class="form_item" style="margin: 0em;">
+                <%= f.label :from_date, t(:'conclusion_committee_report.from_date'),
+                  :class => :inline %>
+                <%= f.calendar_date_select :from_date, :value => l(@from_date),
+                  :class => :inline_item %>
+              </p>
+            </td>
+            <td style="padding-right: 1em;">
+              <p class="form_item" style="margin: 0em;">
+                <%= f.label :to_date, t(:'conclusion_committee_report.to_date'),
+                  :class => :inline %>
+                <%= f.calendar_date_select :to_date, :value => l(@to_date),
+                  :class => :inline_item %>
+              </p>
+            </td>
+            <td>
+              <span class="button"><%= f.submit t(:'label.update'),
+                :style => 'margin: 0em;' %></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <% end -%>
+  </div>
+</div>
+<%= set_focus_to_first_element %>

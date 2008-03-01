@@ -1,0 +1,104 @@
+bcra_A4609_security_management_responsible_dependency_item:
+  control_objective_text: Dependencia del área responsable
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "Se considera en la estructura organizacional un área para la protección de los activos de información, con el fin de establecer los mecanismos para la administración y el control de la seguridad sobre el acceso lógico y físico a sus distintos ambientes tecnológicos y recursos de información: equipamiento principal, plataforma de sucursales, equipos departamentales, subsistemas o módulos administradores de seguridad de los sistemas de aplicación, sistemas de transferencias electrónicas de fondos, bases de datos, canales de servicios electrónicos, banca por Internet y otros."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 5.days.from_now.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: bcra_A4609_security_management_responsible_dependency
+  review: current_review
+
+bcra_A4609_data_proccessing_impact_analisys_item:
+  control_objective_text: Análisis de impacto
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "La continuidad del procesamiento electrónico de datos, que en definitiva posibilita la continuidad de los negocios, evidencia que se han identificado los eventos que puedan ocasionar interrupciones en sus procesos críticos."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 7.days.from_now.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: bcra_A4609_data_proccessing_impact_analisys
+  review: current_review
+
+iso_27000_security_policy_3_1_item:
+  control_objective_text: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "3.1.1 Documentación de la política de seguridad de la información."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 1.year.ago.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: iso_27000_security_policy_3_1
+  review: past_review
+
+iso_27000_security_organization_4_1_item:
+  control_objective_text: "4.1) Infraestructura de seguridad de la información."
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "4.1.1	Foro gerencial sobre seguridad de la información."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 1.year.ago.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: iso_27000_security_organization_4_1
+  review: past_review
+
+iso_27000_security_organization_4_2_item:
+  control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "4.2.1 Identificación de riesgos del acceso de terceras partes."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 1.year.ago.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: iso_27000_security_organization_4_2
+  review: past_review
+
+bcra_A4609_security_management_responsible_dependency_item_editable:
+  control_objective_text: Dependencia del área responsible
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "Se considera en la estructura organizacional un área para la protección de los activos de información, con el fin de establecer los mecanismos para la administración y el control de la seguridad sobre el acceso lógico y físico a sus distintos ambientes tecnológicos y recursos de información: equipamiento principal, plataforma de sucursales, equipos departamentales, subsistemas o módulos administradores de seguridad de los sistemas de aplicación, sistemas de transferencias electrónicas de fondos, bases de datos, canales de servicios electrónicos, banca por Internet y otros."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 5.days.from_now.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: bcra_A4609_security_management_responsible_dependency
+  review: review_with_conclusion
+
+bcra_A4609_data_proccessing_impact_analisys_item_editable:
+  control_objective_text: Análisis de impacto
+  effects: Effects
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  identified_controls: "La continuidad del procesamiento electrónico de datos, que en definitiva posibilita la continuidad de los negocios, evidencia que se han identificado los eventos que puedan ocasionar interrupciones en sus procesos críticos."
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  pre_audit_tests: Pre audit tests
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_tests: Post audit tests
+  audit_date: <%= 7.days.from_now.to_date %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: bcra_A4609_data_proccessing_impact_analisys
+  review: review_with_conclusion

@@ -1,0 +1,11 @@
+<tr class="<%= cycle(:even, :odd) %>">
+  <td></td>
+  <td><%= h index_line.name %></td>
+  <td><%= h name_for_option_value(parameter_in(@auth_organization.id,
+    :admin_resource_units, index_line.created_at), index_line.unit) %></td>
+  <td><%= link_to_show index_line %></td>
+  <td><%= link_to_edit edit_resource_class_path(index_line) %></td>
+  <td><%= button_to_destroy index_line %></td>
+  <td></td>
+</tr>
+<tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>

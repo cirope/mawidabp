@@ -1,0 +1,289 @@
+<% PLAIN_PASSWORDS = HashWithIndifferentAccess.new({:admin => 'admin123'}) %>
+<% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
+administrator_user:
+  name: Administrator
+  last_name: Administrator
+  language: es
+  email: administrator@administrator.com
+  function: Administrator function
+  user: admin
+  password: <%= Digest::SHA512.hexdigest("#{salt}-admin123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
+<% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
+administrator_second_user:
+  name: Administrator Second
+  last_name: Administrator Second
+  language: es
+  email: administrator_second@administrator.com
+  function: Administrator second function
+  user: admin_second
+  password: <%= Digest::SHA512.hexdigest("#{salt}-admin123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
+<% salt = Digest::SHA512.hexdigest("bare#{rand}") %>
+bare_user:
+  name: Bare
+  last_name: User
+  language: es
+  email: bare@users.com
+  function: Bare function
+  user: bare_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-bare123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
+<% salt = Digest::SHA512.hexdigest("first_time_user#{rand}") %>
+first_time_user:
+  name: First Time
+  last_name: User
+  language: es
+  email: first_time@users.com
+  function: First time function
+  user: first_time_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-first_time_user") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:expired] = 'expired123' %>
+<% salt = Digest::SHA512.hexdigest("expired#{rand}") %>
+expired_user:
+  name: Expired
+  last_name: Expired
+  language: es
+  email: expired@expired.com
+  function: Expired function
+  user: expired
+  password: <%= Digest::SHA512.hexdigest("#{salt}-expired123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.months.ago.to_date %>
+  logged_in: false
+  password_changed: <%= 2.days.ago %>
+  last_access: <%= DEFAULT_PARAMETERS[:security_acount_expire_time].to_i.days.ago.yesterday %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
+<% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
+disabled_user:
+  name: Diasabled
+  last_name: Disabled
+  language: es
+  email: diasabled@diasabled.com
+  function: Disabled function
+  user: disabled
+  password: <%= Digest::SHA512.hexdigest("#{salt}-diasabled123") %>
+  salt: <%= salt %>
+  enable: false
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
+<% salt = Digest::SHA512.hexdigest("blank_password#{rand}") %>
+blank_password_user:
+  name: Blank
+  last_name: Password
+  language: es
+  email: blank_password@blank-password.com
+  function: Blank password function
+  user: blank_password
+  password: <%= Digest::SHA512.hexdigest("#{salt}-blank_password123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+  change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
+
+<% PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
+<% salt = Digest::SHA512.hexdigest("expired_blank_password#{rand}") %>
+expired_blank_password_user:
+  name: Expired Blank
+  last_name: Password
+  language: es
+  email: expired_blank_password@blank-password.com
+  function: Expired blank password function
+  user: expired_blank_password
+  password: <%= Digest::SHA512.hexdigest("#{salt}-expired_blank_password123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 20.days.ago.to_date %>
+  logged_in: false
+  password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago %>
+  resource: auditor_resource
+  change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
+
+<% PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
+<% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
+manager_user:
+  name: Manager
+  last_name: Lastname
+  language: es
+  email: manager@users.com
+  function: Manager function
+  user: manager_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-manager123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
+<% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
+manager_second_user:
+  name: Manager Second
+  last_name: Lastname
+  language: es
+  email: manager_second@users.com
+  function: Manager Second function
+  user: manager_second_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-manager_second123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
+<% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
+supervisor_user:
+  name: Supervisor
+  last_name: Lastname
+  language: es
+  email: supervisor@users.com
+  function: Supervisor function
+  user: supervisor_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-supervisor123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
+<% salt = Digest::SHA512.hexdigest("supervisor_second#{rand}") %>
+supervisor_second_user:
+  name: Supervisor Second
+  last_name: Lastname
+  language: es
+  email: supervisor_second@users.com
+  function: Supervisor second function
+  user: supervisor_second_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-supervisor_second123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
+<% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
+audited_user:
+  name: Audited
+  last_name: Lastname
+  language: es
+  email: audited@users.com
+  function: Audited function
+  user: audited_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-audited123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
+<% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
+audited_second_user:
+  name: Audited Second
+  last_name: Lastname
+  language: es
+  email: audited_second@users.com
+  function: Audited Second function
+  user: audited_second_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-audited_second123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:committee] = 'committee123' %>
+<% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
+committee_user:
+  name: Committee
+  last_name: Committee
+  language: es
+  email: committee@committee.com
+  function: Committee function
+  user: committee
+  password: <%= Digest::SHA512.hexdigest("#{salt}-committee123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 2.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource
+
+<% PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
+<% salt = Digest::SHA512.hexdigest("auditor#{rand}") %>
+auditor_user:
+  name: Auditor
+  last_name: User
+  language: es
+  email: auditor@users.com
+  function: Auditor function
+  user: auditor_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-auditor123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  resource: auditor_resource

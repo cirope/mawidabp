@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= BestPractice.human_attribute_name 'name' %></th>
+      <th><%= BestPractice.human_attribute_name 'description' %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+    <%= render :partial => 'index_line', :collection => @best_practices %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @best_practices %>
+<%= link_to t(:'label.new'), new_best_practice_path %>
+<div style="clear: both;"></div>
+</div>

@@ -1,0 +1,44 @@
+<% if @query.blank? -%>
+  <%= render :partial => 'shared/date_filter_form',
+    :locals => {:action => :index, :extra_params => {}} %>
+<% end -%>
+<%= render :partial => 'shared/search', :locals => {
+  :options => {},
+  :columns => @query.blank? ? LoginRecord::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
+<table>
+  <thead id="column_headers">
+    <tr>
+      <th></th>
+      <%= make_filterable_column User.human_name, 'user' %>
+      <%= make_not_available_column LoginRecord.human_attribute_name(:start) %>
+      <%= make_not_available_column LoginRecord.human_attribute_name(:end) %>
+      <%= make_filterable_column LoginRecord.human_attribute_name(:data), 'data' %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+  <% @login_records.each do |login_record| -%>
+    <tr class="<%= cycle(:even, :odd) %>">
+      <td></td>
+      <td><%=h login_record.user.user %></td>
+      <td><%=h l(login_record.start, :format => :short) if login_record.start %></td>
+      <td><%=h l(login_record.end, :format => :short) if login_record.end %></td>
+      <td><%= super_truncate(login_record.data, 40) %></td>
+      <td><%= link_to_show login_record %></td>
+      <td></td>
+    </tr>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+  <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @login_records %>
+<%= link_to t(:'label.back'), :action => :choose %> |
+<%= link_to t(:'label.download'), :action => :export_to_pdf,
+    :range => {:from_date => @from_date, :to_date => @to_date} %>
+<div style="clear: both;"></div>
+</div>

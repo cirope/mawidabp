@@ -1,0 +1,54 @@
+<%= render :partial => 'shared/date_filter_form',
+  :locals => {:action => :detailed_management_report, :extra_params => {}} %>
+
+<% @audits_by_business_unit.each do |data| -%>
+  <% if data[:value] == BusinessUnit::INTERNAL_TYPES.values.sort.first -%>
+    <h1 class="center_title">
+      <%= t :'execution_reports.detailed_management_report.internal_audit_weaknesses' %>
+    </h1>
+  <% elsif data[:value] == BusinessUnit::EXTERNAL_TYPES.values.sort.first -%>
+    <h1 class="center_title">
+      <%= t :'execution_reports.detailed_management_report.external_audit_weaknesses' %>
+    </h1>
+  <% end -%>
+  <h1 style="margin: 1em;"><%= data[:name] %></h1>
+  <% unless data[:column_data].blank? -%>
+    <table class="summary_table" style="margin: 0em 1em;">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name| -%>
+            <% column = data[:columns][col_name] %>
+            <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
+          <% end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:column_data].each do |row| -%>
+          <tr>
+            <% @column_order.each do |col_name| -%>
+              <td><%= row[col_name].kind_of?(Array) ?
+                array_to_ul(row[col_name], :class => :raw_list) :
+                row[col_name] %></td>
+            <% end -%>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% else -%>
+    <p style="margin: 1em;">
+      <em><%= t :'execution_reports.detailed_management_report.without_audits_in_the_period' %></em>
+    </p>
+  <% end -%>
+<% end -%>
+
+<div style="margin: 1em;">
+  <%= simple_format t(:'execution_reports.detailed_management_report.references',
+    :risk_types => @risk_levels.to_sentence) %>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.back'), :action => :index %> |
+  <%= link_to t(:'label.download'), :action => :detailed_management_report,
+    :detailed_management_report => {:from_date => @from_date, :to_date => @to_date},
+    :download => 1 %>
+</div>

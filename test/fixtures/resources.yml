@@ -1,0 +1,23 @@
+auditor_resource:
+  name: Auditor
+  description: This is the auditor resource
+  cost_per_unit: 1.20
+  resource_class: human_resources
+
+developer_resource:
+  name: Developer
+  description: This is the developer resource
+  cost_per_unit: 1.30
+  resource_class: human_resources
+
+senior_auditor_resource:
+  name: Senior Auditor
+  description: This is the senior auditor resource
+  cost_per_unit: 2.20
+  resource_class: human_resources
+
+laptop_resource:
+  name: Generic Laptop
+  description: This is a generic laptop
+  cost_per_unit: 10.7
+  resource_class: hardware_resources

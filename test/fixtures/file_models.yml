@@ -1,0 +1,9 @@
+image_file:
+  filename: 'photo.jpg'
+  content_type: 'image/jpeg'
+  size: 1000
+
+text_file:
+  filename: 'text.txt'
+  content_type: 'text/plain'
+  size: 20

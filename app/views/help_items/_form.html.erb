@@ -1,0 +1,56 @@
+<!--[form:help_item]-->
+<% form_for @help_item do |hi_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var child='#{generate_template(hi_f, :children)}';" %>
+  <% end -%>
+  <%= hi_f.error_messages %>
+
+  <p>
+    <%= hi_f.label :name %>
+    <%= hi_f.text_field :name, :maxlength => 255 %>
+  </p>
+
+  <p style="margin-bottom: 1em;">
+    <%= hi_f.label :description %>
+    <%= hi_f.text_area :description, :class => :double_height %>
+  </p>
+
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 5%;">
+        <h3><%= HelpItem.human_attribute_name 'order_number' %></h3>
+      </div>
+      <div class="item_column" style="width: 30%;">
+        <h3><%= HelpItem.human_attribute_name 'name' %></h3>
+      </div>
+      <div class="item_column" style="width: 50%;">
+        <h3><%= HelpItem.human_attribute_name 'description' %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="children">
+      <% hi_f.fields_for :children do |hi_f| -%>
+        <%= render :partial => 'child', :locals =>
+          {:f => hi_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'label.add_item'), '#child', :class => :add_nested_item,
+      :rel => :children %>
+  </p>
+
+  <%= hidden_lock_version(hi_f) %>
+  
+  <p>
+    <span class="button"><%= hi_f.submit submit_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:help_item] -->
+<%= set_focus_to_first_element %>
+<script type="text/javascript">
+  Helper.makeSortable('children', '#children div.child', '#children a.move');
+</script>

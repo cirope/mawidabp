@@ -1,0 +1,42 @@
+<div id="showed_data">
+<p>
+  <b><%= Oportunity.human_attribute_name 'description' %>:</b>
+  <%=h @oportunity.description %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'review_code' %>:</b>
+  <%=h @oportunity.review_code %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'answer' %>:</b>
+  <%=h @oportunity.answer %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'user_ids' %>:</b>
+  <%=h @oportunity.users.collect{ |u| u.full_name }.join(APP_ENUM_SEPARATOR) %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'audit_comments' %>:</b>
+  <%=h @oportunity.audit_comments %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'state' %>:</b>
+  <%=h @oportunity.state_text %>
+</p>
+
+<p>
+  <b><%= Oportunity.human_attribute_name 'solution_date' %>:</b>
+  <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_oportunity_path(@oportunity) %> |
+<%= link_to t(:'label.list'), oportunities_path %> |
+<%= link_to_back %>
+</div>

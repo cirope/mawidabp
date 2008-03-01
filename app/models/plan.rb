@@ -1,0 +1,195 @@
+class Plan < ActiveRecord::Base
+  include ParameterSelector
+  
+  has_paper_trail :meta => {
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  }
+
+  # Callbacks
+  before_validation :set_proper_parent
+  before_destroy :can_be_destroyed?
+
+  # Atributos no persistentes
+  attr_accessor :allow_overload, :allow_duplication, :new_version
+  attr_writer :estimated_amount
+
+  attr_readonly :period_id
+
+  # Asociaciones que deben ser registradas cuando cambien
+  @@associations_attributes_for_log = [:plan_item_ids]
+
+  # Restricciones
+  validates_presence_of :period_id
+  validates_uniqueness_of :period_id, :allow_nil => true, :allow_blank => true
+  validates_numericality_of :period_id, :only_integer => true,
+    :allow_nil => true
+  validates_each :plan_items do |record, attr, value|
+    unless value.all? {|pi| !pi.marked_for_destruction? || pi.can_be_destroyed?}
+      record.errors.add attr, :locked
+    end
+  end
+  
+  # Relaciones
+  belongs_to :period
+  has_one :organization, :through => :period
+  has_many :plan_items, :dependent => :destroy,
+    :order => "#{PlanItem.table_name}.order_number ASC"
+
+  accepts_nested_attributes_for :plan_items, :allow_destroy => true
+
+  def set_proper_parent
+    self.plan_items.each { |pi| pi.plan = self }
+  end
+
+  def overloaded?
+    self.plan_items.any? { |pi| pi.overloaded }
+  end
+
+  def has_duplication?
+    has_duplication = false
+
+    self.plan_items.each do |pi|
+      errors = pi.errors
+      taken_error = ::ActiveRecord::Error.new(pi, :project, :taken).to_s
+
+      has_duplication ||= taken_error == errors[:project]
+    end
+
+    has_duplication
+  end
+
+  def allow_overload?
+    self.allow_overload == true || (self.allow_overload.respond_to?(:to_i) &&
+      self.allow_overload.to_i != 0)
+  end
+
+  def allow_duplication?
+    self.allow_duplication == true ||
+      (self.allow_duplication.respond_to?(:to_i) &&
+        self.allow_duplication.to_i != 0)
+  end
+
+  def estimated_amount
+    self.plan_items.inject(0) do |sum, plan_item|
+      sum + plan_item.resource_utilizations.to_a.sum(&:cost)
+    end
+  end
+
+  def can_be_destroyed?
+    unless self.plan_items.all? { |pi| pi.can_be_destroyed? }
+      errors = self.plan_items.map do |pi|
+        pi.errors.full_messages.join(APP_ENUM_SEPARATOR)
+      end
+
+      self.errors.add_to_base errors.reject { |e| e.blank? }.join(
+        APP_ENUM_SEPARATOR)
+
+      false
+    else
+      true
+    end
+  end
+
+  def to_pdf(organization = nil, include_details = true)
+    pdf = PDF::Writer.create_generic_pdf :landscape
+    currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
+    column_order = [['order_number', 6], ['business_unit_id', 16],
+      ['project', 30], ['start', 7.5], ['end', 7.5],
+      ['human_resources_cost', 10], ['material_resources_cost', 10],
+      ['total_resources_cost', 13]]
+    columns = {}
+    column_data = []
+
+    pdf.add_generic_report_header organization
+    
+    pdf.add_title "#{I18n.t(:'plan.pdf.title')}\n", 18, :center
+
+    pdf.add_description_item(I18n.t(:'plan.period.title',
+        :number => self.period.number), I18n.t(:'plan.period.range',
+        :from_date => I18n.l(self.period.start, :format => :long),
+        :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
+
+    column_order.each do |col_name, col_with|
+      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+        c.heading = PlanItem.human_attribute_name(col_name)
+        c.width = pdf.percent_width(col_with)
+      end
+    end
+
+    self.plan_items.each do |plan_item|
+      total_resource_text = currency_mask % plan_item.cost
+
+      column_data << {
+        'order_number' => plan_item.order_number,
+        'business_unit_id' => plan_item.business_unit ?
+          plan_item.business_unit.name.to_iso : '',
+        'project' => plan_item.project.to_iso,
+        'start' => I18n.l(plan_item.start, :format => :default),
+        'end' => I18n.l(plan_item.end, :format => :default),
+        'human_resources_cost' => currency_mask % plan_item.human_cost,
+        'material_resources_cost' => currency_mask % plan_item.material_cost,
+        'total_resources_cost' => plan_item.cost > 0 && include_details ?
+          ("<c:ilink dest='plan_cost_detail_#{plan_item.id}'>" +
+            "#{total_resource_text}</c:ilink>") : total_resource_text
+      }
+    end
+
+    column_data << {
+      'order_number' => '', 'business_unit_id' => '', 'project' => '',
+      'start' => '', 'end' => '', 'human_resources_cost' => '',
+      'material_resources_cost' => '',
+      'total_resources_cost' => "<b>#{currency_mask % self.cost}</b>"
+    }
+
+    pdf.move_pointer 12
+
+    unless column_data.blank?
+      PDF::SimpleTable.new do |table|
+        table.width = pdf.page_usable_width
+        table.columns = columns
+        table.data = column_data
+        table.column_order = column_order.map(&:first)
+        table.split_rows = true
+        table.font_size = 8
+        table.shade_color = Color::RGB::Grey90
+        table.shade_heading_color = Color::RGB::Grey70
+        table.heading_font_size = 10
+        table.shade_headings = true
+        table.position = :left
+        table.orientation = :right
+        table.render_on pdf
+      end
+    end
+
+    if include_details &&
+        !self.plan_items.all? { |pi| pi.resource_utilizations.blank? }
+      pdf.move_pointer 12
+
+      pdf.add_title I18n.t(:'plan.pdf.resource_utilization'), 14
+
+      self.plan_items.each do |plan_item|
+        unless plan_item.resource_utilizations.blank?
+          plan_item.add_resource_data(pdf)
+        end
+      end
+    end
+
+    pdf.custom_save_as(self.pdf_name, Plan.table_name, self.id)
+  end
+
+  def absolute_pdf_path
+    PDF::Writer.absolute_path(self.pdf_name, Plan.table_name, self.id)
+  end
+
+  def relative_pdf_path
+    PDF::Writer.relative_path(self.pdf_name, Plan.table_name, self.id)
+  end
+
+  def pdf_name
+    I18n.t(:'plan.pdf.pdf_name', :period => self.period.number)
+  end
+
+  def cost
+    self.plan_items.inject(0) { |sum, pi| sum + pi.cost }
+  end
+end

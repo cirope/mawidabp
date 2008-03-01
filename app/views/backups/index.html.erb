@@ -1,0 +1,24 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Backup.human_attribute_name 'backup_type' %></th>
+      <th><%= Backup.human_attribute_name 'work_papers_included' %></th>
+      <th><%= Backup.human_attribute_name 'created_at' %></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+    <%= render :partial => 'index_line', :collection => @backups %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @backups %>
+<%= link_to t(:'label.new'), new_backup_path %> |
+<%= link_to t(:'backup.restore'), :action => :restore %>
+<div style="clear: both;"></div>
+</div>

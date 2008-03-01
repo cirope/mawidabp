@@ -1,0 +1,17 @@
+<div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
+  <p>
+    <%= t :'notifier.footer.title' %>
+  </p>
+  <ul>
+    <li>
+      <b><%= t :'notifier.footer.email_label' %></b>:
+      <a href="mailto:<%= SUPPORT_EMAIL %>"><%= SUPPORT_EMAIL %></a>
+    </li>
+    <li>
+      <b><%= t :'notifier.footer.phone_label' %></b>: <%= SUPPORT_PHONE %>
+    </li>
+  </ul>
+  <p>
+    <%= textilize  t(:'notifier.footer.recommendations') %>
+  </p>
+</div>

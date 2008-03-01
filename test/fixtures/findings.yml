@@ -1,0 +1,171 @@
+bcra_A4609_security_management_responsible_dependency_weakness_notify:
+  type: Weakness
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: O01
+  description: Description 1w
+  answer: Answer 1w
+  audit_comments: Audit comments 1w
+  state: <%= Finding::STATUS[:being_implemented] %>
+  solution_date: 
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
+  type: Weakness
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: O02
+  description: Description 2w
+  answer: Answer 2w
+  audit_comments: Audit comments 2w
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  solution_date:
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date: 
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
+  type: Weakness
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: O03
+  description: Description 3w
+  answer: Answer 3w
+  audit_comments: Audit comments 3w
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  solution_date:
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date: 
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_security_management_responsible_dependency_notify_oportunity:
+  type: Oportunity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: OM01
+  description: Description 1o
+  answer: Answer 1o
+  audit_comments: Audit comments 1o
+  state: <%= Finding::STATUS[:notify] %>
+  solution_date:
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
+  type: Oportunity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: OM01
+  description: Description 1o
+  answer: Answer 1o
+  audit_comments: Audit comments 1o
+  state: <%= Finding::STATUS[:being_implemented] %>
+  solution_date:
+  final: false
+  users: administrator_user, auditor_user, audited_user, manager_user, first_time_user
+
+bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity:
+  type: Weakness
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: O03
+  description: Description 3w
+  answer: Answer 3w
+  audit_comments: Audit comments 3w
+  state: <%= Finding::STATUS[:being_implemented] %>
+  solution_date:
+  audit_recommendations: Proposed action 3w
+  effect: Effect 3w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_data_proccessing_impact_analisys_weakness:
+  type: Weakness
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  review_code: O02
+  description: Description 2w
+  answer: Answer 2w
+  audit_comments: Audit comments 2w
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  solution_date: 
+  audit_recommendations: Proposed action 2w
+  effect: Effect 2w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date:
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
+  type: Weakness
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  review_code: O01
+  description: Description 1w
+  answer: Answer 1w
+  audit_comments: Audit comments 1w
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  solution_date:
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date:
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
+  type: Oportunity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  review_code: OM03
+  description: Description 3o
+  answer: Answer 3o
+  audit_comments: Audit comments 3o
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  solution_date:
+  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business %>
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
+  type: Oportunity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  review_code: OM02
+  description: Description 2o
+  answer: Answer 2o
+  audit_comments: Audit comments 2o
+  state: <%= Finding::STATUS[:confirmed] %>
+  solution_date:
+  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user
+
+iso_27000_security_policy_3_1_item_weakness:
+  type: Weakness
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: O01
+  description: Description 1wx
+  answer: Answer 1w
+  audit_comments: Audit comment 1w
+  state: <%= Finding::STATUS[:being_implemented] %>
+  solution_date:
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date %>
+  final: false
+  users: administrator_user, auditor_user, audited_user, bare_user

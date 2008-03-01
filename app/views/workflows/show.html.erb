@@ -1,0 +1,27 @@
+<div id="showed_data">
+<p>
+  <b><%= Organization.human_name %>:</b>
+  <%=h @workflow.organization.name %>
+</p>
+
+<p>
+  <b><%= Period.human_name %>:</b>
+  <%=h "#{@workflow.period.description} (#{@workflow.period.number})" %>
+</p>
+
+<p>
+  <b><%= Period.human_attribute_name 'start' %>:</b>
+  <%=h l(@workflow.period.start, :format => :short) %>
+</p>
+
+<p>
+  <b><%= Period.human_attribute_name 'end' %>:</b>
+  <%=h l(@workflow.period.end, :format => :short) %>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_workflow_path(@workflow) %> |
+<%= link_to t(:'label.list'), workflows_path %> |
+<%= link_to_back %>
+</div>

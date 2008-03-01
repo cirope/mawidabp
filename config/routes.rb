@@ -1,0 +1,244 @@
+ActionController::Routing::Routes.draw do |map|
+  map.resources :inline_helps
+
+  map.welcome 'welcome', :controller => 'welcome', :action => 'index'
+  
+  map.execution_reports 'execution_reports', :controller => 'execution_reports',
+    :action => 'index'
+
+  [
+    'weaknesses_by_state',
+    'detailed_management_report'
+  ].each do |action|
+    map.named_route action, "execution_reports/#{action}",
+      :controller => 'execution_reports', :action => action
+  end
+
+  map.resources :versions, :collection => {
+    :security_changes_report => :get
+  }
+
+  map.resources :help_items
+
+  map.resources :help_contents, :member => {
+    :show_content => :get
+  }, :collection => {
+    :show_content => :get
+  }
+
+  map.resources :notifications, :member => {
+    :confirm => :get
+  }
+
+  map.resources :backups, :collection => {
+    :restore => [:get, :post]
+  }
+
+  map.conclusion_audit_reports 'conclusion_audit_reports',
+    :controller => 'conclusion_audit_reports', :action => 'index'
+
+  map.conclusion_committee_reports 'conclusion_committee_reports',
+    :controller => 'conclusion_committee_reports', :action => 'index'
+
+  map.conclusion_management_reports 'conclusion_management_reports',
+    :controller => 'conclusion_management_reports', :action => 'index'
+
+  map.follow_up_audit 'follow_up_audit',
+    :controller => 'follow_up_audit', :action => 'index'
+
+  map.follow_up_committee 'follow_up_committee',
+    :controller => 'follow_up_committee', :action => 'index'
+
+  map.follow_up_management 'follow_up_management',
+    :controller => 'follow_up_management', :action => 'index'
+
+  [
+    'weaknesses_by_state',
+    'weaknesses_by_risk',
+    'weaknesses_by_audit_type'
+  ].each do |action|
+    map.named_route "#{action}_conclusion_management_reports",
+      "conclusion_management_reports/#{action}",
+      :controller => 'conclusion_management_reports', :action => action
+    map.named_route "#{action}_conclusion_audit_reports",
+      "conclusion_audit_reports/#{action}",
+      :controller => 'conclusion_audit_reports', :action => action
+    map.named_route "#{action}_follow_up_management",
+      "follow_up_management/#{action}", :controller => 'follow_up_management',
+      :action => action
+    map.named_route "#{action}_follow_up_audit",
+      "follow_up_audit/#{action}", :controller => 'follow_up_audit',
+      :action => action
+  end
+
+  [
+    'synthesis_report',
+    'weaknesses_by_state',
+    'weaknesses_by_risk',
+    'weaknesses_by_audit_type'
+  ].each do |action|
+    map.named_route "#{action}_conclusion_committee_reports",
+      "conclusion_committee_reports/#{action}",
+      :controller => 'conclusion_committee_reports', :action => action
+    map.named_route "#{action}_follow_up_committee",
+      "follow_up_committee/#{action}", :controller => 'follow_up_committee',
+      :action => action
+  end
+
+  map.named_route 'cost_analysis_conclusion_committee_reports',
+    "conclusion_committee_reports/cost_analysis",
+    :controller => 'conclusion_committee_reports', :action => 'cost_analysis'
+  map.named_route 'detailed_cost_analysis_conclusion_committee_reports',
+    "conclusion_committee_reports/cost_analysis/detailed",
+    :controller => 'conclusion_committee_reports', :action => 'cost_analysis',
+    :include_details => 1
+
+  map.named_route 'cost_analysis_follow_up_committee',
+    "follow_up_committee/cost_analysis",
+    :controller => 'follow_up_committee', :action => 'cost_analysis'
+
+  map.resources :findings, :has_many => :costs, :member => {
+    :follow_up_pdf => :get,
+    :auto_complete_for_user => :post
+  }, :path_prefix => ':completed',
+    :requirements => {:completed => /complete|incomplete/}
+
+  map.resources :workflows, :member => {
+    :export_to_pdf => :get,
+  }, :collection => {
+    :estimated_amount => :get,
+    :reviews_for_period => :get
+  }
+
+  map.resources :conclusion_draft_reviews, :member => {
+    :export_to_pdf => :get,
+    :auto_complete_for_user => :post,
+    :send_by_email => [:get, :put],
+    :download_work_papers => :get,
+    :score_sheet => :get,
+    :bundle => :get,
+    :create_bundle => :post
+  }
+
+  map.resources :conclusion_final_reviews, :member => {
+    :export_to_pdf => :get,
+    :auto_complete_for_user => :post,
+    :send_by_email => [:get, :put],
+    :download_work_papers => :get,
+    :score_sheet => :get,
+    :bundle => :get,
+    :create_bundle => :post
+  }
+
+  map.resources :reviews, :member => {
+    :survey_pdf => :get,
+    :weaknesses_and_oportunities => :get,
+    :download_work_papers => :get
+  }, :collection => {
+    :estimated_amount => :get
+  }
+
+  map.resources :weaknesses, :has_many => :costs
+
+  map.resources :control_objective_items, :member => {
+    :suggest_next_work_paper_code => :get
+  }
+
+  map.resources :plans, :member => {
+    :export_to_pdf => :get,
+    :auto_complete_for_business_unit_business_unit_id => :post
+  }
+
+  map.resources :resource_classes
+
+  map.resources :procedure_controls, :member => {
+    :export_to_pdf => :get
+  }, :collection => {
+    :get_control_objective => :get,
+    :get_control_objectives => :get,
+    :get_process_controls => :get
+  }
+
+  map.resources :best_practices
+
+  map.resources :periods
+
+  map.resources :oportunities, :has_many => :costs
+
+  map.resources :organizations
+
+  map.resources :roles
+
+  map.resources :parameters, :path_prefix => ':type',
+    :requirements => {:type => /admin|security/}
+
+  map.resources :error_records, :collection => {
+    :export_to_pdf => :get
+  }
+
+  map.resources :login_records, :collection => {
+    :choose => :get,
+    :export_to_pdf => :get
+  }
+
+  map.resources :users, :collection => {
+    :login => [:get, :post],
+    :export_to_pdf => :get,
+    :auto_complete_for_user => :post,
+    :roles => :get
+  }, :member => {
+    :logout => :get,
+    :change_password => [:get, :put],
+    :change_personal_data => [:get, :put],
+    :blank_password => :put,
+    :user_reassignment => [:get, :put],
+    :user_release => [:get, :put]
+  }
+
+  # The priority is based upon order of creation: first created -> highest priority.
+
+  # Sample of regular route:
+  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  # This route can be invoked with purchase_url(:id => product.id)
+
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   map.resources :products
+
+  # Sample resource route with options:
+  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+
+  # Sample resource route with sub-resources:
+  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
+  
+  # Sample resource route with more complex sub-resources
+  #   map.resources :products do |products|
+  #     products.resources :comments
+  #     products.resources :sales, :collection => { :recent => :get }
+  #   end
+
+  # Sample resource route within a namespace:
+  #   map.namespace :admin do |admin|
+  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
+  #     admin.resources :products
+  #   end
+
+  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
+  map.root :controller => 'users', :action => 'login'
+
+  # See how all your routes lay out with "rake routes"
+
+  # Install the default routes as the lowest priority.
+  # Note: These default routes make all actions in every controller accessible via GET requests. You should
+  # consider removing the them or commenting them out if you're using named routes and resources.
+  map.connect 'private/:path', :controller => 'file_models',
+    :action => 'download', :path => /.+/
+  map.connect ':controller/page/:page', :page => /\d+/
+  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id.:format'
+
+  Translate::Routes.translation_ui(map) #unless RAILS_ENV == 'production'
+end

@@ -1,0 +1,35 @@
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Role.human_attribute_name :name %></th>
+      <th><%= Role.human_attribute_name :role_type %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+    <% @roles.each do |role| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%=h role.name %></td>
+        <td><%= role_type_text(role.role_type) %></td>
+        <td><%= link_to_show role %></td>
+        <td><%= link_to_edit edit_role_path(role) %></td>
+        <td><%= button_to_destroy role %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links(@roles) %>
+  <%= link_to t(:'label.new'), new_role_path %>
+<div style="clear: both;"></div>
+</div>

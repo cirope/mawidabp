@@ -1,0 +1,41 @@
+<div id="login">
+  <div id="logo">
+    <%= image_tag 'logo_mini.png', :size => '150x40', :alt => t(:app_name) %>
+  </div>
+  <% if @organization -%>
+    <!--[form:user]-->
+    <% form_for @user, :url => login_users_path do |f| -%>
+      <p>
+        <%= f.label :user %>
+        <%= f.text_field :user, :maxlength => 30 %>
+      </p>
+      <p>
+        <%= f.label :password %>
+        <%= f.password_field :password, :maxlength => 128 %>
+      </p>
+      <div style="margin: 1em 0em 0em 24em;">
+        <span class="button"><%= f.submit t(:'user.enter') %></span>
+      </div>
+    <% end -%>
+    <!--[eoform:user] -->
+    <% content_for :extra_bottom do -%>
+      <div id="unsupported_browser" style="display: none;">
+        <%= textilize t(:'message.unsupported_browser',
+          :url => request.host_with_port) %>
+      </div>
+      <script type="text/javascript">
+      //<![CDATA[
+        if(!Prototype.Browser.WebKit && !Prototype.Browser.Gecko) {
+          Element.show('unsupported_browser');
+        }
+      //]]>
+      </script>
+
+      <%= set_focus_to_first_element %>
+    <% end -%>
+  <% else -%>
+    <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
+      <%= t :'message.no_organization' %>
+    </div>
+  <% end -%>
+</div>

@@ -1,0 +1,9 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.modify')} %>
+
+<div id="links">
+<%= link_to_unless(@parameter.new_record?, t(:'label.show'),
+  parameter_path(params[:type], @parameter)) %> |
+<%= link_to t(:'label.list'), parameters_path(:type => params[:type]) %> |
+<%= link_to_back %>
+</div>

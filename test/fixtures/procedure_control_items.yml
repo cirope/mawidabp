@@ -1,0 +1,27 @@
+procedure_control_item_iso_27001_1:
+  aproach: <%= DEFAULT_PARAMETERS[:admin_aproach_types].first[1] %>
+  frequency: <%= DEFAULT_PARAMETERS[:admin_frequency_types].first[1] %>
+  process_control: iso_27000_security_policy
+  order: 1
+  procedure_control: procedure_control_iso_27001
+
+procedure_control_item_iso_27001_2:
+  aproach: <%= DEFAULT_PARAMETERS[:admin_aproach_types].first[1] %>
+  frequency: <%= DEFAULT_PARAMETERS[:admin_frequency_types].first[1] %>
+  process_control: iso_27000_security_organization
+  order: 2
+  procedure_control: procedure_control_iso_27001
+
+procedure_control_item_bcra_A4609_1:
+  aproach: <%= DEFAULT_PARAMETERS[:admin_aproach_types].first[1] %>
+  frequency: <%= DEFAULT_PARAMETERS[:admin_frequency_types].first[1] %>
+  process_control: bcra_A4609_security_management
+  order: 1
+  procedure_control: procedure_control_bcra_A4609
+
+procedure_control_item_bcra_A4609_2:
+  aproach: <%= DEFAULT_PARAMETERS[:admin_aproach_types].first[1] %>
+  frequency: <%= DEFAULT_PARAMETERS[:admin_frequency_types].first[1] %>
+  process_control: bcra_A4609_data_proccessing
+  order: 2
+  procedure_control: procedure_control_bcra_A4609

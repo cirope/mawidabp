@@ -1,0 +1,8 @@
+current_plan:
+  period: current_period
+
+past_plan:
+  period: past_period
+
+unrelated_plan:
+  period: third_period

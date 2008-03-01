@@ -1,0 +1,8 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.save')} %>
+
+<div id="links">
+  <%= link_to t(:'label.show'), @resource_class %> |
+  <%= link_to t(:'label.list'), resource_classes_path %> |
+  <%= link_to_back %>
+</div>

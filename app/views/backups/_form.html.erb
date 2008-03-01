@@ -1,0 +1,21 @@
+<!--[form:backup]-->
+<% form_for @backup do |f| -%>
+<%= f.error_messages %>
+
+<p class="form_item">
+  <label class="inline"><%= Backup.human_attribute_name 'backup_type' %>:</label>
+  <%= f.radio_button :backup_type, 0, :class => :inline_item %> <%= t(:'backup.full') %>
+  <%= f.radio_button :backup_type, 1, :class => :inline_item %> <%= t(:'backup.differential') %>
+</p>
+<p class="form_item">
+  <%= f.label :work_papers_included, nil, :class => :inline %>
+  <%= f.check_box :work_papers_included, :class => :inline_item %>
+</p>
+<p>
+    <span class="button"><%= f.submit submit_button_text %></span>
+</p>
+
+<div style="display:none"><%= f.hidden_field :lock_version %></div>
+<% end -%>
+<!--[eoform:backup] -->
+<%= set_focus_to_first_element %>

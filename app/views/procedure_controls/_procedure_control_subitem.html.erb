@@ -1,0 +1,94 @@
+<% id = f.object.new_record? ? 'NEW_SUBRECORD' : f.object.id %>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>" <%= 'style="display: none;"' if hide %>>
+  <div>
+    <div class="item_field" style="width: 15%;">
+    <%= f.select :control_objective_id, control_objectives,
+      {:prompt => true},
+      {:id => "procedure_control_subitem_#{id}_control_objective",
+        :class => :control_objective} %>
+    </div>
+    <div class="item_field" style="width: 15%;">
+    <%= f.text_area :control_objective_text, :class => :control_objective_text,
+      :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
+    </div>
+    <div class="item_field" style="width: 15%;">
+    <%= f.text_area :main_procedures, :class => :main_procedures,
+      :id => "procedure_control_subitem_#{id}_main_procedures" %>
+    </div>
+    <div class="item_field" style="width: 15%;">
+    <%= f.text_area :design_tests, :class => :tests,
+      :id => "procedure_control_subitem_#{id}_design_tests" %>
+    </div>
+    <div class="item_field" style="width: 15%;">
+    <%= f.text_area :compliance_tests, :class => :tests,
+      :id => "procedure_control_subitem_#{id}_compliance_tests" %>
+    </div>
+    <div class="item_field" style="width: 10%;">
+    <%= f.text_area :effects, :class => :effects,
+      :id => "procedure_control_subitem_#{id}_effects" %>
+    </div>
+    <div class="item_field" style="width: 10%;">
+    <%= f.select :risk, f.object.get_parameter(
+      :admin_control_objective_risk_levels, true), {}, :class => :risk,
+      :id => "procedure_control_subitem_#{id}_risk" %>
+    </div>
+    <div class="item_field" style="width: 5%;">
+    <%= f.hidden_field :order, :class => :sort_number %>
+    <%= insert_record_link(f, :class => :insert_record_subitem,
+      :rel => 'procedure_control_item procedure_control_subitems') %> |
+    <%= remove_item_link(f) -%>
+    </div>
+    <script type="text/javascript">FormUtil.completeSortNumbers();</script>
+  </div>
+</div>
+<script type="text/javascript">
+    Event.observe('procedure_control_subitem_<%= id %>_control_objective', 'change', function() {
+      var parentId = '<%= "procedure_control_subitem_#{id}" %>';
+      $$('#' + parentId + ' textarea').invoke('clear');
+      
+      if(!$F(this).blank()) {
+        var element = $(this);
+
+        Helper.showLoading(element);
+        
+        new Ajax.Request('<%= url_for :action => :get_control_objective %>', {
+          method: 'get',
+          parameters: { control_objective: $F(this) },
+          onSuccess: function(transport) {
+            var controlObjective = transport.responseJSON.control_objective;
+
+            Form.Element.setValue(parentId + '_control_objective_texts',
+              controlObjective.name);
+            Form.Element.setValue(parentId + '_main_procedures',
+              controlObjective.control);
+            Form.Element.setValue(parentId + '_design_tests',
+              controlObjective.design_tests);
+            Form.Element.setValue(parentId + '_compliance_tests',
+              controlObjective.compliance_tests);
+            Form.Element.setValue(parentId + '_effects',
+              controlObjective.effects);
+            Form.Element.setValue(parentId + '_risk', controlObjective.risk);
+
+            
+            
+            Helper.hideLoading(element);
+          },
+          onFailure: function() { Helper.hideLoading(element); }
+        });
+      }
+    });
+</script>
+<% if is_dynamic -%>
+<script type="text/javascript">
+(function() {
+  var thisElement = $('procedure_control_subitem_<%= id %>');
+  var options = procedureControlItemHash.get(
+    thisElement.up('.procedure_control_item').id);
+
+  HTMLUtil.updateOptions($('procedure_control_subitem_<%= id %>_control_objective'),
+    HTMLUtil.optionsFromArray(options));
+  Helper.showItem('procedure_control_subitem_NEW_SUBRECORD');
+})();
+</script>
+<% end -%>

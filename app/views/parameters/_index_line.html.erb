@@ -1,0 +1,9 @@
+<tr class="<%= cycle(:even, :odd) %>">
+  <td></td>
+  <td><%=h index_line %></td>
+  <td><%=h truncate(index_line.description, :length => 40, :omission => '...') %></td>
+  <td><%= link_to_show parameter_path(@type, index_line) %></td>
+  <td><%= link_to_edit edit_parameter_path(@type, index_line) %></td>
+  <td></td>
+</tr>
+<tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>

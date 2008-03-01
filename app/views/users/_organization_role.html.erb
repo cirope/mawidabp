@@ -1,0 +1,52 @@
+<% id = dynamic_object_id('organization_role', f) -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% roles = f.object.organization ? Role.list : [] %>
+<div class="organization_role item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+  <div>
+    <div class="item_field" style="width: 40%;">
+    <%= f.select :organization_id, sorted_options_array_for(
+      Organization.all, :name, :id), {:prompt => true},
+      {:id => "#{id}_organization_id"} %>
+    </div>
+    <div class="item_field" style="width: 40%;">
+    <%= f.select :role_id, sorted_options_array_for(roles, :name, :id),
+      {:prompt => true},
+      {:disabled => f.object.organization.nil?, :class => :role_select} %>
+    </div>
+    <div class="item_field" style="width: 10%;">
+    <%= remove_item_link(f) -%>
+    </div>
+  </div>
+</div>
+<% if is_dynamic -%>
+  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>
+  <script type="text/javascript">
+    Event.observe('<%= id %>_organization_id', 'change', function() {
+      var element = $(this);
+      var roleSelect = element.up('.organization_role').down('.role_select');
+
+      if(!$F(element).blank()) {
+        var url = '<%= url_for :action => :roles %>';
+
+        Helper.showLoading(element);
+
+        new Ajax.Request(url, {
+          method: 'get',
+          parameters: { id: $F(element), format: 'json' },
+          onSuccess: function(transport) {
+            HTMLUtil.updateOptions(roleSelect,
+              HTMLUtil.optionsFromArray(transport.responseJSON));
+
+            roleSelect.selectedIndex = 0;
+          },
+          onComplete: function() {
+            Helper.hideLoading(element);
+          }
+        });
+      } else {
+        roleSelect.update('');
+        roleSelect.disable();
+      }
+    });
+  </script>

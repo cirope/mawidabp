@@ -1,0 +1,54 @@
+<% if params[:control_objective].blank? -%>
+  <%= render :partial => 'shared/search', :locals => {
+    :options => {},
+    :columns => @query.blank? ? Weakness::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+<% end -%>
+<table>
+  <thead id="column_headers">
+    <tr>
+      <th></th>
+      <%= make_filterable_column Review.human_name, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:review_code), 'review_code' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:description), 'description' %>
+      <%= make_not_available_column Weakness.human_attribute_name :state %>
+      <%= make_not_available_column Weakness.human_attribute_name :follow_up_date %>
+      <%= make_not_available_column Weakness.human_attribute_name :solution_date %>
+      <%= make_not_available_column t(:'finding.has_work_papers') %>
+      <th colspan="4" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
+    <% @weaknesses.each do |weakness| -%>
+      <tr class="<%= cycle(:even, :odd) %> <%= weakness.is_in_a_final_review? ? :readonly_item : :writable_item %>">
+        <td></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_acronym weakness.review %></td>
+        <td><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(weakness) %></td>
+        <td><%= super_truncate weakness.description, 20 %></td>
+        <td><%= weakness.state_text %></td>
+        <td><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
+        <td><%= l weakness.solution_date, :format => :short if weakness.solution_date %></td>
+        <td><%= t weakness.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td><%= link_to_show weakness %></td>
+        <td><%= link_to_edit edit_weakness_path(weakness) %></td>
+        <td><%= button_to_destroy weakness %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @weaknesses %>
+<% if params[:control_objective].to_i > 0 -%>
+  <%= link_to t(:'label.new'), new_weakness_path(
+    :control_objective_item => params[:control_objective]) %>
+  | <%= link_to t(:'weakness.see_all'), weaknesses_path, :class => 'red bold' %>
+<% end -%>
+<div style="clear: both;"></div>
+</div>

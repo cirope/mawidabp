@@ -1,0 +1,17 @@
+<div id="showed_data">
+<p>
+  <b><%= Role.human_attribute_name 'name' %>:</b>
+  <%=h @role.name %>
+</p>
+
+<p>
+  <b><%= Role.human_attribute_name 'privileges' %>:</b>
+  <span class="pre"><%= @role.privileges.map { |p| p.to_s }.join("\n") -%></span>
+</p>
+</div>
+
+<div id="links">
+<%= link_to t(:'label.edit'), edit_role_path(@role) %> |
+<%= link_to t(:'label.list'), roles_path %> |
+<%= link_to_back %>
+</div>

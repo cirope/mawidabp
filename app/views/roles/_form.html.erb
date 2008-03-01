@@ -1,0 +1,131 @@
+<!--[form:role]-->
+<% form_for @role do |r_f| -%>
+  <%= r_f.error_messages %>
+  <div class="form_column_left">
+    <p class="form_item">
+      <%= r_f.label :name, nil, :class => :inline %>
+      <%= r_f.text_field :name, :maxlength => 255, :class => :inline_item %>
+    </p>
+  </div>
+  <div class="form_column_right">
+    <p class="form_item">
+      <%= r_f.label :role_type, nil, :class => :inline %>
+      <%= role_type_field(r_f) %>
+    </p>
+  </div>
+
+  <table class="summary_table" style="clear: both;">
+    <thead>
+      <tr>
+        <th><%= Privilege.human_name %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :approval %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% menu_items = @role.audited? ?
+        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS -%>
+      <% menu_items.each do |menu_item| -%>
+        <%= render :partial => 'menu_item', :locals => {
+          :menu_item => menu_item, :role_form => r_f} %>
+      <% end -%>
+    </tbody>
+  </table>
+
+  <div style="display:none"><%= r_f.hidden_field :lock_version %></div>
+  <p>
+    <span class="button"><%= r_f.submit submit_button_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:role] -->
+<%= set_focus_to_first_element %>
+<script type="text/javascript">
+  (function() {
+    $('role_role_type').store('reset_value', $F('role_role_type'));
+  })();
+  
+  function checkForNestedPrivileges(checkBox) {
+    var module = checkBox.up('.menu_item').down('input[id$=module]').getValue();
+    var classes = $A(['read_check', 'modify_check', 'erase_check',
+      'approval_check']);
+    var checkBoxClass = $w(checkBox.className).reject(function(c) {
+      classes.include(c);
+    }).first();
+
+    markChildren('.' + module, checkBoxClass, checkBox.checked, true);
+  }
+
+  function markChildren(parentClass, checkClass, value, nested) {
+    $$(parentClass).each(function(checkBox) {
+      if(checkBox.hasClassName(checkClass)) {
+        if(checkBox.checked != value) {
+          checkBox.click();
+        }
+      }
+
+      if(nested) {
+        checkForNestedPrivileges(checkBox);
+      }
+    });
+  }
+
+  Element.addMethods({
+    searchUpAndPrevious: function(element, css_rule) {
+      return $(element).up('.menu_item').down(css_rule);
+    }
+  });
+
+  Event.observe('role_role_type', 'change', function() {
+    var selectedType = $F(this);
+    var url = '<%=@role.new_record? ? new_role_path : edit_role_path(@role)%>';
+
+    if(selectedType) {
+      BrowserManipulation.changeLocation(url, {
+        'role[role_type]': selectedType
+      });
+    }
+  });
+  
+  Event.observe('app_content', 'change', function(event) {
+    var element = $(event.element());
+
+    if(element.hasClassName('approval_check')) {
+      if(element.checked) {
+        element.searchUpAndPrevious('.read_check').checked = element.checked;
+      }
+
+      checkForNestedPrivileges(element);
+    } else if(element.hasClassName('erase_check')) {
+      if(!element.checked) {
+        element.searchUpAndPrevious('.approval_check').checked =
+          element.checked;
+      } else {
+        element.searchUpAndPrevious('.modify_check').checked = element.checked;
+        element.searchUpAndPrevious('.read_check').checked = element.checked;
+      }
+
+      checkForNestedPrivileges(element);
+    } else if(element.hasClassName('modify_check')) {
+      if(element.checked) {
+        element.searchUpAndPrevious('.read_check').checked = element.checked;
+      } else {
+        element.searchUpAndPrevious('.erase_check').checked = element.checked;
+        element.searchUpAndPrevious('.approval_check').checked =
+          element.checked;
+      }
+
+      checkForNestedPrivileges(element);
+    } else if(element.hasClassName('read_check')) {
+      if(!element.checked) {
+        element.searchUpAndPrevious('.modify_check').checked = element.checked;
+        element.searchUpAndPrevious('.erase_check').checked = element.checked;
+        element.searchUpAndPrevious('.approval_check').checked =
+          element.checked;
+      }
+
+      checkForNestedPrivileges(element);
+    }
+  });
+</script>

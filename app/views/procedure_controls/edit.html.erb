@@ -1,0 +1,9 @@
+<%= render :partial => 'form',
+  :locals => {:submit_button_text => t(:'label.save')} %>
+
+<div id="links">
+  <%= link_to t(:'label.show'), @procedure_control %> |
+  <%= link_to t(:'label.list'), procedure_controls_path %> |
+  <%= link_to t(:'label.download'), export_to_pdf_procedure_control_path(@procedure_control) %> |
+  <%= link_to_back %>
+</div>

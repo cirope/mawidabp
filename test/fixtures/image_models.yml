@@ -1,0 +1,36 @@
+--- !omap
+- image_one:
+    id: 1
+    filename: image_one.jpg
+    content_type: "image/gif"
+    size: 100
+    height: 10
+    width: 10
+
+- image_thumb_one:
+    id: 2
+    parent_id: 1
+    thumbnail: thumb
+    filename: image_thumb_one.jpg
+    content_type: "image/gif"
+    size: 100
+    height: 10
+    width: 10
+
+- image_two:
+    id: 3
+    filename: image_two.jpg
+    content_type: "image/gif"
+    size: 10000
+    height: 10
+    width: 10
+
+- image_thumb_two:
+    id: 4
+    parent_id: 3
+    thumbnail: thumb
+    filename: image_thumb_two.jpg
+    content_type: "image/gif"
+    size: 1122
+    height: 12
+    width: 13

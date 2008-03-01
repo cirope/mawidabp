@@ -1,0 +1,41 @@
+<p style="margin: .1em 0em;">
+  <b><%= Review.human_name %></b>:
+  <%=h finding.review.to_s %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= ControlObjective.human_name %></b>:
+  <%=h finding.control_objective.name %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= finding.class.human_attribute_name :description %></b>:
+  <%=h "(#{finding.review_code}) #{finding.description}" %>
+</p>
+<p style="margin: .1em 0em;">
+  <b><%= finding.class.human_attribute_name :state %></b>:
+  <%=h finding.state_text %>
+</p>
+<% unless finding.follow_up_date.blank? -%>
+  <p style="margin: .1em 0em;">
+    <b><%= finding.class.human_attribute_name :follow_up_date %></b>:
+    <%=l finding.follow_up_date, :format => :long %>
+  </p>
+<% end -%>
+<% unless finding.solution_date.blank? -%>
+  <p style="margin: .1em 0em;">
+    <b><%= finding.class.human_attribute_name :solution_date %></b>:
+    <%=l finding.solution_date, :format => :long %>
+  </p>
+<% end -%>
+<% audited, auditors = *finding.users.partition {|u| u.audited?} -%>
+
+<p style="margin: .1em 0em;">
+  <b><%= t(:'finding.audited', :count => audited.size) %></b>:
+</p>
+<%= textilize_without_paragraph(
+  audited.map {|u| "* #{u.full_name}"}.join("\n")) %>
+
+<p style="margin: .1em 0em;">
+  <b><%= t(:'finding.reviewers', :count => auditors.size) %></b>:
+</p>
+<%= textilize_without_paragraph(
+  auditors.map {|u| "* #{u.full_name}"}.join("\n")) %>

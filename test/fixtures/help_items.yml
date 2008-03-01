@@ -1,0 +1,29 @@
+help_item_1_es:
+  name: Help Item es 1
+  description: Description item es 1
+  order_number: 1
+  help_content: help_es
+
+help_item_1_1_es:
+  name: Help Item es 1.1
+  description: Description item es 1.1
+  order_number: 1
+  parent: help_item_1_es
+
+help_item_2_es:
+  name: Help Item es 2
+  description: Description item es 1
+  order_number: 2
+  help_content: help_es
+
+help_item_1_en:
+  name: Help Item en 1
+  description: Description item en 1
+  order_number: 1
+  help_content: help_en
+
+help_item_2_en:
+  name: Help Item en 2
+  description: Description item en 1
+  order_number: 2
+  help_content: help_en

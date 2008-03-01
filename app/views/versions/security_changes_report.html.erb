@@ -1,0 +1,43 @@
+<%= render :partial => 'shared/date_filter_form',
+  :locals => {:action => :security_changes_report, :extra_params => {}} %>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Version.human_attribute_name(:created_at) %></th>
+      <th><%= Version.human_attribute_name(:whodunnit) %></th>
+      <th><%= Version.human_attribute_name(:item) %></th>
+      <th><%= Version.human_attribute_name(:event) %></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+  <% @versions.each do |version| -%>
+    <tr class="<%= cycle(:even, :odd) %>">
+      <td></td>
+      <td><%=h l(version.created_at, :format => :short) %></td>
+      <td><%=h show_whodunnit(version.whodunnit) %></td>
+      <td><%= version.item ?
+        super_truncate("#{version.item.class.human_name} (#{version.item})", 30) : '-' %></td>
+      <td><%=h t("version.event_#{version.event}") %></td>
+      <td><%= link_to_show version_path(version) %></td>
+      <td></td>
+    </tr>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+  <% end -%>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @versions %>
+<%= link_to t(:'label.back'), :controller => :login_records,
+  :action => :choose %> |
+<%= link_to t(:'label.download'), :action => :security_changes_report,
+  :security_changes_report => {:from_date => @from_date, :to_date => @to_date},
+  :download => 1 %>
+<div style="clear: both;"></div>
+</div>

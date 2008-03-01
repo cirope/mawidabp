@@ -1,0 +1,38 @@
+<div id="showed_data">
+  <p>
+    <b><%= Period.human_name %>:</b>
+    <%=h @procedure_control.period.inspect %>
+  </p>
+
+  <table class="summary_table">
+    <thead>
+      <tr>
+        <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>
+        <th><%= ProcedureControlSubitem.human_attribute_name :main_procedures %></th>
+        <th><%= ProcedureControlSubitem.human_attribute_name :compliance_tests %></th>
+        <th><%= ProcedureControlSubitem.human_attribute_name :effects %></th>
+        <th><%= ProcedureControlSubitem.human_attribute_name :risk %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @procedure_control.procedure_control_items.each do |pci| -%>
+        <% pci.procedure_control_subitems.each do |pcs| -%>
+          <tr>
+            <td><%= h pcs.control_objective_text %></td>
+            <td><%= h pcs.main_procedures %></td>
+            <td><%= h pcs.compliance_tests %></td>
+            <td><%= h pcs.effects %></td>
+            <td><%= pcs.risk_text %></td>
+          </tr>
+        <% end -%>
+      <% end -%>
+    </tbody>
+  </table>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.edit'), edit_procedure_control_path(@procedure_control) %> |
+  <%= link_to t(:'label.list'), procedure_controls_path %> |
+  <%= link_to t(:'label.download'), export_to_pdf_procedure_control_path(@procedure_control) %> |
+  <%= link_to_back %>
+</div>
