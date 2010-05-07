@@ -1,71 +1,71 @@
 current_workflow_item_1:
   task: Task 1
-  start: <%= 5.days.ago.to_date %>
-  end: <%= 2.days.ago.to_date %>
+  start: <%= 5.days.ago.to_date.to_s(:db) %>
+  end: <%= 2.days.ago.to_date.to_s(:db) %>
   predecessors: []
   order_number: 1
   workflow: current_workflow
 
 current_workflow_item_2:
   task: Task 2
-  start: <%= Time.now.to_date %>
-  end: <%= 2.days.from_now.to_date %>
+  start: <%= Time.now.to_date.to_s(:db) %>
+  end: <%= 2.days.from_now.to_date.to_s(:db) %>
   predecessors: [1]
   order_number: 2
   workflow: current_workflow
 
 current_workflow_item_3:
   task: Task 3
-  start: <%= 3.days.from_now.to_date %>
-  end: <%= 5.days.from_now.to_date %>
+  start: <%= 3.days.from_now.to_date.to_s(:db) %>
+  end: <%= 5.days.from_now.to_date.to_s(:db) %>
   predecessors: []
   order_number: 3
   workflow: current_workflow
 
 past_workflow_item_1:
   task: Task 1
-  start: <%= 50.days.ago.to_date %>
-  end: <%= 45.days.ago.to_date %>
+  start: <%= 50.days.ago.to_date.to_s(:db) %>
+  end: <%= 45.days.ago.to_date.to_s(:db) %>
   predecessors: []
   order_number: 1
   workflow: past_workflow
 
 past_workflow_item_2:
   task: Task 2
-  start: <%= 40.days.ago.to_date %>
-  end: <%= 35.days.ago.to_date %>
+  start: <%= 40.days.ago.to_date.to_s(:db) %>
+  end: <%= 35.days.ago.to_date.to_s(:db) %>
   predecessors: [1]
   order_number: 2
   workflow: past_workflow
 
 past_workflow_item_3:
   task: Task 3
-  start: <%= 30.days.ago.to_date %>
-  end: <%= 25.days.ago.to_date %>
+  start: <%= 30.days.ago.to_date.to_s(:db) %>
+  end: <%= 25.days.ago.to_date.to_s(:db) %>
   predecessors: [2]
   order_number: 3
   workflow: past_workflow
 
 with_conclusion_workflow_item_1:
   task: Task 1
-  start: <%= 5.days.ago.to_date %>
-  end: <%= 2.days.ago.to_date %>
+  start: <%= 5.days.ago.to_date.to_s(:db) %>
+  end: <%= 2.days.ago.to_date.to_s(:db) %>
   predecessors: []
   order_number: 1
   workflow: with_conclusion_workflow
 
 with_conclusion_workflow_item_2:
   task: Task 2
-  start: <%= Time.now.to_date %>
-  end: <%= 2.days.from_now.to_date %>
+  start: <%= Time.now.to_date.to_s(:db) %>
+  end: <%= 2.days.from_now.to_date.to_s(:db) %>
   predecessors: [1]
   order_number: 2
   workflow: with_conclusion_workflow
 
 with_conclusion_workflow_item_3:
   task: Task 3
-  start: <%= 3.days.from_now.to_date %>
-  end: <%= 5.days.from_now.to_date %>
+  start: <%= 3.days.from_now.to_date.to_s(:db) %>
+  end: <%= 5.days.from_now.to_date.to_s(:db) %>
   predecessors: []
   order_number: 3
   workflow: with_conclusion_workflow

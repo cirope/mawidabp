@@ -1,17 +1,17 @@
 conclusion_current_final_review:
   type: ConclusionFinalReview
   review: current_review
-  issue_date: <%= 2.days.ago.to_date %>
-  close_date: <%= 2.days.from_now.to_date %>
+  issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  close_date: <%= 2.days.from_now.to_date.to_s(:db) %>
   applied_procedures: Current Final Applied Procedures
   conclusion: Current Final Conclusion
   approved: true
-  created_at: <%= 2.days.ago.to_date %>
+  created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
 conclusion_current_draft_review:
   type: ConclusionDraftReview
   review: current_review
-  issue_date: <%= 2.days.ago.to_date %>
+  issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
   applied_procedures: Current Draft Applied Procedures
   conclusion: Current Draft Conclusion
   approved: true
@@ -19,17 +19,17 @@ conclusion_current_draft_review:
 conclusion_past_final_review:
   type: ConclusionFinalReview
   review: past_review
-  issue_date: <%= 2.months.ago.to_date %>
-  close_date: <%= 1.month.ago.to_date %>
+  issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
+  close_date: <%= 1.month.ago.to_date.to_s(:db) %>
   applied_procedures: Past Final Applied Procedures
   conclusion: Past Final Conclusion
   approved: true
-  created_at: <%= 2.months.ago.to_date %>
+  created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
 conclusion_past_draft_review:
   type: ConclusionDraftReview
   review: past_review
-  issue_date: <%= 2.months.ago.to_date %>
+  issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
   applied_procedures: Past Draft Applied Procedures
   conclusion: Past Draft Conclusion
   approved: true
@@ -37,7 +37,7 @@ conclusion_past_draft_review:
 conclusion_with_conclusion_draft_review:
   type: ConclusionDraftReview
   review: review_with_conclusion
-  issue_date: <%= 2.months.ago.to_date %>
+  issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true

@@ -7,7 +7,7 @@
     whodunnit: <%= Fixtures.identify(:administrator_user) %>
     organization_id: <%= Fixtures.identify(:default_organization) %>
     important: false
-    created_at: <%= Time.now %>
+    created_at: <%= Time.now.to_s(:db) %>
 
 - important_version:
     id: 2
@@ -18,7 +18,7 @@
     organization_id: <%= Fixtures.identify(:default_organization) %>
     object: {name: 'old_name'}
     important: true
-    created_at: <%= Time.now %>
+    created_at: <%= Time.now.to_s(:db) %>
 
 - important_new_version:
     id: 3
@@ -29,4 +29,4 @@
     organization_id: <%= Fixtures.identify(:default_organization) %>
     object: {name: 'new_name'}
     important: true
-    created_at: <%= Time.now %>
+    created_at: <%= Time.now.to_s(:db) %>

@@ -7,7 +7,7 @@ bcra_A4609_security_management_responsible_dependency_item:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 5.days.from_now.to_date %>
+  audit_date: <%= 5.days.from_now.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: bcra_A4609_security_management_responsible_dependency
@@ -22,7 +22,7 @@ bcra_A4609_data_proccessing_impact_analisys_item:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 7.days.from_now.to_date %>
+  audit_date: <%= 7.days.from_now.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: bcra_A4609_data_proccessing_impact_analisys
@@ -37,7 +37,7 @@ iso_27000_security_policy_3_1_item:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 1.year.ago.to_date %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: iso_27000_security_policy_3_1
@@ -52,7 +52,7 @@ iso_27000_security_organization_4_1_item:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 1.year.ago.to_date %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: iso_27000_security_organization_4_1
@@ -67,7 +67,7 @@ iso_27000_security_organization_4_2_item:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 1.year.ago.to_date %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: iso_27000_security_organization_4_2
@@ -82,7 +82,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 5.days.from_now.to_date %>
+  audit_date: <%= 5.days.from_now.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: bcra_A4609_security_management_responsible_dependency
@@ -97,7 +97,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable:
   pre_audit_tests: Pre audit tests
   post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   post_audit_tests: Post audit tests
-  audit_date: <%= 7.days.from_now.to_date %>
+  audit_date: <%= 7.days.from_now.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
   control_objective: bcra_A4609_data_proccessing_impact_analisys

@@ -11,7 +11,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_notify:
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
-  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -29,7 +29,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date: 
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date %>
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -47,7 +47,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date: 
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date %>
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -88,7 +88,7 @@ bcra_A4609_security_management_responsible_dependency_editable_being_implemented
   effect: Effect 3w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
-  follow_up_date: <%= 2.days.ago.to_date %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -135,8 +135,8 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
   solution_date:
-  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business %>
-  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date %>
+  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business.to_s(:db) %>
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -149,7 +149,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
   solution_date:
-  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business %>
+  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user
 
@@ -166,6 +166,6 @@ iso_27000_security_policy_3_1_item_weakness:
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
-  follow_up_date: <%= 2.days.ago.to_date %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   users: administrator_user, auditor_user, audited_user, bare_user

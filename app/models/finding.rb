@@ -237,8 +237,7 @@ class Finding < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :allow_nil => true, :allow_blank => true
-  validates_date :solution_date, :on_or_after => :follow_up_date,
-    :allow_nil => true, :allow_blank => true
+  validates_date :solution_date, :allow_nil => true, :allow_blank => true
   validates_each :follow_up_date do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)
@@ -653,8 +652,9 @@ class Finding < ActiveRecord::Base
 
     auditors = self.users.reject { |u| u.can_act_as_audited? }.map(&:full_name)
 
-    pdf.add_description_item(I18n.t(:'finding.auditors'), auditors.join('; '),
-      0, false)
+    pdf.add_title I18n.t(:'finding.auditors'), 12, :left
+    pdf.add_list auditors, 24
+    
     pdf.add_description_item(Finding.human_attribute_name(
         'control_objective_item_id'),
       self.control_objective_item.control_objective_text, 0, false)

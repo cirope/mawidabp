@@ -203,20 +203,6 @@ class FindingTest < ActiveSupport::TestCase
       :invalid_date), @finding.errors.on(:solution_date)
   end
 
-  test 'validates dates order' do
-    @finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity).id)
-    @finding.state = Finding::STATUS[:implemented_audited]
-    @finding.follow_up_date = 5.days.from_now.to_date
-    @finding.solution_date = @finding.follow_up_date.yesterday
-    assert @finding.invalid?
-    assert_equal 1, @finding.errors.count
-    assert_equal error_message_from_model(@finding, :solution_date,
-      :on_or_after, :restriction => I18n.l(@finding.follow_up_date,
-        :format => :default)),
-      @finding.errors.on(:solution_date)
-  end
-
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     # Debe tener una fecha de implementación por el cambio de estado

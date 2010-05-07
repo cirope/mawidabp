@@ -66,6 +66,15 @@ module PDF
       end
     end
 
+    def add_list(items, left = 0)
+      self.move_pointer((self.font_size / 2.0).round)
+
+      self.text items.to_a.map { |item| "<C:bullet /> #{item}" }.join("\n"),
+        :left => left
+
+      self.move_pointer((self.font_size / 2.0).round)
+    end
+
     def add_organization_image(organization, font_size = 10)
       font_height_size = self.font_height(font_size)
 
@@ -158,7 +167,7 @@ module PDF
       end
     end
 
-    def add_generic_report_header(organization, date = Time.now.to_date)
+    def add_generic_report_header(organization, date = Date.today)
       self.open_object do |heading|
         font_size = 12
         y_top = self.page_height - (self.top_margin / 2)

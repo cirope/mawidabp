@@ -11,9 +11,9 @@ administrator_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
@@ -29,9 +29,9 @@ administrator_second_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
@@ -47,9 +47,9 @@ bare_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
@@ -66,7 +66,7 @@ first_time_user:
   enable: true
   failed_attempts: 0
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:expired] = 'expired123' %>
@@ -82,7 +82,7 @@ expired_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.months.ago.to_date %>
+  last_access: <%= 30.months.ago.to_date.to_s(:db) %>
   logged_in: false
   password_changed: <%= 2.days.ago %>
   last_access: <%= DEFAULT_PARAMETERS[:security_acount_expire_time].to_i.days.ago.yesterday %>
@@ -101,9 +101,9 @@ disabled_user:
   salt: <%= salt %>
   enable: false
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
@@ -119,9 +119,9 @@ blank_password_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
 
@@ -138,7 +138,7 @@ expired_blank_password_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 20.days.ago.to_date %>
+  last_access: <%= 20.days.ago.to_date.to_s(:db) %>
   logged_in: false
   password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago %>
   resource: auditor_resource
@@ -157,9 +157,9 @@ manager_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
@@ -175,9 +175,9 @@ manager_second_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
@@ -193,9 +193,9 @@ supervisor_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
@@ -211,9 +211,9 @@ supervisor_second_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
@@ -229,9 +229,9 @@ audited_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
@@ -247,9 +247,9 @@ audited_second_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:committee] = 'committee123' %>
@@ -265,9 +265,9 @@ committee_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 2.minutes.ago.to_date %>
+  last_access: <%= 2.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
@@ -283,7 +283,7 @@ auditor_user:
   salt: <%= salt %>
   enable: true
   failed_attempts: 0
-  last_access: <%= 30.minutes.ago.to_date %>
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
-  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date %>
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
