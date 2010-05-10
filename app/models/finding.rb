@@ -840,7 +840,7 @@ class Finding < ActiveRecord::Base
 
   def self.notify_for_unconfirmed_for_notification_findings
     # Sólo si no es sábado o domingo
-    unless [0, 6].include?(Time.now.wday)
+    unless [0, 6].include?(Date.today.wday)
       Finding.transaction do
         users = Finding.unconfirmed_for_notification.inject([]) do |u, finding|
           u | finding.users.reject do |user|
@@ -857,13 +857,15 @@ class Finding < ActiveRecord::Base
 
   def self.mark_as_unanswered_if_necesary
     # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include?(Time.now.wday)
+    unless [0, 6].include?(Date.today.wday)
       Finding.transaction do
-        findings = Finding.confirmed_and_stale.select do |finding|
-          !finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
+        findings = Finding.confirmed_and_stale.reject do |finding|
+          finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
         end
 
-        findings |= Finding.unconfirmed_and_stale
+        findings |= Finding.unconfirmed_and_stale.reject do |finding|
+          finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
+        end
 
         users = findings.inject([]) do |u, finding|
           finding.update_attribute :state, Finding::STATUS[:unanswered]
@@ -871,7 +873,8 @@ class Finding < ActiveRecord::Base
         end
 
         users.each do |user|
-          Notifier.deliver_unanswered_findings_notification user, findings
+          Notifier.deliver_unanswered_findings_notification user,
+            findings.select { |f| f.users.include?(user) }
         end
       end
     end
@@ -879,7 +882,7 @@ class Finding < ActiveRecord::Base
 
   def self.warning_users_about_expiration
     # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include?(Time.now.wday)
+    unless [0, 6].include?(Date.today.wday)
       users = Finding.next_to_expire.inject([]) do |u, finding|
         u | finding.users.select { |u| u.can_act_as_audited? }
       end

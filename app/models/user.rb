@@ -678,7 +678,7 @@ class User < ActiveRecord::Base
 
   def self.notify_new_findings
     # Sólo si no es sábado o domingo
-    unless [0, 6].include?(Time.now.wday)
+    unless [0, 6].include?(Date.today.wday)
       findings = User.all_with_findings_for_notification.inject([]) do |f, user|
         Notifier.deliver_notify_new_findings user
 

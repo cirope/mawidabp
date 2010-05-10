@@ -516,7 +516,7 @@ class UserTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     user = User.find users(:administrator_user).id
     # Sólo funciona si no es un fin de semana
-    assert ![0, 6].include?(Time.now.wday)
+    assert ![0, 6].include?(Date.today.wday)
     assert !user.findings.for_notification.empty?
     assert !Finding.for_notification.empty?
 

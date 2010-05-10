@@ -490,7 +490,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify for stale and unconfirmed findings' do
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
-    assert ![0, 6].include?(Time.now.wday)
+    assert ![0, 6].include?(Date.today.wday)
     assert_equal 2, Finding.unconfirmed_for_notification.size
     assert Finding.all(:conditions => {
         :state => Finding::STATUS[:unanswered]}).empty?
@@ -538,7 +538,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'warning users about findings expiration' do
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
-    assert ![0, 6].include?(Time.now.wday)
+    assert ![0, 6].include?(Date.today.wday)
     assert_equal 1, Finding.next_to_expire.size
     before_expire = (FINDING_WARNING_EXPIRE_DAYS - 1).days.from_now_in_business.
       to_date
@@ -580,7 +580,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'mark stale and confirmed findings as unanswered' do
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
-    assert ![0, 6].include?(Time.now.wday)
+    assert ![0, 6].include?(Date.today.wday)
     findings = Finding.confirmed_and_stale.select do |finding|
       !finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
     end
@@ -625,7 +625,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'not mark stale and confirmed findings if has an answer' do
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
-    assert ![0, 6].include?(Time.now.wday)
+    assert ![0, 6].include?(Date.today.wday)
     assert Finding.all(:conditions => {
         :state => Finding::STATUS[:unanswered]}).empty?
     assert_equal 1, Finding.confirmed_and_stale.size
