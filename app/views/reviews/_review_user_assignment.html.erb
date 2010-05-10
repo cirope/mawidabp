@@ -19,6 +19,8 @@
             :param_name => 'user_data'} %>
         </div>
       <% else -%>
+        <%= f.hidden_field :user_id, :value => f.object.user_id,
+          :id => "hidden_user_id_#{id}" %>
         <%= text_field_tag "review_user_assignment_user_#{id}",
           f.object.user.try(:full_name_with_function, f.object.created_at),
           :readonly => true %>

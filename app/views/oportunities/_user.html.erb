@@ -18,6 +18,8 @@
           :parameters => ("oportunity_id=#{@oportunity.id}" unless @oportunity.new_record?)} %>
       </div>
       <% else -%>
+        <%= hidden_field_tag 'oportunity[user_ids][]', user.id,
+          :id => "hidden_user_#{id}" %>
         <%= text_field_tag "oportunity_user_#{id}",
           user.full_name_with_function(f.object.updated_at), :readonly => true %>
       <% end -%>

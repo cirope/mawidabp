@@ -24,6 +24,8 @@
             :parameters => ("finding_id=#{@finding.id}" unless @finding.new_record?)} %>
         </div>
       <% else -%>
+        <%= hidden_field_tag 'finding[user_ids][]', user.id,
+          :id => "hidden_user_#{id}" %>
         <%= text_field_tag "finding_user_#{id}",
           user.full_name_with_function(f.object.created_at), :readonly => true %>
       <% end -%>

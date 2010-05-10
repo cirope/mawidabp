@@ -17,6 +17,8 @@
             :parameters => ("weakness_id=#{@weakness.id}" unless @weakness.new_record?)} %>
         </div>
       <% else -%>
+        <%= hidden_field_tag 'weakness[user_ids][]', user.id,
+          :id => "hidden_user_#{id}" %>
         <%= text_field_tag "weakness_user_#{id}",
           user.full_name_with_function(f.object.updated_at), :readonly => true %>
       <% end -%>
