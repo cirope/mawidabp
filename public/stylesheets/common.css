@@ -212,7 +212,7 @@ div#menu {
 }
 
 div#menu a {
-    padding: .5em .7em;
+    padding: .5em 1em;
     background: none;
     color: #191619;
     border-right: 2px solid #7b7b7b;
@@ -243,10 +243,11 @@ div#menu_level_1 {
 }
 
 div#menu_level_1 a {
-    padding: .1em .5em;
+    padding: .1em 1em;
     font-weight: normal;
     color: #5b5b5b;
     background: none;
+    margin: 0em .1em;
 }
 
 div#menu_level_1 a.selected_menu, div#menu_level_2 a.selected_menu {
@@ -260,7 +261,6 @@ div#menu_level_1 a:hover {
 
 div#menu_level_1 li {
     list-style: none;
-    padding: 0em .5em;
     font-weight: bold;
     color: #151215;
     border-right: 1px solid #5b5b5b;
@@ -279,7 +279,7 @@ div#menu_level_2 {
 }
 
 div#menu_level_2 a {
-    padding: 0em .5em;
+    padding: 0em 1em;
     font-weight: normal;
     color: #7b7b7b;
     background: none;
@@ -291,7 +291,6 @@ div#menu_level_2 a:hover {
 
 div#menu_level_2 li {
     list-style: none;
-    padding: 0em .5em;
     font-weight: bold;
     color: #151215;
     border-right: 1px solid #7b7b7b;

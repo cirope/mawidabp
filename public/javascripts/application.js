@@ -480,13 +480,22 @@ var Observer = {
             if(e && e.hasClassName('menu_item_1') && content) {
                 $('menu_level_1').update(content);
                 $('menu_level_2').update('&nbsp;');
+                $$('.menu_item_1').invoke('restoreStyleProperty', 'background');
 
                 Event.stop(event);
             } else if (e && e.hasClassName('menu_item_2') && content) {
                 $('menu_level_2').update(content);
+                $$('.menu_item_2').invoke('restoreStyleProperty', 'background');
 
                 Event.stop(event);
+            } else if (e) {
+                $$('.menu_item_1').invoke('restoreStyleProperty', 'background');
+                $$('.menu_item_2').invoke('restoreStyleProperty', 'background');
+                Helper.showLoading();
             }
+
+            e.storeStyleProperty('background');
+            e.setStyle({'background': '#b1aea6'});
         });
     }
 }
@@ -734,8 +743,20 @@ Element.addMethods({
 
         if(originalText) {$(element).update(originalText);}
     },
+    restoreStyleProperty: function(element, property) {
+        var oldValue = element.retrieve('old_' + property);
+        var newStyle = $H();
+
+        if(!Object.isUndefined(oldValue)) {
+            newStyle.set(property, oldValue);
+            element.setStyle(newStyle.toObject());
+        }
+    },
     showOrHide: function(element, options) {
         Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
+    },
+    storeStyleProperty: function(element, property) {
+        element.store('old_' + property, element.getStyle(property));
     },
     toggleContent: function(element, originalText, alternateText) {
         var e = $(element);
