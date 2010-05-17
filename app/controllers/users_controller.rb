@@ -6,13 +6,16 @@ require 'pdf/simpletable'
 # ingreso al sistema, permite blanquear la contraseña, cambiarla, etc. y
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
-  before_filter :auth, :except => [:login, :edit_password, :update_password]
+  before_filter :auth, :except => [:login, :create_session, :edit_password,
+    :update_password]
   before_filter :load_privileges
-  before_filter :check_privileges, :except => [:login, :logout, :edit_password,
-    :update_password, :edit_personal_data, :update_personal_data]
+  before_filter :check_privileges, :except => [:login, :create_session, :logout,
+    :edit_password, :update_password, :edit_personal_data,
+    :update_personal_data]
   layout proc { |controller|
     controller.request.xhr? ? false :
-      (controller.action_name == 'login' ? 'clean' : 'application')
+      (['login', 'create_session'].include?(controller.action_name) ?
+        'clean' : 'application')
   }
   hide_action :find_with_organization, :load_privileges
 
@@ -171,19 +174,19 @@ class UsersController < ApplicationController
   # Realiza la autenticación de los usuarios.
   #
   # * GET /users/login
-  # * POST /users/login
   def login
     auth_user = User.find(session[:user_id]) if session[:user_id]
-    
+
     if auth_user && session[:organization_id]
       auth_organization = Organization.find(session[:organization_id])
       GlobalModelConfig.current_organization_id = auth_organization.try :id
     end
-    
+
     if auth_user.try(:is_enable?) && auth_user.logged_in?
       redirect_to :controller => :welcome
     else
       @title = t :'user.login_title'
+      @user = User.new
       organization_prefix = request.subdomains.first
       show_default_organization_warning = false
 
@@ -194,103 +197,114 @@ class UsersController < ApplicationController
 
       @organization = Organization.find_by_prefix(organization_prefix)
 
-      GlobalModelConfig.current_organization_id = @organization.try :id
-
-      if @organization && params[:user]
-        @user = User.new(params[:user])
-
-        auth_user = User.first(
-          :joins => :organizations,
-          :conditions => {
-            "#{User.table_name}.user" => @user.user,
-            "#{Organization.table_name}.id" => @organization.id
-          },
-          :readonly => false
-        )
-
-        @user.salt = auth_user.salt if auth_user
-        @user.encrypt_password
-
-        if auth_user && auth_user.must_change_the_password?
-          session[:user_id] = auth_user.id
-          flash[:notice] ||= t :'message.must_change_the_password'
-          session[:go_to] = edit_password_user_url(auth_user)
-        elsif auth_user && auth_user.expired?
-          auth_user.is_an_important_change = false
-          auth_user.update_attribute :enable, false
-        end
-
-        if auth_user && auth_user.is_enable? && @user.password_was_encrypted &&
-            auth_user.password == @user.password
-          record = LoginRecord.new(
-            :user => auth_user,
-            :organization => @organization,
-            :request => request
-          )
-
-          if record.save
-            days_for_password_expiration =
-              auth_user.days_for_password_expiration
-
-            if days_for_password_expiration
-              flash[:notice] = t(days_for_password_expiration >= 0 ?
-                  :'message.password_expire_in_x' :
-                  :'message.password_expired_x_days_ago',
-                :count => days_for_password_expiration.abs)
-            end
-
-            unless auth_user.allow_concurrent_access?
-              flash[:notice] ||= t :'message.you_are_already_logged'
-              auth_user = nil
-              @user = User.new
-            end
-
-            if auth_user
-              session[:last_access] = Time.now
-              auth_user.logged_in!(session[:last_access])
-              session[:user_id] = auth_user.id
-              session[:organization_id] = @organization.id
-              go_to = session[:go_to] || {:controller => :welcome}
-              session[:go_to], session[:record_id] = nil, record.id
-
-              redirect_to go_to
-            end
-          end
-        elsif
-          if (user = User.find_by_user(@user.user))
-            ErrorRecord.create(:user => user, :organization => @organization,
-              :request => request, :error_type => :on_login)
-
-            user.failed_attempts += 1
-            max_attempts = user.get_parameter(:security_attempts_count).to_i
-
-            if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
-                user.is_enable?
-              user.enable = false
-
-              ErrorRecord.create(:user => user, :organization => @organization,
-                :request => request, :error_type => :user_disabled)
-            end
-
-            user.is_an_important_change = false
-            user.save
-          else
-            ErrorRecord.create(:user_name => @user.user,
-              :organization => @organization, :request => request,
-              :error_type => :on_login)
-          end
-
-          @user.password = nil
-          flash[:notice] = t :'message.invalid_user_or_password'
-        end
-      else
-        @user = User.new
-        if show_default_organization_warning && @organization
-          flash[:notice] ||= t(:'message.default_organization_selected',
-            :organization => @organization.name)
-        end
+      if show_default_organization_warning && @organization
+        flash[:notice] ||= t(:'message.default_organization_selected',
+          :organization => @organization.name)
       end
     end
+  end
+
+  # Realiza la autenticación de los usuarios.
+  #
+  # * POST /users/create_session
+  def create_session
+    @title = t :'user.login_title'
+    organization_prefix = request.subdomains.first
+
+    @organization = Organization.find_by_prefix(organization_prefix)
+
+    GlobalModelConfig.current_organization_id = @organization.try :id
+
+    if @organization
+      @user = User.new(params[:user])
+
+      auth_user = User.first(
+        :joins => :organizations,
+        :conditions => {
+          "#{User.table_name}.user" => @user.user,
+          "#{Organization.table_name}.id" => @organization.id
+        },
+        :readonly => false
+      )
+
+      @user.salt = auth_user.salt if auth_user
+      @user.encrypt_password
+
+      if auth_user && auth_user.must_change_the_password?
+        session[:user_id] = auth_user.id
+        flash[:notice] ||= t :'message.must_change_the_password'
+        session[:go_to] = edit_password_user_url(auth_user)
+      elsif auth_user && auth_user.expired?
+        auth_user.is_an_important_change = false
+        auth_user.update_attribute :enable, false
+      end
+
+      if auth_user && auth_user.is_enable? && @user.password_was_encrypted &&
+          auth_user.password == @user.password
+        record = LoginRecord.new(
+          :user => auth_user,
+          :organization => @organization,
+          :request => request
+        )
+
+        if record.save
+          days_for_password_expiration =
+            auth_user.days_for_password_expiration
+
+          if days_for_password_expiration
+            flash[:notice] = t(days_for_password_expiration >= 0 ?
+                :'message.password_expire_in_x' :
+                :'message.password_expired_x_days_ago',
+              :count => days_for_password_expiration.abs)
+          end
+
+          unless auth_user.allow_concurrent_access?
+            flash[:notice] ||= t :'message.you_are_already_logged'
+            auth_user = nil
+            @user = User.new
+          end
+
+          if auth_user
+            session[:last_access] = Time.now
+            auth_user.logged_in!(session[:last_access])
+            session[:user_id] = auth_user.id
+            session[:organization_id] = @organization.id
+            go_to = session[:go_to] || {:controller => :welcome}
+            session[:go_to], session[:record_id] = nil, record.id
+
+            redirect_to go_to
+          end
+        end
+      elsif
+        if (user = User.find_by_user(@user.user))
+          ErrorRecord.create(:user => user, :organization => @organization,
+            :request => request, :error_type => :on_login)
+
+          user.failed_attempts += 1
+          max_attempts = user.get_parameter(:security_attempts_count).to_i
+
+          if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
+              user.is_enable?
+            user.enable = false
+
+            ErrorRecord.create(:user => user, :organization => @organization,
+              :request => request, :error_type => :user_disabled)
+          end
+
+          user.is_an_important_change = false
+          user.save
+        else
+          ErrorRecord.create(:user_name => @user.user,
+            :organization => @organization, :request => request,
+            :error_type => :on_login)
+        end
+
+        @user.password = nil
+        flash[:notice] = t :'message.invalid_user_or_password'
+      end
+    end
+
+    render :action => :login unless session[:user_id]
   end
 
   # Blanquea la contraseña de un usuario
@@ -444,7 +458,7 @@ class UsersController < ApplicationController
     @user = find_with_organization(params[:id])
 
     unless params[:user][:id].blank?
-      @other = find_with_organization(params[:user][:id], 'id')
+      @other = find_with_organization(params[:user][:id], :id)
     end
 
     options = {
@@ -633,7 +647,7 @@ class UsersController < ApplicationController
   # no pertenece a la organización con la que se autenticó el usuario) devuelve
   # nil.
   # _id_::  ID (campo usuario) del usuario que se quiere recuperar
-  def find_with_organization(id, field = 'user') #:doc:
+  def find_with_organization(id, field = :user) #:doc:
     User.first(
       :include => :organizations,
       :conditions => [

@@ -35,10 +35,18 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
+  test 'login users' do
+    get :login
+    assert_response :success
+    assert_not_nil assigns(:user)
+    assert_select '#error_body', false
+    assert_template 'users/login'
+  end
+
   # Prueba que no pueda autenticarse un usuario que no es válido
   test 'invalid user and password attempt' do
     assert_difference 'ErrorRecord.count' do
-      post :login,
+      post :create_session,
         :user => { :user => 'someone', :password => 'without authorization' }
 
       error_record = ErrorRecord.find(:first,
@@ -53,7 +61,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'invalid password attempt' do
     assert_difference 'ErrorRecord.count' do
-      post :login,
+      post :create_session,
         :user => {
           :user => users(:administrator_user).user,
           :password => 'wrong password'
@@ -73,7 +81,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'disabled user attempt' do
     assert_difference 'ErrorRecord.count' do
-      post :login,
+      post :create_session,
         :user => {
           :user => users(:disabled_user).user,
           :password => PLAIN_PASSWORDS[users(:disabled_user).user]
@@ -97,7 +105,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'ErrorRecord.count', max_attempts + 1 do
       max_attempts.times do
-        post :login,
+        post :create_session,
           :user => { :user => user.user, :password => 'wrong password' }
         error_record = ErrorRecord.find(:first,
           :conditions => {
@@ -127,7 +135,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'login without organization' do
     @request.host = 'localhost.i'
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -138,7 +146,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'login sucesfully' do
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -154,7 +162,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'login with hashed password' do
     assert_difference 'ErrorRecord.count' do
-      post :login,
+      post :create_session,
         :user => {
           :user => users(:administrator_user).user,
           :password => users(:administrator_user).password
@@ -180,7 +188,7 @@ class UsersControllerTest < ActionController::TestCase
       get_test_parameter(:security_acount_expire_time).to_i.days.ago.yesterday
 
     assert user.enable?
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:expired_user).user,
         :password => PLAIN_PASSWORDS[users(:expired_user).user]
@@ -196,7 +204,7 @@ class UsersControllerTest < ActionController::TestCase
     user.update_attribute :password_changed,
       get_test_parameter(:security_password_expire_time).to_i.next.days.ago
 
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -212,7 +220,7 @@ class UsersControllerTest < ActionController::TestCase
 
     user.update_attribute :password_changed, password_changed
 
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -238,7 +246,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert parameter.update_attributes(:value => 0)
 
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -246,7 +254,7 @@ class UsersControllerTest < ActionController::TestCase
     
     assert_redirected_to :controller => :welcome, :action => :index
 
-    post :login, {:user => {
+    post :create_session, {:user => {
       :user => users(:administrator_user).user,
       :password => PLAIN_PASSWORDS[users(:administrator_user).user]
     }}, {}
@@ -258,7 +266,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'redirected instead of relogin' do
-    post :login,
+    post :create_session,
       :user => {
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
@@ -273,7 +281,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'first login' do
     assert_difference 'LoginRecord.count' do
-      post :login,
+      post :create_session,
         :user => {
           :user => users(:first_time_user).user,
           :password => PLAIN_PASSWORDS[users(:first_time_user).user]
