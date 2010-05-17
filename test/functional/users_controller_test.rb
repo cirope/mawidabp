@@ -19,7 +19,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = [:login]
     private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :blank_password, :edit_password, :edit_personal_data,
+      :blank_password, :edit_password, :update_password, :edit_personal_data,
       :update_personal_data, :logout]
 
     private_actions.each do |action|
@@ -623,16 +623,21 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to :controller => :users, :action => :login
   end
 
-  test 'user findings reassignment' do
+  test 'user findings reassignment edit' do
     perform_auth users(:administrator_second_user),
       organizations(:second_organization)
-    get :user_reassignment, :id => users(:audited_user).user
+    get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_reassignment'
+    assert_template 'users/reassignment_edit'
+  end
+
+  test 'user finding reassignment update' do
+    perform_auth users(:administrator_second_user),
+      organizations(:second_organization)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -640,7 +645,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        post :user_reassignment, {
+        put :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:audited_second_user).id,
@@ -654,16 +659,21 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
   end
 
-  test 'user reviews reassignment' do
+  test 'user reviews reassignment edit' do
     perform_auth users(:administrator_second_user),
       organizations(:second_organization)
-    get :user_reassignment, :id => users(:audited_user).user
+    get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_reassignment'
+    assert_template 'users/reassignment_edit'
+  end
+
+  test 'user reviews reassignment update' do
+    perform_auth users(:administrator_second_user),
+      organizations(:second_organization)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -671,7 +681,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        post :user_reassignment, {
+        put :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:audited_second_user).id,
@@ -685,16 +695,21 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
   end
 
-  test 'user reassignment of nothing' do
+  test 'user reassignment of nothing edit' do
     perform_auth users(:administrator_second_user),
       organizations(:second_organization)
-    get :user_reassignment, :id => users(:audited_user).user
+    get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_reassignment'
+    assert_template 'users/reassignment_edit'
+  end
+
+  test 'user reassignment of nothing' do
+    perform_auth users(:administrator_second_user),
+      organizations(:second_organization)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -702,7 +717,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'Notification.count' do
-        post :user_reassignment, {
+        post :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:administrator_second_user).id

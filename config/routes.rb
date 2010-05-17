@@ -193,7 +193,8 @@ ActionController::Routing::Routes.draw do |map|
     :edit_personal_data => :get,
     :update_personal_data => :put,
     :blank_password => :put,
-    :user_reassignment => [:get, :put],
+    :reassignment_edit => :get,
+    :reassignment_update => :put,
     :user_release => [:get, :put]
   }
 

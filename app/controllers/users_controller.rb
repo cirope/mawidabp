@@ -427,32 +427,40 @@ class UsersController < ApplicationController
   # Reasigna usuarios en las relaciones que mantienen seguimiento y por lo tanto
   # el usuario es notificado de los eventos (como por ejemplo observaciones).
   #
-  # * GET /users/user_reassignment/1
-  # * GET /users/user_reassignment/1.xml
-  # * PUT /users/user_reassignment/1
-  # * PUT /users/user_reassignment/1.xml
-  def user_reassignment
+  # * GET /users/reassignment_edit/1
+  # * GET /users/reassignment_edit/1.xml
+  def reassignment_edit
+    @title = t :'user.user_reassignment'
+    @user = find_with_organization(params[:id])
+  end
+
+  # Reasigna usuarios en las relaciones que mantienen seguimiento y por lo tanto
+  # el usuario es notificado de los eventos (como por ejemplo observaciones).
+  #
+  # * PUT /users/reassignment_update/1
+  # * PUT /users/reassignment_update/1.xml
+  def reassignment_update
     @title = t :'user.user_reassignment'
     @user = find_with_organization(params[:id])
 
-    if params[:user]
-      unless params[:user][:id].blank?
-        @other = find_with_organization(params[:user][:id], 'id')
-      end
-      
-      options = {
-        :with_findings => params[:user][:with_findings] == '1',
-        :with_reviews => params[:user][:with_reviews] == '1'
-      }
+    unless params[:user][:id].blank?
+      @other = find_with_organization(params[:user][:id], 'id')
+    end
 
-      if @other && @user.reassign_to(@other, options)
-        flash[:notice] = t(:'user.user_reassignment_completed')
-        redirect_to users_path
-      elsif !@other
-        @user.errors.add_to_base t(:'user.errors.must_select_a_user')
-      else
-        flash[:notice] = t(:'user.user_reassignment_failed')
-      end
+    options = {
+      :with_findings => params[:user][:with_findings] == '1',
+      :with_reviews => params[:user][:with_reviews] == '1'
+    }
+
+    if @other && @user.reassign_to(@other, options)
+      flash[:notice] = t(:'user.user_reassignment_completed')
+      redirect_to users_path
+    elsif !@other
+      @user.errors.add_to_base t(:'user.errors.must_select_a_user')
+      render :action => :reassignment_edit
+    else
+      flash[:notice] = t(:'user.user_reassignment_failed')
+      render :action => :reassignment_edit
     end
   end
 
@@ -642,7 +650,8 @@ class UsersController < ApplicationController
         :roles => :read,
         :export_to_pdf => :read,
         :blank_password => :modify,
-        :user_reassignment => :modify,
+        :reassignment_edit => :modify,
+        :reassignment_update => :modify,
         :user_release => :modify
       })
     end
