@@ -195,57 +195,64 @@ class ConclusionFinalReviewsController < ApplicationController
     redirect_to @conclusion_final_review.relative_bundle_zip_path
   end
 
+  # Confecciona el correo con el informe
+  #
+  # * GET /conclusion_final_reviews/compose_email/1
+  def compose_email
+    @title = t :'conclusion_final_review.send_by_email'
+    @conclusion_final_review = find_with_organization(params[:id])
+  end
+
   # Envia por correo el informe a los usuarios indicados
   #
-  # * GET /conclusion_draft_reviews/send_by_email/1
-  # * POST /conclusion_draft_reviews/send_by_email/1
+  # * POST /conclusion_final_reviews/send_by_email/1
   def send_by_email
     @title = t :'conclusion_final_review.send_by_email'
     @conclusion_final_review = find_with_organization(params[:id])
 
-    if params[:user]
-      users = []
+    users = []
 
-      if params[:conclusion_review]
-        include_score_sheet =
-          params[:conclusion_review][:include_score_sheet] == '1'
-        include_global_score_sheet =
-          params[:conclusion_review][:include_global_score_sheet] == '1'
-        note = params[:conclusion_review][:email_note]
+    if params[:conclusion_review]
+      include_score_sheet =
+        params[:conclusion_review][:include_score_sheet] == '1'
+      include_global_score_sheet =
+        params[:conclusion_review][:include_global_score_sheet] == '1'
+      note = params[:conclusion_review][:email_note]
+    end
+
+    @conclusion_final_review.to_pdf(@auth_organization)
+
+    if include_score_sheet
+      @conclusion_final_review.review.score_sheet @auth_organization, false
+    end
+
+    if include_global_score_sheet
+      @conclusion_final_review.review.global_score_sheet(@auth_organization,
+        false)
+    end
+
+    (params[:user].try(:values) || []).each do |user_data|
+      user = User.find(user_data[:id]) if user_data[:id]
+      send_options = {
+        :note => note,
+        :notify => false,
+        :include_score_sheet => include_score_sheet,
+        :include_global_score_sheet => include_global_score_sheet
+      }
+
+      if user && !users.include?(user)
+        @conclusion_final_review.send_by_email_to(user, send_options)
+
+        users << user
       end
+    end
 
-      @conclusion_final_review.to_pdf(@auth_organization)
+    unless users.blank?
+      flash[:notice] = t(:'conclusion_review.review_sended')
 
-      if include_score_sheet
-        @conclusion_final_review.review.score_sheet @auth_organization, false
-      end
-
-      if include_global_score_sheet
-        @conclusion_final_review.review.global_score_sheet(@auth_organization,
-          false)
-      end
-
-      params[:user].values.each do |user_data|
-        user = User.find(user_data[:id]) if user_data[:id]
-        send_options = {
-          :note => note,
-          :notify => false,
-          :include_score_sheet => include_score_sheet,
-          :include_global_score_sheet => include_global_score_sheet
-        }
-
-        if user && !users.include?(user)
-          @conclusion_final_review.send_by_email_to(user, send_options)
-
-          users << user
-        end
-      end
-
-      unless users.blank?
-        flash[:notice] = t(:'conclusion_review.review_sended')
-
-        redirect_to edit_conclusion_final_review_path(@conclusion_final_review)
-      end
+      redirect_to edit_conclusion_final_review_path(@conclusion_final_review)
+    else
+      render :action => :compose_email
     end
   end
 

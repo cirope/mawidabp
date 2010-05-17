@@ -114,7 +114,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :conclusion_draft_reviews, :member => {
     :export_to_pdf => :get,
     :auto_complete_for_user => :post,
-    :send_by_email => [:get, :put],
+    :compose_email => :get,
+    :send_by_email => :put,
     :download_work_papers => :get,
     :score_sheet => :get,
     :bundle => :get,
@@ -124,7 +125,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :conclusion_final_reviews, :member => {
     :export_to_pdf => :get,
     :auto_complete_for_user => :post,
-    :send_by_email => [:get, :put],
+    :compose_email => :get,
+    :send_by_email => :put,
     :download_work_papers => :get,
     :score_sheet => :get,
     :bundle => :get,

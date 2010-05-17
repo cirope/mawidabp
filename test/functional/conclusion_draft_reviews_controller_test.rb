@@ -186,6 +186,16 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_kind_of Array, approval_hash['errors']
   end
 
+  test 'compose email' do
+    perform_auth
+    get :compose_email,
+      :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
+    assert_response :success
+    assert_not_nil assigns(:conclusion_draft_review)
+    assert_select '#error_body', false
+    assert_template 'conclusion_draft_reviews/compose_email'
+  end
+
   test 'send by email' do
     perform_auth
     counts_array = ['ActionMailer::Base.deliveries.size', 'Notification.count']
@@ -197,7 +207,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference counts_array do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
@@ -222,7 +232,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        post :send_by_email, {
+        put :send_by_email, {
           :id => conclusion_review.id,
           :user => {
             users(:administrator_user).id => {
@@ -255,7 +265,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -275,7 +285,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, ActionMailer::Base.deliveries.last.body
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -307,7 +317,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference counts_array do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {

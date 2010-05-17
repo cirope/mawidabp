@@ -174,63 +174,71 @@ class ConclusionDraftReviewsController < ApplicationController
     redirect_to @conclusion_draft_review.relative_bundle_zip_path
   end
 
+  # Confecciona el correo con el informe
+  #
+  # * GET /conclusion_draft_reviews/compose_email/1
+  def compose_email
+    @title = t :'conclusion_draft_review.send_by_email'
+    @conclusion_draft_review = find_with_organization(params[:id])
+  end
+
   # Envia por correo el informe a los usuarios indicados
   #
-  # * GET /conclusion_draft_reviews/send_by_email/1
   # * POST /conclusion_draft_reviews/send_by_email/1
   def send_by_email
     @title = t :'conclusion_draft_review.send_by_email'
     @conclusion_draft_review = find_with_organization(params[:id])
 
-    if params[:user]
-      if @conclusion_draft_review.review.can_be_sended? &&
-          !@conclusion_draft_review.has_final_review?
-        users = []
+    if @conclusion_draft_review.review.can_be_sended? &&
+        !@conclusion_draft_review.has_final_review?
+      users = []
 
-        if params[:conclusion_review]
-          include_score_sheet =
-            params[:conclusion_review][:include_score_sheet] == '1'
-          include_global_score_sheet =
-            params[:conclusion_review][:include_global_score_sheet] == '1'
-          note = params[:conclusion_review][:email_note]
-        end
-
-        @conclusion_draft_review.to_pdf(@auth_organization)
-
-        if include_score_sheet
-          @conclusion_draft_review.review.score_sheet @auth_organization, true
-        end
-
-        if include_global_score_sheet
-          @conclusion_draft_review.review.global_score_sheet(@auth_organization,
-            true)
-        end
-
-        params[:user].values.each do |user_data|
-          user = User.find(user_data[:id]) if user_data[:id]
-          send_options = {
-            :note => note,
-            :notify => (user_data[:must_confirm] == '1'),
-            :include_score_sheet => include_score_sheet,
-            :include_global_score_sheet => include_global_score_sheet
-          }
-
-          if user && !users.include?(user)
-            @conclusion_draft_review.send_by_email_to(user, send_options)
-
-            users << user
-          end
-        end
-
-        unless users.blank?
-          flash[:notice] = t(:'conclusion_review.review_sended')
-
-          redirect_to edit_conclusion_draft_review_path(
-            @conclusion_draft_review)
-        end
-      else
-        flash[:notice] = t(:'conclusion_review.review_not_approved')
+      if params[:conclusion_review]
+        include_score_sheet =
+          params[:conclusion_review][:include_score_sheet] == '1'
+        include_global_score_sheet =
+          params[:conclusion_review][:include_global_score_sheet] == '1'
+        note = params[:conclusion_review][:email_note]
       end
+
+      @conclusion_draft_review.to_pdf(@auth_organization)
+
+      if include_score_sheet
+        @conclusion_draft_review.review.score_sheet @auth_organization, true
+      end
+
+      if include_global_score_sheet
+        @conclusion_draft_review.review.global_score_sheet(@auth_organization,
+          true)
+      end
+
+      (params[:user].try(:values) || []).each do |user_data|
+        user = User.find(user_data[:id]) if user_data[:id]
+        send_options = {
+          :note => note,
+          :notify => (user_data[:must_confirm] == '1'),
+          :include_score_sheet => include_score_sheet,
+          :include_global_score_sheet => include_global_score_sheet
+        }
+
+        if user && !users.include?(user)
+          @conclusion_draft_review.send_by_email_to(user, send_options)
+
+          users << user
+        end
+      end
+
+      unless users.blank?
+        flash[:notice] = t(:'conclusion_review.review_sended')
+
+        redirect_to edit_conclusion_draft_review_path(
+          @conclusion_draft_review)
+      else
+        render :action => :compose_email
+      end
+    else
+      flash[:notice] = t(:'conclusion_review.review_not_approved')
+      render :action => :compose_email
     end
   end
 

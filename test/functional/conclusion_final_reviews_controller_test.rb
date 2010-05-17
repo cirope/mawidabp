@@ -187,6 +187,16 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     FileUtils.rm conclusion_review.absolute_bundle_zip_path
   end
 
+  test 'compose email' do
+    perform_auth
+    get :compose_email,
+      :id => conclusion_reviews(:conclusion_past_final_review).id
+    assert_response :success
+    assert_not_nil assigns(:conclusion_final_review)
+    assert_select '#error_body', false
+    assert_template 'conclusion_final_reviews/compose_email'
+  end
+
   test 'send by email' do
     perform_auth
 
@@ -195,7 +205,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
           users(:administrator_user).id => {
@@ -216,7 +226,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       :conclusion_current_final_review).id
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
           users(:administrator_user).id => {
@@ -245,7 +255,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -264,7 +274,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, ActionMailer::Base.deliveries.last.body
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_by_email, {
+      put :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
           :include_score_sheet => '1',
