@@ -6,10 +6,10 @@ require 'pdf/simpletable'
 # ingreso al sistema, permite blanquear la contraseña, cambiarla, etc. y
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
-  before_filter :auth, :except => [:login, :change_password]
+  before_filter :auth, :except => [:login, :edit_password, :update_password]
   before_filter :load_privileges
-  before_filter :check_privileges,
-    :except => [:login, :logout, :change_password, :change_personal_data]
+  before_filter :check_privileges, :except => [:login, :logout, :edit_password,
+    :update_password, :change_personal_data]
   layout proc { |controller|
     controller.request.xhr? ? false :
       (controller.action_name == 'login' ? 'clean' : 'application')
@@ -214,7 +214,7 @@ class UsersController < ApplicationController
         if auth_user && auth_user.must_change_the_password?
           session[:user_id] = auth_user.id
           flash[:notice] ||= t :'message.must_change_the_password'
-          session[:go_to] = change_password_user_url(auth_user)
+          session[:go_to] = edit_password_user_url(auth_user)
         elsif auth_user && auth_user.expired?
           auth_user.is_an_important_change = false
           auth_user.update_attribute :enable, false
@@ -316,11 +316,32 @@ class UsersController < ApplicationController
 
   # Cambia la contraseña del usuario actual
   #
-  # * GET /users/change_password/1
-  # * GET /users/change_password/1.xml
-  # * PUT /users/change_password/1
-  # * PUT /users/change_password/1.xml
-  def change_password
+  # * GET /users/edit_password/1
+  # * GET /users/edit_password/1.xml
+  def edit_password
+    @title = t :'user.change_password_title'
+
+    unless params[:confirmation_hash].blank?
+      @auth_user = User.with_valid_confirmation_hash(
+        params[:confirmation_hash]).first
+      @auth_organization = @auth_user.organizations.first if @auth_user
+    else
+      login_check
+    end
+
+    unless @auth_user
+      restart_session
+      redirect_to_login t(:'user.confirmation_link_invalid')
+    else
+      @auth_user.password = nil
+    end
+  end
+
+  # Cambia la contraseña del usuario actual
+  #
+  # * PUT /users/update_password/1
+  # * PUT /users/update_password/1.xml
+  def update_password
     @title = t :'user.change_password_title'
     
     unless params[:confirmation_hash].blank?
@@ -331,7 +352,7 @@ class UsersController < ApplicationController
       login_check
     end
     
-    if @auth_user && params[:user]
+    if @auth_user
       @auth_user.password = params[:user][:password]
       @auth_user.password_confirmation = params[:user][:password_confirmation]
 
@@ -350,11 +371,12 @@ class UsersController < ApplicationController
           restart_session
           redirect_to_login t(:'user.password_correctly_updated')
         end
+      else
+        @auth_user.password = @auth_user.password_confirmation = nil
+        render :action => :edit_password
       end
 
       @auth_user.password, @auth_user.password_confirmation = nil, nil
-    elsif @auth_user
-      @auth_user.password = nil
     else
       restart_session
       redirect_to_login t(:'user.confirmation_link_invalid')
@@ -362,7 +384,7 @@ class UsersController < ApplicationController
 
   rescue ActiveRecord::StaleObjectError
     flash[:notice] = t :'user.password_stale_object_error'
-    redirect_to change_password_user_url(@auth_user)
+    redirect_to edit_password_user_url(@auth_user)
   end
 
   # Cambia los datos del usuario actual

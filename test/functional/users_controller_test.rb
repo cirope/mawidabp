@@ -7,9 +7,6 @@ class UsersControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @public_actions = [:login]
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :blank_password, :change_password, :change_personal_data, :logout]
     @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
   end
 
@@ -20,14 +17,18 @@ class UsersControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
+    public_actions = [:login]
+    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
+      :blank_password, :edit_password, :change_personal_data, :logout]
+
+    private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
       assert [I18n.t(:'message.must_be_authenticated'),
         I18n.t(:'user.confirmation_link_invalid')].include?(flash[:notice])
     end
 
-    @public_actions.each do |action|
+    public_actions.each do |action|
       get action
       assert_response :success
     end
@@ -200,7 +201,7 @@ class UsersControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
       
-    assert_redirected_to change_password_user_url(user)
+    assert_redirected_to edit_password_user_url(user)
   end
 
   test 'warning about password expiration' do
@@ -278,7 +279,7 @@ class UsersControllerTest < ActionController::TestCase
         }
     end
 
-    assert_redirected_to change_password_user_url(users(:first_time_user))
+    assert_redirected_to edit_password_user_url(users(:first_time_user))
     login_record = LoginRecord.first(
       :conditions => {
         :user_id => users(:first_time_user).id,
@@ -516,16 +517,19 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil user.password
   end
 
-  test 'change password' do
+  test 'edit password' do
     perform_auth
-    get :change_password, {:user => nil}
+    get :edit_password, {:user => nil}
     assert_response :success
     assert_not_nil assigns(:auth_user)
     assert_select '#error_body', false
-    assert_template 'users/change_password'
+    assert_template 'users/edit_password'
+  end
 
+  test 'update password' do
+    perform_auth
     assert_difference 'OldPassword.count' do
-      put :change_password, {
+      put :update_password, {
         :user => {
           :password => 'new_password_123',
           :password_confirmation => 'new_password_123'
@@ -539,19 +543,21 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'change blank password' do
-    get :change_password, {:user => nil,
+    get :edit_password, {:user => users(:blank_password_user).user,
       :confirmation_hash => users(:blank_password_user).change_password_hash}
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'users/change_password'
+    assert_template 'users/edit_password'
 
-    put :change_password, {
-      :user => {
-        :password => 'new_password_123',
-        :password_confirmation => 'new_password_123'
-      },
-      :confirmation_hash => users(:blank_password_user).change_password_hash
-    }
+    assert_difference 'OldPassword.count' do
+      put :update_password, {
+        :user => {
+          :password => 'new_password_123',
+          :password_confirmation => 'new_password_123'
+        },
+        :confirmation_hash => users(:blank_password_user).change_password_hash
+      }
+    end
 
     user = User.find(users(:blank_password_user).id)
     assert_redirected_to :controller => :users, :action => :login
@@ -559,13 +565,13 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil user.last_access
 
     # No se puede usar 2 veces el mismo hash
-    get :change_password, {:user => nil,
+    get :edit_password, {:user => nil,
       :confirmation_hash => users(:blank_password_user).change_password_hash}
     assert_redirected_to :controller => :users, :action => :login
   end
 
   test 'change expired blank password' do
-    put :change_password, {
+    put :update_password, {
       :user => {
         :password => 'new_password_123',
         :password_confirmation => 'new_password_123'

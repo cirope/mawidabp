@@ -95,9 +95,10 @@ class ApplicationController < ActionController::Base
 
       session[:back_to] = nil if action == :index
 
-      if @auth_user.first_login? && action != :change_password
+      if @auth_user.first_login? && 
+          ![:edit_password, :update_password].include?(action)
         flash[:notice] ||= t :'message.must_change_the_password'
-        redirect_to :controller => :users, :action => :change_password
+        redirect_to edit_password_user_url(@auth_user)
       end
 
       @action_privileges = HashWithIndifferentAccess.new(:approval).update({

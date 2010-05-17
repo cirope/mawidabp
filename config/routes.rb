@@ -188,7 +188,8 @@ ActionController::Routing::Routes.draw do |map|
     :roles => :get
   }, :member => {
     :logout => :get,
-    :change_password => [:get, :put],
+    :edit_password => :get,
+    :update_password => :put,
     :change_personal_data => [:get, :put],
     :blank_password => :put,
     :user_reassignment => [:get, :put],
