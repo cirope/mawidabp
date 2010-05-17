@@ -19,7 +19,8 @@ class UsersControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = [:login]
     private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :blank_password, :edit_password, :change_personal_data, :logout]
+      :blank_password, :edit_password, :edit_personal_data,
+      :update_personal_data, :logout]
 
     private_actions.each do |action|
       get action
@@ -586,10 +587,19 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_equal User.digest('new_password_123', user.salt), user.password
   end
 
-  test 'change personal data' do
+  test 'edit personal data' do
+    perform_auth
+    get :edit_personal_data, {:user => users(:administrator_user).user}
+    assert_response :success
+    assert_not_nil assigns(:auth_user)
+    assert_select '#error_body', false
+    assert_template 'users/edit_personal_data'
+  end
+
+  test 'update personal data' do
     assert_no_difference 'User.count' do
       perform_auth
-      put :change_personal_data, {
+      put :update_personal_data, {
         :user => {
           :name => 'Updated Name',
           :last_name => 'Updated Last Name',
@@ -603,7 +613,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:auth_user)
     assert_equal 'Updated Name', assigns(:auth_user).name
     assert_select '#error_body', false
-    assert_template 'users/change_personal_data'
+    assert_template 'users/edit_personal_data'
   end
 
   test 'logout' do

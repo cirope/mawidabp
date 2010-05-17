@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   before_filter :auth, :except => [:login, :edit_password, :update_password]
   before_filter :load_privileges
   before_filter :check_privileges, :except => [:login, :logout, :edit_password,
-    :update_password, :change_personal_data]
+    :update_password, :edit_personal_data, :update_personal_data]
   layout proc { |controller|
     controller.request.xhr? ? false :
       (controller.action_name == 'login' ? 'clean' : 'application')
@@ -389,33 +389,39 @@ class UsersController < ApplicationController
 
   # Cambia los datos del usuario actual
   #
-  # * GET /users/change_personal_data/1
-  # * GET /users/change_personal_data/1.xml
-  # * PUT /users/change_personal_data/1
-  # * PUT /users/change_personal_data/1.xml
-  def change_personal_data
+  # * GET /users/edit_personal_data/1
+  # * GET /users/edit_personal_data/1.xml
+  def edit_personal_data
+    @title = t :'user.change_personal_data'
+  end
+
+  # Cambia los datos del usuario actual
+  #
+  # * PUT /users/update_personal_data/1
+  # * PUT /users/update_personal_data/1.xml
+  def update_personal_data
     @title = t :'user.change_personal_data'
 
-    if params[:user]
-      attributes = {
-        :name => params[:user][:name],
-        :last_name => params[:user][:last_name],
-        :language => params[:user][:language],
-        :email => params[:user][:email],
-        :function => params[:user][:function]
-      }
+    attributes = {
+      :name => params[:user][:name],
+      :last_name => params[:user][:last_name],
+      :language => params[:user][:language],
+      :email => params[:user][:email],
+      :function => params[:user][:function]
+    }
 
-      @auth_user.is_an_important_change = false
+    @auth_user.is_an_important_change = false
 
-      if @auth_user.update_attributes(attributes)
-        I18n.locale = @auth_user.language
-        flash[:notice] = t :'user.correctly_updated'
-      end
+    if @auth_user.update_attributes(attributes)
+      I18n.locale = @auth_user.language
+      flash[:notice] = t :'user.correctly_updated'
     end
+
+    render :action => :edit_personal_data
 
   rescue ActiveRecord::StaleObjectError
     flash[:notice] = t :'user.password_stale_object_error'
-    redirect_to change_personal_data_user_url(@auth_user)
+    redirect_to edit_personal_data_user_url(@auth_user)
   end
 
   # Reasigna usuarios en las relaciones que mantienen seguimiento y por lo tanto

@@ -190,7 +190,8 @@ ActionController::Routing::Routes.draw do |map|
     :logout => :get,
     :edit_password => :get,
     :update_password => :put,
-    :change_personal_data => [:get, :put],
+    :edit_personal_data => :get,
+    :update_personal_data => :put,
     :blank_password => :put,
     :user_reassignment => [:get, :put],
     :user_release => [:get, :put]
