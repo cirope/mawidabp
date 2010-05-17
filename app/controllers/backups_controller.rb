@@ -86,8 +86,15 @@ class BackupsController < ApplicationController
     end
   end
 
-  # Permite seleccionar y restaurar los datos de la aplicación a partir de una
-  # copia anterior
+  # Permite seleccionar los datos de la aplicación a partir de una copia
+  # anterior
+  #
+  # * GET /backups/restore_setup
+  def restore_setup
+    @title = t :'backup.restore_title'
+  end
+
+  # Permite restaurar los datos de la aplicación a partir de una copia anterior
   #
   # * POST /backups/restore
   def restore
@@ -105,7 +112,7 @@ class BackupsController < ApplicationController
       @restore_ok = do_restore backup_path
     end
 
-    respond_to { |format| format.html }
+    respond_to { |format| format.html { render :action => :restore_setup } }
   end
 
   private

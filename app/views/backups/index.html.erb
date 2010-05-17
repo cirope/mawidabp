@@ -12,13 +12,23 @@
 
   <tbody>
     <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
-    <%= render :partial => 'index_line', :collection => @backups %>
+    <% @backups.each do |backup| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%= t backup.backup_type == 0 ? :'backup.full' : :'backup.differential' %></td>
+        <td><%= t backup.work_papers_included ? :'label.yes' : :'label.no' %></td>
+        <td><%= l backup.created_at, :format => :long %></td>
+        <td><%= link_to_show backup %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+    <% end -%>
   </tbody>
 </table>
 
 <div id="links">
 <%= pagination_links @backups %>
 <%= link_to t(:'label.new'), new_backup_path %> |
-<%= link_to t(:'backup.restore'), :action => :restore %>
+<%= link_to t(:'backup.restore'), restore_setup_backups_path %>
 <div style="clear: both;"></div>
 </div>

@@ -31,7 +31,8 @@ ActionController::Routing::Routes.draw do |map|
   }
 
   map.resources :backups, :collection => {
-    :restore => [:get, :post]
+    :restore_setup => :get,
+    :restore => :post
   }
 
   map.conclusion_audit_reports 'conclusion_audit_reports',
