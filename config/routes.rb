@@ -195,7 +195,8 @@ ActionController::Routing::Routes.draw do |map|
     :blank_password => :put,
     :reassignment_edit => :get,
     :reassignment_update => :put,
-    :user_release => [:get, :put]
+    :release_edit => :get,
+    :release_update => :put
   }
 
   # The priority is based upon order of creation: first created -> highest priority.

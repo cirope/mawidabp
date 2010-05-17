@@ -717,7 +717,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'Notification.count' do
-        post :reassignment_update, {
+        put :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:administrator_second_user).id
@@ -730,22 +730,26 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
   end
 
-  test 'user findings release' do
+  test 'user findings release edit' do
     perform_auth
-    get :user_release, :id => users(:auditor_user).user
+    get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_release'
+    assert_template 'users/release_edit'
+  end
+
+  test 'user findings release update' do
+    perform_auth
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :user_release, {
+      put :release_update, {
         :id => users(:auditor_user).user,
         :user => { :with_findings => '1' }
       }
@@ -755,22 +759,26 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
   end
 
-  test 'user reviews release' do
+  test 'user reviews release edit' do
     perform_auth
-    get :user_release, :id => users(:auditor_user).user
+    get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_release'
+    assert_template 'users/release_edit'
+  end
+
+  test 'user reviews release update' do
+    perform_auth
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :user_release, {
+      put :release_update, {
         :id => users(:auditor_user).user,
         :user => { :with_reviews => '1' }
       }
@@ -780,22 +788,26 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
   end
 
-  test 'user release of nothing' do
+  test 'user release edit of nothing' do
     perform_auth
-    get :user_release, :id => users(:auditor_user).user
+    get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
     assert_select '#error_body', false
-    assert_template 'users/user_release'
+    assert_template 'users/release_edit'
+  end
+
+  test 'user release update of nothing' do
+    perform_auth
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      post :user_release, {
+      post :release_update, {
         :id => users(:auditor_user).user
       }
     end

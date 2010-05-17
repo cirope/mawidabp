@@ -467,26 +467,33 @@ class UsersController < ApplicationController
   # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
   # el usuario queda desligado de los eventos (como por ejemplo observaciones).
   #
-  # * GET /users/user_release/1
-  # * GET /users/user_release/1.xml
-  # * PUT /users/user_release/1
-  # * PUT /users/user_release/1.xml
-  def user_release
+  # * GET /users/release_edit/1
+  # * GET /users/release_edit/1.xml
+  def release_edit
+    @title = t :'user.user_release'
+    @user = find_with_organization(params[:id])
+  end
+
+  # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
+  # el usuario queda desligado de los eventos (como por ejemplo observaciones).
+  #
+  # * PUT /users/release_update/1
+  # * PUT /users/release_update/1.xml
+  def release_update
     @title = t :'user.user_release'
     @user = find_with_organization(params[:id])
 
-    if params[:user]
-      options = {
-        :with_findings => params[:user][:with_findings] == '1',
-        :with_reviews => params[:user][:with_reviews] == '1'
-      }
+    options = {
+      :with_findings => params[:user][:with_findings] == '1',
+      :with_reviews => params[:user][:with_reviews] == '1'
+    }
 
-      if @user.release_for_all_pending_findings(options)
-        flash[:notice] = t(:'user.user_release_completed')
-        redirect_to users_path
-      else
-        flash[:notice] = t(:'user.user_release_failed')
-      end
+    if @user.release_for_all_pending_findings(options)
+      flash[:notice] = t(:'user.user_release_completed')
+      redirect_to users_path
+    else
+      flash[:notice] = t(:'user.user_release_failed')
+      render :action => :reassignment_edit
     end
   end
 
@@ -652,7 +659,8 @@ class UsersController < ApplicationController
         :blank_password => :modify,
         :reassignment_edit => :modify,
         :reassignment_update => :modify,
-        :user_release => :modify
+        :release_edit => :modify,
+        :release_update => :modify
       })
     end
   end

@@ -1,4 +1,4 @@
-<% form_for @user, :url => user_release_user_path(@user) do |f| -%>
+<% form_for @user, :url => release_update_user_path(@user) do |f| -%>
   <%= f.error_messages %>
   <p class="form_item">
     <%= content_tag :label, t(:'user.release_with_findings'),
