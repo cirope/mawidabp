@@ -293,7 +293,8 @@ class Finding < ActiveRecord::Base
   has_many :finding_answers, :dependent => :destroy,
     :after_add => :answer_added, :order => 'created_at ASC'
   has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, :through => :notification_relations, :uniq => true
+  has_many :notifications, :through => :notification_relations, :uniq => true,
+    :order => 'created_at'
   has_many :costs, :as => :item, :dependent => :destroy
   has_many :work_papers, :as => :owner, :dependent => :destroy,
     :before_add => [:check_for_final_review, :prepare_work_paper],
@@ -468,6 +469,21 @@ class Finding < ActiveRecord::Base
 
   def important_dates
     important_dates = []
+
+    unless self.notifications.empty?
+      important_dates << I18n.t(:'finding.important_dates.notification_date',
+        :date => I18n.l(self.notifications.first.created_at,
+          :format => :very_long).strip)
+    end
+
+    if self.confirmed? && self.confirmation_date
+      notification = self.notifications.detect { |n| n.user.audited? }
+
+      important_dates << I18n.t(:'finding.important_dates.confirmation_date',
+        :date => I18n.l(notification.confirmation_date,
+          :format => :very_long).strip,
+        :user => notification.try(:user).try(:informal_name))
+    end
 
     if self.confirmed? || self.unconfirmed? ||
         Finding.confirmed_and_stale.exists?(self.id)

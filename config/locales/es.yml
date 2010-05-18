@@ -437,6 +437,8 @@ es:
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *{{date}}* si ningún auditado proporciona una respuesta"
+      notification_date: "Fue notificada por primera vez el día *{{date}}*"
+      confirmation_date: "Su notificación fue confirmada el día *{{date}}* por *{{user}}*"
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"
@@ -1716,6 +1718,7 @@ es:
       minimal: "%d/%m/%y %H:%M:%S"
       short: "%e de %b de %Y %H:%M"
       long: "%e de %B de %Y %H:%M"
+      very_long: "%e de %B de %Y a las %H:%M"
       validation: "%d/%m/%Y %H:%M:%S"
     am: "am"
     pm: "pm"
