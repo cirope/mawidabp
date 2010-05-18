@@ -587,6 +587,7 @@ es:
     status_unconfirmed: "Sin confirmar"
     status_confirmed: "Confirmada"
     status_rejected: "Rechazada"
+    type: "Tipo"
 
   notifier:
     notify_new_finding:
