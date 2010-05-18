@@ -3,7 +3,7 @@
   <div class="form_column_left">
     <% unless @notification.findings.blank? -%>
       <p>
-        <b><%= Notification.human_attribute_name 'findings' %>:</b>
+        <b><%= Notification.human_attribute_name :findings %>:</b>
       </p>
       <ul style="margin: .5em 0em .5em 3em;">
         <% @notification.findings.map do |f| -%>
@@ -14,7 +14,7 @@
     <% end -%>
     <% unless @notification.conclusion_reviews.blank? -%>
       <p>
-        <b><%= Notification.human_attribute_name 'conclusion_reviews' %>:</b>
+        <b><%= Notification.human_attribute_name :conclusion_reviews %>:</b>
       </p>
       <ul style="margin: .5em 0em .5em 3em;">
         <% @notification.conclusion_reviews.map do |cr| -%>
@@ -24,23 +24,23 @@
       </ul>
     <% end -%>
     <p>
-      <b><%= Notification.human_attribute_name 'status' %>:</b>
+      <b><%= Notification.human_attribute_name :status %>:</b>
       <%=h @notification.status_text %>
     </p>
 
     <p>
-      <b><%= Notification.human_attribute_name 'user_who_confirm' %>:</b>
+      <b><%= Notification.human_attribute_name :user_who_confirm %>:</b>
       <%=h @notification.user_who_confirm.full_name if @notification.user_who_confirm %>
     </p>
 
     <p>
-      <b><%= Notification.human_attribute_name 'created_at' %>:</b>
+      <b><%= Notification.human_attribute_name :created_at %>:</b>
       <%=l @notification.created_at, :format => :long %>
     </p>
 
     <p>
-      <b><%= Notification.human_attribute_name 'updated_at' %>:</b>
-      <%=l @notification.updated_at, :format => :long if @notification.notified? %>
+      <b><%= Notification.human_attribute_name :confirmation_date %>:</b>
+      <%=l @notification.confirmation_date, :format => :long if @notification.confirmation_date %>
     </p>
     <p style="margin-top: 1em;">
       <%= n_f.label :notes %>

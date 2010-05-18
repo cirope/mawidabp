@@ -4,6 +4,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.integer :status
       t.string :confirmation_hash
       t.text :notes
+      t.datetime :confirmation_date
       t.references :user
       t.references :user_who_confirm
       t.integer :lock_version, :default => 0

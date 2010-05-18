@@ -43,6 +43,8 @@ class Notification < ActiveRecord::Base
     :only_integer => true, :allow_nil => true, :allow_blank => true
   validates_length_of :confirmation_hash, :maximum => 255, :allow_nil => true,
     :allow_blank => true
+  validates_datetime :confirmation_date, :allow_nil => true,
+    :allow_blank => true
 
   # Relaciones
   belongs_to :user
@@ -69,7 +71,8 @@ class Notification < ActiveRecord::Base
       begin
         self.update_attributes(
           :status => confirmed ? STATUSES[:confirmed] : STATUSES[:rejected],
-          :user_who_confirm => self.user
+          :user_who_confirm => self.user,
+          :confirmation_date => Time.now
         )
 
         self.findings.each do |finding|

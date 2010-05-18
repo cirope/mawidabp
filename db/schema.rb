@@ -32,10 +32,10 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
 
   create_table "business_units", :force => true do |t|
     t.string   "name"
-    t.integer  "business_unit_type"
     t.integer  "organization_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "business_unit_type"
   end
 
   add_index "business_units", ["organization_id"], :name => "index_business_units_on_organization_id"
@@ -44,13 +44,13 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.string   "type"
     t.integer  "review_id"
     t.date     "issue_date"
-    t.date     "close_date"
-    t.text     "applied_procedures"
     t.text     "conclusion"
-    t.boolean  "approved"
     t.integer  "lock_version",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "applied_procedures"
+    t.boolean  "approved"
+    t.date     "close_date"
   end
 
   add_index "conclusion_reviews", ["review_id"], :name => "index_conclusion_reviews_on_review_id"
@@ -67,12 +67,12 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.text     "post_audit_tests"
     t.date     "audit_date"
     t.text     "auditor_comment"
-    t.boolean  "finished"
     t.integer  "control_objective_id"
     t.integer  "review_id"
     t.integer  "lock_version",             :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "finished"
   end
 
   add_index "control_objective_items", ["control_objective_id"], :name => "index_control_objective_items_on_control_objective_id"
@@ -81,28 +81,28 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   create_table "control_objectives", :force => true do |t|
     t.text     "name"
     t.text     "control"
-    t.text     "effects"
-    t.text     "compliance_tests"
-    t.text     "design_tests"
-    t.integer  "risk"
-    t.integer  "relevance"
     t.integer  "order"
     t.integer  "process_control_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "relevance"
+    t.text     "effects"
+    t.text     "compliance_tests"
+    t.integer  "risk"
+    t.text     "design_tests"
   end
 
   add_index "control_objectives", ["process_control_id"], :name => "index_control_objectives_on_process_control_id"
 
   create_table "costs", :force => true do |t|
     t.text     "description"
-    t.string   "cost_type"
     t.decimal  "cost",        :precision => 15, :scale => 2
     t.integer  "item_id"
     t.string   "item_type"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "cost_type"
   end
 
   add_index "costs", ["cost_type"], :name => "index_costs_on_cost_type"
@@ -136,9 +136,9 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.integer  "answer_type"
     t.integer  "finding_id"
     t.integer  "user_id"
-    t.integer  "file_model_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "file_model_id"
   end
 
   add_index "finding_answers", ["file_model_id"], :name => "index_finding_answers_on_file_model_id"
@@ -147,18 +147,13 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
 
   create_table "findings", :force => true do |t|
     t.string   "type"
+    t.integer  "control_objective_item_id"
     t.string   "review_code"
     t.text     "description"
     t.text     "answer"
-    t.text     "audit_comments"
-    t.date     "solution_date"
-    t.date     "first_notification_date"
-    t.date     "confirmation_date"
-    t.boolean  "final"
-    t.integer  "parent_id"
     t.integer  "state"
+    t.date     "solution_date"
     t.integer  "lock_version",              :default => 0
-    t.integer  "control_objective_item_id"
     t.text     "audit_recommendations"
     t.text     "effect"
     t.integer  "risk"
@@ -166,6 +161,11 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.date     "follow_up_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "audit_comments"
+    t.date     "first_notification_date"
+    t.date     "confirmation_date"
+    t.boolean  "final"
+    t.integer  "parent_id"
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"
@@ -259,14 +259,15 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   add_index "notification_relations", ["notification_id"], :name => "index_notification_relations_on_notification_id"
 
   create_table "notifications", :force => true do |t|
-    t.integer  "status"
     t.string   "confirmation_hash"
-    t.text     "notes"
     t.integer  "user_id"
-    t.integer  "user_who_confirm_id"
-    t.integer  "lock_version",        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_who_confirm_id"
+    t.integer  "status"
+    t.text     "notes"
+    t.integer  "lock_version",        :default => 0
+    t.datetime "confirmation_date"
   end
 
   add_index "notifications", ["confirmation_hash"], :name => "index_notifications_on_confirmation_hash", :unique => true
@@ -319,7 +320,6 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.datetime "updated_at"
   end
 
-  add_index "parameters", ["name", "organization_id"], :name => "index_parameters_on_name_and_organization_id", :unique => true
   add_index "parameters", ["organization_id"], :name => "index_parameters_on_organization_id"
 
   create_table "periods", :force => true do |t|
@@ -366,10 +366,10 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.boolean  "read",                      :default => false
     t.boolean  "modify",                    :default => false
     t.boolean  "erase",                     :default => false
-    t.boolean  "approval",                  :default => false
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "approval",                  :default => false
   end
 
   add_index "privileges", ["role_id"], :name => "index_privileges_on_role_id"
@@ -391,7 +391,6 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   create_table "procedure_control_subitems", :force => true do |t|
     t.text     "control_objective_text"
     t.text     "main_procedures"
-    t.text     "design_tests"
     t.text     "compliance_tests"
     t.text     "effects"
     t.integer  "risk"
@@ -400,6 +399,7 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.integer  "procedure_control_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "design_tests"
   end
 
   add_index "procedure_control_subitems", ["control_objective_id"], :name => "index_procedure_control_subitems_on_control_objective_id"
@@ -427,11 +427,11 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   create_table "resource_classes", :force => true do |t|
     t.string   "name"
     t.integer  "unit"
-    t.integer  "resource_class_type"
     t.integer  "organization_id"
     t.integer  "lock_version",        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "resource_class_type"
   end
 
   add_index "resource_classes", ["organization_id"], :name => "index_resource_classes_on_organization_id"
@@ -475,13 +475,13 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   create_table "reviews", :force => true do |t|
     t.string   "identification"
     t.text     "description"
-    t.text     "survey"
     t.integer  "period_id"
     t.integer  "plan_item_id"
-    t.integer  "file_model_id"
     t.integer  "lock_version",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "file_model_id"
+    t.text     "survey"
   end
 
   add_index "reviews", ["file_model_id"], :name => "index_reviews_on_file_model_id"
@@ -490,11 +490,11 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
 
   create_table "roles", :force => true do |t|
     t.string   "name"
-    t.integer  "role_type"
     t.integer  "organization_id"
     t.integer  "lock_version",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "role_type"
   end
 
   add_index "roles", ["organization_id"], :name => "index_roles_on_organization_id"
@@ -505,19 +505,19 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.string   "language",             :limit => 10
     t.string   "email",                :limit => 100
     t.string   "user",                 :limit => 30
-    t.string   "function"
     t.string   "password",             :limit => 128
-    t.string   "salt"
-    t.string   "change_password_hash"
     t.date     "password_changed"
-    t.boolean  "enable",                              :default => false
-    t.boolean  "logged_in",                           :default => false
-    t.integer  "resource_id"
-    t.datetime "last_access"
+    t.boolean  "enable"
     t.integer  "failed_attempts",                     :default => 0
     t.integer  "lock_version",                        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_access"
+    t.boolean  "logged_in",                           :default => false
+    t.string   "salt"
+    t.string   "change_password_hash"
+    t.string   "function"
+    t.integer  "resource_id"
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true
@@ -532,11 +532,10 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
     t.integer  "whodunnit"
     t.text     "object"
     t.datetime "created_at"
-    t.boolean  "important"
     t.integer  "organization_id"
+    t.boolean  "important"
   end
 
-  add_index "versions", ["created_at"], :name => "index_versions_on_created_at"
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
   add_index "versions", ["organization_id"], :name => "index_versions_on_organization_id"
   add_index "versions", ["whodunnit"], :name => "index_versions_on_whodunnit"
@@ -544,16 +543,16 @@ ActiveRecord::Schema.define(:version => 20100406115456) do
   create_table "work_papers", :force => true do |t|
     t.string   "name"
     t.string   "code"
-    t.string   "work_paper_type"
-    t.integer  "number_of_pages"
     t.text     "description"
-    t.integer  "owner_id"
-    t.string   "owner_type"
     t.integer  "file_model_id"
     t.integer  "organization_id"
     t.integer  "lock_version",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "number_of_pages"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "work_paper_type"
   end
 
   add_index "work_papers", ["file_model_id"], :name => "index_work_papers_on_file_model_id"

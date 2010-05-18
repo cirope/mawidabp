@@ -1336,7 +1336,8 @@ es:
         conclusion_reviews: "Informes"
         user_who_confirm: "Confirmada por"
         created_at: "Fecha de envío"
-        updated_at: "Fecha de confirmación"
+        updated_at: "Fecha de actualización"
+        confirmation_date: "Fecha de confirmación"
       notification_relation:
         model: "Modelo"
         notification: "Notificación"

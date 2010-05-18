@@ -6,7 +6,7 @@
       <th><%= t :'notification.type' %></th>
       <th><%= Notification.human_attribute_name :user_who_confirm %></th>
       <th><%= Notification.human_attribute_name :created_at %></th>
-      <th><%= Notification.human_attribute_name :updated_at %></th>
+      <th><%= Notification.human_attribute_name :confirmation_date %></th>
       <th colspan="5"></th>
     </tr>
   </thead>
@@ -20,7 +20,7 @@
         <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
         <td><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
         <td><%=l notification.created_at, :format => :short %></td>
-        <td><%=l notification.updated_at, :format => :short if notification.notified? %></td>
+        <td><%=l notification.confirmation_date, :format => :short if notification.confirmation_date %></td>
         <td><%= link_to_show notification %></td>
         <td><%= link_to_edit edit_notification_path(notification) %></td>
         <td><%= link_to_confirm notification %></td>

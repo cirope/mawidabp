@@ -19,6 +19,8 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal fixture_notification.notes, @notification.notes
     assert_equal fixture_notification.confirmation_hash,
       @notification.confirmation_hash
+    assert_equal fixture_notification.confirmation_date,
+      @notification.confirmation_date
     assert_equal fixture_notification.user_id, @notification.user_id
   end
 
@@ -68,14 +70,17 @@ class NotificationTest < ActiveSupport::TestCase
     @notification.user_id = '12.3'
     @notification.status = '_12'
     @notification.user_who_confirm_id = 'x123'
+    @notification.confirmation_date = '12/34/34'
     assert @notification.invalid?
-    assert_equal 3, @notification.errors.count
+    assert_equal 4, @notification.errors.count
     assert_equal error_message_from_model(@notification, :user_id,
       :not_a_number), @notification.errors.on(:user_id)
     assert_equal error_message_from_model(@notification, :status,
       :not_a_number), @notification.errors.on(:status)
     assert_equal error_message_from_model(@notification, :user_who_confirm_id,
       :not_a_number), @notification.errors.on(:user_who_confirm_id)
+    assert_equal error_message_from_model(@notification, :confirmation_date,
+      :invalid_date), @notification.errors.on(:confirmation_date)
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -112,6 +117,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert confirmed.empty?
     assert !pendings.empty?
+    assert_nil @notification.confirmation_date
     assert @notification.notify!
 
     pendings = @notification.findings(true).select do |f|
@@ -122,6 +128,7 @@ class NotificationTest < ActiveSupport::TestCase
     # No se confirma porque no es un auditado (es bare_user)
     assert confirmed.empty?
     assert !pendings.empty?
+    assert_not_nil @notification.confirmation_date
 
     @notification = Notification.find(notifications(
         :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
@@ -133,8 +140,10 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert confirmed.empty?
     assert !pendings.empty?
+    assert_nil @notification.confirmation_date
     assert @notification.notify!
     assert @notification.confirmed?
+    assert_not_nil @notification.confirmation_date
 
     pendings = @notification.findings(true).select do |f|
       f.notifications(true).any? { |n| !n.notified? }
