@@ -101,7 +101,8 @@ class WeaknessesControllerTest < ActionController::TestCase
           :priority => get_test_parameter(:admin_priorities).first[1],
           :follow_up_date => 2.days.from_now.to_date,
           :user_ids => [users(:administrator_user).id, users(:bare_user).id,
-            users(:audited_user).id],
+            users(:audited_user).id, users(:manager_user).id,
+            users(:supervisor_user).id],
           :work_papers_attributes => {
             :new_1 => {
               :name => 'New workpaper name',
@@ -151,7 +152,8 @@ class WeaknessesControllerTest < ActionController::TestCase
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
             :user_ids => [users(:administrator_user).id, users(:bare_user).id,
-              users(:audited_user).id],
+              users(:audited_user).id, users(:manager_user).id,
+              users(:supervisor_user).id],
             :work_papers_attributes => {
               :new_1 => {
                 :name => 'New workpaper name',

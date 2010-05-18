@@ -544,7 +544,7 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 4 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 6 do
       User.notify_new_findings
     end
 

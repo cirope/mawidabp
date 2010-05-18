@@ -2,42 +2,38 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= Notification.human_attribute_name 'status' %></th>
+      <th><%= Notification.human_attribute_name :status %></th>
       <th><%= t :'notification.type' %></th>
-      <th><%= Notification.human_attribute_name 'user_who_confirm' %></th>
-      <th><%= Notification.human_attribute_name 'created_at' %></th>
-      <th><%= Notification.human_attribute_name 'updated_at' %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= Notification.human_attribute_name :user_who_confirm %></th>
+      <th><%= Notification.human_attribute_name :created_at %></th>
+      <th><%= Notification.human_attribute_name :updated_at %></th>
+      <th colspan="5"></th>
     </tr>
   </thead>
 
   <tbody>
-  <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
-  <% @notifications.each do |notification| -%>
-    <tr class="<%= cycle(:even, :odd) %>">
-      <td></td>
-      <td><%=h notification.status_text %></td>
-      <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
-      <td><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
-      <td><%=l notification.created_at, :format => :short %></td>
-      <td><%=l notification.updated_at, :format => :short if notification.notified? %></td>
-      <td><%= link_to_show notification %></td>
-      <td><%= link_to_edit edit_notification_path(notification) %></td>
-      <td><%= link_to_confirm notification %></td>
-      <td><%= link_to_confirm notification, true %></td>
-      <td></td>
-    </tr>
     <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
-  <% end -%>
+    <% @notifications.each do |notification| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%=h notification.status_text %></td>
+        <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
+        <td><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
+        <td><%=l notification.created_at, :format => :short %></td>
+        <td><%=l notification.updated_at, :format => :short if notification.notified? %></td>
+        <td><%= link_to_show notification %></td>
+        <td><%= link_to_edit edit_notification_path(notification) %></td>
+        <td><%= link_to_confirm notification %></td>
+        <td><%= link_to_confirm notification, true %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
+    <% end -%>
   </tbody>
 </table>
 
 <div id="links">
-<%= pagination_links @notifications %>
-<%= link_to_back %>
-<div style="clear: both;"></div>
+  <%= pagination_links @notifications %>
+  <%= link_to_back %>
+  <div style="clear: both;"></div>
 </div>

@@ -47,7 +47,8 @@ class FindingTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :user_ids => [users(:bare_user).id, users(:audited_user).id,
+          users(:manager_user).id, users(:supervisor_user).id]
       )
 
       assert @finding.save, @finding.errors.full_messages.join('; ')
@@ -70,7 +71,9 @@ class FindingTest < ActiveSupport::TestCase
         :effect => 'New effect',
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
-        :follow_up_date => 2.days.from_now.to_date
+        :follow_up_date => 2.days.from_now.to_date,
+        :user_ids => [users(:bare_user).id, users(:audited_user).id,
+          users(:manager_user).id, users(:supervisor_user).id]
       )
     end
   end
@@ -242,6 +245,24 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validates auditor users' do
     @finding.users.delete_if { |u| u.auditor? }
+
+    assert @finding.invalid?
+    assert 1, @finding.errors.size
+    assert_equal error_message_from_model(@finding, :users, :invalid),
+      @finding.errors.on(:users)
+  end
+
+  test 'validates supervisor users' do
+    @finding.users.delete_if { |u| u.supervisor? }
+
+    assert @finding.invalid?
+    assert 1, @finding.errors.size
+    assert_equal error_message_from_model(@finding, :users, :invalid),
+      @finding.errors.on(:users)
+  end
+
+  test 'validates manager users' do
+    @finding.users.delete_if { |u| u.manager? }
 
     assert @finding.invalid?
     assert 1, @finding.errors.size

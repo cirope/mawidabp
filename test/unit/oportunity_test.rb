@@ -36,7 +36,8 @@ class OportunityTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:being_implemented],
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :user_ids => [users(:bare_user).id, users(:audited_user).id,
+          users(:manager_user).id, users(:supervisor_user).id]
       )
 
       assert @oportunity.save, @oportunity.errors.full_messages.join('; ')

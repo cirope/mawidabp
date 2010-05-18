@@ -47,7 +47,8 @@ class WeaknessTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :user_ids => [users(:bare_user).id, users(:audited_user).id,
+          users(:manager_user).id, users(:supervisor_user).id]
       )
 
       assert @weakness.save, @weakness.errors.full_messages.join('; ')

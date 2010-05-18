@@ -1594,7 +1594,7 @@ es:
             solution_date:
               must_be_blank: "debe estar en blanco para el estado seleccionado"
             users:
-              invalid: "debe contener como mínimo un auditor y un auditado"
+              invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
         organization:
           attributes:
             business_units:

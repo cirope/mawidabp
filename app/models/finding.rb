@@ -279,8 +279,8 @@ class Finding < ActiveRecord::Base
     end
   end
   validates_each :users do |record, attr, value|
-    unless value.any? { |u| u.can_act_as_audited? } &&
-        value.any? { |u| u.auditor? }
+    unless value.any?(&:can_act_as_audited?) && value.any?(&:auditor?) &&
+        value.any?(&:supervisor?) && value.any?(&:manager?)
       record.errors.add attr, :invalid
     end
   end

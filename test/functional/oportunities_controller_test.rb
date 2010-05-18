@@ -96,7 +96,8 @@ class OportunitiesControllerTest < ActionController::TestCase
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
           :state => Finding::STATUS[:being_implemented],
-          :user_ids => [users(:bare_user).id, users(:audited_user).id],
+          :user_ids => [users(:bare_user).id, users(:audited_user).id,
+            users(:manager_user).id, users(:supervisor_user).id],
           :work_papers_attributes => {
             :new_1 => {
               :name => 'New workpaper name',
@@ -141,7 +142,8 @@ class OportunitiesControllerTest < ActionController::TestCase
             :audit_comments => 'Updated audit comments',
             :state => Finding::STATUS[:confirmed],
             :solution_date => '',
-            :user_ids => [users(:bare_user).id, users(:audited_user).id],
+            :user_ids => [users(:bare_user).id, users(:audited_user).id,
+              users(:manager_user).id, users(:supervisor_user).id],
             :work_papers_attributes => {
               :new_1 => {
                 :name => 'New workpaper name',

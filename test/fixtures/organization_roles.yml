@@ -48,6 +48,11 @@ manager_role_for_manager_user_in_default_organization:
   organization: default_organization
   role: manager_role
 
+manager_role_for_manager_user_in_second_organization:
+  user: manager_user
+  organization: second_organization
+  role: manager_role
+
 manager_role_for_manager_second_user_in_default_organization:
   user: manager_second_user
   organization: default_organization
@@ -56,6 +61,11 @@ manager_role_for_manager_second_user_in_default_organization:
 supervisor_role_for_supervisor_user_in_default_organization:
   user: supervisor_user
   organization: default_organization
+  role: supervisor_role
+
+supervisor_role_for_supervisor_user_in_second_organization:
+  user: supervisor_user
+  organization: second_organization
   role: supervisor_role
 
 supervisor_role_for_supervisor_second_user_in_default_organization:
