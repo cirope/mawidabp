@@ -612,10 +612,13 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def create_findings_follow_up_pdf(organization = nil, index = 1)
-    is_final = !self.kind_of?(ConclusionDraftReview) ||
+    use_finals = !self.kind_of?(ConclusionDraftReview) ||
       self.review.has_final_review?
-    weaknesses = self.review.weaknesses
-    oportunities = self.review.oportunities
+    weaknesses = (use_finals ? self.review.final_weaknesses :
+        self.review.weaknesses)
+    oportunities = (use_finals ? self.review.final_oportunities :
+        self.review.oportunities)
+
     weaknesses = weaknesses.select do |w|
       w.implemented? || w.being_implemented? || w.unanswered?
     end.sort {|w1, w2| w1.review_code <=> w2.review_code}
@@ -625,7 +628,10 @@ class ConclusionReview < ActiveRecord::Base
 
     unless (weaknesses + oportunities).blank?
       pdf = PDF::Writer.create_generic_pdf(:portrait, false)
-      pdf.add_watermark(I18n.t(:'pdf.draft')) unless is_final
+      column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
+      columns = {}
+      column_data = []
+      pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
 
       pdf.margins_mm(*PDF_MARGINS)
       pdf.select_font 'Helvetica', :encoding => nil
@@ -638,11 +644,44 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_title I18n.t(:'conclusion_review.findings_follow_up.title'), 18,
         :center
 
-      pdf.move_pointer 18 unless weaknesses.blank?
+      column_order.each do |col_name, col_with|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+          c.heading = Finding.human_attribute_name(col_name) +
+            (['risk', 'state'].include?(col_name) ? ' *' : '')
+          c.width = pdf.percent_width(col_with)
+        end
+      end
+
+      pdf.move_pointer 24 unless weaknesses.blank?
 
       weaknesses.each do |weakness|
-        pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => 12
+        column_data << {
+          'review_code' => weakness.review_code.to_iso,
+          'risk' => weakness.risk_text.to_iso,
+          'state' => weakness.state_text.to_iso
+        }
+      end
+
+      unless column_data.blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = column_data
+          table.column_order = column_order.map(&:first)
+          table.split_rows = true
+          table.font_size = 8
+          table.shade_color = Color::RGB::Grey90
+          table.shade_heading_color = Color::RGB::Grey70
+          table.heading_font_size = 10
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.render_on pdf
+        end
+
+        pdf.text "\n#{
+          I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
+            :font_size => 8, :justification => :full
       end
 
       weaknesses.each do |weakness|
@@ -660,11 +699,40 @@ class ConclusionReview < ActiveRecord::Base
           :justification => :center
       end
 
-      pdf.move_pointer 18 unless oportunities.blank?
+      unless oportunities.blank?
+        pdf.move_pointer 24
+        column_data = []
+        column_order.delete_at 1
+        columns.delete 'risk'
+      end
 
       oportunities.each do |oportunity|
-        pdf.text [oportunity.review_code, oportunity.state_text].join(' - '),
-          :font_size => 12
+        column_data << {
+          'review_code' => oportunity.review_code.to_iso,
+          'state' => oportunity.state_text.to_iso
+        }
+      end
+
+      unless column_data.blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = column_data
+          table.column_order = column_order.map(&:first)
+          table.split_rows = true
+          table.font_size = 8
+          table.shade_color = Color::RGB::Grey90
+          table.shade_heading_color = Color::RGB::Grey70
+          table.heading_font_size = 10
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.render_on pdf
+        end
+
+        pdf.text "\n#{
+          I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
+            :font_size => 8, :justification => :full
       end
 
       oportunities.each do |oportunity|

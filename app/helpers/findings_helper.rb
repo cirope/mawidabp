@@ -48,16 +48,14 @@ module FindingsHelper
 
 
   def finding_answer_notification_check(form)
-    unless @auth_user.audited?
-      label_and_check = [
-        form.label(:notify_users, nil, :class => :plain_label),
-        show_inline_help_for(:finding_answer_notification,
-          'finding_answer_notification_NEW_RECORD'),
-        form.check_box(:notify_users, :style => 'margin: 0em 0em 0em 1em;')
-      ]
+    label_and_check = [
+      form.label(:notify_users, nil, :class => :plain_label),
+      show_inline_help_for(:finding_answer_notification,
+        'finding_answer_notification_NEW_RECORD'),
+      form.check_box(:notify_users, :style => 'margin: 0em 0em 0em 1em;')
+    ]
 
-      label_and_check.map {|tag| content_tag(:span, tag)}.join
-    end
+    label_and_check.map {|tag| content_tag(:span, tag)}.join
   end
 
   def finding_show_status_change_history(dom_id)

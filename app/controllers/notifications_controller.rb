@@ -71,7 +71,7 @@ class NotificationsController < ApplicationController
   # * GET /notifications/confirm.xml
   def confirm
     @notification = Notification.first(:conditions => {
-        :status => Notification::STATUSES[:unconfirmed],
+        :status => Notification::STATUS[:unconfirmed],
         :confirmation_hash => params[:id]}
     )
 

@@ -93,11 +93,11 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'dynamic functions' do
-    Notification::STATUSES.each do |status, value|
+    Notification::STATUS.each do |status, value|
       @notification.status = value
       assert @notification.send("#{status}?".to_sym)
 
-      Notification::STATUSES.each do |k, v|
+      Notification::STATUS.each do |k, v|
         unless k == status
           @notification.status = v
           assert !@notification.send("#{status}?".to_sym)

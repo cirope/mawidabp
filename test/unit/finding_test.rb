@@ -325,6 +325,8 @@ class FindingTest < ActiveSupport::TestCase
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
     assert finding.unconfirmed?
+    assert_nil finding.confirmation_date
+    assert finding.notifications.not_confirmed.detect { |n| n.user.audited? }
 
     finding.finding_answers << FindingAnswer.new(
       :answer => 'New administrator answer',
@@ -335,6 +337,7 @@ class FindingTest < ActiveSupport::TestCase
 
     # La respuesta es de un usuario administrador
     assert finding.unconfirmed?
+    assert finding.notifications.not_confirmed.detect { |n| n.user.audited? }
 
     finding.finding_answers << FindingAnswer.new(
       :answer => 'New audited answer',
@@ -343,6 +346,10 @@ class FindingTest < ActiveSupport::TestCase
     )
 
     assert finding.confirmed?
+    assert_not_nil finding.confirmation_date
+    assert !finding.notifications.not_confirmed.detect { |n| n.user.audited? }
+    assert_equal users(:audited_user).id,
+      finding.notifications.detect { |n| n.user.audited? }.user_who_confirm.id
     assert finding.save
   end
 

@@ -1,7 +1,7 @@
 class Notification < ActiveRecord::Base
   
   # Constantes
-  STATUSES = {
+  STATUS = {
     :unconfirmed => 0,
     :confirmed => 1,
     :rejected => 2
@@ -9,7 +9,7 @@ class Notification < ActiveRecord::Base
 
   # Named scopes
   named_scope :not_confirmed, :conditions =>
-    { :status => STATUSES[:unconfirmed] }
+    { :status => STATUS[:unconfirmed] }
   named_scope :confirmed_or_stale, :conditions => [
     [
       'status = :status_confirmed',
@@ -18,8 +18,8 @@ class Notification < ActiveRecord::Base
       ].join(' AND ')
     ].join(' OR '),
     {
-      :status_confirmed => STATUSES[:confirmed],
-      :status_unconfirmed => STATUSES[:unconfirmed],
+      :status_confirmed => STATUS[:confirmed],
+      :status_unconfirmed => STATUS[:unconfirmed],
       :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
     }
   ]
@@ -31,8 +31,8 @@ class Notification < ActiveRecord::Base
       ].join(' AND ')
     ].join(' OR '),
     {
-      :status_rejected => STATUSES[:confirmed],
-      :status_unconfirmed => STATUSES[:unconfirmed],
+      :status_rejected => STATUS[:confirmed],
+      :status_unconfirmed => STATUS[:unconfirmed],
       :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
     }
   ]
@@ -58,7 +58,7 @@ class Notification < ActiveRecord::Base
   def initialize(attributes = nil)
     super(attributes)
 
-    self.status ||= STATUSES[:unconfirmed]
+    self.status ||= STATUS[:unconfirmed]
     self.confirmation_hash ||= UUIDTools::UUID.random_create.to_s
   end
 
@@ -70,7 +70,7 @@ class Notification < ActiveRecord::Base
     Notification.transaction do
       begin
         self.update_attributes(
-          :status => confirmed ? STATUSES[:confirmed] : STATUSES[:rejected],
+          :status => confirmed ? STATUS[:confirmed] : STATUS[:rejected],
           :user_who_confirm => self.user,
           :confirmation_date => Time.now
         )
@@ -83,7 +83,7 @@ class Notification < ActiveRecord::Base
                 (self.user.audited? ^ notification.user.audited?)
               notification.update_attributes!(
                 :status => confirmed ?
-                  STATUSES[:confirmed] : STATUSES[:rejected],
+                  STATUS[:confirmed] : STATUS[:rejected],
                 :user_who_confirm => self.user
               )
             end
@@ -97,7 +97,7 @@ class Notification < ActiveRecord::Base
     end
   end
 
-  STATUSES.each do |status_type, status_value|
+  STATUS.each do |status_type, status_value|
     define_method("#{status_type}?") { self.status == status_value }
   end
 
@@ -106,7 +106,7 @@ class Notification < ActiveRecord::Base
   end
 
   def status_text
-    I18n.t("notification.status_#{STATUSES.invert[self.status]}")
+    I18n.t("notification.status_#{STATUS.invert[self.status]}")
   end
 
   def stale?

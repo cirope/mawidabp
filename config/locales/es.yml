@@ -1,5 +1,5 @@
 es:
-  app_name: "Mawida"
+  app_name: "Mawida Buenas Prácticas"
   app_copyright: "Copyright © 2008-{{year}} Mawida Buenas Prácticas. Todos los derechos reservados."
 
   label:
@@ -308,6 +308,7 @@ es:
       title: "SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
       weakness_title_in_singular: "SEGUIMIENTO DE OBSERVACIÓN"
       oportunity_title_in_singular: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
+      index_clarification: "* Al momento de emitir el informe definitivo"
       pdf_name: "{{prefix}}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
     workflow:
       title: "Documentación del trabajo realizado"
