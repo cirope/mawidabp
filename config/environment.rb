@@ -40,6 +40,7 @@ Rails::Initializer.run do |config|
   config.gem 'whenever', :lib => false, :source => 'http://gemcutter.org'
   config.gem 'will_paginate', :source => 'http://gemcutter.org'
   config.gem 'paper_trail', :source => 'http://gemcutter.org'
+  config.gem 'acts_as_commentable', :source => 'http://gemcutter.org'
   config.gem 'metaskills-pdf-writer', :lib => 'pdf/writer',
     :source => 'http://gems.github.com'
   config.gem 'mksm-rubyzip', :lib => 'zip/zip',

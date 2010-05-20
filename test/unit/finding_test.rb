@@ -234,6 +234,24 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'validates exceptional status change' do
+    finding = Finding.find(findings(
+        :iso_27000_security_policy_3_1_item_weakness).id)
+
+    finding.state = Finding::STATUS[:implemented]
+    assert finding.save
+
+    finding.state = Finding::STATUS[:being_implemented]
+    assert finding.invalid?
+
+    assert_equal error_message_from_model(finding, :state,
+      :must_have_a_comment), finding.errors.on(:state)
+
+    finding.comments.build(:comment => 'Test comment',
+      :user => users(:administrator_user))
+    assert finding.valid?
+  end
+
   test 'validates audited users' do
     @finding.users.delete_if {|u| u.can_act_as_audited?}
 
@@ -345,6 +363,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'dynamic functions' do
+    # Funciones status?
     Finding::STATUS.each do |status, value|
       @finding.state = value
       assert @finding.send("#{status}?".to_sym)
@@ -356,6 +375,17 @@ class FindingTest < ActiveSupport::TestCase
         end
       end
     end
+
+    # Funciones was_status?
+    @finding.reload
+    assert @finding.unconfirmed?
+
+    @finding.state = Finding::STATUS[:confirmed]
+
+    assert !@finding.unconfirmed?
+    assert @finding.confirmed?
+    assert @finding.was_unconfirmed?
+    assert !@finding.was_confirmed?
   end
 
   test 'versions between' do

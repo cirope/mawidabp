@@ -113,6 +113,7 @@ es:
     unsupported_browser: "Su navegador no cumple con todos los estándares internacionales requeridos por la aplicación, por favor en su lugar utilice Mozilla Firefox y abra la siguiente dirección: {{url}}"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
+    automatic_by_the_system: "Realizado de forma automática por el sistema"
 
   error:
     title: "Error"
@@ -309,8 +310,8 @@ es:
       oportunity_title_in_singular: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
       pdf_name: "{{prefix}}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
     workflow:
-      title: "Programa de trabajo"
-      pdf_name: "detalle_del_programa_de_trabajo.pdf"
+      title: "Documentación del trabajo realizado"
+      pdf_name: "documentacion_del_trabajo_realizado.pdf"
       control_objective_work_papers: "Papeles de trabajo del objetivo de control"
       control_objective_weaknesses: "Observaciones"
       control_objective_oportunities: "Oportunidades"
@@ -329,7 +330,7 @@ es:
     correctly_updated: "Objetivo de control actualizado correctamente."
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
     view_all_weaknesses: "Ver listado"
-    add_oportunity: "Agregar nueva oportunidad"
+    add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
     readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
@@ -399,7 +400,8 @@ es:
     stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
     related_users: "Usuarios relacionados"
     work_papers: "Papeles de trabajo"
-    comments: "Comentarios de seguimiento"
+    finding_answers: "Comentarios de seguimiento"
+    comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *{{cost}}* al seguimiento de la observación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -415,6 +417,8 @@ es:
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles: "Responsables"
     send_notification: "¿Enviar notificación?"
+    show_status_change_history: "Ver historial de cambios de estado"
+    status_change_history: "Historial de cambios de estado"
     status_confirmed: "Confirmada"
     status_unconfirmed: "No confirmada"
     status_unanswered: "Sin respuesta"
@@ -1165,6 +1169,7 @@ es:
       backup: "Copia de seguridad"
       best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
+      comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
       conclusion_draft_review: "Informe borrador"
@@ -1214,6 +1219,9 @@ es:
       business_unit:
         name: "Nombre"
         business_units_name: "Nombre"
+        <<: *commons
+      comment:
+        comment: "Comentario"
         <<: *commons
       conclusion_draft_review:
         force_approval: "Forzar aprobación"
@@ -1596,6 +1604,8 @@ es:
               must_be_blank: "debe estar en blanco para el estado seleccionado"
             solution_date:
               must_be_blank: "debe estar en blanco para el estado seleccionado"
+            state:
+              must_have_a_comment: "debe tener adjunto un comentario para esta transición"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
         organization:

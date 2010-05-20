@@ -612,12 +612,10 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def create_findings_follow_up_pdf(organization = nil, index = 1)
-    use_finals = !self.kind_of?(ConclusionDraftReview) ||
+    is_final = !self.kind_of?(ConclusionDraftReview) ||
       self.review.has_final_review?
-    weaknesses = (use_finals ? self.review.final_weaknesses :
-      self.review.weaknesses)
-    oportunities = (use_finals ? self.review.final_oportunities :
-      self.review.oportunities)
+    weaknesses = self.review.weaknesses
+    oportunities = self.review.oportunities
     weaknesses = weaknesses.select do |w|
       w.implemented? || w.being_implemented? || w.unanswered?
     end.sort {|w1, w2| w1.review_code <=> w2.review_code}
@@ -627,7 +625,7 @@ class ConclusionReview < ActiveRecord::Base
 
     unless (weaknesses + oportunities).blank?
       pdf = PDF::Writer.create_generic_pdf(:portrait, false)
-      pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+      pdf.add_watermark(I18n.t(:'pdf.draft')) unless is_final
 
       pdf.margins_mm(*PDF_MARGINS)
       pdf.select_font 'Helvetica', :encoding => nil

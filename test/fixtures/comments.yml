@@ -1,0 +1,11 @@
+comment_one:
+  comment: Comment one
+  commentable_type: Finding
+  commentable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_weakness_notify) %>
+  user: administrator_user
+
+comment_two:
+  comment: Comment two
+  commentable_type: Finding
+  commentable_id: <%= Fixtures.identify(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification) %>
+  user: administrator_user

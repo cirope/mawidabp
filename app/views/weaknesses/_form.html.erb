@@ -2,6 +2,7 @@
 <% review = @weakness.review || @weakness.control_objective_item.try(:review) -%>
 <% @weakness.review_code ||= next_weakness_code(@weakness) -%>
 <% frozen = review.try :is_frozen? -%>
+<% show_history_changes = @weakness.status_change_history.size > 1 -%>
 <!--[form:weakness]-->
 <% form_for @weakness, :html => {:multipart => true} do |f| %>
   <% content_for :js_extra do -%>
@@ -69,9 +70,35 @@
         {:class => :inline_item, :disabled => readonly} %>
     </p>
     <p class="form_item">
-      <%= f.label :state, nil, :class => :inline %>
+      <%= f.label :state, Weakness.human_attribute_name(:state) +
+        (show_history_changes ? finding_show_status_change_history(
+          :finding_status_change_history) : ''), :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
+
+    <% if show_history_changes -%>
+      <%= render :partial => 'findings/history_changes',
+        :locals => { :finding => @weakness } %>
+    <% end -%>
+
+    <% if @weakness.must_have_a_comment? -%>
+      <% f.fields_for :comments,
+        @weakness.comments.build(:user => @auth_user) do |c_f| -%>
+        <p>
+          <%= c_f.label :comment, nil, :class => :error_field %>
+          <%= c_f.text_area :comment, :class => :error_field %>
+          <%= c_f.hidden_field :user_id %>
+        </p>
+      <% end -%>
+    <% end -%>
+    <% if @weakness.must_have_a_comment? -%>
+      <% f.fields_for :comments, @weakness.comments.build do |c_f| -%>
+        <p>
+          <%= c_f.label :comment, nil, :class => :error_field %>
+          <%= c_f.text_area :comment, :class => :error_field %>
+        </p>
+      <% end -%>
+    <% end -%>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>

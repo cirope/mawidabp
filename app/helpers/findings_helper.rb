@@ -59,4 +59,17 @@ module FindingsHelper
       label_and_check.map {|tag| content_tag(:span, tag)}.join
     end
   end
+
+  def finding_show_status_change_history(dom_id)
+    content_tag(:span,
+      link_to_function(
+        image_tag(
+          'clock.gif', :size => '11x11',
+          :alt => t(:'finding.show_status_change_history'),
+          :title => t(:'finding.show_status_change_history')
+        ),
+        "Element.showOrHide('#{dom_id}')", :class => :image_link
+      ), :style => 'margin-left: .25em;'
+    )
+  end
 end

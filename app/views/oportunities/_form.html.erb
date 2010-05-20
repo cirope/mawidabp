@@ -2,6 +2,7 @@
 <% review = @oportunity.review || (@oportunity.control_objective_item ?
     @oportunity.control_objective_item.review : nil) -%>
 <% frozen = review.try :is_frozen? -%>
+<% show_history_changes = @oportunity.status_change_history.size > 1 -%>
 <!--[form:oportunity]-->
 <% form_for @oportunity, :html => {:multipart => true} do |f| -%>
   <% content_for :js_extra do -%>
@@ -51,9 +52,27 @@
   </div>
   <div class="form_column_right">
     <p class="form_item">
-      <%= f.label :state, nil, :class => :inline %>
+      <%= f.label :state, Oportunity.human_attribute_name(:state) +
+        (show_history_changes ? finding_show_status_change_history(
+          :finding_status_change_history) : ''), :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
+
+    <% if show_history_changes -%>
+      <%= render :partial => 'findings/history_changes',
+        :locals => { :finding => @oportunity } %>
+    <% end -%>
+
+    <% if @oportunity.must_have_a_comment? -%>
+      <% f.fields_for :comments,
+        @oportunity.comments.build(:user => @auth_user) do |c_f| -%>
+        <p>
+          <%= c_f.label :comment, nil, :class => :error_field %>
+          <%= c_f.text_area :comment, :class => :error_field %>
+          <%= c_f.hidden_field :user_id %>
+        </p>
+      <% end -%>
+    <% end -%>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>

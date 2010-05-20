@@ -41,20 +41,60 @@ class Finding < ActiveRecord::Base
   }.freeze
 
   STATUS_TRANSITIONS = {
-    :confirmed => [:confirmed, :unanswered, :being_implemented, :implemented,
-      :implemented_audited, :assumed_risk],
-    :unconfirmed => [:unconfirmed, :confirmed, :unanswered],
-    :unanswered => [:unanswered, :being_implemented, :implemented,
-      :implemented_audited, :assumed_risk],
-    :being_implemented => [:being_implemented, :implemented,
-      :implemented_audited, :assumed_risk],
-    :implemented => [:implemented, :implemented_audited, :assumed_risk],
-    :implemented_audited => [:implemented_audited],
-    :assumed_risk => [:assumed_risk],
-    :notify => [:notify, :incomplete, :being_implemented, :implemented,
-      :implemented_audited, :assumed_risk],
-    :incomplete => [:incomplete, :notify, :being_implemented, :implemented,
-      :implemented_audited, :assumed_risk]
+    :confirmed => [
+      :confirmed,
+      :unanswered,
+      :being_implemented,
+      :implemented,
+      :implemented_audited,
+      :assumed_risk
+    ],
+    :unconfirmed => [
+      :unconfirmed,
+      :confirmed,
+      :unanswered
+    ],
+    :unanswered => [
+      :unanswered,
+      :being_implemented,
+      :implemented,
+      :implemented_audited,
+      :assumed_risk
+    ],
+    :being_implemented => [
+      :being_implemented,
+      :implemented,
+      :implemented_audited,
+      :assumed_risk
+    ],
+    :implemented => [
+      :implemented,
+      :being_implemented,
+      :implemented_audited,
+      :assumed_risk
+    ],
+    :implemented_audited => [
+      :implemented_audited
+    ],
+    :assumed_risk => [
+      :assumed_risk
+    ],
+    :notify => [
+      :notify,
+      :incomplete,
+      :being_implemented,
+      :implemented,
+      :implemented_audited,
+      :assumed_risk
+    ],
+    :incomplete => [
+      :incomplete,
+      :notify,
+      :being_implemented,
+      :implemented,
+      :implemented_audited,
+      :assumed_risk
+    ]
   }
 
   PENDING_STATUS = [
@@ -66,7 +106,7 @@ class Finding < ActiveRecord::Base
   EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete]
 
   # Atributos no persistente
-  attr_accessor :users_for_notification
+  attr_accessor :users_for_notification, :user_who_make_it
 
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:user_ids, :workpaper_ids]
@@ -262,6 +302,8 @@ class Finding < ActiveRecord::Base
         !record.next_status_list(record.state_was).values.include?(value)
       record.errors.add attr, :inclusion
     end
+
+    record.errors.add attr, :must_have_a_comment if record.must_have_a_comment?
   end
   validates_each :review_code do |record, attr, value|
     review = record.control_objective_item.try(:review)
@@ -299,6 +341,8 @@ class Finding < ActiveRecord::Base
   has_many :work_papers, :as => :owner, :dependent => :destroy,
     :before_add => [:check_for_final_review, :prepare_work_paper],
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
+  has_many :comments, :as => :commentable, :dependent => :destroy,
+    :order => 'created_at ASC'
   has_and_belongs_to_many :users, :validate => false,
     :order => 'last_name ASC, name ASC', :after_add => :user_changed,
     :after_remove => :user_changed
@@ -306,6 +350,7 @@ class Finding < ActiveRecord::Base
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
+  accepts_nested_attributes_for :comments, :allow_destroy => false
 
   def initialize(attributes = nil, import_users = false)
     super(attributes)
@@ -343,7 +388,8 @@ class Finding < ActiveRecord::Base
   end
 
   def answer_added(finding_answer)
-    if self.unconfirmed? && finding_answer.user.try(:can_act_as_audited?)
+    if (self.unconfirmed? || self.notify?) &&
+        finding_answer.user.try(:can_act_as_audited?)
       self.state = STATUS[:confirmed]
     end
   end
@@ -417,6 +463,11 @@ class Finding < ActiveRecord::Base
     end
   end
 
+  def must_have_a_comment?
+    self.being_implemented? && self.was_implemented? &&
+      !self.comments.detect { |c| c.new_record? && c.valid? }
+  end
+
   def mark_as_unconfirmed!
     self.first_notification_date = Date.today unless self.unconfirmed?
     self.state = STATUS[:unconfirmed] if self.notify?
@@ -436,6 +487,10 @@ class Finding < ActiveRecord::Base
 
   STATUS.each do |status_type, status_value|
     define_method("#{status_type}?") { self.state == status_value }
+  end
+
+  STATUS.each do |status_type, status_value|
+    define_method("was_#{status_type}?") { self.state_was == status_value }
   end
 
   def state_text
@@ -532,6 +587,9 @@ class Finding < ActiveRecord::Base
   end
 
   def status_change_history
+    last_version = self.versions.last
+    self.user_who_make_it = last_version.try(:whodunnit) ?
+      User.find(last_version.whodunnit) : nil
     findings_with_status_changed = [self]
     last_added_version = self
 
@@ -540,6 +598,10 @@ class Finding < ActiveRecord::Base
 
       if old_finding && old_finding.state != last_added_version.state
         last_added_version = old_finding
+
+        if version.previous.whodunnit
+          old_finding.user_who_make_it = User.find(version.previous.whodunnit)
+        end
         
         findings_with_status_changed << old_finding
       end
@@ -799,39 +861,44 @@ class Finding < ActiveRecord::Base
 
     last_state = ''
 
+    pdf.move_pointer 12
+
+    pdf.add_title I18n.t(:'finding.status_change_history'), 12, :full
+
     self.status_change_history.each do |finding|
       pdf.move_pointer 12
       
-      pdf.add_title I18n.l(finding.updated_at, :format => :long).strip, 12,
-        :full, true
+      pdf.text "<C:bullet /> #{I18n.l(finding.updated_at,
+        :format => :very_long)}",
+        :font_size => 12, :justification => :full, :left => 24
       pdf.move_pointer 6
       pdf.add_description_item(I18n.t(:'finding.follow_up_report.past_state'),
-        last_state, 0, false)
+        last_state, 36, false)
       pdf.add_description_item(I18n.t(
-          :'finding.follow_up_report.current_state'), finding.state_text, 0,
+          :'finding.follow_up_report.current_state'), finding.state_text, 36,
         false)
       
       last_state = finding.state_text
 
       if finding.respond_to?(:risk_text)
-        pdf.add_description_item(finding.class.human_attribute_name('risk'),
-          finding.risk_text, 0, false)
+        pdf.add_description_item(finding.class.human_attribute_name(:risk),
+          finding.risk_text, 36, false)
       end
 
       if finding.respond_to?(:priority_text)
-        pdf.add_description_item(finding.class.human_attribute_name('priority'),
-          finding.priority_text, 0, false)
+        pdf.add_description_item(finding.class.human_attribute_name(:priority),
+          finding.priority_text, 36, false)
       end
 
-      pdf.add_description_item(Finding.human_attribute_name('answer'),
-        finding.answer, 0, false)
-      pdf.add_description_item(Finding.human_attribute_name('audit_comments'),
-        finding.audit_comments, 0, false)
+      pdf.add_description_item(Finding.human_attribute_name(:answer),
+        finding.answer, 36, false)
+      pdf.add_description_item(Finding.human_attribute_name(:audit_comments),
+        finding.audit_comments, 36, false)
 
       if finding.solution_date
         pdf.add_description_item(self.class.human_attribute_name(
-            'solution_date'), I18n.l(finding.solution_date, :format => :long),
-          0, false)
+            :solution_date), I18n.l(finding.solution_date, :format => :long),
+          36, false)
       end
     end
 

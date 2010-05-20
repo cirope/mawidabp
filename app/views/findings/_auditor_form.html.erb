@@ -1,4 +1,5 @@
 <% users_readonly = @finding.implemented_audited? || @finding.assumed_risk? -%>
+<% show_history_changes = @finding.status_change_history.size > 1 -%>
 <!--[form:finding]-->
 <% form_for :finding, @finding, :url => finding_path(params[:completed], @finding), :html =>
   {:method => :put, :class => 'edit_finding', :multipart => true,
@@ -84,9 +85,27 @@
     <% end -%>
     <p class="form_item">
       <%= f_f.label :state, Finding.human_attribute_name(:state) +
-        show_inline_help_for(:finding_state), :class => :inline %>
+        show_inline_help_for(:finding_state) +
+        (show_history_changes ? finding_show_status_change_history(
+          :finding_status_change_history) : ''), :class => :inline %>
       <%= finding_status_field(f_f) %>
     </p>
+    
+    <% if show_history_changes -%>
+      <%= render :partial => 'history_changes',
+        :locals => { :finding => @finding } %>
+    <% end -%>
+
+    <% if @finding.must_have_a_comment? -%>
+      <% f_f.fields_for :comments,
+        @finding.comments.build(:user => @auth_user) do |c_f| -%>
+        <p>
+          <%= c_f.label :comment, nil, :class => :error_field %>
+          <%= c_f.text_area :comment, :class => :error_field %>
+          <%= c_f.hidden_field :user_id %>
+        </p>
+      <% end -%>
+    <% end -%>
     <% if @finding.kind_of? Weakness -%>
       <p>
         <%= f_f.label :follow_up_date,
@@ -156,7 +175,7 @@
 
   <div style="clear: both; margin-top: 2em;">
     <h1>
-      <%= t(:'finding.comments') %>
+      <%= t(:'finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h1>
     

@@ -494,8 +494,10 @@ var Observer = {
                 Helper.showLoading();
             }
 
-            e.storeStyleProperty('background');
-            e.setStyle({'background': '#b1aea6'});
+            if(e) {
+                e.storeStyleProperty('background');
+                e.setStyle({'background': '#b1aea6'});
+            }
         });
     }
 }
