@@ -229,8 +229,8 @@ class FindingTest < ActiveSupport::TestCase
       assert @finding.invalid?
       # Dependiendo del estado se validan más o menos cosas
       assert !@finding.errors.empty?
-      assert_equal error_message_from_model(@finding, :state, :inclusion),
-        @finding.errors.on(:state)
+      assert @finding.errors.on(:state).include?(
+        error_message_from_model(@finding, :state, :inclusion))
     end
   end
 
@@ -250,6 +250,20 @@ class FindingTest < ActiveSupport::TestCase
     finding.comments.build(:comment => 'Test comment',
       :user => users(:administrator_user))
     assert finding.valid?
+  end
+
+  test 'validates implemented audited with work papers' do
+    finding = Finding.find(findings(
+        :iso_27000_security_policy_3_1_item_weakness).id)
+
+    finding.state = Finding::STATUS[:implemented_audited]
+    finding.solution_date = Date.today
+
+    assert finding.work_papers.empty?
+    assert finding.invalid?
+    assert_equal 1, finding.errors.size
+    assert_equal error_message_from_model(finding, :state,
+      :must_have_a_work_paper), finding.errors.on(:state)
   end
 
   test 'validates audited users' do

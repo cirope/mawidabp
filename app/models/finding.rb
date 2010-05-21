@@ -304,6 +304,10 @@ class Finding < ActiveRecord::Base
     end
 
     record.errors.add attr, :must_have_a_comment if record.must_have_a_comment?
+    
+    if record.implemented_audited? && record.work_papers.empty?
+      record.errors.add attr, :must_have_a_work_paper
+    end
   end
   validates_each :review_code do |record, attr, value|
     review = record.control_objective_item.try(:review)
