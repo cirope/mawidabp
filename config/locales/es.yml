@@ -443,7 +443,7 @@ es:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *{{date}}* si ningún auditado proporciona una respuesta"
       notification_date: "Fue notificada por primera vez el día *{{date}}*"
-      confirmation_date: "Su notificación fue confirmada el día *{{date}}* por *{{user}}*"
+      confirmation_date: "Su notificación fue confirmada el día *{{date}}*"
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"

@@ -488,6 +488,7 @@ class Finding < ActiveRecord::Base
           if notification.user.audited?
             notification.update_attributes!(
               :status => Notification::STATUS[:confirmed],
+              :confirmation_date => notification.confirmation_date || Time.now,
               :user_who_confirm => user
             )
           end
@@ -543,14 +544,14 @@ class Finding < ActiveRecord::Base
     end
 
     if self.confirmed? && self.confirmation_date
-      notification_or_answer = self.notifications.detect { |n| n.user.audited? } ||
-        self.finding_answers.detect { |fa| fa.user.audited? }
+      notification_or_answer = self.notifications.detect {|n| n.user.audited?} ||
+        self.finding_answers.detect {|fa| fa.user.audited?}
+      date = notification_or_answer.respond_to?(:confirmation_date) ?
+        notification_or_answer.confirmation_date :
+        notification_or_answer.created_at
 
       important_dates << I18n.t(:'finding.important_dates.confirmation_date',
-        :date => I18n.l(notification_or_answer.respond_to?(:confirmation_date) ?
-            notification_or_answer.confirmation_date :
-            notification_or_answer.created_at, :format => :very_long).strip,
-        :user => notification_or_answer.try(:user).try(:informal_name))
+        :date => I18n.l(date, :format => :very_long).strip)
     end
 
     if self.confirmed? || self.unconfirmed? ||
