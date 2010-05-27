@@ -321,6 +321,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :create_bundle => :read,
         :auto_complete_for_user => :read,
         :check_for_approval => :read,
+        :compose_email => :modify,
         :send_by_email => :modify
       })
   end

@@ -308,6 +308,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :bundle => :read,
         :create_bundle => :read,
         :auto_complete_for_user => :read,
+        :compose_email => :modify,
         :send_by_email => :modify
       })
   end

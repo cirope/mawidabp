@@ -50,6 +50,15 @@ var BrowserManipulation = {
 
 // Manejadores de eventos
 var EventHandler = {
+    eventList: $A([
+        'addNestedItem',
+        'addNestedSubitem',
+        'hideItem',
+        'insertRecordItem',
+        'insertRecordSubitem',
+        'removeItem'
+    ]),
+
     /**
      * Agrega un ítem anidado
      */
@@ -440,18 +449,18 @@ var Observer = {
      * Adjunta eventos a la sección app_content
      */
     attachToAppContent: function() {
-        var events = $A(['addNestedItem', 'addNestedSubitem', 'hideItem',
-            'insertRecordItem', 'insertRecordSubitem', 'removeItem']);
+        var events = EventHandler.eventList;
 
         Event.observe('app_content', 'click', function(event) {
             var e = Event.findElement(event);
+            var classNames = $w(e.className);
+            var selectedEventClassNames = events.select(function(eventName) {
+                return classNames.include(eventName.underscore());
+            });
 
-            events.each(function(eventName) {
-                if(e.hasClassName(eventName.underscore())) {
-                    EventHandler[eventName](e);
-
-                    Event.stop(event);
-                }
+            selectedEventClassNames.each(function(eventName) {
+                EventHandler[eventName](e);
+                Event.stop(event);
             });
 
             if (e.hasClassName('file_container')) {
