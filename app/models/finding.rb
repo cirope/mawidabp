@@ -472,8 +472,8 @@ class Finding < ActiveRecord::Base
   end
 
   def check_users_for_notification
-    unless self.users_for_notification.blank?
-      self.users_for_notification.each do |user_id|
+    unless (self.users_for_notification || []).reject(&:blank?).blank?
+      self.users_for_notification.reject(&:blank?).each do |user_id|
         Notifier.deliver_notify_new_finding self.users.find(user_id), self
       end
     end
