@@ -202,9 +202,12 @@ class Review < ActiveRecord::Base
     }
 
   def to_s
-    identification = "#{self.identification} - #{self.plan_item.project}"
+    self.long_identification +
+      " (#{I18n.l(self.issue_date, :format => :minimal)})"
+  end
 
-    "#{identification} (#{I18n.l(self.issue_date, :format => :minimal)})"
+  def long_identification
+    "#{self.identification} - #{self.plan_item.project}"
   end
 
   def assign_review(related_object)

@@ -149,7 +149,9 @@
   <% end -%>
 
   <div>
-    <h1 style="clear: both;"><%= t(:'finding.responsibles') %></h1>
+    <h1 style="clear: both;">
+      <%= t(:'finding.responsibles', :count => @finding.users.size) %>
+    </h1>
 
     <div class="column_headers">
       <div class="item_column" style="width: 50%;">

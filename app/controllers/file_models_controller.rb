@@ -12,6 +12,6 @@ class FileModelsController < ApplicationController
       redirect = false
     end
 
-    redirect_to :controller => :users, :action => :index if redirect
+    redirect_to :controller => :welcome, :action => :index if redirect
   end
 end

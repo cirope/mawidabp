@@ -408,7 +408,10 @@ es:
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
     has_work_papers: "Papeles de trabajo"
-    auditors: "Auditores"
+    change_history: "Historial de cambios"
+    auditors:
+      one: "Auditor"
+      other: "Auditores"
     reviewers:
       one: "Revisor"
       other: "Revisores"
@@ -416,7 +419,9 @@ es:
       one: "Auditado"
       other: "Auditados"
     readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
-    responsibles: "Responsables"
+    responsibles:
+      one: "Responsable"
+      other: "Responsables"
     send_notification: "¿Enviar notificación?"
     show_status_change_history: "Ver historial de cambios de estado"
     status_change_history: "Historial de cambios de estado"
@@ -447,16 +452,14 @@ es:
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"
-        internal_audit_subtitle: "Observaciones Auditoría Interna"
+        subtitle: "Datos de la observación"
       oportunity:
-        title: "SEGUIMIENTO DE OPORTUNIDAD"
-        internal_audit_subtitle: "Oportunidades Auditoría Interna"
+        title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
+        subtitle: "Datos de la oportunidad de mejora"
       print_date: "Fecha de impresión: {{date}}"
       download: "Descargar seguimiento completo"
-      change_date: "Fecha de cambio"
-      past_state: "Estado anterior"
-      current_state: "Estado a la fecha"
       follow_up_comments: "Comentarios de seguimiento"
+      without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_observacion_{{code}}.pdf"
       
@@ -1224,6 +1227,7 @@ es:
       comment:
         comment: "Comentario"
         <<: *commons
+        created_at: "Fecha del comentario"
       conclusion_draft_review:
         force_approval: "Forzar aprobación"
       conclusion_review:

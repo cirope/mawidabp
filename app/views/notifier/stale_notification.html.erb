@@ -3,19 +3,17 @@
   <%= t :'notifier.notification.the_following_findings_are_still_unconfirmed' %>
 </h3>
 <% @notifications.each do |n| -%>
-  <% unless n.findings.empty? -%>
-    <% n.findings.group_by(&:organization).each do |organization, findings| -%>
-      <h4 style="margin-bottom: 1em;"><%=h organization.name %></h4>
-      <h5><%= l(n.created_at.to_date, :format => :long) %></h5>
-      <% findings.each do |finding| -%>
-        <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
-      <% end -%>
-      <p>
-        <%= link_to t(:'notifier.notification.confirm'),
-          confirm_notification_url(n, :protocol => URL_PROTOCOL,
-            :host => "#{organization.prefix}.#{URL_HOST}") %>
-      </p>
+  <% n.findings.unconfirmed_for_notification.group_by(&:organization).each do |organization, findings| -%>
+    <h4 style="margin-bottom: 1em;"><%=h organization.name %></h4>
+    <h5><%= l(n.created_at.to_date, :format => :long) %></h5>
+    <% findings.each do |finding| -%>
+      <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
     <% end -%>
+    <p>
+      <%= link_to t(:'notifier.notification.confirm'),
+        confirm_notification_url(n, :protocol => URL_PROTOCOL,
+          :host => "#{organization.prefix}.#{URL_HOST}") %>
+    </p>
   <% end -%>
 <% end -%>
 <%= render :partial => 'footer' %>

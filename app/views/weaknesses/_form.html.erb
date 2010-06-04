@@ -91,14 +91,6 @@
         </p>
       <% end -%>
     <% end -%>
-    <% if @weakness.must_have_a_comment? -%>
-      <% f.fields_for :comments, @weakness.comments.build do |c_f| -%>
-        <p>
-          <%= c_f.label :comment, nil, :class => :error_field %>
-          <%= c_f.text_area :comment, :class => :error_field %>
-        </p>
-      <% end -%>
-    <% end -%>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>

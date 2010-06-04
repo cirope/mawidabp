@@ -84,6 +84,17 @@ module PDF
   end
 end
 
+# Extensión de la clase Object
+class Object
+  def to_translated_string
+    if self.respond_to?(:strftime)
+      I18n.l(self, :format => :long)
+    else
+      self.to_s
+    end
+  end
+end
+
 # Extensión de la clase String
 class String
   def to_iso
@@ -123,5 +134,40 @@ class String
     seconds = seconds_match ? (seconds_match[2] || seconds_match[1]).to_f : 0
 
     ((hours + minutes / 60.0 + seconds / 3600.0) * 3600).round
+  end
+end
+
+class Version
+  def changes_until(other)
+    changes = []
+    old_attributes = self.reify.try(:attributes) || {}
+    new_attributes = (other.try(:reify) || self.item.reload).attributes
+    item_class = self.item.class
+
+    old_attributes.each do |attribute, old_value|
+      new_value = new_attributes.delete attribute
+
+      if old_value != new_value && !(old_value.blank? && new_value.blank?)
+        changes << HashWithIndifferentAccess.new({
+          :attribute => item_class.human_attribute_name(attribute),
+          :old_value => old_value.to_translated_string,
+          :new_value => new_value.to_translated_string
+        })
+      end
+    end
+
+    new_attributes.each do |attribute, new_value|
+      changes << HashWithIndifferentAccess.new({
+        :attribute => item_class.human_attribute_name(attribute),
+        :old_value => '-',
+        :new_value => new_value
+      })
+    end
+
+    changes
+  end
+
+  def changes_from_next
+    self.changes_until(self.next)
   end
 end

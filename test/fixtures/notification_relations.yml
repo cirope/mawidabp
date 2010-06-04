@@ -3,6 +3,16 @@ administrator_user_bcra_A4609_security_management_responsible_dependency_weaknes
   model_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_weakness_notify) %>
   model_type: Finding
 
+administrator_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_relation:
+  notification: administrator_user_iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  model_id: <%= Fixtures.identify(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification) %>
+  model_type: Finding
+
+administrator_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_relation:
+  notification: administrator_user_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  model_id: <%= Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_oportunity) %>
+  model_type: Finding
+
 administrator_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed_relation:
   notification: administrator_user_bcra_A4609_security_management_responsible_dependency_notify_oportunity_unconfirmed
   model_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_notify_oportunity) %>

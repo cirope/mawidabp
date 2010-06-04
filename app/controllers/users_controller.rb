@@ -301,6 +301,7 @@ class UsersController < ApplicationController
 
         @user.password = nil
         flash[:notice] = t :'message.invalid_user_or_password'
+        render :action => :login
       end
     end
 

@@ -81,7 +81,9 @@
     </ul>
   <% end -%>
 
-  <h1 style="clear: both;"><%= t(:'finding.responsibles') %></h1>
+  <h1 style="clear: both;">
+    <%= t(:'finding.responsibles', :count => @finding.users.size) %>
+  </h1>
   <ul class="raw_list">
     <% @finding.users.each do |user| -%>
       <li><%= user.full_name_with_function(@finding.created_at) %></li>

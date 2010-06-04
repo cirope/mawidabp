@@ -124,9 +124,9 @@
   <% end -%>
 
   <% unless @finding.users.blank? -%>
-    <% audited, auditors = *@finding.users.partition {|u| u.audited?} -%>
+    <% audited, auditors = *@finding.users.partition(&:audited?) -%>
     <div style="clear: both; margin: 0em 0em 1em 0em;">
-      <h1><%= t(:'finding.responsibles') %></h1>
+      <h1><%= t(:'finding.responsibles', :count => @finding.users.size) %></h1>
       <table class="summary_table" style="margin-bottom: 2em;">
         <thead>
           <tr>

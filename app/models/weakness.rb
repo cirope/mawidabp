@@ -102,7 +102,7 @@ class Weakness < Finding
   def all_follow_up_dates(end_date = nil)
     follow_up_dates = []
     last_date = self.follow_up_date
-    dates = self.versions_since_final_review(end_date).map do |v|
+    dates = self.versions_after_final_review(end_date).map do |v|
       v.reify.try(:follow_up_date)
     end
 

@@ -524,7 +524,7 @@ class Finding < ActiveRecord::Base
   def state_text
     self.state ? I18n.t("finding.status_#{STATUS.invert[self.state]}") : '-'
   end
-
+  
   def stale?
     self.being_implemented? && self.follow_up_date &&
       self.follow_up_date < Time.now.to_date
@@ -562,12 +562,14 @@ class Finding < ActiveRecord::Base
     if self.confirmed? && self.confirmation_date
       notification_or_answer = self.notifications.detect {|n| n.user.audited?} ||
         self.finding_answers.detect {|fa| fa.user.audited?}
-      date = notification_or_answer.respond_to?(:confirmation_date) ?
-        notification_or_answer.confirmation_date :
+      date = (notification_or_answer.respond_to?(:confirmation_date) ?
+        notification_or_answer.confirmation_date : nil) ||
         notification_or_answer.created_at
 
-      important_dates << I18n.t(:'finding.important_dates.confirmation_date',
-        :date => I18n.l(date, :format => :very_long).strip)
+      if date
+        important_dates << I18n.t(:'finding.important_dates.confirmation_date',
+          :date => I18n.l(date, :format => :very_long).strip)
+      end
     end
 
     if self.confirmed? || self.unconfirmed? ||
@@ -611,9 +613,14 @@ class Finding < ActiveRecord::Base
         {:filter_start => start_date, :filter_end => end_date}])
   end
 
-  def versions_since_final_review(end_date = nil)
+  def versions_after_final_review(end_date = nil)
     self.versions_between(self.control_objective_item.try(:review).try(
         :conclusion_final_review).try(:created_at), end_date)
+  end
+
+  def versions_before_final_review(start_date = nil)
+    self.versions_between(start_date, self.control_objective_item.try(
+        :review).try(:conclusion_final_review).try(:created_at))
   end
 
   def status_change_history
@@ -623,13 +630,13 @@ class Finding < ActiveRecord::Base
     findings_with_status_changed = [self]
     last_added_version = self
 
-    self.versions_since_final_review.reverse.each do |version|
+    self.versions_after_final_review.reverse.each do |version|
       old_finding = version.reify
 
       if old_finding && old_finding.state != last_added_version.state
         last_added_version = old_finding
 
-        if version.previous.whodunnit
+        if version.previous.try(:whodunnit)
           old_finding.user_who_make_it = User.find(version.previous.whodunnit)
         end
         
@@ -744,6 +751,8 @@ class Finding < ActiveRecord::Base
 
   def follow_up_pdf(organization = nil)
     pdf = PDF::Writer.create_generic_pdf(:portrait)
+    issue_date = self.issue_date ? I18n.l(self.issue_date, :format => :long) :
+      I18n.t(:'finding.without_conclusion_final_review')
 
     add_finding_follow_up_header pdf, organization
     
@@ -753,39 +762,209 @@ class Finding < ActiveRecord::Base
     pdf.move_pointer 14
 
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
-        '.internal_audit_subtitle'), 14, :center
+        '.subtitle'), 14, :left
 
     pdf.move_pointer 14
 
-    pdf.add_description_item(Review.human_name, self.review.identification, 0,
-      false)
-
-    auditors = self.users.reject { |u| u.can_act_as_audited? }.map(&:full_name)
-
-    pdf.add_title I18n.t(:'finding.auditors'), 12, :left
-    pdf.add_list auditors, 24
+    pdf.add_description_item(Review.human_name,
+      "#{self.review.long_identification} (#{issue_date})", 0, false)
+    pdf.add_description_item(PlanItem.human_attribute_name(:project),
+      self.review.plan_item.project, 0, false)
+    pdf.add_description_item(Finding.human_attribute_name(:review_code),
+      self.review_code, 0, false)
     
     pdf.add_description_item(Finding.human_attribute_name(
-        'control_objective_item_id'),
+        :control_objective_item_id),
       self.control_objective_item.control_objective_text, 0, false)
-    pdf.add_description_item(Finding.human_attribute_name('review_code'),
-      self.review_code, 0, false)
-    pdf.add_description_item(self.class.human_attribute_name('description'),
+    pdf.add_description_item(self.class.human_attribute_name(:description),
       self.description, 0, false)
-    pdf.add_description_item(Finding.human_attribute_name('effect'),
-      self.effect, 0, false)
-    pdf.add_description_item(Finding.human_attribute_name(
-        'audit_recommendations'), self.audit_recommendations, 0, false)
+    pdf.add_description_item(self.class.human_attribute_name(:state),
+      self.state_text, 0, false)
 
-    if self.respond_to?(:all_follow_up_dates)
-      follow_up_dates = [self.follow_up_date] + self.all_follow_up_dates
+    if self.kind_of?(Weakness)
+      pdf.add_description_item(self.class.human_attribute_name(:risk),
+        self.risk_text, 0, false)
+      pdf.add_description_item(self.class.human_attribute_name(:priority),
+        self.priority_text, 0, false)
+      pdf.add_description_item(Finding.human_attribute_name(:effect),
+        self.effect, 0, false)
+      pdf.add_description_item(Finding.human_attribute_name(
+          :audit_recommendations), self.audit_recommendations, 0, false)
+    end
+    
+    pdf.add_description_item(Finding.human_attribute_name(:answer),
+      self.answer, 0, false)
 
-      unless follow_up_dates.compact.blank?
-        pdf.text "<b>#{self.class.human_attribute_name('follow_up_date')}</b>:"
+    if self.kind_of?(Weakness) && self.follow_up_date
+      pdf.add_description_item(Finding.human_attribute_name(:follow_up_date),
+        I18n.l(self.follow_up_date, :format => :long), 0, false)
+    end
 
-        follow_up_dates.compact.each do |follow_up_date|
-          pdf.text "<C:disc/> #{I18n.l(follow_up_date, :format => :long)}",
-            :left => 24
+    if self.solution_date
+      pdf.add_description_item(Finding.human_attribute_name(:solution_date),
+        I18n.l(self.solution_date, :format => :long), 0, false)
+    end
+
+    audited, auditors = *self.users.partition(&:can_act_as_audited?)
+
+    pdf.add_title I18n.t(:'finding.auditors', :count => auditors.size), 12,
+      :left
+    pdf.add_list auditors.map(&:full_name), 24
+
+    pdf.add_title I18n.t(:'finding.responsibles', :count => audited.size), 12,
+      :left
+    pdf.add_list audited.map(&:full_name), 24
+    
+    important_attributes = [:state, :risk, :priority, :follow_up_date]
+    important_changed_versions = []
+    previous_version = self.versions.first
+
+    while (previous_version.try(:event) &&
+          last_checked_version = (previous_version.try(:next) ||
+            Version.new(:object => object_to_string(self))))
+      has_important_changes = important_attributes.any? do |attribute|
+        current_value = last_checked_version.reify ?
+          last_checked_version.reify.send(attribute) : nil
+        old_value = previous_version.reify ?
+          previous_version.reify.send(attribute) : nil
+
+        if attribute == :follow_up_date
+          current_value
+          old_value
+        end
+
+        current_value != old_value
+      end
+
+      important_changed_versions << previous_version if has_important_changes
+
+      previous_version = last_checked_version
+    end
+
+    pdf.add_title I18n.t(:'finding.change_history'), 14, :full
+
+    if important_changed_versions.size > 1
+      last_checked_version = self.versions.first
+      column_names = {'attribute' => 30, 'old_value' => 35, 'new_value' => 35}
+      columns, column_data = {}, []
+
+      column_names.each do |col_name, col_size|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+          c.heading = col_name == 'attribute' ?
+            '' : I18n.t("version.column_#{col_name}")
+          c.justification = :full
+          c.width = pdf.percent_width(col_size)
+        end
+      end
+
+      previous_version = important_changed_versions.shift
+      previous_finding = previous_version.reify
+
+      important_changed_versions.each do |version|
+        version_finding = version.reify
+        column_data = []
+
+        important_attributes.each do |attribute|
+          previous_method_name = previous_finding.respond_to?(
+            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
+          version_method_name = version_finding.respond_to?(
+            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
+
+          column_data << {
+            'attribute' => Finding.human_attribute_name(attribute).to_iso,
+            'old_value' => previous_finding.try(:send, previous_method_name).
+              to_translated_string.to_iso,
+            'new_value' => version_finding.try(:send, version_method_name).
+              to_translated_string.to_iso
+          }
+        end
+
+        unless column_data.blank?
+          pdf.move_pointer 12
+          
+          pdf.add_description_item(Version.human_attribute_name(:created_at),
+            I18n.l(previous_version.created_at, :format => :long))
+          pdf.add_description_item(User.human_name, previous_version.whodunnit ?
+              User.find(previous_version.whodunnit).try(:full_name) : nil)
+
+          pdf.move_pointer 12
+
+          PDF::SimpleTable.new do |table|
+            table.width = pdf.page_usable_width
+            table.columns = columns
+            table.data = column_data
+            table.column_order = ['attribute', 'old_value', 'new_value']
+            table.split_rows = true
+            table.row_gap = 8
+            table.font_size = 10
+            table.shade_rows = :none
+            table.shade_heading_color = Color::RGB::Grey70
+            table.heading_font_size = 10
+            table.shade_headings = true
+            table.position = :left
+            table.orientation = :right
+            table.show_lines = :all
+            table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
+            table.render_on pdf
+          end
+        end
+
+        previous_finding = version_finding
+        previous_version = version
+      end
+    else
+      pdf.text(
+        "\n#{I18n.t(:'finding.follow_up_report.without_important_changes')}",
+        :font_size => 12)
+    end
+
+    unless self.work_papers.blank?
+      column_names = {'name' => 20, 'code' => 20, 'number_of_pages' => 20,
+        'description' => 40}
+      columns, column_data = {}, []
+
+      column_names.each do |col_name, col_size|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+          c.heading = WorkPaper.human_attribute_name col_name
+          c.justification = :full
+          c.width = pdf.percent_width(col_size)
+        end
+      end
+
+      self.work_papers.each do |work_paper|
+        column_data << {
+          'name' => work_paper.name.try(:to_iso),
+          'code' => work_paper.code.try(:to_iso),
+          'number_of_pages' => work_paper.number_of_pages || '-',
+          'description' => work_paper.description.try(:to_iso)
+        }
+      end
+
+      pdf.move_pointer 12
+
+      pdf.add_title I18n.t(:'finding.follow_up_report.work_papers'), 14, :full
+
+      pdf.move_pointer 12
+
+      unless column_data.blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = column_data
+          table.column_order = ['name', 'code', 'number_of_pages',
+            'description']
+          table.split_rows = true
+          table.row_gap = 8
+          table.font_size = 10
+          table.shade_rows = :none
+          table.shade_heading_color = Color::RGB::Grey70
+          table.heading_font_size = 10
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.show_lines = :all
+          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
+          table.render_on pdf
         end
       end
     end
@@ -813,7 +992,7 @@ class Finding < ActiveRecord::Base
 
       pdf.move_pointer 12
       
-      pdf.add_title I18n.t(:'finding.follow_up_report.follow_up_comments'), 12,
+      pdf.add_title I18n.t(:'finding.follow_up_report.follow_up_comments'), 14,
         :full
       
       pdf.move_pointer 12
@@ -837,100 +1016,6 @@ class Finding < ActiveRecord::Base
           table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
           table.render_on pdf
         end
-      end
-    end
-
-    unless self.work_papers.blank?
-      column_names = {'name' => 20, 'code' => 20, 'number_of_pages' => 20,
-        'description' => 40}
-      columns, column_data = {}, []
-
-      column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = WorkPaper.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
-      end
-
-      self.work_papers.each do |work_paper|
-        column_data << {
-          'name' => work_paper.name.try(:to_iso),
-          'code' => work_paper.code.try(:to_iso),
-          'number_of_pages' => work_paper.number_of_pages || '-',
-          'description' => work_paper.description.try(:to_iso)
-        }
-      end
-
-      pdf.move_pointer 12
-
-      pdf.add_title I18n.t(:'finding.follow_up_report.work_papers'), 12, :full
-
-      pdf.move_pointer 12
-
-      unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['name', 'code', 'number_of_pages',
-            'description']
-          table.split_rows = true
-          table.row_gap = 8
-          table.font_size = 10
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
-        end
-      end
-    end
-
-    last_state = ''
-
-    pdf.move_pointer 12
-
-    pdf.add_title I18n.t(:'finding.status_change_history'), 12, :full
-
-    self.status_change_history.each do |finding|
-      pdf.move_pointer 12
-      
-      pdf.text "<C:bullet /> #{I18n.l(finding.updated_at,
-        :format => :very_long)}",
-        :font_size => 12, :justification => :full, :left => 24
-      pdf.move_pointer 6
-      pdf.add_description_item(I18n.t(:'finding.follow_up_report.past_state'),
-        last_state, 36, false)
-      pdf.add_description_item(I18n.t(
-          :'finding.follow_up_report.current_state'), finding.state_text, 36,
-        false)
-      
-      last_state = finding.state_text
-
-      if finding.respond_to?(:risk_text)
-        pdf.add_description_item(finding.class.human_attribute_name(:risk),
-          finding.risk_text, 36, false)
-      end
-
-      if finding.respond_to?(:priority_text)
-        pdf.add_description_item(finding.class.human_attribute_name(:priority),
-          finding.priority_text, 36, false)
-      end
-
-      pdf.add_description_item(Finding.human_attribute_name(:answer),
-        finding.answer, 36, false)
-      pdf.add_description_item(Finding.human_attribute_name(:audit_comments),
-        finding.audit_comments, 36, false)
-
-      if finding.solution_date
-        pdf.add_description_item(self.class.human_attribute_name(
-            :solution_date), I18n.l(finding.solution_date, :format => :long),
-          36, false)
       end
     end
 
@@ -958,8 +1043,10 @@ class Finding < ActiveRecord::Base
     unless [0, 6].include?(Date.today.wday)
       Finding.transaction do
         users = Finding.unconfirmed_for_notification.inject([]) do |u, finding|
-          u | finding.users.reject do |user|
-            user.notifications.not_confirmed.blank?
+          u | finding.users.select do |user|
+            user.notifications.not_confirmed.any? do |n|
+              n.findings.include?(finding)
+            end
           end
         end
 

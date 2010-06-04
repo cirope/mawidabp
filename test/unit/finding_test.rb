@@ -422,19 +422,19 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'versions since final review' do
-    assert_equal 0, @finding.versions_since_final_review.size
+    assert_equal 0, @finding.versions_after_final_review.size
     updated_at = @finding.updated_at.dup
     assert @finding.update_attributes(:audit_comments => 'Updated comments')
-    assert_equal 1, @finding.versions_since_final_review.size
-    assert_equal 0, @finding.versions_since_final_review(updated_at).size
+    assert_equal 1, @finding.versions_after_final_review.size
+    assert_equal 0, @finding.versions_after_final_review(updated_at).size
     updated_at = @finding.reload.updated_at.dup
 
     assert @finding.update_attributes(:audit_comments => 'New updated comments')
-    assert_equal 2, @finding.versions_since_final_review.size
-    assert_equal 2, @finding.versions_since_final_review(updated_at + 1).size
-    assert @finding.versions_since_final_review.first.update_attribute(
+    assert_equal 2, @finding.versions_after_final_review.size
+    assert_equal 2, @finding.versions_after_final_review(updated_at + 1).size
+    assert @finding.versions_after_final_review.first.update_attribute(
       :created_at, updated_at + 2)
-    assert_equal 1, @finding.reload.versions_since_final_review(
+    assert_equal 1, @finding.reload.versions_after_final_review(
       updated_at + 1).size
   end
 
@@ -460,7 +460,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.find findings(
         :iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification).id
 
-    assert_equal 1, finding.important_dates.size
+    assert_equal 2, finding.important_dates.size
   end
 
   test 'notify changes to users' do
@@ -574,7 +574,8 @@ class FindingTest < ActiveSupport::TestCase
         assert user.notifications.not_confirmed.all? {|n| !n.findings.empty?}
         review_codes_by_user[user] ||= []
         user.notifications.not_confirmed.each do |n|
-          review_codes_by_user[user] |= n.findings.map(&:review_code)
+          review_codes_by_user[user] |=
+            n.findings.unconfirmed_for_notification.map(&:review_code)
         end
       end
     end
@@ -583,7 +584,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
       Finding.notify_for_unconfirmed_for_notification_findings
     end
 
