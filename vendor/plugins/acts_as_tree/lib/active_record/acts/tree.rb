@@ -39,12 +39,13 @@ module ActiveRecord
         # * <tt>foreign_key</tt> - specifies the column name to use for tracking of the tree (default: +parent_id+)
         # * <tt>order</tt> - makes it possible to sort the children according to this SQL snippet.
         # * <tt>counter_cache</tt> - keeps a count in a +children_count+ column if set to +true+ (default: +false+).
+        # * <tt>dependent_children</tt> - If set to :destroy all the associated objects are destroyed alongside this object by calling their destroy method. If set to :delete_all all associated objects are deleted without calling their destroy method. If set to :nullify all associated objects’ foreign keys are set to NULL without calling their save callbacks. *Warning:* This option is ignored when also using the :through option.
         def acts_as_tree(options = {})
-          configuration = { :foreign_key => "parent_id", :order => nil, :counter_cache => nil }
+          configuration = { :foreign_key => "parent_id", :order => nil, :counter_cache => nil, :include => nil, :dependent_children => :destroy }
           configuration.update(options) if options.is_a?(Hash)
 
           belongs_to :parent, :class_name => name, :foreign_key => configuration[:foreign_key], :counter_cache => configuration[:counter_cache]
-          has_many :children, :class_name => name, :foreign_key => configuration[:foreign_key], :order => configuration[:order], :dependent => :destroy
+          has_many :children, :class_name => name, :foreign_key => configuration[:foreign_key], :order => configuration[:order], :dependent => configuration[:dependent_children], :include => configuration[:include]
 
           class_eval <<-EOV
             include ActiveRecord::Acts::Tree::InstanceMethods

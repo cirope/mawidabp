@@ -28,13 +28,15 @@ class User < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
     :important => Proc.new {|user| user.is_an_important_change }
   }
+  acts_as_tree :foreign_key => 'manager_id',
+    :order => 'last_name ASC, name ASC', :dependent_children => :nullify
 
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:role_ids, :organization_ids]
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
-    :reallocation_errors
+    :reallocation_errors, :nested_user
   attr_accessor_with_default :is_an_important_change, true
   attr_accessor_with_default :password_was_encrypted, false
 
@@ -92,6 +94,17 @@ class User < ActiveRecord::Base
   validates_length_of :function, :salt, :change_password_hash, :maximum => 255,
     :allow_nil => true, :allow_blank => true
   validates_confirmation_of :password, :unless => :is_encrypted?
+  validates_each :manager_id do |record, attr, value|
+    if value
+      parent = User.find(value)
+      is_in_the_same_organization = record.organization_roles.any? do |o_r|
+        parent.organization_roles.map(&:organization_id).include?(
+          o_r.organization_id)
+      end
+
+      record.errors.add attr, :invalid unless is_in_the_same_organization
+    end
+  end
   validates_each :organization_roles do |record, attr, value|
     if value.reject { |o_r| o_r.marked_for_destruction? }.blank?
       record.errors.add attr, :blank

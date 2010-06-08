@@ -956,9 +956,13 @@ es:
     password_correctly_updated: "Contraseña actualizada correctamente."
     password_stale_object_error: "La contraseña no pudo ser actualizada, intente nuevamente."
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
+    add_child: "Agregar nueva persona a cargo"
+    add_organization_role: "Agregar un nuevo perfil dentro de una organización"
+    children: "Personal a cargo"
     reassign: "Reasignar"
     reassign_to_another_user: "Reasignar responsabilidades"
     release: "Liberar responsabilidades"
+    unlink_manager: "Desvincular"
     user_reassignment: "Reasignación de responsabilidades"
     user_reassignment_failed: "La reasignación de responsabilidades no puede realizarse entre los usuarios seleccionados"
     user_reassignment_completed: "Reasignación de responsabilidades finalizada correctamente"
@@ -1499,6 +1503,7 @@ es:
         logged_in: "Conectado"
         organization_roles: "Perfiles"
         resource_id: "Tipo de recurso"
+        manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         <<: *commons
       version:

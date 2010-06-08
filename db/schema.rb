@@ -531,10 +531,12 @@ ActiveRecord::Schema.define(:version => 20100518161500) do
     t.string   "change_password_hash"
     t.string   "function"
     t.integer  "resource_id"
+    t.integer  "manager_id"
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["manager_id"], :name => "index_users_on_manager_id"
   add_index "users", ["resource_id"], :name => "index_users_on_resource_id"
   add_index "users", ["user"], :name => "index_users_on_user", :unique => true
 

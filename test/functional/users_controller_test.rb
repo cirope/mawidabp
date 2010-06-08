@@ -182,7 +182,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'expired user attempt' do
     user = User.find users(:expired_user).id
-    # TODO: eliminar cuando se corriga el error en JRuby que no permite que
+    # TODO: eliminar cuando se corrija el error en JRuby que no permite que
     # este atributo se cargue desde los fixtures
     user.update_attribute :last_access,
       get_test_parameter(:security_acount_expire_time).to_i.days.ago.yesterday
@@ -360,6 +360,7 @@ class UsersControllerTest < ActionController::TestCase
           :email => 'new_user@newemail.net',
           :language => I18n.available_locales.last.to_s,
           :resource_id => resources(:auditor_resource).id,
+          :manager_id => users(:administrator_user).id,
           :logged_in => false,
           :enable => true,
           :send_notification_email => true,
@@ -383,6 +384,7 @@ class UsersControllerTest < ActionController::TestCase
             :email => 'new_user2@newemail.net',
             :language => I18n.available_locales.last.to_s,
             :resource_id => resources(:auditor_resource).id,
+            :manager_id => users(:administrator_user).id,
             :logged_in => false,
             :enable => true,
             :send_notification_email => false,
@@ -410,15 +412,17 @@ class UsersControllerTest < ActionController::TestCase
   test 'update user' do
     perform_auth
 
+    user = User.find(users(:administrator_user).id)
+
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     counts_array = ['User.count', 'OrganizationRole.count',
-      'ActionMailer::Base.deliveries.size']
+      'ActionMailer::Base.deliveries.size', 'user.children.count']
 
     assert_no_difference counts_array do
       put :update, {
-        :id => users(:administrator_user).user,
+        :id => user.user,
         :user => {
           :user => 'updated_name',
           :name => 'Updated Name',
@@ -435,7 +439,24 @@ class UsersControllerTest < ActionController::TestCase
               :organization_id => organizations(:default_organization).id,
               :role_id => roles(:admin_role).id
             }
-          }
+          },
+          :child_ids => [
+            users(:administrator_second_user).id,
+            users(:bare_user).id,
+            users(:first_time_user).id,
+            users(:expired_user).id,
+            users(:disabled_user).id,
+            users(:blank_password_user).id,
+            users(:expired_blank_password_user).id,
+            users(:manager_user).id,
+            users(:manager_second_user).id,
+            users(:supervisor_user).id,
+            users(:supervisor_second_user).id,
+            users(:audited_user).id,
+            users(:audited_second_user).id,
+            users(:committee_user).id,
+            users(:auditor_user).id
+          ]
         }
       }
     end
@@ -448,33 +469,55 @@ class UsersControllerTest < ActionController::TestCase
   test 'send notification on updated user' do
     perform_auth
 
+    user = User.find(users(:administrator_user).id)
+
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     
     assert_no_difference 'User.count', 'OrganizationRole.count' do
       assert_difference 'ActionMailer::Base.deliveries.size' do
-        put :update, {
-          :id => users(:administrator_user).user,
-          :user => {
-            :user => 'updated_name_2',
-            :name => 'Updated Name',
-            :last_name => 'Updated Last Name',
-            :email => 'updated_user@updatedemail.net',
-            :language => I18n.available_locales.first.to_s,
-            :resource_id => resources(:auditor_resource).id,
-            :logged_in => false,
-            :enable => true,
-            :send_notification_email => true,
-            :organization_roles_attributes => {
-              organization_roles(:admin_role_for_administrator_user_in_default_organization).id => {
-                :id => organization_roles(:admin_role_for_administrator_user_in_default_organization).id,
-                :organization_id => organizations(:default_organization).id,
-                :role_id => roles(:admin_role).id
-              }
+        assert_difference 'user.children.count', -1 do
+          put :update, {
+            :id => users(:administrator_user).user,
+            :user => {
+              :user => 'updated_name_2',
+              :name => 'Updated Name',
+              :last_name => 'Updated Last Name',
+              :email => 'updated_user@updatedemail.net',
+              :language => I18n.available_locales.first.to_s,
+              :resource_id => resources(:auditor_resource).id,
+              :logged_in => false,
+              :enable => true,
+              :send_notification_email => true,
+              :organization_roles_attributes => {
+                organization_roles(:admin_role_for_administrator_user_in_default_organization).id => {
+                  :id => organization_roles(:admin_role_for_administrator_user_in_default_organization).id,
+                  :organization_id => organizations(:default_organization).id,
+                  :role_id => roles(:admin_role).id
+                }
+              },
+              :child_ids => [
+                users(:administrator_second_user).id,
+                users(:bare_user).id,
+                users(:first_time_user).id,
+                users(:expired_user).id,
+                users(:disabled_user).id,
+                users(:blank_password_user).id,
+                users(:expired_blank_password_user).id,
+                users(:manager_user).id,
+                users(:manager_second_user).id,
+                users(:supervisor_user).id,
+                users(:supervisor_second_user).id,
+                users(:audited_user).id,
+                users(:audited_second_user).id,
+                # El siguiente se elimina
+                #users(:committee_user).id,
+                users(:auditor_user).id
+              ]
             }
           }
-        }
+        end
       end
     end
 

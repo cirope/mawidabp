@@ -1,6 +1,8 @@
 <!--[form:user]-->
 <% form_for @user do |u_f| -%>
   <% content_for :js_extra do -%>
+    <%= "var child='#{escape_javascript(render(:partial => 'child',
+        :object => User.new, :locals => {:f => u_f, :is_dynamic => true}))}';" %>
     <%= "var organization_role='#{generate_template(u_f,
         :organization_roles)}';" %>
   <% end -%>
@@ -50,7 +52,55 @@
     </p>
     <div style="display: none;"><%= u_f.hidden_field :lock_version %></div>
   </div>
+  
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 50%;">
+        <h3><%= User.human_attribute_name(:manager_id) %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">&nbsp;</div>
+      <div style="clear: both;"></div>
+    </div>
+    <div class="item_field" style="width: 50%;">
+      <div class="search">
+        <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
+        <%= text_field_with_auto_complete :user, :nested_user,
+          {:id => "user_manager_#{@user.id}", :class => :search,
+          :title => t(:'label.search'),
+          :value => @user.parent.try(:full_name_with_function)},
+          {:indicator => :loading, :skip_style => true,
+          :after_update_element => 'AutoComplete.itemSelected',
+          :param_name => 'user_data',
+          :parameters => ("user_id=#{@user.id}" unless @user.new_record?),
+          :url => {:action => :auto_complete_for_user}} %>
+      </div>
+    </div>
+    <div class="item_field" style="width: 10%;">
+      <%= link_to_function t(:'user.unlink_manager'),
+        "$('user_manager_#{@user.id}').setValue(''); $('user_manager_id').setValue('')" -%>
+    </div>
+  </div>
 
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 50%;">
+        <h3><%= t(:'user.children') %></h3>
+      </div>
+      <div class="item_column" style="width: 10%;">&nbsp;</div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="children">
+      <%= render :partial => 'child', :collection => @user.children,
+        :locals => {:f => u_f, :is_dynamic => false} %>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'user.add_child'), '#child',
+      :class => :add_nested_item, :rel => :children %>
+  </p>
+  
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 40%;">
@@ -72,7 +122,7 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'label.add_item'), '#organization_role',
+    <%= link_to t(:'user.add_organization_role'), '#organization_role',
       :class => :add_nested_item, :rel => :organization_roles %>
   </p>
   <p>

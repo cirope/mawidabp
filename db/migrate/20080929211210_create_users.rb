@@ -15,6 +15,7 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean :logged_in, :default => false
       t.references :resource
       t.datetime :last_access
+      t.integer :manager_id
       t.integer :failed_attempts, :default => 0
       t.integer :lock_version, :default => 0
 
@@ -25,6 +26,7 @@ class CreateUsers < ActiveRecord::Migration
     add_index :users, :email, :unique => true
     add_index :users, :change_password_hash, :unique => true
     add_index :users, :resource_id
+    add_index :users, :manager_id
   end
 
   def self.down
@@ -32,6 +34,7 @@ class CreateUsers < ActiveRecord::Migration
     remove_index :users, :column => :email
     remove_index :users, :column => :change_password_hash
     remove_index :users, :column => :resource_id
+    remove_index :users, :column => :manager_id
 
     drop_table :users
   end

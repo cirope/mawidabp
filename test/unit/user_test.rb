@@ -29,6 +29,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal users(:administrator_second_user).logged_in, @user.logged_in
     assert_equal users(:administrator_second_user).resource_id,
       @user.resource_id
+    assert_equal users(:administrator_second_user).manager_id,
+      @user.manager_id
   end
 
   # Prueba la creación de un usuario
@@ -49,6 +51,7 @@ class UserTest < ActiveSupport::TestCase
         :failed_attempts => 0,
         :logged_in => false,
         :resource_id => resources(:auditor_resource).id,
+        :parent => users(:administrator_user),
         :organization_roles_attributes => {
           :new_1 => {
             :organization => organizations(:default_organization),
@@ -59,14 +62,18 @@ class UserTest < ActiveSupport::TestCase
 
       assert @user.save, @user.errors.full_messages.join('; ')
       assert_equal 'New name', @user.name
+      assert_not_nil @user.parent
     end
   end
 
   # Prueba de actualización de un usuario
   test 'update' do
-    assert @user.update_attributes(
-      :name => 'New name', :last_name => 'New last name'),
-      @user.errors.full_messages.join('; ')
+    assert_no_difference 'User.count' do
+      assert @user.update_attributes(
+        :name => 'New name', :last_name => 'New last name'),
+        @user.errors.full_messages.join('; ')
+    end
+
     @user.reload
     assert_equal 'New name', @user.name
     assert_equal 'New last name', @user.last_name
@@ -123,6 +130,7 @@ class UserTest < ActiveSupport::TestCase
     any_with_pending_findings = reviews.any? do |r|
       !user.findings.all_for_reallocation_with_review(r).empty?
     end
+
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
@@ -162,7 +170,7 @@ class UserTest < ActiveSupport::TestCase
     @user.email = '  '
     @user.organization_roles.clear
     assert @user.invalid?
-    assert_equal 5, @user.errors.count
+    assert_equal 6, @user.errors.count
     assert_equal error_message_from_model(@user, :name, :blank),
       @user.errors.on(:name)
     assert_equal error_message_from_model(@user, :last_name, :blank),
@@ -171,6 +179,8 @@ class UserTest < ActiveSupport::TestCase
       @user.errors.on(:language)
     assert_equal error_message_from_model(@user, :email, :blank),
       @user.errors.on(:email)
+    assert_equal error_message_from_model(@user, :manager_id, :invalid),
+      @user.errors.on(:manager_id)
     assert_equal error_message_from_model(@user, :organization_roles, :blank),
       @user.errors.on(:organization_roles)
   end
@@ -253,6 +263,18 @@ class UserTest < ActiveSupport::TestCase
       :count => 255), @user.errors.on(:salt)
     assert_equal error_message_from_model(@user, :change_password_hash,
       :too_long, :count => 255), @user.errors.on(:change_password_hash)
+  end
+
+  test 'validates parent is in the same organization' do
+    user = User.find(users(:bare_user).id)
+    bad_parent = User.find(users(:administrator_second_user).id)
+
+    assert user.valid?
+    user.parent = bad_parent
+    assert user.invalid?
+    assert_equal 1, user.errors.size
+    assert_equal error_message_from_model(user, :manager_id, :invalid),
+      user.errors.on(:manager_id)
   end
 
   test 'validates password changed too soon' do

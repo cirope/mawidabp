@@ -119,6 +119,7 @@ class UsersController < ApplicationController
     @title = t :'user.edit_title'
     @user = find_with_organization(params[:id])
     params[:user][:last_access] = nil if @user.expired?
+    params[:user][:child_ids] ||= []
     # Para permitir al usuario actualmente autenticado modificar sus datos
     if @user == @auth_user
       params[:user].delete :lock_version
@@ -618,7 +619,11 @@ class UsersController < ApplicationController
     @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ["#{Organization.table_name}.id = :organization_id"]
-    parameters = {:organization_id => @auth_organization.id}
+    conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
+    parameters = {
+      :organization_id => @auth_organization.id,
+      :self_id => params[:user_id]
+    }
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",

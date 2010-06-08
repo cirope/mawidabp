@@ -30,9 +30,12 @@ class Workflow < ActiveRecord::Base
   has_one :organization, :through => :period
   has_one :plan_item, :through => :review
 
-  # TODO: revisar si los campos con "" son usados en todos los motores
   has_many :workflow_items, :dependent => :destroy,
-    :order => ['order_number ASC', '"start" ASC', '"end" ASC'].join(', ')
+    :order => [
+      "#{WorkflowItem.table_name}.order_number ASC",
+      "#{WorkflowItem.table_name}.start ASC",
+      "#{WorkflowItem.table_name}.end ASC"
+    ].join(', ')
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
