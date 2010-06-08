@@ -552,6 +552,7 @@ es:
     stale_object_error: "El contenido de ayuda no fue actualizado, intente nuevamente."
     content_title: "Contenido"
     help_title: "Ayuda"
+    last_modification: "Esta sección se modificó por última vez hace *{{last_modification}}*"
 
   help_item:
     index_title: "Listado de registros de ayuda"

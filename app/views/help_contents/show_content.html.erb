@@ -21,6 +21,12 @@
         <div class="help_content">
           <%= textilize @help_item.try(:description) %>
         </div>
+        <% if can_edit -%>
+          <div style="margin-top: 2em;" class="red">
+            <% distance_in_words = extended_distance_of_time_in_words(@help_item.updated_at, Time.now) -%>
+            <%= textilize  t(:'help_content.last_modification', :last_modification => distance_in_words) %>
+          </div>
+        <% end -%>
       </td>
     </tr>
   </tbody>
