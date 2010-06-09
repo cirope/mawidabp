@@ -108,4 +108,14 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert @control_objective.valid?,
       @control_objective.errors.full_messages.join('; ')
   end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates that have at least one control' do
+    assert @control_objective.valid?
+    @control_objective.control_ids = []
+    assert @control_objective.invalid?
+    assert_equal 1, @control_objective.errors.count
+    assert_equal error_message_from_model(@control_objective, :controls,
+      :blank), @control_objective.errors.on(:controls)
+  end
 end

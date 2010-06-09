@@ -313,10 +313,10 @@ class ReviewsController < ApplicationController
         control_objective_item = ControlObjectiveItem.new(
           :control_objective_id => pcs.control_objective_id,
           :control_objective_text => pcs.control_objective_text,
-          :identified_controls => pcs.main_procedures,
-          :effects => pcs.effects,
-          :pre_audit_tests => pcs.design_tests,
-          :post_audit_tests => pcs.compliance_tests,
+          :identified_controls => pcs.controls.first.control,
+          :effects => pcs.controls.first.effects,
+          :pre_audit_tests => pcs.controls.first.design_tests,
+          :post_audit_tests => pcs.controls.first.compliance_tests,
           :included_in_review => false
         )
       else

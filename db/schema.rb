@@ -413,16 +413,12 @@ ActiveRecord::Schema.define(:version => 20100608181406) do
 
   create_table "procedure_control_subitems", :force => true do |t|
     t.text     "control_objective_text"
-    t.text     "main_procedures"
-    t.text     "compliance_tests"
-    t.text     "effects"
     t.integer  "risk"
     t.integer  "order"
     t.integer  "control_objective_id"
     t.integer  "procedure_control_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "design_tests"
   end
 
   add_index "procedure_control_subitems", ["control_objective_id"], :name => "index_procedure_control_subitems_on_control_objective_id"

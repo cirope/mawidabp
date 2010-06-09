@@ -3,9 +3,9 @@
 <div class="procedure_control_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
-    <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
-      t(:'procedure_control.show_procedure_control_subitems'),
-      t(:'procedure_control.hide_procedure_control_subitems') %>
+      <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
+        t(:'procedure_control.show_procedure_control_subitems'),
+        t(:'procedure_control.hide_procedure_control_subitems') %>
     </div>
     <div class="item_field" style="width: 23%;">
       <% unless f.object.process_control_id -%>
@@ -16,54 +16,54 @@
       <% end -%>
     </div>
     <div class="item_field" style="width: 23%;">
-    <% unless f.object.process_control_id -%>
-      <%= f.select(:process_control_id, [],
-        {:prompt => true},
-        {:id => "#{id}_process_control_id", :disabled => true}) %>
-    <% else -%>
-      <%= f.hidden_field :process_control_id %>
-      <%= text_field_tag "process_control_#{id}", f.object.process_control.name,
-        :readonly => true,
-        :class => (:error_field unless f.object.errors.blank?) %>
-    <% end -%>
+      <% unless f.object.process_control_id -%>
+        <%= f.select(:process_control_id, [],
+          {:prompt => true},
+          {:id => "#{id}_process_control_id", :disabled => true}) %>
+      <% else -%>
+        <%= f.hidden_field :process_control_id %>
+        <%= text_field_tag "process_control_#{id}", f.object.process_control.name,
+          :readonly => true,
+          :class => (:error_field unless f.object.errors.blank?) %>
+      <% end -%>
     </div>
     <div class="item_field" style="width: 23%;">
-    <%= f.select :aproach, parameter_in(@auth_organization.id,
-      :admin_aproach_types, f.object.created_at).map {|item| [item[0], item[1].to_i]} %>
+      <%= f.select :aproach, parameter_in(@auth_organization.id,
+        :admin_aproach_types, f.object.created_at).map {|item| [item[0], item[1].to_i]} %>
     </div>
     <div class="item_field" style="width: 23%;">
-    <%= f.select :frequency, parameter_in(@auth_organization.id,
-      :admin_frequency_types, f.object.created_at) %>
+      <%= f.select :frequency, parameter_in(@auth_organization.id,
+        :admin_frequency_types, f.object.created_at) %>
     </div>
     <div class="item_field" style="width: 5%;">
-    <%= f.hidden_field :order, :class => :sort_number %>
-    <%= insert_record_link(f) %> |
-    <%= remove_item_link(f) -%>
+      <%= f.hidden_field :order, :class => :sort_number %>
+      <%= insert_record_link(f) %> |
+      <%= remove_item_link(f) -%>
     </div>
 
     <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>" style="display: none;">
       <div>
         <div class="column_headers">
           <div class="item_column" style="width: 15%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'control_objective_id' %></h3>
+            <h3><%= ProcedureControlSubitem.human_attribute_name :control_objective_id %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'control_objective_text' %></h3>
+            <h3><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'main_procedures' %></h3>
+            <h3><%= Control.human_attribute_name :control %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'design_tests' %></h3>
+            <h3><%= Control.human_attribute_name :design_tests %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'compliance_tests' %></h3>
+            <h3><%= Control.human_attribute_name :compliance_tests %></h3>
           </div>
           <div class="item_column" style="width: 10%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'effects' %></h3>
+            <h3><%= Control.human_attribute_name :effects %></h3>
           </div>
           <div class="item_column" style="width: 10%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name 'risk' %></h3>
+            <h3><%= ProcedureControlSubitem.human_attribute_name :risk %></h3>
           </div>
           <div class="item_column" style="width: 5%;"></div>
           <div style="clear: both;"></div>

@@ -2,10 +2,6 @@ class CreateProcedureControlSubitems < ActiveRecord::Migration
   def self.up
     create_table :procedure_control_subitems do |t|
       t.text :control_objective_text
-      t.text :main_procedures
-      t.text :design_tests
-      t.text :compliance_tests
-      t.text :effects
       t.integer :risk
       t.integer :order
       t.references :control_objective

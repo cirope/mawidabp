@@ -27,6 +27,12 @@ class ProcedureControlSubitem < ActiveRecord::Base
     :risk, :order
   validates_numericality_of :procedure_control_item_id, :control_objective_id,
     :risk, :order, :only_integer => true, :allow_nil => true
+  validates_each :controls do |record, attr, value|
+    has_active_controls = value &&
+      value.reject(&:marked_for_destruction?).size > 0
+
+    record.errors.add attr, :blank unless has_active_controls
+  end
   validates_each :control_objective_id do |record, attr, value|
     pci = record.procedure_control_item
 
@@ -44,6 +50,16 @@ class ProcedureControlSubitem < ActiveRecord::Base
   # Relaciones
   belongs_to :control_objective
   belongs_to :procedure_control_item
+  has_many :controls, :as => :controllable, :dependent => :destroy,
+    :order => "#{Control.table_name}.order ASC"
+
+  accepts_nested_attributes_for :controls, :allow_destroy => true
+
+  def initialize(attributes = nil)
+    super(attributes)
+
+    self.controls.build if self.controls.blank?
+  end
 
   def fill_control_objective_text
     if self.control_objective

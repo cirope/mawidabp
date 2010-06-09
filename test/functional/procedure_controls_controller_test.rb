@@ -55,7 +55,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'create procedure control' do
     counts_array = ['ProcedureControl.count', 'ProcedureControlItem.count',
-      'ProcedureControlSubitem.count']
+      'ProcedureControlSubitem.count', 'Control.count']
     perform_auth
     assert_difference counts_array do
       post :create, {
@@ -71,10 +71,14 @@ class ProcedureControlsControllerTest < ActionController::TestCase
               :procedure_control_subitems_attributes => {
                 :new_1 => {
                   :control_objective_text => 'New control objective text',
-                  :main_procedures => 'New main procedure',
-                  :design_tests => 'New design tests',
-                  :compliance_tests => 'New compliance tests',
-                  :effects => 'New effects',
+                  :controls_attributes => {
+                    :new_1 => {
+                      :control => 'New control',
+                      :design_tests => 'New design tests',
+                      :compliance_tests => 'New compliance tests',
+                      :effects => 'New effects'
+                    }
+                  },
                   :risk =>
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :control_objective_id =>
@@ -100,7 +104,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'update procedure control' do
     counts_array = ['ProcedureControl.count', 'ProcedureControlItem.count',
-      'ProcedureControlSubitem.count']
+      'ProcedureControlSubitem.count', 'Control.count']
 
     assert_no_difference counts_array do
       perform_auth
@@ -120,10 +124,15 @@ class ProcedureControlsControllerTest < ActionController::TestCase
               :procedure_control_subitems_attributes => {
                 procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id => {
                   :id => procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id,
-                  :main_procedures => 'Updated main procedure',
-                  :design_tests => 'Updated design tests',
-                  :compliance_tests => 'Updated compliance tests',
-                  :effects => 'Updated effects',
+                  :controls_attributes => {
+                    controls(:procedure_control_subitem_iso_27001_1_1_control_1).id => {
+                      :id => controls(:procedure_control_subitem_iso_27001_1_1_control_1).id,
+                      :control => 'Updated control',
+                      :design_tests => 'Updated design tests',
+                      :compliance_tests => 'Updated compliance tests',
+                      :effects => 'Updated effects'
+                    }
+                  },
                   :risk =>
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :control_objective_id =>
@@ -143,8 +152,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert_redirected_to edit_procedure_control_path(
       procedure_controls(:procedure_control_iso_27001).id)
     assert_not_nil assigns(:procedure_control)
-    assert_equal 'Updated main procedure',
-      procedure_control_subitem.main_procedures
+    assert_equal 'Updated control',
+      procedure_control_subitem.controls.first.control
   end
 
   test 'destroy procedure control' do

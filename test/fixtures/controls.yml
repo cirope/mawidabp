@@ -51,3 +51,39 @@ iso_27000_security_organization_4_3_control_1:
   controllable_type: ControlObjective
   controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_3) %>
   order: 1
+
+procedure_control_subitem_iso_27001_1_1_control_1:
+  control: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  controllable_type: ProcedureControlSubitem
+  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_iso_27001_1_1) %>
+  order: 1
+
+procedure_control_subitem_iso_27001_1_2_control_1:
+  control: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  controllable_type: ProcedureControlSubitem
+  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_iso_27001_1_2) %>
+  order: 1
+
+procedure_control_subitem_bcra_A4609_1_1_control_1:
+  control: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  controllable_type: ProcedureControlSubitem
+  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_1) %>
+  order: 1
+
+procedure_control_subitem_bcra_A4609_1_2_control_1:
+  control: Main procedures
+  design_tests: Proposed design tests
+  compliance_tests: Proposed compliance tests
+  effects: Know effects
+  controllable_type: ProcedureControlSubitem
+  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_2) %>
+  order: 1

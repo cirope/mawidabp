@@ -8,9 +8,9 @@
     <thead>
       <tr>
         <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>
-        <th><%= ProcedureControlSubitem.human_attribute_name :main_procedures %></th>
-        <th><%= ProcedureControlSubitem.human_attribute_name :compliance_tests %></th>
-        <th><%= ProcedureControlSubitem.human_attribute_name :effects %></th>
+        <th><%= Control.human_attribute_name :control %></th>
+        <th><%= Control.human_attribute_name :compliance_tests %></th>
+        <th><%= Control.human_attribute_name :effects %></th>
         <th><%= ProcedureControlSubitem.human_attribute_name :risk %></th>
       </tr>
     </thead>
@@ -19,9 +19,9 @@
         <% pci.procedure_control_subitems.each do |pcs| -%>
           <tr>
             <td><%= h pcs.control_objective_text %></td>
-            <td><%= h pcs.main_procedures %></td>
-            <td><%= h pcs.compliance_tests %></td>
-            <td><%= h pcs.effects %></td>
+            <td><%= h pcs.controls.first.control %></td>
+            <td><%= h pcs.controls.first.compliance_tests %></td>
+            <td><%= h pcs.controls.first.effects %></td>
             <td><%= pcs.risk_text %></td>
           </tr>
         <% end -%>

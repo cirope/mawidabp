@@ -140,11 +140,11 @@ class ProcedureControlsController < ApplicationController
     pdf.add_planning_header @auth_organization, @procedure_control.period
     pdf.add_title ProcedureControl.human_name
 
-    column_order = ['control_objective_text', 'main_procedures',
+    column_order = ['control_objective_text', 'control',
       'compliance_tests', 'effects', 'risk']
     procedure_control_column_order = ['process_control_id', 'aproach',
       'frequency']
-    column_width = {'control_objective_text' => 15, 'main_procedures' => 35,
+    column_width = {'control_objective_text' => 15, 'control' => 35,
       'compliance_tests' => 35, 'effects' => 8, 'risk' => 7}
     procedure_control_column_width = {'process_control_id' => 70,
       'aproach' => 15, 'frequency' => 15}
@@ -212,9 +212,9 @@ class ProcedureControlsController < ApplicationController
       pci.procedure_control_subitems.each do |pcs|
         column_data << {
           'control_objective_text' => pcs.control_objective_text.to_iso,
-          'main_procedures' => pcs.main_procedures.to_iso,
-          'compliance_tests' => pcs.compliance_tests.to_iso,
-          'effects' => pcs.effects.to_iso,
+          'control' => pcs.controls.first.control.to_iso,
+          'compliance_tests' => pcs.controls.first.compliance_tests.to_iso,
+          'effects' => pcs.controls.first.effects.to_iso,
           'risk' => pcs.risk_text.to_iso
         }
       end

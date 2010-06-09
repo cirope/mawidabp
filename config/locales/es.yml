@@ -1437,10 +1437,6 @@ es:
         <<: *commons
       procedure_control_subitem:
         control_objective_text: "Objetivo de control"
-        main_procedures: "Principales procedimientos"
-        compliance_tests: "Pruebas de cumplimiento y/o sustantivas"
-        design_tests: "Evaluación de diseño"
-        effects: "Efectos"
         risk: "Riesgo"
         control_objective_id: "Objetivo de control"
         <<: *commons

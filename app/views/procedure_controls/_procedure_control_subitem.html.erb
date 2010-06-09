@@ -3,41 +3,45 @@
 <div class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>" <%= 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 15%;">
-    <%= f.select :control_objective_id, control_objectives,
-      {:prompt => true},
-      {:id => "procedure_control_subitem_#{id}_control_objective",
-        :class => :control_objective} %>
+      <%= f.select :control_objective_id, control_objectives,
+        {:prompt => true},
+        {:id => "procedure_control_subitem_#{id}_control_objective",
+          :class => :control_objective} %>
     </div>
     <div class="item_field" style="width: 15%;">
-    <%= f.text_area :control_objective_text, :class => :control_objective_text,
-      :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
+      <%= f.text_area :control_objective_text, :class => :control_objective_text,
+        :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
     </div>
-    <div class="item_field" style="width: 15%;">
-    <%= f.text_area :main_procedures, :class => :main_procedures,
-      :id => "procedure_control_subitem_#{id}_main_procedures" %>
-    </div>
-    <div class="item_field" style="width: 15%;">
-    <%= f.text_area :design_tests, :class => :tests,
-      :id => "procedure_control_subitem_#{id}_design_tests" %>
-    </div>
-    <div class="item_field" style="width: 15%;">
-    <%= f.text_area :compliance_tests, :class => :tests,
-      :id => "procedure_control_subitem_#{id}_compliance_tests" %>
-    </div>
+
+    <% f.fields_for :controls, f.object.controls.first do |c_f| -%>
+      <div class="item_field" style="width: 15%;">
+        <%= c_f.text_area :control, :class => :control,
+          :id => "procedure_control_subitem_#{id}_control" %>
+      </div>
+      <div class="item_field" style="width: 15%;">
+        <%= c_f.text_area :design_tests, :class => :tests,
+          :id => "procedure_control_subitem_#{id}_design_tests" %>
+      </div>
+      <div class="item_field" style="width: 15%;">
+        <%= c_f.text_area :compliance_tests, :class => :tests,
+          :id => "procedure_control_subitem_#{id}_compliance_tests" %>
+      </div>
+      <div class="item_field" style="width: 10%;">
+        <%= c_f.text_area :effects, :class => :effects,
+          :id => "procedure_control_subitem_#{id}_effects" %>
+      </div>
+    <% end -%>
+
     <div class="item_field" style="width: 10%;">
-    <%= f.text_area :effects, :class => :effects,
-      :id => "procedure_control_subitem_#{id}_effects" %>
-    </div>
-    <div class="item_field" style="width: 10%;">
-    <%= f.select :risk, f.object.get_parameter(
-      :admin_control_objective_risk_levels, true), {}, :class => :risk,
-      :id => "procedure_control_subitem_#{id}_risk" %>
+      <%= f.select :risk, f.object.get_parameter(
+        :admin_control_objective_risk_levels, true), {}, :class => :risk,
+        :id => "procedure_control_subitem_#{id}_risk" %>
     </div>
     <div class="item_field" style="width: 5%;">
-    <%= f.hidden_field :order, :class => :sort_number %>
-    <%= insert_record_link(f, :class => :insert_record_subitem,
-      :rel => 'procedure_control_item procedure_control_subitems') %> |
-    <%= remove_item_link(f) -%>
+      <%= f.hidden_field :order, :class => :sort_number %>
+      <%= insert_record_link(f, :class => :insert_record_subitem,
+        :rel => 'procedure_control_item procedure_control_subitems') %> |
+      <%= remove_item_link(f) -%>
     </div>
     <script type="text/javascript">FormUtil.completeSortNumbers();</script>
   </div>
@@ -60,7 +64,7 @@
 
             Form.Element.setValue(parentId + '_control_objective_texts',
               controlObjective.name);
-            Form.Element.setValue(parentId + '_main_procedures',
+            Form.Element.setValue(parentId + '_control',
               controlObjective.controls[0].control);
             Form.Element.setValue(parentId + '_design_tests',
               controlObjective.controls[0].design_tests);

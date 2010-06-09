@@ -25,7 +25,10 @@ class ControlObjective < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false,
     :scope => :process_control_id
   validates_each :controls do |record, attr, value|
-    record.errors.add attr, :blank if value.blank? || value.size == 0
+    has_active_controls = value &&
+      value.reject(&:marked_for_destruction?).size > 0
+    
+    record.errors.add attr, :blank unless has_active_controls
   end
   
   # Relaciones
