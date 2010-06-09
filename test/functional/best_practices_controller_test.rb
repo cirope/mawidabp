@@ -2,7 +2,7 @@ require 'test_helper'
 
 # Pruebas para el controlador de buenas prácticas
 class BestPracticesControllerTest < ActionController::TestCase
-  fixtures :best_practices, :process_controls, :control_objectives
+  fixtures :best_practices, :process_controls, :control_objectives, :controls
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
@@ -56,7 +56,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   test 'create best_practice' do
     perform_auth
     counts_array = ['BestPractice.count', 'ProcessControl.count',
-      'ControlObjective.count']
+      'ControlObjective.count', 'Control.count']
     assert_difference counts_array, 4 do
       post :create, {
         :best_practice => {
@@ -69,10 +69,14 @@ class BestPracticesControllerTest < ActionController::TestCase
               :control_objectives_attributes => {
                 :new_1 => {
                   :name => 'new control objective 1 1',
-                  :control => 'new control 1 1',
-                  :effects => 'new effects 1 1',
-                  :design_tests => 'new design tests 1 1',
-                  :compliance_tests => 'new compliance tests 1 1',
+                  :controls_attributes => {
+                    :new_1 => {
+                      :control => 'new control 1 1',
+                      :effects => 'new effects 1 1',
+                      :design_tests => 'new design tests 1 1',
+                      :compliance_tests => 'new compliance tests 1 1'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -81,10 +85,14 @@ class BestPracticesControllerTest < ActionController::TestCase
                 },
                 :new_2 => {
                   :name => 'new control objective 1 2',
-                  :control => 'new control 1 2',
-                  :effects => 'new effects 1 2',
-                  :design_tests => 'new design tests 1 2',
-                  :compliance_tests => 'new compliance tests 1 2',
+                  :controls_attributes => {
+                    :new_1 => {
+                      :control => 'new control 1 2',
+                      :effects => 'new effects 1 2',
+                      :design_tests => 'new design tests 1 2',
+                      :compliance_tests => 'new compliance tests 1 2'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -99,10 +107,14 @@ class BestPracticesControllerTest < ActionController::TestCase
               :control_objectives_attributes => {
                 :new_1 => {
                   :name => 'new control objective 2 1',
-                  :control => 'new control 2 1',
-                  :effects => 'new effects 2 1',
-                  :design_tests => 'new design tests 2 1',
-                  :compliance_tests => 'new compliance tests 2 1',
+                  :controls_attributes => {
+                    :new_1 => {
+                      :control => 'new control 2 1',
+                      :effects => 'new effects 2 1',
+                      :design_tests => 'new design tests 2 1',
+                      :compliance_tests => 'new compliance tests 2 1'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -111,10 +123,14 @@ class BestPracticesControllerTest < ActionController::TestCase
                 },
                 :new_2 => {
                   :name => 'new control objective 2 2',
-                  :control => 'new control 2 2',
-                  :effects => 'new effects 2 2',
-                  :design_tests => 'new design tests 2 2',
-                  :compliance_tests => 'new compliance tests 2 2',
+                  :controls_attributes => {
+                    :new_1 => {
+                      :control => 'new control 2 2',
+                      :effects => 'new effects 2 2',
+                      :design_tests => 'new design tests 2 2',
+                      :compliance_tests => 'new compliance tests 2 2'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -172,7 +188,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   test 'update best practice' do
     perform_auth
     counts_array = ['BestPractice.count', 'ProcessControl.count',
-      'ControlObjective.count']
+      'ControlObjective.count', 'Control.count']
     assert_no_difference counts_array do
       put :update, {
         :id => best_practices(:iso_27001).id,
@@ -189,10 +205,15 @@ class BestPracticesControllerTest < ActionController::TestCase
                   :id => control_objectives(
                     :iso_27000_security_organization_4_1).id,
                   :name => 'updated control objective 1 1',
-                  :control => 'updated control 1 1',
-                  :effects => 'updated effects 1 1',
-                  :design_tests => 'new design tests 1 1',
-                  :compliance_tests => 'updated compliance tests 1 1',
+                  :controls_attributes => {
+                    controls(:iso_27000_security_organization_4_1_control_1).id => {
+                      :id => controls(:iso_27000_security_organization_4_1_control_1).id,
+                      :control => 'updated control 1 1',
+                      :effects => 'updated effects 1 1',
+                      :design_tests => 'new design tests 1 1',
+                      :compliance_tests => 'updated compliance tests 1 1'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -203,10 +224,15 @@ class BestPracticesControllerTest < ActionController::TestCase
                   :id => control_objectives(
                     :iso_27000_security_organization_4_2).id,
                   :name => 'updated control objective 1 2',
-                  :control => 'updated control 1 2',
-                  :effects => 'updated effects 1 2',
-                  :design_tests => 'new design tests 1 2',
-                  :compliance_tests => 'updated compliance_tests 1 2',
+                  :controls_attributes => {
+                    controls(:iso_27000_security_organization_4_2_control_1).id => {
+                      :id => controls(:iso_27000_security_organization_4_2_control_1).id,
+                      :control => 'updated control 1 2',
+                      :effects => 'updated effects 1 2',
+                      :design_tests => 'new design tests 1 2',
+                      :compliance_tests => 'updated compliance_tests 1 2'
+                    }
+                  },
                   :relevance => get_test_parameter(
                     :admin_control_objective_importances).first[1],
                   :risk =>
@@ -223,6 +249,8 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_redirected_to edit_best_practice_path(best_practices(:iso_27001).id)
     assert_not_nil assigns(:best_practice)
     assert_equal 'updated_best_practice', assigns(:best_practice).name
+    assert_equal 'updated control 1 1', Control.find(
+      controls(:iso_27000_security_organization_4_1_control_1).id).control
   end
 
   test 'destroy best_practice' do

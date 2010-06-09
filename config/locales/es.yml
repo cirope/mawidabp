@@ -103,7 +103,6 @@ es:
       one: "Su contraseña expiró ayer"
       other: "Su contraseña expiró hace {{count}} días"
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
-    select_one: "Seleccionar..."
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_a_minute: "Su sesión expìra en menos de un minuto"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
@@ -1182,6 +1181,7 @@ es:
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
       conclusion_draft_review: "Informe borrador"
+      control: "Control"
       control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
@@ -1246,14 +1246,17 @@ es:
         project: "Proyecto"
         approved: "Aprobado"
         <<: *commons
-      control_objective:
-        name: "Objetivo de control"
+      control:
+        order: "Orden"
         control: "Controles identificados"
-        relevance: "Importancia"
         effects: "Efectos"
-        risk: "Riesgo"
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento y/o sustantivas"
+        <<: *commons
+      control_objective:
+        name: "Objetivo de control"
+        relevance: "Importancia"
+        risk: "Riesgo"
         <<: *commons
       control_objective_item:
         control_objective_id: "Objetivo de control"

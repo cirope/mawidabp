@@ -2,10 +2,6 @@ class CreateControlObjectives < ActiveRecord::Migration
   def self.up
     create_table :control_objectives do |t|
       t.text :name
-      t.text :control
-      t.text :effects
-      t.text :compliance_tests
-      t.text :design_tests
       t.integer :risk
       t.integer :relevance
       t.integer :order

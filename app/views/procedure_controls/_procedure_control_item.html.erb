@@ -162,7 +162,7 @@
 <script type="text/javascript">Helper.showItem($('<%= id %>'));</script>
 <% elsif !f.object.new_record? -%>
   <% content_for :js_extra_bottom do -%>
-    <% options = [[t(:'message.select_one'), '']] +
+    <% options = [[t(:'support.select.prompt'), '']] +
         f.object.control_objectives.map { |co| [co.name, co.id] } -%>
     <%= "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
   <% end -%>

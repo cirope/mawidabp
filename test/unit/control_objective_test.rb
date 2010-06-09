@@ -15,14 +15,6 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert_kind_of ControlObjective, @control_objective
     assert_equal control_objectives(:iso_27000_security_policy_3_1).name,
       @control_objective.name
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).control,
-      @control_objective.control
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).effects,
-      @control_objective.effects
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).
-      design_tests, @control_objective.design_tests
-    assert_equal control_objectives(:iso_27000_security_policy_3_1).
-      compliance_tests, @control_objective.compliance_tests
     assert_equal control_objectives(:iso_27000_security_policy_3_1).relevance,
       @control_objective.relevance
     assert_equal control_objectives(:iso_27000_security_policy_3_1).risk,
@@ -33,13 +25,17 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
   # Prueba la creación de una buena práctica
   test 'create' do
-    assert_difference 'ControlObjective.count' do
+    assert_difference ['ControlObjective.count', 'Control.count'] do
       @control_objective = ControlObjective.create(
         :name => 'New name',
-        :control => 'New control',
-        :effects => 'New effects',
-        :design_tests => 'New design tests',
-        :compliance_tests => 'New compliance tests',
+        :controls_attributes => {
+          :new_1 => {
+            :control => 'New control',
+            :effects => 'New effects',
+            :design_tests => 'New design tests',
+            :compliance_tests => 'New compliance tests'
+          }
+        },
         :relevance =>
           get_test_parameter(:admin_control_objective_importances).first[1],
         :risk =>

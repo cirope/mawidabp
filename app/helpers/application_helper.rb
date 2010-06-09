@@ -43,7 +43,8 @@ module ApplicationHelper
   # * _id_field_::    Campo o método que se va a usar para identificar al objeto
   def options_array_for(objects, name_field, id_field, show_prompt = false)
     raw_options = objects.map { |o| [o.send(name_field), o.send(id_field)] }
-    show_prompt ? [[t(:'message.select_one'), nil]] + raw_options : raw_options
+    show_prompt ? [[t(:'support.select.prompt'), nil]] + raw_options :
+      raw_options
   end
 
   # Genera un array ordenado con pares [[name_field_1, id_field_1],......] para

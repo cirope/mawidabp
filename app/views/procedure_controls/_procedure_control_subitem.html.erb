@@ -61,16 +61,14 @@
             Form.Element.setValue(parentId + '_control_objective_texts',
               controlObjective.name);
             Form.Element.setValue(parentId + '_main_procedures',
-              controlObjective.control);
+              controlObjective.controls[0].control);
             Form.Element.setValue(parentId + '_design_tests',
-              controlObjective.design_tests);
+              controlObjective.controls[0].design_tests);
             Form.Element.setValue(parentId + '_compliance_tests',
-              controlObjective.compliance_tests);
+              controlObjective.controls[0].compliance_tests);
             Form.Element.setValue(parentId + '_effects',
-              controlObjective.effects);
+              controlObjective.controls[0].effects);
             Form.Element.setValue(parentId + '_risk', controlObjective.risk);
-
-            
             
             Helper.hideLoading(element);
           },

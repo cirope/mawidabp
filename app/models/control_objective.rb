@@ -24,11 +24,24 @@ class ControlObjective < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :name, :case_sensitive => false,
     :scope => :process_control_id
+  validates_each :controls do |record, attr, value|
+    record.errors.add attr, :blank if value.blank? || value.size == 0
+  end
   
   # Relaciones
   belongs_to :process_control
   has_many :control_objective_items, :dependent => :nullify
   has_many :procedure_control_subitems, :dependent => :nullify
+  has_many :controls, :as => :controllable, :dependent => :destroy,
+    :order => "#{Control.table_name}.order ASC"
+
+  accepts_nested_attributes_for :controls, :allow_destroy => true
+
+  def initialize(attributes = nil)
+    super(attributes)
+
+    self.controls.build if self.controls.blank?
+  end
 
   def can_be_destroyed?
     unless self.control_objective_items.blank? &&

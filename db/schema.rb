@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100518161500) do
+ActiveRecord::Schema.define(:version => 20100608181406) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -93,19 +93,29 @@ ActiveRecord::Schema.define(:version => 20100518161500) do
 
   create_table "control_objectives", :force => true do |t|
     t.text     "name"
-    t.text     "control"
     t.integer  "order"
     t.integer  "process_control_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "relevance"
-    t.text     "effects"
-    t.text     "compliance_tests"
     t.integer  "risk"
-    t.text     "design_tests"
   end
 
   add_index "control_objectives", ["process_control_id"], :name => "index_control_objectives_on_process_control_id"
+
+  create_table "controls", :force => true do |t|
+    t.text     "control"
+    t.text     "effects"
+    t.text     "compliance_tests"
+    t.text     "design_tests"
+    t.integer  "order"
+    t.integer  "controllable_id"
+    t.string   "controllable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "controls", ["controllable_type", "controllable_id"], :name => "index_controls_on_controllable_type_and_controllable_id"
 
   create_table "costs", :force => true do |t|
     t.text     "description"

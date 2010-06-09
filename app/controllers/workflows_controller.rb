@@ -200,7 +200,7 @@ class WorkflowsController < ApplicationController
   #
   # * GET /reviews/reviews_for_period/?period=id
   def reviews_for_period
-    options = [[t(:'message.select_one'), '']]
+    options = [[t(:'support.select.prompt'), '']]
     reviews = Review.list_all_without_workflow(params[:period])
 
     reviews.each { |r| options << [r.identification, r.id] }
