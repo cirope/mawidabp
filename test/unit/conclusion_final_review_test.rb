@@ -197,8 +197,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
     end
-
-    assert_equal 0, work_papers_count
+    
     assert final_work_papers_count > 0
+    assert_equal final_work_papers_count, work_papers_count
   end
 end

@@ -17,6 +17,7 @@ class WorkPaper < ActiveRecord::Base
   # Restricciones de los atributos
   attr_accessor :code_prefix, :neighbours
   attr_readonly :organization_id, :code
+  attr_accessor_with_default :check_code_prefix, true
 
   # Callbacks
   before_save :check_for_modifications
@@ -31,28 +32,30 @@ class WorkPaper < ActiveRecord::Base
   validates_length_of :name, :code, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_each :code, :on => :create do |record, attr, value|
-    raise 'No code_prefix is set!' unless record.code_prefix
+    if record.check_code_prefix
+      raise 'No code_prefix is set!' unless record.code_prefix
 
-    regex = Regexp.new "\\A(#{record.code_prefix})\\s\\d+\\Z"
+      regex = Regexp.new "\\A(#{record.code_prefix})\\s\\d+\\Z"
 
-    record.errors.add attr, :invalid unless value =~ regex
+      record.errors.add attr, :invalid unless value =~ regex
 
-    raise 'The neighbours array is not set!' unless record.neighbours
+      raise 'The neighbours array is not set!' unless record.neighbours
 
-    taken_codes = []
+      taken_codes = []
 
-    record.neighbours.each do |wp|
-      another_work_paper = (!record.new_record? && record.id != wp.id) ||
-        (record.new_record? && record.object_id != wp.object_id)
+      record.neighbours.each do |wp|
+        another_work_paper = (!record.new_record? && record.id != wp.id) ||
+          (record.new_record? && record.object_id != wp.object_id)
 
-      if another_work_paper && !record.marked_for_destruction? &&
-          record.code.strip == wp.code.strip
-        taken_codes << record.code.strip
+        if another_work_paper && !record.marked_for_destruction? &&
+            record.code.strip == wp.code.strip
+          taken_codes << record.code.strip
+        end
       end
-    end
 
-    unless taken_codes.blank?
-      record.errors.add attr, :taken
+      unless taken_codes.blank?
+        record.errors.add attr, :taken
+      end
     end
   end
   

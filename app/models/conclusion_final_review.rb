@@ -106,7 +106,9 @@ class ConclusionFinalReview < ConclusionReview
           finding.parent = f
           finding.user_ids = f.user_ids
           
-          f.work_papers.each { |wp| wp.owner = finding }
+          f.work_papers.each do |wp|
+            finding.work_papers.build(wp.attributes.clone.update(:id => nil)).check_code_prefix = false
+          end
 
           finding.save!
           f.save!
