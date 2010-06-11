@@ -183,21 +183,19 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :audit_date, :blank), @control_objective_item.errors.on(:audit_date)
     assert_equal error_message_from_model(@control_objective_item,
       :relevance, :blank), @control_objective_item.errors.on(:relevance)
-    assert @control_objective_item.errors.full_messages.include?(
-      full_error_message_from_model(
-        @control_objective_item.controls[0], :effects, :blank))
-    assert @control_objective_item.errors.full_messages.include?(
-      full_error_message_from_model(@control_objective_item.controls[0],
-        :control, :blank))
-    assert @control_objective_item.errors.full_messages.include?(
-      full_error_message_from_model(@control_objective_item.controls[0],
-        :compliance_tests, :blank))
+    assert_equal error_message_from_model(@control_objective_item.controls[0],
+      :effects, :blank), @control_objective_item.controls[0].errors.on(:effects)
+    assert_equal error_message_from_model(@control_objective_item.controls[0],
+      :control, :blank), @control_objective_item.controls[0].errors.on(:control)
+    assert_equal error_message_from_model(@control_objective_item.controls[0],
+      :compliance_tests, :blank), @control_objective_item.controls[0].errors.on(
+      :compliance_tests)
     assert_equal error_message_from_model(@control_objective_item,
       :auditor_comment, :blank), @control_objective_item.errors.on(
       :auditor_comment)
-    assert @control_objective_item.errors.full_messages.include?(
-      full_error_message_from_model(@control_objective_item.controls[0],
-        :design_tests, :blank))
+    assert_equal error_message_from_model(@control_objective_item.controls[0],
+      :design_tests, :blank), @control_objective_item.controls[0].errors.on(
+      :design_tests)
   end
 
   test 'effectiveness with pre audit qualification' do

@@ -52,4 +52,29 @@ class ControlTest < ActiveSupport::TestCase
   test 'destroy' do
     assert_difference('Control.count', -1) { @control.destroy }
   end
+
+  test 'validates blank attributes' do
+    @control.control = ' '
+    @control.effects = ' '
+    @control.design_tests = ' '
+    @control.compliance_tests = ' '
+
+    assert @control.valid?
+
+    @control.validates_presence_of_control = true
+    @control.validates_presence_of_effects = true
+    @control.validates_presence_of_design_tests = true
+    @control.validates_presence_of_compliance_tests = true
+
+    assert @control.invalid?
+    assert_equal 4, @control.errors.size
+    assert_equal error_message_from_model(@control, :control, :blank),
+      @control.errors.on(:control)
+    assert_equal error_message_from_model(@control, :effects, :blank),
+      @control.errors.on(:effects)
+    assert_equal error_message_from_model(@control, :design_tests, :blank),
+      @control.errors.on(:design_tests)
+    assert_equal error_message_from_model(@control, :compliance_tests, :blank),
+      @control.errors.on(:compliance_tests)
+  end
 end

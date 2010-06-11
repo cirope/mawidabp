@@ -69,11 +69,7 @@ class ActiveSupport::TestCase
   end
 
   def error_message_from_model(model, attribute, message, extra = {})
-    ::ActiveRecord::Error.new(model, attribute, message, extra).to_s
-  end
-
-  def full_error_message_from_model(model, attribute, message, extra = {})
-    ::ActiveRecord::Error.new(model, attribute, message, extra).full_message
+    ::ActiveRecord::Error.new(model, attribute, message, extra).message
   end
 
   def backup_file(file_name)

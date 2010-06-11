@@ -6,7 +6,7 @@
       <%= f.text_area :name, :class => :focused %>
     </div>
 
-    <% f.fields_for :controls, f.object.controls.first do |c_f| -%>
+    <% f.fields_for :controls, f.object.controls[0] do |c_f| -%>
       <div class="item_field" style="width: 13%;">
         <%= c_f.hidden_field :order %>
         <%= c_f.text_area :control %>

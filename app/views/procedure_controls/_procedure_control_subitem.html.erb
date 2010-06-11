@@ -13,7 +13,7 @@
         :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
     </div>
 
-    <% f.fields_for :controls, f.object.controls.first do |c_f| -%>
+    <% f.fields_for :controls, f.object.controls[0] do |c_f| -%>
       <div class="item_field" style="width: 15%;">
         <%= c_f.text_area :control, :class => :control,
           :id => "procedure_control_subitem_#{id}_control" %>

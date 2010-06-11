@@ -28,7 +28,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   attr_reader :approval_errors
 
   # Callbacks
-  before_validation :can_be_modified?
+  before_validation :can_be_modified?, :enable_control_validations
   before_destroy :can_be_destroyed?
   before_validation_on_create :fill_control_objective_text
 
@@ -68,30 +68,6 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
   validates_presence_of :post_audit_qualification, :audit_date, :relevance,
     :auditor_comment, :if => :finished
-  validates_each(:controls, :if => :finished) do |record, attr, value|
-    if value
-      value.each do |control|
-        unless control.marked_for_destruction?
-          control.errors.add :control, :blank if control.control.blank?
-          control.errors.add :effects, :blank if control.effects.blank?
-
-          if record.pre_audit_qualification && control.design_tests.blank?
-            control.errors.add :design_tests, :blank
-          end
-
-          if control.compliance_tests.blank?
-            control.errors.add :compliance_tests, :blank
-          end
-
-          control.errors.full_messages.each do |m|
-            unless record.errors.full_messages.include?(m)
-              record.errors.add_to_base m
-            end
-          end
-        end
-      end
-    end
-  end
   
   # Relaciones
   belongs_to :control_objective
@@ -242,6 +218,18 @@ class ControlObjectiveItem < ActiveRecord::Base
       self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
 
       false
+    end
+  end
+
+  def enable_control_validations
+    if self.finished
+      self.controls.each { |c| c.validates_presence_of_control = true }
+      self.controls.each { |c| c.validates_presence_of_effects = true }
+      self.controls.each { |c| c.validates_presence_of_compliance_tests = true }
+
+      if self.pre_audit_qualification
+        self.controls.each { |c| c.validates_presence_of_design_tests = true }
+      end
     end
   end
 

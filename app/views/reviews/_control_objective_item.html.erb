@@ -43,7 +43,7 @@
         <%= co_f.label :control_objective_text %>
         <%= co_f.text_area :control_objective_text, :readonly => readonly %>
       </p>
-      <% co_f.fields_for :controls, control_objective_item.controls.first do |c_f| -%>
+      <% co_f.fields_for :controls, control_objective_item.controls[0] do |c_f| -%>
         <p>
           <%= c_f.label :effects %>
           <%= c_f.text_area :effects, :readonly => readonly %>
