@@ -15,47 +15,47 @@
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'effects' %>:</b>
-  <%=h @control_objective_item.effects %>
+  <b><%= Control.human_attribute_name :effects %>:</b>
+  <%=h @control_objective_item.controls.first.effects %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'relevance' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
   <%=h @control_objective_item.relevance %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'identified_controls' %>:</b>
-  <%=h @control_objective_item.identified_controls %>
+  <b><%= Control.human_attribute_name :control %>:</b>
+  <%=h @control_objective_item.controls.first.control %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'pre_audit_qualification' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :pre_audit_qualification %>:</b>
   <%=h @control_objective_item.pre_audit_qualification %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'pre_audit_tests' %>:</b>
-  <%=h @control_objective_item.pre_audit_tests %>
+  <b><%= Control.human_attribute_name :design_tests %>:</b>
+  <%=h @control_objective_item.controls.first.design_tests %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'post_audit_qualification' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :post_audit_qualification %>:</b>
   <%=h @control_objective_item.post_audit_qualification %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'post_audit_tests' %>:</b>
-  <%=h @control_objective_item.post_audit_tests %>
+  <b><%= Control.human_attribute_name :compliance_tests %>:</b>
+  <%=h @control_objective_item.controls.first.compliance_tests %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'audit_date' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
   <%=h l(@control_objective_item.audit_date, :format => :short) if @control_objective_item.audit_date %>
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'auditor_comment' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
   <%=h @control_objective_item.auditor_comment %>
 </p>
 
@@ -65,13 +65,13 @@
 </p>
 
 <p>
-  <b><%= ControlObjectiveItem.human_attribute_name 'finished' %>:</b>
+  <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
   <%=t @control_objective_item.finished? ? :'label.yes' : :'label.no' %>
 </p>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_control_objective_item_path(@control_objective_item) %> |
-<%= link_to t(:'label.list'), control_objective_items_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_control_objective_item_path(@control_objective_item) %> |
+  <%= link_to t(:'label.list'), control_objective_items_path %> |
+  <%= link_to_back %>
 </div>

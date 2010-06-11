@@ -2,7 +2,7 @@ require 'test_helper'
 
 # Clase para probar el modelo "ControlObjectiveItem"
 class ControlObjectiveItemTest < ActiveSupport::TestCase
-  fixtures :control_objective_items, :control_objectives, :reviews
+  fixtures :control_objective_items, :control_objectives, :reviews, :controls
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
@@ -19,19 +19,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_kind_of ControlObjectiveItem, @control_objective_item
     assert_equal retrived_coi.control_objective_text,
       @control_objective_item.control_objective_text
-    assert_equal retrived_coi.effects,
-      @control_objective_item.effects
     assert_equal retrived_coi.relevance, @control_objective_item.relevance
-    assert_equal retrived_coi.identified_controls,
-      @control_objective_item.identified_controls
     assert_equal retrived_coi.pre_audit_qualification,
       @control_objective_item.pre_audit_qualification
-    assert_equal retrived_coi.pre_audit_tests,
-      @control_objective_item.pre_audit_tests
     assert_equal retrived_coi.post_audit_qualification,
       @control_objective_item.post_audit_qualification
-    assert_equal retrived_coi.post_audit_tests,
-      @control_objective_item.post_audit_tests
     assert_equal retrived_coi.audit_date, @control_objective_item.audit_date
     assert_equal retrived_coi.auditor_comment,
       @control_objective_item.auditor_comment
@@ -40,24 +32,28 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Prueba la creación de un item de objetivo de control
   test 'create' do
-    assert_difference 'ControlObjectiveItem.count' do
+    assert_difference ['ControlObjectiveItem.count', 'Control.count'] do
       @control_objective_item = ControlObjectiveItem.create(
         :control_objective_text => 'New text',
-        :effects => 'New effects',
         :relevance =>
           get_test_parameter(:admin_control_objective_importances).last[1],
-        :identified_controls => 'New controls',
         :pre_audit_qualification =>
           get_test_parameter(:admin_control_objective_qualifications).last[1],
-        :pre_audit_tests => 'Pre tests',
         :post_audit_qualification =>
           get_test_parameter(:admin_control_objective_qualifications).last[1],
-        :post_audit_tests => 'Post tests',
         :audit_date => 10.days.from_now.to_date,
         :auditor_comment => 'New comment',
         :control_objective_id =>
           control_objectives(:iso_27000_security_organization_4_1).id,
-        :review_id => reviews(:review_with_conclusion).id
+        :review_id => reviews(:review_with_conclusion).id,
+        :controls_attributes => {
+          :new_1 => {
+            :control => 'New control',
+            :effects => 'New effects',
+            :design_tests => 'New design tests',
+            :compliance_tests => 'New compliance tests'
+          }
+        }
       )
     end
   end
@@ -167,11 +163,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.audit_date = nil
     @control_objective_item.relevance = nil
     @control_objective_item.finished = false
-    @control_objective_item.effects = '   '
-    @control_objective_item.identified_controls = '   '
-    @control_objective_item.post_audit_tests = '   '
+    @control_objective_item.controls[0].effects = '   '
+    @control_objective_item.controls[0].control = '   '
+    @control_objective_item.controls[0].compliance_tests = '   '
     @control_objective_item.auditor_comment = '   '
-    @control_objective_item.pre_audit_tests = '   '
+    @control_objective_item.controls[0].design_tests = '   '
 
     assert @control_objective_item.valid?
 
@@ -187,20 +183,21 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :audit_date, :blank), @control_objective_item.errors.on(:audit_date)
     assert_equal error_message_from_model(@control_objective_item,
       :relevance, :blank), @control_objective_item.errors.on(:relevance)
-    assert_equal error_message_from_model(@control_objective_item, :effects,
-      :blank), @control_objective_item.errors.on(:effects)
-    assert_equal error_message_from_model(@control_objective_item,
-      :identified_controls, :blank), @control_objective_item.errors.on(
-      :identified_controls)
-    assert_equal error_message_from_model(@control_objective_item,
-      :post_audit_tests, :blank), @control_objective_item.errors.on(
-      :post_audit_tests)
+    assert @control_objective_item.errors.full_messages.include?(
+      full_error_message_from_model(
+        @control_objective_item.controls[0], :effects, :blank))
+    assert @control_objective_item.errors.full_messages.include?(
+      full_error_message_from_model(@control_objective_item.controls[0],
+        :control, :blank))
+    assert @control_objective_item.errors.full_messages.include?(
+      full_error_message_from_model(@control_objective_item.controls[0],
+        :compliance_tests, :blank))
     assert_equal error_message_from_model(@control_objective_item,
       :auditor_comment, :blank), @control_objective_item.errors.on(
       :auditor_comment)
-    assert_equal error_message_from_model(@control_objective_item,
-      :pre_audit_tests, :blank), @control_objective_item.errors.on(
-      :pre_audit_tests)
+    assert @control_objective_item.errors.full_messages.include?(
+      full_error_message_from_model(@control_objective_item.controls[0],
+        :design_tests, :blank))
   end
 
   test 'effectiveness with pre audit qualification' do
@@ -241,17 +238,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.effects = '  '
+    @control_objective_item.controls[0].effects = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.identified_controls = '  '
+    @control_objective_item.controls[0].control = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.post_audit_tests = '  '
+    @control_objective_item.controls[0].compliance_tests = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
@@ -262,13 +259,13 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     @control_objective_item.reload
     assert @control_objective_item.pre_audit_qualification
-    @control_objective_item.pre_audit_tests = '  '
+    @control_objective_item.controls[0].design_tests = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
     @control_objective_item.pre_audit_qualification = nil
-    @control_objective_item.pre_audit_tests = '  '
+    @control_objective_item.controls[0].design_tests = '  '
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 

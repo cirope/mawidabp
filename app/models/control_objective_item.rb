@@ -59,12 +59,39 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     record.errors.add attr, :taken if is_duplicated
   end
+  validates_each :controls do |record, attr, value|
+    active_controls = value &&
+      value.reject(&:marked_for_destruction?).size > 0
+
+    record.errors.add attr, :blank unless active_controls
+  end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
   validates_presence_of :post_audit_qualification, :audit_date, :relevance,
-    :effects, :identified_controls, :post_audit_tests, :auditor_comment,
-    :if => :finished
-  validates_presence_of :pre_audit_tests,
-    :if => proc { |coi| coi.finished && coi.pre_audit_qualification }
+    :auditor_comment, :if => :finished
+  validates_each(:controls, :if => :finished) do |record, attr, value|
+    if value
+      value.each do |control|
+        unless control.marked_for_destruction?
+          control.errors.add :control, :blank if control.control.blank?
+          control.errors.add :effects, :blank if control.effects.blank?
+
+          if record.pre_audit_qualification && control.design_tests.blank?
+            control.errors.add :design_tests, :blank
+          end
+
+          if control.compliance_tests.blank?
+            control.errors.add :compliance_tests, :blank
+          end
+
+          control.errors.full_messages.each do |m|
+            unless record.errors.full_messages.include?(m)
+              record.errors.add_to_base m
+            end
+          end
+        end
+      end
+    end
+  end
   
   # Relaciones
   belongs_to :control_objective
@@ -89,7 +116,10 @@ class ControlObjectiveItem < ActiveRecord::Base
     :before_add => [:check_for_final_review, :prepare_work_paper,
     :mark_as_post_audit], :before_remove => :check_for_final_review,
     :conditions => {:work_paper_type => 'ControlObjectiveItemPostAudit'}
+  has_many :controls, :as => :controllable, :dependent => :destroy,
+    :order => "#{Control.table_name}.order ASC"
 
+  accepts_nested_attributes_for :controls, :allow_destroy => true
   accepts_nested_attributes_for :pre_audit_work_papers, :allow_destroy => true
   accepts_nested_attributes_for :post_audit_work_papers, :allow_destroy => true
 
@@ -101,6 +131,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
 
     self.finished ||= false
+    self.controls.build if self.controls.blank?
   end
 
   def check_for_final_review(_)
@@ -177,26 +208,27 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t(:'control_objective_item.errors.without_audit_date')
     end
 
-    if self.effects.blank?
+    if self.controls.first.try(:effects).blank?
       errors << I18n.t(:'control_objective_item.errors.without_effects')
     end
 
-    if self.identified_controls.blank?
+    if self.controls.first.try(:control).blank?
       errors << I18n.t(
-        :'control_objective_item.errors.without_identified_controls')
+        :'control_objective_item.errors.without_controls')
     end
 
-    if self.post_audit_tests.blank?
+    if self.controls.first.try(:compliance_tests).blank?
       errors << I18n.t(
-        :'control_objective_item.errors.without_post_audit_tests')
+        :'control_objective_item.errors.without_compliance_tests')
     end
 
     if self.auditor_comment.blank?
       errors << I18n.t(:'control_objective_item.errors.without_auditor_comment')
     end
 
-    if self.pre_audit_qualification && self.pre_audit_tests.blank?
-      errors << I18n.t(:'control_objective_item.errors.without_pre_audit_tests')
+    if self.pre_audit_qualification &&
+        self.controls.first.try(:design_tests).blank?
+      errors << I18n.t(:'control_objective_item.errors.without_design_tests')
     end
 
     (@approval_errors = errors).blank?
@@ -257,29 +289,29 @@ class ControlObjectiveItem < ActiveRecord::Base
     pdf.move_pointer 28
 
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'relevance'), self.relevance_text(true), 0, false)
+        :relevance), self.relevance_text(true), 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'audit_date'),
+        :audit_date),
       (I18n.l(self.audit_date, :format => :long) if self.audit_date), 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:effects),
+      self.controls.first.effects, 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:control),
+      self.controls.first.control, 0, false)
+    pdf.add_description_item(Control.human_attribute_name(:compliance_tests),
+      self.controls.first.compliance_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'effects'), self.effects, 0, false)
+        :auditor_comment), self.auditor_comment, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'identified_controls'), self.identified_controls, 0, false)
-    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'post_audit_tests'), self.post_audit_tests, 0, false)
-    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'auditor_comment'), self.auditor_comment, 0, false)
-    pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'post_audit_qualification'), self.post_audit_qualification_text(true),
+        :post_audit_qualification), self.post_audit_qualification_text(true),
       0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        'effectiveness'), "#{self.effectiveness}%", 0, false)
+        :effectiveness), "#{self.effectiveness}%", 0, false)
 
     unless self.work_papers.blank?
       pdf.start_new_page
       pdf.move_pointer 36
 
-      pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
+      pdf.add_title(ControlObjectiveItem.human_attribute_name(:work_papers),
         18, :center, false)
 
       pdf.move_pointer 36

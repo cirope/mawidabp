@@ -72,6 +72,10 @@ class ActiveSupport::TestCase
     ::ActiveRecord::Error.new(model, attribute, message, extra).to_s
   end
 
+  def full_error_message_from_model(model, attribute, message, extra = {})
+    ::ActiveRecord::Error.new(model, attribute, message, extra).full_message
+  end
+
   def backup_file(file_name)
     if File.exists?(file_name)
       FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"

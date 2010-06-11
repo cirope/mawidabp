@@ -63,14 +63,26 @@
       <%= co_f.label :control_objective_text %>
       <%= co_f.text_area :control_objective_text, :readonly => readonly %>
     </p>
-    <p>
-      <%= co_f.label :effects %>
-      <%= co_f.text_area :effects, :readonly => readonly %>
-    </p>
-    <p>
-      <%= co_f.label :identified_controls %>
-      <%= co_f.text_area :identified_controls, :readonly => readonly %>
-    </p>
+    <% co_f.fields_for :controls, @control_objective_item.controls.first do |c_f| -%>
+      <p>
+        <%= c_f.label :effects %>
+        <%= c_f.text_area :effects, :readonly => readonly %>
+      </p>
+      <p>
+        <%= c_f.label :control %>
+        <%= c_f.text_area :control, :readonly => readonly %>
+      </p>
+
+      <% content_for :design_tests do -%>
+        <%= c_f.label :design_tests %>
+        <%= c_f.text_area :design_tests, :readonly => readonly %>
+      <% end %>
+
+      <% content_for :compliance_tests do -%>
+        <%= c_f.label :compliance_tests %>
+        <%= c_f.text_area :compliance_tests, :readonly => readonly %>
+      <% end %>
+    <% end -%>
   </div>
   <div class="form_column_right">
     <p>
@@ -83,8 +95,7 @@
         {:disabled => readonly} %>
     </p>
     <p>
-      <%= co_f.label :pre_audit_tests %>
-      <%= co_f.text_area :pre_audit_tests, :readonly => readonly %>
+      <%= yield :design_tests %>
     </p>
     <p>
       <%= co_f.label :post_audit_qualification %>
@@ -96,8 +107,7 @@
         {:disabled => readonly} %>
     </p>
     <p>
-      <%= co_f.label :post_audit_tests %>
-      <%= co_f.text_area :post_audit_tests, :readonly => readonly %>
+      <%= yield :compliance_tests %>
     </p>
     <p>
       <%= co_f.label :auditor_comment %>

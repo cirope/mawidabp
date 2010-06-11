@@ -367,7 +367,10 @@ class Finding < ActiveRecord::Base
       self.user_ids |= self.control_objective_item.review.user_ids
     end
 
-    self.effect ||= self.control_objective_item.try(:effects)
+    unless self.control_objective_item.try(:controls).blank?
+      self.effect ||= self.control_objective_item.controls.first.try(:effects)
+    end
+
     self.state ||= STATUS[:incomplete]
     self.final ||= false
     self.finding_prefix ||= false

@@ -2,7 +2,7 @@ require 'test_helper'
 
 # Pruebas para el controlador de informes
 class ReviewsControllerTest < ActionController::TestCase
-  fixtures :reviews, :plan_items, :periods, :control_objectives
+  fixtures :reviews, :plan_items, :periods, :control_objectives, :controls
 
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
@@ -81,7 +81,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'create review' do
     perform_auth
-    assert_difference ['Review.count', 'ControlObjectiveItem.count'] do
+    assert_difference ['Review.count', 'ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         assert_difference 'FileModel.count', 3 do
           assert_difference 'ReviewUserAssignment.count', 4 do
@@ -118,16 +118,20 @@ class ReviewsControllerTest < ActionController::TestCase
                 :control_objective_items_attributes => {
                   :new_1 => {
                     :control_objective_text => 'New text',
-                    :effects => 'New effects',
+                    :controls_attributes => {
+                      :new_1 => {
+                        :control => 'New control',
+                        :effects => 'New effects',
+                        :design_tests => 'New design tests',
+                        :compliance_tests => 'New compliance tests'
+                      }
+                    },
                     :relevance => get_test_parameter(
                       :admin_control_objective_importances).last[1],
-                    :identified_controls => 'New controls',
                     :pre_audit_qualification => get_test_parameter(
                       :admin_control_objective_qualifications).last[1],
-                    :pre_audit_tests => 'Pre tests',
                     :post_audit_qualification => get_test_parameter(
                       :admin_control_objective_qualifications).last[1],
-                    :post_audit_tests => 'Post tests',
                     :audit_date => Time.now.to_date,
                     :auditor_comment => 'New comment',
                     :control_objective_id => control_objectives(
@@ -166,16 +170,20 @@ class ReviewsControllerTest < ActionController::TestCase
                   },
                   :new_2 => {
                     :control_objective_text => 'New text',
-                    :effects => 'New effects',
+                    :controls_attributes => {
+                      :new_1 => {
+                        :control => 'New control',
+                        :effects => 'New effects',
+                        :design_tests => 'New design tests',
+                        :compliance_tests => 'New compliance tests'
+                      }
+                    },
                     :relevance => get_test_parameter(
                       :admin_control_objective_importances).last[1],
-                    :identified_controls => 'New controls',
                     :pre_audit_qualification => get_test_parameter(
                       :admin_control_objective_qualifications).last[1],
-                    :pre_audit_tests => 'Pre tests',
                     :post_audit_qualification => get_test_parameter(
                       :admin_control_objective_qualifications).last[1],
-                    :post_audit_tests => 'Post tests',
                     :audit_date => Time.now.to_date,
                     :auditor_comment => 'New comment',
                     :control_objective_id => control_objectives(
@@ -233,7 +241,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'update review' do
     counts_array = ['Review.count', 'ControlObjectiveItem.count',
-      'ReviewUserAssignment.count', 'FileModel.count']
+      'ReviewUserAssignment.count', 'FileModel.count', 'Control.count']
     perform_auth
     assert_no_difference counts_array do
       put :update, {
@@ -256,16 +264,21 @@ class ReviewsControllerTest < ActionController::TestCase
               :id => control_objective_items(
                 :bcra_A4609_security_management_responsible_dependency_item_editable).id,
               :control_objective_text => 'Updated text',
-              :effects => 'Updated effects',
+              :controls_attributes => {
+                controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id => {
+                  :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
+                  :control => 'Updated control',
+                  :effects => 'Updated effects',
+                  :design_tests => 'Updated design tests',
+                  :compliance_tests => 'Updated compliance tests'
+                }
+              },
               :relevance => get_test_parameter(
                 :admin_control_objective_importances).last[1],
-              :identified_controls => 'Updated controls',
               :pre_audit_qualification => get_test_parameter(
                 :admin_control_objective_qualifications).last[1],
-              :pre_audit_tests => 'Updated Pre tests',
               :post_audit_qualification => get_test_parameter(
                 :admin_control_objective_qualifications).last[1],
-              :post_audit_tests => 'Updated Post tests',
               :audit_date => Time.now.to_date,
               :auditor_comment => 'Updated comment',
               :control_objective_id =>

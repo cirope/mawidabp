@@ -343,10 +343,10 @@ es:
       without_relevance: "sin importancia"
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
-      without_identified_controls: "sin controles identificados"
-      without_post_audit_tests: "sin pruebas de cumplimiento y/o sustantivas"
+      without_controls: "sin controles"
+      without_compliance_tests: "sin pruebas de cumplimiento y/o sustantivas"
       without_auditor_comment: "sin comentarios del auditor"
-      without_pre_audit_tests: "sin evaluación de diseño"
+      without_design_tests: "sin evaluación de diseño"
 
   error_record:
     index_title: "Registros de error"
@@ -1261,13 +1261,9 @@ es:
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
-        effects: "Efectos"
         relevance: "Importancia"
-        identified_controls: "Controles identificados"
         pre_audit_qualification: "Calificación evaluación de diseño"
         post_audit_qualification: "Calificación pruebas de cumplimiento y/o sustantivas"
-        pre_audit_tests: "Evaluación de diseño"
-        post_audit_tests: "Pruebas de cumplimiento y/o sustantivas"
         audit_date: "Fecha de auditoría"
         auditor_comment: "Comentarios del auditor"
         finished: "Terminado"

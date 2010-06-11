@@ -71,13 +71,9 @@ ActiveRecord::Schema.define(:version => 20100608181406) do
 
   create_table "control_objective_items", :force => true do |t|
     t.text     "control_objective_text"
-    t.text     "effects"
     t.integer  "relevance"
-    t.text     "identified_controls"
     t.integer  "pre_audit_qualification"
-    t.text     "pre_audit_tests"
     t.integer  "post_audit_qualification"
-    t.text     "post_audit_tests"
     t.date     "audit_date"
     t.text     "auditor_comment"
     t.integer  "control_objective_id"

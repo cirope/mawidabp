@@ -83,7 +83,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'update control_objective_item' do
-    assert_no_difference 'ControlObjectiveItem.count' do
+    assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         perform_auth
         put :update, {
@@ -91,16 +91,21 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
-            :effects => 'Updated effects',
             :relevance =>
               get_test_parameter(:admin_control_objective_importances).last[1],
-            :identified_controls => 'Updated controls',
+            :controls_attributes => {
+              controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id => {
+                :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
+                :control => 'Updated control',
+                :effects => 'Updated effects',
+                :design_tests => 'Updated design tests',
+                :compliance_tests => 'Updated compliance tests'
+              }
+            },
             :pre_audit_qualification =>
               get_test_parameter(:admin_control_objective_qualifications).last[1],
-            :pre_audit_tests => 'Updated pre tests',
             :post_audit_qualification =>
               get_test_parameter(:admin_control_objective_qualifications).last[1],
-            :post_audit_tests => 'Updated post tests',
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id =>
