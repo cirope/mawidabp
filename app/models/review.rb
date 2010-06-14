@@ -33,8 +33,8 @@ class Review < ActiveRecord::Base
   @@associations_attributes_for_log = [:control_objective_item_ids]
 
   # Acceso a los atributos
-  attr_reader :approval_errors
-  attr_accessor :can_be_approved_by_force
+  attr_reader :approval_errors, :procedure_control_subitem_ids
+  attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
   attr_readonly :plan_item_id
   
   # Named scopes
@@ -194,12 +194,7 @@ class Review < ActiveRecord::Base
 
   accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
-  accepts_nested_attributes_for :control_objective_items,
-    :allow_destroy => true,
-    :reject_if => lambda { |attributes|
-      attributes['included_in_review'].to_i != 1 &&
-        attributes['_destroy'].to_i != 1
-    }
+  accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
 
   def to_s
     self.long_identification +
@@ -240,6 +235,32 @@ class Review < ActiveRecord::Base
 
   def is_frozen?
     self.has_final_review? && self.conclusion_final_review.is_frozen?
+  end
+
+  def procedure_control_subitem_ids=(ids)
+    (ids || []).uniq.each do |pcs_id|
+      if pcs_id.respond_to?(:to_i) &&
+          ProcedureControlSubitem.exists?(pcs_id.to_i)
+        pcs = ProcedureControlSubitem.find(pcs_id)
+        control_objective_ids = self.control_objective_items.map(
+          &:control_objective_id)
+
+        unless control_objective_ids.include?(pcs.control_objective_id)
+          self.control_objective_items.build(
+            :control_objective_id => pcs.control_objective_id,
+            :control_objective_text => pcs.control_objective_text,
+            :controls_attributes => {
+              :new_1 => {
+                :control => pcs.controls.first.control,
+                :effects => pcs.controls.first.effects,
+                :design_tests => pcs.controls.first.design_tests,
+                :compliance_tests => pcs.controls.first.compliance_tests
+              }
+            }
+          )
+        end
+      end
+    end
   end
 
   # Devuelve la calificación del informe, siempre es un arreglo de dos elementos

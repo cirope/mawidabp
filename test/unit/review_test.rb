@@ -352,6 +352,19 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
+  test 'procedure control subitem ids' do
+    assert !@review.control_objective_items.empty?
+    assert_difference '@review.control_objective_items.size' do
+      @review.procedure_control_subitem_ids =
+        [procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id]
+    end
+
+    assert_no_difference '@review.control_objective_items.size' do
+      @review.procedure_control_subitem_ids =
+        [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id]
+    end
+  end
+
   test 'effectiveness function' do
     coi_count = @review.control_objective_items.inject(0) do |acc, coi|
       acc + coi.relevance

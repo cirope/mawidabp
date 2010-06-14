@@ -1,5 +1,6 @@
 class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
+  include Comparable
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -24,7 +25,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     :post_audit_workpaper_ids]
 
   # Atributos no persistentes
-  attr_accessor :included_in_review
   attr_reader :approval_errors
 
   # Callbacks
@@ -129,6 +129,24 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def mark_as_post_audit(work_paper)
     work_paper.work_paper_type = 'ControlObjectiveItemPostAudit'
+  end
+
+  def <=>(other)
+    if other && other.kind_of?(ControlObjectiveItem)
+      bp_base = 2 ** 64
+      pc_base = 2 ** 32
+      
+      order_1 = self.control_objective.process_control.best_practice_id *
+        bp_base + self.control_objective.process_control.order * pc_base +
+        self.control_objective.order
+      order_2 = other.control_objective.process_control.best_practice_id *
+        bp_base + other.control_objective.process_control.order * pc_base +
+        other.control_objective.order
+
+      order_1 <=> order_2
+    else
+      -1
+    end
   end
 
   def effectiveness

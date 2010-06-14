@@ -65,7 +65,6 @@ class ReviewsController < ApplicationController
       :period_id => params[:period] ?
         params[:period].to_i : (first_period ? first_period.id : nil)
     )
-    prepare_review
 
     respond_to do |format|
       format.html # new.html.erb
@@ -79,7 +78,6 @@ class ReviewsController < ApplicationController
   def edit
     @title = t :'review.edit_title'
     @review = find_with_organization(params[:id])
-    prepare_review
   end
 
   # Crea un nuevo informe siempre que cumpla con las validaciones. Además
@@ -97,7 +95,6 @@ class ReviewsController < ApplicationController
         format.html { redirect_to(edit_review_path(@review)) }
         format.xml  { render :xml => @review, :status => :created, :location => @review }
       else
-        prepare_review
         format.html { render :action => :new }
         format.xml  { render :xml => @review.errors, :status => :unprocessable_entity }
       end
@@ -120,7 +117,6 @@ class ReviewsController < ApplicationController
         format.html { redirect_to(edit_review_path(@review)) }
         format.xml  { head :ok }
       else
-        prepare_review
         format.html { render :action => :edit }
         format.xml  { render :xml => @review.errors, :status => :unprocessable_entity }
       end
@@ -234,6 +230,38 @@ class ReviewsController < ApplicationController
     @users = User.all(find_options)
   end
 
+  # * POST /reviews/auto_complete_for_procedure_control_subitem
+  def auto_complete_for_procedure_control_subitem
+    @tokens = params[:procedure_control_subitem_data][0..100].split(/[\s,]/).uniq
+    @tokens.reject! {|t| t.blank?}
+    conditions = [
+      "#{BestPractice.table_name}.organization_id = :organization_id",
+      "#{ProcedureControl.table_name}.period_id = :period_id"
+    ]
+    parameters = {:organization_id => @auth_organization.id,
+      :period_id => params[:period_id]}
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{ProcedureControlSubitem.table_name}.control_objective_text) LIKE :procedure_control_subitem_data_#{i}",
+        "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_subitem_data_#{i}"
+      ].join(' OR ')
+
+      parameters["procedure_control_subitem_data_#{i}".to_sym] = "%#{t.downcase}%"
+    end
+    find_options = {
+      :include => {:control_objective => {:process_control => :best_practice},
+        :procedure_control_item => :procedure_control},
+      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
+      :order => [
+        "#{ProcessControl.table_name}.name ASC",
+        "#{ControlObjective.table_name}.name ASC"
+      ].join(','),
+      :limit => 10
+    }
+
+    @procedure_control_subitems = ProcedureControlSubitem.all(find_options)
+  end
+
   # * GET /reviews/estimated_amount/1
   def estimated_amount
     plan_item = PlanItem.find(params[:id]) unless params[:id].blank?
@@ -242,27 +270,6 @@ class ReviewsController < ApplicationController
   end
 
   private
-
-  def prepare_review
-    @review.control_objective_items.each { |coi| coi.included_in_review = true }
-
-    unless @review.has_final_review?
-      associated_cois = @review.control_objective_items.map do |coi|
-        coi.control_objective_id
-      end
-
-      control_objective_items = control_objective_items_for_period(
-        @review.period_id, associated_cois.compact)
-
-      coi_attributes = control_objective_items.map do |coi|
-        coi.attributes unless coi.included_in_review
-      end
-
-      @review.control_objective_items.build(coi_attributes.compact)
-    end
-    
-    sort_control_objective_items! @review.control_objective_items
-  end
 
   # Busca el informe indicado siempre que pertenezca a la organización. En el
   # caso que no se encuentre (ya sea que no existe un informe con ese ID o que
@@ -280,81 +287,6 @@ class ReviewsController < ApplicationController
     )
   end
 
-  # Devuelve todos los objetivos de control definidos para un periodo
-  #
-  # * _period_id_::                         ID del periodo
-  # * _asocciated_control_objective_ids_::  Arreglo con los IDs de los objetivos
-  #                                         de control asociados al informe
-  def control_objective_items_for_period(period_id,
-      asocciated_control_objective_ids = []) #:doc:
-    conditions = ["#{ProcedureControl.table_name}.period_id = :period_id"]
-    parameters = {:period_id => period_id}
-
-    unless asocciated_control_objective_ids.blank?
-      conditions << 'control_objective_id NOT IN (:control_objective_ids)'
-      parameters[:control_objective_ids] = asocciated_control_objective_ids
-    end
-    procedure_control_subitems = ProcedureControlSubitem.all(
-      :joins => {:procedure_control_item => :procedure_control},
-      :conditions => [conditions.join(' AND '), parameters]
-    )
-
-    procedure_control_subitems.delete_if do |pcs|
-      procedure_control_subitems.any? do |pcs2|
-        pcs.control_objective_id == pcs2.control_objective_id &&
-          pcs.id != pcs2.id
-      end
-    end
-
-    procedure_control_subitems.map do |pcs|
-      control_objective_item = nil
-
-      unless (asocciated_control_objective_ids).include?(pcs.control_objective_id)
-        control_objective_item = ControlObjectiveItem.new(
-          :control_objective_id => pcs.control_objective_id,
-          :control_objective_text => pcs.control_objective_text,
-          :controls_attributes => {
-            :new_1 => {
-              :control => pcs.controls.first.control,
-              :effects => pcs.controls.first.effects,
-              :design_tests => pcs.controls.first.design_tests,
-              :compliance_tests => pcs.controls.first.compliance_tests
-            }
-          },
-          :included_in_review => false
-        )
-      else
-        control_objective_item = @review.control_objective_items.detect do |coi|
-          coi.control_objective_id = pcs.control_objective_id
-        end
-
-        if control_objective_item
-          control_objective_item.included_in_review = true
-        end
-      end
-
-      control_objective_item
-    end.compact
-  end
-
-  # Ordena los objetivos de control y modifica el arreglo enviado como parámetro
-  #
-  # * _control_objective_items_:: Arreglo con los objetivos de control a ordenar
-  def sort_control_objective_items!(control_objective_items) #:doc:
-    bp_base = 2 ** 64
-    pc_base = 2 ** 32
-
-    control_objective_items.sort! do |coi_1, coi_2|
-      order_1 = coi_1.control_objective.process_control.best_practice_id *
-        bp_base + coi_1.control_objective.process_control.order * pc_base +
-        coi_1.control_objective.order
-      order_2 = coi_2.control_objective.process_control.best_practice_id *
-        bp_base + coi_2.control_objective.process_control.order * pc_base +
-        coi_2.control_objective.order
-      order_1 <=> order_2
-    end
-  end
-
   def load_privileges #:nodoc:
     @action_privileges.update({
       :review_data => :read,
@@ -362,6 +294,7 @@ class ReviewsController < ApplicationController
       :plan_item_data => :read,
       :survey_pdf => :read,
       :auto_complete_for_user => :read,
+      :auto_complete_for_procedure_control_subitem => :read,
       :estimated_amount => :read
     })
   end

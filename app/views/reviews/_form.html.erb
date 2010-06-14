@@ -4,6 +4,10 @@
 <% form_for @review, :html => { :multipart => true } do |r_f| -%>
   <% content_for :js_extra do -%>
     <%= "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
+    <%= "var control_objective='#{escape_javascript render(
+      :partial => 'procedure_control_subitem',
+      :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
+      :is_dynamic => true})}';" %>
     <%= "var review_user_assignment='#{generate_template(r_f,
       :review_user_assignments, :locals => {:readonly => readonly})}';" %>
   <% end -%>
@@ -129,49 +133,62 @@
     </p>
   <% end -%>
 
-  <div class="items">
-    <h1><%= t(:'review.control_objective_items_label') %></h1>
-    <div id="control_objective_items">
-      <% process_controls = @review.control_objective_items.map {|coi| coi.control_objective.process_control.name}.uniq %>
-      <% pre_template = post_template = nil -%>
-      <% r_f.fields_for :control_objective_items do |coi_f| -%>
-        <% unless frozen -%>
-          <% content_for :js_extra do -%>
-            <% pre_template ||= generate_template(coi_f,
-              :post_audit_work_papers, {:form_builder_local => :wp_f,
-              :partial => 'work_papers/work_paper',
-              :child_index => 'NEW_SUBRECORD',
-              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
-            <% post_template ||= generate_template(coi_f,
-              :pre_audit_work_papers, {:form_builder_local => :wp_f,
-              :partial => 'work_papers/work_paper',
-              :child_index => 'NEW_SUBRECORD',
-              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
-            <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 -%>
-            <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 -%>
-            <% pre_template = post_template = 0 -%>
+  <% unless @review.control_objective_items.empty? -%>
+    <div class="items" style="margin-top: 2em;">
+      <h1><%= t(:'review.control_objective_items_label') %></h1>
+      <div id="control_objective_items">
+        <% pre_template = post_template = nil -%>
+        <% r_f.fields_for :control_objective_items,
+          @review.control_objective_items.sort! do |coi_f| -%>
+          <% unless frozen -%>
+            <% content_for :js_extra do -%>
+              <% pre_template ||= generate_template(coi_f,
+                :post_audit_work_papers, {:form_builder_local => :wp_f,
+                :partial => 'work_papers/work_paper',
+                :child_index => 'NEW_SUBRECORD',
+                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
+              <% post_template ||= generate_template(coi_f,
+                :pre_audit_work_papers, {:form_builder_local => :wp_f,
+                :partial => 'work_papers/work_paper',
+                :child_index => 'NEW_SUBRECORD',
+                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
+              <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 -%>
+              <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 -%>
+              <% pre_template = post_template = 0 -%>
+            <% end -%>
           <% end -%>
+          <%= render :partial => 'control_objective_item', :locals => {
+            :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
         <% end -%>
-        <%= render :partial => 'control_objective_item', :locals => {
-          :co_f => coi_f, :process_controls => process_controls,
-          :readonly => readonly, :frozen => frozen} %>
-      <% end -%>
+      </div>
     </div>
-  </div>
+  <% end -%>
 
   <% unless readonly -%>
-    <p class="form_item" style="margin-top: 1em; font-weight: bold;">
-      <%= label_tag :select_all, t(:'label.select_all'),
-        :class => 'inline plain_label', :style => 'width: auto;'  %>
-      <%= check_box_tag :select_all, 1, false  %>
+    <div class="items" style="margin-top: 2em;">
+      <div class="column_headers">
+        <div class="item_column" style="width: 50%;">
+          <h3><%= ControlObjective.human_name %></h3>
+        </div>
+        <div class="item_column" style="width: 5%;"></div>
+        <div style="clear: both;"></div>
+      </div>
+
+      <div id="control_objectives">
+      </div>
+    </div>
+
+    <p class="add_item">
+      <%= link_to t(:'review.add_control_objective'),
+        '#control_objective', :class => :add_nested_item,
+        :rel => :control_objectives %>
     </p>
   <% end -%>
 
-  <div style="display: none;">
-    <%= r_f.hidden_field :lock_version %>
-  </div>
+
+  <%= hidden_lock_version(r_f) %>
 
   <p>
     <span class="button"><%= r_f.submit submit_button_text %></span>
@@ -181,42 +198,11 @@
 <%= set_focus_to_first_element %>
 <script type="text/javascript">
 //<![CDATA[
-  function markAsDeleted(includeCheckBox) {
-    var destroyCheckBox = includeCheckBox.up('.enumeration_list').
-      down('.destroy_check_box');
-
-    if(destroyCheckBox) {
-      destroyCheckBox.checked = !includeCheckBox.checked;
-    }
-  }
-
   Event.observe('app_content', 'change', function(event) {
     var element = $(event.element());
 
-    // Es un Checkbox para seleccionar objetivos de control
-    if(element.hasClassName('include_check_box')) {
-      markAsDeleted(element);
-
-      element.classNames().reject(function(c) {
-        return c == 'include_check_box';
-      }).each(function(class_name) {
-        var allChecked = $$('.' + class_name).inject(true, function(acc, e) {
-          return acc && e.checked;
-        });
-
-        $(class_name.sub('child_', '')).checked = allChecked;
-      });
-    // Es un Checkbox para seleccionar un proceso de negocio completo
-    } else if (element.hasClassName('process_control_check_box')) {
-      $$('.child_' + element.readAttribute('name')).each(function(e) {
-        if(e.hasClassName('include_check_box') &&
-          e.readAttribute('disabled') == null) {
-          e.checked = element.checked;
-          markAsDeleted(e);
-        }
-      });
     // Es un select de calificación post auditoría
-    } else if (element.hasClassName('post_audit_qualification')) {
+    if (element.hasClassName('post_audit_qualification')) {
       var currentValue = $F(element).match(/^\d+$/) ?
         parseInt($F(element)) : -1;
       var values = $A($(element).options).map(function(e) {
@@ -239,16 +225,6 @@
       }
     }
   });
-
-  if($('select_all')) {
-    Event.observe('select_all', 'change', function() {
-      $$('input.process_control_check_box').each(function(e) {
-        if(e.checked != $('select_all').checked) {
-          e.click();
-        }
-      });
-    });
-  }
 
   if($('review_plan_item_id')) {
     Event.observe('review_plan_item_id', 'change', function() {
@@ -291,14 +267,6 @@
       }
     });
   }
-
-  $$('input.process_control_check_box').each(function(element) {
-    var childName = 'child_' + element.readAttribute('name');
-    
-    element.checked = $$('.' + childName).inject(true, function(acc, e) {
-      return acc && e.checked;
-    });
-  });
 
   HTMLUtil.stylizeAllInputFiles();
 //]]>

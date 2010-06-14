@@ -1,0 +1,30 @@
+<% id = 'procedure_control_subitem'.concat(procedure_control_subitem.id || 'NEW_RECORD') -%>
+<div class="procedure_control_subitem item" <%= 'style="display: none;"' if is_dynamic %> id="<%= id %>">
+  <div>
+    <div class="item_field" style="width: 40%;">
+      <div class="search">
+        <%= hidden_field_tag 'review[procedure_control_subitem_ids][]',
+          procedure_control_subitem.id,
+          :id => "hidden_procedure_control_subitem_#{id}",
+          :class => :autocomplete_id_item %>
+        <%= text_field_with_auto_complete :procedure_control_subitem,
+          :procedure_control_subitem_data,
+          {:id => "procedure_control_subitem_#{id}",
+          :class => :search,
+          :title => t(:'label.search'),
+          :value => ''},
+          {:indicator => :loading, :skip_style => true,
+          :url => {:action => :auto_complete_for_procedure_control_subitem},
+          :after_update_element => 'AutoComplete.itemSelected',
+          :param_name => 'procedure_control_subitem_data',
+          :parameters => "period_id=#{@review.period_id}"} %>
+      </div>
+    </div>
+    <div class="item_field" style="width: 5%;">
+      <%= remove_item_link(nil, 'procedure_control_subitem') -%>
+    </div>
+  </div>
+</div>
+<% if is_dynamic -%>
+<script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

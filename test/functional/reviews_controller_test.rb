@@ -81,149 +81,151 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'create review' do
     perform_auth
-    assert_difference ['Review.count', 'ControlObjectiveItem.count', 'Control.count'] do
-      assert_difference 'WorkPaper.count', 2 do
-        assert_difference 'FileModel.count', 3 do
-          assert_difference 'ReviewUserAssignment.count', 4 do
-            post :create, {
-              :review => {
-                :identification => 'New Identification',
-                :description => 'New Description',
-                :survey => 'New survey',
-                :period_id => periods(:current_period).id,
-                :plan_item_id => plan_items(:past_plan_item_3).id,
-                :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
-                    TEST_FILE, 'text/plain')
-                },
-                :review_user_assignments_attributes => {
-                  :new_1 => {
-                    :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-                    :user => users(:first_time_user)
+    assert_difference 'Review.count' do
+      # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
+      assert_difference ['ControlObjectiveItem.count', 'Control.count'], 3 do
+        assert_difference 'WorkPaper.count', 4 do
+          assert_difference 'FileModel.count', 5 do
+            assert_difference 'ReviewUserAssignment.count', 4 do
+              post :create, {
+                :review => {
+                  :identification => 'New Identification',
+                  :description => 'New Description',
+                  :survey => 'New survey',
+                  :period_id => periods(:current_period).id,
+                  :plan_item_id => plan_items(:past_plan_item_3).id,
+                  :procedure_control_subitem_ids =>
+                    [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
+                  :file_model_attributes => {
+                    :uploaded_data => ActionController::TestUploadedFile.new(
+                      TEST_FILE, 'text/plain')
                   },
-                  :new_2 => {
-                    :assignment_type =>
-                      ReviewUserAssignment::TYPES[:supervisor],
-                    :user => users(:supervisor_user)
-                  },
-                  :new_3 => {
-                    :assignment_type => ReviewUserAssignment::TYPES[:manager],
-                    :user => users(:manager_user)
-                  },
-                  :new_4 => {
-                    :assignment_type => ReviewUserAssignment::TYPES[:audited],
-                    :user => users(:audited_user)
-                  }
-                },
-                :control_objective_items_attributes => {
-                  :new_1 => {
-                    :control_objective_text => 'New text',
-                    :controls_attributes => {
-                      :new_1 => {
-                        :control => 'New control',
-                        :effects => 'New effects',
-                        :design_tests => 'New design tests',
-                        :compliance_tests => 'New compliance tests'
-                      }
+                  :review_user_assignments_attributes => {
+                    :new_1 => {
+                      :assignment_type => ReviewUserAssignment::TYPES[:auditor],
+                      :user => users(:first_time_user)
                     },
-                    :relevance => get_test_parameter(
-                      :admin_control_objective_importances).last[1],
-                    :pre_audit_qualification => get_test_parameter(
-                      :admin_control_objective_qualifications).last[1],
-                    :post_audit_qualification => get_test_parameter(
-                      :admin_control_objective_qualifications).last[1],
-                    :audit_date => Time.now.to_date,
-                    :auditor_comment => 'New comment',
-                    :control_objective_id => control_objectives(
-                      :iso_27000_security_organization_4_1).id,
-                    :included_in_review => 1,
-                    :pre_audit_work_papers_attributes => {
-                      :new_1 => {
-                        :name => 'New pre_workpaper name',
-                        :code => 'PTOC 20',
-                        :number_of_pages => '10',
-                        :description => 'New pre_workpaper description',
-                        :organization_id =>
-                          organizations(:default_organization).id,
-                        :file_model_attributes => {
-                          :uploaded_data =>
-                            ActionController::TestUploadedFile.new(
-                            TEST_FILE)
-                        }
-                      }
+                    :new_2 => {
+                      :assignment_type =>
+                        ReviewUserAssignment::TYPES[:supervisor],
+                      :user => users(:supervisor_user)
                     },
-                    :post_audit_work_papers_attributes => {
-                      :new_1 => {
-                        :name => 'New post_workpaper name',
-                        :code => 'PTOC 21',
-                        :number_of_pages => '10',
-                        :description => 'New post_workpaper description',
-                        :organization_id =>
-                          organizations(:default_organization).id,
-                        :file_model_attributes => {
-                          :uploaded_data =>
-                            ActionController::TestUploadedFile.new(
-                            TEST_FILE)
-                        }
-                      }
+                    :new_3 => {
+                      :assignment_type => ReviewUserAssignment::TYPES[:manager],
+                      :user => users(:manager_user)
+                    },
+                    :new_4 => {
+                      :assignment_type => ReviewUserAssignment::TYPES[:audited],
+                      :user => users(:audited_user)
                     }
                   },
-                  :new_2 => {
-                    :control_objective_text => 'New text',
-                    :controls_attributes => {
-                      :new_1 => {
-                        :control => 'New control',
-                        :effects => 'New effects',
-                        :design_tests => 'New design tests',
-                        :compliance_tests => 'New compliance tests'
-                      }
-                    },
-                    :relevance => get_test_parameter(
-                      :admin_control_objective_importances).last[1],
-                    :pre_audit_qualification => get_test_parameter(
-                      :admin_control_objective_qualifications).last[1],
-                    :post_audit_qualification => get_test_parameter(
-                      :admin_control_objective_qualifications).last[1],
-                    :audit_date => Time.now.to_date,
-                    :auditor_comment => 'New comment',
-                    :control_objective_id => control_objectives(
-                      :iso_27000_security_organization_4_1).id,
-                    # NO INCLUIDO, POR LO TANTO NO SE AGREGA
-                    :included_in_review => 0,
-                    :pre_audit_work_papers_attributes => {
-                      :new_1 => {
-                        :name => 'New pre_workpaper name',
-                        :code => 'New pre_workpaper code',
-                        :number_of_pages => '10',
-                        :description => 'New pre_workpaper description',
-                        :organization_id =>
-                          organizations(:default_organization).id,
-                        :file_model_attributes => {
-                          :uploaded_data =>
-                            ActionController::TestUploadedFile.new(
-                            TEST_FILE)
+                  :control_objective_items_attributes => {
+                    :new_1 => {
+                      :control_objective_text => 'New text',
+                      :controls_attributes => {
+                        :new_1 => {
+                          :control => 'New control',
+                          :effects => 'New effects',
+                          :design_tests => 'New design tests',
+                          :compliance_tests => 'New compliance tests'
+                        }
+                      },
+                      :relevance => get_test_parameter(
+                        :admin_control_objective_importances).last[1],
+                      :pre_audit_qualification => get_test_parameter(
+                        :admin_control_objective_qualifications).last[1],
+                      :post_audit_qualification => get_test_parameter(
+                        :admin_control_objective_qualifications).last[1],
+                      :audit_date => Time.now.to_date,
+                      :auditor_comment => 'New comment',
+                      :control_objective_id => control_objectives(
+                        :iso_27000_security_organization_4_1).id,
+                      :pre_audit_work_papers_attributes => {
+                        :new_1 => {
+                          :name => 'New pre_workpaper name',
+                          :code => 'PTOC 20',
+                          :number_of_pages => '10',
+                          :description => 'New pre_workpaper description',
+                          :organization_id =>
+                            organizations(:default_organization).id,
+                          :file_model_attributes => {
+                            :uploaded_data =>
+                              ActionController::TestUploadedFile.new(
+                              TEST_FILE)
+                          }
+                        }
+                      },
+                      :post_audit_work_papers_attributes => {
+                        :new_1 => {
+                          :name => 'New post_workpaper name',
+                          :code => 'PTOC 21',
+                          :number_of_pages => '10',
+                          :description => 'New post_workpaper description',
+                          :organization_id =>
+                            organizations(:default_organization).id,
+                          :file_model_attributes => {
+                            :uploaded_data =>
+                              ActionController::TestUploadedFile.new(
+                              TEST_FILE)
+                          }
                         }
                       }
                     },
-                    :post_audit_work_papers_attributes => {
-                      :new_1 => {
-                        :name => 'New post_workpaper name',
-                        :code => 'New post_workpaper code',
-                        :number_of_pages => '10',
-                        :description => 'New post_workpaper description',
-                        :organization_id =>
-                          organizations(:default_organization).id,
-                        :file_model_attributes => {
-                          :uploaded_data =>
-                            ActionController::TestUploadedFile.new(
-                            TEST_FILE)
+                    :new_2 => {
+                      :control_objective_text => 'New text',
+                      :controls_attributes => {
+                        :new_1 => {
+                          :control => 'New control',
+                          :effects => 'New effects',
+                          :design_tests => 'New design tests',
+                          :compliance_tests => 'New compliance tests'
+                        }
+                      },
+                      :relevance => get_test_parameter(
+                        :admin_control_objective_importances).last[1],
+                      :pre_audit_qualification => get_test_parameter(
+                        :admin_control_objective_qualifications).last[1],
+                      :post_audit_qualification => get_test_parameter(
+                        :admin_control_objective_qualifications).last[1],
+                      :audit_date => Time.now.to_date,
+                      :auditor_comment => 'New comment',
+                      :control_objective_id => control_objectives(
+                        :iso_27000_security_organization_4_2).id,
+                      :pre_audit_work_papers_attributes => {
+                        :new_1 => {
+                          :name => 'New pre_workpaper name',
+                          :code => 'PTOC 22',
+                          :number_of_pages => '10',
+                          :description => 'New pre_workpaper description',
+                          :organization_id =>
+                            organizations(:default_organization).id,
+                          :file_model_attributes => {
+                            :uploaded_data =>
+                              ActionController::TestUploadedFile.new(
+                              TEST_FILE)
+                          }
+                        }
+                      },
+                      :post_audit_work_papers_attributes => {
+                        :new_1 => {
+                          :name => 'New post_workpaper name',
+                          :code => 'PTOC 23',
+                          :number_of_pages => '10',
+                          :description => 'New post_workpaper description',
+                          :organization_id =>
+                            organizations(:default_organization).id,
+                          :file_model_attributes => {
+                            :uploaded_data =>
+                              ActionController::TestUploadedFile.new(
+                              TEST_FILE)
+                          }
                         }
                       }
                     }
                   }
                 }
               }
-            }
+            end
           end
         end
       end
@@ -408,5 +410,38 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, assigns(:users).size # None
     assert_select '#error_body', false
     assert_template 'reviews/auto_complete_for_user'
+  end
+
+  test 'auto complete for procedure control subitem' do
+    perform_auth
+    post :auto_complete_for_procedure_control_subitem, {
+      :procedure_control_subitem_data => 'ges seg',
+      :period_id => periods(:current_period).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:procedure_control_subitems)
+    assert_equal 2, assigns(:procedure_control_subitems).size # Gestión de la seguridad
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+
+    post :auto_complete_for_procedure_control_subitem, {
+      :procedure_control_subitem_data => 'depen',
+      :period_id => periods(:current_period).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:procedure_control_subitems)
+    assert_equal 1, assigns(:procedure_control_subitems).size # Dependencia del área responsable
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+
+    post :auto_complete_for_procedure_control_subitem, {
+      :procedure_control_subitem_data => 'xyz',
+      :period_id => periods(:current_period).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:procedure_control_subitems)
+    assert_equal 0, assigns(:procedure_control_subitems).size # None
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
   end
 end

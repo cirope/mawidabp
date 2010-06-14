@@ -1,26 +1,17 @@
+<% @displayed_process_controls ||= [] %>
 <% control_objective_item = co_f.object -%>
 <% id = dynamic_object_id('control_objective_item', co_f) -%>
 <% process_control = control_objective_item.control_objective.process_control.name -%>
-<% class_name = "process_control_#{control_objective_item.control_objective.process_control.id}" -%>
-<% if process_controls.include?(process_control) -%>
-  <h3>
-    <%= check_box_tag class_name, 1, false,
-      {:class => :process_control_check_box, :disabled => readonly}  %>
-    <%= label_tag class_name, process_controls.delete(process_control),
-      :class => :plain_label %>
-  </h3>
+<% unless @displayed_process_controls.include?(process_control) -%>
+  <h3><%= process_control %></h3>
+  <% @displayed_process_controls << process_control -%>
 <% end -%>
 <div class="enumeration_list">
-  <div style="display: none;">
-    <%= co_f.check_box :_destroy, :class => :destroy_check_box %>
-  </div>
   <%= link_to_show_hide id,
     t(:'review.show_control_objective'),
     t(:'review.hide_control_objective') %>
-  <%= co_f.check_box :included_in_review,
-    :class => "include_check_box child_#{class_name}",
-    :disabled => !control_objective_item.new_record? %>
-  <%= co_f.label :included_in_review, control_objective_item.control_objective_text,
+  <%= co_f.label :included_in_review,
+    control_objective_item.control_objective_text,
     :class => (:error_field unless control_objective_item.errors.blank?) %>
 </div>
 <div class="control_objective_item item hidden_items" style="display: none; margin-top: 1em;" id="<%= id %>">
@@ -53,12 +44,12 @@
           <%= c_f.text_area :control, :readonly => readonly %>
         </p>
 
-        <% content_for :design_tests do -%>
+        <% content_for "design_tests_#{id}" do -%>
           <%= c_f.label :design_tests %>
           <%= c_f.text_area :design_tests, :readonly => readonly %>
         <% end %>
 
-        <% content_for :compliance_tests do -%>
+        <% content_for "compliance_tests_#{id}" do -%>
           <%= c_f.label :compliance_tests %>
           <%= c_f.text_area :compliance_tests, :readonly => readonly %>
         <% end %>
@@ -87,7 +78,7 @@
           {:disabled => readonly} %>
       </p>
       <p>
-        <%= yield :design_tests %>
+        <%= yield "design_tests_#{id}" %>
       </p>
       <p>
         <%= co_f.label :post_audit_qualification %>
@@ -99,7 +90,7 @@
           {:class => :post_audit_qualification, :disabled => readonly} %>
       </p>
       <p>
-        <%= yield :compliance_tests %>
+        <%= yield "compliance_tests_#{id}" %>
       </p>
       <p>
         <%= co_f.label :auditor_comment %>
