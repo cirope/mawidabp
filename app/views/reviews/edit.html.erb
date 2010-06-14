@@ -6,5 +6,6 @@
   <%= link_to t(:'label.list'), reviews_path %> |
   <%= link_to t(:'review.download_work_papers'),
     :action => :download_work_papers, :id => @review %> |
+  <%= link_to_procedure_control_for_review @review %> |
   <%= link_to_back %>
 </div>

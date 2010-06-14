@@ -45,4 +45,12 @@ module ReviewsHelper
     review ? review.last_control_objective_work_paper_code(code_prefix) :
       "#{code_prefix} 0".strip
   end
+
+  def link_to_procedure_control_for_review(review)
+    procedure_control = ProcedureControl.list_by_period(review.period_id).first
+
+    link_to_unless(procedure_control.nil?,
+      t(:'review.view_procedure_control_for_the_period'),
+      procedure_control ? procedure_control_path(procedure_control) : nil)
+  end
 end

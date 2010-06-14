@@ -10,9 +10,7 @@
   <%= link_to_show_hide id,
     t(:'review.show_control_objective'),
     t(:'review.hide_control_objective') %>
-  <%= co_f.label :included_in_review,
-    control_objective_item.control_objective_text,
-    :class => (:error_field unless control_objective_item.errors.blank?) %>
+  <%= control_objective_item.control_objective_text %>
 </div>
 <div class="control_objective_item item hidden_items" style="display: none; margin-top: 1em;" id="<%= id %>">
   <div>

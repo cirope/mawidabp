@@ -853,6 +853,7 @@ es:
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
+    view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
     add_user_assignment: "Agregar usuario relacionado"
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"

@@ -7,6 +7,19 @@ class ProcedureControl < ActiveRecord::Base
 
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:procedure_control_item_ids]
+
+  # Named scope
+  named_scope :list_by_period, lambda { |period_id|
+    {
+      :include => :period,
+      :conditions => {
+        "#{Period.table_name}.organization_id" =>
+          GlobalModelConfig.current_organization_id,
+        "#{table_name}.period_id" => period_id
+      },
+      :order => 'number DESC'
+    }
+  }
   
   # Restricciones
   validates_presence_of :period_id
