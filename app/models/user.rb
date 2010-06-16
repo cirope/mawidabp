@@ -158,6 +158,7 @@ class User < ActiveRecord::Base
   has_many :login_records, :dependent => :destroy
   has_many :error_records, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
+  has_many :detracts, :dependent => :destroy
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
   has_many :review_user_assignments, :dependent => :destroy,
     :include => :review, :order => 'assignment_type DESC'
@@ -169,6 +170,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :findings, :readonly => true
 
   accepts_nested_attributes_for :organization_roles, :allow_destroy => true
+  accepts_nested_attributes_for :detracts, :allow_destroy => false
 
   def initialize(attributes = {})
     super(attributes)
@@ -522,8 +524,8 @@ class User < ActiveRecord::Base
     Finding.transaction do
       if options[:with_findings]
         self.findings.all_for_reallocation.each do |f|
-          description = "#{f.class.human_name} #{f.review_code} " +
-            "(#{Review.human_name} #{f.review.identification})"
+          description = "#{f.class.human_name} *#{f.review_code.strip}* " +
+            "(#{Review.human_name} *#{f.review.identification.strip}*)"
           f.avoid_changes_notification = true
           f.users.delete self
           items_for_notification << description
@@ -545,7 +547,8 @@ class User < ActiveRecord::Base
 
             unless rua.destroy_without_notification
               all_released = false
-              description = "#{Review.human_name}: #{rua.review.identification}"
+              description =
+                "#{Review.human_name}: *#{rua.review.identification.strip}*"
               
               self.reallocation_errors << [description,rua.errors.full_messages]
             end
@@ -591,7 +594,8 @@ class User < ActiveRecord::Base
 
             if f.invalid?
               all_reassigned = false
-              description = "#{f.class.human_name}: #{f.review_code}"
+              description = "#{f.class.human_name} *#{f.review_code.strip}* " +
+                "(#{Review.human_name} *#{f.review.identification.strip}*)"
 
               self.reallocation_errors << [description, f.errors.full_messages]
             end
@@ -614,7 +618,7 @@ class User < ActiveRecord::Base
               unless rua.update_attribute :user, other
                 all_reassigned = false
                 description = "#{Review.human_name}: " +
-                  rua.review.identification
+                  "*#{rua.review.identification.strip}*"
 
                 self.reallocation_errors << [description,
                   rua.errors.full_messages]

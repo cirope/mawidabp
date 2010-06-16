@@ -26,7 +26,7 @@ class Review < ActiveRecord::Base
   })
 
   # Callbacks
-  before_validation :set_proper_parent, :can_be_modified?
+  before_validation :strip_identification, :set_proper_parent, :can_be_modified?
   before_destroy :can_be_destroyed?
 
   # Asociaciones que deben ser registradas cuando cambien
@@ -207,6 +207,10 @@ class Review < ActiveRecord::Base
 
   def assign_review(related_object)
     related_object.review = self
+  end
+
+  def strip_identification
+    self.identification = self.identification.try(:strip)
   end
 
   def set_proper_parent

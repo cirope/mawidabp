@@ -1282,6 +1282,12 @@ es:
         item_id: "Item"
         item_type: "Item (tipo)"
         <<: *commons
+      detract:
+        organization_id: "Organización"
+        user_id: "Usuario"
+        value: "Valor"
+        observations: "Observaciones"
+        <<: *commons
       error_record:
         user_id: "Usuario"
         error: "Error"

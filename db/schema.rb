@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100608181406) do
+ActiveRecord::Schema.define(:version => 20100616151654) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -127,6 +127,19 @@ ActiveRecord::Schema.define(:version => 20100608181406) do
   add_index "costs", ["cost_type"], :name => "index_costs_on_cost_type"
   add_index "costs", ["item_type", "item_id"], :name => "index_costs_on_item_type_and_item_id"
   add_index "costs", ["user_id"], :name => "index_costs_on_user_id"
+
+  create_table "detracts", :force => true do |t|
+    t.decimal  "value",           :precision => 3, :scale => 2
+    t.text     "observations"
+    t.integer  "user_id"
+    t.integer  "organization_id"
+    t.integer  "lock_version",                                  :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "detracts", ["organization_id"], :name => "index_detracts_on_organization_id"
+  add_index "detracts", ["user_id"], :name => "index_detracts_on_user_id"
 
   create_table "error_records", :force => true do |t|
     t.text     "data"
