@@ -2,16 +2,16 @@
 <div class="resource item" <%= 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 30%;">
-    <%= f.text_field :name, :maxlength => 255 %>
+      <%= f.text_field :name, :maxlength => 255 %>
     </div>
     <div class="item_field" style="width: 50%;">
-    <%= f.text_area :description %>
+      <%= f.text_area :description %>
     </div>
     <div class="item_field" style="width: 10%;">
-    <%= f.text_field :cost_per_unit %>
+      <%= f.text_field :cost_per_unit %>
     </div>
-    <div class="item_field" style="width: 5%;">
-    <%= remove_item_link(f) -%>
+    <div class="item_field item_controls" style="width: 5%;">
+      <%= remove_item_link(f) -%>
     </div>
   </div>
 </div>

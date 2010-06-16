@@ -21,7 +21,11 @@ class ControlObjectiveItemsController < ApplicationController
 
     @control_objectives = ControlObjectiveItem.paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE,
-      :include => [{:review => :period}, :weaknesses],
+      :include => [
+        {:review => :period},
+        {:control_objective => :process_control},
+        :weaknesses
+      ],
       :conditions => @conditions,
       :order => [
         "#{Review.table_name}.period_id DESC",

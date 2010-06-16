@@ -37,7 +37,7 @@
         :admin_control_objective_risk_levels, true), {}, :class => :risk,
         :id => "procedure_control_subitem_#{id}_risk" %>
     </div>
-    <div class="item_field" style="width: 5%;">
+    <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :order, :class => :sort_number %>
       <%= insert_record_link(f, :class => :insert_record_subitem,
         :rel => 'procedure_control_item procedure_control_subitems') %> |

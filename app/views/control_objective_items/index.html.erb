@@ -7,6 +7,7 @@
     <tr>
       <th></th>
       <%= make_filterable_column Review.human_name, 'review' %>
+      <%= make_filterable_column ProcessControl.human_name, 'process_control' %>
       <%= make_filterable_column ControlObjective.human_name, 'control_objective_text' %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished) %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance) %>
@@ -18,7 +19,7 @@
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
+    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="10"></td><td></td></tr>
     <% @control_objectives.each do |control_objective| -%>
       <% html_class = "#{cycle(:even, :odd)} " -%>
       <% html_class << (control_objective.is_in_a_final_review? ?
@@ -26,6 +27,7 @@
       <tr class="<%= html_class %>">
         <td></td>
         <td class="nowrap"><%= show_review_with_close_date_as_acronym control_objective.review %></td>
+        <td><%= super_truncate(control_objective.process_control.name, 30) %></td>
         <td><%= super_truncate(control_objective.control_objective_text, 30) %></td>
         <td><%= t control_objective.finished? ? :'label.yes' : :'label.no' %></td>
         <td><%= control_objective_relevance_text(control_objective) %></td>
@@ -39,7 +41,7 @@
             params.slice(:period, :review))) if control_objective.can_be_destroyed? %></td>
         <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="10"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

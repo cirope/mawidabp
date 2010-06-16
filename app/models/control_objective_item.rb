@@ -9,6 +9,11 @@ class ControlObjectiveItem < ActiveRecord::Base
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
       :regexp => /.*/
     },
+    :process_control => {
+      :column => "LOWER(#{ProcessControl.table_name}.name)",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
+    },
     :control_objective_text => {
       :column => "LOWER(#{table_name}.control_objective_text)",
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,

@@ -51,7 +51,7 @@
     <%= f.text_field :plain_predecessors, :maxlength => 255,
       :class => (:error_field if f.object.errors.on(:predecessors)) %>
     </div>
-    <div class="item_field" style="width: 10%;">
+    <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f) %> |
       <%= remove_item_link(f) -%> |
       <%= link_to_move %>

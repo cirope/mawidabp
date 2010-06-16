@@ -38,7 +38,7 @@
       l(finding_answer.created_at, :format => :long) :
       finding_answer_notification_check(f) %>
     </div>
-    <div class="item_field" style="width: 5%;">
+    <div class="item_field item_controls" style="width: 5%;">
     <%= remove_item_link(f) if finding_answer.new_record? -%>
     <%= f.hidden_field :user_id %>
     </div>

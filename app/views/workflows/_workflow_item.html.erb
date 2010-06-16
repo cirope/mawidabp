@@ -3,31 +3,31 @@
 <div class="workflow_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
-    <%= link_to_show_hide "resource_utilizations_for_#{id}",
-      t(:'workflow.show_resource_utilization'),
-      t(:'workflow.hide_resource_utilization') %>
+      <%= link_to_show_hide "resource_utilizations_for_#{id}",
+        t(:'workflow.show_resource_utilization'),
+        t(:'workflow.hide_resource_utilization') %>
     </div>
     <div class="item_field" style="width: 5%;">
-    <%= f.text_field :order_number, :size => nil, :class => :sort_number,
-      :readonly => true %>
+      <%= f.text_field :order_number, :size => nil, :class => :sort_number,
+        :readonly => true %>
     </div>
     <div class="item_field" style="width: 50%;">
-    <%= f.text_area :task, :style => 'height: 5em;', :class => :focused %>
+      <%= f.text_area :task, :style => 'height: 5em;', :class => :focused %>
     </div>
     <div class="item_field" style="width: 10%;">
-    <%= f.calendar_date_select :start, :class => :date %>
+      <%= f.calendar_date_select :start, :class => :date %>
     </div>
     <div class="item_field" style="width: 10%;">
-    <%= f.calendar_date_select :end, :class => :date %>
+      <%= f.calendar_date_select :end, :class => :date %>
     </div>
     <div class="item_field" style="width: 10%;">
-    <%= f.text_field :plain_predecessors, :maxlength => 255,
-      :class => (:error_field if f.object.errors.on(:predecessors)) %>
+      <%= f.text_field :plain_predecessors, :maxlength => 255,
+        :class => (:error_field if f.object.errors.on(:predecessors)) %>
     </div>
-    <div class="item_field" style="width: 10%;">
-    <%= insert_record_link(f) %> |
-    <%= remove_item_link(f) -%> |
-    <%= link_to_move %>
+    <div class="item_field item_controls" style="width: 10%;">
+      <%= insert_record_link(f) %> |
+      <%= remove_item_link(f) -%> |
+      <%= link_to_move %>
     </div>
 
     <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">

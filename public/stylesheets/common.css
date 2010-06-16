@@ -23,6 +23,21 @@ a#show_search_link {
     font-weight: normal;
 }
 
+a.action_link {
+    font-weight: bold;
+    top: 2px;
+    left: 0px;
+    padding: 1px 3px;
+    text-decoration: none;
+    border: 1px solid #bcbcbc;
+}
+
+a.action_link:hover {
+    background: #47ae00;
+    color: #ffffff;
+    border: 1px solid #47ae00;
+}
+
 a.image_link {
     text-decoration: none;
 }
@@ -30,6 +45,21 @@ a.image_link {
 a.image_link:hover {
     background: inherit;
     color: inherit;
+}
+
+a.remove_link {
+    font-weight: bold;
+    top: 2px;
+    left: 0px;
+    padding: 1px 3px;
+    text-decoration: none;
+    border: 1px solid #bcbcbc;
+}
+
+a.remove_link:hover {
+    background: #aa0000;
+    color: #ffffff;
+    border: 1px solid #aa0000;
 }
 
 acronym {
@@ -671,6 +701,11 @@ div.item_column_small {
     float: left;
     display: inline;
     width: 9em;
+}
+
+div.item_controls {
+    padding-top: 2px;
+    text-align: left;
 }
 
 div.item_field {

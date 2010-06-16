@@ -11,7 +11,7 @@
     <div class="item_field" style="width: 20%;">
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
-    <div class="item_field" style="width: 10%;">
+    <div class="item_field item_controls" style="width: 10%;">
     <%= insert_record_link(f, :class => :insert_record_subitem,
       :rel => 'workflow_item material_resource_utilizations',
       :class_to_insert => 'material_resource_utilization') %> |

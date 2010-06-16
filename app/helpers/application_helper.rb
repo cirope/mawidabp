@@ -299,10 +299,10 @@ module ApplicationHelper
     out = String.new
     out << fields.hidden_field(:_destroy,
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to(image_tag('remove.gif', :size => '14x14', :alt => '[-]',
-      :class => "change_on_hover #{(new_record ? :remove_item : :hide_item)}"),
+    out << link_to('X',
       "##{class_for_remove || fields.object.class.name.underscore}",
-      :class => :image_link, :title => t(:'label.delete'))
+      :class => "remove_link #{(new_record ? :remove_item : :hide_item)}",
+      :title => t(:'label.delete'))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un
@@ -310,10 +310,8 @@ module ApplicationHelper
   #
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_list_item_link(fields)
-    link_to(image_tag('remove.gif', :size => '14x14', :alt => '[-]',
-      :class => 'change_on_hover remove_list_item'),
-      "##{fields.object.class.name.underscore}", :class => :image_link,
-      :title => t(:'label.delete'))
+    link_to('X', "##{fields.object.class.name.underscore}",
+      :class => 'remove_link remove_list_item', :title => t(:'label.delete'))
   end
 
   # Devuelve HTML con un link para agregar un elemento
@@ -321,14 +319,13 @@ module ApplicationHelper
   # * _options_:: Opciones utilizadas por link_to
   def link_to_add(*args)
     options = {
-      :class => 'image_link add_link',
+      :class => 'action_link add_link',
       :title => t(:'label.add')
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
     out = String.new
-    out << link_to(image_tag('add.gif', :size => '14x14', :alt => '[+]',
-        :class => :change_on_hover), *(args << options))
+    out << link_to('+', *(args << options))
   end
 
   # Devuelve el HTML de un vínculo para clonar un ítem.

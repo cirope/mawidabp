@@ -1,7 +1,7 @@
 <% id = 'procedure_control_subitem'.concat(procedure_control_subitem.id || 'NEW_RECORD') -%>
 <div class="procedure_control_subitem item" <%= 'style="display: none;"' if is_dynamic %> id="<%= id %>">
   <div>
-    <div class="item_field" style="width: 40%;">
+    <div class="item_field" style="width: 95%;">
       <div class="search">
         <%= hidden_field_tag 'review[procedure_control_subitem_ids][]',
           procedure_control_subitem.id,
@@ -11,6 +11,7 @@
           :procedure_control_subitem_data,
           {:id => "procedure_control_subitem_#{id}",
           :class => :search,
+          :style => 'width: 95%;',
           :title => t(:'label.search'),
           :value => ''},
           {:indicator => :loading, :skip_style => true,
@@ -20,7 +21,7 @@
           :parameters => "period_id=#{@review.period_id}"} %>
       </div>
     </div>
-    <div class="item_field" style="width: 5%;">
+    <div class="item_field item_controls" style="width: 2%;">
       <%= remove_item_link(nil, 'procedure_control_subitem') -%>
     </div>
   </div>

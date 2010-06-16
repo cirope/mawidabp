@@ -1,15 +1,15 @@
 <div class="parameter_value item" <%= 'style="display: none;"' if item == ['', ''] %>>
   <div>
     <div class="item_field" style="width: 45%;">
-    <%= text_field :parameter, "key_#{number}", :value => item[0], :class => 'parameter' %>
+      <%= text_field :parameter, "key_#{number}", :value => item[0], :class => 'parameter' %>
     </div>
     <div class="item_field" style="width: 45%;">
-    <%= text_field :parameter, "value_#{number}", :value => item[1], :class => 'parameter' %>
+      <%= text_field :parameter, "value_#{number}", :value => item[1], :class => 'parameter' %>
     </div>
-    <div class="item_field" style="width: 10%;">
-    <%= link_to_function(image_tag('remove.gif', :size => '14x14', :alt => '[-]',
-        :class => :change_on_hover),
-      "Helper.removeItem($(this).up('.parameter_value'));", :class => :image_link) %>
+    <div class="item_field item_controls" style="width: 10%;">
+      <%= link_to_function('X',
+        "Helper.removeItem($(this).up('.parameter_value'));",
+        :class => 'remove_link image_link') %>
     </div>
     <script type="text/javascript">
       Util.randomizeIdsAndNames('div.parameter_value', 'parameter', new Array('key', 'value'));

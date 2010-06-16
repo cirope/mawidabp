@@ -12,7 +12,7 @@
     <div class="item_field" style="width: 50%;">
     <%= f.text_area :description %>
     </div>
-    <div class="item_field" style="width: 10%;">
+    <div class="item_field item_controls" style="width: 10%;">
       <% unless f.object.new_record? -%>
         <%= link_to_edit(edit_help_item_path(f.object)) %> |
       <% end -%>
