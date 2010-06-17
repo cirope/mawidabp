@@ -284,7 +284,7 @@ class ProcedureControlsController < ApplicationController
   def get_control_objective
     if params[:control_objective]
       control_objective = ControlObjective.first(
-        :joins => {:process_control => :best_practice},
+        :include => {:process_control => :best_practice},
         :conditions => {:id => params[:control_objective], :best_practices =>
             {:organization_id => @auth_organization.id}}
       )

@@ -207,7 +207,7 @@ class WeaknessesController < ApplicationController
   # _id_::  ID de la debilidad que se quiere recuperar
   def find_with_organization(id) #:doc:
     Weakness.first(
-      :joins => {:control_objective_item => {:review => :period}},
+      :include => {:control_objective_item => {:review => :period}},
       :conditions => {
         :id => id,
         Period.table_name => {:organization_id => @auth_organization.id}

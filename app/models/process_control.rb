@@ -18,7 +18,7 @@ class ProcessControl < ActiveRecord::Base
   named_scope :list_for_period, lambda { |period_id|
     {
       :select => connection.distinct('process_controls.id, name', 'name'),
-      :joins => [:procedure_control_items => [:procedure_control]],
+      :include => [:procedure_control_items => [:procedure_control]],
       :conditions => {
         :procedure_control_items =>
           {:procedure_controls => {:period_id => period_id}}

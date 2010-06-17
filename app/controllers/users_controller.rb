@@ -220,7 +220,7 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
 
       auth_user = User.first(
-        :joins => :organizations,
+        :include => :organizations,
         :conditions => {
           "#{User.table_name}.user" => @user.user,
           "#{Organization.table_name}.id" => @organization.id
@@ -539,7 +539,7 @@ class UsersController < ApplicationController
     build_search_conditions User, default_conditions
     
     users = User.all(
-      :joins => :organizations,
+      :include => :organizations,
       :conditions => @conditions,
       :order => "#{User.table_name}.user ASC")
 

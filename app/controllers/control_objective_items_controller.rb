@@ -65,7 +65,7 @@ class ControlObjectiveItemsController < ApplicationController
     @title = t :'control_objective_item.edit_title'
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.first(
-        :joins => :review,
+        :include => :review,
         :conditions => {
           :control_objective_id => params[:control_objective],
           :review_id => params[:review],

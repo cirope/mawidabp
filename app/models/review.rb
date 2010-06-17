@@ -50,7 +50,7 @@ class Review < ActiveRecord::Base
   }
   named_scope :list_with_approved_draft, lambda {
     {
-      :joins => [:period, :conclusion_draft_review],
+      :include => [:period, :conclusion_draft_review],
       :conditions => {
         ConclusionReview.table_name => {:approved => true},
         Period.table_name => {
@@ -62,7 +62,7 @@ class Review < ActiveRecord::Base
   }
   named_scope :list_with_final_draft, lambda {
     {
-      :joins => [:period, :conclusion_final_review],
+      :include => [:period, :conclusion_final_review],
       :conditions => {
         Period.table_name => {
           :organization_id => GlobalModelConfig.current_organization_id

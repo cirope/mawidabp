@@ -224,8 +224,9 @@ class FindingsControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => 3.days.from_now.to_date,
-            :user_ids => [users(:administrator_user).id,
-              users(:bare_user).id, users(:audited_user).id],
+            :user_ids => [users(:administrator_user).id, users(:bare_user).id,
+              users(:audited_user).id, users(:manager_user).id,
+              users(:supervisor_user).id],
             :work_papers_attributes => {
               :new_1 => {
                 :name => 'New workpaper name',

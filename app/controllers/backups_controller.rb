@@ -136,7 +136,7 @@ class BackupsController < ApplicationController
 
     # Si es diferencial (0 = total, 1 = diferencial)
     if type.respond_to?(:to_i) && type.to_i == 1
-      last_full_backup = Backup.find(:first, :conditions => {:backup_type => 0},
+      last_full_backup = Backup.first(:conditions => {:backup_type => 0},
         :order => 'created_at DESC')
       conditions = ['created_at > :date_last_full_backup',
         {:date_last_full_backup => last_full_backup.created_at}]

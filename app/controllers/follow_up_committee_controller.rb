@@ -31,7 +31,7 @@ class FollowUpCommitteeController < ApplicationController
 
     resume = {}
     ControlObjectiveItem.find_in_batches(
-      :joins => [
+      :include => [
         :review => [:period, {:plan_item => :business_unit}],
         :control_objective => :process_control],
       :conditions => {
@@ -125,7 +125,7 @@ class FollowUpCommitteeController < ApplicationController
     risks_hash.keys.each { |risk_name| summary[risk_name] = {} }
 
     Weakness.find_in_batches(
-      :joins => {:control_objective_item =>
+      :include => {:control_objective_item =>
           {:review => [:period, {:plan_item => :business_unit}]}},
       :conditions => {
         Period.table_name => {:organization_id => get_organization},

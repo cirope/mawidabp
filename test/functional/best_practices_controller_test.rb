@@ -249,6 +249,11 @@ class BestPracticesControllerTest < ActionController::TestCase
     assert_redirected_to edit_best_practice_path(best_practices(:iso_27001).id)
     assert_not_nil assigns(:best_practice)
     assert_equal 'updated_best_practice', assigns(:best_practice).name
+    assert_equal 'updated process control', ProcessControl.find(
+      process_controls(:iso_27000_security_policy).id).name
+    assert_equal 'updated control objective 1 1',
+      ControlObjective.find(control_objectives(
+        :iso_27000_security_organization_4_1).id).name
     assert_equal 'updated control 1 1', Control.find(
       controls(:iso_27000_security_organization_4_1_control_1).id).control
   end
