@@ -14,6 +14,6 @@ class FileModel < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
 
   def base_path
-    RAILS_ROOT
+    Rails.root
   end
 end

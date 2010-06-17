@@ -247,6 +247,4 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/page/:page', :page => /\d+/
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
-
-  Translate::Routes.translation_ui(map) #unless RAILS_ENV == 'production'
 end

@@ -5,13 +5,13 @@ SUPPORT_PHONE = '(0261) 449-8885'.freeze
 # Dirección principal de soporte
 SUPPORT_URL = 'http://soporte.mawidaweb.com.ar/'.freeze
 # Ruta hasta el directorio de configuración
-CONFIG_PATH = File.join(RAILS_ROOT, 'config', File::SEPARATOR).freeze
+CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público
-PUBLIC_PATH = File.join(RAILS_ROOT, 'public', File::SEPARATOR).freeze
+PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
 # Ruta hasta el directorio privado
-PRIVATE_PATH = File.join(RAILS_ROOT, 'private', File::SEPARATOR).freeze
+PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
 # Ruta al directorio temporal
-TEMP_PATH = File.join(RAILS_ROOT, 'tmp', File::SEPARATOR).freeze
+TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Ruta al directorio para realizar copias de seguridad
 APP_BACKUP_PATH = File.join(PRIVATE_PATH, 'backup_files', File::SEPARATOR).freeze
 # Organización seleccionada por defecto
@@ -52,7 +52,7 @@ PDF_MARGINS = [25, 25, 20, 20].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
-PDF_LOGO = File.join(RAILS_ROOT, 'public', 'images', 'logo_pdf.png').freeze
+PDF_LOGO = File.join(Rails.root, 'public', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
 PDF_LOGO_SIZE = [352, 90].map { |size| (size / 6.0).round }
 # Prefijo para los archivos que no se pueden acceder sin estar autenticado
@@ -60,10 +60,10 @@ PRIVATE_FILES_PREFIX = 'private'.freeze
 # Ruta a un archivo para realizar las pruebas
 TEST_FILE = File.join(PUBLIC_PATH, '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (RAILS_ENV == 'development' ?
+URL_HOST = (Rails.env == 'development' ?
     'mawidaweb.com.ar:3000' : 'mawidaweb.com.ar').freeze
 # Protocolo a utilizar para formar los links absolutos
-URL_PROTOCOL = (RAILS_ENV == 'development' ? 'http' : 'https').freeze
+URL_PROTOCOL = (Rails.env == 'development' ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
 # AND)
 SEARCH_AND_REGEXP = /\s*[;]+\s*|\s+AND\s+|\s+Y\s+/i

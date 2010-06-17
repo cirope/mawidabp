@@ -8,7 +8,7 @@ class FileModelsController < ApplicationController
     base_regexp = %r(^#{Regexp.escape(PRIVATE_PATH)})
 
     if file_name =~ base_regexp && File.file?(file_name)
-      send_file file_name, :x_sendfile => (RAILS_ENV == 'production')
+      send_file file_name, :x_sendfile => (Rails.env == 'production')
       redirect = false
     end
 

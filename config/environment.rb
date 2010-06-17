@@ -2,7 +2,7 @@
 
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
-# ENV['RAILS_ENV'] ||= 'production'
+# ENV['Rails.env'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
@@ -51,7 +51,7 @@ Rails::Initializer.run do |config|
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  # config.load_paths += %W( #{Rails.root}/extras )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
@@ -64,7 +64,7 @@ Rails::Initializer.run do |config|
 
   # The internationalization framework can be changed to have another default locale (standard is :en) or more load paths.
   # All files from config/locales/*.rb,yml are added automatically.
-  # config.i18n.load_path << Dir[File.join(RAILS_ROOT, 'my', 'locales', '*.{rb,yml}')]
+  # config.i18n.load_path << Dir[File.join(Rails.root, 'my', 'locales', '*.{rb,yml}')]
   config.i18n.default_locale = :es
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
@@ -79,8 +79,8 @@ Rails::Initializer.run do |config|
   config.active_record.lock_optimistically = true
 
   config.cache_store = :mem_cache_store, 'localhost',
-    { :namespace => "mawidabp_#{RAILS_ENV}".downcase }
+    { :namespace => "mawidabp_#{config.environment}".downcase }
 
   # En caso de no tener memcached se pueden user archivos:
-#  config.cache_store = :file_store, File.join(RAILS_ROOT, 'tmp', 'cache_files')
+  #  config.cache_store = :file_store, File.join(Rails.root, 'tmp', 'cache_files')
 end

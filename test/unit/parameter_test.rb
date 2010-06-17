@@ -7,7 +7,7 @@ class ParameterTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @parameter = Parameter.find parameters(:parameter_admin_aproach_types).id
-    FileUtils.rm_r File.join(RAILS_ROOT, 'tmp', 'cache_files'), :force => true
+    FileUtils.rm_r File.join(Rails.root, 'tmp', 'cache_files'), :force => true
   end
 
   def teardown

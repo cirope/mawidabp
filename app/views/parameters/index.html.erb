@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= Parameter.human_attribute_name 'name' %></th>
-      <th><%= Parameter.human_attribute_name 'description' %></th>
+      <th><%= Parameter.human_attribute_name :name %></th>
+      <th><%= Parameter.human_attribute_name :description %></th>
       <th></th>
       <th></th>
       <th></th>
@@ -12,11 +12,21 @@
   
   <tbody>
   <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
-  <%= render :partial => 'index_line', :collection => @parameters %>
+    <% @parameters.each do |parameter| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%= super_truncate parameter.to_s, 40 %></td>
+        <td><%= super_truncate parameter.description, 40 %></td>
+        <td><%= link_to_show parameter_path(@type, parameter) %></td>
+        <td><%= link_to_edit edit_parameter_path(@type, parameter) %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
+    <% end -%>
   </tbody>
 </table>
 
 <div id="links">
-<%= pagination_links @parameters %>
-<div style="clear: both;"></div>
+  <%= pagination_links @parameters %>
+  <div style="clear: both;"></div>
 </div>

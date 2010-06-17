@@ -33,7 +33,7 @@
         <div id="menu"></div>
       <% end -%>
       <div id="page">
-        <div id="app_content" <%= 'style="border: 2px dotted red;"' if RAILS_ENV == 'development' %>>
+        <div id="app_content" <%= 'style="border: 2px dotted red;"' if Rails.env == 'development' %>>
           <%= yield %>
         </div>
         <div style="clear: both; margin: 0px; padding: 0px;">&nbsp;</div>

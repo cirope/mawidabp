@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= BestPractice.human_attribute_name 'name' %></th>
-      <th><%= BestPractice.human_attribute_name 'description' %></th>
+      <th><%= BestPractice.human_attribute_name :name %></th>
+      <th><%= BestPractice.human_attribute_name :description %></th>
       <th></th>
       <th></th>
       <th></th>
@@ -13,12 +13,23 @@
 
   <tbody>
     <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
-    <%= render :partial => 'index_line', :collection => @best_practices %>
+    <% @best_practices.each do |best_practice| -%>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td></td>
+        <td><%= super_truncate(best_practice.name, 40) %></td>
+        <td><%= super_truncate(best_practice.description, 40) %></td>
+        <td><%= link_to_show best_practice %></td>
+        <td><%= link_to_edit edit_best_practice_path(best_practice) %></td>
+        <td><%= button_to_destroy best_practice %></td>
+        <td></td>
+      </tr>
+      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
+    <% end -%>
   </tbody>
 </table>
 
 <div id="links">
-<%= pagination_links @best_practices %>
-<%= link_to t(:'label.new'), new_best_practice_path %>
-<div style="clear: both;"></div>
+  <%= pagination_links @best_practices %>
+  <%= link_to t(:'label.new'), new_best_practice_path %>
+  <div style="clear: both;"></div>
 </div>

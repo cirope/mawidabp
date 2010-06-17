@@ -20,6 +20,6 @@ class ImageModel < ActiveRecord::Base
   end
 
   def base_path
-    RAILS_ROOT
+    Rails.root
   end
 end
