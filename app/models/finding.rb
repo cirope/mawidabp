@@ -121,12 +121,19 @@ class Finding < ActiveRecord::Base
   named_scope :all_for_reallocation_with_review, lambda { |review|
     {
       :include => {:control_objective_item => :review},
-      :conditions => {:reviews => {:id => review.id}, :state => PENDING_STATUS}
+      :conditions => {
+        :reviews => {:id => review.id},
+        :state => PENDING_STATUS,
+        :final => false
+      }
     }
   }
-  named_scope :all_for_reallocation, :conditions => {:state => PENDING_STATUS}
-  named_scope :for_notification, :conditions => {:state => STATUS[:notify],
-    :final => false}
+  named_scope :all_for_reallocation,
+    :conditions => {:state => PENDING_STATUS, :final => false}
+  named_scope :for_notification, :conditions => {
+    :state => STATUS[:notify],
+    :final => false
+  }
   named_scope :finals, lambda { |use_finals|
     { :conditions => { :final => use_finals } }
   }
