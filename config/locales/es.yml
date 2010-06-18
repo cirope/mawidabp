@@ -901,6 +901,7 @@ es:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       notifications_not_approved: "tiene notificaciones sin aprobar"
       without_survey: "no tiene relevamiento"
+      without_control_objectives: "no tiene objetivos de control"
     survey:
       with_attachment: "Con un archivo adjunto"
       without_attachment: "Sin archivos adjuntos"

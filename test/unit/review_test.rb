@@ -244,6 +244,16 @@ class ReviewTest < ActiveSupport::TestCase
       :finished, false)
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
+
+    assert @review.control_objective_items.first.update_attribute(
+      :finished, true)
+    assert @review.reload.must_be_approved?
+
+    @review.control_objective_items.clear
+
+    assert !@review.reload.must_be_approved?
+    assert @review.approval_errors.flatten.include?(
+      I18n.t(:'review.errors.without_control_objectives'))
   end
 
   test 'must be approved function with notifications' do

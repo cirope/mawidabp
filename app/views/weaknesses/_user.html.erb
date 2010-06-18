@@ -20,7 +20,7 @@
         <%= hidden_field_tag 'weakness[user_ids][]', user.id,
           :id => "hidden_user_#{id}" %>
         <%= text_field_tag "weakness_user_#{id}",
-          user.full_name_with_function(f.object.updated_at), :readonly => true %>
+          user.full_name_with_function(f.object.created_at), :readonly => true %>
       <% end -%>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
