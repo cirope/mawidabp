@@ -8,15 +8,17 @@ module ApplicationHelper
   include ParameterSelector
 
   def super_truncate(text, length = 30)
-    omission = content_tag(:acronym, '...', :title => h(text))
-    text_length = text.mb_chars.length
+    unless text.blank?
+      omission = content_tag(:acronym, '...', :title => h(text))
+      text_length = text.mb_chars.length
 
-    truncate(h(text_length > length ?
-          text.dup.concat('.' * omission.mb_chars.length) : text),
-      :length => text_length > length ?
-        (length + omission.mb_chars.length) : length,
-      :omission => omission
-    )
+      truncate(h(text_length > length ?
+            text.dup.concat('.' * omission.mb_chars.length) : text),
+        :length => text_length > length ?
+          (length + omission.mb_chars.length) : length,
+        :omission => omission
+      )
+    end
   end
 
   def time_in_words_with_acronym(time_in_seconds = 0)
