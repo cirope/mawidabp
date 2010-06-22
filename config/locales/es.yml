@@ -1233,6 +1233,7 @@ es:
         <<: *commons
       comment:
         comment: "Comentario"
+        user_id: "Usuario"
         <<: *commons
         created_at: "Fecha del comentario"
       conclusion_draft_review:

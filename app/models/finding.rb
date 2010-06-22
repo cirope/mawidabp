@@ -640,7 +640,7 @@ class Finding < ActiveRecord::Base
     findings_with_status_changed = [self]
     last_added_version = self
 
-    self.versions_after_final_review.reverse.each do |version|
+    self.versions.reverse.each do |version|
       old_finding = version.reify
 
       if old_finding && old_finding.state != last_added_version.state
@@ -783,6 +783,8 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
     
+    pdf.add_description_item(ProcessControl.human_name,
+      self.control_objective_item.process_control.name, 0, false)
     pdf.add_description_item(Finding.human_attribute_name(
         :control_objective_item_id),
       self.control_objective_item.control_objective_text, 0, false)
@@ -838,15 +840,12 @@ class Finding < ActiveRecord::Base
         old_value = previous_version.reify ?
           previous_version.reify.send(attribute) : nil
 
-        if attribute == :follow_up_date
-          current_value
-          old_value
-        end
-
         current_value != old_value
       end
 
-      important_changed_versions << previous_version if has_important_changes
+      if has_important_changes
+        important_changed_versions << last_checked_version
+      end
 
       previous_version = last_checked_version
     end
@@ -928,6 +927,55 @@ class Finding < ActiveRecord::Base
         :font_size => 12)
     end
 
+    unless self.comments.blank?
+      column_names = {'comment' => 50, 'user_id' => 30, 'created_at' => 20}
+      columns, column_data = {}, []
+
+      column_names.each do |col_name, col_size|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+          c.heading = Comment.human_attribute_name col_name
+          c.justification = :full
+          c.width = pdf.percent_width(col_size)
+        end
+      end
+
+      self.comments.each do |comment|
+        column_data << {
+          'comment' => comment.comment.try(:to_iso),
+          'user_id' => comment.user.try(:full_name).try(:to_iso),
+          'created_at' => I18n.l(comment.created_at,
+            :format => :validation).to_iso
+        }
+      end
+
+      pdf.move_pointer 12
+
+      pdf.add_title I18n.t(:'finding.comments'), 14, :full
+
+      pdf.move_pointer 12
+
+      unless column_data.blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = column_data
+          table.column_order = ['user_id', 'comment', 'created_at']
+          table.split_rows = true
+          table.row_gap = 8
+          table.font_size = 10
+          table.shade_rows = :none
+          table.shade_heading_color = Color::RGB::Grey70
+          table.heading_font_size = 10
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.show_lines = :all
+          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
+          table.render_on pdf
+        end
+      end
+    end
+
     unless self.work_papers.blank?
       column_names = {'name' => 20, 'code' => 20, 'number_of_pages' => 20,
         'description' => 40}
@@ -980,7 +1028,8 @@ class Finding < ActiveRecord::Base
     end
 
     unless self.finding_answers.blank?
-      column_names = {'answer' => 50, 'user_id' => 30, 'created_at' => 20}
+      column_names = {'answer' => 35, 'answer_type' => 15, 'user_id' => 30,
+        'created_at' => 20}
       columns, column_data = {}, []
 
       column_names.each do |col_name, col_size|
@@ -994,6 +1043,7 @@ class Finding < ActiveRecord::Base
       self.finding_answers.each do |finding_answer|
         column_data << {
           'answer' => finding_answer.answer.try(:to_iso),
+          'answer_type' => finding_answer.answer_type_text.to_iso,
           'user_id' => finding_answer.user.try(:full_name).try(:to_iso),
           'created_at' => I18n.l(finding_answer.created_at,
             :format => :validation).to_iso
@@ -1012,7 +1062,8 @@ class Finding < ActiveRecord::Base
           table.width = pdf.page_usable_width
           table.columns = columns
           table.data = column_data
-          table.column_order = ['user_id', 'answer', 'created_at']
+          table.column_order = ['user_id', 'answer', 'answer_type',
+            'created_at']
           table.split_rows = true
           table.row_gap = 8
           table.font_size = 10
