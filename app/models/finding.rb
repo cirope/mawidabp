@@ -545,15 +545,15 @@ class Finding < ActiveRecord::Base
   end
 
   def has_audited?
-    self.users.any? { |user| user.can_act_as_audited? }
+    self.users.any?(&:can_act_as_audited?)
   end
 
   def has_auditor?
-    self.users.any? { |user| user.auditor? }
+    self.users.any?(&:auditor?)
   end
 
   def cost
-    self.costs.reject { |c| c.new_record? }.sum(&:cost)
+    self.costs.reject(&:new_record?).sum(&:cost)
   end
 
   def issue_date
@@ -563,23 +563,36 @@ class Finding < ActiveRecord::Base
   def important_dates
     important_dates = []
 
-    unless self.notifications.empty?
-      important_dates << I18n.t(:'finding.important_dates.notification_date',
-        :date => I18n.l(self.notifications.first.created_at,
-          :format => :very_long).strip)
+    if self.unconfirmed?
+      notification_date = self.versions.last.try(:created_at)
+    else
+      unconfirmed_version = self.versions.detect do |v|
+        v.reify.try(:unconfirmed?)
+      end
+
+      if unconfirmed_version.try(:previous)
+        notification_date = unconfirmed_version.previous.created_at
+      end
     end
 
-    if self.confirmed? && self.confirmation_date
-      notification_or_answer = self.notifications.detect {|n| n.user.audited?} ||
-        self.finding_answers.detect {|fa| fa.user.audited?}
-      date = (notification_or_answer.respond_to?(:confirmation_date) ?
-        notification_or_answer.confirmation_date : nil) ||
-        notification_or_answer.created_at
+    if notification_date
+      important_dates << I18n.t(:'finding.important_dates.notification_date',
+        :date => I18n.l(notification_date, :format => :very_long).strip)
+    end
 
-      if date
-        important_dates << I18n.t(:'finding.important_dates.confirmation_date',
-          :date => I18n.l(date, :format => :very_long).strip)
+    if self.confirmed?
+      confirmation_date = self.versions.last.try(:created_at)
+    else
+      confirmed_version = self.versions.detect { |v| v.reify.try(:confirmed?) }
+
+      if confirmed_version.try(:previous)
+        confirmation_date = confirmed_version.previous.created_at
       end
+    end
+
+    if confirmation_date
+      important_dates << I18n.t(:'finding.important_dates.confirmation_date',
+        :date => I18n.l(confirmation_date, :format => :very_long).strip)
     end
 
     if self.confirmed? || self.unconfirmed? ||
@@ -778,8 +791,6 @@ class Finding < ActiveRecord::Base
 
     pdf.add_description_item(Review.human_name,
       "#{self.review.long_identification} (#{issue_date})", 0, false)
-    pdf.add_description_item(PlanItem.human_attribute_name(:project),
-      self.review.plan_item.project, 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
     
@@ -877,7 +888,7 @@ class Finding < ActiveRecord::Base
           previous_method_name = previous_finding.respond_to?(
             "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
           version_method_name = version_finding.respond_to?(
-            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
+           "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
 
           column_data << {
             'attribute' => Finding.human_attribute_name(attribute).to_iso,

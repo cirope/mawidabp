@@ -503,6 +503,7 @@ div#user {
 }
 
 div.auto_complete {
+    position: absolute;
     width: 100%;
     background: #ffffff;
     z-index: 1;
@@ -517,6 +518,8 @@ div.auto_complete ul {
 }
 
 div.auto_complete ul li {
+    display:block;
+    cursor: pointer;
     margin: 0em;
     padding: .3em;
     white-space: normal;

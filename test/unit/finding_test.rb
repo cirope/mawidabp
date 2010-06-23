@@ -447,8 +447,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'mark as unconfirmed' do
-    finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
+    finding = Finding.find findings(
+        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert finding.notify?
     assert finding.mark_as_unconfirmed!
@@ -460,6 +460,15 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.find findings(
         :iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification).id
 
+    assert_equal 1, finding.important_dates.size
+    
+    finding = Finding.find findings(
+        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
+
+    assert_equal 0, finding.important_dates.size
+    assert finding.update_attribute(:state, Finding::STATUS[:unconfirmed])
+    assert_equal 1, finding.important_dates.size
+    assert finding.update_attributes(:state => Finding::STATUS[:confirmed])
     assert_equal 2, finding.important_dates.size
   end
 
