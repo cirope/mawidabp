@@ -356,6 +356,17 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data['business_unit_type']
   end
 
+  test 'procedure control data' do
+    perform_auth
+
+    get :procedure_control_data,
+      :id => procedure_controls(:procedure_control_iso_27001).id
+    assert_response :success
+    assert_not_nil assigns(:procedure_control)
+    assert_select '#error_body', false
+    assert_template 'procedure_controls/show'
+  end
+
   test 'survey pdf' do
     perform_auth
     review = Review.find reviews(:current_review).id

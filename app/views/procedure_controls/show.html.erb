@@ -1,38 +1,40 @@
 <div id="showed_data">
-  <p>
-    <b><%= Period.human_name %>:</b>
-    <%=h @procedure_control.period.inspect %>
-  </p>
+  <h1><%= Period.human_name %>: <%=h @procedure_control.period.inspect %></h1>
 
-  <table class="summary_table">
-    <thead>
-      <tr>
-        <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>
-        <th><%= Control.human_attribute_name :control %></th>
-        <th><%= Control.human_attribute_name :compliance_tests %></th>
-        <th><%= Control.human_attribute_name :effects %></th>
-        <th><%= ProcedureControlSubitem.human_attribute_name :risk %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @procedure_control.procedure_control_items.each do |pci| -%>
+  <% @procedure_control.procedure_control_items.each do |pci| -%>
+    <h3><%= "#{pci.best_practice.name} (#{pci.process_control.name})" %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>
+          <th><%= Control.human_attribute_name :control %></th>
+          <th><%= Control.human_attribute_name :compliance_tests %></th>
+          <th><%= Control.human_attribute_name :design_tests %></th>
+          <th><%= Control.human_attribute_name :effects %></th>
+          <th><%= ProcedureControlSubitem.human_attribute_name :risk %></th>
+        </tr>
+      </thead>
+      <tbody>
         <% pci.procedure_control_subitems.each do |pcs| -%>
           <tr>
             <td><%= h pcs.control_objective_text %></td>
             <td><%= h pcs.controls.first.control %></td>
             <td><%= h pcs.controls.first.compliance_tests %></td>
+            <td><%= h pcs.controls.first.design_tests %></td>
             <td><%= h pcs.controls.first.effects %></td>
             <td><%= pcs.risk_text %></td>
           </tr>
         <% end -%>
-      <% end -%>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  <% end -%>
 </div>
 
-<div id="links">
-  <%= link_to t(:'label.edit'), edit_procedure_control_path(@procedure_control) %> |
-  <%= link_to t(:'label.list'), procedure_controls_path %> |
-  <%= link_to t(:'label.download'), export_to_pdf_procedure_control_path(@procedure_control) %> |
-  <%= link_to_back %>
-</div>
+<% unless controller.request.xhr? %>
+  <div id="links">
+    <%= link_to t(:'label.edit'), edit_procedure_control_path(@procedure_control) %> |
+    <%= link_to t(:'label.list'), procedure_controls_path %> |
+    <%= link_to t(:'label.download'), export_to_pdf_procedure_control_path(@procedure_control) %> |
+    <%= link_to_back %>
+  </div>
+<% end -%>

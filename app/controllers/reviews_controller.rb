@@ -190,6 +190,22 @@ class ReviewsController < ApplicationController
     }.to_json
   end
 
+  # Devuelve los datos del procedimiento y prueba de control
+  #
+  # * GET /reviews/procedure_control_data/1
+  def procedure_control_data
+    @procedure_control = ProcedureControl.first(
+      :include => :period,
+      :conditions => {
+        :id => params[:id],
+        "#{Period.table_name}.organization_id" => @auth_organization.id
+      },
+      :readonly => true
+    )
+
+    render :template => 'procedure_controls/show'
+  end
+
   # Crea el documento de relevamiento del informe
   #
   # * GET /reviews/survey_pdf/1
@@ -292,6 +308,7 @@ class ReviewsController < ApplicationController
       :review_data => :read,
       :download_work_papers => :read,
       :plan_item_data => :read,
+      :procedure_control_data => :read,
       :survey_pdf => :read,
       :auto_complete_for_user => :read,
       :auto_complete_for_procedure_control_subitem => :read,

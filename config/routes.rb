@@ -135,10 +135,16 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :reviews, :member => {
     :survey_pdf => :get,
+    :review_data => :get,
     :weaknesses_and_oportunities => :get,
-    :download_work_papers => :get
+    :download_work_papers => :get,
+    :estimated_amount => :get,
+    :plan_item_data => :get,
+    :procedure_control_data => :get
   }, :collection => {
-    :estimated_amount => :get
+    :estimated_amount => :get,
+    :auto_complete_for_user => :post,
+    :auto_complete_for_procedure_control_subitem => :post
   }
 
   map.resources :weaknesses, :has_many => :costs

@@ -220,7 +220,7 @@ div#links div.pagination span.disabled {
 }
 
 div#loading {
-    position: absolute;
+    position: fixed;
     top: .5em;
     right: 1em;
 }
