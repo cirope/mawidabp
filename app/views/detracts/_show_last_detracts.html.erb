@@ -1,0 +1,25 @@
+<h1 style="font-weight: normal;"><%= textilize_without_paragraph(
+  t(:'detract.last_detracts', :count => LAST_DETRACTORS_LIMIT,
+    :user => @user.informal_name.strip)) %></h1>
+<% unless @detracts.blank? -%>
+  <table class="summary_table">
+    <thead>
+      <tr>
+        <th><%= Detract.human_attribute_name :created_at %></th>
+        <th><%= Detract.human_attribute_name :value %></th>
+        <th><%= Detract.human_attribute_name :observations %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @detracts.each do |detract| %>
+        <tr>
+          <td><%= l detract.created_at, :format => :minimal %></td>
+          <td><%= h detract.value %></td>
+          <td><%= h detract.observations %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+<% else -%>
+  <h3><%= t(:'detract.user_without_detracts') %></h3>
+<% end -%>

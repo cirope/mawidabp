@@ -1,5 +1,19 @@
 # Menú del auditado
 APP_AUDITED_MENU_ITEMS = [
+  # ADMINISTRACIÓN
+  MenuItem.new(
+    :administration,
+    :order => 1,
+    :url => '#menu_administration',
+    :children => [
+      MenuItem.new(
+        :detracts,
+        :order => 1,
+        :controllers => :detracts,
+        :url => {:controller => :detracts}
+      )
+    ]
+  ),
   MenuItem.new(
     :follow_up,
     :order => 1,
@@ -100,6 +114,12 @@ APP_AUDITOR_MENU_ITEMS = [
         :order => 5,
         :controllers => :backups,
         :url => {:controller => :backups}
+      ),
+      MenuItem.new(
+        :detracts,
+        :order => 6,
+        :controllers => :detracts,
+        :url => {:controller => :detracts}
       )
     ]
   ),

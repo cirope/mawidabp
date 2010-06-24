@@ -53,10 +53,13 @@ class DetractTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @detract.value = '  '
+    @detract.user_id = nil
     assert @detract.invalid?
-    assert_equal 1, @detract.errors.count
+    assert_equal 2, @detract.errors.count
     assert_equal error_message_from_model(@detract, :value, :blank),
       @detract.errors.on(:value)
+    assert_equal error_message_from_model(@detract, :user_id, :blank),
+      @detract.errors.on(:user_id)
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

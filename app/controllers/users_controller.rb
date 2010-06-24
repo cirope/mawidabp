@@ -212,6 +212,10 @@ class UsersController < ApplicationController
     @title = t :'user.login_title'
     organization_prefix = request.subdomains.first
 
+    if organization_prefix == 'www' || !organization_prefix
+      organization_prefix = APP_DEFAULT_ORGANIZATION
+    end
+
     @organization = Organization.find_by_prefix(organization_prefix)
 
     GlobalModelConfig.current_organization_id = @organization.try :id

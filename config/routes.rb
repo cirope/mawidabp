@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :detracts, :only => [:index, :show, :new, :create], :member => {
+    :show_last_detractors => :get
+  }
+
   map.resources :inline_helps
 
   map.welcome 'welcome', :controller => 'welcome', :action => 'index'

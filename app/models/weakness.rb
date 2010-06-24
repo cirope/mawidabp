@@ -77,7 +77,7 @@ class Weakness < Finding
     elsif self.assumed_risk? && self.follow_up_date?
       errors << I18n.t(:'weakness.errors.with_follow_up_date')
     elsif !self.implemented_audited? && !self.implemented? &&
-        !self.being_implemented? && !self.unconfirmed? && !self.unanswered? &&
+        !self.being_implemented? && !self.unconfirmed? &&
         !self.assumed_risk?
       errors << I18n.t(:'weakness.errors.not_valid_state')
     end

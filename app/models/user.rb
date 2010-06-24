@@ -158,7 +158,8 @@ class User < ActiveRecord::Base
   has_many :login_records, :dependent => :destroy
   has_many :error_records, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
-  has_many :detracts, :dependent => :destroy
+  has_many :detracts, :dependent => :destroy,
+    :order => "#{Detract.table_name}.created_at ASC"
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
   has_many :review_user_assignments, :dependent => :destroy,
     :include => :review, :order => 'assignment_type DESC'
@@ -170,7 +171,6 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :findings, :readonly => true
 
   accepts_nested_attributes_for :organization_roles, :allow_destroy => true
-  accepts_nested_attributes_for :detracts, :allow_destroy => false
 
   def initialize(attributes = {})
     super(attributes)

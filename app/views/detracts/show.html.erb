@@ -1,0 +1,48 @@
+<div id="showed_data">
+  <% if @detract -%>
+    <p>
+      <b><%= Detract.human_attribute_name :user_id %>:</b>
+      <%=h @detract.user.full_name %> | <%= link_to_last_detracts @user %>
+    </p>
+
+    <p>
+      <b><%= Detract.human_attribute_name :value %>:</b>
+      <%=h @detract.value %>
+    </p>
+
+    <p>
+      <b><%= Detract.human_attribute_name :observations %>:</b>
+      <%=h @detract.observations %>
+    </p>
+  <% end -%>
+
+  <% unless @user.try(:children).try(:size).to_i == 0 -%>
+    <h3 style="margin-top: 1em;"><%= t(:'user.children') %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= Detract.human_attribute_name :user_id %></th>
+          <th><%= t(:'detract.last_detract') %></th>
+          <th></th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <% @detract.user.children.each do |child| -%>
+          <tr>
+            <td><%= h child.full_name %></td>
+            <td><%= h child.detracts.last.try(:value) %></td>
+            <td><%= link_to_last_detracts child %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
+
+  <div id="last_detracts"><%= render :partial => 'show_last_detracts' %></div>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.list'), detracts_path %> |
+  <%= link_to_back %>
+</div>

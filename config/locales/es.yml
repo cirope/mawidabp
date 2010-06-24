@@ -48,6 +48,7 @@ es:
       best_practices: "Buenas prácticas"
       parameters: "Parámetros"
       backups: "Copias de seguridad"
+      detracts: "Detractores"
     planning_title: "PLANIFICACIÓN"
     planning:
       periods: "Periodos"
@@ -346,6 +347,17 @@ es:
       without_compliance_tests: "sin pruebas de cumplimiento y/o sustantivas"
       without_auditor_comment: "sin comentarios del auditor"
       without_design_tests: "sin evaluación de diseño"
+
+  detract:
+    index_title: "Listado de detractores"
+    show_title: "Detalle del detractor"
+    new_title: "Agregar detractor"
+    correctly_created: "Detractor agregado correctamente."
+    show_last_detracts: "Ver los últimos detractores"
+    last_detract: "Último detractor"
+    last_detracts: "Resumen de los últimos *{{count}}* detractores de *{{user}}*"
+    without_detract: "No tiene ningún detractor asignado al momento"
+    user_without_detracts: "No tiene ningún detractor asignado al momento"
 
   error_record:
     index_title: "Registros de error"
@@ -1187,6 +1199,7 @@ es:
       control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
+      detract: "Detractor"
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
@@ -1696,6 +1709,7 @@ es:
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
+    detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"

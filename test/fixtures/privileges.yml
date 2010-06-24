@@ -34,7 +34,7 @@ audited_<%= privilege %>:
   read: true
   modify: true
   erase: true
-  approval: true
+  approval: false
   role: audited_role
 <% end %>
 
