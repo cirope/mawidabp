@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
     }
   })
 
-  has_paper_trail :meta => {
+  has_paper_trail :ignore => [:last_access, :logged_in], :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
     :important => Proc.new {|user| user.is_an_important_change }
   }

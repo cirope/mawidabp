@@ -131,15 +131,11 @@ class ApplicationController < ActionController::Base
       session[:last_access] = Time.now
 
       unless @auth_user.first_login?
-        User.paper_trail_off
-
         begin
           @auth_user.update_attribute :last_access, session[:last_access]
         rescue ActiveRecord::StaleObjectError
           @auth_user.reload
         end
-        
-        User.paper_trail_on
       end
     else
       restart_session

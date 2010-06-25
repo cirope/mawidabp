@@ -903,9 +903,10 @@ class Finding < ActiveRecord::Base
           pdf.move_pointer 12
           
           pdf.add_description_item(Version.human_attribute_name(:created_at),
-            I18n.l(previous_version.created_at, :format => :long))
-          pdf.add_description_item(User.human_name, previous_version.whodunnit ?
-              User.find(previous_version.whodunnit).try(:full_name) : nil)
+            I18n.l(version.created_at || version_finding.updated_at,
+              :format => :long))
+          pdf.add_description_item(User.human_name, version.whodunnit ?
+              User.find(version.whodunnit).try(:full_name) : nil)
 
           pdf.move_pointer 12
 
