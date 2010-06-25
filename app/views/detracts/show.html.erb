@@ -1,12 +1,14 @@
 <div id="showed_data">
   <% if @detract -%>
-    <p>
-      <b><%= Detract.human_attribute_name :user_id %>:</b>
-      <%=h @detract.user.full_name %> | <%= link_to_last_detracts @user %>
+    <p style="font-size: 1.4em; margin-bottom: 1em;">
+      <strong><%=h @detract.user.informal_name %></strong>
     </p>
-
+    <h1><%= t(:'detract.last_detract') %></h1>
     <p>
-      <b><%= Detract.human_attribute_name :value %>:</b>
+      <b>
+        <%= Detract.human_attribute_name :value %>
+        <%= show_inline_help_for(:detract_value) %>:
+      </b>
       <%=h @detract.value %>
     </p>
 
@@ -14,10 +16,12 @@
       <b><%= Detract.human_attribute_name :observations %>:</b>
       <%=h @detract.observations %>
     </p>
+
+    <p><%= link_to_last_detracts @user %> <%= show_inline_help_for(:detract_last_detracts) %></p>
   <% end -%>
 
   <% unless @user.try(:children).try(:size).to_i == 0 -%>
-    <h3 style="margin-top: 1em;"><%= t(:'user.children') %></h3>
+    <h1 style="margin-top: 1em;"><%= t(:'user.children') %></h1>
     <table class="summary_table">
       <thead>
         <tr>

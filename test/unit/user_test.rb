@@ -54,8 +54,8 @@ class UserTest < ActiveSupport::TestCase
         :parent => users(:administrator_user),
         :organization_roles_attributes => {
           :new_1 => {
-            :organization => organizations(:default_organization),
-            :role => role
+            :organization_id => organizations(:default_organization).id,
+            :role_id => role.id
           }
         }
       )
@@ -269,9 +269,18 @@ class UserTest < ActiveSupport::TestCase
     user = User.find(users(:bare_user).id)
     bad_parent = User.find(users(:administrator_second_user).id)
 
-    assert user.valid?
     user.parent = bad_parent
     assert user.invalid?
+    assert_equal 1, user.errors.size
+    assert_equal error_message_from_model(user, :manager_id, :invalid),
+      user.errors.on(:manager_id)
+  end
+
+  test 'validates parent is not child' do
+    user = User.find(users(:bare_user).id)
+    bad_child = User.find(users(:administrator_user).id)
+
+    assert !user.update_attributes(:child_ids => [bad_child.id])
     assert_equal 1, user.errors.size
     assert_equal error_message_from_model(user, :manager_id, :invalid),
       user.errors.on(:manager_id)

@@ -63,11 +63,13 @@
     </div>
     <div class="item_field" style="width: 50%;">
       <div class="search">
+        <% errors_on_manager = @user.errors.on(:manager_id) -%>
         <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
         <%= text_field_with_auto_complete :user, :nested_user,
-          {:id => "user_manager_#{@user.id}", :class => :search,
+          {:id => "user_manager_#{@user.id}",
+          :class => "search #{'error_field' unless errors_on_manager.blank?}",
           :title => t(:'label.search'),
-          :value => @user.parent.try(:full_name_with_function)},
+          :value => @user.parent.try(:full_name_with_function) || ''},
           {:indicator => :loading, :skip_style => true,
           :after_update_element => 'AutoComplete.itemSelected',
           :param_name => 'user_data',

@@ -102,7 +102,9 @@ class User < ActiveRecord::Base
           o_r.organization_id)
       end
 
-      record.errors.add attr, :invalid unless is_in_the_same_organization
+      if record.child_ids.include?(value) || !is_in_the_same_organization
+        record.errors.add attr, :invalid
+      end
     end
   end
   validates_each :organization_roles do |record, attr, value|
@@ -170,7 +172,10 @@ class User < ActiveRecord::Base
   has_many :organizations, :through => :organization_roles, :uniq => true
   has_and_belongs_to_many :findings, :readonly => true
 
-  accepts_nested_attributes_for :organization_roles, :allow_destroy => true
+  accepts_nested_attributes_for :organization_roles, :allow_destroy => true,
+    :reject_if => proc { |attributes|
+      attributes['organization_id'].blank? || attributes['role_id'].blank?
+    }
 
   def initialize(attributes = {})
     super(attributes)

@@ -37,7 +37,7 @@ FINDING_STALE_UNCONFIRMED_DAYS = 1
 # oportunidad
 FINDING_STALE_CONFIRMED_DAYS = 3
 # Cantidad de detractores a mostrar en el resumen por usuario
-LAST_DETRACTORS_LIMIT = 10
+LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las
 # notificaciones a esta cuenta)
 NOTIFICATIONS_EMAIL = 'notificaciones@mawidaweb.com.ar'.freeze
