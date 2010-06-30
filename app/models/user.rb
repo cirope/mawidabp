@@ -3,6 +3,9 @@ require 'digest/sha2'
 class User < ActiveRecord::Base
   include ParameterSelector
   include Comparable
+  include Trimmer
+
+  trimmed_fields :user, :email, :name, :last_name
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({

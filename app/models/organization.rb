@@ -1,5 +1,8 @@
 class Organization < ActiveRecord::Base
   include ParameterSelector
+  include Trimmer
+
+  trimmed_fields :name, :prefix
   
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }

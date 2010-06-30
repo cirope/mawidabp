@@ -1,3 +1,9 @@
+manager_resource:
+  name: Manager
+  description: This is the manager resource
+  cost_per_unit: 50.2
+  resource_class: human_resources
+
 auditor_resource:
   name: Auditor
   description: This is the auditor resource

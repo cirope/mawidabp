@@ -526,6 +526,60 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.has_audited?
   end
 
+  test 'users for scaffold notification' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    user_for_levels = {
+      1 => [users(:audited_user), users(:plain_manager_user)].sort,
+      2 => [users(:audited_user), users(:plain_manager_user),
+        users(:coordinator_manager_user)].sort,
+      3 => [users(:audited_user), users(:plain_manager_user),
+        users(:coordinator_manager_user), users(:general_manager_user),
+        users(:president_user)].sort
+    }
+
+    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
+      users = finding.users_for_scaffold_notification(n + 1)
+
+      assert_equal user_for_levels[n + 1].map(&:to_s), users.sort.map(&:to_s)
+    end
+  end
+
+  test 'manager users for level' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    user_for_levels = {
+      1 => [users(:plain_manager_user)].sort,
+      2 => [users(:coordinator_manager_user)].sort,
+      3 => [users(:general_manager_user), users(:president_user)].sort
+    }
+
+    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
+      users = finding.manager_users_for_level(n + 1)
+
+      assert_equal user_for_levels[n + 1].map(&:to_s), users.sort.map(&:to_s)
+    end
+  end
+
+  test 'notification date for level' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+
+    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
+      first_notification_date = finding.first_notification_date.dup
+      computed_date = finding.notification_date_for_level(n + 1)
+      days_to_add = (FINDING_STALE_CONFIRMED_DAYS +
+        FINDING_STALE_CONFIRMED_DAYS * (n + 1)).next
+
+      until days_to_add == 0
+        first_notification_date += 1.day
+        days_to_add -= 1 unless [0, 6].include?(first_notification_date.wday)
+      end
+
+      assert_equal computed_date, first_notification_date
+    end
+  end
+
   test 'follow up pdf' do
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 
@@ -573,8 +627,6 @@ class FindingTest < ActiveSupport::TestCase
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     assert_equal 2, Finding.unconfirmed_for_notification.size
-    assert Finding.all(:conditions => {
-        :state => Finding::STATUS[:unanswered]}).empty?
 
     review_codes_by_user = {}
 
@@ -679,8 +731,8 @@ class FindingTest < ActiveSupport::TestCase
       review_codes_by_user[user] = findings_by_user.map(&:review_code)
     end
 
-    assert Finding.all(:conditions => {
-        :state => Finding::STATUS[:unanswered]}).empty?
+    unanswered_finding = Finding.count(:conditions => {
+        :state => Finding::STATUS[:unanswered]})
     assert_not_equal 0, findings.size
 
     ActionMailer::Base.delivery_method = :test
@@ -699,8 +751,8 @@ class FindingTest < ActiveSupport::TestCase
       end
     end
 
-    assert !Finding.all(:conditions => {
-        :state => Finding::STATUS[:unanswered]}).empty?
+    assert_not_equal unanswered_finding, Finding.count(:conditions => {
+        :state => Finding::STATUS[:unanswered]})
     assert Finding.confirmed_and_stale.empty?
   end
 
@@ -708,8 +760,8 @@ class FindingTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    assert Finding.all(:conditions => {
-        :state => Finding::STATUS[:unanswered]}).empty?
+    unanswered_findings = Finding.count(:conditions => {
+        :state => Finding::STATUS[:unanswered]})
     assert_equal 1, Finding.confirmed_and_stale.size
 
     Finding.confirmed_and_stale.each do |finding|
@@ -726,7 +778,55 @@ class FindingTest < ActiveSupport::TestCase
       Finding.mark_as_unanswered_if_necesary
     end
 
+    assert_equal unanswered_findings, Finding.count(:conditions => {
+        :state => Finding::STATUS[:unanswered]})
     assert !Finding.confirmed_and_stale.empty?
+  end
+
+  test 'notify manager if necesary' do
+    GlobalModelConfig.current_organization_id = nil
+    # Sólo funciona si no es un fin de semana
+    assert ![0, 6].include?(Date.today.wday)
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+    
+    users_by_level_for_notification = {1 => [], 2 => [], 3 => []}
+    finding_ids = []
+
+    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.step(1, -1) do |n|
+      findings = Finding.unanswered_and_stale(n)
+
+      assert_equal 1, findings.size
+
+      finding = findings.first
+
+      finding_ids << finding.id
+
+      users_by_level_for_notification[n] |= finding.users |
+        finding.users_for_scaffold_notification(n)
+    end
+
+    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+      level_counts = {}
+
+      finding_ids.each do |f_id|
+        level_counts[f_id] = Finding.find(f_id).notification_level
+      end
+
+      Finding.notify_manager_if_necesary
+
+      finding_ids.each do |f_id|
+        assert_equal level_counts[f_id].next,
+          Finding.find(f_id).notification_level
+      end
+    end
+
+    ActionMailer::Base.deliveries.each_with_index do |mail, i|
+      assert_equal users_by_level_for_notification[3 - i].map(&:email).sort,
+        mail.to.sort
+    end
   end
 
   test 'work papers can be added to uneditable control objectives' do

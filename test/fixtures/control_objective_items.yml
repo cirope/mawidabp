@@ -74,3 +74,14 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable:
   finished: true
   control_objective: bcra_A4609_data_proccessing_impact_analisys
   review: review_with_conclusion
+
+iso_27000_security_organization_4_2_item_editable:
+  control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  pre_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  post_audit_qualification: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: iso_27000_security_organization_4_2
+  review: review_without_conclusion

@@ -8,4 +8,5 @@ every 1.day, :at => '00:00' do
   runner 'User.notify_new_findings'
   runner 'Finding.mark_as_unanswered_if_necesary'
   runner 'Finding.warning_users_about_expiration'
+  runner 'Finding.notify_manager_if_necesary'
 end

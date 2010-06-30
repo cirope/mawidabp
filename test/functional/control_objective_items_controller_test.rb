@@ -43,7 +43,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:control_objectives)
-    assert_equal 3, assigns(:control_objectives).size
+    assert_equal 4, assigns(:control_objectives).size
     assert(assigns(:control_objectives).all? do |coi|
       coi.control_objective_text.match(/seguridad/i)
     end)

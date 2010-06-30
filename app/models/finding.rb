@@ -141,12 +141,14 @@ class Finding < ActiveRecord::Base
   named_scope :next_to_expire, :conditions => [
     [
       'follow_up_date = :warning_date',
-      'state = :being_implemented_state'
+      'state = :being_implemented_state',
+      'final = :boolean_false'
     ].join(' AND '),
     {
       :warning_date =>
         FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date,
-      :being_implemented_state => STATUS[:being_implemented]
+      :being_implemented_state => STATUS[:being_implemented],
+      :boolean_false => false
     }
   ]
   named_scope :unconfirmed_for_notification, :conditions => [
@@ -162,6 +164,26 @@ class Finding < ActiveRecord::Base
         FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
     }
   ]
+  named_scope :unanswered_and_stale, lambda { |factor|
+    {
+      :conditions => [
+        [
+          'first_notification_date < :stale_unanswered_date',
+          'state = :state',
+          'final = :boolean_false',
+          'notification_level = :notification_level'
+        ].join(' AND '),
+        {
+          :state => STATUS[:unanswered],
+          :boolean_false => false,
+          :stale_unanswered_date => (
+            FINDING_STALE_CONFIRMED_DAYS + FINDING_STALE_CONFIRMED_DAYS * factor
+          ).days.ago_in_business.to_date,
+          :notification_level => factor - 1
+        }
+      ]
+    }
+  }
   named_scope :unconfirmed_and_stale, :conditions => [
     [
       'first_notification_date < :stale_unconfirmed_date',
@@ -175,19 +197,22 @@ class Finding < ActiveRecord::Base
           FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date
     }
   ]
-  named_scope :confirmed_and_stale,
-    :include => :finding_answers,
+  named_scope :confirmed_and_stale, :include => :finding_answers,
     :conditions => [
       [
         [
           'confirmation_date < :stale_confirmed_date',
           'state = :state',
-          'final = :boolean_false'
+          'final = :boolean_false',
+          'notification_level = :notification_level'
         ].join(' AND '),
+        # Para que no dar días de más a los usuarios que confirmaron cerca
+        # del último día
         [
           'first_notification_date < :stale_first_notification_date',
           'state = :state',
-          'final = :boolean_false'
+          'final = :boolean_false',
+          'notification_level = :notification_level'
         ].join(' AND '),
       ].map {|c| "(#{c})"}.join(' OR '),
       {
@@ -196,7 +221,8 @@ class Finding < ActiveRecord::Base
         :stale_confirmed_date =>
           FINDING_STALE_CONFIRMED_DAYS.days.ago_in_business.to_date,
         :stale_first_notification_date => (FINDING_STALE_UNCONFIRMED_DAYS +
-            FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date
+            FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date,
+        :notification_level => 0
       }
     ]
   named_scope :being_implemented, :conditions =>
@@ -511,7 +537,7 @@ class Finding < ActiveRecord::Base
 
       if user
         self.notifications.not_confirmed.each do |notification|
-          if notification.user.audited?
+          if notification.user.can_act_as_audited?
             notification.update_attributes!(
               :status => Notification::STATUS[:confirmed],
               :confirmation_date => notification.confirmation_date || Time.now,
@@ -670,6 +696,62 @@ class Finding < ActiveRecord::Base
     end
 
     findings_with_status_changed.sort {|f1, f2| f1.updated_at <=> f2.updated_at}
+  end
+
+  def users_for_scaffold_notification(level = 1)
+    users = self.users.select(&:can_act_as_audited?)
+    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
+
+    if level < NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS
+      level.times do
+        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
+      end
+    else
+      until highest_users.empty?
+        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
+      end
+    end
+
+    users.uniq
+  end
+
+  def manager_users_for_level(level = 1)
+    users = self.users.select(&:can_act_as_audited?)
+    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
+
+    if level < NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS
+      level.times do
+        highest_users = highest_users.map(&:parent).compact.uniq
+      end
+    else
+      (level - 1).times do
+        highest_users = highest_users.map(&:parent).compact.uniq
+      end
+      
+      users = []
+      
+      until highest_users.empty?
+        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
+      end
+      
+      
+      highest_users = users
+    end
+
+    highest_users.reject { |u| self.users.include?(u) }
+  end
+
+  def notification_date_for_level(level = 1)
+    date_for_notification = self.first_notification_date.try(:dup) || Date.today
+    days_to_add = (FINDING_STALE_CONFIRMED_DAYS +
+      FINDING_STALE_CONFIRMED_DAYS * level).next
+
+    until days_to_add == 0
+      date_for_notification += 1
+      days_to_add -= 1 unless [0, 6].include?(date_for_notification.wday)
+    end
+
+    date_for_notification
   end
 
   def to_pdf(organization = nil)
@@ -1150,6 +1232,26 @@ class Finding < ActiveRecord::Base
         users.each do |user|
           Notifier.deliver_unanswered_findings_notification user,
             findings.select { |f| f.users.include?(user) }
+        end
+      end
+    end
+  end
+
+  def self.notify_manager_if_necesary
+    # Sólo si no es sábado o domingo (porque no tiene sentido)
+    unless [0, 6].include?(Date.today.wday)
+      Finding.transaction do
+        NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.step(1, -1) do |n|
+          findings = Finding.unanswered_and_stale(n)
+          
+          findings.each do |finding|
+            users = finding.users_for_scaffold_notification(n) | finding.users
+
+            Notifier.deliver_unanswered_finding_to_manager_notification(finding,
+              users, n)
+
+            finding.update_attribute :notification_level, n
+          end
         end
       end
     end

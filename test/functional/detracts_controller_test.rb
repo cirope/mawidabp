@@ -36,7 +36,7 @@ class DetractsControllerTest < ActionController::TestCase
     get :index, :search => {:query => 'manager', :columns => ['user', 'name']}
     assert_response :success
     assert_not_nil assigns(:users)
-    assert_equal 2, assigns(:users).size
+    assert_equal 5, assigns(:users).size
     assert_select '#error_body', false
     assert_template 'detracts/index'
   end

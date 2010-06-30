@@ -311,7 +311,7 @@ class UsersControllerTest < ActionController::TestCase
     get :index, :search => {:query => 'manager', :columns => ['user', 'name']}
     assert_response :success
     assert_not_nil assigns(:users)
-    assert_equal 2, assigns(:users).size
+    assert_equal 5, assigns(:users).size
     assert_select '#error_body', false
     assert_template 'users/index'
   end
@@ -448,14 +448,9 @@ class UsersControllerTest < ActionController::TestCase
             users(:disabled_user).id,
             users(:blank_password_user).id,
             users(:expired_blank_password_user).id,
-            users(:manager_user).id,
-            users(:manager_second_user).id,
             users(:supervisor_user).id,
             users(:supervisor_second_user).id,
-            users(:audited_user).id,
-            users(:audited_second_user).id,
-            users(:committee_user).id,
-            users(:auditor_user).id
+            users(:committee_user).id
           ]
         }
       }
@@ -505,15 +500,10 @@ class UsersControllerTest < ActionController::TestCase
                 users(:disabled_user).id,
                 users(:blank_password_user).id,
                 users(:expired_blank_password_user).id,
-                users(:manager_user).id,
-                users(:manager_second_user).id,
                 users(:supervisor_user).id,
-                users(:supervisor_second_user).id,
-                users(:audited_user).id,
-                users(:audited_second_user).id,
+                users(:supervisor_second_user).id
                 # El siguiente se elimina
-                #users(:committee_user).id,
-                users(:auditor_user).id
+                #users(:committee_user).id
               ]
             }
           }

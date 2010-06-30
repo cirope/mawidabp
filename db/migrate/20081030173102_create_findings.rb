@@ -13,6 +13,7 @@ class CreateFindings < ActiveRecord::Migration
       t.boolean :final
       t.integer :parent_id
       t.integer :state
+      t.integer :notification_level, :default => 0
       t.integer :lock_version, :default => 0
       t.references :control_objective_item
       # Weakness

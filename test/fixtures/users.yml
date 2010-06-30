@@ -151,6 +151,81 @@ expired_blank_password_user:
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
   manager_id: <%= Fixtures.identify(:administrator_user) %>
 
+<% PLAIN_PASSWORDS[:president_user] = 'president123' %>
+<% salt = Digest::SHA512.hexdigest("president#{rand}") %>
+president_user:
+  name: President
+  last_name: Lastname
+  language: es
+  email: president@users.com
+  function: President function
+  user: president_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-president123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: manager_resource
+
+<% PLAIN_PASSWORDS[:general_manager_user] = 'general_manager123' %>
+<% salt = Digest::SHA512.hexdigest("general_manager#{rand}") %>
+general_manager_user:
+  name: General Manager
+  last_name: Lastname
+  language: es
+  email: general_manager@users.com
+  function: General Manager function
+  user: general_manager_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-general_manager123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: manager_resource
+  manager_id: <%= Fixtures.identify(:president_user) %>
+
+<% PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
+<% salt = Digest::SHA512.hexdigest("coordinator_manager#{rand}") %>
+coordinator_manager_user:
+  name: Coordinator Manager
+  last_name: Lastname
+  language: es
+  email: coordinator_manager@users.com
+  function: Coordinator Manager function
+  user: coordinator_manager_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-coordinator_manager123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: manager_resource
+  manager_id: <%= Fixtures.identify(:general_manager_user) %>
+
+<% PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
+<% salt = Digest::SHA512.hexdigest("plain_manager#{rand}") %>
+plain_manager_user:
+  name: Plain Manager
+  last_name: Lastname
+  language: es
+  email: plain_manager@users.com
+  function: Plain Manager function
+  user: plain_manager_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-plain_manager123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: manager_resource
+  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+
 <% PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
 <% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
 manager_user:
@@ -167,8 +242,8 @@ manager_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
-  resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  resource: manager_resource
+  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
 
 <% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
@@ -187,7 +262,26 @@ manager_second_user:
   logged_in: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+
+<% PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
+<% salt = Digest::SHA512.hexdigest("plain_manager_second#{rand}") %>
+plain_manager_second_user:
+  name: Plain Manager Second
+  last_name: Lastname
+  language: es
+  email: plain_manager_second@users.com
+  function: Plain Manager Second function
+  user: plain_manager_second_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-plain_manager_second123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: auditor_resource
+  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
 
 <% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
@@ -244,7 +338,7 @@ audited_user:
   logged_in: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= Fixtures.identify(:plain_manager_user) %>
 
 <% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
 <% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
@@ -263,7 +357,7 @@ audited_second_user:
   logged_in: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= Fixtures.identify(:plain_manager_second_user) %>
 
 <% PLAIN_PASSWORDS[:committee] = 'committee123' %>
 <% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
@@ -301,4 +395,4 @@ auditor_user:
   logged_in: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= Fixtures.identify(:supervisor_user) %>

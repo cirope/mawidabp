@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(:version => 20100616151654) do
     t.date     "confirmation_date"
     t.boolean  "final"
     t.integer  "parent_id"
+    t.integer  "notification_level",        :default => 0
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"

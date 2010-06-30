@@ -72,6 +72,15 @@ class Notifier < ActionMailer::Base
     body :grouped_findings => filtered_findings.group_by(&:organization)
   end
 
+  def unanswered_finding_to_manager_notification(finding, users, level)
+    subject I18n.t(:'notifier.unanswered_finding_to_manager.title')
+    recipients users.map(&:email)
+    from "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>"
+    sent_on Time.now
+    content_type 'text/html'
+    body :finding => finding, :level => level
+  end
+
   def reassigned_findings_notification(new_users, old_users, findings,
       notify = true)
     findings_array = findings.kind_of?(Array) ? findings : [findings]

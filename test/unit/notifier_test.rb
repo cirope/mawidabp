@@ -96,6 +96,26 @@ class NotifierTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
   end
 
+  test 'deliver unanswered finding to manager notification' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_2_notification).id)
+    users = finding.users_for_scaffold_notification(1)
+
+    assert ActionMailer::Base.deliveries.empty?
+
+    response = Notifier.deliver_unanswered_finding_to_manager_notification(
+      finding, users, 1)
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal I18n.t(:'notifier.unanswered_finding_to_manager.title'),
+      response.subject
+    assert_match Regexp.new(I18n.t(
+        :'notifier.unanswered_finding_to_manager.the_following_finding_is_stale_and_unanswered')),
+      response.body
+    assert !users.empty?
+    assert users.map(&:email).all? { |email| response.to.include?(email) }
+  end
+
   test 'deliver reassigned findings notification' do
     user = User.find(users(:administrator_user).id)
     old_user = User.find(users(:administrator_second_user).id)
