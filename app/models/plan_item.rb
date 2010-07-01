@@ -181,6 +181,38 @@ class PlanItem < ActiveRecord::Base
     end
   end
 
+  def status_text(long = true)
+    if self.try(:review).try(:has_final_review?)
+      I18n.t("plan.item_status.concluded.#{long ? :long : :short}")
+    elsif self.try(:review)
+      if self.end >= Date.today
+        I18n.t("plan.item_status.executing_in_time.#{long ? :long : :short}")
+      else
+        I18n.t("plan.item_status.executing_overtime.#{long ? :long : :short}")
+      end
+    elsif !self.try(:review) && self.try(:business_unit)
+      if self.try(:start) && self.start < Date.today
+        I18n.t("plan.item_status.delayed.#{long ? :long : :short}")
+      end
+    end
+  end
+
+  def status_color
+    if self.try(:review).try(:has_final_review?)
+      :green
+    elsif self.try(:review)
+      if self.end >= Date.today
+        :gray
+      else
+        :yellow
+      end
+    elsif !self.try(:review) && self.try(:business_unit)
+      if self.try(:start) && self.start < Date.today
+        :red
+      end
+    end
+  end
+
   def add_resource_data(pdf, show_description = true)
     pdf.move_pointer 12
 

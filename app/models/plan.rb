@@ -93,10 +93,10 @@ class Plan < ActiveRecord::Base
   def to_pdf(organization = nil, include_details = true)
     pdf = PDF::Writer.create_generic_pdf :landscape
     currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
-    column_order = [['order_number', 6], ['business_unit_id', 16],
-      ['project', 30], ['start', 7.5], ['end', 7.5],
+    column_order = [['order_number', 6], ['status', 6],
+      ['business_unit_id', 16], ['project', 27], ['start', 7.5], ['end', 7.5],
       ['human_resources_cost', 10], ['material_resources_cost', 10],
-      ['total_resources_cost', 13]]
+      ['total_resources_cost', 10]]
     columns = {}
     column_data = []
 
@@ -121,6 +121,7 @@ class Plan < ActiveRecord::Base
 
       column_data << {
         'order_number' => plan_item.order_number,
+        'status' => plan_item.status_text(false).try(:to_iso),
         'business_unit_id' => plan_item.business_unit ?
           plan_item.business_unit.name.to_iso : '',
         'project' => plan_item.project.to_iso,
@@ -135,8 +136,8 @@ class Plan < ActiveRecord::Base
     end
 
     column_data << {
-      'order_number' => '', 'business_unit_id' => '', 'project' => '',
-      'start' => '', 'end' => '', 'human_resources_cost' => '',
+      'order_number' => '', 'status' => '', 'business_unit_id' => '',
+      'project' => '', 'start' => '', 'end' => '', 'human_resources_cost' => '',
       'material_resources_cost' => '',
       'total_resources_cost' => "<b>#{currency_mask % self.cost}</b>"
     }
@@ -160,6 +161,8 @@ class Plan < ActiveRecord::Base
         table.render_on pdf
       end
     end
+
+    pdf.text "\n#{I18n.t(:'plan.item_status.note')}", :font_size => 8
 
     if include_details &&
         !self.plan_items.all? { |pi| pi.resource_utilizations.blank? }

@@ -816,10 +816,19 @@ es:
     download_global_plan: "Descargar plan de auditoria global"
     download_detailed_plan: "Descargar plan de auditoria detallado"
     item_status:
-      concluded: "Concluido"
-      executing_in_time: "En ejecución (dentro de lo planeado)"
-      executing_overtime: "En ejecución (fuera de lo planeado)"
-      delayed: "Retrasado"
+      note: "Los estados deben leerse como sigue: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado"
+      concluded:
+        long: "Concluido"
+        short: "C"
+      executing_in_time:
+        long: "En ejecución (dentro de lo planeado)"
+        short: "E"
+      executing_overtime:
+        long: "En ejecución (fuera de lo planeado)"
+        short: "E (FP)"
+      delayed:
+        long: "Retrasado"
+        short: "R"
     period:
       title: "Periodo ({{number}})"
       range: "{{from_date}} al {{to_date}}"
@@ -1441,6 +1450,7 @@ es:
         business_unit_id: "Unidad de negocio"
         resources: "Recursos"
         resource_ids: "Recursos"
+        status: "Estado"
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
