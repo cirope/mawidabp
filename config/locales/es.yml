@@ -666,11 +666,13 @@ es:
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
-      the_following_findings_are_now_unanswered: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
-      if_no_answer_is_given_the_following_users_will_be_notified: "Si no se recibe una respuesta se producirán las siguientes notificaciones"
+      the_following_findings_are_now_unanswered:
+        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+      if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     welcome_email:
       title: "{{name}}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"

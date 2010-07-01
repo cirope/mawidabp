@@ -64,12 +64,16 @@ class Notifier < ActionMailer::Base
   def unanswered_findings_notification(user, findings)
     filtered_findings = findings.select {|f| f.users.any? {|u| u.id == user.id}}
 
-    subject I18n.t(:'notifier.unanswered_findings.title')
-    recipients [user.email]
-    from "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>"
-    sent_on Time.now
-    content_type 'text/html'
-    body :grouped_findings => filtered_findings.group_by(&:organization)
+    unless filtered_findings.empty?
+      subject I18n.t(:'notifier.unanswered_findings.title')
+      recipients [user.email]
+      from "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>"
+      sent_on Time.now
+      content_type 'text/html'
+      body :grouped_findings => filtered_findings.group_by(&:organization)
+    else
+      raise 'Findings and user mismatch'
+    end
   end
 
   def unanswered_finding_to_manager_notification(finding, users, level)
