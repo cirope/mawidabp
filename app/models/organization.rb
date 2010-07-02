@@ -8,6 +8,9 @@ class Organization < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
+  # Constantes
+  INVALID_PREFIXES = ['www', 'admin']
+
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:business_unit_ids, :parameter_ids]
 
@@ -29,7 +32,9 @@ class Organization < ActiveRecord::Base
   validates_presence_of :name, :prefix
   validates_length_of :name, :prefix, :maximum => 255, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :name, :prefix, :case_sensitive => false
+  validates_uniqueness_of :prefix, :case_sensitive => false
+  validates_uniqueness_of :name, :case_sensitive => false, :scope => :group_id
+  validates_exclusion_of :prefix, :in => INVALID_PREFIXES
   validates_each :business_units do |record, attr, value|
     unless value.all? {|bu| !bu.marked_for_destruction? || bu.can_be_destroyed?}
       record.errors.add attr, :locked
@@ -48,6 +53,15 @@ class Organization < ActiveRecord::Base
   accepts_nested_attributes_for :image_model, :allow_destroy => true
   accepts_nested_attributes_for :business_units, :allow_destroy => true,
     :reject_if => lambda { |attributes| attributes['name'].blank? }
+
+  def initialize(attributes = nil)
+    super(attributes)
+
+    if Organization.exists?(GlobalModelConfig.current_organization_id)
+      self.group_id = Organization.find(
+        GlobalModelConfig.current_organization_id).group_id
+    end
+  end
   
   # Crea la configuración inicial de la organización
   def create_initial_data

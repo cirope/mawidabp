@@ -12,7 +12,7 @@ class Group < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false
 
   # Relaciones
-  has_many :organizations, :dependent => :destroy
+  has_many :organizations, :dependent => :destroy, :order => 'name ASC'
 
   accepts_nested_attributes_for :organizations, :allow_destroy => true
 end

@@ -66,6 +66,9 @@ class GroupsControllerTest < ActionController::TestCase
         }
       }
     end
+
+    assert_equal Group.find_by_name('New group').id,
+      Organization.find_by_prefix('new-organization').group_id
   end
 
   test 'edit group' do
