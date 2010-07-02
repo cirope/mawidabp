@@ -66,6 +66,7 @@ class OrganizationsControllerTest < ActionController::TestCase
           :name => 'New organization',
           :prefix => 'new-prefix',
           :description => 'New description',
+          :group_id => groups(:main_group).id,
           :image_model_id => image_models(:image_one).id,
           :business_units_attributes => {
             :new_1 => {

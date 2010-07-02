@@ -15,9 +15,7 @@
       <%= yield %>
     </div>
     <div style="clear: both; margin: 0px; padding: 0px;">&nbsp;</div>
-    <% if flash[:notice] -%>
-      <%= render :partial => 'shared/notice' %>
-    <% end -%>
+    <%= render :partial => 'shared/notice' if flash[:notice] %>
     <%= yield :extra_bottom %>
   </body>
 </html>

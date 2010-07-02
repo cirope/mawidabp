@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100616151654) do
+ActiveRecord::Schema.define(:version => 20100702122825) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -216,6 +216,14 @@ ActiveRecord::Schema.define(:version => 20100616151654) do
 
   add_index "findings_users", ["finding_id", "user_id"], :name => "index_findings_users_on_finding_id_and_user_id"
 
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "lock_version", :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "help_contents", :force => true do |t|
     t.string   "language"
     t.integer  "lock_version", :default => 0
@@ -338,8 +346,10 @@ ActiveRecord::Schema.define(:version => 20100616151654) do
     t.integer  "lock_version",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "group_id"
   end
 
+  add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"
   add_index "organizations", ["image_model_id"], :name => "index_organizations_on_image_model_id"
   add_index "organizations", ["prefix"], :name => "index_organizations_on_prefix", :unique => true
 

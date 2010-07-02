@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :groups
+
   map.resources :detracts, :only => [:index, :show, :new, :create], :member => {
     :show_last_detractors => :get
   }

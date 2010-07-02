@@ -3,9 +3,11 @@ default_organization:
   prefix: default-testing-organization
   description: The default organization
   image_model: image_one
+  group: main_group
 
 second_organization:
   name: Second Organization
   prefix: second-testing-organization
   description: The second organization
   image_model: image_two
+  group: second_group

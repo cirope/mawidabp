@@ -24,14 +24,7 @@
         {:time_left => parameter_in(@auth_organization.id, :security_session_expire_time).to_i} %>
     <% end -%>
     <div id="main_container">
-      <% if @auth_user && @auth_user.password -%>
-        <div id="menu_container">
-          <%= render :partial => "shared/#{@auth_user.get_menu if @auth_user}",
-            :locals => {:user => @auth_user, :organization => @auth_organization} %>
-        </div>
-      <% else -%>
-        <div id="menu"></div>
-      <% end -%>
+      <div id="menu"></div>
       <div id="page">
         <div id="app_content">
           <%= yield %>

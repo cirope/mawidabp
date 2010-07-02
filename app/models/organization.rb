@@ -17,6 +17,9 @@ class Organization < ActiveRecord::Base
   # Named scopes
   named_scope :list, {:order => 'name ASC'}
 
+  # Atributos de solo lectura
+  attr_readonly :group_id
+
   # Atributos no persistentes
   attr_accessor :must_create_parameters, :must_create_roles
   
@@ -34,6 +37,7 @@ class Organization < ActiveRecord::Base
   end
   
   # Relaciones
+  belongs_to :group
   belongs_to :image_model, :dependent => :destroy
   has_many :business_units, :dependent => :destroy, :order => 'name ASC'
   has_many :parameters, :dependent => :destroy

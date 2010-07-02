@@ -1,0 +1,17 @@
+<div id="showed_data">
+  <p>
+    <b><%= Group.human_attribute_name :name %>:</b>
+    <%= h @group.name %>
+  </p>
+
+  <p>
+    <b><%= Group.human_attribute_name :description %>:</b>
+    <%= h @group.description %>
+  </p>
+</div>
+
+<div id="links">
+  <%= link_to t(:'label.edit'), edit_group_path(@group) %> |
+  <%= link_to t(:'label.list'), groups_path %> |
+  <%= link_to_back %>
+</div>

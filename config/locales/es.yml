@@ -552,6 +552,16 @@ es:
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
 
+  group:
+    index_title: "Listado de grupos"
+    show_title: "Detalles del grupo"
+    new_title: "Agregar grupo"
+    edit_title: "Modificar grupo"
+    correctly_created: "Grupo agregado correctamente."
+    correctly_updated: "Grupo actualizado correctamente."
+    stale_object_error: "El grupo no fue actualizado, intente nuevamente."
+    add_organization: "Agregar organización"
+
   help_content:
     index_title: "Listado de contenidos de ayuda"
     show_title: "Detalles del contenido de ayuda"
@@ -1219,6 +1229,7 @@ es:
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
+      group: "Grupo"
       help_content: "Contenido de ayuda"
       help_item: "Registro de ayuda"
       inline_help: "Registro de ayuda en línea"
@@ -1359,6 +1370,10 @@ es:
         notify_users: "Enviar notificación"
         <<: *commons
         created_at: "Fecha del comentario"
+      group:
+        name: "Nombre"
+        description: "Descripción"
+        <<: *commons
       help_content:
         language: "Idioma"
         <<: *commons
@@ -1730,6 +1745,7 @@ es:
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"
+    groups: "Grupos"
     help_contents: "Contenidos de ayuda"
     help_items: "Registros de ayuda"
     inline_helps: "Registros de ayuda en línea"

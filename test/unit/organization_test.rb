@@ -29,6 +29,7 @@ class OrganizationTest < ActiveSupport::TestCase
           @organization = Organization.create(
             :name => 'new3 organization',
             :prefix => 'newww-test-prefix',
+            :group => groups(:main_group),
             :must_create_parameters => true,
             :must_create_roles => true
           )
