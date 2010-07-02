@@ -102,6 +102,16 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'check group admin function' do
+    login_admin
+    @controller.class.instance_variable_set(:@controller_name, 'users')
+    @controller.send('action_name=', 'index')
+
+    @controller.send(:check_group_admin)
+    assert_nil  @controller.send(:flash)[:notice]
+    assert_response :success
+  end
+
   test 'check no privileges function' do
     login_admin
     @controller.instance_variable_set(:@auth_privileges,

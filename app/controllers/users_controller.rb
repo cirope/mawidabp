@@ -210,11 +210,7 @@ class UsersController < ApplicationController
   # * POST /users/create_session
   def create_session
     @title = t :'user.login_title'
-    organization_prefix = request.subdomains.first
-
-    if organization_prefix == 'www' || !organization_prefix
-      organization_prefix = APP_DEFAULT_ORGANIZATION
-    end
+    organization_prefix = request.subdomains.first || APP_DEFAULT_ORGANIZATION
 
     @organization = Organization.find_by_prefix(organization_prefix)
 

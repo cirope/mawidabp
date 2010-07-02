@@ -13,6 +13,7 @@ class CreateUsers < ActiveRecord::Migration
       t.date :password_changed
       t.boolean :enable, :default => false
       t.boolean :logged_in, :default => false
+      t.boolean :group_admin, :default => false
       t.references :resource
       t.datetime :last_access
       t.integer :manager_id

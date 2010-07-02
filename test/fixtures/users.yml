@@ -13,11 +13,12 @@ administrator_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: true
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
 
 <% PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
-<% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
+<% salt = Digest::SHA512.hexdigest("admin_second#{rand}") %>
 administrator_second_user:
   name: Administrator Second
   last_name: Administrator Second
@@ -31,6 +32,7 @@ administrator_second_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -50,6 +52,7 @@ bare_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -68,6 +71,7 @@ first_time_user:
   enable: true
   failed_attempts: 0
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -87,6 +91,7 @@ expired_user:
   failed_attempts: 0
   last_access: <%= 30.months.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= 2.days.ago %>
   last_access: <%= DEFAULT_PARAMETERS[:security_acount_expire_time].to_i.days.ago.yesterday %>
   resource: auditor_resource
@@ -107,6 +112,7 @@ disabled_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -126,6 +132,7 @@ blank_password_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
@@ -146,6 +153,7 @@ expired_blank_password_user:
   failed_attempts: 0
   last_access: <%= 20.days.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
@@ -166,6 +174,7 @@ president_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
 
@@ -184,6 +193,7 @@ general_manager_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:president_user) %>
@@ -203,6 +213,7 @@ coordinator_manager_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:general_manager_user) %>
@@ -222,6 +233,7 @@ plain_manager_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
@@ -241,6 +253,7 @@ manager_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
@@ -260,6 +273,7 @@ manager_second_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
@@ -279,6 +293,7 @@ plain_manager_second_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
@@ -298,6 +313,7 @@ supervisor_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -317,6 +333,7 @@ supervisor_second_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -336,6 +353,7 @@ audited_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:plain_manager_user) %>
@@ -355,6 +373,7 @@ audited_second_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:plain_manager_second_user) %>
@@ -374,6 +393,7 @@ committee_user:
   failed_attempts: 0
   last_access: <%= 2.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
@@ -393,6 +413,7 @@ auditor_user:
   failed_attempts: 0
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
+  group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:supervisor_user) %>

@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:role_ids, :organization_ids]
 
+  # Atributos protegidos
+  attr_protected :group_admin
+
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
     :reallocation_errors, :nested_user

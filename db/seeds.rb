@@ -9,6 +9,7 @@ def self.check_errors(record)
   end
 end
 
+Group.paper_trail_off
 Organization.paper_trail_off
 User.paper_trail_off
 Role.paper_trail_off
@@ -17,12 +18,18 @@ Parameter.paper_trail_off
 HelpContent.paper_trail_off
 HelpItem.paper_trail_off
 
-organization = nil
+group = Group.create(
+  :name => 'Default',
+  :description => 'Default group'
+)
+
+check_errors group
 
 organization = Organization.create(
   :name => 'Default',
   :prefix => APP_DEFAULT_ORGANIZATION,
   :description => 'Default organization',
+  :group_id => group.id,
   :must_create_parameters => true,
   :must_create_roles => true
 )
@@ -48,6 +55,7 @@ user = User.new(
   }
 )
 
+user.group_admin = true
 user.roles.each { |r| r.inject_auth_privileges Hash.new(Hash.new(true)) }
 user.encrypt_password
 user.save
@@ -69,6 +77,7 @@ help_content.save
 
 check_errors help_content
 
+Group.paper_trail_on
 Organization.paper_trail_on
 User.paper_trail_on
 Role.paper_trail_on

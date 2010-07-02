@@ -220,6 +220,17 @@ class ApplicationController < ActionController::Base
     redirect_to_login t(:'message.insufficient_privileges')
   end
 
+  def check_group_admin
+    unless @auth_user.group_admin == true
+      flash[:notice] = t(:'message.insufficient_privileges')
+      redirect_to :back
+    end
+
+  rescue ActionController::RedirectBackError
+    restart_session
+    redirect_to_login t(:'message.insufficient_privileges')
+  end
+
   # Crea un archivo en un directorio propio del usuario a partir de una
   # excepción
   def create_exception_file(exception) #:doc:
