@@ -1,21 +1,18 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= Notification.human_attribute_name :status %></th>
       <th><%= t :'notification.type' %></th>
       <th><%= Notification.human_attribute_name :user_who_confirm %></th>
       <th><%= Notification.human_attribute_name :created_at %></th>
       <th><%= Notification.human_attribute_name :confirmation_date %></th>
-      <th colspan="5"></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
     <% @notifications.each do |notification| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%=h notification.status_text %></td>
         <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
         <td><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
@@ -25,9 +22,7 @@
         <td><%= link_to_edit edit_notification_path(notification) %></td>
         <td><%= link_to_confirm notification %></td>
         <td><%= link_to_confirm notification, true %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

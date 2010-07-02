@@ -1,7 +1,6 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
       <th><%= Review.human_attribute_name 'period_id' %></th>
       <th><%= Review.human_attribute_name 'identification' %></th>
@@ -9,15 +8,12 @@
       <th><%= PlanItem.human_attribute_name 'project' %></th>
       <th></th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="7"></td><td></td></tr>
     <% @conclusion_final_reviews.each do |conclusion_final_review| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
         <td><%= show_period_with_dates_as_acronym conclusion_final_review.review.period %></td>
         <td class="nowrap"><%= h conclusion_final_review.review.identification %></td>
@@ -25,9 +21,7 @@
         <td><%= super_truncate(conclusion_final_review.review.plan_item.project, 30) %></td>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="7"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

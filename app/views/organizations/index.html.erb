@@ -1,28 +1,22 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= Organization.human_attribute_name :name %></th>
       <th><%= Organization.human_attribute_name :prefix %></th>
-      <th></th>
       <th></th>
       <th></th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% @organizations.each do |organization| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= h organization.name %></td>
         <td><strong><%= h organization.prefix %></strong></td>
         <td><%= link_to_show organization %></td>
         <td><%= link_to_edit edit_organization_path(organization) %></td>
         <td><%= button_to_destroy organization %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

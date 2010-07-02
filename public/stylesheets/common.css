@@ -98,7 +98,6 @@ div#actions * {
 
 div#app_content {
     position: relative;
-    border: 1px solid #bcbcbc;
 }
 
 div#approval_text {
@@ -375,7 +374,7 @@ div#organization_logo {
 }
 
 div#page {
-    padding: 2em 2em;
+    padding: .5em 1em;
     color: #525252;
     background: #ffffff;
 }
@@ -1101,14 +1100,14 @@ th.disabled {
     color: #7b7b7b;
 }
 
-tr.even > td {
+/*tr.even > td {
     border-bottom: 1px solid #c2bfb7;
     padding: .3em 0em;
 }
 
 tr.even > td:first-child, tr.even > td:last-child {
     border: none;
-}
+}*/
 
 th.filterable {
     cursor: default;
@@ -1119,7 +1118,19 @@ th.not_available {
     color: #f2f2f2;
 }
 
-tr.odd > td {
+tr.odd {
+    background-color: #f2f2f2;
+}
+
+tr.odd:hover, tr.even:hover {
+    background: #e3e0dd;
+}
+
+tr.odd > td, tr.even > td {
+    padding: .2em .5em;
+}
+
+/*tr.odd > td {
     padding: .2em .5em;
     border-bottom: 1px solid #c2bfb7;
 }
@@ -1132,7 +1143,7 @@ tr.odd > td:first-child {
 tr.odd > td:last-child {
     border: none;
     border-left: 1px solid #c2bfb7;
-}
+}*/
 
 tr.readonly_item, tr.disabled_item {
     color: #a5a5a5;

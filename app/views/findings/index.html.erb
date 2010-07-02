@@ -9,7 +9,6 @@
 <table>
   <thead  id="column_headers">
     <tr>
-      <th></th>
       <%= make_filterable_column Review.human_name, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:review_code), 'review_code' %>
@@ -19,15 +18,13 @@
           params[:completed] == 'incomplete' ? :follow_up_date : :solution_date) %>
       <%= make_not_available_column Finding.human_attribute_name(:finding_answers) %>
       <%= make_not_available_column t(:'finding.has_work_papers') %>
-      <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
+      <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
     <% @findings.each do |finding| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td class="nowrap"><%= show_review_with_conclusion_status_as_acronym(
           finding.control_objective_item.review) %></td>
         <td><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
@@ -44,9 +41,7 @@
         <td><%= link_to_show finding_path(params[:completed], finding) %></td>
         <td><%= link_to_edit edit_finding_path('incomplete', finding) if (params[:completed] == 'incomplete') || finding.can_be_modified?(false) -%></td>
         <td><%= button_to_destroy finding_path(params[:completed], finding) %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="11"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

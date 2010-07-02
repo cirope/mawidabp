@@ -1,7 +1,6 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= Period.human_attribute_name :number %></th>
       <th><%= Period.human_attribute_name :description %></th>
       <th><%= Period.human_attribute_name :start %></th>
@@ -10,15 +9,12 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>
     <% @periods.each do |period| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= h period.number %></td>
         <td><%= super_truncate period.description, 40 %></td>
         <td><%= h l(period.start, :format => :short) %></td>
@@ -27,9 +23,7 @@
         <td><%= link_to_show period %></td>
         <td><%= link_to_edit edit_period_path(period) %></td>
         <td><%= button_to_destroy period %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

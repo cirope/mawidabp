@@ -1,5 +1,5 @@
 <% controller_name = controller.controller_name.to_sym -%>
-<div id="menu">
+<div id="menu" <%= 'style="border-top: 12px solid #F7AC07;"' if Rails.env == 'development' %>>
   <div id="session">
     <div id="user">[ <%= link_to user.user, edit_personal_data_user_path(user),
       {:title => t(:'user.change_personal_data')} %> ]</div>

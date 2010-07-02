@@ -1,7 +1,6 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= Period.human_name %></th>
       <th><%= Review.human_name %></th>
       <th><%= PlanItem.human_attribute_name :project %></th>
@@ -11,15 +10,12 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
     <%  @workflows.each do |workflow| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= show_period_with_dates_as_acronym workflow.period %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_acronym workflow.review %></td>
         <td><%= super_truncate workflow.review.plan_item.project, 30 %></td>
@@ -30,9 +26,7 @@
         <td><%= link_to_show workflow %></td>
         <td><%= link_to_edit edit_workflow_path(workflow) %></td>
         <td><%= button_to_destroy(workflow) if workflow.can_be_destroyed? %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="9"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

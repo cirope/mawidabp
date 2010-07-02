@@ -1,7 +1,6 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= Period.human_name %></th>
       <th><%= Plan.human_attribute_name :created_at %></th>
       <th><%= Period.human_attribute_name :start %></th>
@@ -10,15 +9,12 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>
     <% @plans.each do |plan| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= show_period_with_dates_as_acronym plan.period %></td>
         <td><%= h l(plan.created_at, :format => :short) %></td>
         <td><%= h l(plan.period.start, :format => :short) %></td>
@@ -27,9 +23,7 @@
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit edit_plan_path(plan) %></td>
         <td><%= button_to_destroy plan %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="8"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>

@@ -1,10 +1,8 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th><%= ResourceClass.human_attribute_name :name %></th>
       <th><%= ResourceClass.human_attribute_name :unit %></th>
-      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -12,19 +10,15 @@
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% @resource_classes.each do |resource_class| -%>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td></td>
         <td><%= h resource_class.name %></td>
         <td><%= h name_for_option_value(parameter_in(@auth_organization.id,
           :admin_resource_units, resource_class.created_at), resource_class.unit) %></td>
         <td><%= link_to_show resource_class %></td>
         <td><%= link_to_edit edit_resource_class_path(resource_class) %></td>
         <td><%= button_to_destroy resource_class %></td>
-        <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% end -%>
   </tbody>
 </table>
