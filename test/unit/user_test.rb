@@ -27,6 +27,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal users(:administrator_second_user).last_access,
       @user.last_access
     assert_equal users(:administrator_second_user).logged_in, @user.logged_in
+    assert_equal users(:administrator_second_user).group_admin,
+      @user.group_admin
     assert_equal users(:administrator_second_user).resource_id,
       @user.resource_id
     assert_equal users(:administrator_second_user).manager_id,
@@ -70,13 +72,17 @@ class UserTest < ActiveSupport::TestCase
   test 'update' do
     assert_no_difference 'User.count' do
       assert @user.update_attributes(
-        :name => 'New name', :last_name => 'New last name'),
-        @user.errors.full_messages.join('; ')
+        :name => 'Updated name',
+        :last_name => 'Updated last name',
+        :group_admin => true
+      ), @user.errors.full_messages.join('; ')
     end
 
     @user.reload
-    assert_equal 'New name', @user.name
-    assert_equal 'New last name', @user.last_name
+    assert_equal 'Updated name', @user.name
+    assert_equal 'Updated last name', @user.last_name
+    # No puede habilitarse la administración por asignación masiva
+    assert_equal false, @user.group_admin
   end
 
   # Prueba de eliminación de usuarios

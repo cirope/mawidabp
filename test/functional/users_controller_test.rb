@@ -43,8 +43,35 @@ class UsersControllerTest < ActionController::TestCase
     assert_template 'users/login'
   end
 
+  test 'login users in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
+    get :login
+    assert_response :success
+    assert_not_nil assigns(:user)
+    assert_select '#error_body', false
+    assert_template 'users/login'
+  end
+
   # Prueba que no pueda autenticarse un usuario que no es válido
   test 'invalid user and password attempt' do
+    assert_difference 'ErrorRecord.count' do
+      post :create_session,
+        :user => { :user => 'someone', :password => 'without authorization' }
+
+      error_record = ErrorRecord.find(:first,
+        :conditions => ['data LIKE :data', {:data => '%someone%'}],
+        :order => 'created_at DESC')
+      assert_kind_of ErrorRecord, error_record
+      assert_response :success
+      # en div#notice se leen los mensajes de flash[]
+      assert_select '#notice p', I18n.t(:'message.invalid_user_or_password')
+    end
+  end
+
+  test 'invalid user and password attempt in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
     assert_difference 'ErrorRecord.count' do
       post :create_session,
         :user => { :user => 'someone', :password => 'without authorization' }
@@ -79,6 +106,28 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
+  test 'invalid password attempt in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
+    assert_difference 'ErrorRecord.count' do
+      post :create_session,
+        :user => {
+          :user => users(:administrator_user).user,
+          :password => 'wrong password'
+        }
+      error_record = ErrorRecord.find(:first,
+        :conditions => {
+          :user_id => users(:administrator_user).id,
+          :error => ErrorRecord::ERRORS[:on_login]
+        },
+        :order => 'created_at DESC')
+      assert_kind_of ErrorRecord, error_record
+      assert_response :success
+      # en div#notice se leen los mensajes de flash[]
+      assert_select '#notice p', I18n.t(:'message.invalid_user_or_password')
+    end
+  end
+
   test 'disabled user attempt' do
     assert_difference 'ErrorRecord.count' do
       post :create_session,
@@ -89,6 +138,50 @@ class UsersControllerTest < ActionController::TestCase
       error_record = ErrorRecord.find(:first,
         :conditions => {
           :user_id => users(:disabled_user).id,
+          :error => ErrorRecord::ERRORS[:on_login]
+        },
+        :order => 'created_at DESC')
+      assert_kind_of ErrorRecord, error_record
+      assert_response :success
+      # en div#notice se leen los mensajes de flash[]
+      assert_select '#notice p', I18n.t(:'message.invalid_user_or_password')
+    end
+  end
+
+  test 'disabled user attempt in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
+    assert_difference 'ErrorRecord.count' do
+      post :create_session,
+        :user => {
+          :user => users(:disabled_user).user,
+          :password => PLAIN_PASSWORDS[users(:disabled_user).user]
+        }
+      error_record = ErrorRecord.find(:first,
+        :conditions => {
+          :user_id => users(:disabled_user).id,
+          :error => ErrorRecord::ERRORS[:on_login]
+        },
+        :order => 'created_at DESC')
+      assert_kind_of ErrorRecord, error_record
+      assert_response :success
+      # en div#notice se leen los mensajes de flash[]
+      assert_select '#notice p', I18n.t(:'message.invalid_user_or_password')
+    end
+  end
+
+  test 'no group admin user attempt in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
+    assert_difference 'ErrorRecord.count' do
+      post :create_session,
+        :user => {
+          :user => users(:bare_user).user,
+          :password => PLAIN_PASSWORDS[users(:bare_user).user]
+        }
+      error_record = ErrorRecord.first(
+        :conditions => {
+          :user_id => users(:bare_user).id,
           :error => ErrorRecord::ERRORS[:on_login]
         },
         :order => 'created_at DESC')
@@ -135,6 +228,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'login without organization' do
     @request.host = 'localhost.i'
+
     post :create_session,
       :user => {
         :user => users(:administrator_user).user,
@@ -153,7 +247,24 @@ class UsersControllerTest < ActionController::TestCase
       }
 
     assert_redirected_to :controller => :welcome, :action => :index
-    login_record = LoginRecord.find(:first, :conditions => {
+    login_record = LoginRecord.first(:conditions => {
+        :user_id => users(:administrator_user).id,
+        :organization_id => organizations(:default_organization).id
+      })
+    assert_kind_of LoginRecord, login_record
+  end
+
+  test 'login sucesfully in admin mode' do
+    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+
+    post :create_session,
+      :user => {
+        :user => users(:administrator_user).user,
+        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+      }
+
+    assert_redirected_to :controller => :groups, :action => :index
+    login_record = LoginRecord.first(:conditions => {
         :user_id => users(:administrator_user).id,
         :organization_id => organizations(:default_organization).id
       })

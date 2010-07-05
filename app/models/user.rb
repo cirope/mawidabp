@@ -361,6 +361,10 @@ class User < ActiveRecord::Base
     self.enable? && GlobalModelConfig.current_organization_id && !self.expired?
   end
 
+  def is_group_admin?
+    self.group_admin == true && self.enable == true
+  end
+
   def expired?
     !self.last_access.blank? && self.last_access <
       self.get_parameter(:security_acount_expire_time).to_i.days.ago
@@ -413,9 +417,11 @@ class User < ActiveRecord::Base
 
   def logged_in!(time = Time.now)
     self.is_an_important_change = false
+    self.failed_attempts = 0
+    self.logged_in = true
+    self.last_access = time unless first_login?
 
-    self.update_attributes(:failed_attempts => 0, :logged_in => true,
-      :last_access => (time unless first_login?))
+    self.save(false)
   end
 
   def logout!

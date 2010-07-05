@@ -2,7 +2,7 @@
   <div id="logo">
     <%= image_tag 'logo_mini.png', :size => '150x40', :alt => t(:app_name) %>
   </div>
-  <% if @organization -%>
+  <% if @organization || @group_admin_mode -%>
     <!--[form:user]-->
     <% form_for @user, :url => create_session_users_path do |f| -%>
       <p>

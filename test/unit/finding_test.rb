@@ -799,8 +799,10 @@ class FindingTest < ActiveSupport::TestCase
       findings = Finding.unanswered_and_stale(n)
 
       assert_equal 1, findings.size
-
+      
       finding = findings.first
+
+      assert !finding.users_for_scaffold_notification(n).empty?
 
       finding_ids << finding.id
 

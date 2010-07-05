@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   }
 
   # Constantes
-  INVALID_PREFIXES = ['www', 'admin']
+  INVALID_PREFIXES = ['www', APP_ADMIN_PREFIX]
 
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:business_unit_ids, :parameter_ids]

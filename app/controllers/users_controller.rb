@@ -188,13 +188,10 @@ class UsersController < ApplicationController
     else
       @title = t :'user.login_title'
       @user = User.new
-      organization_prefix = request.subdomains.first
-      show_default_organization_warning = false
-
-      if organization_prefix == 'www' || !organization_prefix
-        organization_prefix = APP_DEFAULT_ORGANIZATION
-        show_default_organization_warning = true
-      end
+      organization_prefix = request.subdomains.first || APP_DEFAULT_ORGANIZATION
+      @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
+      show_default_organization_warning = (organization_prefix ==
+        APP_DEFAULT_ORGANIZATION)
 
       @organization = Organization.find_by_prefix(organization_prefix)
 
@@ -210,38 +207,43 @@ class UsersController < ApplicationController
   # * POST /users/create_session
   def create_session
     @title = t :'user.login_title'
+    @user = User.new(params[:user])
     organization_prefix = request.subdomains.first || APP_DEFAULT_ORGANIZATION
+    @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
     @organization = Organization.find_by_prefix(organization_prefix)
 
     GlobalModelConfig.current_organization_id = @organization.try :id
 
-    if @organization
-      @user = User.new(params[:user])
+    if @organization || @group_admin_mode
+      conditions = {"#{User.table_name}.user" => @user.user}
+
+      if @group_admin_mode
+        conditions["#{User.table_name}.group_admin"] = true
+      else
+        conditions["#{Organization.table_name}.id"] = @organization.id
+      end
 
       auth_user = User.first(
         :include => :organizations,
-        :conditions => {
-          "#{User.table_name}.user" => @user.user,
-          "#{Organization.table_name}.id" => @organization.id
-        },
+        :conditions => conditions,
         :readonly => false
       )
 
       @user.salt = auth_user.salt if auth_user
       @user.encrypt_password
 
-      if auth_user && auth_user.must_change_the_password?
+      if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
         session[:user_id] = auth_user.id
         flash[:notice] ||= t :'message.must_change_the_password'
         session[:go_to] = edit_password_user_url(auth_user)
-      elsif auth_user && auth_user.expired?
+      elsif !@group_admin_mode && auth_user && auth_user.expired?
         auth_user.is_an_important_change = false
         auth_user.update_attribute :enable, false
       end
 
-      if auth_user && auth_user.is_enable? && @user.password_was_encrypted &&
-          auth_user.password == @user.password
+      if !@group_admin_mode && auth_user && auth_user.is_enable? &&
+          @user.password_was_encrypted && auth_user.password == @user.password
         record = LoginRecord.new(
           :user => auth_user,
           :organization => @organization,
@@ -276,13 +278,21 @@ class UsersController < ApplicationController
             redirect_to go_to
           end
         end
-      elsif
+      elsif @group_admin_mode && auth_user.try(:is_group_admin?) &&
+          auth_user.password == @user.password
+        session[:last_access] = Time.now
+        auth_user.logged_in!(session[:last_access])
+        session[:user_id] = auth_user.id
+
+        redirect_to :controller => :groups, :action => :index
+      else
         if (user = User.find_by_user(@user.user))
           ErrorRecord.create(:user => user, :organization => @organization,
             :request => request, :error_type => :on_login)
 
           user.failed_attempts += 1
-          max_attempts = user.get_parameter(:security_attempts_count).to_i
+          max_attempts = @group_admin_mode ?
+            3 : user.get_parameter(:security_attempts_count).to_i
 
           if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
               user.is_enable?
@@ -293,7 +303,7 @@ class UsersController < ApplicationController
           end
 
           user.is_an_important_change = false
-          user.save
+          user.save(false)
         else
           ErrorRecord.create(:user_name => @user.user,
             :organization => @organization, :request => request,

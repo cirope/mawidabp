@@ -12,6 +12,8 @@ PUBLIC_PATH = File.join(Rails.root, 'public', File::SEPARATOR).freeze
 PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
 # Ruta al directorio temporal
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
+# Prefijo de la organización para administrar grupos
+APP_ADMIN_PREFIX = 'admin'.freeze
 # Ruta al directorio para realizar copias de seguridad
 APP_BACKUP_PATH = File.join(PRIVATE_PATH, 'backup_files', File::SEPARATOR).freeze
 # Organización seleccionada por defecto

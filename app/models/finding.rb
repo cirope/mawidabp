@@ -1245,10 +1245,13 @@ class Finding < ActiveRecord::Base
           findings = Finding.unanswered_and_stale(n)
           
           findings.each do |finding|
-            users = finding.users_for_scaffold_notification(n) | finding.users
+            users = finding.users_for_scaffold_notification(n)
 
-            Notifier.deliver_unanswered_finding_to_manager_notification(finding,
-              users, n)
+            # No notificar si no hace falta
+            unless finding.manager_users_for_level(n).empty?
+              Notifier.deliver_unanswered_finding_to_manager_notification(finding,
+                users | finding.users, n)
+            end
 
             finding.update_attribute :notification_level, n
           end

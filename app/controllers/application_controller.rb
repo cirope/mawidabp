@@ -68,7 +68,8 @@ class ApplicationController < ActionController::Base
     load_organization
     load_user
     
-    !@auth_user.nil? && @auth_user.is_enable? && @auth_user.logged_in?
+    !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&
+      @auth_user.logged_in?
   end
 
   # Controla que el usuario esté autenticado y de ser así carga sus permisos.
@@ -112,7 +113,8 @@ class ApplicationController < ActionController::Base
       })
       
       unless @auth_user.change_password_hash
-        @auth_privileges = @auth_user.privileges(@auth_organization)
+        @auth_privileges = @auth_organization ?
+          @auth_user.privileges(@auth_organization) : {}
       else
         @auth_privileges = {}
       end
@@ -123,8 +125,8 @@ class ApplicationController < ActionController::Base
   # expirado. Puede deshabilitarse con el parámetro
   # :_security_session_expire_time_
   def check_access_time #:doc:
-    session_expire = parameter_in(@auth_organization.id,
-      :security_session_expire_time).to_i
+    session_expire = @auth_organization ? parameter_in(@auth_organization.id,
+      :security_session_expire_time).to_i : 30
     last_access = session[:last_access]
     
     if session_expire == 0 || last_access >= session_expire.minutes.ago
