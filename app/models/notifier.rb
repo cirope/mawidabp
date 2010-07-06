@@ -1,5 +1,14 @@
 class Notifier < ActionMailer::Base
 
+  def group_welcome_email(group)
+    subject I18n.t(:'notifier.group_welcome_email.title', :name => group.name)
+    recipients [group.admin_email]
+    from "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>"
+    sent_on Time.now
+    content_type 'text/html'
+    body :group => group, :hash => group.admin_hash
+  end
+
   def welcome_email(user)
     subject I18n.t(:'notifier.welcome_email.title', :name => user.informal_name)
     recipients [user.email]

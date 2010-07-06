@@ -1,0 +1,11 @@
+<h2><%= t :'notifier.group_welcome_email.title', :name => @group.name %></h2>
+<p><%= t :'notifier.group_welcome_email.initial_user' %></p>
+<p>
+  <%= link_to t(:'notifier.group_welcome_email.create_user'),
+    new_initial_users_url(:hash => @hash,
+      :host => (@group.organizations.blank? ?
+          URL_HOST : "#{@group.organizations.first.prefix}.#{URL_HOST}"),
+      :protocol => URL_PROTOCOL) -%>
+</p>
+<p><%= t(:'notifier.group_welcome_email.clarification') %></p>
+<%= render :partial => 'footer' %>

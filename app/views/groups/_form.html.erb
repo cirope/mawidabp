@@ -11,8 +11,16 @@
       <%= g_f.text_field :name, :maxlength => 255 %>
     </p>
     <p>
+      <%= g_f.label :admin_email %>
+      <%= g_f.text_field :admin_email, :maxlength => 100 %>
+    </p>
+    <p>
       <%= g_f.label :description %>
       <%= g_f.text_area :description %>
+    </p>
+    <p class="form_item">
+      <%= g_f.label :send_notification_email, nil, :class => :inline %>
+      <%= g_f.check_box :send_notification_email, {:class => :inline_item}, '1', '' %>
     </p>
   </div>
 

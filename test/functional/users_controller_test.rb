@@ -20,7 +20,7 @@ class UsersControllerTest < ActionController::TestCase
     public_actions = [:login]
     private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
       :blank_password, :edit_password, :update_password, :edit_personal_data,
-      :update_personal_data, :logout]
+      :update_personal_data, :logout, :new_initial, :create_initial]
 
     private_actions.each do |action|
       get action
@@ -737,6 +737,97 @@ class UsersControllerTest < ActionController::TestCase
     user = User.find(users(:expired_blank_password_user).id)
     assert_redirected_to :controller => :users, :action => :login
     assert_not_equal User.digest('new_password_123', user.salt), user.password
+  end
+
+  test 'new initial' do
+    get :new_initial, :hash => groups(:main_group).admin_hash
+    assert_response :success
+    assert_not_nil assigns(:user)
+    assert_select '#error_body', false
+    assert_template 'users/new_initial'
+  end
+
+  test 'new initial with invalid hash' do
+    get :new_initial, :hash => "#{groups(:main_group).admin_hash}x"
+    assert_redirected_to :controller => :users, :action => :login
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
+  end
+
+  test 'create initial' do
+    assert_difference ['User.count', 'OrganizationRole.count'] do
+      post :create_initial, {
+        :hash => groups(:main_group).admin_hash,
+        :user => {
+          :user => 'new_user_2',
+          :name => 'New Name2',
+          :last_name => 'New Last Name2',
+          :email => 'new_user2@newemail.net',
+          :language => I18n.available_locales.last.to_s,
+          :resource_id => resources(:auditor_resource).id,
+          :manager_id => users(:administrator_user).id,
+          :logged_in => false,
+          :enable => true,
+          :send_notification_email => false,
+          :organization_roles_attributes => {
+            :new_1 => {
+              :organization_id => organizations(:default_organization).id,
+              :role_id => roles(:admin_role).id
+            }
+          }
+        }
+      }
+    end
+
+    assert_redirected_to :controller => :users, :action => :login
+    assert_equal I18n.t(:'user.correctly_created'), flash[:notice]
+  end
+
+  test 'create initial with invalid hash' do
+    assert_no_difference ['User.count', 'OrganizationRole.count'] do
+      post :create_initial, {
+        :hash => "#{groups(:main_group).admin_hash}x",
+        :user => {
+          :user => 'new_user_2',
+          :name => 'New Name2',
+          :last_name => 'New Last Name2',
+          :email => 'new_user2@newemail.net',
+          :language => I18n.available_locales.last.to_s,
+          :resource_id => resources(:auditor_resource).id,
+          :manager_id => users(:administrator_user).id,
+          :logged_in => false,
+          :enable => true,
+          :send_notification_email => false,
+          :organization_roles_attributes => {
+            :new_1 => {
+              :organization_id => organizations(:default_organization).id,
+              :role_id => roles(:admin_role).id
+            }
+          }
+        }
+      }
+    end
+    
+    assert_redirected_to :controller => :users, :action => :login
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
+  end
+
+  test 'get initial roles' do
+    perform_auth
+    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+      :format => 'json', :hash => groups(:main_group).admin_hash
+    assert_response :success
+    roles = ActiveSupport::JSON.decode(@response.body)
+    assert !roles.empty?
+    assert roles.any? { |r| r.first == roles(:admin_role).name }
+  end
+
+  test 'get initial roles with invalid hash' do
+    perform_auth
+    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+      :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
+
+    assert_redirected_to :controller => :users, :action => :login
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
   end
 
   test 'edit personal data' do

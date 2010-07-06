@@ -1,7 +1,22 @@
 require 'test_helper'
 
 class NotifierTest < ActionMailer::TestCase
-  fixtures :users, :findings, :organizations
+  fixtures :users, :findings, :organizations, :groups
+
+  test 'group welcome email' do
+    group = Group.find(groups(:main_group).id)
+
+    assert ActionMailer::Base.deliveries.empty?
+
+    response = Notifier.deliver_group_welcome_email(group)
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal I18n.t(:'notifier.group_welcome_email.title',
+      :name => group.name), response.subject
+    assert_match Regexp.new(I18n.t(:'notifier.group_welcome_email.initial_user')),
+      response.body
+    assert response.to.include?(group.admin_email)
+  end
 
   test 'welcome email' do
     user = User.find(users(:first_time_user).id)

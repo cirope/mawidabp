@@ -1,5 +1,4 @@
-<%= render :partial => 'form',
-  :locals => {:submit_button_text => t(:'label.modify')} %>
+<%= render_form t(:'label.modify'), :url => edit_user_path(@user) %>
 
 <div id="links">
   <%= link_to t(:'label.show'), @user %> |

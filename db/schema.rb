@@ -218,11 +218,17 @@ ActiveRecord::Schema.define(:version => 20100702122825) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
+    t.string   "admin_email"
+    t.string   "admin_hash"
     t.text     "description"
     t.integer  "lock_version", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "groups", ["admin_email"], :name => "index_groups_on_admin_email", :unique => true
+  add_index "groups", ["admin_hash"], :name => "index_groups_on_admin_hash", :unique => true
+  add_index "groups", ["name"], :name => "index_groups_on_name", :unique => true
 
   create_table "help_contents", :force => true do |t|
     t.string   "language"

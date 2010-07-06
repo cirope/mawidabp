@@ -60,12 +60,21 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'create group' do
-    assert_difference ['Group.count', 'Organization.count'] do
+    counts_array = ['Group.count', 'Organization.count',
+      'ActionMailer::Base.deliveries.size']
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_difference counts_array do
       perform_auth
       post :create, {
         :group => {
           :name => 'New group',
           :description => 'New group description',
+          :admin_email => 'new_group@test.com',
+          :send_notification_email => '1',
           :organizations_attributes => {
             :new_1 => {
               :name => 'New organization',
@@ -75,6 +84,37 @@ class GroupsControllerTest < ActionController::TestCase
           }
         }
       }
+    end
+
+    assert_equal Group.find_by_name('New group').id,
+      Organization.find_by_prefix('new-organization').group_id
+  end
+
+  test 'create group without notification' do
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_difference ['Group.count', 'Organization.count'] do
+      assert_no_difference 'ActionMailer::Base.deliveries.size' do
+        perform_auth
+        post :create, {
+          :group => {
+            :name => 'New group',
+            :description => 'New group description',
+            :admin_email => 'new_group@test.com',
+            :send_notification_email => '',
+            :organizations_attributes => {
+              :new_1 => {
+                :name => 'New organization',
+                :prefix => 'new-organization',
+                :description => 'New organization description'
+              }
+            }
+          }
+        }
+      end
     end
 
     assert_equal Group.find_by_name('New group').id,
@@ -98,6 +138,8 @@ class GroupsControllerTest < ActionController::TestCase
         :group => {
           :name => 'Updated group',
           :description => 'Updated group description',
+          :admin_email => 'updated_group@test.com',
+          :send_notification_email => '',
           :organizations_attributes => {
             organizations(:default_organization).id => {
               :id => organizations(:default_organization).id,

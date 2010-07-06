@@ -683,6 +683,11 @@ es:
         one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
+    group_welcome_email:
+      title: "El grupo {{name}} ha sido creado"
+      initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
+      create_user: "Crear usuario"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawida Buenas Prácticas'"
     welcome_email:
       title: "{{name}}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
@@ -1373,6 +1378,8 @@ es:
       group:
         name: "Nombre"
         description: "Descripción"
+        admin_email: "Correo del administrador"
+        send_notification_email: "Enviar notificación"
         <<: *commons
       help_content:
         language: "Idioma"

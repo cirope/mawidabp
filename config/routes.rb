@@ -199,9 +199,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :collection => {
     :login => :get,
     :create_session => :post,
+    :new_initial => :get,
+    :create_initial => :post,
     :export_to_pdf => :get,
     :auto_complete_for_user => :post,
-    :roles => :get
+    :roles => :get,
+    :initial_roles => :get
   }, :member => {
     :logout => :get,
     :edit_password => :get,

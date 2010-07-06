@@ -7,11 +7,11 @@ require 'pdf/simpletable'
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
   before_filter :auth, :except => [:login, :create_session, :edit_password,
-    :update_password]
+    :update_password, :new_initial, :create_initial, :initial_roles]
   before_filter :load_privileges
   before_filter :check_privileges, :except => [:login, :create_session, :logout,
     :edit_password, :update_password, :edit_personal_data,
-    :update_personal_data]
+    :update_personal_data, :new_initial, :create_initial, :initial_roles]
   layout proc { |controller|
     controller.request.xhr? ? false :
       (['login', 'create_session'].include?(controller.action_name) ?
@@ -161,14 +161,14 @@ class UsersController < ApplicationController
     end
   end
 
-  # Lista los informes del periodo indicado
+  # Lista los roles de la organización indicada
   #
   # * GET /users/roles/1.json
   def roles
     roles = Role.find_all_by_organization_id params[:id]
 
     respond_to do |format|
-      format.json  { render :json => roles.map { |r| [r.name, r.id] }}
+      format.json { render :json => roles.map { |r| [r.name, r.id] } }
     end
   end
 
@@ -411,6 +411,62 @@ class UsersController < ApplicationController
   rescue ActiveRecord::StaleObjectError
     flash[:notice] = t :'user.password_stale_object_error'
     redirect_to edit_password_user_url(@auth_user)
+  end
+
+  # Crea un usuario inicial, sólo hace falta un hash válido para autenticarse
+  #
+  # * GET /users/new_initial/hash=xxxx
+  def new_initial
+    group = Group.find_by_admin_hash(params[:hash])
+
+    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
+      @user = User.new
+      
+      render :layout => 'application_clean'
+    else
+      restart_session
+      redirect_to_login t(:'message.must_be_authenticated')
+    end
+  end
+
+  # Crea un usuario inicial, sólo hace falta un hash válido para autenticarse
+  #
+  # * POST /users/create_initial
+  def create_initial
+    group = Group.find_by_admin_hash(params[:hash])
+
+    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
+      @user = User.new(params[:user])
+
+      if @user.save && group.update_attribute(:admin_hash, nil)
+        @user.send_welcome_email
+        restart_session
+        redirect_to_login t(:'user.correctly_created')
+      else
+        render :action => :new_initial, :layout => 'application_clean'
+      end
+    else
+      restart_session
+      redirect_to_login t(:'message.must_be_authenticated')
+    end
+  end
+
+  # Lista los roles de la organización indicada
+  #
+  # * GET /users/initial_roles/1.json
+  def initial_roles
+    group = Group.find_by_admin_hash(params[:hash])
+
+    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
+      roles = Role.find_all_by_organization_id params[:id]
+
+      respond_to do |format|
+        format.json { render :json => roles.map { |r| [r.name, r.id] } }
+      end
+    else
+      restart_session
+      redirect_to_login t(:'message.must_be_authenticated')
+    end
   end
 
   # Cambia los datos del usuario actual

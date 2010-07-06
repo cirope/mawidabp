@@ -18,7 +18,7 @@ class Organization < ActiveRecord::Base
   after_create :create_initial_data
   
   # Named scopes
-  named_scope :list, {:order => 'name ASC'}
+  named_scope :list, :order => 'name ASC'
 
   # Atributos de solo lectura
   attr_readonly :group_id
@@ -73,7 +73,7 @@ class Organization < ActiveRecord::Base
   
   def create_initial_parameters
     DEFAULT_PARAMETERS.each do |name, value|
-      self.parameters << Parameter.new(
+      self.parameters.build(
         :name => name.to_s,
         :value => value,
         :description => nil
@@ -82,32 +82,23 @@ class Organization < ActiveRecord::Base
   end
 
   def create_initial_roles
-    success_on_create = true
-
     Role.transaction do
       Role::TYPES.each do |type, value|
-        role = Role.new(:name => "#{type}_#{self.prefix}", :role_type => value,
-          :organization => self)
+        role = self.roles.build(:name => "#{type}_#{self.prefix}",
+          :role_type => value)
 
         role.inject_auth_privileges(Hash.new(Hash.new(true)))
 
-        success_on_create &= role.save
-
         ALLOWED_MODULES_BY_TYPE[type].each do |mod|
-          privilege = Privilege.create(
+          role.privileges.build(
             :module => mod.to_s,
             :read => true,
             :modify => true,
             :erase => true,
-            :approval => true,
-            :role => role
+            :approval => true
           )
-
-          success_on_create &&= privilege.errors.size == 0
         end
       end
-
-      raise ActiveRecord::Rollback unless success_on_create
     end
   end
 end

@@ -30,6 +30,8 @@ AVAILABLE_LOCALES = [:es].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
+# Expresión regular para validar direcciones de correo
+EMAIL_REGEXP = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
 # Cantidad de días anteriores al vencimiento de una observación en los que el
 # sistema notificará su proximidad
 FINDING_WARNING_EXPIRE_DAYS = 7

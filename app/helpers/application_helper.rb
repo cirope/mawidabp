@@ -99,9 +99,10 @@ module ApplicationHelper
   #
   # * _submit_label_::  Etiqueta que se quiere mostrar en el botón submit del
   #                     formulario
-  def render_form(submit_label = t(:'label.save'))
+  def render_form(submit_label = t(:'label.save'), locals_extra = {})
     content_tag :div, render(:partial => 'form',
-      :locals => {:submit_text => submit_label}), :class => :form_container
+      :locals => {:submit_text => submit_label}.merge(locals_extra)),
+      :class => :form_container
   end
 
   # Devuelve el HTML de un campo lock_version oculto dentro de un div oculto

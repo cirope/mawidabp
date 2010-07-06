@@ -1,7 +1,11 @@
 main_group:
   name: Main group
   description: Main group description
+  admin_email: main@test.com
+  admin_hash: <%= UUIDTools::UUID.random_create.to_s %>
 
 second_group:
   name: Second group
   description: Second group description
+  admin_email: second@test.com
+  admin_hash: <%= UUIDTools::UUID.random_create.to_s %>

@@ -157,9 +157,8 @@ class User < ActiveRecord::Base
       record.errors.add attr, :already_used if repeated
     end
   end
-  validates_format_of :email,
-    :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
-    :allow_nil => true, :allow_blank => true
+  validates_format_of :email, :with => EMAIL_REGEXP, :allow_nil => true,
+    :allow_blank => true
   
   # Relaciones
   belongs_to :resource
