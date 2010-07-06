@@ -139,7 +139,7 @@ class RoleTest < ActiveSupport::TestCase
   test 'has privilege for functions' do
     assert @role.privileges.size > 2
     # Para asegurar un negativo
-    assert Privilege.find(privileges(:admin_administration_organizations).id).
+    assert Privilege.find(privileges(:admin_administration_backups).id).
       update_attributes(:read => false, :modify => false, :erase => false,
       :approval => false)
 

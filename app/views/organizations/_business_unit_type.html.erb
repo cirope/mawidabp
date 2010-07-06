@@ -10,7 +10,7 @@
       <div id="business_units_<%= value %>">
         <%= hidden_field_tag "business_unit_value_#{value}", value,
           :class => :business_unit_type %>
-        <% @organization.business_units.each do |bu| -%>
+        <% @auth_organization.business_units.each do |bu| -%>
           <% if bu.business_unit_type == value -%>
             <% o_f.fields_for :business_units, bu do |bu_f| -%>
               <%= render :partial => 'business_unit', :locals =>

@@ -1,0 +1,33 @@
+<h1 class="center_title"><%= @auth_organization.name %></h1>
+<!--[form:organization]-->
+<% form_for @auth_organization, :url => {:action => :update_business_units} do |o_f| -%>
+  <% content_for :js_extra do -%>
+    <%= "var business_unit='#{generate_template(o_f, :business_units,
+    :locals => {:business_unit_type => 'NEW_TYPE'})}';" %>
+  <% end -%>
+  <%= o_f.error_messages %>
+
+  <div style="clear: both; margin-top: 2em;">
+    <h1><%= t :'organization.internal_audit' %></h1>
+    <% BusinessUnit::INTERNAL_TYPES.sort { |a,b| a[1] <=> b[1] }.each do |type, value| -%>
+      <%= render :partial => 'business_unit_type',
+        :locals => {:value => value, :type => type, :o_f => o_f} %>
+    <% end -%>
+  </div>
+
+  <div style="clear: both; margin-top: 2em;">
+    <h1><%= t :'organization.external_audit' %></h1>
+    <% BusinessUnit::EXTERNAL_TYPES.sort { |a,b| a[1] <=> b[1] }.each do |type, value| -%>
+      <%= render :partial => 'business_unit_type',
+        :locals => {:value => value, :type => type, :o_f => o_f} %>
+    <% end -%>
+  </div>
+
+  <%= hidden_lock_version(o_f) %>
+
+  <p>
+    <span class="button"><%= o_f.submit t(:'label.save') %></span>
+  </p>
+<% end -%>
+<!--[eoform:organization] -->
+<%= set_focus_to_first_element %>

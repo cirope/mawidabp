@@ -8,7 +8,8 @@ class OrganizationsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
+    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
+      :edit_business_units, :update_business_units]
 
     private_actions.each do |action|
       get action
@@ -53,27 +54,27 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'create organization' do
     user = User.find users(:administrator_user).id
-    counts_array = ['Organization.count', 'BusinessUnit.count',
-      'user.organizations.count']
 
     perform_auth user
 
-    assert_difference counts_array do
-      post :create, {
-        :organization => {
-          :name => 'New organization',
-          :prefix => 'new-prefix',
-          :description => 'New description',
-          :group_id => groups(:main_group).id,
-          :image_model_id => image_models(:image_one).id,
-          :business_units_attributes => {
-            :new_1 => {
-              :name => 'new business_unit 1',
-              :business_unit_type => BusinessUnit::TYPES[:cycle]
+    assert_difference ['Organization.count', 'user.organizations.count'] do
+      assert_no_difference 'BusinessUnit.count' do
+        post :create, {
+          :organization => {
+            :name => 'New organization',
+            :prefix => 'new-prefix',
+            :description => 'New description',
+            :group_id => groups(:main_group).id,
+            :image_model_id => image_models(:image_one).id,
+            :business_units_attributes => {
+              :new_1 => {
+                :name => 'new business_unit 1',
+                :business_unit_type => BusinessUnit::TYPES[:cycle]
+              }
             }
           }
         }
-      }
+      end
     end
 
     assert_equal groups(:main_group).id,
@@ -82,27 +83,27 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'create organization with wrong group' do
     user = User.find users(:administrator_user).id
-    counts_array = ['Organization.count', 'BusinessUnit.count',
-      'user.organizations.count']
 
     perform_auth user
 
-    assert_difference counts_array do
-      post :create, {
-        :organization => {
-          :name => 'New organization',
-          :prefix => 'new-prefix',
-          :description => 'New description',
-          :group_id => groups(:second_group).id,
-          :image_model_id => image_models(:image_one).id,
-          :business_units_attributes => {
-            :new_1 => {
-              :name => 'new business_unit 1',
-              :business_unit_type => BusinessUnit::TYPES[:cycle]
+    assert_difference ['Organization.count', 'user.organizations.count'] do
+      assert_no_difference 'BusinessUnit.count' do
+        post :create, {
+          :organization => {
+            :name => 'New organization',
+            :prefix => 'new-prefix',
+            :description => 'New description',
+            :group_id => groups(:second_group).id,
+            :image_model_id => image_models(:image_one).id,
+            :business_units_attributes => {
+              :new_1 => {
+                :name => 'new business_unit 1',
+                :business_unit_type => BusinessUnit::TYPES[:cycle]
+              }
             }
           }
         }
-      }
+      end
     end
 
     # El grupo debe ser el mismo que el de la organización autenticada
@@ -142,7 +143,8 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_redirected_to organizations_path
     assert_not_nil assigns(:organization)
     assert_equal 'Updated organization', assigns(:organization).name
-    assert_equal 'Updated business units', business_unit.name
+    # No se debe poder actualizar las unidades de negocio
+    assert_not_equal 'Updated business units', business_unit.name
   end
 
   test 'destroy organization' do
@@ -154,5 +156,40 @@ class OrganizationsControllerTest < ActionController::TestCase
     end
     
     assert_redirected_to organizations_path
+  end
+
+  test 'edit business units' do
+    perform_auth
+    get :edit_business_units
+    assert_response :success
+    assert_not_nil assigns(:auth_organization)
+    assert_select '#error_body', false
+    assert_template 'organizations/edit_business_units'
+  end
+
+  test 'update business units' do
+    perform_auth
+    put :update_business_units, {
+      :organization => {
+        :name => 'Updated organization',
+        :description => 'Updated description',
+        :image_model_id => image_models(:image_one).id,
+        :business_units_attributes => {
+          business_units(:business_unit_one).id => {
+            :id => business_units(:business_unit_one).id,
+            :name => 'Updated business units',
+            :business_unit_type => BusinessUnit::TYPES[:cycle]
+          }
+        }
+      }
+    }
+
+    business_unit = BusinessUnit.find business_units(:business_unit_one).id
+
+    assert_redirected_to edit_business_units_organizations_path
+    assert_not_nil assigns(:auth_organization)
+    # No se debe poder actualizar otro dato que no sea las unidades de negocio
+    assert_not_equal 'Updated organization', assigns(:auth_organization).name
+    assert_equal 'Updated business units', business_unit.name
   end
 end

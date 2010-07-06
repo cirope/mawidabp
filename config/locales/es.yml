@@ -38,7 +38,10 @@ es:
     exit: "Salir"
     administration_title: "ADMINISTRACIÓN"
     administration:
-      organizations: "Organización"
+      organization_title: "Organización"
+      organization:
+        management: "Gestión"
+        business_units: "Unidades de negocio"
       security_title: "Seguridad"
       security:
         parameters: "Parámetros de seguridad"
@@ -719,6 +722,8 @@ es:
     hide_business_units: "Ocultar unidades de negocio"
     internal_audit: "Auditorías realizadas por la entidad"
     external_audit: "Auditorías realizadas por otras entidades"
+    edit_business_units_title: "Editar unidades de negocio"
+    business_units_correctly_updated: "Unidades de negocio actualizadas correctamente"
     errors:
       business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
     business_unit_cycle:

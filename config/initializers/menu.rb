@@ -59,10 +59,26 @@ APP_AUDITOR_MENU_ITEMS = [
     :url => '#menu_administration',
     :children => [
       MenuItem.new(
-        :organizations,
+        :organization,
         :order => 1,
-        :controllers => :organizations,
-        :url => {:controller => :organizations}
+        :url => '#menu_administration_organization',
+        :class => :menu_item_2,
+        :children => [
+          MenuItem.new(
+            :management,
+            :order => 1,
+            :controllers => :organizations,
+            :extra_conditions => "!['edit_business_units', 'update_business_units'].include?(params[:action])",
+            :url => {:controller => :organizations}
+          ),
+          MenuItem.new(
+            :business_units,
+            :order => 2,
+            :controllers => :organizations,
+            :extra_conditions => "['edit_business_units', 'update_business_units'].include?(params[:action])",
+            :url => {:controller => :organizations, :action => :edit_business_units}
+          )
+        ]
       ),
       MenuItem.new(
         :security,
@@ -83,19 +99,20 @@ APP_AUDITOR_MENU_ITEMS = [
             :controllers => [:error_records, :login_records, :versions],
             :url => {:controller => :login_records, :action => :choose}
           ),
-        MenuItem.new(
-          :users,
-          :order => 3,
-          :controllers => :users,
-          :url => {:controller => :users}
-        ),
-        MenuItem.new(
-          :roles,
-          :order => 4,
-          :controllers => :roles,
-          :url => {:controller => :roles}
-        )
-      ]),
+          MenuItem.new(
+            :users,
+            :order => 3,
+            :controllers => :users,
+            :url => {:controller => :users}
+          ),
+          MenuItem.new(
+            :roles,
+            :order => 4,
+            :controllers => :roles,
+            :url => {:controller => :roles}
+          )
+        ]
+      ),
       MenuItem.new(
         :best_practices,
         :order => 3,
@@ -324,8 +341,6 @@ end.flatten.freeze
 APP_AUDITED_MODULES = APP_AUDITED_MENU_ITEMS.map do |menu_item|
   menu_item.submenu_names
 end.flatten.freeze
-
-APP_MENU_VERSION = 1
 
 APP_MODULES = (APP_AUDITOR_MODULES | APP_AUDITED_MODULES).freeze
 

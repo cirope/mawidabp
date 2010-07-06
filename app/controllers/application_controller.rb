@@ -182,7 +182,8 @@ class ApplicationController < ActionController::Base
       modules.each do |mod|
         if mod.controllers.include?(controller_name) && (top_level_menu ||
               mod.conditions(controller_name).blank? ||
-              eval(mod.conditions(controller_name)))
+              eval(mod.conditions(controller_name)) ||
+              eval(mod.conditions(controller_name, false)))
 
           selected_module = mod
           top_level_menu = false

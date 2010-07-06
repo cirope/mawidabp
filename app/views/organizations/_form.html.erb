@@ -34,23 +34,7 @@
   </p>
   </div>
 
-  <div style="clear: both; margin-top: 2em;">
-    <h1><%= t :'organization.internal_audit' %></h1>
-    <% BusinessUnit::INTERNAL_TYPES.sort { |a,b| a[1] <=> b[1] }.each do |type, value| -%>
-      <%= render :partial => 'business_unit_type',
-        :locals => {:value => value, :type => type, :o_f => o_f} %>
-    <% end -%>
-  </div>
-
-  <div style="clear: both; margin-top: 2em;">
-    <h1><%= t :'organization.external_audit' %></h1>
-    <% BusinessUnit::EXTERNAL_TYPES.sort { |a,b| a[1] <=> b[1] }.each do |type, value| -%>
-      <%= render :partial => 'business_unit_type',
-        :locals => {:value => value, :type => type, :o_f => o_f} %>
-    <% end -%>
-  </div>
-
-  <div style="display:none"><%= o_f.hidden_field :lock_version %></div>
+  <%= hidden_lock_version(o_f) %>
 
   <p>
     <span class="button"><%= o_f.submit submit_button_text %></span>

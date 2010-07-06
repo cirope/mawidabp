@@ -180,7 +180,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :oportunities, :has_many => :costs
 
-  map.resources :organizations
+  map.resources :organizations, :collection => {
+    :edit_business_units => :get,
+    :update_business_units => :put
+  }
 
   map.resources :roles
 
