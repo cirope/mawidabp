@@ -27,7 +27,8 @@
       var roleSelect = element.up('.organization_role').down('.role_select');
 
       if(!$F(element).blank()) {
-        var url = '<%= url_for :action => (@auth_user ? :roles : :initial_roles) %>';
+        var url = '<%= url_for(:action => (@auth_user ? :roles : :initial_roles),
+          :hash => params[:hash]) %>';
 
         Helper.showLoading(element);
 

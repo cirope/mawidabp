@@ -114,8 +114,8 @@ class User < ActiveRecord::Base
     end
   end
   validates_each :organization_roles do |record, attr, value|
-    if value.reject { |o_r| o_r.marked_for_destruction? }.blank?
-      record.errors.add attr, :blank
+    if value.reject(&:marked_for_destruction?).blank?
+      record.errors.add attr, :blank unless record.group_admin == true
     end
   end
   validates_each :password do |record, attr, value|

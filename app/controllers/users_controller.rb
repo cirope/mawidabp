@@ -27,10 +27,13 @@ class UsersController < ApplicationController
     @title = t :'user.index_title'
     default_conditions = [
       [
-        "#{Organization.table_name}.id = :organization_id",
-        "#{Organization.table_name}.id IS NULL"
-      ].join(' OR '),
-      {:organization_id => @auth_organization.id}
+        [
+          "#{Organization.table_name}.id = :organization_id",
+          "#{Organization.table_name}.id IS NULL"
+        ].join(' OR '),
+        "#{User.table_name}.group_admin = :boolean_false"
+      ].join(' AND '),
+      { :organization_id => @auth_organization.id, :boolean_false => false }
     ]
 
     build_search_conditions User, default_conditions
@@ -188,17 +191,10 @@ class UsersController < ApplicationController
     else
       @title = t :'user.login_title'
       @user = User.new
-      organization_prefix = request.subdomains.first || APP_DEFAULT_ORGANIZATION
+      organization_prefix = request.subdomains.first
       @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
-      show_default_organization_warning = (organization_prefix ==
-        APP_DEFAULT_ORGANIZATION)
 
       @organization = Organization.find_by_prefix(organization_prefix)
-
-      if show_default_organization_warning && @organization
-        flash[:notice] ||= t(:'message.default_organization_selected',
-          :organization => @organization.name)
-      end
     end
   end
 
@@ -208,7 +204,7 @@ class UsersController < ApplicationController
   def create_session
     @title = t :'user.login_title'
     @user = User.new(params[:user])
-    organization_prefix = request.subdomains.first || APP_DEFAULT_ORGANIZATION
+    organization_prefix = request.subdomains.first
     @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
     @organization = Organization.find_by_prefix(organization_prefix)

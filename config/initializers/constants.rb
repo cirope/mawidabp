@@ -16,8 +16,6 @@ TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 APP_ADMIN_PREFIX = 'admin'.freeze
 # Ruta al directorio para realizar copias de seguridad
 APP_BACKUP_PATH = File.join(PRIVATE_PATH, 'backup_files', File::SEPARATOR).freeze
-# Organización seleccionada por defecto
-APP_DEFAULT_ORGANIZATION = 'default'.freeze
 # Ruta a los archivos subidos a la aplicación
 APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 # Ruta a las imágenes subidas a la aplicación
