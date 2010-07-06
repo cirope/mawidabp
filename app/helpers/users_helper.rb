@@ -18,4 +18,13 @@ module UsersHelper
     form.select :language, options.sort{ |a, b| a[0] <=> b[0] }, {},
       {:class => (:inline_item if inline)}
   end
+
+  def user_organizations_field(form, id = nil )
+    group = @auth_organization ? @auth_organization.group :
+      Group.find_by_admin_hash(params[:hash])
+    
+    form.select :organization_id, sorted_options_array_for(
+      Organization.list_for_group(group), :name, :id), {:prompt => true},
+      {:id => "#{id}_organization_id"}
+  end
 end

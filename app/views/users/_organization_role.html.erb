@@ -4,9 +4,7 @@
 <div class="organization_role item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">
-    <%= f.select :organization_id, sorted_options_array_for(
-      Organization.all, :name, :id), {:prompt => true},
-      {:id => "#{id}_organization_id"} %>
+    <%= user_organizations_field(f, id) %>
     </div>
     <div class="item_field" style="width: 40%;">
     <%= f.select :role_id, sorted_options_array_for(roles, :name, :id),

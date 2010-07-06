@@ -24,6 +24,9 @@ class ApplicationController < ActionController::Base
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
   def rescue_action(exception)
+    STDERR << "#{exception.class}: #{exception.message}\n\n"
+    exception.backtrace.each { |l| STDERR << "#{l}\n" }
+
     @title = t :'error.title'
     create_exception_file exception
     

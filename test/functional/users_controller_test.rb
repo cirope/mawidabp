@@ -1051,11 +1051,13 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       post :release_update, {
-        :id => users(:auditor_user).user
+        :id => users(:auditor_user).user,
+        :user => {}
       }
     end
 
-    assert_response :success
+    assert_redirected_to users_path
+    assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
   end
 
   test 'export to pdf' do

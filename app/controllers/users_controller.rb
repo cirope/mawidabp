@@ -168,7 +168,8 @@ class UsersController < ApplicationController
   #
   # * GET /users/roles/1.json
   def roles
-    roles = Role.find_all_by_organization_id params[:id]
+    organization = Organization.find(params[:id])
+    roles = Role.list_by_organization_and_group organization, organization.group
 
     respond_to do |format|
       format.json { render :json => roles.map { |r| [r.name, r.id] } }
@@ -258,9 +259,11 @@ class UsersController < ApplicationController
           end
 
           unless auth_user.allow_concurrent_access?
-            flash[:notice] ||= t :'message.you_are_already_logged'
             auth_user = nil
             @user = User.new
+            flash[:notice] = t :'message.you_are_already_logged'
+
+            render :action => :login
           end
 
           if auth_user
@@ -310,9 +313,9 @@ class UsersController < ApplicationController
         flash[:notice] = t :'message.invalid_user_or_password'
         render :action => :login
       end
+    else
+      render :action => :login unless session[:user_id]
     end
-
-    render :action => :login unless session[:user_id]
   end
 
   # Blanquea la contraseña de un usuario

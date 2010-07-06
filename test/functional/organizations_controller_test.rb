@@ -27,6 +27,8 @@ class OrganizationsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:organizations)
+    # Sólo la organización del grupo autenticado
+    assert_equal 1, assigns(:organizations).size
     assert_select '#error_body', false
     assert_template 'organizations/index'
   end
@@ -144,7 +146,8 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'destroy organization' do
-    perform_auth
+    perform_auth(users(:administrator_second_user),
+      organizations(:second_organization))
     
     assert_difference ['Organization.count', 'BusinessUnit.count'], -1 do
       delete :destroy, :id => organizations(:second_organization).id

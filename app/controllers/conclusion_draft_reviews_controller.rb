@@ -189,7 +189,7 @@ class ConclusionDraftReviewsController < ApplicationController
     @title = t :'conclusion_draft_review.send_by_email'
     @conclusion_draft_review = find_with_organization(params[:id])
 
-    if @conclusion_draft_review.review.can_be_sended? &&
+    if @conclusion_draft_review.try(:review).try(:can_be_sended?) &&
         !@conclusion_draft_review.has_final_review?
       users = []
 
@@ -236,9 +236,11 @@ class ConclusionDraftReviewsController < ApplicationController
       else
         render :action => :compose_email
       end
-    else
+    elsif @conclusion_draft_review.try(:review)
       flash[:notice] = t(:'conclusion_review.review_not_approved')
       render :action => :compose_email
+    else
+      redirect_to conclusion_draft_reviews_path
     end
   end
 

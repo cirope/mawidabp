@@ -44,6 +44,21 @@ class OrganizationTest < ActiveSupport::TestCase
       Organization.find_by_prefix('newww-test-prefix').group_id
   end
 
+  # Prueba la creación de una organización sin parámetros ni roles
+  test 'create without parameters or roles' do
+    assert_difference 'Organization.count' do
+      assert_no_difference ['Parameter.count', 'Role.count'] do
+        @organization = Organization.create(
+          :name => 'new3 organization',
+          :prefix => 'newww-test-prefix'
+        )
+      end
+    end
+
+    assert_equal groups(:main_group).id,
+      Organization.find_by_prefix('newww-test-prefix').group_id
+  end
+
   # Prueba la creación de una organización
   test 'create with wrong group' do
     assert_difference 'Organization.count' do

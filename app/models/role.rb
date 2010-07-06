@@ -27,6 +27,15 @@ class Role < ActiveRecord::Base
       :order => 'name ASC'
     }
   }
+  named_scope :list_by_organization_and_group, lambda { |organization, group|
+    {
+      :include => :organization,
+      :conditions => {
+        "#{table_name}.organization_id" => organization.id,
+        "#{Organization.table_name}.group_id" => group.id
+      }
+    }
+  }
 
   # Callbacks
   before_validation :check_auth_privileges

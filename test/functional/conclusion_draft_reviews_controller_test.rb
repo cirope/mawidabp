@@ -331,9 +331,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     # Produce un error cuando se trata de buscar un informe borrador que ya
     # tiene definitivo
-    assert_response :success
-    assert_select '#error_body', true
-    assert_template 'errors/show'
+    assert_redirected_to :action => :index
   end
 
   test 'auto complete for user' do

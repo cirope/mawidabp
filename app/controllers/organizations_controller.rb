@@ -15,7 +15,7 @@ class OrganizationsController < ApplicationController
     @title = t :'organization.index_title'
     @organizations = Organization.paginate(:page => params[:page],
       :per_page => APP_LINES_PER_PAGE,
-      :conditions => {:id => @auth_user.organization_ids},
+      :conditions => {:group_id => @auth_organization.group_id},
       :order => 'name ASC'
     )
 
@@ -144,6 +144,11 @@ class OrganizationsController < ApplicationController
   #
   # _id_::  ID de la organización que se quiere buscar
   def find_if_allowed(id) #:doc:
-    Organization.find(id) if id && @auth_user.organization_ids.include?(id.to_i)
+    Organization.first(
+      :conditions => {
+        :group_id => @auth_organization.group_id,
+        :id => id
+      }
+    )
   end
 end

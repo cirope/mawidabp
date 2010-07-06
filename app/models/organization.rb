@@ -19,6 +19,11 @@ class Organization < ActiveRecord::Base
   
   # Named scopes
   named_scope :list, :order => 'name ASC'
+  named_scope :list_for_group, lambda { |group|
+    {
+      :conditions => { :group_id => group.id }
+    }
+  }
 
   # Atributos de solo lectura
   attr_readonly :group_id
