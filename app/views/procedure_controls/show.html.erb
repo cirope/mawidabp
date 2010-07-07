@@ -17,11 +17,11 @@
       <tbody>
         <% pci.procedure_control_subitems.each do |pcs| -%>
           <tr>
-            <td><%= h pcs.control_objective_text %></td>
-            <td><%= h pcs.controls.first.control %></td>
-            <td><%= h pcs.controls.first.compliance_tests %></td>
-            <td><%= h pcs.controls.first.design_tests %></td>
-            <td><%= h pcs.controls.first.effects %></td>
+            <td><%= simple_format h(pcs.control_objective_text) %></td>
+            <td><%= simple_format h(pcs.controls.first.control) %></td>
+            <td><%= simple_format h(pcs.controls.first.compliance_tests) %></td>
+            <td><%= simple_format h(pcs.controls.first.design_tests) %></td>
+            <td><%= simple_format h(pcs.controls.first.effects) %></td>
             <td><%= pcs.risk_text %></td>
           </tr>
         <% end -%>

@@ -1,17 +1,37 @@
 <div id="showed_data">
-<p>
-  <b><%= BestPractice.human_attribute_name 'name' %></b>
-  <%=h @best_practice.name %>
-</p>
+  <h1><%= BestPractice.human_name %>: <%=h @best_practice.name %></h1>
 
-<p>
-  <b><%= BestPractice.human_attribute_name 'description' %></b>
-  <%=h @best_practice.description %>
-</p>
+  <% @best_practice.process_controls.each do |pc| -%>
+    <h3><%= "#{@best_practice.name} (#{pc.name})" %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= ControlObjective.human_attribute_name :name %></th>
+          <th><%= Control.human_attribute_name :control %></th>
+          <th><%= Control.human_attribute_name :compliance_tests %></th>
+          <th><%= Control.human_attribute_name :design_tests %></th>
+          <th><%= Control.human_attribute_name :effects %></th>
+          <th><%= ControlObjective.human_attribute_name :risk %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pc.control_objectives.each do |co| -%>
+          <tr>
+            <td><%= simple_format h(co.name) %></td>
+            <td><%= simple_format h(co.controls.first.control) %></td>
+            <td><%= simple_format h(co.controls.first.compliance_tests) %></td>
+            <td><%= simple_format h(co.controls.first.design_tests) %></td>
+            <td><%= simple_format h(co.controls.first.effects) %></td>
+            <td><%= co.risk_text %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_best_practice_path(@best_practice) %> |
-<%= link_to t(:'label.list'), best_practices_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_best_practice_path(@best_practice) %> |
+  <%= link_to t(:'label.list'), best_practices_path %> |
+  <%= link_to_back %>
 </div>

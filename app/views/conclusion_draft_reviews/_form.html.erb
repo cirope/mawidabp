@@ -142,6 +142,9 @@
           duration: 2,
           queue: { position: 'end', scope: 'conclusion_draft_review', limit: 1 }
         });
+
+        $('error_list_container').update('');
+        $('force_approval_prompt').hide();
       } else {
         var errorsUl = HTMLUtil.arrayToUL(request.responseJSON.errors,
         {'id': 'error_list', 'class': 'raw_list'});

@@ -1,17 +1,37 @@
 <div id="showed_data">
-<p>
-  <b><%= Role.human_attribute_name 'name' %>:</b>
-  <%=h @role.name %>
-</p>
+  <p>
+    <b><%= Role.human_attribute_name :name %>:</b>
+    <%=h @role.name %>
+  </p>
 
-<p>
-  <b><%= Role.human_attribute_name 'privileges' %>:</b>
-  <span class="pre"><%= @role.privileges.map { |p| p.to_s }.join("\n") -%></span>
-</p>
+  <p>
+    <b><%= Role.human_attribute_name :role_type %>:</b>
+    <%= role_type_text(@role.role_type, nil) %>
+  </p>
+
+  <table class="summary_table" style="clear: both;">
+    <thead>
+      <tr>
+        <th><%= Privilege.human_name %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
+        <th style="width: 5%;"><%= Privilege.human_attribute_name :approval %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% menu_items = @role.audited? ?
+        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS -%>
+      <% menu_items.each do |menu_item| -%>
+        <%= render :partial => 'menu_item_show', :locals => {
+          :menu_item => menu_item} %>
+      <% end -%>
+    </tbody>
+  </table>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_role_path(@role) %> |
-<%= link_to t(:'label.list'), roles_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_role_path(@role) %> |
+  <%= link_to t(:'label.list'), roles_path %> |
+  <%= link_to_back %>
 </div>

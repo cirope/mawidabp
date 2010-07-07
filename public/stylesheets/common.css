@@ -1055,6 +1055,11 @@ table.summary_table th, table.summary_table td.header {
 table.summary_table td {
     padding: .3em .5em;
     border: 1px solid #c2bfb7;
+    vertical-align: text-top;
+}
+
+table.summary_table td p {
+    margin-bottom: 1em;
 }
 
 table.summary_table tr.odd td {
@@ -1100,15 +1105,6 @@ th.disabled {
     color: #7b7b7b;
 }
 
-/*tr.even > td {
-    border-bottom: 1px solid #c2bfb7;
-    padding: .3em 0em;
-}
-
-tr.even > td:first-child, tr.even > td:last-child {
-    border: none;
-}*/
-
 th.filterable {
     cursor: default;
 }
@@ -1129,21 +1125,6 @@ tr.odd:hover, tr.even:hover {
 tr.odd > td, tr.even > td {
     padding: .2em .5em;
 }
-
-/*tr.odd > td {
-    padding: .2em .5em;
-    border-bottom: 1px solid #c2bfb7;
-}
-
-tr.odd > td:first-child {
-    border: none;
-    border-right: 1px solid #c2bfb7;
-}
-
-tr.odd > td:last-child {
-    border: none;
-    border-left: 1px solid #c2bfb7;
-}*/
 
 tr.readonly_item, tr.disabled_item {
     color: #a5a5a5;

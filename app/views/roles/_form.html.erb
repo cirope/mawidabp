@@ -88,7 +88,7 @@
     }
   });
   
-  Event.observe('app_content', 'change', function(event) {
+  Event.observe('app_content', 'click', function(event) {
     var element = $(event.element());
 
     if(element.hasClassName('approval_check')) {

@@ -56,4 +56,11 @@ class ControlObjective < ActiveRecord::Base
       true
     end
   end
+
+  def risk_text
+    risks = self.get_parameter(:admin_control_objective_risk_levels)
+    risk = risks.detect { |r| r.last == self.risk }
+
+    risk ? risk.first : ''
+  end
 end

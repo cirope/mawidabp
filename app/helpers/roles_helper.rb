@@ -7,8 +7,8 @@ module RolesHelper
       {:class => "no_observe_changes #{:inline_item if inline}"}
   end
 
-  def role_type_text(type)
-    content_tag(:span, role_type_name_for(type), :class => :bold)
+  def role_type_text(type, html_class = :bold)
+    content_tag(:span, role_type_name_for(type), :class => html_class)
   end
 
   def role_type_name_for(type)
