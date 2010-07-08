@@ -1,18 +1,37 @@
 <div id="showed_data">
-<p>
-  <b><%= ResourceClass.human_attribute_name 'name' %>:</b>
-  <%=h @resource_class.name %>
-</p>
+  <p>
+    <b><%= ResourceClass.human_attribute_name :name %>:</b>
+    <%=h @resource_class.name %>
+  </p>
 
-<p>
-  <b><%= ResourceClass.human_attribute_name 'unit' %>:</b>
-  <%=h name_for_option_value(parameter_in(@auth_organization.id,
-      :admin_resource_units, @resource_class.created_at), @resource_class.unit) %>
-</p>
+  <p>
+    <b><%= ResourceClass.human_attribute_name :unit %>:</b>
+    <%=h name_for_option_value(parameter_in(@auth_organization.id,
+        :admin_resource_units, @resource_class.created_at), @resource_class.unit) %>
+  </p>
+
+  <table class="summary_table">
+    <thead>
+      <tr>
+        <th><%= Resource.human_attribute_name :name %></th>
+        <th><%= Resource.human_attribute_name :description %></th>
+        <th><%= Resource.human_attribute_name :cost_per_unit %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @resource_class.resources.each do |resource| -%>
+        <tr>
+          <td><%= h resource.name %></td>
+          <td><%= h resource.description %></td>
+          <td><%= h resource.cost_per_unit %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_resource_class_path(@resource_class) %> |
-<%= link_to t(:'label.list'), resource_classes_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_resource_class_path(@resource_class) %> |
+  <%= link_to t(:'label.list'), resource_classes_path %> |
+  <%= link_to_back %>
 </div>

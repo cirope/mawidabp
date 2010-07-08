@@ -1,22 +1,115 @@
 <div id="showed_data">
-<p>
-  <b><%= Review.human_attribute_name 'identification' %>:</b>
-  <%=h @review.identification %>
-</p>
+  <div>
+    <b><%= Review.human_attribute_name :identification %>:</b>
+    <%=h @review.identification %>
+  </div>
 
-<p>
-  <b><%= Review.human_attribute_name 'description' %>:</b>
-  <%=h @review.description %>
-</p>
+  <div>
+    <b><%= Review.human_attribute_name :period_id %>:</b>
+    <%=h @review.period.inspect %>
+  </div>
 
-<p>
-  <b><%= Review.human_attribute_name 'business_unit_id' %>:</b>
-  <%=h @review.business_unit.name %>
-</p>
+  <div>
+    <b><%= Review.human_attribute_name :plan_item_id %>:</b>
+    <%=h @review.plan_item.project %>
+  </div>
+
+  <div>
+    <b><%= Review.human_attribute_name :business_unit %>:</b>
+    <%=h review_business_unit_text(@review) %>
+  </div>
+
+  <div>
+    <b><%= Review.human_attribute_name :audit_type %>:</b>
+    <%=h review_business_unit_type_text(@review) %>
+  </div>
+
+  <div>
+    <b><%= Review.human_attribute_name :survey %>:</b>
+    <%= simple_format h(@review.survey) %>
+  </div>
+
+  <div>
+    <b><%= Review.human_attribute_name :description %>:</b>
+    <%= simple_format h(@review.description) %>
+  </div>
+
+  <table class="summary_table">
+    <thead>
+      <tr>
+        <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
+        <th><%= ReviewUserAssignment.human_attribute_name :assignment_type %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @review.review_user_assignments.each do |rua| -%>
+        <tr>
+          <td><%= rua.user.full_name %></td>
+          <td><%= rua.type_text %></td>
+        </tr>
+      <% end -%>
+    </tbody>
+  </table>
+
+  <% displayed_process_controls ||= [] -%>
+  <% @review.control_objective_items.sort.each do |coi| -%>
+    <% process_control = coi.control_objective.process_control.name -%>
+    <% unless displayed_process_controls.include?(process_control) -%>
+      <h1><%= process_control %></h1>
+      <% displayed_process_controls << process_control -%>
+    <% end -%>
+    <h2><%=h coi.control_objective_text %></h2>
+    <div style="margin: 1em;">
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
+        <%= h(coi.relevance_text(false)) %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
+        <%= l(coi.audit_date) if coi.audit_date %>
+      </div>
+      <div>
+        <b><%= Control.human_attribute_name :effects %>:</b>
+        <%= simple_format h(coi.controls[0].effects) %>
+      </div>
+      <div>
+        <b><%= Control.human_attribute_name :control %>:</b>
+        <%= simple_format h(coi.controls[0].control) %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
+        <%= "#{coi.effectiveness}%" %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :pre_audit_qualification %>:</b>
+        <%= h(coi.pre_audit_qualification_text) %>
+      </div>
+      <div>
+        <b><%= Control.human_attribute_name :design_tests %>:</b>
+        <%= simple_format h(coi.controls[0].design_tests) %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :post_audit_qualification %>:</b>
+        <%= h(coi.post_audit_qualification_text) %>
+      </div>
+      <div>
+        <b><%= Control.human_attribute_name :compliance_tests %>:</b>
+        <%= simple_format h(coi.controls[0].compliance_tests) %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
+        <%= simple_format h(coi.auditor_comment) %>
+      </div>
+      <div>
+        <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
+        <%= t coi.finished ? :'label.yes' : :'label.no' %>
+      </div>
+    </div>
+  <% end -%>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_review_path(@review) %> |
-<%= link_to t(:'label.list'), reviews_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_review_path(@review) %> |
+  <%= link_to t(:'label.list'), reviews_path %> |
+  <%= link_to_back %>
 </div>

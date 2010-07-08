@@ -223,7 +223,7 @@ module PDF
     def add_footnote(text, font_size = 8)
       font_height = self.font_height(font_size)
       self.add_text(self.absolute_left_margin,
-        (self.bottom_margin + font_height) / 2.0, text, font_size)
+        (self.bottom_margin - font_height * 5.5), text, font_size)
     end
 
     def page_usable_width

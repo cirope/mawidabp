@@ -54,7 +54,7 @@
       <% end -%>
       <p class="form_item">
         <%= content_tag :label, ControlObjectiveItem.human_attribute_name(
-          'effectiveness'), :class => :inline %>
+          :effectiveness), :class => :inline %>
         <%= text_field_tag "effectiveness_#{control_objective_item.object_id}",
           "#{control_objective_item.effectiveness}%",
           :class => 'inline_item effectiveness', :readonly => true %>
@@ -98,7 +98,7 @@
     </div>
 
     <h1 style="clear: both; margin-bottom: 0em;">
-      <%= ControlObjectiveItem.human_attribute_name('weaknesses') %>
+      <%= ControlObjectiveItem.human_attribute_name :weaknesses %>
     </h1>
 
     <table class="summary_table">
@@ -129,12 +129,12 @@
     </p>
 
     <h1 style="clear: both;">
-      <%= ControlObjectiveItem.human_attribute_name('work_papers') %>
+      <%= ControlObjectiveItem.human_attribute_name :work_papers %>
     </h1>
     <div class="form_column_left">
       <p>
         <label>
-          <%= ControlObjectiveItem.human_attribute_name('pre_audit_work_papers') %>
+          <%= ControlObjectiveItem.human_attribute_name :pre_audit_work_papers %>
         </label>
       </p>
       <div class="in_column_items" id="pre_audit_work_papers_for_<%= id %>">
@@ -176,26 +176,26 @@
     <div class="form_column_right">
       <p>
         <label>
-          <%= ControlObjectiveItem.human_attribute_name 'post_audit_work_papers' %>
+          <%= ControlObjectiveItem.human_attribute_name :post_audit_work_papers %>
         </label>
       </p>
 
       <div class="in_column_items" id="post_audit_work_papers_for_<%= id %>">
         <div class="column_headers">
           <div class="item_column" style="width: 20%;">
-            <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :name %></h3>
           </div>
           <div class="item_column" style="width: 20%;">
-            <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :code %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
           </div>
           <div class="item_column" style="width: 25%;">
-            <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :description %></h3>
           </div>
           <div class="item_column" style="width: 10%;">
-            <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
           </div>
           <div class="item_column" style="width: 10%;"></div>
           <div style="clear: both;"></div>

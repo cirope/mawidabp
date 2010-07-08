@@ -272,11 +272,23 @@ class ControlObjectiveItem < ActiveRecord::Base
         relevance.first) : ''
   end
 
+  def pre_audit_qualification_text(show_value = false)
+    post_audit_qualifications = self.get_parameter(
+      :admin_control_objective_qualifications)
+    pre_audit_qualification = post_audit_qualifications.detect do |r|
+      r.last == self.pre_audit_qualification
+    end
+
+    pre_audit_qualification ? (show_value ?
+        "#{pre_audit_qualification.first} (#{pre_audit_qualification.last})" :
+        pre_audit_qualification.first) : ''
+  end
+
   def post_audit_qualification_text(show_value = false)
     post_audit_qualifications = self.get_parameter(
       :admin_control_objective_qualifications)
     post_audit_qualification = post_audit_qualifications.detect do |r|
-      r.last == self.relevance
+      r.last == self.post_audit_qualification
     end
 
     post_audit_qualification ? (show_value ?
