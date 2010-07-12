@@ -5,9 +5,10 @@
       <p>
         <b><%= Notification.human_attribute_name :findings %>:</b>
       </p>
-      <ul style="margin: .5em 0em .5em 3em;">
+      <ul class="raw_list">
         <% @notification.findings.map do |f| -%>
-          <li><%= link_to "#{f.review_code} (#{f.review.identification})",
+          <li><%= link_to_if f.users.include?(@auth_user),
+            "#{f.review_code} (#{f.review.identification})",
             finding_path(f.try(:pending?) ? 'incomplete' : 'complete', f) %></li>
         <% end -%>
       </ul>
@@ -55,3 +56,9 @@
 <% end -%>
 <!--[eoform:notification] -->
 <%= set_focus_to_first_element %>
+
+<div id="links">
+  <%= link_to t(:'label.show'), @notification %> |
+  <%= link_to t(:'label.list'), notifications_path %> |
+  <%= link_to_back %>
+</div>

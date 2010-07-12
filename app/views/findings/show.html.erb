@@ -1,73 +1,73 @@
 <div id="showed_data">
-  <p>
+  <div class="show_item">
     <b><%= Review.human_name %></b>:
     <%= h @finding.review.try(:identification) %>
-  </p>
-  <p>
+  </div>
+  <div class="show_item">
     <b><%= PlanItem.human_attribute_name(:project) %></b>:
     <%= h @finding.review.try(:plan_item).try(:project) %>
-  </p>
-  <p>
+  </div>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name :review_code %></b>
     <%= h @finding.review_code %>
-  </p>
-  <p>
+  </div>
+  <% if @finding.control_objective_item -%>
+    <div class="show_item">
+      <b><%= ControlObjective.human_name %></b>:
+      <%= simple_format h("#{@finding.control_objective_item.control_objective_text} (#{@finding.control_objective_item.process_control.name})") %>
+    </div>
+  <% end -%>
+  <div class="show_item">
     <b><%= ConclusionFinalReview.human_attribute_name(:issue_date) +
       show_inline_help_for(:finding_issue_date) %></b>:
     <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
       t(:'finding.without_conclusion_final_review') %>
-  </p>
-  <% if @finding.control_objective_item -%>
-    <p>
-      <b><%= ControlObjective.human_name %></b>:
-      <%= h "#{@finding.control_objective_item.control_objective_text} (#{@finding.control_objective_item.process_control.name})" %>
-    </p>
-  <% end -%>
-  <p>
+  </div>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name :description %></b>
-    <%= h @finding.description %>
-  </p>
+    <%= simple_format h(@finding.description) %>
+  </div>
   <% if @finding.kind_of? Weakness -%>
-    <p>
+    <div class="show_item">
       <b><%= Weakness.human_attribute_name :audit_recommendations %></b>:
-      <%= h @finding.audit_recommendations %>
-    </p>
-    <p>
+      <%= simple_format h(@finding.audit_recommendations) %>
+    </div>
+    <div class="show_item">
       <b><%= Weakness.human_attribute_name :risk %></b>:
       <%= @finding.risk_text %>
-    </p>
-    <p>
+    </div>
+    <div class="show_item">
       <b><%= Weakness.human_attribute_name :priority %></b>:
       <%= @finding.priority_text %>
-    </p>
+    </div>
   <% end -%>
-  <p>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state) %></b>:
     <%= @finding.state_text %>
-  </p>
+  </div>
   <% if @finding.kind_of? Weakness -%>
-    <p>
+    <div class="show_item">
       <b><%= Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date) %></b>:
       <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
-    </p>
+    </div>
     <%= show_weakness_previous_follow_up_dates @finding %>
   <% end -%>
-  <p>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name(:solution_date) + show_inline_help_for(:finding_solution_date) %></b>:
     <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
-  </p>
-  <p>
+  </div>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name :effect %></b>:
-    <%= h @finding.effect %>
-  </p>
-  <p>
+    <%= simple_format h(@finding.effect) %>
+  </div>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name :answer %></b>:
-    <%= h @finding.answer %>
-  </p>
-  <p>
+    <%= simple_format h(@finding.answer) %>
+  </div>
+  <div class="show_item">
     <b><%= Finding.human_attribute_name :audit_comments %></b>:
-    <%= h @finding.audit_comments %>
-  </p>
+    <%= simple_format h(@finding.audit_comments) %>
+  </div>
 
   <% unless @finding.important_dates.blank? -%>
     <h1 style="clear: both;">
@@ -81,20 +81,14 @@
     </ul>
   <% end -%>
 
-  <h1 style="clear: both;">
-    <%= t(:'finding.responsibles', :count => @finding.users.size) %>
-  </h1>
-  <ul class="raw_list">
-    <% @finding.users.each do |user| -%>
-      <li><%= user.full_name_with_function(@finding.created_at) %></li>
-    <% end -%>
-  </ul>
-
+  <h3><%= t(:'finding.responsibles', :count => @finding.users.size) %></h3>
+  <%= array_to_ul @finding.users.map { |u| u.full_name_with_function(@finding.created_at) }, :class => :raw_list %>
+  
   <% unless @finding.finding_answers.blank? -%>
-    <h1>
+    <h3>
       <%= t(:'finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
-    </h1>
+    </h3>
 
     <table class="summary_table">
       <thead>
@@ -118,11 +112,11 @@
         <% @finding.finding_answers.each do |finding_answer| -%>
           <tr>
             <td><%= h finding_answer.user.full_name %></td>
-            <td><%= h finding_answer.answer %></td>
+            <td><%= simple_format h(finding_answer.answer) %></td>
             <td><%= finding_answer.answer_type_text %></td>
             <td>
               <%= finding_answer.file_model ?
-                link_to_download(finding_answer.file_model.public_filename) : '---' %>
+                link_to(t(:'label.download'), finding_answer.file_model.public_filename) : '---' %>
             </td>
             <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
           </tr>
@@ -132,7 +126,7 @@
   <% end -%>
 
   <% unless @auth_user.audited? || @finding.work_papers.blank? -%>
-    <h1><%= t(:'finding.work_papers') %></h1>
+    <h3><%= t(:'finding.work_papers') %></h3>
 
     <table class="summary_table">
       <thead>
@@ -150,9 +144,9 @@
             <td><%= h work_paper.name %></td>
             <td><%= h work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
-            <td><%= h work_paper.description %></td>
+            <td><%= simple_format h(work_paper.description) %></td>
             <td><%= work_paper.file_model ?
-              link_to_download(work_paper.file_model.public_filename) : '---' %></td>
+              link_to(t(:'label.download'), work_paper.file_model.public_filename) : '---' %></td>
           </tr>
         <% end -%>
       </tbody>
@@ -185,7 +179,7 @@
               <tr>
                 <td><%= l(cost.created_at, :format => :long) %></td>
                 <td><%= time_in_words_with_acronym(cost.cost.hours) %></td>
-                <td><%= h cost.description.blank? ? '-' : cost.description %></td>
+                <td><%= simple_format h(cost.description.blank? ? '-' : cost.description) %></td>
                 <td><%= h cost.user.full_name %></td>
               </tr>
             <% end -%>

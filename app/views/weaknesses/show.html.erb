@@ -77,6 +77,7 @@
           <th><%= WorkPaper.human_attribute_name :code %></th>
           <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
           <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
         </tr>
       </thead>
       <tbody>
@@ -86,6 +87,8 @@
             <td><%=h wp.code %></td>
             <td><%=h wp.number_of_pages %></td>
             <td><%= simple_format h(wp.description) %></td>
+            <td><%= wp.file_model ?
+              link_to(t(:'label.download'), wp.file_model.public_filename) : '---' %></td>
           </tr>
         <% end -%>
       </tbody>

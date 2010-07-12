@@ -3,10 +3,9 @@
     <b><%= HelpContent.human_attribute_name :language %>:</b>
     <%= t "lang.#{@help_content.language}" %>
   </p>
-  <h3 style="margin-top: 2em;"><%= t(:'help_content.content_title') %></h3>
   <% @help_content.help_items.each do |help_item| -%>
-    <p style="font-weight: bold;"><%=h help_item.name %></p>
-    <p><%= textilize(help_item.description) %></p>
+    <h1><%=h help_item.name %></h1>
+    <%= textilize(h(help_item.description)) %>
   <% end -%>
 </div>
 

@@ -1,18 +1,18 @@
 <div id="showed_data">
-<p>
-  <b><%= HelpItem.human_attribute_name 'order_number' %>:</b>
-  <%=h @help_item.order_number %>
-</p>
+  <div class="show_item">
+    <b><%= HelpItem.human_attribute_name :order_number %>:</b>
+    <%=h @help_item.order_number %>
+  </div>
 
-<p>
-  <b><%= HelpItem.human_attribute_name 'name' %>:</b>
-  <%=h @help_item.name %>
-</p>
+  <div class="show_item">
+    <b><%= HelpItem.human_attribute_name :name %>:</b>
+    <%=h @help_item.name %>
+  </div>
 
-<p>
-  <b><%= HelpItem.human_attribute_name 'description' %>:</b>
-  <%=h @help_item.description %>
-</p>
+  <div class="show_item">
+    <b><%= HelpItem.human_attribute_name :description %>:</b>
+    <%= textilize h(@help_item.description) %>
+  </div>
 </div>
 
 <div id="links">

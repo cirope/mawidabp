@@ -1064,7 +1064,7 @@ table.summary_table td {
 }
 
 table.summary_table td p {
-    margin-bottom: 1em;
+    margin: 0em;
 }
 
 table.summary_table tr.odd td {
