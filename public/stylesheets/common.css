@@ -379,6 +379,8 @@ div#organization_logo {
 }
 
 div#page {
+    display: block;
+    clear: both;
     padding: .5em 1em;
     color: #525252;
     background: #ffffff;

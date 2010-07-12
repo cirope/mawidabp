@@ -699,9 +699,10 @@ class ConclusionReview < ActiveRecord::Base
           :justification => :center
       end
 
+      column_data = []
+
       unless oportunities.blank?
         pdf.move_pointer 24
-        column_data = []
         column_order.delete_at 1
         columns.delete 'risk'
       end

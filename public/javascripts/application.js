@@ -468,7 +468,7 @@ var Observer = {
                 e.down('input[type=file]').click();
             } else if (e.hasClassName('history_back')) {
                 if(window.history.length > 0) {
-                    window.history.go(-1);
+                    window.history.back();
                 }
             } else if (e.hasClassName('remove_list_item')) {
                 Helper.removeItem(e.up('.item'));
