@@ -21,13 +21,6 @@
   <%= co_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
-      <label class="inline"><%= Organization.human_name %>:</label>
-      <%= text_field_tag :organization_name,
-        @control_objective_item.control_objective.process_control.best_practice.organization.name,
-        :size => nil, :class => :inline_item, :readonly => true %>
-    </p>
-
-    <p class="form_item">
       <label class="inline"><%= Review.human_name %>:</label>
       <%= text_field_tag :review_identification,
         @control_objective_item.review.identification,
@@ -111,8 +104,7 @@
     </p>
     <p>
       <%= co_f.label :auditor_comment %>
-      <%= co_f.text_area :auditor_comment, :readonly => readonly,
-        :style => 'height: 10em;' %>
+      <%= co_f.text_area :auditor_comment, :readonly => readonly %>
     </p>
     <p class="form_item">
       <%= content_tag :label, ControlObjectiveItem.human_attribute_name(

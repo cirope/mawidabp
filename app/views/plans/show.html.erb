@@ -38,7 +38,7 @@
         </tr>
       <% end -%>
       <tr>
-        <%= 8.times.map {'<td></td>'}.join %>
+        <td colspan="8"></td>
         <td><b><%= @plan.cost %></b></td>
       </tr>
     </tbody>
@@ -72,7 +72,7 @@
               </tr>
             <% end -%>
             <tr>
-              <%= 3.times.map {'<td></td>'}.join %>
+              <td colspan="3"></td>
               <td><b><%= plan_item.cost %></b></td>
             </tr>
           </tbody>

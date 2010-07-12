@@ -1,73 +1,68 @@
 <div id="showed_data">
-<p>
-  <b><%= Organization.human_name %>:</b>
-  <%= h @control_objective_item.control_objective.process_control.best_practice.organization.name %>
-</p>
+  <div class="show_item">
+    <b><%= ProcessControl.human_name %>:</b>
+    <%= h @control_objective_item.control_objective.process_control.name %>
+  </div>
 
-<p>
-  <b><%= ProcessControl.human_name %>:</b>
-  <%= h @control_objective_item.control_objective.process_control.name %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :control_objective_text %>:</b>
+    <%= simple_format h(@control_objective_item.control_objective_text) %>
+  </div>
 
-<p>
-  <b><%= ControlObjective.human_name %>:</b>
-  <%= h @control_objective_item.control_objective.name %>
-</p>
+  <div class="show_item">
+    <b><%= Control.human_attribute_name :effects %>:</b>
+    <%= simple_format h(@control_objective_item.controls.first.effects) %>
+  </div>
 
-<p>
-  <b><%= Control.human_attribute_name :effects %>:</b>
-  <%=h @control_objective_item.controls.first.effects %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
+    <%=h @control_objective_item.relevance_text %>
+  </div>
 
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
-  <%=h @control_objective_item.relevance %>
-</p>
+  <div class="show_item">
+    <b><%= Control.human_attribute_name :control %>:</b>
+    <%= simple_format h(@control_objective_item.controls.first.control) %>
+  </div>
 
-<p>
-  <b><%= Control.human_attribute_name :control %>:</b>
-  <%=h @control_objective_item.controls.first.control %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :pre_audit_qualification %>:</b>
+    <%=h @control_objective_item.pre_audit_qualification_text %>
+  </div>
 
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :pre_audit_qualification %>:</b>
-  <%=h @control_objective_item.pre_audit_qualification %>
-</p>
+  <div class="show_item">
+    <b><%= Control.human_attribute_name :design_tests %>:</b>
+    <%= simple_format h(@control_objective_item.controls.first.design_tests) %>
+  </div>
 
-<p>
-  <b><%= Control.human_attribute_name :design_tests %>:</b>
-  <%=h @control_objective_item.controls.first.design_tests %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :post_audit_qualification %>:</b>
+    <%=h @control_objective_item.post_audit_qualification_text %>
+  </div>
 
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :post_audit_qualification %>:</b>
-  <%=h @control_objective_item.post_audit_qualification %>
-</p>
+  <div class="show_item">
+    <b><%= Control.human_attribute_name :compliance_tests %>:</b>
+    <%= simple_format h(@control_objective_item.controls.first.compliance_tests) %>
+  </div>
 
-<p>
-  <b><%= Control.human_attribute_name :compliance_tests %>:</b>
-  <%=h @control_objective_item.controls.first.compliance_tests %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
+    <%=h l(@control_objective_item.audit_date, :format => :long) if @control_objective_item.audit_date %>
+  </div>
 
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
-  <%=h l(@control_objective_item.audit_date, :format => :short) if @control_objective_item.audit_date %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
+    <%= simple_format h(@control_objective_item.auditor_comment) %>
+  </div>
 
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
-  <%=h @control_objective_item.auditor_comment %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
+    <%= "#{@control_objective_item.effectiveness}%" %>
+  </div>
 
-<p>
-  <b><%= ControlObjective.human_name %></b>
-  <%=h @control_objective_item.control_objective.name %>
-</p>
-
-<p>
-  <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
-  <%=t @control_objective_item.finished? ? :'label.yes' : :'label.no' %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
+    <%=t @control_objective_item.finished? ? :'label.yes' : :'label.no' %>
+  </div>
 </div>
 
 <div id="links">

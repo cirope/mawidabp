@@ -1,6 +1,7 @@
 class WorkflowItem < ActiveRecord::Base
   include ParameterSelector
-  
+  include Comparable
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -106,6 +107,10 @@ class WorkflowItem < ActiveRecord::Base
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
 
+  def <=>(other)
+    self.order_number <=> other.order_number
+  end
+
   def material_resource_utilizations
     self.resource_utilizations.select { |ru| ru.material? }
   end
@@ -126,6 +131,14 @@ class WorkflowItem < ActiveRecord::Base
 
   def cost
     self.resource_utilizations.to_a.sum(&:cost)
+  end
+
+  def human_cost
+    self.human_resource_utilizations.sum(&:cost)
+  end
+
+  def material_cost
+    self.material_resource_utilizations.sum(&:cost)
   end
 
   def validate

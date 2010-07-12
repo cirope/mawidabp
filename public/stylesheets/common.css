@@ -222,6 +222,11 @@ div#loading {
     position: fixed;
     top: .5em;
     right: 1em;
+    background: #2c3234;
+    padding: 1px 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 div#main_container {
@@ -417,8 +422,8 @@ div#showed_data {
     margin: 0em 1em 1em 1em;
 }
 
-div#showed_data > p {
-    margin-top: .5em;
+div#showed_data > p, div#showed_data div.show_item {
+    margin-bottom: 1em;
 }
 
 div#time_left {

@@ -405,6 +405,7 @@ var HTMLUtil = {
     stylizeAllInputFiles: function() {
         $$('span.file_container').each(function(e) {
             HTMLUtil.stylizeInputFile(e);
+            Observer.attachToInputFile(e);
         });
     },
 
@@ -508,6 +509,33 @@ var Observer = {
                 e.setStyle({'background': '#b1aea6'});
             }
         });
+    },
+    attachToInputFile: function(span) {
+        var input = span ? span.down('input[type=file]') : undefined;
+
+        if(input) {
+            Event.stopObserving(input, 'change');
+            
+            Event.observe(input, 'change', function(event) {
+                var e = Event.findElement(event, 'input[type="file"]');
+
+                if(e && e.hasClassName('file') && !$F(e).blank()) {
+                    var imageTag = new Element('img', {
+                        src: '/images/new_document.gif',
+                        width: 22,
+                        height: 20,
+                        alt: $F(e),
+                        title: $F(e)
+                    });
+
+                    if($(e).up('span.file_container')) {
+                        $(e).up('span.file_container').hide();
+                        $(e).up('span.file_container').insert(
+                            {after: imageTag});
+                    }
+                }
+            });
+        }
     }
 }
 
@@ -655,25 +683,6 @@ Event.observe(window, 'load', function() {
 
             if(e && e.hasClassName('change_on_hover')) {
                 HTMLUtil.replaceWithNormalImage(e);
-            }
-        });
-
-        Event.observe('app_content', 'change', function(event) {
-            var e = Event.findElement(event, 'input[type="file"]');
-            
-            if(e && e.hasClassName('file') && !$F(e).blank()) {
-                var imageTag = new Element('img', {
-                    src: '/images/new_document.gif',
-                    width: 22,
-                    height: 20,
-                    alt: $F(e),
-                    title: $F(e)
-                });
-
-                if($(e).up('span.file_container')) {
-                    $(e).up('span.file_container').hide();
-                    $(e).up('span.file_container').insert({after: imageTag});
-                }
             }
         });
     }

@@ -1610,6 +1610,9 @@ es:
         order_number: "Orden"
         resources: "Recursos"
         resource_ids: "Recursos"
+        human_resources_cost: "Costo recursos humanos"
+        material_resources_cost: "Costo recursos materiales"
+        total_resources_cost: "Costo total"
         <<: *commons
 
     errors:

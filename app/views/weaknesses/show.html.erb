@@ -1,67 +1,100 @@
 <div id="showed_data">
-<p>
-  <b><%= Weakness.human_attribute_name 'description' %>:</b>
-  <%=h @weakness.description %>
-</p>
+  <div class="show_item">
+    <b><%= Review.human_name %>:</b>
+    <%=h @weakness.review.try(:identification) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'review_code' %>:</b>
-  <%=h @weakness.review_code %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjective.human_name %>:</b>
+    <%= simple_format h(@weakness.control_objective_item.try(:control_objective_text)) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'audit_recommendations' %>:</b>
-  <%=h @weakness.audit_recommendations %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :review_code %>:</b>
+    <%=h @weakness.review_code %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'answer' %>:</b>
-  <%=h @weakness.answer %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :description %>:</b>
+    <%= simple_format h(@weakness.description) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'effect' %>:</b>
-  <%=h @weakness.effect %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :audit_recommendations %>:</b>
+    <%= simple_format h(@weakness.audit_recommendations) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'risk' %>:</b>
-  <%=h @weakness.risk_text %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :answer %>:</b>
+    <%= simple_format h(@weakness.answer) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'priority' %>:</b>
-  <%=h weakness_priority_text @weakness %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :effect %>:</b>
+    <%= simple_format h(@weakness.effect) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'user_ids' %>:</b>
-  <%=h @weakness.users.map { |u| u.full_name }.join(APP_ENUM_SEPARATOR) %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :risk %>:</b>
+    <%=h @weakness.risk_text %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'follow_up_date' %>:</b>
-  <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :priority %>:</b>
+    <%=h weakness_priority_text @weakness %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'audit_comments' %>:</b>
-  <%=h @weakness.audit_comments %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :follow_up_date %>:</b>
+    <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'state' %>:</b>
-  <%=h @weakness.state_text %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :audit_comments %>:</b>
+    <%= simple_format h(@weakness.audit_comments) %>
+  </div>
 
-<p>
-  <b><%= Weakness.human_attribute_name 'solution_date' %>:</b>
-  <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
-</p>
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :state %>:</b>
+    <%=h @weakness.state_text %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :solution_date %>:</b>
+    <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
+  </div>
+
+  <h3><%= t(:'finding.related_users') %></h3>
+  <%= array_to_ul @weakness.users.map { |u| u.full_name_with_function(@weakness.created_at) },
+    :class => :raw_list %>
+
+  <% unless @weakness.work_papers.empty? %>
+    <h3><%= t(:'finding.work_papers') %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weakness.work_papers.each do |wp| -%>
+          <tr>
+            <td><%=h wp.name %></td>
+            <td><%=h wp.code %></td>
+            <td><%=h wp.number_of_pages %></td>
+            <td><%= simple_format h(wp.description) %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_weakness_path(@weakness) %> |
-<%= link_to t(:'label.list'), weaknesses_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_weakness_path(@weakness) %> |
+  <%= link_to t(:'label.list'), weaknesses_path %> |
+  <%= link_to_back %>
 </div>

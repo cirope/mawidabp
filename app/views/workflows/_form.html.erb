@@ -30,7 +30,7 @@
           {:prompt => true}, {:class => :inline_item} %>
         <%= link_to_add new_period_path(:back_to => new_workflow_path) %>
       <% else -%>
-        <label class="inline"><%= Workflow.human_attribute_name 'period_id' %>:</label>
+        <label class="inline"><%= Workflow.human_attribute_name :period_id %>:</label>
         <%= text_field_tag :period_description, @workflow.period.inspect,
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
@@ -49,7 +49,7 @@
           {:prompt => true},
           (with_period && @workflow.new_record? ? {} : {:disabled => true}).merge(:class => :inline_item) %>
       <% else -%>
-        <label class="inline"><%= Workflow.human_attribute_name 'review_id' %>:</label>
+        <label class="inline"><%= Workflow.human_attribute_name :review_id %>:</label>
         <%= text_field_tag :review_description, @workflow.review,
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
@@ -79,7 +79,7 @@
         <td>
           <div id="estimated_amount">
             <%= render :partial => 'estimated_amount',
-              :locals => {:plan_item => @workflow.plan_item} %>
+              :locals => {:plan_item => @workflow.review.try(:plan_item)} %>
           </div>
         </td>
       </tr>
@@ -89,26 +89,26 @@
   <div class="items">
     <div class="column_headers nested_items">
       <div class="item_column" style="width: 5%;">
-        <h3><%= WorkflowItem.human_attribute_name 'order_number' %></h3>
+        <h3><%= WorkflowItem.human_attribute_name :order_number %></h3>
       </div>
       <div class="item_column" style="width: 50%;">
-        <h3><%= WorkflowItem.human_attribute_name 'task' %></h3>
+        <h3><%= WorkflowItem.human_attribute_name :task %></h3>
       </div>
       <div class="item_column" style="width: 10%;">
-        <h3><%= WorkflowItem.human_attribute_name 'start' %></h3>
+        <h3><%= WorkflowItem.human_attribute_name :start %></h3>
       </div>
       <div class="item_column" style="width: 10%;">
-        <h3><%= WorkflowItem.human_attribute_name 'end' %></h3>
+        <h3><%= WorkflowItem.human_attribute_name :end %></h3>
       </div>
       <div class="item_column" style="width: 10%;">
-        <h3><%= WorkflowItem.human_attribute_name 'predecessors' %></h3>
+        <h3><%= WorkflowItem.human_attribute_name :predecessors %></h3>
       </div>
       <div class="item_column" style="width: 10%;"></div>
       <div style="clear: both;"></div>
     </div>
 
     <div id="workflow_items">
-      <% w_f.fields_for :workflow_items do |wi_f| -%>
+      <% w_f.fields_for :workflow_items, @workflow.workflow_items.sort! do |wi_f| -%>
         <% content_for :js_extra do -%>
           <% hru_template ||= generate_template(wi_f, :resource_utilizations,
             :object => ResourceUtilization.new(:resource_type => 'User'),

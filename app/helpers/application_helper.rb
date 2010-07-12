@@ -79,12 +79,12 @@ module ApplicationHelper
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, "#{textilize(e.shift)}\n#{array_to_ul(e)}")
+          content_tag(:li, "#{textilize(h(e.shift))}\n#{array_to_ul(e)}")
         else
           if e.kind_of?(Array)
-            e.map {|item| content_tag(:li, textilize(item)) }.join("\n")
+            e.map {|item| content_tag(:li, textilize(h(item))) }.join("\n")
           else
-            content_tag(:li, textilize(e))
+            content_tag(:li, textilize(h(e)))
           end
         end
       end

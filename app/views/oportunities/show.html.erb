@@ -1,42 +1,75 @@
 <div id="showed_data">
-<p>
-  <b><%= Oportunity.human_attribute_name 'description' %>:</b>
-  <%=h @oportunity.description %>
-</p>
+  <div class="show_item">
+    <b><%= Review.human_name %>:</b>
+    <%=h @oportunity.review.try(:identification) %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'review_code' %>:</b>
-  <%=h @oportunity.review_code %>
-</p>
+  <div class="show_item">
+    <b><%= ControlObjective.human_name %>:</b>
+    <%= simple_format h(@oportunity.control_objective_item.try(:control_objective_text)) %>
+  </div>
+  
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :review_code %>:</b>
+    <%=h @oportunity.review_code %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'answer' %>:</b>
-  <%=h @oportunity.answer %>
-</p>
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :description %>:</b>
+    <%= simple_format h(@oportunity.description) %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'user_ids' %>:</b>
-  <%=h @oportunity.users.collect{ |u| u.full_name }.join(APP_ENUM_SEPARATOR) %>
-</p>
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :answer %>:</b>
+    <%= simple_format h(@oportunity.answer) %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'audit_comments' %>:</b>
-  <%=h @oportunity.audit_comments %>
-</p>
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :audit_comments %>:</b>
+    <%= simple_format h(@oportunity.audit_comments) %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'state' %>:</b>
-  <%=h @oportunity.state_text %>
-</p>
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :state %>:</b>
+    <%=h @oportunity.state_text %>
+  </div>
 
-<p>
-  <b><%= Oportunity.human_attribute_name 'solution_date' %>:</b>
-  <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
-</p>
+  <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :solution_date %>:</b>
+    <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
+  </div>
+
+  <h3><%= t(:'finding.related_users') %></h3>
+  <%= array_to_ul @oportunity.users.map { |u| u.full_name_with_function(@oportunity.created_at) },
+    :class => :raw_list %>
+
+  <% unless @oportunity.work_papers.empty? %>
+    <h3><%= t(:'finding.work_papers') %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.work_papers.each do |wp| -%>
+          <tr>
+            <td><%=h wp.name %></td>
+            <td><%=h wp.code %></td>
+            <td><%=h wp.number_of_pages %></td>
+            <td><%= simple_format h(wp.description) %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  <% end -%>
 </div>
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_oportunity_path(@oportunity) %> |
-<%= link_to t(:'label.list'), oportunities_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_oportunity_path(@oportunity) %> |
+  <%= link_to t(:'label.list'), oportunities_path %> |
+  <%= link_to_back %>
 </div>
