@@ -468,8 +468,10 @@ var Observer = {
                 e.down('input[type=file]').click();
             } else if (e.hasClassName('history_back')) {
                 if(window.history.length > 0) {
-                    window.history.back();
+                    window.history.back(1);
                 }
+
+                Event.stop(event);
             } else if (e.hasClassName('remove_list_item')) {
                 Helper.removeItem(e.up('.item'));
 

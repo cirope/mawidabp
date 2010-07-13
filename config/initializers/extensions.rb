@@ -124,9 +124,9 @@ class String
   # * '1h15m'.fetch_time              # => 4500
   # * '1 hora 15 minutos'.fetch_time  # => 4500
   def fetch_time
-    hours_match = self.match /(:*)(\d+\.?\d*)\s*([h]*)([ms]*)/
-    minutes_match = self.match /((:*)\:(\d+\.?\d*))|((\d+\.?\d*)\s*m)/
-    seconds_match = self.match /:.*:\D*(\d+\.?\d*)|(\d+\.?\d*)\s*s/
+    hours_match = self.match /(:*)(\d+\.?\d*)\s*([h]*)([ms]*)/i
+    minutes_match = self.match /((:*)\:(\d+\.?\d*))|((\d+\.?\d*)\s*m)/i
+    seconds_match = self.match /:.*:\D*(\d+\.?\d*)|(\d+\.?\d*)\s*s/i
     hours = hours_match && hours_match[1].blank? && hours_match[4].blank? ?
       hours_match[2].to_f : 0
     minutes = minutes_match && minutes_match[2].blank? ?
