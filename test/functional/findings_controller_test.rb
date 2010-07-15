@@ -141,7 +141,7 @@ class FindingsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     difference_counts = ['WorkPaper.count', 'FindingAnswer.count', 'Cost.count',
-      'ActionMailer::Base.deliveries.size']
+      'ActionMailer::Base.deliveries.size', 'FindingRelation.count']
 
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
@@ -192,6 +192,12 @@ class FindingsControllerTest < ActionController::TestCase
                   }
                 }
               },
+              :finding_relations_attributes => {
+                :new_1 => {
+                  :finding_relation_type => FindingRelation::TYPES[:duplicated],
+                  :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
+                }
+              },
               :costs_attributes => {
                 :new_1 => {
                   :cost => '12.5',
@@ -213,7 +219,8 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'update finding with audited user' do
     perform_auth users(:audited_user)
-    no_difference_count = ['Finding.count', 'WorkPaper.count']
+    no_difference_count = ['Finding.count', 'WorkPaper.count',
+      'FindingRelation.count']
     difference_count = ['FindingAnswer.count', 'Cost.count', 'FileModel.count']
 
     assert_no_difference no_difference_count do
@@ -262,6 +269,12 @@ class FindingsControllerTest < ActionController::TestCase
                   :uploaded_data => ActionController::TestUploadedFile.new(
                     TEST_FILE, 'text/plain')
                 }
+              }
+            },
+            :finding_relations_attributes => {
+              :new_1 => {
+                :finding_relation_type => FindingRelation::TYPES[:duplicated],
+                :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
               }
             },
             :costs_attributes => {

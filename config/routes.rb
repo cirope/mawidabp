@@ -154,7 +154,11 @@ ActionController::Routing::Routes.draw do |map|
     :auto_complete_for_procedure_control_subitem => :post
   }
 
-  map.resources :weaknesses, :has_many => :costs
+  map.resources :weaknesses, :has_many => :costs, :member => {
+    :follow_up_pdf => :get,
+    :auto_complete_for_user => :post,
+    :auto_complete_for_finding_relation => :post
+  }
 
   map.resources :control_objective_items, :member => {
     :suggest_next_work_paper_code => :get
@@ -179,7 +183,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :periods
 
-  map.resources :oportunities, :has_many => :costs
+  map.resources :oportunities, :has_many => :costs, :member => {
+    :follow_up_pdf => :get,
+    :auto_complete_for_user => :post,
+    :auto_complete_for_finding_relation => :post
+  }
 
   map.resources :organizations, :collection => {
     :edit_business_units => :get,

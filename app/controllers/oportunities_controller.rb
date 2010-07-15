@@ -168,7 +168,7 @@ class OportunitiesController < ApplicationController
     redirect_to oportunity.relative_follow_up_pdf_path
   end
 
-  # * POST /findings/auto_complete_for_user
+  # * POST /oportunities/auto_complete_for_user
   def auto_complete_for_user
     @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
@@ -197,6 +197,54 @@ class OportunitiesController < ApplicationController
     @users = User.all(find_options)
   end
 
+  # * POST /oportunities/auto_complete_for_finding_relation
+  def auto_complete_for_finding_relation
+    @tokens = params[:finding_relation_data][0..100].split(/[y,]/i).uniq.map(
+      &:strip)
+    @tokens.reject! { |t| t.blank? }
+    finding = Finding.find(params[:finding_id])
+    conditions = [
+      "#{Finding.table_name}.id <> :finding_id",
+      "#{Finding.table_name}.final = :boolean_false",
+      "#{Period.table_name}.organization_id = :organization_id",
+      [
+        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+        "#{Review.table_name}.id = :review_id"
+      ].join(' OR ')
+    ]
+    parameters = {
+      :boolean_false => false,
+      :finding_id => params[:finding_id],
+      :organization_id => @auth_organization.id,
+      :review_id => finding.review.id
+    }
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{Finding.table_name}.review_code) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Finding.table_name}.description) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
+      ].join(' OR ')
+
+      parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
+    end
+    find_options = {
+      :include => {
+        :control_objective_item => {
+          :review => [:period, :conclusion_final_review]
+        }
+      },
+      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
+      :order => [
+        "#{Review.table_name}.identification ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ].join(','),
+      :limit => 5
+    }
+
+    @findings = Finding.all(find_options)
+  end
+
   private
 
   # Busca la oportunidad de mejora indicada siempre que pertenezca a la
@@ -217,7 +265,8 @@ class OportunitiesController < ApplicationController
   def load_privileges #:nodoc:
     @action_privileges.update({
       :follow_up_pdf => :read,
-      :auto_complete_for_user => :read
+      :auto_complete_for_user => :read,
+      :auto_complete_for_finding_relation => :read
     })
   end
 end
