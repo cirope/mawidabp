@@ -1,5 +1,5 @@
 <% url = url_for({:action => action}.merge(extra_params)) -%>
-<div id="date_filter">
+<div id="date_filter" class="filter">
   <div>
     <% form_for action, :url => url, :html => {:method => :get} do |f| -%>
       <table style="border: none; margin: 0em;">

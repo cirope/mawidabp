@@ -58,6 +58,18 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
+  test 'list findings for user' do
+    perform_auth
+    user = User.find(users(:first_time_user).id)
+    get :index, :completed => 'incomplete', :user_id => user.id
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 2, assigns(:findings).size
+    assert assigns(:findings).all? { |f| f.users.include?(user) }
+    assert_select '#error_body', false
+    assert_template 'findings/index'
+  end
+
   test 'edit finding when search match only one result' do
     perform_auth
     get :index, :completed => 'incomplete', :search => {
@@ -311,16 +323,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 'Updated description', assigns(:finding).description
   end
 
-  test 'destroy finding' do
-    perform_auth
-    assert_difference 'Finding.count', -1 do
-      delete :destroy, :completed => 'incomplete', :id =>
-        findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
-    end
-
-    assert_redirected_to findings_path
-  end
-
   test 'follow up pdf' do
     perform_auth
     finding = Finding.find(findings(
@@ -331,17 +333,6 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to finding.relative_follow_up_pdf_path
-  end
-
-  test 'unauthorized destroy finding' do
-    perform_auth users(:audited_user)
-
-    assert_no_difference 'Finding.count'do
-      delete :destroy, :completed => 'incomplete', :id =>
-        findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
-    end
-
-    assert_redirected_to findings_path('incomplete')
   end
 
   test 'auto complete for user' do

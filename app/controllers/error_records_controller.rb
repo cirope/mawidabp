@@ -37,7 +37,7 @@ class ErrorRecordsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @error_records.size == 1 && !@query.blank?
+        if @error_records.size == 1 && !@query.blank? && !params[:page]
           redirect_to error_record_path(@error_records.first)
         end
       } # index.html.erb

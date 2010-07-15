@@ -91,6 +91,10 @@ module ActiveRecord
         def self_and_siblings
           parent ? parent.children : self.class.roots
         end
+
+        def descendants
+          children.map(&:descendants).flatten + children
+        end
       end
     end
   end

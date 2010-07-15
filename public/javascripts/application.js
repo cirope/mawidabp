@@ -606,12 +606,12 @@ var Search = {
                 }
             });
 
-            if($('date_filter')) {
-                Element.hide('date_filter');
+            if($$('.filter').size() == 0) {
+                Effect.Appear(search, Util.merge(default_options, options));
+            } else {
+                $$('.filter').invoke('hide');
                 Element.show(search);
                 $('search_query').focus();
-            } else {
-                Effect.Appear(search, Util.merge(default_options, options));
             }
 
             Element.hide('show_search_link');

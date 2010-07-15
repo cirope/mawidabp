@@ -1,3 +1,27 @@
+<% if @query.blank? && @self_and_descendants.size > 1 -%>
+  <div class="filter" style="margin: 1em;">
+    <div>
+      <table>
+        <tbody>
+          <tr>
+            <td style="padding-right: 1em; width: 90%;">
+              <%= label_tag :user_id_select, User.human_name, :class => :inline %>
+              <%= select nil, :user_id,
+                sort_options_array(@self_and_descendants.map { |d| [d.full_name, d.id.to_s] }),
+                {:prompt => true, :selected => params[:user_id]},
+                {:name => :user_id, :id => :user_id_select, :class => :inline_item} %>
+            </td>
+            <td class="nowrap" style="text-align: right;">
+              <%= link_to_if params[:user_id], t(:'label.cancel'),
+                findings_path(params[:completed]),
+                {:style => 'margin-left: 1em;'} %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end -%>
 <%= render :partial => 'shared/search', :locals => {
   :options => {
     :url => findings_path(:completed => params[:completed]),
@@ -18,7 +42,7 @@
           params[:completed] == 'incomplete' ? :follow_up_date : :solution_date) %>
       <%= make_not_available_column Finding.human_attribute_name(:finding_answers) %>
       <%= make_not_available_column t(:'finding.has_work_papers') %>
-      <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -38,9 +62,8 @@
         <% end -%>
         <td><%= h finding.finding_answers.count %></td>
         <td><%= t finding.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
-        <td><%= link_to_show finding_path(params[:completed], finding) %></td>
-        <td><%= link_to_edit edit_finding_path('incomplete', finding) if (params[:completed] == 'incomplete') || finding.can_be_modified?(false) -%></td>
-        <td><%= button_to_destroy finding_path(params[:completed], finding) %></td>
+        <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
+        <td><%= link_to_edit edit_finding_path('incomplete', finding, :user_id => params[:user_id]) if (params[:completed] == 'incomplete') || finding.can_be_modified?(false) -%></td>
       </tr>
     <% end -%>
   </tbody>
@@ -50,3 +73,16 @@
   <%= pagination_links @findings %>
   <div style="clear: both;"></div>
 </div>
+
+<script type="text/javascript">
+  if($('user_id_select')) {
+    Event.observe('user_id_select', 'change', function() {
+      var selectedUser = $F(this);
+      var url = '<%= findings_path(params[:completed]) %>';
+
+      if(selectedUser) {
+        BrowserManipulation.changeLocation(url, {'user_id': selectedUser});
+      }
+    });
+  }
+</script>

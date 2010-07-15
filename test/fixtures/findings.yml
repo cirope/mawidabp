@@ -14,7 +14,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_notify:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
+  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user, first_time_user
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness

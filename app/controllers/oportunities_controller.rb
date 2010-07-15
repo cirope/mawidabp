@@ -49,7 +49,7 @@ class OportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @oportunities.size == 1 && !@query.blank?
+        if @oportunities.size == 1 && !@query.blank? && !params[:page]
           redirect_to edit_oportunity_path(@oportunities.first)
         end
       } # index.html.erb

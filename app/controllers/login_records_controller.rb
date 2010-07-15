@@ -50,7 +50,7 @@ class LoginRecordsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @login_records.size == 1 && !@query.blank?
+        if @login_records.size == 1 && !@query.blank? && !params[:page]
           redirect_to login_record_path(@login_records.first)
         end
       } # index.html.erb

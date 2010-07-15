@@ -32,7 +32,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @reviews.size == 1 && !@query.blank?
+        if @reviews.size == 1 && !@query.blank? && !params[:page]
           redirect_to edit_review_path(@reviews.first)
         end
       }

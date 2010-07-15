@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @users.size == 1 && !@query.blank?
+        if @users.size == 1 && !@query.blank? && !params[:page]
           redirect_to edit_user_path(@users.first)
         end
       } # index.html.erb

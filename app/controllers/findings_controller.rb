@@ -13,6 +13,7 @@ class FindingsController < ApplicationController
   # * GET /findings.xml
   def index
     @title = t :'finding.index_title'
+    @self_and_descendants = @auth_user.descendants + [@auth_user]
 
     options = {
       :page => params[:page],
@@ -33,7 +34,11 @@ class FindingsController < ApplicationController
     }
 
     unless @auth_user.committee?
-      default_conditions[User.table_name] = {:id => @auth_user.id}
+      self_and_descendants_ids = @self_and_descendants.map(&:id)
+      default_conditions[User.table_name] = {
+        :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
+          params[:user_id] : self_and_descendants_ids
+      }
     end
     
     default_conditions[:state] = params[:completed] == 'incomplete' ?
@@ -46,7 +51,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @findings.size == 1 && !@query.blank?
+        if @findings.size == 1 && !@query.blank? && !params[:page]
           redirect_to edit_finding_path(params[:completed], @findings.first)
         end
       } # index.html.erb
@@ -110,23 +115,6 @@ class FindingsController < ApplicationController
     flash[:notice] = t :'finding.stale_object_error'
     redirect_to :action => :edit
   end
-
-  # Marca como eliminada una debilidad u oportunidad
-  #
-  # * DELETE /findings/1
-  # * DELETE /findings/1.xml
-  def destroy
-    unless @auth_user.can_act_as_audited?
-      @finding = find_with_organization(params[:id])
-      @finding.destroy
-    end
-
-    respond_to do |format|
-      format.html { redirect_to(findings_url(params[:completed])) }
-      format.xml  { head :ok }
-    end
-  end
-
 
   # Crea el documento de seguimiento de la oportunidad
   #
@@ -235,7 +223,9 @@ class FindingsController < ApplicationController
     }
 
     unless @auth_user.committee?
-      options[:conditions][User.table_name] = {:id => @auth_user.id}
+      options[:conditions][User.table_name] = {
+        :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
+      }
     end
     
     finding = Finding.first(options)
