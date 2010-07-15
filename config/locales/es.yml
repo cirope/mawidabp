@@ -413,9 +413,11 @@ es:
     stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
     related_users: "Usuarios relacionados"
     work_papers: "Papeles de trabajo"
+    finding_relations: "Relaciones con otras observaciones"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *{{cost}}* al seguimiento de la observación"
+    add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
@@ -474,7 +476,12 @@ es:
       without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
       pdf_name: "seguimiento_de_observacion_{{code}}.pdf"
-      
+
+  finding_relation:
+    types:
+      related: "Relacionada"
+      duplicated: "Duplicada"
+
   follow_up_audit:
     index_title: "Reportes de auditoría"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
@@ -1379,6 +1386,11 @@ es:
         notify_users: "Enviar notificación"
         <<: *commons
         created_at: "Fecha del comentario"
+      finding_relation:
+        finding_id: 'Observación / Oportunidad de mejora'
+        related_finding_id: 'Observación / Oportunidad de mejora relacionada'
+        finding_relation_type: 'Tipo'
+        <<: *commons
       group:
         name: "Nombre"
         description: "Descripción"

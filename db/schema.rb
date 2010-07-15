@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100702122825) do
+ActiveRecord::Schema.define(:version => 20100713180810) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -176,6 +176,17 @@ ActiveRecord::Schema.define(:version => 20100702122825) do
   add_index "finding_answers", ["file_model_id"], :name => "index_finding_answers_on_file_model_id"
   add_index "finding_answers", ["finding_id"], :name => "index_finding_answers_on_finding_id"
   add_index "finding_answers", ["user_id"], :name => "index_finding_answers_on_user_id"
+
+  create_table "finding_relations", :force => true do |t|
+    t.integer  "finding_relation_type"
+    t.integer  "finding_id"
+    t.integer  "related_finding_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "finding_relations", ["finding_id"], :name => "index_finding_relations_on_finding_id"
+  add_index "finding_relations", ["related_finding_id"], :name => "index_finding_relations_on_related_finding_id"
 
   create_table "findings", :force => true do |t|
     t.string   "type"

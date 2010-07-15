@@ -370,4 +370,51 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/auto_complete_for_user'
   end
+
+  test 'auto complete for finding relation' do
+    perform_auth
+    post :auto_complete_for_finding_relation, {
+      :completed => 'incomplete',
+      :finding_relation_data => 'O01',
+      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 3, assigns(:findings).size
+    assert_select '#error_body', false
+    assert_template 'findings/auto_complete_for_finding_relation'
+
+    post :auto_complete_for_finding_relation, {
+      :completed => 'incomplete',
+      :finding_relation_data => 'O01',
+      :finding_id => findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 2, assigns(:findings).size # Se excluye la observación O01 que no tiene informe definitivo
+    assert_select '#error_body', false
+    assert_template 'findings/auto_complete_for_finding_relation'
+
+    post :auto_complete_for_finding_relation, {
+      :completed => 'incomplete',
+      :finding_relation_data => 'O01, 1 2 3',
+      :finding_id => findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 1, assigns(:findings).size # Solo O01 del informe 1 2 3
+    assert_select '#error_body', false
+    assert_template 'findings/auto_complete_for_finding_relation'
+
+    post :auto_complete_for_finding_relation, {
+      :completed => 'incomplete',
+      :finding_relation_data => 'x_none',
+      :finding_id => findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 0, assigns(:findings).size # Sin resultados
+    assert_select '#error_body', false
+    assert_template 'findings/auto_complete_for_finding_relation'
+  end
 end

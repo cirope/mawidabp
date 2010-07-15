@@ -10,6 +10,8 @@
       :readonly => users_readonly}))}';" %>
     <%= "var finding_answer='#{generate_template(f_f, :finding_answers,
       :object => FindingAnswer.new(:user_id => @auth_user.id))}';" %>
+    <%= "var finding_relation='#{generate_template(f_f, :finding_relations,
+      :object => FindingRelation.new(:finding_id => @finding.id))}';" %>
     <%= "var work_paper='#{generate_template(f_f, :work_papers,
           {:form_builder_local => :wp_f,
           :partial => 'work_papers/work_paper',
@@ -174,6 +176,36 @@
         :class => :add_nested_item, :rel => :users %>
     </p>
   </div>
+
+  <div style="clear: both; margin-top: 2em;">
+    <h1>
+      <%= t(:'finding.finding_relations') %>
+      <%= show_inline_help_for(:finding_relations) %>
+    </h1>
+
+    <div class="column_headers">
+      <div class="item_column" style="width: 60%;">
+        <h3><%= FindingRelation.human_attribute_name :related_finding_id %></h3>
+      </div>
+      <div class="item_column" style="width: 30%;">
+        <h3><%= FindingRelation.human_attribute_name :finding_relation_type %></h3>
+      </div>
+      <div class="item_column" style="width: 5%;"></div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="finding_relations">
+      <% f_f.fields_for :finding_relations do |fr_f| -%>
+        <%= render :partial => 'finding_relation', :locals =>
+          {:f => fr_f, :is_dynamic => false} %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'finding.add_finding_relation'), '#finding_relation',
+      :class => :add_nested_item, :rel => :finding_relations %>
+  </p>
 
   <div style="clear: both; margin-top: 2em;">
     <h1>

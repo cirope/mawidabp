@@ -106,7 +106,8 @@ class Finding < ActiveRecord::Base
   EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete]
 
   # Atributos no persistente
-  attr_accessor :users_for_notification, :user_who_make_it
+  attr_accessor :users_for_notification, :user_who_make_it,
+    :nested_finding_relation
 
   # Asociaciones que deben ser registradas cuando cambien
   @@associations_attributes_for_log = [:user_ids, :workpaper_ids]
@@ -301,6 +302,7 @@ class Finding < ActiveRecord::Base
   before_save :can_be_modified?, :check_users_for_notification
   before_destroy :can_be_destroyed?
   after_update :notify_changes_to_users
+  before_validation :set_proper_parent
 
   # Restricciones
   validates_presence_of :control_objective_item_id, :description, :review_code
@@ -372,6 +374,8 @@ class Finding < ActiveRecord::Base
   has_many :finding_answers, :dependent => :destroy,
     :after_add => :answer_added, :order => 'created_at ASC'
   has_many :notification_relations, :as => :model, :dependent => :destroy
+  has_many :finding_relations, :dependent => :destroy,
+    :before_add => :check_for_valid_relation
   has_many :notifications, :through => :notification_relations, :uniq => true,
     :order => 'created_at'
   has_many :costs, :as => :item, :dependent => :destroy
@@ -389,6 +393,7 @@ class Finding < ActiveRecord::Base
     :after_remove => :user_changed
   
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
+  accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
@@ -413,9 +418,27 @@ class Finding < ActiveRecord::Base
     other.kind_of?(Finding) ? self.id <=> other.id : -1
   end
 
+  def to_s
+    "#{self.review_code} - #{self.control_objective_item.try(:review)}"
+  end
+
   def check_for_final_review(_)
     if self.final? && self.review && self.review.is_frozen?
       raise 'Conclusion Final Review frozen'
+    end
+  end
+
+  def set_proper_parent
+    self.finding_relations.each { |fr| fr.finding = self }
+  end
+
+  def check_for_valid_relation(finding_relation)
+    related_finding = finding_relation.related_finding
+    
+    if related_finding.final? || !related_finding.is_in_a_final_review? ||
+        (!related_finding.is_in_a_final_review? &&
+          related_finding.review.id == self.control_objective_item.try(:review_id))
+      raise 'Invalid finding for asociation'
     end
   end
 
@@ -503,8 +526,7 @@ class Finding < ActiveRecord::Base
   end
 
   def is_in_a_final_review?
-    self.control_objective_item && self.control_objective_item.review &&
-      self.control_objective_item.review.has_final_review?
+    self.control_objective_item.try(:review).try(:has_final_review?)
   end
 
   def check_users_for_notification

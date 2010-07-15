@@ -1,6 +1,6 @@
 module ConclusionFinalReviewsHelper
   def conclusion_final_review_review_field(form, review)
-    reviews = (Review.list_with_approved_draft - Review.list_with_final_draft) |
+    reviews = (Review.list_with_approved_draft - Review.list_with_final_review) |
       [review]
     options = reviews.compact.map { |r| [r.identification, r.id] }
 

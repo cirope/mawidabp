@@ -63,14 +63,16 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_with_final_draft, lambda {
+  named_scope :list_with_final_review, lambda {
     {
       :include => [:period, :conclusion_final_review],
-      :conditions => {
-        Period.table_name => {
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      }
+      :conditions => [
+        [
+          "#{Period.table_name}.organization_id = :organization_id",
+          "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+        ].join(' AND '),
+        { :organization_id => GlobalModelConfig.current_organization_id }
+      ]
     }
   }
   named_scope :list_without_final_review, lambda {

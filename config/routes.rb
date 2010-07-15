@@ -106,7 +106,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :findings, :has_many => :costs, :member => {
     :follow_up_pdf => :get,
-    :auto_complete_for_user => :post
+    :auto_complete_for_user => :post,
+    :auto_complete_for_finding_relation => :post
   }, :path_prefix => ':completed',
     :requirements => {:completed => /complete|incomplete/}
 

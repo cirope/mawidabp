@@ -1,0 +1,30 @@
+<% unless @findings.empty? -%>
+  <ul>
+    <% @findings.each do |f| -%>
+      <li id="dynamic_result_<%= "#{rand(100000)}_id_#{f.id}" %>">
+        <%= highlight(h(f.to_s), @tokens) %>
+        <span class="informal aditional_info">
+          <span style="display: block;">
+            <b><%= Finding.human_attribute_name(:description) %></b>:
+            <%= highlight(h(f.description), @tokens) %>
+          </span>
+          <span style="display: block;">
+            <b><%= Finding.human_attribute_name(:review_code) %></b>:
+            <%= highlight(h(f.review_code), @tokens) %>
+          </span>
+          <span style="display: block;">
+            <b><%= Review.human_name %></b>:
+            <%= highlight(h(f.control_objective_item.review.to_s), @tokens) %>
+          </span>
+          <span style="display: block;">
+            <b><%= ControlObjectiveItem.human_attribute_name(:control_objective_text) %></b>:
+            <%= highlight(h(f.control_objective_item.control_objective_text), @tokens) %>
+          </span>
+        </span>
+      </li>
+    <% end -%>
+  </ul>
+<% else -%>
+  <ul style="display: none;"><li></li></ul>
+  <p class="empty_result"><%= t(:'message.empty_result') %></p>
+<% end -%>
