@@ -383,7 +383,7 @@ class UsersController < ApplicationController
 
       if @auth_user.valid?
         @auth_user.encrypt_password
-        @auth_user.is_an_important_change = false
+        PaperTrail.whodunnit ||= @auth_user.id
 
         if @auth_user.update_attributes(
             :password => @auth_user.password,

@@ -135,6 +135,13 @@ class String
 
     ((hours + minutes / 60.0 + seconds / 3600.0) * 3600).round
   end
+
+  def split_if_no_space_in(max_characters = 50, split_character = "\n")
+    self.to_s.scan(/.{1,#{max_characters}}/).map do |chunk|
+      chunk.index(/\s/) || chunk.length < max_characters ?
+        chunk : "#{chunk}#{split_character}"
+    end.join
+  end
 end
 
 class Version
@@ -150,8 +157,8 @@ class Version
       if old_value != new_value && !(old_value.blank? && new_value.blank?)
         changes << HashWithIndifferentAccess.new({
           :attribute => item_class.human_attribute_name(attribute),
-          :old_value => old_value.to_translated_string,
-          :new_value => new_value.to_translated_string
+          :old_value => old_value.to_translated_string.split_if_no_space_in(50),
+          :new_value => new_value.to_translated_string.split_if_no_space_in(50)
         })
       end
     end
