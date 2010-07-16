@@ -1578,6 +1578,7 @@ es:
         resource_id: "Tipo de recurso"
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
+        roles: 'Perfiles'
         <<: *commons
       version:
         item: "Objeto"
