@@ -160,8 +160,8 @@ class NotifierTest < ActionMailer::TestCase
 
     assert !ActionMailer::Base.deliveries.empty?
     assert_equal I18n.t(:'notifier.blank_password.title'), response.subject
-    assert_match Regexp.new(I18n.t(:'notifier.blank_password.body_title')),
-      response.body
+    assert response.body.include?(I18n.t(:'notifier.blank_password.body_title',
+        :user_name => user.informal_name, :user => user.user))
     assert response.to.include?(user.email)
   end
 

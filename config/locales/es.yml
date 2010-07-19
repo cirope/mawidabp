@@ -645,7 +645,7 @@ es:
     change_password: "Cambiar contraseña"
     blank_password:
       title: "Contraseña blanqueada"
-      body_title: "Su contraseña ha sido blanqueada, para establecer una nueva utilice el siguiente enlace:"
+      body_title: "{{user_name}}, la contraseña de su usuario ({{user}}) ha sido blanqueada, para establecer una nueva utilice el siguiente enlace:"
       valid_until: "{{link}} (Usted podrá utilizar este enlace hasta el día *{{date}}* inclusive)"
     changes_notification:
       title: "Notificación de cambios"
