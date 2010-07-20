@@ -4,23 +4,19 @@ require 'test_helper'
 class ProcedureControlsControllerTest < ActionController::TestCase
   fixtures :procedure_controls, :organizations, :periods
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
+    public_actions = []
+    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
+
+    private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
     end
 
-    @public_actions.each do |action|
+    public_actions.each do |action|
       get action
       assert_response :success
     end
@@ -49,6 +45,24 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:procedure_control)
+    assert_select '#error_body', false
+    assert_template 'procedure_controls/new'
+  end
+
+  test 'clone procedure_control' do
+    perform_auth
+    procedure_control = ProcedureControl.find(
+      procedure_controls(:procedure_control_iso_27001).id)
+
+    get :new, :clone_from => procedure_control.id
+    assert_response :success
+    assert_not_nil assigns(:procedure_control)
+    assert procedure_control.procedure_control_items.size > 0
+    assert_equal procedure_control.procedure_control_items.size,
+      assigns(:procedure_control).procedure_control_items.size
+    assert procedure_control.procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum > 0
+    assert_equal procedure_control.procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum,
+      assigns(:procedure_control).procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum
     assert_select '#error_body', false
     assert_template 'procedure_controls/new'
   end

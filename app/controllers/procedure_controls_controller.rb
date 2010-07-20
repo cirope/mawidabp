@@ -52,7 +52,30 @@ class ProcedureControlsController < ApplicationController
   def new
     @title = t :'procedure_control.new_title'
     @procedure_control = ProcedureControl.new
-    @procedure_control.procedure_control_items.build
+
+    clone_id = params[:clone_from].respond_to?(:to_i) ?
+      params[:clone_from].to_i : 0
+
+    if exists?(clone_id)
+      clone_procedure_control = find_with_organization(clone_id)
+    end
+
+    if clone_procedure_control
+      clone_procedure_control.procedure_control_items.each do |pci|
+        pcs_attributes = pci.procedure_control_subitems.map do |pcs|
+          pcs.attributes.merge :id => nil
+        end
+        
+        attributes = pci.attributes.merge(
+          :id => nil,
+          :procedure_control_subitems_attributes => pcs_attributes
+        )
+
+        @procedure_control.procedure_control_items.build(attributes)
+      end
+    else
+      @procedure_control.procedure_control_items.build
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -312,6 +335,21 @@ class ProcedureControlsController < ApplicationController
         "#{Period.table_name}.organization_id" => @auth_organization.id
       },
       :readonly => false
+    )
+  end
+
+  # Indica si existe el procedimiento de control indicado, siempre que
+  # pertenezca a la organización. En el caso que no se encuentre (ya sea que no
+  # existe un procedimiento de control con ese ID o que no pertenece a la
+  # organización con la que se autenticó el usuario) devuelve false.
+  # _id_::  ID del plan de trabajo que se quiere recuperar
+  def exists?(id) #:doc:
+    ProcedureControl.first(
+      :include => :period,
+      :conditions => {
+        :id => id,
+        "#{Period.table_name}.organization_id" => @auth_organization.id
+      }
     )
   end
 

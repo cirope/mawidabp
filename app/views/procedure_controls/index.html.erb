@@ -5,9 +5,7 @@
       <th><%= Period.human_attribute_name :start %></th>
       <th><%= Period.human_attribute_name :end %></th>
       <th><%= Organization.human_name %></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
@@ -18,6 +16,8 @@
         <td><%= h l(procedure_control.period.start, :format => :short) %></td>
         <td><%= h l(procedure_control.period.end, :format => :short) %></td>
         <td><%= h procedure_control.organization.name %></td>
+        <td><%= link_to_clone new_procedure_control_path(:clone_from => procedure_control.id),
+            :label => t(:'procedure_control.copy') %></td>
         <td><%= link_to_show procedure_control %></td>
         <td><%= link_to_edit edit_procedure_control_path(procedure_control) %></td>
         <td><%= button_to_destroy procedure_control %></td>

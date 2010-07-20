@@ -874,6 +874,7 @@ es:
     correctly_created: "Procedimiento y prueba de control agregado correctamente."
     correctly_updated: "Procedimiento y prueba de control actualizado correctamente."
     stale_object_error: "El procedimiento y prueba de control no fue actualizado, intente nuevamente."
+    copy: "Copiar"
     add_procedure_control_item: "Agregar proceso de negocio"
     add_procedure_control_subitem: "Agregar procedimiento de control"
     show_procedure_control_subitems: "Ver procedimientos de control"
