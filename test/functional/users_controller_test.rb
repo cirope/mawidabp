@@ -322,6 +322,10 @@ class UsersControllerTest < ActionController::TestCase
       }
       
     assert_redirected_to edit_password_user_url(user)
+
+    # Cualquier petición redirecciona al cambio de contraseña
+    get :index
+    assert_redirected_to edit_password_user_url(user)
   end
 
   test 'warning about password expiration' do

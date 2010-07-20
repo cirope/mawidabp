@@ -36,6 +36,30 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/index'
   end
 
+  test 'list conclusion_draft_reviews with search' do
+    perform_auth
+    get :index, :search => {
+      :query => '1 2',
+      :columns => ['identification', 'project']
+    }
+    assert_response :success
+    assert_not_nil assigns(:conclusion_draft_reviews)
+    assert_equal 2, assigns(:conclusion_draft_reviews).size
+    assert_select '#error_body', false
+    assert_template 'conclusion_draft_reviews/index'
+  end
+
+  test 'edit conclusion_draft_reviews when search match only one result' do
+    perform_auth
+    get :index, :search => {
+      :query => '1 1',
+      :columns => ['identification', 'project']
+    }
+    assert_redirected_to edit_conclusion_draft_review_path(conclusion_reviews(:conclusion_past_draft_review))
+    assert_not_nil assigns(:conclusion_draft_reviews)
+    assert_equal 1, assigns(:conclusion_draft_reviews).size
+  end
+
   test 'show conclusion_draft_review' do
     perform_auth
     get :show, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id

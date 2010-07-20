@@ -13,16 +13,26 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews.xml
   def index
     @title = t :'conclusion_draft_review.index_title'
+    default_conditions = {
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    }
+
+    build_search_conditions ConclusionDraftReview, default_conditions
+
     @conclusion_draft_reviews = ConclusionDraftReview.paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE,
-      :include => {:review => :period},
-      :conditions => {
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
+      :include => { :review => [:period, { :plan_item => :business_unit }] },
+      :conditions => @conditions,
       :order => 'issue_date DESC')
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {
+        if @conclusion_draft_reviews.size == 1 && !@query.blank? &&
+            !params[:page]
+          redirect_to edit_conclusion_draft_review_path(
+            @conclusion_draft_reviews.first)
+        end
+      }
       format.xml  { render :xml => @conclusion_draft_reviews }
     end
   end

@@ -7,6 +7,27 @@ class ConclusionReview < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
+  # Constantes
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :period => {
+      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
+    },
+    :identification => {
+      :column => "LOWER(#{Review.table_name}.identification)",
+      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
+      :regexp => /.*/
+    },
+    :business_unit => {
+      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :project => {
+      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    }
+  })
+
   # Callbacks
   before_destroy :can_be_destroyed?
 

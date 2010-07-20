@@ -1,13 +1,17 @@
+<%= render :partial => 'shared/search', :locals => {
+  :options => {},
+  :columns => @query.blank? ?
+    ConclusionDraftReview::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
 <table>
-  <thead>
+  <thead id="column_headers">
     <tr>
-      <th><%= ConclusionFinalReview.human_attribute_name 'issue_date' %></th>
-      <th><%= Review.human_attribute_name 'period_id' %></th>
-      <th><%= Review.human_attribute_name 'identification' %></th>
-      <th><%= PlanItem.human_attribute_name 'business_unit_id' %></th>
-      <th><%= PlanItem.human_attribute_name 'project' %></th>
-      <th></th>
-      <th></th>
+      <%= make_not_available_column ConclusionDraftReview.human_attribute_name(:issue_date) %>
+      <%= make_filterable_column Review.human_attribute_name(:period_id), 'period' %>
+      <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
 
