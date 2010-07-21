@@ -51,18 +51,18 @@ class BusinessUnit < ActiveRecord::Base
   end
 
   def type_text
-    I18n.t "organization.business_unit_#{self.type}.type"
+    I18n.t "organization.business_unit_#{self.type_sym}.type"
   end
 
   def report_name_text
-    I18n.t "organization.business_unit_#{self.type}.report_name"
+    I18n.t "organization.business_unit_#{self.type_sym}.report_name"
   end
 
   def report_subname_text
-    I18n.t "organization.business_unit_#{self.type}.report_subname"
+    I18n.t "organization.business_unit_#{self.type_sym}.report_subname"
   end
 
-  def type
+  def type_sym
     TYPES.invert[self.business_unit_type]
   end
 end

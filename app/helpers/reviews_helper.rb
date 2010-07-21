@@ -9,14 +9,11 @@ module ReviewsHelper
   end
 
   def review_business_unit_type_text(review)
-    review.plan_item && review.plan_item.business_unit ?
-      t("organization.business_unit_#{
-        review.plan_item.business_unit.type}.type") : nil
+    review.plan_item.try(:business_unit).try(:type_text)
   end
 
   def review_business_unit_text(review)
-    review.plan_item && review.plan_item.business_unit ?
-      review.plan_item.business_unit.name : nil
+    review.plan_item.try(:business_unit).try(:name)
   end
 
   def user_assignment_type_field(form, inline = true, disabled = false)
