@@ -68,15 +68,13 @@ APP_AUDITOR_MENU_ITEMS = [
             :management,
             :order => 1,
             :controllers => :organizations,
-            :extra_conditions => "!['edit_business_units', 'update_business_units'].include?(params[:action])",
             :url => {:controller => :organizations}
           ),
           MenuItem.new(
             :business_units,
             :order => 2,
-            :controllers => :organizations,
-            :extra_conditions => "['edit_business_units', 'update_business_units'].include?(params[:action])",
-            :url => {:controller => :organizations, :action => :edit_business_units}
+            :controllers => :business_unit_types,
+            :url => {:controller => :business_unit_types}
           )
         ]
       ),

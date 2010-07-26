@@ -58,23 +58,15 @@ class OrganizationsControllerTest < ActionController::TestCase
     perform_auth user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
-      assert_no_difference 'BusinessUnit.count' do
-        post :create, {
-          :organization => {
-            :name => 'New organization',
-            :prefix => 'new-prefix',
-            :description => 'New description',
-            :group_id => groups(:main_group).id,
-            :image_model_id => image_models(:image_one).id,
-            :business_units_attributes => {
-              :new_1 => {
-                :name => 'new business_unit 1',
-                :business_unit_type => BusinessUnit::TYPES[:cycle]
-              }
-            }
-          }
+      post :create, {
+        :organization => {
+          :name => 'New organization',
+          :prefix => 'new-prefix',
+          :description => 'New description',
+          :group_id => groups(:main_group).id,
+          :image_model_id => image_models(:image_one).id
         }
-      end
+      }
     end
 
     assert_equal groups(:main_group).id,
@@ -87,23 +79,15 @@ class OrganizationsControllerTest < ActionController::TestCase
     perform_auth user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
-      assert_no_difference 'BusinessUnit.count' do
-        post :create, {
-          :organization => {
-            :name => 'New organization',
-            :prefix => 'new-prefix',
-            :description => 'New description',
-            :group_id => groups(:second_group).id,
-            :image_model_id => image_models(:image_one).id,
-            :business_units_attributes => {
-              :new_1 => {
-                :name => 'new business_unit 1',
-                :business_unit_type => BusinessUnit::TYPES[:cycle]
-              }
-            }
-          }
+      post :create, {
+        :organization => {
+          :name => 'New organization',
+          :prefix => 'new-prefix',
+          :description => 'New description',
+          :group_id => groups(:second_group).id,
+          :image_model_id => image_models(:image_one).id
         }
-      end
+      }
     end
 
     # El grupo debe ser el mismo que el de la organización autenticada
@@ -127,69 +111,23 @@ class OrganizationsControllerTest < ActionController::TestCase
       :organization => {
         :name => 'Updated organization',
         :description => 'Updated description',
-        :image_model_id => image_models(:image_one).id,
-        :business_units_attributes => {
-          business_units(:business_unit_one).id => {
-            :id => business_units(:business_unit_one).id,
-            :name => 'Updated business units',
-            :business_unit_type => BusinessUnit::TYPES[:cycle]
-          }
-        }
+        :image_model_id => image_models(:image_one).id
       }
     }
-
-    business_unit = BusinessUnit.find business_units(:business_unit_one).id
 
     assert_redirected_to organizations_path
     assert_not_nil assigns(:organization)
     assert_equal 'Updated organization', assigns(:organization).name
-    # No se debe poder actualizar las unidades de negocio
-    assert_not_equal 'Updated business units', business_unit.name
   end
 
   test 'destroy organization' do
     perform_auth(users(:administrator_second_user),
       organizations(:second_organization))
     
-    assert_difference ['Organization.count', 'BusinessUnit.count'], -1 do
+    assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
       delete :destroy, :id => organizations(:second_organization).id
     end
     
     assert_redirected_to organizations_path
-  end
-
-  test 'edit business units' do
-    perform_auth
-    get :edit_business_units
-    assert_response :success
-    assert_not_nil assigns(:auth_organization)
-    assert_select '#error_body', false
-    assert_template 'organizations/edit_business_units'
-  end
-
-  test 'update business units' do
-    perform_auth
-    put :update_business_units, {
-      :organization => {
-        :name => 'Updated organization',
-        :description => 'Updated description',
-        :image_model_id => image_models(:image_one).id,
-        :business_units_attributes => {
-          business_units(:business_unit_one).id => {
-            :id => business_units(:business_unit_one).id,
-            :name => 'Updated business units',
-            :business_unit_type => BusinessUnit::TYPES[:cycle]
-          }
-        }
-      }
-    }
-
-    business_unit = BusinessUnit.find business_units(:business_unit_one).id
-
-    assert_redirected_to edit_business_units_organizations_path
-    assert_not_nil assigns(:auth_organization)
-    # No se debe poder actualizar otro dato que no sea las unidades de negocio
-    assert_not_equal 'Updated organization', assigns(:auth_organization).name
-    assert_equal 'Updated business units', business_unit.name
   end
 end

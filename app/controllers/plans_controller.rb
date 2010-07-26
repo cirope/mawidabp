@@ -141,7 +141,7 @@ class PlansController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un plan de trabajo
+  # Elimina un plan de trabajo
   #
   # * DELETE /plans/1
   # * DELETE /plans/1.xml
@@ -176,7 +176,7 @@ class PlansController < ApplicationController
     @tokens = params[:business_unit_data][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      "#{BusinessUnit.table_name}.organization_id = :organization_id"
+      "#{BusinessUnitType.table_name}.organization_id = :organization_id"
     ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
@@ -187,10 +187,11 @@ class PlansController < ApplicationController
       parameters["business_unit_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
     find_options = {
+      :include => :business_unit_type,
       :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
       :order => [
         "#{BusinessUnit.table_name}.name ASC",
-        "#{BusinessUnit.table_name}.business_unit_type ASC"
+        "#{BusinessUnitType.table_name}.name ASC"
       ].join(','),
       :limit => 10
     }

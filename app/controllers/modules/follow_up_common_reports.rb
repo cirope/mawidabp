@@ -2,7 +2,7 @@ module FollowUpCommonReports
   def weaknesses_by_state
     @title = t :'follow_up_committee.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
-    @audit_types = [:internal, :external, :bcra]
+    @audit_types = [:internal, :external]
     @weaknesses_counts = {}
     @being_implemented_resumes = {}
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
@@ -171,7 +171,7 @@ module FollowUpCommonReports
   def weaknesses_by_risk
     @title = t :'follow_up_committee.weaknesses_by_risk_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
-    @audit_types = [:internal, :external, :bcra]
+    @audit_types = [:internal, :external]
     @tables_data = {}
     @being_implemented_resumes = {}
     risk_levels = parameter_in(@auth_organization.id,
@@ -270,7 +270,7 @@ module FollowUpCommonReports
   def weaknesses_by_audit_type
     @title = t :'follow_up_committee.weaknesses_by_audit_type_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
-    @audit_types = [:internal, :external, :bcra]
+    @audit_types = [:internal, :external]
     @data = {}
     risk_levels = parameter_in(@auth_organization.id,
       :admin_finding_risk_levels, @from_date)
@@ -285,7 +285,7 @@ module FollowUpCommonReports
 
       conclusion_final_review.each do |cfr|
         business_unit = cfr.review.plan_item.business_unit
-        business_unit_type = business_unit.type_text
+        business_unit_type = business_unit.business_unit_type.name
 
         reviews_by_audit_type[business_unit_type] ||= {}
         reviews_by_audit_type[business_unit_type][business_unit.name] ||= []
@@ -432,7 +432,8 @@ module FollowUpCommonReports
             data_item[:business_units].each do |bu, bu_data|
               pdf.move_pointer 12
 
-              pdf.add_description_item bu.report_name_text, bu.name
+              pdf.add_description_item(
+                bu.business_unit_type.business_unit_label, bu.name)
               pdf.move_pointer 12
 
               pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"

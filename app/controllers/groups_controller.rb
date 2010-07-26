@@ -102,7 +102,7 @@ class GroupsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un grupo
+  # Elimina un grupo
   #
   # * DELETE /groups/1
   # * DELETE /groups/1.xml

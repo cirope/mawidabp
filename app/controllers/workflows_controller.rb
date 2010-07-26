@@ -141,7 +141,7 @@ class WorkflowsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un programa de trabajo
+  # Elimina un programa de trabajo
   #
   # * DELETE /workflows/1
   # * DELETE /workflows/1.xml

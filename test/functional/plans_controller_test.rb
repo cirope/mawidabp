@@ -300,11 +300,11 @@ class PlansControllerTest < ActionController::TestCase
   test 'auto complete for business_unit business_unit' do
     perform_auth
     post :auto_complete_for_business_unit_business_unit_id, {
-      :business_unit_data => 'three'
+      :business_unit_data => 'fifth'
     }
     assert_response :success
     assert_not_nil assigns(:business_units)
-    assert_equal 0, assigns(:business_units).size # Three is in another organization
+    assert_equal 0, assigns(:business_units).size # Fifth is in another organization
     assert_select '#error_body', false
     assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
 
@@ -322,7 +322,7 @@ class PlansControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:business_units)
-    assert_equal 2, assigns(:business_units).size # All in the organization (one and two)
+    assert_equal 4, assigns(:business_units).size # All in the organization (one, two, three and four)
     assert_select '#error_body', false
     assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
   end

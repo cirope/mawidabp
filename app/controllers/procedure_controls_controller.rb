@@ -137,7 +137,7 @@ class ProcedureControlsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un procedimiento de control
+  # Elimina un procedimiento de control
   #
   # * DELETE /procedure_controls/1
   # * DELETE /procedure_controls/1.xml

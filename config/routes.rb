@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :business_unit_types
+
   map.resources :groups
 
   map.resources :detracts, :only => [:index, :show, :new, :create], :member => {
@@ -189,10 +191,7 @@ ActionController::Routing::Routes.draw do |map|
     :auto_complete_for_finding_relation => :post
   }
 
-  map.resources :organizations, :collection => {
-    :edit_business_units => :get,
-    :update_business_units => :put
-  }
+  map.resources :organizations
 
   map.resources :roles
 

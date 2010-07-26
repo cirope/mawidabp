@@ -269,28 +269,18 @@ class Finding < ActiveRecord::Base
   }
   named_scope :internal_audit,
     :include => {
-      :control_objective_item => {:review => {:plan_item => :business_unit}}
+      :control_objective_item => {
+        :review => {:plan_item => {:business_unit => :business_unit_type}}
+      }
     },
-    :conditions => [
-      "#{BusinessUnit.table_name}.business_unit_type IN (:types)",
-      {:types => BusinessUnit::INTERNAL_TYPES.values}
-    ]
+    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
   named_scope :external_audit,
     :include => {
-      :control_objective_item => {:review => {:plan_item => :business_unit}}
+      :control_objective_item => {
+        :review => {:plan_item => {:business_unit => :business_unit_type}}
+      }
     },
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:external_audit]
-    }
-  named_scope :bcra_audit,
-    :include => {
-      :control_objective_item => {:review => {:plan_item => :business_unit}}
-    },
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:bcra]
-    }
+    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
 
   # Restricciones sobre los atributos
   attr_protected :first_notification_date, :final

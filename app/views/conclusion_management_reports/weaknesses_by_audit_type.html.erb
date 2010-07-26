@@ -11,7 +11,8 @@
         <h1><%= data_item[:title] %></h1>
         <% data_item[:business_units].each do |bu, bu_data| -%>
           <p>
-            <b><%= bu.report_name_text %></b>: <%= bu.name %>
+            <b><%= bu.business_unit_type.business_unit_label %></b>:
+            <%= bu.name %>
           </p>
           <p style="margin-top: 1em;">
             <strong><%= t(:'actioncontroller.reviews') %></strong>

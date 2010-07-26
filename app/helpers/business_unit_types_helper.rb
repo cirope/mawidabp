@@ -1,0 +1,2 @@
+module BusinessUnitTypesHelper
+end

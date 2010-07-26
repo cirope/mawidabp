@@ -72,7 +72,7 @@ class BackupsController < ApplicationController
     end
   end
 
-  # Marca como eliminada una copia de seguridad
+  # Elimina una copia de seguridad
   #
   # * DELETE /backups/1
   # * DELETE /backups/1.xml

@@ -43,6 +43,12 @@ class BestPractice < ActiveRecord::Base
   
   accepts_nested_attributes_for :process_controls, :allow_destroy => true
 
+  def initialize(attributes = nil)
+    super(attributes)
+
+    self.organization_id = GlobalModelConfig.current_organization_id
+  end
+
   def assign_best_practice(process_control)
     process_control.best_practice = self
   end

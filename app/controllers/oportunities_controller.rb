@@ -143,7 +143,7 @@ class OportunitiesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminada una oportunidad de mejora
+  # Elimina una oportunidad de mejora
   #
   # * DELETE /oportunities/1
   # * DELETE /oportunities/1.xml

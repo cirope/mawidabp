@@ -102,7 +102,7 @@ class Review < ActiveRecord::Base
   named_scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
     {
       :include => [:period, :conclusion_final_review,
-        {:plan_item => :business_unit}],
+        {:plan_item => {:business_unit => :business_unit_type}}],
       :conditions => [
         [
           "#{Period.table_name}.organization_id = :organization_id",
@@ -115,7 +115,8 @@ class Review < ActiveRecord::Base
         }
       ],
       :order => [
-        "#{BusinessUnit.table_name}.business_unit_type ASC",
+        "#{BusinessUnitType.table_name}.external ASC",
+        "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
       ].join(', ')
     }
@@ -138,23 +139,11 @@ class Review < ActiveRecord::Base
     }
   }
   named_scope :internal_audit,
-    :include => {:plan_item => :business_unit},
-    :conditions => [
-      "#{BusinessUnit.table_name}.business_unit_type IN (:types)",
-      {:types => BusinessUnit::INTERNAL_TYPES.values}
-    ]
+    :include => { :plan_item => {:business_unit => :business_unit_type} },
+    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
   named_scope :external_audit,
-    :include => {:plan_item => :business_unit},
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:external_audit]
-    }
-  named_scope :bcra_audit,
-    :include => {:plan_item => :business_unit},
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:bcra]
-    }
+    :include => { :plan_item => {:business_unit => :business_unit_type} },
+    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
 
   # Restricciones
   validates_format_of :identification, :with => /\A\w[\w\s]*\z/,
@@ -906,12 +895,13 @@ class Review < ActiveRecord::Base
 
     pdf.move_pointer 12
 
-    pdf.add_description_item(self.business_unit.report_name_text,
+    pdf.add_description_item(
+      self.business_unit.business_unit_type.business_unit_label,
       self.business_unit.name)
 
-    unless self.business_unit.branch_offices? || self.business_unit.bcra? ||
-        self.business_unit.external_audit?
-      pdf.add_description_item(self.business_unit.report_subname_text,
+    unless self.business_unit.business_unit_type.project_label.blank?
+      pdf.add_description_item(
+        self.business_unit.business_unit_type.project_label,
         self.plan_item.project)
     end
 

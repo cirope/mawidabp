@@ -106,7 +106,7 @@ class ControlObjectiveItemsController < ApplicationController
       redirect_to :action => :edit
   end
 
-  # Marca como eliminado un objetivo de control
+  # Elimina un objetivo de control
   #
   # * DELETE /control_objective_items/1
   # * DELETE /control_objective_items/1.xml

@@ -9,7 +9,7 @@ module ReviewsHelper
   end
 
   def review_business_unit_type_text(review)
-    review.plan_item.try(:business_unit).try(:type_text)
+    review.plan_item.try(:business_unit).try(:business_unit_type).try(:name)
   end
 
   def review_business_unit_text(review)

@@ -7,6 +7,8 @@ class BestPracticeTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @best_practice = BestPractice.find best_practices(:iso_27001).id
+    GlobalModelConfig.current_organization_id =
+      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -21,11 +23,13 @@ class BestPracticeTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'BestPractice.count' do
       @best_practice = BestPractice.create(
-        :organization_id => organizations(:default_organization).id,
         :name => 'New name',
         :description => 'New description'
       )
     end
+
+    assert_equal organizations(:default_organization).id,
+      @best_practice.organization_id
   end
 
   # Prueba de actualización de una buena práctica

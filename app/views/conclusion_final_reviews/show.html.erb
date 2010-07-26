@@ -12,13 +12,13 @@
     <%= l(@conclusion_final_review.issue_date, :format => :long) %>
   </p>
   <p>
-    <b><%= @conclusion_final_review.review.business_unit.report_name_text %></b>:
+    <b><%= @conclusion_final_review.review.business_unit.business_unit_type.business_unit_label %></b>:
     <%= @conclusion_final_review.review.business_unit.name %>
   </p>
 
-  <% unless @conclusion_final_review.review.business_unit.branch_offices? || @conclusion_final_review.review.business_unit.bcra? || @conclusion_final_review.review.business_unit.external_audit? -%>
+  <% unless @conclusion_final_review.review.business_unit.business_unit_type.project_label.blank? -%>
     <p>
-      <b><%= @conclusion_final_review.review.business_unit.report_subname_text %></b>:
+      <b><%= @conclusion_final_review.review.business_unit.business_unit_type.project_label %></b>:
       <%= @conclusion_final_review.review.plan_item.project %>
     </p>
   <% end -%>

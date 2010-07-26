@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina organizaciones (#Organization) y
 # unidades de negocio (#BusinessUnit)
 class OrganizationsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_filter :auth, :check_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
   hide_action :update_auth_user_id
 
@@ -34,7 +34,7 @@ class OrganizationsController < ApplicationController
     @organization = find_if_allowed(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show.html.erbtype
       format.xml  { render :xml => @organization }
     end
   end
@@ -46,7 +46,6 @@ class OrganizationsController < ApplicationController
   def new
     @title = t :'organization.new_title'
     @organization = Organization.new
-    @organization.business_units.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -125,7 +124,7 @@ class OrganizationsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminada una organización
+  # Elimina una organización
   #
   # * DELETE /organizations/1
   # * DELETE /organizations/1.xml
@@ -137,38 +136,6 @@ class OrganizationsController < ApplicationController
       format.html { redirect_to(organizations_url) }
       format.xml  { head :ok }
     end
-  end
-
-  # Muestra las unidades de negocio y permite su edición
-  #
-  # * GET /organizations/edit_business_units/1
-  # * GET /organizations/edit_business_units/1.xml
-  def edit_business_units
-    @title = t :'organization.edit_business_units_title'
-  end
-
-  # Actualiza las unidades de negocio de la organización
-  #
-  # * PUT /organizations/update_business_units/1
-  # * PUT /organizations/update_business_units/1.xml
-  def update_business_units
-    @title = t :'organization.edit_business_units_title'
-
-    respond_to do |format|
-      if @auth_organization.update_attributes({:business_units_attributes =>
-              params[:organization][:business_units_attributes]})
-        flash[:notice] = t :'organization.business_units_correctly_updated'
-        format.html { redirect_to(edit_business_units_organizations_path) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => :edit_business_units }
-        format.xml  { render :xml => @auth_organization.errors, :status => :unprocessable_entity }
-      end
-    end
-
-  rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'organization.stale_object_error'
-    redirect_to :action => :edit_business_units
   end
 
   private
@@ -184,12 +151,5 @@ class OrganizationsController < ApplicationController
         :id => id
       }
     )
-  end
-
-  def load_privileges #:nodoc:
-    @action_privileges.update({
-        :edit_business_units => :modify,
-        :update_business_units => :modify
-      })
   end
 end

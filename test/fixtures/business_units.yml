@@ -1,19 +1,19 @@
 business_unit_one:
   name: Business unit one
-  organization: default_organization
-  business_unit_type: <%= BusinessUnit::TYPES[:cycle] %>
+  business_unit_type: cycle
 
 business_unit_two:
   name: Business unit two
-  organization: default_organization
-  business_unit_type: <%= BusinessUnit::TYPES[:cycle] %>
+  business_unit_type: cycle
 
 business_unit_three:
   name: Business unit three
-  organization: second_organization
-  business_unit_type: <%= BusinessUnit::TYPES[:cycle] %>
+  business_unit_type: cycle
 
 business_unit_four:
   name: Business unit four
-  organization: second_organization
-  business_unit_type: <%= BusinessUnit::TYPES[:cycle] %>
+  business_unit_type: cycle
+
+business_unit_fifth:
+  name: Business unit fifth
+  business_unit_type: bcra_second_organization

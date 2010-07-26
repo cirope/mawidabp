@@ -40,24 +40,17 @@ class Organization < ActiveRecord::Base
   validates_uniqueness_of :prefix, :case_sensitive => false
   validates_uniqueness_of :name, :case_sensitive => false, :scope => :group_id
   validates_exclusion_of :prefix, :in => INVALID_PREFIXES
-  validates_each :business_units do |record, attr, value|
-    unless value.all? {|bu| !bu.marked_for_destruction? || bu.can_be_destroyed?}
-      record.errors.add attr, :locked
-    end
-  end
   
   # Relaciones
   belongs_to :group
   belongs_to :image_model, :dependent => :destroy
-  has_many :business_units, :dependent => :destroy, :order => 'name ASC'
+  has_many :business_unit_types, :dependent => :destroy, :order => 'name ASC'
   has_many :parameters, :dependent => :destroy
   has_many :roles, :dependent => :destroy
   has_many :organization_roles, :dependent => :destroy
   has_many :users, :through => :organization_roles, :readonly => true
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true
-  accepts_nested_attributes_for :business_units, :allow_destroy => true,
-    :reject_if => lambda { |attributes| attributes['name'].blank? }
 
   def initialize(attributes = nil)
     super(attributes)

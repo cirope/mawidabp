@@ -1,9 +1,5 @@
 <!--[form:organization]-->
 <% form_for @organization, :html => { :multipart => true } do |o_f| -%>
-  <% content_for :js_extra do -%>
-    <%= "var business_unit='#{generate_template(o_f, :business_units,
-    :locals => {:business_unit_type => 'NEW_TYPE'})}';" %>
-  <% end -%>
   <%= o_f.error_messages %>
 
   <div class="form_column_left">

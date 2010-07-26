@@ -4,7 +4,7 @@ class ConclusionFinalReview < ConclusionReview
     {
       :include => {
         :review => [:period, {:control_objective_items => :weaknesses},
-          {:plan_item => :business_unit}]
+          {:plan_item => {:business_unit => :business_unit_type}}]
       },
       :conditions => [
         [
@@ -17,29 +17,22 @@ class ConclusionFinalReview < ConclusionReview
         }
       ],
       :order => [
-        "#{BusinessUnit.table_name}.business_unit_type ASC",
+        "#{BusinessUnitType.table_name}.external ASC",
+        "#{BusinessUnitType.table_name}.name ASC",
         'issue_date ASC'
       ].join(', ')
     }
   }
   named_scope :internal_audit,
-    :include => {:review => {:plan_item => :business_unit}},
-    :conditions => [
-      "#{BusinessUnit.table_name}.business_unit_type IN (:types)",
-      {:types => BusinessUnit::INTERNAL_TYPES.values}
-    ]
+    :include => {
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    },
+    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
   named_scope :external_audit,
-    :include => {:review => {:plan_item => :business_unit}},
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:external_audit]
-    }
-  named_scope :bcra_audit,
-    :include => {:review => {:plan_item => :business_unit}},
-    :conditions => {
-      "#{BusinessUnit.table_name}.business_unit_type" =>
-        BusinessUnit::TYPES[:bcra]
-    }
+    :include => {
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    },
+    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
 
   # Callbacks
   before_save :check_for_approval

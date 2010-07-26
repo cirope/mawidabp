@@ -105,7 +105,7 @@ class RolesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un perfil
+  # Elimina un perfil
   #
   # * DELETE /roles/1
   # * DELETE /roles/1.xml

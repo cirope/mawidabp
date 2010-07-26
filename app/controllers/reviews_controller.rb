@@ -127,7 +127,7 @@ class ReviewsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un informe
+  # Elimina un informe
   #
   # * DELETE /reviews/1
   # * DELETE /reviews/1.xml
@@ -180,10 +180,8 @@ class ReviewsController < ApplicationController
     business_unit = plan_item.try(:business_unit)
     name = business_unit.try(:name)
     
-    if business_unit
-      type = t("organization.business_unit_#{business_unit.type}.type")
-    end
-
+    type = business_unit.business_unit_type.name if business_unit
+    
     render :json => {
       :business_unit_name => name,
       :business_unit_type => type

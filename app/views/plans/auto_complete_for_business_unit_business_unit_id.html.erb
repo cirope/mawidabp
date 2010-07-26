@@ -5,7 +5,7 @@
         <%= highlight(h(truncate(bu.name, :omission => '...', :length => 25)),
           @tokens) %>
         <span class="informal aditional_info">
-          <%= bu.type_text %>
+          <%= bu.business_unit_type.name %>
         </span>
       </li>
     <% end -%>

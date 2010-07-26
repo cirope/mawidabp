@@ -14,14 +14,16 @@
 </div>
 
 <% @audits_by_business_unit.each do |data| -%>
-  <% if data[:value] == BusinessUnit::INTERNAL_TYPES.values.sort.first -%>
+  <% if !data[:external] && !@internal_title_showed -%>
     <h1 class="center_title">
-      <%= t :'follow_up_committee.synthesis_report.internal_audit_weaknesses' %>
+      <%= t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
     </h1>
-  <% elsif data[:value] == BusinessUnit::EXTERNAL_TYPES.values.sort.first -%>
+    <% @internal_title_showed = true -%>
+  <% elsif data[:external] && !@external_title_showed -%>
     <h1 class="center_title">
-      <%= t :'follow_up_committee.synthesis_report.external_audit_weaknesses' %>
+      <%= t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
     </h1>
+    <% @external_title_showed = true -%>
   <% end -%>
   <h1 style="margin: 1em;"><%= data[:name] %></h1>
   <% unless data[:column_data].blank? -%>

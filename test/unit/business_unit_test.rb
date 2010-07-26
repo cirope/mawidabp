@@ -13,8 +13,8 @@ class BusinessUnitTest < ActiveSupport::TestCase
   test 'search' do
     assert_kind_of BusinessUnit, @business_unit
     assert_equal business_units(:business_unit_one).name, @business_unit.name
-    assert_equal business_units(:business_unit_one).organization_id,
-      @business_unit.organization_id
+    assert_equal business_units(:business_unit_one).business_unit_type_id,
+      @business_unit.business_unit_type_id
   end
 
   # Prueba la creación de una unidad de negocio
@@ -22,8 +22,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert_difference 'BusinessUnit.count' do
       @business_unit = BusinessUnit.new(
         :name => 'New name',
-        :business_unit_type => BusinessUnit::TYPES[:cycle],
-        :organization => organizations(:default_organization)
+        :business_unit_type => business_unit_types(:cycle)
       )
 
       assert @business_unit.save, @business_unit.errors.full_messages.join('; ')
@@ -44,7 +43,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert_no_difference('BusinessUnit.count') { @business_unit.destroy }
 
     assert_equal 1, @business_unit.errors.size
-    assert_equal I18n.t(:'organization.errors.business_unit_related'),
+    assert_equal I18n.t(:'business_unit_type.errors.business_unit_related'),
       @business_unit.errors.full_messages.first
 
     assert_difference 'BusinessUnit.count', -1 do
@@ -55,22 +54,10 @@ class BusinessUnitTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @business_unit.name = ' '
-    @business_unit.business_unit_type = nil
-    assert @business_unit.invalid?
-    assert_equal 2, @business_unit.errors.count
-    assert_equal error_message_from_model(@business_unit, :name, :blank),
-      @business_unit.errors.on(:name)
-    assert_equal error_message_from_model(@business_unit, :business_unit_type,
-      :blank), @business_unit.errors.on(:business_unit_type)
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates included attributes' do
-    @business_unit.business_unit_type = BusinessUnit::TYPES.values.sort.last.next
     assert @business_unit.invalid?
     assert_equal 1, @business_unit.errors.count
-    assert_equal error_message_from_model(@business_unit, :business_unit_type,
-      :inclusion), @business_unit.errors.on(:business_unit_type)
+    assert_equal error_message_from_model(@business_unit, :name, :blank),
+      @business_unit.errors.on(:name)
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -89,17 +76,5 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert_equal 1, @business_unit.errors.count
     assert_equal error_message_from_model(@business_unit, :name, :taken),
       @business_unit.errors.on(:name)
-  end
-
-  test 'dynamic functions' do
-    BusinessUnit::TYPES.each do |type, value|
-      @business_unit.business_unit_type = value
-      assert @business_unit.send("#{type}?".to_sym)
-
-      (BusinessUnit::TYPES.values - [value]).each do |v|
-        @business_unit.business_unit_type = v
-        assert !@business_unit.send("#{type}?".to_sym)
-      end
-    end
   end
 end

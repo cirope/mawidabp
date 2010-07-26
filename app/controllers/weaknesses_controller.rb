@@ -144,7 +144,7 @@ class WeaknessesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminada una debilidad
+  # Elimina una debilidad
   #
   # * DELETE /weaknesses/1
   # * DELETE /weaknesses/1.xml

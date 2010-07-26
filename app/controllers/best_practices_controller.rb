@@ -5,7 +5,7 @@
 # (#ControlObjective)
 class BestPracticesController < ApplicationController
   before_filter :auth, :check_privileges
-  hide_action :update_auth_user_id
+  hide_action :find_with_organization
 
   # Lista las buenas prácticas
   #
@@ -68,8 +68,7 @@ class BestPracticesController < ApplicationController
   # * POST /best_practices.xml
   def create
     @title = t :'best_practice.new_title'
-    @best_practice = BestPractice.new(params[:best_practice].merge(
-        :organization_id => @auth_organization.id))
+    @best_practice = BestPractice.new(params[:best_practice])
 
     respond_to do |format|
       if @best_practice.save
@@ -110,7 +109,7 @@ class BestPracticesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminada una buena práctica
+  # Elimina una buena práctica
   #
   # * DELETE /best_practices/1
   # * DELETE /best_practices/1.xml

@@ -1,0 +1,31 @@
+<table>
+  <tbody>
+    <tr>
+      <th><%= BusinessUnitType.human_attribute_name :name %></th>
+      <th><%= BusinessUnitType.human_attribute_name :business_unit_label %></th>
+      <th><%= BusinessUnitType.human_attribute_name :project_label %></th>
+      <th><%= BusinessUnitType.human_attribute_name :external %></th>
+      <th colspan="3"></th>
+    </tr>
+  </tbody>
+
+  <tbody>
+    <% @business_unit_types.each do |business_unit_type| %>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td><%=h business_unit_type.name %></td>
+        <td><%=h business_unit_type.business_unit_label %></td>
+        <td><%=h business_unit_type.project_label %></td>
+        <td><%=t business_unit_type.external ? :'label.yes' : :'label.no' %></td>
+        <td><%= link_to_show business_unit_type %></td>
+        <td><%= link_to_edit edit_business_unit_type_path(business_unit_type) %></td>
+        <td><%= button_to_destroy business_unit_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @business_unit_types %>
+  <%= link_to t(:'label.new'), new_business_unit_type_path %>
+  <div style="clear: both;"></div>
+</div>

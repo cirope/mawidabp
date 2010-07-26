@@ -123,13 +123,13 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.add_description_item(I18n.t(:'conclusion_review.issue_date_title'),
       I18n.l(self.issue_date, :format => :long))
-    pdf.add_description_item(self.review.business_unit.report_name_text,
+    pdf.add_description_item(
+      self.review.business_unit.business_unit_type.business_unit_label,
       self.review.business_unit.name)
 
-    unless self.review.business_unit.branch_offices? ||
-        self.review.business_unit.bcra? ||
-        self.review.business_unit.external_audit?
-      pdf.add_description_item(self.review.business_unit.report_subname_text,
+    unless self.review.business_unit.business_unit_type.project_label.blank?
+      pdf.add_description_item(
+        self.review.business_unit.business_unit_type.project_label,
         self.review.plan_item.project)
     end
 

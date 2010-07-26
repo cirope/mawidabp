@@ -107,7 +107,7 @@ class ResourceClassesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminada una clase de recursos
+  # Elimina una clase de recursos
   #
   # * DELETE /resource_classes/1
   # * DELETE /resource_classes/1.xml

@@ -144,6 +144,21 @@ es:
     success: "Restauración correcta"
     fail: "Falló la restauración, contáctese con el administrador del sistema"
 
+  business_unit_type:
+    index_title: "Listado de tipos de unidades de negocio"
+    show_title: "Detalle tipo de unidad de negocio"
+    new_title: "Agregar tipo de unidad de negocio"
+    edit_title: "Modificar tipo de unidad de negocio"
+    correctly_created: "Tipo de unidad de negocio agregado correctamente."
+    correctly_updated: "Tipo de unidad de negocio actualizado correctamente."
+    stale_object_error: "El tipo de unidad de negocio no fue actualizado, intente nuevamente."
+    add_business_unit: "Agregar unidad de negocio"
+    internal_audit: "Auditorías realizadas por la entidad"
+    external_audit: "Auditorías realizadas por otras entidades"
+    errors:
+      can_not_be_destroyed: "El tipo de unidad de negocio no puede ser eliminado"
+      business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
+
   best_practice:
     index_title: "Listado de buenas prácticas"
     show_title: "Detalle buenas prácticas"
@@ -198,10 +213,8 @@ es:
     detailed_cost_analysis_title: "Análisis de costos detallado"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
     findings_type_external: "Seguimiento de Observaciones Auditoría Externa"
-    findings_type_bcra: "Seguimiento de Observaciones B.C.R.A."
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Seguimiento Observaciones Auditoría Externa"
-    weaknesses_type_bcra: "Seguimiento Observaciones B.C.R.A."
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -388,7 +401,6 @@ es:
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
-    findings_type_bcra: "Seguimiento de Observaciones B.C.R.A."
     findings_type_external: "Seguimiento de Observaciones Auditoría Externa"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
     period:
@@ -724,35 +736,6 @@ es:
     correctly_created: "Organización agregada correctamente."
     correctly_updated: "Organización actualizada correctamente."
     stale_object_error: "La organización no fue actualizada, intente nuevamente."
-    add_business_unit: "Agregar unidad de negocio"
-    show_business_units: "Ver unidades de negocio"
-    hide_business_units: "Ocultar unidades de negocio"
-    internal_audit: "Auditorías realizadas por la entidad"
-    external_audit: "Auditorías realizadas por otras entidades"
-    edit_business_units_title: "Editar unidades de negocio"
-    business_units_correctly_updated: "Unidades de negocio actualizadas correctamente"
-    errors:
-      business_unit_related: "La unidad de negocio no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
-    business_unit_cycle:
-      type: "Ciclo"
-      report_name: "CICLO"
-      report_subname: "SUBCICLO"
-    business_unit_consolidated_substantive:
-      type: "Sustantivo Consolidado"
-      report_name: "UNIDAD DE NEGOCIO"
-      report_subname: "OBJETO AUDITADO"
-    business_unit_branch_offices:
-      type: "Sucursales"
-      report_name: "UNIDAD DE NEGOCIO"
-      report_subname: "-"
-    business_unit_bcra:
-      type: "B.C.R.A."
-      report_name: "UNIDAD DE NEGOCIO"
-      report_subname: "-"
-    business_unit_external_audit:
-      type: "Auditoría Externa"
-      report_name: "UNIDAD DE NEGOCIO"
-      report_subname: "-"
 
   parameter:
     index_title: "Listado de parámetros"
@@ -1234,6 +1217,7 @@ es:
       backup: "Copia de seguridad"
       best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
+      business_unit_type: "Tipo de unidad de negocio"
       comment: "Comentario"
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
@@ -1286,7 +1270,13 @@ es:
         <<: *commons
       business_unit:
         name: "Nombre"
-        business_units_name: "Nombre"
+        <<: *commons
+      business_unit_type:
+        name: "Nombre"
+        business_unit_label: "Etiqueta de la unidad de negocio en el informe"
+        project_label: "Etiqueta del proyecto en el informe"
+        external: "Externo"
+        business_units: "Unidades de negocio"
         <<: *commons
       comment:
         comment: "Comentario"
@@ -1455,7 +1445,6 @@ es:
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        business_units: "Unidades de negocio"
         image_model: "Isologotipo"
         <<: *commons
       organization_role:
@@ -1680,6 +1669,10 @@ es:
           attributes:
             process_controls:
               locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
+        business_unit_type:
+          attributes:
+            business_units:
+              locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
         conclusion_final_review:
           attributes:
             review_id:
@@ -1697,10 +1690,6 @@ es:
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
-        organization:
-          attributes:
-            business_units:
-              locked: "no pueden ser eliminadas, ya se utilizaron en al menos un plan de trabajo"
         organization_role:
           attributes:
             role_id:
@@ -1760,6 +1749,7 @@ es:
   actioncontroller:
     backups: "Copias de seguridad"
     best_practices: "Buenas prácticas"
+    business_unit_types: "Unidades de negocio"
     follow_up_audit: "Reportes de auditoría (Seguimiento)"
     follow_up_committee: "Reportes de comité (Seguimiento)"
     follow_up_management: "Reportes de la gerencia (Seguimiento)"

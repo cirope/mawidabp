@@ -27,19 +27,18 @@ class ExecutionReportsController < ApplicationController
     @audits_by_business_unit = []
     reviews = Review.list_all_without_final_review_by_date @from_date, @to_date
 
-    BusinessUnit::TYPES.sort {|t1, t2| t1[1] <=> t2[1]}.each do |type, value|
-      columns = {'business_unit_report_name' =>
-          [t("organization.business_unit_#{type}.report_name"), 15],
+    BusinessUnitType.list.each do |but|
+      columns = {'business_unit_report_name' => [but.business_unit_label, 15],
         'review' => [Review.human_name, 16],
         'process_control' =>
-          ["#{BestPractice.human_attribute_name('process_controls')}", 45],
+          ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
         'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (1)", 12],
         'oportunities_count' => ["#{t(:'review.oportunities_count')} (2)", 12]}
       column_data = []
-      name = t "organization.business_unit_#{type}.type"
+      name = but.name
 
       reviews.each do |r|
-        if r.business_unit.business_unit_type == value
+        if r.business_unit.business_unit_type_id == but.id
           process_controls = []
           weaknesses_count = {}
 
@@ -79,7 +78,7 @@ class ExecutionReportsController < ApplicationController
 
       @audits_by_business_unit << {
         :name => name,
-        :value => value,
+        :external => but.external,
         :columns => columns,
         :column_data => column_data
       }
@@ -122,10 +121,12 @@ class ExecutionReportsController < ApplicationController
           end
         end
 
-        if data[:value] == BusinessUnit::INTERNAL_TYPES.values.sort.first
+        if !data[:external] && !@internal_title_showed
           title = t :'execution_reports.detailed_management_report.internal_audit_weaknesses'
-        elsif data[:value] == BusinessUnit::EXTERNAL_TYPES.values.sort.first
+          @internal_title_showed = true
+        elsif data[:external] && !@external_title_showed
           title = t :'execution_reports.detailed_management_report.external_audit_weaknesses'
+          @external_title_showed = true
         end
 
         if title
@@ -191,7 +192,7 @@ class ExecutionReportsController < ApplicationController
   def weaknesses_by_state
     @title = t :'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
-    @audit_types = [:internal, :external, :bcra]
+    @audit_types = [:internal, :external]
     @counts = {}
     @status = Finding::STATUS.sort { |s1, s2| s1.last <=> s2.last }
     @reviews = Review.list_all_without_final_review_by_date(

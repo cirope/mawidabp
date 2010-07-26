@@ -14,8 +14,10 @@ class ReviewTest < ActiveSupport::TestCase
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Review, @review
-    assert_equal reviews(:review_with_conclusion).identification, @review.identification
-    assert_equal reviews(:review_with_conclusion).description, @review.description
+    assert_equal reviews(:review_with_conclusion).identification,
+      @review.identification
+    assert_equal reviews(:review_with_conclusion).description,
+      @review.description
   end
 
   # Prueba la creación de un reporte

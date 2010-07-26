@@ -36,21 +36,20 @@ class ConclusionCommitteeReportsController < ApplicationController
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date)
 
-    BusinessUnit::TYPES.sort {|t1, t2| t1[1] <=> t2[1]}.each do |type, value|
-      columns = {'business_unit_report_name' =>
-          [t("organization.business_unit_#{type}.report_name"), 15],
+    BusinessUnitType.list.each do |but|
+      columns = {'business_unit_report_name' => [but.business_unit_label, 15],
         'review' => [Review.human_name, 16],
         'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
         'process_control' => 
-          ["#{BestPractice.human_attribute_name('process_controls')} (2)", 30],
+          ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
         'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],
         'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
       column_data = []
       review_scores = []
-      name = t "organization.business_unit_#{type}.type"
+      name = but.name
 
       conclusion_reviews.each do |c_r|
-        if c_r.review.business_unit.business_unit_type == value
+        if c_r.review.business_unit.business_unit_type_id == but.id
           process_controls = {}
           weaknesses_count = {}
 
@@ -99,7 +98,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
       @audits_by_business_unit << {
         :name => name,
-        :value => value,
+        :external => but.external,
         :columns => columns,
         :column_data => column_data,
         :review_scores => review_scores
@@ -168,10 +167,12 @@ class ConclusionCommitteeReportsController < ApplicationController
           end
         end
 
-        if data[:value] == BusinessUnit::INTERNAL_TYPES.values.sort.first
+        if !data[:external] && !@internal_title_showed
           title = t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses'
-        elsif data[:value] == BusinessUnit::EXTERNAL_TYPES.values.sort.first
+          @internal_title_showed = true
+        elsif data[:external] && !@external_title_showed
           title = t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses'
+          @external_title_showed = true
         end
 
         if title

@@ -145,7 +145,7 @@ class UsersController < ApplicationController
     redirect_to edit_user_url(@user)
   end
 
-  # Marca como eliminada un usuario
+  # Elimina un usuario
   #
   # * DELETE /users/1
   # * DELETE /users/1.xml

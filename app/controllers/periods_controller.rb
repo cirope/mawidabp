@@ -105,7 +105,7 @@ class PeriodsController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Marca como eliminado un periodo
+  # Elimina un periodo
   #
   # * DELETE /periods/1
   # * DELETE /periods/1.xml

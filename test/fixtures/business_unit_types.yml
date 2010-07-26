@@ -1,0 +1,27 @@
+cycle:
+  name: Cycle
+  external: false
+  business_unit_label: Cycle
+  project_label: Subcycle
+  organization: default_organization
+
+consolidated_substantive:
+  name: Consolidated Substantive
+  external: false
+  business_unit_label: Business Unit
+  project_label: Audited object
+  organization: default_organization
+
+bcra:
+  name: "B.C.R.A."
+  external: true
+  business_unit_label: Business Unit
+  project_label: 
+  organization: default_organization
+
+bcra_second_organization:
+  name: "B.C.R.A."
+  external: true
+  business_unit_label: Business Unit
+  project_label:
+  organization: second_organization

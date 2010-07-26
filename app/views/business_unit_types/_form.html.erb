@@ -1,0 +1,55 @@
+<!--[form:business_unit_type]-->
+<% form_for @business_unit_type do |but_f| -%>
+  <% content_for :js_extra do -%>
+      <%= "var business_unit='#{generate_template(but_f, :business_units)}';" %>
+  <% end -%>
+  <%= but_f.error_messages %>
+
+  <div class="form_column_left">
+    <p>
+      <%= but_f.label :name %>
+      <%= but_f.text_field :name, :maxlength => 255, :class => :focused %>
+    </p>
+    <p>
+      <%= but_f.label :business_unit_label %>
+      <%= but_f.text_field :business_unit_label, :maxlength => 255 %>
+    </p>
+    <p>
+      <%= but_f.label :project_label %>
+      <%= but_f.text_field :project_label, :maxlength => 255 %>
+    </p>
+    <p class="form_item">
+      <%= but_f.label :external, nil, :class => :inline %>
+      <%= but_f.check_box :external, :class => :inline_item %>
+    </p>
+  </div>
+
+  <div class="items">
+    <div class="column_headers nested_items">
+      <div class="item_column" style="width: 50%;">
+        <h3><%= BusinessUnit.human_name %></h3>
+      </div>
+      <div class="item_column" style="width: 35%;">&nbsp;</div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div id="business_units">
+      <% but_f.fields_for :business_units do |bu_f| -%>
+        <%= render :partial => 'business_unit',
+          :locals => { :f => bu_f, :is_dynamic => false } %>
+      <% end -%>
+    </div>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'business_unit_type.add_business_unit'), '#business_unit',
+      :class => :add_nested_item, :rel => 'business_units' %>
+  </p>
+
+  <%= hidden_lock_version(but_f) %>
+  <p>
+    <span class="button"><%= but_f.submit submit_text %></span>
+  </p>
+<% end -%>
+<!--[eoform:business_unit_type] -->
+<%= set_focus_to_first_element %>

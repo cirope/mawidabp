@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100713180810) do
+ActiveRecord::Schema.define(:version => 20100722163057) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -30,15 +30,27 @@ ActiveRecord::Schema.define(:version => 20100713180810) do
 
   add_index "best_practices", ["organization_id"], :name => "index_best_practices_on_organization_id"
 
-  create_table "business_units", :force => true do |t|
+  create_table "business_unit_types", :force => true do |t|
     t.string   "name"
+    t.boolean  "external",            :default => false, :null => false
+    t.string   "business_unit_label"
+    t.string   "project_label"
     t.integer  "organization_id"
+    t.integer  "lock_version",        :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "business_unit_type"
   end
 
-  add_index "business_units", ["organization_id"], :name => "index_business_units_on_organization_id"
+  add_index "business_unit_types", ["organization_id"], :name => "index_business_unit_types_on_organization_id"
+
+  create_table "business_units", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "business_unit_type_id"
+  end
+
+  add_index "business_units", ["business_unit_type_id"], :name => "index_business_unit_on_business_unit_type_id"
 
   create_table "comments", :force => true do |t|
     t.text     "comment"
