@@ -298,6 +298,7 @@ class Review < ActiveRecord::Base
     self.can_be_approved_by_force = true
 
     if self.control_objective_items.empty?
+      self.can_be_approved_by_force = false
       review_errors << I18n.t(:'review.errors.without_control_objectives')
     end
 

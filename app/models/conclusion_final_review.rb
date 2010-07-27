@@ -44,8 +44,8 @@ class ConclusionFinalReview < ConclusionReview
   # Restricciones
   validates_presence_of :close_date
   validates_uniqueness_of :review_id, :allow_blank => true, :allow_nil => true
-  validates_date :close_date, :allow_nil => true, :on => :create,
-    :on_or_after => lambda { |conclusion_review|
+  validates_date :close_date, :allow_nil => true, :allow_blank => true,
+    :on => :create, :on_or_after => lambda { |conclusion_review|
       conclusion_review.issue_date || Time.now.to_date
     }
   validates_each :review_id do |record, attr, value|
