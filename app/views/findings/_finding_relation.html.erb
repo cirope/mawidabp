@@ -6,6 +6,10 @@
     <div class="item_field" style="width: 60%;">
       <% if is_dynamic -%>
         <div class="search">
+          <% extra_parameters = {
+            :finding_id => (@finding.id unless @finding.new_record?),
+            :review_id => @finding.control_objective_item.try(:review).try(:id)
+          } -%>
           <%= f.hidden_field :related_finding_id,
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :finding, :nested_finding_relation,
@@ -16,7 +20,7 @@
             :url => {:action => :auto_complete_for_finding_relation},
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'finding_relation_data',
-            :parameters => ("finding_id=#{@finding.id}" unless @finding.new_record?)} %>
+            :parameters => extra_parameters.to_param} %>
         </div>
       <% else -%>
         <%= f.hidden_field :related_finding_id,

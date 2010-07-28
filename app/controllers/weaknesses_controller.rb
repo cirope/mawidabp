@@ -203,21 +203,20 @@ class WeaknessesController < ApplicationController
     @tokens = params[:finding_relation_data][0..100].split(/[y,]/i).uniq.map(
       &:strip)
     @tokens.reject! { |t| t.blank? }
-    finding = Finding.find(params[:finding_id])
     conditions = [
-      "#{Finding.table_name}.id <> :finding_id",
+      ("#{Finding.table_name}.id <> :finding_id" unless params[:finding_id].blank?),
       "#{Finding.table_name}.final = :boolean_false",
       "#{Period.table_name}.organization_id = :organization_id",
       [
         "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{Review.table_name}.id = :review_id"
-      ].join(' OR ')
-    ]
+        ("#{Review.table_name}.id = :review_id" unless params[:review_id].blank?)
+      ].compact.join(' OR ')
+    ].compact
     parameters = {
       :boolean_false => false,
       :finding_id => params[:finding_id],
       :organization_id => @auth_organization.id,
-      :review_id => finding.review.id
+      :review_id => params[:review_id]
     }
     @tokens.each_with_index do |t, i|
       conditions << [
