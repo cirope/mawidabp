@@ -40,16 +40,19 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
-  test 'list findings with search' do
+  test 'list findings with search and sort' do
     perform_auth
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
-      :columns => ['description', 'review']
+      :columns => ['description', 'review'],
+      :order => 'review'
     }
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_equal 2, assigns(:findings).size
     assert assigns(:findings).all? {|f| f.review.identification.match(/1 2 4/i)}
+    assert_equal assigns(:findings).map {|f| f.review.identification}.sort,
+      assigns(:findings).map {|f| f.review.identification}
     assert_select '#error_body', false
     assert_template 'findings/index'
   end

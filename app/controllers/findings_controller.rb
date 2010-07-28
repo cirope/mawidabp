@@ -21,12 +21,7 @@ class FindingsController < ApplicationController
       :include => [
         {:control_objective_item => {:review => [:period, :plan_item]}},
         :users
-      ],
-      :order => [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
-      ].join(', ')
+      ]
     }
     default_conditions = {
       :final => false,
@@ -46,6 +41,12 @@ class FindingsController < ApplicationController
       Finding::STATUS.values - Finding::PENDING_STATUS
     
     build_search_conditions Finding, default_conditions
+
+    options[:order] = @order_by || [
+      "#{Review.table_name}.created_at DESC",
+      "#{Finding.table_name}.state ASC",
+      "#{Finding.table_name}.review_code ASC"
+    ].join(', ')
 
     @findings = Finding.paginate(options.merge(:conditions => @conditions))
 

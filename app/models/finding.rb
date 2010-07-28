@@ -404,6 +404,23 @@ class Finding < ActiveRecord::Base
     self.finding_prefix ||= false
   end
 
+  def self.columns_for_sort
+    HashWithIndifferentAccess.new({
+      :risk => {
+        :name => Finding.human_attribute_name(:risk),
+        :field => "#{Finding.table_name}.risk ASC"
+      },
+      :state => {
+        :name => Finding.human_attribute_name(:state),
+        :field => "#{Finding.table_name}.state ASC"
+      },
+      :review => {
+        :name => Review.human_name,
+        :field => "#{Review.table_name}.identification ASC"
+      }
+    })
+  end
+
   def <=>(other)
     other.kind_of?(Finding) ? self.id <=> other.id : -1
   end

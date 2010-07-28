@@ -23,6 +23,10 @@ class Oportunity < Finding
       :next_oportunity_code, self.prefix)
   end
 
+  def self.columns_for_sort
+    Finding.columns_for_sort.except(:risk)
+  end
+
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.get_parameter(
       :admin_code_prefix_for_work_papers_in_oportunities)

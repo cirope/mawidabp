@@ -1,4 +1,4 @@
-<% if @query.blank? && @self_and_descendants.size > 1 -%>
+<% if @query.blank? && @order_by.blank? && @self_and_descendants.size > 1 -%>
   <div class="filter" style="margin: 1em;">
     <div>
       <table>
@@ -24,6 +24,7 @@
 <% end -%>
 <%= render :partial => 'shared/search', :locals => {
   :options => {
+    :columns_for_sort => Finding.columns_for_sort,
     :url => findings_path(:completed => params[:completed]),
     :extra_parameters => {:completed => params[:completed]}
   },
@@ -40,6 +41,7 @@
       <%= make_not_available_column Finding.human_attribute_name(:state) %>
       <%= make_not_available_column Finding.human_attribute_name(
           params[:completed] == 'incomplete' ? :follow_up_date : :solution_date) %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk) %>
       <%= make_not_available_column Finding.human_attribute_name(:finding_answers) %>
       <%= make_not_available_column t(:'finding.has_work_papers') %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
@@ -60,6 +62,7 @@
         <% else -%>
           <td><%= finding_follow_up_date_text(finding) %></td>
         <% end -%>
+        <td><%= h finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td><%= h finding.finding_answers.count %></td>
         <td><%= t finding.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>

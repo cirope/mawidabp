@@ -109,6 +109,7 @@ es:
     session_expires_in_less_than_a_minute: "Su sesión expìra en menos de un minuto"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     show_all: "Ver todos..."
+    sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
     unsupported_browser: "Su navegador no cumple con todos los estándares internacionales requeridos por la aplicación, por favor en su lugar utilice Mozilla Firefox y abra la siguiente dirección: {{url}}"

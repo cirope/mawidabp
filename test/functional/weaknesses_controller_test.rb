@@ -31,11 +31,12 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_template 'weaknesses/index'
   end
 
-  test 'list weaknesses with search' do
+  test 'list weaknesses with search and sort' do
     perform_auth
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review']
+      :columns => ['description', 'review'],
+      :order => 'review'
     }
     assert_response :success
     assert_not_nil assigns(:weaknesses)
@@ -43,6 +44,8 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert(assigns(:weaknesses).all? do |w|
       w.review.identification.match(/1 2 4/i)
     end)
+    assert_equal assigns(:weaknesses).map {|w| w.review.identification}.sort,
+      assigns(:weaknesses).map {|w| w.review.identification}
     assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end

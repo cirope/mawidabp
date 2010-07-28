@@ -21,6 +21,15 @@ class Weakness < Finding
     super(attributes, import_users)
   end
 
+  def self.columns_for_sort
+    Finding.columns_for_sort.dup.merge(
+      :follow_up_date => {
+        :name => Weakness.human_attribute_name(:follow_up_date),
+        :field => "#{Weakness.table_name}.follow_up_date ASC"
+      }
+    )
+  end
+
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.get_parameter(self.finding_prefix ?
         :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :

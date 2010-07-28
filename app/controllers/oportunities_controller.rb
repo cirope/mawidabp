@@ -41,7 +41,7 @@ class OportunitiesController < ApplicationController
       :include => {:control_objective_item =>
           {:review => [:period, :plan_item, :conclusion_final_review]}},
       :conditions => [@conditions, parameters],
-      :order => [
+      :order => @order_by || [
         "#{Review.table_name}.identification ASC",
         "#{Oportunity.table_name}.review_code ASC"
       ].join(', ')

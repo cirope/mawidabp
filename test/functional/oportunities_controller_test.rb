@@ -31,11 +31,12 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_template 'oportunities/index'
   end
 
-  test 'list oportunities with search' do
+  test 'list oportunities with search and sort' do
     perform_auth
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review']
+      :columns => ['description', 'review'],
+      :order => 'review'
     }
     
     assert_response :success
@@ -44,6 +45,8 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert(assigns(:oportunities).all? do |o|
       o.review.identification.match(/1 2 4/i)
     end)
+    assert_equal assigns(:oportunities).map {|o| o.review.identification}.sort,
+      assigns(:oportunities).map {|o| o.review.identification}
     assert_select '#error_body', false
     assert_template 'oportunities/index'
   end
