@@ -111,14 +111,14 @@ class ConclusionCommitteeReportsController < ApplicationController
       pdf.add_generic_report_header @auth_organization
 
       pdf.add_title t(:'conclusion_committee_report.synthesis_report.title'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title t(:'conclusion_committee_report.synthesis_report.subtitle'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(
         t(:'conclusion_committee_report.period.title'),
@@ -142,19 +142,19 @@ class ConclusionCommitteeReportsController < ApplicationController
         average_score = count > 0 ? (total.to_f / count).round : 100
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title(
         t(:'conclusion_committee_report.synthesis_report.organization_score',
-          :score => average_score || 100), 16)
+          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
 
-      pdf.move_pointer 8
+      pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
       pdf.text(
         t(:'conclusion_committee_report.synthesis_report.organization_score_note',
           :audit_types =>
             @audits_by_business_unit.map {|data| data[:name]}.to_sentence),
-        :font_size => 8)
+        :font_size => (PDF_FONT_SIZE * 0.75).round)
 
       @audits_by_business_unit.each do |data|
         columns = data[:columns]
@@ -176,11 +176,11 @@ class ConclusionCommitteeReportsController < ApplicationController
         end
 
         if title
-          pdf.move_pointer 24
-          pdf.add_title title, 14, :center
+          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
         end
 
-        pdf.add_subtitle data[:name], 12, 12
+        pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
         data[:column_data].each do |row|
           new_row = {}
@@ -204,10 +204,10 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
             table.column_order = @column_order
             table.split_rows = true
-            table.font_size = 8
-            table.shade_color = Color::RGB::Grey70
-            table.shade_heading_color = Color::RGB::Grey50
-            table.heading_font_size = 10
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
             table.shade_headings = true
             table.position = :left
             table.orientation = :right
@@ -224,19 +224,19 @@ class ConclusionCommitteeReportsController < ApplicationController
             text = t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
           end
 
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
 
-          pdf.text text, :font_size => 12
+          pdf.text text, :font_size => PDF_FONT_SIZE
         else
           pdf.text(
             t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period'))
         end
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       pdf.text t(:'conclusion_committee_report.synthesis_report.references',
-        :risk_types => @risk_levels.to_sentence), :font_size => 8,
-        :justification => :full
+        :risk_types => @risk_levels.to_sentence),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
       pdf.custom_save_as(
         t(:'conclusion_committee_report.synthesis_report.pdf_name',
@@ -350,10 +350,10 @@ class ConclusionCommitteeReportsController < ApplicationController
 
       pdf.add_title t(params[:include_details].blank? ?
           :'conclusion_committee_report.cost_analysis.general_title' :
-          :'conclusion_committee_report.cost_analysis.detailed_title'), 12,
-        :center
+          :'conclusion_committee_report.cost_analysis.detailed_title'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(
         t(:'conclusion_committee_report.period.title'),
@@ -370,7 +370,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           end
         end
 
-        pdf.move_pointer 12
+        pdf.move_pointer PDF_FONT_SIZE
 
         PDF::SimpleTable.new do |table|
           table.width = pdf.page_usable_width
@@ -378,10 +378,10 @@ class ConclusionCommitteeReportsController < ApplicationController
           table.data = @total_cost_data
           table.column_order = @column_order.map(&:first)
           table.split_rows = true
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey70
-          table.shade_heading_color = Color::RGB::Grey50
-          table.heading_font_size = 10
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -390,7 +390,7 @@ class ConclusionCommitteeReportsController < ApplicationController
       else
         pdf.text(
           t(:'conclusion_committee_report.cost_analysis.without_audits_in_the_period'),
-          :font_size => 12)
+          :font_size => PDF_FONT_SIZE)
       end
 
       unless @detailed_data.blank?
@@ -405,7 +405,8 @@ class ConclusionCommitteeReportsController < ApplicationController
         end
 
         @detailed_data.each do |detailed_data|
-          pdf.text "\n<b>#{detailed_data[:review]}</b>\n\n", :font_size => 12
+          pdf.text "\n<b>#{detailed_data[:review]}</b>\n\n",
+            :font_size => PDF_FONT_SIZE
 
           PDF::SimpleTable.new do |table|
             table.width = pdf.page_usable_width
@@ -413,10 +414,10 @@ class ConclusionCommitteeReportsController < ApplicationController
             table.data = detailed_data[:data]
             table.column_order = @detailed_column_order.map(&:first)
             table.split_rows = true
-            table.font_size = 8
-            table.shade_color = Color::RGB::Grey70
-            table.shade_heading_color = Color::RGB::Grey50
-            table.heading_font_size = 10
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
             table.shade_headings = true
             table.position = :left
             table.orientation = :right

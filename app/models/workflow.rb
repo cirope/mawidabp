@@ -100,7 +100,8 @@ class Workflow < ActiveRecord::Base
 
     pdf.add_generic_report_header organization
 
-    pdf.add_title "#{Workflow.human_name}\n", 18, :center
+    pdf.add_title "#{Workflow.human_name}\n", (PDF_FONT_SIZE * 1.25).round,
+      :center
 
     pdf.add_description_item Workflow.human_attribute_name('review_id'),
       self.review.to_s, 0, false
@@ -136,7 +137,7 @@ class Workflow < ActiveRecord::Base
     }
 
     unless column_data.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       
       PDF::SimpleTable.new do |table|
         table.width = pdf.page_width - pdf.right_margin - pdf.left_margin
@@ -144,10 +145,10 @@ class Workflow < ActiveRecord::Base
         table.data = column_data
         table.column_order = column_order
         table.split_rows = true
-        table.font_size = 8
-        table.shade_color = Color::RGB::Grey90
-        table.shade_heading_color = Color::RGB::Grey70
-        table.heading_font_size = 10
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
         table.shade_headings = true
         table.position = :left
         table.orientation = :right
@@ -157,9 +158,10 @@ class Workflow < ActiveRecord::Base
 
     if include_details &&
         !self.workflow_items.all? { |wi| wi.resource_utilizations.blank? }
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'workflow.pdf.resources_utilization'), 14
+      pdf.add_title I18n.t(:'workflow.pdf.resources_utilization'),
+        (PDF_FONT_SIZE * 1.25).round
 
       self.workflow_items.each do |workflow_item|
         unless workflow_item.resource_utilizations.blank?
@@ -169,16 +171,17 @@ class Workflow < ActiveRecord::Base
     end
 
     if include_details && !self.review.plan_item.resource_utilizations.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'workflow.pdf.planned_resources_utilization'), 14
+      pdf.add_title I18n.t(:'workflow.pdf.planned_resources_utilization'),
+        (PDF_FONT_SIZE * 1.25).round
       
       self.review.plan_item.add_resource_data(pdf, false)
 
-      pdf.move_pointer 6
+      pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
 
       pdf.text I18n.t(:'workflow.pdf.planned_resources_utilization_explanation'),
-        :font_size => 8
+        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf.custom_save_as(self.pdf_name, Workflow.table_name, self.id)

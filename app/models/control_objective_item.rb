@@ -302,14 +302,14 @@ class ControlObjectiveItem < ActiveRecord::Base
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
 
-    pdf.move_pointer 28
+    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(ProcessControl.human_name,
-      self.process_control.try(:name), 0, false, 14)
+      self.process_control.try(:name), 0, false, (PDF_FONT_SIZE * 1.25).round)
     pdf.add_description_item(ControlObjectiveItem.human_name,
-      self.control_objective_text, 0, false, 14)
+      self.control_objective_text, 0, false, (PDF_FONT_SIZE * 1.25).round)
 
-    pdf.move_pointer 28
+    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :relevance), self.relevance_text(true), 0, false)
@@ -332,15 +332,16 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     unless self.work_papers.blank?
       pdf.start_new_page
-      pdf.move_pointer 36
+      pdf.move_pointer PDF_FONT_SIZE * 3
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name(:work_papers),
-        18, :center, false)
+        (PDF_FONT_SIZE * 1.5).round, :center, false)
 
-      pdf.move_pointer 36
+      pdf.move_pointer PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, :justification => :center, :font_size => 12
+        pdf.text wp.inspect, :justification => :center,
+          :font_size => PDF_FONT_SIZE
       end
     else
       pdf.add_footnote(I18n.t(:'control_objective_item.without_work_papers'))

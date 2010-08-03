@@ -101,35 +101,35 @@ class WorkPaper < ActiveRecord::Base
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)
 
-    pdf.move_pointer 24
+    pdf.move_pointer PDF_FONT_SIZE * 2
 
-    pdf.add_title WorkPaper.human_name, 24, :full, true
+    pdf.add_title WorkPaper.human_name, PDF_FONT_SIZE * 2, :full, true
 
-    pdf.move_pointer 48
+    pdf.move_pointer PDF_FONT_SIZE * 4
 
     unless self.name.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name('name'),
         self.name, 0, false
     end
 
     unless self.description.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name('description'),
         self.description, 0, false
     end
 
     unless self.code.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name('code'),
         self.code, 0, false
     end
 
     unless self.number_of_pages.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(
         'number_of_pages'), self.number_of_pages.to_s, 0, false

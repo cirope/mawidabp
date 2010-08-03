@@ -420,7 +420,7 @@ var HTMLUtil = {
         if(input && !input.up('div.stylized_file')) {
             element.observe('mousemove', function(event) {
                 var left = (event.pointerX() -
-                    this.positionedOffset()['left']) - input.getWidth() - 30;
+                    this.positionedOffset()['left']) - input.getWidth() - 20;
 
                 input.setStyle({left: left + 'px'});
             }).wrap('div', {'class' : 'stylized_file'});

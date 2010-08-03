@@ -111,15 +111,16 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_watermark(self.class.human_name)
     end
 
-    pdf.add_title cover_text, 18, :center, false
-    pdf.add_title cover_bottom_text, 14, :center, false
+    pdf.add_title cover_text, (PDF_FONT_SIZE * 1.5).round, :center, false
+    pdf.add_title cover_bottom_text, (PDF_FONT_SIZE * 1.25).round, :center,
+      false
 
     pdf.start_new_page true
     pdf.add_page_footer
 
     pdf.add_title self.review.description
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(I18n.t(:'conclusion_review.issue_date_title'),
       I18n.l(self.issue_date, :format => :long))
@@ -141,7 +142,8 @@ class ConclusionReview < ActiveRecord::Base
       )
     )
 
-    pdf.add_subtitle I18n.t(:'conclusion_review.objectives_and_scopes'), 12, 12
+    pdf.add_subtitle I18n.t(:'conclusion_review.objectives_and_scopes'),
+      PDF_FONT_SIZE, PDF_FONT_SIZE
 
     grouped_control_objectives = self.control_objective_items.group_by(
       &:'process_control')
@@ -151,29 +153,31 @@ class ConclusionReview < ActiveRecord::Base
           "<i>#{process_control.name}</i></b>", :justification => :full
 
       cois.each do |coi|
-        pdf.text "<C:bullet/> #{coi.control_objective_text}", :left => 24,
-          :justification => :full
+        pdf.text "<C:bullet/> #{coi.control_objective_text}",
+          :left => PDF_FONT_SIZE * 2, :justification => :full
       end
     end
 
     unless self.applied_procedures.blank?
-      pdf.add_subtitle I18n.t(:'conclusion_review.applied_procedures'), 12
+      pdf.add_subtitle I18n.t(:'conclusion_review.applied_procedures'),
+        PDF_FONT_SIZE
       pdf.text self.applied_procedures, :justification => :full
     end
 
-    pdf.add_subtitle I18n.t(:'conclusion_review.conclusion'), 12
+    pdf.add_subtitle I18n.t(:'conclusion_review.conclusion'), PDF_FONT_SIZE
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     self.review.add_score_details_table(pdf)
 
-    pdf.move_pointer 8
+    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
     pdf.text "<i>#{I18n.t(:'review.review_qualification_explanation')}</i>",
-      :font_size => 8, :justification => :full
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
     unless self.conclusion.blank?
-      pdf.move_pointer 12
-      pdf.text self.conclusion, :justification => :full, :font_size => 12
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text self.conclusion, :justification => :full,
+        :font_size => PDF_FONT_SIZE
     end
 
     review_has_observations = grouped_control_objectives.any? do |_, cois|
@@ -184,7 +188,7 @@ class ConclusionReview < ActiveRecord::Base
 
     if review_has_observations
       pdf.add_subtitle(
-        I18n.t(:'conclusion_review.findings'), 12, 12)
+        I18n.t(:'conclusion_review.findings'), PDF_FONT_SIZE, PDF_FONT_SIZE)
 
       grouped_control_objectives.each do |process_control, cois|
         has_observations = cois.any? do |coi|
@@ -217,12 +221,12 @@ class ConclusionReview < ActiveRecord::Base
               table.columns = columns
               table.data = column_data
               table.column_order = [pc_id]
-              table.row_gap = 14
+              table.row_gap = (PDF_FONT_SIZE * 1.25).round
               table.split_rows = true
-              table.font_size = 12
-              table.shade_color = Color::RGB::Grey70
-              table.shade_heading_color = Color::RGB::Grey50
-              table.heading_font_size = 12
+              table.font_size = PDF_FONT_SIZE
+              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
               table.shade_headings = true
               table.position = :left
               table.orientation = :right
@@ -230,7 +234,7 @@ class ConclusionReview < ActiveRecord::Base
             end
           end
 
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
         end
       end
     end
@@ -243,7 +247,7 @@ class ConclusionReview < ActiveRecord::Base
 
     if review_has_oportunities
       pdf.add_subtitle(
-        I18n.t(:'conclusion_review.oportunities'), 12, 12)
+        I18n.t(:'conclusion_review.oportunities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
 
       grouped_control_objectives.each do |process_control, cois|
         has_oportunities = cois.any? do |coi|
@@ -276,12 +280,12 @@ class ConclusionReview < ActiveRecord::Base
               table.columns = columns
               table.data = column_data
               table.column_order = [pc_id]
-              table.row_gap = 14
+              table.row_gap = (PDF_FONT_SIZE * 1.25).round
               table.split_rows = true
-              table.font_size = 12
-              table.shade_color = Color::RGB::Grey70
-              table.shade_heading_color = Color::RGB::Grey50
-              table.heading_font_size = 12
+              table.font_size = PDF_FONT_SIZE
+              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
               table.shade_headings = true
               table.position = :left
               table.orientation = :right
@@ -289,12 +293,12 @@ class ConclusionReview < ActiveRecord::Base
             end
           end
 
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
         end
       end
     end
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_review_auditors_table(
       self.review.review_user_assignments.reject { |rua| rua.audited? })
@@ -422,15 +426,17 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
 
-    pdf.move_pointer 18
+    pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-    pdf.add_title I18n.t(:'conclusion_review.bundle_index.title'), 18, :center
+    pdf.add_title I18n.t(:'conclusion_review.bundle_index.title'),
+      (PDF_FONT_SIZE * 1.5).round, :center
 
-    pdf.move_pointer 18
+    pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
     (index_items || '').each_line do |line|
       unless line.blank?
-        pdf.text "#{'%02d' % items_count}. #{line.strip}", :font_size => 14
+        pdf.text "#{'%02d' % items_count}. #{line.strip}",
+          :font_size => (PDF_FONT_SIZE * 1.25).round
         items_count += 1
       end
     end
@@ -462,9 +468,9 @@ class ConclusionReview < ActiveRecord::Base
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
-    pdf.move_pointer 96
+    pdf.move_pointer PDF_FONT_SIZE * 8
 
-    pdf.add_title text, 24, :center
+    pdf.add_title text, PDF_FONT_SIZE * 2, :center
 
     pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
 
@@ -490,53 +496,58 @@ class ConclusionReview < ActiveRecord::Base
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
-    pdf.move_pointer 18
+    pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-    pdf.add_title I18n.t(:'conclusion_review.workflow.title'), 18, :center
+    pdf.add_title I18n.t(:'conclusion_review.workflow.title'),
+      (PDF_FONT_SIZE * 1.5).round, :center
 
-    pdf.move_pointer 18
+    pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
     grouped_control_objectives = self.control_objective_items.group_by(
       &:'process_control')
 
     grouped_control_objectives.each do |process_control, cois|
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       pdf.add_description_item("#{ProcessControl.human_name}",
         process_control.name, 0, false)
 
       cois.each do |coi|
-        pdf.move_pointer 12
+        pdf.move_pointer PDF_FONT_SIZE
         pdf.add_description_item("<C:bullet/> #{ControlObjectiveItem.human_name}",
-          coi.control_objective_text, 24, false)
+          coi.control_objective_text, PDF_FONT_SIZE * 2, false)
 
         unless coi.work_papers.blank?
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
           pdf.text "<C:disc/> <b>#{I18n.t(
             :'conclusion_review.workflow.control_objective_work_papers')}</b>:",
-              :left => 48
+              :left => PDF_FONT_SIZE * 4
 
-          coi.work_papers.each { |wp| pdf.text wp.inspect, :left => 72 }
+          coi.work_papers.each do |wp|
+            pdf.text wp.inspect, :left => PDF_FONT_SIZE * 6
+          end
         end
 
         unless (use_finals ? coi.final_weaknesses : coi.weaknesses).blank?
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
           pdf.text "<C:disc/> <b>#{I18n.t(
             :'conclusion_review.workflow.control_objective_weaknesses')}</b>:",
-              :left => 48
+              :left => PDF_FONT_SIZE * 4
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
             pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
-              :left => 72
+              :left => PDF_FONT_SIZE * 6
 
             unless w.work_papers.blank?
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
               pdf.text "<C:bullet/> <b>#{I18n.t(
                 :'conclusion_review.workflow.weakness_work_papers')}</b>:",
-                  :left => 96
+                  :left => PDF_FONT_SIZE * 8
 
-              w.work_papers.each { |wp| pdf.text wp.inspect, :left => 120 }
+              w.work_papers.each do |wp|
+                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10
+              end
 
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
             end
           end
         end
@@ -545,21 +556,24 @@ class ConclusionReview < ActiveRecord::Base
           title = I18n.t(
             :'conclusion_review.workflow.control_objective_oportunities')
 
-          pdf.move_pointer 12
-          pdf.text "<C:disc/> <b>#{title}</b>:", :left => 48
+          pdf.move_pointer PDF_FONT_SIZE
+          pdf.text "<C:disc/> <b>#{title}</b>:", :left => PDF_FONT_SIZE * 4
 
           (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-            pdf.text [o.review_code, o.state_text].join(' - '), :left => 72
+            pdf.text [o.review_code, o.state_text].join(' - '),
+              :left => PDF_FONT_SIZE * 6
 
             unless o.work_papers.blank?
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
               pdf.text "<C:bullet/> <b>#{I18n.t(
                 :'conclusion_review.workflow.oportunity_work_papers')}</b>:",
-                  :left => 96
+                  :left => PDF_FONT_SIZE * 8
 
-              o.work_papers.each { |wp| pdf.text wp.inspect, :left => 120 }
+              o.work_papers.each do |wp|
+                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10
+              end
               
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
             end
           end
         end
@@ -598,18 +612,20 @@ class ConclusionReview < ActiveRecord::Base
         self.review.try(:identification),
         self.review.try(:plan_item).try(:project)
 
-      pdf.move_pointer 18
+      pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-      pdf.add_title I18n.t(:'conclusion_review.findings_sheet.title'), 18,
-        :center
+      pdf.add_title I18n.t(:'conclusion_review.findings_sheet.title'),
+        (PDF_FONT_SIZE * 1.5).round, :center
 
-      pdf.move_pointer 18
+      pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
       weaknesses.sort {|w1, w2| w1.review_code <=> w2.review_code}.each do |w|
         pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
-          :font_size => 12
+          :font_size => PDF_FONT_SIZE
 
-        w.work_papers.each { |wp| pdf.text wp.inspect, :left => 24 }
+        w.work_papers.each do |wp|
+          pdf.text wp.inspect, :left => PDF_FONT_SIZE * 2
+        end
       end
 
       pdf.custom_save_as self.findings_sheet_name(index), 'conclusion_reviews',
@@ -653,17 +669,14 @@ class ConclusionReview < ActiveRecord::Base
       columns = {}
       column_data = []
       pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
-
-      pdf.margins_mm(*PDF_MARGINS)
-      pdf.select_font 'Helvetica', :encoding => nil
       pdf.add_review_header organization || self.review.try(:organization),
         self.review.try(:identification),
         self.review.try(:plan_item).try(:project)
 
-      pdf.move_pointer 18
+      pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-      pdf.add_title I18n.t(:'conclusion_review.findings_follow_up.title'), 18,
-        :center
+      pdf.add_title I18n.t(:'conclusion_review.findings_follow_up.title'),
+        (PDF_FONT_SIZE * 1.5).round, :center
 
       column_order.each do |col_name, col_with|
         columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
@@ -673,7 +686,7 @@ class ConclusionReview < ActiveRecord::Base
         end
       end
 
-      pdf.move_pointer 24 unless weaknesses.blank?
+      pdf.move_pointer PDF_FONT_SIZE * 2 unless weaknesses.blank?
 
       weaknesses.each do |weakness|
         column_data << {
@@ -690,10 +703,10 @@ class ConclusionReview < ActiveRecord::Base
           table.data = column_data
           table.column_order = column_order.map(&:first)
           table.split_rows = true
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey90
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -702,28 +715,28 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => 8, :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
       end
 
       weaknesses.each do |weakness|
         pdf.start_new_page
-        pdf.move_pointer 18
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.add_title I18n.t(
           :'conclusion_review.findings_follow_up.weakness_title_in_singular'),
-          18, :center
+          (PDF_FONT_SIZE * 1.5).round, :center
 
-        pdf.move_pointer 18
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => 12,
+          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
           :justification => :center
       end
 
       column_data = []
 
       unless oportunities.blank?
-        pdf.move_pointer 24
+        pdf.move_pointer PDF_FONT_SIZE * 2
         column_order.delete_at 1
         columns.delete 'risk'
       end
@@ -742,10 +755,10 @@ class ConclusionReview < ActiveRecord::Base
           table.data = column_data
           table.column_order = column_order.map(&:first)
           table.split_rows = true
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey90
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -754,21 +767,21 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => 8, :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75), :justification => :full
       end
 
       oportunities.each do |oportunity|
         pdf.start_new_page
-        pdf.move_pointer 18
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.add_title I18n.t(
           :'conclusion_review.findings_follow_up.oportunity_title_in_singular'),
-          18, :center
+          (PDF_FONT_SIZE * 1.5).round, :center
 
-        pdf.move_pointer 18
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.text [oportunity.review_code, oportunity.state_text].join(' - '),
-          :font_size => 12, :justification => :center
+          :font_size => PDF_FONT_SIZE, :justification => :center
       end
 
       pdf.custom_save_as self.findings_follow_up_name(index),

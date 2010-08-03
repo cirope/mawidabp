@@ -206,7 +206,7 @@ class ProcedureControlsController < ApplicationController
             pci.frequency) + '</b></i>').to_iso
       }]
     
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
         PDF::SimpleTable.new do |table|
@@ -215,11 +215,11 @@ class ProcedureControlsController < ApplicationController
           table.data = procedure_control_column_data
           table.column_order = procedure_control_column_order
           table.split_rows = true
-          table.font_size = 10
-          table.row_gap = 4
-          table.shade_color = Color::RGB::Grey90
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.font_size = PDF_FONT_SIZE
+          table.row_gap = (PDF_FONT_SIZE * 0.5).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.bold_headings = true
           table.shade_headings = true
           table.outer_line_style = PDF::Writer::StrokeStyle.new(1.5,
@@ -230,7 +230,7 @@ class ProcedureControlsController < ApplicationController
         end
       end
 
-      pdf.move_pointer 6
+      pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
 
       pci.procedure_control_subitems.each do |pcs|
         column_data << {
@@ -248,11 +248,11 @@ class ProcedureControlsController < ApplicationController
           table.columns = columns
           table.data = column_data
           table.column_order = column_order
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey90
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
-          table.row_gap = 12
+          table.font_size = (PDF_FONT_SIZE * 0.75)
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
+          table.row_gap = PDF_FONT_SIZE
           table.split_rows = true
           table.bold_headings = true
           table.shade_headings = true

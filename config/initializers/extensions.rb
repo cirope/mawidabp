@@ -148,8 +148,9 @@ class Version
   def changes_until(other)
     changes = []
     old_attributes = self.reify.try(:attributes) || {}
-    new_attributes = (other.try(:reify) || self.item.reload).attributes
-    item_class = self.item.class
+    new_attributes =
+      (other.try(:reify) || self.item.try(:reload)).try(:attributes) || {}
+    item_class = self.try(:class) || self.item.try(:class)
 
     old_attributes.each do |attribute, old_value|
       new_value = new_attributes.delete attribute
