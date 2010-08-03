@@ -1,5 +1,6 @@
-<%= render :partial => 'shared/date_filter_form',
-  :locals => {:action => :synthesis_report, :extra_params => {}} %>
+<%= render :partial => 'shared/filter_form',
+  :locals => {:action => :synthesis_report, :extra_params => {},
+  :forms => {:date_filter => true}} %>
 
 <div style="margin: 1em;">
   <p style="font-size: 1.6em;">

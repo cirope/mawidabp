@@ -1,5 +1,6 @@
-<%= render :partial => 'shared/date_filter_form',
-  :locals => {:action => :weaknesses_by_state, :extra_params => {}} %>
+<%= render :partial => 'shared/filter_form',
+  :locals => {:action => :weaknesses_by_state, :extra_params => {},
+  :forms => {:date_filter => true}} %>
 
 <% @audit_types.each do |type| -%>
   <% weaknesses_count = @weaknesses_counts["#{type}_weaknesses"] -%>

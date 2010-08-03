@@ -1,5 +1,6 @@
-<%= render :partial => 'shared/date_filter_form',
-  :locals => {:action => :cost_analysis, :extra_params => {}} %>
+<%= render :partial => 'shared/filter_form',
+  :locals => {:action => :cost_analysis, :extra_params => {},
+  :forms => {:date_filter => true}} %>
 
 <div style="margin: 1em;">
   <h1><%= t :'follow_up_committee.cost_analysis.weaknesses' %></h1>
