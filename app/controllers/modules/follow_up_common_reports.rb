@@ -51,10 +51,10 @@ module FollowUpCommonReports
 
       pdf.add_generic_report_header @auth_organization
 
-      pdf.add_title t(:'follow_up_committee.weaknesses_by_state.title'), 12,
-        :center
+      pdf.add_title t(:'follow_up_committee.weaknesses_by_state.title'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 24
+      pdf.move_pointer PDF_FONT_SIZE * 2
 
       pdf.add_description_item(
         t(:'follow_up_committee.period.title'),
@@ -68,12 +68,12 @@ module FollowUpCommonReports
         total_weaknesses = weaknesses_count.values.sum
         total_oportunities = oportunities_count.values.sum
 
-        pdf.move_pointer 24
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
          pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-          14, :center
+          (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer 12
+        pdf.move_pointer PDF_FONT_SIZE
 
         if (total_weaknesses + total_oportunities) > 0
           columns = {
@@ -135,11 +135,11 @@ module FollowUpCommonReports
                 ['state', 'weaknesses_count', 'oportunities_count'] :
                 ['state', 'weaknesses_count']
               table.split_rows = true
-              table.font_size = 12
-              table.row_gap = 6
+              table.font_size = PDF_FONT_SIZE
+              table.row_gap = (PDF_FONT_SIZE * 0.5).round
               table.shade_rows = :none
-              table.shade_heading_color = Color::RGB::Grey50
-              table.heading_font_size = 12
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
               table.shade_headings = true
               table.bold_headings = true
               table.position = :left
@@ -152,7 +152,7 @@ module FollowUpCommonReports
           add_being_implemented_resume(pdf, @being_implemented_resumes[type])
         else
           pdf.text t(:'follow_up_committee.without_weaknesses'),
-            :font_size => 12
+            :font_size => PDF_FONT_SIZE
         end
       end
 
@@ -231,10 +231,10 @@ module FollowUpCommonReports
 
       pdf.add_generic_report_header @auth_organization
 
-      pdf.add_title t(:'follow_up_committee.weaknesses_by_risk.title'), 12,
-        :center
+      pdf.add_title t(:'follow_up_committee.weaknesses_by_risk.title'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 24
+      pdf.move_pointer PDF_FONT_SIZE * 2
 
       pdf.add_description_item(
         t(:'follow_up_committee.period.title'),
@@ -243,12 +243,12 @@ module FollowUpCommonReports
           :to_date => l(@to_date, :format => :long)))
 
       @audit_types.each do |type|
-        pdf.move_pointer 24
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
         pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
-          14, :center
+          (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer 12
+        pdf.move_pointer PDF_FONT_SIZE
 
         add_weaknesses_synthesis_table(pdf, @tables_data[type])
 
@@ -406,9 +406,9 @@ module FollowUpCommonReports
       pdf.add_generic_report_header @auth_organization
 
       pdf.add_title t(:'follow_up_committee.weaknesses_by_audit_type.title'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 24
+      pdf.move_pointer PDF_FONT_SIZE * 2
 
       pdf.add_description_item(
         t(:'follow_up_committee.period.title'),
@@ -417,27 +417,27 @@ module FollowUpCommonReports
           :to_date => l(@to_date, :format => :long)))
 
       @audit_types.each do |type|
-        pdf.move_pointer 24
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
         pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-          14, :center
+          (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer 12
+        pdf.move_pointer PDF_FONT_SIZE
 
         unless @data[type].blank?
           @data[type].each do |data_item|
-            pdf.move_pointer 12
-            pdf.add_title data_item[:title], 12, :center
+            pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
             data_item[:business_units].each do |bu, bu_data|
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
 
               pdf.add_description_item(
                 bu.business_unit_type.business_unit_label, bu.name)
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
 
               pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
                 findings_count = cr.review.weaknesses.size +
@@ -450,15 +450,16 @@ module FollowUpCommonReports
                   text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
                 end
 
-                pdf.text text, :left => 24
+                pdf.text text, :left => PDF_FONT_SIZE * 2
               end
 
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
 
               pdf.add_title(
-                t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'), 12)
+                t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'),
+                PDF_FONT_SIZE)
 
-              pdf.move_pointer 12
+              pdf.move_pointer PDF_FONT_SIZE
 
               add_weaknesses_synthesis_table(pdf,
                 bu_data[:weaknesses_table_data], 10)
@@ -466,12 +467,13 @@ module FollowUpCommonReports
                 bu_data[:being_implemented_resume])
 
               if type == :internal
-                pdf.move_pointer 12
+                pdf.move_pointer PDF_FONT_SIZE
 
                 pdf.add_title(
-                  t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'), 12)
+                  t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'),
+                  PDF_FONT_SIZE)
 
-                pdf.move_pointer 12
+                pdf.move_pointer PDF_FONT_SIZE
 
                 unless bu_data[:oportunities_table_data].blank?
                   columns = {
@@ -493,11 +495,11 @@ module FollowUpCommonReports
                       table.data = bu_data[:oportunities_table_data]
                       table.column_order = ['state', 'count']
                       table.split_rows = true
-                      table.font_size = 10
-                      table.row_gap = 6
+                      table.font_size = PDF_FONT_SIZE
+                      table.row_gap = (PDF_FONT_SIZE * 0.5).round
                       table.shade_rows = :none
-                      table.shade_heading_color = Color::RGB::Grey50
-                      table.heading_font_size = 12
+                      table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                      table.heading_font_size = PDF_FONT_SIZE
                       table.shade_headings = true
                       table.bold_headings = true
                       table.position = :left
@@ -514,7 +516,7 @@ module FollowUpCommonReports
           end
         else
           pdf.text t(:'follow_up_committee.without_weaknesses'),
-            :font_size => 12
+            :font_size => PDF_FONT_SIZE
         end
       end
 
@@ -544,7 +546,7 @@ module FollowUpCommonReports
       params[:organization] : @auth_organization.id
   end
 
-  def add_weaknesses_synthesis_table(pdf, data, font_size = 12)
+  def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
       columns = {}
       column_data = []
@@ -572,10 +574,10 @@ module FollowUpCommonReports
           table.column_order = data[:order]
           table.split_rows = true
           table.font_size = font_size
-          table.row_gap = 6
+          table.row_gap = (font_size * 0.5).round
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey50
-          table.heading_font_size = 12
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = font_size
           table.shade_headings = true
           table.bold_headings = true
           table.position = :left
@@ -585,7 +587,7 @@ module FollowUpCommonReports
         end
       end
     else
-      pdf.text "<i>#{data}</i>", :font_size => 12
+      pdf.text "<i>#{data}</i>", :font_size => PDF_FONT_SIZE
     end
   end
 
@@ -650,9 +652,9 @@ module FollowUpCommonReports
 
   def add_being_implemented_resume(pdf, being_implemented_resume = nil)
     unless being_implemented_resume.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.text "* #{being_implemented_resume}", :font_size => 10
+      pdf.text "* #{being_implemented_resume}", :font_size => PDF_FONT_SIZE
     end
   end
 

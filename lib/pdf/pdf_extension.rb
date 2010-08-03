@@ -16,10 +16,11 @@ module PDF
 
       pdf.margins_mm(*PDF_MARGINS)
       pdf.select_font 'Helvetica', :encoding => nil
+      pdf.font_size = PDF_FONT_SIZE
       pdf.add_page_footer if footer
 
       pdf.open_object do |footer_object|
-        font_size = 6
+        font_size = (PDF_FONT_SIZE * 0.5).round
 
         pdf.add_image_from_file(PDF_LOGO, pdf.left_margin, 20,
           PDF_LOGO_SIZE.first, PDF_LOGO_SIZE.last)
@@ -41,15 +42,16 @@ module PDF
       klass.extend(PDFClassExtension)
     end
 
-    def add_title(text, font_size = 18, justification = :full,
-        underline = false)
+    def add_title(text, font_size = (PDF_FONT_SIZE * 1.5).round,
+        justification = :full, underline = false)
       title_text = underline ? "<c:uline><b>#{text}</b></c:uline>" :
         "<b>#{text}</b>"
       self.text "#{title_text}\n", :font_size => font_size,
         :justification => justification
     end
 
-    def add_subtitle(text, margin_top = 0, margin_down = 0, font_size = 12)
+    def add_subtitle(text, margin_top = 0, margin_down = 0,
+        font_size = PDF_FONT_SIZE)
       self.move_pointer margin_top if margin_top != 0
       self.text "<c:uline><b>#{text.strip}</b></c:uline>",
         :font_size => font_size, :justification => :full
@@ -57,7 +59,7 @@ module PDF
     end
 
     def add_description_item(term, description, left = 0, underline = true,
-        font_size = 12)
+        font_size = PDF_FONT_SIZE)
       if term && !term.blank? && description && !description.blank?
         term = underline ? "<c:uline><b>#{term}</b></c:uline>:" :
           "<b>#{term}</b>:"
@@ -75,7 +77,7 @@ module PDF
       self.move_pointer((self.font_size / 2.0).round)
     end
 
-    def add_organization_image(organization, font_size = 10)
+    def add_organization_image(organization, font_size = PDF_FONT_SIZE)
       font_height_size = self.font_height(font_size)
 
       if organization && organization.image_model
@@ -89,7 +91,7 @@ module PDF
 
     def add_planning_header(organization, period)
       self.open_object do |heading|
-        font_size = 10
+        font_size = PDF_FONT_SIZE
         font_height_size = self.font_height(font_size)
         y_top = self.page_height - (self.top_margin / 2)
 
@@ -110,7 +112,7 @@ module PDF
 
     def add_review_header(organization, identification, project)
       self.open_object do |heading|
-        font_size = 10
+        font_size = PDF_FONT_SIZE
         font_height_size = self.font_height(font_size)
         y_top = self.page_height - (self.top_margin / 2)
 
@@ -154,10 +156,10 @@ module PDF
             table.columns = columns
             table.data = [column_data]
             table.column_order = review_user_assignments.map{|rua| rua.id.to_s}
-            table.font_size = 8
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_rows = :none
-            table.shade_heading_color = Color::RGB::Grey70
-            table.heading_font_size = 10
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
             table.shade_headings = true
             table.position = :left
             table.orientation = :right
@@ -169,7 +171,7 @@ module PDF
 
     def add_generic_report_header(organization, date = Date.today)
       self.open_object do |heading|
-        font_size = 12
+        font_size = PDF_FONT_SIZE
         y_top = self.page_height - (self.top_margin / 2)
 
         self.add_organization_image organization, font_size
@@ -184,7 +186,7 @@ module PDF
       end
     end
 
-    def add_watermark(text, font_size = 60)
+    def add_watermark(text, font_size = PDF_FONT_SIZE * 5)
       stroke_color = self.stroke_color?
       stroke_style = self.stroke_style?
       text_render_style = self.text_render_style?
@@ -220,7 +222,7 @@ module PDF
         I18n.t(:'pdf.page_pattern').to_iso, 1
     end
 
-    def add_footnote(text, font_size = 8)
+    def add_footnote(text, font_size = (PDF_FONT_SIZE * 0.75).round)
       font_height = self.font_height(font_size)
       self.add_text(self.absolute_left_margin,
         (self.bottom_margin - font_height * 5.5), text, font_size)

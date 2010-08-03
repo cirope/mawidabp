@@ -431,11 +431,11 @@ class Review < ActiveRecord::Base
       self.plan_item.project.strip
     pdf.add_title Review.human_attribute_name 'survey'
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.text self.survey, :font_size => 12, :justification => :full
+    pdf.text self.survey, :font_size => PDF_FONT_SIZE, :justification => :full
 
-    pdf.move_pointer 24
+    pdf.move_pointer PDF_FONT_SIZE * 2
 
     note_text = self.file_model ? I18n.t('review.survey.with_attachment') :
       I18n.t('review.survey.without_attachment')
@@ -463,7 +463,7 @@ class Review < ActiveRecord::Base
   def score_sheet(organization = nil, draft = false)
     pdf = self.score_sheet_common_header organization, false, draft
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     columns, column_data = {}, []
     process_controls = {}
@@ -528,12 +528,12 @@ class Review < ActiveRecord::Base
         table.columns = columns
         table.data = column_data
         table.column_order = ['name', 'relevance', 'effectiveness']
-        table.row_gap = 10
+        table.row_gap = PDF_FONT_SIZE
         table.split_rows = true
-        table.font_size = 12
+        table.font_size = PDF_FONT_SIZE
         table.shade_color = Color::RGB::White
-        table.shade_heading_color = Color::RGB::Grey70
-        table.heading_font_size = 12
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = PDF_FONT_SIZE
         table.shade_headings = true
         table.position = :left
         table.orientation = :right
@@ -541,15 +541,15 @@ class Review < ActiveRecord::Base
       end
     end
 
-    pdf.move_pointer 8
+    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
     pdf.text "<c:uline><b>#{I18n.t(:'review.notes')}</b></c:uline>:",
-      :font_size => 8
+      :font_size => (PDF_FONT_SIZE * 0.75).round
     pdf.text "<i>* #{I18n.t(:'review.review_qualification_explanation')}</i>",
-      :font_size => 8, :justification => :full
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     pdf.text(
       "<i>** #{I18n.t(:'review.process_control_qualification_explanation')}</i>",
-      :font_size => 8, :justification => :full)
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
 
     weaknesses = self.final_weaknesses.all_for_report
 
@@ -558,7 +558,7 @@ class Review < ActiveRecord::Base
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t(:'review.weaknesses_summary',
-        :risks => risk_levels_text), 12, 12
+        :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
       column_names = {'description' => 60, 'risk' => 15, 'state' => 25}
@@ -589,11 +589,11 @@ class Review < ActiveRecord::Base
           table.data = column_data
           table.column_order = ['description', 'risk', 'state']
           table.split_rows = true
-          table.row_gap = 15
-          table.font_size = 12
+          table.row_gap = (PDF_FONT_SIZE * 1.5).round
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 12
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -607,7 +607,8 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      pdf.add_subtitle I18n.t(:'review.oportunities_summary'), 12, 12
+      pdf.add_subtitle I18n.t(:'review.oportunities_summary'), PDF_FONT_SIZE,
+        PDF_FONT_SIZE
 
       columns, column_data = {}, []
       column_names = {'description' => 75, 'state' => 25}
@@ -637,11 +638,11 @@ class Review < ActiveRecord::Base
           table.data = column_data
           table.column_order = ['description', 'state']
           table.split_rows = true
-          table.row_gap = 10
-          table.font_size = 12
+          table.row_gap = PDF_FONT_SIZE
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 12
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -652,7 +653,7 @@ class Review < ActiveRecord::Base
       end
     end
 
-    pdf.move_pointer 24
+    pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_review_auditors_table(
       self.review_user_assignments.reject { |rua| rua.audited? })
@@ -663,7 +664,7 @@ class Review < ActiveRecord::Base
   def global_score_sheet(organization = nil, draft = false)
     pdf = self.score_sheet_common_header organization, true, draft
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     columns, column_data = {}, []
     process_controls = {}
@@ -709,12 +710,12 @@ class Review < ActiveRecord::Base
         table.columns = columns
         table.data = column_data
         table.column_order = ['name', 'effectiveness']
-        table.row_gap = 10
+        table.row_gap = PDF_FONT_SIZE
         table.split_rows = true
-        table.font_size = 12
+        table.font_size = PDF_FONT_SIZE
         table.shade_color = Color::RGB::White
-        table.shade_heading_color = Color::RGB::Grey70
-        table.heading_font_size = 12
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = PDF_FONT_SIZE
         table.shade_headings = true
         table.position = :left
         table.orientation = :right
@@ -722,15 +723,15 @@ class Review < ActiveRecord::Base
       end
     end
 
-    pdf.move_pointer 8
+    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
     pdf.text "<c:uline><b>#{I18n.t(:'review.notes')}</b></c:uline>:",
-      :font_size => 8
+      :font_size => (PDF_FONT_SIZE * 0.75).round
     pdf.text "<i>* #{I18n.t(:'review.review_qualification_explanation')}</i>",
-      :font_size => 8, :justification => :full
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     pdf.text(
       "<i>** #{I18n.t(:'review.process_control_qualification_explanation')}</i>",
-      :font_size => 8, :justification => :full)
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
 
     weaknesses = self.final_weaknesses.all_for_report
 
@@ -739,7 +740,7 @@ class Review < ActiveRecord::Base
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t(:'review.weaknesses_count_summary',
-        :risks => risk_levels_text), 12, 12
+        :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
       column_names = {
@@ -790,11 +791,11 @@ class Review < ActiveRecord::Base
           table.data = column_data
           table.column_order = ['count', 'risk', 'state']
           table.split_rows = true
-          table.row_gap = 10
-          table.font_size = 12
+          table.row_gap = PDF_FONT_SIZE
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 12
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -811,7 +812,8 @@ class Review < ActiveRecord::Base
       risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
-      pdf.add_subtitle I18n.t(:'review.oportunities_count_summary'), 12, 12
+      pdf.add_subtitle I18n.t(:'review.oportunities_count_summary'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
       column_names = {
@@ -859,11 +861,11 @@ class Review < ActiveRecord::Base
           table.data = column_data
           table.column_order = ['count', 'state']
           table.split_rows = true
-          table.row_gap = 10
-          table.font_size = 12
+          table.row_gap = PDF_FONT_SIZE
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 12
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -874,7 +876,7 @@ class Review < ActiveRecord::Base
       end
     end
 
-    pdf.move_pointer 24
+    pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_review_auditors_table(
       self.review_user_assignments.select { |rua| !rua.audited? })
@@ -894,7 +896,7 @@ class Review < ActiveRecord::Base
 
     pdf.add_watermark(I18n.t(:'pdf.draft')) if draft
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
       self.business_unit.business_unit_type.business_unit_label,
@@ -918,7 +920,7 @@ class Review < ActiveRecord::Base
     pdf.add_description_item(I18n.t(:'review.auditors'),
       users.map { |rua| rua.user.full_name }.join('; '))
 
-    pdf.add_subtitle I18n.t(:'review.score'), 12, 12
+    pdf.add_subtitle I18n.t(:'review.score'), PDF_FONT_SIZE, PDF_FONT_SIZE
 
     self.add_score_details_table(pdf)
 
@@ -958,11 +960,11 @@ class Review < ActiveRecord::Base
         table.columns = columns
         table.data = [column_data]
         table.column_order = scores.map { |s| s[1] }
-        table.header_gap = 14
-        table.row_gap = 4
+        table.header_gap = (PDF_FONT_SIZE * 1.25).round
+        table.row_gap = (PDF_FONT_SIZE * 0.25).round
         table.protect_rows = 2
-        table.heading_font_size = 14
-        table.font_size = 8
+        table.heading_font_size = (PDF_FONT_SIZE * 1.25).round
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
         table.shade_rows = :none
         table.position = :left
         table.orientation = :right

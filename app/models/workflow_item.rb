@@ -161,10 +161,10 @@ class WorkflowItem < ActiveRecord::Base
   end
   
   def add_resource_data(pdf)
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     pdf.text "<b>#{self.order_number}</b>) #{self.task}",
-      :font_size => 12
+      :font_size => PDF_FONT_SIZE
 
     pdf.add_destination "workflow_cost_detail_#{self.id}", 'XYZ', 0, pdf.y
 
@@ -195,7 +195,7 @@ class WorkflowItem < ActiveRecord::Base
       'cost' => "<b>#{currency_mask % self.cost}</b>"
     }
 
-    pdf.move_pointer 6
+    pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
 
     unless column_data.blank?
       PDF::SimpleTable.new do |table|
@@ -204,10 +204,10 @@ class WorkflowItem < ActiveRecord::Base
         table.data = column_data
         table.column_order = column_order.map(&:first)
         table.split_rows = true
-        table.font_size = 8
-        table.shade_color = Color::RGB::Grey90
-        table.shade_heading_color = Color::RGB::Grey70
-        table.heading_font_size = 10
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
         table.shade_headings = true
         table.position = :left
         table.orientation = :right

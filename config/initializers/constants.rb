@@ -62,6 +62,8 @@ PDF_PAPER = 'A4'.freeze
 PDF_LOGO = File.join(Rails.root, 'public', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
 PDF_LOGO_SIZE = [352, 90].map { |size| (size / 6.0).round }
+# Tamaño de fuente en los PDF
+PDF_FONT_SIZE = 11
 # Prefijo para los archivos que no se pueden acceder sin estar autenticado
 PRIVATE_FILES_PREFIX = 'private'.freeze
 # Ruta a un archivo para realizar las pruebas

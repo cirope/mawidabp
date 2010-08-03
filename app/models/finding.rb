@@ -788,18 +788,19 @@ class Finding < ActiveRecord::Base
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
 
-    pdf.move_pointer 36
+    pdf.move_pointer PDF_FONT_SIZE * 3
 
-    pdf.add_title self.class.human_name, 18, :center, false
+    pdf.add_title self.class.human_name, (PDF_FONT_SIZE * 1.5).round, :center,
+      false
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_title "<b>#{self.class.human_attribute_name('review_code')}</b>: " +
-      self.review_code, 12, :center, false
+    pdf.add_title "<b>#{self.class.human_attribute_name(:review_code)}</b>: " +
+      self.review_code, PDF_FONT_SIZE, :center, false
 
     pdf.start_new_page
 
-    pdf.move_pointer 28
+    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(
       self.class.human_attribute_name('control_objective_item_id'),
@@ -809,7 +810,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('description'),
       self.description, 0, false)
 
-    pdf.move_pointer 28
+    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
     if self.kind_of?(Weakness)
       pdf.add_description_item(Weakness.human_attribute_name('risk'),
@@ -850,17 +851,18 @@ class Finding < ActiveRecord::Base
 
     unless self.work_papers.blank?
       pdf.start_new_page
-      pdf.move_pointer 36
+      pdf.move_pointer PDF_FONT_SIZE * 3
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
-        18, :center, false)
-      pdf.add_title("#{self.class.human_name} #{self.review_code}", 18, :center,
-        false)
+        (PDF_FONT_SIZE * 1.5).round, :center, false)
+      pdf.add_title("#{self.class.human_name} #{self.review_code}",
+        (PDF_FONT_SIZE * 1.5).round, :center, false)
 
-      pdf.move_pointer 36
+      pdf.move_pointer PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, :justification => :center, :font_size => 12
+        pdf.text wp.inspect, :justification => :center,
+          :font_size => PDF_FONT_SIZE
       end
     else
       pdf.add_footnote(I18n.t(:'finding.without_work_papers'))
@@ -890,14 +892,14 @@ class Finding < ActiveRecord::Base
     add_finding_follow_up_header pdf, organization
     
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
-        '.title'), 14, :center
+        '.title'), (PDF_FONT_SIZE * 1.25).round, :center
 
-    pdf.move_pointer 14
+    pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
 
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
-        '.subtitle'), 14, :left
+        '.subtitle'), (PDF_FONT_SIZE * 1.25).round, :left
 
-    pdf.move_pointer 14
+    pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
 
     pdf.add_description_item(Review.human_name,
       "#{self.review.long_identification} (#{issue_date})", 0, false)
@@ -940,13 +942,13 @@ class Finding < ActiveRecord::Base
 
     audited, auditors = *self.users.partition(&:can_act_as_audited?)
 
-    pdf.add_title I18n.t(:'finding.auditors', :count => auditors.size), 12,
-      :left
-    pdf.add_list auditors.map(&:full_name), 24
+    pdf.add_title I18n.t(:'finding.auditors', :count => auditors.size),
+      PDF_FONT_SIZE, :left
+    pdf.add_list auditors.map(&:full_name), PDF_FONT_SIZE * 2
 
-    pdf.add_title I18n.t(:'finding.responsibles', :count => audited.size), 12,
-      :left
-    pdf.add_list audited.map(&:full_name), 24
+    pdf.add_title I18n.t(:'finding.responsibles', :count => audited.size),
+      PDF_FONT_SIZE, :left
+    pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
     
     important_attributes = [:state, :risk, :priority, :follow_up_date]
     important_changed_versions = []
@@ -971,7 +973,8 @@ class Finding < ActiveRecord::Base
       previous_version = last_checked_version
     end
 
-    pdf.add_title I18n.t(:'finding.change_history'), 14, :full
+    pdf.add_title I18n.t(:'finding.change_history'),
+      (PDF_FONT_SIZE * 1.25).round, :full
 
     if important_changed_versions.size > 1
       last_checked_version = self.versions.first
@@ -1010,7 +1013,7 @@ class Finding < ActiveRecord::Base
         end
 
         unless column_data.blank?
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
           
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
@@ -1018,7 +1021,7 @@ class Finding < ActiveRecord::Base
           pdf.add_description_item(User.human_name, version.whodunnit ?
               User.find(version.whodunnit).try(:full_name) : nil)
 
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
 
           PDF::SimpleTable.new do |table|
             table.width = pdf.page_usable_width
@@ -1026,11 +1029,11 @@ class Finding < ActiveRecord::Base
             table.data = column_data
             table.column_order = ['attribute', 'old_value', 'new_value']
             table.split_rows = true
-            table.row_gap = 8
-            table.font_size = 10
+            table.row_gap = (PDF_FONT_SIZE * 0.75).round
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_rows = :none
-            table.shade_heading_color = Color::RGB::Grey70
-            table.heading_font_size = 10
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_headings = true
             table.position = :left
             table.orientation = :right
@@ -1046,7 +1049,7 @@ class Finding < ActiveRecord::Base
     else
       pdf.text(
         "\n#{I18n.t(:'finding.follow_up_report.without_important_changes')}",
-        :font_size => 12)
+        :font_size => PDF_FONT_SIZE)
     end
 
     unless self.comments.blank?
@@ -1070,11 +1073,12 @@ class Finding < ActiveRecord::Base
         }
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'finding.comments'), 14, :full
+      pdf.add_title I18n.t(:'finding.comments'), (PDF_FONT_SIZE * 1.25).round,
+        :full
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
         PDF::SimpleTable.new do |table|
@@ -1083,11 +1087,11 @@ class Finding < ActiveRecord::Base
           table.data = column_data
           table.column_order = ['user_id', 'comment', 'created_at']
           table.split_rows = true
-          table.row_gap = 8
-          table.font_size = 10
+          table.row_gap = (PDF_FONT_SIZE * 0.75).round
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -1120,11 +1124,12 @@ class Finding < ActiveRecord::Base
         }
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'finding.follow_up_report.work_papers'), 14, :full
+      pdf.add_title I18n.t(:'finding.follow_up_report.work_papers'),
+        (PDF_FONT_SIZE * 1.25).round, :full
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
         PDF::SimpleTable.new do |table|
@@ -1134,11 +1139,11 @@ class Finding < ActiveRecord::Base
           table.column_order = ['name', 'code', 'number_of_pages',
             'description']
           table.split_rows = true
-          table.row_gap = 8
-          table.font_size = 10
+          table.row_gap = (PDF_FONT_SIZE * 0.75).round
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -1172,12 +1177,12 @@ class Finding < ActiveRecord::Base
         }
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       
-      pdf.add_title I18n.t(:'finding.follow_up_report.follow_up_comments'), 14,
-        :full
+      pdf.add_title I18n.t(:'finding.follow_up_report.follow_up_comments'),
+        (PDF_FONT_SIZE * 1.25).round, :full
       
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
         PDF::SimpleTable.new do |table|
@@ -1187,11 +1192,11 @@ class Finding < ActiveRecord::Base
           table.column_order = ['user_id', 'answer', 'answer_type',
             'created_at']
           table.split_rows = true
-          table.row_gap = 8
-          table.font_size = 10
+          table.row_gap = (PDF_FONT_SIZE * 0.75).round
+          table.font_size = PDF_FONT_SIZE
           table.shade_rows = :none
-          table.shade_heading_color = Color::RGB::Grey70
-          table.heading_font_size = 10
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -1306,7 +1311,7 @@ class Finding < ActiveRecord::Base
 
   def add_finding_follow_up_header(pdf, organization, date = Date.today)
     pdf.open_object do |heading|
-      font_size = 10
+      font_size = PDF_FONT_SIZE
       font_height_size = pdf.font_height(font_size)
       y_top = pdf.page_height - (pdf.top_margin / 2)
 

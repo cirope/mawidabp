@@ -90,20 +90,20 @@ class ExecutionReportsController < ApplicationController
       pdf.add_generic_report_header @auth_organization
 
       pdf.add_title t(:'execution_reports.detailed_management_report.title'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title t(:'execution_reports.detailed_management_report.subtitle'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.text '<i>%s</i>' %
         t(:'execution_reports.detailed_management_report.clarification'),
-        :font_size => 10
+        :font_size => PDF_FONT_SIZE
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(t(:'execution_reports.period.title'),
         t(:'execution_reports.period.range',
@@ -130,11 +130,11 @@ class ExecutionReportsController < ApplicationController
         end
 
         if title
-          pdf.move_pointer 24
-          pdf.add_title title, 14, :center
+          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
         end
 
-        pdf.add_subtitle data[:name], 12, 12
+        pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
         data[:column_data].each do |row|
           new_row = {}
@@ -155,10 +155,10 @@ class ExecutionReportsController < ApplicationController
             table.data = column_data
             table.column_order = @column_order
             table.split_rows = true
-            table.font_size = 8
-            table.shade_color = Color::RGB::Grey70
-            table.shade_heading_color = Color::RGB::Grey50
-            table.heading_font_size = 10
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
             table.shade_headings = true
             table.position = :left
             table.orientation = :right
@@ -170,10 +170,10 @@ class ExecutionReportsController < ApplicationController
         end
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       pdf.text t(:'execution_reports.detailed_management_report.references',
-        :risk_types => @risk_levels.to_sentence), :font_size => 8,
-        :justification => :full
+        :risk_types => @risk_levels.to_sentence),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
       pdf.custom_save_as(
         t(:'execution_reports.detailed_management_report.pdf_name',
@@ -216,15 +216,15 @@ class ExecutionReportsController < ApplicationController
       pdf.add_generic_report_header @auth_organization
 
       pdf.add_title t(:'execution_reports.weaknesses_by_state.title'),
-        12, :center
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.text '<i>%s</i>' %
         t(:'execution_reports.weaknesses_by_state.clarification'),
-          :font_size => 10
+          :font_size => PDF_FONT_SIZE
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(
         t(:'execution_reports.period.title'),
@@ -233,9 +233,10 @@ class ExecutionReportsController < ApplicationController
           :to_date => l(@to_date, :format => :long)))
 
       @audit_types.each do |type|
-        pdf.move_pointer 24
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.add_title t("execution_reports.findings_type_#{type}"), 14, :center
+        pdf.add_title t("execution_reports.findings_type_#{type}"),
+          (PDF_FONT_SIZE * 1.25).round, :center
 
         if @counts[type]
           @counts[type].each do |review, counts|
@@ -245,7 +246,7 @@ class ExecutionReportsController < ApplicationController
             total_oportunities = oportunities_count.values.sum
 
             pdf.text "\n<b>#{Review.human_name}</b>: #{review}\n\n",
-              :font_size => 12
+              :font_size => PDF_FONT_SIZE
 
             unless (total_weaknesses + total_oportunities) == 0
               columns = {
@@ -302,11 +303,11 @@ class ExecutionReportsController < ApplicationController
                     ['state', 'weaknesses_count', 'oportunities_count'] :
                     ['state', 'weaknesses_count']
                   table.split_rows = true
-                  table.font_size = 12
-                  table.row_gap = 6
+                  table.font_size = PDF_FONT_SIZE
+                  table.row_gap = (PDF_FONT_SIZE * 0.5).round
                   table.shade_rows = :none
-                  table.shade_heading_color = Color::RGB::Grey50
-                  table.heading_font_size = 12
+                  table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                  table.heading_font_size = PDF_FONT_SIZE
                   table.shade_headings = true
                   table.bold_headings = true
                   table.position = :left
@@ -317,12 +318,13 @@ class ExecutionReportsController < ApplicationController
               end
             else
               pdf.text t(:'execution_reports.without_findings'),
-                :font_size => 12
-              pdf.move_pointer 12
+                :font_size => PDF_FONT_SIZE
+              pdf.move_pointer PDF_FONT_SIZE
             end
           end
         else
-          pdf.text t(:'execution_reports.without_weaknesses'), :font_size => 12
+          pdf.text t(:'execution_reports.without_weaknesses'),
+            :font_size => PDF_FONT_SIZE
         end
       end
 

@@ -11,7 +11,8 @@
 
 <p>
   <b><%= Version.human_attribute_name 'item' %>:</b>
-  <%=h "#{@version.item.class.human_name} (#{@version.reify || @version.item})" %>
+  <%=h @version.item ?
+    "#{@version.item.class.human_name} (#{@version.reify || @version.item})" : '-' %>
 </p>
 
 <p>

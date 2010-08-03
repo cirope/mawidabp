@@ -102,7 +102,7 @@ class LoginRecordsController < ApplicationController
     pdf.add_generic_report_header @auth_organization
     pdf.add_title t(:'login_record.index_title')
 
-    pdf.move_pointer 12
+    pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(t(:'login_record.period.title'),
       t(:'login_record.period.range',
@@ -132,7 +132,7 @@ class LoginRecordsController < ApplicationController
     end
 
     unless column_data.blank?
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       PDF::SimpleTable.new do |table|
         table.width = pdf.page_usable_width
@@ -140,10 +140,10 @@ class LoginRecordsController < ApplicationController
         table.data = column_data
         table.column_order = column_order.map(&:first)
         table.split_rows = true
-        table.font_size = 8
-        table.shade_color = Color::RGB::Grey90
-        table.shade_heading_color = Color::RGB::Grey70
-        table.heading_font_size = 10
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = PDF_FONT_SIZE
         table.shade_headings = true
         table.position = :left
         table.orientation = :right

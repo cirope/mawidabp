@@ -242,15 +242,15 @@ class FollowUpCommitteeController < ApplicationController
 
       pdf.add_generic_report_header @auth_organization
 
-      pdf.add_title t(:'follow_up_committee.synthesis_report.title'), 12,
-        :center
+      pdf.add_title t(:'follow_up_committee.synthesis_report.title'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title t(:'follow_up_committee.synthesis_report.subtitle'), 12,
-        :center
+      pdf.add_title t(:'follow_up_committee.synthesis_report.subtitle'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(
         t(:'follow_up_committee.period.title'),
@@ -274,19 +274,19 @@ class FollowUpCommitteeController < ApplicationController
         average_score = count > 0 ? (total.to_f / count).round : 100
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title(
         t(:'follow_up_committee.synthesis_report.organization_score',
-          :score => average_score || 100), 16)
+          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
 
-      pdf.move_pointer 8
+      pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
       pdf.text(
         t(:'conclusion_committee_report.synthesis_report.organization_score_note',
           :audit_types =>
             @audits_by_business_unit.map {|data| data[:name]}.to_sentence),
-        :font_size => 8)
+        :font_size => (PDF_FONT_SIZE * 0.75).round)
 
       @audits_by_business_unit.each do |data|
         columns = data[:columns]
@@ -308,11 +308,11 @@ class FollowUpCommitteeController < ApplicationController
         end
 
         if title
-          pdf.move_pointer 24
-          pdf.add_title title, 14, :center
+          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
         end
 
-        pdf.add_subtitle data[:name], 12, 12
+        pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
         data[:column_data].each do |row|
           new_row = {}
@@ -336,10 +336,10 @@ class FollowUpCommitteeController < ApplicationController
             end
             table.column_order = @column_order
             table.split_rows = true
-            table.font_size = 8
-            table.shade_color = Color::RGB::Grey70
-            table.shade_heading_color = Color::RGB::Grey50
-            table.heading_font_size = 10
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
             table.shade_headings = true
             table.position = :left
             table.orientation = :right
@@ -356,18 +356,18 @@ class FollowUpCommitteeController < ApplicationController
             text = t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
           end
 
-          pdf.move_pointer 12
+          pdf.move_pointer PDF_FONT_SIZE
 
-          pdf.text text, :font_size => 12
+          pdf.text text, :font_size => PDF_FONT_SIZE
         else
           pdf.text t(:'follow_up_committee.synthesis_report.without_audits_in_the_period')
         end
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
       pdf.text t(:'follow_up_committee.synthesis_report.references',
-        :risk_types => @risk_levels.to_sentence), :font_size => 8,
-        :justification => :full
+        :risk_types => @risk_levels.to_sentence),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
       pdf.custom_save_as(t(:'follow_up_committee.synthesis_report.pdf_name',
           :from_date => @from_date.to_formatted_s(:db),
@@ -465,9 +465,10 @@ class FollowUpCommitteeController < ApplicationController
       end
 
       pdf.add_generic_report_header @auth_organization
-      pdf.add_title t(:'follow_up_committee.cost_analysis.title'), 12, :center
+      pdf.add_title t(:'follow_up_committee.cost_analysis.title'),
+        PDF_FONT_SIZE, :center
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item(
         t(:'follow_up_committee.period.title'),
@@ -475,10 +476,10 @@ class FollowUpCommitteeController < ApplicationController
           :from_date => l(@from_date, :format => :long),
           :to_date => l(@to_date, :format => :long)))
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title "#{t(:'follow_up_committee.cost_analysis.weaknesses')}\n",
-        12, :center
+        PDF_FONT_SIZE, :center
 
       unless @weaknesses_data.blank?
         PDF::SimpleTable.new do |table|
@@ -487,10 +488,10 @@ class FollowUpCommitteeController < ApplicationController
           table.data = @weaknesses_data
           table.column_order = @column_order.map(&:first)
           table.split_rows = true
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey70
-          table.shade_heading_color = Color::RGB::Grey50
-          table.heading_font_size = 10
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -498,13 +499,13 @@ class FollowUpCommitteeController < ApplicationController
         end
       else
         pdf.text t(:'follow_up_committee.cost_analysis.without_weaknesses'),
-          :font_size => 12
+          :font_size => PDF_FONT_SIZE
       end
 
-      pdf.move_pointer 12
+      pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_title "#{t(:'follow_up_committee.cost_analysis.oportunities')}\n",
-        12, :center
+        PDF_FONT_SIZE, :center
 
       unless @oportunities_data.blank?
         PDF::SimpleTable.new do |table|
@@ -513,10 +514,10 @@ class FollowUpCommitteeController < ApplicationController
           table.data = @oportunities_data
           table.column_order = @column_order.map(&:first)
           table.split_rows = true
-          table.font_size = 8
-          table.shade_color = Color::RGB::Grey70
-          table.shade_heading_color = Color::RGB::Grey50
-          table.heading_font_size = 10
+          table.font_size = (PDF_FONT_SIZE * 0.75)
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
           table.shade_headings = true
           table.position = :left
           table.orientation = :right
@@ -524,7 +525,7 @@ class FollowUpCommitteeController < ApplicationController
         end
       else
         pdf.text t(:'follow_up_committee.cost_analysis.without_oportunities'),
-          :font_size => 12
+          :font_size => PDF_FONT_SIZE
       end
 
       pdf.custom_save_as(
