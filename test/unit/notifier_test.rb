@@ -96,7 +96,7 @@ class NotifierTest < ActionMailer::TestCase
 
   test 'deliver unanswered findings notification' do
     finding = Finding.confirmed_and_stale.select do |finding|
-      !finding.finding_answers.detect { |fa| fa.user.audited? }
+      !finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
     end
     user = finding.first.users.first
 

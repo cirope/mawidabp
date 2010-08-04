@@ -411,7 +411,7 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
 
-    audited_users = finding.users.select { |u| u.audited? }
+    audited_users = finding.users.select { |u| u.can_act_as_audited? }
 
     unless audited_users.blank?
       body << "<b>#{finding.class.human_attribute_name('user_ids')}:</b> " +

@@ -323,8 +323,8 @@ class User < ActiveRecord::Base
     if self.roles_changed || self.organization_roles.any? { |o_r| o_r.changed? }
       old_user = User.find(self.id)
 
-      if (old_user.auditor? && self.audited?) ||
-          (old_user.audited? && self.auditor?)
+      if (old_user.auditor? && self.can_act_as_audited?) ||
+          (old_user.can_act_as_audited? && self.auditor?)
         unless self.findings.all_for_reallocation.blank?
           self.organization_roles(true)
           self.errors.add :organization_roles, :invalid

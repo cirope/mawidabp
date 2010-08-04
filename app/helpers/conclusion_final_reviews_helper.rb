@@ -130,7 +130,7 @@ module ConclusionFinalReviewsHelper
         "</b> #{I18n.l(finding.solution_date, :format => :long)}"
     end
 
-    audited_users = finding.users.select { |u| u.audited? }
+    audited_users = finding.users.select { |u| u.can_act_as_audited? }
 
     unless audited_users.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(

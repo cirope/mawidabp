@@ -241,7 +241,7 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.users.delete_if { |user| user.audited? }
+    @weakness.users.delete_if { |user| user.can_act_as_audited? }
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
     assert_equal I18n.t(:'weakness.errors.without_audited'),

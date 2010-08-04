@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :detailed_management_report, :extra_params => {},
-  :forms => {:date_filter => true}} %>
+  :forms => {:date_range => true}} %>
 
 <% @audits_by_business_unit.each do |data| -%>
   <% if !data[:external] && !@internal_title_showed -%>

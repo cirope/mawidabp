@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :weaknesses_by_audit_type, :extra_params => {},
-  :forms => {:date_filter => true}} %>
+  :forms => {:date_range => true}} %>
 
 <% @audit_types.each do |type| -%>
   <h1 class="center_title">

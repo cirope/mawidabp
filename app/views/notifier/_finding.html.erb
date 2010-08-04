@@ -26,7 +26,7 @@
     <%=l finding.solution_date, :format => :long %>
   </p>
 <% end -%>
-<% audited, auditors = *finding.users.partition {|u| u.audited?} -%>
+<% audited, auditors = *finding.users.partition(&:can_act_as_audited?) -%>
 
 <p style="margin: .1em 0em;">
   <b><%= t(:'finding.audited', :count => audited.size) %></b>:

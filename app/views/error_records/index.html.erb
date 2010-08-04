@@ -1,7 +1,7 @@
 <% if @query.blank? -%>
   <%= render :partial => 'shared/filter_form',
     :locals => {:action => :index, :extra_params => {},
-    :forms => {:date_filter => true}} %>
+    :forms => {:date_range => true}} %>
 <% end -%>
 
 <%= render :partial => 'shared/search', :locals => {
