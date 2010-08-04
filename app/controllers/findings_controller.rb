@@ -159,8 +159,8 @@ class FindingsController < ApplicationController
 
   # * POST /findings/auto_complete_for_finding_relation
   def auto_complete_for_finding_relation
-    @tokens = params[:finding_relation_data][0..100].split(/[y,]/i).uniq.map(
-      &:strip)
+    @tokens = params[:finding_relation_data][0..100].split(
+      SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
       ("#{Finding.table_name}.id <> :finding_id" unless params[:finding_id].blank?),

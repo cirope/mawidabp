@@ -7,6 +7,7 @@ es:
     "no": "No"
     add: "Agregar"
     add_item: "Agregar ítem"
+    apply_filter: "Aplicar filtro"
     back: "Volver"
     cancel: "Cancelar"
     close: "Cerrar"
@@ -219,6 +220,9 @@ es:
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
+    applied_filters:
+      one: "En este reporte se ha aplicado el siguientes filtro: {{filters}}"
+      other: "En este reporte se han aplicado los siguientes filtros: {{filters}}"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -523,6 +527,9 @@ es:
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
     print_date: "Fecha de impresión: {{date}}"
+    applied_filters:
+      one: "En este reporte se ha aplicado el siguientes filtro: {{filters}}"
+      other: "En este reporte se han aplicado los siguientes filtros: {{filters}}"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"

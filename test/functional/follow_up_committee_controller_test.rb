@@ -84,6 +84,22 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     assert_template 'follow_up_committee/synthesis_report'
   end
 
+  test 'filtered synthesis report' do
+    perform_auth
+    get :synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'three'
+      }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).size
+    assert_template 'follow_up_committee/synthesis_report'
+  end
+
   test 'download synthesis report' do
     perform_auth
     get :synthesis_report, :download => 1, :synthesis_report => {

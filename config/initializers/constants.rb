@@ -66,6 +66,8 @@ PDF_LOGO_SIZE = [352, 90].map { |size| (size / 6.0).round }
 PDF_FONT_SIZE = 11
 # Prefijo para los archivos que no se pueden acceder sin estar autenticado
 PRIVATE_FILES_PREFIX = 'private'.freeze
+# Expresión regular para dividir términos en una búsqueda
+SPLIT_AND_TERMS_REGEXP = /\s+y\s+|\s*[,;]\s*|\s+AND\s+/i
 # Ruta a un archivo para realizar las pruebas
 TEST_FILE = File.join(PUBLIC_PATH, '500.html').freeze
 # Dirección base para formar los links absolutos

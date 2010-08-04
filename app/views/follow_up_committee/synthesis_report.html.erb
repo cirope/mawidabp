@@ -1,18 +1,20 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :synthesis_report, :extra_params => {},
-  :forms => {:date_range => true}} %>
+  :forms => {:date_range => true, :business_unit => true}} %>
 
-<div style="margin: 1em;">
-  <p style="font-size: 1.6em;">
-    <strong>
-      <%= synthesis_report_organization_score_average(@audits_by_business_unit) %>
-    </strong>
-  </p>
-  <p style="font-size: .8em; margin-top: 1em;">
-    <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
-      :audit_types => @audits_by_business_unit.map {|data| data[:name]}.to_sentence) %>
-  </p>
-</div>
+<% unless @selected_business_unit -%>
+  <div style="margin: 1em;">
+    <p style="font-size: 1.6em;">
+      <strong>
+        <%= synthesis_report_organization_score_average(@audits_by_business_unit) %>
+      </strong>
+    </p>
+    <p style="font-size: .8em; margin-top: 1em;">
+      <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+        :audit_types => @audits_by_business_unit.map {|data| data[:name]}.to_sentence) %>
+    </p>
+  </div>
+<% end -%>
 
 <% @audits_by_business_unit.each do |data| -%>
   <% if !data[:external] && !@internal_title_showed -%>
@@ -69,6 +71,5 @@
 <div id="links">
   <%= link_to t(:'label.back'), :action => :index %> |
   <%= link_to t(:'label.download'), :action => :synthesis_report,
-    :synthesis_report => {:from_date => @from_date, :to_date => @to_date},
-    :download => 1 %>
+    :synthesis_report => params[:synthesis_report], :download => 1 %>
 </div>

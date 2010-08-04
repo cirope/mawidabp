@@ -1,0 +1,32 @@
+<div id="business_unit_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div>
+    <table style="border: none; margin: .5em 0em; width: 100%;">
+      <tbody>
+        <tr>
+          <td style="padding-right: 1em; width: 50%;">
+            <p class="form_item" style="margin: 0em;">
+              <% selected = params[action] ?
+                params[action][:business_unit_type] : nil -%>
+              <%= f.label :business_unit_type, BusinessUnitType.human_name,
+                :class => :inline %>
+              <%= f.select :business_unit_type,
+                BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
+                {:prompt => true, :selected => selected},
+                {:class => :inline_item} %>
+            </p>
+          </td>
+          <td style="padding-right: 1em; width: 50%;">
+            <p class="form_item" style="margin: 0em;">
+              <% business_unit_filter = params[action] ?
+                params[action][:business_unit] : nil -%>
+              <%= f.label :business_unit, BusinessUnit.human_name,
+                :class => :inline %>
+              <%= f.text_field :business_unit, :value => business_unit_filter,
+                :maxlength => 255, :class => :inline_item %>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -28,6 +28,32 @@ class ConclusionReview < ActiveRecord::Base
     }
   })
 
+  # Named scopes
+  named_scope :by_business_unit_type, lambda { |business_unit_type|
+    {
+      :include => {
+        :review => {:plan_item => {:business_unit => :business_unit_type}}
+      },
+      :conditions => { "#{BusinessUnitType.table_name}.id" => business_unit_type }
+    }
+  }
+  named_scope :by_business_unit_names, lambda { |*business_unit_names|
+    conditions = []
+    parameters = {}
+
+    business_unit_names.each_with_index do |business_unit_name, i|
+      conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
+      parameters[:"bu_#{i}"] = "%#{business_unit_name}%".downcase
+    end
+
+    {
+      :include => {
+        :review => { :plan_item => :business_unit }
+      },
+      :conditions => [conditions.join(' OR '), parameters]
+    }
+  }
+
   # Callbacks
   before_destroy :can_be_destroyed?
 

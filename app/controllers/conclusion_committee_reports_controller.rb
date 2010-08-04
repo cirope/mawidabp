@@ -31,12 +31,39 @@ class ConclusionCommitteeReportsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @column_order = ['business_unit_report_name', 'review', 'score',
         'process_control', 'weaknesses_count', 'oportunities_count']
+    @filters = []
     @risk_levels = []
     @audits_by_business_unit = []
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date)
 
-    BusinessUnitType.list.each do |but|
+    if params[:synthesis_report]
+      unless params[:synthesis_report][:business_unit_type].blank?
+        @selected_business_unit = BusinessUnitType.find(
+          params[:synthesis_report][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(
+          @selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.human_name}</b> = " +
+          "\"#{@selected_business_unit.name.strip}\""
+      end
+
+      unless params[:synthesis_report][:business_unit].blank?
+        business_units = params[:synthesis_report][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+
+        unless business_units.empty?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(
+            *business_units)
+          @filters << "<b>#{BusinessUnit.human_name}</b> = " +
+            "\"#{params[:synthesis_report][:business_unit].strip}\""
+        end
+      end
+    end
+
+    business_unit_types = @selected_business_unit ?
+      [@selected_business_unit] : BusinessUnitType.list
+
+    business_unit_types.each do |but|
       columns = {'business_unit_report_name' => [but.business_unit_label, 15],
         'review' => [Review.human_name, 16],
         'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
@@ -126,35 +153,37 @@ class ConclusionCommitteeReportsController < ApplicationController
           :from_date => l(@from_date, :format => :long),
           :to_date => l(@to_date, :format => :long)))
 
-      unless @audits_by_business_unit.blank?
-        count = 0
-        total = @audits_by_business_unit.inject(0) do |sum, data|
-          scores = data[:review_scores]
+      unless @selected_business_unit
+        unless @audits_by_business_unit.blank?
+          count = 0
+          total = @audits_by_business_unit.inject(0) do |sum, data|
+            scores = data[:review_scores]
 
-          if scores.blank?
-            sum
-          else
-            count += 1
-            sum + (scores.sum.to_f / scores.size).round
+            if scores.blank?
+              sum
+            else
+              count += 1
+              sum + (scores.sum.to_f / scores.size).round
+            end
           end
+
+          average_score = count > 0 ? (total.to_f / count).round : 100
         end
 
-        average_score = count > 0 ? (total.to_f / count).round : 100
+        pdf.move_pointer PDF_FONT_SIZE
+
+        pdf.add_title(
+          t(:'conclusion_committee_report.synthesis_report.organization_score',
+            :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
+
+        pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
+
+        pdf.text(
+          t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+            :audit_types =>
+              @audits_by_business_unit.map {|data| data[:name]}.to_sentence),
+          :font_size => (PDF_FONT_SIZE * 0.75).round)
       end
-
-      pdf.move_pointer PDF_FONT_SIZE
-
-      pdf.add_title(
-        t(:'conclusion_committee_report.synthesis_report.organization_score',
-          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
-
-      pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
-
-      pdf.text(
-        t(:'conclusion_committee_report.synthesis_report.organization_score_note',
-          :audit_types =>
-            @audits_by_business_unit.map {|data| data[:name]}.to_sentence),
-        :font_size => (PDF_FONT_SIZE * 0.75).round)
 
       @audits_by_business_unit.each do |data|
         columns = data[:columns]
@@ -231,6 +260,13 @@ class ConclusionCommitteeReportsController < ApplicationController
           pdf.text(
             t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period'))
         end
+      end
+
+      unless @filters.empty?
+        pdf.move_pointer PDF_FONT_SIZE
+        pdf.text t(:'conclusion_committee_report.applied_filters',
+          :filters => @filters.to_sentence, :count => @filters.size),
+          :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
       end
 
       pdf.move_pointer PDF_FONT_SIZE

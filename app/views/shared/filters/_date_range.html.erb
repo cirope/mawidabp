@@ -1,9 +1,9 @@
 <div id="date_filter" class="filter" <%= 'style="display: none;"' unless display %>>
   <div>
-    <table style="border: none; margin: 0em;">
+    <table style="border: none; margin: .5em 0em; width: 100%;">
       <tbody>
         <tr>
-          <td style="padding-right: 1em;">
+          <td style="padding-right: 1em; width: 50%;">
             <p class="form_item" style="margin: 0em;">
               <%= f.label :from_date, t(:'conclusion_committee_report.from_date'),
                 :class => :inline %>
@@ -11,17 +11,13 @@
                 :class => :inline_item %>
             </p>
           </td>
-          <td style="padding-right: 1em;">
+          <td style="padding-right: 1em; width: 50%;">
             <p class="form_item" style="margin: 0em;">
               <%= f.label :to_date, t(:'conclusion_committee_report.to_date'),
                 :class => :inline %>
               <%= f.calendar_date_select :to_date, :value => l(@to_date),
                 :class => :inline_item %>
             </p>
-          </td>
-          <td>
-            <span class="button"><%= f.submit t(:'label.update'),
-              :style => 'margin: 0em;' %></span>
           </td>
         </tr>
       </tbody>
