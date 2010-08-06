@@ -99,7 +99,7 @@ class HelpContentsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'help_content.stale_object_error'
+    flash[:alert] = t :'help_content.stale_object_error'
     redirect_to :action => :edit
   end
 

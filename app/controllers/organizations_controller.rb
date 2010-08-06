@@ -120,7 +120,7 @@ class OrganizationsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'organization.stale_object_error'
+    flash[:alert] = t :'organization.stale_object_error'
     redirect_to :action => :edit
   end
 

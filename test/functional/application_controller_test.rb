@@ -59,7 +59,7 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_nil @controller.instance_variable_get(:@auth_user)
     assert_redirected_to login_users_url
     assert_equal I18n.t(:'message.session_time_expired'),
-      @controller.send(:flash)[:notice]
+      @controller.send(:flash)[:alert]
   end
 
   test 'redirect to index function' do
@@ -120,7 +120,7 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send('action_name=', 'index')
 
     @controller.send(:check_privileges)
-    assert_not_nil  @controller.send(:flash)[:notice]
+    assert_not_nil  @controller.send(:flash)[:alert]
     assert_redirected_to login_users_url
   end
 

@@ -90,6 +90,11 @@ div#actions * {
     display: inline;
 }
 
+div#alert {
+    background: #aa0000;
+    color: #ffffff;
+}
+
 div#app_content {
     position: relative;
 }
@@ -325,12 +330,15 @@ div#menu_level_2 li {
 }
 
 div#notice {
+    background: #151215;
+    color: #ffffff;
+}
+
+div#notice, div#alert {
     position: fixed;
     bottom: .5em;
     left: 5%;
     right: 5%;
-    background: #aa0000;
-    color: #ffffff;
     font-weight: bold;
     font-size: 1.4em;
     text-align: center;
@@ -338,7 +346,7 @@ div#notice {
     border: 4px solid #c2bfb7;
 }
 
-div#notice div#close_notice {
+div#notice div#close_notice, div#alert div#close_alert {
     position: absolute;
     top: .5em;
     right: 1em;
@@ -347,7 +355,7 @@ div#notice div#close_notice {
     border: 2px solid #c2bfb7;
 }
 
-div#notice div#close_notice a {
+div#notice div#close_notice a, div#alert div#close_alert a {
     background: inherit;
     color: #c2bfb7;
     text-decoration: none;

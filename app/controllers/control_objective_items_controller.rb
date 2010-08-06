@@ -102,7 +102,7 @@ class ControlObjectiveItemsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash[:notice] = t :'control_objective_item.stale_object_error'
+      flash[:alert] = t :'control_objective_item.stale_object_error'
       redirect_to :action => :edit
   end
 

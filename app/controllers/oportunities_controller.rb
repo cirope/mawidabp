@@ -139,7 +139,7 @@ class OportunitiesController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'oportunity.stale_object_error'
+    flash[:alert] = t :'oportunity.stale_object_error'
     redirect_to :action => :edit
   end
 

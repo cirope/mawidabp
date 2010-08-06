@@ -137,7 +137,7 @@ class PlansController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'plan.stale_object_error'
+    flash[:alert] = t :'plan.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -149,7 +149,7 @@ class PlansController < ApplicationController
     @plan = find_with_organization(params[:id])
 
     unless @plan.destroy
-      flash[:notice] = t :'plan.errors.can_not_be_destroyed'
+      flash[:alert] = t :'plan.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

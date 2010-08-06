@@ -137,7 +137,7 @@ class WorkflowsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'workflow.stale_object_error'
+    flash[:alert] = t :'workflow.stale_object_error'
     redirect_to :action => :edit
   end
 

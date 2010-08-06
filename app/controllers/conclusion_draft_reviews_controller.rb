@@ -116,7 +116,7 @@ class ConclusionDraftReviewsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash[:notice] = t :'conclusion_draft_review.stale_object_error'
+      flash[:alert] = t :'conclusion_draft_review.stale_object_error'
       redirect_to :action => :edit
   end
 
@@ -247,7 +247,7 @@ class ConclusionDraftReviewsController < ApplicationController
         render :action => :compose_email
       end
     elsif @conclusion_draft_review.try(:review)
-      flash[:notice] = t(:'conclusion_review.review_not_approved')
+      flash[:alert] = t(:'conclusion_review.review_not_approved')
       render :action => :compose_email
     else
       redirect_to conclusion_draft_reviews_path

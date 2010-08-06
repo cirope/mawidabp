@@ -13,7 +13,7 @@ class PlansControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
     public_actions.each do |action|
@@ -283,7 +283,7 @@ class PlansControllerTest < ActionController::TestCase
       delete :destroy, :id => plans(:current_plan).id
     end
 
-    assert_equal I18n.t(:'plan.errors.can_not_be_destroyed'), flash[:notice]
+    assert_equal I18n.t(:'plan.errors.can_not_be_destroyed'), flash[:alert]
     assert_redirected_to plans_path
   end
 

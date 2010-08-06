@@ -133,7 +133,7 @@ class ProcedureControlsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'procedure_control.stale_object_error'
+    flash[:alert] = t :'procedure_control.stale_object_error'
     redirect_to :action => :edit
   end
 

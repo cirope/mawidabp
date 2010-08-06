@@ -63,7 +63,7 @@ class NotificationsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'notification.stale_object_error'
+    flash[:alert] = t :'notification.stale_object_error'
     redirect_to :action => :edit
   end
 

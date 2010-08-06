@@ -17,7 +17,7 @@ class PeriodsControllerTest < ActionController::TestCase
     @private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
     @public_actions.each do |action|
@@ -136,7 +136,7 @@ class PeriodsControllerTest < ActionController::TestCase
       I18n.t(:'period.errors.has_workflows', :count => period.workflows.size),
       I18n.t(:'period.errors.has_procedure_controls',
         :count => period.procedure_controls.size)].join(APP_ENUM_SEPARATOR),
-      flash[:notice]
+      flash[:alert]
     assert_redirected_to periods_path
   end
 end

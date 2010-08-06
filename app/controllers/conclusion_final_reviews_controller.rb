@@ -137,7 +137,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'conclusion_final_review.stale_object_error'
+    flash[:alert] = t :'conclusion_final_review.stale_object_error'
     redirect_to :action => :edit
   end
 

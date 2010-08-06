@@ -101,7 +101,7 @@ class PeriodsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'period.stale_object_error'
+    flash[:alert] = t :'period.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -113,7 +113,7 @@ class PeriodsController < ApplicationController
     @period = find_with_organization(params[:id])
 
     unless @period.destroy
-      flash[:notice] = ([t(:'period.errors.can_not_be_destroyed')] +
+      flash[:alert] = ([t(:'period.errors.can_not_be_destroyed')] +
           @period.errors.full_messages).join(APP_ENUM_SEPARATOR)
     end
 

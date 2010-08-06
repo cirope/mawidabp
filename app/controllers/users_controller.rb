@@ -141,7 +141,7 @@ class UsersController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'user.stale_object_error'
+    flash[:alert] = t :'user.stale_object_error'
     redirect_to edit_user_url(@user)
   end
 
@@ -153,7 +153,7 @@ class UsersController < ApplicationController
     @user = find_with_organization(params[:id])
     
     unless @user.disable!
-      flash[:notice] = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
+      flash[:alert] = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else
       flash[:notice] = t :'user.correctly_disabled'
     end
@@ -261,7 +261,7 @@ class UsersController < ApplicationController
           unless auth_user.allow_concurrent_access?
             auth_user = nil
             @user = User.new
-            flash[:notice] = t :'message.you_are_already_logged'
+            flash[:alert] = t :'message.you_are_already_logged'
 
             render :action => :login
           end
@@ -310,7 +310,7 @@ class UsersController < ApplicationController
         end
 
         @user.password = nil
-        flash[:notice] = t :'message.invalid_user_or_password'
+        flash[:alert] = t :'message.invalid_user_or_password'
         render :action => :login
       end
     else
@@ -356,7 +356,7 @@ class UsersController < ApplicationController
 
     unless @auth_user
       restart_session
-      redirect_to_login t(:'user.confirmation_link_invalid')
+      redirect_to_login t(:'user.confirmation_link_invalid'), :alert
     else
       @auth_user.password = nil
     end
@@ -404,11 +404,11 @@ class UsersController < ApplicationController
       @auth_user.password, @auth_user.password_confirmation = nil, nil
     else
       restart_session
-      redirect_to_login t(:'user.confirmation_link_invalid')
+      redirect_to_login t(:'user.confirmation_link_invalid'), :alert
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'user.password_stale_object_error'
+    flash[:alert] = t :'user.password_stale_object_error'
     redirect_to edit_password_user_url(@auth_user)
   end
 
@@ -424,7 +424,7 @@ class UsersController < ApplicationController
       render :layout => 'application_clean'
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated')
+      redirect_to_login t(:'message.must_be_authenticated'), :alert
     end
   end
 
@@ -446,7 +446,7 @@ class UsersController < ApplicationController
       end
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated')
+      redirect_to_login t(:'message.must_be_authenticated'), :alert
     end
   end
 
@@ -464,7 +464,7 @@ class UsersController < ApplicationController
       end
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated')
+      redirect_to_login t(:'message.must_be_authenticated'), :alert
     end
   end
 
@@ -501,7 +501,7 @@ class UsersController < ApplicationController
     render :action => :edit_personal_data
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'user.password_stale_object_error'
+    flash[:alert] = t :'user.password_stale_object_error'
     redirect_to edit_personal_data_user_url(@auth_user)
   end
 
@@ -540,7 +540,7 @@ class UsersController < ApplicationController
       @user.errors.add_to_base t(:'user.errors.must_select_a_user')
       render :action => :reassignment_edit
     else
-      flash[:notice] = t(:'user.user_reassignment_failed')
+      flash[:alert] = t(:'user.user_reassignment_failed')
       render :action => :reassignment_edit
     end
   end
@@ -573,7 +573,7 @@ class UsersController < ApplicationController
       flash[:notice] = t(:'user.user_release_completed')
       redirect_to users_path
     else
-      flash[:notice] = t(:'user.user_release_failed')
+      flash[:alert] = t(:'user.user_release_failed')
       render :action => :reassignment_edit
     end
   end

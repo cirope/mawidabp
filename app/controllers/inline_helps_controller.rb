@@ -94,7 +94,7 @@ class InlineHelpsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'inline_help.stale_object_error'
+    flash[:alert] = t :'inline_help.stale_object_error'
     redirect_to :action => :edit
   end
 

@@ -83,7 +83,7 @@ class ParametersController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'parameter.stale_object_error'
+    flash[:alert] = t :'parameter.stale_object_error'
     redirect_to :action => :edit
   end
 

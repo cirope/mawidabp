@@ -123,7 +123,7 @@ class ReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'review.stale_object_error'
+    flash[:alert] = t :'review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -135,7 +135,7 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     unless @review.destroy
-      flash[:notice] = t :'review.errors.can_not_be_destroyed'
+      flash[:alert] = t :'review.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

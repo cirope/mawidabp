@@ -18,7 +18,7 @@ class ReviewsControllerTest < ActionController::TestCase
     @private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:notice]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
     @public_actions.each do |action|
@@ -316,7 +316,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to reviews_path
-    assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash[:notice]
+    assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash[:alert]
   end
 
   test 'review data' do

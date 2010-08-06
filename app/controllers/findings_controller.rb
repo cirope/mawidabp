@@ -113,7 +113,7 @@ class FindingsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'finding.stale_object_error'
+    flash[:alert] = t :'finding.stale_object_error'
     redirect_to :action => :edit
   end
 

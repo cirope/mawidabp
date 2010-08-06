@@ -103,7 +103,7 @@ class ResourceClassesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:notice] = t :'resource_class.stale_object_error'
+    flash[:alert] = t :'resource_class.stale_object_error'
     redirect_to :action => :edit
   end
 

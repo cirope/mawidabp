@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
       go_to = request.path
       session[:go_to] = go_to unless action == :logout || request.xhr?
       @auth_user = nil
-      redirect_to_login t(:'message.must_be_authenticated')
+      redirect_to_login t(:'message.must_be_authenticated'), :alert
     else
       I18n.locale = @auth_user.language
       check_access_time
@@ -147,21 +147,21 @@ class ApplicationController < ActionController::Base
       go_to = request.path
       session[:go_to] = params[:action].try(:to_sym) != :logout ? go_to : nil
       @auth_user = nil
-      redirect_to_login t(:'message.session_time_expired')
+      redirect_to_login t(:'message.session_time_expired'), :alert
     end
   end
 
   # Redirige la navegación a la página por defecto
   # _message_:: Mensaje que se mostrará luego de la redirección
-  def redirect_to_index(message = nil) #:doc:
-    flash[:notice] = message if message
+  def redirect_to_index(message = nil, type = :notice) #:doc:
+    flash[type] = message if message
     redirect_to :action => :index
   end
 
   # Redirige la navegación a la página de autenticación
   # _message_:: Mensaje que se mostrará luego de la redirección
-  def redirect_to_login(message = nil) #:doc:
-    flash[:notice] = message if message
+  def redirect_to_login(message = nil, type = :notice) #:doc:
+    flash[type] = message if message
     redirect_to login_users_path
   end
 
@@ -213,7 +213,7 @@ class ApplicationController < ActionController::Base
 
     unless allowed_by_type && allowed_by_privileges
       unless request.xhr?
-        flash[:notice] = t(:'message.insufficient_privileges')
+        flash[:alert] = t(:'message.insufficient_privileges')
         redirect_to :back
       else
         render :partial => 'shared/ajax_message', :layout => false,
@@ -223,18 +223,18 @@ class ApplicationController < ActionController::Base
 
   rescue ActionController::RedirectBackError
     restart_session
-    redirect_to_login t(:'message.insufficient_privileges')
+    redirect_to_login t(:'message.insufficient_privileges'), :alert
   end
 
   def check_group_admin
     unless @auth_user.group_admin == true
-      flash[:notice] = t(:'message.insufficient_privileges')
+      flash[:alert] = t(:'message.insufficient_privileges')
       redirect_to :back
     end
 
   rescue ActionController::RedirectBackError
     restart_session
-    redirect_to_login t(:'message.insufficient_privileges')
+    redirect_to_login t(:'message.insufficient_privileges'), :alert
   end
 
   # Crea un archivo en un directorio propio del usuario a partir de una

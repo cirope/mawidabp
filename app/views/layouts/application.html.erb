@@ -38,6 +38,7 @@
         </div>
         <div style="clear: both; margin: 0px; padding: 0px;">&nbsp;</div>
         <%= render :partial => 'shared/notice' if flash[:notice] %>
+        <%= render :partial => 'shared/alert' if flash[:alert] %>
       </div>
     </div>
     <% javascript_tag do -%>
