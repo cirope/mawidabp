@@ -4,24 +4,20 @@ require 'test_helper'
 class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   fixtures :findings
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :synthesis_report, :weaknesses_by_state,
-      :weaknesses_by_risk, :weaknesses_by_audit_type]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
+    public_actions = []
+    private_actions = [:index, :synthesis_report, :weaknesses_by_state,
+      :weaknesses_by_risk, :weaknesses_by_audit_type]
+
+    private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
-    @public_actions.each do |action|
+    public_actions.each do |action|
       get action
       assert_response :success
     end
@@ -72,13 +68,15 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/synthesis_report'
   end
 
-  test 'download synthesis report' do
+  test 'create synthesis report' do
     perform_auth
 
-    get :synthesis_report, :download => 1, :synthesis_report => {
+    get :create_synthesis_report, :synthesis_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.synthesis_report.pdf_name',
@@ -96,7 +94,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_state'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_state, :weaknesses_by_state => {
+      get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -107,13 +105,14 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_state'
   end
 
-  test 'download weaknesses by state report' do
+  test 'create weaknesses by state report' do
     perform_auth
 
-    get :weaknesses_by_state, :download => 1, :weaknesses_by_state => {
+    get :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.weaknesses_by_state.pdf_name',
@@ -131,7 +130,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_risk'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_risk, :weaknesses_by_risk => {
+      get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -142,13 +141,14 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_risk'
   end
 
-  test 'download weaknesses by risk report' do
+  test 'create weaknesses by risk report' do
     perform_auth
 
-    get :weaknesses_by_risk, :download => 1, :weaknesses_by_risk => {
+    post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.weaknesses_by_risk.pdf_name',
@@ -166,7 +166,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_audit_type'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
+      get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -177,14 +177,15 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/weaknesses_by_audit_type'
   end
 
-  test 'download weaknesses by audit type report' do
+  test 'create weaknesses by audit type report' do
     perform_auth
 
-    get :weaknesses_by_audit_type, :download => 1,
+    post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
@@ -215,14 +216,15 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/cost_analysis'
   end
 
-  test 'download cost analysis report' do
+  test 'create cost analysis report' do
     perform_auth
 
-    get :cost_analysis, :download => 1,
+    post :create_cost_analysis,
       :cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.cost_analysis.pdf_name',
@@ -253,14 +255,15 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/cost_analysis'
   end
 
-  test 'download detailed cost analysis report' do
+  test 'create detailed cost analysis report' do
     perform_auth
 
-    get :cost_analysis, :include_details => 1, :download => 1,
+    post :create_cost_analysis, :include_details => 1,
       :cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'conclusion_committee_report.cost_analysis.pdf_name',

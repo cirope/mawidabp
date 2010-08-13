@@ -42,7 +42,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/detailed_management_report'
 
     assert_nothing_raised(Exception) do
-      post :detailed_management_report, :detailed_management_report => {
+      get :detailed_management_report, :detailed_management_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -53,13 +53,15 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/detailed_management_report'
   end
 
-  test 'download detailed management report' do
+  test 'create detailed management report' do
     perform_auth
 
-    get :detailed_management_report, :download => 1, :detailed_management_report => {
+    post :create_detailed_management_report, :detailed_management_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'execution_reports.detailed_management_report.pdf_name',
@@ -77,7 +79,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/weaknesses_by_state'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_state, :weaknesses_by_state => {
+      get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -88,12 +90,13 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/weaknesses_by_state'
   end
 
-  test 'download weaknesses by state report' do
+  test 'create weaknesses by state report' do
     perform_auth
-    get :weaknesses_by_state, :download => 1, :weaknesses_by_state => {
+    post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-    }
+    },
+    :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'execution_reports.weaknesses_by_state.pdf_name',

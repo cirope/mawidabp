@@ -25,8 +25,11 @@ class FollowUpAuditController < ApplicationController
   def load_privileges #:nodoc:
     @action_privileges.update({
         :weaknesses_by_state => :read,
+        :create_weaknesses_by_state => :read,
         :weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read
+        :create_weaknesses_by_risk => :read,
+        :weaknesses_by_audit_type => :read,
+        :create_weaknesses_by_audit_type => :read
       })
   end
 end

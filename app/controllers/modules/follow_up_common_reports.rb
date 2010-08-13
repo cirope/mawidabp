@@ -45,127 +45,128 @@ module FollowUpCommonReports
       @being_implemented_resumes[audit_type] =
         being_implemented_resume_from_counts(being_implemented_counts)
     end
+  end
 
-    unless params[:download].blank?
-      pdf = PDF::Writer.create_generic_pdf :landscape
+  def create_weaknesses_by_state
+    self.weaknesses_by_state
 
-      pdf.add_generic_report_header @auth_organization
+    pdf = PDF::Writer.create_generic_pdf :landscape
 
-      pdf.add_title t(:'follow_up_committee.weaknesses_by_state.title'),
-        PDF_FONT_SIZE, :center
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t(:'follow_up_committee.period.title'),
+      t(:'follow_up_committee.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    @audit_types.each do |type|
+      weaknesses_count = @weaknesses_counts["#{type}_weaknesses"]
+      oportunities_count = @weaknesses_counts["#{type}_oportunities"]
+      total_weaknesses = weaknesses_count.values.sum
+      total_oportunities = oportunities_count.values.sum
 
       pdf.move_pointer PDF_FONT_SIZE * 2
 
-      pdf.add_description_item(
-        t(:'follow_up_committee.period.title'),
-        t(:'follow_up_committee.period.range',
-          :from_date => l(@from_date, :format => :long),
-          :to_date => l(@to_date, :format => :long)))
+       pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
+        (PDF_FONT_SIZE * 1.25).round, :center
 
-      @audit_types.each do |type|
-        weaknesses_count = @weaknesses_counts["#{type}_weaknesses"]
-        oportunities_count = @weaknesses_counts["#{type}_oportunities"]
-        total_weaknesses = weaknesses_count.values.sum
-        total_oportunities = oportunities_count.values.sum
+      pdf.move_pointer PDF_FONT_SIZE
 
-        pdf.move_pointer PDF_FONT_SIZE * 2
+      if (total_weaknesses + total_oportunities) > 0
+        columns = {
+          'state' => [Finding.human_attribute_name('state'), 30],
+          'weaknesses_count' => [
+            t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+            type == :internal ? 35 : 70]
+        }
+        column_data = []
 
-         pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-          (PDF_FONT_SIZE * 1.25).round, :center
+        if type == :internal
+          columns['oportunities_count'] = [
+            t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+        end
 
-        pdf.move_pointer PDF_FONT_SIZE
-
-        if (total_weaknesses + total_oportunities) > 0
-          columns = {
-            'state' => [Finding.human_attribute_name('state'), 30],
-            'weaknesses_count' => [
-              t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-              type == :internal ? 35 : 70]
-          }
-          column_data = []
-
-          if type == :internal
-            columns['oportunities_count'] = [
-              t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+        columns.each do |col_name, col_data|
+          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+            column.heading = col_data.first
+            column.width = pdf.percent_width col_data.last
           end
+        end
 
-          columns.each do |col_name, col_data|
-            columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-              column.heading = col_data.first
-              column.width = pdf.percent_width col_data.last
-            end
-          end
-
-          @status.each do |state|
-            w_count = weaknesses_count[state.last] || 0
-            o_count = oportunities_count[state.last] || 0
-            weaknesses_percentage = total_weaknesses > 0 ?
-              w_count.to_f / total_weaknesses * 100 : 0.0
-            oportunities_percentage = total_oportunities > 0 ?
-              o_count.to_f / total_oportunities * 100 : 0.0
-
-            column_data << {
-              'state' => "<b>#{t("finding.status_#{state.first}")}</b>".to_iso,
-              'weaknesses_count' =>
-                "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-              'oportunities_count' =>
-                "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
-            }
-
-            if state.first == :being_implemented
-              if column_data.last['weaknesses_count'] != '0'
-                column_data.last['weaknesses_count'] << ' *'
-              end
-            end
-          end
+        @status.each do |state|
+          w_count = weaknesses_count[state.last] || 0
+          o_count = oportunities_count[state.last] || 0
+          weaknesses_percentage = total_weaknesses > 0 ?
+            w_count.to_f / total_weaknesses * 100 : 0.0
+          oportunities_percentage = total_oportunities > 0 ?
+            o_count.to_f / total_oportunities * 100 : 0.0
 
           column_data << {
-            'state' =>
-              "<b>#{t(:'follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
-            'weaknesses_count' => "<b>#{total_weaknesses}</b>",
-            'oportunities_count' => "<b>#{total_oportunities}</b>"
+            'state' => "<b>#{t("finding.status_#{state.first}")}</b>".to_iso,
+            'weaknesses_count' =>
+              "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
+            'oportunities_count' =>
+              "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
           }
 
-          unless column_data.blank?
-            PDF::SimpleTable.new do |table|
-              table.width = pdf.page_usable_width
-              table.columns = columns
-              table.data = column_data
-              table.column_order = type == :internal ?
-                ['state', 'weaknesses_count', 'oportunities_count'] :
-                ['state', 'weaknesses_count']
-              table.split_rows = true
-              table.font_size = PDF_FONT_SIZE
-              table.row_gap = (PDF_FONT_SIZE * 0.5).round
-              table.shade_rows = :none
-              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-              table.heading_font_size = PDF_FONT_SIZE
-              table.shade_headings = true
-              table.bold_headings = true
-              table.position = :left
-              table.orientation = :right
-              table.show_lines = :all
-              table.render_on pdf
+          if state.first == :being_implemented
+            if column_data.last['weaknesses_count'] != '0'
+              column_data.last['weaknesses_count'] << ' *'
             end
           end
-
-          add_being_implemented_resume(pdf, @being_implemented_resumes[type])
-        else
-          pdf.text t(:'follow_up_committee.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE
         end
+
+        column_data << {
+          'state' =>
+            "<b>#{t(:'follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
+          'weaknesses_count' => "<b>#{total_weaknesses}</b>",
+          'oportunities_count' => "<b>#{total_oportunities}</b>"
+        }
+
+        unless column_data.blank?
+          PDF::SimpleTable.new do |table|
+            table.width = pdf.page_usable_width
+            table.columns = columns
+            table.data = column_data
+            table.column_order = type == :internal ?
+              ['state', 'weaknesses_count', 'oportunities_count'] :
+              ['state', 'weaknesses_count']
+            table.split_rows = true
+            table.font_size = PDF_FONT_SIZE
+            table.row_gap = (PDF_FONT_SIZE * 0.5).round
+            table.shade_rows = :none
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
+            table.shade_headings = true
+            table.bold_headings = true
+            table.position = :left
+            table.orientation = :right
+            table.show_lines = :all
+            table.render_on pdf
+          end
+        end
+
+        add_being_implemented_resume(pdf, @being_implemented_resumes[type])
+      else
+        pdf.text t(:'follow_up_committee.without_weaknesses'),
+          :font_size => PDF_FONT_SIZE
       end
-
-      pdf.custom_save_as(
-        t(:'follow_up_committee.weaknesses_by_state.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_state', 0)
-
-      redirect_to PDF::Writer.relative_path(
-        t(:'follow_up_committee.weaknesses_by_state.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_state', 0)
     end
+
+    pdf.custom_save_as(
+      t(:'follow_up_committee.weaknesses_by_state.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_state', 0)
+
+    redirect_to PDF::Writer.relative_path(
+      t(:'follow_up_committee.weaknesses_by_state.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_state', 0)
   end
 
   def weaknesses_by_risk
@@ -225,46 +226,47 @@ module FollowUpCommonReports
       @tables_data[audit_type] = get_weaknesses_synthesis_table_data(
         weaknesses_count, weaknesses_count_by_risk, risk_levels)
     end
+  end
 
-    unless params[:download].blank?
-      pdf = PDF::Writer.create_generic_pdf :landscape
+  def create_weaknesses_by_risk
+    self.weaknesses_by_risk
 
-      pdf.add_generic_report_header @auth_organization
+    pdf = PDF::Writer.create_generic_pdf :landscape
 
-      pdf.add_title t(:'follow_up_committee.weaknesses_by_risk.title'),
-        PDF_FONT_SIZE, :center
+    pdf.add_generic_report_header @auth_organization
 
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t(:'follow_up_committee.period.title'),
+      t(:'follow_up_committee.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    @audit_types.each do |type|
       pdf.move_pointer PDF_FONT_SIZE * 2
 
-      pdf.add_description_item(
-        t(:'follow_up_committee.period.title'),
-        t(:'follow_up_committee.period.range',
-          :from_date => l(@from_date, :format => :long),
-          :to_date => l(@to_date, :format => :long)))
+      pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
+        (PDF_FONT_SIZE * 1.25).round, :center
 
-      @audit_types.each do |type|
-        pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_pointer PDF_FONT_SIZE
 
-        pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
-          (PDF_FONT_SIZE * 1.25).round, :center
+      add_weaknesses_synthesis_table(pdf, @tables_data[type])
 
-        pdf.move_pointer PDF_FONT_SIZE
-
-        add_weaknesses_synthesis_table(pdf, @tables_data[type])
-
-        add_being_implemented_resume(pdf, @being_implemented_resumes[type])
-      end
-
-      pdf.custom_save_as(
-        t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk', 0)
-
-      redirect_to PDF::Writer.relative_path(
-        t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk', 0)
+      add_being_implemented_resume(pdf, @being_implemented_resumes[type])
     end
+
+    pdf.custom_save_as(
+      t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk', 0)
+
+    redirect_to PDF::Writer.relative_path(
+      t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk', 0)
   end
   
   def weaknesses_by_audit_type
@@ -399,139 +401,140 @@ module FollowUpCommonReports
         }
       end
     end
+  end
 
-    unless params[:download].blank?
-      pdf = PDF::Writer.create_generic_pdf :landscape
+  def create_weaknesses_by_audit_type
+    self.weaknesses_by_audit_type
 
-      pdf.add_generic_report_header @auth_organization
+    pdf = PDF::Writer.create_generic_pdf :landscape
 
-      pdf.add_title t(:'follow_up_committee.weaknesses_by_audit_type.title'),
-        PDF_FONT_SIZE, :center
+    pdf.add_generic_report_header @auth_organization
 
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t(:'follow_up_committee.period.title'),
+      t(:'follow_up_committee.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    @audit_types.each do |type|
       pdf.move_pointer PDF_FONT_SIZE * 2
 
-      pdf.add_description_item(
-        t(:'follow_up_committee.period.title'),
-        t(:'follow_up_committee.period.range',
-          :from_date => l(@from_date, :format => :long),
-          :to_date => l(@to_date, :format => :long)))
+      pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
+        (PDF_FONT_SIZE * 1.25).round, :center
 
-      @audit_types.each do |type|
-        pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_pointer PDF_FONT_SIZE
 
-        pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-          (PDF_FONT_SIZE * 1.25).round, :center
+      unless @data[type].blank?
+        @data[type].each do |data_item|
+          pdf.move_pointer PDF_FONT_SIZE
+          pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
-        pdf.move_pointer PDF_FONT_SIZE
-
-        unless @data[type].blank?
-          @data[type].each do |data_item|
+          data_item[:business_units].each do |bu, bu_data|
             pdf.move_pointer PDF_FONT_SIZE
-            pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
-            data_item[:business_units].each do |bu, bu_data|
-              pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_description_item(
+              bu.business_unit_type.business_unit_label, bu.name)
+            pdf.move_pointer PDF_FONT_SIZE
 
-              pdf.add_description_item(
-                bu.business_unit_type.business_unit_label, bu.name)
-              pdf.move_pointer PDF_FONT_SIZE
+            pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
+            pdf.move_pointer PDF_FONT_SIZE
 
-              pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
-              pdf.move_pointer PDF_FONT_SIZE
+            bu_data[:conclusion_reviews].each do |cr|
+              findings_count = cr.review.weaknesses.size +
+                cr.review.oportunities.size
 
-              bu_data[:conclusion_reviews].each do |cr|
-                findings_count = cr.review.weaknesses.size +
-                  cr.review.oportunities.size
+              text = "<C:bullet /> <b>#{cr.review}</b>: " +
+                cr.review.score_text
 
-                text = "<C:bullet /> <b>#{cr.review}</b>: " +
-                  cr.review.score_text
-
-                if findings_count == 0
-                  text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
-                end
-
-                pdf.text text, :left => PDF_FONT_SIZE * 2
+              if findings_count == 0
+                text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
               end
 
+              pdf.text text, :left => PDF_FONT_SIZE * 2
+            end
+
+            pdf.move_pointer PDF_FONT_SIZE
+
+            pdf.add_title(
+              t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'),
+              PDF_FONT_SIZE)
+
+            pdf.move_pointer PDF_FONT_SIZE
+
+            add_weaknesses_synthesis_table(pdf,
+              bu_data[:weaknesses_table_data], 10)
+            add_being_implemented_resume(pdf,
+              bu_data[:being_implemented_resume])
+
+            if type == :internal
               pdf.move_pointer PDF_FONT_SIZE
 
               pdf.add_title(
-                t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'),
+                t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'),
                 PDF_FONT_SIZE)
 
               pdf.move_pointer PDF_FONT_SIZE
 
-              add_weaknesses_synthesis_table(pdf,
-                bu_data[:weaknesses_table_data], 10)
-              add_being_implemented_resume(pdf,
-                bu_data[:being_implemented_resume])
+              unless bu_data[:oportunities_table_data].blank?
+                columns = {
+                  'state' => [Oportunity.human_attribute_name('state'), 30],
+                  'count' => [Oportunity.human_attribute_name('count'), 70]
+                }
 
-              if type == :internal
-                pdf.move_pointer PDF_FONT_SIZE
-
-                pdf.add_title(
-                  t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'),
-                  PDF_FONT_SIZE)
-
-                pdf.move_pointer PDF_FONT_SIZE
+                columns.each do |col_name, col_data|
+                  columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+                    column.heading = col_data.first
+                    column.width = pdf.percent_width col_data.last
+                  end
+                end
 
                 unless bu_data[:oportunities_table_data].blank?
-                  columns = {
-                    'state' => [Oportunity.human_attribute_name('state'), 30],
-                    'count' => [Oportunity.human_attribute_name('count'), 70]
-                  }
-
-                  columns.each do |col_name, col_data|
-                    columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-                      column.heading = col_data.first
-                      column.width = pdf.percent_width col_data.last
-                    end
+                  PDF::SimpleTable.new do |table|
+                    table.width = pdf.page_usable_width
+                    table.columns = columns
+                    table.data = bu_data[:oportunities_table_data]
+                    table.column_order = ['state', 'count']
+                    table.split_rows = true
+                    table.font_size = PDF_FONT_SIZE
+                    table.row_gap = (PDF_FONT_SIZE * 0.5).round
+                    table.shade_rows = :none
+                    table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                    table.heading_font_size = PDF_FONT_SIZE
+                    table.shade_headings = true
+                    table.bold_headings = true
+                    table.position = :left
+                    table.orientation = :right
+                    table.show_lines = :all
+                    table.render_on pdf
                   end
-
-                  unless bu_data[:oportunities_table_data].blank?
-                    PDF::SimpleTable.new do |table|
-                      table.width = pdf.page_usable_width
-                      table.columns = columns
-                      table.data = bu_data[:oportunities_table_data]
-                      table.column_order = ['state', 'count']
-                      table.split_rows = true
-                      table.font_size = PDF_FONT_SIZE
-                      table.row_gap = (PDF_FONT_SIZE * 0.5).round
-                      table.shade_rows = :none
-                      table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-                      table.heading_font_size = PDF_FONT_SIZE
-                      table.shade_headings = true
-                      table.bold_headings = true
-                      table.position = :left
-                      table.orientation = :right
-                      table.show_lines = :all
-                      table.render_on pdf
-                    end
-                  end
-                else
-                  pdf.text t(:'follow_up_committee.without_oportunities')
                 end
+              else
+                pdf.text t(:'follow_up_committee.without_oportunities')
               end
             end
           end
-        else
-          pdf.text t(:'follow_up_committee.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE
         end
+      else
+        pdf.text t(:'follow_up_committee.without_weaknesses'),
+          :font_size => PDF_FONT_SIZE
       end
-
-      pdf.custom_save_as(
-        t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_audit_type',
-        0)
-
-      redirect_to PDF::Writer.relative_path(
-        t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
-          :from_date => @from_date.to_formatted_s(:db),
-          :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_audit_type',
-        0)
     end
+
+    pdf.custom_save_as(
+      t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_audit_type',
+      0)
+
+    redirect_to PDF::Writer.relative_path(
+      t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_audit_type',
+      0)
   end
 
   private

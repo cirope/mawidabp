@@ -368,6 +368,11 @@ es:
       without_auditor_comment: "sin comentarios del auditor"
       without_design_tests: "sin evaluación de diseño"
 
+  customize_report_form:
+    create: "Generar"
+    title: "Título"
+    subtitle: "Subtítulo"
+
   detract:
     index_title: "Listado de detractores"
     show_title: "Detalle del detractor"

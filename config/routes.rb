@@ -16,7 +16,9 @@ ActionController::Routing::Routes.draw do |map|
 
   [
     'weaknesses_by_state',
-    'detailed_management_report'
+    'create_weaknesses_by_state',
+    'detailed_management_report',
+    'create_detailed_management_report'
   ].each do |action|
     map.named_route action, "execution_reports/#{action}",
       :controller => 'execution_reports', :action => action
@@ -62,9 +64,9 @@ ActionController::Routing::Routes.draw do |map|
     :controller => 'follow_up_management', :action => 'index'
 
   [
-    'weaknesses_by_state',
-    'weaknesses_by_risk',
-    'weaknesses_by_audit_type'
+    'weaknesses_by_state', 'create_weaknesses_by_state',
+    'weaknesses_by_risk', 'create_weaknesses_by_risk',
+    'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type'
   ].each do |action|
     map.named_route "#{action}_conclusion_management_reports",
       "conclusion_management_reports/#{action}",
@@ -81,10 +83,11 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   [
-    'synthesis_report',
-    'weaknesses_by_state',
-    'weaknesses_by_risk',
-    'weaknesses_by_audit_type'
+    'cost_analysis', 'create_cost_analysis',
+    'synthesis_report', 'create_synthesis_report',
+    'weaknesses_by_state', 'create_weaknesses_by_state',
+    'weaknesses_by_risk', 'create_weaknesses_by_risk',
+    'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type'
   ].each do |action|
     map.named_route "#{action}_conclusion_committee_reports",
       "conclusion_committee_reports/#{action}",

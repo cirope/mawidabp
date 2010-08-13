@@ -4,24 +4,20 @@ require 'test_helper'
 class FollowUpManagementControllerTest < ActionController::TestCase
   fixtures :findings
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :weaknesses_by_state, :weaknesses_by_risk,
-      :weaknesses_by_audit_type]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
+    public_actions = []
+    private_actions = [:index, :weaknesses_by_state, :weaknesses_by_risk,
+      :weaknesses_by_audit_type]
+
+    private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
-    @public_actions.each do |action|
+    public_actions.each do |action|
       get action
       assert_response :success
     end
@@ -45,7 +41,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_state'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_state, :weaknesses_by_state => {
+      get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -56,12 +52,13 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_state'
   end
 
-  test 'download weaknesses by state report' do
+  test 'create weaknesses by state report' do
     perform_auth
-    get :weaknesses_by_state, :download => 1, :weaknesses_by_state => {
+    post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-    }
+    },
+    :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'follow_up_committee.weaknesses_by_state.pdf_name',
@@ -79,7 +76,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_risk'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_risk, :weaknesses_by_risk => {
+      get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -90,13 +87,14 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_risk'
   end
 
-  test 'download weaknesses by risk report' do
+  test 'create weaknesses by risk report' do
     perform_auth
 
-    get :weaknesses_by_risk, :download => 1, :weaknesses_by_risk => {
+    post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
-      }
+      },
+      :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
@@ -114,7 +112,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_audit_type'
 
     assert_nothing_raised(Exception) do
-      post :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
+      get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -125,14 +123,15 @@ class FollowUpManagementControllerTest < ActionController::TestCase
     assert_template 'follow_up_management/weaknesses_by_audit_type'
   end
 
-  test 'download weaknesses by audit type report' do
+  test 'create weaknesses by audit type report' do
     perform_auth
 
-    get :weaknesses_by_audit_type, :download => 1,
+    post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
       I18n.t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
