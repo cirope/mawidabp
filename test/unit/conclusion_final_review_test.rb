@@ -197,8 +197,15 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
     end
-    
+
     assert final_work_papers_count > 0
     assert_equal final_work_papers_count, work_papers_count
+    assert_not_nil @conclusion_review.issue_date
+    assert(findings.all? do |f|
+      f.origination_date == @conclusion_review.issue_date
+    end)
+    assert(final_findings.all? do |f|
+      f.origination_date == @conclusion_review.issue_date
+    end)
   end
 end

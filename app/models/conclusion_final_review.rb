@@ -98,6 +98,7 @@ class ConclusionFinalReview < ConclusionReview
           finding.final = true
           finding.parent = f
           finding.user_ids = f.user_ids
+          finding.origination_date ||= f.origination_date ||= self.issue_date
           
           f.work_papers.each do |wp|
             finding.work_papers.build(wp.attributes.clone.update(:id => nil)).check_code_prefix = false
