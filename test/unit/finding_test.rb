@@ -23,6 +23,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.answer, @finding.answer
     assert_equal finding.state, @finding.state
     assert_equal finding.solution_date, @finding.solution_date
+    assert_equal finding.origination_date, @finding.origination_date
     assert_equal finding.audit_recommendations, @finding.audit_recommendations
     assert_equal finding.effect, @finding.effect
     assert_equal finding.risk, @finding.risk
@@ -41,6 +42,7 @@ class FindingTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:notify],
+        :origination_date => 1.day.ago.to_date,
         :solution_date => nil,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
@@ -66,6 +68,7 @@ class FindingTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:notify],
+        :origination_date => 35.days.from_now.to_date,
         :solution_date => 30.days.from_now.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
@@ -193,8 +196,9 @@ class FindingTest < ActiveSupport::TestCase
     @finding.first_notification_date = '12/13/12'
     @finding.follow_up_date = '12/13/12'
     @finding.solution_date = '12/13/12'
+    @finding.origination_date = '12/13/12'
     assert @finding.invalid?
-    assert_equal 4, @finding.errors.count
+    assert_equal 5, @finding.errors.count
     assert_equal error_message_from_model(@finding,
       :control_objective_item_id, :not_a_number),
       @finding.errors.on(:control_objective_item_id)
@@ -204,6 +208,8 @@ class FindingTest < ActiveSupport::TestCase
       :invalid_date), @finding.errors.on(:follow_up_date)
     assert_equal error_message_from_model(@finding, :solution_date,
       :invalid_date), @finding.errors.on(:solution_date)
+    assert_equal error_message_from_model(@finding, :origination_date,
+      :invalid_date), @finding.errors.on(:origination_date)
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

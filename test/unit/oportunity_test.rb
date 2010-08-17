@@ -23,6 +23,7 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal oportunity.answer, @oportunity.answer
     assert_equal oportunity.state, @oportunity.state
     assert_equal oportunity.solution_date, @oportunity.solution_date
+    assert_equal oportunity.origination_date, @oportunity.origination_date
   end
 
   # Prueba la creación de una oportunidad
@@ -54,6 +55,7 @@ class OportunityTest < ActiveSupport::TestCase
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:being_implemented],
         :solution_date => 30.days.from_now.to_date,
+        :origination_date => 35.days.from_now.to_date,
         :user_ids => [users(:bare_user).id, users(:audited_user).id]
       )
     end

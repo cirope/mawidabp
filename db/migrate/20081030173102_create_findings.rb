@@ -10,6 +10,7 @@ class CreateFindings < ActiveRecord::Migration
       t.date :solution_date
       t.date :first_notification_date
       t.date :confirmation_date
+      t.date :origination_date
       t.boolean :final
       t.integer :parent_id
       t.integer :state

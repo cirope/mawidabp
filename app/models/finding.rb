@@ -301,8 +301,8 @@ class Finding < ActiveRecord::Base
   validates_numericality_of :control_objective_item_id, :only_integer => true,
     :allow_nil => true, :allow_blank => true
   validates_date :first_notification_date, :allow_nil => true
-  validates_date :follow_up_date, :allow_nil => true, :allow_blank => true
-  validates_date :solution_date, :allow_nil => true, :allow_blank => true
+  validates_date :follow_up_date, :solution_date, :origination_date,
+    :allow_nil => true, :allow_blank => true
   validates_each :follow_up_date do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)

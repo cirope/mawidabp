@@ -46,7 +46,7 @@
     <% end -%>
     <p>
       <%= f_f.label :description %>
-      <%= f_f.text_area :description, :readonly => true, :style => 'height: 13em;' %>
+      <%= f_f.text_area :description, :readonly => true, :style => 'height: 17em;' %>
     </p>
     <% if @finding.kind_of? Weakness -%>
       <p>
@@ -76,6 +76,14 @@
       <%= f_f.label :state, Finding.human_attribute_name(:state) +
         show_inline_help_for(:finding_state), :class => :inline %>
       <%= finding_status_field(f_f, true, true) %>
+    </p>
+    <p>
+      <%= f_f.label :origination_date,
+        Finding.human_attribute_name(:origination_date) +
+        show_inline_help_for(:finding_origination_date) %>
+      <%= f_f.text_field :origination_date, :value =>
+        (l @finding.origination_date, :format => :short if @finding.origination_date),
+        :readonly => true %>
     </p>
     <% if @finding.kind_of? Weakness -%>
       <p>

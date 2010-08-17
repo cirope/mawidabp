@@ -45,7 +45,8 @@
     </p>
     <p>
       <%= f.label :description %>
-      <%= f.text_area :description, :readonly => readonly, :class => :focused %>
+      <%= f.text_area :description, :readonly => readonly, :class => :focused,
+        :style => 'height: 11em;' %>
     </p>
     <p>
       <%= f.label :audit_recommendations %>
@@ -100,6 +101,10 @@
     <p>
       <%= f.label :audit_comments %>
       <%= f.text_area :audit_comments, :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :origination_date %>
+      <%= f.calendar_date_select :origination_date, :readonly => readonly %>
     </p>
     <p>
       <%= f.label :follow_up_date %>

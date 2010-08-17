@@ -222,6 +222,7 @@ ActiveRecord::Schema.define(:version => 20100722163057) do
     t.boolean  "final"
     t.integer  "parent_id"
     t.integer  "notification_level",        :default => 0
+    t.date     "origination_date"
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"
@@ -607,6 +608,7 @@ ActiveRecord::Schema.define(:version => 20100722163057) do
     t.boolean  "important"
   end
 
+  add_index "versions", ["created_at"], :name => "index_versions_on_created_at"
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
   add_index "versions", ["organization_id"], :name => "index_versions_on_organization_id"
   add_index "versions", ["whodunnit"], :name => "index_versions_on_whodunnit"

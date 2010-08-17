@@ -45,11 +45,8 @@
     </p>
     <p>
       <%= f.label :description %>
-      <%= f.text_area :description, :readonly => readonly, :class => :focused %>
-    </p>
-    <p>
-      <%= f.label :solution_date %>
-      <%= f.calendar_date_select :solution_date, :readonly => readonly %>
+      <%= f.text_area :description, :readonly => readonly, :class => :focused,
+        :style => 'height: 21em;' %>
     </p>
   </div>
   <div class="form_column_right">
@@ -59,11 +56,18 @@
           :finding_status_change_history) : ''), :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
-
     <% if show_history_changes -%>
       <%= render :partial => 'findings/history_changes',
         :locals => { :finding => @oportunity } %>
     <% end -%>
+    <p>
+      <%= f.label :solution_date %>
+      <%= f.calendar_date_select :solution_date, :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :origination_date %>
+      <%= f.calendar_date_select :origination_date, :readonly => readonly %>
+    </p>
 
     <% if @oportunity.must_have_a_comment? -%>
       <% f.fields_for :comments,

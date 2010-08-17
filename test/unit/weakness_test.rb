@@ -28,6 +28,7 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal weakness.risk, @weakness.risk
     assert_equal weakness.priority, @weakness.priority
     assert_equal weakness.follow_up_date, @weakness.follow_up_date
+    assert_equal weakness.origination_date, @weakness.origination_date
   end
 
   # Prueba la creación de una debilidad
@@ -42,6 +43,7 @@ class WeaknessTest < ActiveSupport::TestCase
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:notify],
         :solution_date => nil,
+        :origination_date => 1.day.ago.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
@@ -66,6 +68,7 @@ class WeaknessTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:notify],
+        :origination_date => 35.days.from_now.to_date,
         :solution_date => 30.days.from_now.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',

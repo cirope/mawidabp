@@ -60,7 +60,7 @@
     <% end -%>
     <p>
       <%= f_f.label :description %>
-      <%= f_f.text_area :description, :readonly => true, :style => 'height: 13em;' %>
+      <%= f_f.text_area :description, :readonly => true, :style => 'height: 18.5em;' %>
     </p>
     <% if @finding.kind_of? Weakness -%>
       <p>
@@ -108,6 +108,12 @@
         </p>
       <% end -%>
     <% end -%>
+    <p>
+      <%= f_f.label :origination_date,
+        Finding.human_attribute_name(:origination_date) +
+        show_inline_help_for(:finding_origination_datee) %>
+      <%= f_f.calendar_date_select :origination_date %>
+    </p>
     <% if @finding.kind_of? Weakness -%>
       <p>
         <%= f_f.label :follow_up_date,
