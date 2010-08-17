@@ -111,7 +111,7 @@
     <p>
       <%= f_f.label :origination_date,
         Finding.human_attribute_name(:origination_date) +
-        show_inline_help_for(:finding_origination_datee) %>
+        show_inline_help_for(:finding_origination_date) %>
       <%= f_f.calendar_date_select :origination_date %>
     </p>
     <% if @finding.kind_of? Weakness -%>

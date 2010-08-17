@@ -45,11 +45,6 @@
   </div>
 
   <div class="show_item">
-    <b><%= Weakness.human_attribute_name :follow_up_date %>:</b>
-    <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
-  </div>
-
-  <div class="show_item">
     <b><%= Weakness.human_attribute_name :audit_comments %>:</b>
     <%= simple_format h(@weakness.audit_comments) %>
   </div>
@@ -57,6 +52,16 @@
   <div class="show_item">
     <b><%= Weakness.human_attribute_name :state %>:</b>
     <%=h @weakness.state_text %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :origination_date %>:</b>
+    <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :follow_up_date %>:</b>
+    <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
   </div>
 
   <div class="show_item">

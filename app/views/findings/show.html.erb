@@ -45,6 +45,10 @@
     <b><%= Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state) %></b>:
     <%= @finding.state_text %>
   </div>
+  <div class="show_item">
+    <b><%= Finding.human_attribute_name(:origination_date) + show_inline_help_for(:finding_origination_date) %></b>:
+    <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
+  </div>
   <% if @finding.kind_of? Weakness -%>
     <div class="show_item">
       <b><%= Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date) %></b>:

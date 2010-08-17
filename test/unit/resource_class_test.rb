@@ -81,6 +81,9 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert_equal 1, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :name, :taken),
       @resource_class.errors.on(:name)
+
+    @resource_class.organization_id = organizations(:second_organization).id
+    assert @resource_class.valid?
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

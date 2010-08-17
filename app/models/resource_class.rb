@@ -46,7 +46,8 @@ class ResourceClass < ActiveRecord::Base
   validates_numericality_of :unit, :only_integer => true, :allow_nil => true
   validates_inclusion_of :resource_class_type, :in => TYPES.values,
     :allow_blank => true, :allow_nil => true
-  validates_uniqueness_of :name, :case_sensitive => false
+  validates_uniqueness_of :name, :scope => :organization_id,
+    :case_sensitive => false
 
   # Relaciones
   belongs_to :organization
