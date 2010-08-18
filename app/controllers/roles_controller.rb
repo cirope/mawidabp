@@ -10,7 +10,7 @@ class RolesController < ApplicationController
   # * GET /roles.xml
   def index
     @title = t :'role.index_title'
-    @roles = Role.list.paginate(
+    @roles = Role.list(@auth_organization.id).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
