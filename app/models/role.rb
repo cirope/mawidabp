@@ -19,10 +19,11 @@ class Role < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :list, lambda {
+  named_scope :list, lambda { |organization_id|
     {
       :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id
+        :organization_id => organization_id ||
+          GlobalModelConfig.current_organization_id
       },
       :order => 'name ASC'
     }
