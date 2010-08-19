@@ -47,6 +47,21 @@ class Period < ActiveRecord::Base
       :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
     }
   }
+  named_scope :list_all_without_procedure_controls, lambda {
+    {
+      :include => :procedure_controls,
+      :conditions => [
+        [
+          "#{table_name}.organization_id = :organization_id",
+          "#{ProcedureControl.table_name}.period_id IS NULL"
+        ].join(' AND '),
+        {
+          :organization_id => GlobalModelConfig.current_organization_id
+        }
+      ],
+      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
+    }
+  }
 
   
   # Restricciones

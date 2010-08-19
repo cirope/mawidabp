@@ -25,6 +25,7 @@ class ProcedureControl < ActiveRecord::Base
   validates_presence_of :period_id
   validates_numericality_of :period_id, :allow_nil => true,
     :only_integer => true
+  validates_uniqueness_of :period_id, :allow_nil => true, :allow_blank => true
 
   
   # Relaciones

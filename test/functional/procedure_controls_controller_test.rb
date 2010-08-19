@@ -74,7 +74,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert_difference counts_array do
       post :create, {
         :procedure_control => {
-          :period_id => periods(:current_period).id,
+          :period_id => periods(:third_period).id,
           :procedure_control_items_attributes => {
             :new_1 => {
               :aproach => get_test_parameter(:admin_aproach_types).first[1],

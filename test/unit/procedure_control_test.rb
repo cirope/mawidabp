@@ -21,7 +21,7 @@ class ProcedureControlTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ProcedureControl.count' do
       ProcedureControl.create(
-        :period_id => periods(:current_period).id
+        :period_id => periods(:third_period).id
       )
     end
   end
@@ -29,11 +29,11 @@ class ProcedureControlTest < ActiveSupport::TestCase
   # Prueba de actualización de un procedimiento de control
   test 'update' do
     assert @procedure_control.update_attributes(
-      :period_id => periods(:past_period).id),
+      :period_id => periods(:third_period).id),
       @procedure_control.errors.full_messages.join('; ')
 
     @procedure_control.reload
-    assert_equal periods(:past_period).id, @procedure_control.period_id
+    assert_equal periods(:third_period).id, @procedure_control.period_id
   end
 
   # Prueba de eliminación de procedimientos de control
@@ -59,5 +59,15 @@ class ProcedureControlTest < ActiveSupport::TestCase
     assert_equal 1, @procedure_control.errors.count
     assert_equal error_message_from_model(@procedure_control, :period_id,
       :blank), @procedure_control.errors.on(:period_id)
+  end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates duplicated attributes' do
+    @procedure_control.period_id =
+      procedure_controls(:procedure_control_bcra_A4609).period_id
+    assert @procedure_control.invalid?
+    assert_equal 1, @procedure_control.errors.count
+    assert_equal error_message_from_model(@procedure_control,
+      :period_id, :taken), @procedure_control.errors.on(:period_id)
   end
 end

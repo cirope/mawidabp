@@ -427,7 +427,7 @@ class ReviewsControllerTest < ActionController::TestCase
     perform_auth
     post :auto_complete_for_procedure_control_subitem, {
       :procedure_control_subitem_data => 'ges seg',
-      :period_id => periods(:current_period).id
+      :period_id => periods(:past_period).id
     }
     assert_response :success
     assert_not_nil assigns(:procedure_control_subitems)
@@ -437,7 +437,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
     post :auto_complete_for_procedure_control_subitem, {
       :procedure_control_subitem_data => 'depen',
-      :period_id => periods(:current_period).id
+      :period_id => periods(:past_period).id
     }
     assert_response :success
     assert_not_nil assigns(:procedure_control_subitems)
@@ -447,7 +447,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
     post :auto_complete_for_procedure_control_subitem, {
       :procedure_control_subitem_data => 'xyz',
-      :period_id => periods(:current_period).id
+      :period_id => periods(:past_period).id
     }
     assert_response :success
     assert_not_nil assigns(:procedure_control_subitems)
