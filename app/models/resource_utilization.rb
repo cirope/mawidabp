@@ -1,6 +1,7 @@
 class ResourceUtilization < ActiveRecord::Base
   include ParameterSelector
-  
+  include Comparable
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -19,6 +20,10 @@ class ResourceUtilization < ActiveRecord::Base
   # Relaciones
   belongs_to :resource, :polymorphic => true
   belongs_to :resource_consumer, :polymorphic => true
+
+  def <=>(other)
+    self.resource_id <=> other.resource_id
+  end
 
   def validate
     if self.changed? && self.resource_consumer.respond_to?(:is_frozen?) &&

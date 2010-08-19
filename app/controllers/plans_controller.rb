@@ -61,15 +61,7 @@ class PlansController < ApplicationController
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
 
     if clone_plan
-      clone_plan.plan_items.each do |pi|
-        attributes = pi.attributes.merge(
-          :id => nil,
-          :resource_utilizations_attributes =>
-            pi.resource_utilizations.map { |ru| ru.attributes.merge :id => nil }
-        )
-
-        @plan.plan_items.build(attributes)
-      end
+      @plan.clone_from clone_plan
     else
       @plan.plan_items.build
     end

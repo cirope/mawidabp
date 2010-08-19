@@ -257,6 +257,20 @@ class Review < ActiveRecord::Base
     end
   end
 
+  def clone_from(other)
+    self.attributes = other.attributes.merge(
+      :id => nil, :period_id => nil, :plan_item_id => nil,
+      :identification => nil)
+
+    other.control_objective_items.each do |coi|
+      self.control_objective_items.build(coi.attributes.merge(:id => nil))
+    end
+
+    other.review_user_assignments.each do |rua|
+      self.review_user_assignments.build(rua.attributes.merge(:id => nil))
+    end
+  end
+
   # Devuelve la calificación del informe, siempre es un arreglo de dos elementos
   # como sigue: ['nota en texto', integer_promedio], por ejemplo
   # ['Satisfactorio', 90]

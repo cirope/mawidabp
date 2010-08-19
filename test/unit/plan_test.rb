@@ -145,4 +145,18 @@ class PlanTest < ActiveSupport::TestCase
     assert cost > 0
     assert_equal cost, @plan.cost
   end
+
+  test 'clone from' do
+    new_plan = Plan.new
+    new_plan.clone_from(@plan)
+
+    assert new_plan.plan_items.size > 0
+    assert new_plan.plan_items.any? { |pi| pi.resource_utilizations.size > 0 }
+    assert_equal @plan.plan_items, new_plan.plan_items
+    assert @plan.plan_items.all? { |pi|
+      new_plan.plan_items.any? { |npi|
+        npi.resource_utilizations == pi.resource_utilizations
+      }
+    }
+  end
 end

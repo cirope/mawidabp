@@ -1,6 +1,7 @@
 class ReviewUserAssignment < ActiveRecord::Base
   include ParameterSelector
-  
+  include Comparable
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -68,6 +69,10 @@ class ReviewUserAssignment < ActiveRecord::Base
   # Relaciones
   belongs_to :review
   belongs_to :user
+
+  def <=>(other)
+    self.user_id <=> other.user_id
+  end
 
   def can_be_modified?
     unless self.is_in_a_final_review? &&

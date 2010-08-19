@@ -247,8 +247,8 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
 
-    assert @review.control_objective_items.first.update_attribute(
-      :finished, true)
+    assert @review.control_objective_items.first(
+      :conditions => {:finished => false}).update_attribute(:finished, true)
     assert @review.reload.must_be_approved?
 
     @review.control_objective_items.clear
@@ -476,5 +476,17 @@ class ReviewTest < ActiveSupport::TestCase
     assert File.size(@review.absolute_work_papers_zip_path) > 0
 
     FileUtils.rm @review.absolute_work_papers_zip_path
+  end
+
+  test 'clone from' do
+    new_review = Review.new
+    new_review.clone_from(@review)
+
+    assert new_review.control_objective_items.size > 0
+    assert new_review.review_user_assignments.size > 0
+    assert_equal @review.control_objective_items,
+      new_review.control_objective_items
+    assert_equal @review.review_user_assignments,
+      new_review.review_user_assignments
   end
 end

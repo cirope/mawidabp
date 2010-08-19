@@ -79,6 +79,23 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/new'
   end
 
+  test 'clone review' do
+    perform_auth
+    review = Review.find reviews(:current_review).id
+
+    get :new, :clone_from => review.id
+    assert_response :success
+    assert_not_nil assigns(:review)
+    assert review.control_objective_items.size > 0
+    assert_equal review.control_objective_items.size,
+      assigns(:review).control_objective_items.size
+    assert review.review_user_assignments.size > 0
+    assert_equal review.review_user_assignments.size,
+      assigns(:review).review_user_assignments.size
+    assert_select '#error_body', false
+    assert_template 'reviews/new'
+  end
+
   test 'create review' do
     perform_auth
     assert_difference 'Review.count' do

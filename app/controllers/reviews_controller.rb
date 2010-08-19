@@ -66,6 +66,12 @@ class ReviewsController < ApplicationController
         params[:period].to_i : (first_period ? first_period.id : nil)
     )
 
+    clone_id = params[:clone_from].respond_to?(:to_i) ?
+      params[:clone_from].to_i : 0
+    clone_review = find_with_organization(clone_id) if exists?(clone_id)
+
+    @review.clone_from clone_review if clone_review
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @review }
@@ -289,6 +295,7 @@ class ReviewsController < ApplicationController
   # caso que no se encuentre (ya sea que no existe un informe con ese ID o que
   # no pertenece a la organización con la que se autenticó el usuario) devuelve
   # nil.
+  #
   # _id_::  ID del informe que se quiere recuperar
   def find_with_organization(id) #:doc:
     Review.first(
@@ -298,6 +305,22 @@ class ReviewsController < ApplicationController
         "#{Period.table_name}.organization_id" => @auth_organization.id
       },
       :readonly => false
+    )
+  end
+
+  # Indica si existe el informe indicado, siempre que pertenezca a la
+  # organización. En el caso que no se encuentre (ya sea que no existe un
+  # informe con ese ID o que no pertenece a la organización con la que se
+  # autenticó el usuario) devuelve false.
+  #
+  # _id_::  ID del informe que se quiere recuperar
+  def exists?(id) #:doc:
+    Review.first(
+      :include => :period,
+      :conditions => {
+        :id => id,
+        "#{Period.table_name}.organization_id" => @auth_organization.id
+      }
     )
   end
 

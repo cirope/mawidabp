@@ -90,6 +90,18 @@ class Plan < ActiveRecord::Base
     end
   end
 
+  def clone_from(other)
+    other.plan_items.each do |pi|
+      attributes = pi.attributes.merge(
+        :id => nil,
+        :resource_utilizations_attributes =>
+          pi.resource_utilizations.map { |ru| ru.attributes.merge :id => nil }
+      )
+
+      self.plan_items.build(attributes)
+    end
+  end
+
   def to_pdf(organization = nil, include_details = true)
     pdf = PDF::Writer.create_generic_pdf :landscape
     currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
