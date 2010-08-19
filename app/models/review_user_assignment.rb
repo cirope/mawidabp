@@ -167,7 +167,8 @@ class ReviewUserAssignment < ActiveRecord::Base
       end
     end
 
-    if all_valid && !@cancel_notification
+    if all_valid && !@cancel_notification &&
+        (self.review.oportunities | self.review.weaknesses).size > 0
       title = I18n.t(:'review_user_assignment.responsibility_removed',
         :review => self.review.try(:identification))
 

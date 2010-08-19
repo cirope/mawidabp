@@ -61,16 +61,13 @@ class ReviewsController < ApplicationController
   def new
     @title = t :'review.new_title'
     first_period = Period.list.first
-    @review = Review.new(
-      :period_id => params[:period] ?
-        params[:period].to_i : (first_period ? first_period.id : nil)
-    )
-
-    clone_id = params[:clone_from].respond_to?(:to_i) ?
-      params[:clone_from].to_i : 0
+    @review = Review.new
+    clone_id = params[:clone_from].to_i
     clone_review = find_with_organization(clone_id) if exists?(clone_id)
 
     @review.clone_from clone_review if clone_review
+    @review.period_id = params[:period] ?
+      params[:period].to_i : first_period.try(:id)
 
     respond_to do |format|
       format.html # new.html.erb
