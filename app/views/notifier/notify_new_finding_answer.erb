@@ -3,24 +3,26 @@
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
   finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization),
   :protocol => URL_PROTOCOL) -%>
-<h2 style="margin-bottom: 1em;"><%=h organization.name %></h2>
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2 style="margin-bottom: 1em;"><%=h organization.name %></h2>
 
-<h3 style="font-weight: normal;"><%= textilize_without_paragraph(
-  t(:'notifier.notify_new_finding_answer.finding_data',
-  :review => h(finding.review.to_s),
-  :finding_code => h(finding.review_code))) %></h3>
+  <h3 style="font-weight: normal;"><%= textilize_without_paragraph(
+    t(:'notifier.notify_new_finding_answer.finding_data',
+    :review => h(finding.review.to_s),
+    :finding_code => h(finding.review_code))) %></h3>
 
-<p>
-  <b><%= FindingAnswer.human_attribute_name(:user_id) %></b>:
-  <%=h @finding_answer.user.full_name_with_function %>
-</p>
-<p>
-  <b><%= FindingAnswer.human_attribute_name(:answer) %></b>:
-  <span style="font-style: italic;"><%=h @finding_answer.answer %></span>
-</p>
+  <p>
+    <b><%= FindingAnswer.human_attribute_name(:user_id) %></b>:
+    <%=h @finding_answer.user.full_name_with_function %>
+  </p>
+  <p>
+    <b><%= FindingAnswer.human_attribute_name(:answer) %></b>:
+    <span style="font-style: italic;"><%=h @finding_answer.answer %></span>
+  </p>
 
-<p>
-  <%= link_to t(:'notifier.notify_new_finding_answer.finding_link'),
-    finding_url %>
-</p>
-<%= render :partial => 'footer' %>
+  <p>
+    <%= link_to t(:'notifier.notify_new_finding_answer.finding_link'),
+      finding_url %>
+  </p>
+  <%= render :partial => 'footer' %>
+</div>

@@ -1,30 +1,32 @@
 <% organization = @notification.findings.first.try(:review).try(:organization) if @notification -%>
-<h2><%= @title %></h2>
-<% if @body.kind_of?(Array) && !@body.blank? -%>
-  <ul>
-    <% @body.each do |body_item| -%>
-      <li><%= body_item %></li>
-    <% end -%>
-  </ul>
-<% elsif !@body.blank? -%>
-  <p style="margin: 1em 0em;"><%= textilize @body %></p>
-<% end -%>
-<% if @content.kind_of?(Array) && !@content.blank? -%>
-  <ul>
-    <% @content.each do |content_item| -%>
-      <li><%= content_item %></li>
-    <% end -%>
-  </ul>
-<% elsif !@content.blank? -%>
-  <p><%= textilize @content %></p>
-<% end -%>
+<div style="font-family: verdana, sans-serif, arial, helvetica;">
+  <h2><%= @title %></h2>
+  <% if @body.kind_of?(Array) && !@body.blank? -%>
+    <ul>
+      <% @body.each do |body_item| -%>
+        <li><%= body_item %></li>
+      <% end -%>
+    </ul>
+  <% elsif !@body.blank? -%>
+    <p style="margin: 1em 0em;"><%= textilize @body %></p>
+  <% end -%>
+  <% if @content.kind_of?(Array) && !@content.blank? -%>
+    <ul>
+      <% @content.each do |content_item| -%>
+        <li><%= content_item %></li>
+      <% end -%>
+    </ul>
+  <% elsif !@content.blank? -%>
+    <p><%= textilize @content %></p>
+  <% end -%>
 
-<% if @notification -%>
-<p>
-  <%= link_to t(:'notifier.notification.confirm'),
-    confirm_notification_url(@notification,
-      :host => (organization ? "#{organization.prefix}.#{URL_HOST}" : URL_HOST),
-      :protocol => URL_PROTOCOL) %>
-</p>
-<% end -%>
-<%= render :partial => 'footer' %>
+  <% if @notification -%>
+  <p>
+    <%= link_to t(:'notifier.notification.confirm'),
+      confirm_notification_url(@notification,
+        :host => (organization ? "#{organization.prefix}.#{URL_HOST}" : URL_HOST),
+        :protocol => URL_PROTOCOL) %>
+  </p>
+  <% end -%>
+  <%= render :partial => 'footer' %>
+</div>

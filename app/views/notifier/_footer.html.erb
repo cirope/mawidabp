@@ -1,4 +1,7 @@
 <div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
+  <p style="color: #cc0000;">
+    <%= textilize_without_paragraph t(:'notifier.footer.warning') %>
+  </p>
   <p>
     <%= t :'notifier.footer.title' %>
   </p>
@@ -12,6 +15,6 @@
     </li>
   </ul>
   <p>
-    <%= textilize  t(:'notifier.footer.recommendations') %>
+    <%= textilize_without_paragraph t(:'notifier.footer.recommendations') %>
   </p>
 </div>

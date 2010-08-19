@@ -687,6 +687,7 @@ es:
     footer:
       email_label: "Correo"
       phone_label: "Teléfono"
+      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'Mawida Buenas Prácticas'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Para garantizar un correcto funcionamiento recomendamos utilizar *Mozilla Firefox*"
     notification:
