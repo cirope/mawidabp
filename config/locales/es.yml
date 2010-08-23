@@ -237,9 +237,10 @@ es:
       detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE AUDITORÍA INTERNA"
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
     period:
-      title: "Periodo"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo"
+      range: "desde el {{from_date}} al {{to_date}}"
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -249,6 +250,7 @@ es:
       organization_score: "Calificación de la organización: {{score}}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría ({{audit_types}})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average: "Promedio de las calificaciones de {{audit_type}}"
@@ -394,8 +396,8 @@ es:
     show_list: "Ver registros de error"
     pdf_list_name: "registros_de_error_{{from_date}}_{{to_date}}.pdf"
     period:
-      title: "Periodo"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo"
+      range: "desde el {{from_date}} al {{to_date}}"
 
   execution_reports:
     detailed_management_report:
@@ -406,6 +408,7 @@ es:
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
       clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
@@ -414,8 +417,8 @@ es:
     findings_type_external: "Seguimiento de Observaciones Auditoría Externa"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
     period:
-      title: "Periodo"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo"
+      range: "desde el {{from_date}} al {{to_date}}"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por informe y estado"
     weaknesses_by_state:
       pdf_name: "observaciones_en_ejecucion_por_estado_{{from_date}}_al_{{to_date}}.pdf"
@@ -425,6 +428,7 @@ es:
       oportunities_column: "Oportunidades de Mejora"
       total: "TOTAL"
     without_weaknesses: "Sin observaciones en el periodo"
+    without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
 
   finding:
@@ -548,8 +552,8 @@ es:
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_{{from_date}}_al_{{to_date}}.pdf"
     period:
-      title: "Periodo"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo"
+      range: "desde el {{from_date}} al {{to_date}}"
     synthesis_report:
       pdf_name: "informe_de_sintesis_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -559,6 +563,7 @@ es:
       organization_score: "Calificación de la organización: {{score}}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría ({{audit_types}})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average: "Promedio de las calificaciones de {{audit_type}}"
@@ -636,8 +641,8 @@ es:
     show_list: "Ver registros de ingreso"
     pdf_list_name: "listado_de_registros_de_ingreso_{{from_date}}_{{to_date}}.pdf"
     period:
-      title: "Periodo"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo"
+      range: "desde el {{from_date}} al {{to_date}}"
 
   notification:
     index_title: "Listado de notificaciones"
@@ -853,8 +858,8 @@ es:
         long: "Retrasado"
         short: "R"
     period:
-      title: "Periodo ({{number}})"
-      range: "{{from_date}} al {{to_date}}"
+      title: "Intervalo ({{number}})"
+      range: "desde el {{from_date}} al {{to_date}}"
     pdf:
       title: "Plan de auditoría"
       pdf_name: "plan_periodo_{{period}}.pdf"

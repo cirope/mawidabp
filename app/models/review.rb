@@ -115,6 +115,8 @@ class Review < ActiveRecord::Base
         }
       ],
       :order => [
+        "#{Period.table_name}.start ASC",
+        "#{Period.table_name}.end ASC",
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
@@ -269,6 +271,14 @@ class Review < ActiveRecord::Base
     other.review_user_assignments.each do |rua|
       self.review_user_assignments.build(rua.attributes.merge(:id => nil))
     end
+  end
+
+  def internal_audit?
+    !self.business_unit.business_unit_type.external
+  end
+
+  def external_audit?
+    self.business_unit.business_unit_type.external
   end
 
   # Devuelve la calificación del informe, siempre es un arreglo de dos elementos

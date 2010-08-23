@@ -1,6 +1,7 @@
 class Period < ActiveRecord::Base
   include ParameterSelector
-  
+  include Comparable
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -78,6 +79,10 @@ class Period < ActiveRecord::Base
   has_many :plans
   has_many :workflows
   has_many :procedure_controls
+
+  def <=>(other)
+    self.id <=> other.id
+  end
 
   def to_s
     "#{self.description} (#{self.number})"

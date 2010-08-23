@@ -925,7 +925,7 @@ h1, div.title {
 
 h1.center_title {
     text-align: center;
-    margin: 1em 0em 0em 0em;
+    margin: 1em 1em 0em 1em;
     border: none;
     font-size: 1.6em;
 }
@@ -933,6 +933,10 @@ h1.center_title {
 h1.plain {
     border: none;
     margin: 0em;
+}
+
+h1.with_border_bottom {
+    border-bottom: 2px solid #cecece;
 }
 
 h2 {
