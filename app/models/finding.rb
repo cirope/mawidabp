@@ -139,6 +139,12 @@ class Finding < ActiveRecord::Base
     { :conditions => { :final => use_finals } }
   }
   named_scope :sort_by_code, :order => 'review_code ASC'
+  named_scope :for_period, lambda { |period|
+    {
+      :include => { :control_objective_item => { :review =>:period } },
+      :conditions => { "#{Period.table_name}.id" => period.id }
+    }
+  }
   named_scope :next_to_expire, :conditions => [
     [
       'follow_up_date = :warning_date',
@@ -245,7 +251,11 @@ class Finding < ActiveRecord::Base
           :organization_id => GlobalModelConfig.current_organization_id,
           :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
         }
-      ]
+      ],
+      :order => [
+        "#{Period.table_name}.start ASC",
+        "#{Period.table_name}.end ASC"
+      ].join(', ')
     }
   }
   named_scope :list_all_in_execution_by_date, lambda { |from_date, to_date|

@@ -2,48 +2,55 @@ module FollowUpCommonReports
   def weaknesses_by_state
     @title = t :'follow_up_committee.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
+    @periods = periods_for_interval
     @audit_types = [:internal, :external]
     @weaknesses_counts = {}
     @being_implemented_resumes = {}
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
 
-    @audit_types.each do |audit_type|
-      @weaknesses_counts["#{audit_type}_weaknesses"] =
-        Weakness.list_all_by_date(@from_date, @to_date).send(
-          "#{audit_type}_audit").finals(false).count(:group => :state)
-      @weaknesses_counts["#{audit_type}_oportunities"] =
-        Oportunity.list_all_by_date(@from_date, @to_date).send(
-          "#{audit_type}_audit").finals(false).count(:group => :state)
-      being_implemented_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
+    @periods.each do |period|
+      @audit_types.each do |audit_type|
+        @weaknesses_counts[period] ||= {}
+        @weaknesses_counts[period]["#{audit_type}_weaknesses"] =
+          Weakness.list_all_by_date(@from_date, @to_date).send(
+            "#{audit_type}_audit").finals(false).for_period(period).count(
+            :group => :state)
+        @weaknesses_counts[period]["#{audit_type}_oportunities"] =
+          Oportunity.list_all_by_date(@from_date, @to_date).send(
+            "#{audit_type}_audit").finals(false).for_period(period).count(
+            :group => :state)
+        being_implemented_counts = {:current => 0, :stale => 0,
+          :current_rescheduled => 0, :stale_rescheduled => 0}
 
-      @status.each do |state|
-        if state.first == :being_implemented
-          being_implemented =
-            Weakness.list_all_by_date(@from_date, @to_date).send(
-              "#{audit_type}_audit").finals(false).being_implemented
+        @status.each do |state|
+          if state.first == :being_implemented
+            being_implemented = Weakness.list_all_by_date(
+              @from_date, @to_date).send("#{audit_type}_audit").finals(
+              false).for_period(period).being_implemented
 
-          being_implemented.each do |w|
-            unless w.stale?
-              unless w.rescheduled?
-                being_implemented_counts[:current] += 1
+            being_implemented.each do |w|
+              unless w.stale?
+                unless w.rescheduled?
+                  being_implemented_counts[:current] += 1
+                else
+                  being_implemented_counts[:current_rescheduled] += 1
+                end
               else
-                being_implemented_counts[:current_rescheduled] += 1
-              end
-            else
-              unless w.rescheduled?
-                being_implemented_counts[:stale] += 1
-              else
-                being_implemented_counts[:stale_rescheduled] += 1
+                unless w.rescheduled?
+                  being_implemented_counts[:stale] += 1
+                else
+                  being_implemented_counts[:stale_rescheduled] += 1
+                end
               end
             end
           end
         end
-      end
 
-      @being_implemented_resumes[audit_type] =
-        being_implemented_resume_from_counts(being_implemented_counts)
+        @being_implemented_resumes[period] ||= {}
+        @being_implemented_resumes[period][audit_type] =
+          being_implemented_resume_from_counts(being_implemented_counts)
+      end
     end
   end
 
@@ -64,97 +71,104 @@ module FollowUpCommonReports
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    @audit_types.each do |type|
-      weaknesses_count = @weaknesses_counts["#{type}_weaknesses"]
-      oportunities_count = @weaknesses_counts["#{type}_oportunities"]
-      total_weaknesses = weaknesses_count.values.sum
-      total_oportunities = oportunities_count.values.sum
-
-      pdf.move_pointer PDF_FONT_SIZE * 2
-
-       pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-        (PDF_FONT_SIZE * 1.25).round, :center
-
+    @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
+      
+      @audit_types.each do |type|
+        weaknesses_count = @weaknesses_counts[period]["#{type}_weaknesses"]
+        oportunities_count = @weaknesses_counts[period]["#{type}_oportunities"]
+        total_weaknesses = weaknesses_count.values.sum
+        total_oportunities = oportunities_count.values.sum
 
-      if (total_weaknesses + total_oportunities) > 0
-        columns = {
-          'state' => [Finding.human_attribute_name('state'), 30],
-          'weaknesses_count' => [
-            t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-            type == :internal ? 35 : 70]
-        }
-        column_data = []
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
-        if type == :internal
-          columns['oportunities_count'] = [
-            t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
-        end
+         pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
+          (PDF_FONT_SIZE * 1.25).round, :center
 
-        columns.each do |col_name, col_data|
-          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading = col_data.first
-            column.width = pdf.percent_width col_data.last
-          end
-        end
+        pdf.move_pointer PDF_FONT_SIZE
 
-        @status.each do |state|
-          w_count = weaknesses_count[state.last] || 0
-          o_count = oportunities_count[state.last] || 0
-          weaknesses_percentage = total_weaknesses > 0 ?
-            w_count.to_f / total_weaknesses * 100 : 0.0
-          oportunities_percentage = total_oportunities > 0 ?
-            o_count.to_f / total_oportunities * 100 : 0.0
-
-          column_data << {
-            'state' => "<b>#{t("finding.status_#{state.first}")}</b>".to_iso,
-            'weaknesses_count' =>
-              "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-            'oportunities_count' =>
-              "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+        if (total_weaknesses + total_oportunities) > 0
+          columns = {
+            'state' => [Finding.human_attribute_name('state'), 30],
+            'weaknesses_count' => [
+              t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+              type == :internal ? 35 : 70]
           }
+          column_data = []
 
-          if state.first == :being_implemented
-            if column_data.last['weaknesses_count'] != '0'
-              column_data.last['weaknesses_count'] << ' *'
+          if type == :internal
+            columns['oportunities_count'] = [
+              t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+          end
+
+          columns.each do |col_name, col_data|
+            columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+              column.heading = col_data.first
+              column.width = pdf.percent_width col_data.last
             end
           end
-        end
 
-        column_data << {
-          'state' =>
-            "<b>#{t(:'follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
-          'weaknesses_count' => "<b>#{total_weaknesses}</b>",
-          'oportunities_count' => "<b>#{total_oportunities}</b>"
-        }
+          @status.each do |state|
+            w_count = weaknesses_count[state.last] || 0
+            o_count = oportunities_count[state.last] || 0
+            weaknesses_percentage = total_weaknesses > 0 ?
+              w_count.to_f / total_weaknesses * 100 : 0.0
+            oportunities_percentage = total_oportunities > 0 ?
+              o_count.to_f / total_oportunities * 100 : 0.0
 
-        unless column_data.blank?
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data
-            table.column_order = type == :internal ?
-              ['state', 'weaknesses_count', 'oportunities_count'] :
-              ['state', 'weaknesses_count']
-            table.split_rows = true
-            table.font_size = PDF_FONT_SIZE
-            table.row_gap = (PDF_FONT_SIZE * 0.5).round
-            table.shade_rows = :none
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.bold_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.show_lines = :all
-            table.render_on pdf
+            column_data << {
+              'state' => "<b>#{t("finding.status_#{state.first}")}</b>".to_iso,
+              'weaknesses_count' =>
+                "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
+              'oportunities_count' =>
+                "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+            }
+
+            if state.first == :being_implemented
+              if column_data.last['weaknesses_count'] != '0'
+                column_data.last['weaknesses_count'] << ' *'
+              end
+            end
           end
-        end
 
-        add_being_implemented_resume(pdf, @being_implemented_resumes[type])
-      else
-        pdf.text t(:'follow_up_committee.without_weaknesses'),
-          :font_size => PDF_FONT_SIZE
+          column_data << {
+            'state' =>
+              "<b>#{t(:'follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
+            'weaknesses_count' => "<b>#{total_weaknesses}</b>",
+            'oportunities_count' => "<b>#{total_oportunities}</b>"
+          }
+
+          unless column_data.blank?
+            PDF::SimpleTable.new do |table|
+              table.width = pdf.page_usable_width
+              table.columns = columns
+              table.data = column_data
+              table.column_order = type == :internal ?
+                ['state', 'weaknesses_count', 'oportunities_count'] :
+                ['state', 'weaknesses_count']
+              table.split_rows = true
+              table.font_size = PDF_FONT_SIZE
+              table.row_gap = (PDF_FONT_SIZE * 0.5).round
+              table.shade_rows = :none
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
+              table.shade_headings = true
+              table.bold_headings = true
+              table.position = :left
+              table.orientation = :right
+              table.show_lines = :all
+              table.render_on pdf
+            end
+          end
+
+          add_being_implemented_resume(pdf,
+            @being_implemented_resumes[period][type])
+        else
+          pdf.text t(:'follow_up_committee.without_weaknesses'),
+            :font_size => PDF_FONT_SIZE
+        end
       end
     end
 
@@ -172,6 +186,7 @@ module FollowUpCommonReports
   def weaknesses_by_risk
     @title = t :'follow_up_committee.weaknesses_by_risk_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
+    @periods = periods_for_interval
     @audit_types = [:internal, :external]
     @tables_data = {}
     @being_implemented_resumes = {}
@@ -180,51 +195,55 @@ module FollowUpCommonReports
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
 
-    @audit_types.each do |audit_type|
-      weaknesses_count = {}
-      weaknesses_count_by_risk = {}
-      being_implemented_counts = {:current => 0, :stale => 0,
-        :current_rescheduled => 0, :stale_rescheduled => 0}
+    @periods.each do |period|
+      @audit_types.each do |audit_type|
+        weaknesses_count = {}
+        weaknesses_count_by_risk = {}
+        being_implemented_counts = {:current => 0, :stale => 0,
+          :current_rescheduled => 0, :stale_rescheduled => 0}
 
-      risk_levels.each do |rl|
-        weaknesses_count_by_risk[rl[0]] = 0
+        risk_levels.each do |rl|
+          weaknesses_count_by_risk[rl[0]] = 0
 
-        statuses.each do |s|
-          weaknesses_count[s[1]] ||= {}
-            weaknesses_count[s[1]][rl[1]] =
-              Weakness.list_all_by_date(@from_date, @to_date).send(
-                "#{audit_type}_audit").finals(false).count(
-                :conditions => {:state => s[1], :risk => rl[1]})
-            weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+          statuses.each do |s|
+            weaknesses_count[s[1]] ||= {}
+              weaknesses_count[s[1]][rl[1]] =
+                Weakness.list_all_by_date(@from_date, @to_date).send(
+                  "#{audit_type}_audit").finals(false).for_period(period).count(
+                  :conditions => {:state => s[1], :risk => rl[1]})
+              weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
-          if s.first == :being_implemented
-          being_implemented = Weakness.list_all_by_date(
-            @from_date, @to_date).send("#{audit_type}_audit").finals(false).
-            being_implemented.find_all_by_risk(rl[1])
+            if s.first == :being_implemented
+            being_implemented = Weakness.list_all_by_date(
+              @from_date, @to_date).send("#{audit_type}_audit").finals(false).
+              for_period(period).being_implemented.find_all_by_risk(rl[1])
 
-            being_implemented.each do |f|
-              unless f.stale?
-                unless f.respond_to?(:rescheduled?) && f.rescheduled?
-                  being_implemented_counts[:current] += 1
+              being_implemented.each do |f|
+                unless f.stale?
+                  unless f.respond_to?(:rescheduled?) && f.rescheduled?
+                    being_implemented_counts[:current] += 1
+                  else
+                    being_implemented_counts[:current_rescheduled] += 1
+                  end
                 else
-                  being_implemented_counts[:current_rescheduled] += 1
-                end
-              else
-                unless f.respond_to?(:rescheduled?) && f.rescheduled?
-                  being_implemented_counts[:stale] += 1
-                else
-                  being_implemented_counts[:stale_rescheduled] += 1
+                  unless f.respond_to?(:rescheduled?) && f.rescheduled?
+                    being_implemented_counts[:stale] += 1
+                  else
+                    being_implemented_counts[:stale_rescheduled] += 1
+                  end
                 end
               end
             end
           end
         end
-      end
 
-      @being_implemented_resumes[audit_type] =
-        being_implemented_resume_from_counts(being_implemented_counts)
-      @tables_data[audit_type] = get_weaknesses_synthesis_table_data(
-        weaknesses_count, weaknesses_count_by_risk, risk_levels)
+        @being_implemented_resumes[period] ||= {}
+        @being_implemented_resumes[period][audit_type] =
+          being_implemented_resume_from_counts(being_implemented_counts)
+        @tables_data[period] ||= {}
+        @tables_data[period][audit_type] = get_weaknesses_synthesis_table_data(
+          weaknesses_count, weaknesses_count_by_risk, risk_levels)
+      end
     end
   end
 
@@ -245,17 +264,24 @@ module FollowUpCommonReports
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    @audit_types.each do |type|
-      pdf.move_pointer PDF_FONT_SIZE * 2
-
-      pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
-        (PDF_FONT_SIZE * 1.25).round, :center
-
+    @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
 
-      add_weaknesses_synthesis_table(pdf, @tables_data[type])
+      @audit_types.each do |type|
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
-      add_being_implemented_resume(pdf, @being_implemented_resumes[type])
+        pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
+          (PDF_FONT_SIZE * 1.25).round, :center
+
+        pdf.move_pointer PDF_FONT_SIZE
+
+        add_weaknesses_synthesis_table(pdf, @tables_data[period][type])
+
+        add_being_implemented_resume(pdf,
+          @being_implemented_resumes[period][type])
+      end
     end
 
     pdf.custom_save_as(
@@ -272,6 +298,7 @@ module FollowUpCommonReports
   def weaknesses_by_audit_type
     @title = t :'follow_up_committee.weaknesses_by_audit_type_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
+    @periods = periods_for_interval
     @audit_types = [:internal, :external]
     @data = {}
     risk_levels = parameter_in(@auth_organization.id,
@@ -279,126 +306,130 @@ module FollowUpCommonReports
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
 
-    @audit_types.each do |audit_type|
-      @data[audit_type] = []
-      conclusion_final_review = ConclusionFinalReview.list_all_by_date(
-        @from_date, @to_date).send("#{audit_type}_audit")
-      reviews_by_audit_type = {}
+    @periods.each do |period|
+      @data[period] ||= {}
 
-      conclusion_final_review.each do |cfr|
-        business_unit = cfr.review.plan_item.business_unit
-        business_unit_type = business_unit.business_unit_type.name
+      @audit_types.each do |audit_type|
+        @data[period][audit_type] = []
+        conclusion_final_review = ConclusionFinalReview.list_all_by_date(
+          @from_date, @to_date).send("#{audit_type}_audit").for_period(period)
+        reviews_by_audit_type = {}
 
-        reviews_by_audit_type[business_unit_type] ||= {}
-        reviews_by_audit_type[business_unit_type][business_unit.name] ||= []
-        reviews_by_audit_type[business_unit_type][business_unit.name] << cfr
-      end
+        conclusion_final_review.each do |cfr|
+          business_unit = cfr.review.plan_item.business_unit
+          business_unit_type = business_unit.business_unit_type.name
 
-      reviews_by_audit_type.each do |bu_type, bu_data|
-        title = "#{Review.human_attribute_name('audit_type')}: #{bu_type}"
-        business_units = {}
+          reviews_by_audit_type[business_unit_type] ||= {}
+          reviews_by_audit_type[business_unit_type][business_unit.name] ||= []
+          reviews_by_audit_type[business_unit_type][business_unit.name] << cfr
+        end
 
-        bu_data.values.each do |cfrs|
-          unless cfrs.empty?
-            business_unit = cfrs.first.plan_item.business_unit
-            weaknesses = []
-            oportunities = []
+        reviews_by_audit_type.each do |bu_type, bu_data|
+          title = "#{Review.human_attribute_name('audit_type')}: #{bu_type}"
+          business_units = {}
 
-            cfrs.sort! do |cfr1, cfr2|
-              cfr1.review.effectiveness <=> cfr2.review.effectiveness
-            end
+          bu_data.values.each do |cfrs|
+            unless cfrs.empty?
+              business_unit = cfrs.first.plan_item.business_unit
+              weaknesses = []
+              oportunities = []
 
-            cfrs.each do |cfr|
-              review = cfr.review
-              weaknesses |= review.weaknesses
-              oportunities |= review.oportunities
-            end
+              cfrs.sort! do |cfr1, cfr2|
+                cfr1.review.effectiveness <=> cfr2.review.effectiveness
+              end
 
-            grouped_weaknesses = weaknesses.group_by(&:state)
-            grouped_oportunities = oportunities.group_by(&:state)
-            oportunities_table_data = []
-            weaknesses_count = {}
-            weaknesses_count_by_risk = {}
-            total_oportunities = grouped_oportunities.values.sum(&:size)
-            being_implemented_counts = {:current => 0, :stale => 0,
-              :current_rescheduled => 0, :stale_rescheduled => 0}
+              cfrs.each do |cfr|
+                review = cfr.review
+                weaknesses |= review.weaknesses
+                oportunities |= review.oportunities
+              end
 
-            if total_oportunities > 0
-              statuses.each do |s|
-                o_count = (grouped_oportunities[s[1]] || []).size
-                oportunities_percentage = total_oportunities > 0 ?
-                  o_count.to_f / total_oportunities * 100 : 0.0
+              grouped_weaknesses = weaknesses.group_by(&:state)
+              grouped_oportunities = oportunities.group_by(&:state)
+              oportunities_table_data = []
+              weaknesses_count = {}
+              weaknesses_count_by_risk = {}
+              total_oportunities = grouped_oportunities.values.sum(&:size)
+              being_implemented_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
+
+              if total_oportunities > 0
+                statuses.each do |s|
+                  o_count = (grouped_oportunities[s[1]] || []).size
+                  oportunities_percentage = total_oportunities > 0 ?
+                    o_count.to_f / total_oportunities * 100 : 0.0
+
+                  oportunities_table_data << {
+                    'state' => "<b>#{t("finding.status_#{s[0]}")}</b>".to_iso,
+                    'count' =>
+                      "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+                  }
+                end
 
                 oportunities_table_data << {
-                  'state' => "<b>#{t("finding.status_#{s[0]}")}</b>".to_iso,
-                  'count' =>
-                    "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+                  'state' =>
+                    "<b>#{t(:'conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
+                  'count' => "<b>#{total_oportunities}</b>"
                 }
               end
 
-              oportunities_table_data << {
-                'state' =>
-                  "<b>#{t(:'conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
-                'count' => "<b>#{total_oportunities}</b>"
-              }
-            end
+              risk_levels.each do |rl|
+                weaknesses_count_by_risk[rl[0]] = 0
 
-            risk_levels.each do |rl|
-              weaknesses_count_by_risk[rl[0]] = 0
+                statuses.each do |s|
+                  weaknesses_for_status = grouped_weaknesses[s[1]] || {}
 
-              statuses.each do |s|
-                weaknesses_for_status = grouped_weaknesses[s[1]] || {}
-
-                count_for_risk = weaknesses_for_status.inject(0) do |sum, w|
-                  sum + (w.risk == rl[1] ? 1 : 0)
-                end
-
-                weaknesses_count[s[1]] ||= {}
-                weaknesses_count[s[1]][rl[1]] = count_for_risk
-                weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
-
-                if s.first == :being_implemented
-                  being_implemented = weaknesses_for_status.select do |w|
-                    w.risk == rl[1]
+                  count_for_risk = weaknesses_for_status.inject(0) do |sum, w|
+                    sum + (w.risk == rl[1] ? 1 : 0)
                   end
 
-                  being_implemented.each do |w|
-                    unless w.stale?
-                      unless w.rescheduled?
-                        being_implemented_counts[:current] += 1
+                  weaknesses_count[s[1]] ||= {}
+                  weaknesses_count[s[1]][rl[1]] = count_for_risk
+                  weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+
+                  if s.first == :being_implemented
+                    being_implemented = weaknesses_for_status.select do |w|
+                      w.risk == rl[1]
+                    end
+
+                    being_implemented.each do |w|
+                      unless w.stale?
+                        unless w.rescheduled?
+                          being_implemented_counts[:current] += 1
+                        else
+                          being_implemented_counts[:current_rescheduled] += 1
+                        end
                       else
-                        being_implemented_counts[:current_rescheduled] += 1
-                      end
-                    else
-                      unless w.rescheduled?
-                        being_implemented_counts[:stale] += 1
-                      else
-                        being_implemented_counts[:stale_rescheduled] += 1
+                        unless w.rescheduled?
+                          being_implemented_counts[:stale] += 1
+                        else
+                          being_implemented_counts[:stale_rescheduled] += 1
+                        end
                       end
                     end
                   end
                 end
               end
+
+              weaknesses_table_data = get_weaknesses_synthesis_table_data(
+                weaknesses_count, weaknesses_count_by_risk, risk_levels)
+              being_implemented_resume = being_implemented_resume_from_counts(
+                being_implemented_counts)
+
+              business_units[business_unit] = {
+                :conclusion_reviews => cfrs,
+                :weaknesses_table_data => weaknesses_table_data,
+                :oportunities_table_data => oportunities_table_data,
+                :being_implemented_resume => being_implemented_resume
+              }
             end
-
-            weaknesses_table_data = get_weaknesses_synthesis_table_data(
-              weaknesses_count, weaknesses_count_by_risk, risk_levels)
-            being_implemented_resume = being_implemented_resume_from_counts(
-              being_implemented_counts)
-
-            business_units[business_unit] = {
-              :conclusion_reviews => cfrs,
-              :weaknesses_table_data => weaknesses_table_data,
-              :oportunities_table_data => oportunities_table_data,
-              :being_implemented_resume => being_implemented_resume
-            }
           end
-        end
 
-        @data[audit_type] << {
-          :title => title,
-          :business_units => business_units
-        }
+          @data[period][audit_type] << {
+            :title => title,
+            :business_units => business_units
+          }
+        end
       end
     end
   end
@@ -420,107 +451,113 @@ module FollowUpCommonReports
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    @audit_types.each do |type|
-      pdf.move_pointer PDF_FONT_SIZE * 2
-
-      pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
-        (PDF_FONT_SIZE * 1.25).round, :center
-
+    @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
 
-      unless @data[type].blank?
-        @data[type].each do |data_item|
-          pdf.move_pointer PDF_FONT_SIZE
-          pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
+      @audit_types.each do |type|
+        pdf.move_pointer PDF_FONT_SIZE * 2
 
-          data_item[:business_units].each do |bu, bu_data|
+        pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
+          (PDF_FONT_SIZE * 1.25).round, :center
+
+        pdf.move_pointer PDF_FONT_SIZE
+
+        unless @data[period][type].blank?
+          @data[period][type].each do |data_item|
             pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
-            pdf.add_description_item(
-              bu.business_unit_type.business_unit_label, bu.name)
-            pdf.move_pointer PDF_FONT_SIZE
+            data_item[:business_units].each do |bu, bu_data|
+              pdf.move_pointer PDF_FONT_SIZE
 
-            pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
-            pdf.move_pointer PDF_FONT_SIZE
+              pdf.add_description_item(
+                bu.business_unit_type.business_unit_label, bu.name)
+              pdf.move_pointer PDF_FONT_SIZE
 
-            bu_data[:conclusion_reviews].each do |cr|
-              findings_count = cr.review.weaknesses.size +
-                cr.review.oportunities.size
+              pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
+              pdf.move_pointer PDF_FONT_SIZE
 
-              text = "<C:bullet /> <b>#{cr.review}</b>: " +
-                cr.review.score_text
+              bu_data[:conclusion_reviews].each do |cr|
+                findings_count = cr.review.weaknesses.size +
+                  cr.review.oportunities.size
 
-              if findings_count == 0
-                text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
+                text = "<C:bullet /> <b>#{cr.review}</b>: " +
+                  cr.review.score_text
+
+                if findings_count == 0
+                  text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
+                end
+
+                pdf.text text, :left => PDF_FONT_SIZE * 2
               end
 
-              pdf.text text, :left => PDF_FONT_SIZE * 2
-            end
-
-            pdf.move_pointer PDF_FONT_SIZE
-
-            pdf.add_title(
-              t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'),
-              PDF_FONT_SIZE)
-
-            pdf.move_pointer PDF_FONT_SIZE
-
-            add_weaknesses_synthesis_table(pdf,
-              bu_data[:weaknesses_table_data], 10)
-            add_being_implemented_resume(pdf,
-              bu_data[:being_implemented_resume])
-
-            if type == :internal
               pdf.move_pointer PDF_FONT_SIZE
 
               pdf.add_title(
-                t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'),
+                t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses'),
                 PDF_FONT_SIZE)
 
               pdf.move_pointer PDF_FONT_SIZE
 
-              unless bu_data[:oportunities_table_data].blank?
-                columns = {
-                  'state' => [Oportunity.human_attribute_name('state'), 30],
-                  'count' => [Oportunity.human_attribute_name('count'), 70]
-                }
+              add_weaknesses_synthesis_table(pdf,
+                bu_data[:weaknesses_table_data], 10)
+              add_being_implemented_resume(pdf,
+                bu_data[:being_implemented_resume])
 
-                columns.each do |col_name, col_data|
-                  columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-                    column.heading = col_data.first
-                    column.width = pdf.percent_width col_data.last
-                  end
-                end
+              if type == :internal
+                pdf.move_pointer PDF_FONT_SIZE
+
+                pdf.add_title(
+                  t(:'follow_up_committee.weaknesses_by_audit_type.oportunities'),
+                  PDF_FONT_SIZE)
+
+                pdf.move_pointer PDF_FONT_SIZE
 
                 unless bu_data[:oportunities_table_data].blank?
-                  PDF::SimpleTable.new do |table|
-                    table.width = pdf.page_usable_width
-                    table.columns = columns
-                    table.data = bu_data[:oportunities_table_data]
-                    table.column_order = ['state', 'count']
-                    table.split_rows = true
-                    table.font_size = PDF_FONT_SIZE
-                    table.row_gap = (PDF_FONT_SIZE * 0.5).round
-                    table.shade_rows = :none
-                    table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-                    table.heading_font_size = PDF_FONT_SIZE
-                    table.shade_headings = true
-                    table.bold_headings = true
-                    table.position = :left
-                    table.orientation = :right
-                    table.show_lines = :all
-                    table.render_on pdf
+                  columns = {
+                    'state' => [Oportunity.human_attribute_name('state'), 30],
+                    'count' => [Oportunity.human_attribute_name('count'), 70]
+                  }
+
+                  columns.each do |col_name, col_data|
+                    columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+                      column.heading = col_data.first
+                      column.width = pdf.percent_width col_data.last
+                    end
                   end
+
+                  unless bu_data[:oportunities_table_data].blank?
+                    PDF::SimpleTable.new do |table|
+                      table.width = pdf.page_usable_width
+                      table.columns = columns
+                      table.data = bu_data[:oportunities_table_data]
+                      table.column_order = ['state', 'count']
+                      table.split_rows = true
+                      table.font_size = PDF_FONT_SIZE
+                      table.row_gap = (PDF_FONT_SIZE * 0.5).round
+                      table.shade_rows = :none
+                      table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                      table.heading_font_size = PDF_FONT_SIZE
+                      table.shade_headings = true
+                      table.bold_headings = true
+                      table.position = :left
+                      table.orientation = :right
+                      table.show_lines = :all
+                      table.render_on pdf
+                    end
+                  end
+                else
+                  pdf.text t(:'follow_up_committee.without_oportunities')
                 end
-              else
-                pdf.text t(:'follow_up_committee.without_oportunities')
               end
             end
           end
+        else
+          pdf.text t(:'follow_up_committee.without_weaknesses'),
+            :font_size => PDF_FONT_SIZE
         end
-      else
-        pdf.text t(:'follow_up_committee.without_weaknesses'),
-          :font_size => PDF_FONT_SIZE
       end
     end
 
@@ -538,6 +575,16 @@ module FollowUpCommonReports
   end
 
   private
+
+  def periods_for_interval
+    Period.all({
+        :include => {:reviews => :conclusion_final_review},
+        :conditions => [
+          "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
+          { :from_date => @from_date, :to_date => @to_date }
+        ]
+    })
+  end
 
   # Devuelve el ID de la organización seleccionada, sólo si el usuario está
   # autorizado para verla. Caso contrario retorna la organización con la que

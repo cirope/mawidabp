@@ -29,11 +29,12 @@ class FollowUpCommitteeController < ApplicationController
   def synthesis_report
     @title = t :'follow_up_committee.synthesis_report_title'
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
+    @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'review', 'score',
         'process_control', 'weaknesses_count', 'oportunities_count']
     @filters = []
     @risk_levels = []
-    @audits_by_business_unit = []
+    @audits_by_business_unit = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date)
 
@@ -63,73 +64,76 @@ class FollowUpCommitteeController < ApplicationController
     business_unit_types = @selected_business_unit ?
       [@selected_business_unit] : BusinessUnitType.list
 
-    business_unit_types.each do |but|
-      columns = {'business_unit_report_name' => [but.business_unit_label, 15],
-        'review' => [Review.human_name, 16],
-        'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
-        'process_control' =>
-          ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
-        'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],
-        'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
-      column_data = []
-      review_scores = []
-      name = but.name
+    @periods.each do |period|
+      business_unit_types.each do |but|
+        columns = {'business_unit_report_name' => [but.business_unit_label, 15],
+          'review' => [Review.human_name, 16],
+          'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
+          'process_control' =>
+            ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
+          'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],
+          'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
+        column_data = []
+        review_scores = []
+        name = but.name
 
-      conclusion_reviews.each do |c_r|
-        if c_r.review.business_unit.business_unit_type_id == but.id
-          process_controls = {}
-          weaknesses_count = {}
+        conclusion_reviews.for_period(period).each do |c_r|
+          if c_r.review.business_unit.business_unit_type_id == but.id
+            process_controls = {}
+            weaknesses_count = {}
 
-          c_r.review.control_objective_items.each do |coi|
-            process_controls[coi.process_control.name] ||= []
-            process_controls[coi.process_control.name] << coi.effectiveness
-          end
+            c_r.review.control_objective_items.each do |coi|
+              process_controls[coi.process_control.name] ||= []
+              process_controls[coi.process_control.name] << coi.effectiveness
+            end
 
-          process_controls.each do |pc, effectiveness|
-            process_controls[pc] = effectiveness.inject(0) {|t, e| t + e}
-            process_controls[pc] /= effectiveness.size
-          end
+            process_controls.each do |pc, effectiveness|
+              process_controls[pc] = effectiveness.inject(0) {|t, e| t + e}
+              process_controls[pc] /= effectiveness.size
+            end
 
-          c_r.review.weaknesses.each do |w|
-            @risk_levels |= parameter_in(@auth_organization.id,
-              :admin_finding_risk_levels, w.created_at).
-              sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+            c_r.review.weaknesses.each do |w|
+              @risk_levels |= parameter_in(@auth_organization.id,
+                :admin_finding_risk_levels, w.created_at).
+                sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
-            weaknesses_count[w.risk_text] ||= 0
-            weaknesses_count[w.risk_text] += 1
-          end
+              weaknesses_count[w.risk_text] ||= 0
+              weaknesses_count[w.risk_text] += 1
+            end
 
-          weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-            t(:'follow_up_committee.synthesis_report.without_weaknesses') :
-            @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
-          process_control_text = process_controls.sort do |pc1, pc2|
-            pc1[1] <=> pc2[1]
-          end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
-          oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
-            c_r.review.final_oportunities.count.to_s :
-            t(:'conclusion_committee_report.synthesis_report.without_oportunities')
-
-          review_scores << c_r.review.effectiveness
-          column_data << {
-            'business_unit_report_name' => c_r.review.business_unit.name,
-            'review' => c_r.review.to_s,
-            'score' => c_r.review.score_text,
-            'process_control' => process_control_text,
-            'weaknesses_count' => @risk_levels.blank? ?
+            weaknesses_count_text = weaknesses_count.values.sum == 0 ?
               t(:'follow_up_committee.synthesis_report.without_weaknesses') :
-              weaknesses_count_text,
-            'oportunities_count' => oportunities_count_text
-          }
-        end
-      end
+              @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
+            process_control_text = process_controls.sort do |pc1, pc2|
+              pc1[1] <=> pc2[1]
+            end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
+            oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
+              c_r.review.final_oportunities.count.to_s :
+              t(:'conclusion_committee_report.synthesis_report.without_oportunities')
 
-      @audits_by_business_unit << {
-        :name => name,
-        :external => but.external,
-        :columns => columns,
-        :column_data => column_data,
-        :review_scores => review_scores
-      }
+            review_scores << c_r.review.effectiveness
+            column_data << {
+              'business_unit_report_name' => c_r.review.business_unit.name,
+              'review' => c_r.review.to_s,
+              'score' => c_r.review.score_text,
+              'process_control' => process_control_text,
+              'weaknesses_count' => @risk_levels.blank? ?
+                t(:'follow_up_committee.synthesis_report.without_weaknesses') :
+                weaknesses_count_text,
+              'oportunities_count' => oportunities_count_text
+            }
+          end
+        end
+
+        @audits_by_business_unit[period] ||= []
+        @audits_by_business_unit[period] << {
+          :name => name,
+          :external => but.external,
+          :columns => columns,
+          :column_data => column_data,
+          :review_scores => review_scores
+        }
+      end
     end
   end
 
@@ -158,111 +162,119 @@ class FollowUpCommitteeController < ApplicationController
         :from_date => I18n.l(@from_date, :format => :long),
         :to_date => I18n.l(@to_date, :format => :long)))
 
-    unless @selected_business_unit
-      unless @audits_by_business_unit.blank?
-        count = 0
-        total = @audits_by_business_unit.inject(0) do |sum, data|
-          scores = data[:review_scores]
-
-          if scores.blank?
-            sum
-          else
-            count += 1
-            sum + (scores.sum.to_f / scores.size).round
-          end
-        end
-
-        average_score = count > 0 ? (total.to_f / count).round : 100
-      end
-
+    @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
 
-      pdf.add_title(
-        t(:'follow_up_committee.synthesis_report.organization_score',
-          :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
+      unless @selected_business_unit
+        unless @audits_by_business_unit[period].blank?
+          count = 0
+          total = @audits_by_business_unit[period].inject(0) do |sum, data|
+            scores = data[:review_scores]
 
-      pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
-
-      pdf.text(
-        t(:'conclusion_committee_report.synthesis_report.organization_score_note',
-          :audit_types =>
-            @audits_by_business_unit.map {|data| data[:name]}.to_sentence),
-        :font_size => (PDF_FONT_SIZE * 0.75).round)
-    end
-
-    @audits_by_business_unit.each do |data|
-      columns = data[:columns]
-      column_data = []
-
-      @column_order.each do |col_name|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = columns[col_name].first
-          column.width = pdf.percent_width columns[col_name].last
-        end
-      end
-
-      if !data[:external] && !@internal_title_showed
-        title = t :'follow_up_committee.synthesis_report.internal_audit_weaknesses'
-        @internal_title_showed = true
-      elsif data[:external] && !@external_title_showed
-        title = t :'follow_up_committee.synthesis_report.external_audit_weaknesses'
-        @external_title_showed = true
-      end
-
-      if title
-        pdf.move_pointer PDF_FONT_SIZE * 2
-        pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
-      end
-
-      pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
-
-      data[:column_data].each do |row|
-        new_row = {}
-
-        row.each do |column_name, column_content|
-          new_row[column_name] = column_content.kind_of?(Array) ?
-            column_content.map {|l| "  <C:bullet /> #{l}"}.join("\n").to_iso :
-            column_content.to_iso
-        end
-
-        column_data << new_row
-      end
-
-      unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data.sort do |row1, row2|
-            row1['score'].match(/(\d+)%/)[0].to_i <=>
-              row2['score'].match(/(\d+)%/)[0].to_i
+            if scores.blank?
+              sum
+            else
+              count += 1
+              sum + (scores.sum.to_f / scores.size).round
+            end
           end
-          table.column_order = @column_order
-          table.split_rows = true
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
-        end
 
-        scores = data[:review_scores]
-
-        unless scores.blank?
-          title = t(:'conclusion_committee_report.synthesis_report.generic_score_average',
-            :audit_type => data[:name])
-          text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
-        else
-          text = t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
+          average_score = count > 0 ? (total.to_f / count).round : 100
         end
 
         pdf.move_pointer PDF_FONT_SIZE
 
-        pdf.text text, :font_size => PDF_FONT_SIZE
-      else
-        pdf.text t(:'follow_up_committee.synthesis_report.without_audits_in_the_period')
+        pdf.add_title(
+          t(:'follow_up_committee.synthesis_report.organization_score',
+            :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
+
+        pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
+
+        pdf.text(
+          t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+            :audit_types =>
+              @audits_by_business_unit[period].map { |data|
+                data[:name]
+              }.to_sentence),
+          :font_size => (PDF_FONT_SIZE * 0.75).round)
+      end
+
+      @audits_by_business_unit[period].each do |data|
+        columns = data[:columns]
+        column_data = []
+
+        @column_order.each do |col_name|
+          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+            column.heading = columns[col_name].first
+            column.width = pdf.percent_width columns[col_name].last
+          end
+        end
+
+        if !data[:external] && !@internal_title_showed
+          title = t :'follow_up_committee.synthesis_report.internal_audit_weaknesses'
+          @internal_title_showed = true
+        elsif data[:external] && !@external_title_showed
+          title = t :'follow_up_committee.synthesis_report.external_audit_weaknesses'
+          @external_title_showed = true
+        end
+
+        if title
+          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
+        end
+
+        pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
+
+        data[:column_data].each do |row|
+          new_row = {}
+
+          row.each do |column_name, column_content|
+            new_row[column_name] = column_content.kind_of?(Array) ?
+              column_content.map {|l| "  <C:bullet /> #{l}"}.join("\n").to_iso :
+              column_content.to_iso
+          end
+
+          column_data << new_row
+        end
+
+        unless column_data.blank?
+          PDF::SimpleTable.new do |table|
+            table.width = pdf.page_usable_width
+            table.columns = columns
+            table.data = column_data.sort do |row1, row2|
+              row1['score'].match(/(\d+)%/)[0].to_i <=>
+                row2['score'].match(/(\d+)%/)[0].to_i
+            end
+            table.column_order = @column_order
+            table.split_rows = true
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
+            table.shade_headings = true
+            table.position = :left
+            table.orientation = :right
+            table.render_on pdf
+          end
+
+          scores = data[:review_scores]
+
+          unless scores.blank?
+            title = t(:'conclusion_committee_report.synthesis_report.generic_score_average',
+              :audit_type => data[:name])
+            text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
+          else
+            text = t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
+          end
+
+          pdf.move_pointer PDF_FONT_SIZE
+
+          pdf.text text, :font_size => PDF_FONT_SIZE
+        else
+          pdf.text t(:'follow_up_committee.synthesis_report.without_audits_in_the_period')
+        end
       end
     end
 
@@ -294,69 +306,75 @@ class FollowUpCommitteeController < ApplicationController
   def cost_analysis
     @title = t :'follow_up_committee.cost_analysis_title'
     @from_date, @to_date = *make_date_range(params[:cost_analysis])
+    @periods = periods_for_interval
     @column_order = [['business_unit', 20], ['project', 20], ['review', 10],
       ['audit_cost', 25], ['audited_cost', 25]]
-    @weaknesses_data = []
-    @oportunities_data = []
-    total_weaknesses_audit_cost, total_weaknesses_audited_cost = 0, 0
-    total_oportunities_audit_cost, total_oportunities_audited_cost = 0, 0
-    weaknesses_by_review = Weakness.list_all_by_date(@from_date, @to_date).
-      finals(false).group_by(&:review)
-    oportunities_by_review  = Oportunity.list_all_by_date(@from_date, @to_date).
-      finals(false).group_by(&:review)
+    @weaknesses_data = {}
+    @oportunities_data = {}
 
-    unless weaknesses_by_review.blank?
-      weaknesses_by_review.each do |review, weaknesses|
-        audit_cost = weaknesses.inject(0) do |sum, weakness|
-          sum + weakness.costs.audit.to_a.sum(&:cost)
-        end
-        audited_cost = weaknesses.inject(0) do |sum, weakness|
-          sum + weakness.costs.audited.to_a.sum(&:cost)
+    @periods.each do |period|
+      @weaknesses_data[period] ||= []
+      @oportunities_data[period] ||= []
+      total_weaknesses_audit_cost, total_weaknesses_audited_cost = 0, 0
+      total_oportunities_audit_cost, total_oportunities_audited_cost = 0, 0
+      weaknesses_by_review = Weakness.list_all_by_date(@from_date, @to_date).
+        finals(false).for_period(period).group_by(&:review)
+      oportunities_by_review  = Oportunity.list_all_by_date(@from_date, @to_date).
+        finals(false).for_period(period).group_by(&:review)
+
+      unless weaknesses_by_review.blank?
+        weaknesses_by_review.each do |review, weaknesses|
+          audit_cost = weaknesses.inject(0) do |sum, weakness|
+            sum + weakness.costs.audit.to_a.sum(&:cost)
+          end
+          audited_cost = weaknesses.inject(0) do |sum, weakness|
+            sum + weakness.costs.audited.to_a.sum(&:cost)
+          end
+
+          total_weaknesses_audit_cost += audit_cost
+          total_weaknesses_audited_cost += audited_cost
+          @weaknesses_data[period] << {
+            'business_unit' => review.plan_item.business_unit.name.to_iso,
+            'project' => review.plan_item.project.to_iso,
+            'review' => review.identification.to_iso,
+            'audit_cost' => audit_cost.to_s,
+            'audited_cost' => audited_cost.to_s
+          }
         end
 
-        total_weaknesses_audit_cost += audit_cost
-        total_weaknesses_audited_cost += audited_cost
-        @weaknesses_data << {
-          'business_unit' => review.plan_item.business_unit.name.to_iso,
-          'project' => review.plan_item.project.to_iso,
-          'review' => review.identification.to_iso,
-          'audit_cost' => audit_cost.to_s,
-          'audited_cost' => audited_cost.to_s
+        @weaknesses_data[period] << {
+          'business_unit' => '', 'project' => '', 'review' => '',
+          'audit_cost' => "<b>#{total_weaknesses_audit_cost}</b>",
+          'audited_cost' => "<b>#{total_weaknesses_audited_cost}</b>"
         }
       end
-      
-      @weaknesses_data << {
-        'business_unit' => '', 'project' => '', 'review' => '',
-        'audit_cost' => "<b>#{total_weaknesses_audit_cost}</b>",
-        'audited_cost' => "<b>#{total_weaknesses_audited_cost}</b>"
-      }
-    end
 
-    unless oportunities_by_review.blank?
-      oportunities_by_review.each do |review, oportunities|
-        audit_cost = oportunities.inject(0) do |sum, oportunity|
-          sum + oportunity.costs.audit.to_a.sum(&:cost)
-        end
-        audited_cost = oportunities.inject(0) do |sum, oportunity|
-          sum + oportunity.costs.audited.to_a.sum(&:cost)
+      unless oportunities_by_review.blank?
+        oportunities_by_review.each do |review, oportunities|
+          audit_cost = oportunities.inject(0) do |sum, oportunity|
+            sum + oportunity.costs.audit.to_a.sum(&:cost)
+          end
+          audited_cost = oportunities.inject(0) do |sum, oportunity|
+            sum + oportunity.costs.audited.to_a.sum(&:cost)
+          end
+
+          total_oportunities_audit_cost += audit_cost
+          total_oportunities_audited_cost += audited_cost
+          @oportunities_data[period] << {
+            'business_unit' => review.plan_item.business_unit.name.to_iso,
+            'project' => review.plan_item.project.to_iso,
+            'review' => review.identification.to_iso,
+            'audit_cost' => audit_cost.to_s,
+            'audited_cost' => audited_cost.to_s
+          }
         end
 
-        total_oportunities_audit_cost += audit_cost
-        total_oportunities_audited_cost += audited_cost
-        @oportunities_data << {
-          'business_unit' => review.plan_item.business_unit.name.to_iso,
-          'project' => review.plan_item.project.to_iso,
-          'review' => review.identification.to_iso,
-          'audit_cost' => audit_cost.to_s,
-          'audited_cost' => audited_cost.to_s
+        @oportunities_data[period] << {
+          'business_unit' => '', 'project' => '', 'review' => '',
+          'audit_cost' => "<b>#{total_oportunities_audit_cost}</b>",
+          'audited_cost' => "<b>#{total_oportunities_audited_cost}</b>"
         }
       end
-      
-      @oportunities_data << {
-        'business_unit' => '', 'project' => '', 'review' => '',
-        'audit_cost' => "<b>#{total_oportunities_audit_cost}</b>",
-        'audited_cost' => "<b>#{total_oportunities_audited_cost}</b>"
-      }
     end
   end
 
@@ -390,54 +408,61 @@ class FollowUpCommitteeController < ApplicationController
 
     pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_title "#{t(:'follow_up_committee.cost_analysis.weaknesses')}\n",
-      PDF_FONT_SIZE, :center
+    @periods.each do |period|
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
+      pdf.move_pointer PDF_FONT_SIZE
 
-    unless @weaknesses_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = @weaknesses_data
-        table.column_order = @column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.add_title "#{t(:'follow_up_committee.cost_analysis.weaknesses')}\n",
+        PDF_FONT_SIZE, :center
+
+      unless @weaknesses_data[period].blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = @weaknesses_data[period]
+          table.column_order = @column_order.map(&:first)
+          table.split_rows = true
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.render_on pdf
+        end
+      else
+        pdf.text t(:'follow_up_committee.cost_analysis.without_weaknesses'),
+          :font_size => PDF_FONT_SIZE
       end
-    else
-      pdf.text t(:'follow_up_committee.cost_analysis.without_weaknesses'),
-        :font_size => PDF_FONT_SIZE
-    end
 
-    pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_title "#{t(:'follow_up_committee.cost_analysis.oportunities')}\n",
-      PDF_FONT_SIZE, :center
+      pdf.add_title "#{t(:'follow_up_committee.cost_analysis.oportunities')}\n",
+        PDF_FONT_SIZE, :center
 
-    unless @oportunities_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = @oportunities_data
-        table.column_order = @column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75)
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      unless @oportunities_data[period].blank?
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = @oportunities_data[period]
+          table.column_order = @column_order.map(&:first)
+          table.split_rows = true
+          table.font_size = (PDF_FONT_SIZE * 0.75)
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.render_on pdf
+        end
+      else
+        pdf.text t(:'follow_up_committee.cost_analysis.without_oportunities'),
+          :font_size => PDF_FONT_SIZE
       end
-    else
-      pdf.text t(:'follow_up_committee.cost_analysis.without_oportunities'),
-        :font_size => PDF_FONT_SIZE
     end
 
     pdf.custom_save_as(

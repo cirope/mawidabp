@@ -29,6 +29,12 @@ class ConclusionReview < ActiveRecord::Base
   })
 
   # Named scopes
+  named_scope :for_period, lambda { |period|
+    {
+      :include => { :review =>:period },
+      :conditions => { "#{Period.table_name}.id" => period.id }
+    }
+  }
   named_scope :by_business_unit_type, lambda { |business_unit_type|
     {
       :include => {

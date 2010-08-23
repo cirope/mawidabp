@@ -3,8 +3,8 @@
   :forms => {:date_range => true}} %>
 
 <%  @counts.each do |count_data| -%>
-  <h1 class="center_title with_border_bottom">
-    <%= Period.human_name %>: <%= count_data[:period].inspect %>
+  <h1 class="simple_title with_border_bottom">
+    <strong><%= Period.human_name %>: <%= count_data[:period].inspect %></strong>
   </h1>
   <% @audit_types.each do |type| -%>
     <h1 class="center_title">

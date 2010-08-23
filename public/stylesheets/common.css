@@ -935,6 +935,17 @@ h1.plain {
     margin: 0em;
 }
 
+h1.simple_title {
+    text-align: left;
+    margin: 1em 1em 0em 1em;
+    border: none;
+    font-size: 1em;
+}
+
+h1.simple_title > strong {
+    font-size: 1.6em;
+}
+
 h1.with_border_bottom {
     border-bottom: 2px solid #cecece;
 }

@@ -3,12 +3,17 @@
   :forms => {:date_range => true}} %>
 
 <div style="margin: 1em;">
-  <% @audit_types.each do |type| -%>
-    <h1 class="center_title">
-      <%= t("conclusion_committee_report.weaknesses_type_#{type}") %>
+  <% @periods.each do |period| -%>
+    <h1 class="simple_title with_border_bottom">
+      <strong><%= "#{Period.human_name}: #{period.inspect}" %></strong>
     </h1>
-    <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-        :table_data => @tables_data[type]} %>
+    <% @audit_types.each do |type| -%>
+      <h1 class="center_title">
+        <%= t("conclusion_committee_report.weaknesses_type_#{type}") %>
+      </h1>
+      <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+          :table_data => @tables_data[period][type]} %>
+    <% end -%>
   <% end -%>
 </div>
 

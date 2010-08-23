@@ -3,8 +3,8 @@
   :forms => {:date_range => true}} %>
 
 <% @audits_by_period.each do |audit_by_period| -%>
-  <h1 class="center_title with_border_bottom">
-    <%= Period.human_name %>: <%= audit_by_period[:period].inspect %>
+  <h1 class="simple_title with_border_bottom">
+    <strong><%= Period.human_name %>: <%= audit_by_period[:period].inspect %></strong>
   </h1>
   <% audit_by_period[:audits_by_business_unit].each do |data| -%>
     <% if !data[:external] && !@internal_title_showed -%>

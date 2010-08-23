@@ -126,7 +126,7 @@ class ExecutionReportsController < ApplicationController
     @audits_by_period.each do |audit_by_period|
       pdf.move_pointer PDF_FONT_SIZE * 2
       pdf.add_title "#{Period.human_name}: #{audit_by_period[:period].inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :center
+        (PDF_FONT_SIZE * 1.25).round, :justify
 
       audit_by_period[:audits_by_business_unit].each do |data|
         columns = data[:columns]
@@ -266,7 +266,7 @@ class ExecutionReportsController < ApplicationController
     @counts.each do |count_data|
       pdf.move_pointer PDF_FONT_SIZE * 2
       pdf.add_title "#{Period.human_name}: #{count_data[:period].inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :center
+        (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|
         pdf.move_pointer PDF_FONT_SIZE * 2

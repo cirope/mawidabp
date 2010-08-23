@@ -2,64 +2,69 @@
   :locals => {:action => :synthesis_report, :extra_params => {},
   :forms => {:date_range => true, :business_unit => true}} %>
 
-<% unless @selected_business_unit -%>
-  <div style="margin: 1em;">
-    <p style="font-size: 1.6em;">
-      <strong>
-        <%= synthesis_report_organization_score_average(@audits_by_business_unit) %>
-      </strong>
-    </p>
-    <p style="font-size: .8em; margin-top: 1em;">
-      <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
-        :audit_types => @audits_by_business_unit.map {|data| data[:name]}.to_sentence) %>
-    </p>
-  </div>
-<% end -%>
-
-<% @audits_by_business_unit.each do |data| -%>
-  <% if !data[:external] && !@internal_title_showed -%>
-    <h1 class="center_title">
-      <%= t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
-    </h1>
-    <% @internal_title_showed = true -%>
-  <% elsif data[:external] && !@external_title_showed -%>
-    <h1 class="center_title">
-      <%= t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
-    </h1>
-    <% @external_title_showed = true -%>
+<% @periods.each do |period| -%>
+  <h1 class="simple_title with_border_bottom">
+    <strong><%= "#{Period.human_name}: #{period.inspect}" %></strong>
+  </h1>
+  <% unless @selected_business_unit -%>
+    <div style="margin: 1em;">
+      <p style="font-size: 1.6em;">
+        <strong>
+          <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
+        </strong>
+      </p>
+      <p style="font-size: .8em; margin-top: 1em;">
+        <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+          :audit_types => @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
+      </p>
+    </div>
   <% end -%>
-  <h1 style="margin: 1em;"><%= data[:name] %></h1>
-  <% unless data[:column_data].blank? -%>
-    <table class="summary_table" style="margin: 0em 1em;">
-      <thead>
-        <tr>
-          <% @column_order.each do |col_name| -%>
-            <% column = data[:columns][col_name] %>
-            <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
-          <% end -%>
-        </tr>
-      </thead>
-      <tbody>
-        <% data[:column_data].each do |row| -%>
+
+  <% @audits_by_business_unit[period].each do |data| -%>
+    <% if !data[:external] && !@internal_title_showed -%>
+      <h1 class="center_title">
+        <%= t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
+      </h1>
+      <% @internal_title_showed = true -%>
+    <% elsif data[:external] && !@external_title_showed -%>
+      <h1 class="center_title">
+        <%= t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
+      </h1>
+      <% @external_title_showed = true -%>
+    <% end -%>
+    <h1 style="margin: 1em;"><%= data[:name] %></h1>
+    <% unless data[:column_data].blank? -%>
+      <table class="summary_table" style="margin: 0em 1em;">
+        <thead>
           <tr>
             <% @column_order.each do |col_name| -%>
-              <td><%= row[col_name].kind_of?(Array) ?
-                array_to_ul(row[col_name], :class => :raw_list) :
-                row[col_name] %></td>
+              <% column = data[:columns][col_name] %>
+              <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
             <% end -%>
           </tr>
-        <% end -%>
-      </tbody>
-    </table>
-    <p style="margin: 1em">
-      <%= synthesis_report_score_average(
-       t(:'conclusion_committee_report.synthesis_report.generic_score_average',
-         :audit_type => data[:name]), data[:review_scores]) %>
-    </p>
-  <% else -%>
-    <p style="margin: 1em;">
-      <em><%= t :'follow_up_committee.synthesis_report.without_audits_in_the_period' %></em>
-    </p>
+        </thead>
+        <tbody>
+          <% data[:column_data].each do |row| -%>
+            <tr>
+              <% @column_order.each do |col_name| -%>
+                <td><%= row[col_name].kind_of?(Array) ?
+                  array_to_ul(row[col_name], :class => :raw_list) :
+                  row[col_name] %></td>
+              <% end -%>
+            </tr>
+          <% end -%>
+        </tbody>
+      </table>
+      <p style="margin: 1em">
+        <%= synthesis_report_score_average(
+         t(:'conclusion_committee_report.synthesis_report.generic_score_average',
+           :audit_type => data[:name]), data[:review_scores]) %>
+      </p>
+    <% else -%>
+      <p style="margin: 1em;">
+        <em><%= t :'follow_up_committee.synthesis_report.without_audits_in_the_period' %></em>
+      </p>
+    <% end -%>
   <% end -%>
 <% end -%>
 

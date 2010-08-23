@@ -18,6 +18,25 @@ class Period < ActiveRecord::Base
       :order => 'number DESC'
     }
   }
+  named_scope :list_by_date, lambda { |from_date, to_date|
+    {
+      :conditions => [
+        [
+          "#{table_name}.organization_id = :organization_id",
+          [
+            "#{table_name}.start BETWEEN :from_date AND :to_date",
+            "#{table_name}.end BETWEEN :from_date AND :to_date"
+          ].join(' OR ')
+        ].map {|c| "(#{c})"}.join(' AND '),
+        {
+          :from_date => from_date,
+          :to_date => to_date,
+          :organization_id => GlobalModelConfig.current_organization_id
+        }
+      ],
+      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
+    }
+  }
   named_scope :currents, lambda {
     {
       :conditions => [
