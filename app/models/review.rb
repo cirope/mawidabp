@@ -265,7 +265,13 @@ class Review < ActiveRecord::Base
       :identification => nil)
 
     other.control_objective_items.each do |coi|
-      self.control_objective_items.build(coi.attributes.merge(:id => nil))
+      self.control_objective_items.build(coi.attributes.merge({
+            :id => nil,
+            :controls_attributes =>
+              coi.controls.map { |c| c.attributes.merge :id => nil }
+          }
+        )
+      )
     end
 
     other.review_user_assignments.each do |rua|
