@@ -160,6 +160,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'validations when is finished' do
     @control_objective_item.post_audit_qualification = nil
+    @control_objective_item.pre_audit_qualification = nil
     @control_objective_item.audit_date = nil
     @control_objective_item.relevance = nil
     @control_objective_item.finished = false
@@ -172,10 +173,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.valid?
 
     @control_objective_item.finished = true
-    assert @control_objective_item.pre_audit_qualification
 
-    assert !@control_objective_item.valid?
-    assert_equal 8, @control_objective_item.errors.count
+    assert @control_objective_item.invalid?
+    assert_equal 7, @control_objective_item.errors.count
     assert_equal error_message_from_model(@control_objective_item,
       :post_audit_qualification, :blank),
       @control_objective_item.errors.on(:post_audit_qualification)
@@ -193,6 +193,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal error_message_from_model(@control_objective_item,
       :auditor_comment, :blank), @control_objective_item.errors.on(
       :auditor_comment)
+
+    @control_objective_item.pre_audit_qualification = 0
+
+    assert !@control_objective_item.valid?
+    assert_equal 7, @control_objective_item.errors.count
+    assert_nil @control_objective_item.errors.on(:post_audit_qualification)
     assert_equal error_message_from_model(@control_objective_item.controls[0],
       :design_tests, :blank), @control_objective_item.controls[0].errors.on(
       :design_tests)

@@ -71,8 +71,13 @@ class ControlObjectiveItem < ActiveRecord::Base
     record.errors.add attr, :blank unless active_controls
   end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
-  validates_presence_of :post_audit_qualification, :audit_date, :relevance,
-    :auditor_comment, :if => :finished
+  validates_presence_of :audit_date, :relevance, :auditor_comment,
+    :if => :finished
+  validates_each :post_audit_qualification, :if => :finished do |record, attr, value|
+    if value.blank? && record.pre_audit_qualification.blank?
+      record.errors.add attr, :blank
+    end
+  end
   
   # Relaciones
   belongs_to :control_objective

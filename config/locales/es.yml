@@ -1702,6 +1702,10 @@ es:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        control_objective_item:
+          attributes:
+            post_audit_qualification:
+              blank: "no puede estar en blanco, o bien debe tener una Calificación evaluación de diseño"
         finding:
           attributes:
             follow_up_date:
