@@ -172,66 +172,128 @@ class Finding < ActiveRecord::Base
     }
   ]
   named_scope :unanswered_and_stale, lambda { |factor|
+    stale_parameters = Organization.all_parameters(
+      :admin_finding_stale_confirmed_days)
+    pre_conditions = []
+    parameters = {
+      :state => STATUS[:unanswered],
+      :boolean_false => false,
+      :notification_level => factor - 1
+    }
+
+    stale_parameters.each_with_index do |stale_parameter, i|
+      stale_days = stale_parameter[:parameter].to_i
+      parameters[:"stale_unanswered_date_#{i}"] =
+        (stale_days + stale_days * factor).days.ago_in_business.to_date
+      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+
+      pre_conditions << [
+        "first_notification_date < :stale_unanswered_date_#{i}",
+        "#{Period.table_name}.organization_id = :organization_id_#{i}",
+      ].join(' AND ')
+    end
+
+    fix_conditions = [
+      'state = :state',
+      'final = :boolean_false',
+      'notification_level = :notification_level'
+    ].join(' AND ')
+
     {
+      :include => { :control_objective_item => { :review => :period } },
       :conditions => [
         [
-          'first_notification_date < :stale_unanswered_date',
-          'state = :state',
-          'final = :boolean_false',
-          'notification_level = :notification_level'
+          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
+          fix_conditions
         ].join(' AND '),
-        {
-          :state => STATUS[:unanswered],
-          :boolean_false => false,
-          :stale_unanswered_date => (
-            FINDING_STALE_CONFIRMED_DAYS + FINDING_STALE_CONFIRMED_DAYS * factor
-          ).days.ago_in_business.to_date,
-          :notification_level => factor - 1
-        }
+        parameters
       ]
     }
   }
-  named_scope :unconfirmed_and_stale, :conditions => [
-    [
-      'first_notification_date < :stale_unconfirmed_date',
+  named_scope :unconfirmed_and_stale, lambda {
+    stale_parameters = Organization.all_parameters(
+      :admin_finding_stale_confirmed_days)
+    pre_conditions = []
+    parameters = {
+      :state => STATUS[:unconfirmed],
+      :boolean_false => false
+    }
+
+    stale_parameters.each_with_index do |stale_parameter, i|
+      stale_days = stale_parameter[:parameter].to_i
+      parameters[:"stale_unconfirmed_date_#{i}"] =
+        (stale_days + stale_days).days.ago_in_business.to_date
+      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+
+      pre_conditions << [
+        "first_notification_date < :stale_unconfirmed_date_#{i}",
+        "#{Period.table_name}.organization_id = :organization_id_#{i}",
+      ].join(' AND ')
+    end
+
+    fix_conditions = [
       'state = :state',
       'final = :boolean_false'
-    ].join(' AND '),
+    ].join(' AND ')
+
     {
-      :state => STATUS[:unconfirmed],
-      :boolean_false => false,
-      :stale_unconfirmed_date => (FINDING_STALE_UNCONFIRMED_DAYS +
-          FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date
+      :include => { :control_objective_item => { :review => :period } },
+      :conditions => [
+        [
+          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
+          fix_conditions
+        ].join(' AND '),
+        parameters
+      ]
     }
-  ]
-  named_scope :confirmed_and_stale, :include => :finding_answers,
-    :conditions => [
-      [
+  }
+  named_scope :confirmed_and_stale, lambda {
+    stale_parameters = Organization.all_parameters(
+      :admin_finding_stale_confirmed_days)
+    pre_conditions = []
+    parameters = {
+      :state => STATUS[:confirmed],
+      :boolean_false => false,
+      :notification_level => 0
+    }
+
+    stale_parameters.each_with_index do |stale_parameter, i|
+      stale_days = stale_parameter[:parameter].to_i
+      parameters[:"stale_confirmed_date_#{i}"] =
+        stale_days.days.ago_in_business.to_date
+      parameters[:"stale_first_notification_date_#{i}"] =
+        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
+      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+
+      pre_conditions << [
         [
-          'confirmation_date < :stale_confirmed_date',
-          'state = :state',
-          'final = :boolean_false',
-          'notification_level = :notification_level'
-        ].join(' AND '),
-        # Para que no dar días de más a los usuarios que confirmaron cerca
-        # del último día
+          "confirmation_date < :stale_confirmed_date_#{i}",
+          "first_notification_date < :stale_first_notification_date_#{i}"
+        ].join(' OR '),
+        "#{Period.table_name}.organization_id = :organization_id_#{i}",
+      ].map {|c| "(#{c})"}.join(' AND ')
+    end
+
+    fix_conditions = [
+      'state = :state',
+      'final = :boolean_false',
+      'notification_level = :notification_level'
+    ].join(' AND ')
+
+    {
+      :include => [
+        :finding_answers,
+        { :control_objective_item => { :review => :period } }
+      ],
+      :conditions => [
         [
-          'first_notification_date < :stale_first_notification_date',
-          'state = :state',
-          'final = :boolean_false',
-          'notification_level = :notification_level'
+          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
+          fix_conditions
         ].join(' AND '),
-      ].map {|c| "(#{c})"}.join(' OR '),
-      {
-        :state => STATUS[:confirmed],
-        :boolean_false => false,
-        :stale_confirmed_date =>
-          FINDING_STALE_CONFIRMED_DAYS.days.ago_in_business.to_date,
-        :stale_first_notification_date => (FINDING_STALE_UNCONFIRMED_DAYS +
-            FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date,
-        :notification_level => 0
-      }
-    ]
+        parameters
+      ]
+    }
+  }
   named_scope :being_implemented, :conditions =>
     {:state => STATUS[:being_implemented]}
   named_scope :list_all_by_date, lambda { |from_date, to_date|
@@ -663,13 +725,13 @@ class Finding < ActiveRecord::Base
         Finding.confirmed_and_stale.exists?(self.id)
 
       if self.confirmation_date
-        max_notification_date = FINDING_STALE_CONFIRMED_DAYS.days.
+        max_notification_date = self.stale_confirmed_days.days.
           ago_in_business.to_date
         expiration_diff = self.confirmation_date.try(:diff_in_business,
           max_notification_date)
       else
         max_notification_date = (FINDING_STALE_UNCONFIRMED_DAYS +
-            FINDING_STALE_CONFIRMED_DAYS).days.ago_in_business.to_date
+            self.stale_confirmed_days).days.ago_in_business.to_date
         expiration_diff = self.first_notification_date.try(:diff_in_business,
           max_notification_date)
       end
@@ -682,6 +744,11 @@ class Finding < ActiveRecord::Base
     end
 
     important_dates
+  end
+
+  def stale_confirmed_days
+    self.parameter_in(self.review.organization.id,
+      :admin_finding_stale_confirmed_days).to_i
   end
 
   def next_status_list(state = nil)
@@ -760,8 +827,8 @@ class Finding < ActiveRecord::Base
 
   def notification_date_for_level(level = 1)
     date_for_notification = self.first_notification_date.try(:dup) || Date.today
-    days_to_add = (FINDING_STALE_CONFIRMED_DAYS +
-      FINDING_STALE_CONFIRMED_DAYS * level).next
+    days_to_add = (self.stale_confirmed_days +
+        self.stale_confirmed_days * level).next
 
     until days_to_add == 0
       date_for_notification += 1

@@ -777,6 +777,7 @@ es:
     admin_control_objective_qualifications: "Calificaciones de los objetivos de control"
     admin_control_objective_risk_levels: "Niveles de riesgo de los objetivos de control"
     admin_finding_risk_levels: "Niveles de riesgo de las observaciones"
+    admin_finding_stale_confirmed_days: "Cantidad de días que deben pasar para que una observación sin responder se considere desatendida"
     admin_frequency_types: "Tipos de frecuencia"
     admin_improvement_oportunities_states: "Estados de las oportunidades de mejora"
     admin_priorities: "Prioridades"

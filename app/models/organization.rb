@@ -67,6 +67,15 @@ class Organization < ActiveRecord::Base
     create_initial_roles if must_create_roles
   end
 
+  def self.all_parameters(param_name)
+    self.all.map do |o|
+      {
+        :organization => o,
+        :parameter => Parameter.find_parameter(o.id, param_name)
+      }
+    end
+  end
+
   private
   
   def create_initial_parameters

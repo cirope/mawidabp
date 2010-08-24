@@ -1,3 +1,4 @@
+<% stale_confirmed_days = DEFAULT_PARAMETERS[:admin_finding_stale_confirmed_days].to_i %>
 bcra_A4609_security_management_responsible_dependency_weakness_notify:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
@@ -54,7 +55,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date:
-  first_notification_date: <%= (FINDING_STALE_CONFIRMED_DAYS + FINDING_STALE_CONFIRMED_DAYS * level).next.days.ago_in_business.to_date.to_s(:db) %>
+  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
   users: auditor_user, audited_user, bare_user, manager_user, supervisor_user
@@ -176,7 +177,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   state: <%= Finding::STATUS[:unconfirmed] %>
   origination_date: 
   solution_date: 
-  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business.to_s(:db) %>
+  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
@@ -192,7 +193,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   state: <%= Finding::STATUS[:confirmed] %>
   origination_date: 
   solution_date: 
-  confirmation_date: <%= FINDING_STALE_CONFIRMED_DAYS.next.days.ago_in_business.to_s(:db) %>
+  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
   users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user

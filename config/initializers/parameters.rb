@@ -48,6 +48,7 @@ DEFAULT_PARAMETERS = {
     ['Aclaración', 4],
     ['Requerimiento', 5]
   ],
+  :admin_finding_stale_confirmed_days => '3',
   :admin_finding_risk_levels => [
     ['Bajo', 0],
     ['Medio', 1],

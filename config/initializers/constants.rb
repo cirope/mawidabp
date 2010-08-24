@@ -35,9 +35,6 @@ EMAIL_REGEXP = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
 FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_STALE_UNCONFIRMED_DAYS = 1
-# Cantidad de días a los que se considera como sin respuesta a una observación u
-# oportunidad
-FINDING_STALE_CONFIRMED_DAYS = 3
 # Cantidad de detractores a mostrar en el resumen por usuario
 LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las

@@ -577,8 +577,8 @@ class FindingTest < ActiveSupport::TestCase
     10.times do |n|
       first_notification_date = finding.first_notification_date.dup
       computed_date = finding.notification_date_for_level(n + 1)
-      days_to_add = (FINDING_STALE_CONFIRMED_DAYS +
-        FINDING_STALE_CONFIRMED_DAYS * (n + 1)).next
+      days_to_add = (finding.stale_confirmed_days +
+          finding.stale_confirmed_days * (n + 1)).next
 
       until days_to_add == 0
         first_notification_date += 1.day
