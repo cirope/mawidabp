@@ -1,5 +1,12 @@
-<% levels =  (@level.next..NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS).to_a -%>
-<% has_more_managers = levels.any? { |l| !@finding.manager_users_for_level(l).empty? } -%>
+<% levels = [] -%>
+<% next_level = @level.next  %>
+
+<% until @finding.manager_users_for_level(next_level).empty? -%>
+  <% levels << next_level  %>
+  <% next_level += 1 %>
+<% end -%>
+
+<% has_more_managers = !levels.empty? -%>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= t :'notifier.unanswered_finding_to_manager.title' %></h2>
   <h3 style="font-weight: normal;">

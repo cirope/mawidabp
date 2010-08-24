@@ -45,9 +45,6 @@ LAST_DETRACTORS_LIMIT = 20
 NOTIFICATIONS_EMAIL = 'notificaciones@mawidaweb.com.ar'.freeze
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
-# Máxima cantidad de veces a subir en la jerarquía de usuarios para las
-# notificaciones
-NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS = 3
 # Ruta hasta donde se almacenan los archivos de errores
 ERROR_FILES_PATH = File.join(PUBLIC_PATH, 'error_files', File::SEPARATOR).freeze
 # Cadena para separar las enumeraciones cuando son concatenadas

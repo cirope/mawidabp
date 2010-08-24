@@ -540,14 +540,16 @@ class FindingTest < ActiveSupport::TestCase
       2 => [users(:audited_user), users(:plain_manager_user),
         users(:coordinator_manager_user)].sort,
       3 => [users(:audited_user), users(:plain_manager_user),
+        users(:coordinator_manager_user), users(:general_manager_user)].sort,
+      4 => [users(:audited_user), users(:plain_manager_user),
         users(:coordinator_manager_user), users(:general_manager_user),
         users(:president_user)].sort
     }
 
-    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
-      users = finding.users_for_scaffold_notification(n + 1)
+    n = 0
 
-      assert_equal user_for_levels[n + 1].map(&:to_s), users.sort.map(&:to_s)
+    until (users = finding.users_for_scaffold_notification(n += 1)).empty?
+      assert_equal user_for_levels[n].map(&:to_s).sort, users.map(&:to_s).sort
     end
   end
 
@@ -555,15 +557,16 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
     user_for_levels = {
-      1 => [users(:plain_manager_user)].sort,
-      2 => [users(:coordinator_manager_user)].sort,
-      3 => [users(:general_manager_user), users(:president_user)].sort
+      1 => [users(:plain_manager_user)],
+      2 => [users(:coordinator_manager_user)],
+      3 => [users(:general_manager_user)],
+      4 => [users(:president_user)]
     }
 
-    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
-      users = finding.manager_users_for_level(n + 1)
+    n = 0
 
-      assert_equal user_for_levels[n + 1].map(&:to_s), users.sort.map(&:to_s)
+    until (users = finding.manager_users_for_level(n += 1)).empty?
+      assert_equal user_for_levels[n].map(&:to_s), users.map(&:to_s)
     end
   end
 
@@ -571,7 +574,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
 
-    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.times do |n|
+    10.times do |n|
       first_notification_date = finding.first_notification_date.dup
       computed_date = finding.notification_date_for_level(n + 1)
       days_to_add = (FINDING_STALE_CONFIRMED_DAYS +
@@ -798,12 +801,12 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     
-    users_by_level_for_notification = {1 => [], 2 => [], 3 => []}
+    users_by_level_for_notification = {1 => [], 2 => [], 3 => [], 4 => []}
     finding_ids = []
 
-    NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.step(1, -1) do |n|
-      findings = Finding.unanswered_and_stale(n)
+    n = 0
 
+    until (findings = Finding.unanswered_and_stale(n += 1)).empty?
       assert_equal 1, findings.size
       
       finding = findings.first
@@ -816,7 +819,7 @@ class FindingTest < ActiveSupport::TestCase
         finding.users_for_scaffold_notification(n)
     end
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 4 do
       level_counts = {}
 
       finding_ids.each do |f_id|
@@ -832,7 +835,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     ActionMailer::Base.deliveries.each_with_index do |mail, i|
-      assert_equal users_by_level_for_notification[3 - i].map(&:email).sort,
+      assert_equal users_by_level_for_notification[i + 1].map(&:email).sort,
         mail.to.sort
     end
   end

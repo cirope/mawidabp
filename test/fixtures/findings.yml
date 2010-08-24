@@ -37,7 +37,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   notification_level: 0
   users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
-<% (1..NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS).each do |level| %>
+<% (1..4).each do |level| %>
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
   type: Weakness

@@ -739,42 +739,21 @@ class Finding < ActiveRecord::Base
   def users_for_scaffold_notification(level = 1)
     users = self.users.select(&:can_act_as_audited?)
     highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
+    level_overflow = false
 
-    if level < NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS
-      level.times do
-        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
-      end
-    else
-      until highest_users.empty?
-        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
-      end
+    level.times do
+      users |= (highest_users = highest_users.map(&:parent).compact.uniq)
+      level_overflow ||= highest_users.empty?
     end
 
-    users.uniq
+    level_overflow ? [] : users.uniq
   end
 
   def manager_users_for_level(level = 1)
     users = self.users.select(&:can_act_as_audited?)
     highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
 
-    if level < NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS
-      level.times do
-        highest_users = highest_users.map(&:parent).compact.uniq
-      end
-    else
-      (level - 1).times do
-        highest_users = highest_users.map(&:parent).compact.uniq
-      end
-      
-      users = []
-      
-      until highest_users.empty?
-        users |= (highest_users = highest_users.map(&:parent).compact.uniq)
-      end
-      
-      
-      highest_users = users
-    end
+    level.times { highest_users = highest_users.map(&:parent).compact.uniq }
 
     highest_users.reject { |u| self.users.include?(u) }
   end
@@ -1284,19 +1263,19 @@ class Finding < ActiveRecord::Base
     # Sólo si no es sábado o domingo (porque no tiene sentido)
     unless [0, 6].include?(Date.today.wday)
       Finding.transaction do
-        NOTIFICATIONS_UP_TO_MANAGER_MAX_LEAPS.step(1, -1) do |n|
-          findings = Finding.unanswered_and_stale(n)
-          
+        n = 0
+
+        until (findings = Finding.unanswered_and_stale(n += 1)).empty?
           findings.each do |finding|
             users = finding.users_for_scaffold_notification(n)
 
             # No notificar si no hace falta
-            unless finding.manager_users_for_level(n).empty?
+            unless users.empty?
               Notifier.deliver_unanswered_finding_to_manager_notification(finding,
                 users | finding.users, n)
             end
 
-            finding.update_attribute :notification_level, n
+            finding.update_attribute :notification_level, users.empty? ? -1 : n
           end
         end
       end
