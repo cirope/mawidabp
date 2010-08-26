@@ -478,9 +478,13 @@ class Finding < ActiveRecord::Base
 
   def self.columns_for_sort
     HashWithIndifferentAccess.new({
-      :risk => {
-        :name => Finding.human_attribute_name(:risk),
+      :risk_asc => {
+        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.ascendant')})",
         :field => "#{Finding.table_name}.risk ASC"
+      },
+      :risk_desc => {
+        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.descendant')})",
+        :field => "#{Finding.table_name}.risk DESC"
       },
       :state => {
         :name => Finding.human_attribute_name(:state),
