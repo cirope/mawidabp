@@ -11,7 +11,7 @@
           <tr>
             <td style="width: <%= columns_for_sort.empty? ? '99%' : '70%' %>;">
               <%= f.text_field :query, :value => query_string,
-                :maxlength => 100 %>
+                :maxlength => 100, :size => 10 %>
               <div id="search_column_names" style="display: none;">
                 <% columns.each do |column| -%>
                   <%= f.hidden_field :columns, :value => column,

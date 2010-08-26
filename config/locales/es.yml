@@ -292,8 +292,9 @@ es:
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
-          one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
-          other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"
+        one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
+        other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"
+      sorted_by: "El listado fue ordenado por la columna {{column}}"
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"

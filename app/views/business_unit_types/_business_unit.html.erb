@@ -3,7 +3,7 @@
 <div class="business_unit item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 50%;">
-      <%= f.text_field :name, :maxlength => 255 %>
+      <%= f.text_field :name, :maxlength => 255, :size => 10 %>
     </div>
     <div class="item_field item_controls" style="width: 35%;">
       <%= remove_item_link(f) -%>

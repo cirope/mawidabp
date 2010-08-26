@@ -21,7 +21,7 @@
       <%= f.calendar_date_select :end, :class => :date %>
     </div>
     <div class="item_field" style="width: 10%;">
-      <%= f.text_field :plain_predecessors, :maxlength => 255,
+      <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,
         :class => (:error_field if f.object.errors.on(:predecessors)) %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">

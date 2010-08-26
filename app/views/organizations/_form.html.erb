@@ -5,12 +5,12 @@
   <div class="form_column_left">
   <p>
     <%= o_f.label :name %>
-    <%= o_f.text_field :name, :maxlength => 255 %>
+    <%= o_f.text_field :name, :maxlength => 255, :size => 10 %>
   </p>
   <% unless [:edit, :update].include?(controller.action_name.to_sym) -%>
   <p>
     <%= o_f.label :prefix %>
-    <%= o_f.text_field :prefix, :maxlength => 255 %>
+    <%= o_f.text_field :prefix, :maxlength => 255, :size => 10 %>
   </p>
   <% end -%>
   <p>

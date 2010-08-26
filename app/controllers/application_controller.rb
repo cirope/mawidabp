@@ -271,6 +271,8 @@ class ApplicationController < ActionController::Base
   def build_search_conditions(model, default_conditions = {})
     if params[:search] && !params[:search][:order].blank?
       @order_by = model.columns_for_sort[params[:search][:order]][:field]
+      @order_by_column_name =
+        model.columns_for_sort[params[:search][:order]][:name]
     end
     
     if params[:search] && !params[:search][:query].blank?

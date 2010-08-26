@@ -347,6 +347,12 @@ class ConclusionFinalReviewsController < ApplicationController
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
+    unless @order_by_column_name.blank?
+      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
+        :column => "<b>#{@order_by_column_name}</b>"),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
     pdf_name = t :'conclusion_final_review.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, ConclusionFinalReview.table_name)

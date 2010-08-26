@@ -7,11 +7,11 @@
     <% form_for @user, :url => create_session_users_path do |f| -%>
       <p>
         <%= f.label :user %>
-        <%= f.text_field :user, :maxlength => 30 %>
+        <%= f.text_field :user, :maxlength => 30, :size => 10 %>
       </p>
       <p>
         <%= f.label :password %>
-        <%= f.password_field :password, :maxlength => 128 %>
+        <%= f.password_field :password, :maxlength => 128, :size => 10 %>
       </p>
       <div style="margin: 1em 0em 0em 24em;">
         <span class="button"><%= f.submit t(:'user.enter') %></span>

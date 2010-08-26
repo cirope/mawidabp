@@ -8,15 +8,16 @@
   <div class="form_column_left">
     <p>
       <%= but_f.label :name %>
-      <%= but_f.text_field :name, :maxlength => 255, :class => :focused %>
+      <%= but_f.text_field :name, :maxlength => 255, :size => 10,
+        :class => :focused %>
     </p>
     <p>
       <%= but_f.label :business_unit_label %>
-      <%= but_f.text_field :business_unit_label, :maxlength => 255 %>
+      <%= but_f.text_field :business_unit_label, :maxlength => 255, :size => 10 %>
     </p>
     <p>
       <%= but_f.label :project_label %>
-      <%= but_f.text_field :project_label, :maxlength => 255 %>
+      <%= but_f.text_field :project_label, :maxlength => 255, :size => 10 %>
     </p>
     <p class="form_item">
       <%= but_f.label :external, nil, :class => :inline %>
