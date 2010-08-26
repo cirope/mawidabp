@@ -85,6 +85,23 @@ class ConclusionReview < ActiveRecord::Base
   has_many :notifications, :through => :notification_relations, :uniq => true,
     :order => 'created_at DESC'
 
+  def self.columns_for_sort
+    HashWithIndifferentAccess.new({
+      :issue_date => {
+        :name => ConclusionReview.human_attribute_name(:issue_date),
+        :field => "#{ConclusionReview.table_name}.issue_date ASC"
+      },
+      :period => {
+        :name => Period.human_name,
+        :field => "#{Period.table_name}.number ASC"
+      },
+      :identification => {
+        :name => Review.human_attribute_name(:identification),
+        :field => "#{Review.table_name}.identification ASC"
+      }
+    })
+  end
+
   def can_be_destroyed?
     false
   end

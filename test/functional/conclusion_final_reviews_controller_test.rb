@@ -318,6 +318,31 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, ActionMailer::Base.deliveries.last.body
   end
 
+  test 'export list to pdf' do
+    perform_auth
+
+    assert_nothing_raised(Exception) { get :export_list_to_pdf }
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'conclusion_final_review.pdf.pdf_name'),
+      ConclusionFinalReview.table_name)
+  end
+
+  test 'export list with search' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_list_to_pdf, :search => {
+        :query => '1',
+        :columns => ['period', 'identification']
+      }
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'conclusion_final_review.pdf.pdf_name'),
+      ConclusionFinalReview.table_name)
+  end
+
   test 'auto complete for user' do
     perform_auth
     post :auto_complete_for_user, { :user_data => 'admin' }

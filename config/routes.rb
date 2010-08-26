@@ -143,6 +143,8 @@ ActionController::Routing::Routes.draw do |map|
     :score_sheet => :get,
     :bundle => :get,
     :create_bundle => :post
+  }, :collection => {
+    :export_list_to_pdf => :get
   }
 
   map.resources :reviews, :member => {

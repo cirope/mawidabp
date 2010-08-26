@@ -23,7 +23,7 @@ class ConclusionFinalReviewsController < ApplicationController
       :page => params[:page], :per_page => APP_LINES_PER_PAGE,
       :include => { :review => [:period, { :plan_item => :business_unit }] },
       :conditions => @conditions,
-      :order => 'issue_date DESC')
+      :order => @order_by || 'issue_date DESC')
 
     respond_to do |format|
       format.html {
@@ -266,6 +266,94 @@ class ConclusionFinalReviewsController < ApplicationController
     end
   end
 
+  # Lista las informes en un PDF
+  #
+  # * GET /conclusion_final_reviews/export_to_pdf
+  def export_list_to_pdf
+    default_conditions = {
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    }
+
+    build_search_conditions ConclusionFinalReview, default_conditions
+
+    conclusion_final_reviews = ConclusionFinalReview.all(
+      :include => { :review => [:period, { :plan_item => :business_unit }] },
+      :conditions => @conditions,
+      :order => @order_by || 'issue_date DESC'
+    )
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+    pdf.add_title t(:'conclusion_final_review.index_title')
+
+    column_order = [
+      ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
+      ['period', Review.human_attribute_name(:period_id), 10],
+      ['identification', Review.human_attribute_name(:identification), 10],
+      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 35],
+      ['project', PlanItem.human_attribute_name(:project), 35]
+    ]
+    columns = {}
+    column_data = []
+
+    column_order.each do |col_name, col_title, col_with|
+      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
+        c.heading = col_title
+        c.width = pdf.percent_width col_with
+      end
+    end
+
+    conclusion_final_reviews.each do |cfr|
+      column_data << {
+        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
+        'period' => cfr.review.period.number.to_s.to_iso,
+        'identification' => cfr.review.identification.to_iso,
+        'business_unit' => cfr.review.plan_item.business_unit.name.to_iso,
+        'project' => cfr.review.plan_item.project.to_iso
+      }
+    end
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    unless column_data.blank?
+      PDF::SimpleTable.new do |table|
+        table.width = pdf.page_usable_width
+        table.columns = columns
+        table.data = column_data
+        table.column_order = column_order.map(&:first)
+        table.split_rows = true
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_headings = true
+        table.position = :left
+        table.orientation = :right
+        table.render_on pdf
+      end
+    end
+
+    unless @columns.blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      columns = @columns.map do |c|
+        column_name = column_order.detect { |co| co[0] == c }
+        "<b>#{column_name[1]}</b>"
+      end
+
+      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => columns.to_sentence, :count => @columns.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    pdf_name = t :'conclusion_final_review.pdf.pdf_name'
+
+    pdf.custom_save_as(pdf_name, ConclusionFinalReview.table_name)
+
+    redirect_to PDF::Writer.relative_path(pdf_name, ConclusionFinalReview.table_name)
+  end
+
   # Método para el autocompletado de usuarios
   #
   # * POST /reviews/auto_complete_for_user
@@ -317,6 +405,7 @@ class ConclusionFinalReviewsController < ApplicationController
         :download_work_papers => :read,
         :bundle => :read,
         :create_bundle => :read,
+        :export_list_to_pdf => :read,
         :auto_complete_for_user => :read,
         :compose_email => :modify,
         :send_by_email => :modify

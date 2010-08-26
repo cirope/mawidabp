@@ -1,5 +1,7 @@
 <%= render :partial => 'shared/search', :locals => {
-  :options => {},
+  :options => {
+    :columns_for_sort => ConclusionFinalReview.columns_for_sort
+  },
   :columns => @query.blank? ?
     ConclusionDraftReview::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
@@ -32,6 +34,8 @@
 
 <div id="links">
   <%= pagination_links @conclusion_final_reviews %>
-  <%= link_to t(:'label.new'), new_conclusion_final_review_path %>
+  <%= link_to t(:'label.new'), new_conclusion_final_review_path %> |
+  <%= link_to t(:'label.download'),
+    export_list_to_pdf_conclusion_final_reviews_path(:search => params[:search]) %>
 <div style="clear: both;"></div>
 </div>

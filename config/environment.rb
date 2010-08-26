@@ -35,16 +35,15 @@ Rails::Initializer.run do |config|
   config.gem 'newrelic_rpm'
   config.gem 'validates_timeliness'
   config.gem 'RedCloth'
-  config.gem 'i18n_label', :source => 'http://gemcutter.org'
-  config.gem 'smurf', :lib => false, :source => 'http://gemcutter.org'
-  config.gem 'whenever', :lib => false, :source => 'http://gemcutter.org'
-  config.gem 'will_paginate', :source => 'http://gemcutter.org'
-  config.gem 'paper_trail', :source => 'http://gemcutter.org'
+  config.gem 'i18n_label'
+  config.gem 'smurf', :lib => false
+  config.gem 'whenever', :lib => false
+  config.gem 'will_paginate'
+  config.gem 'paper_trail'
   # Sólo para pdf-writer
-  config.gem 'color', :lib => false, :source => 'http://gemcutter.org'
+  config.gem 'color', :lib => false
   # Sólo para pdf-writer
-  config.gem 'transaction-simple', :lib => false,
-    :source => 'http://gemcutter.org'
+  config.gem 'transaction-simple', :lib => false
   config.gem 'metaskills-pdf-writer', :lib => 'pdf/writer',
     :source => 'http://gems.github.com'
   config.gem 'mksm-rubyzip', :lib => 'zip/zip',
