@@ -175,7 +175,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_equal 7, @control_objective_item.errors.count
+    assert_equal 6, @control_objective_item.errors.count
     assert_equal error_message_from_model(@control_objective_item,
       :post_audit_qualification, :blank),
       @control_objective_item.errors.on(:post_audit_qualification)
@@ -187,9 +187,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :effects, :blank), @control_objective_item.controls[0].errors.on(:effects)
     assert_equal error_message_from_model(@control_objective_item.controls[0],
       :control, :blank), @control_objective_item.controls[0].errors.on(:control)
-    assert_equal error_message_from_model(@control_objective_item.controls[0],
-      :compliance_tests, :blank), @control_objective_item.controls[0].errors.on(
-      :compliance_tests)
     assert_equal error_message_from_model(@control_objective_item,
       :auditor_comment, :blank), @control_objective_item.errors.on(
       :auditor_comment)
@@ -197,7 +194,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.pre_audit_qualification = 0
 
     assert !@control_objective_item.valid?
-    assert_equal 7, @control_objective_item.errors.count
+    assert_equal 6, @control_objective_item.errors.count
     assert_nil @control_objective_item.errors.on(:post_audit_qualification)
     assert_equal error_message_from_model(@control_objective_item.controls[0],
       :design_tests, :blank), @control_objective_item.controls[0].errors.on(

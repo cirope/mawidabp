@@ -1,14 +1,23 @@
 module PDF
   module PDFClassExtension
     def relative_path(filename, sub_directory, id = 0)
-      "/private/pdfs/#{sub_directory}/" + ('%08d' % id).scan(/..../).join('/') +
-        "/#{filename}"
+      "/private/#{path_without_root(filename, sub_directory, id).join('/')}"
     end
 
     def absolute_path(filename, sub_directory, id = 0)
-      path = [PRIVATE_PATH, 'pdfs', sub_directory] +
-        ('%08d' % id).scan(/..../) + [filename]
+      path = [PRIVATE_PATH] + path_without_root(filename, sub_directory, id)
+      
       File.join(*path)
+    end
+
+    def path_without_root(filename, sub_directory, id = 0)
+      id_path = ('%08d' % id).scan(/..../)
+      user_path = ('%08d' % (PaperTrail.whodunnit || 0)).scan(/..../)
+      organization_path = ('%08d' %
+        (GlobalModelConfig.current_organization_id || 0)).scan(/..../)
+
+      organization_path + user_path + ['pdfs', sub_directory] + id_path +
+        [filename]
     end
 
     def create_generic_pdf(orientation = :landscape, footer = true)
@@ -237,8 +246,9 @@ module PDF
     end
 
     def custom_save_as(filename, sub_directory, id = 0)
-      base_dir = File.join "#{PRIVATE_PATH}pdfs", sub_directory,
-        *('%08d' % id).scan(/..../)
+      base_dir = File.join(*([PRIVATE_PATH] +
+            PDF::Writer.path_without_root(filename, sub_directory, id)[0..-2]))
+
       FileUtils.makedirs base_dir
       self.save_as File.join(base_dir, filename)
     end

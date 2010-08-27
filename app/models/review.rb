@@ -1041,12 +1041,12 @@ class Review < ActiveRecord::Base
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
     dirs = {
-      :pre_audit => I18n.t(:'review.pre_audit_work_papers'),
-      :post_audit => I18n.t(:'review.post_audit_work_papers'),
-      :weaknesses => I18n.t(:'review.weaknesses_work_papers'),
-      :oportunities => I18n.t(:'review.oportunities_work_papers'),
-      :follow_up => I18n.t(:'review.follow_up_work_papers'),
-      :survey => Review.human_attribute_name('survey')
+      :pre_audit => I18n.t(:'review.pre_audit_work_papers').gsub(/\//, '|'),
+      :post_audit => I18n.t(:'review.post_audit_work_papers').gsub(/\//, '|'),
+      :weaknesses => I18n.t(:'review.weaknesses_work_papers').gsub(/\//, '|'),
+      :oportunities => I18n.t(:'review.oportunities_work_papers').gsub(/\//, '|'),
+      :follow_up => I18n.t(:'review.follow_up_work_papers').gsub(/\//, '|'),
+      :survey => Review.human_attribute_name(:survey).gsub(/\//, '|')
     }
 
     FileUtils.rm filename if File.exists?(filename)
@@ -1110,22 +1110,21 @@ class Review < ActiveRecord::Base
   end
 
   def absolute_work_papers_zip_path
-    filename_prefix = I18n.t(:'review.work_papers').downcase.gsub(
-      /[^A-Za-z0-9\.\-]+/, '_')
-    dirs_path = [PRIVATE_PATH, self.class.table_name] +
-      ('%08d' % self.id).scan(/..../) +
-      ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
-
-    File.join *dirs_path
+    File.join PRIVATE_PATH, self.work_papers_zip_path
   end
 
   def relative_work_papers_zip_path
+    "/private/#{self.work_papers_zip_path}"
+  end
+
+  def work_papers_zip_path
     filename_prefix = I18n.t(:'review.work_papers').downcase.gsub(
       /[^A-Za-z0-9\.\-]+/, '_')
-    filename = "#{filename_prefix}-#{self.sanitized_identification}.zip"
+    path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/..../) +
+      [Review.table_name] + ('%08d' % self.id).scan(/..../) +
+      ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
 
-    "/private/#{self.class.table_name}/" +
-      "#{('%08d' % self.id).scan(/..../).join('/')}/#{filename}"
+    File.join *path
   end
 
   def add_work_paper_to_zip(wp, dir, zipfile)

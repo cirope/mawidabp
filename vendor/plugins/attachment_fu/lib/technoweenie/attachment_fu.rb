@@ -108,7 +108,6 @@ module Technoweenie # :nodoc:
             else File.join("public", table_name)
           end
         end
-        attachment_options[:path_prefix]   = attachment_options[:path_prefix][1..-1] if options[:path_prefix].first == '/'
 
         association_options = { :foreign_key => 'parent_id' }
         if attachment_options[:association_options]

@@ -251,12 +251,15 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def enable_control_validations
     if self.finished
-      self.controls.each { |c| c.validates_presence_of_control = true }
-      self.controls.each { |c| c.validates_presence_of_effects = true }
-      self.controls.each { |c| c.validates_presence_of_compliance_tests = true }
+      self.controls.each {|c| c.validates_presence_of_control = true}
+      self.controls.each {|c| c.validates_presence_of_effects = true}
+
+      if self.post_audit_qualification
+        self.controls.each {|c| c.validates_presence_of_compliance_tests = true}
+      end
 
       if self.pre_audit_qualification
-        self.controls.each { |c| c.validates_presence_of_design_tests = true }
+        self.controls.each {|c| c.validates_presence_of_design_tests = true}
       end
     end
   end

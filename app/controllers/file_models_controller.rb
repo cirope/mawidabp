@@ -5,7 +5,9 @@ class FileModelsController < ApplicationController
     redirect = true
 
     file_name = File.expand_path(File.join(PRIVATE_PATH, params[:path] || ''))
-    base_regexp = %r(^#{Regexp.escape(PRIVATE_PATH)})
+    organization_private_path = "#{PRIVATE_PATH}#{File.join(('%08d' %
+      (GlobalModelConfig.current_organization_id || 0)).scan(/..../))}"
+    base_regexp = %r(^#{Regexp.escape(organization_private_path)})
 
     if file_name =~ base_regexp && File.file?(file_name)
       response.headers['Cache-Control'] = 'private'

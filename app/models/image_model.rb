@@ -7,8 +7,12 @@ class ImageModel < ActiveRecord::Base
   
   has_attachment :content_type => :image, :storage => :file_system,
     :max_size => 2.megabytes,
-    :path_prefix => "#{PRIVATE_FILES_PREFIX}/#{table_name}",
-    :thumbnails => { :thumb => '300x75>', :pdf_thumb => '200x40>' }
+    :thumbnails => { :thumb => '300x75>', :pdf_thumb => '200x40>' },
+    :path_prefix => lambda {
+      File.join(PRIVATE_FILES_PREFIX,
+        *(('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/..../) +
+            [table_name]))
+    }
 
   # Restricciones
   validates_as_attachment
