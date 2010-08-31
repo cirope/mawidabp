@@ -22,6 +22,9 @@
   <% unless being_implemented_resume.blank? %>
     <p>* <%= being_implemented_resume %></p>
   <% end %>
+  <% unless highest_being_implemented_resume.blank? %>
+    <p>** <%= highest_being_implemented_resume %></p>
+  <% end %>
 <% else -%>
   <p style="margin: 1em 0em; font-size: 1.1em;"><em><%= table_data %></em></p>
 <% end -%>

@@ -30,7 +30,8 @@
               <h2><%= t(:'follow_up_committee.weaknesses_by_audit_type.weaknesses') %></h2>
               <%= render :partial => 'weaknesses_synthesis_table', :locals => {
                 :table_data => bu_data[:weaknesses_table_data],
-                :being_implemented_resume => bu_data[:being_implemented_resume]} %>
+                :being_implemented_resume => bu_data[:being_implemented_resume],
+                :highest_being_implemented_resume => bu_data[:highest_being_implemented_resume]} %>
 
               <% if type == :internal -%>
                 <h2 style="margin-top: 1em;">
