@@ -4,7 +4,7 @@
 <% frozen = review.try :is_frozen? -%>
 <% show_history_changes = @oportunity.status_change_history.size > 1 -%>
 <!--[form:oportunity]-->
-<% form_for @oportunity, :html => {:multipart => true} do |f| -%>
+<%= form_for @oportunity, :html => {:multipart => true} do |f| -%>
   <% content_for :js_extra do -%>
     <% unless readonly -%>
     <%= "var user='#{escape_javascript(render(:partial => 'user',

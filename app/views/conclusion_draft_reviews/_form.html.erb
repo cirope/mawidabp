@@ -1,5 +1,5 @@
 <!--[form:conclusion_draft_review]-->
-<% form_for @conclusion_draft_review do |f| %>
+<%= form_for @conclusion_draft_review do |f| %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
@@ -69,12 +69,13 @@
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
     </div>
     <div>
-      <%= link_to_remote t(:'conclusion_draft_review.check_for_approval'),
+      <%= link_to t(:'conclusion_draft_review.check_for_approval'),
         {:url => {:action => :check_for_approval},
         :with => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
         :success => 'updateApprovalText(request)',
         :condition => "!$F('conclusion_draft_review_review_id').blank()",
-        :before => 'Helper.showLoading()', :complete => 'Helper.hideLoading()'},
+        :before => 'Helper.showLoading()', :complete => 'Helper.hideLoading()',
+        :remote => true},
         {:style => 'margin-left: 1em;'} %>
     </div>
     <% if @conclusion_draft_review.updated_at -%>

@@ -16,7 +16,7 @@
   }
 </script>
 <!--[form:workflow]-->
-<% form_for @workflow do |w_f| -%>
+<%= form_for @workflow do |w_f| -%>
   <% content_for :js_extra do -%>
     <%= "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
   <% end -%>

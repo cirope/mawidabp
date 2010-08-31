@@ -1,5 +1,5 @@
 <!--[form:customize_report_form]-->
-<% form_for options[:form_name], :url => options[:url] do |f| -%>
+<%= form_for options[:form_name], :url => options[:url] do |f| -%>
   <% options[:fields].each do |field| -%>
     <div class="field">
       <%= label_tag field[:name], field[:label] %>

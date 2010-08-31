@@ -1,6 +1,6 @@
 class Oportunity < Finding
   # Named scopes
-  named_scope :all_for_report,
+  scope :all_for_report,
     :conditions => {
       :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
       :final => true

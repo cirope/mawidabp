@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   attr_accessor_with_default :password_was_encrypted, false
 
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :include => :organizations,
       :conditions => {:organizations => {
@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
       }
     }
   }
-  named_scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
+  scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
     {
       :conditions => [
         [
@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
       :limit => 1
     }
   }
-  named_scope :all_with_findings_for_notification,
+  scope :all_with_findings_for_notification,
     :include => :findings,
     :conditions =>
       {:findings => {:state => Finding::STATUS[:notify], :final => false}},
@@ -295,7 +295,7 @@ class User < ActiveRecord::Base
 
   def send_welcome_email
     unless self.send_notification_email.blank?
-      Notifier.deliver_welcome_email(self)
+      Notifier.welcome_email(self).deliver
     end
   end
 
@@ -306,7 +306,7 @@ class User < ActiveRecord::Base
       self.blank_password!(organization, false)
       self.log_password_change
 
-      Notifier.deliver_welcome_email(self)
+      Notifier.welcome_email(self).deliver
     end
   end
 
@@ -342,7 +342,7 @@ class User < ActiveRecord::Base
     self.password_changed = Time.new
     self.change_password_hash = UUIDTools::UUID.random_create.to_s
 
-    Notifier.deliver_blank_password_notification(self, organization) if notify
+    Notifier.blank_password_notification(self, organization).deliver if notify
 
     self.save(false)
   end
@@ -584,8 +584,8 @@ class User < ActiveRecord::Base
     if all_released && !items_for_notification.empty?
       title = I18n.t(:'user.responsibility_release.title')
 
-      Notifier.deliver_changes_notification(self, :title => title,
-        :content => items_for_notification)
+      Notifier.changes_notification(self, :title => title,
+        :content => items_for_notification).deliver
     end
 
     all_released
@@ -666,8 +666,8 @@ class User < ActiveRecord::Base
               I18n.t(:'user.responsibility_modification.new_responsible',
                 :responsible => other.full_name_with_function)]
 
-            Notifier.deliver_changes_notification([other, self],
-              :title => title, :body => body, :content => content)
+            Notifier.changes_notification([other, self], :title => title,
+              :body => body, :content => content).deliver
           end
 
           unless unconfirmed_findings.blank?
@@ -695,8 +695,8 @@ class User < ActiveRecord::Base
               content << "\n\n"
             end
 
-            Notifier.deliver_changes_notification(other, :title => title,
-              :content => content, :notification => notification)
+            Notifier.changes_notification(other, :title => title,
+              :content => content, :notification => notification).deliver
           end
         end
 
@@ -713,7 +713,7 @@ class User < ActiveRecord::Base
     # Sólo si no es sábado o domingo
     unless [0, 6].include?(Date.today.wday)
       findings = User.all_with_findings_for_notification.inject([]) do |f, user|
-        Notifier.deliver_notify_new_findings user
+        Notifier.notify_new_findings(user).deliver
 
         f | user.findings.for_notification
       end

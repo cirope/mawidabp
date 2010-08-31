@@ -1,5 +1,5 @@
 <!--[form:conclusion_final_review]-->
-<% form_for @conclusion_final_review,
+<%= form_for @conclusion_final_review,
   :url => send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
   <% content_for :js_extra do -%>
     <%= "var user='" + escape_javascript(render :partial => 'user',

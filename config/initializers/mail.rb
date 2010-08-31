@@ -1,4 +1,3 @@
-ActionMailer::Base.default_charset = 'utf-8'
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.default_url_options[:host] = URL_HOST

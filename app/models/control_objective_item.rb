@@ -35,15 +35,16 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Callbacks
   before_validation :can_be_modified?, :enable_control_validations
   before_destroy :can_be_destroyed?
-  before_validation_on_create :fill_control_objective_text
+  before_validation(:on => :create) { fill_control_objective_text }
 
   # Validaciones
-  validates_presence_of :control_objective_text, :control_objective_id
+  validates :control_objective_text, :control_objective_id, :presence => true
   validates_numericality_of :control_objective_id, :review_id,
     :allow_nil => true, :only_integer => true
   validates_numericality_of :relevance, :only_integer => true,
     :allow_blank => true, :allow_nil => true, :greater_than_or_equal_to => 0
-  validates_date :audit_date, :allow_nil => true, :allow_blank => true
+  validates :audit_date, :allow_nil => true, :allow_blank => true,
+    :timeliness => { :type => :date }
   validates_each :audit_date do |record, attr, value|
     period = record.review.period if record.review
 

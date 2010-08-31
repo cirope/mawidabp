@@ -10,7 +10,7 @@ class Parameter < ActiveRecord::Base
 
   # Named scopes
   # Deprecated
-  named_scope :all_parameters, lambda { |name|
+  scope :all_parameters, lambda { |name|
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id,

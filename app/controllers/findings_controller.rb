@@ -213,7 +213,7 @@ class FindingsController < ApplicationController
   # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
   def find_with_organization(id) #:doc:
     options = {
-      :joins => [{:control_objective_item => {:review => :period}}, :users],
+      :include => [{:control_objective_item => {:review => :period}}],
       :conditions => {
         :id => id,
         :final => false,
@@ -223,12 +223,17 @@ class FindingsController < ApplicationController
     }
 
     unless @auth_user.committee?
+      options[:include] << :users
       options[:conditions][User.table_name] = {
         :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
       }
     end
     
     finding = Finding.first(options)
+
+    # TODO: eliminar cuando se corrija el problema que hace que include solo
+    # traiga el primer usuario
+    finding.users.reload if finding
 
     finding.finding_prefix = true if finding
 

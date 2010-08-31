@@ -1,7 +1,7 @@
 <% url = url_for({:action => action}.merge(extra_params)) -%>
 <div id="filter_box">
   <div>
-    <% form_for action, :url => url, :html => {:method => :get} do |f| -%>
+    <%= form_for action, :url => url, :html => {:method => :get} do |f| -%>
       <% forms.each do |f_name, display| -%>
         <%= render :partial => "shared/filters/#{f_name}",
           :locals => {:f => f, :display => display, :action => action} %>

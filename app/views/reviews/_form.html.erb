@@ -1,7 +1,7 @@
 <% readonly = @review.has_final_review? -%>
 <% frozen = @review.is_frozen? -%>
 <!--[form:review]-->
-<% form_for @review, :html => { :multipart => true } do |r_f| -%>
+<%= form_for @review, :html => { :multipart => true } do |r_f| -%>
   <% content_for :js_extra do -%>
     <%= "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
     <%= "var control_objective='#{escape_javascript render(

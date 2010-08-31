@@ -1,6 +1,6 @@
 <% readonly = !@conclusion_final_review.new_record? -%>
 <!--[form:conclusion_final_review]-->
-<% form_for @conclusion_final_review do |cfr_f| %>
+<%= form_for @conclusion_final_review do |cfr_f| %>
   <%= cfr_f.error_messages %>
 
   <div class="form_column_left">

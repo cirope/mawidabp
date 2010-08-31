@@ -1,5 +1,5 @@
 <!--[form:help_item]-->
-<% form_for @help_item do |hi_f| -%>
+<%= form_for @help_item do |hi_f| -%>
   <% content_for :js_extra do -%>
     <%= "var child='#{generate_template(hi_f, :children)}';" %>
   <% end -%>

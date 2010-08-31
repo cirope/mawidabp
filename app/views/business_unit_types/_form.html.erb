@@ -1,5 +1,5 @@
 <!--[form:business_unit_type]-->
-<% form_for @business_unit_type do |but_f| -%>
+<%= form_for @business_unit_type do |but_f| -%>
   <% content_for :js_extra do -%>
       <%= "var business_unit='#{generate_template(but_f, :business_units)}';" %>
   <% end -%>

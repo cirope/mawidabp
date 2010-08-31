@@ -41,7 +41,7 @@ class Review < ActiveRecord::Base
   attr_readonly :plan_item_id
   
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :include => :period,
       :conditions => {
@@ -51,7 +51,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_with_approved_draft, lambda {
+  scope :list_with_approved_draft, lambda {
     {
       :include => [:period, :conclusion_draft_review],
       :conditions => {
@@ -63,7 +63,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_with_final_review, lambda {
+  scope :list_with_final_review, lambda {
     {
       :include => [:period, :conclusion_final_review],
       :conditions => [
@@ -75,7 +75,7 @@ class Review < ActiveRecord::Base
       ]
     }
   }
-  named_scope :list_without_final_review, lambda {
+  scope :list_without_final_review, lambda {
     {
       :include => [:period, :conclusion_final_review],
       :conditions => [
@@ -87,7 +87,7 @@ class Review < ActiveRecord::Base
       ]
     }
   }
-  named_scope :list_without_draft_review, lambda {
+  scope :list_without_draft_review, lambda {
     {
       :include => [:period, :conclusion_draft_review],
       :conditions => [
@@ -99,7 +99,7 @@ class Review < ActiveRecord::Base
       ]
     }
   }
-  named_scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
+  scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
     {
       :include => [:period, :conclusion_final_review,
         {:plan_item => {:business_unit => :business_unit_type}}],
@@ -123,7 +123,7 @@ class Review < ActiveRecord::Base
       ].join(', ')
     }
   }
-  named_scope :list_all_without_workflow, lambda { |period_id|
+  scope :list_all_without_workflow, lambda { |period_id|
     {
       :include => [:period, :workflow],
       :conditions => [
@@ -140,10 +140,10 @@ class Review < ActiveRecord::Base
         :order => "#{table_name}.identification ASC"
     }
   }
-  named_scope :internal_audit,
+  scope :internal_audit,
     :include => { :plan_item => {:business_unit => :business_unit_type} },
     :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  named_scope :external_audit,
+  scope :external_audit,
     :include => { :plan_item => {:business_unit => :business_unit_type} },
     :conditions => { "#{BusinessUnitType.table_name}.external" => true }
 

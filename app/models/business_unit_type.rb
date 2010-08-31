@@ -8,7 +8,7 @@ class BusinessUnitType < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :list, proc {
+  scope :list, proc {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id

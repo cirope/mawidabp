@@ -18,8 +18,8 @@ class Organization < ActiveRecord::Base
   after_create :create_initial_data
   
   # Named scopes
-  named_scope :list, :order => 'name ASC'
-  named_scope :list_for_group, lambda { |group|
+  scope :list, :order => 'name ASC'
+  scope :list_for_group, lambda { |group|
     {
       :conditions => { :group_id => group.id }
     }

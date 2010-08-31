@@ -1,5 +1,5 @@
 <!--[form:resource_class]-->
-<% form_for @resource_class do |rc_f| -%>
+<%= form_for @resource_class do |rc_f| -%>
   <% content_for :js_extra do -%>
     <%= "var resource='#{generate_template(rc_f, :resources)}'" %>
   <% end -%>

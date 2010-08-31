@@ -1,5 +1,5 @@
 <!--[form:best_practice]-->
-<% form_for @best_practice do |bp_f| -%>
+<%= form_for @best_practice do |bp_f| -%>
   <% content_for :js_extra do -%>
       <%= "var process_control='" + generate_template(bp_f, :process_controls,
         :object => ProcessControl.new) + "';" %>

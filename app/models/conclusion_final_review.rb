@@ -1,6 +1,6 @@
 class ConclusionFinalReview < ConclusionReview
   # Named scopes
-  named_scope :list_all_by_date, lambda { |from_date, to_date|
+  scope :list_all_by_date, lambda { |from_date, to_date|
     {
       :include => {
         :review => [:period, {:control_objective_items => :weaknesses},
@@ -23,12 +23,12 @@ class ConclusionFinalReview < ConclusionReview
       ].join(', ')
     }
   }
-  named_scope :internal_audit,
+  scope :internal_audit,
     :include => {
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     },
     :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  named_scope :external_audit,
+  scope :external_audit,
     :include => {
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     },
@@ -42,11 +42,14 @@ class ConclusionFinalReview < ConclusionReview
   attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
 
   # Restricciones
-  validates_presence_of :close_date
+  validates :close_date, :presence => true
   validates_uniqueness_of :review_id, :allow_blank => true, :allow_nil => true
-  validates_date :close_date, :allow_nil => true, :allow_blank => true,
-    :on => :create, :on_or_after => lambda { |conclusion_review|
-      conclusion_review.issue_date || Time.now.to_date
+  validates :close_date, :allow_nil => true, :allow_blank => true,
+    :on => :create, :timeliness => {
+      :type => :date,
+      :on_or_after => lambda { |conclusion_review|
+        conclusion_review.issue_date || Time.now.to_date
+      }
     }
   validates_each :review_id do |record, attr, value|
     if record.review && record.review.conclusion_draft_review

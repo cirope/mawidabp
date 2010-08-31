@@ -1,5 +1,5 @@
 <!--[form:parameter]-->
-<% form_for @parameter, :url => parameter_path(params[:type], @parameter),
+<%= form_for @parameter, :url => parameter_path(params[:type], @parameter),
   :html => {:method => :put} do |f| -%>
   <%= f.error_messages %>
   <div class="form_column_left">

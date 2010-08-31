@@ -13,9 +13,9 @@ class ProcessControl < ActiveRecord::Base
   @@associations_attributes_for_log = [:control_objective_ids]
 
   # Named scopes
-  named_scope :list, :order =>['best_practice_id ASC',
+  scope :list, :order =>['best_practice_id ASC',
     "#{table_name}.order ASC"].join(', ')
-  named_scope :list_for_period, lambda { |period_id|
+  scope :list_for_period, lambda { |period_id|
     {
       :select => connection.distinct('process_controls.id, name', 'name'),
       :include => [:procedure_control_items => [:procedure_control]],
@@ -26,7 +26,7 @@ class ProcessControl < ActiveRecord::Base
       :order => "#{table_name}.order ASC"
     }
   }
-  named_scope :list_for_log, lambda { |id|
+  scope :list_for_log, lambda { |id|
     {
       :conditions => {:id => id}
     }

@@ -1,5 +1,5 @@
 <!--[form:user]-->
-<% form_for @user, :url => url do |u_f| -%>
+<%= form_for @user, :url => url do |u_f| -%>
   <% content_for :js_extra do -%>
     <%= "var child='#{escape_javascript(render(:partial => 'child',
         :object => User.new, :locals => {:f => u_f, :is_dynamic => true}))}';" %>

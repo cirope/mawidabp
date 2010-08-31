@@ -1,7 +1,7 @@
 <% readonly = @control_objective_item.is_in_a_final_review? -%>
 <% frozen = @control_objective_item.review.try(:is_frozen?) -%>
 <!--[form:control_objective_item]-->
-<% form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
+<%= form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
   <% unless frozen -%>
     <% content_for :js_extra do -%>
       <%= "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(

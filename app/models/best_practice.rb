@@ -12,7 +12,7 @@ class BestPractice < ActiveRecord::Base
   @@associations_attributes_for_log = [:process_control_ids]
 
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id

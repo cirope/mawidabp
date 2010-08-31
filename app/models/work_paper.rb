@@ -6,13 +6,13 @@ class WorkPaper < ActiveRecord::Base
   }
   
   # Named scopes
-  named_scope :with_prefix, lambda { |prefix|
+  scope :with_prefix, lambda { |prefix|
     {
       :conditions => ['code LIKE :code', { :code => "#{prefix}%" }],
       :order => 'code ASC'
     }
   }
-  named_scope :sorted_by_code, :order => 'code ASC'
+  scope :sorted_by_code, :order => 'code ASC'
 
   # Restricciones de los atributos
   attr_accessor :code_prefix, :neighbours

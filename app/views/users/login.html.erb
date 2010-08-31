@@ -4,7 +4,7 @@
   </div>
   <% if @organization || @group_admin_mode -%>
     <!--[form:user]-->
-    <% form_for @user, :url => create_session_users_path do |f| -%>
+    <%= form_for @user, :url => create_session_users_path do |f| -%>
       <p>
         <%= f.label :user %>
         <%= f.text_field :user, :maxlength => 30, :size => 10 %>

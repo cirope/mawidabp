@@ -9,7 +9,7 @@ class ProcedureControl < ActiveRecord::Base
   @@associations_attributes_for_log = [:procedure_control_item_ids]
 
   # Named scope
-  named_scope :list_by_period, lambda { |period_id|
+  scope :list_by_period, lambda { |period_id|
     {
       :include => :period,
       :conditions => {

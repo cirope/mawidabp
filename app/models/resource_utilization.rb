@@ -7,8 +7,8 @@ class ResourceUtilization < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :human, :conditions => { :resource_type => 'User' }
-  named_scope :material, :conditions => { :resource_type => 'Resource' }
+  scope :human, :conditions => { :resource_type => 'User' }
+  scope :material, :conditions => { :resource_type => 'Resource' }
 
   # Restricciones
   validates_presence_of :units, :cost_per_unit, :resource_id, :resource_type

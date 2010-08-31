@@ -13,7 +13,7 @@ class PlanItem < ActiveRecord::Base
   @@associations_attributes_for_log = [:resource_ids]
 
    # Named scopes
-  named_scope :list_unused, lambda { |period_id|
+  scope :list_unused, lambda { |period_id|
     {
       :include => [{:plan => :period}, :review],
       :conditions => [
@@ -41,13 +41,13 @@ class PlanItem < ActiveRecord::Base
   serialize :predecessors, Array
   
   # Restricciones
-  validates_presence_of :project, :order_number
+  validates :project, :order_number, :presence => true
   validates_length_of :project, :predecessors, :maximum => 255,
     :allow_nil => true, :allow_blank => true
   validates_numericality_of :order_number, :plan_id, :business_unit_id,
     :only_integer => true, :allow_nil => true
-  validates_date :start
-  validates_date :end, :on_or_after => :start
+  validates :start, :timeliness => { :type => :date }
+  validates :end, :timeliness => { :type => :date , :on_or_after => :start }
   validates_each :project do |record, attr, value|
     unless record.plan.try(:allow_duplication?)
       (record.plan.try(:plan_items) || []).each do |pi|

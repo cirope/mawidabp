@@ -1,2 +1,3 @@
 CalendarDateSelect.format = :italian
-ValidatesTimeliness::Formats.remove_us_formats
+# TODO: descomentar cuando se cargue como una gem
+#ValidatesTimeliness::Formats.remove_us_formats

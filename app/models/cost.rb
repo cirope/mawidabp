@@ -4,8 +4,8 @@ class Cost < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :audit, :conditions => {:cost_type => 'audit'}
-  named_scope :audited, :conditions => {:cost_type => 'audited'}
+  scope :audit, :conditions => {:cost_type => 'audit'}
+  scope :audited, :conditions => {:cost_type => 'audited'}
   
   # Restricciones
   validates_presence_of :cost, :cost_type, :user_id, :item_id, :item_type

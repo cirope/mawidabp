@@ -1,5 +1,5 @@
 <!--[form:group]-->
-<% form_for @group do |g_f| -%>
+<%= form_for @group do |g_f| -%>
   <% content_for :js_extra do -%>
     <%= "var organization='#{generate_template(g_f, :organizations)}';" %>
   <% end -%>

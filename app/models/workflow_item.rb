@@ -20,15 +20,15 @@ class WorkflowItem < ActiveRecord::Base
   attr_accessor :overloaded
 
   # Restricciones
-  validates_presence_of :task, :order_number
+  validates :task, :order_number, :presence => true
   validates_length_of :predecessors, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_uniqueness_of :task, :case_sensitive => false,
     :scope => :workflow_id
   validates_numericality_of :order_number, :workflow_id, :only_integer => true,
     :allow_nil => true
-  validates_date :start
-  validates_date :end, :on_or_after => :start
+  validates :start, :timeliness => { :type => :date }
+  validates :end, :timeliness => { :type => :date , :on_or_after => :start }
   validates_each :start, :end do |record, attr, value|
     parent = record.workflow
     period = parent.period if parent

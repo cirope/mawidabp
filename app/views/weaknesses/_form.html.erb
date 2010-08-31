@@ -4,7 +4,7 @@
 <% frozen = review.try(:is_frozen?) && !@weakness.can_be_modified?(false) #TODO: cambiar a solo is_frozen? cuando termine la "papelización" -%>
 <% show_history_changes = @weakness.status_change_history.size > 1 -%>
 <!--[form:weakness]-->
-<% form_for @weakness, :html => {:multipart => true} do |f| %>
+<%= form_for @weakness, :html => {:multipart => true} do |f| %>
   <% content_for :js_extra do -%>
     <% unless readonly -%>
       <%= "var user='#{escape_javascript(render(:partial => 'user',

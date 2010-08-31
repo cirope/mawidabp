@@ -20,9 +20,10 @@ class LoginRecord < ActiveRecord::Base
   attr_accessor :request
 
   # Restricciones
-  validates_presence_of :user_id, :organization_id
-  validates_datetime :start, :allow_nil => true
-  validates_datetime :end, :after => :start, :allow_nil => true
+  validates :user_id, :organization_id, :presence => true
+  validates :start, :allow_nil => true, :timeliness => { :type => :datetime }
+  validates :end, :allow_nil => true,
+    :timeliness => { :type => :datetime, :after => :start }
 
   # Relaciones
   belongs_to :user

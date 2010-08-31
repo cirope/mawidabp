@@ -1,5 +1,5 @@
 <!--[form:procedure_control]-->
-<% form_for @procedure_control do |pc_f| -%>
+<%= form_for @procedure_control do |pc_f| -%>
   <% content_for :js_extra do -%>
     <%= "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
     <%= 'var procedureControlItemHash = new Hash();' %>

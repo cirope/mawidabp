@@ -16,7 +16,7 @@
   }
 </script>
 <!--[form:plan]-->
-<% form_for @plan do |p_f| -%>
+<%= form_for @plan do |p_f| -%>
   <% content_for :js_extra do -%>
     <%= "var plan_item='#{generate_template(p_f, :plan_items)}';" %>
   <% end -%>

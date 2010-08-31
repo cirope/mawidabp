@@ -113,13 +113,13 @@ class Finding < ActiveRecord::Base
   @@associations_attributes_for_log = [:user_ids, :workpaper_ids]
 
   # Named scopes
-  named_scope :with_prefix, lambda { |prefix|
+  scope :with_prefix, lambda { |prefix|
     {
       :conditions => ['review_code LIKE ?', "#{prefix}%"],
       :order => 'review_code ASC'
     }
   }
-  named_scope :all_for_reallocation_with_review, lambda { |review|
+  scope :all_for_reallocation_with_review, lambda { |review|
     {
       :include => {:control_objective_item => :review},
       :conditions => {
@@ -129,23 +129,23 @@ class Finding < ActiveRecord::Base
       }
     }
   }
-  named_scope :all_for_reallocation,
+  scope :all_for_reallocation,
     :conditions => {:state => PENDING_STATUS, :final => false}
-  named_scope :for_notification, :conditions => {
+  scope :for_notification, :conditions => {
     :state => STATUS[:notify],
     :final => false
   }
-  named_scope :finals, lambda { |use_finals|
+  scope :finals, lambda { |use_finals|
     { :conditions => { :final => use_finals } }
   }
-  named_scope :sort_by_code, :order => 'review_code ASC'
-  named_scope :for_period, lambda { |period|
+  scope :sort_by_code, :order => 'review_code ASC'
+  scope :for_period, lambda { |period|
     {
       :include => { :control_objective_item => { :review =>:period } },
       :conditions => { "#{Period.table_name}.id" => period.id }
     }
   }
-  named_scope :next_to_expire, :conditions => [
+  scope :next_to_expire, :conditions => [
     [
       'follow_up_date = :warning_date',
       'state = :being_implemented_state',
@@ -158,7 +158,7 @@ class Finding < ActiveRecord::Base
       :boolean_false => false
     }
   ]
-  named_scope :unconfirmed_for_notification, :conditions => [
+  scope :unconfirmed_for_notification, :conditions => [
     [
       'first_notification_date >= :stale_unconfirmed_date',
       'state = :state',
@@ -171,7 +171,7 @@ class Finding < ActiveRecord::Base
         FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
     }
   ]
-  named_scope :unanswered_and_stale, lambda { |factor|
+  scope :unanswered_and_stale, lambda { |factor|
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -210,7 +210,7 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :unconfirmed_and_stale, lambda {
+  scope :unconfirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -247,7 +247,7 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :confirmed_and_stale, lambda {
+  scope :confirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -294,9 +294,9 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :being_implemented, :conditions =>
+  scope :being_implemented, :conditions =>
     {:state => STATUS[:being_implemented]}
-  named_scope :list_all_by_date, lambda { |from_date, to_date|
+  scope :list_all_by_date, lambda { |from_date, to_date|
     {
       :include => {
         :control_objective_item => {:review =>
@@ -320,7 +320,7 @@ class Finding < ActiveRecord::Base
       ].join(', ')
     }
   }
-  named_scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
+  scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
     {
       :include => {
         :control_objective_item =>
@@ -339,14 +339,14 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :internal_audit,
+  scope :internal_audit,
     :include => {
       :control_objective_item => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
       }
     },
     :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  named_scope :external_audit,
+  scope :external_audit,
     :include => {
       :control_objective_item => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
@@ -367,14 +367,16 @@ class Finding < ActiveRecord::Base
   before_validation :set_proper_parent
 
   # Restricciones
-  validates_presence_of :control_objective_item_id, :description, :review_code
+  validates :control_objective_item_id, :description, :review_code,
+    :presence => true
   validates_length_of :review_code, :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_numericality_of :control_objective_item_id, :only_integer => true,
     :allow_nil => true, :allow_blank => true
-  validates_date :first_notification_date, :allow_nil => true
-  validates_date :follow_up_date, :solution_date, :origination_date,
-    :allow_nil => true, :allow_blank => true
+  validates :first_notification_date, :allow_nil => true,
+    :timeliness => { :type => :date }
+  validates :follow_up_date, :solution_date, :origination_date,
+    :allow_nil => true, :allow_blank => true, :timeliness => { :type => :date }
   validates_each :follow_up_date do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)
@@ -558,15 +560,15 @@ class Finding < ActiveRecord::Base
   def notify_changes_to_users
     unless self.avoid_changes_notification
       if @users_change && !@users_added.blank? && !@users_removed.blank?
-        Notifier.deliver_reassigned_findings_notification(@users_added,
-          @users_removed, self, false)
+        Notifier.reassigned_findings_notification(@users_added, @users_removed,
+          self, false).deliver
       elsif @users_change && @users_added.blank? && !@users_removed.blank?
         title = I18n.t(:'finding.responsibility_removed',
           :class_name => self.class.human_name.downcase,
           :review_code => self.review_code,
           :review => self.review.try(:identification))
 
-        Notifier.deliver_changes_notification @users_removed, :title => title
+        Notifier.changes_notification(@users_removed, :title => title).deliver
       end
     end
   end
@@ -614,7 +616,7 @@ class Finding < ActiveRecord::Base
   def check_users_for_notification
     unless (self.users_for_notification || []).reject(&:blank?).blank?
       self.users_for_notification.reject(&:blank?).each do |user_id|
-        Notifier.deliver_notify_new_finding self.users.find(user_id), self
+        Notifier.notify_new_finding(self.users.find(user_id), self).deliver
       end
     end
   end
@@ -1298,9 +1300,7 @@ class Finding < ActiveRecord::Base
           end
         end
 
-        users.each do |user|
-          Notifier.deliver_stale_notification user
-        end
+        users.each { |user| Notifier.stale_notification(user).deliver }
       end
     end
   end
@@ -1323,8 +1323,8 @@ class Finding < ActiveRecord::Base
         end
 
         users.each do |user|
-          Notifier.deliver_unanswered_findings_notification user,
-            findings.select { |f| f.users.include?(user) }
+          Notifier.unanswered_findings_notification(user,
+            findings.select { |f| f.users.include?(user) }).deliver
         end
       end
     end
@@ -1342,8 +1342,8 @@ class Finding < ActiveRecord::Base
 
             # No notificar si no hace falta
             unless users.empty?
-              Notifier.deliver_unanswered_finding_to_manager_notification(finding,
-                users | finding.users, n)
+              Notifier.unanswered_finding_to_manager_notification(finding,
+                users | finding.users, n).deliver
             end
 
             finding.update_attribute :notification_level, users.empty? ? -1 : n
@@ -1361,8 +1361,8 @@ class Finding < ActiveRecord::Base
       end
 
       users.each do |user|
-        Notifier.deliver_findings_expiration_warning(user,
-          user.findings.next_to_expire)
+        Notifier.findings_expiration_warning(user,
+          user.findings.next_to_expire).deliver
       end
     end
   end

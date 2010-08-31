@@ -29,13 +29,13 @@ class ConclusionReview < ActiveRecord::Base
   })
 
   # Named scopes
-  named_scope :for_period, lambda { |period|
+  scope :for_period, lambda { |period|
     {
       :include => { :review =>:period },
       :conditions => { "#{Period.table_name}.id" => period.id }
     }
   }
-  named_scope :by_business_unit_type, lambda { |business_unit_type|
+  scope :by_business_unit_type, lambda { |business_unit_type|
     {
       :include => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
@@ -43,7 +43,7 @@ class ConclusionReview < ActiveRecord::Base
       :conditions => { "#{BusinessUnitType.table_name}.id" => business_unit_type }
     }
   }
-  named_scope :by_business_unit_names, lambda { |*business_unit_names|
+  scope :by_business_unit_names, lambda { |*business_unit_names|
     conditions = []
     parameters = {}
 
@@ -71,11 +71,12 @@ class ConclusionReview < ActiveRecord::Base
   @@associations_attributes_for_log = [:weakness_ids, :oportunity_ids]
   
   # Restricciones
-  validates_presence_of :review_id
-  validates_presence_of :issue_date, :applied_procedures, :conclusion
+  validates :review_id, :presence => true
+  validates :issue_date, :applied_procedures, :conclusion, :presence => true
   validates_length_of :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
-  validates_date :issue_date, :allow_nil => true, :allow_blank => true
+  validates :issue_date, :allow_nil => true, :allow_blank => true,
+    :timeliness => { :type => :date }
 
   # Relaciones
   belongs_to :review
@@ -124,7 +125,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def send_by_email_to(user, options = {})
-    Notifier.deliver_conclusion_review_notification(user, self, options)
+    Notifier.conclusion_review_notification(user, self, options).deliver
   end
 
   def last_notifications

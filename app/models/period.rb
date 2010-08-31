@@ -10,7 +10,7 @@ class Period < ActiveRecord::Base
   before_destroy :can_be_destroyed?
   
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id
@@ -18,7 +18,7 @@ class Period < ActiveRecord::Base
       :order => 'number DESC'
     }
   }
-  named_scope :list_by_date, lambda { |from_date, to_date|
+  scope :list_by_date, lambda { |from_date, to_date|
     {
       :conditions => [
         [
@@ -37,7 +37,7 @@ class Period < ActiveRecord::Base
       :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
     }
   }
-  named_scope :currents, lambda {
+  scope :currents, lambda {
     {
       :conditions => [
         [
@@ -52,7 +52,7 @@ class Period < ActiveRecord::Base
       :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
     }
   }
-  named_scope :list_all_without_plans, lambda {
+  scope :list_all_without_plans, lambda {
     {
       :include => :plans,
       :conditions => [
@@ -67,7 +67,7 @@ class Period < ActiveRecord::Base
       :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
     }
   }
-  named_scope :list_all_without_procedure_controls, lambda {
+  scope :list_all_without_procedure_controls, lambda {
     {
       :include => :procedure_controls,
       :conditions => [
@@ -86,11 +86,13 @@ class Period < ActiveRecord::Base
   
   # Restricciones
   validates_numericality_of :number, :only_integer => true, :allow_nil => true
-  validates_presence_of :number, :start, :end, :description, :organization_id
+  validates :number, :start, :end, :description, :organization_id,
+    :presence => true
   validates_uniqueness_of :number, :scope => :organization_id
-  validates_date :start, :allow_nil => true, :allow_blank => true
-  validates_date :end, :allow_nil => true, :allow_blank => true,
-    :after => :start
+  validates :start, :allow_nil => true, :allow_blank => true,
+    :timeliness => {:type => :date}
+  validates :end, :allow_nil => true, :allow_blank => true,
+    :timeliness => {:after => :start, :type => :date}
   
   # Relaciones
   belongs_to :organization
