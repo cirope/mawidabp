@@ -529,10 +529,18 @@ es:
     synthesis_report_title: "Informe de síntesis al directorio"
     weakness_summary: "Resumen de observaciones"
     cost_analysis_title: "Análisis de costos"
-    weaknesses_being_implemented_current: "Vigentes"
-    weaknesses_being_implemented_current_rescheduled: "Reprogramadas vigentes"
-    weaknesses_being_implemented_stale: "Vencidas"
-    weaknesses_being_implemented_stale_rescheduled: "Reprogramadas vencidas"
+    weaknesses_being_implemented_current:
+      one: "Vigente"
+      other: "Vigentes"
+    weaknesses_being_implemented_current_rescheduled:
+      one: "Reprogramada vigente"
+      other: "Reprogramadas vigentes"
+    weaknesses_being_implemented_stale:
+      one: "Vencida"
+      other: "Vencidas"
+    weaknesses_being_implemented_stale_rescheduled:
+      one: "Reprogramada vencida"
+      other: "Reprogramadas vencidas"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"

@@ -190,16 +190,20 @@ module FollowUpCommonReports
     @audit_types = [:internal, :external]
     @tables_data = {}
     @being_implemented_resumes = {}
+    @highest_being_implemented_resumes = {}
     risk_levels = parameter_in(@auth_organization.id,
       :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
+    highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
 
     @periods.each do |period|
       @audit_types.each do |audit_type|
         weaknesses_count = {}
         weaknesses_count_by_risk = {}
         being_implemented_counts = {:current => 0, :stale => 0,
+          :current_rescheduled => 0, :stale_rescheduled => 0}
+        highest_being_implemented_counts = {:current => 0, :stale => 0,
           :current_rescheduled => 0, :stale_rescheduled => 0}
 
         risk_levels.each do |rl|
@@ -222,14 +226,30 @@ module FollowUpCommonReports
                 unless f.stale?
                   unless f.respond_to?(:rescheduled?) && f.rescheduled?
                     being_implemented_counts[:current] += 1
+
+                    if rl == highest_risk
+                      highest_being_implemented_counts[:current] += 1
+                    end
                   else
                     being_implemented_counts[:current_rescheduled] += 1
+
+                    if rl == highest_risk
+                      highest_being_implemented_counts[:current_rescheduled] +=1
+                    end
                   end
                 else
                   unless f.respond_to?(:rescheduled?) && f.rescheduled?
                     being_implemented_counts[:stale] += 1
+
+                    if rl == highest_risk
+                      highest_being_implemented_counts[:stale] += 1
+                    end
                   else
                     being_implemented_counts[:stale_rescheduled] += 1
+
+                    if rl == highest_risk
+                      highest_being_implemented_counts[:stale_rescheduled] += 1
+                    end
                   end
                 end
               end
@@ -240,6 +260,9 @@ module FollowUpCommonReports
         @being_implemented_resumes[period] ||= {}
         @being_implemented_resumes[period][audit_type] =
           being_implemented_resume_from_counts(being_implemented_counts)
+        @highest_being_implemented_resumes[period] ||= {}
+        @highest_being_implemented_resumes[period][audit_type] =
+          being_implemented_resume_from_counts(highest_being_implemented_counts)
         @tables_data[period] ||= {}
         @tables_data[period][audit_type] = get_weaknesses_synthesis_table_data(
           weaknesses_count, weaknesses_count_by_risk, risk_levels)
@@ -281,6 +304,8 @@ module FollowUpCommonReports
 
         add_being_implemented_resume(pdf,
           @being_implemented_resumes[period][type])
+        add_being_implemented_resume(pdf,
+          @highest_being_implemented_resumes[period][type], 2)
       end
     end
 
@@ -305,6 +330,7 @@ module FollowUpCommonReports
       :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
+    highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
 
     @periods.each do |period|
       @data[period] ||= {}
@@ -352,6 +378,8 @@ module FollowUpCommonReports
               total_oportunities = grouped_oportunities.values.sum(&:size)
               being_implemented_counts = {:current => 0, :stale => 0,
                 :current_rescheduled => 0, :stale_rescheduled => 0}
+              highest_being_implemented_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
 
               if total_oportunities > 0
                 statuses.each do |s|
@@ -396,14 +424,30 @@ module FollowUpCommonReports
                       unless w.stale?
                         unless w.rescheduled?
                           being_implemented_counts[:current] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:current] += 1
+                          end
                         else
                           being_implemented_counts[:current_rescheduled] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:current_rescheduled] += 1
+                          end
                         end
                       else
                         unless w.rescheduled?
                           being_implemented_counts[:stale] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:stale] += 1
+                          end
                         else
                           being_implemented_counts[:stale_rescheduled] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:stale_rescheduled] += 1
+                          end
                         end
                       end
                     end
@@ -415,12 +459,17 @@ module FollowUpCommonReports
                 weaknesses_count, weaknesses_count_by_risk, risk_levels)
               being_implemented_resume = being_implemented_resume_from_counts(
                 being_implemented_counts)
+              highest_being_implemented_resume =
+                being_implemented_resume_from_counts(
+                highest_being_implemented_counts)
 
               business_units[business_unit] = {
                 :conclusion_reviews => cfrs,
                 :weaknesses_table_data => weaknesses_table_data,
                 :oportunities_table_data => oportunities_table_data,
-                :being_implemented_resume => being_implemented_resume
+                :being_implemented_resume => being_implemented_resume,
+                :highest_being_implemented_resume =>
+                  highest_being_implemented_resume
               }
             end
           end
@@ -505,6 +554,8 @@ module FollowUpCommonReports
                 bu_data[:weaknesses_table_data], 10)
               add_being_implemented_resume(pdf,
                 bu_data[:being_implemented_resume])
+              add_being_implemented_resume(pdf,
+                bu_data[:highest_being_implemented_resume], 2)
 
               if type == :internal
                 pdf.move_pointer PDF_FONT_SIZE
@@ -664,6 +715,7 @@ module FollowUpCommonReports
         column_row = {'state' => "<b>#{t("finding.status_#{state.first}")}</b>"}
 
         risk_levels.each do |rl|
+          highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
           count = weaknesses_count[state.last][rl.last]
           percentage = sub_total_count > 0 ?
             (count * 100.0 / sub_total_count).round(2) : 0.0
@@ -671,6 +723,10 @@ module FollowUpCommonReports
           column_row[rl.first] = count > 0 ?
             "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
+          
+          if count > 0 && rl == highest_risk && state[0] == :being_implemented
+            column_row[rl.first] << '**'
+          end
         end
 
         column_row['count'] = sub_total_count > 0 ?
@@ -700,11 +756,13 @@ module FollowUpCommonReports
     end
   end
 
-  def add_being_implemented_resume(pdf, being_implemented_resume = nil)
+  def add_being_implemented_resume(pdf, being_implemented_resume = nil,
+      asterisks = 1)
     unless being_implemented_resume.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_pointer PDF_FONT_SIZE if asterisks == 1
 
-      pdf.text "* #{being_implemented_resume}", :font_size => PDF_FONT_SIZE
+      pdf.text(('*' * asterisks) + " #{being_implemented_resume}",
+        :font_size => PDF_FONT_SIZE)
     end
   end
 
@@ -719,7 +777,8 @@ module FollowUpCommonReports
         0.00 : (count.to_f / total_of_being_implemented) * 100
       sub_status_resume = "<b>#{count}</b> "
       sub_status_resume << t(
-        "follow_up_committee.weaknesses_being_implemented_#{sub_status}")
+        "follow_up_committee.weaknesses_being_implemented_#{sub_status}",
+        :count => count)
       sub_status_resume << " (#{'%.2f' % sub_status_percentage}%)"
 
       being_implemented_resume << sub_status_resume

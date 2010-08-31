@@ -13,7 +13,8 @@
       </h1>
       <%= render :partial => 'weaknesses_synthesis_table', :locals => {
         :table_data => @tables_data[period][type],
-        :being_implemented_resume => @being_implemented_resumes[period][type]} %>
+        :being_implemented_resume => @being_implemented_resumes[period][type],
+        :highest_being_implemented_resume => @highest_being_implemented_resumes[period][type]} %>
     <% end -%>
   <% end -%>
 </div>
