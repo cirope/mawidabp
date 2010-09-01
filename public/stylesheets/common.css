@@ -955,6 +955,11 @@ h2 {
     font-weight: bold;
 }
 
+h2.simple_title {
+    margin: 1em 1em 0em 1em;
+    font-size: 1em;
+}
+
 h3 {
     margin: .2em 0em;
     font-weight: bold;

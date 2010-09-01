@@ -7,14 +7,23 @@
     <h1 class="simple_title with_border_bottom">
       <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
     </h1>
-    <% @audit_types.each do |type| %>
+    <% @audit_types.each do |audit_type| %>
+      <% audit_type_symbol = audit_type.kind_of?(Symbol) ? audit_type : audit_type.first %>
       <h1 class="center_title">
-        <%= t("conclusion_committee_report.weaknesses_type_#{type}") %>
+        <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
       </h1>
-      <%= render :partial => 'weaknesses_synthesis_table', :locals => {
-        :table_data => @tables_data[period][type],
-        :being_implemented_resume => @being_implemented_resumes[period][type],
-        :highest_being_implemented_resume => @highest_being_implemented_resumes[period][type]} %>
+      <% (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i| %>
+        <% if audit_type.kind_of?(Symbol) %>
+          <% key = audit_type_symbol %>
+        <% else %>
+          <% key = "#{audit_type_symbol}_#{audit_type.last[i][1]}" %>
+          <h2 class="simple_title"><%= audit_type.last[i][0] %></h2>
+        <% end %>
+        <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+          :table_data => @tables_data[period][key],
+          :being_implemented_resume => @being_implemented_resumes[period][key],
+          :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
+      <% end %>
     <% end %>
   <% end %>
 </div>

@@ -8,7 +8,7 @@ class BusinessUnitType < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :list, proc {
+  scope :list, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id
@@ -16,9 +16,25 @@ class BusinessUnitType < ActiveRecord::Base
       :order => ['external ASC', 'name ASC'].join(', ')
     }
   }
+  scope :internal_audit, lambda {
+    {
+      :conditions => {
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :external => false
+      }
+    }
+  }
+  scope :external_audit, lambda {
+    {
+      :conditions => {
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :external => true
+      }
+    }
+  }
   
   # Restricciones
-  validates_presence_of :name, :business_unit_label
+  validates :name, :business_unit_label, :presence => true
   validates_length_of :name, :business_unit_label, :project_label,
     :maximum => 255, :allow_nil => true, :allow_blank => true
   validates_uniqueness_of :name, :case_sensitive => false,

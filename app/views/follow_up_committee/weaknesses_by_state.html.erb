@@ -6,69 +6,80 @@
   <h1 class="simple_title with_border_bottom">
     <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
-  <% @audit_types.each do |type| %>
-    <% weaknesses_count = @weaknesses_counts[period]["#{type}_weaknesses"] %>
-    <% oportunities_count = @weaknesses_counts[period]["#{type}_oportunities"] %>
-    <% total_weaknesses = weaknesses_count.values.sum %>
-    <% total_oportunities = oportunities_count.values.sum %>
+  <% @audit_types.each do |audit_type| %>
+    <% audit_type_symbol = audit_type.kind_of?(Symbol) ? audit_type : audit_type.first %>
     <h1 class="center_title">
-      <%= t "conclusion_committee_report.findings_type_#{type}" %>
+      <%= t "conclusion_committee_report.findings_type_#{audit_type_symbol}" %>
     </h1>
-    <% if (total_oportunities + total_weaknesses) > 0 %>
-      <table class="summary_table" style="margin: 1em;">
-        <thead>
-          <tr>
-            <th style="width: 30%;">
-              <%= Finding.human_attribute_name('state') %>
-            </th>
-            <% if type == :internal %>
-              <th style="width: 35%;">
-                <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
-              </th>
-              <th style="width: 35%;">
-                <%= t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
-              </th>
-            <% else %>
-              <th style="width: 70%;">
-                <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
-              </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% @status.each do |state| %>
-            <% w_count = weaknesses_count[state.last] || 0 %>
-            <% o_count = oportunities_count[state.last] || 0 %>
-            <% weaknesses_percentage = total_weaknesses > 0 ? w_count.to_f / total_weaknesses * 100 : 0.0 %>
-            <% oportunities_percentage = total_oportunities > 0 ? o_count.to_f / total_oportunities * 100 : 0.0 %>
+
+    <% (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i| %>
+      <% if audit_type.kind_of?(Symbol) %>
+        <% key = audit_type_symbol %>
+      <% else %>
+        <% key = "#{audit_type_symbol}_#{audit_type.last[i][1]}" %>
+        <h2 class="simple_title"><%= audit_type.last[i][0] %></h2>
+      <% end %>
+      <% weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"] %>
+      <% oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"] %>
+      <% total_weaknesses = weaknesses_count.values.sum %>
+      <% total_oportunities = oportunities_count.values.sum %>
+
+      <% if (total_oportunities + total_weaknesses) > 0 %>
+        <table class="summary_table" style="margin: 1em;">
+          <thead>
             <tr>
-              <td><strong><%= t("finding.status_#{state.first}") %></strong></td>
-              <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" +
-                (state.first == :being_implemented && w_count != 0 ? ' *' : '') %></td>
-              <% if type == :internal %>
-                <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
+              <th style="width: 30%;">
+                <%= Finding.human_attribute_name(:state) %>
+              </th>
+              <% if audit_type_symbol == :internal %>
+                <th style="width: 35%;">
+                  <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
+                </th>
+                <th style="width: 35%;">
+                  <%= t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
+                </th>
+              <% else %>
+                <th style="width: 70%;">
+                  <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
+                </th>
               <% end %>
             </tr>
-          <% end %>
-          <tr>
-            <td>
-              <strong><%= t(:'follow_up_committee.weaknesses_by_state.total') %></strong>
-            </td>
-            <td><strong><%= total_weaknesses %></strong></td>
-            <% if type == :internal %>
-              <td><strong><%= total_oportunities %></strong></td>
+          </thead>
+          <tbody>
+            <% @status.each do |state| %>
+              <% w_count = weaknesses_count[state.last] || 0 %>
+              <% o_count = oportunities_count[state.last] || 0 %>
+              <% weaknesses_percentage = total_weaknesses > 0 ? w_count.to_f / total_weaknesses * 100 : 0.0 %>
+              <% oportunities_percentage = total_oportunities > 0 ? o_count.to_f / total_oportunities * 100 : 0.0 %>
+              <tr>
+                <td><strong><%= t("finding.status_#{state.first}") %></strong></td>
+                <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" +
+                  (state.first == :being_implemented && w_count != 0 ? ' *' : '') %></td>
+                <% if audit_type_symbol == :internal %>
+                  <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
+                <% end %>
+              </tr>
             <% end %>
-          </tr>
-        </tbody>
-      </table>
+            <tr>
+              <td>
+                <strong><%= t(:'follow_up_committee.weaknesses_by_state.total') %></strong>
+              </td>
+              <td><strong><%= total_weaknesses %></strong></td>
+              <% if audit_type_symbol == :internal %>
+                <td><strong><%= total_oportunities %></strong></td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
 
-      <% unless @being_implemented_resumes[period][type].blank? %>
-        <p style="margin-left: 1em;">* <%= @being_implemented_resumes[period][type] %></p>
+        <% unless @being_implemented_resumes[period][key].blank? %>
+          <p style="margin-left: 1em;">* <%= @being_implemented_resumes[period][key] %></p>
+        <% end %>
+      <% else %>
+        <p style="margin: 1em;">
+          <em><%= t(:'follow_up_committee.without_weaknesses') %></em>
+        </p>
       <% end %>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t(:'follow_up_committee.without_weaknesses') %></em>
-      </p>
     <% end %>
   <% end %>
 <% end %>
