@@ -3,22 +3,40 @@ module ConclusionCommonReports
     @title = t :'conclusion_committee_report.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
-    @audit_types = [:internal, :external]
+    @audit_types = [
+      :internal,
+      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+    ]
     @weaknesses_counts = {}
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
 
     @periods.each do |period|
+      @weaknesses_counts[period] ||= {}
+
       @audit_types.each do |audit_type|
-        @weaknesses_counts[period] ||= {}
-        @weaknesses_counts[period]["#{audit_type}_weaknesses"] =
-          Weakness.list_all_by_date(@from_date, @to_date).send(
-            "#{audit_type}_audit").for_period(period).finals(true).count(
-            :group => :state)
-        @weaknesses_counts[period]["#{audit_type}_oportunities"] =
-          Oportunity.list_all_by_date(@from_date, @to_date).send(
-            "#{audit_type}_audit").for_period(period).finals(true).count(
-            :group => :state)
+        audit_type_symbol = audit_type.kind_of?(Symbol) ?
+          audit_type : audit_type.first
+
+        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
+          if audit_type.kind_of?(Symbol)
+            key = audit_type
+          else
+            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
+            conditions = {
+              "#{BusinessUnitType.table_name}.id" => audit_type.last[i][1]
+            }
+          end
+
+          @weaknesses_counts[period]["#{key}_weaknesses"] =
+            Weakness.list_all_by_date(@from_date, @to_date).send(
+              "#{audit_type_symbol}_audit").for_period(period).finals(
+              true).count(:conditions => conditions, :group => :state)
+          @weaknesses_counts[period]["#{key}_oportunities"] =
+            Oportunity.list_all_by_date(@from_date, @to_date).send(
+              "#{audit_type_symbol}_audit").for_period(period).finals(
+              true).count(:conditions => conditions, :group => :state)
+        end
       end
     end
   end
@@ -45,89 +63,104 @@ module ConclusionCommonReports
       pdf.add_title "#{Period.human_name}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
-      @audit_types.each do |type|
-        weaknesses_count = @weaknesses_counts[period]["#{type}_weaknesses"]
-        oportunities_count = @weaknesses_counts[period]["#{type}_oportunities"]
-        total_weaknesses = weaknesses_count.values.sum
-        total_oportunities = oportunities_count.values.sum
+      @audit_types.each do |audit_type|
+        audit_type_symbol = audit_type.kind_of?(Symbol) ?
+          audit_type : audit_type.first
 
         pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
+        pdf.add_title t("conclusion_committee_report.findings_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer PDF_FONT_SIZE
+        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
+          if audit_type.kind_of? Symbol
+            key = audit_type_symbol
 
-        if (total_weaknesses + total_oportunities) > 0
-          columns = {
-            'state' => [Finding.human_attribute_name('state'), 30],
-            'weaknesses_count' => [
-              t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-              type == :internal ? 35 : 70]
-          }
-          column_data = []
+            pdf.move_pointer PDF_FONT_SIZE
+          else
+            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
 
-          if type == :internal
-            columns['oportunities_count'] = [
-              t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+            pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title audit_type.last[i][0], PDF_FONT_SIZE, :justify
+            pdf.move_pointer PDF_FONT_SIZE
           end
 
-          columns.each do |col_name, col_data|
-            columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-              column.heading = col_data.first
-              column.width = pdf.percent_width col_data.last
+          weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
+          oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
+          total_weaknesses = weaknesses_count.values.sum
+          total_oportunities = oportunities_count.values.sum
+
+          if (total_weaknesses + total_oportunities) > 0
+            columns = {
+              'state' => [Finding.human_attribute_name(:state), 30],
+              'weaknesses_count' => [
+                t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+                audit_type_symbol == :internal ? 35 : 70]
+            }
+            column_data = []
+
+            if audit_type_symbol == :internal
+              columns['oportunities_count'] = [
+                t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
             end
-          end
 
-          @status.each do |state|
-            w_count = weaknesses_count[state.last] || 0
-            o_count = oportunities_count[state.last] || 0
-            weaknesses_percentage = total_weaknesses > 0 ?
-              w_count.to_f / total_weaknesses * 100 : 0.0
-            oportunities_percentage = total_oportunities > 0 ?
-              o_count.to_f / total_oportunities * 100 : 0.0
+            columns.each do |col_name, col_data|
+              columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+                column.heading = col_data.first
+                column.width = pdf.percent_width col_data.last
+              end
+            end
+
+            @status.each do |state|
+              w_count = weaknesses_count[state.last] || 0
+              o_count = oportunities_count[state.last] || 0
+              weaknesses_percentage = total_weaknesses > 0 ?
+                w_count.to_f / total_weaknesses * 100 : 0.0
+              oportunities_percentage = total_oportunities > 0 ?
+                o_count.to_f / total_oportunities * 100 : 0.0
+
+              column_data << {
+                'state' => t("finding.status_#{state.first}").to_iso,
+                'weaknesses_count' =>
+                  "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
+                'oportunities_count' =>
+                  "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+              }
+            end
 
             column_data << {
-              'state' => t("finding.status_#{state.first}").to_iso,
-              'weaknesses_count' =>
-                "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-              'oportunities_count' =>
-                "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+              'state' =>
+                "<b>#{t(:'conclusion_committee_report.weaknesses_by_state.total')}</b>".to_iso,
+              'weaknesses_count' => "<b>#{total_weaknesses}</b>",
+              'oportunities_count' => "<b>#{total_oportunities}</b>"
             }
-          end
 
-          column_data << {
-            'state' =>
-              "<b>#{t(:'conclusion_committee_report.weaknesses_by_state.total')}</b>".to_iso,
-            'weaknesses_count' => "<b>#{total_weaknesses}</b>",
-            'oportunities_count' => "<b>#{total_oportunities}</b>"
-          }
-
-          unless column_data.blank?
-            PDF::SimpleTable.new do |table|
-              table.width = pdf.page_usable_width
-              table.columns = columns
-              table.data = column_data
-              table.column_order = type == :internal ?
-                ['state', 'weaknesses_count', 'oportunities_count'] :
-                ['state', 'weaknesses_count']
-              table.split_rows = true
-              table.font_size = PDF_FONT_SIZE
-              table.row_gap = (PDF_FONT_SIZE * 0.5).round
-              table.shade_rows = :none
-              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-              table.heading_font_size = PDF_FONT_SIZE
-              table.shade_headings = true
-              table.bold_headings = true
-              table.position = :left
-              table.orientation = :right
-              table.show_lines = :all
-              table.render_on pdf
+            unless column_data.blank?
+              PDF::SimpleTable.new do |table|
+                table.width = pdf.page_usable_width
+                table.columns = columns
+                table.data = column_data
+                table.column_order = audit_type_symbol == :internal ?
+                  ['state', 'weaknesses_count', 'oportunities_count'] :
+                  ['state', 'weaknesses_count']
+                table.split_rows = true
+                table.font_size = PDF_FONT_SIZE
+                table.row_gap = (PDF_FONT_SIZE * 0.5).round
+                table.shade_rows = :none
+                table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                table.heading_font_size = PDF_FONT_SIZE
+                table.shade_headings = true
+                table.bold_headings = true
+                table.position = :left
+                table.orientation = :right
+                table.show_lines = :all
+                table.render_on pdf
+              end
             end
+          else
+            pdf.text t(:'follow_up_committee.without_weaknesses'),
+              :font_size => PDF_FONT_SIZE
           end
-        else
-          pdf.text t(:'follow_up_committee.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE
         end
       end
     end
@@ -149,7 +182,10 @@ module ConclusionCommonReports
     @title = t :'conclusion_committee_report.weaknesses_by_risk_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
-    @audit_types = [:internal, :external]
+    @audit_types = [
+      :internal,
+      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+    ]
     @tables_data = {}
     risk_levels = parameter_in(@auth_organization.id,
       :admin_finding_risk_levels, @from_date)
@@ -160,22 +196,36 @@ module ConclusionCommonReports
       @audit_types.each do |audit_type|
         weaknesses_count = {}
         weaknesses_count_by_risk = {}
+        audit_type_symbol = audit_type.kind_of?(Symbol) ?
+          audit_type : audit_type.first
 
-        risk_levels.each do |rl|
-          weaknesses_count_by_risk[rl[0]] = 0
-
-          statuses.each do |s|
-            weaknesses_count[s[1]] ||= {}
-            weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(@from_date,
-              @to_date).send("#{audit_type}_audit").for_period(period).finals(
-              true).count(:conditions => {:state => s[1], :risk => rl[1]})
-            weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
+          if audit_type.kind_of?(Symbol)
+            key = audit_type
+          else
+            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
+            conditions = {
+              "#{BusinessUnitType.table_name}.id" => audit_type.last[i][1]
+            }
           end
-        end
 
-        @tables_data[period] ||= {}
-        @tables_data[period][audit_type] = get_weaknesses_synthesis_table_data(
-          weaknesses_count, weaknesses_count_by_risk, risk_levels)
+          risk_levels.each do |rl|
+            weaknesses_count_by_risk[rl[0]] = 0
+
+            statuses.each do |s|
+              weaknesses_count[s[1]] ||= {}
+              weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(@from_date,
+                @to_date).send("#{audit_type_symbol}_audit").for_period(period).finals(
+                true).count(:conditions => {
+                  :state => s[1], :risk => rl[1]}.merge(conditions || {}))
+              weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+            end
+          end
+
+          @tables_data[period] ||= {}
+          @tables_data[period][key] = get_weaknesses_synthesis_table_data(
+            weaknesses_count, weaknesses_count_by_risk, risk_levels)
+        end
       end
     end
   end
@@ -202,15 +252,30 @@ module ConclusionCommonReports
       pdf.add_title "#{Period.human_name}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
-      @audit_types.each do |type|
+      @audit_types.each do |audit_type|
+        audit_type_symbol = audit_type.kind_of?(Symbol) ?
+          audit_type : audit_type.first
+
         pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.add_title t("conclusion_committee_report.weaknesses_type_#{type}"),
+        pdf.add_title t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer PDF_FONT_SIZE
+        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
+          if audit_type.kind_of? Symbol
+            key = audit_type_symbol
 
-        add_weaknesses_synthesis_table(pdf, @tables_data[period][type])
+            pdf.move_pointer PDF_FONT_SIZE
+          else
+            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
+
+            pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title audit_type.last[i][0], PDF_FONT_SIZE, :justify
+            pdf.move_pointer PDF_FONT_SIZE
+          end
+
+          add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
+        end
       end
     end
 

@@ -216,9 +216,9 @@ es:
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-    findings_type_external: "Seguimiento de Observaciones Auditoría Externa"
+    findings_type_external: "Observaciones Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
-    weaknesses_type_external: "Seguimiento Observaciones Auditoría Externa"
+    weaknesses_type_external: "Observaciones Auditorías Externas"
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -246,7 +246,7 @@ es:
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Seguimiento de Observaciones de Auditorías Externas"
+      external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: {{score}}% (*)"
@@ -411,7 +411,7 @@ es:
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Seguimiento de Observaciones de Auditorías Externas"
+      external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
       clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
@@ -422,7 +422,7 @@ es:
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
-    findings_type_external: "Seguimiento de Observaciones Auditoría Externa"
+    findings_type_external: "Observaciones Auditorías Externas"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
     period:
       title: "Intervalo"
@@ -573,7 +573,7 @@ es:
     synthesis_report:
       pdf_name: "informe_de_sintesis_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Seguimiento de Observaciones de Auditorías Externas"
+      external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: {{score}}% (*)"
