@@ -5,7 +5,7 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Period.human_name, 'period' %>
+      <%= make_filterable_column Period.model_name.human, 'period' %>
       <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
@@ -15,7 +15,7 @@
   </thead>
 
   <tbody>
-    <% @reviews.each do |review| -%>
+    <% @reviews.each do |review| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym review.period %></td>
         <td class="nowrap"><%= h review.identification %></td>
@@ -27,7 +27,7 @@
         <td><%= link_to_edit edit_review_path(review) %></td>
         <td><%= button_to_destroy review %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

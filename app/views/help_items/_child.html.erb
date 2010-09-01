@@ -1,5 +1,5 @@
-<% id = dynamic_object_id('child', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = dynamic_object_id('child', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="child item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 5%;">
@@ -13,20 +13,20 @@
     <%= f.text_area :description %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-      <% unless f.object.new_record? -%>
+      <% unless f.object.new_record? %>
         <%= link_to_edit(edit_help_item_path(f.object)) %> |
-      <% end -%>
+      <% end %>
       <%= insert_record_link(f, :class_to_insert => :child) %> |
-      <%= remove_item_link(f, :child) -%> |
+      <%= remove_item_link(f, :child) %> |
       <%= link_to_move %>
       <%= hidden_lock_version(f) %>
     </div>
   </div>
 </div>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">
   Helper.makeSortable('children', '#children div.child', '#children a.move');
   Helper.showItem('<%= id %>');
 </script>
-<% end -%>
+<% end %>

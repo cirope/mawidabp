@@ -5,9 +5,9 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, 'review' %>
-      <%= make_filterable_column ProcessControl.human_name, 'process_control' %>
-      <%= make_filterable_column ControlObjective.human_name, 'control_objective_text' %>
+      <%= make_filterable_column Review.model_name.human, 'review' %>
+      <%= make_filterable_column ProcessControl.model_name.human, 'process_control' %>
+      <%= make_filterable_column ControlObjective.model_name.human, 'control_objective_text' %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished) %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance) %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness) %>
@@ -18,10 +18,10 @@
   </thead>
 
   <tbody>
-    <% @control_objectives.each do |control_objective| -%>
-      <% html_class = "#{cycle(:even, :odd)} " -%>
+    <% @control_objectives.each do |control_objective| %>
+      <% html_class = "#{cycle(:even, :odd)} " %>
       <% html_class << (control_objective.is_in_a_final_review? ?
-        :readonly_item : :writable_item).to_s -%>
+        :readonly_item : :writable_item).to_s %>
       <tr class="<%= html_class %>">
         <td class="nowrap"><%= show_review_with_close_date_as_acronym control_objective.review %></td>
         <td><%= super_truncate(control_objective.process_control.name, 30) %></td>
@@ -38,7 +38,7 @@
         <td><%= button_to_destroy(control_objective_item_path(control_objective,
             params.slice(:period, :review))) if control_objective.can_be_destroyed? %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

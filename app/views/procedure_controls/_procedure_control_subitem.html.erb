@@ -1,5 +1,5 @@
 <% id = f.object.new_record? ? 'NEW_SUBRECORD' : f.object.id %>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>" <%= 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 15%;">
@@ -13,7 +13,7 @@
         :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
     </div>
 
-    <% f.fields_for :controls, f.object.controls[0] do |c_f| -%>
+    <%= f.fields_for :controls, f.object.controls[0] do |c_f| %>
       <div class="item_field" style="width: 15%;">
         <%= c_f.text_area :control, :class => :control,
           :id => "procedure_control_subitem_#{id}_control" %>
@@ -30,7 +30,7 @@
         <%= c_f.text_area :effects, :class => :effects,
           :id => "procedure_control_subitem_#{id}_effects" %>
       </div>
-    <% end -%>
+    <% end %>
 
     <div class="item_field" style="width: 10%;">
       <%= f.select :risk, f.object.get_parameter(
@@ -41,7 +41,7 @@
       <%= f.hidden_field :order, :class => :sort_number %>
       <%= insert_record_link(f, :class => :insert_record_subitem,
         :rel => 'procedure_control_item procedure_control_subitems') %> |
-      <%= remove_item_link(f) -%>
+      <%= remove_item_link(f) %>
     </div>
     <script type="text/javascript">FormUtil.completeSortNumbers();</script>
   </div>
@@ -81,7 +81,7 @@
       }
     });
 </script>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">
 (function() {
   var thisElement = $('procedure_control_subitem_<%= id %>');
@@ -93,4 +93,4 @@
   Helper.showItem('procedure_control_subitem_NEW_SUBRECORD');
 })();
 </script>
-<% end -%>
+<% end %>

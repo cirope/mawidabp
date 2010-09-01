@@ -1,8 +1,8 @@
 <!--[form:help_item]-->
-<%= form_for @help_item do |hi_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @help_item do |hi_f| %>
+  <% content_for :js_extra do %>
     <%= "var child='#{generate_template(hi_f, :children)}';" %>
-  <% end -%>
+  <% end %>
   <%= hi_f.error_messages %>
 
   <p>
@@ -31,10 +31,10 @@
     </div>
 
     <div id="children">
-      <% hi_f.fields_for :children do |hi_f| -%>
+      <%= hi_f.fields_for :children do |hi_f| %>
         <%= render :partial => 'child', :locals =>
           {:f => hi_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -48,7 +48,7 @@
   <p>
     <span class="button"><%= hi_f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:help_item] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

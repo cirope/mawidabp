@@ -1,6 +1,6 @@
 <div id="showed_data">
 <p>
-  <b><%= User.human_name %>:</b>
+  <b><%= User.model_name.human %>:</b>
   <%=h @error_record.user ? @error_record.user.user : t(:'error_record.void_user') %>
 </p>
 

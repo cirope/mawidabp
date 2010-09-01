@@ -1,8 +1,8 @@
 <!--[form:business_unit_type]-->
-<%= form_for @business_unit_type do |but_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @business_unit_type do |but_f| %>
+  <% content_for :js_extra do %>
       <%= "var business_unit='#{generate_template(but_f, :business_units)}';" %>
-  <% end -%>
+  <% end %>
   <%= but_f.error_messages %>
 
   <div class="form_column_left">
@@ -28,17 +28,17 @@
   <div class="items">
     <div class="column_headers nested_items">
       <div class="item_column" style="width: 50%;">
-        <h3><%= BusinessUnit.human_name %></h3>
+        <h3><%= BusinessUnit.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 35%;">&nbsp;</div>
       <div style="clear: both;"></div>
     </div>
 
     <div id="business_units">
-      <% but_f.fields_for :business_units do |bu_f| -%>
+      <%= but_f.fields_for :business_units do |bu_f| %>
         <%= render :partial => 'business_unit',
           :locals => { :f => bu_f, :is_dynamic => false } %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -51,6 +51,6 @@
   <p>
     <span class="button"><%= but_f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:business_unit_type] -->
 <%= set_focus_to_first_element %>

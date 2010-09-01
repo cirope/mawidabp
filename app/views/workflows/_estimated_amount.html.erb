@@ -1,16 +1,16 @@
-<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" -%>
-<% unless plan_item.try(:resource_utilizations).blank? -%>
+<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" %>
+<% unless plan_item.try(:resource_utilizations).blank? %>
   <%= link_to_function currency_mask % plan_item.cost,
     "$('estimated_cost_details').showOrHide()" %>
   <div id="estimated_cost_details" style="display: none;">
     <div>
       <ul class="raw_list">
-        <% plan_item.resource_utilizations.each do |ru| -%>
+        <% plan_item.resource_utilizations.each do |ru| %>
           <li><%= "#{ru.resource.resource_name}: #{currency_mask % ru.cost}" %></li>
-        <% end -%>
+        <% end %>
       </ul>
     </div>
   </div>
-<% else -%>
+<% else %>
   <p><%= currency_mask % 0.0 %></p>
-<% end -%>
+<% end %>

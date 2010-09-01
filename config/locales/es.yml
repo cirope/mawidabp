@@ -109,7 +109,7 @@ es:
       other: "Su contraseña expiró hace %{count} días"
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
     session_closed_correctly: "Sesión cerrada correctamente"
-    session_expires_in_less_than_a_minute: "Su sesión expìra en menos de un minuto"
+    session_expires_in_less_than_a_minute: "Su sesión expira en menos de un minuto"
     session_time_expired: "Su sesión ha expirado, debe autenticarse nuevamente"
     show_all: "Ver todos..."
     sort_by: "Ordenar por..."

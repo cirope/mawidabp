@@ -161,7 +161,7 @@ class ProcedureControlsController < ApplicationController
     pdf.start_page_numbering pdf.absolute_x_middle, (pdf.bottom_margin / 2.0),
       10, :center, t(:'pdf.page_pattern').to_iso, 1
     pdf.add_planning_header @auth_organization, @procedure_control.period
-    pdf.add_title ProcedureControl.human_name
+    pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
       'compliance_tests', 'effects', 'risk']

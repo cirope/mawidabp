@@ -25,7 +25,7 @@ module Technoweenie # :nodoc:
             thumb_class.attachment_options[:path_prefix].to_s
           file_system_path = file_system_path[1..-1] if file_system_path.first == '/'
           
-          File.join(RAILS_ROOT, file_system_path, *partitioned_path(thumbnail_name_for(thumbnail)))
+          File.join(::Rails.root.to_s, file_system_path, *partitioned_path(thumbnail_name_for(thumbnail)))
         end
       
         # Used as the base path that #public_filename strips off full_filename to create the public path

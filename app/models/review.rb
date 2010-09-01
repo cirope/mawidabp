@@ -214,7 +214,7 @@ class Review < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'review.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -337,7 +337,7 @@ class Review < ActiveRecord::Base
         unless w.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Weakness.human_name} #{w.review_code}", w.approval_errors
+            "#{Weakness.model_name.human} #{w.review_code}", w.approval_errors
           ]
         end
       end
@@ -345,7 +345,7 @@ class Review < ActiveRecord::Base
       unless coi.must_be_approved?
         self.can_be_approved_by_force = false
         errors << [
-          "#{ControlObjectiveItem.human_name}: #{coi.control_objective_text}",
+          "#{ControlObjectiveItem.model_name.human}: #{coi.control_objective_text}",
           coi.approval_errors
         ]
       end
@@ -360,7 +360,7 @@ class Review < ActiveRecord::Base
       review_errors << I18n.t(:'review.errors.without_survey')
     end
 
-    errors << ["#{Review.human_name}", review_errors] unless review_errors.blank?
+    errors << ["#{Review.model_name.human}", review_errors] unless review_errors.blank?
 
     (@approval_errors = errors).blank?
   end
@@ -524,7 +524,7 @@ class Review < ActiveRecord::Base
     end
 
     column_data << {
-      'name' => "<b>#{Review.human_name}</b> ".to_iso,
+      'name' => "<b>#{Review.model_name.human}</b> ".to_iso,
       'relevance' => '',
       'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
     }
@@ -536,7 +536,7 @@ class Review < ActiveRecord::Base
       end
 
       column_data << {
-        'name' => "#{ProcessControl.human_name}: #{process_control}".to_iso,
+        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
         'relevance' => '',
         'effectiveness' => "#{effectiveness_average.round}%**"
       }
@@ -544,7 +544,7 @@ class Review < ActiveRecord::Base
       coi_data.each do |coi|
         column_data << {
           'name' =>
-            "        <C:bullet /> <i>#{ControlObjectiveItem.human_name}: " +
+            "        <C:bullet /> <i>#{ControlObjectiveItem.model_name.human}: " +
             "#{coi[0]}</i>".to_iso,
           'relevance' => "<i>#{coi[2]}</i>".to_iso,
           'effectiveness' => "<i>#{coi[1].round}%</i>"
@@ -719,7 +719,7 @@ class Review < ActiveRecord::Base
     end
 
     column_data << {
-      'name' => "<b>#{Review.human_name}</b>".to_iso,
+      'name' => "<b>#{Review.model_name.human}</b>".to_iso,
       'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
     }
 
@@ -729,7 +729,7 @@ class Review < ActiveRecord::Base
       end
 
       column_data << {
-        'name' => "#{ProcessControl.human_name}: #{process_control}".to_iso,
+        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
         'effectiveness' => "#{effectiveness_average.round}%**"
       }
     end

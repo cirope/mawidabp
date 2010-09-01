@@ -85,7 +85,7 @@ class ProcessControl < ActiveRecord::Base
         co.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
       
-      self.errors.add_to_base errors.reject { |e| e.blank? }.join(
+      self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 
       false

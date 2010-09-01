@@ -11,7 +11,7 @@
   </thead>
 
   <tbody>
-    <% @notifications.each do |notification| -%>
+    <% @notifications.each do |notification| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%=h notification.status_text %></td>
         <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
@@ -23,7 +23,7 @@
         <td><%= link_to_confirm notification %></td>
         <td><%= link_to_confirm notification, true %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

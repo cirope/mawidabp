@@ -145,7 +145,7 @@ class Period < ActiveRecord::Base
         :count => self.procedure_controls.size)
     end
 
-    errors.each { |e| self.errors.add_to_base e unless self.errors.include?(e) }
+    errors.each { |e| self.errors.add(:base, e) unless self.errors.include?(e) }
 
     errors.blank?
   end

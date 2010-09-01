@@ -17,24 +17,26 @@ module ApplicationHelper
         :length => text_length > length ?
           (length + omission.mb_chars.length) : length,
         :omission => omission
-      )
+      ).html_safe
     end
   end
 
   def time_in_words_with_acronym(time_in_seconds = 0)
-    content_tag :acronym, time_ago_in_words(time_in_seconds.from_now),
+    content_tag(:acronym, time_ago_in_words(time_in_seconds.from_now),
       :title => t(:'datetime.distance_in_words.x_hours',
-        :count => ('%.2f' % (time_in_seconds / 3600)))
+        :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
 
   def show_inline_help_for(name, link_name = nil)
-    render :partial => 'inline_helps/show_inline', :locals => {:name => name,
-      :link_name => (link_name || name)}
+    render(:partial => 'inline_helps/show_inline', :locals => {:name => name,
+      :link_name => (link_name || name)}).html_safe
   end
 
   def show_info(text, html_options = {})
-    content_tag(:span, !text.blank? ? content_tag(:acronym, 'i', :title => text,
-      :class => "info #{html_options[:class]}") : '&nbsp;', :class => :info_box)
+    content_tag(:span, !text.blank? ?
+        content_tag(:acronym, 'i', :title => text,
+        :class => "info #{html_options[:class]}") :
+        '&nbsp;', :class => :info_box).html_safe
   end
 
   # Genera un array con pares [[name_field_1, id_field_1],......] para ser
@@ -89,7 +91,7 @@ module ApplicationHelper
         end
       end
 
-      content_tag(:ul, list.join("\n"), options)
+      content_tag(:ul, list.join("\n"), options).html_safe
     end
   end
 
@@ -109,16 +111,16 @@ module ApplicationHelper
   #
   # * _form_:: Formulario que se utilizará para generar el campo oculto
   def hidden_lock_version(form)
-    content_tag :div, form.hidden_field(:lock_version),
-      :style => 'display: none;'
+    content_tag(:div, form.hidden_field(:lock_version),
+      :style => 'display: none;').html_safe
   end
 
   # Devuelve el HTML con los links para navegar una lista paginada
   #
   # * _objects_:: Objetos con los que se genera la lista paginada
   def pagination_links(objects)
-    previous_label = "&laquo; #{t :'label.previous'}"
-    next_label = "#{t :'label.next'} &raquo;"
+    previous_label = "&laquo; #{t :'label.previous'}".html_safe
+    next_label = "#{t :'label.next'} &raquo;".html_safe
 
     result = will_paginate objects, :previous_label => previous_label,
       :next_label => next_label, :inner_window => 1, :outer_window => 1
@@ -174,11 +176,12 @@ module ApplicationHelper
       content << hidden_field_tag("column_#{column}_for_filter", column)
     end
 
-    content_tag(:th, content, :class => "filterable #{html_class}")
+    content_tag(:th, content, :class => "filterable #{html_class}").html_safe
   end
 
   def make_not_available_column(title)
-    content_tag :th, title, :class => (@query.blank? ? nil : :not_available)
+    content_tag(:th, title,
+      :class => (@query.blank? ? nil : :not_available)).html_safe
   end
 
   # Devuelve el HTML de un vínculo para volver (history.back())
@@ -479,31 +482,31 @@ module ApplicationHelper
     convert_boolean_attributes!(html_options, %w( disabled ))
 
     method_tag = ''
-    if (method = html_options.delete('method')) &&
-        %w{put delete}.include?(method.to_s)
-      method_tag = tag('input', :type => 'hidden', :name => '_method',
-        :value => method.to_s)
+    if (method = html_options.delete('method')) && %w{put delete}.include?(method.to_s)
+      method_tag = tag('input', :type => 'hidden', :name => '_method', :value => method.to_s)
     end
 
     form_method = method.to_s == 'get' ? 'get' : 'post'
 
+    remote = html_options.delete('remote')
+
     request_token_tag = ''
     if form_method == 'post' && protect_against_forgery?
-      request_token_tag = tag(:input, :type => "hidden",
-        :name => request_forgery_protection_token.to_s,
-        :value => form_authenticity_token)
+      request_token_tag = tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token)
     end
 
     if confirm = html_options.delete("confirm")
-      html_options["onclick"] = "return #{confirm_javascript_function(confirm)};"
+      html_options["onclick"] = "return confirm('#{escape_javascript(confirm)}');"
     end
 
     url = options.is_a?(String) ? options : self.url_for(options)
     name ||= url
 
+    html_options = convert_options_to_data_attributes(options, html_options)
+
     html_options.merge!('type' => 'image', 'title' => name, 'alt' => name)
 
-    "<form method=\"#{form_method}\" action=\"#{escape_once url}\" class=\"button-to\"><div>" +
-      method_tag + tag(:input, html_options) + request_token_tag + "</div></form>"
+    ("<form method=\"#{form_method}\" action=\"#{html_escape(url)}\" #{"data-remote=\"true\"" if remote} class=\"button_to\"><div>" +
+      method_tag + tag("input", html_options) + request_token_tag + "</div></form>").html_safe
   end
 end

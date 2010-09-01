@@ -4,12 +4,12 @@
 
   <div class="form_column_left">
     <p class="form_item">
-      <% unless @conclusion_draft_review.review -%>
+      <% unless @conclusion_draft_review.review %>
         <%= f.label :review_id, nil, :class => :inline %>
         <%= f.select :review_id,
           Review.list_without_draft_review.map { |r| [r.identification, r.id] },
           {:prompt => true}, {:class => 'inline_item focused'} %>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :review_id %>
         <%= content_tag :label,
           ConclusionDraftReview.human_attribute_name('review_id'),
@@ -17,7 +17,7 @@
         <%= text_field_tag :review,
           @conclusion_draft_review.review.identification,
           :class => :inline_item, :readonly => true %>
-      <% end -%>
+      <% end %>
     </p>
     <p class="form_item">
       <%= label_tag :business_unit,
@@ -64,7 +64,7 @@
       <p class="red bold">
         <%= t(:'conclusion_draft_review.not_approved') %>
       </p>
-      <% @conclusion_draft_review.review.try(:must_be_approved?) -%>
+      <% @conclusion_draft_review.review.try(:must_be_approved?) %>
       <%= link_to_function t(:'error.show_details'), 'showOrHideErrors()',
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
     </div>
@@ -78,12 +78,12 @@
         :remote => true},
         {:style => 'margin-left: 1em;'} %>
     </div>
-    <% if @conclusion_draft_review.updated_at -%>
+    <% if @conclusion_draft_review.updated_at %>
       <div style="margin-left: 1em;">
         | <%= t(:'conclusion_draft_review.last_verified_date',
           :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
       </div>
-    <% end -%>
+    <% end %>
   </div>
   <div id="approval_errors_detail" style="display: none; clear: both;">
     <div>
@@ -99,25 +99,25 @@
     </div>
   </div>
 
-  <% unless @conclusion_draft_review.notifications.blank? -%>
+  <% unless @conclusion_draft_review.notifications.blank? %>
     <div id="notifications" style="margin: 2em 0em;">
       <h1><%= t(:'conclusion_draft_review.notifications_statuses') %></h1>
       <ul class="raw_list">
-        <% @conclusion_draft_review.last_notifications.each do |notification| -%>
+        <% @conclusion_draft_review.last_notifications.each do |notification| %>
           <li><%= notification.user.full_name %>: <strong><%= notification.status_text %></strong>
             (<%=t(:'conclusion_draft_review.notification_sended_at',
               :date => l(notification.created_at, :format => :long)) %>)</li>
         <% end %>
       </ul>
     </div>
-  <% end -%>
+  <% end %>
 
   <%= hidden_lock_version(f) %>
   
   <p>
     <span class="button"><%= f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:conclusion_draft_review] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

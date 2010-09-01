@@ -235,7 +235,7 @@ class FindingTest < ActiveSupport::TestCase
       assert @finding.invalid?
       # Dependiendo del estado se validan más o menos cosas
       assert !@finding.errors.empty?
-      assert @finding.errors.on(:state).include?(
+      assert @finding.errors[:state].include?(
         error_message_from_model(@finding, :state, :inclusion))
     end
   end

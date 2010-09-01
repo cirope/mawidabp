@@ -34,7 +34,7 @@ class ExecutionReportsController < ApplicationController
       BusinessUnitType.list.each do |but|
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
-          'review' => [Review.human_name, 16],
+          'review' => [Review.model_name.human, 16],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
           'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (1)", 12],
@@ -125,7 +125,7 @@ class ExecutionReportsController < ApplicationController
 
     @audits_by_period.each do |audit_by_period|
       pdf.move_pointer PDF_FONT_SIZE * 2
-      pdf.add_title "#{Period.human_name}: #{audit_by_period[:period].inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{audit_by_period[:period].inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       audit_by_period[:audits_by_business_unit].each do |data|
@@ -265,7 +265,7 @@ class ExecutionReportsController < ApplicationController
 
     @counts.each do |count_data|
       pdf.move_pointer PDF_FONT_SIZE * 2
-      pdf.add_title "#{Period.human_name}: #{count_data[:period].inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{count_data[:period].inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|
@@ -281,7 +281,7 @@ class ExecutionReportsController < ApplicationController
             total_weaknesses = weaknesses_count.values.sum
             total_oportunities = oportunities_count.values.sum
 
-            pdf.text "\n<b>#{Review.human_name}</b>: #{review}\n\n",
+            pdf.text "\n<b>#{Review.model_name.human}</b>: #{review}\n\n",
               :font_size => PDF_FONT_SIZE
 
             unless (total_weaknesses + total_oportunities) == 0

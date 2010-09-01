@@ -1,5 +1,5 @@
-<% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="process_control item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
@@ -13,7 +13,7 @@
     <div class="item_field item_controls" style="width: 35%;">
       <%= f.hidden_field :order, :class => :sort_number %>
       <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) -%>
+      <%= remove_item_link(f) %>
     </div>
 
     <div class="items hidden_items" id="control_objectives_for_<%= id %>" style="display: none;">
@@ -45,10 +45,10 @@
         </div>
 
         <div class="control_objectives">
-          <% f.fields_for :control_objectives do |co_f| -%>
+          <%= f.fields_for :control_objectives do |co_f| %>
             <%= render :partial => 'control_objective', :locals =>
               {:f => co_f, :is_dynamic => false} %>
-          <% end -%>
+          <% end %>
         </div>
         <p style="margin-bottom: 1em;">
           <%= link_to t(:'best_practice.add_control_objective'),
@@ -60,6 +60,6 @@
   </div>
 </div>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

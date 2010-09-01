@@ -18,8 +18,8 @@
   </thead>
 
   <tbody>
-    <% @conclusion_draft_reviews.each do |conclusion_draft_review| -%>
-      <% has_final = conclusion_draft_review.has_final_review? -%>
+    <% @conclusion_draft_reviews.each do |conclusion_draft_review| %>
+      <% has_final = conclusion_draft_review.has_final_review? %>
       <tr class="<%= cycle(:even, :odd) %> <%= has_final ? :readonly_item : :writable_item %>">
         <td><%= show_has_final_info if has_final %></td>
         <td><%= l(conclusion_draft_review.issue_date, :format => :short) if conclusion_draft_review.issue_date %></td>
@@ -33,7 +33,7 @@
         <td><%= link_to_show(conclusion_draft_review) unless has_final %></td>
         <td><%= link_to_edit edit_conclusion_draft_review_path(conclusion_draft_review) unless has_final %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

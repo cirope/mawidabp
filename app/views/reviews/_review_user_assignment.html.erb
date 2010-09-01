@@ -1,11 +1,11 @@
-<% id = dynamic_object_id('review_user_assignment', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = dynamic_object_id('review_user_assignment', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="review_user_assignment item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">
-      <% unless readonly -%>
+      <% unless readonly %>
         <div class="search">
-          <% errors_on_user = f.object.errors.on(:user_id) || f.object.errors.on(:user) -%>
+          <% errors_on_user = f.object.errors.on(:user_id) || f.object.errors.on(:user) %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :review_user_assignment, :user_data,
@@ -18,22 +18,22 @@
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'user_data'} %>
         </div>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :user_id, :value => f.object.user_id,
           :id => "hidden_user_id_#{id}" %>
         <%= text_field_tag "review_user_assignment_user_#{id}",
           f.object.user.try(:full_name_with_function, f.object.created_at),
           :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 20%;">
       <%= user_assignment_type_field(f, false, readonly) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) unless readonly -%>
+      <%= remove_item_link(f) unless readonly %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

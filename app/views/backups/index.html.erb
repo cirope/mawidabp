@@ -9,14 +9,14 @@
   </thead>
 
   <tbody>
-    <% @backups.each do |backup| -%>
+    <% @backups.each do |backup| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= t backup.backup_type == 0 ? :'backup.full' : :'backup.differential' %></td>
         <td><%= t backup.work_papers_included ? :'label.yes' : :'label.no' %></td>
         <td><%= l backup.created_at, :format => :long %></td>
         <td><%= link_to_show backup %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

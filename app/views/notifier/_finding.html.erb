@@ -1,9 +1,9 @@
 <p style="margin: .1em 0em;">
-  <b><%= Review.human_name %></b>:
+  <b><%= Review.model_name.human %></b>:
   <%=h finding.review.to_s %>
 </p>
 <p style="margin: .1em 0em;">
-  <b><%= ControlObjective.human_name %></b>:
+  <b><%= ControlObjective.model_name.human %></b>:
   <%=h finding.control_objective.name %>
 </p>
 <p style="margin: .1em 0em;">
@@ -14,19 +14,19 @@
   <b><%= finding.class.human_attribute_name :state %></b>:
   <%=h finding.state_text %>
 </p>
-<% unless finding.follow_up_date.blank? -%>
+<% unless finding.follow_up_date.blank? %>
   <p style="margin: .1em 0em;">
     <b><%= finding.class.human_attribute_name :follow_up_date %></b>:
     <%=l finding.follow_up_date, :format => :long %>
   </p>
-<% end -%>
-<% unless finding.solution_date.blank? -%>
+<% end %>
+<% unless finding.solution_date.blank? %>
   <p style="margin: .1em 0em;">
     <b><%= finding.class.human_attribute_name :solution_date %></b>:
     <%=l finding.solution_date, :format => :long %>
   </p>
-<% end -%>
-<% audited, auditors = *finding.users.partition(&:can_act_as_audited?) -%>
+<% end %>
+<% audited, auditors = *finding.users.partition(&:can_act_as_audited?) %>
 
 <p style="margin: .1em 0em;">
   <b><%= t(:'finding.audited', :count => audited.size) %></b>:

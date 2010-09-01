@@ -1,17 +1,17 @@
-<% readonly = @weakness.final? -%>
-<% review = @weakness.review || @weakness.control_objective_item.try(:review) -%>
-<% @weakness.review_code ||= next_weakness_code(@weakness) -%>
-<% frozen = review.try(:is_frozen?) && !@weakness.can_be_modified?(false) #TODO: cambiar a solo is_frozen? cuando termine la "papelización" -%>
-<% show_history_changes = @weakness.status_change_history.size > 1 -%>
+<% readonly = @weakness.final? %>
+<% review = @weakness.review || @weakness.control_objective_item.try(:review) %>
+<% @weakness.review_code ||= next_weakness_code(@weakness) %>
+<% frozen = review.try(:is_frozen?) && !@weakness.can_be_modified?(false) #TODO: cambiar a solo is_frozen? cuando termine la "papelización" %>
+<% show_history_changes = @weakness.status_change_history.size > 1 %>
 <!--[form:weakness]-->
 <%= form_for @weakness, :html => {:multipart => true} do |f| %>
-  <% content_for :js_extra do -%>
-    <% unless readonly -%>
+  <% content_for :js_extra do %>
+    <% unless readonly %>
       <%= "var user='#{escape_javascript(render(:partial => 'user',
           :object => User.new, :locals => {:f => f, :is_dynamic => true,
           :readonly => readonly}))}';" %>
-    <% end -%>
-    <% unless frozen -%>
+    <% end %>
+    <% unless frozen %>
     <%= "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
         @weakness)}';" %>
     <%= "var finding_relation='#{generate_template(f, :finding_relations,
@@ -21,18 +21,18 @@
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <% end -%>
-  <% end -%>
+    <% end %>
+  <% end %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
     <p class="form_item">
-      <%= content_tag :label, Review.human_name, :class => :inline %>
+      <%= content_tag :label, Review.model_name.human, :class => :inline %>
       <%= text_field_tag :review, review.try(:identification),
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <label class="inline"><%= ControlObjective.human_name %>:</label>
+      <label class="inline"><%= ControlObjective.model_name.human %>:</label>
       <%= text_field nil, :control_objective_name, :size => nil,
         :value => "#{@weakness.control_objective_item.control_objective_text} (#{@weakness.control_objective_item.process_control.name})",
         :class => :inline_item, :readonly => true %>
@@ -79,21 +79,21 @@
       <%= finding_status_field(f, true, readonly) %>
     </p>
 
-    <% if show_history_changes -%>
+    <% if show_history_changes %>
       <%= render :partial => 'findings/history_changes',
         :locals => { :finding => @weakness } %>
-    <% end -%>
+    <% end %>
 
-    <% if @weakness.must_have_a_comment? -%>
-      <% f.fields_for :comments,
-        @weakness.comments.build(:user => @auth_user) do |c_f| -%>
+    <% if @weakness.must_have_a_comment? %>
+      <%= f.fields_for :comments,
+        @weakness.comments.build(:user => @auth_user) do |c_f| %>
         <p>
           <%= c_f.label :comment, nil, :class => :error_field %>
           <%= c_f.text_area :comment, :class => :error_field %>
           <%= c_f.hidden_field :user_id %>
         </p>
-      <% end -%>
-    <% end -%>
+      <% end %>
+    <% end %>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>
@@ -134,10 +134,10 @@
     </div>
 
     <div id="finding_relations">
-      <% f.fields_for :finding_relations do |fr_f| -%>
+      <%= f.fields_for :finding_relations do |fr_f| %>
         <%= render :partial => 'finding_relation', :locals =>
           {:f => fr_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -183,11 +183,11 @@
           </div>
           
           <div id="work_papers">
-            <% f.fields_for :work_papers do |wp_f| -%>
+            <%= f.fields_for :work_papers do |wp_f| %>
               <%= render :partial => 'work_papers/work_paper', :locals =>
                 {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
                 :child_index => 'NEW_RECORD'} %>
-            <% end -%>
+            <% end %>
           </div>
         </td>
       </tr>
@@ -210,6 +210,6 @@
   <p>
     <span class="button"><%= f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:weakness] -->
 <%= set_focus_to_first_element %>

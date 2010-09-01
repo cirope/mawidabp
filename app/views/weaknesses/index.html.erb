@@ -1,13 +1,13 @@
-<% if params[:control_objective].blank? -%>
+<% if params[:control_objective].blank? %>
   <%= render :partial => 'shared/search', :locals => {
     :options => {:columns_for_sort => Weakness.columns_for_sort},
     :columns => @query.blank? ? Weakness::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
-<% end -%>
+<% end %>
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, 'review' %>
+      <%= make_filterable_column Review.model_name.human, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
       <%= make_filterable_column Weakness.human_attribute_name(:review_code), 'review_code' %>
       <%= make_filterable_column Weakness.human_attribute_name(:description), 'description' %>
@@ -20,7 +20,7 @@
   </thead>
 
   <tbody>
-    <% @weaknesses.each do |weakness| -%>
+    <% @weaknesses.each do |weakness| %>
       <tr class="<%= cycle(:even, :odd) %> <%= weakness.is_in_a_final_review? ? :readonly_item : :writable_item %>">
         <td class="nowrap"><%= show_review_with_close_date_as_acronym weakness.review %></td>
         <td><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
@@ -34,16 +34,16 @@
         <td><%= link_to_edit edit_weakness_path(weakness) %></td>
         <td><%= button_to_destroy weakness %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 
 <div id="links">
 <%= pagination_links @weaknesses %>
-<% if params[:control_objective].to_i > 0 -%>
+<% if params[:control_objective].to_i > 0 %>
   <%= link_to t(:'label.new'), new_weakness_path(
     :control_objective_item => params[:control_objective]) %>
   | <%= link_to t(:'weakness.see_all'), weaknesses_path, :class => 'red bold' %>
-<% end -%>
+<% end %>
 <div style="clear: both;"></div>
 </div>

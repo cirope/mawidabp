@@ -73,7 +73,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       @audit_types.each do |type|
@@ -289,7 +289,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|
@@ -502,7 +502,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|

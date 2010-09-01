@@ -1,6 +1,6 @@
-<% unless @business_units.empty? -%>
+<% unless @business_units.empty? %>
   <ul>
-    <% @business_units.each do |bu| -%>
+    <% @business_units.each do |bu| %>
       <li id="dynamic_result_<%= "#{rand(100000)}_id_#{bu.id}" %>">
         <%= highlight(h(truncate(bu.name, :omission => '...', :length => 25)),
           @tokens) %>
@@ -8,9 +8,9 @@
           <%= bu.business_unit_type.name %>
         </span>
       </li>
-    <% end -%>
+    <% end %>
   </ul>
-<% else -%>
+<% else %>
   <ul style="display: none;"><li></li></ul>
   <p class="empty_result"><%= t(:'message.empty_result') %></p>
-<% end -%>
+<% end %>

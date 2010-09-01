@@ -1,9 +1,9 @@
-<% readonly = @control_objective_item.is_in_a_final_review? -%>
-<% frozen = @control_objective_item.review.try(:is_frozen?) -%>
+<% readonly = @control_objective_item.is_in_a_final_review? %>
+<% frozen = @control_objective_item.review.try(:is_frozen?) %>
 <!--[form:control_objective_item]-->
 <%= form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
-  <% unless frozen -%>
-    <% content_for :js_extra do -%>
+  <% unless frozen %>
+    <% content_for :js_extra do %>
       <%= "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
         @control_objective_item)}';" %>
       <%= "var post_audit_work_paper='#{generate_template(co_f,
@@ -16,26 +16,26 @@
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <% end -%>
-  <% end -%>
+    <% end %>
+  <% end %>
   <%= co_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
-      <label class="inline"><%= Review.human_name %>:</label>
+      <label class="inline"><%= Review.model_name.human %>:</label>
       <%= text_field_tag :review_identification,
         @control_objective_item.review.identification,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= ProcessControl.human_name %>:</label>
+      <label class="inline"><%= ProcessControl.model_name.human %>:</label>
       <%= text_field_tag :process_control_name,
         @control_objective_item.control_objective.process_control.name,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= Period.human_name %>:</label>
+      <label class="inline"><%= Period.model_name.human %>:</label>
       <%= text_field_tag :period, @control_objective_item.review.period.inspect,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
@@ -56,7 +56,7 @@
       <%= co_f.label :control_objective_text %>
       <%= co_f.text_area :control_objective_text, :readonly => readonly %>
     </p>
-    <% co_f.fields_for :controls, @control_objective_item.controls[0] do |c_f| -%>
+    <%= co_f.fields_for :controls, @control_objective_item.controls[0] do |c_f| %>
       <p>
         <%= c_f.label :effects %>
         <%= c_f.text_area :effects, :readonly => readonly %>
@@ -66,16 +66,16 @@
         <%= c_f.text_area :control, :readonly => readonly %>
       </p>
 
-      <% content_for :design_tests do -%>
+      <% content_for :design_tests do %>
         <%= c_f.label :design_tests %>
         <%= c_f.text_area :design_tests, :readonly => readonly %>
       <% end %>
 
-      <% content_for :compliance_tests do -%>
+      <% content_for :compliance_tests do %>
         <%= c_f.label :compliance_tests %>
         <%= c_f.text_area :compliance_tests, :readonly => readonly %>
       <% end %>
-    <% end -%>
+    <% end %>
   </div>
   <div class="form_column_right">
     <p>
@@ -127,17 +127,17 @@
   <table class="summary_table">
     <thead>
       <tr>
-        <% Finding::STATUS.keys.each do |status| -%>
+        <% Finding::STATUS.keys.each do |status| %>
           <th><%= t("finding.status_#{status}") %></th>
-        <% end -%>
+        <% end %>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <% Finding::STATUS.keys.each do |status| -%>
+        <% Finding::STATUS.keys.each do |status| %>
           <td><%= @control_objective_item.
               weaknesses.select { |w| w.send "#{status}?" }.size %></td>
-        <% end -%>
+        <% end %>
       </tr>
     </tbody>
   </table>
@@ -181,11 +181,11 @@
       </div>
 
       <div id="pre_audit_work_papers">
-        <% co_f.fields_for :pre_audit_work_papers do |wp_f| -%>
+        <%= co_f.fields_for :pre_audit_work_papers do |wp_f| %>
           <%= render :partial => 'work_papers/work_paper', :locals =>
             {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
             :child_index => 'NEW_RECORD'} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
 
@@ -221,11 +221,11 @@
       </div>
 
       <div id="post_audit_work_papers">
-        <% co_f.fields_for :post_audit_work_papers do |wp_f| -%>
+        <%= co_f.fields_for :post_audit_work_papers do |wp_f| %>
           <%= render :partial => 'work_papers/work_paper', :locals =>
             {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
             :child_index => 'NEW_RECORD'} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
 
@@ -243,7 +243,7 @@
   <p>
     <span class="button"><%= co_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:control_objective_item] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

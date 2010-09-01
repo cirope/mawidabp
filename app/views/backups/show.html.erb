@@ -14,11 +14,11 @@
   <%= l @backup.created_at, :format => :long %>
 </p>
 
-<% if params[:backup_file] -%>
+<% if params[:backup_file] %>
 <p>
   <%= link_to t(:'message.download'), "/backup_files/#{params[:backup_file]}" %>
 </p>
-<% end -%>
+<% end %>
 </div>
 
 <div id="links">

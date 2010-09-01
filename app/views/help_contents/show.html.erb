@@ -3,10 +3,10 @@
     <b><%= HelpContent.human_attribute_name :language %>:</b>
     <%= t "lang.#{@help_content.language}" %>
   </p>
-  <% @help_content.help_items.each do |help_item| -%>
+  <% @help_content.help_items.each do |help_item| %>
     <h1><%=h help_item.name %></h1>
     <%= textilize(h(help_item.description)) %>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

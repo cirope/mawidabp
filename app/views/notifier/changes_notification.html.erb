@@ -1,32 +1,32 @@
-<% organization = @notification.findings.first.try(:review).try(:organization) if @notification -%>
+<% organization = @notification.findings.first.try(:review).try(:organization) if @notification %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= @title %></h2>
-  <% if @body.kind_of?(Array) && !@body.blank? -%>
+  <% if @body.kind_of?(Array) && !@body.blank? %>
     <ul>
-      <% @body.each do |body_item| -%>
+      <% @body.each do |body_item| %>
         <li><%= body_item %></li>
-      <% end -%>
+      <% end %>
     </ul>
-  <% elsif !@body.blank? -%>
+  <% elsif !@body.blank? %>
     <p style="margin: 1em 0em;"><%= textilize @body %></p>
-  <% end -%>
-  <% if @content.kind_of?(Array) && !@content.blank? -%>
+  <% end %>
+  <% if @content.kind_of?(Array) && !@content.blank? %>
     <ul>
-      <% @content.each do |content_item| -%>
+      <% @content.each do |content_item| %>
         <li><%= content_item %></li>
-      <% end -%>
+      <% end %>
     </ul>
-  <% elsif !@content.blank? -%>
+  <% elsif !@content.blank? %>
     <p><%= textilize @content %></p>
-  <% end -%>
+  <% end %>
 
-  <% if @notification -%>
+  <% if @notification %>
   <p>
     <%= link_to t(:'notifier.notification.confirm'),
       confirm_notification_url(@notification,
         :host => (organization ? "#{organization.prefix}.#{URL_HOST}" : URL_HOST),
         :protocol => URL_PROTOCOL) %>
   </p>
-  <% end -%>
+  <% end %>
   <%= render :partial => 'footer' %>
 </div>

@@ -18,7 +18,7 @@
   </thead>
 
   <tbody>
-    <% @conclusion_final_reviews.each do |conclusion_final_review| -%>
+    <% @conclusion_final_reviews.each do |conclusion_final_review| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
         <td><%= show_period_with_dates_as_acronym conclusion_final_review.review.period %></td>
@@ -28,7 +28,7 @@
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

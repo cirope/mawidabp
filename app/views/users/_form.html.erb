@@ -1,11 +1,11 @@
 <!--[form:user]-->
-<%= form_for @user, :url => url do |u_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @user, :url => url do |u_f| %>
+  <% content_for :js_extra do %>
     <%= "var child='#{escape_javascript(render(:partial => 'child',
         :object => User.new, :locals => {:f => u_f, :is_dynamic => true}))}';" %>
     <%= "var organization_role='#{generate_template(u_f,
         :organization_roles)}';" %>
-  <% end -%>
+  <% end %>
   <%= u_f.error_messages %>
   <div class="form_column_left">
     <p>
@@ -53,7 +53,7 @@
     <div style="display: none;"><%= u_f.hidden_field :lock_version %></div>
   </div>
 
-  <% if @auth_user -%>
+  <% if @auth_user %>
     <div class="items">
       <div class="column_headers">
         <div class="item_column" style="width: 50%;">
@@ -64,7 +64,7 @@
       </div>
       <div class="item_field" style="width: 50%;">
         <div class="search">
-          <% errors_on_manager = @user.errors.on(:manager_id) -%>
+          <% errors_on_manager = @user.errors.on(:manager_id) %>
           <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :user, :nested_user,
             {:id => "user_manager_#{@user.id}",
@@ -80,7 +80,7 @@
       </div>
       <div class="item_field" style="width: 10%;">
         <%= link_to_function t(:'user.unlink_manager'),
-          "$('user_manager_#{@user.id}').setValue(''); $('user_manager_id').setValue('')" -%>
+          "$('user_manager_#{@user.id}').setValue(''); $('user_manager_id').setValue('')" %>
       </div>
     </div>
 
@@ -103,7 +103,7 @@
       <%= link_to t(:'user.add_child'), '#child',
         :class => :add_nested_item, :rel => :children %>
     </p>
-  <% end -%>
+  <% end %>
   
   <div class="items">
     <div class="column_headers">
@@ -118,10 +118,10 @@
     </div>
 
     <div id="organization_roles">
-      <% u_f.fields_for :organization_roles do |or_f| -%>
+      <%= u_f.fields_for :organization_roles do |or_f| %>
         <%= render :partial => 'organization_role', :locals =>
           {:f => or_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -132,6 +132,6 @@
   <p>
     <span class="button"><%= u_f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:user] -->
 <%= set_focus_to_first_element %>

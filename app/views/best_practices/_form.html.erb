@@ -1,9 +1,9 @@
 <!--[form:best_practice]-->
-<%= form_for @best_practice do |bp_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @best_practice do |bp_f| %>
+  <% content_for :js_extra do %>
       <%= "var process_control='" + generate_template(bp_f, :process_controls,
         :object => ProcessControl.new) + "';" %>
-  <% end -%>
+  <% end %>
   <%= bp_f.error_messages %>
 
   <div class="form_column_left">
@@ -21,25 +21,25 @@
   <div class="items">
     <div class="column_headers nested_items">
       <div class="item_column" style="width: 50%;">
-        <h3><%= ProcessControl.human_name %></h3>
+        <h3><%= ProcessControl.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 35%;">&nbsp;</div>
       <div style="clear: both;"></div>
     </div>
 
     <div id="process_controls">
-      <% co_template = nil -%>
-      <% bp_f.fields_for :process_controls do |p_f| -%>
-        <% content_for :js_extra do -%>
+      <% co_template = nil %>
+      <%= bp_f.fields_for :process_controls do |p_f| %>
+        <% content_for :js_extra do %>
           <% co_template ||= generate_template(p_f,
-              :control_objectives, :child_index => 'NEW_SUBRECORD') -%>
-          <%= "var control_objective = '#{co_template}';" unless co_template == 0 -%>
-          <% co_template = 0 -%>
-        <% end -%>
+              :control_objectives, :child_index => 'NEW_SUBRECORD') %>
+          <%= "var control_objective = '#{co_template}';" unless co_template == 0 %>
+          <% co_template = 0 %>
+        <% end %>
         <%= render :partial => 'process_control',
           :locals => {:f => p_f, :best_practice => @best_practice,
           :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -56,6 +56,6 @@
   <p>
     <span class="button"><%= bp_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:best_practice] -->
 <%= set_focus_to_first_element %>

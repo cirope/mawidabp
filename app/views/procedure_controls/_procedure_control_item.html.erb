@@ -1,5 +1,5 @@
-<% id = dynamic_object_id('procedure_control_item', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = dynamic_object_id('procedure_control_item', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="procedure_control_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
@@ -8,24 +8,24 @@
         t(:'procedure_control.hide_procedure_control_subitems') %>
     </div>
     <div class="item_field" style="width: 23%;">
-      <% unless f.object.process_control_id -%>
+      <% unless f.object.process_control_id %>
         <%= procedure_control_best_practices_select(id) %>
-      <% else -%>
+      <% else %>
         <%= text_field_tag "best_practice_#{id}",
           f.object.process_control.best_practice.name, :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 23%;">
-      <% unless f.object.process_control_id -%>
+      <% unless f.object.process_control_id %>
         <%= f.select(:process_control_id, [],
           {:prompt => true},
           {:id => "#{id}_process_control_id", :disabled => true}) %>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :process_control_id %>
         <%= text_field_tag "process_control_#{id}", f.object.process_control.name,
           :readonly => true,
           :class => (:error_field unless f.object.errors.blank?) %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 23%;">
       <%= f.select :aproach, parameter_in(@auth_organization.id,
@@ -38,7 +38,7 @@
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :order, :class => :sort_number %>
       <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) -%>
+      <%= remove_item_link(f) %>
     </div>
 
     <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>" style="display: none;">
@@ -70,13 +70,13 @@
         </div>
 
         <div class="procedure_control_subitems">
-          <% f.fields_for :procedure_control_subitems do |pcs_f| -%>
+          <%= f.fields_for :procedure_control_subitems do |pcs_f| %>
             <%= render :partial => 'procedure_control_subitem',
               :locals => {:f => pcs_f, :is_dynamic => false,
               :control_objectives => (f.object.process_control ?
                   f.object.process_control.control_objectives.map {|co| [co.name, co.id]} :
                   []) } %>
-          <% end -%>
+          <% end %>
         </div>
 
         <p style="margin-bottom: 1em;">
@@ -88,7 +88,7 @@
     </div>
   </div>
 </div>
-<% if f.object.new_record? -%>
+<% if f.object.new_record? %>
   <script type="text/javascript">
     Event.observe('<%= id %>_best_practice', 'change', function() {
       var processControlId = '<%= id %>_process_control_id';
@@ -157,13 +157,13 @@
     });
     FormUtil.completeSortNumbers();
   </script>
-<% end -%>
-<% if is_dynamic -%>
+<% end %>
+<% if is_dynamic %>
 <script type="text/javascript">Helper.showItem($('<%= id %>'));</script>
-<% elsif !f.object.new_record? -%>
-  <% content_for :js_extra_bottom do -%>
+<% elsif !f.object.new_record? %>
+  <% content_for :js_extra_bottom do %>
     <% options = [[t(:'support.select.prompt'), '']] +
-        f.object.control_objectives.map { |co| [co.name, co.id] } -%>
+        f.object.control_objectives.map { |co| [co.name, co.id] } %>
     <%= "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
-  <% end -%>
-<% end -%>
+  <% end %>
+<% end %>

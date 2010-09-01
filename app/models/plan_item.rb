@@ -173,7 +173,7 @@ class PlanItem < ActiveRecord::Base
 
   def can_be_destroyed?
     if self.review
-      self.errors.add_to_base I18n.t(:'plan.errors.plan_item_related')
+      self.errors.add :base, I18n.t(:'plan.errors.plan_item_related')
 
       false
     else

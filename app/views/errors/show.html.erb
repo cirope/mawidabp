@@ -15,11 +15,11 @@
       </span>
       <span class="column_right">
         <%= t(:'error.download_the_following_file') %><br />
-        <% if @auth_user -%>
+        <% if @auth_user %>
           <%= link_to "#{t(:'error.error_file')}.log",
             :controller => :error_files, :action => @auth_user.user,
             :id => "#{t(:'error.error_file')}.log" %>
-        <% end -%>
+        <% end %>
       </span>
     </p>
 
@@ -50,7 +50,7 @@
   </div>
 </div>
 
-<% unless Rails.env == 'production' -%>
+<% unless Rails.env == 'production' %>
   <%= link_to_function t(:'error.show_details'),
     "Effect.SlideDown('error_details'); this.hide();", :id => 'show_link' %>
   <div style="display: none; margin: 2em 0em;" id="error_details">
@@ -64,10 +64,10 @@
     <h3 style="margin-top: 1em;">Application backtrace:</h3>
     <pre style="margin-top: .5em;"><%=h error.application_backtrace.join("\n") %></pre>
 
-    <% unless params.empty? -%>
+    <% unless params.empty? %>
     <h3 style="margin-top: 1em;">Parameters:</h3>
     <pre style="margin-top: .5em;"><%=h params.inspect %></pre>
-    <% end -%>
+    <% end %>
     <div style="clear: both;"></div>
   </div>
-<% end -%>
+<% end %>

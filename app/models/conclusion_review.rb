@@ -93,7 +93,7 @@ class ConclusionReview < ActiveRecord::Base
         :field => "#{ConclusionReview.table_name}.issue_date ASC"
       },
       :period => {
-        :name => Period.human_name,
+        :name => Period.model_name.human,
         :field => "#{Period.table_name}.number ASC"
       },
       :identification => {
@@ -148,7 +148,7 @@ class ConclusionReview < ActiveRecord::Base
   def to_pdf(organization = nil)
     pdf = PDF::Writer.create_generic_pdf(:portrait, false)
     use_finals = !self.kind_of?(ConclusionDraftReview) || self.has_final_review?
-    cover_text = "\n\n\n\n#{Review.human_name.upcase}\n\n"
+    cover_text = "\n\n\n\n#{Review.model_name.human.upcase}\n\n"
     cover_text << "#{self.review.identification}\n\n"
     cover_text << "#{self.review.plan_item.project}\n\n\n\n\n\n"
     cover_bottom_text = "#{self.review.plan_item.business_unit.name}\n"
@@ -158,7 +158,7 @@ class ConclusionReview < ActiveRecord::Base
       self.review.plan_item.project.strip
 
     if self.instance_of?(ConclusionDraftReview)
-      pdf.add_watermark(self.class.human_name)
+      pdf.add_watermark(self.class.model_name.human)
     end
 
     pdf.add_title cover_text, (PDF_FONT_SIZE * 1.5).round, :center, false
@@ -199,7 +199,7 @@ class ConclusionReview < ActiveRecord::Base
       &:'process_control')
 
     grouped_control_objectives.each do |process_control, cois|
-      pdf.text "<b>#{ProcessControl.human_name}: " +
+      pdf.text "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>", :justification => :full
 
       cois.each do |coi|
@@ -253,7 +253,7 @@ class ConclusionReview < ActiveRecord::Base
           column_data = [{pc_id => nil}]
 
           columns[pc_id] = PDF::SimpleTable::Column.new(pc_id) do |c|
-            c.heading = "<b><i>#{ProcessControl.human_name}: " +
+            c.heading = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
             c.justification = :full
             c.width = pdf.percent_width(100)
@@ -312,7 +312,7 @@ class ConclusionReview < ActiveRecord::Base
           column_data = [{pc_id => nil}]
 
           columns[pc_id] = PDF::SimpleTable::Column.new(pc_id) do |c|
-            c.heading = "<b><i>#{ProcessControl.human_name}: " +
+            c.heading = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
             c.justification = :full
             c.width = pdf.percent_width(100)
@@ -369,7 +369,7 @@ class ConclusionReview < ActiveRecord::Base
   def pdf_name
     identification = self.review.sanitized_identification
 
-    "#{self.class.human_name.downcase.gsub(/\s/, '_')}-#{identification}.pdf"
+    "#{self.class.model_name.human.downcase.gsub(/\s/, '_')}-#{identification}.pdf"
   end
 
   def create_bundle_zip(organization, index_items)
@@ -558,12 +558,13 @@ class ConclusionReview < ActiveRecord::Base
 
     grouped_control_objectives.each do |process_control, cois|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_description_item("#{ProcessControl.human_name}",
+      pdf.add_description_item("#{ProcessControl.model_name.human}",
         process_control.name, 0, false)
 
       cois.each do |coi|
         pdf.move_pointer PDF_FONT_SIZE
-        pdf.add_description_item("<C:bullet/> #{ControlObjectiveItem.human_name}",
+        pdf.add_description_item(
+          "<C:bullet/> #{ControlObjectiveItem.model_name.human}",
           coi.control_objective_text, PDF_FONT_SIZE * 2, false)
 
         unless coi.work_papers.blank?

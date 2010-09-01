@@ -7,12 +7,12 @@
     <%= t :'notifier.welcome_email.initial_password' %>
   </p>
   <p>
-    <% link_valid_until = (BLANK_PASSWORD_STALE_DAYS - 1).days.from_now.to_date -%>
+    <% link_valid_until = (BLANK_PASSWORD_STALE_DAYS - 1).days.from_now.to_date %>
     <% edit_password_link = link_to t(:'notifier.welcome_email.change_password'),
       edit_password_user_url(@user, :confirmation_hash => @hash,
         :host => (@user.organizations.blank? ?
             URL_HOST : "#{@user.organizations.first.prefix}.#{URL_HOST}"),
-        :protocol => URL_PROTOCOL) -%>
+        :protocol => URL_PROTOCOL) %>
     <%= textilize t(:'notifier.blank_password.valid_until',
       :link => edit_password_link,
       :date => l(link_valid_until, :format => :long).strip) %>
@@ -22,10 +22,10 @@
       :count => @user.organizations.all.size %>
   </p>
   <ul>
-    <% @user.organizations.all.each do |organization| -%>
+    <% @user.organizations.all.each do |organization| %>
       <li><%= link_to "#{URL_PROTOCOL}://#{organization.prefix}.#{URL_HOST}/",
           "#{URL_PROTOCOL}://#{organization.prefix}.#{URL_HOST}/" %> (<%= organization.name %>)</li>
-    <% end -%>
+    <% end %>
   </ul>
   <p>
     <%= t(:'notifier.welcome_email.clarification') %>

@@ -128,7 +128,7 @@ class Notifier < ActionMailer::Base
     title = I18n.t(:'notifier.conclusion_review_notification.title',
       :review => conclusion_review.review.identification)
     elements = [
-      "*#{Review.human_name} #{conclusion_review.review.identification}*"
+      "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
     ]
 
     if options[:include_score_sheet]

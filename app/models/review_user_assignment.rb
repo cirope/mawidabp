@@ -80,7 +80,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'review.user_assignment.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -117,7 +117,7 @@ class ReviewUserAssignment < ActiveRecord::Base
         notification_title = I18n.t(
           :'review_user_assignment.responsibility_modification.title',
           :review => self.review.try(:identification))
-        notification_body = "#{Review.human_name} #{self.review.identification}"
+        notification_body = "#{Review.model_name.human} #{self.review.identification}"
         notification_content = [
           I18n.t(
             :'review_user_assignment.responsibility_modification.old_responsible',

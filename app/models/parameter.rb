@@ -83,7 +83,7 @@ class Parameter < ActiveRecord::Base
   def self.write_in_cache(parameter)
     if parameter
       cache_key = "#{parameter.organization_id}_#{parameter.name}"
-      cached_versions = Rails.cache.read(cache_key) || []
+      cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
       cached_versions.delete_if do |p|
         p.modification_date == parameter.modification_date

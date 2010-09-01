@@ -1,8 +1,8 @@
 <!--[form:resource_class]-->
-<%= form_for @resource_class do |rc_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @resource_class do |rc_f| %>
+  <% content_for :js_extra do %>
     <%= "var resource='#{generate_template(rc_f, :resources)}'" %>
-  <% end -%>
+  <% end %>
   <%= rc_f.error_messages %>
 
   <div class="form_column_left">
@@ -39,10 +39,10 @@
     </div>
 
     <div id="resources">
-      <% rc_f.fields_for :resources do |r_f| -%>
+      <%= rc_f.fields_for :resources do |r_f| %>
         <%= render :partial => 'resource', :locals =>
           {:f => r_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -59,6 +59,6 @@
   <p>
     <span class="button"><%= rc_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:resource_class] -->
 <%= set_focus_to_first_element %>

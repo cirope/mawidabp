@@ -25,7 +25,8 @@ class BusinessUnit < ActiveRecord::Base
 
   def can_be_destroyed?
     unless self.plan_items.empty?
-      self.errors.add_to_base I18n.t(:'business_unit_type.errors.business_unit_related')
+      self.errors.add :base,
+        I18n.t(:'business_unit_type.errors.business_unit_related')
 
       false
     else

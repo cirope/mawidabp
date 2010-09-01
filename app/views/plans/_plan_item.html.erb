@@ -1,5 +1,5 @@
-<% id = dynamic_object_id('plan_item', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = dynamic_object_id('plan_item', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="plan_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="margin-right: 1em;">
@@ -15,9 +15,9 @@
       :readonly => true %>
     </div>
     <div class="item_field" style="width: 20%;">
-      <% unless f.object.business_unit -%>
+      <% unless f.object.business_unit %>
       <div class="search">
-        <% errors_on_business_unit = f.object.errors.on(:business_unit_id) -%>
+        <% errors_on_business_unit = f.object.errors.on(:business_unit_id) %>
         <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id_item %>
         <%= text_field_with_auto_complete :plan_item, :business_unit_data,
@@ -30,13 +30,13 @@
           :after_update_element => 'AutoComplete.itemSelected',
           :param_name => 'business_unit_data'} %>
       </div>
-      <% else -%>
+      <% else %>
         <%= text_field_tag "plan_item_business_unit_#{id}",
           f.object.business_unit.name, :readonly => true %>
         <%= f.hidden_field :business_unit_id,
           :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}" %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 20%;">
     <%= f.text_field :project, :maxlength => 255, :size => 10 %>
@@ -53,7 +53,7 @@
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) -%> |
+      <%= remove_item_link(f) %> |
       <%= link_to_move %>
     </div>
 
@@ -74,17 +74,17 @@
         </div>
 
         <div class="material_resource_utilizations">
-          <% f.fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| -%>
+          <%= f.fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
             <%= render :partial => 'material_resource_utilization',
               :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end -%>
+          <% end %>
         </div>
 
         <div class="human_resource_utilizations">
-          <% f.fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| -%>
+          <%= f.fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
             <%= render :partial => 'human_resource_utilization',
               :locals => {:f => ru_f, :is_dynamic => false} %>
-          <% end -%>
+          <% end %>
         </div>
 
         <p style="margin-bottom: 1em;">
@@ -104,6 +104,6 @@
     '#plan_items a.move');
   FormUtil.completeSortNumbers();
 </script>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

@@ -1,6 +1,6 @@
 <div id="showed_data">
   <div class="show_item">
-    <b><%= Review.human_name %></b>:
+    <b><%= Review.model_name.human %></b>:
     <%= h @finding.review.try(:identification) %>
   </div>
   <div class="show_item">
@@ -11,12 +11,12 @@
     <b><%= Finding.human_attribute_name :review_code %></b>
     <%= h @finding.review_code %>
   </div>
-  <% if @finding.control_objective_item -%>
+  <% if @finding.control_objective_item %>
     <div class="show_item">
-      <b><%= ControlObjective.human_name %></b>:
+      <b><%= ControlObjective.model_name.human %></b>:
       <%= simple_format h("#{@finding.control_objective_item.control_objective_text} (#{@finding.control_objective_item.process_control.name})") %>
     </div>
-  <% end -%>
+  <% end %>
   <div class="show_item">
     <b><%= ConclusionFinalReview.human_attribute_name(:issue_date) +
       show_inline_help_for(:finding_issue_date) %></b>:
@@ -27,7 +27,7 @@
     <b><%= Finding.human_attribute_name :description %></b>
     <%= simple_format h(@finding.description) %>
   </div>
-  <% if @finding.kind_of? Weakness -%>
+  <% if @finding.kind_of? Weakness %>
     <div class="show_item">
       <b><%= Weakness.human_attribute_name :audit_recommendations %></b>:
       <%= simple_format h(@finding.audit_recommendations) %>
@@ -40,7 +40,7 @@
       <b><%= Weakness.human_attribute_name :priority %></b>:
       <%= @finding.priority_text %>
     </div>
-  <% end -%>
+  <% end %>
   <div class="show_item">
     <b><%= Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state) %></b>:
     <%= @finding.state_text %>
@@ -49,13 +49,13 @@
     <b><%= Finding.human_attribute_name(:origination_date) + show_inline_help_for(:finding_origination_date) %></b>:
     <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
   </div>
-  <% if @finding.kind_of? Weakness -%>
+  <% if @finding.kind_of? Weakness %>
     <div class="show_item">
       <b><%= Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date) %></b>:
       <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
     </div>
     <%= show_weakness_previous_follow_up_dates @finding %>
-  <% end -%>
+  <% end %>
   <div class="show_item">
     <b><%= Finding.human_attribute_name(:solution_date) + show_inline_help_for(:finding_solution_date) %></b>:
     <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
@@ -73,22 +73,22 @@
     <%= simple_format h(@finding.audit_comments) %>
   </div>
 
-  <% unless @finding.important_dates.blank? -%>
+  <% unless @finding.important_dates.blank? %>
     <h1 style="clear: both;">
       <%= t(:'finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
     </h1>
     <ul class="raw_list">
-      <% @finding.important_dates.each do |important_date| -%>
+      <% @finding.important_dates.each do |important_date| %>
         <li><%= textilize_without_paragraph important_date %></li>
-      <% end -%>
+      <% end %>
     </ul>
-  <% end -%>
+  <% end %>
 
   <h3><%= t(:'finding.responsibles', :count => @finding.users.size) %></h3>
   <%= array_to_ul @finding.users.map { |u| u.full_name_with_function(@finding.created_at) }, :class => :raw_list %>
   
-  <% unless @finding.finding_answers.blank? -%>
+  <% unless @finding.finding_answers.blank? %>
     <h3>
       <%= t(:'finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
@@ -97,7 +97,7 @@
     <table class="summary_table">
       <thead>
         <tr>
-          <th><%= User.human_name %></th>
+          <th><%= User.model_name.human %></th>
           <th><%= FindingAnswer.human_attribute_name :answer %></th>
           <th>
             <%= FindingAnswer.human_attribute_name :answer_type %>
@@ -113,7 +113,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @finding.finding_answers.each do |finding_answer| -%>
+        <% @finding.finding_answers.each do |finding_answer| %>
           <tr>
             <td><%= h finding_answer.user.full_name %></td>
             <td><%= simple_format h(finding_answer.answer) %></td>
@@ -124,12 +124,12 @@
             </td>
             <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 
-  <% unless @auth_user.audited? || @finding.work_papers.blank? -%>
+  <% unless @auth_user.audited? || @finding.work_papers.blank? %>
     <h3><%= t(:'finding.work_papers') %></h3>
 
     <table class="summary_table">
@@ -143,7 +143,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @finding.work_papers.each do |work_paper| -%>
+        <% @finding.work_papers.each do |work_paper| %>
           <tr>
             <td><%= h work_paper.name %></td>
             <td><%= h work_paper.code %></td>
@@ -152,17 +152,17 @@
             <td><%= work_paper.file_model ?
               link_to(t(:'label.download'), work_paper.file_model.public_filename) : '---' %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 
   <div class="title" style="font-weight: normal;">
     <%= textilize t(:'finding.costs',
       :cost => time_in_words_with_acronym((@finding.cost || 0).hours)) %>
   </div>
 
-  <% unless @finding.costs.blank? -%>
+  <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
       <%= link_to_function t(:'finding.view_cost_details'),
         "Effect.toggle('cost_details', 'slide')" %>
@@ -179,28 +179,28 @@
             </tr>
           </thead>
           <tbody>
-            <% @finding.costs.each do |cost| -%>
+            <% @finding.costs.each do |cost| %>
               <tr>
                 <td><%= l(cost.created_at, :format => :long) %></td>
                 <td><%= time_in_words_with_acronym(cost.cost.hours) %></td>
                 <td><%= simple_format h(cost.description.blank? ? '-' : cost.description) %></td>
                 <td><%= h cost.user.full_name %></td>
               </tr>
-            <% end -%>
+            <% end %>
           </tbody>
         </table>
       </div>
     </div>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">
   <b><%= link_to t(:'label.edit'), edit_finding_path(params[:completed],
     @finding, :user_id => params[:user_id]) %></b> |
-  <% unless @auth_user.audited? -%>
+  <% unless @auth_user.audited? %>
     <%= link_to t(:'finding.follow_up_report.download'),
       :action => :follow_up_pdf, :id => @finding %> |
-  <% end -%>
+  <% end %>
   <%= link_to t(:'label.list'), findings_path(params[:completed],
     :user_id => params[:user_id]) %> |
   <%= link_to_back %>

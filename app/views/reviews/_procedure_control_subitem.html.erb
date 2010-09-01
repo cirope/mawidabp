@@ -1,4 +1,4 @@
-<% id = 'procedure_control_subitem'.concat(procedure_control_subitem.id || 'NEW_RECORD') -%>
+<% id = 'procedure_control_subitem'.concat(procedure_control_subitem.id || 'NEW_RECORD') %>
 <div class="procedure_control_subitem item" <%= 'style="display: none;"' if is_dynamic %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 95%;">
@@ -22,10 +22,10 @@
       </div>
     </div>
     <div class="item_field item_controls" style="width: 2%;">
-      <%= remove_item_link(nil, 'procedure_control_subitem') -%>
+      <%= remove_item_link(nil, 'procedure_control_subitem') %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

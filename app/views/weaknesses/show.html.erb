@@ -1,11 +1,11 @@
 <div id="showed_data">
   <div class="show_item">
-    <b><%= Review.human_name %>:</b>
+    <b><%= Review.model_name.human %>:</b>
     <%=h @weakness.review.try(:identification) %>
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjective.human_name %>:</b>
+    <b><%= ControlObjective.model_name.human %>:</b>
     <%= simple_format h(@weakness.control_objective_item.try(:control_objective_text)) %>
   </div>
 
@@ -86,7 +86,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @weakness.work_papers.each do |wp| -%>
+        <% @weakness.work_papers.each do |wp| %>
           <tr>
             <td><%=h wp.name %></td>
             <td><%=h wp.code %></td>
@@ -95,10 +95,10 @@
             <td><%= wp.file_model ?
               link_to(t(:'label.download'), wp.file_model.public_filename) : '---' %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

@@ -206,7 +206,7 @@ class NotifierTest < ActionMailer::TestCase
     conclusion_review = ConclusionFinalReview.find(conclusion_reviews(
         :conclusion_current_final_review).id)
     elements = [
-      "#{Review.human_name} #{conclusion_review.review.identification}",
+      "#{Review.model_name.human} #{conclusion_review.review.identification}",
       I18n.t(:'conclusion_review.score_sheet'),
       I18n.t(:'conclusion_review.global_score_sheet')
     ]

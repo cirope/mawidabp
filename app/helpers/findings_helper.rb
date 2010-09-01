@@ -40,7 +40,7 @@ module FindingsHelper
   end
 
   def show_finding_review_code_with_control_objective_as_acronym(finding)
-    control_objective_text = "#{ControlObjectiveItem.human_name}: " +
+    control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
       finding.control_objective_item.control_objective_text
 
     content_tag(:acronym, h(finding.review_code), :title => control_objective_text)

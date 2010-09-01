@@ -1,5 +1,5 @@
 <!--[form:backup]-->
-<%= form_for @backup do |f| -%>
+<%= form_for @backup do |f| %>
 <%= f.error_messages %>
 
 <p class="form_item">
@@ -16,6 +16,6 @@
 </p>
 
 <div style="display:none"><%= f.hidden_field :lock_version %></div>
-<% end -%>
+<% end %>
 <!--[eoform:backup] -->
 <%= set_focus_to_first_element %>

@@ -1,16 +1,16 @@
 <table>
   <thead>
     <tr>
-      <th><%= Period.human_name %></th>
+      <th><%= Period.model_name.human %></th>
       <th><%= Period.human_attribute_name :start %></th>
       <th><%= Period.human_attribute_name :end %></th>
-      <th><%= Organization.human_name %></th>
+      <th><%= Organization.model_name.human %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @procedure_controls.each do |procedure_control| -%>
+    <% @procedure_controls.each do |procedure_control| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym procedure_control.period %></td>
         <td><%= h l(procedure_control.period.start, :format => :short) %></td>
@@ -22,7 +22,7 @@
         <td><%= link_to_edit edit_procedure_control_path(procedure_control) %></td>
         <td><%= button_to_destroy procedure_control %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

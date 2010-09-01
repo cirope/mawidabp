@@ -1,5 +1,5 @@
 <!--[form:organization]-->
-<%= form_for @organization, :html => { :multipart => true } do |o_f| -%>
+<%= form_for @organization, :html => { :multipart => true } do |o_f| %>
   <%= o_f.error_messages %>
 
   <div class="form_column_left">
@@ -7,26 +7,26 @@
     <%= o_f.label :name %>
     <%= o_f.text_field :name, :maxlength => 255, :size => 10 %>
   </p>
-  <% unless [:edit, :update].include?(controller.action_name.to_sym) -%>
+  <% unless [:edit, :update].include?(controller.action_name.to_sym) %>
   <p>
     <%= o_f.label :prefix %>
     <%= o_f.text_field :prefix, :maxlength => 255, :size => 10 %>
   </p>
-  <% end -%>
+  <% end %>
   <p>
     <%= o_f.label :description %>
     <%= o_f.text_area :description %>
   </p>
   <p class="form_item">
-    <% @organization.build_image_model unless @organization.image_model -%>
-    <% o_f.fields_for :image_model do |im_f| -%>
+    <% @organization.build_image_model unless @organization.image_model %>
+    <%= o_f.fields_for :image_model do |im_f| %>
       <%= im_f.label :uploaded_data,
         Organization.human_attribute_name('image_model'), :class => :inline %>
       <span class="file_container">
         <%= im_f.file_field :uploaded_data, :class => 'inline_item file',
           :size => nil %>
       </span>
-    <% end -%>
+    <% end %>
   </p>
   </div>
 
@@ -35,7 +35,7 @@
   <p>
     <span class="button"><%= o_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:organization] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">HTMLUtil.stylizeAllInputFiles();</script>

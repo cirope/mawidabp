@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
 
       session[:back_to] = nil if action == :index
 
-      if @auth_user.must_change_the_password? &&
+      if @auth_user.try(:must_change_the_password?) &&
            ![:edit_password, :update_password].include?(action)
         flash[:notice] ||= t :'message.must_change_the_password'
         redirect_to edit_password_user_url(@auth_user)
@@ -110,9 +110,9 @@ class ApplicationController < ActionController::Base
         :destroy => :erase
       })
       
-      unless @auth_user.change_password_hash
+      unless @auth_user.try(:change_password_hash)
         @auth_privileges = @auth_organization ?
-          @auth_user.privileges(@auth_organization) : {}
+          @auth_user.try(:privileges, @auth_organization) : {}
       else
         @auth_privileges = {}
       end

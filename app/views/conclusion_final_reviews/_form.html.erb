@@ -1,15 +1,15 @@
-<% readonly = !@conclusion_final_review.new_record? -%>
+<% readonly = !@conclusion_final_review.new_record? %>
 <!--[form:conclusion_final_review]-->
 <%= form_for @conclusion_final_review do |cfr_f| %>
   <%= cfr_f.error_messages %>
 
   <div class="form_column_left">
     <p class="form_item">
-      <% unless @conclusion_final_review.review -%>
+      <% unless @conclusion_final_review.review %>
         <%= cfr_f.label :review_id, nil, :class => :inline %>
         <%= conclusion_final_review_review_field(cfr_f,
           @conclusion_final_review.review) %>
-      <% else -%>
+      <% else %>
         <%= content_tag :label,
           ConclusionFinalReview.human_attribute_name(:review_id),
           :class => :inline %>
@@ -17,7 +17,7 @@
           @conclusion_final_review.review.identification,
           :class => :inline_item, :readonly => true %>
         <%= cfr_f.hidden_field :review_id %>
-      <% end -%>
+      <% end %>
     </p>
     <p class="form_item">
       <%= label_tag :business_unit,
@@ -68,7 +68,7 @@
   <p>
     <span class="button"><%= cfr_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:conclusion_final_review] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

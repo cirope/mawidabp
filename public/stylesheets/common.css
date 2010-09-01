@@ -907,11 +907,11 @@ form .inline_item, .filter .inline_item {
     margin: 4px 0px;
 }
 
-form.button-to {
+form.button_to {
     margin: 0px;
 }
 
-form.button-to input[type="submit"] {
+form.button_to input[type="submit"] {
     margin: 0px;
 }
 

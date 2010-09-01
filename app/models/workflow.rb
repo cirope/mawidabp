@@ -19,10 +19,11 @@ class Workflow < ActiveRecord::Base
   @@associations_attributes_for_log = [:workflow_item_ids]
 
   # Restricciones
-  validates_presence_of :period_id, :review_id
+  validates :period_id, :review_id, :presence => true
   validates_uniqueness_of :review_id, :allow_nil => true, :allow_blank => true
   validates_numericality_of :period_id, :review_id, :only_integer => true,
     :allow_nil => true, :allow_blank => true
+  validate :check_if_is_frozen
 
   # Relaciones
   belongs_to :period
@@ -59,12 +60,12 @@ class Workflow < ActiveRecord::Base
       self.allow_overload.to_i != 0)
   end
 
-  def validate
+  def check_if_is_frozen
     unless self.is_frozen? && self.changed?
       true
     else
       msg = I18n.t(:'workflow.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -100,7 +101,7 @@ class Workflow < ActiveRecord::Base
 
     pdf.add_generic_report_header organization
 
-    pdf.add_title "#{Workflow.human_name}\n", (PDF_FONT_SIZE * 1.25).round,
+    pdf.add_title "#{Workflow.model_name.human}\n", (PDF_FONT_SIZE * 1.25).round,
       :center
 
     pdf.add_description_item Workflow.human_attribute_name('review_id'),

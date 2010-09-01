@@ -1,8 +1,8 @@
-<% readonly = @review.has_final_review? -%>
-<% frozen = @review.is_frozen? -%>
+<% readonly = @review.has_final_review? %>
+<% frozen = @review.is_frozen? %>
 <!--[form:review]-->
-<%= form_for @review, :html => { :multipart => true } do |r_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @review, :html => { :multipart => true } do |r_f| %>
+  <% content_for :js_extra do %>
     <%= "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
     <%= "var control_objective='#{escape_javascript render(
       :partial => 'procedure_control_subitem',
@@ -10,7 +10,7 @@
       :is_dynamic => true})}';" %>
     <%= "var review_user_assignment='#{generate_template(r_f,
       :review_user_assignments, :locals => {:readonly => readonly})}';" %>
-  <% end -%>
+  <% end %>
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
@@ -18,7 +18,7 @@
       <%= r_f.text_field :identification, :readonly => readonly,
         :class => :inline_item %>
     </p>
-    <% if [:new, :create].include?(controller.action_name.to_sym) -%>
+    <% if [:new, :create].include?(controller.action_name.to_sym) %>
       <p class="form_item">
         <%= r_f.label :period_id, nil, :class => :inline %>
         <%= r_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
@@ -32,8 +32,8 @@
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
       </p>
-    <% end -%>
-    <% if @review.new_record? -%>
+    <% end %>
+    <% if @review.new_record? %>
       <p class="form_item">
         <%= r_f.label :plan_item_id, nil, :class => :inline %>
         <%= r_f.select :plan_item_id,
@@ -48,7 +48,7 @@
         <%= text_field_tag :plan_item, @review.plan_item.project,
           :class => :inline_item, :readonly => true %>
       </p>
-    <% end -%>
+    <% end %>
     <p class="form_item">
       <%= label_tag :business_unit, Review.human_attribute_name(:business_unit),
         :class => :inline %>
@@ -76,18 +76,18 @@
     </p>
     <p class="form_item" style="margin-bottom: 0em;">
       <label class="inline"><%= Review.human_attribute_name :file_model_id %></label>
-      <% unless readonly -%>
-        <% r_f.object.build_file_model unless r_f.object.file_model -%>
-        <% r_f.fields_for :file_model do |fm_f| -%>
+      <% unless readonly %>
+        <% r_f.object.build_file_model unless r_f.object.file_model %>
+        <%= r_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
             <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
           </span>
-        <% end -%>
-      <% end -%>
+        <% end %>
+      <% end %>
       
-      <% if r_f.object.file_model && !r_f.object.file_model.new_record? -%>
+      <% if r_f.object.file_model && !r_f.object.file_model.new_record? %>
         <%= link_to_download r_f.object.file_model.public_filename, :style => 'margin-left: 1em;' %>
-      <% end -%>
+      <% end %>
     </p>
     <p>
       <%= link_to_unless @review.new_record?, t(:'review.survey.download'),
@@ -112,59 +112,59 @@
     </div>
 
     <div id="review_user_assignments">
-      <% r_f.fields_for :review_user_assignments do |rua_f| -%>
+      <%= r_f.fields_for :review_user_assignments do |rua_f| %>
         <%= render :partial => 'review_user_assignment',
           :locals => {:f => rua_f, :is_dynamic => false, :readonly => readonly} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
-  <% unless readonly -%>
+  <% unless readonly %>
     <p class="add_item">
       <%= link_to t(:'review.add_user_assignment'),
         '#review_user_assignment', :class => :add_nested_item,
         :rel => :review_user_assignments %>
     </p>
-  <% end -%>
+  <% end %>
 
-  <% unless @review.control_objective_items.empty? -%>
+  <% unless @review.control_objective_items.empty? %>
     <div class="items" style="margin-top: 2em;">
       <h1><%= t(:'review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
-        <% pre_template = post_template = nil -%>
-        <% r_f.fields_for :control_objective_items,
-          @review.control_objective_items.sort! do |coi_f| -%>
-          <% unless frozen -%>
-            <% content_for :js_extra do -%>
+        <% pre_template = post_template = nil %>
+        <%= r_f.fields_for :control_objective_items,
+          @review.control_objective_items.sort! do |coi_f| %>
+          <% unless frozen %>
+            <% content_for :js_extra do %>
               <% pre_template ||= generate_template(coi_f,
                 :post_audit_work_papers, {:form_builder_local => :wp_f,
                 :partial => 'work_papers/work_paper',
                 :child_index => 'NEW_SUBRECORD',
                 :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
+                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
               <% post_template ||= generate_template(coi_f,
                 :pre_audit_work_papers, {:form_builder_local => :wp_f,
                 :partial => 'work_papers/work_paper',
                 :child_index => 'NEW_SUBRECORD',
                 :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
-              <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 -%>
-              <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 -%>
-              <% pre_template = post_template = 0 -%>
-            <% end -%>
-          <% end -%>
+                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
+              <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 %>
+              <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 %>
+              <% pre_template = post_template = 0 %>
+            <% end %>
+          <% end %>
           <%= render :partial => 'control_objective_item', :locals => {
             :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
-  <% end -%>
+  <% end %>
 
-  <% unless readonly -%>
+  <% unless readonly %>
     <div class="items" style="margin-top: 2em;">
       <div class="column_headers">
         <div class="item_column" style="width: 95%;">
-          <h3><%= ControlObjective.human_name %></h3>
+          <h3><%= ControlObjective.model_name.human %></h3>
         </div>
         <div class="item_column" style="width: 2%;"></div>
         <div style="clear: both;"></div>
@@ -179,7 +179,7 @@
         '#control_objective', :class => :add_nested_item,
         :rel => :control_objectives %>
     </p>
-  <% end -%>
+  <% end %>
 
 
   <%= hidden_lock_version(r_f) %>
@@ -187,7 +187,7 @@
   <p>
     <span class="button"><%= r_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:review] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

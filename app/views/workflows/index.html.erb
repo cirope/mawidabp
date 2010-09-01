@@ -1,8 +1,8 @@
 <table>
   <thead>
     <tr>
-      <th><%= Period.human_name %></th>
-      <th><%= Review.human_name %></th>
+      <th><%= Period.model_name.human %></th>
+      <th><%= Review.model_name.human %></th>
       <th><%= PlanItem.human_attribute_name :project %></th>
       <th><%= Workflow.human_attribute_name :created_at %></th>
       <th><%= Workflow.human_attribute_name :cost %></th>
@@ -14,7 +14,7 @@
   </thead>
 
   <tbody>
-    <%  @workflows.each do |workflow| -%>
+    <%  @workflows.each do |workflow| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym workflow.period %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_acronym workflow.review %></td>
@@ -27,7 +27,7 @@
         <td><%= link_to_edit edit_workflow_path(workflow) %></td>
         <td><%= button_to_destroy(workflow) if workflow.can_be_destroyed? %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

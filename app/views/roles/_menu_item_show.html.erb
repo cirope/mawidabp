@@ -1,6 +1,6 @@
-<% unless menu_item.exclude_from_privileges -%>
+<% unless menu_item.exclude_from_privileges %>
   <% privilege = @role.privileges.detect {|p| p.module == menu_item.menu_name} ||
-    @role.privileges.build(:module => menu_item.menu_name) -%>
+    @role.privileges.build(:module => menu_item.menu_name) %>
   <tr id="<%= menu_item.menu_name %>" class="menu_item highlight_on_hover <%= 'bold' unless menu_item.parent %>">
     <td>
       <span <%= "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= 'class="red bold"' if privilege.errors.size > 0 %>>
@@ -12,8 +12,8 @@
     <td><%= t(privilege.erase == true ? :'label.yes' : :'label.no') %></td>
     <td><%= t(privilege.approval == true ? :'label.yes' : :'label.no') %></td>
   </tr>
-  <% menu_item.children.each do |submenu_item| -%>
+  <% menu_item.children.each do |submenu_item| %>
     <%= render :partial => 'menu_item_show', :locals => {
       :menu_item => submenu_item} %>
-  <% end -%>
-<% end -%>
+  <% end %>
+<% end %>

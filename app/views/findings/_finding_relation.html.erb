@@ -1,15 +1,15 @@
-<% id = "#{dynamic_object_id('finding_relation', f)}#{'_NEW_RECORD' if is_dynamic}" -%>
-<% finding_relation = f.object -%>
-<% hide = is_dynamic || finding_relation.marked_for_destruction? -%>
+<% id = "#{dynamic_object_id('finding_relation', f)}#{'_NEW_RECORD' if is_dynamic}" %>
+<% finding_relation = f.object %>
+<% hide = is_dynamic || finding_relation.marked_for_destruction? %>
 <div class="finding_relation item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 60%;">
-      <% if is_dynamic -%>
+      <% if is_dynamic %>
         <div class="search">
           <% extra_parameters = {
             :finding_id => (@finding.id unless @finding.new_record?),
             :review_id => @finding.control_objective_item.try(:review).try(:id)
-          } -%>
+          } %>
           <%= f.hidden_field :related_finding_id,
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :finding, :nested_finding_relation,
@@ -22,23 +22,23 @@
             :param_name => 'finding_relation_data',
             :parameters => extra_parameters.to_param} %>
         </div>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :related_finding_id,
           :id => "hidden_related_finding_#{id}" %>
         <%= text_field_tag "finding_finding_relation_#{id}",
           finding_relation.related_finding.try(:to_s), :readonly => true,
           :class => ('error_field' if finding_relation.errors.on(:related_finding_id)) %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 30%;">
       <%= finding_relation_type_field(f) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :finding_id %>
-      <%= remove_item_link(f) -%>
+      <%= remove_item_link(f) %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

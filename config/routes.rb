@@ -115,7 +115,7 @@ MawidaApp::Application.routes.draw do
     :as => 'cost_analysis_follow_up_committee',
     :to => 'follow_up_committee#cost_analysis'
 
-  scope ':complete', :completed => /complete|incomplete/ do
+  scope ':completed', :completed => /complete|incomplete/ do
     resources :findings do
       resources :costs
 

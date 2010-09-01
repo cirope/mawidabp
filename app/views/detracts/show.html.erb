@@ -1,5 +1,5 @@
 <div id="showed_data">
-  <% if @detract -%>
+  <% if @detract %>
     <p style="font-size: 1.4em; margin-bottom: 1em;">
       <strong><%=h @detract.user.informal_name %></strong>
     </p>
@@ -18,9 +18,9 @@
     </p>
 
     <p><%= link_to_last_detracts @user %> <%= show_inline_help_for(:detract_last_detracts) %></p>
-  <% end -%>
+  <% end %>
 
-  <% unless @user.try(:children).try(:size).to_i == 0 -%>
+  <% unless @user.try(:children).try(:size).to_i == 0 %>
     <h1 style="margin-top: 1em;"><%= t(:'user.children') %></h1>
     <table class="summary_table">
       <thead>
@@ -32,16 +32,16 @@
       </thead>
       
       <tbody>
-        <% @detract.user.children.each do |child| -%>
+        <% @detract.user.children.each do |child| %>
           <tr>
             <td><%= h child.full_name %></td>
             <td><%= h child.detracts.last.try(:value) %></td>
             <td><%= link_to_last_detracts child %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 
   <div id="last_detracts"><%= render :partial => 'show_last_detracts' %></div>
 </div>

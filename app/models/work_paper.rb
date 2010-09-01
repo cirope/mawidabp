@@ -103,7 +103,7 @@ class WorkPaper < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE * 2
 
-    pdf.add_title WorkPaper.human_name, PDF_FONT_SIZE * 2, :full, true
+    pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2, :full, true
 
     pdf.move_pointer PDF_FONT_SIZE * 4
 

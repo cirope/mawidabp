@@ -1,8 +1,8 @@
-<% unless menu_item.exclude_from_privileges -%>
+<% unless menu_item.exclude_from_privileges %>
   <% privilege = @role.privileges.detect {|p| p.module == menu_item.menu_name} ||
-    @role.privileges.build(:module => menu_item.menu_name) -%>
-  <% role_form.fields_for :privileges, privilege do |f| -%>
-  <% parent_name = menu_item.parent.try(:menu_name) -%>
+    @role.privileges.build(:module => menu_item.menu_name) %>
+  <%= role_form.fields_for :privileges, privilege do |f| %>
+  <% parent_name = menu_item.parent.try(:menu_name) %>
   <tr id="<%= menu_item.menu_name %>" class="menu_item highlight_on_hover <%= 'bold' unless menu_item.parent %>">
     <td>
       <span <%= "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= 'class="red bold"' if privilege.errors.size > 0 %>>
@@ -24,9 +24,9 @@
       <%= f.check_box :approval, :class => "approval_check #{parent_name}" %>
     </td>
   </tr>
-  <% end -%>
-  <% menu_item.children.each do |submenu_item| -%>
+  <% end %>
+  <% menu_item.children.each do |submenu_item| %>
     <%= render :partial => 'menu_item', :locals => {
       :menu_item => submenu_item, :role_form => role_form} %>
-  <% end -%>
-<% end -%>
+  <% end %>
+<% end %>

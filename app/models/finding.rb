@@ -493,7 +493,7 @@ class Finding < ActiveRecord::Base
         :field => "#{Finding.table_name}.state ASC"
       },
       :review => {
-        :name => Review.human_name,
+        :name => Review.model_name.human,
         :field => "#{Review.table_name}.identification ASC"
       }
     })
@@ -564,7 +564,7 @@ class Finding < ActiveRecord::Base
           self, false).deliver
       elsif @users_change && @users_added.blank? && !@users_removed.blank?
         title = I18n.t(:'finding.responsibility_removed',
-          :class_name => self.class.human_name.downcase,
+          :class_name => self.class.model_name.human.downcase,
           :review_code => self.review_code,
           :review => self.review.try(:identification))
 
@@ -630,7 +630,7 @@ class Finding < ActiveRecord::Base
     self.first_notification_date = Date.today unless self.unconfirmed?
     self.state = STATUS[:unconfirmed] if self.notify?
     
-    self.save false
+    self.save(:validate => false)
   end
 
   def confirmed!(user = nil)
@@ -852,7 +852,7 @@ class Finding < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE * 3
 
-    pdf.add_title self.class.human_name, (PDF_FONT_SIZE * 1.5).round, :center,
+    pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center,
       false
 
     pdf.move_pointer PDF_FONT_SIZE
@@ -917,7 +917,7 @@ class Finding < ActiveRecord::Base
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
-      pdf.add_title("#{self.class.human_name} #{self.review_code}",
+      pdf.add_title("#{self.class.model_name.human} #{self.review_code}",
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_pointer PDF_FONT_SIZE * 3
@@ -942,7 +942,7 @@ class Finding < ActiveRecord::Base
   end
 
   def pdf_name
-    ("#{self.class.human_name.downcase.gsub(/\s+/, '_')}-" +
+    ("#{self.class.model_name.human.downcase.gsub(/\s+/, '_')}-" +
       "#{self.review_code}.pdf").gsub(/[^A-Za-z0-9\.\-]+/, '_')
   end
 
@@ -963,12 +963,12 @@ class Finding < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
 
-    pdf.add_description_item(Review.human_name,
+    pdf.add_description_item(Review.model_name.human,
       "#{self.review.long_identification} (#{issue_date})", 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
     
-    pdf.add_description_item(ProcessControl.human_name,
+    pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)
     pdf.add_description_item(Finding.human_attribute_name(
         :control_objective_item_id),
@@ -1080,7 +1080,7 @@ class Finding < ActiveRecord::Base
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
-          pdf.add_description_item(User.human_name, version.whodunnit ?
+          pdf.add_description_item(User.model_name.human, version.whodunnit ?
               User.find(version.whodunnit).try(:full_name) : nil)
 
           pdf.move_pointer PDF_FONT_SIZE

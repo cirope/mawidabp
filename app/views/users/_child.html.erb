@@ -1,8 +1,8 @@
-<% id = "#{dynamic_object_id('child', f)}_#{is_dynamic ? 'NEW_RECORD' : child.id}" -%>
+<% id = "#{dynamic_object_id('child', f)}_#{is_dynamic ? 'NEW_RECORD' : child.id}" %>
 <div class="child item" id="<%= id %>" <%= 'style="display: none;"' if is_dynamic %>>
   <div>
     <div class="item_field" style="width: 50%;">
-      <% if child.new_record? -%>
+      <% if child.new_record? %>
         <div class="search">
           <%= hidden_field_tag 'user[child_ids][]', child.id,
             :id => "hidden_child_#{id}", :class => :autocomplete_id_item %>
@@ -15,18 +15,18 @@
             :parameters => ("user_id=#{@user.id}" unless @user.new_record?),
             :url => {:action => :auto_complete_for_user}} %>
         </div>
-      <% else -%>
+      <% else %>
         <%= hidden_field_tag 'user[child_ids][]', child.id,
             :id => "hidden_child_#{id}" %>
         <%= text_field_tag "user_child_#{id}", child.full_name_with_function,
           :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_list_item_link(f) -%>
+      <%= remove_list_item_link(f) %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

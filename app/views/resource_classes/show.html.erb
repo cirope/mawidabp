@@ -19,13 +19,13 @@
       </tr>
     </thead>
     <tbody>
-      <% @resource_class.resources.each do |resource| -%>
+      <% @resource_class.resources.each do |resource| %>
         <tr>
           <td><%= h resource.name %></td>
           <td><%= h resource.description %></td>
           <td><%= h resource.cost_per_unit %></td>
         </tr>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
 </div>

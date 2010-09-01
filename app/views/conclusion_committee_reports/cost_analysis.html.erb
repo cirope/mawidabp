@@ -3,65 +3,65 @@
     {:include_details => params[:include_details]},
   :forms => {:date_range => true}} %>
 
-<% @periods.each do |period| -%>
+<% @periods.each do |period| %>
   <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.human_name}: #{period.inspect}" %></strong>
+    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
   <div style="margin: 1em;">
-    <% unless @total_cost_data[period].blank? -%>
+    <% unless @total_cost_data[period].blank? %>
       <table class="summary_table">
         <thead>
           <tr>
-            <% @column_order.each do |col_name, col_width| -%>
+            <% @column_order.each do |col_name, col_width| %>
               <th style="width: <%= "#{col_width}%" %>">
                 <%= t "conclusion_committee_report.cost_analysis.general_column_#{col_name}" %>
               </th>
-            <% end -%>
+            <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @total_cost_data[period].each do |total_data| -%>
+          <% @total_cost_data[period].each do |total_data| %>
             <tr>
               <% @column_order.map(&:first).each do |col_name| %>
                 <td><%= total_data[col_name].to_utf8 %></td>
-              <% end -%>
+              <% end %>
             </tr>
-          <% end -%>
+          <% end %>
         </tbody>
       </table>
-    <% else -%>
+    <% else %>
       <p style="margin: 1em;">
         <em><%= t :'conclusion_committee_report.cost_analysis.without_audits_in_the_period' %></em>
       </p>
-    <% end -%>
+    <% end %>
 
-    <% unless @detailed_data[period].blank? -%>
-      <% @detailed_data[period].each do |detailed_data| -%>
+    <% unless @detailed_data[period].blank? %>
+      <% @detailed_data[period].each do |detailed_data| %>
         <h2 style="margin: 1em 0em;"><%= detailed_data[:review] %></h2>
         <table class="summary_table">
           <thead>
             <tr>
-              <% @detailed_column_order.each do |col_name, col_width| -%>
+              <% @detailed_column_order.each do |col_name, col_width| %>
                 <th style="width: <%= "#{col_width}%" %>">
                   <%= t "conclusion_committee_report.cost_analysis.detailed_column_#{col_name}" %>
                 </th>
-              <% end -%>
+              <% end %>
             </tr>
           </thead>
           <tbody>
-            <% detailed_data[:data].each do |data| -%>
+            <% detailed_data[:data].each do |data| %>
               <tr>
                 <% @detailed_column_order.map(&:first).each do |col_name| %>
                   <td><%= data[col_name].to_utf8 %></td>
-                <% end -%>
+                <% end %>
               </tr>
-            <% end -%>
+            <% end %>
           </tbody>
         </table>
-      <% end -%>
-    <% end -%>
+      <% end %>
+    <% end %>
   </div>
-<% end -%>
+<% end %>
 
 <div id="links">
   <%= link_to t(:'label.back'), :action => :index %> |

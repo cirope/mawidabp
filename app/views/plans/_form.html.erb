@@ -16,14 +16,14 @@
   }
 </script>
 <!--[form:plan]-->
-<%= form_for @plan do |p_f| -%>
-  <% content_for :js_extra do -%>
+<%= form_for @plan do |p_f| %>
+  <% content_for :js_extra do %>
     <%= "var plan_item='#{generate_template(p_f, :plan_items)}';" %>
-  <% end -%>
+  <% end %>
   <%= p_f.error_messages %>
 
   <div class="form_column_left">
-    <% if @plan.new_record? -%>
+    <% if @plan.new_record? %>
       <p class="form_item">
         <%= p_f.label :period_id, nil, :class => :inline %>
         <%= p_f.select :period_id,
@@ -32,7 +32,7 @@
           {:class => 'inline_item focused'} %>
         <%= link_to_add new_period_path(:back_to => new_plan_path) %>
       </p>
-    <% else -%>
+    <% else %>
       <p class="form_item">
         <%= p_f.hidden_field :period_id %>
         <%= label_tag :period, Plan.human_attribute_name('period_id'),
@@ -40,7 +40,7 @@
         <%= text_field_tag :period, @plan.period.try(:inspect),
           :readonly => true, :class => :inline_item %>
       </p>
-    <% end -%>
+    <% end %>
   </div>
   <div class="form_column_right">
     <p>
@@ -57,7 +57,7 @@
         <h3><%= PlanItem.human_attribute_name :order_number %></h3>
       </div>
       <div class="item_column" style="width: 20%; padding-left: .3em;">
-        <h3><%= BusinessUnit.human_name %></h3>
+        <h3><%= BusinessUnit.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 20%; padding-left: .3em;">
         <h3><%= PlanItem.human_attribute_name :project %></h3>
@@ -76,25 +76,25 @@
     </div>
 
     <div id="plan_items">
-      <% p_f.fields_for :plan_items, @plan.plan_items.sort do |pi_f| -%>
+      <%= p_f.fields_for :plan_items, @plan.plan_items.sort do |pi_f| %>
         <% mru_template = nil %>
-        <% content_for :js_extra do -%>
+        <% content_for :js_extra do %>
           <% hru_template ||= generate_template(pi_f, :resource_utilizations,
             :object => ResourceUtilization.new(:resource_type => 'User'),
             :partial => 'human_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') -%>
+            :child_index => 'NEW_SUBRECORD') %>
           <% mru_template ||= generate_template(pi_f, :resource_utilizations,
             :object => ResourceUtilization.new(:resource_type => 'Resource'),
             :partial => 'material_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') -%>
-          <%= "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 -%>
-          <%= "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 -%>
-          <% mru_template = 0 -%>
-          <% hru_template = 0 -%>
-        <% end -%>
+            :child_index => 'NEW_SUBRECORD') %>
+          <%= "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
+          <%= "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
+          <% mru_template = 0 %>
+          <% hru_template = 0 %>
+        <% end %>
         <%= render :partial => 'plan_item', :locals =>
           {:f => pi_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
@@ -103,27 +103,27 @@
       :class => :add_nested_item, :rel => :plan_items %>
   </p>
 
-  <% if @plan.has_duplication? -%>
+  <% if @plan.has_duplication? %>
     <p class="form_item">
       <%= p_f.label :allow_duplication, t(:'plan.allow_duplication'),
         :class => 'inline error_field' %>
       <%= p_f.check_box :allow_duplication, :class => :inline_item %>
     </p>
-  <% end -%>
+  <% end %>
 
-  <% if @plan.overloaded? -%>
+  <% if @plan.overloaded? %>
     <p class="form_item">
       <%= p_f.label :allow_overload, t(:'plan.allow_overload'),
         :class => 'inline error_field' %>
       <%= p_f.check_box :allow_overload, :class => :inline_item %>
     </p>
-  <% end -%>
+  <% end %>
 
   <%= hidden_lock_version(p_f) %>
   <p>
     <span class="button"><%= p_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:plan] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

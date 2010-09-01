@@ -19,22 +19,22 @@
     <%=t @business_unit_type.external ? :'label.yes' : :'label.no' %>
   </p>
 
-  <% unless @business_unit_type.business_units.empty? -%>
+  <% unless @business_unit_type.business_units.empty? %>
     <table class="summary_table">
       <thead>
         <tr>
-          <th><%= BusinessUnit.human_name %></th>
+          <th><%= BusinessUnit.model_name.human %></th>
         </tr>
       </thead>
       <tbody>
-        <% @business_unit_type.business_units.each do |bu| -%>
+        <% @business_unit_type.business_units.each do |bu| %>
           <tr>
             <td><%= h bu.name %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

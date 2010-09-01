@@ -11,11 +11,13 @@ class ResourceUtilization < ActiveRecord::Base
   scope :material, :conditions => { :resource_type => 'Resource' }
 
   # Restricciones
-  validates_presence_of :units, :cost_per_unit, :resource_id, :resource_type
+  validates :units, :cost_per_unit, :resource_id, :resource_type,
+    :presence => true
   validates_numericality_of :resource_id, :resource_consumer_id,
     :only_integer => true, :allow_nil => true, :allow_blank => true
   validates_numericality_of :units, :cost_per_unit, :allow_nil => true,
     :allow_blank => true, :greater_than_or_equal_to => 0
+  validate :check_resource_consumer
 
   # Relaciones
   belongs_to :resource, :polymorphic => true
@@ -25,7 +27,7 @@ class ResourceUtilization < ActiveRecord::Base
     self.resource_id <=> other.resource_id
   end
 
-  def validate
+  def check_resource_consumer
     if self.changed? && self.resource_consumer.respond_to?(:is_frozen?) &&
         self.resource_consumer.is_frozen?
       self.errors.add :resource_consumer, :is_frozen

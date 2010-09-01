@@ -1,13 +1,13 @@
-<% if params[:control_objective].blank? -%>
+<% if params[:control_objective].blank? %>
   <%= render :partial => 'shared/search', :locals => {
     :options => {:columns_for_sort => Oportunity.columns_for_sort},
     :columns => @query.blank? ? Oportunity::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
-<% end -%>
+<% end %>
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, 'review' %>
+      <%= make_filterable_column Review.model_name.human, 'review' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
       <%= make_filterable_column Oportunity.human_attribute_name(:review_code), 'review_code' %>
       <%= make_filterable_column Oportunity.human_attribute_name(:description), 'description' %>
@@ -18,7 +18,7 @@
   </thead>
 
   <tbody>
-    <% @oportunities.each do |oportunity| -%>
+    <% @oportunities.each do |oportunity| %>
       <tr class="<%= cycle(:even, :odd) %> <%= oportunity.is_in_a_final_review? ? :readonly_item : :writable_item %>">
         <td class="nowrap"><%= show_review_with_close_date_as_acronym oportunity.review %></td>
         <td><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
@@ -30,15 +30,15 @@
         <td><%= link_to_edit edit_oportunity_path(oportunity) %></td>
         <td><%= button_to_destroy oportunity %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 
 <div id="links">
   <%= pagination_links @oportunities %>
-  <% if params[:control_objective].to_i > 0 -%>
+  <% if params[:control_objective].to_i > 0 %>
     <%= link_to t(:'label.new'), new_oportunity_path(
       :control_objective_item => params[:control_objective]) %>
-  <% end -%>
+  <% end %>
   <div style="clear: both;"></div>
 </div>

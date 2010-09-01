@@ -1,25 +1,25 @@
 <!--[form:customize_report_form]-->
-<%= form_for options[:form_name], :url => options[:url] do |f| -%>
-  <% options[:fields].each do |field| -%>
+<%= form_for options[:form_name], :url => options[:url] do |f| %>
+  <% options[:fields].each do |field| %>
     <div class="field">
       <%= label_tag field[:name], field[:label] %>
       <%= text_area_tag field[:name], field[:value], :rows => 20,
         :cols => 80, :style => 'height: 20em;' %>
     </div>
-  <% end -%>
-  <% unless options[:exclude_extra_parameters] -%>
+  <% end %>
+  <% unless options[:exclude_extra_parameters] %>
     <%=  %>
-  <% end -%>
+  <% end %>
 
   <div class="actions">
     <span class="button">
       <%= f.submit(options[:submit_label] || t(:'customize_report_form.create')) %>
     </span>
   </div>
-<% end -%>
+<% end %>
 <!--[eoform:customize_report_form] -->
-<% if options[:show_link_to_back] -%>
+<% if options[:show_link_to_back] %>
   <div id="links">
     <%= link_to_back %>
   </div>
-<% end -%>
+<% end %>

@@ -189,7 +189,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity.solution_date = nil
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -199,7 +199,7 @@ class ReviewTest < ActiveSupport::TestCase
         :solution_date => Time.now.to_date, :follow_up_date => nil})
     oportunity.user_ids = review_weakness.user_ids
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -208,7 +208,7 @@ class ReviewTest < ActiveSupport::TestCase
         :state => Finding::STATUS[:being_implemented]})
     oportunity.user_ids = review_weakness.user_ids
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -227,7 +227,7 @@ class ReviewTest < ActiveSupport::TestCase
         :follow_up_date => Time.now.to_date})
     oportunity.user_ids = review_weakness.user_ids
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?

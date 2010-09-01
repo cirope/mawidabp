@@ -49,7 +49,7 @@ class ControlObjective < ActiveRecord::Base
   def can_be_destroyed?
     unless self.control_objective_items.blank? &&
         self.procedure_control_subitems.blank?
-      self.errors.add_to_base I18n.t(:'control_objective.errors.related')
+      self.errors.add :base, I18n.t(:'control_objective.errors.related')
 
       false
     else

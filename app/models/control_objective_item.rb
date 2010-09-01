@@ -244,7 +244,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'control_objective_item.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -313,9 +313,9 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
-    pdf.add_description_item(ProcessControl.human_name,
+    pdf.add_description_item(ProcessControl.model_name.human,
       self.process_control.try(:name), 0, false, (PDF_FONT_SIZE * 1.25).round)
-    pdf.add_description_item(ControlObjectiveItem.human_name,
+    pdf.add_description_item(ControlObjectiveItem.model_name.human,
       self.control_objective_text, 0, false, (PDF_FONT_SIZE * 1.25).round)
 
     pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
@@ -371,13 +371,13 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def pdf_name
-    "#{self.class.human_name.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
+    "#{self.class.model_name.human.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
   end
 
   def pdf_column_data(finding, pc_id)
     body = String.new
     weakness = finding.kind_of?(Weakness)
-    head = "<b>#{ControlObjective.human_name}:</b> " +
+    head = "<b>#{ControlObjective.model_name.human}:</b> " +
       "#{self.control_objective_text.chomp}\n"
 
     unless finding.review_code.blank?

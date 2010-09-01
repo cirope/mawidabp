@@ -420,7 +420,7 @@ class User < ActiveRecord::Base
     self.logged_in = true
     self.last_access = time unless first_login?
 
-    self.save(false)
+    self.save(:validate => false)
   end
 
   def logout!
@@ -473,7 +473,7 @@ class User < ActiveRecord::Base
 
   def has_not_orphan_fingings?
     unless self.findings.all_for_reallocation.blank?
-      self.errors.add_to_base I18n.t(:'user.will_be_orphan_findings')
+      self.errors.add :base, I18n.t(:'user.will_be_orphan_findings')
 
       false
     else
@@ -540,8 +540,8 @@ class User < ActiveRecord::Base
     Finding.transaction do
       if options[:with_findings]
         self.findings.all_for_reallocation.each do |f|
-          description = "#{f.class.human_name} *#{f.review_code.strip}* " +
-            "(#{Review.human_name} *#{f.review.identification.strip}*)"
+          description = "#{f.class.model_name.human} *#{f.review_code.strip}* " +
+            "(#{Review.model_name.human} *#{f.review.identification.strip}*)"
           f.avoid_changes_notification = true
           f.users.delete self
           items_for_notification << description
@@ -558,13 +558,13 @@ class User < ActiveRecord::Base
       if options[:with_reviews]
         self.review_user_assignments.each do |rua|
           unless rua.review.has_final_review?
-            items_for_notification << "#{Review.human_name} " +
+            items_for_notification << "#{Review.model_name.human} " +
               rua.review.identification
 
             unless rua.destroy_without_notification
               all_released = false
               description =
-                "#{Review.human_name}: *#{rua.review.identification.strip}*"
+                "#{Review.model_name.human}: *#{rua.review.identification.strip}*"
               
               self.reallocation_errors << [description,rua.errors.full_messages]
             end
@@ -575,7 +575,7 @@ class User < ActiveRecord::Base
       end
 
       unless all_released
-        self.errors.add_to_base I18n.t(:'user.user_release_failed')
+        self.errors.add :base, I18n.t(:'user.user_release_failed')
         
         raise ActiveRecord::Rollback
       end
@@ -610,8 +610,8 @@ class User < ActiveRecord::Base
 
             if f.invalid?
               all_reassigned = false
-              description = "#{f.class.human_name} *#{f.review_code.strip}* " +
-                "(#{Review.human_name} *#{f.review.identification.strip}*)"
+              description = "#{f.class.model_name.human} *#{f.review_code.strip}* " +
+                "(#{Review.model_name.human} *#{f.review.identification.strip}*)"
 
               self.reallocation_errors << [description, f.errors.full_messages]
             end
@@ -633,7 +633,7 @@ class User < ActiveRecord::Base
               
               unless rua.update_attribute :user, other
                 all_reassigned = false
-                description = "#{Review.human_name}: " +
+                description = "#{Review.model_name.human}: " +
                   "*#{rua.review.identification.strip}*"
 
                 self.reallocation_errors << [description,
@@ -677,7 +677,7 @@ class User < ActiveRecord::Base
               :findings => unconfirmed_findings, :user => other)
 
             unconfirmed_findings.group_by(&:review).each do |r, findings|
-              content << "*#{Review.human_name} #{r.identification}*"
+              content << "*#{Review.model_name.human} #{r.identification}*"
 
               findings.each do |f|
                 model = f.class

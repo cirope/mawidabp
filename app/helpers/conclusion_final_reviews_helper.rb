@@ -45,7 +45,7 @@ module ConclusionFinalReviewsHelper
       body = String.new
 
       header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.human_name}: #{h(process_control.name)}",
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
         :class => :header)
 
       cois.each do |coi|
@@ -71,7 +71,7 @@ module ConclusionFinalReviewsHelper
       body = String.new
 
       header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.human_name}: #{h(process_control.name)}",
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
         :class => :header)
 
       cois.each do |coi|
@@ -86,7 +86,7 @@ module ConclusionFinalReviewsHelper
 
   def weakness_row_data(coi, finding, html_class = nil)
     weakness = finding.kind_of?(Weakness)
-    body_rows = ["<b>#{ControlObjective.human_name}:</b> " +
+    body_rows = ["<b>#{ControlObjective.model_name.human}:</b> " +
       "#{h(coi.control_objective_text)}"]
 
     unless finding.review_code.blank?

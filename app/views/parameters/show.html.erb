@@ -5,7 +5,7 @@
     <%=h @parameter.description %>
   </p>
 
-  <% if @parameter.value.kind_of?(Array) -%>
+  <% if @parameter.value.kind_of?(Array) %>
     <table class="summary_table">
       <thead>
         <tr>
@@ -14,20 +14,20 @@
         </tr>
       </thead>
       <tbody>
-        <% @parameter.value.each do |p| -%>
+        <% @parameter.value.each do |p| %>
           <tr>
             <td><%= p[0] %></td>
             <td><%= p[1] %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% else -%>
+  <% else %>
     <p>
       <b><%= Parameter.human_attribute_name :value %>:</b>
       <%=h @parameter.value %>
     </p>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

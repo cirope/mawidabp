@@ -1,22 +1,22 @@
-<% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) -%>
-<% can_edit = @auth_user.admin? -%>
+<% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) %>
+<% can_edit = @auth_user.admin? %>
 <span style="display: inline;">
   <span id="help_link_<%= link_name %>" class="popup_link" title="<%= t(:'inline_help.link_title') %>">?</span>
 </span>
 
-<% content_for :extra_html_bottom do -%>
+<% content_for :extra_html_bottom do %>
   <div id="inline_item_<%= name %>" class="popup" style="display: none;">
     <%= textilize inline_help.try(:content) %>
 
     <div class="action_links">
-      <% if can_edit && inline_help -%>
+      <% if can_edit && inline_help %>
         <%= link_to t(:'label.edit'), edit_inline_help_path(inline_help,
           :back_to => request.path) %> |
-      <% elsif can_edit -%>
+      <% elsif can_edit %>
         <%= link_to t(:'label.new'), new_inline_help_path(
           :inline_help => {:language => @auth_user.language, :name => name.to_s},
           :back_to => request.path) %> |
-      <% end -%>
+      <% end %>
       <a id="help_closebox_<%= name %>" class="popup_closebox" href="#" onclick="return false;">
         <%= t(:'label.close') %>
       </a>
@@ -39,4 +39,4 @@
   PopupListener[functionName]();
 })();
 </script>
-<% end -%>
+<% end %>

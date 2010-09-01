@@ -1,10 +1,10 @@
 <!--[form:conclusion_draft_review]-->
 <%= form_for @conclusion_draft_review,
   :url => send_by_email_conclusion_draft_review_path(@conclusion_draft_review) do |f| %>
-  <% content_for :js_extra do -%>
+  <% content_for :js_extra do %>
     <%= "var user='" + escape_javascript(render :partial => 'user',
       :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
-  <% end -%>
+  <% end %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
@@ -35,7 +35,7 @@
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 50%;">
-        <h3><%= User.human_name %></h3>
+        <h3><%= User.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 20%;">
         <h3><%= t(:'conclusion_review.must_confirm_the_review') %></h3>
@@ -45,7 +45,7 @@
     </div>
 
     <div id="users">
-      <% @conclusion_draft_review.review.users.each do |user| -%>
+      <% @conclusion_draft_review.review.users.each do |user| %>
         <%= render :partial => 'user', :locals => {:user => user,
           :is_dynamic => false} %>
       <% end %>
