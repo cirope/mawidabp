@@ -302,7 +302,7 @@ class UsersController < ApplicationController
           end
 
           user.is_an_important_change = false
-          user.save(false)
+          user.save(:validate => false)
         else
           ErrorRecord.create(:user_name => @user.user,
             :organization => @organization, :request => request,

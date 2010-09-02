@@ -174,7 +174,7 @@ class FindingsControllerTest < ActionController::TestCase
                   :description => 'New workpaper description',
                   :organization_id => organizations(:default_organization).id,
                   :file_model_attributes => {
-                    :uploaded_data => ActionController::TestUploadedFile.new(
+                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                       TEST_FILE, 'text/plain')
                   }
                 }
@@ -187,7 +187,7 @@ class FindingsControllerTest < ActionController::TestCase
                   :user_id => users(:administrator_user).id,
                   :notify_users => '1',
                   :file_model_attributes => {
-                    :uploaded_data => ActionController::TestUploadedFile.new(
+                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                       TEST_FILE, 'text/plain')
                   }
                 }
@@ -255,7 +255,7 @@ class FindingsControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
+                  :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                     TEST_FILE, 'text/plain')
                 }
               }
@@ -267,7 +267,7 @@ class FindingsControllerTest < ActionController::TestCase
                 :answer_type => get_test_parameter(:admin_finding_answers_types).first[1],
                 :user_id => users(:audited_user).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
+                  :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                     TEST_FILE, 'text/plain')
                 }
               }

@@ -4,23 +4,25 @@ require 'test_helper'
 class ControlObjectiveItemsControllerTest < ActionController::TestCase
   fixtures :control_objective_items, :control_objectives, :reviews
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :edit, :update, :destroy]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, {:id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id}],
+      [:get, :edit, {:id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id}],
+      [:put, :update, {:id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id}],
+      [:delete, :destroy, {:id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id}]
+    ]
+
+    private_actions.each do |action|
+      send(*action)
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
     end
 
-    @public_actions.each do |action|
+    public_actions.each do |action|
       get action
       assert_response :success
     end
@@ -119,8 +121,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New pre_workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
-                    TEST_FILE, 'text/plain')
+                  :uploaded_data => fixture_file_upload(TEST_FILE, 'text/plain')
                 }
               }
             },
@@ -132,8 +133,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New post_workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
-                    TEST_FILE, 'text/plain')
+                  :uploaded_data => fixture_file_upload(TEST_FILE, 'text/plain')
                 }
               }
             }

@@ -14,7 +14,7 @@
     <% @notifications.each do |notification| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%=h notification.status_text %></td>
-        <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:human_name) %></td>
+        <td><%=h notification.notification_relations.first.try(:model).try(:class).try(:model_name).try(:human) %></td>
         <td><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>
         <td><%=l notification.created_at, :format => :short %></td>
         <td><%=l notification.confirmation_date, :format => :short if notification.confirmation_date %></td>

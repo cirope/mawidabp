@@ -344,7 +344,7 @@ class User < ActiveRecord::Base
 
     Notifier.blank_password_notification(self, organization).deliver if notify
 
-    self.save(false)
+    self.save(:validate => false)
   end
 
   def disable!

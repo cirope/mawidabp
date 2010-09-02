@@ -70,15 +70,15 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.conclusion = '   '
     assert @conclusion_review.invalid?
     assert_equal 4, @conclusion_review.errors.count
-    assert_equal error_message_from_model(@conclusion_review, :issue_date,
-      :blank), @conclusion_review.errors.on(:issue_date)
-    assert_equal error_message_from_model(@conclusion_review, :review_id,
-      :blank), @conclusion_review.errors.on(:review_id)
-    assert_equal error_message_from_model(@conclusion_review,
-      :applied_procedures, :blank),
-      @conclusion_review.errors.on(:applied_procedures)
-    assert_equal error_message_from_model(@conclusion_review, :conclusion,
-      :blank), @conclusion_review.errors.on(:conclusion)
+    assert_equal [error_message_from_model(@conclusion_review, :issue_date,
+      :blank)], @conclusion_review.errors[:issue_date]
+    assert_equal [error_message_from_model(@conclusion_review, :review_id,
+      :blank)], @conclusion_review.errors[:review_id]
+    assert_equal [error_message_from_model(@conclusion_review,
+      :applied_procedures, :blank)],
+      @conclusion_review.errors[:applied_procedures]
+    assert_equal [error_message_from_model(@conclusion_review, :conclusion,
+      :blank)], @conclusion_review.errors[:conclusion]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -86,8 +86,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     @conclusion_review.type = 'abcdd' * 52
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
-    assert_equal error_message_from_model(@conclusion_review, :type, :too_long,
-      :count => 255), @conclusion_review.errors.on(:type)
+    assert_equal [error_message_from_model(@conclusion_review, :type, :too_long,
+      :count => 255)], @conclusion_review.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -104,10 +104,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_equal 4, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
       :blank), error_message_from_model(@conclusion_review, :issue_date,
-      :invalid_date)].sort, @conclusion_review.errors.on(:issue_date).sort
+      :invalid_date)].sort, @conclusion_review.errors[:issue_date].sort
     assert_equal [error_message_from_model(@conclusion_review, :close_date,
       :blank), error_message_from_model(@conclusion_review, :close_date,
-      :invalid_date)].sort, @conclusion_review.errors.on(:close_date).sort
+      :invalid_date)].sort, @conclusion_review.errors[:close_date].sort
   end
 
   test 'validates date attributes between boundaries' do
@@ -121,9 +121,9 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
-    assert_equal error_message_from_model(@conclusion_review, :close_date,
-      :on_or_after, :restriction => I18n.l(Time.now.to_date)),
-      @conclusion_review.errors.on(:close_date)
+    assert_equal [error_message_from_model(@conclusion_review, :close_date,
+      :on_or_after, :restriction => I18n.l(Time.now.to_date))],
+      @conclusion_review.errors[:close_date]
   end
 
   test 'create notification for' do

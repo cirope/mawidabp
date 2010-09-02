@@ -41,7 +41,7 @@ class HelpContentTest < ActiveSupport::TestCase
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
     assert_equal error_message_from_model(@help_content, :language, :blank),
-      @help_content.errors.on(:language)
+      @help_content.errors[:language]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -50,7 +50,7 @@ class HelpContentTest < ActiveSupport::TestCase
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
     assert_equal error_message_from_model(@help_content, :language, :taken),
-      @help_content.errors.on(:language)
+      @help_content.errors[:language]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -59,6 +59,6 @@ class HelpContentTest < ActiveSupport::TestCase
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
     assert_equal error_message_from_model(@help_content, :language, :too_long,
-      :count => 10), @help_content.errors.on(:language)
+      :count => 10), @help_content.errors[:language]
   end
 end

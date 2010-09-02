@@ -135,7 +135,7 @@
         <%= r_f.fields_for :control_objective_items,
           @review.control_objective_items.sort! do |coi_f| %>
           <% unless frozen %>
-            <% content_for :js_extra do %>
+            <%= content_for :js_extra do %>
               <% pre_template ||= generate_template(coi_f,
                 :post_audit_work_papers, {:form_builder_local => :wp_f,
                 :partial => 'work_papers/work_paper',

@@ -114,7 +114,7 @@ class ReviewsControllerTest < ActionController::TestCase
                   :procedure_control_subitem_ids =>
                     [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
                   :file_model_attributes => {
-                    :uploaded_data => ActionController::TestUploadedFile.new(
+                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                       TEST_FILE, 'text/plain')
                   },
                   :review_user_assignments_attributes => {
@@ -167,7 +167,7 @@ class ReviewsControllerTest < ActionController::TestCase
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :uploaded_data =>
-                              ActionController::TestUploadedFile.new(
+                              ActionDispatch::Http::UploadedFile.new(
                               TEST_FILE)
                           }
                         }
@@ -182,7 +182,7 @@ class ReviewsControllerTest < ActionController::TestCase
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :uploaded_data =>
-                              ActionController::TestUploadedFile.new(
+                              ActionDispatch::Http::UploadedFile.new(
                               TEST_FILE)
                           }
                         }
@@ -218,7 +218,7 @@ class ReviewsControllerTest < ActionController::TestCase
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :uploaded_data =>
-                              ActionController::TestUploadedFile.new(
+                              ActionDispatch::Http::UploadedFile.new(
                               TEST_FILE)
                           }
                         }
@@ -233,7 +233,7 @@ class ReviewsControllerTest < ActionController::TestCase
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :uploaded_data =>
-                              ActionController::TestUploadedFile.new(
+                              ActionDispatch::Http::UploadedFile.new(
                               TEST_FILE)
                           }
                         }

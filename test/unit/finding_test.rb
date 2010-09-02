@@ -113,12 +113,12 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 4, @finding.errors.count
     assert_equal error_message_from_model(@finding,
       :control_objective_item_id, :blank),
-      @finding.errors.on(:control_objective_item_id)
+      @finding.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@finding, :review_code, :blank),
       error_message_from_model(@finding, :review_code, :invalid)].sort,
-      @finding.errors.on(:review_code).sort
+      @finding.errors[:review_code].sort
     assert_equal error_message_from_model(@finding, :description, :blank),
-      @finding.errors.on(:description)
+      @finding.errors[:description]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -131,9 +131,9 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_equal 2, @finding.errors.count
     assert_equal error_message_from_model(@finding, :follow_up_date, :blank),
-      @finding.errors.on(:follow_up_date)
+      @finding.errors[:follow_up_date]
     assert_equal error_message_from_model(@finding, :answer, :blank),
-      @finding.errors.on(:answer)
+      @finding.errors[:answer]
 
     assert @finding.reload.update_attributes(
       :state => Finding::STATUS[:implemented_audited],
@@ -142,7 +142,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
     assert_equal error_message_from_model(@finding, :solution_date, :blank),
-      @finding.errors.on(:solution_date)
+      @finding.errors[:solution_date]
   end
 
   test 'validates special not blank attributes' do
@@ -155,9 +155,9 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_equal 2, finding.errors.size
     assert_equal error_message_from_model(finding, :follow_up_date,
-      :must_be_blank), finding.errors.on(:follow_up_date)
+      :must_be_blank), finding.errors[:follow_up_date]
     assert_equal error_message_from_model(finding, :solution_date,
-      :must_be_blank), finding.errors.on(:solution_date)
+      :must_be_blank), finding.errors[:solution_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -168,7 +168,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
     assert_equal error_message_from_model(@finding, :review_code, :taken),
-      @finding.errors.on(:review_code)
+      @finding.errors[:review_code]
 
     # Se puede duplicar si es de otro informe
     another_finding = Finding.find(findings(
@@ -185,9 +185,9 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 3, @finding.errors.count
     assert_equal [error_message_from_model(@finding, :review_code, :too_long,
       :count => 255), error_message_from_model(@finding, :review_code,
-      :invalid)].sort, @finding.errors.on(:review_code).sort
+      :invalid)].sort, @finding.errors[:review_code].sort
     assert_equal error_message_from_model(@finding, :type, :too_long,
-      :count => 255), @finding.errors.on(:type)
+      :count => 255), @finding.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -201,15 +201,15 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 5, @finding.errors.count
     assert_equal error_message_from_model(@finding,
       :control_objective_item_id, :not_a_number),
-      @finding.errors.on(:control_objective_item_id)
+      @finding.errors[:control_objective_item_id]
     assert_equal error_message_from_model(@finding, :first_notification_date,
-      :invalid_date), @finding.errors.on(:first_notification_date)
+      :invalid_date), @finding.errors[:first_notification_date]
     assert_equal error_message_from_model(@finding, :follow_up_date,
-      :invalid_date), @finding.errors.on(:follow_up_date)
+      :invalid_date), @finding.errors[:follow_up_date]
     assert_equal error_message_from_model(@finding, :solution_date,
-      :invalid_date), @finding.errors.on(:solution_date)
+      :invalid_date), @finding.errors[:solution_date]
     assert_equal error_message_from_model(@finding, :origination_date,
-      :invalid_date), @finding.errors.on(:origination_date)
+      :invalid_date), @finding.errors[:origination_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -222,7 +222,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
     assert_equal error_message_from_model(@finding, :state, :inclusion),
-      @finding.errors.on(:state)
+      @finding.errors[:state]
   end
 
   test 'validates status' do
@@ -251,7 +251,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
 
     assert_equal error_message_from_model(finding, :state,
-      :must_have_a_comment), finding.errors.on(:state)
+      :must_have_a_comment), finding.errors[:state]
 
     finding.comments.build(:comment => 'Test comment',
       :user => users(:administrator_user))
@@ -269,7 +269,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_equal 1, finding.errors.size
     assert_equal error_message_from_model(finding, :state,
-      :must_have_a_work_paper), finding.errors.on(:state)
+      :must_have_a_work_paper), finding.errors[:state]
   end
 
   test 'validates audited users' do
@@ -278,7 +278,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert 1, @finding.errors.size
     assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+      @finding.errors[:users]
   end
 
   test 'validates auditor users' do
@@ -287,7 +287,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert 1, @finding.errors.size
     assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+      @finding.errors[:users]
   end
 
   test 'validates supervisor users' do
@@ -296,7 +296,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert 1, @finding.errors.size
     assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+      @finding.errors[:users]
   end
 
   test 'validates manager users' do
@@ -305,7 +305,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert 1, @finding.errors.size
     assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+      @finding.errors[:users]
   end
 
   test 'stale function' do
@@ -386,7 +386,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.invalid?
     assert_equal 1, finding.errors.size
     assert_equal error_message_from_model(finding, :answer, :blank),
-      finding.errors.on(:answer)
+      finding.errors[:answer]
   end
 
   test 'dynamic functions' do
@@ -855,7 +855,7 @@ class FindingTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
+                :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                   TEST_FILE, 'text/plain')
               }
             }
@@ -882,7 +882,7 @@ class FindingTest < ActiveSupport::TestCase
 #              :description => 'New post_workpaper description',
 #              :organization_id => organizations(:default_organization).id,
 #              :file_model_attributes => {
-#                :uploaded_data => ActionController::TestUploadedFile.new(
+#                :uploaded_data => ActionDispatch::Http::UploadedFile.new(
 #                  TEST_FILE, 'text/plain')
 #              }
 #            }

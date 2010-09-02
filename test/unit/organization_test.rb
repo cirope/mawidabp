@@ -101,9 +101,9 @@ class OrganizationTest < ActiveSupport::TestCase
     assert @organization.invalid?
     assert_equal 2, @organization.errors.count
     assert_equal error_message_from_model(@organization, :name, :blank),
-      @organization.errors.on(:name)
+      @organization.errors[:name]
     assert_equal error_message_from_model(@organization, :prefix, :blank),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -114,9 +114,9 @@ class OrganizationTest < ActiveSupport::TestCase
     assert @organization.invalid?
     assert_equal 2, @organization.errors.count
     assert_equal error_message_from_model(@organization, :name, :too_long,
-      :count => 255), @organization.errors.on(:name)
+      :count => 255), @organization.errors[:name]
     assert_equal error_message_from_model(@organization, :prefix, :too_long,
-      :count => 255), @organization.errors.on(:prefix)
+      :count => 255), @organization.errors[:prefix]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -125,13 +125,13 @@ class OrganizationTest < ActiveSupport::TestCase
     assert @organization.invalid?
     assert_equal 1, @organization.errors.count
     assert_equal error_message_from_model(@organization, :prefix, :invalid),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
 
     @organization.prefix = 'abc_abc'
     assert @organization.invalid?
     assert_equal 1, @organization.errors.count
     assert_equal error_message_from_model(@organization, :prefix, :invalid),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -144,16 +144,16 @@ class OrganizationTest < ActiveSupport::TestCase
     assert @organization.invalid?
     assert_equal 2, @organization.errors.count
     assert_equal error_message_from_model(@organization, :name, :taken),
-      @organization.errors.on(:name)
+      @organization.errors[:name]
     assert_equal error_message_from_model(@organization, :prefix, :taken),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
 
     @organization.group_id = groups(:second_group).id
 
     assert @organization.invalid?
     assert_equal 1, @organization.errors.count
     assert_equal error_message_from_model(@organization, :prefix, :taken),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -163,6 +163,6 @@ class OrganizationTest < ActiveSupport::TestCase
     assert @organization.invalid?
     assert_equal 1, @organization.errors.count
     assert_equal error_message_from_model(@organization, :prefix, :exclusion),
-      @organization.errors.on(:prefix)
+      @organization.errors[:prefix]
   end
 end

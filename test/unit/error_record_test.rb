@@ -53,6 +53,6 @@ class ErrorRecordTest < ActiveSupport::TestCase
     assert @error_record.invalid?
     assert_equal 1, @error_record.errors.count
     assert_equal error_message_from_model(@error_record, :error, :inclusion),
-      @error_record.errors.on(:error)
+      @error_record.errors[:error]
   end
 end

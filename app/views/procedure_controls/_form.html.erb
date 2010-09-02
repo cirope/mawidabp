@@ -48,7 +48,7 @@
       <% pci_template = nil %>
       <%= pc_f.fields_for :procedure_control_items,
         @procedure_control.procedure_control_items.sort do |pci_f| %>
-        <% content_for :js_extra do %>
+        <%= content_for :js_extra do %>
           <% pci_template ||= generate_template(pci_f,
             :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
             :locals => {:control_objectives => []}) %>

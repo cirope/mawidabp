@@ -30,7 +30,7 @@
     <div id="process_controls">
       <% co_template = nil %>
       <%= bp_f.fields_for :process_controls do |p_f| %>
-        <% content_for :js_extra do %>
+        <%= content_for :js_extra do %>
           <% co_template ||= generate_template(p_f,
               :control_objectives, :child_index => 'NEW_SUBRECORD') %>
           <%= "var control_objective = '#{co_template}';" unless co_template == 0 %>

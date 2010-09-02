@@ -49,7 +49,7 @@ class ProcedureControlTest < ActiveSupport::TestCase
     assert @procedure_control.invalid?
     assert_equal 1, @procedure_control.errors.count
     assert_equal error_message_from_model(@procedure_control, :period_id,
-      :not_a_number), @procedure_control.errors.on(:period_id)
+      :not_a_number), @procedure_control.errors[:period_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -58,7 +58,7 @@ class ProcedureControlTest < ActiveSupport::TestCase
     assert @procedure_control.invalid?
     assert_equal 1, @procedure_control.errors.count
     assert_equal error_message_from_model(@procedure_control, :period_id,
-      :blank), @procedure_control.errors.on(:period_id)
+      :blank), @procedure_control.errors[:period_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -68,6 +68,6 @@ class ProcedureControlTest < ActiveSupport::TestCase
     assert @procedure_control.invalid?
     assert_equal 1, @procedure_control.errors.count
     assert_equal error_message_from_model(@procedure_control,
-      :period_id, :taken), @procedure_control.errors.on(:period_id)
+      :period_id, :taken), @procedure_control.errors[:period_id]
   end
 end

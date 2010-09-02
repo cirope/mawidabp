@@ -178,17 +178,17 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 6, @user.errors.count
     assert_equal error_message_from_model(@user, :name, :blank),
-      @user.errors.on(:name)
+      @user.errors[:name]
     assert_equal error_message_from_model(@user, :last_name, :blank),
-      @user.errors.on(:last_name)
+      @user.errors[:last_name]
     assert_equal error_message_from_model(@user, :language, :blank),
-      @user.errors.on(:language)
+      @user.errors[:language]
     assert_equal error_message_from_model(@user, :email, :blank),
-      @user.errors.on(:email)
+      @user.errors[:email]
     assert_equal error_message_from_model(@user, :manager_id, :invalid),
-      @user.errors.on(:manager_id)
+      @user.errors[:manager_id]
     assert_equal error_message_from_model(@user, :organization_roles, :blank),
-      @user.errors.on(:organization_roles)
+      @user.errors[:organization_roles]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -199,11 +199,11 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 3, @user.errors.count
     assert_equal error_message_from_model(@user, :name, :invalid),
-      @user.errors.on(:name)
+      @user.errors[:name]
     assert_equal error_message_from_model(@user, :last_name, :invalid),
-      @user.errors.on(:last_name)
+      @user.errors[:last_name]
     assert_equal error_message_from_model(@user, :email, :invalid),
-      @user.errors.on(:email)
+      @user.errors[:email]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -215,11 +215,11 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 3, @user.errors.count
     assert_equal error_message_from_model(@user, :user, :taken),
-      @user.errors.on(:user)
+      @user.errors[:user]
     assert_equal error_message_from_model(@user, :email, :taken),
-      @user.errors.on(:email)
+      @user.errors[:email]
     assert_equal error_message_from_model(@user, :name, :taken),
-      @user.errors.on(:name)
+      @user.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -229,7 +229,7 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 1, @user.errors.count
     assert_equal error_message_from_model(@user, :password, :confirmation),
-      @user.errors.on(:password)
+      @user.errors[:password]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -238,7 +238,7 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 1, @user.errors.count
     assert_equal error_message_from_model(@user, :user, :too_short,
-      :count => 5), @user.errors.on(:user)
+      :count => 5), @user.errors[:user]
 
     @user.user = 'abcd' * 10
     @user.name = 'abcde' * 21
@@ -252,23 +252,23 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 9, @user.errors.count
     assert_equal error_message_from_model(@user, :user, :too_long,
-      :count => 30), @user.errors.on(:user)
+      :count => 30), @user.errors[:user]
     assert_equal error_message_from_model(@user, :name, :too_long,
-      :count => 100), @user.errors.on(:name)
+      :count => 100), @user.errors[:name]
     assert_equal error_message_from_model(@user, :last_name, :too_long,
-      :count => 100), @user.errors.on(:last_name)
+      :count => 100), @user.errors[:last_name]
     assert_equal error_message_from_model(@user, :email, :too_long,
-      :count => 100), @user.errors.on(:email)
+      :count => 100), @user.errors[:email]
     assert_equal error_message_from_model(@user, :language, :too_long,
-      :count => 10), @user.errors.on(:language)
+      :count => 10), @user.errors[:language]
     assert_equal error_message_from_model(@user, :password, :too_long,
-      :count => 128), @user.errors.on(:password)
+      :count => 128), @user.errors[:password]
     assert_equal error_message_from_model(@user, :function, :too_long,
-      :count => 255), @user.errors.on(:function)
+      :count => 255), @user.errors[:function]
     assert_equal error_message_from_model(@user, :salt, :too_long,
-      :count => 255), @user.errors.on(:salt)
+      :count => 255), @user.errors[:salt]
     assert_equal error_message_from_model(@user, :change_password_hash,
-      :too_long, :count => 255), @user.errors.on(:change_password_hash)
+      :too_long, :count => 255), @user.errors[:change_password_hash]
   end
 
   test 'validates parent is in the same organization' do
@@ -279,7 +279,7 @@ class UserTest < ActiveSupport::TestCase
     assert user.invalid?
     assert_equal 1, user.errors.size
     assert_equal error_message_from_model(user, :manager_id, :invalid),
-      user.errors.on(:manager_id)
+      user.errors[:manager_id]
   end
 
   test 'validates parent is not child' do
@@ -289,7 +289,7 @@ class UserTest < ActiveSupport::TestCase
     assert !user.update_attributes(:child_ids => [bad_child.id])
     assert_equal 1, user.errors.size
     assert_equal error_message_from_model(user, :manager_id, :invalid),
-      user.errors.on(:manager_id)
+      user.errors[:manager_id]
   end
 
   test 'validates password changed too soon' do
@@ -317,7 +317,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal error_message_from_model(@user, :password,
       :too_soon,
       :count => get_test_parameter(:security_password_minimum_time).to_i),
-      @user.errors.on(:password)
+      @user.errors[:password]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -355,7 +355,7 @@ class UserTest < ActiveSupport::TestCase
           assert @user.invalid?
           assert_equal 1, @user.errors.count
           assert_equal error_message_from_model(@user, :password, :already_used),
-            @user.errors.on(:password)
+            @user.errors[:password]
         end
       end
     end
@@ -424,7 +424,7 @@ class UserTest < ActiveSupport::TestCase
     assert !auditor_user.save
     assert_equal 1, auditor_user.errors.size
     assert_equal error_message_from_model(auditor_user, :organization_roles,
-      :invalid), auditor_user.errors.on(:organization_roles)
+      :invalid), auditor_user.errors[:organization_roles]
 
     auditor_user.reload
 

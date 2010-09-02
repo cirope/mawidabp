@@ -54,9 +54,9 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.invalid?
     assert_equal 2, @role.errors.count
     assert_equal error_message_from_model(@role, :name, :invalid),
-      @role.errors.on(:name)
+      @role.errors[:name]
     assert_equal error_message_from_model(@role, :organization_id,
-      :not_a_number), @role.errors.on(:organization_id)
+      :not_a_number), @role.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -67,11 +67,11 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.invalid?
     assert_equal 3, @role.errors.count
     assert_equal error_message_from_model(@role, :name, :blank),
-      @role.errors.on(:name)
+      @role.errors[:name]
     assert_equal error_message_from_model(@role, :organization_id, :blank),
-      @role.errors.on(:organization_id)
+      @role.errors[:organization_id]
     assert_equal error_message_from_model(@role, :role_type, :blank),
-      @role.errors.on(:role_type)
+      @role.errors[:role_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -80,7 +80,7 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.invalid?
     assert_equal 1, @role.errors.count
     assert_equal error_message_from_model(@role, :name, :too_long,
-      :count => 255), @role.errors.on(:name)
+      :count => 255), @role.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -89,7 +89,7 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.invalid?
     assert_equal 1, @role.errors.count
     assert_equal error_message_from_model(@role, :role_type, :inclusion),
-      @role.errors.on(:role_type)
+      @role.errors[:role_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -98,7 +98,7 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.invalid?
     assert_equal 1, @role.errors.count
     assert_equal error_message_from_model(@role, :name, :taken),
-      @role.errors.on(:name)
+      @role.errors[:name]
   end
 
   test 'allowed controllers' do

@@ -62,10 +62,10 @@ class ProcessControlTest < ActiveSupport::TestCase
     assert @process_control.invalid?
     assert_equal 3, @process_control.errors.count
     assert_equal error_message_from_model(@process_control, :name, :blank),
-      @process_control.errors.on(:name)
+      @process_control.errors[:name]
     assert_equal [error_message_from_model(@process_control, :order, :blank),
       error_message_from_model(@process_control, :order, :not_a_number)].sort,
-      @process_control.errors.on(:order).sort
+      @process_control.errors[:order].sort
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -74,7 +74,7 @@ class ProcessControlTest < ActiveSupport::TestCase
     assert @process_control.invalid?
     assert_equal 1, @process_control.errors.count
     assert_equal error_message_from_model(@process_control, :name, :too_long,
-      :count => 255), @process_control.errors.on(:name)
+      :count => 255), @process_control.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -84,7 +84,7 @@ class ProcessControlTest < ActiveSupport::TestCase
     assert @process_control.invalid?
     assert_equal 1, @process_control.errors.count
     assert_equal error_message_from_model(@process_control, :name, :taken),
-      @process_control.errors.on(:name)
+      @process_control.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -93,6 +93,6 @@ class ProcessControlTest < ActiveSupport::TestCase
     assert @process_control.invalid?
     assert_equal 1, @process_control.errors.count
     assert_equal error_message_from_model(@process_control, :order,
-      :not_a_number), @process_control.errors.on(:order)
+      :not_a_number), @process_control.errors[:order]
   end
 end

@@ -78,13 +78,13 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_equal 4, @review.errors.count
     assert_equal error_message_from_model(@review, :identification, :blank),
-      @review.errors.on(:identification)
+      @review.errors[:identification]
     assert_equal error_message_from_model(@review, :description, :blank),
-      @review.errors.on(:description)
+      @review.errors[:description]
     assert_equal error_message_from_model(@review, :period_id, :blank),
-      @review.errors.on(:period_id)
+      @review.errors[:period_id]
     assert_equal error_message_from_model(@review, :plan_item_id, :blank),
-      @review.errors.on(:plan_item_id)
+      @review.errors[:plan_item_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -93,7 +93,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_equal 1, @review.errors.count
     assert_equal error_message_from_model(@review, :identification, :too_long,
-      :count => 255), @review.errors.on(:identification)
+      :count => 255), @review.errors[:identification]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -104,11 +104,11 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_equal 3, @review.errors.count
     assert_equal error_message_from_model(@review, :identification, :invalid),
-      @review.errors.on(:identification)
+      @review.errors[:identification]
     assert_equal error_message_from_model(@review, :period_id, :not_a_number),
-      @review.errors.on(:period_id)
+      @review.errors[:period_id]
     assert_equal error_message_from_model(@review, :plan_item_id,
-      :not_a_number), @review.errors.on(:plan_item_id)
+      :not_a_number), @review.errors[:plan_item_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -118,9 +118,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_equal 2, @review.errors.count
     assert_equal error_message_from_model(@review, :identification, :taken),
-      @review.errors.on(:identification)
+      @review.errors[:identification]
     assert_equal error_message_from_model(@review, :plan_item_id, :taken),
-      @review.errors.on(:plan_item_id)
+      @review.errors[:plan_item_id]
   end
 
   test 'validates valid attributes' do
@@ -130,7 +130,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
     assert_equal 1, @review.errors.count
     assert_equal error_message_from_model(@review, :plan_item, :invalid),
-      @review.errors.on(:plan_item)
+      @review.errors[:plan_item]
   end
 
   test 'can be modified' do

@@ -60,9 +60,9 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     assert @organization_role.invalid?
     assert_equal 2, @organization_role.errors.count
     assert_equal error_message_from_model(@organization_role, :organization_id,
-      :blank), @organization_role.errors.on(:organization_id)
+      :blank), @organization_role.errors[:organization_id]
     assert_equal error_message_from_model(@organization_role, :role_id, :blank),
-      @organization_role.errors.on(:role_id)
+      @organization_role.errors[:role_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -73,11 +73,11 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     assert @organization_role.invalid?
     assert_equal 3, @organization_role.errors.count
     assert_equal error_message_from_model(@organization_role, :organization_id,
-      :not_a_number), @organization_role.errors.on(:organization_id)
+      :not_a_number), @organization_role.errors[:organization_id]
     assert_equal error_message_from_model(@organization_role, :role_id,
-      :not_a_number), @organization_role.errors.on(:role_id)
+      :not_a_number), @organization_role.errors[:role_id]
     assert_equal error_message_from_model(@organization_role, :user_id,
-      :not_a_number), @organization_role.errors.on(:user_id)
+      :not_a_number), @organization_role.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -87,7 +87,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     assert organization_role.invalid?
     assert_equal 1, organization_role.errors.count
     assert_equal error_message_from_model(organization_role, :role_id, :taken),
-      organization_role.errors.on(:role_id)
+      organization_role.errors[:role_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -101,6 +101,6 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     assert organization_role.invalid?
     assert_equal 1, organization_role.errors.count
     assert_equal error_message_from_model(organization_role, :role_id,
-      :invalid), organization_role.errors.on(:role_id)
+      :invalid), organization_role.errors[:role_id]
   end
 end

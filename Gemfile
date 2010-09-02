@@ -18,7 +18,7 @@ gem 'RedCloth'
 gem 'i18n_label'
 gem 'smurf', :require => false
 gem 'whenever', :require => false
-gem 'will_paginate', '~> 3.0.pre2'
+gem 'will_paginate', '~> 3.0.pre'
 gem 'paper_trail'
 # Sólo para pdf-writer
 gem 'color', :require => false

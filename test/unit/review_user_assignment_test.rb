@@ -64,10 +64,10 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal 2, @review_user_assignment.errors.count
     assert_equal error_message_from_model(
       @review_user_assignment, :assignment_type, :blank),
-      @review_user_assignment.errors.on(:assignment_type)
+      @review_user_assignment.errors[:assignment_type]
     assert_equal error_message_from_model(
       @review_user_assignment, :user_id, :blank),
-      @review_user_assignment.errors.on(:user_id)
+      @review_user_assignment.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -80,10 +80,10 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal error_message_from_model(
       @review_user_assignment, :assignment_type,
       :not_a_number),
-      @review_user_assignment.errors.on(:assignment_type)
+      @review_user_assignment.errors[:assignment_type]
     assert_equal error_message_from_model(
       @review_user_assignment, :user_id, :not_a_number),
-      @review_user_assignment.errors.on(:user_id)
+      @review_user_assignment.errors[:user_id]
     assert_equal error_message_from_model(
       @review_user_assignment, :review_id,
       :not_a_number), @review_user_assignment.errors.on(
@@ -98,7 +98,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal 1, @review_user_assignment.errors.count
     assert_equal error_message_from_model(
       @review_user_assignment, :assignment_type, :inclusion),
-      @review_user_assignment.errors.on(:assignment_type)
+      @review_user_assignment.errors[:assignment_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -110,7 +110,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(
         @review_user_assignment, :user, :invalid), error_message_from_model(
         @review_user_assignment, :user, :role_taken)].sort,
-      @review_user_assignment.errors.on(:user).sort
+      @review_user_assignment.errors[:user].sort
 
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES[:manager]
@@ -119,7 +119,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(
         @review_user_assignment, :user, :invalid), error_message_from_model(
         @review_user_assignment, :user, :role_taken)].sort,
-      @review_user_assignment.errors.on(:user).sort
+      @review_user_assignment.errors[:user].sort
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -133,7 +133,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal 1, review_user_assignment.errors.count
     assert_equal error_message_from_model(
       review_user_assignment, :user, :role_taken),
-      review_user_assignment.errors.on(:user)
+      review_user_assignment.errors[:user]
 
     review_user_assignment.reload
     assert review_user_assignment.valid?
@@ -146,7 +146,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal 1, review_user_assignment.errors.count
     assert_equal error_message_from_model(
       review_user_assignment, :user, :role_taken),
-      review_user_assignment.errors.on(:user)
+      review_user_assignment.errors[:user]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -156,7 +156,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     assert_equal 1, @review_user_assignment.errors.count
     assert_equal error_message_from_model(
       @review_user_assignment, :user, :taken),
-      @review_user_assignment.errors.on(:user)
+      @review_user_assignment.errors[:user]
   end
 
   test 'user reassignment' do

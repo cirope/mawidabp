@@ -48,9 +48,9 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_equal 2, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :name, :invalid),
-      @resource_class.errors.on(:name)
+      @resource_class.errors[:name]
     assert_equal error_message_from_model(@resource_class, :unit,
-      :not_a_number), @resource_class.errors.on(:unit)
+      :not_a_number), @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -60,9 +60,9 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_equal 2, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :name, :blank),
-      @resource_class.errors.on(:name)
+      @resource_class.errors[:name]
     assert_equal error_message_from_model(@resource_class, :unit, :blank),
-      @resource_class.errors.on(:unit)
+      @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -71,7 +71,7 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :name, :too_long,
-      :count => 255), @resource_class.errors.on(:name)
+      :count => 255), @resource_class.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -80,7 +80,7 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :name, :taken),
-      @resource_class.errors.on(:name)
+      @resource_class.errors[:name]
 
     @resource_class.organization_id = organizations(:second_organization).id
     assert @resource_class.valid?
@@ -93,7 +93,7 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
     assert_equal error_message_from_model(@resource_class, :resource_class_type,
-      :inclusion), @resource_class.errors.on(:resource_class_type)
+      :inclusion), @resource_class.errors[:resource_class_type]
   end
 
   test 'dynamic functions' do

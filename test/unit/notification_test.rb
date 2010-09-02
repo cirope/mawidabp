@@ -60,9 +60,9 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.invalid?
     assert_equal 2, @notification.errors.count
     assert_equal error_message_from_model(@notification, :confirmation_hash,
-      :blank), @notification.errors.on(:confirmation_hash)
+      :blank), @notification.errors[:confirmation_hash]
     assert_equal error_message_from_model(@notification, :user_id, :blank),
-      @notification.errors.on(:user_id)
+      @notification.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -74,13 +74,13 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.invalid?
     assert_equal 4, @notification.errors.count
     assert_equal error_message_from_model(@notification, :user_id,
-      :not_a_number), @notification.errors.on(:user_id)
+      :not_a_number), @notification.errors[:user_id]
     assert_equal error_message_from_model(@notification, :status,
-      :not_a_number), @notification.errors.on(:status)
+      :not_a_number), @notification.errors[:status]
     assert_equal error_message_from_model(@notification, :user_who_confirm_id,
-      :not_a_number), @notification.errors.on(:user_who_confirm_id)
+      :not_a_number), @notification.errors[:user_who_confirm_id]
     assert_equal error_message_from_model(@notification, :confirmation_date,
-      :invalid_date), @notification.errors.on(:confirmation_date)
+      :invalid_date), @notification.errors[:confirmation_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -89,7 +89,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert @notification.invalid?
     assert_equal 1, @notification.errors.count
     assert_equal error_message_from_model(@notification, :confirmation_hash,
-      :too_long, :count => 255), @notification.errors.on(:confirmation_hash)
+      :too_long, :count => 255), @notification.errors[:confirmation_hash]
   end
 
   test 'dynamic functions' do

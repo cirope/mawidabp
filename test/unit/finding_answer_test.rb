@@ -90,11 +90,11 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert @finding_answer.invalid?
     assert_equal 3, @finding_answer.errors.count
     assert_equal error_message_from_model(@finding_answer, :answer, :blank),
-      @finding_answer.errors.on(:answer)
+      @finding_answer.errors[:answer]
     assert_equal error_message_from_model(@finding_answer, :finding_id, :blank),
-      @finding_answer.errors.on(:finding_id)
+      @finding_answer.errors[:finding_id]
     assert_equal error_message_from_model(@finding_answer, :answer_type,
-      :blank), @finding_answer.errors.on(:answer_type)
+      :blank), @finding_answer.errors[:answer_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -106,12 +106,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert @finding_answer.invalid?
     assert_equal 4, @finding_answer.errors.count
     assert_equal error_message_from_model(@finding_answer, :finding_id,
-      :not_a_number), @finding_answer.errors.on(:finding_id)
+      :not_a_number), @finding_answer.errors[:finding_id]
     assert_equal error_message_from_model(@finding_answer, :user_id,
-      :not_a_number), @finding_answer.errors.on(:user_id)
+      :not_a_number), @finding_answer.errors[:user_id]
     assert_equal error_message_from_model(@finding_answer, :file_model_id,
-      :not_a_number), @finding_answer.errors.on(:file_model_id)
+      :not_a_number), @finding_answer.errors[:file_model_id]
     assert_equal error_message_from_model(@finding_answer, :answer_type,
-      :not_a_number), @finding_answer.errors.on(:answer_type)
+      :not_a_number), @finding_answer.errors[:answer_type]
   end
 end

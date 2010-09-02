@@ -60,9 +60,9 @@ class LoginRecordTest < ActiveSupport::TestCase
     assert @login_record.invalid?
     assert_equal 2, @login_record.errors.count
     assert_equal error_message_from_model(@login_record, :user_id, :blank),
-      @login_record.errors.on(:user_id)
+      @login_record.errors[:user_id]
     assert_equal error_message_from_model(@login_record, :organization_id,
-      :blank), @login_record.errors.on(:organization_id)
+      :blank), @login_record.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -73,14 +73,14 @@ class LoginRecordTest < ActiveSupport::TestCase
     assert_equal 1, @login_record.errors.count
     assert_equal error_message_from_model(@login_record, :end, :after,
       :restriction => I18n.l(@login_record.start, :format => :validation)),
-      @login_record.errors.on(:end)
+      @login_record.errors[:end]
 
     @login_record.reload
     @login_record.start = 'XX'
     assert @login_record.invalid?
     assert_equal 1, @login_record.errors.count
     assert_equal error_message_from_model(@login_record, :start, :invalid_date),
-      @login_record.errors.on(:start)
+      @login_record.errors[:start]
 
     @login_record.reload
     @login_record.start = ''
@@ -88,8 +88,8 @@ class LoginRecordTest < ActiveSupport::TestCase
     assert @login_record.invalid?
     assert_equal 2, @login_record.errors.count
     assert_equal error_message_from_model(@login_record, :start, :blank),
-      @login_record.errors.on(:start)
+      @login_record.errors[:start]
     assert_equal error_message_from_model(@login_record, :end, :blank),
-      @login_record.errors.on(:end)
+      @login_record.errors[:end]
   end
 end

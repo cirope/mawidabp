@@ -105,14 +105,14 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert_equal 4, @procedure_control_subitem.errors.count
     assert_equal error_message_from_model(@procedure_control_subitem, 
       :procedure_control_item_id, :not_a_number),
-      @procedure_control_subitem.errors.on(:procedure_control_item_id)
+      @procedure_control_subitem.errors[:procedure_control_item_id]
     assert_equal error_message_from_model(@procedure_control_subitem,
       :control_objective_id, :not_a_number),
-      @procedure_control_subitem.errors.on(:control_objective_id)
+      @procedure_control_subitem.errors[:control_objective_id]
     assert_equal error_message_from_model(@procedure_control_subitem, :risk,
-      :not_a_number), @procedure_control_subitem.errors.on(:risk)
+      :not_a_number), @procedure_control_subitem.errors[:risk]
     assert_equal error_message_from_model(@procedure_control_subitem, :order,
-      :not_a_number), @procedure_control_subitem.errors.on(:order)
+      :not_a_number), @procedure_control_subitem.errors[:order]
   end
   
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -125,14 +125,14 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert_equal 4, @procedure_control_subitem.errors.count
     assert_equal error_message_from_model(@procedure_control_subitem,
       :control_objective_text, :blank),
-      @procedure_control_subitem.errors.on(:control_objective_text)
+      @procedure_control_subitem.errors[:control_objective_text]
     assert_equal error_message_from_model(@procedure_control_subitem,
       :control_objective_id, :blank),
-      @procedure_control_subitem.errors.on(:control_objective_id)
+      @procedure_control_subitem.errors[:control_objective_id]
     assert_equal error_message_from_model(@procedure_control_subitem, :risk,
-      :blank), @procedure_control_subitem.errors.on(:risk)
+      :blank), @procedure_control_subitem.errors[:risk]
     assert_equal error_message_from_model(@procedure_control_subitem, :order,
-      :blank), @procedure_control_subitem.errors.on(:order)
+      :blank), @procedure_control_subitem.errors[:order]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -143,8 +143,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert @procedure_control_subitem.invalid?
     assert_equal 1, @procedure_control_subitem.errors.count
     assert_equal error_message_from_model(@procedure_control_subitem,
-      :control_objective_id, :taken), @procedure_control_subitem.errors.on(
-      :control_objective_id)
+      :control_objective_id, :taken), @procedure_control_subitem.errors[
+      :control_objective_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -154,6 +154,6 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert @procedure_control_subitem.invalid?
     assert_equal 1, @procedure_control_subitem.errors.count
     assert_equal error_message_from_model(@procedure_control_subitem, :controls,
-      :blank), @procedure_control_subitem.errors.on(:controls)
+      :blank), @procedure_control_subitem.errors[:controls]
   end
 end

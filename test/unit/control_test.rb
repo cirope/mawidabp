@@ -68,13 +68,13 @@ class ControlTest < ActiveSupport::TestCase
 
     assert @control.invalid?
     assert_equal 4, @control.errors.size
-    assert_equal error_message_from_model(@control, :control, :blank),
-      @control.errors.on(:control)
-    assert_equal error_message_from_model(@control, :effects, :blank),
-      @control.errors.on(:effects)
-    assert_equal error_message_from_model(@control, :design_tests, :blank),
-      @control.errors.on(:design_tests)
-    assert_equal error_message_from_model(@control, :compliance_tests, :blank),
-      @control.errors.on(:compliance_tests)
+    assert_equal [error_message_from_model(@control, :control, :blank)],
+      @control.errors[:control]
+    assert_equal [error_message_from_model(@control, :effects, :blank)],
+      @control.errors[:effects]
+    assert_equal [error_message_from_model(@control, :design_tests, :blank)],
+      @control.errors[:design_tests]
+    assert_equal [error_message_from_model(@control, :compliance_tests,
+        :blank)], @control.errors[:compliance_tests]
   end
 end

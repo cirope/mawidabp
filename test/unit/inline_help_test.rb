@@ -50,9 +50,9 @@ class InlineHelpTest < ActiveSupport::TestCase
     assert @inline_help.invalid?
     assert_equal 2, @inline_help.errors.count
     assert_equal error_message_from_model(@inline_help, :language, :blank),
-      @inline_help.errors.on(:language)
+      @inline_help.errors[:language]
     assert_equal error_message_from_model(@inline_help, :name, :blank),
-      @inline_help.errors.on(:name)
+      @inline_help.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -61,7 +61,7 @@ class InlineHelpTest < ActiveSupport::TestCase
     assert @inline_help.invalid?
     assert_equal 1, @inline_help.errors.count
     assert_equal error_message_from_model(@inline_help, :name, :taken),
-      @inline_help.errors.on(:name)
+      @inline_help.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -71,8 +71,8 @@ class InlineHelpTest < ActiveSupport::TestCase
     assert @inline_help.invalid?
     assert_equal 2, @inline_help.errors.count
     assert_equal error_message_from_model(@inline_help, :language, :too_long,
-      :count => 10), @inline_help.errors.on(:language)
+      :count => 10), @inline_help.errors[:language]
     assert_equal error_message_from_model(@inline_help, :name, :too_long,
-      :count => 255), @inline_help.errors.on(:name)
+      :count => 255), @inline_help.errors[:name]
   end
 end

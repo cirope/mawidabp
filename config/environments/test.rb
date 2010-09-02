@@ -32,4 +32,6 @@ MawidaApp::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  I18n.config.locale = :es
 end

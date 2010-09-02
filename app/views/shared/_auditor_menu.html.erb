@@ -13,7 +13,7 @@
           :id => "link_#{menu_item.name}", :class => :menu_item_1) %>
       </li>
 
-      <% content_for(:submenu_items_1) do %>
+      <%= content_for(:submenu_items_1) do %>
         <% unless menu_item.children.blank? %>
           <%= raw render(:partial => 'shared/submenu',
             :locals => {
@@ -26,7 +26,7 @@
         <% end %>
       <% end %>
 
-      <% content_for(:submenu_items_2) do %>
+      <%= content_for(:submenu_items_2) do %>
         <% menu_item.children.each do |submenu_item| %>
           <% selected = submenu_item.submenu_names.include?(@current_module) %>
           <% unless submenu_item.children.blank? %>

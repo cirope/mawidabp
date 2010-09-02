@@ -57,9 +57,9 @@ class DetractTest < ActiveSupport::TestCase
     assert @detract.invalid?
     assert_equal 2, @detract.errors.count
     assert_equal error_message_from_model(@detract, :value, :blank),
-      @detract.errors.on(:value)
+      @detract.errors[:value]
     assert_equal error_message_from_model(@detract, :user_id, :blank),
-      @detract.errors.on(:user_id)
+      @detract.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -68,7 +68,7 @@ class DetractTest < ActiveSupport::TestCase
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
     assert_equal error_message_from_model(@detract, :value, :not_a_number),
-      @detract.errors.on(:value)
+      @detract.errors[:value]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -77,7 +77,7 @@ class DetractTest < ActiveSupport::TestCase
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
     assert_equal error_message_from_model(@detract, :value,
-      :greater_than_or_equal_to, :count => 0), @detract.errors.on(:value)
+      :greater_than_or_equal_to, :count => 0), @detract.errors[:value]
 
     @detract.reload
 
@@ -85,6 +85,6 @@ class DetractTest < ActiveSupport::TestCase
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
     assert_equal error_message_from_model(@detract, :value,
-      :less_than_or_equal_to, :count => 1), @detract.errors.on(:value)
+      :less_than_or_equal_to, :count => 1), @detract.errors[:value]
   end
 end

@@ -5,7 +5,7 @@
 <% order_field = params[:search] ? params[:search][:order] : nil %>
 <div id="search" <%= @query.blank? && @order_by.blank? ? 'style="display: none;"' : 'class="visible"' %>>
   <div>
-    <%= form_for :search, nil, :url => url, :html => {:method => :get} do |f| %>
+    <%= form_for nil, :as => :search, :url => url, :html => {:method => :get} do |f| %>
       <table>
         <tbody>
           <tr>

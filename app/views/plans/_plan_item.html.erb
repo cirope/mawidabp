@@ -17,7 +17,7 @@
     <div class="item_field" style="width: 20%;">
       <% unless f.object.business_unit %>
       <div class="search">
-        <% errors_on_business_unit = f.object.errors.on(:business_unit_id) %>
+        <% errors_on_business_unit = f.object.errors[:business_unit_id] %>
         <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id_item %>
         <%= text_field_with_auto_complete :plan_item, :business_unit_data,
@@ -49,7 +49,7 @@
     </div>
     <div class="item_field" style="width: 13%;">
     <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,
-      :class => (:error_field if f.object.errors.on(:predecessors)) %>
+      :class => (:error_field if f.object.errors[:predecessors]) %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f) %> |

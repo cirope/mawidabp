@@ -60,11 +60,11 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
     assert @resource_utilization.invalid?
     assert_equal 3, @resource_utilization.errors.count
     assert_equal error_message_from_model(@resource_utilization, :units,
-      :blank), @resource_utilization.errors.on(:units)
+      :blank), @resource_utilization.errors[:units]
     assert_equal error_message_from_model(@resource_utilization, :cost_per_unit,
-      :blank), @resource_utilization.errors.on(:cost_per_unit)
+      :blank), @resource_utilization.errors[:cost_per_unit]
     assert_equal error_message_from_model(@resource_utilization, :resource_id,
-      :blank), @resource_utilization.errors.on(:resource_id)
+      :blank), @resource_utilization.errors[:resource_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -76,14 +76,14 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
     assert @resource_utilization.invalid?
     assert_equal 4, @resource_utilization.errors.count
     assert_equal error_message_from_model(@resource_utilization, :units,
-      :not_a_number), @resource_utilization.errors.on(:units)
+      :not_a_number), @resource_utilization.errors[:units]
     assert_equal error_message_from_model(@resource_utilization, :cost_per_unit,
-      :not_a_number), @resource_utilization.errors.on(:cost_per_unit)
+      :not_a_number), @resource_utilization.errors[:cost_per_unit]
     assert_equal error_message_from_model(@resource_utilization, :resource_id,
-      :not_a_number), @resource_utilization.errors.on(:resource_id)
+      :not_a_number), @resource_utilization.errors[:resource_id]
     assert_equal error_message_from_model(@resource_utilization,
       :resource_consumer_id, :not_a_number),
-      @resource_utilization.errors.on(:resource_consumer_id)
+      @resource_utilization.errors[:resource_consumer_id]
   end
 
   test 'cost function' do

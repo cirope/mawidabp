@@ -64,7 +64,7 @@
       </div>
       <div class="item_field" style="width: 50%;">
         <div class="search">
-          <% errors_on_manager = @user.errors.on(:manager_id) %>
+          <% errors_on_manager = @user.errors[:manager_id] %>
           <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :user, :nested_user,
             {:id => "user_manager_#{@user.id}",

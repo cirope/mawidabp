@@ -65,16 +65,16 @@ class ProcedureControlItemTest < ActiveSupport::TestCase
     assert_equal 5, @procedure_control_item.errors.count
     assert_equal error_message_from_model(@procedure_control_item, 
       :process_control_id, :not_a_number),
-      @procedure_control_item.errors.on(:process_control_id)
+      @procedure_control_item.errors[:process_control_id]
     assert_equal error_message_from_model(@procedure_control_item,
       :procedure_control_id, :not_a_number),
-      @procedure_control_item.errors.on(:procedure_control_id)
+      @procedure_control_item.errors[:procedure_control_id]
     assert_equal error_message_from_model(@procedure_control_item, :aproach,
-      :not_a_number), @procedure_control_item.errors.on(:aproach)
+      :not_a_number), @procedure_control_item.errors[:aproach]
     assert_equal error_message_from_model(@procedure_control_item, :frequency,
-      :not_a_number), @procedure_control_item.errors.on(:frequency)
+      :not_a_number), @procedure_control_item.errors[:frequency]
     assert_equal error_message_from_model(@procedure_control_item, :order,
-      :not_a_number), @procedure_control_item.errors.on(:order)
+      :not_a_number), @procedure_control_item.errors[:order]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -87,13 +87,13 @@ class ProcedureControlItemTest < ActiveSupport::TestCase
     assert_equal 4, @procedure_control_item.errors.count
     assert_equal error_message_from_model(@procedure_control_item,
       :process_control_id, :blank),
-      @procedure_control_item.errors.on(:process_control_id)
+      @procedure_control_item.errors[:process_control_id]
     assert_equal error_message_from_model(@procedure_control_item, :aproach,
-      :blank), @procedure_control_item.errors.on(:aproach)
+      :blank), @procedure_control_item.errors[:aproach]
     assert_equal error_message_from_model(@procedure_control_item, :frequency,
-      :blank), @procedure_control_item.errors.on(:frequency)
+      :blank), @procedure_control_item.errors[:frequency]
     assert_equal error_message_from_model(@procedure_control_item, :order,
-      :blank), @procedure_control_item.errors.on(:order)
+      :blank), @procedure_control_item.errors[:order]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -104,7 +104,7 @@ class ProcedureControlItemTest < ActiveSupport::TestCase
     assert @procedure_control_item.invalid?
     assert_equal 1, @procedure_control_item.errors.count
     assert_equal error_message_from_model(@procedure_control_item,
-      :process_control_id, :taken), @procedure_control_item.errors.on(
-      :process_control_id)
+      :process_control_id, :taken), @procedure_control_item.errors[
+      :process_control_id]
   end
 end

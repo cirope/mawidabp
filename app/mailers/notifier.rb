@@ -1,4 +1,5 @@
 class Notifier < ActionMailer::Base
+  helper :application
   default :from => "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>",
     :charset => 'UTF-8', :content_type => 'text/html',
     :date => proc { Time.now }
@@ -142,26 +143,26 @@ class Notifier < ActionMailer::Base
     body_title = I18n.t(:'notifier.conclusion_review_notification.body_title',
       :elements => elements.to_sentence)
     
-    @conclusion_review = conclusion_review,
-    @body_title = body_title,
-    @note = options[:note],
+    @conclusion_review = conclusion_review
+    @body_title = body_title
+    @note = options[:note]
     @notification = options[:notify] ?
       conclusion_review.create_notification_for(user) : nil
 
     if File.exist?(conclusion_review.absolute_pdf_path)
-      attachments.inline[conclusion_review.pdf_name] =
+      attachments[conclusion_review.pdf_name] =
         File.read(conclusion_review.absolute_pdf_path)
     end
 
     if options[:include_score_sheet] &&
         File.exist?(conclusion_review.review.absolute_score_sheet_path)
-      attachments.inline[conclusion_review.review.score_sheet_name] =
+      attachments[conclusion_review.review.score_sheet_name] =
         File.read(conclusion_review.review.absolute_score_sheet_path)
     end
 
     if options[:include_global_score_sheet] &&
         File.exist?(conclusion_review.review.absolute_global_score_sheet_path)
-      attachments.inline[conclusion_review.review.global_score_sheet_name] =
+      attachments[conclusion_review.review.global_score_sheet_name] =
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 

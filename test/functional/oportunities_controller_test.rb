@@ -109,7 +109,7 @@ class OportunitiesControllerTest < ActionController::TestCase
               :description => 'New workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
+                :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                   TEST_FILE, 'text/plain')
               }
             }
@@ -162,7 +162,7 @@ class OportunitiesControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionController::TestUploadedFile.new(
+                  :uploaded_data => ActionDispatch::Http::UploadedFile.new(
                     TEST_FILE, 'text/plain')
                 }
               }

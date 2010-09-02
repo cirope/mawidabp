@@ -55,11 +55,11 @@ class HelpItemTest < ActiveSupport::TestCase
     assert @help_item.invalid?
     assert_equal 3, @help_item.errors.count
     assert_equal error_message_from_model(@help_item, :name, :blank),
-      @help_item.errors.on(:name)
+      @help_item.errors[:name]
     assert_equal error_message_from_model(@help_item, :description, :blank),
-      @help_item.errors.on(:description)
+      @help_item.errors[:description]
     assert_equal error_message_from_model(@help_item, :order_number, :blank),
-      @help_item.errors.on(:order_number)
+      @help_item.errors[:order_number]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -68,7 +68,7 @@ class HelpItemTest < ActiveSupport::TestCase
     assert @help_item.invalid?
     assert_equal 1, @help_item.errors.count
     assert_equal error_message_from_model(@help_item, :order_number,
-      :not_a_number), @help_item.errors.on(:order_number)
+      :not_a_number), @help_item.errors[:order_number]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -77,6 +77,6 @@ class HelpItemTest < ActiveSupport::TestCase
     assert @help_item.invalid?
     assert_equal 1, @help_item.errors.count
     assert_equal error_message_from_model(@help_item, :name, :too_long,
-      :count => 255), @help_item.errors.on(:name)
+      :count => 255), @help_item.errors[:name]
   end
 end

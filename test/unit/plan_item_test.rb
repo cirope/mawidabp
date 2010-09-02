@@ -74,15 +74,15 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 5, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :order_number,
-      :not_a_number), @plan_item.errors.on(:order_number)
+      :not_a_number), @plan_item.errors[:order_number]
     assert_equal error_message_from_model(@plan_item, :plan_id, :not_a_number),
-      @plan_item.errors.on(:plan_id)
+      @plan_item.errors[:plan_id]
     assert_equal error_message_from_model(@plan_item, :business_unit_id,
-      :not_a_number), @plan_item.errors.on(:business_unit_id)
+      :not_a_number), @plan_item.errors[:business_unit_id]
     assert_equal error_message_from_model(@plan_item, :start, :invalid_date),
-      @plan_item.errors.on(:start)
+      @plan_item.errors[:start]
     assert_equal error_message_from_model(@plan_item, :end, :invalid_date),
-      @plan_item.errors.on(:end)
+      @plan_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -95,13 +95,13 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 4, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :project, :blank),
-      @plan_item.errors.on(:project)
+      @plan_item.errors[:project]
     assert_equal error_message_from_model(@plan_item, :order_number, :blank),
-      @plan_item.errors.on(:order_number)
+      @plan_item.errors[:order_number]
     assert_equal error_message_from_model(@plan_item, :start, :blank),
-      @plan_item.errors.on(:start)
+      @plan_item.errors[:start]
     assert_equal error_message_from_model(@plan_item, :end, :blank),
-      @plan_item.errors.on(:end)
+      @plan_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -111,7 +111,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :project, :too_long,
-      :count => 255), @plan_item.errors.on(:project)
+      :count => 255), @plan_item.errors[:project]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -120,7 +120,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :project, :taken),
-      @plan_item.errors.on(:project)
+      @plan_item.errors[:project]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -129,7 +129,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :end, :on_or_after,
-      :restriction => I18n.l(@plan_item.start)), @plan_item.errors.on(:end)
+      :restriction => I18n.l(@plan_item.start)), @plan_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -139,9 +139,9 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 2, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :start, :out_of_period),
-      @plan_item.errors.on(:start)
+      @plan_item.errors[:start]
     assert_equal error_message_from_model(@plan_item, :end, :out_of_period),
-      @plan_item.errors.on(:end)
+      @plan_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -152,9 +152,9 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 2, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :end, :item_overload),
-      @plan_item.errors.on(:end)
+      @plan_item.errors[:end]
     assert_equal error_message_from_model(@plan_item, :start, :item_overload),
-      @plan_item.errors.on(:start)
+      @plan_item.errors[:start]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -170,7 +170,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert plan_item_3.invalid?
     assert_equal 1, plan_item_3.errors.count
     assert_equal error_message_from_model(plan_item_3, :start,
-      :resource_overload), plan_item_3.errors.on(:start)
+      :resource_overload), plan_item_3.errors[:start]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -179,7 +179,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
     assert_equal error_message_from_model(@plan_item, :predecessors, :invalid),
-      @plan_item.errors.on(:predecessors)
+      @plan_item.errors[:predecessors]
   end
 
   test 'cost function' do

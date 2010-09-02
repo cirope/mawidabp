@@ -63,10 +63,10 @@ class BestPracticeTest < ActiveSupport::TestCase
     @best_practice.organization_id = '  '
     assert @best_practice.invalid?
     assert_equal 2, @best_practice.errors.count
-    assert_equal error_message_from_model(@best_practice, :name, :blank),
-      @best_practice.errors.on(:name)
-    assert_equal error_message_from_model(@best_practice, :organization_id,
-      :blank), @best_practice.errors.on(:organization_id)
+    assert_equal [error_message_from_model(@best_practice, :name, :blank)],
+      @best_practice.errors[:name]
+    assert_equal [error_message_from_model(@best_practice, :organization_id,
+      :blank)], @best_practice.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -74,16 +74,16 @@ class BestPracticeTest < ActiveSupport::TestCase
     @best_practice.name = 'abcdd' * 52
     assert @best_practice.invalid?
     assert_equal 1, @best_practice.errors.count
-    assert_equal error_message_from_model(@best_practice, :name, :too_long,
-      :count => 255), @best_practice.errors.on(:name)
+    assert_equal [error_message_from_model(@best_practice, :name, :too_long,
+      :count => 255)], @best_practice.errors[:name]
   end
 
   test 'validates formated attributes' do
     @best_practice.organization_id = 'a'
     assert @best_practice.invalid?
     assert_equal 1, @best_practice.errors.count
-    assert_equal error_message_from_model(@best_practice, :organization_id,
-      :not_a_number), @best_practice.errors.on(:organization_id)
+    assert_equal [error_message_from_model(@best_practice, :organization_id,
+      :not_a_number)], @best_practice.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -91,7 +91,7 @@ class BestPracticeTest < ActiveSupport::TestCase
     @best_practice.name = best_practices(:bcra_A4609).name
     assert @best_practice.invalid?
     assert_equal 1, @best_practice.errors.count
-    assert_equal error_message_from_model(@best_practice, :name, :taken),
-      @best_practice.errors.on(:name)
+    assert_equal [error_message_from_model(@best_practice, :name, :taken)],
+      @best_practice.errors[:name]
   end
 end
