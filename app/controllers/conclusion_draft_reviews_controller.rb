@@ -28,7 +28,7 @@ class ConclusionDraftReviewsController < ApplicationController
     respond_to do |format|
       format.html {
         if @conclusion_draft_reviews.size == 1 && !@query.blank? &&
-            !params[:page]
+            !params[:page] && !@conclusion_draft_reviews.first.has_final_review?
           redirect_to edit_conclusion_draft_review_path(
             @conclusion_draft_reviews.first)
         end

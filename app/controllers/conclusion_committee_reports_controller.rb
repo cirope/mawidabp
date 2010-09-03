@@ -515,7 +515,9 @@ class ConclusionCommitteeReportsController < ApplicationController
         :weaknesses_by_audit_type => :read,
         :create_weaknesses_by_audit_type => :read,
         :synthesis_report => :read,
-        :cost_analysis => :read
+        :create_synthesis_report => :read,
+        :cost_analysis => :read,
+        :create_cost_analysis => :read
       })
   end
 end
