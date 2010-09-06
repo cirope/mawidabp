@@ -1,6 +1,6 @@
 es:
   app_name: "Mawida Buenas Prácticas"
-  app_copyright: "Copyright © 2008-%{year} Mawida Buenas Prácticas. Todos los derechos reservados."
+  app_copyright: "Copyright © 2008-{{year}} Mawida Buenas Prácticas. Todos los derechos reservados."
 
   label:
     "yes": "Si"
@@ -103,10 +103,10 @@ es:
     no_organization: "No existe la organización, compruebe la dirección"
     password_expire_in_x:
       one: "Su contraseña expira mañana"
-      other: "Su contraseña expira dentro de %{count} días"
+      other: "Su contraseña expira dentro de {{count}} días"
     password_expired_x_days_ago:
       one: "Su contraseña expiró ayer"
-      other: "Su contraseña expiró hace %{count} días"
+      other: "Su contraseña expiró hace {{count}} días"
     search_link_title: "Filtrar listado (Ctrl + Espacio)"
     session_closed_correctly: "Sesión cerrada correctamente"
     session_expires_in_less_than_a_minute: "Su sesión expìra en menos de un minuto"
@@ -115,7 +115,7 @@ es:
     sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
-    unsupported_browser: "Su navegador no cumple con todos los estándares internacionales requeridos por la aplicación, por favor en su lugar utilice Mozilla Firefox y abra la siguiente dirección: %{url}"
+    unsupported_browser: "Su navegador no cumple con todos los estándares internacionales requeridos por la aplicación, por favor en su lugar utilice Mozilla Firefox y abra la siguiente dirección: {{url}}"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
@@ -196,9 +196,9 @@ es:
     download_work_papers: "Descargar papeles de trabajo"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
-    last_verified_date: "La última comprobación se realizó el %{date}"
+    last_verified_date: "La última comprobación se realizó el {{date}}"
     notifications_statuses: "Estado de las últimas notificaciones"
-    notification_sended_at: "Enviada el %{date}"
+    notification_sended_at: "Enviada el {{date}}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
   conclusion_audit_report:
@@ -223,8 +223,8 @@ es:
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
     applied_filters:
-      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
-      other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+      one: "En este reporte se ha aplicado el siguientes filtro: {{filters}}"
+      other: "En este reporte se han aplicado los siguientes filtros: {{filters}}"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -235,43 +235,43 @@ es:
       general_column_estimated_amount: "Costo estimado (planificado)"
       general_column_real_amount: "Costo real (ejecutado)"
       general_column_deviation: "Desviación"
-      pdf_name: "analisis_de_costos_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "analisis_de_costos_{{from_date}}_al_{{to_date}}.pdf"
       detailed_title: "ANÁLISIS DE COSTOS\nDETALLADO POR INFORME\nDE AUDITORÍA INTERNA"
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
     period:
       title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
+      range: "desde el {{from_date}} al {{to_date}}"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "informe_de_sintesis_informes_definitivos_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
-      organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
+      organization_score: "Calificación de la organización: {{score}}% (*)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría ({{audit_types}})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      generic_score_average: "Promedio de las calificaciones de %{audit_type}"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      generic_score_average: "Promedio de las calificaciones de {{audit_type}}"
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:
-      pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_estado_{{from_date}}_al_{{to_date}}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_riesgo_{{from_date}}_al_{{to_date}}.pdf"
       title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_{{from_date}}_al_{{to_date}}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
@@ -292,9 +292,9 @@ es:
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
-      sorted_by: "El listado fue ordenado por la columna %{column}"
+        one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
+        other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"
+      sorted_by: "El listado fue ordenado por la columna {{column}}"
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
@@ -309,7 +309,7 @@ es:
     global_score_sheet: "Planilla de calificación global"
     email_note: "Nota a incluir en el correo"
     issue_date_title: "FECHA"
-    audit_period: "%{start} al %{end}"
+    audit_period: "{{start}} al {{end}}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
@@ -321,9 +321,9 @@ es:
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
     bundle:
-      zip_name: "legajo_%{identification}.zip"
-      control_objectives_dir: "%{prefix}_objetivos_de_control"
-      findings_dir: "%{prefix}_observaciones_y_oportunidades"
+      zip_name: "legajo_{{identification}}.zip"
+      control_objectives_dir: "{{prefix}}_objetivos_de_control"
+      findings_dir: "{{prefix}}_observaciones_y_oportunidades"
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
@@ -332,13 +332,13 @@ es:
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
       title: "Observaciones - Papeles de trabajo"
-      pdf_name: "%{prefix}_caratula_de_observaciones_y_papeles_de_trabajo.pdf"
+      pdf_name: "{{prefix}}_caratula_de_observaciones_y_papeles_de_trabajo.pdf"
     findings_follow_up:
       title: "SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
       weakness_title_in_singular: "SEGUIMIENTO DE OBSERVACIÓN"
       oportunity_title_in_singular: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
       index_clarification: "* Al momento de emitir el informe definitivo"
-      pdf_name: "%{prefix}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
+      pdf_name: "{{prefix}}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
     workflow:
       title: "Documentación del trabajo realizado"
       pdf_name: "documentacion_del_trabajo_realizado.pdf"
@@ -390,7 +390,7 @@ es:
     correctly_created: "Detractor agregado correctamente."
     show_last_detracts: "Ver los últimos detractores"
     last_detract: "Último detractor"
-    last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
+    last_detracts: "Resumen de los últimos *{{count}}* detractores de *{{user}}*"
     without_detract: "No tiene ningún detractor asignado al momento"
     user_without_detracts: "No tiene ningún detractor asignado al momento"
 
@@ -402,14 +402,14 @@ es:
     error_user_disabled: "Usuario deshabilitado"
     void_user: "Inexistente"
     show_list: "Ver registros de error"
-    pdf_list_name: "registros_de_error_%{from_date}_%{to_date}.pdf"
+    pdf_list_name: "registros_de_error_{{from_date}}_{{to_date}}.pdf"
     period:
       title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
+      range: "desde el {{from_date}} al {{to_date}}"
 
   execution_reports:
     detailed_management_report:
-      pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "informe_gerencial_detallado_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -419,17 +419,17 @@ es:
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
     findings_type_external: "Observaciones Auditorías Externas"
     findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
     period:
       title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
+      range: "desde el {{from_date}} al {{to_date}}"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por informe y estado"
     weaknesses_by_state:
-      pdf_name: "observaciones_en_ejecucion_por_estado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_en_ejecucion_por_estado_{{from_date}}_al_{{to_date}}.pdf"
       title: "INFORME GERENCIAL DETALLADO\nOBSERVACIONES/OPORTUNIDADES DE MEJORA EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
       clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       weaknesses_column: "Observaciones"
@@ -450,7 +450,7 @@ es:
     finding_relations: "Relaciones con otras observaciones"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
+    costs: "Hasta el momento se ha dedicado *{{cost}}* al seguimiento de la observación"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -491,12 +491,12 @@ es:
     view_pending: "Ver pendientes"
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
-    responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
+    responsibility_removed: "Ha sido desafectado de la {{class_name}} {{review_code}} del informe {{review}}"
     important_dates:
       title: "Fechas a considerar"
-      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *%{date}* si ningún auditado proporciona una respuesta"
-      notification_date: "Fue notificada por primera vez el día *%{date}*"
-      confirmation_date: "Su notificación fue confirmada el día *%{date}*"
+      expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *{{date}}* si ningún auditado proporciona una respuesta"
+      notification_date: "Fue notificada por primera vez el día *{{date}}*"
+      confirmation_date: "Su notificación fue confirmada el día *{{date}}*"
     follow_up_report:
       weakness:
         title: "SEGUIMIENTO DE OBSERVACIÓN"
@@ -504,12 +504,12 @@ es:
       oportunity:
         title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
         subtitle: "Datos de la oportunidad de mejora"
-      print_date: "Fecha de impresión: %{date}"
+      print_date: "Fecha de impresión: {{date}}"
       download: "Descargar seguimiento completo"
       follow_up_comments: "Comentarios de seguimiento"
       without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
-      pdf_name: "seguimiento_de_observacion_%{code}.pdf"
+      pdf_name: "seguimiento_de_observacion_{{code}}.pdf"
 
   finding_relation:
     types:
@@ -551,10 +551,10 @@ es:
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
-    print_date: "Fecha de impresión: %{date}"
+    print_date: "Fecha de impresión: {{date}}"
     applied_filters:
-      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
-      other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+      one: "En este reporte se ha aplicado el siguientes filtro: {{filters}}"
+      other: "En este reporte se han aplicado los siguientes filtros: {{filters}}"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -566,38 +566,38 @@ es:
       oportunities: "OPORTUNIDADES DE MEJORA"
       without_weaknesses: "Sin Observaciones en el periodo"
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
-      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "analisis_de_costos_seguimiento_{{from_date}}_al_{{to_date}}.pdf"
     period:
       title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
+      range: "desde el {{from_date}} al {{to_date}}"
     synthesis_report:
-      pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "informe_de_sintesis_{{from_date}}_al_{{to_date}}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
-      organization_score: "Calificación de la organización: %{score}% (*)"
-      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
+      organization_score: "Calificación de la organización: {{score}}% (*)"
+      organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría ({{audit_types}})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
-      generic_score_average: "Promedio de las calificaciones de %{audit_type}"
+      generic_score_average: "Promedio de las calificaciones de {{audit_type}}"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo ({{risk_types}}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:
-      pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_estado_{{from_date}}_al_{{to_date}}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_riesgo_{{from_date}}_al_{{to_date}}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
       without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_{{from_date}}_al_{{to_date}}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
@@ -627,7 +627,7 @@ es:
     stale_object_error: "El contenido de ayuda no fue actualizado, intente nuevamente."
     content_title: "Contenido"
     help_title: "Ayuda"
-    last_modification: "Esta sección se modificó por última vez hace *%{last_modification}*"
+    last_modification: "Esta sección se modificó por última vez hace *{{last_modification}}*"
 
   help_item:
     index_title: "Listado de registros de ayuda"
@@ -655,10 +655,10 @@ es:
     choose: "Reportes de seguridad"
     show_title: "Detalles del registro de ingreso"
     show_list: "Ver registros de ingreso"
-    pdf_list_name: "listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf"
+    pdf_list_name: "listado_de_registros_de_ingreso_{{from_date}}_{{to_date}}.pdf"
     period:
       title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
+      range: "desde el {{from_date}} al {{to_date}}"
 
   notification:
     index_title: "Listado de notificaciones"
@@ -681,7 +681,7 @@ es:
       created_title: "Nueva observación / oportunidad de mejora"
     notify_new_finding_answer:
       title: "Tiene un nuevo comentario"
-      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
+      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *{{finding_code}}* del informe *{{review}}*"
       finding_link: "Ver observación / oportunidad de mejora"
     notify_new_findings:
       title: "Notificación de observaciones / oportunidades de mejora"
@@ -691,13 +691,13 @@ es:
     change_password: "Cambiar contraseña"
     blank_password:
       title: "Contraseña blanqueada"
-      body_title: "%{user_name}, la contraseña de su usuario (%{user}) ha sido blanqueada, para establecer una nueva utilice el siguiente enlace:"
-      valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
+      body_title: "{{user_name}}, la contraseña de su usuario ({{user}}) ha sido blanqueada, para establecer una nueva utilice el siguiente enlace:"
+      valid_until: "{{link}} (Usted podrá utilizar este enlace hasta el día *{{date}}* inclusive)"
     changes_notification:
       title: "Notificación de cambios"
     conclusion_review_notification:
-      title: "Informe de auditoría %{review}"
-      body_title: "Se adjuntan los siguientes documentos: %{elements}"
+      title: "Informe de auditoría {{review}}"
+      body_title: "Se adjuntan los siguientes documentos: {{elements}}"
       confirm: "Confirmar la recepción y APROBAR el informe"
       reject: "Confirmar la recepción y NO APROBAR el informe"
     findings_expiration_warning:
@@ -718,11 +718,11 @@ es:
       the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
-        one: "Responsable actual: %{responsible}"
-        other: "Responsables actuales: %{responsible}"
+        one: "Responsable actual: {{responsible}}"
+        other: "Responsables actuales: {{responsible}}"
       old_responsibles:
-        one: "Responsable anterior: %{responsible}"
-        other: "Responsables anteriores: %{responsible}"
+        one: "Responsable anterior: {{responsible}}"
+        other: "Responsables anteriores: {{responsible}}"
       the_following_findings_are_now_reassigned:
         one: "La siguiente observación / oportunidad de mejora ha sido reasignada"
         other: "Las siguientes observaciones / oportunidades de mejora han sido reasignadas"
@@ -740,12 +740,12 @@ es:
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     group_welcome_email:
-      title: "El grupo %{name} ha sido creado"
+      title: "El grupo {{name}} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
       clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawida Buenas Prácticas'"
     welcome_email:
-      title: "%{name}, su cuenta ha sido creada"
+      title: "{{name}}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
       clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawida Buenas Prácticas' del área de Auditoría Interna."
@@ -832,14 +832,14 @@ es:
       can_not_be_destroyed: "El periodo no puede ser eliminado"
       has_plans:
         one: "Tiene un plan asociado"
-        other: "Tiene %{count} planes asociados"
-      has_procedure_controls: "Está asociado a procedimientos y pruebas de control (%{count})"
+        other: "Tiene {{count}} planes asociados"
+      has_procedure_controls: "Está asociado a procedimientos y pruebas de control ({{count}})"
       has_reviews:
         one: "Tiene un informe asociado"
-        other: "Tiene %{count} informes asociados"
+        other: "Tiene {{count}} informes asociados"
       has_workflows:
         one: "Tiene un programa de trabajo asociado"
-        other: "Tiene %{count} programas de trabajo asociados"
+        other: "Tiene {{count}} programas de trabajo asociados"
 
   plan:
     index_title: "Listado de planes de trabajo"
@@ -875,11 +875,11 @@ es:
         long: "Retrasado"
         short: "R"
     period:
-      title: "Intervalo (%{number})"
-      range: "desde el %{from_date} al %{to_date}"
+      title: "Intervalo ({{number}})"
+      range: "desde el {{from_date}} al {{to_date}}"
     pdf:
       title: "Plan de auditoría"
-      pdf_name: "plan_periodo_%{period}.pdf"
+      pdf_name: "plan_periodo_{{period}}.pdf"
       resource_utilization: "Recursos utilizados"
     errors:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
@@ -934,8 +934,8 @@ es:
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
     taken_work_paper_code:
-      one: "El código de papel de trabajo %{duplicated_work_papers} está duplicado"
-      other: "Los siguientes códigos de papeles de trabajo están duplicados: %{duplicated_work_papers}"
+      one: "El código de papel de trabajo {{duplicated_work_papers}} está duplicado"
+      other: "Los siguientes códigos de papeles de trabajo están duplicados: {{duplicated_work_papers}}"
     user_assignment:
       type_auditor: "Auditor"
       type_supervisor: "Supervisor"
@@ -947,7 +947,7 @@ es:
     score_sheet_filename: "planilla_de_calificacion_detallada"
     global_score_sheet_filename: "planilla_de_calificacion_global"
     draft_score_sheet: "Borrador"
-    audit_period: "%{start} al %{end}"
+    audit_period: "{{start}} al {{end}}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
@@ -955,8 +955,8 @@ es:
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
-    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
+    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo ({{risks}}) y luego por estado de la observación)"
+    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo ({{risks}}) y luego por estado de la observación)"
     weaknesses_count: "Cantidad de Observaciones"
     oportunities_count: "Cantidad de Oportunidades de Mejora"
     work_papers: "Papeles de trabajo"
@@ -982,15 +982,15 @@ es:
       without_attachment: "Sin archivos adjuntos"
       download: "Descargar relevamiento"
     review_data:
-      close_date: "Fecha de cierre: %{date}"
+      close_date: "Fecha de cierre: {{date}}"
       without_close_date: "Sin fecha de cierre"
 
   review_user_assignment:
     responsibility_modification:
-      title: "Modificación de responsabilidades en el informe %{review}"
-      old_responsible: "Responsable anterior: %{responsible}"
-      new_responsible: "Responsable actual: %{responsible}"
-    responsibility_removed: "Ha sido desafectado del informe %{review}"
+      title: "Modificación de responsabilidades en el informe {{review}}"
+      old_responsible: "Responsable anterior: {{responsible}}"
+      new_responsible: "Responsable actual: {{responsible}}"
+    responsibility_removed: "Ha sido desafectado del informe {{review}}"
     cannot_be_reassigned: "El usuario no puede ser reasignado, tiene observaciones que dependen de el"
     cannot_be_destroyed: "El usuario no puede ser eliminado, tiene observaciones que dependen de el"
 
@@ -1029,7 +1029,7 @@ es:
     correctly_updated: "Usuario actualizado correctamente."
     correctly_disabled: "Usuario deshabilitado correctamente."
     stale_object_error: "El usuario no pudo ser actualizado, intente nuevamente."
-    password_reseted: "La contraseña del usuario %{user} ha sido blanqueada."
+    password_reseted: "La contraseña del usuario {{user}} ha sido blanqueada."
     password_correctly_updated: "Contraseña actualizada correctamente."
     password_stale_object_error: "La contraseña no pudo ser actualizada, intente nuevamente."
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
@@ -1056,14 +1056,14 @@ es:
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
     responsibility_modification:
       title: "Modificación de responsabilidades"
-      old_responsible: "Responsable anterior: %{responsible}"
-      new_responsible: "Responsable actual: %{responsible}"
+      old_responsible: "Responsable anterior: {{responsible}}"
+      new_responsible: "Responsable actual: {{responsible}}"
       reassigned_to_reviews:
-        one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
-        other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
+        one: "Se ha reasignado la responsabilidad del informe en ejecución {{reviews}}"
+        other: "Se han reasignado la responsabilidad de los informes en ejecución {{reviews}}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las observaciones y oportunidades de mejora pendientes del informe %{reviews}"
-        other: "Se han reasignado las observaciones y oportunidades de mejora pendientes de los informes %{reviews}"
+        one: "Se han reasignado las observaciones y oportunidades de mejora pendientes del informe {{reviews}}"
+        other: "Se han reasignado las observaciones y oportunidades de mejora pendientes de los informes {{reviews}}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
@@ -1072,8 +1072,8 @@ es:
     pdf:
       pdf_name: "listado_de_usuarios.pdf"
       filtered_by:
-        one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
-        other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
+        one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
+        other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"
 
   version:
     show_title: "Detalles del registro de cambios"
@@ -1087,7 +1087,7 @@ es:
     column_new_value: "Valor nuevo"
     column_old_value: "Valor anterior"
     without_changes: "Sin cambios"
-    pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
+    pdf_list_name: "reporte_de_cambios_de_seguridad_{{from_date}}_{{to_date}}.pdf"
   
   weakness:
     index_title: "Listado de observaciones"
@@ -1116,10 +1116,10 @@ es:
     index_title: "Bienvenido"
 
   work_paper:
-    cover_name: "%{prefix}%{filename}-portada.pdf"
+    cover_name: "{{prefix}}{{filename}}-portada.pdf"
     number_of_pages:
       one: "una hoja"
-      other: "%{count} hojas"
+      other: "{{count}} hojas"
 
   workflow:
     index_title: "Listado de programas de trabajo"
@@ -1145,10 +1145,10 @@ es:
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
     period:
-      title: "Periodo (%{number})"
-      range: "%{from_date} al %{to_date}"
+      title: "Periodo ({{number}})"
+      range: "{{from_date}} al {{to_date}}"
     pdf:
-      pdf_name: "programa_de_trabajo_%{review}.pdf"
+      pdf_name: "programa_de_trabajo_{{review}}.pdf"
       resources_utilization: "Recursos utilizados"
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del programa de trabajo"
@@ -1206,43 +1206,43 @@ es:
       half_a_minute: "medio minuto"
       less_than_x_seconds:
         one: "menos de 1 segundo"
-        other: "menos de %{count} segundos"
+        other: "menos de {{count}} segundos"
       x_seconds:
         one: "1 segundo"
-        other: "%{count} segundos"
+        other: "{{count}} segundos"
       less_than_x_minutes:
         one: "menos de 1 minuto"
-        other: "menos de %{count} minutos"
+        other: "menos de {{count}} minutos"
       x_minutes:
         one: "1 minuto"
-        other: "%{count} minutos"
+        other: "{{count}} minutos"
       about_x_hours:
         one: "alrededor de 1 hora"
-        other: "alrededor de %{count} horas"
+        other: "alrededor de {{count}} horas"
       x_hours:
         one: "1 hora"
-        other: "%{count} horas"
+        other: "{{count}} horas"
       x_days:
         one: "1 día"
-        other: "%{count} días"
+        other: "{{count}} días"
       about_x_weeks:
         one: "alrededor de 1 semana"
-        other: "alrededor de %{count} semanas"
+        other: "alrededor de {{count}} semanas"
       x_weeks:
         one: "1 semana"
-        other: "%{count} semanas"
+        other: "{{count}} semanas"
       about_x_months:
         one: "alrededor de 1 mes"
-        other: "alrededor de %{count} meses"
+        other: "alrededor de {{count}} meses"
       x_months:
         one: "1 mes"
-        other: "%{count} meses"
+        other: "{{count}} meses"
       about_x_years:
         one: "alrededor de 1 año"
-        other: "alrededor de %{count} años"
+        other: "alrededor de {{count}} años"
       over_x_years:
         one: "más de 1 año"
-        other: "más de %{count} años"
+        other: "más de {{count}} años"
 
   attribute_commons: &commons
     created_at: "Creación"
@@ -1662,7 +1662,7 @@ es:
       template:
         header:
           one: "No se realizaron cambios porque se encontró un error"
-          other: "No se realizaron cambios porque se encontraron %{count} errores"
+          other: "No se realizaron cambios porque se encontraron {{count}} errores"
         # The variable :count is also available
         body: "Los siguientes problemas deben solucionarse:"
 
@@ -1676,16 +1676,16 @@ es:
         accepted: "debe ser aceptado"
         empty: "no puede estar vacío"
         blank: "no puede estar en blanco"
-        too_long: "es demasiado largo (%{count} caracteres máximo)"
-        too_short: "es demasiado corto (%{count} caracteres mínimo)"
-        wrong_length: "no tiene la longitud correcta (%{count} caracteres exactos)"
+        too_long: "es demasiado largo ({{count}} caracteres máximo)"
+        too_short: "es demasiado corto ({{count}} caracteres mínimo)"
+        wrong_length: "no tiene la longitud correcta ({{count}} caracteres exactos)"
         taken: "ya está en uso"
         not_a_number: "no es un número"
-        greater_than: "debe ser mayor que %{count}"
-        greater_than_or_equal_to: "debe ser mayor que o igual a %{count}"
-        equal_to: "debe ser igual a %{count}"
-        less_than: "debe ser menor que %{count}"
-        less_than_or_equal_to: "debe ser menor que o igual a %{count}"
+        greater_than: "debe ser mayor que {{count}}"
+        greater_than_or_equal_to: "debe ser mayor que o igual a {{count}}"
+        equal_to: "debe ser igual a {{count}}"
+        less_than: "debe ser menor que {{count}}"
+        less_than_or_equal_to: "debe ser menor que o igual a {{count}}"
         odd: "debe ser impar"
         even: "debe ser par"
         out_of_period: "debe estar dentro del periodo"
@@ -1693,11 +1693,11 @@ es:
         invalid_date: "no es una fecha válida"
         invalid_time: "no es un valor de tiempo válido"
         invalid_datetime: "no es una fecha válida"
-        before: "debe ser anterior a %{restriction}"
-        on_or_before: "debe ser anterior o igual a %{restriction}"
-        after: "debe ser posterior a %{restriction}"
-        on_or_after: "debe ser posterior o igual a %{restriction}"
-        between: "debe estar entre %{earliest} y %{latest}"
+        before: "debe ser anterior a {{restriction}}"
+        on_or_before: "debe ser anterior o igual a {{restriction}}"
+        after: "debe ser posterior a {{restriction}}"
+        on_or_after: "debe ser posterior o igual a {{restriction}}"
+        between: "debe estar entre {{earliest}} y {{latest}}"
 
       # Append your own errors here or at the model/attributes scope.
       models:
@@ -1777,10 +1777,10 @@ es:
             password:
               invalid: "debe cumplir las restricciones impuestas por el administrador"
               already_used: "ya fue utilizada con anterioridad"
-              too_short: "es demasiado corta (%{count} caracteres mínimo)"
+              too_short: "es demasiado corta ({{count}} caracteres mínimo)"
               too_soon:
                 one: "no se puede modificar, debe esperar al menos un día entre cambios"
-                other: "no se puede modificar, debe esperar al menos %{count} días entre cambios"
+                other: "no se puede modificar, debe esperar al menos {{count}} días entre cambios"
         workflow_item:
           attributes:
             start:
