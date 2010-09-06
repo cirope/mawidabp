@@ -71,7 +71,7 @@ module PDF
     alias :text_old :text
 
     def text(utf_text, options = {})
-      text_old CONVERTER_TO_ISO.iconv(utf_text), options
+      text_old utf_text.to_iso, options
     end
 
     alias :save_as_old :save_as

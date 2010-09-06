@@ -165,6 +165,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'create bundle zip' do
+    if File.exist?(@conclusion_review.absolute_bundle_zip_path)
+      FileUtils.rm @conclusion_review.absolute_bundle_zip_path
+    end
+    
     assert !File.exist?(@conclusion_review.absolute_bundle_zip_path)
 
     assert_nothing_raised(Exception) do
@@ -179,6 +183,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'bundle index pdf' do
+    if File.exist?(@conclusion_review.absolute_bundle_index_pdf_path)
+      FileUtils.rm @conclusion_review.absolute_bundle_index_pdf_path
+    end
+
     assert !File.exist?(@conclusion_review.absolute_bundle_index_pdf_path)
 
     assert_nothing_raised(Exception) do
@@ -193,6 +201,10 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   end
 
   test 'create cover pdf' do
+    if File.exist?(@conclusion_review.absolute_cover_pdf_path('test.pdf'))
+        FileUtils.rm @conclusion_review.absolute_cover_pdf_path('test.pdf')
+    end
+
     assert !File.exist?(@conclusion_review.absolute_cover_pdf_path('test.pdf'))
 
     assert_nothing_raised(Exception) do
