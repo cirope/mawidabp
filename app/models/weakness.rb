@@ -43,7 +43,7 @@ class Weakness < Finding
     risks = self.get_parameter(:admin_finding_risk_levels)
     risk = risks.detect { |r| r.last == self.risk }
 
-    risk ? risk.first : ''
+    risk.try(:first) || ''
   end
 
   def priority_text

@@ -1410,6 +1410,7 @@ es:
         users: "Responsables"
         work_papers: "Papeles de trabajo"
         finding_answers: "Respuestas"
+        rescheduled: "Reprogramada"
         <<: *commons
       finding_answer:
         answer: "Comentario"

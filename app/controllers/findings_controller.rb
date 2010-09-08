@@ -169,6 +169,7 @@ class FindingsController < ApplicationController
       ['state', Finding.human_attribute_name(:state), 10],
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
             :follow_up_date : :solution_date), 10],
+      ['rescheduled', Finding.human_attribute_name(:rescheduled), 10],
       ['risk', Weakness.human_attribute_name(:risk), 7]
     ]
     columns = {}
@@ -192,6 +193,8 @@ class FindingsController < ApplicationController
         'description' => finding.description.to_iso,
         'state' => finding.state_text.to_iso,
         'date' => (l(date, :format => :minimal).to_iso if date),
+        'rescheduled' => (finding.kind_of?(Weakness) && finding.being_implemented? ?
+            t(finding.rescheduled? ? :'label.yes' : :'label.no').to_iso : ''),
         'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness))
       }
     end

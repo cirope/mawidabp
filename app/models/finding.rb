@@ -480,11 +480,17 @@ class Finding < ActiveRecord::Base
     HashWithIndifferentAccess.new({
       :risk_asc => {
         :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.ascendant')})",
-        :field => "#{Finding.table_name}.risk ASC"
+        :field => [
+          "#{Finding.table_name}.risk ASC",
+          "#{Finding.table_name}.state ASC"
+        ].join(', ')
       },
       :risk_desc => {
         :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.descendant')})",
-        :field => "#{Finding.table_name}.risk DESC"
+        :field => [
+          "#{Finding.table_name}.risk DESC",
+          "#{Finding.table_name}.state ASC"
+        ].join(', ')
       },
       :state => {
         :name => Finding.human_attribute_name(:state),
