@@ -74,6 +74,7 @@
 
 <div id="links">
   <%= pagination_links @findings %>
+  <%= link_to t(:'label.download'), export_to_pdf_findings_path(:search => params[:search]) %>
   <div style="clear: both;"></div>
 </div>
 

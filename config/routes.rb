@@ -113,6 +113,8 @@ ActionController::Routing::Routes.draw do |map|
     :follow_up_pdf => :get,
     :auto_complete_for_user => :post,
     :auto_complete_for_finding_relation => :post
+  }, :collection => {
+    :export_to_pdf => :get
   }, :path_prefix => ':completed',
     :requirements => {:completed => /complete|incomplete/}
 

@@ -338,6 +338,32 @@ class FindingsControllerTest < ActionController::TestCase
     assert_equal 'Updated description', assigns(:finding).description
   end
 
+  test 'export list to pdf' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete'
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
+  test 'export list with search' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :search => {
+      :query => '1 2 4 y w',
+      :columns => ['description', 'review'],
+      :order => 'review'
+    }
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
   test 'follow up pdf' do
     perform_auth
     finding = Finding.find(findings(

@@ -440,7 +440,7 @@ es:
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
 
   finding:
-    index_title: "Listado de respuestas a observaciones / oportunidades de mejora"
+    index_title: "Listado de observaciones / oportunidades de mejora"
     show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
     edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
     correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
@@ -492,6 +492,12 @@ es:
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la {{class_name}} {{review_code}} del informe {{review}}"
+    pdf:
+      pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
+      filtered_by:
+        one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
+        other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"
+      sorted_by: "El listado fue ordenado por la columna {{column}}"
     important_dates:
       title: "Fechas a considerar"
       expiration_date: "Pasará al estado _\"Sin Respuesta\"_ el día *{{date}}* si ningún auditado proporciona una respuesta"
