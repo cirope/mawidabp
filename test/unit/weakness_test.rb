@@ -329,10 +329,10 @@ class WeaknessTest < ActiveSupport::TestCase
     old_date = @weakness.follow_up_date.clone
 
     assert @weakness.update_attribute(:follow_up_date, 10.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates.include?(old_date)
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
     assert @weakness.update_attribute(:follow_up_date, 15.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates.include?(old_date)
-    assert @weakness.reload.all_follow_up_dates.include?(
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(
       10.days.from_now.to_date)
     assert @weakness.rescheduled?
   end

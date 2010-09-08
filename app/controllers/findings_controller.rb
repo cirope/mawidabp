@@ -185,6 +185,18 @@ class FindingsController < ApplicationController
     findings.each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
+      being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
+      rescheduled_text = being_implemented && !finding.rescheduled? ?
+        t(:'label.no') : ''
+
+      if being_implemented && finding.rescheduled?
+        dates = []
+        finding.all_follow_up_dates[0..-2].each do |fud|
+          dates << l(fud, :format => :minimal)
+        end
+
+        rescheduled_text << dates.join("\n")
+      end
 
       column_data << {
         'review' => finding.review.to_s.to_iso,
@@ -193,8 +205,7 @@ class FindingsController < ApplicationController
         'description' => finding.description.to_iso,
         'state' => finding.state_text.to_iso,
         'date' => (l(date, :format => :minimal).to_iso if date),
-        'rescheduled' => (finding.kind_of?(Weakness) && finding.being_implemented? ?
-            t(finding.rescheduled? ? :'label.yes' : :'label.no').to_iso : ''),
+        'rescheduled' => rescheduled_text.to_iso,
         'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness))
       }
     end
