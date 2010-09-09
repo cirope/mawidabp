@@ -203,9 +203,13 @@ class FindingsController < ApplicationController
 
       if being_implemented && finding.rescheduled?
         dates = []
-        finding.all_follow_up_dates[0..-2].each do |fud|
-          dates << l(fud, :format => :minimal)
+        follow_up_dates = finding.all_follow_up_dates
+
+        if follow_up_dates.last == finding.follow_up_date
+          follow_up_dates.slice(-1)
         end
+
+        follow_up_dates.each { |fud| dates << l(fud, :format => :minimal) }
 
         rescheduled_text << dates.join("\n")
       end
