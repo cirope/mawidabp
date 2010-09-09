@@ -268,6 +268,14 @@ class ApplicationController < ActionController::Base
     [from_date, to_date].sort
   end
 
+  def extract_operator(search_term)
+    operator = SEARCH_ALLOWED_OPERATORS.detect do |op_regex, _|
+      search_term =~ op_regex
+    end
+
+    operator ? [search_term.sub(operator.first, ''), operator.last] : search_term
+  end
+
   def build_search_conditions(model, default_conditions = {})
     if params[:search] && !params[:search][:order].blank?
       @order_by = model.columns_for_sort[params[:search][:order]][:field]
@@ -291,17 +299,25 @@ class ApplicationController < ActionController::Base
 
         or_queries.each_with_index do |or_query, j|
           @columns.each do |column|
-            if or_query =~ model.get_column_regexp(column)
+            clean_or_query, operator = *extract_operator(or_query)
+
+            if clean_or_query =~ model.get_column_regexp(column) &&
+                (!operator || model.allow_search_operator?(operator, column))
               index = i * 1000 + j
               conversion_method = model.get_column_conversion_method(column)
               filter = "#{model.get_column_name(column)} "
 
-              filter << model.get_column_operator(column)
+              filter << (operator || model.get_column_operator(column))
               or_search_string << "#{filter} :#{column}_filter_#{index}"
 
+              if conversion_method.respond_to?(:call)
+                casted_value = conversion_method.call(clean_or_query.strip)
+              else
+                casted_value = clean_or_query.strip.send(conversion_method) rescue nil
+              end
+
               filters["#{column}_filter_#{index}".to_sym] =
-                model.get_column_mask(column) %
-                or_query.strip.send(conversion_method)
+                model.get_column_mask(column) % casted_value
             else
               or_search_string << ':boolean_false'
             end

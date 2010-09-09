@@ -57,6 +57,21 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
+  test 'list findings with search by date and sort' do
+    perform_auth
+    get :index, :completed => 'incomplete', :search => {
+      :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
+      :columns => ['review', 'issue_date']
+    }
+    
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 4, assigns(:findings).size
+    assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
+    assert_select '#error_body', false
+    assert_template 'findings/index'
+  end
+
   test 'list findings for user' do
     perform_auth
     user = User.find(users(:first_time_user).id)

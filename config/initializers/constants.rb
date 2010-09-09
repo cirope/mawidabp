@@ -75,6 +75,16 @@ SEARCH_AND_REGEXP = /\s*[;]+\s*|\s+AND\s+|\s+Y\s+/i
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
 # OR)
 SEARCH_OR_REGEXP = /\s*[,\+]+\s*|\s+OR\s+|\s+O\s+/i
+# Expresión regular para identificar fechas
+SEARCH_DATE_REGEXP = /^\s*\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})\s*$/
+# Operadores permitidos en la búsqueda
+SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
+    /^\s*>[^=]/ => '>',
+    /^\s*<[^=]/ => '<',
+    /^\s*>=/ => '>=',
+    /^\s*<=/ => '<=',
+    /^\s*[^<>]=/ => '='
+})
 
 # Array con los nombre de los controladores
 APP_CONTROLLERS = [

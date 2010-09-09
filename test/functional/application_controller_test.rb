@@ -142,6 +142,16 @@ class ApplicationControllerTest < ActionController::TestCase
       {:from_date => '2011-10-09', :to_date => '2000-10-09'})
   end
 
+  test 'extract operator' do
+    result = @controller.send(:extract_operator, '> test of extraction')
+
+    assert_equal ['test of extraction', '>'], result
+
+    result = @controller.send(:extract_operator, 'z> test of extraction')
+
+    assert_equal 'z> test of extraction', result
+  end
+
   test 'build search conditions' do
     search_string = []
     filters = {}

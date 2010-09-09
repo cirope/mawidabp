@@ -181,7 +181,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
 
     qualifications.empty? ? 100 :
-      (qualifications.sum / qualifications.size).round
+      (qualifications.sum / qualifications.size.to_f).round
   end
 
   def fill_control_objective_text

@@ -35,6 +35,7 @@ module FindingsHelper
   def show_review_with_conclusion_status_as_acronym(review)
     review_data = review.has_final_review? ?
       t(:'review.with_final_review') : t(:'review.without_final_review')
+    review_data << " | #{l(review.issue_date(true), :format => :long)}"
 
     content_tag(:acronym, h(review.identification), :title => review_data)
   end

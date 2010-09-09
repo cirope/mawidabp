@@ -178,7 +178,8 @@ module ApplicationHelper
   end
 
   def make_not_available_column(title)
-    content_tag :th, title, :class => (@query.blank? ? nil : :not_available)
+    content_tag :th, title, :class => (@query.blank? && @order_by.blank? ?
+        nil : :not_available)
   end
 
   # Devuelve el HTML de un vínculo para volver (history.back())

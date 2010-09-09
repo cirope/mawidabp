@@ -318,8 +318,10 @@ class Review < ActiveRecord::Base
     coi_count > 0 ? (total / coi_count.to_f).round : 100
   end
 
-  def issue_date
-    self.conclusion_final_review.try(:issue_date) || self.created_at.to_date
+  def issue_date(include_draft = false)
+    self.conclusion_final_review.try(:issue_date) ||
+      (self.conclusion_draft_review.try(:issue_date) if include_draft) ||
+      self.created_at.to_date
   end
 
   def must_be_approved?(with_notifications = true)

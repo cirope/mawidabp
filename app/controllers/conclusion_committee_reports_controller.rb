@@ -89,7 +89,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
             process_controls.each do |pc, effectiveness|
               process_controls[pc] = effectiveness.inject(0) {|t, e| t + e}
-              process_controls[pc] /= effectiveness.size
+              process_controls[pc] /= effectiveness.size.to_f
             end
 
             c_r.review.final_weaknesses.each do |w|

@@ -19,7 +19,11 @@ class FindingsController < ApplicationController
       :page => params[:page],
       :per_page => APP_LINES_PER_PAGE,
       :include => [
-        {:control_objective_item => {:review => [:period, :plan_item]}},
+        {
+          :control_objective_item => {
+            :review => [:conclusion_final_review, :period, :plan_item]
+          }
+        },
         :users
       ]
     }
@@ -125,7 +129,11 @@ class FindingsController < ApplicationController
 
     options = {
       :include => [
-        {:control_objective_item => {:review => [:period, :plan_item]}},
+        {
+          :control_objective_item => {
+            :review => [:conclusion_final_review, :period, :plan_item]
+          }
+        },
         :users
       ]
     }
@@ -167,9 +175,10 @@ class FindingsController < ApplicationController
       ['review_code', Finding.human_attribute_name(:review_code), 7],
       ['description', Finding.human_attribute_name(:description), 41],
       ['state', Finding.human_attribute_name(:state), 10],
+      ['rescheduled', t(:'weakness.previous_follow_up_dates') +
+          " (#{Finding.human_attribute_name(:rescheduled)})", 10],
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
             :follow_up_date : :solution_date), 10],
-      ['rescheduled', Finding.human_attribute_name(:rescheduled), 10],
       ['risk', Weakness.human_attribute_name(:risk), 7]
     ]
     columns = {}
@@ -185,6 +194,9 @@ class FindingsController < ApplicationController
     findings.each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
+      date_text = l(date, :format => :minimal).to_iso if date
+      stale = finding.kind_of?(Weakness) && finding.being_implemented? &&
+        finding.follow_up_date < Date.today
       being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
       rescheduled_text = being_implemented && !finding.rescheduled? ?
         t(:'label.no') : ''
@@ -204,8 +216,8 @@ class FindingsController < ApplicationController
         'review_code' => finding.review_code.to_iso,
         'description' => finding.description.to_iso,
         'state' => finding.state_text.to_iso,
-        'date' => (l(date, :format => :minimal).to_iso if date),
         'rescheduled' => rescheduled_text.to_iso,
+        'date' => stale ? "<b>#{date_text}</b>" : date_text,
         'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness))
       }
     end
@@ -231,15 +243,16 @@ class FindingsController < ApplicationController
       end
     end
 
-    unless @columns.blank? || @query.blank?
+    unless (@columns - ['issue_date']).blank? || @query.blank?
       pdf.move_pointer PDF_FONT_SIZE
-      columns = @columns.map do |c|
+      columns = (@columns - ['issue_date']).map do |c|
         "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
       end
 
       pdf.text t(:'finding.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence, :count => @columns.size),
+        :columns => columns.to_sentence,
+        :count => (@columns - ['issue_date']).size),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 

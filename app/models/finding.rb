@@ -4,6 +4,13 @@ class Finding < ActiveRecord::Base
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :issue_date => {
+      :column => "#{ConclusionReview.table_name}.issue_date",
+      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
+      :conversion_method => lambda {
+        |value| ValidatesTimeliness::Parser.parse(value, :date)
+      }, :regexp => SEARCH_DATE_REGEXP
+    },
     :review => {
       :column => "LOWER(#{Review.table_name}.identification)",
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,

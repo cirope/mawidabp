@@ -41,6 +41,16 @@ class ActiveRecord::Base
   def self.get_column_regexp(column)
     self::COLUMNS_FOR_SEARCH[column][:regexp]
   end
+
+  def self.allow_search_operator?(operator, column)
+    operators = self.get_column_operator(column)
+
+    if operators.kind_of?(Array)
+      operators.include?(operator)
+    else
+      operators == operator
+    end
+  end
 end
 
 # Reescribe el comportamiento por defecto del etiquetado de los campos con
