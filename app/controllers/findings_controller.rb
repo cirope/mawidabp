@@ -173,7 +173,7 @@ class FindingsController < ApplicationController
       ['review', Review.human_name, 15],
       ['project', PlanItem.human_attribute_name(:project), 10],
       ['review_code', Finding.human_attribute_name(:review_code), 7],
-      ['description', Finding.human_attribute_name(:description), 41],
+      ['description', Finding.human_attribute_name(:description), 31],
       ['state', Finding.human_attribute_name(:state), 10],
       ['rescheduled', t(:'weakness.previous_follow_up_dates') +
           " (#{Finding.human_attribute_name(:rescheduled)})", 10],

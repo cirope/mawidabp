@@ -81,8 +81,8 @@ SEARCH_DATE_REGEXP = /^\s*\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})\s*$/
 SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*>[^=]/ => '>',
     /^\s*<[^=]/ => '<',
-    /^\s*>=/ => '>=',
-    /^\s*<=/ => '<=',
+    /^\s*(>=|desde|since)/i => '>=',
+    /^\s*(<=|hasta|to)/i => '<=',
     /^\s*[^<>]=/ => '='
 })
 
