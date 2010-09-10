@@ -314,6 +314,27 @@ class ConclusionFinalReviewsController < ApplicationController
       }
     end
 
+    unless @columns.blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      pointer_moved = true
+      filter_columns = @columns.map do |c|
+        column_name = column_order.detect { |co| co[0] == c }
+        "<b>#{column_name[1]}</b>"
+      end
+
+      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence, :count => @columns.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    unless @order_by_column_name.blank?
+      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
+      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
+        :column => "<b>#{@order_by_column_name}</b>"),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
     pdf.move_pointer PDF_FONT_SIZE
 
     unless column_data.blank?
@@ -332,25 +353,6 @@ class ConclusionFinalReviewsController < ApplicationController
         table.orientation = :right
         table.render_on pdf
       end
-    end
-
-    unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      columns = @columns.map do |c|
-        column_name = column_order.detect { |co| co[0] == c }
-        "<b>#{column_name[1]}</b>"
-      end
-
-      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
-    end
-
-    unless @order_by_column_name.blank?
-      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
-        :column => "<b>#{@order_by_column_name}</b>"),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf_name = t :'conclusion_final_review.pdf.pdf_name'

@@ -193,6 +193,7 @@ class FindingsController < ApplicationController
 
     unless (@columns - ['issue_date']).blank? || @query.blank?
       pdf.move_pointer PDF_FONT_SIZE
+      pointer_moved = true
       filter_columns = (@columns - ['issue_date']).map do |c|
         "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
       end
@@ -205,6 +206,7 @@ class FindingsController < ApplicationController
     end
 
     unless @order_by_column_name.blank?
+      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
       pdf.text t(:'finding.pdf.sorted_by',
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round

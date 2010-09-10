@@ -306,8 +306,10 @@ class ApplicationController < ActionController::Base
               index = i * 1000 + j
               conversion_method = model.get_column_conversion_method(column)
               filter = "#{model.get_column_name(column)} "
+              operator ||= model.get_column_operator(column).kind_of?(Array) ?
+                '=' : model.get_column_operator(column)
 
-              filter << (operator || model.get_column_operator(column))
+              filter << operator
               or_search_string << "#{filter} :#{column}_filter_#{index}"
 
               if conversion_method.respond_to?(:call)

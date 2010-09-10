@@ -642,6 +642,18 @@ class UsersController < ApplicationController
       }
     end
 
+    unless @columns.blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      filter_columns = @columns.map do |c|
+        "<b>#{User.human_attribute_name(c)}</b>"
+      end
+
+      pdf.text t(:'user.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence, :count => @columns.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
     pdf.move_pointer PDF_FONT_SIZE
 
     unless column_data.blank?
@@ -660,16 +672,6 @@ class UsersController < ApplicationController
         table.orientation = :right
         table.render_on pdf
       end
-    end
-
-    unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      columns = @columns.map {|c| "<b>#{User.human_attribute_name(c)}</b>"}
-
-      pdf.text t(:'user.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf_name = t :'user.pdf.pdf_name'
