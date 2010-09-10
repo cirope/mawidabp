@@ -32,7 +32,11 @@ class FindingsController < ApplicationController
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    unless @auth_user.committee?
+    if @auth_user.committee?
+      if params[:user_id]
+        default_conditions[User.table_name] = {:id => params[:user_id]}
+      end
+    else
       self_and_descendants_ids = @self_and_descendants.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
