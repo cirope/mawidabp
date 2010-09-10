@@ -191,6 +191,25 @@ class FindingsController < ApplicationController
       end
     end
 
+    unless (@columns - ['issue_date']).blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      filter_columns = (@columns - ['issue_date']).map do |c|
+        "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
+      end
+
+      pdf.text t(:'finding.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence,
+        :count => (@columns - ['issue_date']).size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    unless @order_by_column_name.blank?
+      pdf.text t(:'finding.pdf.sorted_by',
+        :column => "<b>#{@order_by_column_name}</b>"),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
     findings.each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
@@ -245,25 +264,6 @@ class FindingsController < ApplicationController
         table.orientation = :right
         table.render_on pdf
       end
-    end
-
-    unless (@columns - ['issue_date']).blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      columns = (@columns - ['issue_date']).map do |c|
-        "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
-      end
-
-      pdf.text t(:'finding.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence,
-        :count => (@columns - ['issue_date']).size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
-    end
-
-    unless @order_by_column_name.blank?
-      pdf.text t(:'finding.pdf.sorted_by',
-        :column => "<b>#{@order_by_column_name}</b>"),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf_name = t :'finding.pdf.pdf_name'
