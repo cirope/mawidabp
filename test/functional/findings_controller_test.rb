@@ -364,6 +364,17 @@ class FindingsControllerTest < ActionController::TestCase
       I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
   end
 
+  test 'export detailed list to pdf' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :include_details => 1
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
   test 'export list with search' do
     perform_auth
 
@@ -373,6 +384,22 @@ class FindingsControllerTest < ActionController::TestCase
       :columns => ['description', 'review'],
       :order => 'review'
     }
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
+  test 'export detailed list with search' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
+        :search => {
+          :query => '1 2 4 y w',
+          :columns => ['description', 'review'],
+          :order => 'review'
+        }
     end
 
     assert_redirected_to PDF::Writer.relative_path(

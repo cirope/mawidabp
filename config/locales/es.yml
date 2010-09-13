@@ -445,6 +445,8 @@ es:
     edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
     correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
     stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
+    download: "Descargar listado general"
+    download_detailed: "Descargar listado detallado"
     related_users: "Usuarios relacionados"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relaciones con otras observaciones"

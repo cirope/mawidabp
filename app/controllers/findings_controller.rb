@@ -129,8 +129,7 @@ class FindingsController < ApplicationController
   #
   # * GET /findings/export_to_pdf
   def export_to_pdf
-    self_and_descendants = @auth_user.descendants + [@auth_user]
-
+    detailed = !params[:include_details].blank?
     options = {
       :include => [
         {
@@ -146,7 +145,12 @@ class FindingsController < ApplicationController
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    unless @auth_user.committee?
+    if @auth_user.committee?
+      if params[:user_id]
+        default_conditions[User.table_name] = {:id => params[:user_id]}
+      end
+    else
+      self_and_descendants = @auth_user.descendants + [@auth_user]
       self_and_descendants_ids = self_and_descendants.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
@@ -174,19 +178,29 @@ class FindingsController < ApplicationController
     pdf.add_title t(:'finding.index_title')
 
     column_order = [
-      ['review', Review.human_name, 15],
+      ['review', Review.human_name, 10],
       ['project', PlanItem.human_attribute_name(:project), 10],
       ['review_code', Finding.human_attribute_name(:review_code), 7],
-      ['description', Finding.human_attribute_name(:description), 31],
+      ['description', Finding.human_attribute_name(:description),
+        detailed ? 15 : 37],
       ['state', Finding.human_attribute_name(:state), 10],
       ['rescheduled', t(:'weakness.previous_follow_up_dates') +
           " (#{Finding.human_attribute_name(:rescheduled)})", 10],
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
             :follow_up_date : :solution_date), 10],
-      ['risk', Weakness.human_attribute_name(:risk), 7]
+      ['risk', Weakness.human_attribute_name(:risk), 6]
     ]
     columns = {}
     column_data = []
+
+    if detailed
+      column_order << [
+        'audit_comments', Finding.human_attribute_name(:audit_comments), 10
+      ]
+      column_order << [
+        'answer', Finding.human_attribute_name(:answer), 12
+      ]
+    end
 
     column_order.each do |col_id, col_name, col_with|
       columns[col_id] = PDF::SimpleTable::Column.new(col_id) do |c|
@@ -247,7 +261,9 @@ class FindingsController < ApplicationController
         'state' => finding.state_text.to_iso,
         'rescheduled' => rescheduled_text.to_iso,
         'date' => stale ? "<b>#{date_text}</b>" : date_text,
-        'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness))
+        'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness)),
+        'audit_comments' => (finding.audit_comments.try(:to_iso) if detailed),
+        'answer' => (finding.answer.try(:to_iso) if detailed)
       }
     end
 

@@ -7,7 +7,7 @@
             <td style="padding-right: 1em; width: 90%;">
               <%= label_tag :user_id_select, User.human_name, :class => :inline %>
               <%= select nil, :user_id,
-                sort_options_array(@self_and_descendants.map { |d| [d.full_name, d.id.to_s] }),
+                sort_options_array(@self_and_descendants.map { |d| [d.full_name_with_function, d.id.to_s] }),
                 {:prompt => true, :selected => params[:user_id]},
                 {:name => :user_id, :id => :user_id_select, :class => :inline_item} %>
             </td>
@@ -74,7 +74,9 @@
 
 <div id="links">
   <%= pagination_links @findings %>
-  <%= link_to t(:'label.download'), export_to_pdf_findings_path(:search => params[:search]) %>
+  <%= link_to t(:'finding.download'), export_to_pdf_findings_path(:search => params[:search]) %> |
+  <%= link_to t(:'finding.download_detailed'),
+    export_to_pdf_findings_path(:search => params[:search], :include_details => 1) %>
   <div style="clear: both;"></div>
 </div>
 
