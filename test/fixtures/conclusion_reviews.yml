@@ -37,7 +37,7 @@ conclusion_past_draft_review:
 conclusion_with_conclusion_draft_review:
   type: ConclusionDraftReview
   review: review_with_conclusion
-  issue_date: <%= 2.months.ago.to_date.to_s(:db) %>
+  issue_date: <%= 4.months.ago.to_date.to_s(:db) %>
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true

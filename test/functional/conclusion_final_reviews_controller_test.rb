@@ -50,12 +50,39 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_final_reviews/index'
   end
 
+  test 'list conclusion_final_reviews with search by date and sort' do
+    perform_auth
+    get :index, :search => {
+      :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:conclusion_final_reviews)
+    assert_equal 2, assigns(:conclusion_final_reviews).size
+    assert assigns(:conclusion_final_reviews).all? {|cfr| cfr.issue_date > 3.months.ago.to_date}
+    assert_select '#error_body', false
+    assert_template 'conclusion_final_reviews/index'
+  end
+
   test 'edit conclusion_final_reviews when search match only one result' do
     perform_auth
     get :index, :search => {
       :query => '1 2 3',
       :columns => ['identification', 'project']
     }
+    assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
+    assert_not_nil assigns(:conclusion_final_reviews)
+    assert_equal 1, assigns(:conclusion_final_reviews).size
+  end
+
+  test 'edit conclusion_final_reviews when search by date match only one result' do
+    perform_auth
+    get :index, :search => {
+      :query => "> #{I18n.l(5.days.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
     assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 1, assigns(:conclusion_final_reviews).size

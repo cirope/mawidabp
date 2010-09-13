@@ -49,6 +49,21 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_draft_reviews/index'
   end
 
+  test 'list conclusion_draft_reviews with search by date and sort' do
+    perform_auth
+    get :index, :search => {
+      :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:conclusion_draft_reviews)
+    assert_equal 2, assigns(:conclusion_draft_reviews).size
+    assert assigns(:conclusion_draft_reviews).all? {|cdr| cdr.issue_date > 3.months.ago.to_date}
+    assert_select '#error_body', false
+    assert_template 'conclusion_draft_reviews/index'
+  end
+
   test 'edit conclusion_draft_reviews when search match only one result' do
     perform_auth
     get :index, :search => {
@@ -56,6 +71,19 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       :columns => ['identification', 'project']
     }
     assert_redirected_to edit_conclusion_draft_review_path(conclusion_reviews(:conclusion_with_conclusion_draft_review))
+    assert_not_nil assigns(:conclusion_draft_reviews)
+    assert_equal 1, assigns(:conclusion_draft_reviews).size
+  end
+
+  test 'edit conclusion_draft_reviews when search by date match only one result' do
+    perform_auth
+    get :index, :search => {
+      :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
+    assert_redirected_to edit_conclusion_draft_review_path(conclusion_reviews(
+        :conclusion_with_conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 1, assigns(:conclusion_draft_reviews).size
   end

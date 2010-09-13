@@ -1,4 +1,13 @@
 class ConclusionFinalReview < ConclusionReview
+  # Constantes
+  COLUMNS_FOR_SEARCH[:close_date] = {
+    :column => "#{table_name}.close_date",
+      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
+      :conversion_method => lambda {
+        |value| ValidatesTimeliness::Parser.parse(value, :date)
+      }, :regexp => SEARCH_DATE_REGEXP
+  }
+
   # Named scopes
   named_scope :list_all_by_date, lambda { |from_date, to_date|
     {
@@ -60,6 +69,15 @@ class ConclusionFinalReview < ConclusionReview
 
   # Relaciones
   has_one :conclusion_draft_review, :through => :review
+
+  def self.columns_for_sort
+    ConclusionReview.columns_for_sort.dup.merge(
+      :close_date => {
+        :name => ConclusionReview.human_attribute_name(:close_date),
+        :field => "#{ConclusionReview.table_name}.close_date ASC"
+      }
+    )
+  end
 
   def initialize(attributes = nil, import_from_draft = true)
     super(attributes)

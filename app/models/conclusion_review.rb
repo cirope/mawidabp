@@ -9,6 +9,13 @@ class ConclusionReview < ActiveRecord::Base
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :issue_date => {
+      :column => "#{table_name}.issue_date",
+      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
+      :conversion_method => lambda {
+        |value| ValidatesTimeliness::Parser.parse(value, :date)
+      }, :regexp => SEARCH_DATE_REGEXP
+    },
     :period => {
       :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/

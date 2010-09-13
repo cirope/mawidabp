@@ -288,11 +288,12 @@ class ConclusionFinalReviewsController < ApplicationController
     pdf.add_title t(:'conclusion_final_review.index_title')
 
     column_order = [
-      ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['period', Review.human_attribute_name(:period_id), 10],
       ['identification', Review.human_attribute_name(:identification), 10],
-      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 35],
-      ['project', PlanItem.human_attribute_name(:project), 35]
+      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 30],
+      ['project', PlanItem.human_attribute_name(:project), 30],
+      ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
+      ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
     ]
     columns = {}
     column_data = []
@@ -306,11 +307,12 @@ class ConclusionFinalReviewsController < ApplicationController
 
     conclusion_final_reviews.each do |cfr|
       column_data << {
-        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
         'period' => cfr.review.period.number.to_s.to_iso,
         'identification' => cfr.review.identification.to_iso,
         'business_unit' => cfr.review.plan_item.business_unit.name.to_iso,
-        'project' => cfr.review.plan_item.project.to_iso
+        'project' => cfr.review.plan_item.project.to_iso,
+        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
+        'close_date' => (cfr.close_date ? l(cfr.close_date, :format => :minimal) : '').to_iso,
       }
     end
 
