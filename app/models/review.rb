@@ -308,10 +308,10 @@ class Review < ActiveRecord::Base
   end
 
   def effectiveness
-    coi_count = self.control_objective_items.inject(0) do |acc, coi|
+    coi_count = self.control_objective_items.inject(0.0) do |acc, coi|
       acc + (coi.relevance || 0)
     end
-    total = self.control_objective_items.inject(0) do |acc, coi|
+    total = self.control_objective_items.inject(0.0) do |acc, coi|
       acc + coi.effectiveness * (coi.relevance || 0)
     end
 
