@@ -460,9 +460,6 @@ class Finding < ActiveRecord::Base
     :after_remove => :user_assignment_removed
   has_many :users, :through => :finding_user_assignments, :uniq => true,
     :order => 'last_name ASC, name ASC'
-#  has_and_belongs_to_many :users, :validate => false,
-#    :order => 'last_name ASC, name ASC', :after_add => :user_changed,
-#    :after_remove => :user_changed
   
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true

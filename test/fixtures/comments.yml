@@ -1,7 +1,7 @@
 comment_one:
   comment: Comment one
   commentable_type: Finding
-  commentable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_weakness_notify) %>
+  commentable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented) %>
   user: administrator_user
 
 comment_two:

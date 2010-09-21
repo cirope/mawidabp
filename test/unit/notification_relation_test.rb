@@ -28,7 +28,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
     assert_difference 'NotificationRelation.count' do
       @notification_relation = NotificationRelation.create(
         :model => Weakness.find(findings(
-            :bcra_A4609_security_management_responsible_dependency_weakness_notify).id),
+            :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id),
         :notification => Notification.find(notifications(
             :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
       )

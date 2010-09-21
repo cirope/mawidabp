@@ -137,7 +137,7 @@ class WeaknessTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     another_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @weakness.review_code = another_weakness.review_code
     assert @weakness.invalid?
     assert_equal 1, @weakness.errors.count
@@ -281,7 +281,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'work papers can be added to uneditable control objectives' do
     uneditable_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
     assert_no_difference 'Weakness.count' do
       assert_difference 'WorkPaper.count' do

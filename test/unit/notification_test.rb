@@ -7,14 +7,14 @@ class NotificationTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @notification = Notification.find(
-      notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed).id)
+      notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).id)
     GlobalModelConfig.current_organization_id = organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Notification, @notification
-    fixture_notification = notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed)
+    fixture_notification = notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed)
     assert_equal fixture_notification.status, @notification.status
     assert_equal fixture_notification.notes, @notification.notes
     assert_equal fixture_notification.confirmation_hash,

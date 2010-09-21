@@ -2,7 +2,7 @@ require 'test_helper'
 
 # Clase para probar el modelo "User"
 class UserTest < ActiveSupport::TestCase
-  fixtures :users, :roles, :privileges
+  fixtures :users, :roles, :privileges, :findings, :finding_user_assignments
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
@@ -559,15 +559,12 @@ class UserTest < ActiveSupport::TestCase
     assert !Finding.for_notification.empty?
 
     assert_difference 'Finding.for_notification.size' do
-      finding = user.findings.detect do |f|
-        f.state != Finding::STATUS[:notify] && !f.is_in_a_final_review?
-      end
+      finding = Finding.find(findings(
+          :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
       new_finding = finding.clone
       new_finding.state = Finding::STATUS[:notify]
-      new_finding.solution_date = new_finding.follow_up_date = nil
-      new_finding.review_code =
-        "#{finding.kind_of?(Weakness) ? 'O' : 'OM'}#{rand(999999999999999)}"
+      new_finding.review_code = "O1#{rand(999999999999999)}"
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
           fua.attributes.dup.merge(:finding_id => nil)

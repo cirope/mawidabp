@@ -71,9 +71,10 @@ class User < ActiveRecord::Base
     }
   }
   named_scope :all_with_findings_for_notification,
-    :include => :findings,
-    :conditions =>
-      {:findings => {:state => Finding::STATUS[:notify], :final => false}},
+    :include => {:finding_user_assignments => :finding},
+    :conditions => {
+      Finding.table_name => {:state => Finding::STATUS[:notify], :final => false}
+    },
     :order =>
       ["#{table_name}.last_name ASC", "#{table_name}.name ASC"].join(', ')
 

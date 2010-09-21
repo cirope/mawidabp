@@ -8,7 +8,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   def setup
     @finding_user_assignment = FindingUserAssignment.find(
       finding_user_assignments(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify_administrator_user).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user).id)
     GlobalModelConfig.current_organization_id =
       organizations(:default_organization).id
   end
@@ -16,7 +16,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     fixture_assignment = finding_user_assignments(
-      :bcra_A4609_security_management_responsible_dependency_weakness_notify_administrator_user)
+      :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user)
     assert_kind_of FindingUserAssignment, @finding_user_assignment
     assert_equal fixture_assignment.user_id, @finding_user_assignment.user_id
     assert_equal fixture_assignment.finding_id,
@@ -30,7 +30,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
         FindingUserAssignment.create(
           :user => users(:expired_user),
           :finding_id => findings(
-            :bcra_A4609_security_management_responsible_dependency_weakness_notify).id
+            :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
         )
     end
   end
@@ -50,7 +50,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
   # Prueba de eliminación de una asignación de usuario
   test 'delete' do
     finding_user_assignment = FindingUserAssignment.find(finding_user_assignments(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify_administrator_user).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user).id)
 
     assert_difference 'FindingUserAssignment.count', -1 do
       finding_user_assignment.destroy

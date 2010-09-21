@@ -129,7 +129,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'validates special blank attributes' do
     # En estado "En proceso de implementación"
     @finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @finding.follow_up_date = nil
     @finding.answer = '   '
     assert @finding.invalid?
@@ -167,7 +167,7 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     another_finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @finding.review_code = another_finding.review_code
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
@@ -316,7 +316,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'stale function' do
     @finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
     assert !@finding.stale?
 
@@ -857,7 +857,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'work papers can be added to uneditable control objectives' do
     uneditable_finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
     assert_no_difference 'Finding.count' do
       assert_difference 'WorkPaper.count' do

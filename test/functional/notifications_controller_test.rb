@@ -39,7 +39,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'show notification' do
     perform_auth
     get :show, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed).confirmation_hash
+      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_select '#error_body', false
@@ -49,7 +49,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'edit notification' do
     perform_auth
     get :edit, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed).confirmation_hash
+      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_select '#error_body', false
@@ -61,7 +61,7 @@ class NotificationsControllerTest < ActionController::TestCase
       perform_auth
       put :update, {
         :id => notifications(
-          :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed).confirmation_hash,
+          :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash,
         :notification => {
           :notes => 'Updated notes'
         }
