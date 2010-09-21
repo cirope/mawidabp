@@ -432,6 +432,7 @@ class UserTest < ActiveSupport::TestCase
       {:with_reviews => true, :with_findings => true})
 
     assert auditor_user.reload.findings.all_for_reallocation.empty?
+    
     auditor_user.organization_roles.each {|o_r| o_r.role = roles(:audited_role)}
 
     assert auditor_user.save
@@ -564,8 +565,14 @@ class UserTest < ActiveSupport::TestCase
 
       new_finding = finding.clone
       new_finding.state = Finding::STATUS[:notify]
-      new_finding.review_code = "O#{rand(999999999999999)}"
-      new_finding.user_ids = finding.user_ids
+      new_finding.solution_date = new_finding.follow_up_date = nil
+      new_finding.review_code =
+        "#{finding.kind_of?(Weakness) ? 'O' : 'OM'}#{rand(999999999999999)}"
+      new_finding.finding_user_assignments.build(
+        finding.finding_user_assignments.map do |fua|
+          fua.attributes.dup.merge(:finding_id => nil)
+        end
+      )
       
       assert new_finding.save, new_finding.errors.full_messages.join('; ')
     end

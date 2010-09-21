@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100722163057) do
+ActiveRecord::Schema.define(:version => 20100920114555) do
 
   create_table "backups", :force => true do |t|
     t.integer  "backup_type"
@@ -200,6 +200,15 @@ ActiveRecord::Schema.define(:version => 20100722163057) do
   add_index "finding_relations", ["finding_id"], :name => "index_finding_relations_on_finding_id"
   add_index "finding_relations", ["related_finding_id"], :name => "index_finding_relations_on_related_finding_id"
 
+  create_table "finding_user_assignments", :force => true do |t|
+    t.integer  "finding_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "finding_user_assignments", ["finding_id", "user_id"], :name => "index_finding_user_assignments_on_finding_id_and_user_id"
+
   create_table "findings", :force => true do |t|
     t.string   "type"
     t.integer  "control_objective_item_id"
@@ -232,13 +241,6 @@ ActiveRecord::Schema.define(:version => 20100722163057) do
   add_index "findings", ["parent_id"], :name => "index_findings_on_parent_id"
   add_index "findings", ["state"], :name => "index_findings_on_state"
   add_index "findings", ["type"], :name => "index_findings_on_type"
-
-  create_table "findings_users", :id => false, :force => true do |t|
-    t.integer "finding_id"
-    t.integer "user_id"
-  end
-
-  add_index "findings_users", ["finding_id", "user_id"], :name => "index_findings_users_on_finding_id_and_user_id"
 
   create_table "groups", :force => true do |t|
     t.string   "name"

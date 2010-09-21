@@ -49,8 +49,14 @@ class WeaknessTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id },
+          :new_3 => { :user_id => users(:auditor_user).id },
+          :new_4 => { :user_id => users(:manager_user).id },
+          :new_5 => { :user_id => users(:supervisor_user).id },
+          :new_6 => { :user_id => users(:administrator_user).id }
+        }
       )
 
       assert @weakness.save, @weakness.errors.full_messages.join('; ')
@@ -75,7 +81,10 @@ class WeaknessTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => 2.days.from_now.to_date,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id }
+        }
       )
     end
   end
@@ -244,14 +253,17 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.users.delete_if { |user| user.can_act_as_audited? }
+    @weakness.finding_user_assignments.delete_if do |fua|
+      fua.user.can_act_as_audited?
+    end
+
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
     assert_equal I18n.t(:'weakness.errors.without_audited'),
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.users.delete_if { |user| user.auditor? }
+    @weakness.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
     assert_equal I18n.t(:'weakness.errors.without_auditor'),

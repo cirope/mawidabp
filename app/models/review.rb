@@ -72,7 +72,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NOT NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   named_scope :list_without_final_review, lambda {
@@ -84,7 +85,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   named_scope :list_without_draft_review, lambda {
@@ -96,7 +98,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   named_scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|

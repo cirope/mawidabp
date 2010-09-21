@@ -7,9 +7,8 @@
 <% form_for @oportunity, :html => {:multipart => true} do |f| -%>
   <% content_for :js_extra do -%>
     <% unless readonly -%>
-    <%= "var user='#{escape_javascript(render(:partial => 'user',
-        :object => User.new, :locals => {:f => f, :is_dynamic => true,
-        :readonly => readonly}))}';" %>
+      <%= "var finding_user_assignment='#{generate_template(f,
+          :finding_user_assignments, :locals => {:readonly => readonly})}';" %>
     <% end -%>
     <% unless frozen -%>
     <%= "var lastWorkPaperCode = '#{next_oportunity_work_paper_code(
@@ -129,9 +128,11 @@
     <tbody>
       <tr>
         <td style="width: 52%; padding-top: 1em;">
-          <div id="users">
-            <%= render :partial => 'user', :collection => @oportunity.users,
-              :locals => {:f => f, :is_dynamic => false, :readonly => readonly} %>
+          <div id="finding_user_assignments">
+            <% f.fields_for :finding_user_assignments do |fua_f| -%>
+              <%= render :partial => 'finding_user_assignment', :locals =>
+                {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
+            <% end -%>
           </div>
         </td>
         <td style="width: 48%; padding-top: 1em;">
@@ -166,8 +167,9 @@
       </tr>
       <tr>
         <td>
-          <%= link_to_unless readonly, t(:'finding.add_user'), '#user',
-            :class => :add_nested_item, :rel => :users %>
+          <%= link_to_unless readonly, t(:'finding.add_user'),
+            '#finding_user_assignment', :class => :add_nested_item,
+            :rel => :finding_user_assignments %>
         </td>
         <td>
           <%= link_to_unless frozen, t(:'finding.add_work_paper'),

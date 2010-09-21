@@ -49,8 +49,14 @@ class FindingTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id },
+          :new_3 => { :user_id => users(:auditor_user).id },
+          :new_4 => { :user_id => users(:manager_user).id },
+          :new_5 => { :user_id => users(:supervisor_user).id },
+          :new_6 => { :user_id => users(:administrator_user).id }
+        }
       )
 
       assert @finding.save, @finding.errors.full_messages.join('; ')
@@ -74,9 +80,7 @@ class FindingTest < ActiveSupport::TestCase
         :effect => 'New effect',
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
-        :follow_up_date => 2.days.from_now.to_date,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :follow_up_date => 2.days.from_now.to_date
       )
     end
   end
@@ -273,39 +277,41 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates audited users' do
-    @finding.users.delete_if {|u| u.can_act_as_audited?}
+    @finding.finding_user_assignments.delete_if do |fua|
+      fua.user.can_act_as_audited?
+    end
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+    assert_equal error_message_from_model(@finding, :finding_user_assignments,
+      :invalid), @finding.errors.on(:finding_user_assignments)
   end
 
   test 'validates auditor users' do
-    @finding.users.delete_if { |u| u.auditor? }
+    @finding.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+    assert_equal error_message_from_model(@finding, :finding_user_assignments,
+      :invalid), @finding.errors.on(:finding_user_assignments)
   end
 
   test 'validates supervisor users' do
-    @finding.users.delete_if { |u| u.supervisor? }
+    @finding.finding_user_assignments.delete_if { |fua| fua.user.supervisor? }
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+    assert_equal error_message_from_model(@finding, :finding_user_assignments,
+      :invalid), @finding.errors.on(:finding_user_assignments)
   end
 
   test 'validates manager users' do
-    @finding.users.delete_if { |u| u.manager? }
+    @finding.finding_user_assignments.delete_if { |fua| fua.user.manager? }
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :users, :invalid),
-      @finding.errors.on(:users)
+    assert_equal error_message_from_model(@finding, :finding_user_assignments,
+      :invalid), @finding.errors.on(:finding_user_assignments)
   end
 
   test 'stale function' do
@@ -481,8 +487,8 @@ class FindingTest < ActiveSupport::TestCase
   test 'notify changes to users' do
     new_user = User.find(users(:administrator_second_user).id)
 
-    assert !@finding.users.blank?
-    assert !@finding.users.include?(new_user)
+    assert !@finding.finding_user_assignments.blank?
+    assert !@finding.finding_user_assignments.detect{|fua| fua.user == new_user}
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -492,8 +498,9 @@ class FindingTest < ActiveSupport::TestCase
       assert @finding.update_attributes(:description => 'Updated description')
     end
 
-    @finding.users.delete @finding.users.first
-    @finding.users << new_user
+    @finding.finding_user_assignments.delete(
+      @finding.finding_user_assignments.first)
+    @finding.finding_user_assignments.build(:user => new_user)
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.save
@@ -501,13 +508,14 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify deletion of user' do
-    assert !@finding.users.blank?
+    assert !@finding.finding_user_assignments.blank?
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    @finding.users.delete @finding.users.first
+    @finding.finding_user_assignments.delete(
+      @finding.finding_user_assignments.first)
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.save
@@ -515,18 +523,23 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'has auditor and has audited' do
-    assert @finding.users.any? { |u| u.can_act_as_audited? }
-    assert @finding.users.any? { |u| u.auditor? }
+    assert(@finding.finding_user_assignments.any? do |fua|
+      fua.user.can_act_as_audited?
+    end)
+
+    assert @finding.finding_user_assignments.any? { |fua| fua.user.auditor? }
 
     assert @finding.has_auditor?
     assert @finding.has_audited?
 
-    @finding.users.delete_if { |u| u.can_act_as_audited? }
+    @finding.finding_user_assignments.delete_if do |fua|
+      fua.user.can_act_as_audited?
+    end
 
     assert @finding.has_auditor?
     assert !@finding.has_audited?
 
-    @finding.reload.users.delete_if { |u| u.auditor? }
+    @finding.reload.finding_user_assignments.delete_if {|fua| fua.user.auditor?}
 
     assert !@finding.has_auditor?
     assert @finding.has_audited?
@@ -690,7 +703,7 @@ class FindingTest < ActiveSupport::TestCase
     review_codes_by_user = {}
 
     Finding.next_to_expire.each do |finding|
-      finding.users.each do |user|
+      finding.finding_user_assignments.map(&:user).each do |user|
         assert !user.findings.next_to_expire.empty?
         review_codes_by_user[user] ||= []
         review_codes_by_user[user] |=
@@ -727,7 +740,9 @@ class FindingTest < ActiveSupport::TestCase
     findings = Finding.confirmed_and_stale.select do |finding|
       !finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
     end
-    users = findings.inject([]) { |u, finding| u | finding.users }
+    users = findings.inject([]) do |u, finding|
+      u | finding.finding_user_assignments.map(&:user)
+    end
 
     review_codes_by_user = {}
 

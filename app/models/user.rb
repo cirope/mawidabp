@@ -175,7 +175,8 @@ class User < ActiveRecord::Base
     :order => 'organization_id ASC', :after_add => :mark_roles_as_changed,
     :after_remove => :mark_roles_as_changed
   has_many :organizations, :through => :organization_roles, :uniq => true
-  has_and_belongs_to_many :findings, :readonly => true
+  has_many :finding_user_assignments
+  has_many :findings, :through => :finding_user_assignments, :uniq => true
 
   accepts_nested_attributes_for :organization_roles, :allow_destroy => true,
     :reject_if => proc { |attributes|
@@ -604,8 +605,14 @@ class User < ActiveRecord::Base
         if options[:with_findings]
           self.findings.all_for_reallocation.each do |f|
             f.avoid_changes_notification = true
-            f.users << other unless f.users.include?(other)
-            f.users.delete self
+
+            unless f.users.include?(other)
+              f.finding_user_assignments.create(:user => other)
+            end
+
+            f.finding_user_assignments.delete(
+              f.finding_user_assignments.detect { |fua| fua.user == self })
+
             unconfirmed_findings << f if f.unconfirmed?
 
             if f.invalid?

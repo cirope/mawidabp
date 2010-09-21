@@ -123,7 +123,6 @@ class WeaknessesController < ApplicationController
   def update
     @title = t :'weakness.edit_title'
     @weakness = find_with_organization(params[:id])
-    params[:weakness][:user_ids] ||= [] unless @weakness.is_in_a_final_review?
 
     respond_to do |format|
       Weakness.transaction do

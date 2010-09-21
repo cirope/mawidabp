@@ -101,9 +101,10 @@ class FindingsController < ApplicationController
   def update
     @title = t :'finding.edit_title'
     @finding = find_with_organization(params[:id])
-    params[:finding][:user_ids] ||= [] unless @finding.is_in_a_final_review?
     # Los auditados no pueden modificar desde observaciones las asociaciones
-    params[:finding].delete :user_ids if @auth_user.can_act_as_audited?
+    if @auth_user.can_act_as_audited?
+      params[:finding].delete :finding_user_assignments_attributes
+    end
     prepare_parameters
 
     respond_to do |format|

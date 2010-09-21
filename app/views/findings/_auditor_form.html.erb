@@ -5,9 +5,6 @@
   {:method => :put, :class => 'edit_finding', :multipart => true,
   :id => "edit_finding_#{@finding.id}"} do |f_f| -%>
   <% content_for :js_extra do -%>
-    <%= "var user='#{escape_javascript(render(:partial => 'user',
-      :object => User.new, :locals => {:f => f_f, :is_dynamic => true,
-      :readonly => users_readonly}))}';" %>
     <%= "var finding_answer='#{generate_template(f_f, :finding_answers,
       :object => FindingAnswer.new(:user_id => @auth_user.id))}';" %>
     <%= "var finding_relation='#{generate_template(f_f, :finding_relations,
@@ -19,6 +16,8 @@
           :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
     <%= "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
         @finding, true) if @finding.kind_of?(Weakness)}';" %>
+    <%= "var finding_user_assignment='#{generate_template(f_f,
+        :finding_user_assignments, :locals => {:readonly => users_readonly})}';" %>
   <% end -%>
   <%= f_f.error_messages %>
 
@@ -172,14 +171,17 @@
       <div style="clear: both;"></div>
     </div>
 
-    <div id="users">
-      <%= render :partial => 'user', :collection => @finding.users,
-        :locals => {:f => f_f, :is_dynamic => false, :readonly => users_readonly} %>
+    <div id="finding_user_assignments">
+      <% f_f.fields_for :finding_user_assignments do |fua_f| -%>
+        <%= render :partial => 'finding_user_assignment', :locals =>
+          {:f => fua_f, :is_dynamic => false, :readonly => users_readonly} %>
+      <% end -%>
     </div>
 
     <p class="add_item">
-      <%= link_to_unless users_readonly, t(:'finding.add_user'), '#user',
-        :class => :add_nested_item, :rel => :users %>
+      <%= link_to_unless users_readonly, t(:'finding.add_user'),
+        '#finding_user_assignment', :class => :add_nested_item,
+        :rel => :finding_user_assignments %>
     </p>
   </div>
 
@@ -369,8 +371,9 @@
     var e = Event.findElement(event);
 
     if(e.hasClassName('user_for_notification_selector')) {
-      var id = $F(e.up('.user').down('.autocomplete_id_item'));
-      var userField = e.up('.user').down('.user_for_notification');
+      var id = $F(e.up('.finding_user_assignment').down('.autocomplete_id_item'));
+      var userField = e.up('.finding_user_assignment').down(
+      '.user_for_notification');
 
       if(e.checked) {
         userField.setValue(id);

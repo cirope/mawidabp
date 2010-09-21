@@ -80,13 +80,13 @@ class Workflow < ActiveRecord::Base
 
   def begining
     self.workflow_items.sort do |wi1, wi2|
-      wi1.start <=> wi2.start
+      (wi1.start || Date.today) <=> (wi2.start || Date.today)
     end.first.try(:start) || Date.today
   end
 
   def ending
     self.workflow_items.sort do |wi1, wi2|
-      wi1.end <=> wi2.end
+      (wi1.end || Date.today) <=> (wi2.end || Date.today)
     end.last.try(:end) || Date.today
   end
 

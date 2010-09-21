@@ -1,0 +1,33 @@
+<% id = "#{dynamic_object_id('user', f)}_#{is_dynamic ? 'NEW_RECORD' : f.object.id}" -%>
+<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<div class="finding_user_assignment item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+  <div>
+    <div class="item_field" style="width: 90%;">
+      <% unless readonly -%>
+        <div class="search">
+          <%= f.hidden_field :user_id, :value => f.object.user_id,
+            :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
+          <%= text_field_with_auto_complete :oportunity, :nested_user,
+            {:id => "oportunity_user_#{id}", :class => :search,
+            :title => t(:'label.search'), :value => f.object.user.try(:full_name_with_function)},
+            {:indicator => :loading, :skip_style => true,
+            :url => {:action => :auto_complete_for_user},
+            :after_update_element => 'AutoComplete.itemSelected',
+            :param_name => 'user_data',
+            :parameters => ("oportunity_id=#{@oportunity.id}" unless @oportunity.new_record?)} %>
+        </div>
+      <% else -%>
+        <%= f.hidden_field :user_id, :value => f.object.user_id,
+          :id => "hidden_user_id_#{id}" %>
+        <%= text_field_tag "oportunity_user_#{id}",
+          f.object.user.full_name_with_function(@oportunity.created_at), :readonly => true %>
+      <% end -%>
+    </div>
+    <div class="item_field item_controls" style="width: 5%;">
+      <%= remove_item_link(f) unless readonly -%>
+    </div>
+  </div>
+</div>
+<% if is_dynamic -%>
+  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end -%>

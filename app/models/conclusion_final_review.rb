@@ -115,11 +115,16 @@ class ConclusionFinalReview < ConclusionReview
 
           finding.final = true
           finding.parent = f
-          finding.user_ids = f.user_ids
           finding.origination_date ||= f.origination_date ||= self.issue_date
+
+          f.finding_user_assignments.each do |fua|
+            finding.finding_user_assignments.build(
+              fua.attributes.clone.update(:id => nil, :finding_id => nil))
+          end
           
           f.work_papers.each do |wp|
-            finding.work_papers.build(wp.attributes.clone.update(:id => nil)).check_code_prefix = false
+            finding.work_papers.build(
+              wp.attributes.clone.update(:id => nil)).check_code_prefix = false
           end
 
           finding.save!
@@ -143,6 +148,6 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def is_frozen?
-    self.close_date && Time.now.to_date > self.close_date
+    self.close_date && Date.today > self.close_date
   end
 end

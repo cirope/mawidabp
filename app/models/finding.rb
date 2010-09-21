@@ -116,9 +116,6 @@ class Finding < ActiveRecord::Base
   attr_accessor :users_for_notification, :user_who_make_it,
     :nested_finding_relation
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:user_ids, :workpaper_ids]
-
   # Named scopes
   named_scope :with_prefix, lambda { |prefix|
     {
@@ -428,9 +425,11 @@ class Finding < ActiveRecord::Base
       end
     end
   end
-  validates_each :users do |record, attr, value|
-    unless value.any?(&:can_act_as_audited?) && value.any?(&:auditor?) &&
-        value.any?(&:supervisor?) && value.any?(&:manager?)
+  validates_each :finding_user_assignments do |record, attr, value|
+    users = value.map(&:user)
+    
+    unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
+        users.any?(&:supervisor?) && users.any?(&:manager?)
       record.errors.add attr, :invalid
     end
   end
@@ -457,21 +456,29 @@ class Finding < ActiveRecord::Base
 #    :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
-  has_and_belongs_to_many :users, :validate => false,
-    :order => 'last_name ASC, name ASC', :after_add => :user_changed,
-    :after_remove => :user_changed
+  has_many :finding_user_assignments, :after_add => :user_assignment_added,
+    :after_remove => :user_assignment_removed
+  has_many :users, :through => :finding_user_assignments, :uniq => true,
+    :order => 'last_name ASC, name ASC'
+#  has_and_belongs_to_many :users, :validate => false,
+#    :order => 'last_name ASC, name ASC', :after_add => :user_changed,
+#    :after_remove => :user_changed
   
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
+  accepts_nested_attributes_for :finding_user_assignments,
+    :allow_destroy => true
 
   def initialize(attributes = nil, import_users = false)
     super(attributes)
 
     if import_users && self.control_objective_item.try(:review)
-      self.user_ids |= self.control_objective_item.review.user_ids
+      self.control_objective_item.review.users.each do |u|
+        self.finding_user_assignments.build(:user => u)
+      end
     end
 
     unless self.control_objective_item.try(:controls).blank?
@@ -526,6 +533,7 @@ class Finding < ActiveRecord::Base
 
   def set_proper_parent
     self.finding_relations.each { |fr| fr.finding = self }
+    self.finding_user_assignments.each { |fua| fua.finding = self }
   end
 
   def check_for_valid_relation(finding_relation)
@@ -555,25 +563,26 @@ class Finding < ActiveRecord::Base
       self.confirmed! finding_answer.user
     end
   end
-  
-  def user_changed(user)
-    @users_change = true
-    @users_added ||= []
-    @users_removed ||= []
 
-    if self.users.include?(user)
-      @users_added << user
-    else
-      @users_removed << user
+  def user_assignment_added(finding_user_assignment)
+    @users_added ||= []
+    @users_added << finding_user_assignment.user if finding_user_assignment.user
+  end
+  
+  def user_assignment_removed(finding_user_assignment)
+    @users_removed ||= []
+    
+    if finding_user_assignment.user
+      @users_removed << finding_user_assignment.user
     end
   end
 
   def notify_changes_to_users
     unless self.avoid_changes_notification
-      if @users_change && !@users_added.blank? && !@users_removed.blank?
+      if !@users_added.blank? && !@users_removed.blank?
         Notifier.deliver_reassigned_findings_notification(@users_added,
           @users_removed, self, false)
-      elsif @users_change && @users_added.blank? && !@users_removed.blank?
+      elsif @users_added.blank? && !@users_removed.blank?
         title = I18n.t(:'finding.responsibility_removed',
           :class_name => self.class.human_name.downcase,
           :review_code => self.review_code,
@@ -626,8 +635,14 @@ class Finding < ActiveRecord::Base
 
   def check_users_for_notification
     unless (self.users_for_notification || []).reject(&:blank?).blank?
-      self.users_for_notification.reject(&:blank?).each do |user_id|
-        Notifier.deliver_notify_new_finding self.users.find(user_id), self
+      self.users_for_notification.reject(&:blank?).uniq.each do |user_id|
+        finding_user_assignment = self.finding_user_assignments.detect do |fua|
+          fua.user_id == user_id.to_i
+        end
+
+        if finding_user_assignment
+          Notifier.deliver_notify_new_finding finding_user_assignment.user, self
+        end
       end
     end
   end
@@ -688,11 +703,15 @@ class Finding < ActiveRecord::Base
   end
 
   def has_audited?
-    self.users.any?(&:can_act_as_audited?)
+    self.finding_user_assignments.any? do |fua|
+      !fua.marked_for_destruction? && fua.user.can_act_as_audited?
+    end
   end
 
   def has_auditor?
-    self.users.any?(&:auditor?)
+    self.finding_user_assignments.any? do |fua|
+      !fua.marked_for_destruction? && fua.user.auditor?
+    end
   end
 
   def cost
@@ -821,7 +840,8 @@ class Finding < ActiveRecord::Base
   end
 
   def users_for_scaffold_notification(level = 1)
-    users = self.users.select(&:can_act_as_audited?)
+    users = self.finding_user_assignments.map(&:user).select(
+      &:can_act_as_audited?)
     highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
     level_overflow = false
 
@@ -834,7 +854,8 @@ class Finding < ActiveRecord::Base
   end
 
   def manager_users_for_level(level = 1)
-    users = self.users.select(&:can_act_as_audited?)
+    users = self.finding_user_assignments.map(&:user).select(
+      &:can_act_as_audited?)
     highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
 
     level.times { highest_users = highest_users.map(&:parent).compact.uniq }
@@ -1012,6 +1033,9 @@ class Finding < ActiveRecord::Base
       pdf.add_description_item(Finding.human_attribute_name(:solution_date),
         I18n.l(self.solution_date, :format => :long), 0, false)
     end
+
+    pdf.add_description_item(Finding.human_attribute_name(:audit_comments),
+      self.audit_comments, 0, false)
 
     audited, auditors = *self.users.partition(&:can_act_as_audited?)
 

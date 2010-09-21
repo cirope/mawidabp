@@ -122,7 +122,6 @@ class OportunitiesController < ApplicationController
   def update
     @title = t :'oportunity.edit_title'
     @oportunity = find_with_organization(params[:id])
-    params[:oportunity][:user_ids] ||= [] unless @oportunity.is_in_a_final_review?
 
     respond_to do |format|
       Oportunity.transaction do

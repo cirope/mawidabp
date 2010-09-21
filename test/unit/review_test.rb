@@ -185,7 +185,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new review_weakness.attributes.merge({
         :state => Finding::STATUS[:implemented_audited],
         :review_code => @review.next_weakness_code('O')})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     oportunity.solution_date = nil
 
@@ -197,7 +198,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:implemented],
         :solution_date => Time.now.to_date, :follow_up_date => nil})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
@@ -206,7 +208,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:being_implemented]})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
@@ -215,9 +218,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:assumed_risk]})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save
+
+    @review.reload.must_be_approved?
+    puts @review.approval_errors
+
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
     assert oportunity.destroy
@@ -225,7 +233,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:being_implemented],
         :follow_up_date => Time.now.to_date})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
@@ -488,5 +497,13 @@ class ReviewTest < ActiveSupport::TestCase
       new_review.control_objective_items
     assert_equal @review.review_user_assignments,
       new_review.review_user_assignments
+  end
+
+  private
+
+  def clone_finding_user_assignments(finding)
+    finding.finding_user_assignments.map do |fua|
+      fua.attributes.dup.merge(:finding_id => nil)
+    end
   end
 end

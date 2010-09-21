@@ -71,7 +71,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   belongs_to :user
 
   def <=>(other)
-    self.user_id <=> other.user_id
+    self.user_id.to_i <=> other.user_id.to_i
   end
 
   def can_be_modified?

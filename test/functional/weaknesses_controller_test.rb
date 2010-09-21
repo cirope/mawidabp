@@ -103,9 +103,14 @@ class WeaknessesControllerTest < ActionController::TestCase
           :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
           :priority => get_test_parameter(:admin_priorities).first[1],
           :follow_up_date => 2.days.from_now.to_date,
-          :user_ids => [users(:administrator_user).id, users(:bare_user).id,
-            users(:audited_user).id, users(:manager_user).id,
-            users(:supervisor_user).id],
+          :finding_user_assignments_attributes => {
+            :new_1 => { :user_id => users(:bare_user).id },
+            :new_2 => { :user_id => users(:audited_user).id },
+            :new_3 => { :user_id => users(:auditor_user).id },
+            :new_4 => { :user_id => users(:manager_user).id },
+            :new_5 => { :user_id => users(:supervisor_user).id },
+            :new_6 => { :user_id => users(:administrator_user).id }
+          },
           :work_papers_attributes => {
             :new_1 => {
               :name => 'New workpaper name',
@@ -161,9 +166,26 @@ class WeaknessesControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
-            :user_ids => [users(:administrator_user).id, users(:bare_user).id,
-              users(:audited_user).id, users(:manager_user).id,
-              users(:supervisor_user).id],
+            :finding_user_assignments_attributes => {
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_bare_user).id => {
+                :user_id => users(:bare_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_audited_user).id => {
+                :user_id => users(:audited_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_auditor_user).id => {
+                :user_id => users(:auditor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_manager_user).id => {
+                :user_id => users(:manager_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_supervisor_user).id => {
+                :user_id => users(:supervisor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_weakness_administrator_user).id => {
+                :user_id => users(:administrator_user).id
+              }
+            },
             :work_papers_attributes => {
               :new_1 => {
                 :name => 'New workpaper name',

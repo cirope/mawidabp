@@ -37,8 +37,14 @@ class OportunityTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:being_implemented],
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id },
+          :new_3 => { :user_id => users(:auditor_user).id },
+          :new_4 => { :user_id => users(:manager_user).id },
+          :new_5 => { :user_id => users(:supervisor_user).id },
+          :new_6 => { :user_id => users(:administrator_user).id }
+        }
       )
 
       assert @oportunity.save, @oportunity.errors.full_messages.join('; ')
@@ -56,7 +62,10 @@ class OportunityTest < ActiveSupport::TestCase
         :state => Finding::STATUS[:being_implemented],
         :solution_date => 30.days.from_now.to_date,
         :origination_date => 35.days.from_now.to_date,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id }
+        }
       )
     end
   end
