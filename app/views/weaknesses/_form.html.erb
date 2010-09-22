@@ -155,7 +155,7 @@
     <tbody>
       <tr>
         <td style="width: 52%; padding-top: 1em;">
-          <div id="users">
+          <div id="finding_user_assignments">
             <% f.fields_for :finding_user_assignments do |fua_f| -%>
               <%= render :partial => 'finding_user_assignment', :locals =>
                 {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
