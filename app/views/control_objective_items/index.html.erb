@@ -6,13 +6,13 @@
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.human_name, nil, 'review' %>
-      <%= make_filterable_column ProcessControl.human_name, nil, 'process_control' %>
+      <%= make_filterable_column ProcessControl.human_name, {:expendable => true}, 'process_control' %>
       <%= make_filterable_column ControlObjective.human_name, nil, 'control_objective_text' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished) %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance) %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness) %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses) %>
-      <%= make_not_available_column t(:'control_objective_item.has_work_papers') %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), :expendable => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), :expendable => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), :expendable => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :expendable => true %>
+      <%= make_not_available_column t(:'control_objective_item.has_work_papers'), :expendable => true %>
       <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -24,15 +24,15 @@
         :readonly_item : :writable_item).to_s -%>
       <tr class="<%= html_class %>">
         <td class="nowrap"><%= show_review_with_close_date_as_acronym control_objective.review %></td>
-        <td><%= super_truncate(control_objective.process_control.name, 30) %></td>
+        <td class="expendable"><%= super_truncate(control_objective.process_control.name, 30) %></td>
         <td><%= super_truncate(control_objective.control_objective_text, 30) %></td>
-        <td><%= t control_objective.finished? ? :'label.yes' : :'label.no' %></td>
-        <td><%= control_objective_relevance_text(control_objective) %></td>
-        <td><%= "#{control_objective.effectiveness}%" %></td>
-        <td><%= link_to_unless control_objective.weaknesses.size == 0,
+        <td class="expendable"><%= t control_objective.finished? ? :'label.yes' : :'label.no' %></td>
+        <td class="expendable"><%= control_objective_relevance_text(control_objective) %></td>
+        <td class="expendable"><%= "#{control_objective.effectiveness}%" %></td>
+        <td class="expendable"><%= link_to_unless control_objective.weaknesses.size == 0,
             control_objective.weaknesses.size,
             weaknesses_path(:control_objective => control_objective) %></td>
-        <td><%= t control_objective.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= t control_objective.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
         <td><%= link_to_show control_objective_item_path(control_objective) %></td>
         <td><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>
         <td><%= button_to_destroy(control_objective_item_path(control_objective,

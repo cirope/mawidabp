@@ -3,8 +3,8 @@
     <tr>
       <th><%= Period.human_name %></th>
       <th><%= Plan.human_attribute_name :created_at %></th>
-      <th><%= Period.human_attribute_name :start %></th>
-      <th><%= Period.human_attribute_name :end %></th>
+      <th class="expendable"><%= Period.human_attribute_name :start %></th>
+      <th class="expendable"><%= Period.human_attribute_name :end %></th>
       <th></th>
       <th></th>
       <th></th>
@@ -17,8 +17,8 @@
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym plan.period %></td>
         <td><%= h l(plan.created_at, :format => :short) %></td>
-        <td><%= h l(plan.period.start, :format => :short) %></td>
-        <td><%= h l(plan.period.end, :format => :short) %></td>
+        <td class="expendable"><%= h l(plan.period.start, :format => :short) %></td>
+        <td class="expendable"><%= h l(plan.period.end, :format => :short) %></td>
         <td><%= link_to_clone new_plan_path(:clone_from => plan.id), :label => t(:'plan.copy') %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit edit_plan_path(plan) %></td>

@@ -3,13 +3,10 @@
     <tr>
       <th><%= Period.human_name %></th>
       <th><%= Review.human_name %></th>
-      <th><%= PlanItem.human_attribute_name :project %></th>
-      <th><%= Workflow.human_attribute_name :created_at %></th>
-      <th><%= Workflow.human_attribute_name :cost %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th class="expendable"><%= PlanItem.human_attribute_name :project %></th>
+      <th class="expendable"><%= Workflow.human_attribute_name :created_at %></th>
+      <th class="expendable"><%= Workflow.human_attribute_name :cost %></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
@@ -18,9 +15,9 @@
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym workflow.period %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_acronym workflow.review %></td>
-        <td><%= super_truncate workflow.review.plan_item.project, 30 %></td>
-        <td><%= h l(workflow.created_at, :format => :short) %></td>
-        <td><%= h "#{t(:'number.currency.format.unit')}%.2f" % workflow.cost %></td>
+        <td class="expendable"><%= super_truncate workflow.review.plan_item.project, 30 %></td>
+        <td class="expendable"><%= h l(workflow.created_at, :format => :short) %></td>
+        <td class="expendable"><%= h "#{t(:'number.currency.format.unit')}%.2f" % workflow.cost %></td>
         <td><%= link_to_clone new_workflow_path(:clone_from => workflow.id),
                   :label => t(:'workflow.copy') %></td>
         <td><%= link_to_show workflow %></td>
