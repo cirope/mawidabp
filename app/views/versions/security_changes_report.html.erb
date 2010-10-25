@@ -7,8 +7,8 @@
     <tr>
       <th><%= Version.human_attribute_name(:created_at) %></th>
       <th><%= Version.human_attribute_name(:whodunnit) %></th>
-      <th><%= Version.human_attribute_name(:item) %></th>
-      <th><%= Version.human_attribute_name(:event) %></th>
+      <th class="expendable"><%= Version.human_attribute_name(:item) %></th>
+      <th class="expendable"><%= Version.human_attribute_name(:event) %></th>
       <th></th>
     </tr>
   </thead>
@@ -18,9 +18,9 @@
     <tr class="<%= cycle(:even, :odd) %>">
       <td><%=h l(version.created_at, :format => :short) %></td>
       <td><%=h show_whodunnit(version.whodunnit) %></td>
-      <td><%= version.item ?
+      <td class="expendable"><%= version.item ?
         super_truncate("#{version.item.class.human_name} (#{version.item})", 30) : '-' %></td>
-      <td><%=h t("version.event_#{version.event}") %></td>
+      <td class="expendable"><%=h t("version.event_#{version.event}") %></td>
       <td><%= link_to_show version_path(version) %></td>
     </tr>
   <% end -%>

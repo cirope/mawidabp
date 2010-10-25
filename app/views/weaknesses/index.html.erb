@@ -7,10 +7,10 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:review_code), 'review_code' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:description), 'description' %>
+      <%= make_filterable_column Review.human_name, nil, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), nil, 'project' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:review_code), nil, 'review_code' %>
+      <%= make_filterable_column Weakness.human_attribute_name(:description), nil, 'description' %>
       <%= make_not_available_column Weakness.human_attribute_name :state %>
       <%= make_not_available_column Weakness.human_attribute_name :follow_up_date %>
       <%= make_not_available_column Weakness.human_attribute_name :risk %>

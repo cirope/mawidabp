@@ -8,12 +8,12 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_attribute_name(:period_id), 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
-      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), 'issue_date' %>
-      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), 'close_date' %>
+      <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>
+      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), nil, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), nil, 'project' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), nil, 'issue_date' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), nil, 'close_date' %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>

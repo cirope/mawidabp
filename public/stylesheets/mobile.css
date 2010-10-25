@@ -1,0 +1,37 @@
+div#login {
+    margin: 1em auto;
+    height: 15em;
+    width: 30em;
+}
+
+div#login div.submit {
+    margin: 1em 0em 0em 9em;
+}
+
+div#login label {
+    width: 8em;
+    margin: 0px;
+    text-align: right;
+}
+
+div#login form {
+    margin: 1em auto;
+}
+
+div#logo {
+    float: none;
+    width: auto;
+    margin-left: 9em;
+}
+
+/*div#main_container {
+    min-width: 320px;
+}*/
+
+ul.menu_list {
+    width: 35em;
+}
+
+.expendable {
+    display: none;
+}

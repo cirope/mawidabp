@@ -92,21 +92,8 @@ APP_CONTROLLERS = [
   :oportunities, :weaknesses, :reviews, :control_objective_items, :periods,
   :best_practices, :procedure_controls, :resource_classes, :plans,
   :conclusion_final_reviews, :conclusion_draft_reviews, :workflows, :findings,
-  :follow_up_audit, :follow_up_committee, :follow_up_management, :backups,
-  :notifications, :conclusion_audit_reports, :conclusion_committee_reports,
+  :follow_up_audit, :follow_up_committee, :follow_up_management, :notifications,
+  :conclusion_audit_reports, :conclusion_committee_reports,
   :conclusion_management_reports, :help_contents, :versions, :execution_reports,
   :welcome
 ].freeze
-
-# Arreglo con los modelos (y sus relaciones) que deben ser tenidos en cuenta
-# para realizar la copia de seguridad
-APP_MODELS_FOR_BACKUP = ['image_model', 'organization', 'privilege', 'role',
-  ['user', [:organizations, :roles]], 'backup', 'best_practice',
-  'business_unit', 'file_model', 'work_paper', ['finding', [:work_papers]],
-  ['conclusion_review', [:oportunities, :weaknesses]], 'control_objective',
-  ['control_objective_item', [:pre_audit_work_papers, :post_audit_work_papers]],
-  'error_record', 'finding_answer', 'login_record', 'old_password', 'parameter',
-  'period', 'resource_utilization', 'plan', 'resource_class', 'resource',
-  'plan_item', 'procedure_control', 'procedure_control_item',
-  'procedure_control_subitem', 'process_control', 'review', 'workflow',
-  'workflow_item', 'version', 'help_contents'].freeze

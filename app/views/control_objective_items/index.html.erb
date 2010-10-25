@@ -5,9 +5,9 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, 'review' %>
-      <%= make_filterable_column ProcessControl.human_name, 'process_control' %>
-      <%= make_filterable_column ControlObjective.human_name, 'control_objective_text' %>
+      <%= make_filterable_column Review.human_name, nil, 'review' %>
+      <%= make_filterable_column ProcessControl.human_name, nil, 'process_control' %>
+      <%= make_filterable_column ControlObjective.human_name, nil, 'control_objective_text' %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished) %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance) %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness) %>

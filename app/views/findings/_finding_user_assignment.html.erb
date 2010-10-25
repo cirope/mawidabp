@@ -27,7 +27,8 @@
         <%= f.hidden_field :user_id, :value => f.object.user_id,
           :id => "hidden_user_id_#{id}" %>
         <%= text_field_tag "finding_user_#{id}",
-          f.object.user.full_name_with_function(@finding.created_at), :readonly => true %>
+          f.object.user.try(:full_name_with_function, @finding.created_at),
+          :readonly => true %>
       <% end -%>
     </div>
     <div class="item_field" style="width: 15%;">

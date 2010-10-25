@@ -6,22 +6,22 @@ class PrivilegeTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @privilege = Privilege.find privileges(:admin_administration_backups).id
+    @privilege = Privilege.find privileges(:admin_administration_parameters).id
     @privilege.role.inject_auth_privileges(Hash.new(Hash.new(true)))
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Privilege, @privilege
-    assert_equal privileges(:admin_administration_backups).module,
+    assert_equal privileges(:admin_administration_parameters).module,
       @privilege.module
-    assert_equal privileges(:admin_administration_backups).approval,
+    assert_equal privileges(:admin_administration_parameters).approval,
       @privilege.approval
-    assert_equal privileges(:admin_administration_backups).erase,
+    assert_equal privileges(:admin_administration_parameters).erase,
       @privilege.erase
-    assert_equal privileges(:admin_administration_backups).modify,
+    assert_equal privileges(:admin_administration_parameters).modify,
       @privilege.modify
-    assert_equal privileges(:admin_administration_backups).read,
+    assert_equal privileges(:admin_administration_parameters).read,
       @privilege.read
   end
 
@@ -101,7 +101,7 @@ class PrivilegeTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates role allow module in privileges' do
     @privilege = Privilege.find(privileges(:audited_follow_up_notifications).id)
-    @privilege.module = 'administration_backups'
+    @privilege.module = 'administration_parameters'
     assert @privilege.invalid?
     assert_equal 1, @privilege.errors.count
     assert_equal error_message_from_model(@privilege, :module, :invalid),

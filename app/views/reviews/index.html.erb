@@ -5,10 +5,10 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Period.human_name, 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
+      <%= make_filterable_column Period.human_name, nil, 'period' %>
+      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), nil, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), nil, 'project' %>
       <%= make_not_available_column Review.human_attribute_name(:description) %>
       <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
     </tr>

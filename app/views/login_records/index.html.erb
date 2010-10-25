@@ -11,10 +11,10 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column User.human_name, 'user' %>
+      <%= make_filterable_column User.human_name, nil, 'user' %>
       <%= make_not_available_column LoginRecord.human_attribute_name(:start) %>
-      <%= make_not_available_column LoginRecord.human_attribute_name(:end) %>
-      <%= make_filterable_column LoginRecord.human_attribute_name(:data), 'data' %>
+      <%= make_not_available_column LoginRecord.human_attribute_name(:end), :expendable => true %>
+      <%= make_filterable_column LoginRecord.human_attribute_name(:data), {:expendable => true}, 'data' %>
       <th style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -23,8 +23,8 @@
     <tr class="<%= cycle(:even, :odd) %>">
       <td><%=h login_record.user.user %></td>
       <td><%=h l(login_record.start, :format => :short) if login_record.start %></td>
-      <td><%=h l(login_record.end, :format => :short) if login_record.end %></td>
-      <td><%= super_truncate(login_record.data, 40) %></td>
+      <td class="expendable"><%=h l(login_record.end, :format => :short) if login_record.end %></td>
+      <td class="expendable"><%= super_truncate(login_record.data, 40) %></td>
       <td><%= link_to_show login_record %></td>
     </tr>
   <% end -%>

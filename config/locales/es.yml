@@ -53,7 +53,6 @@ es:
         roles: "Perfiles y Privilegios"
       best_practices: "Buenas prácticas"
       parameters: "Parámetros"
-      backups: "Copias de seguridad"
       detracts: "Detractores"
     planning_title: "PLANIFICACIÓN"
     planning:
@@ -130,23 +129,6 @@ es:
     send_it_to_the_administrator: "Y envíelo al administrador del sistema a través de la página:"
     show_details: "Ver detalles"
     thank_you_and_apologies_for_the_inconvenience: "Muchas gracias y disculpe las molestias"
-
-  backup:
-    index_title: "Listado de copias de seguridad"
-    show_title: "Detalle de la copia de seguridad"
-    new_title: "Nueva copia de seguridad"
-    edit_title: "Modificar copia de seguridad"
-    restore_title: "Restaurar copia de seguridad"
-    correctly_created: "Copia de seguridad creada correctamente."
-    correctly_updated: "Copia de seguridad actualizada correctamente."
-    stale_object_error: "La copia de seguridad no pudo ser actualizada, intente nuevamente."
-    select_file_for_restore: "Seleccione la copia de seguridad"
-    warning: "TODOS los datos actuales serán reemplazados"
-    full: "Completo"
-    differential: "Diferencial"
-    restore: "Restaurar"
-    success: "Restauración correcta"
-    fail: "Falló la restauración, contáctese con el administrador del sistema"
 
   business_unit_type:
     index_title: "Listado de tipos de unidades de negocio"
@@ -1259,7 +1241,6 @@ es:
 
   activerecord:
     models:
-      backup: "Copia de seguridad"
       best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
       business_unit_type: "Tipo de unidad de negocio"
@@ -1304,10 +1285,6 @@ es:
       work_paper: "Papel de trabajo"
 
     attributes:
-      backup:
-        backup_type: "Tipo"
-        work_papers_included: "Papeles de trabajo incluidos"
-        <<: *commons
       best_practice:
         name: "Nombre"
         description: "Descripción"
@@ -1713,10 +1690,6 @@ es:
 
       # Append your own errors here or at the model/attributes scope.
       models:
-        backup:
-          attributes:
-            backup_type:
-              blank: "debe seleccionar uno"
         best_practice:
           attributes:
             process_controls:
@@ -1803,7 +1776,6 @@ es:
               item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
               
   actioncontroller:
-    backups: "Copias de seguridad"
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
     follow_up_audit: "Reportes de auditoría (Seguimiento)"

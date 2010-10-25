@@ -148,6 +148,10 @@ div#login {
     width: 625px;
 }
 
+div#login div.submit {
+    margin: 1em 0em 0em 24em;
+}
+
 div#login label {
     display: block;
     float: left;
