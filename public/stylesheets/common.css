@@ -19,10 +19,6 @@ a img {
     border: none;
 }
 
-a#show_menu {
-    display: none;
-}
-
 a#show_search_link {
     font-weight: normal;
 }
@@ -71,7 +67,7 @@ acronym.info {
 }
 
 body {
-    padding: 2% 2%;
+    padding: 1%;
     font-family: verdana, sans-serif, arial, helvetica;
     font-size: 11px;
     background-color: #2c3234;
@@ -335,6 +331,10 @@ div#menu_level_2 li {
     font-weight: bold;
     color: #151215;
     border-right: 1px solid #7b7b7b;
+}
+
+div#mobile_menu {
+    display: none;
 }
 
 div#notice {

@@ -674,6 +674,9 @@ class UsersController < ApplicationController
       end
     end
 
+    pdf.move_pointer PDF_FONT_SIZE
+    pdf.text t(:'user.pdf.users_count', :count => users.size)
+
     pdf_name = t :'user.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, User.table_name)

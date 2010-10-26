@@ -444,6 +444,17 @@ var HTMLUtil = {
     }
 }
 
+// Manipulación del menú
+var Menu = {
+    /**
+     * Muestra el menú principal
+     */
+    show: function() {
+        $('app_content').update($('main_menu').clone(true).writeAttribute('id',
+            'main_mobile_menu'));
+    }
+}
+
 // Observadores de eventos
 var Observer = {
     /**
@@ -509,6 +520,23 @@ var Observer = {
             if(e) {
                 e.storeStyleProperty('background');
                 e.setStyle({'background': '#b1aea6'});
+            }
+        });
+    },
+    /**
+     * Agrega un listener a los eventos de click en el menú principal en móviles
+     */
+    attachToMobileMenu: function() {
+        Event.observe('app_content', 'click', function(event) {
+            var e = Event.findElement(event, 'a');
+            var menuName = e ? e.readAttribute('href').replace(/.*#/, '') : '';
+            var content = State.menu.get(menuName);
+
+            if(e && (e.hasClassName('menu_item_1') ||
+                e.hasClassName('menu_item_2')) && content) {
+                $('app_content').update(content);
+
+                Event.stop(event);
             }
         });
     },
@@ -689,7 +717,11 @@ Event.observe(window, 'load', function() {
         });
     }
 
-    if($('menu_container')) {Observer.attachToMenu();}
+    if($('menu_container') && !Prototype.Browser.MobileSafari) {
+        Observer.attachToMenu();
+    } else if($('mobile_menu')) {
+        Observer.attachToMobileMenu();
+    }
 
     // Para observar los cambios en los formularios
     $$('form').each(function(form) {
@@ -735,6 +767,12 @@ Event.observe(window, 'load', function() {
             });
         }
     });
+
+    if(!Prototype.Browser.MobileSafari) {
+        $w('menu menu_level_1 menu_level_2').each(function(e) {
+            Element.show(e);
+        });
+    }
 
     Helper.updateDimensions();
 });

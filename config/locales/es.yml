@@ -1062,6 +1062,7 @@ es:
       must_select_a_user: "Debe seleccionar un usuario"
     pdf:
       pdf_name: "listado_de_usuarios.pdf"
+      users_count: "Cantidad de usuarios: {{count}}"
       filtered_by:
         one: "El listado fue filtrado con la consulta '{{query}}' en la columna {{columns}}"
         other: "El listado fue filtrado con la consulta '{{query}}' en las columnas {{columns}}"

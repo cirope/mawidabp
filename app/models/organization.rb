@@ -48,7 +48,8 @@ class Organization < ActiveRecord::Base
   has_many :parameters, :dependent => :destroy
   has_many :roles, :dependent => :destroy
   has_many :organization_roles, :dependent => :destroy
-  has_many :users, :through => :organization_roles, :readonly => true
+  has_many :users, :through => :organization_roles, :uniq => true,
+    :readonly => true
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true
 
