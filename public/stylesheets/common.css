@@ -19,6 +19,10 @@ a img {
     border: none;
 }
 
+a#show_menu {
+    display: none;
+}
+
 a#show_search_link {
     font-weight: normal;
 }

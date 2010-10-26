@@ -26,6 +26,7 @@
         {:time_left => parameter_in(@auth_organization.id, :security_session_expire_time).to_i} %>
     <% end -%>
     <div id="main_container">
+      <%= link_to t(:'menu.show_menu'), '#', :id => :show_menu %>
       <div id="menu">
         <div id="session">
           <% if @auth_user -%>

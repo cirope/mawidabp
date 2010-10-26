@@ -39,6 +39,7 @@ es:
 
   menu:
     exit: "Salir"
+    show_menu: "Ver menu"
     administration_title: "ADMINISTRACIÓN"
     administration:
       organization_title: "Organización"

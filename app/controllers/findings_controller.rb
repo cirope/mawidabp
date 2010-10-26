@@ -179,11 +179,12 @@ class FindingsController < ApplicationController
     pdf.add_title t(:'finding.index_title')
 
     column_order = [
-      ['review', Review.human_name, 10],
-      ['project', PlanItem.human_attribute_name(:project), 10],
+      ['review', [Review.human_name,
+          PlanItem.human_attribute_name(:project)].to_sentence, 10],
+      ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 7],
       ['description', Finding.human_attribute_name(:description),
-        detailed ? 15 : 37],
+        detailed ? 25 : 47],
       ['state', Finding.human_attribute_name(:state), 10],
       ['rescheduled', t(:'weakness.previous_follow_up_dates') +
           " (#{Finding.human_attribute_name(:rescheduled)})", 10],
@@ -204,9 +205,11 @@ class FindingsController < ApplicationController
     end
 
     column_order.each do |col_id, col_name, col_with|
-      columns[col_id] = PDF::SimpleTable::Column.new(col_id) do |c|
-        c.heading = col_name
-        c.width = pdf.percent_width col_with
+      if col_with > 0
+        columns[col_id] = PDF::SimpleTable::Column.new(col_id) do |c|
+          c.heading = col_name
+          c.width = pdf.percent_width col_with
+        end
       end
     end
 
@@ -256,7 +259,6 @@ class FindingsController < ApplicationController
 
       column_data << {
         'review' => finding.review.to_s.to_iso,
-        'project' => finding.review.plan_item.project.to_iso,
         'review_code' => finding.review_code.to_iso,
         'description' => finding.description.to_iso,
         'state' => finding.state_text.to_iso,
@@ -275,7 +277,7 @@ class FindingsController < ApplicationController
         table.width = pdf.page_usable_width
         table.columns = columns
         table.data = column_data
-        table.column_order = column_order.map(&:first)
+        table.column_order = column_order.reject{|co| co.last == 0}.map(&:first)
         table.row_gap = (PDF_FONT_SIZE * 1.25).round
         table.split_rows = true
         table.font_size = (PDF_FONT_SIZE * 0.75).round
