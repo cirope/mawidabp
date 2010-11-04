@@ -72,7 +72,7 @@ class BestPracticesController < ApplicationController
 
     respond_to do |format|
       if @best_practice.save
-        flash[:notice] = t :'best_practice.correctly_created'
+        flash.notice = t :'best_practice.correctly_created'
         format.html { redirect_to(edit_best_practice_path(@best_practice)) }
         format.xml  { render :xml => @best_practice, :status => :created, :location => @best_practice }
       else
@@ -95,7 +95,7 @@ class BestPracticesController < ApplicationController
 
     respond_to do |format|
       if @best_practice.update_attributes(params[:best_practice])
-        flash[:notice] = t :'best_practice.correctly_updated'
+        flash.notice = t :'best_practice.correctly_updated'
         format.html { redirect_to(edit_best_practice_path(@best_practice)) }
         format.xml  { head :ok }
       else
@@ -105,7 +105,7 @@ class BestPracticesController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'best_practice.stale_object_error'
+    flash.alert = t :'best_practice.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -117,7 +117,7 @@ class BestPracticesController < ApplicationController
     @best_practice = find_with_organization(params[:id])
 
     unless @best_practice.destroy
-      flash[:alert] = @best_practice.errors.full_messages.join(
+      flash.alert = @best_practice.errors.full_messages.join(
         APP_ENUM_SEPARATOR)
     end
 

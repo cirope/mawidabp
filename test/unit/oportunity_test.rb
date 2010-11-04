@@ -37,8 +37,14 @@ class OportunityTest < ActiveSupport::TestCase
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
         :state => Finding::STATUS[:being_implemented],
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id },
+          :new_3 => { :user_id => users(:auditor_user).id },
+          :new_4 => { :user_id => users(:manager_user).id },
+          :new_5 => { :user_id => users(:supervisor_user).id },
+          :new_6 => { :user_id => users(:administrator_user).id }
+        }
       )
 
       assert @oportunity.save, @oportunity.errors.full_messages.join('; ')
@@ -56,7 +62,10 @@ class OportunityTest < ActiveSupport::TestCase
         :state => Finding::STATUS[:being_implemented],
         :solution_date => 30.days.from_now.to_date,
         :origination_date => 35.days.from_now.to_date,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id }
+        }
       )
     end
   end
@@ -91,8 +100,8 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.review_code = '   '
     assert @oportunity.invalid?
     assert_equal 3, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, 
-      :control_objective_item_id, :blank),
+    assert_equal [error_message_from_model(@oportunity,
+      :control_objective_item_id, :blank)],
       @oportunity.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@oportunity, :review_code, :blank),
       error_message_from_model(@oportunity, :review_code, :invalid)].sort,
@@ -106,7 +115,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.review_code = another_oportunity.review_code
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, :review_code, :taken),
+    assert_equal [error_message_from_model(@oportunity, :review_code, :taken)],
       @oportunity.errors[:review_code]
   end
 
@@ -119,8 +128,8 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@oportunity, :review_code, :too_long,
       :count => 255), error_message_from_model(@oportunity, :review_code,
       :invalid)].sort, @oportunity.errors[:review_code].sort
-    assert_equal error_message_from_model(@oportunity, :type, :too_long,
-      :count => 255), @oportunity.errors[:type]
+    assert_equal [error_message_from_model(@oportunity, :type, :too_long,
+      :count => 255)], @oportunity.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -128,7 +137,7 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS.values.sort.last.next
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, :state, :inclusion),
+    assert_equal [error_message_from_model(@oportunity, :state, :inclusion)],
       @oportunity.errors[:state]
   end
 
@@ -137,8 +146,8 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.control_objective_item_id = '?nil'
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity,
-      :control_objective_item_id, :not_a_number),
+    assert_equal [error_message_from_model(@oportunity,
+      :control_objective_item_id, :not_a_number)],
       @oportunity.errors[:control_objective_item_id]
   end
 

@@ -30,7 +30,8 @@ class ReviewUserAssignment < ActiveRecord::Base
     :allow_blank => true, :allow_nil => true
   validates_each :user do |record, attr, value|
     review = record.review
-    user = User.find(record.user_id) if User.exists?(record.user_id)
+    user = User.find(record.user_id) if record.user_id &&
+      User.exists?(record.user_id)
 
     # Recarga porque el cache se trae el usuario anterior aun cuando el user_id
     # ha cambiado
@@ -71,7 +72,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   belongs_to :user
 
   def <=>(other)
-    self.user_id <=> other.user_id
+    self.user_id.to_i <=> other.user_id.to_i
   end
 
   def can_be_modified?

@@ -69,7 +69,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @role.save
-        flash[:notice] = t :'role.correctly_created'
+        flash.notice = t :'role.correctly_created'
         format.html { redirect_to(roles_path) }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
       else
@@ -91,7 +91,7 @@ class RolesController < ApplicationController
     respond_to do |format|
       if @role.update_attributes(params[:role].merge(
             :organization_id => @auth_organization.id))
-        flash[:notice] = t :'role.correctly_updated'
+        flash.notice = t :'role.correctly_updated'
         format.html { redirect_to(roles_path) }
         format.xml  { head :ok }
       else
@@ -101,7 +101,7 @@ class RolesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'role.stale_object_error'
+    flash.alert = t :'role.stale_object_error'
     redirect_to :action => :edit
   end
 

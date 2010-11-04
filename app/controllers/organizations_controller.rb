@@ -87,7 +87,7 @@ class OrganizationsController < ApplicationController
       end
 
       if saved
-        flash[:notice] = t :'organization.correctly_created'
+        flash.notice = t :'organization.correctly_created'
         format.html { redirect_to(organizations_path) }
         format.xml  { render :xml => @organization, :status => :created, :location => @organization }
       else
@@ -110,7 +110,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.update_attributes(params[:organization])
-        flash[:notice] = t :'organization.correctly_updated'
+        flash.notice = t :'organization.correctly_updated'
         format.html { redirect_to(organizations_path) }
         format.xml  { head :ok }
       else
@@ -120,7 +120,7 @@ class OrganizationsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'organization.stale_object_error'
+    flash.alert = t :'organization.stale_object_error'
     redirect_to :action => :edit
   end
 

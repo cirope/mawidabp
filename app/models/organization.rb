@@ -11,9 +11,6 @@ class Organization < ActiveRecord::Base
   # Constantes
   INVALID_PREFIXES = ['www', APP_ADMIN_PREFIX]
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:business_unit_ids, :parameter_ids]
-
   # Callbacks
   after_create :create_initial_data
   
@@ -48,7 +45,8 @@ class Organization < ActiveRecord::Base
   has_many :parameters, :dependent => :destroy
   has_many :roles, :dependent => :destroy
   has_many :organization_roles, :dependent => :destroy
-  has_many :users, :through => :organization_roles, :readonly => true
+  has_many :users, :through => :organization_roles, :uniq => true,
+    :readonly => true
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true
 

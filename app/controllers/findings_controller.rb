@@ -19,7 +19,11 @@ class FindingsController < ApplicationController
       :page => params[:page],
       :per_page => APP_LINES_PER_PAGE,
       :include => [
-        {:control_objective_item => {:review => [:period, :plan_item]}},
+        {
+          :control_objective_item => {
+            :review => [:conclusion_final_review, :period, :plan_item]
+          }
+        },
         :users
       ]
     }
@@ -28,7 +32,11 @@ class FindingsController < ApplicationController
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    unless @auth_user.committee?
+    if @auth_user.committee?
+      if params[:user_id]
+        default_conditions[User.table_name] = {:id => params[:user_id]}
+      end
+    else
       self_and_descendants_ids = @self_and_descendants.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
@@ -93,15 +101,16 @@ class FindingsController < ApplicationController
   def update
     @title = t :'finding.edit_title'
     @finding = find_with_organization(params[:id])
-    params[:finding][:user_ids] ||= [] unless @finding.is_in_a_final_review?
     # Los auditados no pueden modificar desde observaciones las asociaciones
-    params[:finding].delete :user_ids if @auth_user.can_act_as_audited?
+    if @auth_user.can_act_as_audited?
+      params[:finding].delete :finding_user_assignments_attributes
+    end
     prepare_parameters
 
     respond_to do |format|
       Finding.transaction do
         if @finding.update_attributes(params[:finding])
-          flash[:notice] = t :'finding.correctly_updated'
+          flash.notice = t :'finding.correctly_updated'
           format.html { redirect_to(edit_finding_path(params[:completed], @finding)) }
           format.xml  { head :ok }
         else
@@ -113,8 +122,180 @@ class FindingsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'finding.stale_object_error'
+    flash.alert = t :'finding.stale_object_error'
     redirect_to :action => :edit
+  end
+
+  # Lista las observaciones / oportunidades de mejora
+  #
+  # * GET /findings/export_to_pdf
+  def export_to_pdf
+    detailed = !params[:include_details].blank?
+    options = {
+      :include => [
+        {
+          :control_objective_item => {
+            :review => [:conclusion_final_review, :period, :plan_item]
+          }
+        },
+        :users
+      ]
+    }
+    default_conditions = {
+      :final => false,
+      Period.table_name => {:organization_id => @auth_organization.id}
+    }
+
+    if @auth_user.committee?
+      if params[:user_id]
+        default_conditions[User.table_name] = {:id => params[:user_id]}
+      end
+    else
+      self_and_descendants = @auth_user.descendants + [@auth_user]
+      self_and_descendants_ids = self_and_descendants.map(&:id)
+      default_conditions[User.table_name] = {
+        :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
+          params[:user_id] : self_and_descendants_ids
+      }
+    end
+
+    default_conditions[:state] = params[:completed] == 'incomplete' ?
+      Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
+      Finding::STATUS.values - Finding::PENDING_STATUS
+
+    build_search_conditions Finding, default_conditions
+
+    options[:order] = @order_by || [
+      "#{Review.table_name}.created_at DESC",
+      "#{Finding.table_name}.state ASC",
+      "#{Finding.table_name}.review_code ASC"
+    ].join(', ')
+
+    findings = Finding.all(options.merge(:conditions => @conditions))
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+    pdf.add_title t(:'finding.index_title')
+
+    column_order = [
+      ['review', [Review.model_name.human,
+          PlanItem.human_attribute_name(:project)].to_sentence, 10],
+      ['project', PlanItem.human_attribute_name(:project), 0],
+      ['review_code', Finding.human_attribute_name(:review_code), 7],
+      ['description', Finding.human_attribute_name(:description),
+        detailed ? 25 : 47],
+      ['state', Finding.human_attribute_name(:state), 10],
+      ['rescheduled', t(:'weakness.previous_follow_up_dates') +
+          " (#{Finding.human_attribute_name(:rescheduled)})", 10],
+      ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
+            :follow_up_date : :solution_date), 10],
+      ['risk', Weakness.human_attribute_name(:risk), 6]
+    ]
+    columns = {}
+    column_data = []
+
+    if detailed
+      column_order << [
+        'audit_comments', Finding.human_attribute_name(:audit_comments), 10
+      ]
+      column_order << [
+        'answer', Finding.human_attribute_name(:answer), 12
+      ]
+    end
+
+    column_order.each do |col_id, col_name, col_with|
+      if col_with > 0
+        columns[col_id] = PDF::SimpleTable::Column.new(col_id) do |c|
+          c.heading = col_name
+          c.width = pdf.percent_width col_with
+        end
+      end
+    end
+
+    unless (@columns - ['issue_date']).blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      pointer_moved = true
+      filter_columns = (@columns - ['issue_date']).map do |c|
+        "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
+      end
+
+      pdf.text t(:'finding.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence,
+        :count => (@columns - ['issue_date']).size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    unless @order_by_column_name.blank?
+      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
+      pdf.text t(:'finding.pdf.sorted_by',
+        :column => "<b>#{@order_by_column_name}</b>"),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    findings.each do |finding|
+      date = params[:completed] == 'incomplete' ? finding.follow_up_date :
+        finding.solution_date
+      date_text = l(date, :format => :minimal).to_iso if date
+      stale = finding.kind_of?(Weakness) && finding.being_implemented? &&
+        finding.follow_up_date < Date.today
+      being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
+      rescheduled_text = being_implemented && !finding.rescheduled? ?
+        t(:'label.no') : ''
+
+      if being_implemented && finding.rescheduled?
+        dates = []
+        follow_up_dates = finding.all_follow_up_dates
+
+        if follow_up_dates.last == finding.follow_up_date
+          follow_up_dates.slice(-1)
+        end
+
+        follow_up_dates.each { |fud| dates << l(fud, :format => :minimal) }
+
+        rescheduled_text << dates.join("\n")
+      end
+
+      column_data << {
+        'review' => finding.review.to_s.to_iso,
+        'review_code' => finding.review_code.to_iso,
+        'description' => finding.description.to_iso,
+        'state' => finding.state_text.to_iso,
+        'rescheduled' => rescheduled_text.to_iso,
+        'date' => stale ? "<b>#{date_text}</b>" : date_text,
+        'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness)),
+        'audit_comments' => (finding.audit_comments.try(:to_iso) if detailed),
+        'answer' => (finding.answer.try(:to_iso) if detailed)
+      }
+    end
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    unless column_data.blank?
+      PDF::SimpleTable.new do |table|
+        table.width = pdf.page_usable_width
+        table.columns = columns
+        table.data = column_data
+        table.column_order = column_order.reject{|co| co.last == 0}.map(&:first)
+        table.row_gap = (PDF_FONT_SIZE * 1.25).round
+        table.split_rows = true
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_headings = true
+        table.position = :left
+        table.orientation = :right
+        table.render_on pdf
+      end
+    end
+
+    pdf_name = t :'finding.pdf.pdf_name'
+
+    pdf.custom_save_as(pdf_name, Finding.table_name)
+
+    redirect_to PDF::Writer.relative_path(pdf_name, Finding.table_name)
   end
 
   # Crea el documento de seguimiento de la oportunidad
@@ -252,6 +433,7 @@ class FindingsController < ApplicationController
 
   def load_privileges #:nodoc:
     @action_privileges.update({
+        :export_to_pdf => :read,
         :follow_up_pdf => :read,
         :auto_complete_for_user => :read,
         :auto_complete_for_finding_relation => :read

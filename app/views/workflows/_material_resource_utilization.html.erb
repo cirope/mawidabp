@@ -28,7 +28,7 @@
   var id = '<%= id %>_resource_id';
 
   Event.observe(id, 'change', function() {
-    var url = '<%= url_for :action => :resource_data %>';
+    var url = '<%= resource_data_workflows_path %>';
 
     Helper.showLoading(id);
 

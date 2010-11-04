@@ -2,9 +2,8 @@
   <thead>
     <tr>
       <th><%= Period.model_name.human %></th>
-      <th><%= Period.human_attribute_name :start %></th>
-      <th><%= Period.human_attribute_name :end %></th>
-      <th><%= Organization.model_name.human %></th>
+      <th class="expendable"><%= Period.human_attribute_name :start %></th>
+      <th class="expendable"><%= Period.human_attribute_name :end %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -13,9 +12,8 @@
     <% @procedure_controls.each do |procedure_control| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym procedure_control.period %></td>
-        <td><%= h l(procedure_control.period.start, :format => :short) %></td>
-        <td><%= h l(procedure_control.period.end, :format => :short) %></td>
-        <td><%= h procedure_control.organization.name %></td>
+        <td class="expendable"><%= h l(procedure_control.period.start, :format => :short) %></td>
+        <td class="expendable"><%= h l(procedure_control.period.end, :format => :short) %></td>
         <td><%= link_to_clone new_procedure_control_path(:clone_from => procedure_control.id),
             :label => t(:'procedure_control.copy') %></td>
         <td><%= link_to_show procedure_control %></td>

@@ -102,7 +102,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         @user.send_welcome_email
-        flash[:notice] = t :'user.correctly_created'
+        flash.notice = t :'user.correctly_created'
         format.html { redirect_to(users_path) }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update_attributes(params[:user])
         @user.send_notification_if_necesary
-        flash[:notice] = t :'user.correctly_updated'
+        flash.notice = t :'user.correctly_updated'
         format.html { redirect_to(users_path) }
         format.xml  { head :ok }
       else
@@ -141,7 +141,7 @@ class UsersController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'user.stale_object_error'
+    flash.alert = t :'user.stale_object_error'
     redirect_to edit_user_url(@user)
   end
 
@@ -153,9 +153,9 @@ class UsersController < ApplicationController
     @user = find_with_organization(params[:id])
     
     unless @user.disable!
-      flash[:alert] = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
+      flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else
-      flash[:notice] = t :'user.correctly_disabled'
+      flash.notice = t :'user.correctly_disabled'
     end
 
     respond_to do |format|
@@ -232,7 +232,7 @@ class UsersController < ApplicationController
 
       if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
         session[:user_id] = auth_user.id
-        flash[:notice] ||= t :'message.must_change_the_password'
+        flash.notice ||= t :'message.must_change_the_password'
         session[:go_to] = edit_password_user_url(auth_user)
       elsif !@group_admin_mode && auth_user && auth_user.expired?
         auth_user.is_an_important_change = false
@@ -252,7 +252,7 @@ class UsersController < ApplicationController
             auth_user.days_for_password_expiration
 
           if days_for_password_expiration
-            flash[:notice] = t(days_for_password_expiration >= 0 ?
+            flash.notice = t(days_for_password_expiration >= 0 ?
                 :'message.password_expire_in_x' :
                 :'message.password_expired_x_days_ago',
               :count => days_for_password_expiration.abs)
@@ -261,7 +261,7 @@ class UsersController < ApplicationController
           unless auth_user.allow_concurrent_access?
             auth_user = nil
             @user = User.new
-            flash[:alert] = t :'message.you_are_already_logged'
+            flash.alert = t :'message.you_are_already_logged'
 
             render :action => :login
           end
@@ -310,7 +310,7 @@ class UsersController < ApplicationController
         end
 
         @user.password = nil
-        flash[:alert] = t :'message.invalid_user_or_password'
+        flash.alert = t :'message.invalid_user_or_password'
         render :action => :login
       end
     else
@@ -408,7 +408,7 @@ class UsersController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'user.password_stale_object_error'
+    flash.alert = t :'user.password_stale_object_error'
     redirect_to edit_password_user_url(@auth_user)
   end
 
@@ -495,13 +495,13 @@ class UsersController < ApplicationController
 
     if @auth_user.update_attributes(attributes)
       I18n.locale = @auth_user.language
-      flash[:notice] = t :'user.correctly_updated'
+      flash.notice = t :'user.correctly_updated'
     end
 
     render :action => :edit_personal_data
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'user.password_stale_object_error'
+    flash.alert = t :'user.password_stale_object_error'
     redirect_to edit_personal_data_user_url(@auth_user)
   end
 
@@ -534,13 +534,13 @@ class UsersController < ApplicationController
     }
 
     if @other && @user.reassign_to(@other, options)
-      flash[:notice] = t(:'user.user_reassignment_completed')
+      flash.notice = t(:'user.user_reassignment_completed')
       redirect_to users_path
     elsif !@other
       @user.errors.add_to_base t(:'user.errors.must_select_a_user')
       render :action => :reassignment_edit
     else
-      flash[:alert] = t(:'user.user_reassignment_failed')
+      flash.alert = t(:'user.user_reassignment_failed')
       render :action => :reassignment_edit
     end
   end
@@ -570,10 +570,10 @@ class UsersController < ApplicationController
     }
 
     if @user.release_for_all_pending_findings(options)
-      flash[:notice] = t(:'user.user_release_completed')
+      flash.notice = t(:'user.user_release_completed')
       redirect_to users_path
     else
-      flash[:alert] = t(:'user.user_release_failed')
+      flash.alert = t(:'user.user_release_failed')
       render :action => :reassignment_edit
     end
   end
@@ -642,6 +642,18 @@ class UsersController < ApplicationController
       }
     end
 
+    unless @columns.blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      filter_columns = @columns.map do |c|
+        "<b>#{User.human_attribute_name(c)}</b>"
+      end
+
+      pdf.text t(:'user.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence, :count => @columns.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
     pdf.move_pointer PDF_FONT_SIZE
 
     unless column_data.blank?
@@ -662,15 +674,8 @@ class UsersController < ApplicationController
       end
     end
 
-    unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      columns = @columns.map {|c| "<b>#{User.human_attribute_name(c)}</b>"}
-
-      pdf.text t(:'user.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
-    end
+    pdf.move_pointer PDF_FONT_SIZE
+    pdf.text t(:'user.pdf.users_count', :count => users.size)
 
     pdf_name = t :'user.pdf.pdf_name'
 

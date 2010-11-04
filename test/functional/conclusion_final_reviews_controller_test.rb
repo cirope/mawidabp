@@ -7,23 +7,32 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :export_to_pdf]
     @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => conclusion_reviews(:conclusion_past_final_review).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:get, :export_to_pdf, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end
@@ -50,12 +59,39 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_template 'conclusion_final_reviews/index'
   end
 
+  test 'list conclusion_final_reviews with search by date and sort' do
+    perform_auth
+    get :index, :search => {
+      :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
+    assert_response :success
+    assert_not_nil assigns(:conclusion_final_reviews)
+    assert_equal 2, assigns(:conclusion_final_reviews).size
+    assert assigns(:conclusion_final_reviews).all? {|cfr| cfr.issue_date > 3.months.ago.to_date}
+    assert_select '#error_body', false
+    assert_template 'conclusion_final_reviews/index'
+  end
+
   test 'edit conclusion_final_reviews when search match only one result' do
     perform_auth
     get :index, :search => {
       :query => '1 2 3',
       :columns => ['identification', 'project']
     }
+    assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
+    assert_not_nil assigns(:conclusion_final_reviews)
+    assert_equal 1, assigns(:conclusion_final_reviews).size
+  end
+
+  test 'edit conclusion_final_reviews when search by date match only one result' do
+    perform_auth
+    get :index, :search => {
+      :query => "> #{I18n.l(5.days.ago.to_date, :format => :minimal)}",
+      :columns => ['issue_date']
+    }
+
     assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 1, assigns(:conclusion_final_reviews).size
@@ -295,7 +331,12 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     end
 
     assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
-    assert_match /textile/, ActionMailer::Base.deliveries.last.body
+
+    text_part = ActionMailer::Base.deliveries.last.parts.detect {
+      |p| p.content_type.match(/text/)
+    }.body.decoded
+
+    assert_match /textile/, text_part
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       put :send_by_email, {
@@ -315,7 +356,12 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     end
 
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
-    assert_match /textile/, ActionMailer::Base.deliveries.last.body
+
+    text_part = ActionMailer::Base.deliveries.last.parts.detect {
+      |p| p.content_type.match(/text/)
+    }.body.decoded
+
+    assert_match /textile/, text_part
   end
 
   test 'export list to pdf' do

@@ -52,10 +52,10 @@ class WorkflowTest < ActiveSupport::TestCase
     @workflow.review_id = '?123'
     assert @workflow.invalid?
     assert_equal 2, @workflow.errors.count
-    assert_equal error_message_from_model(@workflow, :period_id, :not_a_number),
-      @workflow.errors[:period_id]
-    assert_equal error_message_from_model(@workflow, :review_id, :not_a_number),
-      @workflow.errors[:review_id]
+    assert_equal [error_message_from_model(@workflow, :period_id,
+        :not_a_number)], @workflow.errors[:period_id]
+    assert_equal [error_message_from_model(@workflow, :review_id,
+        :not_a_number)], @workflow.errors[:review_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -64,9 +64,9 @@ class WorkflowTest < ActiveSupport::TestCase
     @workflow.review_id = nil
     assert @workflow.invalid?
     assert_equal 2, @workflow.errors.count
-    assert_equal error_message_from_model(@workflow, :period_id, :blank),
+    assert_equal [error_message_from_model(@workflow, :period_id, :blank)],
       @workflow.errors[:period_id]
-    assert_equal error_message_from_model(@workflow, :review_id, :blank),
+    assert_equal [error_message_from_model(@workflow, :review_id, :blank)],
       @workflow.errors[:review_id]
   end
 
@@ -75,7 +75,7 @@ class WorkflowTest < ActiveSupport::TestCase
     @workflow.review_id = workflows(:past_workflow).review_id
     assert @workflow.invalid?
     assert_equal 2, @workflow.errors.count
-    assert_equal error_message_from_model(@workflow, :review_id, :taken),
+    assert_equal [error_message_from_model(@workflow, :review_id, :taken)],
       @workflow.errors[:review_id]
     assert @workflow.errors.full_messages.include?(I18n.t(:'workflow.readonly'))
   end

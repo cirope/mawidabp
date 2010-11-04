@@ -32,9 +32,6 @@ class Review < ActiveRecord::Base
   before_validation :set_proper_parent#, :can_be_modified?
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:control_objective_item_ids]
-
   # Acceso a los atributos
   attr_reader :approval_errors, :procedure_control_subitem_ids
   attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
@@ -72,7 +69,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NOT NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   scope :list_without_final_review, lambda {
@@ -84,7 +82,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   scope :list_without_draft_review, lambda {
@@ -96,7 +95,8 @@ class Review < ActiveRecord::Base
           "#{ConclusionReview.table_name}.review_id IS NULL"
         ].join(' AND '),
         { :organization_id => GlobalModelConfig.current_organization_id }
-      ]
+      ],
+      :order => 'identification ASC'
     }
   }
   scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
@@ -308,18 +308,20 @@ class Review < ActiveRecord::Base
   end
 
   def effectiveness
-    coi_count = self.control_objective_items.inject(0) do |acc, coi|
+    coi_count = self.control_objective_items.inject(0.0) do |acc, coi|
       acc + (coi.relevance || 0)
     end
-    total = self.control_objective_items.inject(0) do |acc, coi|
+    total = self.control_objective_items.inject(0.0) do |acc, coi|
       acc + coi.effectiveness * (coi.relevance || 0)
     end
 
     coi_count > 0 ? (total / coi_count.to_f).round : 100
   end
 
-  def issue_date
-    self.conclusion_final_review.try(:issue_date) || self.created_at.to_date
+  def issue_date(include_draft = false)
+    self.conclusion_final_review.try(:issue_date) ||
+      (self.conclusion_draft_review.try(:issue_date) if include_draft) ||
+      self.created_at.to_date
   end
 
   def must_be_approved?(with_notifications = true)

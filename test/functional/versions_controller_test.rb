@@ -4,31 +4,31 @@ require 'test_helper'
 class VersionsControllerTest < ActionController::TestCase
   fixtures :versions
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:show, :security_changes_report]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => versions(:important_version).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :show, id_param],
+      [:get, :security_changes_report]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end
 
   test 'show version' do
     perform_auth
-    get :show, :id => versions(:important_version).id
+    get :show, :id => versions(:important_version).to_param
     assert_response :success
     assert_not_nil assigns(:version)
     assert_select '#error_body', false

@@ -7,17 +7,26 @@ class FindingsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
+    id_param = {
+      :completed => 'complete',
+      :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param
+    }
     public_actions = []
-    private_actions = [:index, :show, :edit, :update, :destroy]
+    private_actions = [
+      [:get, :index, {:completed => 'incomplete'}],
+      [:get, :show, id_param],
+      [:get, :edit, id_param],
+      [:put, :update, id_param]
+    ]
 
     private_actions.each do |action|
-      get action
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
-      get action
+      send *action
       assert_response :success
     end
   end
@@ -53,6 +62,21 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? {|f| f.review.identification.match(/1 2 4/i)}
     assert_equal assigns(:findings).map {|f| f.review.identification}.sort,
       assigns(:findings).map {|f| f.review.identification}
+    assert_select '#error_body', false
+    assert_template 'findings/index'
+  end
+
+  test 'list findings with search by date and sort' do
+    perform_auth
+    get :index, :completed => 'incomplete', :search => {
+      :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
+      :columns => ['review', 'issue_date']
+    }
+    
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 4, assigns(:findings).size
+    assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
@@ -164,8 +188,14 @@ class FindingsControllerTest < ActionController::TestCase
               :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
               :priority => get_test_parameter(:admin_priorities).first[1],
               :follow_up_date => '',
-              :user_ids => findings(
-                :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).user_ids,
+              :finding_user_assignments_attributes => {
+                :new_1 => { :user_id => users(:bare_user).id },
+                :new_2 => { :user_id => users(:audited_user).id },
+                :new_3 => { :user_id => users(:auditor_user).id },
+                :new_4 => { :user_id => users(:manager_user).id },
+                :new_5 => { :user_id => users(:supervisor_user).id },
+                :new_6 => { :user_id => users(:administrator_user).id }
+              },
               :work_papers_attributes => {
                 :new_1 => {
                   :name => 'New workpaper name',
@@ -174,8 +204,8 @@ class FindingsControllerTest < ActionController::TestCase
                   :description => 'New workpaper description',
                   :organization_id => organizations(:default_organization).id,
                   :file_model_attributes => {
-                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                      TEST_FILE, 'text/plain')
+                    :uploaded_data => Rack::Test::UploadedFile.new(
+                      TEST_FILE_FULL_PATH, 'text/plain')
                   }
                 }
               },
@@ -187,8 +217,8 @@ class FindingsControllerTest < ActionController::TestCase
                   :user_id => users(:administrator_user).id,
                   :notify_users => '1',
                   :file_model_attributes => {
-                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                      TEST_FILE, 'text/plain')
+                    :uploaded_data => Rack::Test::UploadedFile.new(
+                      TEST_FILE_FULL_PATH, 'text/plain')
                   }
                 }
               },
@@ -244,6 +274,26 @@ class FindingsControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => 3.days.from_now.to_date,
+            :finding_user_assignments_attributes => {
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+                :user_id => users(:bare_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+                :user_id => users(:audited_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+                :user_id => users(:auditor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+                :user_id => users(:manager_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+                :user_id => users(:supervisor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+                :user_id => users(:administrator_user).id
+              }
+            },
             :user_ids => [users(:administrator_user).id, users(:bare_user).id,
               users(:audited_user).id, users(:manager_user).id,
               users(:supervisor_user).id],
@@ -255,8 +305,8 @@ class FindingsControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                    TEST_FILE, 'text/plain')
+                  :uploaded_data => Rack::Test::UploadedFile.new(
+                    TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }
             },
@@ -267,8 +317,8 @@ class FindingsControllerTest < ActionController::TestCase
                 :answer_type => get_test_parameter(:admin_finding_answers_types).first[1],
                 :user_id => users(:audited_user).id,
                 :file_model_attributes => {
-                  :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                    TEST_FILE, 'text/plain')
+                  :uploaded_data => Rack::Test::UploadedFile.new(
+                    TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }
             },
@@ -299,8 +349,6 @@ class FindingsControllerTest < ActionController::TestCase
   test 'update finding and notify to the new user' do
     perform_auth
 
-    user_ids = findings(
-      :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).user_ids
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
@@ -326,8 +374,27 @@ class FindingsControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
-            :user_ids => user_ids,
-            :users_for_notification => [user_ids.first]
+            :users_for_notification => [users(:bare_user).id],
+            :finding_user_assignments_attributes => {
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+                :user_id => users(:bare_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+                :user_id => users(:audited_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+                :user_id => users(:auditor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+                :user_id => users(:manager_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+                :user_id => users(:supervisor_user).id
+              },
+              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+                :user_id => users(:administrator_user).id
+              }
+            }
           }
         }
       end
@@ -336,6 +403,59 @@ class FindingsControllerTest < ActionController::TestCase
     assert_redirected_to edit_finding_path('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
+  end
+
+  test 'export list to pdf' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete'
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
+  test 'export detailed list to pdf' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :include_details => 1
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
+  test 'export list with search' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :search => {
+      :query => '1 2 4 y w',
+      :columns => ['description', 'review'],
+      :order => 'review'
+    }
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+  end
+
+  test 'export detailed list with search' do
+    perform_auth
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
+        :search => {
+          :query => '1 2 4 y w',
+          :columns => ['description', 'review'],
+          :order => 'review'
+        }
+    end
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'follow up pdf' do

@@ -48,7 +48,7 @@ class Parameter < ActiveRecord::Base
 
   def remove_from_cache
     cache_key = "#{self.organization_id}_#{self.name}"
-    cached_versions = Rails.cache.read(cache_key) || []
+    cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
     cached_versions.delete_if { |p| p.id == self.id }
 

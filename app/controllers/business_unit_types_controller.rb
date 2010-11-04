@@ -71,7 +71,7 @@ class BusinessUnitTypesController < ApplicationController
 
     respond_to do |format|
       if @business_unit_type.save
-        flash[:notice] = t :'business_unit_type.correctly_created'
+        flash.notice = t :'business_unit_type.correctly_created'
         format.html { redirect_to(business_unit_types_path) }
         format.xml  { render :xml => @business_unit_type, :status => :created, :location => @business_unit_type }
       else
@@ -93,7 +93,7 @@ class BusinessUnitTypesController < ApplicationController
 
     respond_to do |format|
       if @business_unit_type.update_attributes(params[:business_unit_type])
-        flash[:notice] = t :'business_unit_type.correctly_updated'
+        flash.notice = t :'business_unit_type.correctly_updated'
         format.html { redirect_to(business_unit_types_path) }
         format.xml  { head :ok }
       else
@@ -103,7 +103,7 @@ class BusinessUnitTypesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'business_unit_type.stale_object_error'
+    flash.alert = t :'business_unit_type.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -115,7 +115,7 @@ class BusinessUnitTypesController < ApplicationController
     @business_unit_type = find_with_organization(params[:id])
 
     unless @business_unit_type.destroy
-      flash[:alert] = t :'business_unit_type.errors.can_not_be_destroyed'
+      flash.alert = t :'business_unit_type.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

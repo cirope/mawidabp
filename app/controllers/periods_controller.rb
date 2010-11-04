@@ -69,7 +69,7 @@ class PeriodsController < ApplicationController
 
     respond_to do |format|
       if @period.save
-        flash[:notice] = t :'period.correctly_created'
+        flash.notice = t :'period.correctly_created'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || periods_path) }
         format.xml  { render :xml => @period, :status => :created, :location => @period }
@@ -91,7 +91,7 @@ class PeriodsController < ApplicationController
 
     respond_to do |format|
       if @period.update_attributes(params[:period])
-        flash[:notice] = t :'period.correctly_updated'
+        flash.notice = t :'period.correctly_updated'
         format.html { redirect_to(periods_path) }
         format.xml  { head :ok }
       else
@@ -101,7 +101,7 @@ class PeriodsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'period.stale_object_error'
+    flash.alert = t :'period.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -113,7 +113,7 @@ class PeriodsController < ApplicationController
     @period = find_with_organization(params[:id])
 
     unless @period.destroy
-      flash[:alert] = ([t(:'period.errors.can_not_be_destroyed')] +
+      flash.alert = ([t(:'period.errors.can_not_be_destroyed')] +
           @period.errors.full_messages).join(APP_ENUM_SEPARATOR)
     end
 

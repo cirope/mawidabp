@@ -15,9 +15,6 @@ class Workflow < ActiveRecord::Base
 
   attr_readonly :period_id, :review_id
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:workflow_item_ids]
-
   # Restricciones
   validates :period_id, :review_id, :presence => true
   validates_uniqueness_of :review_id, :allow_nil => true, :allow_blank => true
@@ -81,13 +78,13 @@ class Workflow < ActiveRecord::Base
 
   def begining
     self.workflow_items.sort do |wi1, wi2|
-      wi1.start <=> wi2.start
+      (wi1.start || Date.today) <=> (wi2.start || Date.today)
     end.first.try(:start) || Date.today
   end
 
   def ending
     self.workflow_items.sort do |wi1, wi2|
-      wi1.end <=> wi2.end
+      (wi1.end || Date.today) <=> (wi2.end || Date.today)
     end.last.try(:end) || Date.today
   end
 

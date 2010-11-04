@@ -1,5 +1,5 @@
 <% controller_name = controller.controller_name.to_sym %>
-<div id="menu" <%= raw('style="border-top: 12px solid #F7AC07;"') if Rails.env == 'development' %>>
+<div id="menu" style="display: none; <%= 'border-top: 12px solid #F7AC07;' if Rails.env == 'development' %>">
   <div id="session">
     <div id="user">[ <%= link_to user.user, edit_personal_data_user_path(user),
       {:title => t(:'user.change_personal_data')} %> ]</div>
@@ -45,8 +45,8 @@
   </ul>
 </div>
 
-<div id="menu_level_1"><%= yield :submenu_items_1 %>&nbsp;</div>
-<div id="menu_level_2"><%= yield :submenu_items_2 %>&nbsp;</div>
+<div id="menu_level_1" style="display: none;"><%= yield :submenu_items_1 %>&nbsp;</div>
+<div id="menu_level_2" style="display: none;"><%= yield :submenu_items_2 %>&nbsp;</div>
 
 <%= javascript_tag do %>
   <%= yield :javascript_menu %>

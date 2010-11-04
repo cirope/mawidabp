@@ -66,7 +66,7 @@ class PeriodTest < ActiveSupport::TestCase
     @period.end = '_1'
     assert @period.invalid?
     assert_equal 5, @period.errors.count
-    assert_equal error_message_from_model(@period, :number, :not_a_number),
+    assert_equal [error_message_from_model(@period, :number, :not_a_number)],
       @period.errors[:number]
     assert_equal [error_message_from_model(@period, :start, :invalid_date),
       error_message_from_model(@period, :start, :blank)].sort,
@@ -85,15 +85,15 @@ class PeriodTest < ActiveSupport::TestCase
     @period.organization_id = nil
     assert @period.invalid?
     assert_equal 5, @period.errors.count
-    assert_equal error_message_from_model(@period, :number, :blank),
+    assert_equal [error_message_from_model(@period, :number, :blank)],
       @period.errors[:number]
-    assert_equal error_message_from_model(@period, :start, :blank),
+    assert_equal [error_message_from_model(@period, :start, :blank)],
       @period.errors[:start]
-    assert_equal error_message_from_model(@period, :end, :blank),
+    assert_equal [error_message_from_model(@period, :end, :blank)],
       @period.errors[:end]
-    assert_equal error_message_from_model(@period, :description, :blank),
+    assert_equal [error_message_from_model(@period, :description, :blank)],
       @period.errors[:description]
-    assert_equal error_message_from_model(@period, :organization_id, :blank),
+    assert_equal [error_message_from_model(@period, :organization_id, :blank)],
       @period.errors[:organization_id]
   end
 
@@ -102,8 +102,8 @@ class PeriodTest < ActiveSupport::TestCase
     @period.end = @period.start.yesterday
     assert @period.invalid?
     assert_equal 1, @period.errors.count
-    assert_equal error_message_from_model(@period, :end, :after,
-      :restriction => I18n.l(@period.start)), @period.errors[:end]
+    assert_equal [error_message_from_model(@period, :end, :after,
+      :restriction => I18n.l(@period.start))], @period.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -111,7 +111,7 @@ class PeriodTest < ActiveSupport::TestCase
     @period.number = periods(:past_period).number
     assert @period.invalid?
     assert_equal 1, @period.errors.count
-    assert_equal error_message_from_model(@period, :number, :taken),
+    assert_equal [error_message_from_model(@period, :number, :taken)],
       @period.errors[:number]
   end
 
@@ -120,7 +120,7 @@ class PeriodTest < ActiveSupport::TestCase
     @period.number = 1.5
     assert @period.invalid?
     assert_equal 1, @period.errors.count
-    assert_equal error_message_from_model(@period, :number, :not_a_number),
+    assert_equal [error_message_from_model(@period, :number, :not_an_integer)],
       @period.errors[:number]
   end
 end

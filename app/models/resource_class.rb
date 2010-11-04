@@ -10,9 +10,6 @@ class ResourceClass < ActiveRecord::Base
     :human => 0,
     :material => 1
   }
-
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:resource_ids]
   
   # Named scopes
   scope :human_resources, lambda {

@@ -73,7 +73,7 @@ class ParametersController < ApplicationController
 
     respond_to do |format|
       if @parameter.update_attributes(clean_parameters(params[:parameter]))
-        flash[:notice] = t :'parameter.correctly_updated'
+        flash.notice = t :'parameter.correctly_updated'
         format.html { redirect_to(parameters_path(:type => @type)) }
         format.xml  { head :ok }
       else
@@ -83,7 +83,7 @@ class ParametersController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'parameter.stale_object_error'
+    flash.alert = t :'parameter.stale_object_error'
     redirect_to :action => :edit
   end
 

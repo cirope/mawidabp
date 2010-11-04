@@ -94,7 +94,7 @@ class ReviewsController < ApplicationController
     
     respond_to do |format|
       if @review.save
-        flash[:notice] = t :'review.correctly_created'
+        flash.notice = t :'review.correctly_created'
         format.html { redirect_to(edit_review_path(@review)) }
         format.xml  { render :xml => @review, :status => :created, :location => @review }
       else
@@ -116,7 +116,7 @@ class ReviewsController < ApplicationController
 
     respond_to do |format|
       if @review.update_attributes(params[:review])
-        flash[:notice] = t :'review.correctly_updated'
+        flash.notice = t :'review.correctly_updated'
         format.html { redirect_to(edit_review_path(@review)) }
         format.xml  { head :ok }
       else
@@ -126,7 +126,7 @@ class ReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'review.stale_object_error'
+    flash.alert = t :'review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -138,7 +138,7 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     unless @review.destroy
-      flash[:alert] = t :'review.errors.can_not_be_destroyed'
+      flash.alert = t :'review.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|
@@ -179,8 +179,7 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/plan_item_data/1
   def plan_item_data
-    plan_item = PlanItem.first(:conditions => {:id => params[:id]})
-    business_unit = plan_item.try(:business_unit)
+    business_unit = PlanItem.find_by_id(params[:id]).try(:business_unit)
     name = business_unit.try(:name)
     
     type = business_unit.business_unit_type.name if business_unit

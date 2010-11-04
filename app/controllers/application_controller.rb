@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     unless login_check
-      go_to = request.path
+      go_to = request.fullpath
       session[:go_to] = go_to unless action == :logout || request.xhr?
       @auth_user = nil
       redirect_to_login t(:'message.must_be_authenticated'), :alert
@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
 
       if @auth_user.try(:must_change_the_password?) &&
            ![:edit_password, :update_password].include?(action)
-        flash[:notice] ||= t :'message.must_change_the_password'
+        flash.notice ||= t :'message.must_change_the_password'
         redirect_to edit_password_user_url(@auth_user)
       end
 
@@ -139,7 +139,7 @@ class ApplicationController < ActionController::Base
       end
     else
       restart_session
-      go_to = request.path
+      go_to = request.fullpath
       session[:go_to] = params[:action].try(:to_sym) != :logout ? go_to : nil
       @auth_user = nil
       redirect_to_login t(:'message.session_time_expired'), :alert
@@ -208,7 +208,7 @@ class ApplicationController < ActionController::Base
 
     unless allowed_by_type && allowed_by_privileges
       unless request.xhr?
-        flash[:alert] = t(:'message.insufficient_privileges')
+        flash.alert = t(:'message.insufficient_privileges')
         redirect_to :back
       else
         render :partial => 'shared/ajax_message', :layout => false,
@@ -223,7 +223,7 @@ class ApplicationController < ActionController::Base
 
   def check_group_admin
     unless @auth_user.group_admin == true
-      flash[:alert] = t(:'message.insufficient_privileges')
+      flash.alert = t(:'message.insufficient_privileges')
       redirect_to :back
     end
 
@@ -252,15 +252,22 @@ class ApplicationController < ActionController::Base
 
   def make_date_range(parameters = nil)
     if parameters
-      from_date = ValidatesTimeliness::Parser.parse(parameters[:from_date],
-        :date)
-      to_date = ValidatesTimeliness::Parser.parse(parameters[:to_date], :date)
+      from_date = Timeliness::Parser.parse(parameters[:from_date], :date)
+      to_date = Timeliness::Parser.parse(parameters[:to_date], :date)
     end
 
     from_date ||= Date.today.at_beginning_of_month
     to_date ||= Date.today.at_end_of_month
 
-    [from_date, to_date].sort
+    [from_date.to_date, to_date.to_date].sort
+  end
+
+  def extract_operator(search_term)
+    operator = SEARCH_ALLOWED_OPERATORS.detect do |op_regex, _|
+      search_term =~ op_regex
+    end
+
+    operator ? [search_term.sub(operator.first, ''), operator.last] : search_term
   end
 
   def build_search_conditions(model, default_conditions = {})
@@ -286,17 +293,27 @@ class ApplicationController < ActionController::Base
 
         or_queries.each_with_index do |or_query, j|
           @columns.each do |column|
-            if or_query =~ model.get_column_regexp(column)
+            clean_or_query, operator = *extract_operator(or_query)
+
+            if clean_or_query =~ model.get_column_regexp(column) &&
+                (!operator || model.allow_search_operator?(operator, column))
               index = i * 1000 + j
               conversion_method = model.get_column_conversion_method(column)
               filter = "#{model.get_column_name(column)} "
+              operator ||= model.get_column_operator(column).kind_of?(Array) ?
+                '=' : model.get_column_operator(column)
 
-              filter << model.get_column_operator(column)
+              filter << operator
               or_search_string << "#{filter} :#{column}_filter_#{index}"
 
+              if conversion_method.respond_to?(:call)
+                casted_value = conversion_method.call(clean_or_query.strip)
+              else
+                casted_value = clean_or_query.strip.send(conversion_method) rescue nil
+              end
+
               filters["#{column}_filter_#{index}".to_sym] =
-                model.get_column_mask(column) %
-                or_query.strip.send(conversion_method)
+                model.get_column_mask(column) % casted_value
             else
               or_search_string << ':boolean_false'
             end

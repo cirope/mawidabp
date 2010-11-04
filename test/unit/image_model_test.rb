@@ -45,14 +45,14 @@ class ImageModelTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validation' do
     @image_model = ImageModel.new(:uploaded_data =>
-        ActionDispatch::Http::UploadedFile.new(make_file(1), 'image/gif'))
+        Rack::Test::UploadedFile.new(make_file(1), 'image/gif'))
 
     assert @image_model.valid?, @image_model.errors.full_messages.join(' ;')
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}image_model_test"), :secure => true
 
     @image_model = ImageModel.new(:uploaded_data =>
-        ActionDispatch::Http::UploadedFile.new(make_file(21), 'image/gif'))
+        Rack::Test::UploadedFile.new(make_file(21), 'image/gif'))
 
     assert @image_model.invalid?
     assert_equal error_message_from_model(@image_model, :size, :inclusion),
@@ -68,10 +68,10 @@ class ImageModelTest < ActiveSupport::TestCase
     @image_model.content_type = 'abc' * 100
     assert @image_model.invalid?
     assert_equal 4, @image_model.errors.count
-    assert_equal error_message_from_model(@image_model, :filename, :too_long,
-      :count => 255), @image_model.errors[:filename]
-    assert_equal error_message_from_model(@image_model, :thumbnail, :too_long,
-      :count => 255), @image_model.errors[:thumbnail]
+    assert_equal [error_message_from_model(@image_model, :filename, :too_long,
+      :count => 255)], @image_model.errors[:filename]
+    assert_equal [error_message_from_model(@image_model, :thumbnail, :too_long,
+      :count => 255)], @image_model.errors[:thumbnail]
     assert_equal [error_message_from_model(@image_model, :content_type,
       :too_long, :count => 255), error_message_from_model(@image_model,
       :content_type, :inclusion)].sort,

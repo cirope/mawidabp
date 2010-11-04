@@ -6,9 +6,6 @@ class WorkflowItem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:resource_ids]
-
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados
   before_destroy :can_be_destroyed?
@@ -20,6 +17,7 @@ class WorkflowItem < ActiveRecord::Base
   attr_accessor :overloaded
 
   # Restricciones
+  validate :check_if_is_frozen
   validates :task, :order_number, :presence => true
   validates_length_of :predecessors, :maximum => 255, :allow_nil => true,
     :allow_blank => true
@@ -141,12 +139,12 @@ class WorkflowItem < ActiveRecord::Base
     self.material_resource_utilizations.sum(&:cost)
   end
 
-  def validate
+  def check_if_is_frozen
     unless self.is_frozen? && self.changed?
       true
     else
       msg = I18n.t(:'workflow.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
 
       false
     end

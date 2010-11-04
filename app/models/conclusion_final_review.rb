@@ -1,4 +1,13 @@
 class ConclusionFinalReview < ConclusionReview
+  # Constantes
+  COLUMNS_FOR_SEARCH[:close_date] = {
+    :column => "#{table_name}.close_date",
+      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
+      :conversion_method => lambda {
+        |value| ValidatesTimeliness::Parser.parse(value, :date)
+      }, :regexp => SEARCH_DATE_REGEXP
+  }
+
   # Named scopes
   scope :list_all_by_date, lambda { |from_date, to_date|
     {
@@ -44,12 +53,9 @@ class ConclusionFinalReview < ConclusionReview
   # Restricciones
   validates :close_date, :presence => true
   validates_uniqueness_of :review_id, :allow_blank => true, :allow_nil => true
-  validates :close_date, :allow_nil => true, :allow_blank => true,
-    :on => :create, :timeliness => {
-      :type => :date,
-      :on_or_after => lambda { |conclusion_review|
-        conclusion_review.issue_date || Time.now.to_date
-      }
+  validates_date :close_date, :allow_nil => true, :allow_blank => true,
+    :on => :create, :on_or_after => lambda { |conclusion_review|
+      conclusion_review.issue_date || Date.today
     }
   validates_each :review_id do |record, attr, value|
     if record.review && record.review.conclusion_draft_review
@@ -63,6 +69,15 @@ class ConclusionFinalReview < ConclusionReview
 
   # Relaciones
   has_one :conclusion_draft_review, :through => :review
+
+  def self.columns_for_sort
+    ConclusionReview.columns_for_sort.dup.merge(
+      :close_date => {
+        :name => ConclusionReview.human_attribute_name(:close_date),
+        :field => "#{ConclusionReview.table_name}.close_date ASC"
+      }
+    )
+  end
 
   def initialize(attributes = nil, import_from_draft = true)
     super(attributes)
@@ -100,11 +115,16 @@ class ConclusionFinalReview < ConclusionReview
 
           finding.final = true
           finding.parent = f
-          finding.user_ids = f.user_ids
           finding.origination_date ||= f.origination_date ||= self.issue_date
+
+          f.finding_user_assignments.each do |fua|
+            finding.finding_user_assignments.build(
+              fua.attributes.clone.update(:id => nil, :finding_id => nil))
+          end
           
           f.work_papers.each do |wp|
-            finding.work_papers.build(wp.attributes.clone.update(:id => nil)).check_code_prefix = false
+            finding.work_papers.build(
+              wp.attributes.clone.update(:id => nil)).check_code_prefix = false
           end
 
           finding.save!
@@ -128,6 +148,6 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def is_frozen?
-    self.close_date && Time.now.to_date > self.close_date
+    self.close_date && Date.today > self.close_date
   end
 end

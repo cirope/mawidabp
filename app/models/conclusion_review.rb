@@ -9,6 +9,13 @@ class ConclusionReview < ActiveRecord::Base
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+    :issue_date => {
+      :column => "#{table_name}.issue_date",
+      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
+      :conversion_method => lambda {
+        |value| Timeliness::Parser.parse(value, :date)
+      }, :regexp => SEARCH_DATE_REGEXP
+    },
     :period => {
       :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
@@ -66,17 +73,13 @@ class ConclusionReview < ActiveRecord::Base
   # Restricciones de los atributos
   attr_protected :approved
   attr_readonly :review_id
-
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:weakness_ids, :oportunity_ids]
   
   # Restricciones
   validates :review_id, :presence => true
   validates :issue_date, :applied_procedures, :conclusion, :presence => true
   validates_length_of :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
-  validates :issue_date, :allow_nil => true, :allow_blank => true,
-    :timeliness => { :type => :date }
+  validates_date :issue_date, :allow_nil => true, :allow_blank => true
 
   # Relaciones
   belongs_to :review

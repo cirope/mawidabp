@@ -1,4 +1,4 @@
-administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed:
+administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed:
   status: <%= Notification::STATUS[:confirmed] %>
   confirmation_hash: <%= UUIDTools::UUID.random_create.to_s %>
   confirmation_date: <%= Time.now.to_s(:db) %>

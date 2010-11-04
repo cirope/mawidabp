@@ -15,9 +15,6 @@ class Plan < ActiveRecord::Base
 
   attr_readonly :period_id
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:plan_item_ids]
-
   # Restricciones
   validates_presence_of :period_id
   validates_uniqueness_of :period_id, :allow_nil => true, :allow_blank => true
@@ -50,9 +47,10 @@ class Plan < ActiveRecord::Base
 
     self.plan_items.each do |pi|
       errors = pi.errors
-      taken_error = ::ActiveRecord::Error.new(pi, :project, :taken).to_s
+      @taken_error ||= ::ActiveModel::Errors.new(pi).generate_message(:project,
+        :taken)
 
-      has_duplication ||= taken_error == errors[:project]
+      has_duplication ||= errors[:project].include?(@taken_error)
     end
 
     has_duplication
@@ -81,7 +79,7 @@ class Plan < ActiveRecord::Base
         pi.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
 
-      self.errors.add_to_base errors.reject { |e| e.blank? }.join(
+      self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 
       false

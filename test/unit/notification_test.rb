@@ -7,14 +7,14 @@ class NotificationTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @notification = Notification.find(
-      notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed).id)
+      notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).id)
     GlobalModelConfig.current_organization_id = organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Notification, @notification
-    fixture_notification = notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_notify_confirmed)
+    fixture_notification = notifications(:administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed)
     assert_equal fixture_notification.status, @notification.status
     assert_equal fixture_notification.notes, @notification.notes
     assert_equal fixture_notification.confirmation_hash,
@@ -59,9 +59,9 @@ class NotificationTest < ActiveSupport::TestCase
     @notification.user_id = nil
     assert @notification.invalid?
     assert_equal 2, @notification.errors.count
-    assert_equal error_message_from_model(@notification, :confirmation_hash,
-      :blank), @notification.errors[:confirmation_hash]
-    assert_equal error_message_from_model(@notification, :user_id, :blank),
+    assert_equal [error_message_from_model(@notification, :confirmation_hash,
+      :blank)], @notification.errors[:confirmation_hash]
+    assert_equal [error_message_from_model(@notification, :user_id, :blank)],
       @notification.errors[:user_id]
   end
 
@@ -73,14 +73,14 @@ class NotificationTest < ActiveSupport::TestCase
     @notification.confirmation_date = '12/34/34'
     assert @notification.invalid?
     assert_equal 4, @notification.errors.count
-    assert_equal error_message_from_model(@notification, :user_id,
-      :not_a_number), @notification.errors[:user_id]
-    assert_equal error_message_from_model(@notification, :status,
-      :not_a_number), @notification.errors[:status]
-    assert_equal error_message_from_model(@notification, :user_who_confirm_id,
-      :not_a_number), @notification.errors[:user_who_confirm_id]
-    assert_equal error_message_from_model(@notification, :confirmation_date,
-      :invalid_date), @notification.errors[:confirmation_date]
+    assert_equal [error_message_from_model(@notification, :user_id,
+      :not_an_integer)], @notification.errors[:user_id]
+    assert_equal [error_message_from_model(@notification, :status,
+      :not_a_number)], @notification.errors[:status]
+    assert_equal [error_message_from_model(@notification, :user_who_confirm_id,
+      :not_a_number)], @notification.errors[:user_who_confirm_id]
+    assert_equal [error_message_from_model(@notification, :confirmation_date,
+      :invalid_date)], @notification.errors[:confirmation_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -88,8 +88,8 @@ class NotificationTest < ActiveSupport::TestCase
     @notification.confirmation_hash = 'abc' * 100
     assert @notification.invalid?
     assert_equal 1, @notification.errors.count
-    assert_equal error_message_from_model(@notification, :confirmation_hash,
-      :too_long, :count => 255), @notification.errors[:confirmation_hash]
+    assert_equal [error_message_from_model(@notification, :confirmation_hash,
+      :too_long, :count => 255)], @notification.errors[:confirmation_hash]
   end
 
   test 'dynamic functions' do

@@ -84,12 +84,19 @@ class FollowUpCommitteeController < ApplicationController
 
             c_r.review.control_objective_items.each do |coi|
               process_controls[coi.process_control.name] ||= []
-              process_controls[coi.process_control.name] << coi.effectiveness
+              process_controls[coi.process_control.name] << coi
             end
 
-            process_controls.each do |pc, effectiveness|
-              process_controls[pc] = effectiveness.inject(0) {|t, e| t + e}
-              process_controls[pc] /= effectiveness.size
+            process_controls.each do |pc, control_objective_items|
+              coi_count = control_objective_items.inject(0.0) do |acc, coi|
+                acc + (coi.relevance || 0)
+              end
+              total = control_objective_items.inject(0.0) do |acc, coi|
+                acc + coi.effectiveness * (coi.relevance || 0)
+              end
+
+              process_controls[pc] = coi_count > 0 ?
+                (total / coi_count.to_f).round : 100
             end
 
             c_r.review.weaknesses.each do |w|

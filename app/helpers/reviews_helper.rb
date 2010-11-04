@@ -47,8 +47,8 @@ module ReviewsHelper
     procedure_control = ProcedureControl.list_by_period(review.period_id).first
 
     if procedure_control
-      link_to_remote t(:'review.view_procedure_control_for_the_period'),
-        :update => 'procedure_control_data', :method => :get,
+      link_to t(:'review.view_procedure_control_for_the_period'),
+        :remote => true, :update => 'procedure_control_data', :method => :get,
         :url => {:action => :procedure_control_data, :id => procedure_control},
         :loading => 'Helper.showLoading()', :complete => 'Helper.hideLoading()'
     else

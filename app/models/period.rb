@@ -89,10 +89,9 @@ class Period < ActiveRecord::Base
   validates :number, :start, :end, :description, :organization_id,
     :presence => true
   validates_uniqueness_of :number, :scope => :organization_id
-  validates :start, :allow_nil => true, :allow_blank => true,
-    :timeliness => {:type => :date}
-  validates :end, :allow_nil => true, :allow_blank => true,
-    :timeliness => {:after => :start, :type => :date}
+  validates_date :start, :allow_nil => true, :allow_blank => true
+  validates_date :end, :allow_nil => true, :allow_blank => true,
+    :after => :start
   
   # Relaciones
   belongs_to :organization

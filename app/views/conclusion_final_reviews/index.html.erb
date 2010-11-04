@@ -8,11 +8,12 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_not_available_column ConclusionDraftReview.human_attribute_name(:issue_date) %>
-      <%= make_filterable_column Review.human_attribute_name(:period_id), 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
+      <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>
+      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), {:expendable => true}, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), {:expendable => true}, 'issue_date' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), {:expendable => true}, 'close_date' %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -20,11 +21,12 @@
   <tbody>
     <% @conclusion_final_reviews.each do |conclusion_final_review| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
         <td><%= show_period_with_dates_as_acronym conclusion_final_review.review.period %></td>
         <td class="nowrap"><%= h conclusion_final_review.review.identification %></td>
-        <td><%= super_truncate(conclusion_final_review.review.plan_item.business_unit.name, 25) %></td>
-        <td><%= super_truncate(conclusion_final_review.review.plan_item.project, 30) %></td>
+        <td class="expendable"><%= super_truncate(conclusion_final_review.review.plan_item.business_unit.name, 25) %></td>
+        <td class="expendable"><%= super_truncate(conclusion_final_review.review.plan_item.project, 30) %></td>
+        <td class="expendable"><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
+        <td class="expendable"><%= l(conclusion_final_review.close_date, :format => :short) if conclusion_final_review.close_date %></td>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
       </tr>

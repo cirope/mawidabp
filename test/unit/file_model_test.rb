@@ -48,7 +48,7 @@ class FileModelTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validation' do
     @file_model = FileModel.new(
-      :uploaded_data => ActionDispatch::Http::UploadedFile.new(make_file(1),
+      :uploaded_data => Rack::Test::UploadedFile.new(make_file(1),
         'text/plain'))
 
     assert @file_model.valid?, @file_model.errors.full_messages.join(' ;')
@@ -56,11 +56,11 @@ class FileModelTest < ActiveSupport::TestCase
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
 
     @file_model = FileModel.new(
-      :uploaded_data => ActionDispatch::Http::UploadedFile.new(make_file(21),
+      :uploaded_data => Rack::Test::UploadedFile.new(make_file(21),
         'text/plain'))
 
     assert @file_model.invalid?
-    assert_equal error_message_from_model(@file_model, :size, :inclusion),
+    assert_equal [error_message_from_model(@file_model, :size, :inclusion)],
       @file_model.errors[:size]
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
@@ -72,10 +72,10 @@ class FileModelTest < ActiveSupport::TestCase
     @file_model.content_type = 'abc' * 100
     assert @file_model.invalid?
     assert_equal 2, @file_model.errors.count
-    assert_equal error_message_from_model(@file_model, :filename, :too_long,
-      :count => 255), @file_model.errors[:filename]
-    assert_equal error_message_from_model(@file_model, :content_type, :too_long,
-      :count => 255), @file_model.errors[:content_type]
+    assert_equal [error_message_from_model(@file_model, :filename, :too_long,
+      :count => 255)], @file_model.errors[:filename]
+    assert_equal [error_message_from_model(@file_model, :content_type, :too_long,
+      :count => 255)], @file_model.errors[:content_type]
   end
 
   private

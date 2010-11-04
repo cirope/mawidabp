@@ -4,13 +4,6 @@ require 'test_helper'
 class ParametersControllerTest < ActionController::TestCase
   fixtures :parameters
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :edit, :update, :destroy]
-  end
-
   def teardown
     Rails.cache.clear if Rails.cache.respond_to?(:clear)
   end
@@ -18,14 +11,24 @@ class ParametersControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:type => 'admin',
+      :id => parameters(:parameter_admin_aproach_types).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index, {:type => 'admin'}],
+      [:get, :show, id_param],
+      [:get, :edit, id_param],
+      [:put, :update, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end

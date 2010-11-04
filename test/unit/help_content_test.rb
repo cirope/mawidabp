@@ -40,7 +40,7 @@ class HelpContentTest < ActiveSupport::TestCase
     @help_content.language = '   '
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
-    assert_equal error_message_from_model(@help_content, :language, :blank),
+    assert_equal [error_message_from_model(@help_content, :language, :blank)],
       @help_content.errors[:language]
   end
 
@@ -49,7 +49,7 @@ class HelpContentTest < ActiveSupport::TestCase
     @help_content.language = help_contents(:help_en).language
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
-    assert_equal error_message_from_model(@help_content, :language, :taken),
+    assert_equal [error_message_from_model(@help_content, :language, :taken)],
       @help_content.errors[:language]
   end
 
@@ -58,7 +58,7 @@ class HelpContentTest < ActiveSupport::TestCase
     @help_content.language = 'abcd' * 3
     assert @help_content.invalid?
     assert_equal 1, @help_content.errors.count
-    assert_equal error_message_from_model(@help_content, :language, :too_long,
-      :count => 10), @help_content.errors[:language]
+    assert_equal [error_message_from_model(@help_content, :language, :too_long,
+      :count => 10)], @help_content.errors[:language]
   end
 end

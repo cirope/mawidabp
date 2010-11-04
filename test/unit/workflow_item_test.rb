@@ -72,14 +72,14 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.end = '_1'
     assert @workflow_item.invalid?
     assert_equal 4, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :order_number,
-      :not_a_number), @workflow_item.errors[:order_number]
-    assert_equal error_message_from_model(@workflow_item, :workflow_id,
-      :not_a_number), @workflow_item.errors[:workflow_id]
-    assert_equal error_message_from_model(@workflow_item, :start,
-      :invalid_date), @workflow_item.errors[:start]
-    assert_equal error_message_from_model(@workflow_item, :end, :invalid_date),
-      @workflow_item.errors[:end]
+    assert_equal [error_message_from_model(@workflow_item, :order_number,
+        :not_a_number)], @workflow_item.errors[:order_number]
+    assert_equal [error_message_from_model(@workflow_item, :workflow_id,
+        :not_a_number)], @workflow_item.errors[:workflow_id]
+    assert_equal [error_message_from_model(@workflow_item, :start,
+        :invalid_date)], @workflow_item.errors[:start]
+    assert_equal [error_message_from_model(@workflow_item, :end,
+        :invalid_date)], @workflow_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -91,14 +91,14 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.end = '   '
     assert @workflow_item.invalid?
     assert_equal 4, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :task, :blank),
+    assert_equal [error_message_from_model(@workflow_item, :task, :blank)],
       @workflow_item.errors[:task]
-    assert_equal error_message_from_model(@workflow_item, :order_number,
-      :blank), @workflow_item.errors[:order_number]
-    assert_equal error_message_from_model(@workflow_item, :start, :blank),
-      @workflow_item.errors[:start]
-    assert_equal error_message_from_model(@workflow_item, :end, :blank),
-      @workflow_item.errors[:end]
+    assert_equal [error_message_from_model(@workflow_item, :order_number,
+      :blank)], @workflow_item.errors[:order_number]
+    assert_equal [error_message_from_model(@workflow_item, :start,
+        :invalid_date)], @workflow_item.errors[:start]
+    assert_equal [error_message_from_model(@workflow_item, :end,
+        :invalid_date)], @workflow_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -106,7 +106,7 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.task = workflow_items(:with_conclusion_workflow_item_2).task
     assert @workflow_item.invalid?
     assert_equal 1, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :task, :taken),
+    assert_equal [error_message_from_model(@workflow_item, :task, :taken)],
       @workflow_item.errors[:task]
   end
 
@@ -115,8 +115,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.end = @workflow_item.start.yesterday
     assert @workflow_item.invalid?
     assert_equal 1, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :end, :on_or_after,
-      :restriction => I18n.l(@workflow_item.start)),
+    assert_equal [error_message_from_model(@workflow_item, :end, :on_or_after,
+      :restriction => I18n.l(@workflow_item.start))],
       @workflow_item.errors[:end]
   end
 
@@ -126,10 +126,10 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.end = @workflow_item.workflow.period.end.tomorrow
     assert @workflow_item.invalid?
     assert_equal 2, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :start,
-      :out_of_period), @workflow_item.errors[:start]
-    assert_equal error_message_from_model(@workflow_item, :end, :out_of_period),
-      @workflow_item.errors[:end]
+    assert_equal [error_message_from_model(@workflow_item, :start,
+      :out_of_period)], @workflow_item.errors[:start]
+    assert_equal [error_message_from_model(@workflow_item, :end,
+        :out_of_period)], @workflow_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -142,10 +142,10 @@ class WorkflowItemTest < ActiveSupport::TestCase
       workflow_items(:with_conclusion_workflow_item_1).end.yesterday
     assert @workflow_item.invalid?
     assert_equal 2, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :end, :item_overload),
-      @workflow_item.errors[:end]
-    assert_equal error_message_from_model(@workflow_item, :start,
-      :item_overload), @workflow_item.errors[:start]
+    assert_equal [error_message_from_model(@workflow_item, :end,
+        :item_overload)], @workflow_item.errors[:end]
+    assert_equal [error_message_from_model(@workflow_item, :start,
+      :item_overload)], @workflow_item.errors[:start]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -161,8 +161,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
     assert workflow_item_3.invalid?
     assert_equal 1, workflow_item_3.errors.count
-    assert_equal error_message_from_model(workflow_item_3, :start,
-      :resource_overload), workflow_item_3.errors[:start]
+    assert_equal [error_message_from_model(workflow_item_3, :start,
+      :resource_overload)], workflow_item_3.errors[:start]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -170,8 +170,8 @@ class WorkflowItemTest < ActiveSupport::TestCase
     @workflow_item.plain_predecessors = '100'
     assert @workflow_item.invalid?
     assert_equal 1, @workflow_item.errors.count
-    assert_equal error_message_from_model(@workflow_item, :predecessors,
-      :invalid), @workflow_item.errors[:predecessors]
+    assert_equal [error_message_from_model(@workflow_item, :predecessors,
+      :invalid)], @workflow_item.errors[:predecessors]
   end
 
   test 'can be modified' do

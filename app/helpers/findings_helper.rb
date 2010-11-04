@@ -14,15 +14,17 @@ module FindingsHelper
   def finding_follow_up_date_text(finding)
     html_classes = []
 
-    if finding.kind_of?(Weakness) && finding.stale?
-      html_classes << 'strike'
-    end
+    if finding.being_implemented?
+      if finding.kind_of?(Weakness) && finding.stale?
+        html_classes << 'strike'
+      end
 
-    if finding.kind_of?(Weakness) && finding.rescheduled?
-      html_classes << 'yellow'
+      if finding.kind_of?(Weakness) && finding.rescheduled?
+        html_classes << 'yellow'
+      end
+
+      html_classes << 'green' if html_classes.blank?
     end
-    
-    html_classes << 'green' if finding.being_implemented? && html_classes.blank?
 
     unless finding.follow_up_date.blank?
       content_tag(:span, l(finding.follow_up_date, :format => :short),
@@ -35,6 +37,7 @@ module FindingsHelper
   def show_review_with_conclusion_status_as_acronym(review)
     review_data = review.has_final_review? ?
       t(:'review.with_final_review') : t(:'review.without_final_review')
+    review_data << " | #{l(review.issue_date(true), :format => :long)}"
 
     content_tag(:acronym, h(review.identification), :title => review_data)
   end

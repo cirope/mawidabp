@@ -7,12 +7,12 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Review.model_name.human, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
-      <%= make_filterable_column Oportunity.human_attribute_name(:review_code), 'review_code' %>
-      <%= make_filterable_column Oportunity.human_attribute_name(:description), 'description' %>
-      <%= make_not_available_column Oportunity.human_attribute_name(:state) %>
-      <%= make_not_available_column t(:'finding.has_work_papers') %>
+      <%= make_filterable_column Review.model_name.human, nil, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_filterable_column Oportunity.human_attribute_name(:review_code), nil, 'review_code' %>
+      <%= make_filterable_column Oportunity.human_attribute_name(:description), {:expendable => true}, 'description' %>
+      <%= make_not_available_column Oportunity.human_attribute_name(:state), :expendable => true %>
+      <%= make_not_available_column t(:'finding.has_work_papers'), :expendable => true %>
       <th colspan="3" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
@@ -21,11 +21,11 @@
     <% @oportunities.each do |oportunity| %>
       <tr class="<%= cycle(:even, :odd) %> <%= oportunity.is_in_a_final_review? ? :readonly_item : :writable_item %>">
         <td class="nowrap"><%= show_review_with_close_date_as_acronym oportunity.review %></td>
-        <td><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="expendable"><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
         <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(oportunity) %></td>
-        <td><%= super_truncate oportunity.description, 20 %></td>
-        <td><%= h oportunity.state_text %></td>
-        <td><%= t oportunity.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= super_truncate oportunity.description, 20 %></td>
+        <td class="expendable"><%= h oportunity.state_text %></td>
+        <td class="expendable"><%= t oportunity.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
         <td><%= link_to_show oportunity %></td>
         <td><%= link_to_edit edit_oportunity_path(oportunity) %></td>
         <td><%= button_to_destroy oportunity %></td>

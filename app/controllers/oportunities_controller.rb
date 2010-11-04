@@ -104,7 +104,7 @@ class OportunitiesController < ApplicationController
 
     respond_to do |format|
       if @oportunity.save
-        flash[:notice] = t :'oportunity.correctly_created'
+        flash.notice = t :'oportunity.correctly_created'
         format.html { redirect_to(edit_oportunity_path(@oportunity)) }
         format.xml  { render :xml => @oportunity, :status => :created, :location => @oportunity }
       else
@@ -122,12 +122,11 @@ class OportunitiesController < ApplicationController
   def update
     @title = t :'oportunity.edit_title'
     @oportunity = find_with_organization(params[:id])
-    params[:oportunity][:user_ids] ||= [] unless @oportunity.is_in_a_final_review?
 
     respond_to do |format|
       Oportunity.transaction do
         if @oportunity.update_attributes(params[:oportunity])
-          flash[:notice] = t :'oportunity.correctly_updated'
+          flash.notice = t :'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_path(@oportunity)) }
           format.xml  { head :ok }
         else
@@ -139,7 +138,7 @@ class OportunitiesController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'oportunity.stale_object_error'
+    flash.alert = t :'oportunity.stale_object_error'
     redirect_to :action => :edit
   end
 

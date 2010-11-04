@@ -9,9 +9,6 @@ class ProcessControl < ActiveRecord::Base
   # Callbacks
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:control_objective_ids]
-
   # Named scopes
   scope :list, :order =>['best_practice_id ASC',
     "#{table_name}.order ASC"].join(', ')
@@ -62,10 +59,6 @@ class ProcessControl < ActiveRecord::Base
   has_many :control_objectives, :dependent => :destroy, :order => '"order" ASC'
 
   accepts_nested_attributes_for :control_objectives, :allow_destroy => true
-
-  def associations_attributes_for_log
-    @@associations_attributes_for_log
-  end
 
   def <=>(other)
     if other.kind_of?(ProcessControl)

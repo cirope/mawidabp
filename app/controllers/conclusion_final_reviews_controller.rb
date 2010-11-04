@@ -105,7 +105,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     respond_to do |format|
       if @conclusion_final_review.save
-        flash[:notice] = t :'conclusion_final_review.correctly_created'
+        flash.notice = t :'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_path) }
         format.xml  { render :xml => @conclusion_final_review, :status => :created, :location => @conclusion_final_review }
       else
@@ -127,7 +127,7 @@ class ConclusionFinalReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_final_review.update_attributes(
           params[:conclusion_final_review])
-        flash[:notice] = t :'conclusion_final_review.correctly_updated'
+        flash.notice = t :'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_path) }
         format.xml  { head :ok }
       else
@@ -137,7 +137,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'conclusion_final_review.stale_object_error'
+    flash.alert = t :'conclusion_final_review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -258,7 +258,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     unless users.blank?
-      flash[:notice] = t(:'conclusion_review.review_sended')
+      flash.notice = t(:'conclusion_review.review_sended')
 
       redirect_to edit_conclusion_final_review_path(@conclusion_final_review)
     else
@@ -288,11 +288,12 @@ class ConclusionFinalReviewsController < ApplicationController
     pdf.add_title t(:'conclusion_final_review.index_title')
 
     column_order = [
-      ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['period', Review.human_attribute_name(:period_id), 10],
       ['identification', Review.human_attribute_name(:identification), 10],
-      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 35],
-      ['project', PlanItem.human_attribute_name(:project), 35]
+      ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 30],
+      ['project', PlanItem.human_attribute_name(:project), 30],
+      ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
+      ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
     ]
     columns = {}
     column_data = []
@@ -306,12 +307,34 @@ class ConclusionFinalReviewsController < ApplicationController
 
     conclusion_final_reviews.each do |cfr|
       column_data << {
-        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
         'period' => cfr.review.period.number.to_s.to_iso,
         'identification' => cfr.review.identification.to_iso,
         'business_unit' => cfr.review.plan_item.business_unit.name.to_iso,
-        'project' => cfr.review.plan_item.project.to_iso
+        'project' => cfr.review.plan_item.project.to_iso,
+        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
+        'close_date' => (cfr.close_date ? l(cfr.close_date, :format => :minimal) : '').to_iso,
       }
+    end
+
+    unless @columns.blank? || @query.blank?
+      pdf.move_pointer PDF_FONT_SIZE
+      pointer_moved = true
+      filter_columns = @columns.map do |c|
+        column_name = column_order.detect { |co| co[0] == c }
+        "<b>#{column_name[1]}</b>"
+      end
+
+      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
+        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        :columns => filter_columns.to_sentence, :count => @columns.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
+    end
+
+    unless @order_by_column_name.blank?
+      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
+      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
+        :column => "<b>#{@order_by_column_name}</b>"),
+        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf.move_pointer PDF_FONT_SIZE
@@ -332,25 +355,6 @@ class ConclusionFinalReviewsController < ApplicationController
         table.orientation = :right
         table.render_on pdf
       end
-    end
-
-    unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      columns = @columns.map do |c|
-        column_name = column_order.detect { |co| co[0] == c }
-        "<b>#{column_name[1]}</b>"
-      end
-
-      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
-    end
-
-    unless @order_by_column_name.blank?
-      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
-        :column => "<b>#{@order_by_column_name}</b>"),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf_name = t :'conclusion_final_review.pdf.pdf_name'

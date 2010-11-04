@@ -25,10 +25,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:pre_audit_workpaper_ids,
-    :post_audit_workpaper_ids]
-
   # Atributos no persistentes
   attr_reader :approval_errors
 
@@ -43,8 +39,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     :allow_nil => true, :only_integer => true
   validates_numericality_of :relevance, :only_integer => true,
     :allow_blank => true, :allow_nil => true, :greater_than_or_equal_to => 0
-  validates :audit_date, :allow_nil => true, :allow_blank => true,
-    :timeliness => { :type => :date }
+  validates_date :audit_date, :allow_nil => true, :allow_blank => true
   validates_each :audit_date do |record, attr, value|
     period = record.review.period if record.review
 
@@ -182,7 +177,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
 
     qualifications.empty? ? 100 :
-      (qualifications.sum / qualifications.size).round
+      (qualifications.sum / qualifications.size.to_f).round
   end
 
   def fill_control_objective_text

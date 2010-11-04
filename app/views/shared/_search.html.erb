@@ -47,7 +47,7 @@
     <% end %>
   </div>
 </div>
-<% unless @query.blank? %>
+<% unless @query.blank? && @order_by.blank? -%>
   <% content_for :js_extra_bottom do %>
     $('search_query').focus();
     Search.observe();

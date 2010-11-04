@@ -49,8 +49,14 @@ class WeaknessTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id,
-          users(:manager_user).id, users(:supervisor_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id },
+          :new_3 => { :user_id => users(:auditor_user).id },
+          :new_4 => { :user_id => users(:manager_user).id },
+          :new_5 => { :user_id => users(:supervisor_user).id },
+          :new_6 => { :user_id => users(:administrator_user).id }
+        }
       )
 
       assert @weakness.save, @weakness.errors.full_messages.join('; ')
@@ -75,7 +81,10 @@ class WeaknessTest < ActiveSupport::TestCase
         :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => 2.days.from_now.to_date,
-        :user_ids => [users(:bare_user).id, users(:audited_user).id]
+        :finding_user_assignments_attributes => {
+          :new_1 => { :user_id => users(:bare_user).id },
+          :new_2 => { :user_id => users(:audited_user).id }
+        }
       )
     end
   end
@@ -113,26 +122,26 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.priority = nil
     assert @weakness.invalid?
     assert_equal 5, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, 
-      :control_objective_item_id, :blank),
+    assert_equal [error_message_from_model(@weakness,
+      :control_objective_item_id, :blank)],
       @weakness.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@weakness, :review_code, :blank),
       error_message_from_model(@weakness, :review_code, :invalid)].sort,
       @weakness.errors[:review_code].sort
-    assert_equal error_message_from_model(@weakness, :risk, :blank),
+    assert_equal [error_message_from_model(@weakness, :risk, :blank)],
       @weakness.errors[:risk]
-    assert_equal error_message_from_model(@weakness, :priority, :blank),
+    assert_equal [error_message_from_model(@weakness, :priority, :blank)],
       @weakness.errors[:priority]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     another_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @weakness.review_code = another_weakness.review_code
     assert @weakness.invalid?
     assert_equal 1, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, :review_code, :taken),
+    assert_equal [error_message_from_model(@weakness, :review_code, :taken)],
       @weakness.errors[:review_code]
 
     # Se puede duplicar si es de otro informe
@@ -151,8 +160,8 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@weakness, :review_code, :too_long,
       :count => 255), error_message_from_model(@weakness, :review_code,
       :invalid)].sort, @weakness.errors[:review_code].sort
-    assert_equal error_message_from_model(@weakness, :type, :too_long,
-      :count => 255), @weakness.errors[:type]
+    assert_equal [error_message_from_model(@weakness, :type, :too_long,
+      :count => 255)], @weakness.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -160,7 +169,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.state = Finding::STATUS.values.sort.last.next
     assert @weakness.invalid?
     assert_equal 1, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, :state, :inclusion),
+    assert_equal [error_message_from_model(@weakness, :state, :inclusion)],
       @weakness.errors[:state]
   end
 
@@ -170,10 +179,10 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.review_code = 'BAD_PREFIX_2'
     assert @weakness.invalid?
     assert_equal 2, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness,
-      :control_objective_item_id, :not_a_number),
+    assert_equal [error_message_from_model(@weakness,
+      :control_objective_item_id, :not_a_number)],
       @weakness.errors[:control_objective_item_id]
-    assert_equal error_message_from_model(@weakness, :review_code, :invalid),
+    assert_equal [error_message_from_model(@weakness, :review_code, :invalid)],
       @weakness.errors[:review_code]
   end
 
@@ -244,14 +253,17 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.users.delete_if { |user| user.can_act_as_audited? }
+    @weakness.finding_user_assignments.delete_if do |fua|
+      fua.user.can_act_as_audited?
+    end
+
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
     assert_equal I18n.t(:'weakness.errors.without_audited'),
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.users.delete_if { |user| user.auditor? }
+    @weakness.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
     assert_equal I18n.t(:'weakness.errors.without_auditor'),
@@ -269,7 +281,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'work papers can be added to uneditable control objectives' do
     uneditable_weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_notify).id)
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
     assert_no_difference 'Weakness.count' do
       assert_difference 'WorkPaper.count' do
@@ -282,8 +294,8 @@ class WeaknessTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                  TEST_FILE, 'text/plain')
+                :uploaded_data => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                  'text/plain')
               }
             }
           }
@@ -329,10 +341,10 @@ class WeaknessTest < ActiveSupport::TestCase
     old_date = @weakness.follow_up_date.clone
 
     assert @weakness.update_attribute(:follow_up_date, 10.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates.include?(old_date)
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
     assert @weakness.update_attribute(:follow_up_date, 15.days.from_now.to_date)
-    assert @weakness.reload.all_follow_up_dates.include?(old_date)
-    assert @weakness.reload.all_follow_up_dates.include?(
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(old_date)
+    assert @weakness.reload.all_follow_up_dates(nil, true).include?(
       10.days.from_now.to_date)
     assert @weakness.rescheduled?
   end

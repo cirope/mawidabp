@@ -4,25 +4,29 @@ require 'test_helper'
 class ReviewsControllerTest < ActionController::TestCase
   fixtures :reviews, :plan_items, :periods, :control_objectives, :controls
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :reviews_for_period]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => reviews(:current_review).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end
@@ -114,8 +118,8 @@ class ReviewsControllerTest < ActionController::TestCase
                   :procedure_control_subitem_ids =>
                     [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
                   :file_model_attributes => {
-                    :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-                      TEST_FILE, 'text/plain')
+                    :uploaded_data => Rack::Test::UploadedFile.new(
+                      TEST_FILE_FULL_PATH, 'text/plain')
                   },
                   :review_user_assignments_attributes => {
                     :new_1 => {
@@ -166,9 +170,8 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data =>
-                              ActionDispatch::Http::UploadedFile.new(
-                              TEST_FILE)
+                            :uploaded_data => Rack::Test::UploadedFile.new(
+                              TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
                       },
@@ -181,9 +184,8 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data =>
-                              ActionDispatch::Http::UploadedFile.new(
-                              TEST_FILE)
+                            :uploaded_data => Rack::Test::UploadedFile.new(
+                              TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
                       }
@@ -217,9 +219,8 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data =>
-                              ActionDispatch::Http::UploadedFile.new(
-                              TEST_FILE)
+                            :uploaded_data => Rack::Test::UploadedFile.new(
+                              TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
                       },
@@ -232,9 +233,8 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data =>
-                              ActionDispatch::Http::UploadedFile.new(
-                              TEST_FILE)
+                            :uploaded_data => Rack::Test::UploadedFile.new(
+                              TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
                       }
@@ -271,8 +271,8 @@ class ReviewsControllerTest < ActionController::TestCase
           :period_id => periods(:current_period).id,
           :plan_item_id => plan_items(:current_plan_item_2).id,
           :review_user_assignments_attributes => {
-            review_user_assignments(:current_review_auditor).id => {
-              :id => review_user_assignments(:current_review_auditor).id,
+            review_user_assignments(:review_with_conclusion_auditor).id => {
+              :id => review_user_assignments(:review_with_conclusion_auditor).id,
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
               :user => users(:bare_user)
             }
@@ -333,7 +333,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to reviews_path
-    assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash[:alert]
+    assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash.alert
   end
 
   test 'review data' do

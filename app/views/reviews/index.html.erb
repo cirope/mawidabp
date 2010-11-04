@@ -5,11 +5,11 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Period.model_name.human, 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), 'project' %>
-      <%= make_not_available_column Review.human_attribute_name(:description) %>
+      <%= make_filterable_column Period.model_name.human, nil, 'period' %>
+      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), {:expendable => true}, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_not_available_column Review.human_attribute_name(:description), :expendable => true %>
       <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -19,9 +19,9 @@
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= show_period_with_dates_as_acronym review.period %></td>
         <td class="nowrap"><%= h review.identification %></td>
-        <td><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
-        <td><%= super_truncate review.plan_item.project, 25 %></td>
-        <td><%= super_truncate review.description, 25 %></td>
+        <td class="expendable"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
+        <td class="expendable"><%= super_truncate review.plan_item.project, 25 %></td>
+        <td class="expendable"><%= super_truncate review.description, 25 %></td>
         <td><%= link_to_clone new_review_path(:clone_from => review.id), :label => t(:'review.copy') %></td>
         <td><%= link_to_show review %></td>
         <td><%= link_to_edit edit_review_path(review) %></td>

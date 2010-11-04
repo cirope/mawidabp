@@ -8,9 +8,6 @@ class BestPractice < ActiveRecord::Base
   # Callbacks
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:process_control_ids]
-
   # Named scopes
   scope :list, lambda {
     {

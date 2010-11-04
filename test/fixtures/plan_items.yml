@@ -2,7 +2,7 @@ current_plan_item_1:
   project: Project 1
   start: <%= 5.days.ago.to_date.to_s(:db) %>
   end: <%= 2.days.ago.to_date.to_s(:db) %>
-  predecessors: []
+  predecessors: <%= [].to_yaml.inspect %>
   order_number: 1
   plan: current_plan
   business_unit: business_unit_one
@@ -11,7 +11,7 @@ current_plan_item_2:
   project: Project 2
   start: <%= Time.now.to_date.to_s(:db) %>
   end: <%= 2.days.from_now.to_date.to_s(:db) %>
-  predecessors: [1]
+  predecessors: <%= [1].to_yaml.inspect %>
   order_number: 2
   plan: current_plan
   business_unit: business_unit_two
@@ -20,7 +20,7 @@ current_plan_item_3:
   project: Project 3
   start: <%= 3.days.from_now.to_date.to_s(:db) %>
   end: <%= 5.days.from_now.to_date.to_s(:db) %>
-  predecessors: []
+  predecessors: <%= [].to_yaml.inspect %>
   order_number: 3
   plan: current_plan
   business_unit: business_unit_three
@@ -29,7 +29,7 @@ current_plan_item_4_without_business_unit:
   project: Project 4
   start: <%= 3.days.from_now.to_date.to_s(:db) %>
   end: <%= 5.days.from_now.to_date.to_s(:db) %>
-  predecessors: []
+  predecessors: <%= [].to_yaml.inspect %>
   order_number: 4
   plan: current_plan
   business_unit:
@@ -38,7 +38,7 @@ past_plan_item_1:
   project: Project 1
   start: <%= 50.days.ago.to_date.to_s(:db) %>
   end: <%= 45.days.ago.to_date.to_s(:db) %>
-  predecessors: []
+  predecessors: <%= [].to_yaml.inspect %>
   order_number: 1
   plan: past_plan
   business_unit: business_unit_one
@@ -47,7 +47,7 @@ past_plan_item_2:
   project: Project 2
   start: <%= 40.days.ago.to_date.to_s(:db) %>
   end: <%= 35.days.ago.to_date.to_s(:db) %>
-  predecessors: [1]
+  predecessors: <%= [1].to_yaml.inspect %>
   order_number: 2
   plan: past_plan
   business_unit: business_unit_two
@@ -56,7 +56,7 @@ past_plan_item_3:
   project: Project 3
   start: <%= 30.days.ago.to_date.to_s(:db) %>
   end: <%= 25.days.ago.to_date.to_s(:db) %>
-  predecessors: [2]
+  predecessors: <%= [2].to_yaml.inspect %>
   order_number: 3
   plan: past_plan
   business_unit: business_unit_three

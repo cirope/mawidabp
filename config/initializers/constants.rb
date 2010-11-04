@@ -64,6 +64,8 @@ PRIVATE_FILES_PREFIX = 'private'.freeze
 SPLIT_AND_TERMS_REGEXP = /\s+y\s+|\s*[,;]\s*|\s+AND\s+/i
 # Ruta a un archivo para realizar las pruebas
 TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
+# Ruta a un archivo para realizar las pruebas (ruta completa)
+TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (Rails.env == 'development' ?
     'mawidaweb.com.ar:3000' : 'mawidaweb.com.ar').freeze
@@ -75,6 +77,16 @@ SEARCH_AND_REGEXP = /\s*[;]+\s*|\s+AND\s+|\s+Y\s+/i
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
 # OR)
 SEARCH_OR_REGEXP = /\s*[,\+]+\s*|\s+OR\s+|\s+O\s+/i
+# Expresión regular para identificar fechas
+SEARCH_DATE_REGEXP = /^\s*\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})\s*$/
+# Operadores permitidos en la búsqueda
+SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
+    /^\s*>[^=]/ => '>',
+    /^\s*<[^=]/ => '<',
+    /^\s*(>=|desde|since)/i => '>=',
+    /^\s*(<=|hasta|to)/i => '<=',
+    /^\s*[^<>]=/ => '='
+})
 
 # Array con los nombre de los controladores
 APP_CONTROLLERS = [
@@ -82,21 +94,8 @@ APP_CONTROLLERS = [
   :oportunities, :weaknesses, :reviews, :control_objective_items, :periods,
   :best_practices, :procedure_controls, :resource_classes, :plans,
   :conclusion_final_reviews, :conclusion_draft_reviews, :workflows, :findings,
-  :follow_up_audit, :follow_up_committee, :follow_up_management, :backups,
-  :notifications, :conclusion_audit_reports, :conclusion_committee_reports,
+  :follow_up_audit, :follow_up_committee, :follow_up_management, :notifications,
+  :conclusion_audit_reports, :conclusion_committee_reports,
   :conclusion_management_reports, :help_contents, :versions, :execution_reports,
   :welcome
 ].freeze
-
-# Arreglo con los modelos (y sus relaciones) que deben ser tenidos en cuenta
-# para realizar la copia de seguridad
-APP_MODELS_FOR_BACKUP = ['image_model', 'organization', 'privilege', 'role',
-  ['user', [:organizations, :roles]], 'backup', 'best_practice',
-  'business_unit', 'file_model', 'work_paper', ['finding', [:work_papers]],
-  ['conclusion_review', [:oportunities, :weaknesses]], 'control_objective',
-  ['control_objective_item', [:pre_audit_work_papers, :post_audit_work_papers]],
-  'error_record', 'finding_answer', 'login_record', 'old_password', 'parameter',
-  'period', 'resource_utilization', 'plan', 'resource_class', 'resource',
-  'plan_item', 'procedure_control', 'procedure_control_item',
-  'procedure_control_subitem', 'process_control', 'review', 'workflow',
-  'workflow_item', 'version', 'help_contents'].freeze

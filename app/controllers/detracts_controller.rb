@@ -121,7 +121,7 @@ class DetractsController < ApplicationController
 
     respond_to do |format|
       if @detract.save
-        flash[:notice] = t :'detract.correctly_created'
+        flash.notice = t :'detract.correctly_created'
         format.html { redirect_to(detracts_path) }
         format.xml  { render :xml => @detract, :status => :created, :location => @detract }
       else

@@ -8,8 +8,7 @@ class Notification < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :not_confirmed, :conditions =>
-    { :status => STATUS[:unconfirmed] }
+  scope :not_confirmed, where(:status => STATUS[:unconfirmed])
   scope :confirmed_or_stale, :conditions => [
     [
       'status = :status_confirmed',
@@ -43,8 +42,8 @@ class Notification < ActiveRecord::Base
     :only_integer => true, :allow_nil => true, :allow_blank => true
   validates_length_of :confirmation_hash, :maximum => 255, :allow_nil => true,
     :allow_blank => true
-  validates :confirmation_date, :allow_nil => true, :allow_blank => true,
-    :timeliness => { :type => :datetime }
+  validates_datetime :confirmation_date, :allow_nil => true,
+    :allow_blank => true
 
   # Relaciones
   belongs_to :user

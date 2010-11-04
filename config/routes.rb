@@ -5,7 +5,12 @@ MawidaApp::Application.routes.draw do
 
   resources :detracts, :only => [:index, :show, :new, :create] do
     member do
-      get :show_last_detractors
+      get :show_last_detracts
+    end
+
+    # Cuando un usuario no tiene ningún detractor no incluye el ID
+    collection do
+      get :show
     end
   end
 
@@ -26,7 +31,7 @@ MawidaApp::Application.routes.draw do
       :as => action
   end
 
-  resources :versions do
+  resources :versions, :only => [:show] do
     collection do
       get :security_changes_report
     end
@@ -44,16 +49,9 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :notifications do
+  resources :notifications, :only => [:index, :show, :edit, :update] do
     member do
       get :confirm
-    end
-  end
-
-  resources :backups do
-    collection do
-      get :restore_setup
-      post :restore
     end
   end
 
@@ -116,11 +114,15 @@ MawidaApp::Application.routes.draw do
     :to => 'follow_up_committee#cost_analysis'
 
   scope ':completed', :completed => /complete|incomplete/ do
-    resources :findings do
+    resources :findings, :except => [:destroy] do
       resources :costs
 
       member do
         get :follow_up_pdf
+      end
+
+      collection do
+        get :export_to_pdf
         post :auto_complete_for_user
         post :auto_complete_for_finding_relation
       end
@@ -133,28 +135,17 @@ MawidaApp::Application.routes.draw do
     end
 
     collection do
+      get :resource_data
       get :estimated_amount
       get :reviews_for_period
+      post :auto_complete_for_user
     end
   end
 
-  resources :conclusion_draft_reviews do
+  resources :conclusion_draft_reviews, :except => [:destroy] do
     member do
+      get :check_for_approval
       get :export_to_pdf
-      post :auto_complete_for_user
-      get :compose_email
-      put :send_by_email
-      get :download_work_papers
-      get :score_sheet
-      get :bundle
-      post :create_bundle
-    end
-  end
-
-  resources :conclusion_final_reviews do
-    member do
-      get :export_to_pdf
-      post :auto_complete_for_user
       get :compose_email
       put :send_by_email
       get :download_work_papers
@@ -164,6 +155,23 @@ MawidaApp::Application.routes.draw do
     end
 
     collection do
+      post :auto_complete_for_user
+    end
+  end
+
+  resources :conclusion_final_reviews, :except => [:destroy] do
+    member do
+      get :export_to_pdf
+      get :compose_email
+      put :send_by_email
+      get :download_work_papers
+      get :score_sheet
+      get :bundle
+      post :create_bundle
+    end
+
+    collection do
+      post :auto_complete_for_user
       get :export_list_to_pdf
     end
   end
@@ -175,12 +183,12 @@ MawidaApp::Application.routes.draw do
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
-      get :plan_item_data
       get :procedure_control_data
     end
     
     collection do
       get :estimated_amount
+      get :plan_item_data
       post :auto_complete_for_user
       post :auto_complete_for_procedure_control_subitem
     end
@@ -188,11 +196,14 @@ MawidaApp::Application.routes.draw do
 
   resources :weaknesses do
     resources :costs
+
+    collection do
+      post :auto_complete_for_user
+      post :auto_complete_for_finding_relation
+    end
     
     member do
       get :follow_up_pdf
-      post :auto_complete_for_user
-      post :auto_complete_for_finding_relation
     end
   end
 
@@ -205,7 +216,12 @@ MawidaApp::Application.routes.draw do
   resources :plans do
     member do
       get :export_to_pdf
+    end
+
+    collection do
+      get :resource_data
       post :auto_complete_for_business_unit_business_unit_id
+      post :auto_complete_for_user
     end
   end
 
@@ -232,6 +248,9 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
+    end
+
+    collection do
       post :auto_complete_for_user
       post :auto_complete_for_finding_relation
     end
@@ -242,7 +261,7 @@ MawidaApp::Application.routes.draw do
   resources :roles
 
   scope ':type', :type => /admin|security/ do
-    resources :parameters
+    resources :parameters, :except => [:new, :create, :destroy]
   end
 
   resources :error_records do
@@ -251,7 +270,7 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :login_records do
+  resources :login_records, :only => [:index, :show] do
     collection do
       get :choose
       get :export_to_pdf

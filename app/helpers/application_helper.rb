@@ -184,23 +184,33 @@ module ApplicationHelper
     image_button_to(options.delete(:label), *(args << html_options))
   end
 
-  def make_filterable_column(title, *columns)
+  def make_filterable_column(title, options = nil, *columns)
     raise 'Must have at least one column' if columns.empty?
 
-    html_class = @query.blank? || columns.any? { |c| @columns.include?(c) } ?
-      'selected' : 'disabled'
+    html_classes = []
     content = content_tag(:span, title, :class => :title)
+    options ||= {}
+
+    html_classes << (@query.blank? || columns.any?{|c| @columns.include?(c)} ?
+      'selected' : 'disabled')
+    html_classes << 'expendable' if options[:expendable]
 
     columns.each do |column|
       content << hidden_field_tag("column_#{column}_for_filter", column)
     end
 
-    content_tag(:th, content, :class => "filterable #{html_class}").html_safe
+    content_tag(:th, content.html_safe,
+      :class => "filterable #{html_classes.join(' ')}")
   end
 
-  def make_not_available_column(title)
+  def make_not_available_column(title, options = {})
+    html_classes = []
+
+    html_classes << :not_available unless @query.blank? && @order_by.blank?
+    html_classes << :expendable if options[:expendable]
+
     content_tag(:th, title,
-      :class => (@query.blank? ? nil : :not_available)).html_safe
+      :class => (html_classes.join(' ') unless html_classes.blank?))
   end
 
   # Devuelve el HTML de un vínculo para volver (history.back())

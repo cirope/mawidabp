@@ -77,13 +77,13 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = nil
     assert @review.invalid?
     assert_equal 4, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :blank),
+    assert_equal [error_message_from_model(@review, :identification, :blank)],
       @review.errors[:identification]
-    assert_equal error_message_from_model(@review, :description, :blank),
+    assert_equal [error_message_from_model(@review, :description, :blank)],
       @review.errors[:description]
-    assert_equal error_message_from_model(@review, :period_id, :blank),
+    assert_equal [error_message_from_model(@review, :period_id, :blank)],
       @review.errors[:period_id]
-    assert_equal error_message_from_model(@review, :plan_item_id, :blank),
+    assert_equal [error_message_from_model(@review, :plan_item_id, :blank)],
       @review.errors[:plan_item_id]
   end
 
@@ -92,8 +92,8 @@ class ReviewTest < ActiveSupport::TestCase
     @review.identification = 'abcdd' * 52
     assert @review.invalid?
     assert_equal 1, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :too_long,
-      :count => 255), @review.errors[:identification]
+    assert_equal [error_message_from_model(@review, :identification, :too_long,
+      :count => 255)], @review.errors[:identification]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -103,12 +103,12 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = '?nil'
     assert @review.invalid?
     assert_equal 3, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :invalid),
+    assert_equal [error_message_from_model(@review, :identification, :invalid)],
       @review.errors[:identification]
-    assert_equal error_message_from_model(@review, :period_id, :not_a_number),
-      @review.errors[:period_id]
-    assert_equal error_message_from_model(@review, :plan_item_id,
-      :not_a_number), @review.errors[:plan_item_id]
+    assert_equal [error_message_from_model(@review, :period_id,
+        :not_an_integer)], @review.errors[:period_id]
+    assert_equal [error_message_from_model(@review, :plan_item_id,
+      :not_a_number)], @review.errors[:plan_item_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -117,9 +117,9 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = reviews(:past_review).plan_item_id
     assert @review.invalid?
     assert_equal 2, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :taken),
+    assert_equal [error_message_from_model(@review, :identification, :taken)],
       @review.errors[:identification]
-    assert_equal error_message_from_model(@review, :plan_item_id, :taken),
+    assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
       @review.errors[:plan_item_id]
   end
 
@@ -129,7 +129,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_equal 1, @review.errors.count
-    assert_equal error_message_from_model(@review, :plan_item, :invalid),
+    assert_equal [error_message_from_model(@review, :plan_item, :invalid)],
       @review.errors[:plan_item]
   end
 
@@ -185,7 +185,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new review_weakness.attributes.merge({
         :state => Finding::STATUS[:implemented_audited],
         :review_code => @review.next_weakness_code('O')})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     oportunity.solution_date = nil
 
@@ -197,7 +198,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:implemented],
         :solution_date => Time.now.to_date, :follow_up_date => nil})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
@@ -206,7 +208,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:being_implemented]})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
@@ -215,9 +218,14 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:assumed_risk]})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save
+
+    @review.reload.must_be_approved?
+    puts @review.approval_errors
+
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
     assert oportunity.destroy
@@ -225,7 +233,8 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity = Weakness.new oportunity.attributes.merge({
         :state => Finding::STATUS[:being_implemented],
         :follow_up_date => Time.now.to_date})
-    oportunity.user_ids = review_weakness.user_ids
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
@@ -488,5 +497,13 @@ class ReviewTest < ActiveSupport::TestCase
       new_review.control_objective_items
     assert_equal @review.review_user_assignments,
       new_review.review_user_assignments
+  end
+
+  private
+
+  def clone_finding_user_assignments(finding)
+    finding.finding_user_assignments.map do |fua|
+      fua.attributes.dup.merge(:finding_id => nil)
+    end
   end
 end

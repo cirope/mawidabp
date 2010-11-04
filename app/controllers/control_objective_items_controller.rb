@@ -90,7 +90,7 @@ class ControlObjectiveItemsController < ApplicationController
     respond_to do |format|
       if @control_objective_item.update_attributes(
           params[:control_objective_item])
-        flash[:notice] = t :'control_objective_item.correctly_updated'
+        flash.notice = t :'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || edit_control_objective_item_path(
               @control_objective_item)) }
@@ -102,7 +102,7 @@ class ControlObjectiveItemsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash[:alert] = t :'control_objective_item.stale_object_error'
+      flash.alert = t :'control_objective_item.stale_object_error'
       redirect_to :action => :edit
   end
 

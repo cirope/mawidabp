@@ -8,7 +8,7 @@ class Weakness < Finding
     :final => true}
 
   # Restricciones
-  validates_presence_of :risk, :priority
+  validates :risk, :priority, :presence => true
   validates_each :review_code do |record, attr, value|
     prefix = record.get_parameter(:admin_code_prefix_for_weaknesses, false,
       record.control_objective_item.try(:review).try(:organization).try(:id))
@@ -43,7 +43,7 @@ class Weakness < Finding
     risks = self.get_parameter(:admin_finding_risk_levels)
     risk = risks.detect { |r| r.last == self.risk }
 
-    risk ? risk.first : ''
+    risk.try(:first) || ''
   end
 
   def priority_text
@@ -108,20 +108,23 @@ class Weakness < Finding
     (@approval_errors = errors).blank?
   end
 
-  def all_follow_up_dates(end_date = nil)
-    follow_up_dates = []
-    last_date = self.follow_up_date
-    dates = self.versions_after_final_review(end_date).map do |v|
-      v.reify.try(:follow_up_date)
-    end
+  def all_follow_up_dates(end_date = nil, reload = false)
+    @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
 
-    dates.each do |d|
-      unless d.blank? || d == last_date
-        follow_up_dates << d
-        last_date = d
+    if @all_follow_up_dates.empty?
+      last_date = self.follow_up_date
+      dates = self.versions_after_final_review(end_date).map do |v|
+        v.reify.try(:follow_up_date)
+      end
+
+      dates.each do |d|
+        unless d.blank? || d == last_date
+          @all_follow_up_dates << d
+          last_date = d
+        end
       end
     end
 
-    follow_up_dates.compact
+    @all_follow_up_dates.compact
   end
 end

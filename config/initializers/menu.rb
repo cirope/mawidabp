@@ -125,14 +125,8 @@ APP_AUDITOR_MENU_ITEMS = [
         :url => {:controller => :parameters, :type => :admin}
       ),
       MenuItem.new(
-        :backups,
-        :order => 5,
-        :controllers => :backups,
-        :url => {:controller => :backups}
-      ),
-      MenuItem.new(
         :detracts,
-        :order => 6,
+        :order => 5,
         :controllers => :detracts,
         :url => {:controller => :detracts}
       )

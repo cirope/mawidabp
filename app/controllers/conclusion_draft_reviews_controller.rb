@@ -84,7 +84,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     respond_to do |format|
       if @conclusion_draft_review.save
-        flash[:notice] = t :'conclusion_draft_review.correctly_created'
+        flash.notice = t :'conclusion_draft_review.correctly_created'
         format.html { redirect_to(conclusion_draft_reviews_path) }
         format.xml  { render :xml => @conclusion_draft_review, :status => :created, :location => @conclusion_draft_review }
       else
@@ -106,7 +106,7 @@ class ConclusionDraftReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_draft_review.update_attributes(
           params[:conclusion_draft_review])
-        flash[:notice] = t :'conclusion_draft_review.correctly_updated'
+        flash.notice = t :'conclusion_draft_review.correctly_updated'
         format.html { redirect_to(conclusion_draft_reviews_path) }
         format.xml  { head :ok }
       else
@@ -116,7 +116,7 @@ class ConclusionDraftReviewsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash[:alert] = t :'conclusion_draft_review.stale_object_error'
+      flash.alert = t :'conclusion_draft_review.stale_object_error'
       redirect_to :action => :edit
   end
 
@@ -239,7 +239,7 @@ class ConclusionDraftReviewsController < ApplicationController
       end
 
       unless users.blank?
-        flash[:notice] = t(:'conclusion_review.review_sended')
+        flash.notice = t(:'conclusion_review.review_sended')
 
         redirect_to edit_conclusion_draft_review_path(
           @conclusion_draft_review)
@@ -247,7 +247,7 @@ class ConclusionDraftReviewsController < ApplicationController
         render :action => :compose_email
       end
     elsif @conclusion_draft_review.try(:review)
-      flash[:alert] = t(:'conclusion_review.review_not_approved')
+      flash.alert = t(:'conclusion_review.review_not_approved')
       render :action => :compose_email
     else
       redirect_to conclusion_draft_reviews_path

@@ -6,9 +6,9 @@
 <table>
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column User.human_attribute_name(:user), 'user' %>
-      <%= make_filterable_column User.human_attribute_name(:name), 'name', 'last_name' %>
-      <%= make_filterable_column User.human_attribute_name(:function), 'function' %>
+      <%= make_filterable_column User.human_attribute_name(:user), nil, 'user' %>
+      <%= make_filterable_column User.human_attribute_name(:name), nil, 'name', 'last_name' %>
+      <%= make_filterable_column User.human_attribute_name(:function), {:expendable => true}, 'function' %>
       <%= make_not_available_column t(:'detract.last_detract') %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
@@ -20,7 +20,7 @@
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= h user.user %></td>
         <td><%= h user.full_name %></td>
-        <td><%= super_truncate user.function, 25 %></td>
+        <td class="expendable"><%= super_truncate user.function, 25 %></td>
         <td><%= h detract.try(:value) || '-' %></td>
         <td><%= link_to image_tag('new_document.gif', :size => '22x20',
           :alt => t(:'label.new'), :title => t(:'label.new')),

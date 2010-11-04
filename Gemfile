@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0'
+gem 'rails', '3.0.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -12,8 +12,8 @@ gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_selec
 gem 'mini_magick'
 gem 'uuidtools'
 # TODO: descomentar cuando sean compatibles con Rails 3
-#gem 'newrelic_rpm'
-#gem 'validates_timeliness'
+gem 'newrelic_rpm'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'i18n_label'
 gem 'smurf', :require => false

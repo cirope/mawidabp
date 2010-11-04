@@ -9,9 +9,6 @@ class PlanItem < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :business_unit_data, :overloaded
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:resource_ids]
-
    # Named scopes
   scope :list_unused, lambda { |period_id|
     {
@@ -46,8 +43,8 @@ class PlanItem < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates_numericality_of :order_number, :plan_id, :business_unit_id,
     :only_integer => true, :allow_nil => true
-  validates :start, :timeliness => { :type => :date }
-  validates :end, :timeliness => { :type => :date , :on_or_after => :start }
+  validates_date :start
+  validates_date :end, :on_or_after => :start
   validates_each :project do |record, attr, value|
     unless record.plan.try(:allow_duplication?)
       (record.plan.try(:plan_items) || []).each do |pi|

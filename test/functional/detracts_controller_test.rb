@@ -7,17 +7,23 @@ class DetractsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
+    id_param = {:id => versions(:important_version).to_param}
     public_actions = []
-    private_actions = [:index, :show, :new, :create]
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new, {:detract => {:user_id => users(:administrator_user).id}}],
+      [:post, :create]
+    ]
 
     private_actions.each do |action|
-      get action
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
-      get action
+      send *action
       assert_response :success
     end
   end

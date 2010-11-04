@@ -1,5 +1,5 @@
 <% stale_confirmed_days = DEFAULT_PARAMETERS[:admin_finding_stale_confirmed_days].to_i %>
-bcra_A4609_security_management_responsible_dependency_weakness_notify:
+bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
   review_code: O01
@@ -16,7 +16,6 @@ bcra_A4609_security_management_responsible_dependency_weakness_notify:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user, first_time_user
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
@@ -36,7 +35,6 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 <% (1..4).each do |level| %>
 
@@ -58,7 +56,6 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
-  users: auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 <% end %>
 
@@ -80,7 +77,6 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   type: Oportunity
@@ -94,7 +90,6 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   solution_date: 
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
@@ -108,7 +103,6 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   solution_date: 
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, manager_user, first_time_user, supervisor_user
 
 bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity:
   type: Weakness
@@ -127,7 +121,6 @@ bcra_A4609_security_management_responsible_dependency_editable_being_implemented
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
@@ -146,7 +139,6 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   follow_up_date:
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
@@ -165,7 +157,6 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   follow_up_date:
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   type: Oportunity
@@ -181,7 +172,6 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   type: Oportunity
@@ -196,7 +186,6 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user
 
 iso_27000_security_policy_3_1_item_weakness:
   type: Weakness
@@ -215,4 +204,3 @@ iso_27000_security_policy_3_1_item_weakness:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  users: administrator_user, auditor_user, audited_user, bare_user, manager_user, supervisor_user

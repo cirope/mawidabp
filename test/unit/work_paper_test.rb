@@ -36,8 +36,8 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [],
         :file_model_attributes => {
-          :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-            TEST_FILE)
+          :uploaded_data => Rack::Test::UploadedFile.new(
+            TEST_FILE_FULL_PATH)
         }
       )
     end
@@ -65,14 +65,14 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.number_of_pages = nil
     assert @work_paper.invalid?
     assert_equal 4, @work_paper.errors.count
-    assert_equal error_message_from_model(@work_paper, :organization_id, :blank),
-      @work_paper.errors[:organization_id]
-    assert_equal error_message_from_model(@work_paper, :name, :blank),
+    assert_equal [error_message_from_model(@work_paper, :organization_id,
+        :blank)], @work_paper.errors[:organization_id]
+    assert_equal [error_message_from_model(@work_paper, :name, :blank)],
       @work_paper.errors[:name]
-    assert_equal error_message_from_model(@work_paper, :code, :blank),
+    assert_equal [error_message_from_model(@work_paper, :code, :blank)],
       @work_paper.errors[:code]
-    assert_equal error_message_from_model(@work_paper, :number_of_pages,
-      :blank), @work_paper.errors[:number_of_pages]
+    assert_equal [error_message_from_model(@work_paper, :number_of_pages,
+      :blank)], @work_paper.errors[:number_of_pages]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -81,17 +81,17 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.number_of_pages = '12.3'
     assert @work_paper.invalid?
     assert_equal 2, @work_paper.errors.count
-    assert_equal error_message_from_model(@work_paper, :organization_id,
-      :not_a_number), @work_paper.errors[:organization_id]
-    assert_equal error_message_from_model(@work_paper, :number_of_pages,
-      :not_a_number), @work_paper.errors[:number_of_pages]
+    assert_equal [error_message_from_model(@work_paper, :organization_id,
+      :not_a_number)], @work_paper.errors[:organization_id]
+    assert_equal [error_message_from_model(@work_paper, :number_of_pages,
+      :not_an_integer)], @work_paper.errors[:number_of_pages]
 
     @work_paper.reload
     @work_paper.number_of_pages = '100001'
     assert @work_paper.invalid?
     assert_equal 1, @work_paper.errors.count
-    assert_equal error_message_from_model(@work_paper, :number_of_pages,
-      :less_than, :count => 100000), @work_paper.errors[:number_of_pages]
+    assert_equal [error_message_from_model(@work_paper, :number_of_pages,
+      :less_than, :count => 100000)], @work_paper.errors[:number_of_pages]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -100,10 +100,10 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper.code = 'abcdd' * 52
     assert @work_paper.invalid?
     assert_equal 2, @work_paper.errors.count
-    assert_equal error_message_from_model(@work_paper, :name, :too_long,
-      :count => 255), @work_paper.errors[:name]
-    assert_equal error_message_from_model(@work_paper, :code, :too_long,
-      :count => 255), @work_paper.errors[:code]
+    assert_equal [error_message_from_model(@work_paper, :name, :too_long,
+      :count => 255)], @work_paper.errors[:name]
+    assert_equal [error_message_from_model(@work_paper, :code, :too_long,
+      :count => 255)], @work_paper.errors[:code]
   end
 
   test 'zip created' do
@@ -117,8 +117,7 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [],
         :file_model_attributes => {
-          :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-            TEST_FILE)
+          :uploaded_data => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end
@@ -139,14 +138,14 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [other_work_paper],
         :file_model_attributes => {
-          :uploaded_data => ActionDispatch::Http::UploadedFile.new(
-            TEST_FILE)
+          :uploaded_data => Rack::Test::UploadedFile.new(
+            TEST_FILE_FULL_PATH)
         }
       )
     end
 
     assert_equal 1, @work_paper.errors.count
-    assert_equal error_message_from_model(@work_paper, :code, :taken),
+    assert_equal [error_message_from_model(@work_paper, :code, :taken)],
       @work_paper.errors[:code]
   end
 end

@@ -49,9 +49,9 @@ class InlineHelpTest < ActiveSupport::TestCase
     @inline_help.name = '   '
     assert @inline_help.invalid?
     assert_equal 2, @inline_help.errors.count
-    assert_equal error_message_from_model(@inline_help, :language, :blank),
+    assert_equal [error_message_from_model(@inline_help, :language, :blank)],
       @inline_help.errors[:language]
-    assert_equal error_message_from_model(@inline_help, :name, :blank),
+    assert_equal [error_message_from_model(@inline_help, :name, :blank)],
       @inline_help.errors[:name]
   end
 
@@ -60,7 +60,7 @@ class InlineHelpTest < ActiveSupport::TestCase
     @inline_help.name = inline_helps(:es_review_score).name
     assert @inline_help.invalid?
     assert_equal 1, @inline_help.errors.count
-    assert_equal error_message_from_model(@inline_help, :name, :taken),
+    assert_equal [error_message_from_model(@inline_help, :name, :taken)],
       @inline_help.errors[:name]
   end
 
@@ -70,9 +70,9 @@ class InlineHelpTest < ActiveSupport::TestCase
     @inline_help.name = 'abcde' * 52
     assert @inline_help.invalid?
     assert_equal 2, @inline_help.errors.count
-    assert_equal error_message_from_model(@inline_help, :language, :too_long,
-      :count => 10), @inline_help.errors[:language]
-    assert_equal error_message_from_model(@inline_help, :name, :too_long,
-      :count => 255), @inline_help.errors[:name]
+    assert_equal [error_message_from_model(@inline_help, :language, :too_long,
+      :count => 10)], @inline_help.errors[:language]
+    assert_equal [error_message_from_model(@inline_help, :name, :too_long,
+      :count => 255)], @inline_help.errors[:name]
   end
 end

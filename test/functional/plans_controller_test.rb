@@ -7,17 +7,26 @@ class PlansControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
+    id_param = {:id => plans(:current_plan).to_param}
     public_actions = []
-    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param]
+    ]
 
     private_actions.each do |action|
-      get action
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
-      get action
+      send *action
       assert_response :success
     end
   end
@@ -283,7 +292,7 @@ class PlansControllerTest < ActionController::TestCase
       delete :destroy, :id => plans(:current_plan).id
     end
 
-    assert_equal I18n.t(:'plan.errors.can_not_be_destroyed'), flash[:alert]
+    assert_equal I18n.t(:'plan.errors.can_not_be_destroyed'), flash.alert
     assert_redirected_to plans_path
   end
 

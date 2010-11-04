@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th><%= Parameter.human_attribute_name :name %></th>
-      <th><%= Parameter.human_attribute_name :description %></th>
+      <th class="expendable"><%= Parameter.human_attribute_name :description %></th>
       <th></th>
       <th></th>
     </tr>
@@ -12,7 +12,7 @@
     <% @parameters.each do |parameter| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= super_truncate parameter.to_s, 40 %></td>
-        <td><%= super_truncate parameter.description, 40 %></td>
+        <td class="expendable"><%= super_truncate parameter.description, 40 %></td>
         <td><%= link_to_show parameter_path(@type, parameter) %></td>
         <td><%= link_to_edit edit_parameter_path(@type, parameter) %></td>
       </tr>

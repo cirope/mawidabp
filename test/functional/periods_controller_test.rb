@@ -4,24 +4,29 @@ require 'test_helper'
 class PeriodsControllerTest < ActionController::TestCase
   fixtures :periods, :organizations
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => periods(:current_period).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end
@@ -71,6 +76,8 @@ class PeriodsControllerTest < ActionController::TestCase
   test 'back to redirection on create' do
     assert_difference 'Period.count' do
       perform_auth
+      session[:back_to] = new_period_url
+      
       post :create, {
         :period => {
           :number => '20',
@@ -79,7 +86,7 @@ class PeriodsControllerTest < ActionController::TestCase
           :end => 30.days.from_now.to_date,
           :organization_id => organizations(:default_organization).id
         }
-      }, session.merge({ :back_to => {:action => :new} })
+      }
     end
 
     assert_redirected_to :action => :new
@@ -136,7 +143,7 @@ class PeriodsControllerTest < ActionController::TestCase
       I18n.t(:'period.errors.has_workflows', :count => period.workflows.size),
       I18n.t(:'period.errors.has_procedure_controls',
         :count => period.procedure_controls.size)].join(APP_ENUM_SEPARATOR),
-      flash[:alert]
+      flash.alert
     assert_redirected_to periods_path
   end
 end

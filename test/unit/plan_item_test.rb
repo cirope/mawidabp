@@ -73,15 +73,15 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = '_1'
     assert @plan_item.invalid?
     assert_equal 5, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :order_number,
-      :not_a_number), @plan_item.errors[:order_number]
-    assert_equal error_message_from_model(@plan_item, :plan_id, :not_a_number),
-      @plan_item.errors[:plan_id]
-    assert_equal error_message_from_model(@plan_item, :business_unit_id,
-      :not_a_number), @plan_item.errors[:business_unit_id]
-    assert_equal error_message_from_model(@plan_item, :start, :invalid_date),
+    assert_equal [error_message_from_model(@plan_item, :order_number,
+      :not_a_number)], @plan_item.errors[:order_number]
+    assert_equal [error_message_from_model(@plan_item, :plan_id,
+        :not_a_number)], @plan_item.errors[:plan_id]
+    assert_equal [error_message_from_model(@plan_item, :business_unit_id,
+      :not_a_number)], @plan_item.errors[:business_unit_id]
+    assert_equal [error_message_from_model(@plan_item, :start, :invalid_date)],
       @plan_item.errors[:start]
-    assert_equal error_message_from_model(@plan_item, :end, :invalid_date),
+    assert_equal [error_message_from_model(@plan_item, :end, :invalid_date)],
       @plan_item.errors[:end]
   end
 
@@ -94,13 +94,13 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = '   '
     assert @plan_item.invalid?
     assert_equal 4, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :project, :blank),
+    assert_equal [error_message_from_model(@plan_item, :project, :blank)],
       @plan_item.errors[:project]
-    assert_equal error_message_from_model(@plan_item, :order_number, :blank),
+    assert_equal [error_message_from_model(@plan_item, :order_number, :blank)],
       @plan_item.errors[:order_number]
-    assert_equal error_message_from_model(@plan_item, :start, :blank),
+    assert_equal [error_message_from_model(@plan_item, :start, :invalid_date)],
       @plan_item.errors[:start]
-    assert_equal error_message_from_model(@plan_item, :end, :blank),
+    assert_equal [error_message_from_model(@plan_item, :end, :invalid_date)],
       @plan_item.errors[:end]
   end
 
@@ -110,8 +110,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.project = 'abcdd' * 52
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :project, :too_long,
-      :count => 255), @plan_item.errors[:project]
+    assert_equal [error_message_from_model(@plan_item, :project, :too_long,
+      :count => 255)], @plan_item.errors[:project]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -119,7 +119,7 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.project = plan_items(:current_plan_item_2).project
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :project, :taken),
+    assert_equal [error_message_from_model(@plan_item, :project, :taken)],
       @plan_item.errors[:project]
   end
 
@@ -128,8 +128,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = @plan_item.start.yesterday
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :end, :on_or_after,
-      :restriction => I18n.l(@plan_item.start)), @plan_item.errors[:end]
+    assert_equal [error_message_from_model(@plan_item, :end, :on_or_after,
+      :restriction => I18n.l(@plan_item.start))], @plan_item.errors[:end]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -138,9 +138,9 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = @plan_item.plan.period.end.tomorrow
     assert @plan_item.invalid?
     assert_equal 2, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :start, :out_of_period),
+    assert_equal [error_message_from_model(@plan_item, :start, :out_of_period)],
       @plan_item.errors[:start]
-    assert_equal error_message_from_model(@plan_item, :end, :out_of_period),
+    assert_equal [error_message_from_model(@plan_item, :end, :out_of_period)],
       @plan_item.errors[:end]
   end
 
@@ -151,9 +151,9 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.end = plan_items(:current_plan_item_1).end.yesterday
     assert @plan_item.invalid?
     assert_equal 2, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :end, :item_overload),
+    assert_equal [error_message_from_model(@plan_item, :end, :item_overload)],
       @plan_item.errors[:end]
-    assert_equal error_message_from_model(@plan_item, :start, :item_overload),
+    assert_equal [error_message_from_model(@plan_item, :start, :item_overload)],
       @plan_item.errors[:start]
   end
 
@@ -169,8 +169,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
     assert plan_item_3.invalid?
     assert_equal 1, plan_item_3.errors.count
-    assert_equal error_message_from_model(plan_item_3, :start,
-      :resource_overload), plan_item_3.errors[:start]
+    assert_equal [error_message_from_model(plan_item_3, :start,
+      :resource_overload)], plan_item_3.errors[:start]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -178,8 +178,8 @@ class PlanItemTest < ActiveSupport::TestCase
     @plan_item.plain_predecessors = '100'
     assert @plan_item.invalid?
     assert_equal 1, @plan_item.errors.count
-    assert_equal error_message_from_model(@plan_item, :predecessors, :invalid),
-      @plan_item.errors[:predecessors]
+    assert_equal [error_message_from_model(@plan_item, :predecessors,
+        :invalid)], @plan_item.errors[:predecessors]
   end
 
   test 'cost function' do

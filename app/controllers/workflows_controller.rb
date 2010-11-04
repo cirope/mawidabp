@@ -102,7 +102,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.save
-        flash[:notice] = t :'workflow.correctly_created'
+        flash.notice = t :'workflow.correctly_created'
         format.html { redirect_to(workflows_path) }
         format.xml  { render :xml => @workflow, :status => :created, :location => @workflow }
       else
@@ -127,7 +127,7 @@ class WorkflowsController < ApplicationController
     
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
-        flash[:notice] = t :'workflow.correctly_updated'
+        flash.notice = t :'workflow.correctly_updated'
         format.html { redirect_to(workflows_path) }
         format.xml  { head :ok }
       else
@@ -137,7 +137,7 @@ class WorkflowsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'workflow.stale_object_error'
+    flash.alert = t :'workflow.stale_object_error'
     redirect_to :action => :edit
   end
 
