@@ -22,7 +22,7 @@
       <% has_final = conclusion_draft_review.has_final_review? %>
       <tr class="<%= cycle(:even, :odd) %> <%= has_final ? :readonly_item : :writable_item %>">
         <td><%= show_has_final_info if has_final %></td>
-        <td><%= show_period_with_dates_as_acronym conclusion_draft_review.review.period %></td>
+        <td><%= show_period_with_dates_as_abbr conclusion_draft_review.review.period %></td>
         <td class="nowrap"><%= h conclusion_draft_review.review.identification %></td>
         <td class="expendable"><%= super_truncate(conclusion_draft_review.review.plan_item.business_unit.name, 25) %></td>
         <td class="expendable"><%= super_truncate(conclusion_draft_review.review.plan_item.project, 30) %></td>

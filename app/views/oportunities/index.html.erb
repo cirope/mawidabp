@@ -20,9 +20,9 @@
   <tbody>
     <% @oportunities.each do |oportunity| %>
       <tr class="<%= cycle(:even, :odd) %> <%= oportunity.is_in_a_final_review? ? :readonly_item : :writable_item %>">
-        <td class="nowrap"><%= show_review_with_close_date_as_acronym oportunity.review %></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_abbr oportunity.review %></td>
         <td class="expendable"><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(oportunity) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(oportunity) %></td>
         <td class="expendable"><%= super_truncate oportunity.description, 20 %></td>
         <td class="expendable"><%= h oportunity.state_text %></td>
         <td class="expendable"><%= t oportunity.work_papers.blank? ? :'label.no' : :'label.yes' %></td>

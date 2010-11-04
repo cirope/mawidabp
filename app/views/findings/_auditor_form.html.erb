@@ -300,7 +300,7 @@
   <div style="clear: both; margin-top: 2em;">
     <div class="title" style="font-weight: normal;">
       <%= textilize t(:'finding.costs',
-        :cost => time_in_words_with_acronym((@finding.cost || 0).hours)) %>
+        :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
     </div>
 
     <% unless @finding.costs.blank? %>
@@ -323,7 +323,7 @@
               <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
                 <tr>
                   <td><%= l(cost.created_at, :format => :long) %></td>
-                  <td><%= time_in_words_with_acronym(cost.cost.hours) %></td>
+                  <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
                   <td><%= h cost.description.blank? ? '-' : cost.description %></td>
                   <td><%= h cost.user.full_name %></td>
                 </tr>

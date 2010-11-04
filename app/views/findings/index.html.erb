@@ -51,10 +51,10 @@
   <tbody>
     <% @findings.each do |finding| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td class="nowrap"><%= show_review_with_conclusion_status_as_acronym(
+        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
         <td class="expendable"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(finding) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(finding) %></td>
         <td class="expendable"><%= super_truncate(finding.description, 30) %></td>
         <td class="expendable"><%= h finding.state_text %></td>
         <% if params[:completed] == 'complete' %>

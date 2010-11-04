@@ -56,12 +56,12 @@ a.remove_link:hover {
     color: #ffffff;
 }
 
-acronym {
+abbr {
     cursor: help;
     border-bottom: 1px dotted #2c3234;
 }
 
-acronym.info {
+abbr.info {
     font-size: 16px;
     font-weight: bold;
 }

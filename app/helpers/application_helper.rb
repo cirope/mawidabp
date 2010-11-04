@@ -28,7 +28,7 @@ module ApplicationHelper
 
   def super_truncate(text, length = 30)
     unless text.blank?
-      omission = content_tag(:acronym, '...', :title => h(text))
+      omission = content_tag(:abbr, '...', :title => h(text))
       text_length = text.mb_chars.length
 
       truncate(h(text_length > length ?
@@ -40,8 +40,8 @@ module ApplicationHelper
     end
   end
 
-  def time_in_words_with_acronym(time_in_seconds = 0)
-    content_tag(:acronym, time_ago_in_words(time_in_seconds.from_now),
+  def time_in_words_with_abbr(time_in_seconds = 0)
+    content_tag(:abbr, time_ago_in_words(time_in_seconds.from_now),
       :title => t(:'datetime.distance_in_words.x_hours',
         :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
@@ -53,7 +53,7 @@ module ApplicationHelper
 
   def show_info(text, html_options = {})
     content_tag(:span, !text.blank? ?
-        content_tag(:acronym, 'i', :title => text,
+        content_tag(:abbr, 'i', :title => text,
         :class => "info #{html_options[:class]}") :
         '&nbsp;', :class => :info_box).html_safe
   end

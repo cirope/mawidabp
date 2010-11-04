@@ -6,7 +6,7 @@
         <% title = historic_finding.user_who_make_it.try(:full_name) ||
           t(:'message.automatic_by_the_system') %>
         <li>
-          <acronym title="<%= title %>"><%= historic_finding.state_text %></acronym>
+          <abbr title="<%= title %>"><%= historic_finding.state_text %></abbr>
           (<%= l(historic_finding.updated_at, :format => :long) %>)
         </li>
       <% end %>

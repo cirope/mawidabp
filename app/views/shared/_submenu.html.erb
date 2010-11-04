@@ -1,5 +1,5 @@
-<div class="div_menu_level_<%= level %>" <%= raw "id=\"menu_#{menu_item.menu_name}\" style=\"display: none;\"" unless display %>>
-  <ul class="menu_level_<%= level %>" <%= raw  "id=\"ul_#{menu_item.menu_name}\"" unless display %>>
+<div class="div_menu_level_<%= level %>" <%= raw("id=\"menu_#{menu_item.menu_name}\" style=\"display: none;\"") unless display %>>
+  <ul class="menu_level_<%= level %>" <%= raw "id=\"ul_#{menu_item.menu_name}\"" unless display %>>
     <% menu_item.children.each do |submenu_item| %>
       <% selected = submenu_item.submenu_names.include?(@current_module) %>
       <li <%= raw 'class="selected"' if selected %>>

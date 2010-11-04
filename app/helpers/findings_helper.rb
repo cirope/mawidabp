@@ -34,19 +34,19 @@ module FindingsHelper
     end
   end
 
-  def show_review_with_conclusion_status_as_acronym(review)
+  def show_review_with_conclusion_status_as_abbr(review)
     review_data = review.has_final_review? ?
       t(:'review.with_final_review') : t(:'review.without_final_review')
     review_data << " | #{l(review.issue_date(true), :format => :long)}"
 
-    content_tag(:acronym, h(review.identification), :title => review_data)
+    content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
-  def show_finding_review_code_with_control_objective_as_acronym(finding)
+  def show_finding_review_code_with_control_objective_as_abbr(finding)
     control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
       finding.control_objective_item.control_objective_text
 
-    content_tag(:acronym, h(finding.review_code), :title => control_objective_text)
+    content_tag(:abbr, h(finding.review_code), :title => control_objective_text)
   end
 
 

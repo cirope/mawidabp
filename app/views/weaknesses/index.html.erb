@@ -22,9 +22,9 @@
   <tbody>
     <% @weaknesses.each do |weakness| %>
       <tr class="<%= cycle(:even, :odd) %> <%= weakness.is_in_a_final_review? ? :readonly_item : :writable_item %>">
-        <td class="nowrap"><%= show_review_with_close_date_as_acronym weakness.review %></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_abbr weakness.review %></td>
         <td class="expendable"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(weakness) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(weakness) %></td>
         <td class="expendable"><%= super_truncate weakness.description, 20 %></td>
         <td class="expendable"><%= weakness.state_text %></td>
         <td class="expendable"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>

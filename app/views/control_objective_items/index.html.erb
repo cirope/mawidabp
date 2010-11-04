@@ -23,7 +23,7 @@
       <% html_class << (control_objective.is_in_a_final_review? ?
         :readonly_item : :writable_item).to_s %>
       <tr class="<%= html_class %>">
-        <td class="nowrap"><%= show_review_with_close_date_as_acronym control_objective.review %></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_abbr control_objective.review %></td>
         <td class="expendable"><%= super_truncate(control_objective.process_control.name, 30) %></td>
         <td><%= super_truncate(control_objective.control_objective_text, 30) %></td>
         <td class="expendable"><%= t control_objective.finished? ? :'label.yes' : :'label.no' %></td>

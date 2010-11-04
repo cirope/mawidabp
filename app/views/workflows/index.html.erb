@@ -13,8 +13,8 @@
   <tbody>
     <%  @workflows.each do |workflow| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td><%= show_period_with_dates_as_acronym workflow.period %></td>
-        <td class="nowrap"><%= show_review_with_close_date_as_acronym workflow.review %></td>
+        <td><%= show_period_with_dates_as_abbr workflow.period %></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_abbr workflow.review %></td>
         <td class="expendable"><%= super_truncate workflow.review.plan_item.project, 30 %></td>
         <td class="expendable"><%= h l(workflow.created_at, :format => :short) %></td>
         <td class="expendable"><%= h "#{t(:'number.currency.format.unit')}%.2f" % workflow.cost %></td>

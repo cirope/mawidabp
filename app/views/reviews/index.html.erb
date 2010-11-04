@@ -17,7 +17,7 @@
   <tbody>
     <% @reviews.each do |review| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td><%= show_period_with_dates_as_acronym review.period %></td>
+        <td><%= show_period_with_dates_as_abbr review.period %></td>
         <td class="nowrap"><%= h review.identification %></td>
         <td class="expendable"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
         <td class="expendable"><%= super_truncate review.plan_item.project, 25 %></td>

@@ -11,7 +11,7 @@
   <tbody>
     <% @procedure_controls.each do |procedure_control| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td><%= show_period_with_dates_as_acronym procedure_control.period %></td>
+        <td><%= show_period_with_dates_as_abbr procedure_control.period %></td>
         <td class="expendable"><%= h l(procedure_control.period.start, :format => :short) %></td>
         <td class="expendable"><%= h l(procedure_control.period.end, :format => :short) %></td>
         <td><%= link_to_clone new_procedure_control_path(:clone_from => procedure_control.id),

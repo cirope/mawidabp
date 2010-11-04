@@ -23,12 +23,12 @@
             :param_name => 'user_data',
             :parameters => ("finding_id=#{@finding.id}" unless @finding.new_record?)} %>
         </div>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :user_id, :value => f.object.user_id,
           :id => "hidden_user_id_#{id}" %>
         <%= text_field_tag "finding_user_#{id}",
           user.full_name_with_function(f.object.created_at), :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 15%;">
       <% if is_dynamic || is_a_new_relation %>
