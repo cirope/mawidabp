@@ -1,6 +1,6 @@
 <% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="process_control item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="process_control item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
       <%= link_to_show_hide "control_objectives_for_#{id}",
@@ -51,9 +51,11 @@
           <% end %>
         </div>
         <p style="margin-bottom: 1em;">
-          <%= link_to t(:'best_practice.add_control_objective'),
-            '#control_objective', :class => :add_nested_subitem,
-            :rel => 'process_control control_objectives' %>
+          <%= link_to t(:'best_practice.add_control_objective'), '#',
+            :'data-template' => :control_objective,
+            :'data-event' => :add_nested_subitem,
+            :'data-parent' => :process_control,
+            :'data-child' => :control_objectives %>
         </p>
       </div>
     </div>

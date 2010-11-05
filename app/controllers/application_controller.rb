@@ -18,21 +18,23 @@ class ApplicationController < ActionController::Base
 
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
-  def rescue_action(exception)
-    STDERR << "#{exception.class}: #{exception.message}\n\n"
-    exception.backtrace.each { |l| STDERR << "#{l}\n" }
+  rescue_from Exception do |exception|
+    begin
+      STDERR << "#{exception.class}: #{exception.message}\n\n"
+      exception.backtrace.each { |l| STDERR << "#{l}\n" }
 
-    @title = t :'error.title'
-    create_exception_file exception
-    
-    if login_check && response.redirected_to.nil?
-      render :template => 'errors/show', :locals => { :error => exception }
+      @title = t :'error.title'
+      create_exception_file exception
+
+      if login_check && response.redirect_url.blank?
+        render :template => 'errors/show', :locals => { :error => exception }
+      end
+
+      # En caso que la presentación misma de la excepción no salga como se espera
+      rescue => ex
+        STDERR << "#{ex.class}: #{ex.message}\n\n"
+        ex.backtrace.each { |l| STDERR << "#{l}\n" }
     end
-
-  # En caso que la presentación misma de la excepción no salga como se espera
-  rescue => ex
-    STDERR << "#{ex.class}: #{ex.message}\n\n"
-    ex.backtrace.each { |l| STDERR << "#{l}\n" }
   end
 
   def current_user

@@ -54,18 +54,20 @@ var EventHandler = {
         'addNestedItem',
         'addNestedSubitem',
         'hideItem',
+        'historyBack',
         'insertRecordItem',
         'insertRecordSubitem',
-        'removeItem'
+        'removeItem',
+        'removeListItem'
     ]),
 
     /**
      * Agrega un ítem anidado
      */
     addNestedItem: function(e) {
-        var template = eval(e.readAttribute('href').replace(/.*#/, ''));
+        var template = eval(e.readAttribute('data-template'));
 
-        $(e.readAttribute('rel')).insert({
+        $(e.readAttribute('data-container')).insert({
             bottom: Util.replaceIds(template, /NEW_RECORD/)
         });
     },
@@ -74,12 +76,11 @@ var EventHandler = {
      * Agrega un subitem dentro de un ítem
      */
     addNestedSubitem: function(e) {
-        var elements = e.readAttribute('rel').match(/(\w+)/g);
-        var parent = '.' + elements[0];
-        var child = '.' + elements[1];
+        var parent = '.' + e.readAttribute('data-parent');
+        var child = '.' + e.readAttribute('data-child');
         var childContainer = e.up(parent).down(child);
         var parentObjectId = e.up(parent).downForIdFromName();
-        var template = eval(e.readAttribute('href').replace(/.*#/, ''));
+        var template = eval(e.readAttribute('data-template'));
 
         template = template.replace(/(attributes[_\]\[]+)\d+/g, '$1' +
             parentObjectId);
@@ -92,14 +93,12 @@ var EventHandler = {
      * dinámico)
      */
     hideItem: function(e) {
-        // Si es una imágen el link está como contenedor
-        var href = e.readAttribute('href') || e.up('a').readAttribute('href');
-        var target = href.replace(/.*#/, '.');
+        var target = e.readAttribute('data-target');
 
         Helper.hideItem(e.up(target));
 
-        var hiddenInput = e.previous('input[type=hidden]') ||
-            e.up('a').previous('input[type=hidden]');
+        var hiddenInput = e.previous('input[type=hidden].destroy') ||
+            e.up('a').previous('input[type=hidden].destroy');
 
         if(hiddenInput) {hiddenInput.setValue('1');}
 
@@ -113,13 +112,18 @@ var EventHandler = {
     },
 
     /**
+     * Simula el comportamiento del botón "Atrás"
+     */
+    historyBack: function() {
+        if(window.history.length > 0) { window.history.back(1); }
+    },
+
+    /**
      * Inserta un elemento al final del contenedor
      */
     insertRecordItem: function(e) {
-        // Si es una imágen el link está como contenedor
-        var href = e.readAttribute('href') || e.up('a').readAttribute('href');
-        var target = href.replace(/.*#/, '.');
-        var template = eval(href.replace(/.*#/, ''));
+        var target = e.readAttribute('data-target');
+        var template = eval(e.readAttribute('data-template'));
 
         $(e.up(target)).insert({before: Util.replaceIds(template, /NEW_RECORD/)});
     },
@@ -128,14 +132,10 @@ var EventHandler = {
      * Inserta un subelemento al final del contenedor
      */
     insertRecordSubitem: function(e) {
-        // Si es una imágen el link está como contenedor
-        var href = e.readAttribute('href') || e.up('a').readAttribute('href');
-        var target = href.replace(/.*#/, '.');
-        var elements = (e.readAttribute('rel') ||
-            e.up('a').readAttribute('rel')).match(/(\w+)/g);
-        var parent = '.' + elements[0];
+        var target = e.readAttribute('data-target');
+        var parent = '.' + e.readAttribute('data-parent');
         var parentObjectId = e.up(parent).downForIdFromName();
-        var template = eval(href.replace(/.*#/, ''));
+        var template = eval(e.readAttribute('data-template'));
 
         template = template.replace(/(attributes[_\]\[]+)\d+/g, '$1' +
             parentObjectId);
@@ -149,12 +149,18 @@ var EventHandler = {
      * Elimina el elemento del DOM
      */
     removeItem: function(e) {
-        // Si es una imágen el link está como contenedor
-        var href = e.readAttribute('href') || e.up('a').readAttribute('href');
-        var target = href.replace(/.*#/, '.');
+        var target = e.readAttribute('data-target') ||
+            e.up('a').readAttribute('data-target');
 
         Helper.removeItem(e.up(target));
         FormUtil.completeSortNumbers();
+    },
+
+    /**
+     * Elimina el elemento del DOM
+     */
+    removeListItem: function(e) {
+        Helper.removeItem(e.up('.item'));
     }
 }
 
@@ -461,32 +467,9 @@ var Observer = {
      * Adjunta eventos a la sección app_content
      */
     attachToAppContent: function() {
-        var events = EventHandler.eventList;
-
-        Event.observe('app_content', 'click', function(event) {
-            var e = Event.findElement(event);
-            var classNames = $w(e.className);
-            var selectedEventClassNames = events.select(function(eventName) {
-                return classNames.include(eventName.underscore());
-            });
-
-            selectedEventClassNames.each(function(eventName) {
-                EventHandler[eventName](e);
-                Event.stop(event);
-            });
-
-            if (e.hasClassName('file_container')) {
-                e.down('input[type=file]').click();
-            } else if (e.hasClassName('history_back')) {
-                if(window.history.length > 0) {
-                    window.history.back(1);
-                }
-
-                Event.stop(event);
-            } else if (e.hasClassName('remove_list_item')) {
-                Helper.removeItem(e.up('.item'));
-
-                Event.stop(event);
+        $('app_content').on('click', function(event, element) {
+            if (element.hasClassName('file_container')) {
+                element.down('input[type=file]').click();
             }
         });
     },
@@ -690,16 +673,27 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 Event.observe(window, 'load', function() {
-    Event.observe(document, 'keydown', function(e) {
+    document.on('keydown', function(e) {
         if ((e.keyCode || e.which) == 32 && e.ctrlKey) {
             Search.show();
             Event.stop(e);
         }
     });
 
+    document.on('click', 'a[data-event]', function(event, element) {
+        if(event.stopped) return;
+        var eventName =
+            element.readAttribute('data-event').dasherize().camelize();
+
+        if(EventHandler.eventList.include(eventName)) {
+            EventHandler[eventName](element);
+            Event.stop(event);
+        }
+    });
+
     if($('app_content')) {
         Observer.attachToAppContent();
-
+        
         Event.observe('app_content', 'mouseover', function(event) {
             var e = Event.findElement(event, 'img');
 

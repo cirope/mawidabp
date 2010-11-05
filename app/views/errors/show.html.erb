@@ -17,8 +17,7 @@
         <%= t(:'error.download_the_following_file') %><br />
         <% if @auth_user %>
           <%= link_to "#{t(:'error.error_file')}.log",
-            :controller => :error_files, :action => @auth_user.user,
-            :id => "#{t(:'error.error_file')}.log" %>
+            "/error_files/#{@auth_user.user}/#{t(:'error.error_file')}.log" %>
         <% end %>
       </span>
     </p>
@@ -57,12 +56,9 @@
     <%= link_to_function t(:'error.hide_details'),
       "Effect.SlideUp('error_details'); $('show_link').appear();" %>
     <!-- Final -->
-    <h2 style="margin: 1em 0em;"><%=h error.clean_message %></h2>
+    <h2 style="margin: 1em 0em;"><%=h error.message %></h2>
     <h3>Backtrace:</h3>
     <pre style="margin-top: .5em;"><%=h error.backtrace.join("\n") %></pre>
-
-    <h3 style="margin-top: 1em;">Application backtrace:</h3>
-    <pre style="margin-top: .5em;"><%=h error.application_backtrace.join("\n") %></pre>
 
     <% unless params.empty? %>
     <h3 style="margin-top: 1em;">Parameters:</h3>

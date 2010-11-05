@@ -1650,13 +1650,6 @@ es:
         <<: *commons
 
     errors:
-      template:
-        header:
-          one: "No se realizaron cambios porque se encontró un error"
-          other: "No se realizaron cambios porque se encontraron %{count} errores"
-        # The variable :count is also available
-        body: "Los siguientes problemas deben solucionarse:"
-
       # The values :model, :attribute and :value are always available for interpolation
       # The value :count is available when applicable. Can be used for pluralization.
       messages:
@@ -1806,6 +1799,14 @@ es:
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
 
+  errors:
+    template:
+      header:
+        one: "No se realizaron cambios porque se encontró un error"
+        other: "No se realizaron cambios porque se encontraron %{count} errores"
+      # The variable :count is also available
+      body: "Los siguientes problemas deben solucionarse:"
+
   date:
     formats:
       # Use the strftime parameters for formats.
@@ -1825,6 +1826,10 @@ es:
     # Used in date_select and datime_select.
     order: [ :day, :month, :year ]
 
+  helpers:
+    select:
+      prompt: "Seleccionar ..."
+
   time:
     formats:
       default: "%A, %e de %B de %Y %H:%M:%S %z"
@@ -1838,8 +1843,6 @@ es:
 
   # Used in array.to_sentence.
   support:
-    select:
-      prompt: "Seleccionar ..."
     array:
       words_connector: ", "
       two_words_connector: " y "

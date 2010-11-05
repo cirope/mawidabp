@@ -1,9 +1,9 @@
 <!--[form:user]-->
 <%= form_for @user, :url => url do |u_f| %>
   <% content_for :js_extra do %>
-    <%= "var child='#{escape_javascript(render(:partial => 'child',
+    <%= raw "var child='#{escape_javascript(render(:partial => 'child',
         :object => User.new, :locals => {:f => u_f, :is_dynamic => true}))}';" %>
-    <%= "var organization_role='#{generate_template(u_f,
+    <%= raw "var organization_role='#{generate_template(u_f,
         :organization_roles)}';" %>
   <% end %>
   <%= u_f.error_messages %>
@@ -66,7 +66,7 @@
         <div class="search">
           <% errors_on_manager = @user.errors[:manager_id] %>
           <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete :user, :nested_user,
+          <%= raw text_field_with_auto_complete(:user, :nested_user,
             {:id => "user_manager_#{@user.id}",
             :class => "search #{'error_field' unless errors_on_manager.blank?}",
             :title => t(:'label.search'),
@@ -75,7 +75,7 @@
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'user_data',
             :parameters => ("user_id=#{@user.id}" unless @user.new_record?),
-            :url => {:action => :auto_complete_for_user}} %>
+            :url => {:action => :auto_complete_for_user}}) %>
         </div>
       </div>
       <div class="item_field" style="width: 10%;">
@@ -100,8 +100,8 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'user.add_child'), '#child',
-        :class => :add_nested_item, :rel => :children %>
+      <%= link_to t(:'user.add_child'), '#', :'data-template' => :child,
+        :'data-event' => :add_nested_item, :'data-container' => :children %>
     </p>
   <% end %>
   
@@ -126,8 +126,10 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'user.add_organization_role'), '#organization_role',
-      :class => :add_nested_item, :rel => :organization_roles %>
+    <%= link_to t(:'user.add_organization_role'), '#',
+      :'data-template' => :organization_role,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :organization_roles %>
   </p>
   <p>
     <span class="button"><%= u_f.submit submit_text %></span>

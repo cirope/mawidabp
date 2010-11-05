@@ -61,7 +61,7 @@ class DetractsControllerTest < ActionController::TestCase
     
     perform_auth(user)
     get :index
-    assert_redirected_to :action => :show, :id => user.detracts.last
+    assert_redirected_to :action => :show, :id => user.detracts.last || 0
     assert_not_nil assigns(:users)
     assert_equal 1, assigns(:users).size
   end
@@ -70,7 +70,7 @@ class DetractsControllerTest < ActionController::TestCase
     user = User.find users(:audited_user).id
 
     perform_auth(user)
-    get :show, :id => user.detracts.last
+    get :show, :id => user.detracts.last || 0
     assert_response :success
     assert_not_nil assigns(:user)
     assert_not_nil assigns(:detracts)

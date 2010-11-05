@@ -7,16 +7,16 @@
             <p class="form_item" style="margin: 0em;">
               <%= f.label :from_date, t(:'conclusion_committee_report.from_date'),
                 :class => :inline %>
-              <%= f.calendar_date_select :from_date, :value => l(@from_date),
-                :class => :inline_item %>
+              <%= f.calendar_date_select :from_date, :size => nil,
+                :value => l(@from_date), :class => :inline_item %>
             </p>
           </td>
           <td style="padding-right: 1em; width: 50%;">
             <p class="form_item" style="margin: 0em;">
               <%= f.label :to_date, t(:'conclusion_committee_report.to_date'),
                 :class => :inline %>
-              <%= f.calendar_date_select :to_date, :value => l(@to_date),
-                :class => :inline_item %>
+              <%= f.calendar_date_select :to_date, :size => nil,
+                :value => l(@to_date), :class => :inline_item %>
             </p>
           </td>
         </tr>

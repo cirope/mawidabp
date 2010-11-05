@@ -14,8 +14,8 @@ class FileModelsController < ApplicationController
       extname = File.extname(file_name)[1..-1]
       mime_type = Mime::Type.lookup_by_extension(extname)
 
-      send_file file_name, :x_sendfile => (Rails.env == 'production'),
-        :url_based_filename => true, :type => mime_type
+      send_file file_name, :url_based_filename => true,
+        :type => (mime_type || 'application/octet-stream')
       redirect = false
     end
 

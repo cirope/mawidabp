@@ -36,11 +36,12 @@ class DetractsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @users.size == 1 && (!@query.blank? || !@has_approval)
+        if @users.size == 1 && (!@query.blank? || !@has_approval) &&
+            !params[:page]
 
           redirect_to @has_approval ?
             new_detract_path(:detract => {:user_id => @users.first.id}) :
-            {:action => :show, :id => @users.first.detracts.last}
+            {:action => :show, :id => @users.first.detracts.last || 0}
         end
       } # index.html.erb
       format.xml  { render :xml => @users }

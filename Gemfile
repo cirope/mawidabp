@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.1'
+gem 'rails', :git => 'https://github.com/rails/rails.git', :branch => '3-0-stable'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -11,11 +11,9 @@ gem 'memcache-client'
 gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
 gem 'mini_magick'
 gem 'uuidtools'
-# TODO: descomentar cuando sean compatibles con Rails 3
 gem 'newrelic_rpm'
 gem 'validates_timeliness'
 gem 'RedCloth'
-gem 'i18n_label'
 gem 'smurf', :require => false
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.pre'

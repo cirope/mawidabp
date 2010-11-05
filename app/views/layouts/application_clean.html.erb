@@ -13,7 +13,7 @@
     <%= calendar_date_select_includes 'silver', :locale => (@auth_user.language if @auth_user) %>
     <%= javascript_tag do %>
       <%= "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
-      <%= yield :js_extra %>
+      <%= content_for :js_extra %>
     <% end %>
   </head>
   <body>
@@ -47,8 +47,8 @@
       </div>
     </div>
     <%= javascript_tag do %>
-      <%= yield :js_extra_bottom %>
+      <%= content_for :js_extra_bottom %>
     <% end %>
-    <%= yield :extra_html_bottom %>
+    <%= content_for :extra_html_bottom %>
   </body>
 </html>

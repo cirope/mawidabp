@@ -7,11 +7,6 @@ MawidaApp::Application.routes.draw do
     member do
       get :show_last_detracts
     end
-
-    # Cuando un usuario no tiene ningún detractor no incluye el ID
-    collection do
-      get :show
-    end
   end
 
   resources :inline_helps

@@ -34,9 +34,9 @@
     <%= f.text_area :description, :rows => 7, :cols => 20 %>
   </p>
   <div style="display:none">
-  <%= f.hidden_field :lock_version %>
-  <%= f.hidden_field :organization_id %>
-  <%= hidden_field_tag 'type', 'type', :value => @type %>
+    <%= f.hidden_field :lock_version %>
+    <%= f.hidden_field :organization_id %>
+    <%= hidden_field_tag 'type', 'type', :value => @type %>
   </div>
   <p>
     <span class="button"><%= f.submit submit_button_text %></span>

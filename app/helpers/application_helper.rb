@@ -146,8 +146,8 @@ module ApplicationHelper
 
     result ||= content_tag(:div, content_tag(:span, previous_label,
         :class => 'disabled prev_page') +
-        content_tag(:span, 1, :class => :current) + content_tag(:span,
-        next_label, :class => 'disabled next_page'),
+        content_tag(:em, 1) + content_tag(:span, next_label,
+        :class => 'disabled next_page'),
       :class => :pagination)
 
     result
@@ -215,7 +215,7 @@ module ApplicationHelper
 
   # Devuelve el HTML de un vínculo para volver (history.back())
   def link_to_back
-    link_to t(:'label.back'), '#', :class => :history_back
+    link_to t(:'label.back'), '#', :'data-event' => :history_back
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
@@ -331,13 +331,12 @@ module ApplicationHelper
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_item_link(fields = nil, class_for_remove = nil)
     new_record = fields.nil? || fields.object.new_record?
-    out = String.new
-    out << fields.hidden_field(:_destroy,
+    out = String.new.html_safe
+    out << fields.hidden_field(:_destroy, :class => :destroy,
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to('X',
-      "##{class_for_remove || fields.object.class.name.underscore}",
-      :class => "remove_link #{(new_record ? :remove_item : :hide_item)}",
-      :title => t(:'label.delete'))
+    out << link_to('X', '#', :title => t(:'label.delete'),
+      :'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
+      :'data-event' => (new_record ? :remove_item : :hide_item))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un
@@ -345,8 +344,9 @@ module ApplicationHelper
   #
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_list_item_link(fields)
-    link_to('X', "##{fields.object.class.name.underscore}",
-      :class => 'remove_link remove_list_item', :title => t(:'label.delete'))
+    link_to('X', '#', :title => t(:'label.delete'),
+      :'data-target' => ".#{fields.object.class.name.underscore}",
+      :'data-event' => :remove_list_item)
   end
 
   # Devuelve HTML con un link para agregar un elemento
@@ -384,17 +384,19 @@ module ApplicationHelper
   def insert_record_link(fields, user_options = {})
     options = {
       :label => t(:'label.insert_record_item'),
-      :class => :insert_record_item
+      :'data-event' => :insert_record_item
     }.merge(user_options)
     
     link_to(
       image_tag('insert.gif', :size => '19x13', :alt => options[:label],
-        :title => options.delete(:label), :class => options[:class]),
-      "##{options.delete(:class_to_insert) || fields.object.class.name.underscore}",
+        :title => options.delete(:label), :class => options[:class]), "#",
       {
-        :class => "insert_record_item image_link #{options.delete(:class)}",
-        :rel => options.delete(:rel)
-      })
+        :'data-template' => options.delete(:class_to_insert) ||
+          fields.object.class.name.underscore,
+        :'data-target' => options.delete(:'data-target') ||
+          ".#{fields.object.class.name.underscore}",
+        :class => :image_link
+      }.merge(options))
   end
 
   # Devuelve una etiqueta con el mismo nombre que el del objeto para que sea
@@ -522,10 +524,6 @@ module ApplicationHelper
     request_token_tag = ''
     if form_method == 'post' && protect_against_forgery?
       request_token_tag = tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token)
-    end
-
-    if confirm = html_options.delete("confirm")
-      html_options["onclick"] = "return confirm('#{escape_javascript(confirm)}');"
     end
 
     url = options.is_a?(String) ? options : self.url_for(options)

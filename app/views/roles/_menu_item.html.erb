@@ -5,7 +5,7 @@
   <% parent_name = menu_item.parent.try(:menu_name) %>
   <tr id="<%= menu_item.menu_name %>" class="menu_item highlight_on_hover <%= 'bold' unless menu_item.parent %>">
     <td>
-      <span <%= "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= 'class="red bold"' if privilege.errors.size > 0 %>>
+      <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= raw 'class="red bold"' if privilege.errors.size > 0 %>>
         <%= menu_item.to_s %>
       </span>
       <%= f.hidden_field :module %>

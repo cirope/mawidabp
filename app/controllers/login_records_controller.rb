@@ -32,7 +32,7 @@ class LoginRecordsController < ApplicationController
     unless params[:search]
       default_conditions[0] = [
         default_conditions[0],
-        'created_at BETWEEN :from_date AND :to_date'
+        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date"
       ].join(' AND ')
 
       default_conditions[1].merge!(:from_date => @from_date,
@@ -45,7 +45,7 @@ class LoginRecordsController < ApplicationController
       :per_page => APP_LINES_PER_PAGE,
       :include => :user,
       :conditions => @conditions || default_conditions,
-      :order => 'start DESC'
+      :order => "#{LoginRecord.table_name}.start DESC"
     )
 
     respond_to do |format|

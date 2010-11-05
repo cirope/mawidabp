@@ -1,7 +1,7 @@
 <!--[form:business_unit_type]-->
 <%= form_for @business_unit_type do |but_f| %>
   <% content_for :js_extra do %>
-      <%= "var business_unit='#{generate_template(but_f, :business_units)}';" %>
+      <%= raw "var business_unit='#{generate_template(but_f, :business_units)}';" %>
   <% end %>
   <%= but_f.error_messages %>
 
@@ -43,8 +43,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'business_unit_type.add_business_unit'), '#business_unit',
-      :class => :add_nested_item, :rel => 'business_units' %>
+    <%= link_to t(:'business_unit_type.add_business_unit'), '#',
+      :'data-template' => :business_unit, :'data-container' => :business_units,
+      :'data-event' => :add_nested_item %>
   </p>
 
   <%= hidden_lock_version(but_f) %>

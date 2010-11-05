@@ -25,13 +25,13 @@
   <div class="form_column_left">
     <div class="search">
       <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id_item %>
-      <%= text_field_with_auto_complete :user, :user_data,
+      <%= raw text_field_with_auto_complete(:user, :user_data,
         {:id => 'autocomplete_user_id', :class => :search,
         :title => t(:'label.search'), :value => nil},
         {:indicator => :loading, :skip_style => true,
         :url => auto_complete_for_user_users_path,
         :after_update_element => 'AutoComplete.itemSelected',
-        :param_name => 'user_data'} %>
+        :param_name => 'user_data'}) %>
     </div>
   </div>
 

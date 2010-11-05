@@ -44,14 +44,18 @@ a.image_link:hover {
     color: inherit;
 }
 
-a.remove_link {
+a[data-event="remove_item"],
+a[data-event="remove_list_item"],
+a[data-event="hide_item"] {
     font-size: 12px;
     font-weight: bold;
     padding: 1px 3px;
     text-decoration: none;
 }
 
-a.remove_link:hover {
+a[data-event="remove_item"]:hover,
+a[data-event="remove_list_item"]:hover,
+a[data-event="hide_item"]:hover {
     background: #aa0000;
     color: #ffffff;
 }
@@ -208,7 +212,8 @@ div#links div.pagination a:hover {
     border: 2px solid #47ae00;
 }
 
-div#links div.pagination span.current {
+div#links div.pagination em {
+    font-style: normal;
     border: 2px solid #333333;
     background: #333333;
     color: #ffffff;
@@ -865,7 +870,7 @@ form input[type="file"].inline_item {
 
 form input[type="text"].inline_item {
     margin: 0px;
-    width: 66%;
+    width: 60%;
 }
 
 form input[type="radio"].inline_item {
