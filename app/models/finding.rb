@@ -226,7 +226,7 @@ class Finding < ActiveRecord::Base
     stale_parameters.each_with_index do |stale_parameter, i|
       stale_days = stale_parameter[:parameter].to_i
       parameters[:"stale_unconfirmed_date_#{i}"] =
-        (stale_days + stale_days).days.ago_in_business.to_date
+        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
       parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
 
       pre_conditions << [

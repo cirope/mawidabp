@@ -149,8 +149,7 @@ var EventHandler = {
      * Elimina el elemento del DOM
      */
     removeItem: function(e) {
-        var target = e.readAttribute('data-target') ||
-            e.up('a').readAttribute('data-target');
+        var target = e.readAttribute('data-target');
 
         Helper.removeItem(e.up(target));
         FormUtil.completeSortNumbers();
@@ -691,6 +690,14 @@ Event.observe(window, 'load', function() {
         }
     });
 
+    document.on('change', 'form', function(event, element) {
+        if(!element.hasClassName('no_observe_changes')) {
+            State.unsavedData = true;
+        }
+    });
+
+    document.on('submit', function() { State.unsavedData = false; });
+
     if($('app_content')) {
         Observer.attachToAppContent();
         
@@ -716,20 +723,6 @@ Event.observe(window, 'load', function() {
     } else if($('mobile_menu')) {
         Observer.attachToMobileMenu();
     }
-
-    // Para observar los cambios en los formularios
-    $$('form').each(function(form) {
-        Form.getElements(form).each(function(e) {
-            // Hay que observar los elementos uno a uno por IE
-            if(!e.hasClassName('no_observe_changes')) {
-                Event.observe(e, 'change', function() {
-                    State.unsavedData = true;
-                });
-            }
-        });
-        
-        Event.observe(form, 'submit', function() {State.unsavedData = false;});
-    });
 
     // Mensajes diferidos
     if(Object.isArray(State.showMessages)) {

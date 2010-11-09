@@ -55,7 +55,7 @@ module ApplicationHelper
     content_tag(:span, !text.blank? ?
         content_tag(:abbr, 'i', :title => text,
         :class => "info #{html_options[:class]}") :
-        '&nbsp;', :class => :info_box).html_safe
+        '&nbsp;'.html_safe, :class => :info_box).html_safe
   end
 
   # Genera un array con pares [[name_field_1, id_field_1],......] para ser
@@ -66,7 +66,7 @@ module ApplicationHelper
   # * _id_field_::    Campo o método que se va a usar para identificar al objeto
   def options_array_for(objects, name_field, id_field, show_prompt = false)
     raw_options = objects.map { |o| [o.send(name_field), o.send(id_field)] }
-    show_prompt ? [[t(:'support.select.prompt'), nil]] + raw_options :
+    show_prompt ? [[t(:'helpers.select.prompt'), nil]] + raw_options :
       raw_options
   end
 
@@ -359,7 +359,7 @@ module ApplicationHelper
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    out = String.new
+    out = String.new.html_safe
     out << link_to('+', *(args << options))
   end
 
@@ -386,6 +386,7 @@ module ApplicationHelper
       :label => t(:'label.insert_record_item'),
       :'data-event' => :insert_record_item
     }.merge(user_options)
+    target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
     
     link_to(
       image_tag('insert.gif', :size => '19x13', :alt => options[:label],
@@ -393,7 +394,7 @@ module ApplicationHelper
       {
         :'data-template' => options.delete(:class_to_insert) ||
           fields.object.class.name.underscore,
-        :'data-target' => options.delete(:'data-target') ||
+        :'data-target' => target || options.delete(:'data-target') ||
           ".#{fields.object.class.name.underscore}",
         :class => :image_link
       }.merge(options))

@@ -1,7 +1,7 @@
 <!--[form:resource_class]-->
 <%= form_for @resource_class do |rc_f| %>
   <% content_for :js_extra do %>
-    <%= "var resource='#{generate_template(rc_f, :resources)}'" %>
+    <%= raw "var resource='#{generate_template(rc_f, :resources)}'" %>
   <% end %>
   <%= rc_f.error_messages %>
 
@@ -47,8 +47,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'resource_class.add_resource'), '#resource',
-      :class => :add_nested_item, :rel => :resources %>
+    <%= link_to t(:'resource_class.add_resource'), '#',
+      :'data-template' => :resource, :'data-event' => :add_nested_item,
+      :'data-container' => :resources %>
   </p>
 
   <div style="display:none">

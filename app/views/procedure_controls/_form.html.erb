@@ -1,9 +1,7 @@
 <!--[form:procedure_control]-->
 <%= form_for @procedure_control do |pc_f| %>
-  <% content_for :js_extra do %>
-    <%= "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
-    <%= 'var procedureControlItemHash = new Hash();' %>
-  <% end %>
+  <% js_extra = "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
+  <% js_extra << 'var procedureControlItemHash = new Hash();' %>
 
   <%= pc_f.error_messages %>
 
@@ -48,13 +46,11 @@
       <% pci_template = nil %>
       <%= pc_f.fields_for :procedure_control_items,
         @procedure_control.procedure_control_items.sort do |pci_f| %>
-        <%= content_for :js_extra do %>
-          <% pci_template ||= generate_template(pci_f,
-            :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
-            :locals => {:control_objectives => []}) %>
-          <%= "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
-          <% pci_template = 0 %>
-        <% end %>
+        <% pci_template ||= generate_template(pci_f,
+          :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
+          :locals => {:control_objectives => []}) unless pci_template == 0 %>
+        <% js_extra << "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
+        <% pci_template = 0 %>
         <%= render :partial => 'procedure_control_item', :locals =>
           {:f => pci_f, :is_dynamic => false} %>
       <% end %>
@@ -62,9 +58,10 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'procedure_control.add_procedure_control_item'),
-      '#procedure_control_item', :class => :add_nested_item,
-      :rel => :procedure_control_items %>
+    <%= link_to t(:'procedure_control.add_procedure_control_item'), '#',
+      :'data-template' => :procedure_control_item,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :procedure_control_items %>
   </p>
 
   <div style="display:none">
@@ -74,6 +71,9 @@
   <p>
     <span class="button"><%= pc_f.submit submit_button_text %></span>
   </p>
+  <%= content_for :js_extra do %>
+    <%= raw js_extra %>
+  <% end %>
 <% end %>
 <!--[eoform:procedure_control] -->
 <%= set_focus_to_first_element %>

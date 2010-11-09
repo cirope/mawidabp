@@ -18,7 +18,7 @@
 <!--[form:plan]-->
 <%= form_for @plan do |p_f| %>
   <% content_for :js_extra do %>
-    <%= "var plan_item='#{generate_template(p_f, :plan_items)}';" %>
+    <%= raw "var plan_item='#{generate_template(p_f, :plan_items)}';" %>
   <% end %>
   <%= p_f.error_messages %>
 
@@ -87,8 +87,8 @@
             :object => ResourceUtilization.new(:resource_type => 'Resource'),
             :partial => 'material_resource_utilization',
             :child_index => 'NEW_SUBRECORD') %>
-          <%= "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-          <%= "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
+          <%= raw "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
+          <%= raw "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
           <% mru_template = 0 %>
           <% hru_template = 0 %>
         <% end %>
@@ -99,8 +99,8 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'plan.add_plan_item'), '#plan_item',
-      :class => :add_nested_item, :rel => :plan_items %>
+    <%= link_to t(:'plan.add_plan_item'), '#', :'data-template' => :plan_item,
+      :'data-event' => :add_nested_item, :'data-container' => :plan_items %>
   </p>
 
   <% if @plan.has_duplication? %>

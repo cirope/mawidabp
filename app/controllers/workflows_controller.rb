@@ -200,7 +200,7 @@ class WorkflowsController < ApplicationController
   #
   # * GET /reviews/reviews_for_period/?period=id
   def reviews_for_period
-    options = [[t(:'support.select.prompt'), '']]
+    options = [[t(:'helpers.select.prompt'), '']]
     reviews = Review.list_without_final_review.list_all_without_workflow(
       params[:period])
 

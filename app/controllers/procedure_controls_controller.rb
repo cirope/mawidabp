@@ -278,7 +278,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_control_objectives/?process_control=id
   def get_control_objectives
-    options = [[t(:'support.select.prompt'), '']]
+    options = [[t(:'helpers.select.prompt'), '']]
     control_objectives = ControlObjective.all(
       :conditions => {:process_control_id => params[:process_control]})
 
@@ -291,7 +291,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_process_controls/?best_practice=id
   def get_process_controls
-    options = [[t(:'support.select.prompt'), '']]
+    options = [[t(:'helpers.select.prompt'), '']]
     process_controls = ProcessControl.all(
       :conditions => {:best_practice_id => params[:best_practice]})
 

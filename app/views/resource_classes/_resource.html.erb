@@ -1,5 +1,5 @@
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="resource item" <%= 'style="display: none;"' if hide %>>
+<div class="resource item" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 30%;">
       <%= f.text_field :name, :maxlength => 255, :size => 10 %>

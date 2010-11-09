@@ -1,6 +1,6 @@
 <% id = dynamic_object_id('procedure_control_item', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="procedure_control_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="procedure_control_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
       <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
@@ -81,14 +81,16 @@
 
         <p style="margin-bottom: 1em;">
           <%= link_to t(:'procedure_control.add_procedure_control_subitem'),
-            '#procedure_control_subitem', :class => :add_nested_subitem,
-            :rel => 'procedure_control_item procedure_control_subitems' %>
+            '#', :'data-template' => :procedure_control_subitem,
+            :'data-event' => :add_nested_subitem,
+            :'data-parent' => :procedure_control_item,
+            :'data-child' => :procedure_control_subitems %>
         </p>
       </div>
     </div>
   </div>
 </div>
-<% if f.object.new_record? %>
+<% unless f.object.process_control_id %>
   <script type="text/javascript">
     Event.observe('<%= id %>_best_practice', 'change', function() {
       var processControlId = '<%= id %>_process_control_id';
@@ -162,8 +164,8 @@
 <script type="text/javascript">Helper.showItem($('<%= id %>'));</script>
 <% elsif !f.object.new_record? %>
   <% content_for :js_extra_bottom do %>
-    <% options = [[t(:'support.select.prompt'), '']] +
+    <% options = [[t(:'helpers.select.prompt'), '']] +
         f.object.control_objectives.map { |co| [co.name, co.id] } %>
-    <%= "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
+    <%= raw "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
   <% end %>
 <% end %>
