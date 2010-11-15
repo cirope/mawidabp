@@ -34,10 +34,10 @@
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
-      :'data-parent' => :plan_item,
-      :class_to_insert => :human_resource_utilization) %> |
-    <%= remove_item_link(f, 'human_resource_utilization') %>
-    <%= f.hidden_field :resource_type %>
+        :'data-parent' => :plan_item,
+        :class_to_insert => :human_resource_utilization) %> |
+      <%= remove_item_link(f, 'human_resource_utilization') %>
+      <%= f.hidden_field :resource_type %>
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <% id = "#{dynamic_object_id('finding_relation', f)}#{'_NEW_RECORD' if is_dynamic}" %>
 <% finding_relation = f.object %>
 <% hide = is_dynamic || finding_relation.marked_for_destruction? %>
-<div class="finding_relation item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+<div class="finding_relation item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 60%;">
       <% if is_dynamic %>
@@ -12,7 +12,7 @@
           } %>
           <%= f.hidden_field :related_finding_id,
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete :finding, :nested_finding_relation,
+          <%= raw text_field_with_auto_complete(:finding, :nested_finding_relation,
             {:id => "finding_finding_relation_#{id}", :class => :search,
             :title => t(:'label.search'),
             :value => finding_relation.related_finding.to_s},
@@ -20,7 +20,7 @@
             :url => {:action => :auto_complete_for_finding_relation},
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'finding_relation_data',
-            :parameters => extra_parameters.to_param} %>
+            :parameters => extra_parameters.to_param}) %>
         </div>
       <% else %>
         <%= f.hidden_field :related_finding_id,

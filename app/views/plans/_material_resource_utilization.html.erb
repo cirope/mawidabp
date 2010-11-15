@@ -12,11 +12,11 @@
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-    <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
-      :'data-parent' => :plan_item,
-      :class_to_insert => :material_resource_utilization) %> |
-    <%= remove_item_link(f, 'material_resource_utilization') %>
-    <%= f.hidden_field :resource_type %>
+      <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
+        :'data-parent' => :plan_item,
+        :class_to_insert => :material_resource_utilization) %> |
+      <%= remove_item_link(f, 'material_resource_utilization') %>
+      <%= f.hidden_field :resource_type %>
     </div>
   </div>
 </div>

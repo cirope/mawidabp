@@ -870,7 +870,7 @@ form input[type="file"].inline_item {
 
 form input[type="text"].inline_item {
     margin: 0px;
-    width: 60%;
+    width: 66%;
 }
 
 form input[type="radio"].inline_item {

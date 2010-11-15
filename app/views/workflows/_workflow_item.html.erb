@@ -1,6 +1,6 @@
 <% id = "workflow_item_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="workflow_item item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="workflow_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="show_hide_field">
       <%= link_to_show_hide "resource_utilizations_for_#{id}",
@@ -22,7 +22,7 @@
     </div>
     <div class="item_field" style="width: 10%;">
       <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,
-        :class => (:error_field if f.object.errors[:predecessors]) %>
+        :class => (:error_field unless f.object.errors[:predecessors].blank?) %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f) %> |
@@ -64,12 +64,14 @@
         </div>
 
         <p style="margin-bottom: 1em;">
-          <%= link_to t(:'workflow.add_material_resource_utilization'),
-            '#material_resource_utilization', :class => :add_nested_subitem,
-            :rel => 'workflow_item material_resource_utilizations' %> |
-          <%= link_to t(:'workflow.add_human_resource_utilization'),
-            '#human_resource_utilization', :class => :add_nested_subitem,
-            :rel => 'workflow_item human_resource_utilizations' %>
+          <%= link_to t(:'workflow.add_material_resource_utilization'), '#',
+            :'data-template' => :material_resource_utilization,
+            :'data-event' => :add_nested_subitem, :'data-parent' => :workflow_item,
+            :'data-child' => :material_resource_utilizations %> |
+          <%= link_to t(:'workflow.add_human_resource_utilization'), '#',
+            :'data-template' => :human_resource_utilization,
+            :'data-event' => :add_nested_subitem, :'data-parent' => :workflow_item,
+            :'data-child' => :human_resource_utilizations %>
         </p>
       </div>
     </div>

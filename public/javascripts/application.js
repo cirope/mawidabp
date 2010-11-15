@@ -115,7 +115,7 @@ var EventHandler = {
      * Simula el comportamiento del botón "Atrás"
      */
     historyBack: function() {
-        if(window.history.length > 0) { window.history.back(1); }
+        if(window.history.length > 0) {window.history.back(1);}
     },
 
     /**
@@ -672,6 +672,9 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 Event.observe(window, 'load', function() {
+    document.on('ajax:after', function(e) { Helper.showLoading(e); });
+    document.on('ajax:complete', function(e) { Helper.hideLoading(e); });
+
     document.on('keydown', function(e) {
         if ((e.keyCode || e.which) == 32 && e.ctrlKey) {
             Search.show();
@@ -696,7 +699,7 @@ Event.observe(window, 'load', function() {
         }
     });
 
-    document.on('submit', function() { State.unsavedData = false; });
+    document.on('submit', function() {State.unsavedData = false;});
 
     if($('app_content')) {
         Observer.attachToAppContent();
@@ -757,7 +760,7 @@ Event.observe(window, 'load', function() {
 
     if(!Prototype.Browser.MobileSafari) {
         $w('menu menu_level_1 menu_level_2').each(function(e) {
-            Element.show(e);
+            if($(e)) { Element.show(e); }
         });
     }
 

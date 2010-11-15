@@ -12,7 +12,7 @@
     <%= javascript_include_tag 'popup.js' %>
     <%= calendar_date_select_includes 'silver', :locale => (@auth_user.language if @auth_user) %>
     <%= javascript_tag do %>
-      <%= "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
+      <%= raw "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
       <%= content_for :js_extra %>
     <% end %>
   </head>

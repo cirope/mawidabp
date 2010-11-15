@@ -1,6 +1,6 @@
 <% id = "workpaper_#{(is_dynamic ? child_index : rand(100000000000))}" %>
 <% hide = is_dynamic || wp_f.object.marked_for_destruction? %>
-<div class="work_paper item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="work_paper item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 20%;">
       <%= wp_f.text_field :name, :class => :tiny_component %>

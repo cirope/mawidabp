@@ -4,14 +4,14 @@
 <%= form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
   <% unless frozen %>
     <% content_for :js_extra do %>
-      <%= "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
+      <%= raw "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
         @control_objective_item)}';" %>
-      <%= "var post_audit_work_paper='#{generate_template(co_f,
+      <%= raw "var post_audit_work_paper='#{generate_template(co_f,
         :post_audit_work_papers, {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-      <%= "var pre_audit_work_paper='#{generate_template(co_f,
+      <%= raw "var pre_audit_work_paper='#{generate_template(co_f,
         :pre_audit_work_papers, {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
@@ -157,24 +157,24 @@
   <div class="form_column_left">
     <p>
       <%= content_tag :label,
-        ControlObjectiveItem.human_attribute_name('pre_audit_work_papers') %>
+        ControlObjectiveItem.human_attribute_name(:pre_audit_work_papers) %>
     </p>
     <div class="in_column_items">
       <div class="column_headers">
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :name %></h3>
         </div>
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :code %></h3>
         </div>
         <div class="item_column" style="width: 15%;">
-          <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
         </div>
         <div class="item_column" style="width: 25%;">
-          <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :description %></h3>
         </div>
         <div class="item_column" style="width: 10%;">
-          <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
         </div>
         <div class="item_column" style="width: 10%;"></div>
         <div style="clear: both;"></div>
@@ -191,30 +191,31 @@
 
     <p class="add_item">
       <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-        '#pre_audit_work_paper', :class => :add_nested_item,
-        :rel => :pre_audit_work_papers %>
+        '#', :'data-template' => :pre_audit_work_paper,
+        :'data-event' => :add_nested_item,
+        :'data-container' => :pre_audit_work_papers %>
     </p>
   </div>
   <div class="form_column_right">
     <p>
-      <%= content_tag :label, ControlObjectiveItem.human_attribute_name('post_audit_work_papers') %>
+      <%= content_tag :label, ControlObjectiveItem.human_attribute_name(:post_audit_work_papers) %>
     </p>
     <div class="in_column_items">
       <div class="column_headers">
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :name %></h3>
         </div>
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :code %></h3>
         </div>
         <div class="item_column" style="width: 15%;">
-          <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
         </div>
         <div class="item_column" style="width: 25%;">
-          <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :description %></h3>
         </div>
         <div class="item_column" style="width: 10%;">
-          <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
         </div>
         <div class="item_column" style="width: 10%;"></div>
         <div style="clear: both;"></div>
@@ -231,8 +232,9 @@
 
     <p class="add_item">
       <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-        '#post_audit_work_paper', :class => :add_nested_item,
-        :rel => :post_audit_work_papers %>
+        '#', :'data-template' => :post_audit_work_paper,
+        :'data-event' => :add_nested_item,
+        :'data-container' => :post_audit_work_papers %>
     </p>
   </div>
 

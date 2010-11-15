@@ -2,15 +2,13 @@
 <% frozen = @review.is_frozen? %>
 <!--[form:review]-->
 <%= form_for @review, :html => { :multipart => true } do |r_f| %>
-  <% content_for :js_extra do %>
-    <%= "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-    <%= "var control_objective='#{escape_javascript render(
-      :partial => 'procedure_control_subitem',
-      :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
-      :is_dynamic => true})}';" %>
-    <%= "var review_user_assignment='#{generate_template(r_f,
-      :review_user_assignments, :locals => {:readonly => readonly})}';" %>
-  <% end %>
+  <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
+  <% js_extra << "var control_objective='#{escape_javascript render(
+    :partial => 'procedure_control_subitem',
+    :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
+    :is_dynamic => true})}';" %>
+  <% js_extra << "var review_user_assignment='#{generate_template(r_f,
+    :review_user_assignments, :locals => {:readonly => readonly})}';" %>
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
@@ -121,9 +119,10 @@
 
   <% unless readonly %>
     <p class="add_item">
-      <%= link_to t(:'review.add_user_assignment'),
-        '#review_user_assignment', :class => :add_nested_item,
-        :rel => :review_user_assignments %>
+      <%= link_to t(:'review.add_user_assignment'), '#',
+        :'data-event' => :add_nested_item,
+        :'data-template' => :review_user_assignment,
+        :'data-container' => :review_user_assignments %>
     </p>
   <% end %>
 
@@ -135,23 +134,21 @@
         <%= r_f.fields_for :control_objective_items,
           @review.control_objective_items.sort! do |coi_f| %>
           <% unless frozen %>
-            <%= content_for :js_extra do %>
-              <% pre_template ||= generate_template(coi_f,
-                :post_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
-              <% post_template ||= generate_template(coi_f,
-                :pre_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
-              <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 %>
-              <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 %>
-              <% pre_template = post_template = 0 %>
-            <% end %>
+            <% pre_template ||= generate_template(coi_f,
+              :post_audit_work_papers, {:form_builder_local => :wp_f,
+              :partial => 'work_papers/work_paper',
+              :child_index => 'NEW_SUBRECORD',
+              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
+            <% post_template ||= generate_template(coi_f,
+              :pre_audit_work_papers, {:form_builder_local => :wp_f,
+              :partial => 'work_papers/work_paper',
+              :child_index => 'NEW_SUBRECORD',
+              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
+            <% js_extra << "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 %>
+            <% js_extra << "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 %>
+            <% pre_template = post_template = 0 %>
           <% end %>
           <%= render :partial => 'control_objective_item', :locals => {
             :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
@@ -175,9 +172,10 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'review.add_control_objective'),
-        '#control_objective', :class => :add_nested_item,
-        :rel => :control_objectives %>
+      <%= link_to t(:'review.add_control_objective'), '#',
+        :'data-event' => :add_nested_item,
+        :'data-template' => :control_objective,
+        :'data-container' => :control_objectives %>
     </p>
   <% end %>
 
@@ -187,6 +185,9 @@
   <p>
     <span class="button"><%= r_f.submit submit_button_text %></span>
   </p>
+  <%= content_for :js_extra do %>
+    <%= raw js_extra %>
+  <% end %>
 <% end %>
 <!--[eoform:review] -->
 <%= set_focus_to_first_element %>

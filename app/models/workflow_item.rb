@@ -25,8 +25,8 @@ class WorkflowItem < ActiveRecord::Base
     :scope => :workflow_id
   validates_numericality_of :order_number, :workflow_id, :only_integer => true,
     :allow_nil => true
-  validates :start, :timeliness => { :type => :date }
-  validates :end, :timeliness => { :type => :date , :on_or_after => :start }
+  validates_date :start
+  validates_date :end, :on_or_after => :start
   validates_each :start, :end do |record, attr, value|
     parent = record.workflow
     period = parent.period if parent

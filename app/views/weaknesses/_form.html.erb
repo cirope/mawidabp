@@ -7,15 +7,15 @@
 <%= form_for @weakness, :html => {:multipart => true} do |f| %>
   <% content_for :js_extra do %>
     <% unless readonly %>
-      <%= "var finding_user_assignment='#{generate_template(f,
+      <%= raw "var finding_user_assignment='#{generate_template(f,
         :finding_user_assignments, :locals => {:readonly => readonly})}';" %>
     <% end %>
     <% unless frozen %>
-    <%= "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
+    <%= raw "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
         @weakness)}';" %>
-    <%= "var finding_relation='#{generate_template(f, :finding_relations,
+    <%= raw "var finding_relation='#{generate_template(f, :finding_relations,
         :object => FindingRelation.new(:finding_id => @weakness.id))}';" %>
-    <%= "var work_paper='#{generate_template(f, :work_papers,
+    <%= raw "var work_paper='#{generate_template(f, :work_papers,
         {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
@@ -72,9 +72,9 @@
         {:class => :inline_item, :disabled => readonly} %>
     </p>
     <p class="form_item">
-      <%= f.label :state, Weakness.human_attribute_name(:state) +
+      <%= f.label :state, raw(Weakness.human_attribute_name(:state) +
         (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : ''), :class => :inline %>
+          :finding_status_change_history) : '')), :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
 
@@ -141,8 +141,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#finding_relation',
-      :class => :add_nested_item, :rel => :finding_relations %>
+    <%= link_to t(:'finding.add_finding_relation'), '#',
+      :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
+      :'data-container' => :finding_relations %>
   </p>
 
   <table class="item_container">
@@ -195,13 +196,15 @@
       
       <tr>
         <td>
-          <%= link_to_unless readonly, t(:'finding.add_user'),
-            '#finding_user_assignment', :class => :add_nested_item,
-            :rel => :finding_user_assignments %>
+          <%= link_to_unless readonly, t(:'finding.add_user'), '#',
+            :'data-template' => :finding_user_assignment,
+            :'data-event' => :add_nested_item,
+            :'data-container' => :finding_user_assignments %>
         </td>
         <td>
-          <%= link_to_unless frozen, t(:'finding.add_work_paper'),
-            '#work_paper', :class => :add_nested_item, :rel => :work_papers %>
+          <%= link_to_unless frozen, t(:'finding.add_work_paper'), '#',
+            :'data-template' => :work_paper, :'data-event' => :add_nested_item,
+            :'data-container' => :work_papers %>
         </td>
       </tr>
     </tbody>

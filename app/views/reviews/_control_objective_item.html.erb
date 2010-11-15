@@ -169,8 +169,10 @@
 
       <p class="add_item">
         <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-          '#pre_audit_work_paper', :class => :add_nested_subitem,
-          :rel => 'control_objective_item pre_audit_work_papers' %>
+          '#', :'data-event' => :add_nested_subitem,
+          :'data-template' => :pre_audit_work_paper,
+          :'data-parent' => :control_objective_item,
+          :'data-child' => :pre_audit_work_papers %>
       </p>
     </div>
     <div class="form_column_right">
@@ -212,8 +214,10 @@
 
       <p class="add_item">
         <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-          '#post_audit_work_paper', :class => :add_nested_subitem,
-          :rel => 'control_objective_item post_audit_work_papers' %>
+          '#', :'data-event' => :add_nested_subitem,
+          :'data-template' => :post_audit_work_paper,
+          :'data-parent' => :control_objective_item,
+          :'data-child' => :post_audit_work_papers %>
       </p>
     </div>
 

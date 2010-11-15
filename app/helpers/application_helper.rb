@@ -110,7 +110,7 @@ module ApplicationHelper
         end
       end
 
-      content_tag(:ul, list.join("\n"), options).html_safe
+      content_tag(:ul, raw(list.join("\n")), options)
     end
   end
 

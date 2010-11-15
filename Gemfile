@@ -12,7 +12,7 @@ gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_selec
 gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
-gem 'validates_timeliness'
+gem 'validates_timeliness', '~> 3.0'
 gem 'RedCloth'
 gem 'smurf', :require => false
 gem 'whenever', :require => false

@@ -1,6 +1,6 @@
 <% id = dynamic_object_id('review_user_assignment', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="review_user_assignment item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="review_user_assignment item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">
       <% unless readonly %>
@@ -8,7 +8,7 @@
           <% errors_on_user = f.object.errors[:user_id] || f.object.errors[:user] %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete :review_user_assignment, :user_data,
+          <%= raw text_field_with_auto_complete(:review_user_assignment, :user_data,
             {:id => "review_user_assignment_user_#{id}",
             :class => "search #{'error_field' unless errors_on_user.blank?}",
             :title => t(:'label.search'),
@@ -16,7 +16,7 @@
             {:indicator => :loading, :skip_style => true,
             :url => {:action => :auto_complete_for_user},
             :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'user_data'} %>
+            :param_name => 'user_data'}) %>
         </div>
       <% else %>
         <%= f.hidden_field :user_id, :value => f.object.user_id,

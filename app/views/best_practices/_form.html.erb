@@ -29,7 +29,7 @@
       <% co_template = nil %>
       <%= bp_f.fields_for :process_controls do |p_f| %>
         <% co_template ||= generate_template(p_f,
-            :control_objectives, :child_index => 'NEW_SUBRECORD') unless co_template == 0 %>
+            :control_objectives, :child_index => 'NEW_SUBRECORD') %>
         <% js_extra << "var control_objective = '#{co_template}';" unless co_template == 0 %>
         <% co_template = 0 %>
         <%= render :partial => 'process_control',
