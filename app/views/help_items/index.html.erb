@@ -2,17 +2,13 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= HelpItem.human_attribute_name 'name' %></th>
-      <th><%= HelpItem.human_attribute_name 'description' %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= HelpItem.human_attribute_name :name %></th>
+      <th><%= HelpItem.human_attribute_name :description %></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% @help_items.each do |help_item| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td></td>
@@ -23,12 +19,11 @@
         <td><%= button_to_destroy help_item %></td>
         <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="5"></td><td></td></tr>
     <% end %>
   </tbody>
 </table>
 
 <div id="links">
-<%= pagination_links @help_items %>
-<div style="clear: both;"></div>
+  <%= pagination_links @help_items %>
+  <div style="clear: both;"></div>
 </div>

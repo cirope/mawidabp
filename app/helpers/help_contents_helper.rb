@@ -1,6 +1,6 @@
 module HelpContentsHelper
   def help_content_tree_for(help_content)
-    list_text = String.new
+    list_text = String.new.html_safe
 
     unless help_content.try(:help_items).blank?
       help_content.help_items.each do |help_item|
@@ -15,15 +15,15 @@ module HelpContentsHelper
   end
 
   def help_item_list(parent)
-    list_text = String.new
+    list_text = String.new.html_safe
 
     unless parent.try(:children).blank?
       parent.children.each do |child|
         show_or_hide_link = link_to_show_hide_help_item(child)
         edit_link = link_to(child.name, show_content_help_content_path(child),
           :class => (:selected if @help_item.try(:id) == child.id))
-        list_text << content_tag(:li, show_or_hide_link.to_s + edit_link +
-            help_item_list(child))
+        list_text << content_tag(:li, raw(show_or_hide_link.to_s + edit_link +
+            help_item_list(child)))
       end
     end
 

@@ -42,18 +42,18 @@
                     <thead>
                       <tr>
                         <th style="width: 30%;">
-                          <%= Oportunity.human_attribute_name('state') %>
+                          <%= Oportunity.human_attribute_name(:state) %>
                         </th>
                         <th style="width: 70%;">
-                          <%= Oportunity.human_attribute_name('count') %>
+                          <%= Oportunity.human_attribute_name(:count) %>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <% bu_data[:oportunities_table_data].each do |data| %>
                         <tr>
-                          <td><strong><%= data['state'].to_utf8 %></strong></td>
-                          <td><%= data['count'] %></td>
+                          <td><strong><%= raw data['state'].to_utf8 %></strong></td>
+                          <td><%= raw data['count'] %></td>
                         </tr>
                       <% end %>
                     </tbody>

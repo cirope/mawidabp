@@ -5,18 +5,18 @@
   {:method => :put, :class => 'edit_finding', :multipart => true,
   :id => "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
-    <%= "var finding_answer='#{generate_template(f_f, :finding_answers,
+    <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
       :object => FindingAnswer.new(:user_id => @auth_user.id))}';" %>
-    <%= "var finding_relation='#{generate_template(f_f, :finding_relations,
+    <%= raw "var finding_relation='#{generate_template(f_f, :finding_relations,
       :object => FindingRelation.new(:finding_id => @finding.id))}';" %>
-    <%= "var work_paper='#{generate_template(f_f, :work_papers,
+    <%= raw "var work_paper='#{generate_template(f_f, :work_papers,
           {:form_builder_local => :wp_f,
           :partial => 'work_papers/work_paper',
           :locals => {:child_index => 'NEW_RECORD', :frozen => false},
           :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <%= "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
+    <%= raw "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
         @finding, true) if @finding.kind_of?(Weakness)}';" %>
-    <%= "var finding_user_assignment='#{generate_template(f_f,
+    <%= raw "var finding_user_assignment='#{generate_template(f_f,
         :finding_user_assignments, :locals => {:readonly => users_readonly})}';" %>
   <% end %>
   <%= f_f.error_messages %>
@@ -40,8 +40,8 @@
     </p>
     <p class="form_item">
       <%= content_tag :label,
-        ConclusionFinalReview.human_attribute_name(:issue_date) +
-        show_inline_help_for(:finding_issue_date),
+        raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
+        show_inline_help_for(:finding_issue_date)),
         :class => :inline %>
       <%= text_field_tag :issue_date, @finding.issue_date ?
         l(@finding.issue_date, :format => :long) :
@@ -85,10 +85,10 @@
       </p>
     <% end %>
     <p class="form_item">
-      <%= f_f.label :state, Finding.human_attribute_name(:state) +
+      <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
         show_inline_help_for(:finding_state) +
         (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : ''), :class => :inline %>
+          :finding_status_change_history) : '')), :class => :inline %>
       <%= finding_status_field(f_f) %>
     </p>
     
@@ -109,23 +109,23 @@
     <% end %>
     <p>
       <%= f_f.label :origination_date,
-        Finding.human_attribute_name(:origination_date) +
-        show_inline_help_for(:finding_origination_date) %>
+        raw(Finding.human_attribute_name(:origination_date) +
+        show_inline_help_for(:finding_origination_date)) %>
       <%= f_f.calendar_date_select :origination_date %>
     </p>
     <% if @finding.kind_of? Weakness %>
       <p>
         <%= f_f.label :follow_up_date,
-          Finding.human_attribute_name(:follow_up_date) +
-          show_inline_help_for(:finding_follow_up_date) %>
+          raw(Finding.human_attribute_name(:follow_up_date) +
+          show_inline_help_for(:finding_follow_up_date)) %>
         <%= f_f.calendar_date_select :follow_up_date %>
       </p>
       <%= show_weakness_previous_follow_up_dates @finding %>
     <% end %>
     <p>
       <%= f_f.label :solution_date,
-        Finding.human_attribute_name(:solution_date) +
-        show_inline_help_for(:finding_solution_date) %>
+        raw(Finding.human_attribute_name(:solution_date) +
+        show_inline_help_for(:finding_solution_date)) %>
       <%= f_f.calendar_date_select :solution_date %>
       <%= f_f.hidden_field :id %>
     </p>
@@ -179,9 +179,10 @@
     </div>
 
     <p class="add_item">
-      <%= link_to_unless users_readonly, t(:'finding.add_user'),
-        '#finding_user_assignment', :class => :add_nested_item,
-        :rel => :finding_user_assignments %>
+      <%= link_to_unless users_readonly, t(:'finding.add_user'), '#',
+        :'data-template' => :finding_user_assignment,
+        :'data-event' => :add_nested_item,
+        :'data-container' => :finding_user_assignments %>
     </p>
   </div>
 
@@ -211,8 +212,10 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#finding_relation',
-      :class => :add_nested_item, :rel => :finding_relations %>
+    <%= link_to t(:'finding.add_finding_relation'), '#',
+      :'data-template' => :finding_relation,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :finding_relations %>
   </p>
 
   <div style="clear: both; margin-top: 2em;">
@@ -256,8 +259,10 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_answer'), '#finding_answer',
-      :class => :add_nested_item, :rel => :finding_answers %>
+    <%= link_to t(:'finding.add_finding_answer'), '#',
+      :'data-template' => :finding_answer,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :finding_answers %>
   </p>
 
   <div style="margin-top: 2em;">
@@ -292,8 +297,9 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'finding.add_work_paper'), '#work_paper',
-        :class => :add_nested_item, :rel => :work_papers %>
+      <%= link_to t(:'finding.add_work_paper'), '#',
+        :'data-template' => :work_paper, :'data-event' => :add_nested_item,
+        :'data-container' => :work_papers %>
     </p>
   </div>
 

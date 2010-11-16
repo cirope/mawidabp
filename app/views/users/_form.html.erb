@@ -66,7 +66,7 @@
         <div class="search">
           <% errors_on_manager = @user.errors[:manager_id] %>
           <%= u_f.hidden_field :manager_id, :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:user, :nested_user,
+          <%= text_field_with_auto_complete(:user, :nested_user,
             {:id => "user_manager_#{@user.id}",
             :class => "search #{'error_field' unless errors_on_manager.blank?}",
             :title => t(:'label.search'),

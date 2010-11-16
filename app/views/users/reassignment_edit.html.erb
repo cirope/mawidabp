@@ -25,7 +25,7 @@
   <div class="form_column_left">
     <div class="search">
       <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id_item %>
-      <%= raw text_field_with_auto_complete(:user, :user_data,
+      <%= text_field_with_auto_complete(:user, :user_data,
         {:id => 'autocomplete_user_id', :class => :search,
         :title => t(:'label.search'), :value => nil},
         {:indicator => :loading, :skip_style => true,

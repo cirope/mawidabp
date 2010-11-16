@@ -6,7 +6,7 @@
         <div class="search">
           <%= hidden_field_tag 'user[child_ids][]', child.id,
             :id => "hidden_child_#{id}", :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:user, :nested_user,
+          <%= text_field_with_auto_complete(:user, :nested_user,
             {:id => "user_child_#{id}", :class => :search,
             :title => t(:'label.search'), :value => ''},
             {:indicator => :loading, :skip_style => true,

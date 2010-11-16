@@ -8,7 +8,7 @@
           <% errors_on_user = f.object.errors[:resource_id] %>
           <%= f.hidden_field :resource_id, :value => f.object.resource_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:resource_utilization, :user_data,
+          <%= text_field_with_auto_complete(:resource_utilization, :user_data,
             {:id => "resource_utilization_user_#{id}",
             :class => "search #{'error_field' unless errors_on_user.blank?}",
             :title => t(:'label.search'),

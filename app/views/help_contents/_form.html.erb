@@ -1,7 +1,7 @@
 <!--[form:help_content]-->
 <%= form_for @help_content do |hc_f| %>
   <% content_for :js_extra do %>
-    <%= "var help_item='#{generate_template(hc_f, :help_items)}';" %>
+    <%= raw "var help_item='#{generate_template(hc_f, :help_items)}';" %>
   <% end %>
   <%= hc_f.error_messages %>
 
@@ -17,13 +17,13 @@
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 5%;">
-        <h3><%= HelpItem.human_attribute_name 'order_number' %></h3>
+        <h3><%= HelpItem.human_attribute_name :order_number %></h3>
       </div>
       <div class="item_column" style="width: 30%;">
-        <h3><%= HelpItem.human_attribute_name 'name' %></h3>
+        <h3><%= HelpItem.human_attribute_name :name %></h3>
       </div>
       <div class="item_column" style="width: 50%;">
-        <h3><%= HelpItem.human_attribute_name 'description' %></h3>
+        <h3><%= HelpItem.human_attribute_name :description %></h3>
       </div>
       <div class="item_column" style="width: 10%;"></div>
       <div style="clear: both;"></div>
@@ -38,8 +38,8 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'label.add_item'), '#help_item', :class => :add_nested_item,
-      :rel => :help_items %>
+    <%= link_to t(:'label.add_item'), '#', :'data-template' => :help_item,
+      :'data-event' => :add_nested_item, :'data-container' => :help_items %>
   </p>
 
   <%= hidden_lock_version(hc_f) %>

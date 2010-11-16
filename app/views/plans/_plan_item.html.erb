@@ -20,7 +20,7 @@
         <% errors_on_business_unit = f.object.errors[:business_unit_id] %>
         <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id_item %>
-        <%= raw text_field_with_auto_complete(:plan_item, :business_unit_data,
+        <%= text_field_with_auto_complete(:plan_item, :business_unit_data,
           {:id => "plan_item_business_unit_#{id}",
           :class => "search #{'error_field' unless errors_on_business_unit.blank?}",
           :title => t(:'label.search'), :value => ''},

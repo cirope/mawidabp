@@ -73,7 +73,7 @@
         </table>
 
         <% unless @being_implemented_resumes[period][key].blank? %>
-          <p style="margin-left: 1em;">* <%= @being_implemented_resumes[period][key] %></p>
+          <p style="margin-left: 1em;">* <%= raw @being_implemented_resumes[period][key] %></p>
         <% end %>
       <% else %>
         <p style="margin: 1em;">

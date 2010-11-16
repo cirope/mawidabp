@@ -58,7 +58,7 @@ module FindingsHelper
       form.check_box(:notify_users, :style => 'margin: 0em 0em 0em 1em;')
     ]
 
-    label_and_check.map {|tag| content_tag(:span, tag)}.join
+    raw label_and_check.map {|tag| content_tag(:span, tag)}.join
   end
 
   def finding_relation_type_field(form)

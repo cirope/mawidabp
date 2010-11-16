@@ -1,7 +1,7 @@
 <% id = "#{dynamic_object_id('finding_relation', f)}#{'_NEW_RECORD' if is_dynamic}" %>
 <% finding_relation = f.object %>
 <% hide = is_dynamic || finding_relation.marked_for_destruction? %>
-<div class="finding_relation item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+<div class="finding_relation item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 60%;">
       <% if is_dynamic %>

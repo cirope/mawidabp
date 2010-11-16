@@ -23,7 +23,7 @@
           <% @weaknesses_data[period].each do |data| %>
             <tr>
               <% @column_order.map(&:first).each do |col_name| %>
-                <td><%= data[col_name].to_utf8 %></td>
+                <td><%= raw data[col_name].to_utf8 %></td>
               <% end %>
             </tr>
           <% end %>
@@ -51,7 +51,7 @@
           <% @oportunities_data[period].each do |data| %>
             <tr>
               <% @column_order.map(&:first).each do |col_name| %>
-                <td><%= data[col_name].to_utf8 %></td>
+                <td><%= raw data[col_name].to_utf8 %></td>
               <% end %>
             </tr>
           <% end %>

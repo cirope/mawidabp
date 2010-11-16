@@ -12,7 +12,7 @@
           } %>
           <%= f.hidden_field :related_finding_id,
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:finding, :nested_finding_relation,
+          <%= text_field_with_auto_complete(:finding, :nested_finding_relation,
             {:id => "finding_finding_relation_#{id}", :class => :search,
             :title => t(:'label.search'),
             :value => finding_relation.related_finding.to_s},

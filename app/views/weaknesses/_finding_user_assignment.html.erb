@@ -7,7 +7,7 @@
         <div class="search">
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:weakness, :nested_user,
+          <%= text_field_with_auto_complete(:weakness, :nested_user,
             {:id => "weakness_user_#{id}", :class => :search,
             :title => t(:'label.search'), :value => f.object.user.try(:full_name_with_function)},
             {:indicator => :loading, :skip_style => true,

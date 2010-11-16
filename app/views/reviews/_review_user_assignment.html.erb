@@ -8,7 +8,7 @@
           <% errors_on_user = f.object.errors[:user_id] || f.object.errors[:user] %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= raw text_field_with_auto_complete(:review_user_assignment, :user_data,
+          <%= text_field_with_auto_complete(:review_user_assignment, :user_data,
             {:id => "review_user_assignment_user_#{id}",
             :class => "search #{'error_field' unless errors_on_user.blank?}",
             :title => t(:'label.search'),

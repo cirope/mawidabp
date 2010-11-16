@@ -1,6 +1,6 @@
 <% id = dynamic_object_id('child', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="child item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="child item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 5%;">
     <%= f.text_field :order_number, :class => :sort_number,

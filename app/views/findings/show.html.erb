@@ -18,8 +18,8 @@
     </div>
   <% end %>
   <div class="show_item">
-    <b><%= ConclusionFinalReview.human_attribute_name(:issue_date) +
-      show_inline_help_for(:finding_issue_date) %></b>:
+    <b><%= raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
+      show_inline_help_for(:finding_issue_date)) %></b>:
     <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
       t(:'finding.without_conclusion_final_review') %>
   </div>
@@ -42,22 +42,26 @@
     </div>
   <% end %>
   <div class="show_item">
-    <b><%= Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state) %></b>:
+    <b><%= raw(Finding.human_attribute_name(:state) +
+      show_inline_help_for(:finding_state)) %></b>:
     <%= @finding.state_text %>
   </div>
   <div class="show_item">
-    <b><%= Finding.human_attribute_name(:origination_date) + show_inline_help_for(:finding_origination_date) %></b>:
+    <b><%= raw(Finding.human_attribute_name(:origination_date) +
+      show_inline_help_for(:finding_origination_date)) %></b>:
     <%= l(@finding.origination_date, :format => :long) if @finding.origination_date %>
   </div>
   <% if @finding.kind_of? Weakness %>
     <div class="show_item">
-      <b><%= Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date) %></b>:
+      <b><%= raw(Weakness.human_attribute_name(:follow_up_date) +
+        show_inline_help_for(:finding_follow_up_date)) %></b>:
       <%= l(@finding.follow_up_date, :format => :long) if @finding.follow_up_date %>
     </div>
     <%= show_weakness_previous_follow_up_dates @finding %>
   <% end %>
   <div class="show_item">
-    <b><%= Finding.human_attribute_name(:solution_date) + show_inline_help_for(:finding_solution_date) %></b>:
+    <b><%= raw(Finding.human_attribute_name(:solution_date) +
+      show_inline_help_for(:finding_solution_date)) %></b>:
     <%= l(@finding.solution_date, :format => :long) if @finding.solution_date %>
   </div>
   <div class="show_item">
