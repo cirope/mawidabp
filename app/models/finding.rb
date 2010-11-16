@@ -297,7 +297,7 @@ class Finding < ActiveRecord::Base
   }
   scope :being_implemented, :conditions =>
     {:state => STATUS[:being_implemented]}
-  scope :list_all_by_date, lambda { |from_date, to_date|
+  scope :list_all_by_date, lambda { |from_date, to_date, order|
     {
       :include => {
         :control_objective_item => {:review =>
@@ -315,10 +315,10 @@ class Finding < ActiveRecord::Base
           :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
         }
       ],
-      :order => [
+      :order => order ? [
         "#{Period.table_name}.start ASC",
         "#{Period.table_name}.end ASC"
-      ].join(', ')
+      ].join(', ') : nil
     }
   }
   scope :list_all_in_execution_by_date, lambda { |from_date, to_date|

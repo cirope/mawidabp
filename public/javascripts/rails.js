@@ -72,38 +72,41 @@
   }
 
   function handleRemote(element) {
-    var method, url, params;
+    if(!element.readAttribute('data-condition') ||
+        eval(element.readAttribute('data-condition'))) {
+        var method, url, params;
 
-    var event = element.fire("ajax:before");
-    if (event.stopped) return false;
+        var event = element.fire("ajax:before");
+        if (event.stopped) return false;
 
-    if (element.tagName.toLowerCase() === 'form') {
-      method = element.readAttribute('method') || 'post';
-      url    = element.readAttribute('action');
-      params = element.serialize();
-    } else {
-      method = element.readAttribute('data-method') || 'get';
-      url    = element.readAttribute('href');
-      params = {};
+        if (element.tagName.toLowerCase() === 'form') {
+          method = element.readAttribute('method') || 'post';
+          url    = element.readAttribute('action');
+          params = element.serialize();
+        } else {
+          method = element.readAttribute('data-method') || 'get';
+          url    = element.readAttribute('href');
+          params = eval(element.readAttribute('data-params')) || {};
+        }
+
+        var options = {
+          method: method,
+          parameters: params,
+          evalScripts: true,
+
+          onComplete: function(request) {element.fire("ajax:complete", request);},
+          onSuccess:  function(request) {element.fire("ajax:success",  request);},
+          onFailure:  function(request) {element.fire("ajax:failure",  request);}
+        }
+
+        if(element.readAttribute('data-update')) {
+            new Ajax.Updater(element.readAttribute('data-update'), url, options);
+        } else {
+            new Ajax.Request(url, options);
+        }
+
+        element.fire("ajax:after");
     }
-
-    var options = {
-      method: method,
-      parameters: params,
-      evalScripts: true,
-
-      onComplete:    function(request) {element.fire("ajax:complete", request);},
-      onSuccess:     function(request) {element.fire("ajax:success",  request);},
-      onFailure:     function(request) {element.fire("ajax:failure",  request);}
-    }
-
-    if(element.readAttribute('data-update')) {
-        new Ajax.Updater(element.readAttribute('data-update'), url, options);
-    } else {
-        new Ajax.Request(url, options);
-    }
-
-    element.fire("ajax:after");
   }
 
   function handleMethod(element) {

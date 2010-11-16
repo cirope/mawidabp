@@ -23,7 +23,7 @@
           <% @total_cost_data[period].each do |total_data| %>
             <tr>
               <% @column_order.map(&:first).each do |col_name| %>
-                <td><%= total_data[col_name].to_utf8 %></td>
+                <td><%= raw total_data[col_name].to_utf8 %></td>
               <% end %>
             </tr>
           <% end %>
@@ -52,7 +52,7 @@
             <% detailed_data[:data].each do |data| %>
               <tr>
                 <% @detailed_column_order.map(&:first).each do |col_name| %>
-                  <td><%= data[col_name].to_utf8 %></td>
+                  <td><%= raw data[col_name].to_utf8 %></td>
                 <% end %>
               </tr>
             <% end %>

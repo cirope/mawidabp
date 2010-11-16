@@ -44,7 +44,7 @@
       <%= f.text_area :conclusion %>
     </p>
     <p class="form_item">
-      <%= label_tag :score, Review.human_attribute_name('score'),
+      <%= label_tag :score, Review.human_attribute_name(:score),
         :class => :inline %>
       <%= text_field_tag :score,
         (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
@@ -60,7 +60,7 @@
     <%= content_tag(:div, t(:'conclusion_draft_review.approved'),
       :class => 'green bold', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
-    <div id="not_approved" <%= 'style="display: none;"' if @conclusion_draft_review.approved? %>>
+    <div id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
       <p class="red bold">
         <%= t(:'conclusion_draft_review.not_approved') %>
       </p>
@@ -70,13 +70,12 @@
     </div>
     <div>
       <%= link_to t(:'conclusion_draft_review.check_for_approval'),
-        {:url => {:action => :check_for_approval},
-        :with => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
-        :success => 'updateApprovalText(request)',
-        :condition => "!$F('conclusion_draft_review_review_id').blank()",
-        :before => 'Helper.showLoading()', :complete => 'Helper.hideLoading()',
-        :remote => true},
-        {:style => 'margin-left: 1em;'} %>
+        {:action => :check_for_approval},
+        {:'data-params' => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
+        :method => :get,
+        :'data-condition' => "!$F('conclusion_draft_review_review_id').blank()",
+        :remote => true, :style => 'margin-left: 1em;',
+        :id => 'check_for_approval'} %>
     </div>
     <% if @conclusion_draft_review.updated_at %>
       <div style="margin-left: 1em;">
@@ -92,7 +91,7 @@
           :id => :error_list, :class => :raw_list) %>
       </div>
 
-      <p id="force_approval_prompt" class="form_item" <%= @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
+      <p id="force_approval_prompt" class="form_item" <%= raw(@conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"') %>>
         <%= f.label :force_approval, nil, :class => 'inline error_field' %>
         <%= f.check_box :force_approval, :class => :inline_item %>
       </p>
@@ -133,7 +132,9 @@
     }
   }
 
-  function updateApprovalText(request) {
+  document.on('ajax:success', '#check_for_approval', function(event, element) {
+    var request = event.memo;
+    
     if(request.responseText.isJSON()) {
       if(request.responseJSON.approved) {
         $('approved').show();
@@ -173,7 +174,7 @@
         });
       }
     }
-  }
+  });
 
   Event.observe('conclusion_draft_review_review_id', 'change', function() {
     var url = '<%= url_for :controller => :reviews, :action => :review_data,

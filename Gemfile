@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'https://github.com/rails/rails.git', :branch => '3-0-stable'
+gem 'rails', '3.0.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -16,7 +16,7 @@ gem 'validates_timeliness', '~> 3.0'
 gem 'RedCloth'
 gem 'smurf', :require => false
 gem 'whenever', :require => false
-gem 'will_paginate', '~> 3.0.pre'
+gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'
 # Sólo para pdf-writer
 gem 'color', :require => false

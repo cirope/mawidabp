@@ -4,7 +4,7 @@
       <tr>
         <% table_data[:order].each do |column| %>
           <% col_data = table_data[:columns][column] %>
-          <th style="width: <%= "#{col_data.last}%" %>;"><%= col_data.first %></th>
+          <th style="width: <%= "#{col_data.last}%" %>;"><%= raw col_data.first %></th>
         <% end %>
       </tr>
     </thead>
@@ -12,7 +12,7 @@
       <% table_data[:data].each do |row_data| %>
         <tr>
           <% table_data[:order].each do |column| %>
-            <td><%= row_data[column] %></td>
+            <td><%= raw row_data[column] %></td>
           <% end %>
         </tr>
       <% end %>

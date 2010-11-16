@@ -324,9 +324,9 @@ class FollowUpCommitteeController < ApplicationController
       @oportunities_data[period] ||= []
       total_weaknesses_audit_cost, total_weaknesses_audited_cost = 0, 0
       total_oportunities_audit_cost, total_oportunities_audited_cost = 0, 0
-      weaknesses_by_review = Weakness.list_all_by_date(@from_date, @to_date).
+      weaknesses_by_review = Weakness.list_all_by_date(@from_date, @to_date, false).
         finals(false).for_period(period).group_by(&:review)
-      oportunities_by_review  = Oportunity.list_all_by_date(@from_date, @to_date).
+      oportunities_by_review  = Oportunity.list_all_by_date(@from_date, @to_date, false).
         finals(false).for_period(period).group_by(&:review)
 
       unless weaknesses_by_review.blank?

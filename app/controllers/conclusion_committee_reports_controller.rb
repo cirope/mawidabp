@@ -255,6 +255,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
             table.column_order = @column_order
             table.split_rows = true
+            table.row_gap = PDF_FONT_SIZE
             table.font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_color = Color::RGB.from_percentage(95, 95, 95)
             table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
@@ -451,6 +452,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           table.data = @total_cost_data[period]
           table.column_order = @column_order.map(&:first)
           table.split_rows = true
+          table.row_gap = PDF_FONT_SIZE
           table.font_size = (PDF_FONT_SIZE * 0.75).round
           table.shade_color = Color::RGB.from_percentage(95, 95, 95)
           table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)

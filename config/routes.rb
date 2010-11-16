@@ -139,7 +139,6 @@ MawidaApp::Application.routes.draw do
 
   resources :conclusion_draft_reviews, :except => [:destroy] do
     member do
-      get :check_for_approval
       get :export_to_pdf
       get :compose_email
       put :send_by_email
@@ -150,6 +149,7 @@ MawidaApp::Application.routes.draw do
     end
 
     collection do
+      get :check_for_approval
       post :auto_complete_for_user
     end
   end
