@@ -20,11 +20,10 @@
   <p class="form_item">
     <% @organization.build_image_model unless @organization.image_model %>
     <%= o_f.fields_for :image_model do |im_f| %>
-      <%= im_f.label :uploaded_data,
-        Organization.human_attribute_name('image_model'), :class => :inline %>
+      <%= im_f.label :image,
+        Organization.human_attribute_name(:image_model), :class => :inline %>
       <span class="file_container">
-        <%= im_f.file_field :uploaded_data, :class => 'inline_item file',
-          :size => nil %>
+        <%= im_f.file_field :image, :class => 'inline_item file', :size => nil %>
       </span>
     <% end %>
   </p>

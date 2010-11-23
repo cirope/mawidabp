@@ -5,19 +5,13 @@ class FileModel < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  has_attachment :storage => :file_system, :max_size => 20.megabytes,
-    :path_prefix => lambda {
-      File.join(PRIVATE_FILES_PREFIX,
-        *(('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/..../) +
-            [table_name]))
-    }
-  
-  # Restricciones
-  validates_as_attachment
-  validates_length_of :filename, :content_type, :maximum => 255,
-    :allow_nil => true, :allow_blank => true
+  has_attached_file :file,
+    :path => ':rails_root/private/:organization_id/:class/:id/:basename.:extension',
+    :url => '/private/:organization_id/:class/:id/:basename.:extension'
 
-  def base_path
-    Rails.root
-  end
+  # Restricciones
+  validates_attachment_size :file, :less_than => 20.megabytes,
+    :message => I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes)
+  validates_length_of :file_file_name, :file_content_type, :maximum => 255,
+    :allow_nil => true, :allow_blank => true
 end

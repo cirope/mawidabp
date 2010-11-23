@@ -31,9 +31,9 @@
     </div>
 
     <div id="children">
-      <%= hi_f.fields_for :children do |hi_f| %>
+      <%= hi_f.fields_for :children do |hic_f| %>
         <%= render :partial => 'child', :locals =>
-          {:f => hi_f, :is_dynamic => false} %>
+          {:f => hic_f, :is_dynamic => false} %>
       <% end %>
     </div>
   </div>

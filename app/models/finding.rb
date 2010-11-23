@@ -1405,12 +1405,13 @@ class Finding < ActiveRecord::Base
       font_height_size = pdf.font_height(font_size)
       y_top = pdf.page_height - (pdf.top_margin / 2)
 
-      if organization.try(:image_model)
+      if organization.try(:image_model) &&
+          File.exists?(organization.image_model.image.path(:thumb))
         pdf.add_image_from_file(
-          organization.image_model.full_filename(:thumb),
+          organization.image_model.image.path(:thumb),
           pdf.left_margin, pdf.absolute_top_margin + font_height_size,
-          organization.image_model.thumb(:pdf_thumb).width,
-          organization.image_model.thumb(:pdf_thumb).height)
+          organization.image_model.image_geometry(:pdf_thumb)[:width],
+          organization.image_model.image_geometry(:pdf_thumb)[:height])
       end
 
       date_text = I18n.l(date, :format => :long) if date

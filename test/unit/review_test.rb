@@ -271,7 +271,6 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.must_be_approved?
 
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )
@@ -287,7 +286,6 @@ class ReviewTest < ActiveSupport::TestCase
 
     # Ahora el mismo usuario crea confirma una nueva notificación
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )
@@ -301,14 +299,16 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'can be sended' do
     assert @review.can_be_sended?
+    notification_relation = nil
 
-    notification_relation = @review.conclusion_draft_review.
-      notification_relations.create(
-      :model => @conclusion_review,
-      :notification => Notification.new(
-        :user => users(:administrator_user)
+    assert_difference ['Notification.count', 'NotificationRelation.count'] do
+      notification_relation = @review.conclusion_draft_review.
+        notification_relations.create(
+        :notification => Notification.new(
+          :user => users(:administrator_user)
+        )
       )
-    )
+    end
 
     assert !@review.reload.can_be_sended?
 
@@ -318,7 +318,6 @@ class ReviewTest < ActiveSupport::TestCase
 
     # Ahora el mismo usuario crea confirma una nueva notificación
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )

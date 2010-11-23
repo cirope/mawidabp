@@ -24,7 +24,7 @@ class WorkPaper < ActiveRecord::Base
   after_save :create_cover_and_zip
   
   # Restricciones
-  validates_presence_of :organization_id, :name, :code, :number_of_pages
+  validates :organization_id, :name, :code, :number_of_pages, :presence => true
   validates_numericality_of :number_of_pages, :only_integer => true,
     :allow_nil => true, :allow_blank => true, :less_than => 100000
   validates_numericality_of :organization_id, :only_integer => true,
@@ -139,7 +139,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil)
-    filename ||= self.file_model.filename if self.file_model
+    filename ||= self.file_model.file_file_name if self.file_model
 
     unless filename.starts_with?(self.sanitized_code)
       I18n.t :'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
@@ -152,14 +152,14 @@ class WorkPaper < ActiveRecord::Base
 
   def absolute_cover_path(filename = nil)
     if self.file_model
-      File.join File.dirname(self.file_model.full_filename), self.pdf_cover_name
+      File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
       "#{TEMP_PATH}#{self.pdf_cover_name(filename || self.object_id.abs)}"
     end
   end
 
   def filename_with_prefix
-    filename = self.file_model.filename
+    filename = self.file_model.file_file_name
 
     filename.starts_with?(self.sanitized_code) ?
       filename : "#{self.sanitized_code}-#{filename}"
@@ -168,7 +168,7 @@ class WorkPaper < ActiveRecord::Base
   def create_zip
     self.unzip_if_necesary
 
-    original_filename = self.file_model.full_filename
+    original_filename = self.file_model.file.path
     directory = File.dirname original_filename
     filename = File.basename original_filename, File.extname(original_filename)
     pdf_filename = self.absolute_cover_path
@@ -187,9 +187,9 @@ class WorkPaper < ActiveRecord::Base
       FileUtils.rm [original_filename, pdf_filename]
       
       self.file_model.update_attributes(
-        :filename => File.basename(zip_filename),
-        :content_type => 'application/zip',
-        :size => File.size(zip_filename)
+        :file_file_name => File.basename(zip_filename),
+        :file_content_type => 'application/zip',
+        :file_file_size => File.size(zip_filename)
       )
     end
 
@@ -197,9 +197,9 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def unzip_if_necesary
-    if self.file_model && File.extname(self.file_model.filename) == '.zip'
-      zip_path = self.file_model.full_filename
-      base_dir = File.dirname self.file_model.full_filename
+    if self.file_model && File.extname(self.file_model.file_file_name) == '.zip'
+      zip_path = self.file_model.file.path
+      base_dir = File.dirname self.file_model.file.path
 
       Zip::ZipFile.foreach(zip_path) do |entry|
         if entry.file?

@@ -1,9 +1,58 @@
 GIT
-  remote: http://github.com/paneq/calendar_date_select.git
+  remote: git://github.com/rack/rack.git
+  revision: 85ca454e6143a3081d90e4546ccad602a4c3ad2e
+  specs:
+    rack (1.2.1)
+
+GIT
+  remote: https://github.com/paneq/calendar_date_select.git
   revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
   branch: rails3test
   specs:
     calendar_date_select (1.16.1)
+
+PATH
+  remote: /home/franco/github/rails
+  specs:
+    actionmailer (3.0.3)
+      actionpack (= 3.0.3)
+      mail (~> 2.2.9)
+    actionpack (3.0.3)
+      activemodel (= 3.0.3)
+      activesupport (= 3.0.3)
+      builder (~> 2.1.2)
+      erubis (~> 2.6.6)
+      i18n (~> 0.4)
+      rack (~> 1.2.1)
+      rack-mount (~> 0.6.13)
+      rack-test (~> 0.5.6)
+      tzinfo (~> 0.3.23)
+    activemodel (3.0.3)
+      activesupport (= 3.0.3)
+      builder (~> 2.1.2)
+      i18n (~> 0.4)
+    activerecord (3.0.3)
+      activemodel (= 3.0.3)
+      activesupport (= 3.0.3)
+      arel (~> 2.0.2)
+      tzinfo (~> 0.3.23)
+    activeresource (3.0.3)
+      activemodel (= 3.0.3)
+      activesupport (= 3.0.3)
+    activesupport (3.0.3)
+    rails (3.0.3)
+      actionmailer (= 3.0.3)
+      actionpack (= 3.0.3)
+      activerecord (= 3.0.3)
+      activeresource (= 3.0.3)
+      activesupport (= 3.0.3)
+      bundler (~> 1.0)
+      railties (= 3.0.3)
+    railties (3.0.3)
+      actionpack (= 3.0.3)
+      activesupport (= 3.0.3)
+      rake (>= 0.8.7)
+      thor (~> 0.14.4)
 
 GEM
   remote: http://rubygems.org/
@@ -12,33 +61,7 @@ GEM
     RedCloth (4.2.3)
     aaronh-chronic (0.3.9)
     abstract (1.0.0)
-    actionmailer (3.0.2)
-      actionpack (= 3.0.2)
-      mail (~> 2.2.9)
-    actionpack (3.0.2)
-      activemodel (= 3.0.2)
-      activesupport (= 3.0.2)
-      builder (~> 2.1.2)
-      erubis (~> 2.6.6)
-      i18n (~> 0.4.1)
-      rack (~> 1.2.1)
-      rack-mount (~> 0.6.13)
-      rack-test (~> 0.5.6)
-      tzinfo (~> 0.3.23)
-    activemodel (3.0.2)
-      activesupport (= 3.0.2)
-      builder (~> 2.1.2)
-      i18n (~> 0.4.1)
-    activerecord (3.0.2)
-      activemodel (= 3.0.2)
-      activesupport (= 3.0.2)
-      arel (~> 2.0.2)
-      tzinfo (~> 0.3.23)
-    activeresource (3.0.2)
-      activemodel (= 3.0.2)
-      activesupport (= 3.0.2)
-    activesupport (3.0.2)
-    arel (2.0.2)
+    arel (2.0.4)
     builder (2.1.2)
     cgi_multipart_eof_fix (2.5.0)
     color (1.4.1)
@@ -52,9 +75,9 @@ GEM
       rubyforge (>= 2.0.4)
     i18n (0.4.2)
     json_pure (1.4.6)
-    mail (2.2.9.1)
+    mail (2.2.10)
       activesupport (>= 2.3.6)
-      i18n (>= 0.4.1)
+      i18n (~> 0.4.1)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     memcache-client (1.8.5)
@@ -71,35 +94,24 @@ GEM
       fastthread (>= 1.0.1)
       gem_plugin (>= 0.2.3)
     newrelic_rpm (2.13.3)
-    paper_trail (1.6.3)
+    paper_trail (1.6.4)
       actionpack (>= 2.3)
       activerecord (>= 2.3)
+    paperclip (2.3.5)
+      activerecord
+      activesupport
     pg (0.9.0)
     polyglot (0.3.1)
-    rack (1.2.1)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
     rack-test (0.5.6)
       rack (>= 1.0)
-    rails (3.0.2)
-      actionmailer (= 3.0.2)
-      actionpack (= 3.0.2)
-      activerecord (= 3.0.2)
-      activeresource (= 3.0.2)
-      activesupport (= 3.0.2)
-      bundler (~> 1.0.0)
-      railties (= 3.0.2)
-    railties (3.0.2)
-      actionpack (= 3.0.2)
-      activesupport (= 3.0.2)
-      rake (>= 0.8.7)
-      thor (~> 0.14.4)
     rake (0.8.7)
     rubyforge (2.0.4)
       json_pure (>= 1.1.7)
     smurf (1.0.4)
     subexec (0.0.4)
-    thor (0.14.4)
+    thor (0.14.6)
     timeliness (0.1.1)
     transaction-simple (1.4.0)
       hoe (>= 1.1.7)
@@ -129,8 +141,10 @@ DEPENDENCIES
   mongrel
   newrelic_rpm
   paper_trail
+  paperclip
   pg
-  rails (= 3.0.2)
+  rack!
+  rails!
   smurf
   transaction-simple
   uuidtools

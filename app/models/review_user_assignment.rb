@@ -162,7 +162,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       end
       
       unless all_valid
-        self.errors.add_to_base(
+        self.errors.add(:base,
           I18n.t(:'review_user_assignment.cannot_be_destroyed'))
         raise ActiveRecord::Rollback
       end

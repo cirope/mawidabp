@@ -1,23 +1,16 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
 ActiveRecord::Schema.define(:version => 20100920114555) do
-
-  create_table "backups", :force => true do |t|
-    t.integer  "backup_type"
-    t.boolean  "work_papers_included"
-    t.integer  "lock_version",         :default => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -166,12 +159,13 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
   add_index "error_records", ["user_id"], :name => "index_error_records_on_user_id"
 
   create_table "file_models", :force => true do |t|
-    t.string   "filename"
-    t.string   "content_type"
-    t.integer  "size"
-    t.integer  "lock_version", :default => 0
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.integer  "lock_version",      :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "file_updated_at"
   end
 
   create_table "finding_answers", :force => true do |t|
@@ -280,19 +274,14 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
   add_index "help_items", ["parent_id"], :name => "index_help_items_on_parent_id"
 
   create_table "image_models", :force => true do |t|
-    t.integer  "parent_id"
-    t.string   "thumbnail"
-    t.string   "filename"
-    t.string   "content_type"
-    t.integer  "size"
-    t.integer  "height"
-    t.integer  "width"
-    t.integer  "lock_version", :default => 0
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.integer  "lock_version",       :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "image_updated_at"
   end
-
-  add_index "image_models", ["parent_id"], :name => "index_image_models_on_parent_id"
 
   create_table "inline_helps", :force => true do |t|
     t.string   "language"

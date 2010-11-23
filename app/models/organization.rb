@@ -31,7 +31,7 @@ class Organization < ActiveRecord::Base
   # Restricciones
   validates_format_of :prefix, :with => /\A[A-Za-z][A-Za-z0-9\-]+\z/,
     :allow_nil => true, :allow_blank => true
-  validates_presence_of :name, :prefix
+  validates :name, :prefix, :presence => true
   validates_length_of :name, :prefix, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_uniqueness_of :prefix, :case_sensitive => false
@@ -53,7 +53,8 @@ class Organization < ActiveRecord::Base
   def initialize(attributes = nil)
     super(attributes)
 
-    if Organization.exists?(GlobalModelConfig.current_organization_id)
+    if GlobalModelConfig.current_organization_id &&
+        Organization.exists?(GlobalModelConfig.current_organization_id)
       self.group_id = Organization.find(
         GlobalModelConfig.current_organization_id).group_id
     end

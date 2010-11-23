@@ -130,7 +130,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               :description => 'New workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')
               }
             }
@@ -205,7 +205,7 @@ class WeaknessesControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => Rack::Test::UploadedFile.new(
+                  :file => Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }

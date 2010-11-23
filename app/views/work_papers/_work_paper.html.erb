@@ -21,7 +21,7 @@
         <% wp_f.object.build_file_model %>
         <%= wp_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
         <% end %>
       </div>
@@ -32,7 +32,7 @@
         </span>
         <%= wp_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
         <% end %>
       </div>

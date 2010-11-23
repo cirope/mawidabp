@@ -5,6 +5,19 @@ Numeric.send :include, ActiveSupport::CoreExtensions::Numeric::BusinessTime
 Date.send :include, ActiveSupport::CoreExtensions::Date::BusinessTime
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 
+Paperclip.interpolates(:organization_id) do
+  ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/).join(File::SEPARATOR)
+end
+
+Paperclip.interpolates(:id) do |attachment, style_name|
+  ('%08d' % attachment.instance.id).scan(/\d{4}/).join(File::SEPARATOR)
+end
+
+# Parche feo hasta que actualizen paperclip
+if defined? ActionDispatch::Http::UploadedFile
+  ActionDispatch::Http::UploadedFile.send(:include, Paperclip::Upfile)
+end
+
 class ActiveRecord::Base
   # Devuelve siempre una versión correcta para la fecha
   def version_of(date = nil)

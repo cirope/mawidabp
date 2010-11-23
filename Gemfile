@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.2'
+gem 'rails', :path => '/home/franco/github/rails'
+gem 'rack', :git => 'git://github.com/rack/rack.git'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -8,7 +9,7 @@ gem 'rails', '3.0.2'
 gem 'pg'
 gem 'ya2yaml'
 gem 'memcache-client'
-gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
+gem 'calendar_date_select', :git => 'https://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
 gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
@@ -18,6 +19,7 @@ gem 'smurf', :require => false
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'
+gem 'paperclip'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer

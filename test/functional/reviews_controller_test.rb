@@ -117,8 +117,7 @@ class ReviewsControllerTest < ActionController::TestCase
                   :plan_item_id => plan_items(:past_plan_item_3).id,
                   :procedure_control_subitem_ids =>
                     [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
-                  :file_model_attributes => {
-                    :uploaded_data => Rack::Test::UploadedFile.new(
+                  :file_model_attributes => {:file => Rack::Test::UploadedFile.new(
                       TEST_FILE_FULL_PATH, 'text/plain')
                   },
                   :review_user_assignments_attributes => {
@@ -170,7 +169,7 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data => Rack::Test::UploadedFile.new(
+                            :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
@@ -184,7 +183,7 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data => Rack::Test::UploadedFile.new(
+                            :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
@@ -219,7 +218,7 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data => Rack::Test::UploadedFile.new(
+                            :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }
@@ -233,7 +232,7 @@ class ReviewsControllerTest < ActionController::TestCase
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
-                            :uploaded_data => Rack::Test::UploadedFile.new(
+                            :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
                         }

@@ -78,13 +78,13 @@
         <% r_f.object.build_file_model unless r_f.object.file_model %>
         <%= r_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
         <% end %>
       <% end %>
       
-      <% if r_f.object.file_model && !r_f.object.file_model.new_record? %>
-        <%= link_to_download r_f.object.file_model.public_filename, :style => 'margin-left: 1em;' %>
+      <% if r_f.object.file_model.try(:file) && !r_f.object.file_model.new_record? %>
+        <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
       <% end %>
     </p>
     <p>

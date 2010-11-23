@@ -123,8 +123,7 @@ class OportunitiesControllerTest < ActionController::TestCase
               :number_of_pages => '10',
               :description => 'New workpaper description',
               :organization_id => organizations(:default_organization).id,
-              :file_model_attributes => {
-                :uploaded_data => Rack::Test::UploadedFile.new(
+              :file_model_attributes => {:file => Rack::Test::UploadedFile.new(
                   TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
@@ -195,7 +194,7 @@ class OportunitiesControllerTest < ActionController::TestCase
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => Rack::Test::UploadedFile.new(
+                  :file => Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }

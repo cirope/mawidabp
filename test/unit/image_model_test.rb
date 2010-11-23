@@ -12,75 +12,73 @@ class ImageModelTest < ActiveSupport::TestCase
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of ImageModel, @image_model
-    assert_equal image_models(:image_one).filename, @image_model.filename
-    assert_equal image_models(:image_one).content_type,
-      @image_model.content_type
-    assert_equal image_models(:image_one).size, @image_model.size
+    assert_equal image_models(:image_one).image_file_name,
+      @image_model.image_file_name
+    assert_equal image_models(:image_one).image_content_type,
+      @image_model.image_content_type
+    assert_equal image_models(:image_one).image_file_size,
+      @image_model.image_file_size
   end
 
   # Prueba la creación de un modelo de archivo
   test 'create' do
     assert_difference 'ImageModel.count' do
       @image_model = ImageModel.create(
-        :filename => 'new_file.jpg',
-        :content_type => 'image/gif',
-        :size => 2000
+        :image_file_name => 'new_file.jpg',
+        :image_content_type => 'image/gif',
+        :image_file_size => 2000
       )
     end
   end
 
   # Prueba de actualización de un modelo de archivo
   test 'update' do
-    assert @image_model.update_attributes(:filename => 'updated_name'),
+    assert @image_model.update_attributes(:image_file_name => 'updated_name'),
       @image_model.errors.full_messages.join('; ')
     @image_model.reload
-    assert_equal 'updated_name', @image_model.filename
+    assert_equal 'updated_name', @image_model.image_file_name
   end
 
   # Prueba de eliminación de un modelo de archivo
   test 'delete' do
-    assert_difference('ImageModel.count', -2) { @image_model.destroy }
+    assert_difference('ImageModel.count', -1) { @image_model.destroy }
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validation' do
-    @image_model = ImageModel.new(:uploaded_data =>
+    @image_model = ImageModel.new(:image =>
         Rack::Test::UploadedFile.new(make_file(1), 'image/gif'))
 
     assert @image_model.valid?, @image_model.errors.full_messages.join(' ;')
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}image_model_test"), :secure => true
 
-    @image_model = ImageModel.new(:uploaded_data =>
+    @image_model = ImageModel.new(:image =>
         Rack::Test::UploadedFile.new(make_file(21), 'image/gif'))
 
     assert @image_model.invalid?
-    assert_equal error_message_from_model(@image_model, :size, :inclusion),
-      @image_model.errors[:size]
+    assert_equal [error_message_from_model(@image_model, :image_file_size,
+        :less_than, :count => 20.megabytes)],
+      @image_model.errors[:image_file_size]
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}image_model_test"), :secure => true
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates lenght attributes' do
-    @image_model.filename = 'abc' * 100
-    @image_model.thumbnail = 'abc' * 100
-    @image_model.content_type = 'abc' * 100
+    @image_model.image_file_name = 'abc' * 100
+    @image_model.image_content_type = "image/#{'abc' * 100}"
     assert @image_model.invalid?
-    assert_equal 4, @image_model.errors.count
-    assert_equal [error_message_from_model(@image_model, :filename, :too_long,
-      :count => 255)], @image_model.errors[:filename]
-    assert_equal [error_message_from_model(@image_model, :thumbnail, :too_long,
-      :count => 255)], @image_model.errors[:thumbnail]
-    assert_equal [error_message_from_model(@image_model, :content_type,
-      :too_long, :count => 255), error_message_from_model(@image_model,
-      :content_type, :inclusion)].sort,
-    @image_model.errors[:content_type].sort
+    assert_equal 2, @image_model.errors.count
+    assert_equal [error_message_from_model(@image_model, :image_file_name,
+        :too_long, :count => 255)], @image_model.errors[:image_file_name]
+    assert_equal [error_message_from_model(@image_model, :image_content_type,
+      :too_long, :count => 255)], @image_model.errors[:image_content_type]
   end
 
   private
 
-  def make_file(size_in_mb)
+  def make_file(image_file_size_in_mb)
     file_path = File.join "#{TEMP_PATH}image_model_test",
       "test#{rand(1000)}.gif"
 
@@ -91,7 +89,7 @@ class ImageModelTest < ActiveSupport::TestCase
         out << file.read
       end
       
-      (size_in_mb * 1024).times { out << "#{'x' * 1023}\n" }
+      (image_file_size_in_mb * 1024).times { out << "#{'x' * 1023}\n" }
     end
 
     file_path

@@ -294,7 +294,7 @@ class WeaknessTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')
               }
             }
@@ -321,7 +321,7 @@ class WeaknessTest < ActiveSupport::TestCase
 #              :description => 'New post_workpaper description',
 #              :organization_id => organizations(:default_organization).id,
 #              :file_model_attributes => {
-#                :uploaded_data => ActionDispatch::Http::UploadedFile.new(
+#                :file => ActionDispatch::Http::UploadedFile.new(
 #                  TEST_FILE, 'text/plain')
 #              }
 #            }

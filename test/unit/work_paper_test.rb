@@ -36,8 +36,7 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [],
         :file_model_attributes => {
-          :uploaded_data => Rack::Test::UploadedFile.new(
-            TEST_FILE_FULL_PATH)
+          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end
@@ -117,12 +116,12 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [],
         :file_model_attributes => {
-          :uploaded_data => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end
 
-    assert_equal '.zip', File.extname(@work_paper.file_model.full_filename)
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
   end
 
   test 'duplicated codes' do
@@ -138,8 +137,7 @@ class WorkPaperTest < ActiveSupport::TestCase
         :code_prefix => 'PTOC',
         :neighbours => [other_work_paper],
         :file_model_attributes => {
-          :uploaded_data => Rack::Test::UploadedFile.new(
-            TEST_FILE_FULL_PATH)
+          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
       )
     end

@@ -101,7 +101,10 @@ class Period < ActiveRecord::Base
   has_many :procedure_controls
 
   def <=>(other)
-    self.id <=> other.id
+    start_result = self.start <=> other.start
+    end_result = self.end <=> other.end if start_result == 0
+
+    end_result || start_result
   end
 
   def to_s

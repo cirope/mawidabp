@@ -122,7 +122,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New pre_workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => fixture_file_upload(TEST_FILE, 'text/plain')
+                  :file => fixture_file_upload(TEST_FILE, 'text/plain')
                 }
               }
             },
@@ -134,7 +134,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :description => 'New post_workpaper description',
                 :organization_id => organizations(:default_organization).id,
                 :file_model_attributes => {
-                  :uploaded_data => fixture_file_upload(TEST_FILE, 'text/plain')
+                  :file => fixture_file_upload(TEST_FILE, 'text/plain')
                 }
               }
             }

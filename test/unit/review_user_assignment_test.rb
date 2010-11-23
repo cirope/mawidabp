@@ -239,7 +239,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
       end
     end
 
-    assert review_user_assignment.user.findings.all_for_reallocation_with_review(
+    assert review_user_assignment.user.reload.findings.all_for_reallocation_with_review(
       review_user_assignment.review).blank?
   end
 
