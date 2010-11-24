@@ -8,7 +8,8 @@
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete(:oportunity, :nested_user,
-            {:id => "oportunity_user_#{id}", :class => :search,
+            {:id => "oportunity_user_#{id}",
+            :class => "search #{'error_field' unless f.object.errors[:user_id].blank?}",
             :title => t(:'label.search'), :value => f.object.user.try(:full_name_with_function)},
             {:indicator => :loading, :skip_style => true,
             :url => {:action => :auto_complete_for_user},

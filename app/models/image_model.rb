@@ -1,7 +1,5 @@
 class ImageModel < ActiveRecord::Base
   include ParameterSelector
-
-  before_save :set_dimensions
   
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
@@ -13,21 +11,12 @@ class ImageModel < ActiveRecord::Base
     :styles => { :thumb => ['300x75>', :png], :pdf_thumb => ['200x40>', :png] }
 
   # Restricciones
-  validates_attachment_content_type :image, :content_type => /\Aimage/i
+  validates_attachment_content_type :image, :content_type => /\Aimage/i,
+    :message => I18n.t(:invalid, :scope => [:activerecord, :errors, :models, :image_model, :attributes, :image_content_type])
   validates_attachment_size :image, :less_than => 20.megabytes,
     :message => I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes)
   validates_length_of :image_file_name, :image_content_type, :maximum => 255,
     :allow_nil => true, :allow_blank => true
-
-  def set_dimensions
-    tempfile = self.image.queued_for_write[:original]
-
-    if tempfile
-      dimensions = Paperclip::Geometry.from_file(tempfile)
-      self.width = dimensions.width
-      self.height = dimensions.height
-    end
-  end
 
   def image_size(style_name = :original)
     image_geometry = image_geometry(style_name)

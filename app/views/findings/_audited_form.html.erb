@@ -3,7 +3,7 @@
   {:method => :put, :class => 'edit_finding', :multipart => true,
   :id => "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
-    <%= "var finding_answer='#{generate_template(f_f, :finding_answers,
+    <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
       :object => FindingAnswer.new(:user_id => @auth_user.id))}';" %>
   <% end %>
   <%= f_f.error_messages %>
@@ -27,8 +27,8 @@
     </p>
     <p class="form_item">
       <%= content_tag :label,
-        ConclusionFinalReview.human_attribute_name(:issue_date) +
-        show_inline_help_for(:finding_issue_date),
+        raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
+        show_inline_help_for(:finding_issue_date)),
         :class => :inline %>
       <%= text_field_tag :issue_date, @finding.issue_date ?
         l(@finding.issue_date, :format => :long) :
@@ -73,14 +73,14 @@
       </p>
     <% end %>
     <p class="form_item">
-      <%= f_f.label :state, Finding.human_attribute_name(:state) +
-        show_inline_help_for(:finding_state), :class => :inline %>
+      <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
+        show_inline_help_for(:finding_state)), :class => :inline %>
       <%= finding_status_field(f_f, true, true) %>
     </p>
     <p>
       <%= f_f.label :origination_date,
-        Finding.human_attribute_name(:origination_date) +
-        show_inline_help_for(:finding_origination_date) %>
+        raw(Finding.human_attribute_name(:origination_date) +
+        show_inline_help_for(:finding_origination_date)) %>
       <%= f_f.text_field :origination_date, :value =>
         (l @finding.origination_date, :format => :short if @finding.origination_date),
         :readonly => true %>
@@ -88,8 +88,8 @@
     <% if @finding.kind_of? Weakness %>
       <p>
         <%= f_f.label :follow_up_date,
-          Finding.human_attribute_name(:follow_up_date) +
-          show_inline_help_for(:finding_follow_up_date) %>
+          raw(Finding.human_attribute_name(:follow_up_date) +
+          show_inline_help_for(:finding_follow_up_date)) %>
         <%= f_f.text_field :follow_up_date, :value =>
           (l @finding.follow_up_date, :format => :short if @finding.follow_up_date),
           :readonly => true %>
@@ -98,8 +98,8 @@
     <% end %>
     <p>
       <%= f_f.label :solution_date,
-        Finding.human_attribute_name(:solution_date) +
-        show_inline_help_for(:finding_solution_date) %>
+        raw(Finding.human_attribute_name(:solution_date) +
+        show_inline_help_for(:finding_solution_date)) %>
       <%= f_f.text_field :solution_date, :value =>
         (l @finding.solution_date, :format => :short if @finding.solution_date),
         :readonly => true %>
@@ -193,8 +193,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_answer'), '#finding_answer',
-      :class => :add_nested_item, :rel => :finding_answers %>
+    <%= link_to t(:'finding.add_finding_answer'), '#',
+      :'data-template' => :finding_answer,
+      :'data-event' => :add_nested_item, :'data-container' => :finding_answers %>
   </p>
 
   <div style="clear: both; margin-top: 2em;">

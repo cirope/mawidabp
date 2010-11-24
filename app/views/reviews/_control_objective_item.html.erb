@@ -6,7 +6,7 @@
   <h3><%= process_control %></h3>
   <% @displayed_process_controls << process_control %>
 <% end %>
-<div class="enumeration_list">
+<div class="enumeration_list<%= ' red bold' if control_objective_item.try(:invalid?) %>">
   <%= link_to_show_hide id,
     t(:'review.show_control_objective'),
     t(:'review.hide_control_objective') %>
@@ -73,7 +73,7 @@
           :admin_control_objective_qualifications,
           control_objective_item.created_at, true),
           {:include_blank => t(:'control_objective_item.not_rated')},
-          {:disabled => readonly} %>
+          {:class => :pre_audit_qualification, :disabled => readonly} %>
       </p>
       <p>
         <%= yield "design_tests_#{id}" %>
@@ -140,19 +140,19 @@
       <div class="in_column_items" id="pre_audit_work_papers_for_<%= id %>">
         <div class="column_headers">
           <div class="item_column" style="width: 20%;">
-            <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :name %></h3>
           </div>
           <div class="item_column" style="width: 20%;">
-            <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :code %></h3>
           </div>
           <div class="item_column" style="width: 15%;">
-            <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
           </div>
           <div class="item_column" style="width: 25%;">
-            <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :description %></h3>
           </div>
           <div class="item_column" style="width: 10%;">
-            <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+            <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
           </div>
           <div class="item_column" style="width: 10%;"></div>
           <div style="clear: both;"></div>

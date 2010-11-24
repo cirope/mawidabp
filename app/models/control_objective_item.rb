@@ -67,7 +67,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     record.errors.add attr, :blank unless active_controls
   end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
-  validates_presence_of :audit_date, :relevance, :auditor_comment,
+  validates :audit_date, :relevance, :auditor_comment, :presence => true,
     :if => :finished
   validates_each :post_audit_qualification, :if => :finished do |record, attr, value|
     if value.blank? && record.pre_audit_qualification.blank?
@@ -144,10 +144,10 @@ class ControlObjectiveItem < ActiveRecord::Base
       
       order_1 = self.control_objective.process_control.best_practice_id *
         bp_base + self.control_objective.process_control.order * pc_base +
-        self.control_objective.order
+        self.control_objective.order rescue 0
       order_2 = other.control_objective.process_control.best_practice_id *
         bp_base + other.control_objective.process_control.order * pc_base +
-        other.control_objective.order
+        other.control_objective.order rescue 0
 
       order_1 <=> order_2
     else

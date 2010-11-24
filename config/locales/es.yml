@@ -1290,7 +1290,17 @@ es:
       best_practice:
         name: "Nombre"
         description: "Descripción"
-        process_controls: "Procesos de negocio"
+        process_controls:
+          one: "Proceso de negocio"
+          other: "Procesos de negocio"
+          name: "Proceso de negocio"
+          order: "Proceso de negocio (orden)"
+          control_objectives:
+            one: "Objetivo de control"
+            other: "Objetivos de control"
+            name: "Objetivo de control"
+            relevance: "Objetivo de control (importancia)"
+            risk: "Objetivo de control (riesgo)"
         <<: *commons
       business_unit:
         name: "Nombre"
@@ -1300,7 +1310,10 @@ es:
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
         project_label: "Etiqueta del proyecto en el informe"
         external: "Externo"
-        business_units: "Unidades de negocio"
+        business_units:
+          one: "Unidad de negocio"
+          other: "Unidades de negocio"
+          name: "Unidad de negocio"
         <<: *commons
       comment:
         comment: "Comentario"
@@ -1347,6 +1360,38 @@ es:
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         work_papers: "Papeles de trabajo"
+        controls:
+          one: "Control"
+          other: "Controles"
+          order: "Objetivo de control (orden)"
+          control: "Objetivo de control (controles identificados)"
+          effects: "Objetivo de control (efectos)"
+          design_tests: "Objetivo de control (evaluación de diseño)"
+          compliance_tests: "Objetivo de control (pruebas de cumplimiento y/o sustantivas)"
+        pre_audit_work_papers:
+          one: "Papel de trabajo (diseño)"
+          other: "Papel de trabajo (diseño)"
+          name: "Papel de trabajo (nombre)"
+          code: "Papel de trabajo (código)"
+          description: "Papel de trabajo (descripción)"
+          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          file_model:
+            one: "Papel de trabajo (archivo)"
+            file_file_name: "Papel de trabajo (nombre de archivo)"
+            file_content_type: "Papel de trabajo (tipo de archivo)"
+            file_file_size: "Papel de trabajo (tamaño de archivo)"
+        post_audit_work_papers:
+          one: "Papel de trabajo (cumplimiento y/o sustantivas)"
+          other: "Papel de trabajo (cumplimiento y/o sustantivas)"
+          name: "Papel de trabajo (nombre)"
+          code: "Papel de trabajo (código)"
+          description: "Papel de trabajo (descripción)"
+          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          file_model:
+            one: "Papel de trabajo (archivo)"
+            file_file_name: "Papel de trabajo (nombre de archivo)"
+            file_content_type: "Papel de trabajo (tipo de archivo)"
+            file_file_size: "Papel de trabajo (tamaño de archivo)"
         <<: *commons
       cost:
         cost: "Tiempo dedicado"
@@ -1393,6 +1438,42 @@ es:
         work_papers: "Papeles de trabajo"
         finding_answers: "Respuestas"
         rescheduled: "Reprogramada"
+        costs:
+          one: "Tiempo dedicado"
+          cost: "Tiempo dedicado"
+          description: "Descripción de las actividades realizadas"
+        finding_relations:
+          one: "Relación"
+          other: "Relaciones"
+          related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
+          finding_relation_type: "Relación (tipo)"
+        finding_user_assignments:
+          one: "Usuario relacionado"
+          user_id: 'Usuario relacionado (usuario)'
+        finding_answers:
+          one: "Comentarios"
+          answer: "Comentario"
+          auditor_comments: "Comentario (comentarios del auditor)"
+          answer_type: "Comentario (tipo)"
+          user_id: "Comentario (usuario)"
+          notify_users: "Comentario (enviar notificación)"
+          file_model:
+            one: "Anexo (archivo)"
+            file_file_name: "Anexo (nombre de archivo)"
+            file_content_type: "Anexo (tipo de archivo)"
+            file_file_size: "Anexo (tamaño de archivo)"
+        work_papers:
+          one: "Papel de trabajo"
+          other: "Papeles de trabajo"
+          name: "Papel de trabajo (nombre)"
+          code: "Papel de trabajo (código)"
+          description: "Papel de trabajo (descripción)"
+          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          file_model:
+            one: "Papel de trabajo (archivo)"
+            file_file_name: "Papel de trabajo (nombre de archivo)"
+            file_content_type: "Papel de trabajo (tipo de archivo)"
+            file_file_size: "Papel de trabajo (tamaño de archivo)"
         <<: *commons
       finding_answer:
         answer: "Comentario"
@@ -1409,20 +1490,39 @@ es:
         related_finding_id: 'Observación / Oportunidad de mejora relacionada'
         finding_relation_type: 'Tipo'
         <<: *commons
+      finding_user_assignment:
+        finding_id: 'Observación / Oportunidad de mejora'
+        user_id: 'Usuario'
+        <<: *commons
       group:
         name: "Nombre"
         description: "Descripción"
         admin_email: "Correo del administrador"
         send_notification_email: "Enviar notificación"
+        organizations:
+          one: "Organización"
+          name: "Organización (nombre)"
+          prefix: "Organización (prefijo)"
+          description: "Organización (descripción)"
         <<: *commons
       help_content:
         language: "Idioma"
+        help_items:
+          name: "Ítem (nombre)"
+          description: "Ítem (contenido)"
+          order_number: "Ítem (orden)"
+          children: "Ítem (temas incluidos)"
         <<: *commons
       help_item:
         name: "Nombre"
         description: "Contenido"
         order_number: "Orden"
-        children: "Temas incluidos"
+        children:
+          one: "Temas incluidos"
+          name: "Ítem (nombre)"
+          description: "Ítem (contenido)"
+          order_number: "Ítem (orden)"
+          children: "Ítem (temas incluidos)"
         parent: "Tema referente"
         <<: *commons
       image_model:
@@ -1474,7 +1574,12 @@ es:
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        image_model: "Isologotipo"
+        #image_model: "Isologotipo"
+        image_model:
+          one: "Isologotipo"
+          image_file_name: "Isologotipo (nombre de archivo)"
+          image_content_type: "Isologotipo (tipo de archivo)"
+          image_file_size: "Isologotipo (tamaño)"
         <<: *commons
       organization_role:
         user_id: "Usuario"
@@ -1496,7 +1601,23 @@ es:
         organization_id: "Organización"
         period_id: "Periodo"
         estimated_amount: "Costo estimado"
-        plan_items: "Registros"
+        plan_items:
+          one: "Registro"
+          other: "Registros"
+          project: "Proyecto"
+          start: "Proyecto (inicio)"
+          end: "Proyecto (fin)"
+          predecessors: "Proyecto (predecesoras)"
+          order_number: "Proyecto (orden)"
+          business_unit_id: "Proyecto (unidad de negocio)"
+          status: "Proyecto (estado)"
+          resource_utilizations:
+            one: "Recurso"
+            other: "Recursos"
+            units: "Recurso (cantidad de unidades)"
+            cost_per_unit: "Recurso (costo por unidad)"
+            cost: "Recurso (costo)"
+            resource_id: "Recurso"
         <<: *commons
       plan_item:
         project: "Proyecto"
@@ -1521,6 +1642,18 @@ es:
         <<: *commons
       procedure_control:
         period_id: "Periodo"
+        procedure_control_items:
+          one: "Proceso de negocio"
+          other: "Procesos de negocio"
+          process_control_id: "Proceso de negocio"
+          aproach: "Proceso de negocio (enfoque)"
+          frequency: "Proceso de negocio (frecuencia)"
+          procedure_control_subitems:
+            one: "Procedimiento de control"
+            other: "Procedimientos de control"
+            control_objective_text: "Procedimiento de control (objetivo de control)"
+            risk: "Procedimiento de control (riesgo)"
+            control_objective_id: "Procedimiento de control (objetivo de control)"
         <<: *commons
       procedure_control_item:
         aproach: "Enfoque"
@@ -1547,6 +1680,12 @@ es:
         name: "Clase de recurso"
         unit: "Unidad de medida"
         resource_class_type: "Tipo"
+        resources:
+          one: "Recurso"
+          other: "Recursos"
+          name: "Recurso"
+          description: "Recurso (descripción)"
+          cost_per_unit: "Recurso (costo por unidad)"
         <<: *commons
       resource_utilization:
         units: "Cantidad de unidades"
@@ -1566,7 +1705,60 @@ es:
         plan_item_id: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
-        review_user_assignments: "Integrantes"
+        file_model:
+          one: "Anexo (archivo)"
+          file_file_name: "Anexo (nombre de archivo)"
+          file_content_type: "Anexo (tipo de archivo)"
+          file_file_size: "Anexo (tamaño de archivo)"
+        review_user_assignments:
+          one: "Integrante"
+          other: "Integrantes"
+          assignment_type: "Integrante (rol)"
+          user: "Integrante"
+          user_id: "Integrante"
+        control_objective_items:
+          control_objective_id: "Objetivo de control"
+          control_objective_text: "Objetivo de control"
+          relevance: "Objetivo de control (importancia)"
+          pre_audit_qualification: "Objetivo de control (calificación evaluación de diseño)"
+          post_audit_qualification: "Objetivo de control (calificación pruebas de cumplimiento y/o sustantivas)"
+          audit_date: "Objetivo de control (fecha de auditoría)"
+          auditor_comment: "Objetivo de control (comentarios del auditor)"
+          finished: "Objetivo de control (terminado)"
+          process_control_id: "Objetivo de control (proceso de negocio)"
+          effectiveness: "Objetivo de control (efectividad de control)"
+          controls:
+            one: "Control"
+            other: "Controles"
+            order: "Objetivo de control (orden)"
+            control: "Objetivo de control (controles identificados)"
+            effects: "Objetivo de control (efectos)"
+            design_tests: "Objetivo de control (evaluación de diseño)"
+            compliance_tests: "Objetivo de control (pruebas de cumplimiento y/o sustantivas)"
+          pre_audit_work_papers:
+            one: "Papel de trabajo (diseño)"
+            other: "Papel de trabajo (diseño)"
+            name: "Papel de trabajo (nombre)"
+            code: "Papel de trabajo (código)"
+            description: "Papel de trabajo (descripción)"
+            number_of_pages: "Papel de trabajo (cantidad de páginas)"
+            file_model:
+              one: "Papel de trabajo (archivo)"
+              file_file_name: "Papel de trabajo (nombre de archivo)"
+              file_content_type: "Papel de trabajo (tipo de archivo)"
+              file_file_size: "Papel de trabajo (tamaño de archivo)"
+          post_audit_work_papers:
+            one: "Papel de trabajo (cumplimiento y/o sustantivas)"
+            other: "Papel de trabajo (cumplimiento y/o sustantivas)"
+            name: "Papel de trabajo (nombre)"
+            code: "Papel de trabajo (código)"
+            description: "Papel de trabajo (descripción)"
+            number_of_pages: "Papel de trabajo (cantidad de páginas)"
+            file_model:
+              one: "Papel de trabajo (archivo)"
+              file_file_name: "Papel de trabajo (nombre de archivo)"
+              file_content_type: "Papel de trabajo (tipo de archivo)"
+              file_file_size: "Papel de trabajo (tamaño de archivo)"
         <<: *commons
       review_user_assignment:
         assignment_type: "Rol"
@@ -1635,6 +1827,23 @@ es:
         review_id: "Informe"
         cost: "Costo"
         workflow_items_resources: "Recursos"
+        workflow_items:
+          one: "Tarea"
+          other: "Tareas"
+          base: ""
+          task: "Tarea"
+          start: "Tarea (inicio)"
+          end: "Tarea (fin)"
+          predecessors: "Tarea (predecesoras)"
+          order_number: "Tarea (orden)"
+          resources: "Tarea (recursos)"
+          resource_utilizations:
+            one: "Recurso"
+            other: "Recursos"
+            units: "Recurso (cantidad de unidades)"
+            cost_per_unit: "Recurso (costo por unidad)"
+            cost: "Recurso (costo)"
+            resource_id: "Recurso"
         <<: *commons
       workflow_item:
         task: "Tarea"
@@ -1706,6 +1915,12 @@ es:
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
+        image_model:
+          attributes:
+            image_content_type:
+              invalid: "no es válido"
+            image_file_size:
+
         organization_role:
           attributes:
             role_id:

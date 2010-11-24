@@ -534,8 +534,9 @@ class Finding < ActiveRecord::Base
   def check_for_valid_relation(finding_relation)
     related_finding = finding_relation.related_finding
     
-    if related_finding.final? || (!related_finding.is_in_a_final_review? &&
-          related_finding.review.id != self.control_objective_item.try(:review_id))
+    if related_finding && (related_finding.final? ||
+          (!related_finding.is_in_a_final_review? &&
+            related_finding.review.id != self.control_objective_item.try(:review_id)))
       raise 'Invalid finding for asociation'
     end
   end

@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'rails', :path => '/home/franco/github/rails'
-gem 'rack', :git => 'git://github.com/rack/rack.git'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

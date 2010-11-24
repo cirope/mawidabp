@@ -3,8 +3,7 @@ module RolesHelper
     options = Role::TYPES.map { |k, v| [t("role.type_#{k}"), v] }
 
     form.select :role_type, sort_options_array(options),
-      {:prompt => true},
-      {:class => "no_observe_changes #{:inline_item if inline}"}
+      {:prompt => true}, {:class => (:inline_item if inline)}
   end
 
   def role_type_text(type, html_class = :bold)

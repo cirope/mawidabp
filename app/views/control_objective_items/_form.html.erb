@@ -251,27 +251,26 @@
 <script type="text/javascript">
   var ControlObjectiveCalcs = {
     effectiveness: function() {
-      var postAuditQualifications =
-        $('control_objective_item_post_audit_qualification');
-      var preAuditQualifications =
-        $('control_objective_item_pre_audit_qualification');
-      var postAuditQualification = $F(postAuditQualifications);
-      var preAuditQualification = $F(preAuditQualifications);
-      var maxValue = $A(postAuditQualifications.options).map(function(e) {
+      var selectedValues = new Array();
+      var preAuditElement = $('control_objective_item_pre_audit_qualification');
+      var postAuditElement = $('control_objective_item_post_audit_qualification');
+      var maxValue = $A(preAuditElement.options).map(function(e) {
         return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
       }).max();
-      var postAuditSelected = postAuditQualification.match(/^\d+$/);
-      var percentage = postAuditSelected ?
-        (parseInt(postAuditQualification) * 100.0 / maxValue) : 100;
 
-      if(preAuditQualification.match(/^\d+$/)) {
-        percentage += parseInt(preAuditQualification) * 100.0 / maxValue;
-        percentage -= postAuditSelected ? 0 : 100;
-        percentage /= postAuditSelected ? 2.0 : 1.0;
-      }
+      selectedValues.push($F(preAuditElement).match(/^\d+$/) ?
+        parseInt($F(preAuditElement)) : null);
+      selectedValues.push($F(postAuditElement).match(/^\d+$/) ?
+        parseInt($F(postAuditElement)) : null);
+
+      var total = selectedValues.compact().size() == 0 ? -1 :
+        selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
+
+      var percentage = total == -1 || maxValue == 0 ? 100 :
+        ((total / selectedValues.compact().size()) * 100.0 / maxValue).toFixed(0);
 
       $('effectiveness').setValue(new String("#{percentage}%").interpolate(
-        {percentage: percentage.toFixed(0)}));
+        {percentage: percentage}));
 
       var oldColor = $('effectiveness').getStyle('border-color');
 

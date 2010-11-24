@@ -583,7 +583,7 @@ class UsersController < ApplicationController
   # * GET /users/logout/1
   # * GET /users/logout/1.xml
   def logout
-    if LoginRecord.exists?(session[:record_id])
+    if session[:record_id] && LoginRecord.exists?(session[:record_id])
       LoginRecord.find(session[:record_id]).end!
     end
 
