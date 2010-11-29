@@ -1,6 +1,6 @@
-<% id = "workpaper_#{(is_dynamic ? child_index : rand(100000000000))}" -%>
-<% hide = is_dynamic || wp_f.object.marked_for_destruction? -%>
-<div class="work_paper item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<% id = "workpaper_#{(is_dynamic ? child_index : rand(100000000000))}" %>
+<% hide = is_dynamic || wp_f.object.marked_for_destruction? %>
+<div class="work_paper item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 20%;">
       <%= wp_f.text_field :name, :class => :tiny_component %>
@@ -16,27 +16,27 @@
       <%= wp_f.text_area :description, :class => :tiny_component %>
     </div>
 
-    <% if !wp_f.object.file_model || wp_f.object.file_model.new_record? -%>
+    <% if !wp_f.object.file_model || wp_f.object.file_model.new_record? %>
       <div class="item_field" style="width: 10%;">
-        <% wp_f.object.build_file_model -%>
-        <% wp_f.fields_for :file_model do |fm_f| -%>
+        <% wp_f.object.build_file_model %>
+        <%= wp_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
-        <% end -%>
+        <% end %>
       </div>
-    <% else -%>
+    <% else %>
       <div class="item_field" style="width: 10%;">
         <span style="display: block;">
-          <%= link_to_download wp_f.object.file_model.public_filename %>
+          <%= link_to_download wp_f.object.file_model.file.url %>
         </span>
-        <% wp_f.fields_for :file_model do |fm_f| -%>
+        <%= wp_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
-        <% end -%>
+        <% end %>
       </div>
-    <% end -%>
+    <% end %>
 
     <div style="display:none">
     <%= wp_f.hidden_field :lock_version %>
@@ -44,12 +44,12 @@
     </div>
 
     <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_item_link(wp_f) unless frozen -%>
+      <%= remove_item_link(wp_f) unless frozen %>
     </div>
   </div>
 </div>
 <script type="text/javascript">HTMLUtil.stylizeAllInputFiles();</script>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">
 (function() {
   var id = '<%= id %>';
@@ -63,4 +63,4 @@
   }
 })();
 </script>
-<% end -%>
+<% end %>

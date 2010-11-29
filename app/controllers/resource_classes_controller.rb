@@ -72,7 +72,7 @@ class ResourceClassesController < ApplicationController
 
     respond_to do |format|
       if @resource_class.save
-        flash[:notice] = t :'resource_class.correctly_created'
+        flash.notice = t :'resource_class.correctly_created'
         format.html { redirect_to(resource_classes_path) }
         format.xml  { render :xml => @resource_class, :status => :created, :location => @resource_class }
       else
@@ -93,7 +93,7 @@ class ResourceClassesController < ApplicationController
 
     respond_to do |format|
       if @resource_class.update_attributes(params[:resource_class])
-        flash[:notice] = t :'resource_class.correctly_updated'
+        flash.notice = t :'resource_class.correctly_updated'
         format.html { redirect_to(resource_classes_path) }
         format.xml  { head :ok }
       else
@@ -103,7 +103,7 @@ class ResourceClassesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'resource_class.stale_object_error'
+    flash.alert = t :'resource_class.stale_object_error'
     redirect_to :action => :edit
   end
 

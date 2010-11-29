@@ -65,7 +65,7 @@ class HelpContentsController < ApplicationController
 
     respond_to do |format|
       if @help_content.save
-        flash[:notice] = t :'help_content.correctly_created'
+        flash.notice = t :'help_content.correctly_created'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
               show_content_help_content_path(help_item) : help_contents_path) }
@@ -87,7 +87,7 @@ class HelpContentsController < ApplicationController
 
     respond_to do |format|
       if @help_content.update_attributes(params[:help_content])
-        flash[:notice] = t :'help_content.correctly_updated'
+        flash.notice = t :'help_content.correctly_updated'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
               show_content_help_content_path(help_item) : help_contents_path) }
@@ -99,7 +99,7 @@ class HelpContentsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'help_content.stale_object_error'
+    flash.alert = t :'help_content.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -120,7 +120,8 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents/show_content/1
   def show_content
     @title = t :'help_content.help_title'
-    @help_item = HelpItem.exists?(params[:id]) ? HelpItem.find(params[:id]) :
+    @help_item = params[:id] && HelpItem.exists?(params[:id]) ?
+      HelpItem.find(params[:id]) :
       HelpContent.find_by_language(I18n.locale.to_s).try(:help_items).try(:first)
   end
 end

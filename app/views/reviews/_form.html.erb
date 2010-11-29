@@ -1,16 +1,14 @@
-<% readonly = @review.has_final_review? -%>
-<% frozen = @review.is_frozen? -%>
+<% readonly = @review.has_final_review? %>
+<% frozen = @review.is_frozen? %>
 <!--[form:review]-->
-<% form_for @review, :html => { :multipart => true } do |r_f| -%>
-  <% content_for :js_extra do -%>
-    <%= "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-    <%= "var control_objective='#{escape_javascript render(
-      :partial => 'procedure_control_subitem',
-      :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
-      :is_dynamic => true})}';" %>
-    <%= "var review_user_assignment='#{generate_template(r_f,
-      :review_user_assignments, :locals => {:readonly => readonly})}';" %>
-  <% end -%>
+<%= form_for @review, :html => { :multipart => true } do |r_f| %>
+  <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
+  <% js_extra << "var control_objective='#{escape_javascript render(
+    :partial => 'procedure_control_subitem',
+    :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
+    :is_dynamic => true})}';" %>
+  <% js_extra << "var review_user_assignment='#{generate_template(r_f,
+    :review_user_assignments, :locals => {:readonly => readonly})}';" %>
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
@@ -18,7 +16,7 @@
       <%= r_f.text_field :identification, :readonly => readonly,
         :class => :inline_item %>
     </p>
-    <% if [:new, :create].include?(controller.action_name.to_sym) -%>
+    <% if [:new, :create].include?(controller.action_name.to_sym) %>
       <p class="form_item">
         <%= r_f.label :period_id, nil, :class => :inline %>
         <%= r_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
@@ -32,8 +30,8 @@
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
       </p>
-    <% end -%>
-    <% if @review.new_record? -%>
+    <% end %>
+    <% if @review.new_record? %>
       <p class="form_item">
         <%= r_f.label :plan_item_id, nil, :class => :inline %>
         <%= r_f.select :plan_item_id,
@@ -48,7 +46,7 @@
         <%= text_field_tag :plan_item, @review.plan_item.project,
           :class => :inline_item, :readonly => true %>
       </p>
-    <% end -%>
+    <% end %>
     <p class="form_item">
       <%= label_tag :business_unit, Review.human_attribute_name(:business_unit),
         :class => :inline %>
@@ -76,18 +74,18 @@
     </p>
     <p class="form_item" style="margin-bottom: 0em;">
       <label class="inline"><%= Review.human_attribute_name :file_model_id %></label>
-      <% unless readonly -%>
-        <% r_f.object.build_file_model unless r_f.object.file_model -%>
-        <% r_f.fields_for :file_model do |fm_f| -%>
+      <% unless readonly %>
+        <% r_f.object.build_file_model unless r_f.object.file_model %>
+        <%= r_f.fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+            <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
-        <% end -%>
-      <% end -%>
+        <% end %>
+      <% end %>
       
-      <% if r_f.object.file_model && !r_f.object.file_model.new_record? -%>
-        <%= link_to_download r_f.object.file_model.public_filename, :style => 'margin-left: 1em;' %>
-      <% end -%>
+      <% if r_f.object.file_model.try(:file) && !r_f.object.file_model.new_record? %>
+        <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
+      <% end %>
     </p>
     <p>
       <%= link_to_unless @review.new_record?, t(:'review.survey.download'),
@@ -112,59 +110,58 @@
     </div>
 
     <div id="review_user_assignments">
-      <% r_f.fields_for :review_user_assignments do |rua_f| -%>
+      <%= r_f.fields_for :review_user_assignments do |rua_f| %>
         <%= render :partial => 'review_user_assignment',
           :locals => {:f => rua_f, :is_dynamic => false, :readonly => readonly} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
-  <% unless readonly -%>
+  <% unless readonly %>
     <p class="add_item">
-      <%= link_to t(:'review.add_user_assignment'),
-        '#review_user_assignment', :class => :add_nested_item,
-        :rel => :review_user_assignments %>
+      <%= link_to t(:'review.add_user_assignment'), '#',
+        :'data-event' => :add_nested_item,
+        :'data-template' => :review_user_assignment,
+        :'data-container' => :review_user_assignments %>
     </p>
-  <% end -%>
+  <% end %>
 
-  <% unless @review.control_objective_items.empty? -%>
+  <% unless @review.control_objective_items.empty? %>
     <div class="items" style="margin-top: 2em;">
       <h1><%= t(:'review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
-        <% pre_template = post_template = nil -%>
-        <% r_f.fields_for :control_objective_items,
-          @review.control_objective_items.sort! do |coi_f| -%>
-          <% unless frozen -%>
-            <% content_for :js_extra do -%>
-              <% pre_template ||= generate_template(coi_f,
-                :post_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
-              <% post_template ||= generate_template(coi_f,
-                :pre_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) -%>
-              <%= "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 -%>
-              <%= "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 -%>
-              <% pre_template = post_template = 0 -%>
-            <% end -%>
-          <% end -%>
+        <% pre_template = post_template = nil %>
+        <%= r_f.fields_for :control_objective_items,
+          @review.control_objective_items.sort! do |coi_f| %>
+          <% unless frozen %>
+            <% pre_template ||= generate_template(coi_f,
+              :post_audit_work_papers, {:form_builder_local => :wp_f,
+              :partial => 'work_papers/work_paper',
+              :child_index => 'NEW_SUBRECORD',
+              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
+            <% post_template ||= generate_template(coi_f,
+              :pre_audit_work_papers, {:form_builder_local => :wp_f,
+              :partial => 'work_papers/work_paper',
+              :child_index => 'NEW_SUBRECORD',
+              :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
+              :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
+            <% js_extra << "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 %>
+            <% js_extra << "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 %>
+            <% pre_template = post_template = 0 %>
+          <% end %>
           <%= render :partial => 'control_objective_item', :locals => {
             :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
-  <% end -%>
+  <% end %>
 
-  <% unless readonly -%>
+  <% unless readonly %>
     <div class="items" style="margin-top: 2em;">
       <div class="column_headers">
         <div class="item_column" style="width: 95%;">
-          <h3><%= ControlObjective.human_name %></h3>
+          <h3><%= ControlObjective.model_name.human %></h3>
         </div>
         <div class="item_column" style="width: 2%;"></div>
         <div style="clear: both;"></div>
@@ -175,11 +172,12 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'review.add_control_objective'),
-        '#control_objective', :class => :add_nested_item,
-        :rel => :control_objectives %>
+      <%= link_to t(:'review.add_control_objective'), '#',
+        :'data-event' => :add_nested_item,
+        :'data-template' => :control_objective,
+        :'data-container' => :control_objectives %>
     </p>
-  <% end -%>
+  <% end %>
 
 
   <%= hidden_lock_version(r_f) %>
@@ -187,42 +185,50 @@
   <p>
     <span class="button"><%= r_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+  <%= content_for :js_extra do %>
+    <%= raw js_extra %>
+  <% end %>
+<% end %>
 <!--[eoform:review] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">
 //<![CDATA[
-  Event.observe('app_content', 'change', function(event) {
-    var element = $(event.element());
+  document.on('change', 'select.post_audit_qualification, select.pre_audit_qualification', function(event, element) {
+    var parent = element.up('.control_objective_item');
+    var selectedValues = new Array();
+    var preAuditElement = parent.down('.pre_audit_qualification');
+    var postAuditElement = parent.down('.post_audit_qualification');
+    var maxValue = $A(element.options).map(function(e) {
+      return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
+    }).max();
 
-    // Es un select de calificación post auditoría
-    if (element.hasClassName('post_audit_qualification')) {
-      var currentValue = $F(element).match(/^\d+$/) ?
-        parseInt($F(element)) : -1;
-      var values = $A($(element).options).map(function(e) {
-        return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
-      });
-      var percentage = currentValue != -1 ?
-        (currentValue * 100.0 / values.max()).toFixed(0) : 100;
-      var effectivenessElement = element.up('.control_objective_item').
-        down('input.effectiveness');
+    selectedValues.push($F(preAuditElement).match(/^\d+$/) ?
+      parseInt($F(preAuditElement)) : null);
+    selectedValues.push($F(postAuditElement).match(/^\d+$/) ?
+      parseInt($F(postAuditElement)) : null);
 
-      effectivenessElement.setValue(new String("#{percentage}%").interpolate(
-        {percentage: percentage}));
+    var total = selectedValues.compact().size() == 0 ? -1 :
+      selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
 
-      var oldColor = effectivenessElement.getStyle('border-color');
+    var percentage = total == -1 || maxValue == 0 ? 100 :
+      ((total / selectedValues.compact().size()) * 100.0 / maxValue).toFixed(0);
+    var effectivenessElement = parent.down('input.effectiveness');
 
-      if(!oldColor) {
-        effectivenessElement.setStyle({borderColor: '#47ae00'});
-        Element.setStyle.delay(0.8, effectivenessElement,
-          {borderColor: oldColor});
-      }
+    effectivenessElement.setValue(new String("#{percentage}%").interpolate(
+      {percentage: percentage}));
+
+    var oldColor = effectivenessElement.getStyle('border-color');
+
+    if(!oldColor) {
+      effectivenessElement.setStyle({borderColor: '#47ae00'});
+      Element.setStyle.delay(0.8, effectivenessElement,
+        {borderColor: oldColor});
     }
   });
 
   if($('review_plan_item_id')) {
     Event.observe('review_plan_item_id', 'change', function() {
-      var data_url = '<%= url_for :action => :plan_item_data %>';
+      var data_url = '<%= plan_item_data_reviews_path %>';
       var amount_url = '<%= estimated_amount_reviews_path %>';
       var element = $(this);
 

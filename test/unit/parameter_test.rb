@@ -63,12 +63,12 @@ class ParameterTest < ActiveSupport::TestCase
     @parameter.organization_id = nil
     assert @parameter.invalid?
     assert_equal 3, @parameter.errors.count
-    assert_equal error_message_from_model(@parameter, :name, :blank),
-      @parameter.errors.on(:name)
-    assert_equal error_message_from_model(@parameter, :value, :blank),
-      @parameter.errors.on(:value)
-    assert_equal error_message_from_model(@parameter, :organization_id, :blank),
-      @parameter.errors.on(:organization_id)
+    assert_equal [error_message_from_model(@parameter, :name, :blank)],
+      @parameter.errors[:name]
+    assert_equal [error_message_from_model(@parameter, :value, :blank)],
+      @parameter.errors[:value]
+    assert_equal [error_message_from_model(@parameter, :organization_id,
+        :blank)], @parameter.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -76,8 +76,8 @@ class ParameterTest < ActiveSupport::TestCase
     @parameter.name = 'abcdd' * 21
     assert @parameter.invalid?
     assert_equal 1, @parameter.errors.count
-    assert_equal error_message_from_model(@parameter, :name, :too_long,
-      :count => 100), @parameter.errors.on(:name)
+    assert_equal [error_message_from_model(@parameter, :name, :too_long,
+      :count => 100)], @parameter.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -85,8 +85,8 @@ class ParameterTest < ActiveSupport::TestCase
     @parameter.name = '?123'
     assert @parameter.invalid?
     assert_equal 1, @parameter.errors.count
-    assert_equal error_message_from_model(@parameter, :name, :invalid),
-      @parameter.errors.on(:name)
+    assert_equal [error_message_from_model(@parameter, :name, :invalid)],
+      @parameter.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -101,8 +101,8 @@ class ParameterTest < ActiveSupport::TestCase
 
     assert parameter.invalid?
     assert_equal 1, parameter.errors.count
-    assert_equal error_message_from_model(parameter, :name, :taken),
-      parameter.errors.on(:name)
+    assert_equal [error_message_from_model(parameter, :name, :taken)],
+      parameter.errors[:name]
   end
 
   test 'find parameter' do

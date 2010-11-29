@@ -47,10 +47,10 @@ class GroupTest < ActiveSupport::TestCase
     @group.admin_email = ' '
     assert @group.invalid?
     assert_equal 2, @group.errors.count
-    assert_equal error_message_from_model(@group, :name, :blank),
-      @group.errors.on(:name)
-    assert_equal error_message_from_model(@group, :admin_email, :blank),
-      @group.errors.on(:admin_email)
+    assert_equal [error_message_from_model(@group, :name, :blank)],
+      @group.errors[:name]
+    assert_equal [error_message_from_model(@group, :admin_email, :blank)],
+      @group.errors[:admin_email]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -60,12 +60,12 @@ class GroupTest < ActiveSupport::TestCase
     @group.admin_email = "#{'abcdd' * 20}@test.com"
     assert @group.invalid?
     assert_equal 3, @group.errors.count
-    assert_equal error_message_from_model(@group, :name, :too_long,
-      :count => 255), @group.errors.on(:name)
-    assert_equal error_message_from_model(@group, :admin_hash, :too_long,
-      :count => 255), @group.errors.on(:admin_hash)
-    assert_equal error_message_from_model(@group, :admin_email, :too_long,
-      :count => 100), @group.errors.on(:admin_email)
+    assert_equal [error_message_from_model(@group, :name, :too_long,
+      :count => 255)], @group.errors[:name]
+    assert_equal [error_message_from_model(@group, :admin_hash, :too_long,
+      :count => 255)], @group.errors[:admin_hash]
+    assert_equal [error_message_from_model(@group, :admin_email, :too_long,
+      :count => 100)], @group.errors[:admin_email]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -74,10 +74,10 @@ class GroupTest < ActiveSupport::TestCase
     @group.admin_email = groups(:second_group).admin_email
     assert @group.invalid?
     assert_equal 2, @group.errors.count
-    assert_equal error_message_from_model(@group, :name, :taken),
-      @group.errors.on(:name)
-    assert_equal error_message_from_model(@group, :admin_email, :taken),
-      @group.errors.on(:admin_email)
+    assert_equal [error_message_from_model(@group, :name, :taken)],
+      @group.errors[:name]
+    assert_equal [error_message_from_model(@group, :admin_email, :taken)],
+      @group.errors[:admin_email]
   end
 
   test 'send group welcome email' do

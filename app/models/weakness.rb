@@ -3,12 +3,12 @@ class Weakness < Finding
   attr_reader :approval_errors
 
   # Named scopes
-  named_scope :all_for_report, :order => 'risk DESC, state ASC', :conditions =>
+  scope :all_for_report, :order => 'risk DESC, state ASC', :conditions =>
     {:state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true}
 
   # Restricciones
-  validates_presence_of :risk, :priority
+  validates :risk, :priority, :presence => true
   validates_each :review_code do |record, attr, value|
     prefix = record.get_parameter(:admin_code_prefix_for_weaknesses, false,
       record.control_objective_item.try(:review).try(:organization).try(:id))

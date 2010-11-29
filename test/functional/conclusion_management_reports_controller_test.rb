@@ -14,7 +14,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|

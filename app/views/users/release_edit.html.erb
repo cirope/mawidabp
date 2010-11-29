@@ -1,4 +1,4 @@
-<% form_for @user, :url => release_update_user_path(@user) do |f| -%>
+<%= form_for @user, :url => release_update_user_path(@user) do |f| %>
   <%= f.error_messages %>
   <p class="form_item">
     <%= content_tag :label, t(:'user.release_with_findings'),
@@ -11,7 +11,7 @@
     <%= check_box_tag 'user[with_reviews]', 1, true, :class => :inline_item %>
   </p>
 
-  <% unless @user.reallocation_errors.blank? -%>
+  <% unless @user.reallocation_errors.blank? %>
     <p style="margin: 1em 0em;">
       <%= link_to_function t(:'label.details'),
         "$('error_details').showOrHide()", :class => 'bold red' %>
@@ -19,9 +19,9 @@
         <%= array_to_ul(@user.reallocation_errors, :class => :raw_list) %>
       </div>
     </p>
-  <% end -%>
+  <% end %>
 
-  <h1 style="clear: both;"><%= User.human_name %></h1>
+  <h1 style="clear: both;"><%= User.model_name.human %></h1>
   <p>
     <b><%= User.human_attribute_name 'user' %>:</b>
     <%=h @user.user %>
@@ -39,7 +39,7 @@
   <p>
     <span class="button"><%= f.submit t(:'user.release') %></span>
   </p>
-<% end -%>
+<% end %>
 <%= set_focus_to_first_element %>
 
 <div id="links">

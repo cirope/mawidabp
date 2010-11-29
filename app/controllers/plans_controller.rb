@@ -94,7 +94,7 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        flash[:notice] = t :'plan.correctly_created'
+        flash.notice = t :'plan.correctly_created'
         format.html { redirect_to(plans_path) }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
@@ -119,7 +119,7 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
-        flash[:notice] = t :'plan.correctly_updated'
+        flash.notice = t :'plan.correctly_updated'
         format.html { redirect_to(plans_path) }
         format.xml  { head :ok }
       else
@@ -129,7 +129,7 @@ class PlansController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'plan.stale_object_error'
+    flash.alert = t :'plan.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -141,7 +141,7 @@ class PlansController < ApplicationController
     @plan = find_with_organization(params[:id])
 
     unless @plan.destroy
-      flash[:alert] = t :'plan.errors.can_not_be_destroyed'
+      flash.alert = t :'plan.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

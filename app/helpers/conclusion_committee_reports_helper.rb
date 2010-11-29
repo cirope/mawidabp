@@ -1,7 +1,7 @@
 module ConclusionCommitteeReportsHelper
   def synthesis_report_score_average(title, scores)
     unless scores.blank?
-      "<strong>#{title}</strong>: <em>#{(scores.sum.to_f / scores.size).round}%</em>"
+      raw("<strong>#{title}</strong>: <em>#{(scores.sum.to_f / scores.size).round}%</em>")
     else
       t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
     end

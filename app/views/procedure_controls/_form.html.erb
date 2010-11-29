@@ -1,14 +1,12 @@
 <!--[form:procedure_control]-->
-<% form_for @procedure_control do |pc_f| -%>
-  <% content_for :js_extra do -%>
-    <%= "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
-    <%= 'var procedureControlItemHash = new Hash();' %>
-  <% end -%>
+<%= form_for @procedure_control do |pc_f| %>
+  <% js_extra = "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
+  <% js_extra << 'var procedureControlItemHash = new Hash();' %>
 
   <%= pc_f.error_messages %>
 
   <div class="form_column_left">
-    <% if (controller.action_name == 'new' || controller.action_name == 'create') -%>
+    <% if (controller.action_name == 'new' || controller.action_name == 'create') %>
       <p class="form_item">
         <%= pc_f.label :period_id, nil, :class => :inline %>
         <%= pc_f.select :period_id,
@@ -23,16 +21,16 @@
           :value => @procedure_control.period.try(:inspect), :readonly => true,
           :size => nil, :class => :inline_item %>
       </p>
-    <% end -%>
+    <% end %>
   </div>
 
   <div class="items">
     <div class="column_headers nested_items">
       <div class="item_column" style="width: 23%;">
-        <h3><%= BestPractice.human_name %></h3>
+        <h3><%= BestPractice.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 23%;">
-        <h3><%= ProcessControl.human_name %></h3>
+        <h3><%= ProcessControl.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 23%;">
         <h3><%= ProcedureControlItem.human_attribute_name :aproach %></h3>
@@ -45,27 +43,26 @@
     </div>
 
     <div id="procedure_control_items">
-      <% pci_template = nil -%>
+      <% pci_template = nil %>
       <% @procedure_control.procedure_control_items.build if @procedure_control.procedure_control_items.empty? %>
-      <% pc_f.fields_for :procedure_control_items,
-        @procedure_control.procedure_control_items.sort do |pci_f| -%>
-        <% content_for :js_extra do -%>
-          <% pci_template ||= generate_template(pci_f,
-            :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
-            :locals => {:control_objectives => []}) -%>
-          <%= "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 -%>
-          <% pci_template = 0 -%>
-        <% end -%>
+      <%= pc_f.fields_for :procedure_control_items,
+        @procedure_control.procedure_control_items.sort do |pci_f| %>
+        <% pci_template ||= generate_template(pci_f,
+          :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
+          :locals => {:control_objectives => []}) unless pci_template == 0 %>
+        <% js_extra << "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
+        <% pci_template = 0 %>
         <%= render :partial => 'procedure_control_item', :locals =>
           {:f => pci_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'procedure_control.add_procedure_control_item'),
-      '#procedure_control_item', :class => :add_nested_item,
-      :rel => :procedure_control_items %>
+    <%= link_to t(:'procedure_control.add_procedure_control_item'), '#',
+      :'data-template' => :procedure_control_item,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :procedure_control_items %>
   </p>
 
   <div style="display:none">
@@ -75,7 +72,10 @@
   <p>
     <span class="button"><%= pc_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+  <%= content_for :js_extra do %>
+    <%= raw js_extra %>
+  <% end %>
+<% end %>
 <!--[eoform:procedure_control] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

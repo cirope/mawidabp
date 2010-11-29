@@ -64,7 +64,7 @@ class InlineHelpsController < ApplicationController
 
     respond_to do |format|
       if @inline_help.save
-        flash[:notice] = t :'inline_help.correctly_created'
+        flash.notice = t :'inline_help.correctly_created'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || inline_helps_path) }
         format.xml  { render :xml => @inline_help, :status => :created, :location => @inline_help }
@@ -83,7 +83,7 @@ class InlineHelpsController < ApplicationController
 
     respond_to do |format|
       if @inline_help.update_attributes(params[:inline_help])
-        flash[:notice] = t :'inline_help.correctly_updated'
+        flash.notice = t :'inline_help.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || inline_helps_path) }
         format.xml  { head :ok }
@@ -94,7 +94,7 @@ class InlineHelpsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'inline_help.stale_object_error'
+    flash.alert = t :'inline_help.stale_object_error'
     redirect_to :action => :edit
   end
 

@@ -52,7 +52,7 @@ class CommentTest < ActiveSupport::TestCase
     @comment.comment = ' '
     assert @comment.invalid?
     assert_equal 1, @comment.errors.count
-    assert_equal error_message_from_model(@comment, :comment, :blank),
-      @comment.errors.on(:comment)
+    assert_equal [error_message_from_model(@comment, :comment, :blank)],
+      @comment.errors[:comment]
   end
 end

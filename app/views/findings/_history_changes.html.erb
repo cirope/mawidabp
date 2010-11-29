@@ -2,36 +2,36 @@
   <div>
     <h2><%= t(:'finding.status_change_history') %></h2>
     <ul class="raw_list">
-      <% finding.status_change_history.each do |historic_finding| -%>
+      <% finding.status_change_history.each do |historic_finding| %>
         <% title = historic_finding.user_who_make_it.try(:full_name) ||
-          t(:'message.automatic_by_the_system') -%>
+          t(:'message.automatic_by_the_system') %>
         <li>
-          <acronym title="<%= title %>"><%= historic_finding.state_text %></acronym>
+          <abbr title="<%= title %>"><%= historic_finding.state_text %></abbr>
           (<%= l(historic_finding.updated_at, :format => :long) %>)
         </li>
-      <% end -%>
+      <% end %>
     </ul>
 
-    <% unless finding.comments.reject(&:new_record?).empty? -%>
+    <% unless finding.comments.reject(&:new_record?).empty? %>
       <h2><%= t(:'finding.comments') %></h2>
       <table class="summary_table">
         <thead>
           <tr>
             <th><%= Comment.human_attribute_name :created_at %></th>
-            <th><%= User.human_name %></th>
+            <th><%= User.model_name.human %></th>
             <th><%= Comment.human_attribute_name :comment %></th>
           </tr>
         </thead>
         <tbody>
-          <% finding.comments.reject(&:new_record?).each do |comment| -%>
+          <% finding.comments.reject(&:new_record?).each do |comment| %>
             <tr>
               <td><%= l comment.created_at, :format => :minimal %></td>
               <td><%= h comment.user.try(:full_name) %></td>
               <td><%= h comment.comment %></td>
             </tr>
-          <% end -%>
+          <% end %>
         </tbody>
       </table>
-    <% end -%>
+    <% end %>
   </div>
 </div>

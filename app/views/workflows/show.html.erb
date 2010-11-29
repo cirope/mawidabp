@@ -1,4 +1,4 @@
-<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" -%>
+<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" %>
 <div id="showed_data">
   <h1><%=h @workflow.review %></h1>
 
@@ -21,7 +21,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @workflow.workflow_items.each do |workflow_item| -%>
+      <% @workflow.workflow_items.each do |workflow_item| %>
         <tr>
           <td><%= h workflow_item.order_number %></td>
           <td><%= simple_format h(workflow_item.task) %></td>
@@ -32,7 +32,7 @@
           <td><%= currency_mask % workflow_item.material_cost %></td>
           <td><%= currency_mask % workflow_item.cost %></td>
         </tr>
-      <% end -%>
+      <% end %>
       <tr>
         <td colspan="7"></td>
         <td><b><%= @workflow.cost %></b></td>
@@ -40,11 +40,11 @@
     </tbody>
   </table>
 
-  <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } -%>
+  <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
     <h1><%= t(:'workflow.pdf.resources_utilization') %></h1>
 
-    <% @workflow.workflow_items.each do |workflow_item| -%>
-      <% unless workflow_item.resource_utilizations.blank? -%>
+    <% @workflow.workflow_items.each do |workflow_item| %>
+      <% unless workflow_item.resource_utilizations.blank? %>
         <h2 style="font-weight: normal;">
           <b>(<%= workflow_item.order_number %>)</b> <%= workflow_item.task %>
         </h2>
@@ -58,23 +58,23 @@
             </tr>
           </thead>
           <tbody>
-            <% workflow_item.resource_utilizations.each do |ru| -%>
+            <% workflow_item.resource_utilizations.each do |ru| %>
               <tr>
                 <td><%= ru.resource.resource_name %></td>
                 <td><%= ru.units %></td>
                 <td><%= currency_mask % ru.cost_per_unit %></td>
                 <td><%= currency_mask % ru.cost %></td>
               </tr>
-            <% end -%>
+            <% end %>
             <tr>
               <td colspan="3"></td>
               <td><b><%= workflow_item.cost %></b></td>
             </tr>
           </tbody>
         </table>
-      <% end -%>
-    <% end -%>
-  <% end -%>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>
 
 <div id="links">

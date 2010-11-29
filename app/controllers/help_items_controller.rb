@@ -65,7 +65,7 @@ class HelpItemsController < ApplicationController
 
     respond_to do |format|
       if @help_item.save
-        flash[:notice] = t :'help_item.correctly_created'
+        flash.notice = t :'help_item.correctly_created'
         format.html { redirect_to(show_content_help_content_path(@help_item)) }
         format.xml  { render :xml => @help_item, :status => :created, :location => @help_item }
       else
@@ -85,7 +85,7 @@ class HelpItemsController < ApplicationController
 
     respond_to do |format|
       if @help_item.update_attributes(params[:help_item])
-        flash[:notice] = t :'help_item.correctly_updated'
+        flash.notice = t :'help_item.correctly_updated'
         format.html { redirect_to(show_content_help_content_path(@help_item)) }
         format.xml  { head :ok }
       else
@@ -95,7 +95,7 @@ class HelpItemsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'help_item.stale_object_error'
+    flash.alert = t :'help_item.stale_object_error'
     redirect_to :action => :edit
   end
 

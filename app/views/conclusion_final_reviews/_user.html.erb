@@ -1,9 +1,9 @@
 <% id = user.id || 'NEW_RECORD' %>
-<% hide = is_dynamic || user.marked_for_destruction? -%>
-<div class="user item" <%= 'style="display: none;"' if hide %> id="user_<%= id %>">
+<% hide = is_dynamic || user.marked_for_destruction? %>
+<div class="user item" <%= raw 'style="display: none;"' if hide %> id="user_<%= id %>">
   <div>
     <div class="item_field" style="width: 50%;">
-      <% if is_dynamic -%>
+      <% if is_dynamic %>
         <div class="search">
           <%= hidden_field_tag "user[#{id}][id]", user.id,
             :class => :autocomplete_id_item %>
@@ -15,19 +15,19 @@
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'user_data'} %>
         </div>
-      <% else -%>
+      <% else %>
         <%= hidden_field_tag "user[#{id}][id]", user.id %>
         <%= text_field_tag "user[#{id}][data]",
           user.new_record? ? nil : "#{user.full_name} <#{user.email}>",
           :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_item_link nil, 'user' -%>
+      <%= remove_item_link nil, 'user' %>
     </div>
   </div>
 </div>
 
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('user_<%= id %>');</script>
-<% end -%>
+<% end %>

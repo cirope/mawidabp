@@ -1,29 +1,29 @@
 <!--[form:notification]-->
-<% form_for @notification do |n_f| -%>
+<%= form_for @notification do |n_f| %>
   <div class="form_column_left">
-    <% unless @notification.findings.blank? -%>
+    <% unless @notification.findings.blank? %>
       <p>
         <b><%= Notification.human_attribute_name :findings %>:</b>
       </p>
       <ul class="raw_list">
-        <% @notification.findings.map do |f| -%>
+        <% @notification.findings.map do |f| %>
           <li><%= link_to_if f.users.include?(@auth_user),
             "#{f.review_code} (#{f.review.identification})",
             finding_path(f.try(:pending?) ? 'incomplete' : 'complete', f) %></li>
-        <% end -%>
+        <% end %>
       </ul>
-    <% end -%>
-    <% unless @notification.conclusion_reviews.blank? -%>
+    <% end %>
+    <% unless @notification.conclusion_reviews.blank? %>
       <p>
         <b><%= Notification.human_attribute_name :conclusion_reviews %>:</b>
       </p>
       <ul style="margin: .5em 0em .5em 3em;">
-        <% @notification.conclusion_reviews.map do |cr| -%>
+        <% @notification.conclusion_reviews.map do |cr| %>
           <li><%= link_to cr.review.identification, cr.kind_of?(ConclusionFinalReview) ?
             conclusion_final_review_path(cr) : conclusion_draft_review_path(cr) %></li>
-        <% end -%>
+        <% end %>
       </ul>
-    <% end -%>
+    <% end %>
     <p>
       <b><%= Notification.human_attribute_name :status %>:</b>
       <%=h @notification.status_text %>
@@ -53,7 +53,7 @@
   <p>
      <span class="button"><%= n_f.submit t(:'label.save') %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:notification] -->
 <%= set_focus_to_first_element %>
 

@@ -2,9 +2,9 @@
   <div id="logo">
     <%= image_tag 'logo_mini.png', :size => '150x40', :alt => t(:app_name) %>
   </div>
-  <% if @organization || @group_admin_mode -%>
+  <% if @organization || @group_admin_mode %>
     <!--[form:user]-->
-    <% form_for @user, :url => create_session_users_path do |f| -%>
+    <%= form_for @user, :url => create_session_users_path do |f| %>
       <p>
         <%= f.label :user %>
         <%= f.text_field :user, :maxlength => 30, :size => 10 %>
@@ -16,9 +16,9 @@
       <div class="submit">
         <span class="button"><%= f.submit t(:'user.enter') %></span>
       </div>
-    <% end -%>
+    <% end %>
     <!--[eoform:user] -->
-    <% content_for :extra_bottom do -%>
+    <% content_for :extra_bottom do %>
       <div id="unsupported_browser" style="display: none;">
         <%= textilize t(:'message.unsupported_browser',
           :url => request.host_with_port) %>
@@ -32,10 +32,10 @@
       </script>
 
       <%= set_focus_to_first_element %>
-    <% end -%>
-  <% else -%>
+    <% end %>
+  <% else %>
     <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
       <%= t :'message.no_organization' %>
     </div>
-  <% end -%>
+  <% end %>
 </div>

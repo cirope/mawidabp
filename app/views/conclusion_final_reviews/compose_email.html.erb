@@ -1,10 +1,10 @@
 <!--[form:conclusion_final_review]-->
-<% form_for @conclusion_final_review,
+<%= form_for @conclusion_final_review,
   :url => send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
-  <% content_for :js_extra do -%>
-    <%= "var user='" + escape_javascript(render :partial => 'user',
+  <% content_for :js_extra do %>
+    <%= raw "var user='" + escape_javascript(render :partial => 'user',
       :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
-  <% end -%>
+  <% end %>
   <%= f.error_messages %>
   
   <div class="form_column_left">
@@ -35,14 +35,14 @@
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 50%;">
-        <h3><%= User.human_name %></h3>
+        <h3><%= User.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 10%;">&nbsp;</div>
       <div style="clear: both;"></div>
     </div>
 
     <div id="users">
-      <% @conclusion_final_review.review.users.each do |user| -%>
+      <% @conclusion_final_review.review.users.each do |user| %>
         <%= render :partial => 'user', :locals => {:user => user,
           :is_dynamic => false} %>
       <% end %>
@@ -50,8 +50,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'conclusion_review.add_recipient'), '#user',
-      :class => :add_nested_item, :rel => 'users' %>
+    <%= link_to t(:'conclusion_review.add_recipient'), '#',
+      :'data-template' => :user, :'data-event' => :add_nested_item,
+      :'data-container' => :users %>
   </p>
 
   <p>

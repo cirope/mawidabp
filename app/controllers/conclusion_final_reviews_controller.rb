@@ -105,7 +105,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     respond_to do |format|
       if @conclusion_final_review.save
-        flash[:notice] = t :'conclusion_final_review.correctly_created'
+        flash.notice = t :'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_path) }
         format.xml  { render :xml => @conclusion_final_review, :status => :created, :location => @conclusion_final_review }
       else
@@ -127,7 +127,7 @@ class ConclusionFinalReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_final_review.update_attributes(
           params[:conclusion_final_review])
-        flash[:notice] = t :'conclusion_final_review.correctly_updated'
+        flash.notice = t :'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_path) }
         format.xml  { head :ok }
       else
@@ -137,7 +137,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'conclusion_final_review.stale_object_error'
+    flash.alert = t :'conclusion_final_review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -258,7 +258,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     unless users.blank?
-      flash[:notice] = t(:'conclusion_review.review_sended')
+      flash.notice = t(:'conclusion_review.review_sended')
 
       redirect_to edit_conclusion_final_review_path(@conclusion_final_review)
     else

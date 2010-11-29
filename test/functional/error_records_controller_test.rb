@@ -4,24 +4,24 @@ require 'test_helper'
 class ErrorRecordsControllerTest < ActionController::TestCase
   fixtures :error_records
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => error_records(:administrator_user_failed_attempt).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :show, id_param],
+      [:get, :index]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end

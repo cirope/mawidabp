@@ -47,10 +47,10 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.unit = '1.55'
     assert @resource_class.invalid?
     assert_equal 2, @resource_class.errors.count
-    assert_equal error_message_from_model(@resource_class, :name, :invalid),
-      @resource_class.errors.on(:name)
-    assert_equal error_message_from_model(@resource_class, :unit,
-      :not_a_number), @resource_class.errors.on(:unit)
+    assert_equal [error_message_from_model(@resource_class, :name, :invalid)],
+      @resource_class.errors[:name]
+    assert_equal [error_message_from_model(@resource_class, :unit,
+      :not_an_integer)], @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -59,10 +59,10 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.unit = '  '
     assert @resource_class.invalid?
     assert_equal 2, @resource_class.errors.count
-    assert_equal error_message_from_model(@resource_class, :name, :blank),
-      @resource_class.errors.on(:name)
-    assert_equal error_message_from_model(@resource_class, :unit, :blank),
-      @resource_class.errors.on(:unit)
+    assert_equal [error_message_from_model(@resource_class, :name, :blank)],
+      @resource_class.errors[:name]
+    assert_equal [error_message_from_model(@resource_class, :unit, :blank)],
+      @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -70,8 +70,8 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.name = 'abcdd' * 52
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
-    assert_equal error_message_from_model(@resource_class, :name, :too_long,
-      :count => 255), @resource_class.errors.on(:name)
+    assert_equal [error_message_from_model(@resource_class, :name, :too_long,
+      :count => 255)], @resource_class.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -79,8 +79,8 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.name = resource_classes(:hardware_resources).name
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
-    assert_equal error_message_from_model(@resource_class, :name, :taken),
-      @resource_class.errors.on(:name)
+    assert_equal [error_message_from_model(@resource_class, :name, :taken)],
+      @resource_class.errors[:name]
 
     @resource_class.organization_id = organizations(:second_organization).id
     assert @resource_class.valid?
@@ -92,8 +92,9 @@ class ResourceClassTest < ActiveSupport::TestCase
       ResourceClass::TYPES.values.sort.last.next
     assert @resource_class.invalid?
     assert_equal 1, @resource_class.errors.count
-    assert_equal error_message_from_model(@resource_class, :resource_class_type,
-      :inclusion), @resource_class.errors.on(:resource_class_type)
+    assert_equal [error_message_from_model(@resource_class,
+        :resource_class_type, :inclusion)],
+      @resource_class.errors[:resource_class_type]
   end
 
   test 'dynamic functions' do

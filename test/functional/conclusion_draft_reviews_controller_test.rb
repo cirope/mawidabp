@@ -7,22 +7,31 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
     @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => conclusion_reviews(:conclusion_with_conclusion_draft_review).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end
@@ -347,7 +356,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     end
 
     assert_equal 2, ActionMailer::Base.deliveries.last.attachments.size
-    assert_match /textile/, ActionMailer::Base.deliveries.last.body
+
+    text_part = ActionMailer::Base.deliveries.last.parts.detect {
+      |p| p.content_type.match(/text/)
+    }.body.decoded
+
+    assert_match /textile/, text_part
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       put :send_by_email, {
@@ -368,7 +382,12 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     end
 
     assert_equal 3, ActionMailer::Base.deliveries.last.attachments.size
-    assert_match /textile/, ActionMailer::Base.deliveries.last.body
+
+    text_part = ActionMailer::Base.deliveries.last.parts.detect {
+      |p| p.content_type.match(/text/)
+    }.body.decoded
+
+    assert_match /textile/, text_part
   end
 
   test 'can not send by email with final review' do

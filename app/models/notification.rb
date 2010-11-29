@@ -8,9 +8,8 @@ class Notification < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :not_confirmed, :conditions =>
-    { :status => STATUS[:unconfirmed] }
-  named_scope :confirmed_or_stale, :conditions => [
+  scope :not_confirmed, where(:status => STATUS[:unconfirmed])
+  scope :confirmed_or_stale, :conditions => [
     [
       'status = :status_confirmed',
       [
@@ -23,7 +22,7 @@ class Notification < ActiveRecord::Base
       :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
     }
   ]
-  named_scope :rejected_or_new, :conditions => [
+  scope :rejected_or_new, :conditions => [
     [
       'status = :status_rejected',
       [
@@ -38,7 +37,7 @@ class Notification < ActiveRecord::Base
   ]
 
   # Restricciones
-  validates_presence_of :confirmation_hash, :user_id
+  validates :confirmation_hash, :user_id, :presence => true
   validates_numericality_of :user_who_confirm_id, :user_id, :status,
     :only_integer => true, :allow_nil => true, :allow_blank => true
   validates_length_of :confirmation_hash, :maximum => 255, :allow_nil => true,

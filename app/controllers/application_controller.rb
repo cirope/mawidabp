@@ -16,28 +16,25 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '6f154c0c69d58a9c322590ea42fbe654'
 
-  # See ActionController::Base for details
-  # Uncomment this to filter the contents of submitted sensitive data parameters
-  # from your application log (in this case, all fields with names like "password").
-  filter_parameter_logging :password, :password_confirmation
-
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
-  def rescue_action(exception)
-    STDERR << "#{exception.class}: #{exception.message}\n\n"
-    exception.backtrace.each { |l| STDERR << "#{l}\n" }
+  rescue_from Exception do |exception|
+    begin
+      STDERR << "#{exception.class}: #{exception.message}\n\n"
+      exception.backtrace.each { |l| STDERR << "#{l}\n" }
 
-    @title = t :'error.title'
-    create_exception_file exception
-    
-    if login_check && response.redirected_to.nil?
-      render :template => 'errors/show', :locals => { :error => exception }
+      @title = t :'error.title'
+      create_exception_file exception
+
+      if login_check && response.redirect_url.blank?
+        render :template => 'errors/show', :locals => { :error => exception }
+      end
+
+      # En caso que la presentación misma de la excepción no salga como se espera
+      rescue => ex
+        STDERR << "#{ex.class}: #{ex.message}\n\n"
+        ex.backtrace.each { |l| STDERR << "#{l}\n" }
     end
-
-  # En caso que la presentación misma de la excepción no salga como se espera
-  rescue => ex
-    STDERR << "#{ex.class}: #{ex.message}\n\n"
-    ex.backtrace.each { |l| STDERR << "#{l}\n" }
   end
 
   def current_user
@@ -88,7 +85,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     unless login_check
-      go_to = request.path
+      go_to = request.fullpath
       session[:go_to] = go_to unless action == :logout || request.xhr?
       @auth_user = nil
       redirect_to_login t(:'message.must_be_authenticated'), :alert
@@ -99,9 +96,9 @@ class ApplicationController < ActionController::Base
 
       session[:back_to] = nil if action == :index
 
-      if @auth_user.must_change_the_password? &&
+      if @auth_user.try(:must_change_the_password?) &&
            ![:edit_password, :update_password].include?(action)
-        flash[:notice] ||= t :'message.must_change_the_password'
+        flash.notice ||= t :'message.must_change_the_password'
         redirect_to edit_password_user_url(@auth_user)
       end
 
@@ -115,9 +112,9 @@ class ApplicationController < ActionController::Base
         :destroy => :erase
       })
       
-      unless @auth_user.change_password_hash
+      unless @auth_user.try(:change_password_hash)
         @auth_privileges = @auth_organization ?
-          @auth_user.privileges(@auth_organization) : {}
+          @auth_user.try(:privileges, @auth_organization) : {}
       else
         @auth_privileges = {}
       end
@@ -144,7 +141,7 @@ class ApplicationController < ActionController::Base
       end
     else
       restart_session
-      go_to = request.path
+      go_to = request.fullpath
       session[:go_to] = params[:action].try(:to_sym) != :logout ? go_to : nil
       @auth_user = nil
       redirect_to_login t(:'message.session_time_expired'), :alert
@@ -213,7 +210,7 @@ class ApplicationController < ActionController::Base
 
     unless allowed_by_type && allowed_by_privileges
       unless request.xhr?
-        flash[:alert] = t(:'message.insufficient_privileges')
+        flash.alert = t(:'message.insufficient_privileges')
         redirect_to :back
       else
         render :partial => 'shared/ajax_message', :layout => false,
@@ -228,7 +225,7 @@ class ApplicationController < ActionController::Base
 
   def check_group_admin
     unless @auth_user.group_admin == true
-      flash[:alert] = t(:'message.insufficient_privileges')
+      flash.alert = t(:'message.insufficient_privileges')
       redirect_to :back
     end
 
@@ -257,15 +254,14 @@ class ApplicationController < ActionController::Base
 
   def make_date_range(parameters = nil)
     if parameters
-      from_date = ValidatesTimeliness::Parser.parse(parameters[:from_date],
-        :date)
-      to_date = ValidatesTimeliness::Parser.parse(parameters[:to_date], :date)
+      from_date = Timeliness::Parser.parse(parameters[:from_date], :date)
+      to_date = Timeliness::Parser.parse(parameters[:to_date], :date)
     end
 
     from_date ||= Date.today.at_beginning_of_month
     to_date ||= Date.today.at_end_of_month
 
-    [from_date, to_date].sort
+    [from_date.to_date, to_date.to_date].sort
   end
 
   def extract_operator(search_term)

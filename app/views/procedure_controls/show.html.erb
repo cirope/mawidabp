@@ -1,7 +1,7 @@
 <div id="showed_data">
-  <h1><%= Period.human_name %>: <%=h @procedure_control.period.inspect %></h1>
+  <h1><%= Period.model_name.human %>: <%=h @procedure_control.period.inspect %></h1>
 
-  <% @procedure_control.procedure_control_items.each do |pci| -%>
+  <% @procedure_control.procedure_control_items.each do |pci| %>
     <h3><%= "#{pci.best_practice.name} (#{pci.process_control.name})" %></h3>
     <table class="summary_table">
       <thead>
@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <% pci.procedure_control_subitems.each do |pcs| -%>
+        <% pci.procedure_control_subitems.each do |pcs| %>
           <tr>
             <td><%= simple_format h(pcs.control_objective_text) %></td>
             <td><%= simple_format h(pcs.controls.first.control) %></td>
@@ -24,10 +24,10 @@
             <td><%= simple_format h(pcs.controls.first.effects) %></td>
             <td><%= pcs.risk_text %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 </div>
 
 <% unless controller.request.xhr? %>
@@ -37,4 +37,4 @@
     <%= link_to t(:'label.download'), export_to_pdf_procedure_control_path(@procedure_control) %> |
     <%= link_to_back %>
   </div>
-<% end -%>
+<% end %>

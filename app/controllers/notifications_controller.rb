@@ -53,7 +53,7 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       if @notification.update_attributes(params[:notification])
-        flash[:notice] = t :'notification.correctly_updated'
+        flash.notice = t :'notification.correctly_updated'
         format.html { redirect_to(notifications_path) }
         format.xml  { head :ok }
       else
@@ -63,7 +63,7 @@ class NotificationsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'notification.stale_object_error'
+    flash.alert = t :'notification.stale_object_error'
     redirect_to :action => :edit
   end
 

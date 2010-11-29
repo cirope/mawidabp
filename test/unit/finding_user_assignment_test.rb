@@ -62,9 +62,9 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     @finding_user_assignment.user_id = nil
     assert @finding_user_assignment.invalid?
     assert_equal 1, @finding_user_assignment.errors.count
-    assert_equal error_message_from_model(
-      @finding_user_assignment, :user_id, :blank),
-      @finding_user_assignment.errors.on(:user_id)
+    assert_equal [error_message_from_model(
+      @finding_user_assignment, :user_id, :blank)],
+      @finding_user_assignment.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -72,8 +72,8 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     @finding_user_assignment.user_id = '123-'
     assert @finding_user_assignment.invalid?
     assert_equal 1, @finding_user_assignment.errors.count
-    assert_equal error_message_from_model(
-      @finding_user_assignment, :user_id, :not_a_number),
-      @finding_user_assignment.errors.on(:user_id)
+    assert_equal [error_message_from_model(
+      @finding_user_assignment, :user_id, :not_a_number)],
+      @finding_user_assignment.errors[:user_id]
   end
 end

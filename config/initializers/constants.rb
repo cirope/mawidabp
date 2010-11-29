@@ -14,8 +14,6 @@ PRIVATE_PATH = File.join(Rails.root, 'private', File::SEPARATOR).freeze
 TEMP_PATH = File.join(Rails.root, 'tmp', File::SEPARATOR).freeze
 # Prefijo de la organización para administrar grupos
 APP_ADMIN_PREFIX = 'admin'.freeze
-# Ruta al directorio para realizar copias de seguridad
-APP_BACKUP_PATH = File.join(PRIVATE_PATH, 'backup_files', File::SEPARATOR).freeze
 # Ruta a los archivos subidos a la aplicación
 APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 # Ruta a las imágenes subidas a la aplicación
@@ -63,7 +61,9 @@ PRIVATE_FILES_PREFIX = 'private'.freeze
 # Expresión regular para dividir términos en una búsqueda
 SPLIT_AND_TERMS_REGEXP = /\s+y\s+|\s*[,;]\s*|\s+AND\s+/i
 # Ruta a un archivo para realizar las pruebas
-TEST_FILE = File.join(PUBLIC_PATH, '500.html').freeze
+TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
+# Ruta a un archivo para realizar las pruebas (ruta completa)
+TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (Rails.env == 'development' ?
     'mawidaweb.com.ar:3000' : 'mawidaweb.com.ar').freeze

@@ -6,7 +6,7 @@ class Detract < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :for_organization, lambda { |organization|
+  scope :for_organization, lambda { |organization|
     {
       :conditions => { :organization_id => organization.id }
     }

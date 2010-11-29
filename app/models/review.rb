@@ -32,16 +32,13 @@ class Review < ActiveRecord::Base
   before_validation :set_proper_parent#, :can_be_modified?
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:control_objective_item_ids]
-
   # Acceso a los atributos
   attr_reader :approval_errors, :procedure_control_subitem_ids
   attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
   attr_readonly :plan_item_id
   
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :include => :period,
       :conditions => {
@@ -51,7 +48,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_with_approved_draft, lambda {
+  scope :list_with_approved_draft, lambda {
     {
       :include => [:period, :conclusion_draft_review],
       :conditions => {
@@ -63,7 +60,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_with_final_review, lambda {
+  scope :list_with_final_review, lambda {
     {
       :include => [:period, :conclusion_final_review],
       :conditions => [
@@ -76,7 +73,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_without_final_review, lambda {
+  scope :list_without_final_review, lambda {
     {
       :include => [:period, :conclusion_final_review],
       :conditions => [
@@ -89,7 +86,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_without_draft_review, lambda {
+  scope :list_without_draft_review, lambda {
     {
       :include => [:period, :conclusion_draft_review],
       :conditions => [
@@ -102,7 +99,7 @@ class Review < ActiveRecord::Base
       :order => 'identification ASC'
     }
   }
-  named_scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
+  scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
     {
       :include => [:period, :conclusion_final_review,
         {:plan_item => {:business_unit => :business_unit_type}}],
@@ -126,7 +123,7 @@ class Review < ActiveRecord::Base
       ].join(', ')
     }
   }
-  named_scope :list_all_without_workflow, lambda { |period_id|
+  scope :list_all_without_workflow, lambda { |period_id|
     {
       :include => [:period, :workflow],
       :conditions => [
@@ -143,10 +140,10 @@ class Review < ActiveRecord::Base
         :order => "#{table_name}.identification ASC"
     }
   }
-  named_scope :internal_audit,
+  scope :internal_audit,
     :include => { :plan_item => {:business_unit => :business_unit_type} },
     :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  named_scope :external_audit,
+  scope :external_audit,
     :include => { :plan_item => {:business_unit => :business_unit_type} },
     :conditions => { "#{BusinessUnitType.table_name}.external" => true }
 
@@ -217,7 +214,7 @@ class Review < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'review.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -342,7 +339,7 @@ class Review < ActiveRecord::Base
         unless w.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Weakness.human_name} #{w.review_code}", w.approval_errors
+            "#{Weakness.model_name.human} #{w.review_code}", w.approval_errors
           ]
         end
       end
@@ -350,7 +347,7 @@ class Review < ActiveRecord::Base
       unless coi.must_be_approved?
         self.can_be_approved_by_force = false
         errors << [
-          "#{ControlObjectiveItem.human_name}: #{coi.control_objective_text}",
+          "#{ControlObjectiveItem.model_name.human}: #{coi.control_objective_text}",
           coi.approval_errors
         ]
       end
@@ -365,7 +362,7 @@ class Review < ActiveRecord::Base
       review_errors << I18n.t(:'review.errors.without_survey')
     end
 
-    errors << ["#{Review.human_name}", review_errors] unless review_errors.blank?
+    errors << ["#{Review.model_name.human}", review_errors] unless review_errors.blank?
 
     (@approval_errors = errors).blank?
   end
@@ -529,7 +526,7 @@ class Review < ActiveRecord::Base
     end
 
     column_data << {
-      'name' => "<b>#{Review.human_name}</b> ".to_iso,
+      'name' => "<b>#{Review.model_name.human}</b> ".to_iso,
       'relevance' => '',
       'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
     }
@@ -541,7 +538,7 @@ class Review < ActiveRecord::Base
       end
 
       column_data << {
-        'name' => "#{ProcessControl.human_name}: #{process_control}".to_iso,
+        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
         'relevance' => '',
         'effectiveness' => "#{effectiveness_average.round}%**"
       }
@@ -549,7 +546,7 @@ class Review < ActiveRecord::Base
       coi_data.each do |coi|
         column_data << {
           'name' =>
-            "        <C:bullet /> <i>#{ControlObjectiveItem.human_name}: " +
+            "        <C:bullet /> <i>#{ControlObjectiveItem.model_name.human}: " +
             "#{coi[0]}</i>".to_iso,
           'relevance' => "<i>#{coi[2]}</i>".to_iso,
           'effectiveness' => "<i>#{coi[1].round}%</i>"
@@ -724,7 +721,7 @@ class Review < ActiveRecord::Base
     end
 
     column_data << {
-      'name' => "<b>#{Review.human_name}</b>".to_iso,
+      'name' => "<b>#{Review.model_name.human}</b>".to_iso,
       'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
     }
 
@@ -734,7 +731,7 @@ class Review < ActiveRecord::Base
       end
 
       column_data << {
-        'name' => "#{ProcessControl.human_name}: #{process_control}".to_iso,
+        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
         'effectiveness' => "#{effectiveness_average.round}%**"
       }
     end
@@ -1099,7 +1096,7 @@ class Review < ActiveRecord::Base
       end
 
       if self.file_model
-        self.add_file_to_zip self.file_model.full_filename,
+        self.add_file_to_zip self.file_model.file.path,
           self.file_model.filename, dirs[:survey], zipfile
       end
 
@@ -1134,8 +1131,8 @@ class Review < ActiveRecord::Base
 
   def add_work_paper_to_zip(wp, dir, zipfile)
     if wp.file_model
-      self.add_file_to_zip(wp.file_model.full_filename, wp.file_model.filename,
-        dir, zipfile)
+      self.add_file_to_zip(wp.file_model.file.path,
+        wp.file_model.file_file_name, dir, zipfile)
     else
       identification = self.sanitized_identification
       wp.create_pdf_cover(identification, self)

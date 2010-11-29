@@ -1,6 +1,6 @@
-<% finding_answer = f.object -%>
-<% hide = is_dynamic || finding_answer.marked_for_destruction? -%>
-<div class="finding_answer item" <%= 'style="display: none;"' if hide %>>
+<% finding_answer = f.object %>
+<% hide = is_dynamic || finding_answer.marked_for_destruction? %>
+<div class="finding_answer item" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 20%; text-align: left;">
     <%= "#{finding_answer.user.last_name}, #{finding_answer.user.name}" %>
@@ -15,40 +15,40 @@
       {:prompt => true},
       {:disabled => !finding_answer.new_record?} %>
     </div>
-    <% if !f.object.file_model || f.object.file_model.new_record? -%>
+    <% if !f.object.file_model || f.object.file_model.new_record? %>
       <div class="item_field" style="width: 10%;">
-        <% if f.object.new_record? -%>
-          <% f.object.build_file_model -%>
-          <% f.fields_for :file_model do |fm_f| -%>
+        <% if f.object.new_record? %>
+          <% f.object.build_file_model %>
+          <%= f.fields_for :file_model do |fm_f| %>
             <span class="file_container">
-              <%= fm_f.file_field :uploaded_data, :class => 'inline_item file' %>
+              <%= fm_f.file_field :file, :class => 'inline_item file' %>
             </span>
-          <% end -%>
-        <% else -%>
+          <% end %>
+        <% else %>
           ---
-        <% end -%>
+        <% end %>
       </div>
-    <% else -%>
+    <% else %>
       <div class="item_field" style="width: 10%;">
-        <%= link_to_download f.object.file_model.public_filename %>
+        <%= link_to_download f.object.file_model.file.url %>
       </div>
-    <% end -%>
+    <% end %>
     <div class="item_field" style="width: 20%; text-align: left;">
     <%= finding_answer.created_at ?
       l(finding_answer.created_at, :format => :long) :
       finding_answer_notification_check(f) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
-    <%= remove_item_link(f) if finding_answer.new_record? -%>
+    <%= remove_item_link(f) if finding_answer.new_record? %>
     <%= f.hidden_field :user_id %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">
     Helper.showLastItem('.finding_answer');
     HTMLUtil.stylizeAllInputFiles();
     PopupListener['findingAnswerNotification'](
       'finding_answer_notification_NEW_RECORD');
   </script>
-<% end -%>
+<% end %>

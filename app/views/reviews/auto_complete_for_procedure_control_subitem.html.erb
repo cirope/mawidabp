@@ -1,15 +1,15 @@
-<% unless @procedure_control_subitems.empty? -%>
+<% unless @procedure_control_subitems.empty? %>
   <ul>
-    <% @procedure_control_subitems.each do |pcs| -%>
+    <% @procedure_control_subitems.each do |pcs| %>
       <li id="dynamic_result_<%= "#{rand(100000)}_id_#{pcs.id}" %>">
         <%= highlight(h(pcs.control_objective_text), @tokens) %>
         <span class="informal aditional_info">
           <%= highlight(h(pcs.control_objective.process_control.name), @tokens) %>
         </span>
       </li>
-    <% end -%>
+    <% end %>
   </ul>
-<% else -%>
+<% else %>
   <ul style="display: none;"><li></li></ul>
   <p class="empty_result"><%= t(:'message.empty_result') %></p>
-<% end -%>
+<% end %>

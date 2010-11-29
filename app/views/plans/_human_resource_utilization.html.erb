@@ -1,14 +1,14 @@
-<% id = dynamic_object_id('human_resource_utilization', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
-<div class="human_resource_utilization item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+<% id = dynamic_object_id('human_resource_utilization', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
+<div class="human_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 30%;">
-      <% if f.object.new_record? -%>
+      <% if f.object.new_record? %>
         <div class="search">
-          <% errors_on_user = f.object.errors.on(:resource_id) -%>
+          <% errors_on_user = f.object.errors[:resource_id] %>
           <%= f.hidden_field :resource_id, :value => f.object.resource_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete :resource_utilization, :user_data,
+          <%= text_field_with_auto_complete(:resource_utilization, :user_data,
             {:id => "resource_utilization_user_#{id}",
             :class => "search #{'error_field' unless errors_on_user.blank?}",
             :title => t(:'label.search'),
@@ -16,15 +16,15 @@
             {:indicator => :loading, :skip_style => true,
             :url => {:action => :auto_complete_for_user},
             :after_update_element => :autocompleteUserAndCost,
-            :param_name => 'user_data'} %>
+            :param_name => 'user_data'}) %>
         </div>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :resource_id, :value => f.object.resource_id,
           :id => "hidden_user_id_#{id}" %>
         <%= text_field_tag "resource_utilization_user_#{id}",
           f.object.resource.try(:full_name_with_function, f.object.created_at),
           :readonly => true %>
-      <% end -%>
+      <% end %>
     </div>
     <div class="item_field" style="width: 20%;">
     <%= f.text_field :units %>
@@ -33,14 +33,14 @@
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-    <%= insert_record_link(f, :class => :insert_record_subitem,
-      :rel => 'plan_item human_resource_utilizations',
-      :class_to_insert => 'human_resource_utilization') %> |
-    <%= remove_item_link(f, 'human_resource_utilization') -%>
-    <%= f.hidden_field :resource_type %>
+      <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
+        :'data-parent' => :plan_item,
+        :class_to_insert => :human_resource_utilization) %> |
+      <%= remove_item_link(f, 'human_resource_utilization') %>
+      <%= f.hidden_field :resource_type %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

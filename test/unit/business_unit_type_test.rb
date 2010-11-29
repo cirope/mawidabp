@@ -56,11 +56,11 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
     @business_unit_type.business_unit_label = ' '
     assert @business_unit_type.invalid?
     assert_equal 2, @business_unit_type.errors.count
-    assert_equal error_message_from_model(@business_unit_type, :name, :blank),
-      @business_unit_type.errors.on(:name)
-    assert_equal error_message_from_model(@business_unit_type,
-      :business_unit_label, :blank),
-      @business_unit_type.errors.on(:business_unit_label)
+    assert_equal [error_message_from_model(@business_unit_type, :name, :blank)],
+      @business_unit_type.errors[:name]
+    assert_equal [error_message_from_model(@business_unit_type,
+      :business_unit_label, :blank)],
+      @business_unit_type.errors[:business_unit_label]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -70,13 +70,13 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
     @business_unit_type.project_label = 'abcdd' * 52
     assert @business_unit_type.invalid?
     assert_equal 3, @business_unit_type.errors.count
-    assert_equal error_message_from_model(@business_unit_type, :name, :too_long,
-      :count => 255), @business_unit_type.errors.on(:name)
-    assert_equal error_message_from_model(@business_unit_type,
-      :business_unit_label, :too_long, :count => 255),
-      @business_unit_type.errors.on(:business_unit_label)
-    assert_equal error_message_from_model(@business_unit_type, :project_label,
-      :too_long, :count => 255), @business_unit_type.errors.on(:project_label)
+    assert_equal [error_message_from_model(@business_unit_type, :name, :too_long,
+      :count => 255)], @business_unit_type.errors[:name]
+    assert_equal [error_message_from_model(@business_unit_type,
+      :business_unit_label, :too_long, :count => 255)],
+      @business_unit_type.errors[:business_unit_label]
+    assert_equal [error_message_from_model(@business_unit_type, :project_label,
+      :too_long, :count => 255)], @business_unit_type.errors[:project_label]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -84,8 +84,8 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
     @business_unit_type.name = business_unit_types(:bcra).name
     assert @business_unit_type.invalid?
     assert_equal 1, @business_unit_type.errors.count
-    assert_equal error_message_from_model(@business_unit_type, :name, :taken),
-      @business_unit_type.errors.on(:name)
+    assert_equal [error_message_from_model(@business_unit_type, :name, :taken)],
+      @business_unit_type.errors[:name]
   end
 
   test 'validates business units that can not be destroyed' do
@@ -95,7 +95,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
 
     assert @business_unit_type.invalid?
     assert_equal 1, @business_unit_type.errors.count
-    assert_equal error_message_from_model(@business_unit_type, :business_units,
-      :locked), @business_unit_type.errors.on(:business_units)
+    assert_equal [error_message_from_model(@business_unit_type, :business_units,
+      :locked)], @business_unit_type.errors[:business_units]
   end
 end

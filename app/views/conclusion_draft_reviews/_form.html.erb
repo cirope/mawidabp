@@ -1,15 +1,15 @@
 <!--[form:conclusion_draft_review]-->
-<% form_for @conclusion_draft_review do |f| %>
+<%= form_for @conclusion_draft_review do |f| %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
     <p class="form_item">
-      <% unless @conclusion_draft_review.review -%>
+      <% unless @conclusion_draft_review.review %>
         <%= f.label :review_id, nil, :class => :inline %>
         <%= f.select :review_id,
           Review.list_without_draft_review.map { |r| [r.identification, r.id] },
           {:prompt => true}, {:class => 'inline_item focused'} %>
-      <% else -%>
+      <% else %>
         <%= f.hidden_field :review_id %>
         <%= content_tag :label,
           ConclusionDraftReview.human_attribute_name('review_id'),
@@ -17,7 +17,7 @@
         <%= text_field_tag :review,
           @conclusion_draft_review.review.identification,
           :class => :inline_item, :readonly => true %>
-      <% end -%>
+      <% end %>
     </p>
     <p class="form_item">
       <%= label_tag :business_unit,
@@ -44,7 +44,7 @@
       <%= f.text_area :conclusion %>
     </p>
     <p class="form_item">
-      <%= label_tag :score, Review.human_attribute_name('score'),
+      <%= label_tag :score, Review.human_attribute_name(:score),
         :class => :inline %>
       <%= text_field_tag :score,
         (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
@@ -60,29 +60,29 @@
     <%= content_tag(:div, t(:'conclusion_draft_review.approved'),
       :class => 'green bold', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
-    <div id="not_approved" <%= 'style="display: none;"' if @conclusion_draft_review.approved? %>>
+    <div id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
       <p class="red bold">
         <%= t(:'conclusion_draft_review.not_approved') %>
       </p>
-      <% @conclusion_draft_review.review.try(:must_be_approved?) -%>
+      <% @conclusion_draft_review.review.try(:must_be_approved?) %>
       <%= link_to_function t(:'error.show_details'), 'showOrHideErrors()',
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
     </div>
     <div>
-      <%= link_to_remote t(:'conclusion_draft_review.check_for_approval'),
-        {:url => {:action => :check_for_approval},
-        :with => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
-        :success => 'updateApprovalText(request)',
-        :condition => "!$F('conclusion_draft_review_review_id').blank()",
-        :before => 'Helper.showLoading()', :complete => 'Helper.hideLoading()'},
-        {:style => 'margin-left: 1em;'} %>
+      <%= link_to t(:'conclusion_draft_review.check_for_approval'),
+        {:action => :check_for_approval},
+        {:'data-params' => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
+        :method => :get,
+        :'data-condition' => "!$F('conclusion_draft_review_review_id').blank()",
+        :remote => true, :style => 'margin-left: 1em;',
+        :id => 'check_for_approval'} %>
     </div>
-    <% if @conclusion_draft_review.updated_at -%>
+    <% if @conclusion_draft_review.updated_at %>
       <div style="margin-left: 1em;">
         | <%= t(:'conclusion_draft_review.last_verified_date',
           :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
       </div>
-    <% end -%>
+    <% end %>
   </div>
   <div id="approval_errors_detail" style="display: none; clear: both;">
     <div>
@@ -91,32 +91,32 @@
           :id => :error_list, :class => :raw_list) %>
       </div>
 
-      <p id="force_approval_prompt" class="form_item" <%= @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
+      <p id="force_approval_prompt" class="form_item" <%= raw(@conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"') %>>
         <%= f.label :force_approval, nil, :class => 'inline error_field' %>
         <%= f.check_box :force_approval, :class => :inline_item %>
       </p>
     </div>
   </div>
 
-  <% unless @conclusion_draft_review.notifications.blank? -%>
+  <% unless @conclusion_draft_review.notifications.blank? %>
     <div id="notifications" style="margin: 2em 0em;">
       <h1><%= t(:'conclusion_draft_review.notifications_statuses') %></h1>
       <ul class="raw_list">
-        <% @conclusion_draft_review.last_notifications.each do |notification| -%>
+        <% @conclusion_draft_review.last_notifications.each do |notification| %>
           <li><%= notification.user.full_name %>: <strong><%= notification.status_text %></strong>
             (<%=t(:'conclusion_draft_review.notification_sended_at',
               :date => l(notification.created_at, :format => :long)) %>)</li>
         <% end %>
       </ul>
     </div>
-  <% end -%>
+  <% end %>
 
   <%= hidden_lock_version(f) %>
   
   <p>
     <span class="button"><%= f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:conclusion_draft_review] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">
@@ -132,7 +132,9 @@
     }
   }
 
-  function updateApprovalText(request) {
+  document.on('ajax:success', '#check_for_approval', function(event, element) {
+    var request = event.memo;
+    
     if(request.responseText.isJSON()) {
       if(request.responseJSON.approved) {
         $('approved').show();
@@ -172,7 +174,7 @@
         });
       }
     }
-  }
+  });
 
   Event.observe('conclusion_draft_review_review_id', 'change', function() {
     var url = '<%= url_for :controller => :reviews, :action => :review_data,

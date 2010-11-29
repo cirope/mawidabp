@@ -10,12 +10,9 @@ class ResourceClass < ActiveRecord::Base
     :human => 0,
     :material => 1
   }
-
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:resource_ids]
   
   # Named scopes
-  named_scope :human_resources, lambda {
+  scope :human_resources, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id,
@@ -24,7 +21,7 @@ class ResourceClass < ActiveRecord::Base
       :order => 'name ASC'
     }
   }
-  named_scope :material_resources, lambda {
+  scope :material_resources, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id,

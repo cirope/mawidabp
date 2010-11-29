@@ -122,16 +122,16 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.priority = nil
     assert @weakness.invalid?
     assert_equal 5, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, 
-      :control_objective_item_id, :blank),
-      @weakness.errors.on(:control_objective_item_id)
+    assert_equal [error_message_from_model(@weakness,
+      :control_objective_item_id, :blank)],
+      @weakness.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@weakness, :review_code, :blank),
       error_message_from_model(@weakness, :review_code, :invalid)].sort,
-      @weakness.errors.on(:review_code).sort
-    assert_equal error_message_from_model(@weakness, :risk, :blank),
-      @weakness.errors.on(:risk)
-    assert_equal error_message_from_model(@weakness, :priority, :blank),
-      @weakness.errors.on(:priority)
+      @weakness.errors[:review_code].sort
+    assert_equal [error_message_from_model(@weakness, :risk, :blank)],
+      @weakness.errors[:risk]
+    assert_equal [error_message_from_model(@weakness, :priority, :blank)],
+      @weakness.errors[:priority]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -141,8 +141,8 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.review_code = another_weakness.review_code
     assert @weakness.invalid?
     assert_equal 1, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, :review_code, :taken),
-      @weakness.errors.on(:review_code)
+    assert_equal [error_message_from_model(@weakness, :review_code, :taken)],
+      @weakness.errors[:review_code]
 
     # Se puede duplicar si es de otro informe
     another_weakness = Weakness.find(findings(
@@ -159,9 +159,9 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal 3, @weakness.errors.count
     assert_equal [error_message_from_model(@weakness, :review_code, :too_long,
       :count => 255), error_message_from_model(@weakness, :review_code,
-      :invalid)].sort, @weakness.errors.on(:review_code).sort
-    assert_equal error_message_from_model(@weakness, :type, :too_long,
-      :count => 255), @weakness.errors.on(:type)
+      :invalid)].sort, @weakness.errors[:review_code].sort
+    assert_equal [error_message_from_model(@weakness, :type, :too_long,
+      :count => 255)], @weakness.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -169,8 +169,8 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.state = Finding::STATUS.values.sort.last.next
     assert @weakness.invalid?
     assert_equal 1, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, :state, :inclusion),
-      @weakness.errors.on(:state)
+    assert_equal [error_message_from_model(@weakness, :state, :inclusion)],
+      @weakness.errors[:state]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -179,11 +179,11 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.review_code = 'BAD_PREFIX_2'
     assert @weakness.invalid?
     assert_equal 2, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness,
-      :control_objective_item_id, :not_a_number),
-      @weakness.errors.on(:control_objective_item_id)
-    assert_equal error_message_from_model(@weakness, :review_code, :invalid),
-      @weakness.errors.on(:review_code)
+    assert_equal [error_message_from_model(@weakness,
+      :control_objective_item_id, :not_a_number)],
+      @weakness.errors[:control_objective_item_id]
+    assert_equal [error_message_from_model(@weakness, :review_code, :invalid)],
+      @weakness.errors[:review_code]
   end
 
   test 'dynamic functions' do
@@ -294,8 +294,8 @@ class WeaknessTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
-                  TEST_FILE, 'text/plain')
+                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                  'text/plain')
               }
             }
           }
@@ -321,7 +321,7 @@ class WeaknessTest < ActiveSupport::TestCase
 #              :description => 'New post_workpaper description',
 #              :organization_id => organizations(:default_organization).id,
 #              :file_model_attributes => {
-#                :uploaded_data => ActionController::TestUploadedFile.new(
+#                :file => ActionDispatch::Http::UploadedFile.new(
 #                  TEST_FILE, 'text/plain')
 #              }
 #            }

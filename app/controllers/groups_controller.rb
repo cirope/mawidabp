@@ -68,7 +68,7 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.save
-        flash[:notice] = t :'group.correctly_created'
+        flash.notice = t :'group.correctly_created'
         format.html { redirect_to(groups_path) }
         format.xml  { render :xml => @group, :status => :created, :location => @group }
       else
@@ -88,7 +88,7 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        flash[:notice] = t :'group.correctly_updated'
+        flash.notice = t :'group.correctly_updated'
         format.html { redirect_to(groups_path) }
         format.xml  { head :ok }
       else
@@ -98,7 +98,7 @@ class GroupsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'group.stale_object_error'
+    flash.alert = t :'group.stale_object_error'
     redirect_to :action => :edit
   end
 

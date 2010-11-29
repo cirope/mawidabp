@@ -4,24 +4,29 @@ require 'test_helper'
 class RolesControllerTest < ActionController::TestCase
   fixtures :roles, :users
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => roles(:admin_role).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      get action
+    public_actions.each do |action|
+      send *action
       assert_response :success
     end
   end

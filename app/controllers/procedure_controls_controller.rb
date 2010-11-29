@@ -102,7 +102,7 @@ class ProcedureControlsController < ApplicationController
 
     respond_to do |format|
       if @procedure_control.save
-        flash[:notice] = t :'procedure_control.correctly_created'
+        flash.notice = t :'procedure_control.correctly_created'
         format.html { redirect_to(edit_procedure_control_path(@procedure_control)) }
         format.xml  { render :xml => @procedure_control, :status => :created, :location => @procedure_control }
       else
@@ -123,7 +123,7 @@ class ProcedureControlsController < ApplicationController
 
     respond_to do |format|
       if @procedure_control.update_attributes(params[:procedure_control])
-        flash[:notice] = t :'procedure_control.correctly_updated'
+        flash.notice = t :'procedure_control.correctly_updated'
         format.html { redirect_to(edit_procedure_control_path(@procedure_control)) }
         format.xml  { head :ok }
       else
@@ -133,7 +133,7 @@ class ProcedureControlsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'procedure_control.stale_object_error'
+    flash.alert = t :'procedure_control.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -161,7 +161,7 @@ class ProcedureControlsController < ApplicationController
     pdf.start_page_numbering pdf.absolute_x_middle, (pdf.bottom_margin / 2.0),
       10, :center, t(:'pdf.page_pattern').to_iso, 1
     pdf.add_planning_header @auth_organization, @procedure_control.period
-    pdf.add_title ProcedureControl.human_name
+    pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
       'compliance_tests', 'effects', 'risk']
@@ -278,7 +278,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_control_objectives/?process_control=id
   def get_control_objectives
-    options = [[t(:'support.select.prompt'), '']]
+    options = [[t(:'helpers.select.prompt'), '']]
     control_objectives = ControlObjective.all(
       :conditions => {:process_control_id => params[:process_control]})
 
@@ -291,7 +291,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_process_controls/?best_practice=id
   def get_process_controls
-    options = [[t(:'support.select.prompt'), '']]
+    options = [[t(:'helpers.select.prompt'), '']]
     process_controls = ProcessControl.all(
       :conditions => {:best_practice_id => params[:best_practice]})
 

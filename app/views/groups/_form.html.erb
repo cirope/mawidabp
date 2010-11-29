@@ -1,8 +1,8 @@
 <!--[form:group]-->
-<% form_for @group do |g_f| -%>
-  <% content_for :js_extra do -%>
-    <%= "var organization='#{generate_template(g_f, :organizations)}';" %>
-  <% end -%>
+<%= form_for @group do |g_f| %>
+  <% content_for :js_extra do %>
+    <%= raw "var organization='#{generate_template(g_f, :organizations)}';" %>
+  <% end %>
   <%= g_f.error_messages %>
 
   <div class="form_column_left">
@@ -40,22 +40,23 @@
     </div>
 
     <div id="organizations">
-      <% g_f.fields_for :organizations do |o_f| -%>
+      <%= g_f.fields_for :organizations do |o_f| %>
         <%= render :partial => 'organization', :locals =>
           {:f => o_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'group.add_organization'), '#organization',
-      :class => :add_nested_item, :rel => :organizations %>
+    <%= link_to t(:'group.add_organization'), '#',
+      :'data-template' => :organization,
+      :'data-event' => :add_nested_item, :'data-container' => :organizations %>
   </p>
 
   <%= hidden_lock_version(g_f) %>
   <p>
     <span class="button"><%= g_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:group] -->
 <%= set_focus_to_first_element %>

@@ -110,7 +110,7 @@ class FindingsController < ApplicationController
     respond_to do |format|
       Finding.transaction do
         if @finding.update_attributes(params[:finding])
-          flash[:notice] = t :'finding.correctly_updated'
+          flash.notice = t :'finding.correctly_updated'
           format.html { redirect_to(edit_finding_path(params[:completed], @finding)) }
           format.xml  { head :ok }
         else
@@ -122,7 +122,7 @@ class FindingsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'finding.stale_object_error'
+    flash.alert = t :'finding.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -179,7 +179,7 @@ class FindingsController < ApplicationController
     pdf.add_title t(:'finding.index_title')
 
     column_order = [
-      ['review', [Review.human_name,
+      ['review', [Review.model_name.human,
           PlanItem.human_attribute_name(:project)].to_sentence, 10],
       ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 7],
@@ -394,7 +394,7 @@ class FindingsController < ApplicationController
   # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
   def find_with_organization(id) #:doc:
     options = {
-      :joins => [{:control_objective_item => {:review => :period}}, :users],
+      :include => [{:control_objective_item => {:review => :period}}],
       :conditions => {
         :id => id,
         :final => false,
@@ -404,12 +404,17 @@ class FindingsController < ApplicationController
     }
 
     unless @auth_user.committee?
+      options[:include] << :users
       options[:conditions][User.table_name] = {
         :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
       }
     end
     
     finding = Finding.first(options)
+
+    # TODO: eliminar cuando se corrija el problema que hace que include solo
+    # traiga el primer usuario
+    finding.users.reload if finding
 
     finding.finding_prefix = true if finding
 

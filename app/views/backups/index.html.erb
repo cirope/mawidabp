@@ -1,0 +1,28 @@
+<table>
+  <thead>
+    <tr>
+      <th><%= Backup.human_attribute_name :backup_type %></th>
+      <th><%= Backup.human_attribute_name :work_papers_included %></th>
+      <th><%= Backup.human_attribute_name :created_at %></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @backups.each do |backup| %>
+      <tr class="<%= cycle(:even, :odd) %>">
+        <td><%= t backup.backup_type == 0 ? :'backup.full' : :'backup.differential' %></td>
+        <td><%= t backup.work_papers_included ? :'label.yes' : :'label.no' %></td>
+        <td><%= l backup.created_at, :format => :long %></td>
+        <td><%= link_to_show backup %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @backups %>
+<%= link_to t(:'label.new'), new_backup_path %> |
+<%= link_to t(:'backup.restore'), restore_setup_backups_path %>
+<div style="clear: both;"></div>
+</div>

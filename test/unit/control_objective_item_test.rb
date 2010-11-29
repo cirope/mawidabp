@@ -3,6 +3,7 @@ require 'test_helper'
 # Clase para probar el modelo "ControlObjectiveItem"
 class ControlObjectiveItemTest < ActiveSupport::TestCase
   fixtures :control_objective_items, :control_objectives, :reviews, :controls
+  include ActionDispatch::TestProcess
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
@@ -81,12 +82,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.control_objective_id = nil
     assert @control_objective_item.invalid?
     assert_equal 2, @control_objective_item.errors.count
-    assert_equal error_message_from_model(@control_objective_item, 
-      :control_objective_text, :blank),
-      @control_objective_item.errors.on(:control_objective_text)
-    assert_equal error_message_from_model(@control_objective_item,
-      :control_objective_id, :blank),
-      @control_objective_item.errors.on(:control_objective_id)
+    assert_equal [error_message_from_model(@control_objective_item,
+      :control_objective_text, :blank)],
+      @control_objective_item.errors[:control_objective_text]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :control_objective_id, :blank)],
+      @control_objective_item.errors[:control_objective_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -95,9 +96,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       :bcra_A4609_data_proccessing_impact_analisys_item_editable).control_objective_id
     assert @control_objective_item.invalid?
     assert_equal 1, @control_objective_item.errors.count
-    assert_equal error_message_from_model(@control_objective_item,
-      :control_objective_id, :taken), @control_objective_item.errors.on(
-      :control_objective_id)
+    assert_equal [error_message_from_model(@control_objective_item,
+      :control_objective_id, :taken)], @control_objective_item.errors[
+      :control_objective_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -109,16 +110,16 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.finished = false
     assert @control_objective_item.invalid?
     assert_equal 4, @control_objective_item.errors.count
-    assert_equal error_message_from_model(@control_objective_item,
-      :control_objective_id, :not_a_number),
-      @control_objective_item.errors.on(:control_objective_id)
-    assert_equal error_message_from_model(@control_objective_item,
-      :relevance, :not_a_number), @control_objective_item.errors.on(:relevance)
-    assert_equal error_message_from_model(@control_objective_item,
-      :review_id, :not_a_number),
-      @control_objective_item.errors.on(:review_id)
-    assert_equal error_message_from_model(@control_objective_item, :audit_date,
-      :invalid_date), @control_objective_item.errors.on(:audit_date)
+    assert_equal [error_message_from_model(@control_objective_item,
+      :control_objective_id, :not_a_number)],
+      @control_objective_item.errors[:control_objective_id]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :relevance, :not_a_number)], @control_objective_item.errors[:relevance]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :review_id, :not_a_number)],
+      @control_objective_item.errors[:review_id]
+    assert_equal [error_message_from_model(@control_objective_item, :audit_date,
+      :invalid_date)], @control_objective_item.errors[:audit_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -127,9 +128,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     @control_objective_item.audit_date = period_end.tomorrow
     assert @control_objective_item.invalid?
     assert_equal 1, @control_objective_item.errors.count
-    assert_equal error_message_from_model(@control_objective_item,
-      :audit_date, :out_of_period),
-      @control_objective_item.errors.on(:audit_date)
+    assert_equal [error_message_from_model(@control_objective_item,
+      :audit_date, :out_of_period)],
+      @control_objective_item.errors[:audit_date]
   end
 
   test 'effectiveness without pre audit qualification' do
@@ -176,29 +177,29 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     assert @control_objective_item.invalid?
     assert_equal 6, @control_objective_item.errors.count
-    assert_equal error_message_from_model(@control_objective_item,
-      :post_audit_qualification, :blank),
-      @control_objective_item.errors.on(:post_audit_qualification)
-    assert_equal error_message_from_model(@control_objective_item,
-      :audit_date, :blank), @control_objective_item.errors.on(:audit_date)
-    assert_equal error_message_from_model(@control_objective_item,
-      :relevance, :blank), @control_objective_item.errors.on(:relevance)
-    assert_equal error_message_from_model(@control_objective_item.controls[0],
-      :effects, :blank), @control_objective_item.controls[0].errors.on(:effects)
-    assert_equal error_message_from_model(@control_objective_item.controls[0],
-      :control, :blank), @control_objective_item.controls[0].errors.on(:control)
-    assert_equal error_message_from_model(@control_objective_item,
-      :auditor_comment, :blank), @control_objective_item.errors.on(
-      :auditor_comment)
+    assert_equal [error_message_from_model(@control_objective_item,
+      :post_audit_qualification, :blank)],
+      @control_objective_item.errors[:post_audit_qualification]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :audit_date, :blank)], @control_objective_item.errors[:audit_date]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :relevance, :blank)], @control_objective_item.errors[:relevance]
+    assert_equal [error_message_from_model(@control_objective_item.controls[0],
+      :effects, :blank)], @control_objective_item.controls[0].errors[:effects]
+    assert_equal [error_message_from_model(@control_objective_item.controls[0],
+      :control, :blank)], @control_objective_item.controls[0].errors[:control]
+    assert_equal [error_message_from_model(@control_objective_item,
+      :auditor_comment, :blank)], @control_objective_item.errors[
+      :auditor_comment]
 
     @control_objective_item.pre_audit_qualification = 0
 
     assert !@control_objective_item.valid?
     assert_equal 6, @control_objective_item.errors.count
-    assert_nil @control_objective_item.errors.on(:post_audit_qualification)
-    assert_equal error_message_from_model(@control_objective_item.controls[0],
-      :design_tests, :blank), @control_objective_item.controls[0].errors.on(
-      :design_tests)
+    assert_blank @control_objective_item.errors[:post_audit_qualification]
+    assert_equal [error_message_from_model(@control_objective_item.controls[0],
+      :design_tests, :blank)], @control_objective_item.controls[0].errors[
+      :design_tests]
   end
 
   test 'effectiveness with pre audit qualification' do
@@ -317,8 +318,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
-                  TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
             }
           }
@@ -342,8 +342,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
-                  TEST_FILE, 'text/plain')
+                :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
             }
           }

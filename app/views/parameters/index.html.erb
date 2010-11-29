@@ -9,14 +9,14 @@
   </thead>
   
   <tbody>
-    <% @parameters.each do |parameter| -%>
+    <% @parameters.each do |parameter| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= super_truncate parameter.to_s, 40 %></td>
         <td class="expendable"><%= super_truncate parameter.description, 40 %></td>
         <td><%= link_to_show parameter_path(@type, parameter) %></td>
         <td><%= link_to_edit edit_parameter_path(@type, parameter) %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

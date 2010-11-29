@@ -1,6 +1,6 @@
 <div id="showed_data">
   <h1 class="plain" style="margin-top: 1em;">
-    <%= Review.human_name %>
+    <%= Review.model_name.human %>
     <%= @conclusion_draft_review.review.identification %>
   </h1>
   <h1 class="plain"><%= @conclusion_draft_review.review.plan_item.project %></h1>
@@ -16,12 +16,12 @@
     <%= @conclusion_draft_review.review.business_unit.name %>
   </p>
 
-  <% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? -%>
+  <% unless @conclusion_draft_review.review.business_unit.business_unit_type.project_label.blank? %>
     <p>
       <b><%= @conclusion_draft_review.review.business_unit.business_unit_type.project_label %></b>:
       <%= @conclusion_draft_review.review.plan_item.project %>
     </p>
-  <% end -%>
+  <% end %>
 
   <p>
     <b><%= t(:'conclusion_review.audit_period_title') %></b>:
@@ -31,25 +31,25 @@
   </p>
 
   <h2 style="margin: 1em 0em; text-decoration: underline;"><%= t(:'conclusion_review.objectives_and_scopes') %></h2>
-  <% grouped_control_objectives = @conclusion_draft_review.control_objective_items.group_by(&:'process_control') -%>
-  <% grouped_control_objectives.each do |process_control, cois| -%>
+  <% grouped_control_objectives = @conclusion_draft_review.control_objective_items.group_by(&:'process_control') %>
+  <% grouped_control_objectives.each do |process_control, cois| %>
     <p>
-      <b><%= ProcessControl.human_name %></b>:
+      <b><%= ProcessControl.model_name.human %></b>:
       <%= process_control.name %>
     </p>
     <ul class="raw_list">
-      <% cois.each do |coi| -%>
+      <% cois.each do |coi| %>
         <li><%= coi.control_objective_text %></li>
-      <% end -%>
+      <% end %>
     </ul>
-  <% end -%>
+  <% end %>
 
-  <% unless @conclusion_draft_review.applied_procedures.blank? -%>
+  <% unless @conclusion_draft_review.applied_procedures.blank? %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
       <%= t(:'conclusion_review.applied_procedures') %>
     </h2>
     <p><%= @conclusion_draft_review.applied_procedures %></p>
-  <% end -%>
+  <% end %>
 
   <h2 style="margin-top: 1em; text-decoration: underline;">
     <%= t(:'conclusion_review.conclusion') %>
@@ -58,41 +58,41 @@
 
   <p class="note"><%= t(:'review.review_qualification_explanation') %></p>
 
-  <% unless @conclusion_draft_review.conclusion.blank? -%>
+  <% unless @conclusion_draft_review.conclusion.blank? %>
     <p><%= @conclusion_draft_review.conclusion %></p>
-  <% end -%>
+  <% end %>
 
   <% review_has_observations = grouped_control_objectives.any? do |_, cois|
     cois.any? { |coi| !coi.weaknesses.blank? }
   end %>
 
-  <% if review_has_observations -%>
+  <% if review_has_observations %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
       <%= t(:'conclusion_review.findings') %>
     </h2>
 
     <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| -%>
+      <% grouped_control_objectives.each do |process_control, cois| %>
         <%= conclusion_review_process_control_weakness_details_table(process_control, cois, false) %>
-      <% end -%>
+      <% end %>
     </table>
-  <% end -%>
+  <% end %>
 
   <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
     cois.any? { |coi| !coi.oportunities.blank? }
   end %>
 
-  <% if review_has_oportunities -%>
+  <% if review_has_oportunities %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
       <%= t(:'conclusion_review.oportunities') %>
     </h2>
 
     <table class="summary_table">
-      <% grouped_control_objectives.each do |process_control, cois| -%>
+      <% grouped_control_objectives.each do |process_control, cois| %>
         <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, false) %>
-      <% end -%>
+      <% end %>
     </table>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

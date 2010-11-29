@@ -14,16 +14,28 @@ class NotificationsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    @private_actions.each do |action|
-      get action
+    id_param = {:id => notifications(
+      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param}
+    public_actions = [
+      [:get, :confirm, id_param]
+    ]
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :edit, id_param],
+      [:put, :update, id_param],
+    ]
+
+    private_actions.each do |action|
+      send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
-    @public_actions.each do |action|
-      flash[:alert] = nil
-      get action
-      assert_not_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+    public_actions.each do |action|
+      flash.alert = nil
+      send *action
+      assert_not_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
   end
 
@@ -39,7 +51,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'show notification' do
     perform_auth
     get :show, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash
+      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_select '#error_body', false
@@ -49,7 +61,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'edit notification' do
     perform_auth
     get :edit, :id => notifications(
-      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash
+      :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
     assert_select '#error_body', false
@@ -61,7 +73,7 @@ class NotificationsControllerTest < ActionController::TestCase
       perform_auth
       put :update, {
         :id => notifications(
-          :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).confirmation_hash,
+          :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param,
         :notification => {
           :notes => 'Updated notes'
         }
@@ -81,7 +93,7 @@ class NotificationsControllerTest < ActionController::TestCase
     assert !notification.notified?
     get :confirm, :id => notification.confirmation_hash
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'notification.confirmed'), flash[:notice]
+    assert_equal I18n.t(:'notification.confirmed'), flash.notice
     assert notification.reload.notified?
     assert notification.confirmed?
   end
@@ -96,7 +108,7 @@ class NotificationsControllerTest < ActionController::TestCase
     get :confirm, :id => notification.confirmation_hash, :reject => 1
     assert_redirected_to :controller => :users, :action => :login
     assert_not_nil session[:go_to]
-    assert_equal I18n.t(:'notification.rejected'), flash[:notice]
+    assert_equal I18n.t(:'notification.rejected'), flash.notice
     assert notification.reload.notified?
     assert notification.rejected?
   end

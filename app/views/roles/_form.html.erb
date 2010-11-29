@@ -1,5 +1,5 @@
 <!--[form:role]-->
-<% form_for @role do |r_f| -%>
+<%= form_for @role do |r_f| %>
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
@@ -18,7 +18,7 @@
   <table class="summary_table" style="clear: both;">
     <thead>
       <tr>
-        <th><%= Privilege.human_name %></th>
+        <th><%= Privilege.model_name.human %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
@@ -27,11 +27,11 @@
     </thead>
     <tbody>
       <% menu_items = @role.audited? ?
-        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS -%>
-      <% menu_items.each do |menu_item| -%>
+        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% menu_items.each do |menu_item| %>
         <%= render :partial => 'menu_item', :locals => {
           :menu_item => menu_item, :role_form => r_f} %>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
 
@@ -39,7 +39,7 @@
   <p>
     <span class="button"><%= r_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:role] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

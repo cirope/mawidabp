@@ -42,22 +42,22 @@
       </tr>
     </thead>
     <tbody>
-      <% @review.review_user_assignments.each do |rua| -%>
+      <% @review.review_user_assignments.each do |rua| %>
         <tr>
           <td><%= rua.user.full_name %></td>
           <td><%= rua.type_text %></td>
         </tr>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
 
-  <% displayed_process_controls ||= [] -%>
-  <% @review.control_objective_items.sort.each do |coi| -%>
-    <% process_control = coi.control_objective.process_control.name -%>
-    <% unless displayed_process_controls.include?(process_control) -%>
+  <% displayed_process_controls ||= [] %>
+  <% @review.control_objective_items.sort.each do |coi| %>
+    <% process_control = coi.control_objective.process_control.name %>
+    <% unless displayed_process_controls.include?(process_control) %>
       <h1><%= process_control %></h1>
-      <% displayed_process_controls << process_control -%>
-    <% end -%>
+      <% displayed_process_controls << process_control %>
+    <% end %>
     <h2><%=h coi.control_objective_text %></h2>
     <div style="margin: 1em;">
       <div class="show_item">
@@ -105,7 +105,7 @@
         <%= t coi.finished ? :'label.yes' : :'label.no' %>
       </div>
     </div>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

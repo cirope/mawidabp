@@ -1,37 +1,37 @@
-<% readonly = @oportunity.final? -%>
+<% readonly = @oportunity.final? %>
 <% review = @oportunity.review || (@oportunity.control_objective_item ?
-    @oportunity.control_objective_item.review : nil) -%>
-<% frozen = review.try :is_frozen? -%>
-<% show_history_changes = @oportunity.status_change_history.size > 1 -%>
+    @oportunity.control_objective_item.review : nil) %>
+<% frozen = review.try :is_frozen? %>
+<% show_history_changes = @oportunity.status_change_history.size > 1 %>
 <!--[form:oportunity]-->
-<% form_for @oportunity, :html => {:multipart => true} do |f| -%>
-  <% content_for :js_extra do -%>
-    <% unless readonly -%>
-      <%= "var finding_user_assignment='#{generate_template(f,
+<%= form_for @oportunity, :html => {:multipart => true} do |f| %>
+  <% content_for :js_extra do %>
+    <% unless readonly %>
+      <%= raw "var finding_user_assignment='#{generate_template(f,
           :finding_user_assignments, :locals => {:readonly => readonly})}';" %>
-    <% end -%>
-    <% unless frozen -%>
-    <%= "var lastWorkPaperCode = '#{next_oportunity_work_paper_code(
+    <% end %>
+    <% unless frozen %>
+    <%= raw "var lastWorkPaperCode = '#{next_oportunity_work_paper_code(
         @oportunity)}';" %>
-    <%= "var finding_relation='#{generate_template(f, :finding_relations,
+    <%= raw "var finding_relation='#{generate_template(f, :finding_relations,
         :object => FindingRelation.new(:finding_id => @oportunity.id))}';" %>
-    <%= "var work_paper='#{generate_template(f, :work_papers,
+    <%= raw "var work_paper='#{generate_template(f, :work_papers,
         {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <% end -%>
-  <% end -%>
+    <% end %>
+  <% end %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
     <p class="form_item">
-      <%= content_tag :label, Review.human_name, :class => :inline %>
+      <%= content_tag :label, Review.model_name.human, :class => :inline %>
       <%= text_field_tag :review, review.identification,
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <label class="inline"><%= ControlObjective.human_name %>:</label>
+      <label class="inline"><%= ControlObjective.model_name.human %>:</label>
       <%= text_field nil, :control_objective_name, :size => nil,
         :value => "#{@oportunity.control_objective_item.control_objective_text} (#{@oportunity.control_objective_item.process_control.name})",
         :class => :inline_item, :readonly => true %>
@@ -50,15 +50,15 @@
   </div>
   <div class="form_column_right">
     <p class="form_item">
-      <%= f.label :state, Oportunity.human_attribute_name(:state) +
+      <%= f.label :state, raw(Oportunity.human_attribute_name(:state) +
         (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : ''), :class => :inline %>
+          :finding_status_change_history) : '')), :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
-    <% if show_history_changes -%>
+    <% if show_history_changes %>
       <%= render :partial => 'findings/history_changes',
         :locals => { :finding => @oportunity } %>
-    <% end -%>
+    <% end %>
     <p>
       <%= f.label :solution_date %>
       <%= f.calendar_date_select :solution_date, :readonly => readonly %>
@@ -68,16 +68,16 @@
       <%= f.calendar_date_select :origination_date, :readonly => readonly %>
     </p>
 
-    <% if @oportunity.must_have_a_comment? -%>
-      <% f.fields_for :comments,
-        @oportunity.comments.build(:user => @auth_user) do |c_f| -%>
+    <% if @oportunity.must_have_a_comment? %>
+      <%= f.fields_for :comments,
+        @oportunity.comments.build(:user => @auth_user) do |c_f| %>
         <p>
           <%= c_f.label :comment, nil, :class => :error_field %>
           <%= c_f.text_area :comment, :class => :error_field %>
           <%= c_f.hidden_field :user_id %>
         </p>
-      <% end -%>
-    <% end -%>
+      <% end %>
+    <% end %>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>
@@ -106,16 +106,17 @@
     </div>
 
     <div id="finding_relations">
-      <% f.fields_for :finding_relations do |fr_f| -%>
+      <%= f.fields_for :finding_relations do |fr_f| %>
         <%= render :partial => 'finding_relation', :locals =>
           {:f => fr_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#finding_relation',
-      :class => :add_nested_item, :rel => :finding_relations %>
+    <%= link_to t(:'finding.add_finding_relation'), '#',
+      :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
+      :'data-container' => :finding_relations %>
   </p>
 
   <table class="item_container">
@@ -129,51 +130,53 @@
       <tr>
         <td style="width: 52%; padding-top: 1em;">
           <div id="finding_user_assignments">
-            <% f.fields_for :finding_user_assignments do |fua_f| -%>
+            <%= f.fields_for :finding_user_assignments do |fua_f| %>
               <%= render :partial => 'finding_user_assignment', :locals =>
                 {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
-            <% end -%>
+            <% end %>
           </div>
         </td>
         <td style="width: 48%; padding-top: 1em;">
           <div class="column_headers">
             <div class="item_column" style="width: 20%;">
-              <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+              <h3><%= WorkPaper.human_attribute_name :name %></h3>
             </div>
             <div class="item_column" style="width: 20%;">
-              <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+              <h3><%= WorkPaper.human_attribute_name :code %></h3>
             </div>
             <div class="item_column" style="width: 15%;">
-              <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+              <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
             </div>
             <div class="item_column" style="width: 25%;">
-              <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+              <h3><%= WorkPaper.human_attribute_name :description %></h3>
             </div>
             <div class="item_column" style="width: 10%;">
-              <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+              <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
             </div>
             <div class="item_column" style="width: 10%;"></div>
             <div style="clear: both;"></div>
           </div>
 
           <div id="work_papers">
-            <% f.fields_for :work_papers do |wp_f| -%>
+            <%= f.fields_for :work_papers do |wp_f| %>
               <%= render :partial => 'work_papers/work_paper', :locals =>
                 {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
                 :child_index => 'NEW_RECORD'} %>
-            <% end -%>
+            <% end %>
           </div>
         </td>
       </tr>
       <tr>
         <td>
-          <%= link_to_unless readonly, t(:'finding.add_user'),
-            '#finding_user_assignment', :class => :add_nested_item,
-            :rel => :finding_user_assignments %>
+          <%= link_to_unless readonly, t(:'finding.add_user'), '#',
+            :'data-template' => :finding_user_assignment,
+            :'data-event' => :add_nested_item,
+            :'data-container' => :finding_user_assignments %>
         </td>
         <td>
-          <%= link_to_unless frozen, t(:'finding.add_work_paper'),
-            '#work_paper', :class => :add_nested_item, :rel => :work_papers %>
+          <%= link_to_unless frozen, t(:'finding.add_work_paper'), '#',
+            :'data-template' => :work_paper, :'data-event' => :add_nested_item,
+            :'data-container' => :work_papers %>
         </td>
       </tr>
     </tbody>
@@ -184,6 +187,6 @@
   <p>
      <span class="button"><%= f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:oportunity] -->
 <%= set_focus_to_first_element %>

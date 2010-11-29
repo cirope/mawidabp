@@ -89,12 +89,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.answer_type = nil
     assert @finding_answer.invalid?
     assert_equal 3, @finding_answer.errors.count
-    assert_equal error_message_from_model(@finding_answer, :answer, :blank),
-      @finding_answer.errors.on(:answer)
-    assert_equal error_message_from_model(@finding_answer, :finding_id, :blank),
-      @finding_answer.errors.on(:finding_id)
-    assert_equal error_message_from_model(@finding_answer, :answer_type,
-      :blank), @finding_answer.errors.on(:answer_type)
+    assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
+      @finding_answer.errors[:answer]
+    assert_equal [error_message_from_model(@finding_answer, :finding_id,
+        :blank)], @finding_answer.errors[:finding_id]
+    assert_equal [error_message_from_model(@finding_answer, :answer_type,
+      :blank)], @finding_answer.errors[:answer_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -105,13 +105,13 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.answer_type = '12.3'
     assert @finding_answer.invalid?
     assert_equal 4, @finding_answer.errors.count
-    assert_equal error_message_from_model(@finding_answer, :finding_id,
-      :not_a_number), @finding_answer.errors.on(:finding_id)
-    assert_equal error_message_from_model(@finding_answer, :user_id,
-      :not_a_number), @finding_answer.errors.on(:user_id)
-    assert_equal error_message_from_model(@finding_answer, :file_model_id,
-      :not_a_number), @finding_answer.errors.on(:file_model_id)
-    assert_equal error_message_from_model(@finding_answer, :answer_type,
-      :not_a_number), @finding_answer.errors.on(:answer_type)
+    assert_equal [error_message_from_model(@finding_answer, :finding_id,
+      :not_a_number)], @finding_answer.errors[:finding_id]
+    assert_equal [error_message_from_model(@finding_answer, :user_id,
+      :not_a_number)], @finding_answer.errors[:user_id]
+    assert_equal [error_message_from_model(@finding_answer, :file_model_id,
+      :not_a_number)], @finding_answer.errors[:file_model_id]
+    assert_equal [error_message_from_model(@finding_answer, :answer_type,
+      :not_an_integer)], @finding_answer.errors[:answer_type]
   end
 end

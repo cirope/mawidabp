@@ -11,8 +11,8 @@ module ConclusionFinalReviewsHelper
   def conclusion_review_score_details_table(review)
     scores = review.get_parameter(:admin_review_scores)
     review_score = review.score.first
-    header = String.new
-    footer = String.new
+    header = String.new.html_safe
+    footer = String.new.html_safe
     width = (100.0 / scores.size).truncate
 
     scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
@@ -23,8 +23,8 @@ module ConclusionFinalReviewsHelper
       column_text = "#{score[0]}"
 
       header << content_tag(:th, (score[0] != review_score ?
-            "<span style=\"font-weight: normal;\">#{column_text}</span>" :
-            "<b>#{column_text.upcase} (#{review.effectiveness}%)</b>"),
+            raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):
+            raw("<b>#{column_text.upcase} (#{review.effectiveness}%)</b>")),
         :style => "width: #{width}%;")
 
       footer << content_tag(:td, "#{max_percentage}% - #{min_percentage}%")
@@ -41,11 +41,11 @@ module ConclusionFinalReviewsHelper
     end
 
     if has_observations
-      header = String.new
-      body = String.new
+      header = String.new.html_safe
+      body = String.new.html_safe
 
       header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.human_name}: #{h(process_control.name)}",
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
         :class => :header)
 
       cois.each do |coi|
@@ -67,11 +67,11 @@ module ConclusionFinalReviewsHelper
     end
 
     if has_oportunities
-      header = String.new
-      body = String.new
+      header = String.new.html_safe
+      body = String.new.html_safe
 
       header = content_tag :tr, content_tag(:td,
-        "#{ProcessControl.human_name}: #{h(process_control.name)}",
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
         :class => :header)
 
       cois.each do |coi|
@@ -86,7 +86,7 @@ module ConclusionFinalReviewsHelper
 
   def weakness_row_data(coi, finding, html_class = nil)
     weakness = finding.kind_of?(Weakness)
-    body_rows = ["<b>#{ControlObjective.human_name}:</b> " +
+    body_rows = ["<b>#{ControlObjective.model_name.human}:</b> " +
       "#{h(coi.control_objective_text)}"]
 
     unless finding.review_code.blank?
@@ -148,6 +148,7 @@ module ConclusionFinalReviewsHelper
     end
 
     content_tag(:tr, content_tag(:td,
-        body_rows.map {|r| content_tag(:p, r)}.join), :class => html_class)
+        raw(body_rows.map {|r| content_tag(:p, raw(r))}.join)),
+      :class => html_class)
   end
 end

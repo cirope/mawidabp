@@ -78,8 +78,8 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     @control_objective.name = nil
     assert @control_objective.invalid?
     assert_equal 1, @control_objective.errors.count
-    assert_equal error_message_from_model(@control_objective, :name, :blank),
-      @control_objective.errors.on(:name)
+    assert_equal [error_message_from_model(@control_objective, :name, :blank)],
+      @control_objective.errors[:name]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -88,10 +88,10 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     @control_objective.risk = '_12'
     assert @control_objective.invalid?
     assert_equal 2, @control_objective.errors.count
-    assert_equal error_message_from_model(@control_objective, :relevance,
-      :not_a_number), @control_objective.errors.on(:relevance)
-    assert_equal error_message_from_model(@control_objective, :risk,
-      :not_a_number), @control_objective.errors.on(:risk)
+    assert_equal [error_message_from_model(@control_objective, :relevance,
+      :not_an_integer)], @control_objective.errors[:relevance]
+    assert_equal [error_message_from_model(@control_objective, :risk,
+      :not_a_number)], @control_objective.errors[:risk]
   end
 
   test 'validates duplicated attributes' do
@@ -99,8 +99,8 @@ class ControlObjectiveTest < ActiveSupport::TestCase
       control_objectives(:iso_27000_security_organization_4_1).name
     assert @control_objective.invalid?
     assert_equal 1, @control_objective.errors.count
-    assert_equal error_message_from_model(@control_objective, :name, :taken),
-      @control_objective.errors.on(:name)
+    assert_equal [error_message_from_model(@control_objective, :name, :taken)],
+      @control_objective.errors[:name]
 
     # Nombres iguales pero distintos procesos de negocio
     @control_objective.name =
@@ -115,7 +115,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     @control_objective.control_ids = []
     assert @control_objective.invalid?
     assert_equal 1, @control_objective.errors.count
-    assert_equal error_message_from_model(@control_objective, :controls,
-      :blank), @control_objective.errors.on(:controls)
+    assert_equal [error_message_from_model(@control_objective, :controls,
+      :blank)], @control_objective.errors[:controls]
   end
 end

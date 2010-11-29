@@ -2,17 +2,13 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= HelpContent.human_attribute_name 'language' %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= HelpContent.human_attribute_name :language %></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
-    <% @help_contents.each do |help_content| -%>
+    <% @help_contents.each do |help_content| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td></td>
         <td><%= t "lang.#{help_content.language}" %></td>
@@ -21,8 +17,7 @@
         <td><%= button_to_destroy help_content %></td>
         <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="4"></td><td></td></tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

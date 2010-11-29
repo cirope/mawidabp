@@ -56,10 +56,10 @@ class DetractTest < ActiveSupport::TestCase
     @detract.user_id = nil
     assert @detract.invalid?
     assert_equal 2, @detract.errors.count
-    assert_equal error_message_from_model(@detract, :value, :blank),
-      @detract.errors.on(:value)
-    assert_equal error_message_from_model(@detract, :user_id, :blank),
-      @detract.errors.on(:user_id)
+    assert_equal [error_message_from_model(@detract, :value, :blank)],
+      @detract.errors[:value]
+    assert_equal [error_message_from_model(@detract, :user_id, :blank)],
+      @detract.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -67,8 +67,8 @@ class DetractTest < ActiveSupport::TestCase
     @detract.value = '12-9'
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
-    assert_equal error_message_from_model(@detract, :value, :not_a_number),
-      @detract.errors.on(:value)
+    assert_equal [error_message_from_model(@detract, :value, :not_a_number)],
+      @detract.errors[:value]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -76,15 +76,15 @@ class DetractTest < ActiveSupport::TestCase
     @detract.value = '-0.01'
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
-    assert_equal error_message_from_model(@detract, :value,
-      :greater_than_or_equal_to, :count => 0), @detract.errors.on(:value)
+    assert_equal [error_message_from_model(@detract, :value,
+      :greater_than_or_equal_to, :count => 0)], @detract.errors[:value]
 
     @detract.reload
 
     @detract.value = '1.01'
     assert @detract.invalid?
     assert_equal 1, @detract.errors.count
-    assert_equal error_message_from_model(@detract, :value,
-      :less_than_or_equal_to, :count => 1), @detract.errors.on(:value)
+    assert_equal [error_message_from_model(@detract, :value,
+      :less_than_or_equal_to, :count => 1)], @detract.errors[:value]
   end
 end

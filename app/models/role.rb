@@ -19,7 +19,7 @@ class Role < ActiveRecord::Base
   }
 
   # Named scopes
-  named_scope :list, lambda { |organization_id|
+  scope :list, lambda { |organization_id|
     {
       :conditions => {
         :organization_id => organization_id ||
@@ -28,7 +28,7 @@ class Role < ActiveRecord::Base
       :order => 'name ASC'
     }
   }
-  named_scope :list_by_organization_and_group, lambda { |organization, group|
+  scope :list_by_organization_and_group, lambda { |organization, group|
     {
       :include => :organization,
       :conditions => {

@@ -12,7 +12,7 @@
   </thead>
 
   <tbody>
-    <% @periods.each do |period| -%>
+    <% @periods.each do |period| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td><%= h period.number %></td>
         <td class="expendable"><%= super_truncate period.description, 40 %></td>
@@ -22,7 +22,7 @@
         <td><%= link_to_edit edit_period_path(period) %></td>
         <td><%= button_to_destroy period %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

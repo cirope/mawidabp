@@ -1,7 +1,7 @@
-<% id = dynamic_object_id('organization_role', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
+<% id = dynamic_object_id('organization_role', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <% roles = f.object.organization ? Role.list(f.object.organization.try(:id)) : [] %>
-<div class="organization_role item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<div class="organization_role item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">
     <%= user_organizations_field(f, id) %>
@@ -12,13 +12,13 @@
       {:disabled => f.object.organization.nil?, :class => :role_select} %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-    <%= remove_item_link(f) -%>
+    <%= remove_item_link(f) %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>
   <script type="text/javascript">
     Event.observe('<%= id %>_organization_id', 'change', function() {
       var element = $(this);

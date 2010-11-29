@@ -29,11 +29,11 @@ module ConclusionCommonReports
           end
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
-            Weakness.list_all_by_date(@from_date, @to_date).send(
+            Weakness.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").for_period(period).finals(
               true).count(:conditions => conditions, :group => :state)
           @weaknesses_counts[period]["#{key}_oportunities"] =
-            Oportunity.list_all_by_date(@from_date, @to_date).send(
+            Oportunity.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").for_period(period).finals(
               true).count(:conditions => conditions, :group => :state)
         end
@@ -60,7 +60,7 @@ module ConclusionCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |audit_type|
@@ -214,9 +214,9 @@ module ConclusionCommonReports
 
             statuses.each do |s|
               weaknesses_count[s[1]] ||= {}
-              weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(@from_date,
-                @to_date).send("#{audit_type_symbol}_audit").for_period(period).finals(
-                true).count(:conditions => {
+              weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
+                @from_date, @to_date, false).send("#{audit_type_symbol}_audit").
+                for_period(period).finals(true).count(:conditions => {
                   :state => s[1], :risk => rl[1]}.merge(conditions || {}))
               weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
             end
@@ -249,7 +249,7 @@ module ConclusionCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       @audit_types.each do |audit_type|
@@ -423,7 +423,7 @@ module ConclusionCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       @audit_types.each do |type|

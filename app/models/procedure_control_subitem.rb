@@ -5,17 +5,17 @@ class ProcedureControlSubitem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
   
-  before_validation_on_create :fill_control_objective_text
+  before_validation(:on => :create) { fill_control_objective_text }
   
   # Named scopes
-  named_scope :list_for_item, lambda { |procedure_control_item_id|
+  scope :list_for_item, lambda { |procedure_control_item_id|
     {
       #:select => connection.distinct('control_objective_id', nil),
       :conditions => { :procedure_control_item_id => procedure_control_item_id }
     }
   }
 
-  named_scope :list_not_in, lambda { |control_objective_ids|
+  scope :list_not_in, lambda { |control_objective_ids|
     {
       :conditions => ['control_objective_id NOT IN :control_objectives_ids',
         {:control_objectives_ids => control_objective_ids}]
@@ -62,9 +62,7 @@ class ProcedureControlSubitem < ActiveRecord::Base
   end
 
   def fill_control_objective_text
-    if self.control_objective
-      self.control_objective_text ||= self.control_objective.name
-    end
+    self.control_objective_text ||= self.control_objective.try(:name)
   end
 
   def risk_text

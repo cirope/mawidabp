@@ -8,7 +8,7 @@ class Finding < ActiveRecord::Base
       :column => "#{ConclusionReview.table_name}.issue_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
       :conversion_method => lambda {
-        |value| ValidatesTimeliness::Parser.parse(value, :date)
+        |value| Timeliness::Parser.parse(value, :date)
       }, :regexp => SEARCH_DATE_REGEXP
     },
     :review => {
@@ -117,13 +117,13 @@ class Finding < ActiveRecord::Base
     :nested_finding_relation
 
   # Named scopes
-  named_scope :with_prefix, lambda { |prefix|
+  scope :with_prefix, lambda { |prefix|
     {
       :conditions => ['review_code LIKE ?', "#{prefix}%"],
       :order => 'review_code ASC'
     }
   }
-  named_scope :all_for_reallocation_with_review, lambda { |review|
+  scope :all_for_reallocation_with_review, lambda { |review|
     {
       :include => {:control_objective_item => :review},
       :conditions => {
@@ -133,23 +133,23 @@ class Finding < ActiveRecord::Base
       }
     }
   }
-  named_scope :all_for_reallocation,
+  scope :all_for_reallocation,
     :conditions => {:state => PENDING_STATUS, :final => false}
-  named_scope :for_notification, :conditions => {
+  scope :for_notification, :conditions => {
     :state => STATUS[:notify],
     :final => false
   }
-  named_scope :finals, lambda { |use_finals|
+  scope :finals, lambda { |use_finals|
     { :conditions => { :final => use_finals } }
   }
-  named_scope :sort_by_code, :order => 'review_code ASC'
-  named_scope :for_period, lambda { |period|
+  scope :sort_by_code, :order => 'review_code ASC'
+  scope :for_period, lambda { |period|
     {
       :include => { :control_objective_item => { :review =>:period } },
       :conditions => { "#{Period.table_name}.id" => period.id }
     }
   }
-  named_scope :next_to_expire, :conditions => [
+  scope :next_to_expire, :conditions => [
     [
       'follow_up_date = :warning_date',
       'state = :being_implemented_state',
@@ -162,7 +162,7 @@ class Finding < ActiveRecord::Base
       :boolean_false => false
     }
   ]
-  named_scope :unconfirmed_for_notification, :conditions => [
+  scope :unconfirmed_for_notification, :conditions => [
     [
       'first_notification_date >= :stale_unconfirmed_date',
       'state = :state',
@@ -175,7 +175,7 @@ class Finding < ActiveRecord::Base
         FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
     }
   ]
-  named_scope :unanswered_and_stale, lambda { |factor|
+  scope :unanswered_and_stale, lambda { |factor|
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -214,7 +214,7 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :unconfirmed_and_stale, lambda {
+  scope :unconfirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -226,7 +226,7 @@ class Finding < ActiveRecord::Base
     stale_parameters.each_with_index do |stale_parameter, i|
       stale_days = stale_parameter[:parameter].to_i
       parameters[:"stale_unconfirmed_date_#{i}"] =
-        (stale_days + stale_days).days.ago_in_business.to_date
+        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
       parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
 
       pre_conditions << [
@@ -251,7 +251,7 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :confirmed_and_stale, lambda {
+  scope :confirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -284,23 +284,20 @@ class Finding < ActiveRecord::Base
       'notification_level = :notification_level'
     ].join(' AND ')
 
-    {
-      :include => [
-        :finding_answers,
-        { :control_objective_item => { :review => :period } }
-      ],
-      :conditions => [
+    where(
+      [
         [
           "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
           fix_conditions
         ].join(' AND '),
         parameters
       ]
-    }
+    ).includes(:finding_answers,
+      {:control_objective_item => {:review => :period}})
   }
-  named_scope :being_implemented, :conditions =>
+  scope :being_implemented, :conditions =>
     {:state => STATUS[:being_implemented]}
-  named_scope :list_all_by_date, lambda { |from_date, to_date|
+  scope :list_all_by_date, lambda { |from_date, to_date, order|
     {
       :include => {
         :control_objective_item => {:review =>
@@ -318,13 +315,13 @@ class Finding < ActiveRecord::Base
           :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
         }
       ],
-      :order => [
+      :order => order ? [
         "#{Period.table_name}.start ASC",
         "#{Period.table_name}.end ASC"
-      ].join(', ')
+      ].join(', ') : nil
     }
   }
-  named_scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
+  scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
     {
       :include => {
         :control_objective_item =>
@@ -343,14 +340,14 @@ class Finding < ActiveRecord::Base
       ]
     }
   }
-  named_scope :internal_audit,
+  scope :internal_audit,
     :include => {
       :control_objective_item => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
       }
     },
     :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  named_scope :external_audit,
+  scope :external_audit,
     :include => {
       :control_objective_item => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
@@ -371,7 +368,8 @@ class Finding < ActiveRecord::Base
   before_validation :set_proper_parent
 
   # Restricciones
-  validates_presence_of :control_objective_item_id, :description, :review_code
+  validates :control_objective_item_id, :description, :review_code,
+    :presence => true
   validates_length_of :review_code, :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_numericality_of :control_objective_item_id, :only_integer => true,
@@ -379,14 +377,14 @@ class Finding < ActiveRecord::Base
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :solution_date, :origination_date,
     :allow_nil => true, :allow_blank => true
-  validates_each :follow_up_date do |record, attr, value|
+  validates_each :follow_up_date, :unless => :incomplete? do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
     record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
   end
-  validates_each :solution_date do |record, attr, value|
+  validates_each :solution_date, :unless => :incomplete? do |record, attr, value|
     check_for_blank = record.implemented_audited? || record.assumed_risk?
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
@@ -508,7 +506,7 @@ class Finding < ActiveRecord::Base
         :field => "#{Finding.table_name}.state ASC"
       },
       :review => {
-        :name => Review.human_name,
+        :name => Review.model_name.human,
         :field => "#{Review.table_name}.identification ASC"
       }
     })
@@ -536,8 +534,9 @@ class Finding < ActiveRecord::Base
   def check_for_valid_relation(finding_relation)
     related_finding = finding_relation.related_finding
     
-    if related_finding.final? || (!related_finding.is_in_a_final_review? &&
-          related_finding.review.id != self.control_objective_item.try(:review_id))
+    if related_finding && (related_finding.final? ||
+          (!related_finding.is_in_a_final_review? &&
+            related_finding.review.id != self.control_objective_item.try(:review_id)))
       raise 'Invalid finding for asociation'
     end
   end
@@ -577,15 +576,15 @@ class Finding < ActiveRecord::Base
   def notify_changes_to_users
     unless self.avoid_changes_notification
       if !@users_added.blank? && !@users_removed.blank?
-        Notifier.deliver_reassigned_findings_notification(@users_added,
-          @users_removed, self, false)
+        Notifier.reassigned_findings_notification(@users_added, @users_removed,
+          self, false).deliver
       elsif @users_added.blank? && !@users_removed.blank?
         title = I18n.t(:'finding.responsibility_removed',
-          :class_name => self.class.human_name.downcase,
+          :class_name => self.class.model_name.human.downcase,
           :review_code => self.review_code,
           :review => self.review.try(:identification))
 
-        Notifier.deliver_changes_notification @users_removed, :title => title
+        Notifier.changes_notification(@users_removed, :title => title).deliver
       end
     end
   end
@@ -638,7 +637,7 @@ class Finding < ActiveRecord::Base
         end
 
         if finding_user_assignment
-          Notifier.deliver_notify_new_finding finding_user_assignment.user, self
+          Notifier.notify_new_finding(self.users.find(user_id), self).deliver
         end
       end
     end
@@ -653,7 +652,7 @@ class Finding < ActiveRecord::Base
     self.first_notification_date = Date.today unless self.unconfirmed?
     self.state = STATUS[:unconfirmed] if self.notify?
     
-    self.save false
+    self.save(:validate => false)
   end
 
   def confirmed!(user = nil)
@@ -881,7 +880,7 @@ class Finding < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE * 3
 
-    pdf.add_title self.class.human_name, (PDF_FONT_SIZE * 1.5).round, :center,
+    pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center,
       false
 
     pdf.move_pointer PDF_FONT_SIZE
@@ -946,7 +945,7 @@ class Finding < ActiveRecord::Base
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
-      pdf.add_title("#{self.class.human_name} #{self.review_code}",
+      pdf.add_title("#{self.class.model_name.human} #{self.review_code}",
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_pointer PDF_FONT_SIZE * 3
@@ -971,7 +970,7 @@ class Finding < ActiveRecord::Base
   end
 
   def pdf_name
-    ("#{self.class.human_name.downcase.gsub(/\s+/, '_')}-" +
+    ("#{self.class.model_name.human.downcase.gsub(/\s+/, '_')}-" +
       "#{self.review_code}.pdf").gsub(/[^A-Za-z0-9\.\-]+/, '_')
   end
 
@@ -992,12 +991,12 @@ class Finding < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
 
-    pdf.add_description_item(Review.human_name,
+    pdf.add_description_item(Review.model_name.human,
       "#{self.review.long_identification} (#{issue_date})", 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
     
-    pdf.add_description_item(ProcessControl.human_name,
+    pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)
     pdf.add_description_item(Finding.human_attribute_name(
         :control_objective_item_id),
@@ -1112,7 +1111,7 @@ class Finding < ActiveRecord::Base
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
-          pdf.add_description_item(User.human_name, version.whodunnit ?
+          pdf.add_description_item(User.model_name.human, version.whodunnit ?
               User.find(version.whodunnit).try(:full_name) : nil)
 
           pdf.move_pointer PDF_FONT_SIZE
@@ -1332,9 +1331,7 @@ class Finding < ActiveRecord::Base
           end
         end
 
-        users.each do |user|
-          Notifier.deliver_stale_notification user
-        end
+        users.each { |user| Notifier.stale_notification(user).deliver }
       end
     end
   end
@@ -1357,8 +1354,8 @@ class Finding < ActiveRecord::Base
         end
 
         users.each do |user|
-          Notifier.deliver_unanswered_findings_notification user,
-            findings.select { |f| f.users.include?(user) }
+          Notifier.unanswered_findings_notification(user,
+            findings.select { |f| f.users.include?(user) }).deliver
         end
       end
     end
@@ -1376,8 +1373,8 @@ class Finding < ActiveRecord::Base
 
             # No notificar si no hace falta
             unless users.empty?
-              Notifier.deliver_unanswered_finding_to_manager_notification(finding,
-                users | finding.users, n)
+              Notifier.unanswered_finding_to_manager_notification(finding,
+                users | finding.users, n).deliver
             end
 
             finding.update_attribute :notification_level, users.empty? ? -1 : n
@@ -1395,8 +1392,8 @@ class Finding < ActiveRecord::Base
       end
 
       users.each do |user|
-        Notifier.deliver_findings_expiration_warning(user,
-          user.findings.next_to_expire)
+        Notifier.findings_expiration_warning(user,
+          user.findings.next_to_expire).deliver
       end
     end
   end
@@ -1409,12 +1406,13 @@ class Finding < ActiveRecord::Base
       font_height_size = pdf.font_height(font_size)
       y_top = pdf.page_height - (pdf.top_margin / 2)
 
-      if organization.try(:image_model)
+      if organization.try(:image_model) &&
+          File.exists?(organization.image_model.image.path(:thumb))
         pdf.add_image_from_file(
-          organization.image_model.full_filename(:thumb),
+          organization.image_model.image.path(:thumb),
           pdf.left_margin, pdf.absolute_top_margin + font_height_size,
-          organization.image_model.thumb(:pdf_thumb).width,
-          organization.image_model.thumb(:pdf_thumb).height)
+          organization.image_model.image_geometry(:pdf_thumb)[:width],
+          organization.image_model.image_geometry(:pdf_thumb)[:height])
       end
 
       date_text = I18n.l(date, :format => :long) if date

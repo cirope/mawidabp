@@ -30,7 +30,8 @@ class ReviewUserAssignment < ActiveRecord::Base
     :allow_blank => true, :allow_nil => true
   validates_each :user do |record, attr, value|
     review = record.review
-    user = User.find(record.user_id) if User.exists?(record.user_id)
+    user = User.find(record.user_id) if record.user_id &&
+      User.exists?(record.user_id)
 
     # Recarga porque el cache se trae el usuario anterior aun cuando el user_id
     # ha cambiado
@@ -80,7 +81,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'review.user_assignment.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -117,7 +118,7 @@ class ReviewUserAssignment < ActiveRecord::Base
         notification_title = I18n.t(
           :'review_user_assignment.responsibility_modification.title',
           :review => self.review.try(:identification))
-        notification_body = "#{Review.human_name} #{self.review.identification}"
+        notification_body = "#{Review.model_name.human} #{self.review.identification}"
         notification_content = [
           I18n.t(
             :'review_user_assignment.responsibility_modification.old_responsible',
@@ -127,13 +128,13 @@ class ReviewUserAssignment < ActiveRecord::Base
             :responsible => new_user.full_name_with_function)
         ]
 
-        Notifier.deliver_changes_notification([new_user, old_user],
+        Notifier.changes_notification([new_user, old_user],
           :title => notification_title, :body => notification_body,
-          :content => notification_content)
+          :content => notification_content).deliver
 
         unless unconfirmed_findings.blank?
-          Notifier.deliver_reassigned_findings_notification(new_user, old_user,
-            unconfirmed_findings)
+          Notifier.reassigned_findings_notification(new_user, old_user,
+            unconfirmed_findings).deliver
         end
       else
         self.errors.add_to_base(
@@ -161,7 +162,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       end
       
       unless all_valid
-        self.errors.add_to_base(
+        self.errors.add(:base,
           I18n.t(:'review_user_assignment.cannot_be_destroyed'))
         raise ActiveRecord::Rollback
       end
@@ -172,7 +173,7 @@ class ReviewUserAssignment < ActiveRecord::Base
       title = I18n.t(:'review_user_assignment.responsibility_removed',
         :review => self.review.try(:identification))
 
-      Notifier.deliver_changes_notification self.user, :title => title
+      Notifier.changes_notification(self.user, :title => title).deliver
     end
 
     all_valid

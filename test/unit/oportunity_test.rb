@@ -100,12 +100,12 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.review_code = '   '
     assert @oportunity.invalid?
     assert_equal 3, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, 
-      :control_objective_item_id, :blank),
-      @oportunity.errors.on(:control_objective_item_id)
+    assert_equal [error_message_from_model(@oportunity,
+      :control_objective_item_id, :blank)],
+      @oportunity.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@oportunity, :review_code, :blank),
       error_message_from_model(@oportunity, :review_code, :invalid)].sort,
-      @oportunity.errors.on(:review_code).sort
+      @oportunity.errors[:review_code].sort
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -115,8 +115,8 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.review_code = another_oportunity.review_code
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, :review_code, :taken),
-      @oportunity.errors.on(:review_code)
+    assert_equal [error_message_from_model(@oportunity, :review_code, :taken)],
+      @oportunity.errors[:review_code]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -127,9 +127,9 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal 3, @oportunity.errors.count
     assert_equal [error_message_from_model(@oportunity, :review_code, :too_long,
       :count => 255), error_message_from_model(@oportunity, :review_code,
-      :invalid)].sort, @oportunity.errors.on(:review_code).sort
-    assert_equal error_message_from_model(@oportunity, :type, :too_long,
-      :count => 255), @oportunity.errors.on(:type)
+      :invalid)].sort, @oportunity.errors[:review_code].sort
+    assert_equal [error_message_from_model(@oportunity, :type, :too_long,
+      :count => 255)], @oportunity.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -137,8 +137,8 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.state = Finding::STATUS.values.sort.last.next
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity, :state, :inclusion),
-      @oportunity.errors.on(:state)
+    assert_equal [error_message_from_model(@oportunity, :state, :inclusion)],
+      @oportunity.errors[:state]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -146,9 +146,9 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.control_objective_item_id = '?nil'
     assert @oportunity.invalid?
     assert_equal 1, @oportunity.errors.count
-    assert_equal error_message_from_model(@oportunity,
-      :control_objective_item_id, :not_a_number),
-      @oportunity.errors.on(:control_objective_item_id)
+    assert_equal [error_message_from_model(@oportunity,
+      :control_objective_item_id, :not_a_number)],
+      @oportunity.errors[:control_objective_item_id]
   end
 
   test 'dynamic functions' do

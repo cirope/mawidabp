@@ -67,15 +67,15 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review.conclusion = '   '
     assert @conclusion_review.invalid?
     assert_equal 4, @conclusion_review.errors.count
-    assert_equal error_message_from_model(@conclusion_review, :issue_date,
-      :blank), @conclusion_review.errors.on(:issue_date)
-    assert_equal error_message_from_model(@conclusion_review, :review_id,
-      :blank), @conclusion_review.errors.on(:review_id)
-    assert_equal error_message_from_model(@conclusion_review,
-      :applied_procedures, :blank),
-      @conclusion_review.errors.on(:applied_procedures)
-    assert_equal error_message_from_model(@conclusion_review, :conclusion,
-      :blank), @conclusion_review.errors.on(:conclusion)
+    assert_equal [error_message_from_model(@conclusion_review, :issue_date,
+      :blank)], @conclusion_review.errors[:issue_date]
+    assert_equal [error_message_from_model(@conclusion_review, :review_id,
+      :blank)], @conclusion_review.errors[:review_id]
+    assert_equal [error_message_from_model(@conclusion_review,
+      :applied_procedures, :blank)],
+      @conclusion_review.errors[:applied_procedures]
+    assert_equal [error_message_from_model(@conclusion_review, :conclusion,
+      :blank)], @conclusion_review.errors[:conclusion]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -85,7 +85,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     assert_equal 2, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
       :blank), error_message_from_model(@conclusion_review, :issue_date,
-      :invalid_date)].sort, @conclusion_review.errors.on(:issue_date).sort
+      :invalid_date)].sort, @conclusion_review.errors[:issue_date].sort
   end
 
   test 'validates unique attributes' do
@@ -93,8 +93,8 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
       conclusion_reviews(:conclusion_past_draft_review).review_id
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
-    assert_equal error_message_from_model(@conclusion_review, :review_id,
-      :taken), @conclusion_review.errors.on(:review_id)
+    assert_equal [error_message_from_model(@conclusion_review, :review_id,
+      :taken)], @conclusion_review.errors[:review_id]
   end
 
   test 'check for approval with rejected notifications' do

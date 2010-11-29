@@ -105,7 +105,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       if @weakness.save
-        flash[:notice] = t :'weakness.correctly_created'
+        flash.notice = t :'weakness.correctly_created'
         format.html { redirect_to(edit_weakness_path(@weakness)) }
         format.xml  { render :xml => @weakness, :status => :created, :location => @weakness }
       else
@@ -127,7 +127,7 @@ class WeaknessesController < ApplicationController
     respond_to do |format|
       Weakness.transaction do
         if @weakness.update_attributes(params[:weakness])
-          flash[:notice] = t :'weakness.correctly_updated'
+          flash.notice = t :'weakness.correctly_updated'
           format.html { redirect_to(edit_weakness_path(@weakness)) }
           format.xml  { head :ok }
         else
@@ -139,7 +139,7 @@ class WeaknessesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash[:alert] = t :'weakness.stale_object_error'
+    flash.alert = t :'weakness.stale_object_error'
     redirect_to :action => :edit
   end
 

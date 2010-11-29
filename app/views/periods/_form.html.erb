@@ -1,5 +1,5 @@
 <!--[form:period]-->
-<% form_for @period do |f| -%>
+<%= form_for @period do |f| %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
@@ -29,6 +29,6 @@
   <p>
     <span class="button"><%= f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:period] -->
 <%= set_focus_to_first_element %>

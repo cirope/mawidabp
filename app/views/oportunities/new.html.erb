@@ -3,9 +3,9 @@
 
 <div id="links">
 <%= link_to t(:'label.list'), oportunities_path %> |
-<% if @oportunity.control_objective_item -%>
+<% if @oportunity.control_objective_item %>
   <%= link_to t(:'oportunity.edit_control_objective'),
     edit_control_objective_item_path(@oportunity.control_objective_item) %> |
-<% end -%>
+<% end %>
 <%= link_to_back %>
 </div>

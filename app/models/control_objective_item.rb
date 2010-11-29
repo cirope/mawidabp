@@ -25,20 +25,16 @@ class ControlObjectiveItem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:pre_audit_workpaper_ids,
-    :post_audit_workpaper_ids]
-
   # Atributos no persistentes
   attr_reader :approval_errors
 
   # Callbacks
   before_validation :can_be_modified?, :enable_control_validations
   before_destroy :can_be_destroyed?
-  before_validation_on_create :fill_control_objective_text
+  before_validation(:on => :create) { fill_control_objective_text }
 
   # Validaciones
-  validates_presence_of :control_objective_text, :control_objective_id
+  validates :control_objective_text, :control_objective_id, :presence => true
   validates_numericality_of :control_objective_id, :review_id,
     :allow_nil => true, :only_integer => true
   validates_numericality_of :relevance, :only_integer => true,
@@ -71,7 +67,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     record.errors.add attr, :blank unless active_controls
   end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
-  validates_presence_of :audit_date, :relevance, :auditor_comment,
+  validates :audit_date, :relevance, :auditor_comment, :presence => true,
     :if => :finished
   validates_each :post_audit_qualification, :if => :finished do |record, attr, value|
     if value.blank? && record.pre_audit_qualification.blank?
@@ -148,10 +144,10 @@ class ControlObjectiveItem < ActiveRecord::Base
       
       order_1 = self.control_objective.process_control.best_practice_id *
         bp_base + self.control_objective.process_control.order * pc_base +
-        self.control_objective.order
+        self.control_objective.order rescue 0
       order_2 = other.control_objective.process_control.best_practice_id *
         bp_base + other.control_objective.process_control.order * pc_base +
-        other.control_objective.order
+        other.control_objective.order rescue 0
 
       order_1 <=> order_2
     else
@@ -243,7 +239,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'control_objective_item.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -312,9 +308,9 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
-    pdf.add_description_item(ProcessControl.human_name,
+    pdf.add_description_item(ProcessControl.model_name.human,
       self.process_control.try(:name), 0, false, (PDF_FONT_SIZE * 1.25).round)
-    pdf.add_description_item(ControlObjectiveItem.human_name,
+    pdf.add_description_item(ControlObjectiveItem.model_name.human,
       self.control_objective_text, 0, false, (PDF_FONT_SIZE * 1.25).round)
 
     pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
@@ -370,13 +366,13 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def pdf_name
-    "#{self.class.human_name.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
+    "#{self.class.model_name.human.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
   end
 
   def pdf_column_data(finding, pc_id)
     body = String.new
     weakness = finding.kind_of?(Weakness)
-    head = "<b>#{ControlObjective.human_name}:</b> " +
+    head = "<b>#{ControlObjective.model_name.human}:</b> " +
       "#{self.control_objective_text.chomp}\n"
 
     unless finding.review_code.blank?

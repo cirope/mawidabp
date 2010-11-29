@@ -52,12 +52,12 @@ class FindingRelationTest < ActiveSupport::TestCase
     @finding_relation.finding_relation_type = nil
     assert @finding_relation.invalid?
     assert_equal 2, @finding_relation.errors.count
-    assert_equal error_message_from_model(@finding_relation,
-      :related_finding_id, :blank),
-      @finding_relation.errors.on(:related_finding_id)
-    assert_equal error_message_from_model(@finding_relation,
-      :finding_relation_type, :blank),
-      @finding_relation.errors.on(:finding_relation_type)
+    assert_equal [error_message_from_model(@finding_relation,
+      :related_finding_id, :blank)],
+      @finding_relation.errors[:related_finding_id]
+    assert_equal [error_message_from_model(@finding_relation,
+      :finding_relation_type, :blank)],
+      @finding_relation.errors[:finding_relation_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -66,9 +66,9 @@ class FindingRelationTest < ActiveSupport::TestCase
       FindingRelation::TYPES.values.sort.last.next
     assert @finding_relation.invalid?
     assert_equal 1, @finding_relation.errors.count
-    assert_equal error_message_from_model(@finding_relation,
-      :finding_relation_type, :inclusion),
-      @finding_relation.errors.on(:finding_relation_type)
+    assert_equal [error_message_from_model(@finding_relation,
+      :finding_relation_type, :inclusion)],
+      @finding_relation.errors[:finding_relation_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -80,8 +80,9 @@ class FindingRelationTest < ActiveSupport::TestCase
       :related_finding => finding_relation.related_finding)
     assert finding_relation.invalid?
     assert_equal 1, finding_relation.errors.count
-    assert_equal error_message_from_model(finding_relation, :related_finding_id,
-      :taken), finding_relation.errors.on(:related_finding_id)
+    assert_equal [error_message_from_model(finding_relation,
+        :related_finding_id, :taken)],
+      finding_relation.errors[:related_finding_id]
   end
 
   test 'dynamic functions' do

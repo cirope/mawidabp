@@ -58,16 +58,16 @@ class CostTest < ActiveSupport::TestCase
     @cost.user_id = nil
     assert @cost.invalid?
     assert_equal 5, @cost.errors.count
-    assert_equal error_message_from_model(@cost, :cost, :blank),
-      @cost.errors.on(:cost)
-    assert_equal error_message_from_model(@cost, :item_id, :blank),
-      @cost.errors.on(:item_id)
-    assert_equal error_message_from_model(@cost, :item_type, :blank),
-      @cost.errors.on(:item_type)
-    assert_equal error_message_from_model(@cost, :cost_type, :blank),
-      @cost.errors.on(:cost_type)
-    assert_equal error_message_from_model(@cost, :user_id, :blank),
-      @cost.errors.on(:user_id)
+    assert_equal [error_message_from_model(@cost, :cost, :blank)],
+      @cost.errors[:cost]
+    assert_equal [error_message_from_model(@cost, :item_id, :blank)],
+      @cost.errors[:item_id]
+    assert_equal [error_message_from_model(@cost, :item_type, :blank)],
+      @cost.errors[:item_type]
+    assert_equal [error_message_from_model(@cost, :cost_type, :blank)],
+      @cost.errors[:cost_type]
+    assert_equal [error_message_from_model(@cost, :user_id, :blank)],
+      @cost.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -77,12 +77,12 @@ class CostTest < ActiveSupport::TestCase
     @cost.user_id = '15.4'
     assert @cost.invalid?
     assert_equal 3, @cost.errors.count
-    assert_equal error_message_from_model(@cost, :cost, :not_a_number),
-      @cost.errors.on(:cost)
-    assert_equal error_message_from_model(@cost, :item_id, :not_a_number),
-      @cost.errors.on(:item_id)
-    assert_equal error_message_from_model(@cost, :user_id, :not_a_number),
-      @cost.errors.on(:user_id)
+    assert_equal [error_message_from_model(@cost, :cost, :not_a_number)],
+      @cost.errors[:cost]
+    assert_equal [error_message_from_model(@cost, :item_id, :not_an_integer)],
+      @cost.errors[:item_id]
+    assert_equal [error_message_from_model(@cost, :user_id, :not_an_integer)],
+      @cost.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -90,8 +90,8 @@ class CostTest < ActiveSupport::TestCase
     @cost.cost = '-1'
     assert @cost.invalid?
     assert_equal 1, @cost.errors.count
-    assert_equal error_message_from_model(@cost, :cost,
-      :greater_than_or_equal_to, :count => 0), @cost.errors.on(:cost)
+    assert_equal [error_message_from_model(@cost, :cost,
+      :greater_than_or_equal_to, :count => 0)], @cost.errors[:cost]
   end
 
   test 'fetch the correct time from raw cost' do

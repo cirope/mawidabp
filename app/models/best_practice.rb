@@ -8,11 +8,8 @@ class BestPractice < ActiveRecord::Base
   # Callbacks
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:process_control_ids]
-
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id
@@ -59,7 +56,7 @@ class BestPractice < ActiveRecord::Base
         pc.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
       
-      self.errors.add_to_base errors.reject { |e| e.blank? }.join(
+      self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 
       false

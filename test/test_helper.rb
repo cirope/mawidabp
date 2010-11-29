@@ -1,6 +1,6 @@
 ENV["RAILS_ENV"] = 'test'
 require File.expand_path(File.dirname(__FILE__) + '/../config/environment')
-require 'test_help'
+require 'rails/test_help'
 
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
@@ -69,7 +69,7 @@ class ActiveSupport::TestCase
   end
 
   def error_message_from_model(model, attribute, message, extra = {})
-    ::ActiveRecord::Error.new(model, attribute, message, extra).message
+    ::ActiveModel::Errors.new(model).generate_message(attribute, message, extra)
   end
 
   def backup_file(file_name)

@@ -1,8 +1,8 @@
-<% form_for @auth_user, :url => update_personal_data_user_path(@auth_user) do |f| -%>
+<%= form_for @auth_user, :url => update_personal_data_user_path(@auth_user) do |f| %>
   <div class="form_column_left">
     <%= f.error_messages %>
     <p class="form_item">
-      <label class="inline"><%= Organization.human_name %>:</label>
+      <label class="inline"><%= Organization.model_name.human %>:</label>
       <%= text_field nil, :organization_name,
         :value => @auth_organization.name, :readonly => true,
         :size => nil, :class => :inline_item %>
@@ -37,7 +37,7 @@
   <p>
     <span class="button"><%= f.submit t(:'label.modify') %></span>
   </p>
-<% end -%>
+<% end %>
 
 <div id="links">
   <%= link_to t(:'user.change_password_title'), edit_password_user_path(@auth_user) %>

@@ -2,19 +2,19 @@
   :locals => {:action => :weaknesses_by_audit_type, :extra_params => {},
   :forms => {:date_range => true}} %>
 
-<% @periods.each do |period| -%>
+<% @periods.each do |period| %>
   <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.human_name}: #{period.inspect}" %></strong>
+    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
-  <% @audit_types.each do |type| -%>
+  <% @audit_types.each do |type| %>
     <h1 class="center_title">
       <%= t("conclusion_committee_report.findings_type_#{type}") %>
     </h1>
-    <% unless @data[period][type].blank? -%>
-      <% @data[period][type].each do |data_item| -%>
+    <% unless @data[period][type].blank? %>
+      <% @data[period][type].each do |data_item| %>
         <div style="margin: 1em;">
           <h1><%= data_item[:title] %></h1>
-          <% data_item[:business_units].each do |bu, bu_data| -%>
+          <% data_item[:business_units].each do |bu, bu_data| %>
             <p>
               <b><%= bu.business_unit_type.business_unit_label %></b>:
               <%= bu.name %>
@@ -31,46 +31,46 @@
               <%= render :partial => 'weaknesses_synthesis_table', :locals => {
                 :table_data => bu_data[:weaknesses_table_data]} %>
 
-              <% if type == :internal -%>
+              <% if type == :internal %>
                 <h2><%= t(:'conclusion_committee_report.weaknesses_by_audit_type.oportunities') %></h2>
-                <% unless bu_data[:oportunities_table_data].blank? -%>
+                <% unless bu_data[:oportunities_table_data].blank? %>
                   <table class="summary_table" style="margin: 1em 0em;">
                     <thead>
                       <tr>
                         <th style="width: 30%;">
-                          <%= Oportunity.human_attribute_name('state') %>
+                          <%= Oportunity.human_attribute_name(:state) %>
                         </th>
                         <th style="width: 70%;">
-                          <%= Oportunity.human_attribute_name('count') %>
+                          <%= Oportunity.human_attribute_name(:count) %>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <% bu_data[:oportunities_table_data].each do |data| -%>
+                      <% bu_data[:oportunities_table_data].each do |data| %>
                         <tr>
-                          <td><strong><%= data['state'].to_utf8 %></strong></td>
-                          <td><%= data['count'] %></td>
+                          <td><strong><%= raw data['state'].to_utf8 %></strong></td>
+                          <td><%= raw data['count'] %></td>
                         </tr>
                       <% end %>
                     </tbody>
                   </table>
-                <% else -%>
+                <% else %>
                   <p style="margin: 1em 0em; font-size: 1.1em;">
                     <em><%= t(:'follow_up_committee.without_oportunities') %></em>
                   </p>
-                <% end -%>
-              <% end -%>
+                <% end %>
+              <% end %>
             </div>
-          <% end -%>
+          <% end %>
         </div>
-      <% end -%>
-    <% else -%>
+      <% end %>
+    <% else %>
       <p style="margin: 1em; font-size: 1.1em;">
         <em><%= t(:'follow_up_committee.without_weaknesses') %></em>
       </p>
-    <% end -%>
-  <% end -%>
-<% end -%>
+    <% end %>
+  <% end %>
+<% end %>
 
 <div id="links">
   <%= link_to t(:'label.back'), :action => :index %> |

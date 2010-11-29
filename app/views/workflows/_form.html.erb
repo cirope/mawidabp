@@ -16,44 +16,42 @@
   }
 </script>
 <!--[form:workflow]-->
-<% form_for @workflow do |w_f| -%>
-  <% content_for :js_extra do -%>
-    <%= "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
-  <% end -%>
+<%= form_for @workflow do |w_f| %>
+  <% js_extra = "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
   <%= w_f.error_messages %>
 
   <div class="form_column_left">
     <p class="form_item">
-      <% if @workflow.new_record? -%>
+      <% if @workflow.new_record? %>
         <%= w_f.label :period_id, nil, :class => :inline %>
         <%= w_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
           {:prompt => true}, {:class => :inline_item} %>
         <%= link_to_add new_period_path(:back_to => new_workflow_path) %>
-      <% else -%>
+      <% else %>
         <label class="inline"><%= Workflow.human_attribute_name :period_id %>:</label>
         <%= text_field_tag :period_description, @workflow.period.inspect,
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
-      <% end -%>
+      <% end %>
     </p>
   </div>
   <div class="form_column_right">
      <p class="form_item">
-      <% if @workflow.new_record? -%>
+      <% if @workflow.new_record? %>
         <%= w_f.label :review_id, nil, :class => :inline %>
-        <% with_period = @workflow.period_id && @workflow.period_id > 0 -%>
+        <% with_period = @workflow.period_id && @workflow.period_id > 0 %>
         <%= w_f.select :review_id,
             (with_period ? Review.list_without_final_review.
               list_all_without_workflow(@workflow.period_id).
               map { |r| [r.identification, r.id] } : []),
           {:prompt => true},
           (with_period && @workflow.new_record? ? {} : {:disabled => true}).merge(:class => :inline_item) %>
-      <% else -%>
+      <% else %>
         <label class="inline"><%= Workflow.human_attribute_name :review_id %>:</label>
         <%= text_field_tag :review_description, @workflow.review,
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>
-      <% end -%>
+      <% end %>
     </p>
   </div>
 
@@ -108,46 +106,47 @@
     </div>
 
     <div id="workflow_items">
-      <% w_f.fields_for :workflow_items, @workflow.workflow_items.sort! do |wi_f| -%>
-        <% content_for :js_extra do -%>
-          <% hru_template ||= generate_template(wi_f, :resource_utilizations,
-            :object => ResourceUtilization.new(:resource_type => 'User'),
-            :partial => 'human_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') -%>
-          <% mru_template ||= generate_template(wi_f, :resource_utilizations,
-            :object => ResourceUtilization.new(:resource_type => 'Resource'),
-            :partial => 'material_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') -%>
-          <%= "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 -%>
-          <%= "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 -%>
-          <% mru_template = 0 -%>
-          <% hru_template = 0 -%>
-        <% end -%>
+      <%= w_f.fields_for :workflow_items, @workflow.workflow_items.sort! do |wi_f| %>
+        <% hru_template ||= generate_template(wi_f, :resource_utilizations,
+          :object => ResourceUtilization.new(:resource_type => 'User'),
+          :partial => 'human_resource_utilization',
+          :child_index => 'NEW_SUBRECORD') %>
+        <% mru_template ||= generate_template(wi_f, :resource_utilizations,
+          :object => ResourceUtilization.new(:resource_type => 'Resource'),
+          :partial => 'material_resource_utilization',
+          :child_index => 'NEW_SUBRECORD') %>
+        <% js_extra << "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
+        <% js_extra << "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
+        <% mru_template = 0 %>
+        <% hru_template = 0 %>
         <%= render :partial => 'workflow_item', :locals =>
           {:f => wi_f, :is_dynamic => false} %>
-      <% end -%>
+      <% end %>
     </div>
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'label.add_item'), '#workflow_item',
-      :class => :add_nested_item, :rel => :workflow_items %>
+    <%= link_to t(:'label.add_item'), '#', :'data-template' => :workflow_item,
+      :'data-event' => :add_nested_item, :'data-container' => :workflow_items %>
   </p>
 
-  <% if @workflow.overloaded? -%>
+  <% if @workflow.overloaded? %>
     <p class="form_item">
       <%= w_f.label :allow_overload, t(:'workflow.allow_overload'),
         :class => 'inline error_field' %>
       <%= w_f.check_box :allow_overload, :class => :inline_item %>
     </p>
-  <% end -%>
+  <% end %>
 
   <%= hidden_lock_version(w_f) %>
 
   <p>
     <span class="button"><%= w_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+  <%= content_for :js_extra do %>
+    <%= raw js_extra %>
+  <% end %>
+<% end %>
 <!--[eoform:workflow] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">

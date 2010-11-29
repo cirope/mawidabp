@@ -34,9 +34,6 @@ class User < ActiveRecord::Base
   acts_as_tree :foreign_key => 'manager_id',
     :order => 'last_name ASC, name ASC', :dependent_children => :nullify
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:role_ids, :organization_ids]
-
   # Atributos protegidos
   attr_protected :group_admin
 
@@ -47,7 +44,7 @@ class User < ActiveRecord::Base
   attr_accessor_with_default :password_was_encrypted, false
 
   # Named scopes
-  named_scope :list, lambda {
+  scope :list, lambda {
     {
       :include => :organizations,
       :conditions => {:organizations => {
@@ -56,7 +53,7 @@ class User < ActiveRecord::Base
       }
     }
   }
-  named_scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
+  scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
     {
       :conditions => [
         [
@@ -70,10 +67,10 @@ class User < ActiveRecord::Base
       :limit => 1
     }
   }
-  named_scope :all_with_findings_for_notification,
+  scope :all_with_findings_for_notification,
     :include => {:finding_user_assignments => :finding},
     :conditions => {
-      Finding.table_name => {:state => Finding::STATUS[:notify], :final => false}
+      :findings => {:state => Finding::STATUS[:notify], :final => false}
     },
     :order =>
       ["#{table_name}.last_name ASC", "#{table_name}.name ASC"].join(', ')
@@ -297,7 +294,7 @@ class User < ActiveRecord::Base
 
   def send_welcome_email
     unless self.send_notification_email.blank?
-      Notifier.deliver_welcome_email(self)
+      Notifier.welcome_email(self).deliver
     end
   end
 
@@ -308,7 +305,7 @@ class User < ActiveRecord::Base
       self.blank_password!(organization, false)
       self.log_password_change
 
-      Notifier.deliver_welcome_email(self)
+      Notifier.welcome_email(self).deliver
     end
   end
 
@@ -344,9 +341,9 @@ class User < ActiveRecord::Base
     self.password_changed = Time.new
     self.change_password_hash = UUIDTools::UUID.random_create.to_s
 
-    Notifier.deliver_blank_password_notification(self, organization) if notify
+    Notifier.blank_password_notification(self, organization).deliver if notify
 
-    self.save(false)
+    self.save(:validate => false)
   end
 
   def disable!
@@ -422,7 +419,7 @@ class User < ActiveRecord::Base
     self.logged_in = true
     self.last_access = time unless first_login?
 
-    self.save(false)
+    self.save(:validate => false)
   end
 
   def logout!
@@ -475,7 +472,7 @@ class User < ActiveRecord::Base
 
   def has_not_orphan_fingings?
     unless self.findings.all_for_reallocation.blank?
-      self.errors.add_to_base I18n.t(:'user.will_be_orphan_findings')
+      self.errors.add :base, I18n.t(:'user.will_be_orphan_findings')
 
       false
     else
@@ -542,8 +539,8 @@ class User < ActiveRecord::Base
     Finding.transaction do
       if options[:with_findings]
         self.findings.all_for_reallocation.each do |f|
-          description = "#{f.class.human_name} *#{f.review_code.strip}* " +
-            "(#{Review.human_name} *#{f.review.identification.strip}*)"
+          description = "#{f.class.model_name.human} *#{f.review_code.strip}* " +
+            "(#{Review.model_name.human} *#{f.review.identification.strip}*)"
           f.avoid_changes_notification = true
           f.users.delete self
           items_for_notification << description
@@ -560,13 +557,13 @@ class User < ActiveRecord::Base
       if options[:with_reviews]
         self.review_user_assignments.each do |rua|
           unless rua.review.has_final_review?
-            items_for_notification << "#{Review.human_name} " +
+            items_for_notification << "#{Review.model_name.human} " +
               rua.review.identification
 
             unless rua.destroy_without_notification
               all_released = false
               description =
-                "#{Review.human_name}: *#{rua.review.identification.strip}*"
+                "#{Review.model_name.human}: *#{rua.review.identification.strip}*"
               
               self.reallocation_errors << [description,rua.errors.full_messages]
             end
@@ -577,7 +574,7 @@ class User < ActiveRecord::Base
       end
 
       unless all_released
-        self.errors.add_to_base I18n.t(:'user.user_release_failed')
+        self.errors.add :base, I18n.t(:'user.user_release_failed')
         
         raise ActiveRecord::Rollback
       end
@@ -586,8 +583,8 @@ class User < ActiveRecord::Base
     if all_released && !items_for_notification.empty?
       title = I18n.t(:'user.responsibility_release.title')
 
-      Notifier.deliver_changes_notification(self, :title => title,
-        :content => items_for_notification)
+      Notifier.changes_notification(self, :title => title,
+        :content => items_for_notification).deliver
     end
 
     all_released
@@ -618,8 +615,8 @@ class User < ActiveRecord::Base
 
             if f.invalid?
               all_reassigned = false
-              description = "#{f.class.human_name} *#{f.review_code.strip}* " +
-                "(#{Review.human_name} *#{f.review.identification.strip}*)"
+              description = "#{f.class.model_name.human} *#{f.review_code.strip}* " +
+                "(#{Review.model_name.human} *#{f.review.identification.strip}*)"
 
               self.reallocation_errors << [description, f.errors.full_messages]
             end
@@ -641,7 +638,7 @@ class User < ActiveRecord::Base
               
               unless rua.update_attribute :user, other
                 all_reassigned = false
-                description = "#{Review.human_name}: " +
+                description = "#{Review.model_name.human}: " +
                   "*#{rua.review.identification.strip}*"
 
                 self.reallocation_errors << [description,
@@ -674,8 +671,8 @@ class User < ActiveRecord::Base
               I18n.t(:'user.responsibility_modification.new_responsible',
                 :responsible => other.full_name_with_function)]
 
-            Notifier.deliver_changes_notification([other, self],
-              :title => title, :body => body, :content => content)
+            Notifier.changes_notification([other, self], :title => title,
+              :body => body, :content => content).deliver
           end
 
           unless unconfirmed_findings.blank?
@@ -685,7 +682,7 @@ class User < ActiveRecord::Base
               :findings => unconfirmed_findings, :user => other)
 
             unconfirmed_findings.group_by(&:review).each do |r, findings|
-              content << "*#{Review.human_name} #{r.identification}*"
+              content << "*#{Review.model_name.human} #{r.identification}*"
 
               findings.each do |f|
                 model = f.class
@@ -703,8 +700,8 @@ class User < ActiveRecord::Base
               content << "\n\n"
             end
 
-            Notifier.deliver_changes_notification(other, :title => title,
-              :content => content, :notification => notification)
+            Notifier.changes_notification(other, :title => title,
+              :content => content, :notification => notification).deliver
           end
         end
 
@@ -721,7 +718,7 @@ class User < ActiveRecord::Base
     # Sólo si no es sábado o domingo
     unless [0, 6].include?(Date.today.wday)
       findings = User.all_with_findings_for_notification.inject([]) do |f, user|
-        Notifier.deliver_notify_new_findings user
+        Notifier.notify_new_findings(user).deliver
 
         f | user.findings.for_notification
       end

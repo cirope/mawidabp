@@ -1,6 +1,6 @@
-<% id = dynamic_object_id('material_resource_utilization', f) -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
-<div class="material_resource_utilization item" id="<%= id %>" <%= 'style="display: none;"' if hide %>>
+<% id = dynamic_object_id('material_resource_utilization', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
+<div class="material_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 30%;">
     <%= plan_resource_field(f, id, false) %>
@@ -12,28 +12,29 @@
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-    <%= insert_record_link(f, :class => :insert_record_subitem,
-      :rel => 'workflow_item material_resource_utilizations',
-      :class_to_insert => 'material_resource_utilization') %> |
-    <%= remove_item_link(f, 'material_resource_utilization') -%>
-    <%= f.hidden_field :resource_type %>
+      <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
+        :'data-parent' => :workflow_item,
+        :class_to_insert => :material_resource_utilization) %> |
+      <%= remove_item_link(f, 'material_resource_utilization') %>
+      <%= f.hidden_field :resource_type %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
   <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>
 <script type="text/javascript">
 (function() {
   var id = '<%= id %>_resource_id';
 
   Event.observe(id, 'change', function() {
-    var url = '<%= url_for :action => :resource_data %>';
+    var url = '<%= resource_data_workflows_path %>';
 
     Helper.showLoading(id);
 
     new Ajax.Request(url, {
       parameters: {id: $F(id)},
+      method: 'get',
       onSuccess: function(response) {
         $('<%= id %>_cost_per_unit').setValue(
           response.responseJSON.resource.cost_per_unit);

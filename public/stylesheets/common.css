@@ -44,24 +44,28 @@ a.image_link:hover {
     color: inherit;
 }
 
-a.remove_link {
+a[data-event="remove_item"],
+a[data-event="remove_list_item"],
+a[data-event="hide_item"] {
     font-size: 12px;
     font-weight: bold;
     padding: 1px 3px;
     text-decoration: none;
 }
 
-a.remove_link:hover {
+a[data-event="remove_item"]:hover,
+a[data-event="remove_list_item"]:hover,
+a[data-event="hide_item"]:hover {
     background: #aa0000;
     color: #ffffff;
 }
 
-acronym {
+abbr {
     cursor: help;
     border-bottom: 1px dotted #2c3234;
 }
 
-acronym.info {
+abbr.info {
     font-size: 16px;
     font-weight: bold;
 }
@@ -208,7 +212,8 @@ div#links div.pagination a:hover {
     border: 2px solid #47ae00;
 }
 
-div#links div.pagination span.current {
+div#links div.pagination em {
+    font-style: normal;
     border: 2px solid #333333;
     background: #333333;
     color: #ffffff;
@@ -915,11 +920,11 @@ form .inline_item, .filter .inline_item {
     margin: 4px 0px;
 }
 
-form.button-to {
+form.button_to {
     margin: 0px;
 }
 
-form.button-to input[type="submit"] {
+form.button_to input[type="submit"] {
     margin: 0px;
 }
 

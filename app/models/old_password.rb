@@ -1,6 +1,6 @@
 class OldPassword < ActiveRecord::Base
   # Named scopes
-  named_scope :lasts, lambda { |user_id, result_limit|
+  scope :lasts, lambda { |user_id, result_limit|
     limit = result_limit - 1
     {
       :conditions => { :user_id => user_id },

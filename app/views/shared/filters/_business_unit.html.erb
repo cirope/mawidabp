@@ -6,8 +6,8 @@
           <td style="padding-right: 1em; width: 50%;">
             <p class="form_item" style="margin: 0em;">
               <% selected = params[action] ?
-                params[action][:business_unit_type] : nil -%>
-              <%= f.label :business_unit_type, BusinessUnitType.human_name,
+                params[action][:business_unit_type] : nil %>
+              <%= f.label :business_unit_type, BusinessUnitType.model_name.human,
                 :class => :inline %>
               <%= f.select :business_unit_type,
                 BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
@@ -18,8 +18,8 @@
           <td style="padding-right: 1em; width: 50%;">
             <p class="form_item" style="margin: 0em;">
               <% business_unit_filter = params[action] ?
-                params[action][:business_unit] : nil -%>
-              <%= f.label :business_unit, BusinessUnit.human_name,
+                params[action][:business_unit] : nil %>
+              <%= f.label :business_unit, BusinessUnit.model_name.human,
                 :class => :inline %>
               <%= f.text_field :business_unit, :value => business_unit_filter,
                 :maxlength => 255, :size => 10, :class => :inline_item %>

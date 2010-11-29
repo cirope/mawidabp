@@ -12,7 +12,7 @@
 <p>
   <b><%= Version.human_attribute_name 'item' %>:</b>
   <%=h @version.item ?
-    "#{@version.item.class.human_name} (#{@version.reify || @version.item})" : '-' %>
+    "#{@version.item.class.model_name.human} (#{@version.reify || @version.item})" : '-' %>
 </p>
 
 <p>
@@ -21,8 +21,8 @@
 </p>
 
 <h1 style="margin-top: 1em;"><%= t :'version.changes' %></h1>
-<% changes = @version.changes_from_next -%>
-<% unless changes.blank? -%>
+<% changes = @version.changes_from_next %>
+<% unless changes.blank? %>
   <table class="summary_table">
     <thead>
       <tr>
@@ -32,18 +32,18 @@
       </tr>
     </thead>
     <tbody>
-      <% changes.each do |change| -%>
+      <% changes.each do |change| %>
         <tr>
           <td><%= change[:attribute] %></td>
           <td><%= change[:old_value] %></td>
           <td><%= change[:new_value] %></td>
         </tr>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
-<% else -%>
+<% else %>
   <p><%= t :'version.without_changes' %></p>
-<% end -%>
+<% end %>
 </div>
 
 <div id="links">

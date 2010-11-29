@@ -115,14 +115,14 @@ class FindingTest < ActiveSupport::TestCase
     @finding.description = '   '
     assert @finding.invalid?
     assert_equal 4, @finding.errors.count
-    assert_equal error_message_from_model(@finding,
-      :control_objective_item_id, :blank),
-      @finding.errors.on(:control_objective_item_id)
+    assert_equal [error_message_from_model(@finding,
+        :control_objective_item_id, :blank)],
+      @finding.errors[:control_objective_item_id]
     assert_equal [error_message_from_model(@finding, :review_code, :blank),
       error_message_from_model(@finding, :review_code, :invalid)].sort,
-      @finding.errors.on(:review_code).sort
-    assert_equal error_message_from_model(@finding, :description, :blank),
-      @finding.errors.on(:description)
+      @finding.errors[:review_code].sort
+    assert_equal [error_message_from_model(@finding, :description, :blank)],
+      @finding.errors[:description]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -134,10 +134,10 @@ class FindingTest < ActiveSupport::TestCase
     @finding.answer = '   '
     assert @finding.invalid?
     assert_equal 2, @finding.errors.count
-    assert_equal error_message_from_model(@finding, :follow_up_date, :blank),
-      @finding.errors.on(:follow_up_date)
-    assert_equal error_message_from_model(@finding, :answer, :blank),
-      @finding.errors.on(:answer)
+    assert_equal [error_message_from_model(@finding, :follow_up_date, :blank)],
+      @finding.errors[:follow_up_date]
+    assert_equal [error_message_from_model(@finding, :answer, :blank)],
+      @finding.errors[:answer]
 
     assert @finding.reload.update_attributes(
       :state => Finding::STATUS[:implemented_audited],
@@ -145,8 +145,8 @@ class FindingTest < ActiveSupport::TestCase
     @finding.solution_date = nil
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
-    assert_equal error_message_from_model(@finding, :solution_date, :blank),
-      @finding.errors.on(:solution_date)
+    assert_equal [error_message_from_model(@finding, :solution_date, :blank)],
+      @finding.errors[:solution_date]
   end
 
   test 'validates special not blank attributes' do
@@ -158,10 +158,10 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.invalid?
     assert_equal 2, finding.errors.size
-    assert_equal error_message_from_model(finding, :follow_up_date,
-      :must_be_blank), finding.errors.on(:follow_up_date)
-    assert_equal error_message_from_model(finding, :solution_date,
-      :must_be_blank), finding.errors.on(:solution_date)
+    assert_equal [error_message_from_model(finding, :follow_up_date,
+        :must_be_blank)], finding.errors[:follow_up_date]
+    assert_equal [error_message_from_model(finding, :solution_date,
+        :must_be_blank)], finding.errors[:solution_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -171,8 +171,8 @@ class FindingTest < ActiveSupport::TestCase
     @finding.review_code = another_finding.review_code
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
-    assert_equal error_message_from_model(@finding, :review_code, :taken),
-      @finding.errors.on(:review_code)
+    assert_equal [error_message_from_model(@finding, :review_code, :taken)],
+      @finding.errors[:review_code]
 
     # Se puede duplicar si es de otro informe
     another_finding = Finding.find(findings(
@@ -188,32 +188,36 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.invalid?
     assert_equal 3, @finding.errors.count
     assert_equal [error_message_from_model(@finding, :review_code, :too_long,
-      :count => 255), error_message_from_model(@finding, :review_code,
-      :invalid)].sort, @finding.errors.on(:review_code).sort
-    assert_equal error_message_from_model(@finding, :type, :too_long,
-      :count => 255), @finding.errors.on(:type)
+        :count => 255), error_message_from_model(@finding, :review_code,
+        :invalid)].sort, @finding.errors[:review_code].sort
+    assert_equal [error_message_from_model(@finding, :type, :too_long,
+        :count => 255)], @finding.errors[:type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
+    assert @finding.update_attribute :state, Finding::STATUS[:incomplete]
+
     @finding.control_objective_item_id = '?nil'
     @finding.first_notification_date = '12/13/12'
     @finding.follow_up_date = '12/13/12'
     @finding.solution_date = '12/13/12'
     @finding.origination_date = '12/13/12'
+
     assert @finding.invalid?
+
     assert_equal 5, @finding.errors.count
-    assert_equal error_message_from_model(@finding,
-      :control_objective_item_id, :not_a_number),
-      @finding.errors.on(:control_objective_item_id)
-    assert_equal error_message_from_model(@finding, :first_notification_date,
-      :invalid_date), @finding.errors.on(:first_notification_date)
-    assert_equal error_message_from_model(@finding, :follow_up_date,
-      :invalid_date), @finding.errors.on(:follow_up_date)
-    assert_equal error_message_from_model(@finding, :solution_date,
-      :invalid_date), @finding.errors.on(:solution_date)
-    assert_equal error_message_from_model(@finding, :origination_date,
-      :invalid_date), @finding.errors.on(:origination_date)
+    assert_equal [error_message_from_model(@finding,
+      :control_objective_item_id, :not_a_number)],
+      @finding.errors[:control_objective_item_id]
+    assert_equal [error_message_from_model(@finding, :first_notification_date,
+      :invalid_date)], @finding.errors[:first_notification_date]
+    assert_equal [error_message_from_model(@finding, :follow_up_date,
+      :invalid_date)], @finding.errors[:follow_up_date]
+    assert_equal [error_message_from_model(@finding, :solution_date,
+      :invalid_date)], @finding.errors[:solution_date]
+    assert_equal [error_message_from_model(@finding, :origination_date,
+      :invalid_date)], @finding.errors[:origination_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -225,8 +229,8 @@ class FindingTest < ActiveSupport::TestCase
     end.sort.last.next
     assert @finding.invalid?
     assert_equal 1, @finding.errors.count
-    assert_equal error_message_from_model(@finding, :state, :inclusion),
-      @finding.errors.on(:state)
+    assert_equal [error_message_from_model(@finding, :state, :inclusion)],
+      @finding.errors[:state]
   end
 
   test 'validates status' do
@@ -239,7 +243,7 @@ class FindingTest < ActiveSupport::TestCase
       assert @finding.invalid?
       # Dependiendo del estado se validan más o menos cosas
       assert !@finding.errors.empty?
-      assert @finding.errors.on(:state).include?(
+      assert @finding.errors[:state].include?(
         error_message_from_model(@finding, :state, :inclusion))
     end
   end
@@ -254,8 +258,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.state = Finding::STATUS[:being_implemented]
     assert finding.invalid?
 
-    assert_equal error_message_from_model(finding, :state,
-      :must_have_a_comment), finding.errors.on(:state)
+    assert_equal [error_message_from_model(finding, :state,
+        :must_have_a_comment)], finding.errors[:state]
 
     finding.comments.build(:comment => 'Test comment',
       :user => users(:administrator_user))
@@ -272,8 +276,8 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.work_papers.empty?
     assert finding.invalid?
     assert_equal 1, finding.errors.size
-    assert_equal error_message_from_model(finding, :state,
-      :must_have_a_work_paper), finding.errors.on(:state)
+    assert_equal [error_message_from_model(finding, :state,
+        :must_have_a_work_paper)], finding.errors[:state]
   end
 
   test 'validates audited users' do
@@ -283,8 +287,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :finding_user_assignments,
-      :invalid), @finding.errors.on(:finding_user_assignments)
+    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
+        :invalid)], @finding.errors[:finding_user_assignments]
   end
 
   test 'validates auditor users' do
@@ -292,8 +296,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :finding_user_assignments,
-      :invalid), @finding.errors.on(:finding_user_assignments)
+    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
+        :invalid)], @finding.errors[:finding_user_assignments]
   end
 
   test 'validates supervisor users' do
@@ -301,8 +305,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :finding_user_assignments,
-      :invalid), @finding.errors.on(:finding_user_assignments)
+    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
+        :invalid)], @finding.errors[:finding_user_assignments]
   end
 
   test 'validates manager users' do
@@ -310,8 +314,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.invalid?
     assert 1, @finding.errors.size
-    assert_equal error_message_from_model(@finding, :finding_user_assignments,
-      :invalid), @finding.errors.on(:finding_user_assignments)
+    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
+        :invalid)], @finding.errors[:finding_user_assignments]
   end
 
   test 'stale function' do
@@ -373,7 +377,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.confirmed?
     assert_not_nil finding.confirmation_date
-    assert !finding.notifications.not_confirmed.detect { |n| n.user.can_act_as_audited? }
+    assert !finding.notifications.not_confirmed.reload.detect { |n| n.user.can_act_as_audited? }
     assert_equal users(:audited_user).id,
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
     assert finding.save
@@ -391,8 +395,8 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.invalid?
     assert_equal 1, finding.errors.size
-    assert_equal error_message_from_model(finding, :answer, :blank),
-      finding.errors.on(:answer)
+    assert_equal [error_message_from_model(finding, :answer, :blank)],
+      finding.errors[:answer]
   end
 
   test 'dynamic functions' do
@@ -460,7 +464,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'mark as unconfirmed' do
     finding = Finding.find findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
+      :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert finding.notify?
     assert finding.mark_as_unconfirmed!
@@ -470,12 +474,12 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'important dates' do
     finding = Finding.find findings(
-        :iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification).id
+      :iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification).id
 
     assert_equal 1, finding.important_dates.size
     
     finding = Finding.find findings(
-        :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
+      :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert_equal 0, finding.important_dates.size
     assert finding.update_attribute(:state, Finding::STATUS[:unconfirmed])
@@ -524,8 +528,8 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'has auditor and has audited' do
     assert(@finding.finding_user_assignments.any? do |fua|
-      fua.user.can_act_as_audited?
-    end)
+        fua.user.can_act_as_audited?
+      end)
 
     assert @finding.finding_user_assignments.any? { |fua| fua.user.auditor? }
 
@@ -712,9 +716,9 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert(Finding.next_to_expire.all? do |finding|
-      finding.follow_up_date.between?(before_expire, expire) ||
-        finding.solution_date.between?(before_expire, expire)
-    end)
+        finding.follow_up_date.between?(before_expire, expire) ||
+          finding.solution_date.between?(before_expire, expire)
+      end)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -831,7 +835,7 @@ class FindingTest < ActiveSupport::TestCase
       finding_ids << finding.id
 
       users_by_level_for_notification[n] |= finding.users |
-        finding.users_for_scaffold_notification(n)
+      finding.users_for_scaffold_notification(n)
     end
 
     assert_difference 'ActionMailer::Base.deliveries.size', 4 do
@@ -862,20 +866,20 @@ class FindingTest < ActiveSupport::TestCase
     assert_no_difference 'Finding.count' do
       assert_difference 'WorkPaper.count' do
         uneditable_finding.update_attributes({
-        :work_papers_attributes => {
-            '1_new' => {
-              :name => 'New post_workpaper name',
-              :code => 'PTO 20',
-              :number_of_pages => '10',
-              :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
-              :file_model_attributes => {
-                :uploaded_data => ActionController::TestUploadedFile.new(
-                  TEST_FILE, 'text/plain')
+            :work_papers_attributes => {
+              '1_new' => {
+                :name => 'New post_workpaper name',
+                :code => 'PTO 20',
+                :number_of_pages => '10',
+                :description => 'New post_workpaper description',
+                :organization_id => organizations(:default_organization).id,
+                :file_model_attributes => {
+                  :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                    'text/plain')
+                }
               }
             }
-          }
-        })
+          })
       end
     end
   end
@@ -887,23 +891,23 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_no_difference ['Finding.count', 'WorkPaper.count'] do
       # TODO: descomentar cuando termine la "papelización"
-#      assert_raise(RuntimeError) do
-#        uneditable_finding.update_attributes({
-#        :work_papers_attributes => {
-#            '1_new' => {
-#              :name => 'New post_workpaper name',
-#              :code => 'New post_workpaper code',
-#              :number_of_pages => '10',
-#              :description => 'New post_workpaper description',
-#              :organization_id => organizations(:default_organization).id,
-#              :file_model_attributes => {
-#                :uploaded_data => ActionController::TestUploadedFile.new(
-#                  TEST_FILE, 'text/plain')
-#              }
-#            }
-#          }
-#        })
-#      end
+      #      assert_raise(RuntimeError) do
+      #        uneditable_finding.update_attributes({
+      #        :work_papers_attributes => {
+      #            '1_new' => {
+      #              :name => 'New post_workpaper name',
+      #              :code => 'New post_workpaper code',
+      #              :number_of_pages => '10',
+      #              :description => 'New post_workpaper description',
+      #              :organization_id => organizations(:default_organization).id,
+      #              :file_model_attributes => {
+      #                :file => ActionDispatch::Http::UploadedFile.new(
+      #                  TEST_FILE, 'text/plain')
+      #              }
+      #            }
+      #          }
+      #        })
+      #      end
     end
   end
 end

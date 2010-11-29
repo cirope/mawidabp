@@ -1,4 +1,4 @@
-<% form_for @user, :url => reassignment_update_user_path(@user) do |f| -%>
+<%= form_for @user, :url => reassignment_update_user_path(@user) do |f| %>
   <%= f.error_messages %>
   <p class="form_item">
     <%= content_tag :label, t(:'user.reassign_with_findings'),
@@ -11,7 +11,7 @@
     <%= check_box_tag 'user[with_reviews]', 1, true, :class => :inline_item %>
   </p>
 
-  <% unless @user.reallocation_errors.blank? -%>
+  <% unless @user.reallocation_errors.blank? %>
     <p style="margin: 1em 0em;">
       <%= link_to_function t(:'label.details'),
         "$('error_details').showOrHide()", :class => 'bold red' %>
@@ -19,19 +19,19 @@
         <%= array_to_ul(@user.reallocation_errors, :class => :raw_list) %>
       </div>
     </p>
-  <% end -%>
+  <% end %>
   
   <h1><%= t(:'user.new_user_label') %></h1>
   <div class="form_column_left">
     <div class="search">
       <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id_item %>
-      <%= text_field_with_auto_complete :user, :user_data,
+      <%= text_field_with_auto_complete(:user, :user_data,
         {:id => 'autocomplete_user_id', :class => :search,
         :title => t(:'label.search'), :value => nil},
         {:indicator => :loading, :skip_style => true,
         :url => auto_complete_for_user_users_path,
         :after_update_element => 'AutoComplete.itemSelected',
-        :param_name => 'user_data'} %>
+        :param_name => 'user_data'}) %>
     </div>
   </div>
 
@@ -53,7 +53,7 @@
   <p>
     <span class="button"><%= f.submit t(:'user.reassign') %></span>
   </p>
-<% end -%>
+<% end %>
 <%= set_focus_to_first_element %>
 
 <div id="links">

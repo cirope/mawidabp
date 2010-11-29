@@ -1,5 +1,5 @@
 <!--[form:conclusion_final_review]-->
-<% form_for 'bundle', :url => {:action => :create_bundle, :id => @conclusion_final_review}   do |f| %>
+<%= form_for 'bundle', :url => {:action => :create_bundle, :id => @conclusion_final_review}   do |f| %>
   <p>
     <%= label_tag :index_items, t(:'conclusion_review.bundle_index.items_label') %>
     <%= text_area_tag :index_items,
@@ -10,7 +10,7 @@
   <p>
     <span class="button"><%= f.submit t(:'conclusion_review.bundle.create') %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:conclusion_final_review] -->
 <div id="links">
 <%= link_to t(:'label.show'), @conclusion_final_review %> |

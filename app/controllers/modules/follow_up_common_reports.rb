@@ -30,11 +30,11 @@ module FollowUpCommonReports
           end
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
-            Weakness.list_all_by_date(@from_date, @to_date).send(
+            Weakness.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").finals(false).for_period(
               period).count(:conditions => conditions, :group => :state)
           @weaknesses_counts[period]["#{key}_oportunities"] =
-            Oportunity.list_all_by_date(@from_date, @to_date).send(
+            Oportunity.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").finals(false).for_period(
               period).count(:conditions => conditions, :group => :state)
           being_implemented_counts = {:current => 0, :stale => 0,
@@ -42,8 +42,8 @@ module FollowUpCommonReports
 
           @status.each do |state|
             if state.first == :being_implemented
-              being_implemented = Weakness.list_all_by_date(
-                @from_date, @to_date).send("#{audit_type_symbol}_audit").finals(
+              being_implemented = Weakness.list_all_by_date(@from_date,
+                @to_date, false).send("#{audit_type_symbol}_audit").finals(
                 false).for_period(period).being_implemented.all(
                 :conditions => conditions)
 
@@ -92,7 +92,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       @audit_types.each do |audit_type|
@@ -261,7 +261,7 @@ module FollowUpCommonReports
             statuses.each do |s|
               weaknesses_count[s[1]] ||= {}
                 weaknesses_count[s[1]][rl[1]] =
-                  Weakness.list_all_by_date(@from_date, @to_date).send(
+                  Weakness.list_all_by_date(@from_date, @to_date, false).send(
                     "#{audit_type_symbol}_audit").finals(false).for_period(
                     period).count(:conditions => {
                       :state => s[1], :risk => rl[1]}.merge(conditions || {}))
@@ -269,7 +269,7 @@ module FollowUpCommonReports
 
               if s.first == :being_implemented
                 being_implemented = Weakness.list_all_by_date(
-                  @from_date, @to_date).send("#{audit_type_symbol}_audit").
+                  @from_date, @to_date, false).send("#{audit_type_symbol}_audit").
                   finals(false).for_period(period).being_implemented.all(
                   :conditions => {:risk => rl[1]}.merge(conditions || {}))
 
@@ -341,7 +341,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |audit_type|
@@ -569,7 +569,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|

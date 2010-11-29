@@ -10,7 +10,7 @@ class Parameter < ActiveRecord::Base
 
   # Named scopes
   # Deprecated
-  named_scope :all_parameters, lambda { |name|
+  scope :all_parameters, lambda { |name|
     {
       :conditions => {
         :organization_id => GlobalModelConfig.current_organization_id,
@@ -48,7 +48,7 @@ class Parameter < ActiveRecord::Base
 
   def remove_from_cache
     cache_key = "#{self.organization_id}_#{self.name}"
-    cached_versions = Rails.cache.read(cache_key) || []
+    cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
     cached_versions.delete_if { |p| p.id == self.id }
 
@@ -83,7 +83,7 @@ class Parameter < ActiveRecord::Base
   def self.write_in_cache(parameter)
     if parameter
       cache_key = "#{parameter.organization_id}_#{parameter.name}"
-      cached_versions = Rails.cache.read(cache_key) || []
+      cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
       cached_versions.delete_if do |p|
         p.modification_date == parameter.modification_date

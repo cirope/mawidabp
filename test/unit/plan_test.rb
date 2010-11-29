@@ -46,8 +46,8 @@ class PlanTest < ActiveSupport::TestCase
     @plan.period_id = '?123'
     assert @plan.invalid?
     assert_equal 1, @plan.errors.count
-    assert_equal error_message_from_model(@plan, :period_id, :not_a_number),
-      @plan.errors.on(:period_id)
+    assert_equal [error_message_from_model(@plan, :period_id, :not_a_number)],
+      @plan.errors[:period_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -55,8 +55,8 @@ class PlanTest < ActiveSupport::TestCase
     @plan.period_id = nil
     assert @plan.invalid?
     assert_equal 1, @plan.errors.count
-    assert_equal error_message_from_model(@plan, :period_id, :blank),
-      @plan.errors.on(:period_id)
+    assert_equal [error_message_from_model(@plan, :period_id, :blank)],
+      @plan.errors[:period_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -64,8 +64,8 @@ class PlanTest < ActiveSupport::TestCase
     @plan.period_id = plans(:past_plan).period_id
     assert @plan.invalid?
     assert_not_equal 0, @plan.errors.count
-    assert_equal error_message_from_model(@plan, :period_id, :taken),
-      @plan.errors.on(:period_id)
+    assert_equal [error_message_from_model(@plan, :period_id, :taken)],
+      @plan.errors[:period_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

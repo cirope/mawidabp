@@ -77,14 +77,14 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = nil
     assert @review.invalid?
     assert_equal 4, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :blank),
-      @review.errors.on(:identification)
-    assert_equal error_message_from_model(@review, :description, :blank),
-      @review.errors.on(:description)
-    assert_equal error_message_from_model(@review, :period_id, :blank),
-      @review.errors.on(:period_id)
-    assert_equal error_message_from_model(@review, :plan_item_id, :blank),
-      @review.errors.on(:plan_item_id)
+    assert_equal [error_message_from_model(@review, :identification, :blank)],
+      @review.errors[:identification]
+    assert_equal [error_message_from_model(@review, :description, :blank)],
+      @review.errors[:description]
+    assert_equal [error_message_from_model(@review, :period_id, :blank)],
+      @review.errors[:period_id]
+    assert_equal [error_message_from_model(@review, :plan_item_id, :blank)],
+      @review.errors[:plan_item_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -92,8 +92,8 @@ class ReviewTest < ActiveSupport::TestCase
     @review.identification = 'abcdd' * 52
     assert @review.invalid?
     assert_equal 1, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :too_long,
-      :count => 255), @review.errors.on(:identification)
+    assert_equal [error_message_from_model(@review, :identification, :too_long,
+      :count => 255)], @review.errors[:identification]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -103,12 +103,12 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = '?nil'
     assert @review.invalid?
     assert_equal 3, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :invalid),
-      @review.errors.on(:identification)
-    assert_equal error_message_from_model(@review, :period_id, :not_a_number),
-      @review.errors.on(:period_id)
-    assert_equal error_message_from_model(@review, :plan_item_id,
-      :not_a_number), @review.errors.on(:plan_item_id)
+    assert_equal [error_message_from_model(@review, :identification, :invalid)],
+      @review.errors[:identification]
+    assert_equal [error_message_from_model(@review, :period_id,
+        :not_an_integer)], @review.errors[:period_id]
+    assert_equal [error_message_from_model(@review, :plan_item_id,
+      :not_a_number)], @review.errors[:plan_item_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -117,10 +117,10 @@ class ReviewTest < ActiveSupport::TestCase
     @review.plan_item_id = reviews(:past_review).plan_item_id
     assert @review.invalid?
     assert_equal 2, @review.errors.count
-    assert_equal error_message_from_model(@review, :identification, :taken),
-      @review.errors.on(:identification)
-    assert_equal error_message_from_model(@review, :plan_item_id, :taken),
-      @review.errors.on(:plan_item_id)
+    assert_equal [error_message_from_model(@review, :identification, :taken)],
+      @review.errors[:identification]
+    assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
+      @review.errors[:plan_item_id]
   end
 
   test 'validates valid attributes' do
@@ -129,8 +129,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.invalid?
     assert_equal 1, @review.errors.count
-    assert_equal error_message_from_model(@review, :plan_item, :invalid),
-      @review.errors.on(:plan_item)
+    assert_equal [error_message_from_model(@review, :plan_item, :invalid)],
+      @review.errors[:plan_item]
   end
 
   test 'can be modified' do
@@ -190,7 +190,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     oportunity.solution_date = nil
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -201,7 +201,7 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -211,7 +211,7 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
@@ -236,7 +236,7 @@ class ReviewTest < ActiveSupport::TestCase
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
-    assert oportunity.save(false) # Forzado para que no se validen los datos
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
@@ -271,7 +271,6 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.must_be_approved?
 
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )
@@ -287,7 +286,6 @@ class ReviewTest < ActiveSupport::TestCase
 
     # Ahora el mismo usuario crea confirma una nueva notificación
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )
@@ -301,14 +299,16 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'can be sended' do
     assert @review.can_be_sended?
+    notification_relation = nil
 
-    notification_relation = @review.conclusion_draft_review.
-      notification_relations.create(
-      :model => @conclusion_review,
-      :notification => Notification.new(
-        :user => users(:administrator_user)
+    assert_difference ['Notification.count', 'NotificationRelation.count'] do
+      notification_relation = @review.conclusion_draft_review.
+        notification_relations.create(
+        :notification => Notification.new(
+          :user => users(:administrator_user)
+        )
       )
-    )
+    end
 
     assert !@review.reload.can_be_sended?
 
@@ -318,7 +318,6 @@ class ReviewTest < ActiveSupport::TestCase
 
     # Ahora el mismo usuario crea confirma una nueva notificación
     @review.conclusion_draft_review.notification_relations.create(
-      :model => @conclusion_review,
       :notification => Notification.new(
         :user => users(:administrator_user)
       )

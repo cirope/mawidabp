@@ -1,7 +1,7 @@
 <div id="showed_data">
-  <h1><%= BestPractice.human_name %>: <%=h @best_practice.name %></h1>
+  <h1><%= BestPractice.model_name.human %>: <%=h @best_practice.name %></h1>
 
-  <% @best_practice.process_controls.each do |pc| -%>
+  <% @best_practice.process_controls.each do |pc| %>
     <h3><%= "#{@best_practice.name} (#{pc.name})" %></h3>
     <table class="summary_table">
       <thead>
@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <% pc.control_objectives.each do |co| -%>
+        <% pc.control_objectives.each do |co| %>
           <tr>
             <td><%= simple_format h(co.name) %></td>
             <td><%= simple_format h(co.controls.first.control) %></td>
@@ -24,10 +24,10 @@
             <td><%= simple_format h(co.controls.first.effects) %></td>
             <td><%= co.risk_text %></td>
           </tr>
-        <% end -%>
+        <% end %>
       </tbody>
     </table>
-  <% end -%>
+  <% end %>
 </div>
 
 <div id="links">

@@ -1,5 +1,5 @@
 <!--[form:inline_help]-->
-<% form_for @inline_help do |f| -%>
+<%= form_for @inline_help do |f| %>
   <%= f.error_messages %>
 
   <div class="form_column_left">
@@ -25,6 +25,6 @@
   <p>
     <span class="button"><%= f.submit submit_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:inline_help] -->
 <%= set_focus_to_first_element %>

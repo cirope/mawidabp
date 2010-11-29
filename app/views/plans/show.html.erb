@@ -1,4 +1,4 @@
-<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" -%>
+<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" %>
 <div id="showed_data">
   <p>
     <b><%= Plan.human_attribute_name :period_id %></b>:
@@ -14,7 +14,7 @@
       <tr>
         <th></th>
         <th><%= PlanItem.human_attribute_name :order_number %></th>
-        <th><%= BusinessUnit.human_name %></th>
+        <th><%= BusinessUnit.model_name.human %></th>
         <th><%= PlanItem.human_attribute_name :project %></th>
         <th><%= PlanItem.human_attribute_name :start %></th>
         <th><%= PlanItem.human_attribute_name :end %></th>
@@ -24,7 +24,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @plan.plan_items.each do |plan_item| -%>
+      <% @plan.plan_items.each do |plan_item| %>
         <tr>
           <td><%= show_plan_item_info(plan_item) %></td>
           <td><%= h plan_item.order_number %></td>
@@ -36,7 +36,7 @@
           <td><%= currency_mask % plan_item.material_cost %></td>
           <td><%= currency_mask % plan_item.cost %></td>
         </tr>
-      <% end -%>
+      <% end %>
       <tr>
         <td colspan="8"></td>
         <td><b><%= @plan.cost %></b></td>
@@ -44,11 +44,11 @@
     </tbody>
   </table>
 
-  <% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } -%>
+  <% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } %>
     <h1><%= t(:'plan.pdf.resource_utilization') %></h1>
     
-    <% @plan.plan_items.each do |plan_item| -%>
-      <% unless plan_item.resource_utilizations.blank? -%>
+    <% @plan.plan_items.each do |plan_item| %>
+      <% unless plan_item.resource_utilizations.blank? %>
         <h2 style="font-weight: normal;">
           <b>(<%= plan_item.order_number %>)</b> <%= plan_item.project %>
           (<%= plan_item.business_unit.try(:name) %>)
@@ -63,23 +63,23 @@
             </tr>
           </thead>
           <tbody>
-            <% plan_item.resource_utilizations.each do |ru| -%>
+            <% plan_item.resource_utilizations.each do |ru| %>
               <tr>
                 <td><%= ru.resource.resource_name %></td>
                 <td><%= ru.units %></td>
                 <td><%= currency_mask % ru.cost_per_unit %></td>
                 <td><%= currency_mask % ru.cost %></td>
               </tr>
-            <% end -%>
+            <% end %>
             <tr>
               <td colspan="3"></td>
               <td><b><%= plan_item.cost %></b></td>
             </tr>
           </tbody>
         </table>
-      <% end -%>
-    <% end -%>
-  <% end -%>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>
 
 <div id="links">

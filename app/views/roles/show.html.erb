@@ -12,7 +12,7 @@
   <table class="summary_table" style="clear: both;">
     <thead>
       <tr>
-        <th><%= Privilege.human_name %></th>
+        <th><%= Privilege.model_name.human %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
         <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
@@ -21,11 +21,11 @@
     </thead>
     <tbody>
       <% menu_items = @role.audited? ?
-        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS -%>
-      <% menu_items.each do |menu_item| -%>
+        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% menu_items.each do |menu_item| %>
         <%= render :partial => 'menu_item_show', :locals => {
           :menu_item => menu_item} %>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
 </div>

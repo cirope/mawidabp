@@ -103,7 +103,8 @@ class VersionsController < ApplicationController
         'whodunnit' => version.whodunnit ?
           User.find(version.whodunnit).full_name_with_user.to_iso : '-',
         'item' => version.item ?
-          "#{version.item.class.human_name} (#{version.item})".to_iso : '-',
+          "#{version.item.class.model_name.human} (#{version.item})".to_iso :
+          '-',
         'event' => t("version.event_#{version.event}").to_iso
       }
     end

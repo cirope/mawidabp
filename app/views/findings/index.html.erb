@@ -1,11 +1,11 @@
-<% if @query.blank? && @order_by.blank? && @self_and_descendants.size > 1 -%>
+<% if @query.blank? && @order_by.blank? && @self_and_descendants.size > 1 %>
   <div class="filter" style="margin: 1em;">
     <div>
       <table>
         <tbody>
           <tr>
             <td style="padding-right: 1em; width: 90%;">
-              <%= label_tag :user_id_select, User.human_name, :class => :inline %>
+              <%= label_tag :user_id_select, User.model_name.human, :class => :inline %>
               <%= select nil, :user_id,
                 sort_options_array(@self_and_descendants.map { |d| [d.full_name_with_function, d.id.to_s] }),
                 {:prompt => true, :selected => params[:user_id]},
@@ -21,7 +21,7 @@
       </table>
     </div>
   </div>
-<% end -%>
+<% end %>
 <%= render :partial => 'shared/search', :locals => {
   :options => {
     :columns_for_sort => Finding.columns_for_sort,
@@ -34,7 +34,7 @@
 <table>
   <thead  id="column_headers">
     <tr>
-      <%= make_filterable_column Review.human_name, nil, 'review', 'issue_date' %>
+      <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:review_code), nil, 'review_code' %>
       <%= make_filterable_column Finding.human_attribute_name(:description), {:expendable => true}, 'description' %>
@@ -49,26 +49,26 @@
   </thead>
 
   <tbody>
-    <% @findings.each do |finding| -%>
+    <% @findings.each do |finding| %>
       <tr class="<%= cycle(:even, :odd) %>">
-        <td class="nowrap"><%= show_review_with_conclusion_status_as_acronym(
+        <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
         <td class="expendable"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_acronym(finding) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(finding) %></td>
         <td class="expendable"><%= super_truncate(finding.description, 30) %></td>
         <td class="expendable"><%= h finding.state_text %></td>
-        <% if params[:completed] == 'complete' -%>
+        <% if params[:completed] == 'complete' %>
           <td class="expendable"><%= h l(finding.solution_date, :format => :short) if finding.solution_date %></td>
-        <% else -%>
+        <% else %>
           <td class="expendable"><%= finding_follow_up_date_text(finding) %></td>
-        <% end -%>
+        <% end %>
         <td class="expendable"><%= h finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td class="expendable"><%= h finding.finding_answers.count %></td>
         <td class="expendable"><%= t finding.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
-        <td><%= link_to_edit edit_finding_path('incomplete', finding, :user_id => params[:user_id]) if (params[:completed] == 'incomplete') || finding.can_be_modified?(false) -%></td>
+        <td><%= link_to_edit edit_finding_path('incomplete', finding, :user_id => params[:user_id]) if (params[:completed] == 'incomplete') || finding.can_be_modified?(false) %></td>
       </tr>
-    <% end -%>
+    <% end %>
   </tbody>
 </table>
 

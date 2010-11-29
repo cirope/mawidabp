@@ -6,6 +6,6 @@ module WorkflowsHelper
       WorkflowItem.human_attribute_name('end') + ": " +
       l(end_date, :format => :long)
 
-    content_tag(:acronym, distance_text, :title => interval)
+    content_tag(:abbr, distance_text, :title => interval)
   end
 end

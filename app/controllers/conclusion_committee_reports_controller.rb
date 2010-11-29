@@ -44,7 +44,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           params[:synthesis_report][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(
           @selected_business_unit.id)
-        @filters << "<b>#{BusinessUnitType.human_name}</b> = " +
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
           "\"#{@selected_business_unit.name.strip}\""
       end
 
@@ -55,7 +55,7 @@ class ConclusionCommitteeReportsController < ApplicationController
         unless business_units.empty?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(
             *business_units)
-          @filters << "<b>#{BusinessUnit.human_name}</b> = " +
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
             "\"#{params[:synthesis_report][:business_unit].strip}\""
         end
       end
@@ -67,7 +67,7 @@ class ConclusionCommitteeReportsController < ApplicationController
     @periods.each do |period|
       business_unit_types.each do |but|
         columns = {'business_unit_report_name' => [but.business_unit_label, 15],
-          'review' => [Review.human_name, 16],
+          'review' => [Review.model_name.human, 16],
           'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
@@ -171,7 +171,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       unless @selected_business_unit
@@ -255,6 +255,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
             table.column_order = @column_order
             table.split_rows = true
+            table.row_gap = PDF_FONT_SIZE
             table.font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_color = Color::RGB.from_percentage(95, 95, 95)
             table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
@@ -431,7 +432,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
     @periods.each do |period|
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.human_name}: #{period.inspect}",
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       unless @total_cost_data[period].blank?
@@ -451,6 +452,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           table.data = @total_cost_data[period]
           table.column_order = @column_order.map(&:first)
           table.split_rows = true
+          table.row_gap = PDF_FONT_SIZE
           table.font_size = (PDF_FONT_SIZE * 0.75).round
           table.shade_color = Color::RGB.from_percentage(95, 95, 95)
           table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)

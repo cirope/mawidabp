@@ -1,41 +1,41 @@
-<% readonly = @control_objective_item.is_in_a_final_review? -%>
-<% frozen = @control_objective_item.review.try(:is_frozen?) -%>
+<% readonly = @control_objective_item.is_in_a_final_review? %>
+<% frozen = @control_objective_item.review.try(:is_frozen?) %>
 <!--[form:control_objective_item]-->
-<% form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
-  <% unless frozen -%>
-    <% content_for :js_extra do -%>
-      <%= "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
+<%= form_for @control_objective_item, :html => {:multipart => true} do |co_f| %>
+  <% unless frozen %>
+    <% content_for :js_extra do %>
+      <%= raw "var lastWorkPaperCode = '#{next_control_objective_work_paper_code(
         @control_objective_item)}';" %>
-      <%= "var post_audit_work_paper='#{generate_template(co_f,
+      <%= raw "var post_audit_work_paper='#{generate_template(co_f,
         :post_audit_work_papers, {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-      <%= "var pre_audit_work_paper='#{generate_template(co_f,
+      <%= raw "var pre_audit_work_paper='#{generate_template(co_f,
         :pre_audit_work_papers, {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <% end -%>
-  <% end -%>
+    <% end %>
+  <% end %>
   <%= co_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
-      <label class="inline"><%= Review.human_name %>:</label>
+      <label class="inline"><%= Review.model_name.human %>:</label>
       <%= text_field_tag :review_identification,
         @control_objective_item.review.identification,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= ProcessControl.human_name %>:</label>
+      <label class="inline"><%= ProcessControl.model_name.human %>:</label>
       <%= text_field_tag :process_control_name,
         @control_objective_item.control_objective.process_control.name,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= Period.human_name %>:</label>
+      <label class="inline"><%= Period.model_name.human %>:</label>
       <%= text_field_tag :period, @control_objective_item.review.period.inspect,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
@@ -56,7 +56,7 @@
       <%= co_f.label :control_objective_text %>
       <%= co_f.text_area :control_objective_text, :readonly => readonly %>
     </p>
-    <% co_f.fields_for :controls, @control_objective_item.controls[0] do |c_f| -%>
+    <%= co_f.fields_for :controls, @control_objective_item.controls[0] do |c_f| %>
       <p>
         <%= c_f.label :effects %>
         <%= c_f.text_area :effects, :readonly => readonly %>
@@ -66,16 +66,16 @@
         <%= c_f.text_area :control, :readonly => readonly %>
       </p>
 
-      <% content_for :design_tests do -%>
+      <% content_for :design_tests do %>
         <%= c_f.label :design_tests %>
         <%= c_f.text_area :design_tests, :readonly => readonly %>
       <% end %>
 
-      <% content_for :compliance_tests do -%>
+      <% content_for :compliance_tests do %>
         <%= c_f.label :compliance_tests %>
         <%= c_f.text_area :compliance_tests, :readonly => readonly %>
       <% end %>
-    <% end -%>
+    <% end %>
   </div>
   <div class="form_column_right">
     <p>
@@ -127,17 +127,17 @@
   <table class="summary_table">
     <thead>
       <tr>
-        <% Finding::STATUS.keys.each do |status| -%>
+        <% Finding::STATUS.keys.each do |status| %>
           <th><%= t("finding.status_#{status}") %></th>
-        <% end -%>
+        <% end %>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <% Finding::STATUS.keys.each do |status| -%>
+        <% Finding::STATUS.keys.each do |status| %>
           <td><%= @control_objective_item.
               weaknesses.select { |w| w.send "#{status}?" }.size %></td>
-        <% end -%>
+        <% end %>
       </tr>
     </tbody>
   </table>
@@ -157,82 +157,84 @@
   <div class="form_column_left">
     <p>
       <%= content_tag :label,
-        ControlObjectiveItem.human_attribute_name('pre_audit_work_papers') %>
+        ControlObjectiveItem.human_attribute_name(:pre_audit_work_papers) %>
     </p>
     <div class="in_column_items">
       <div class="column_headers">
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :name %></h3>
         </div>
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :code %></h3>
         </div>
         <div class="item_column" style="width: 15%;">
-          <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
         </div>
         <div class="item_column" style="width: 25%;">
-          <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :description %></h3>
         </div>
         <div class="item_column" style="width: 10%;">
-          <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
         </div>
         <div class="item_column" style="width: 10%;"></div>
         <div style="clear: both;"></div>
       </div>
 
       <div id="pre_audit_work_papers">
-        <% co_f.fields_for :pre_audit_work_papers do |wp_f| -%>
+        <%= co_f.fields_for :pre_audit_work_papers do |wp_f| %>
           <%= render :partial => 'work_papers/work_paper', :locals =>
             {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
             :child_index => 'NEW_RECORD'} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
 
     <p class="add_item">
       <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-        '#pre_audit_work_paper', :class => :add_nested_item,
-        :rel => :pre_audit_work_papers %>
+        '#', :'data-template' => :pre_audit_work_paper,
+        :'data-event' => :add_nested_item,
+        :'data-container' => :pre_audit_work_papers %>
     </p>
   </div>
   <div class="form_column_right">
     <p>
-      <%= content_tag :label, ControlObjectiveItem.human_attribute_name('post_audit_work_papers') %>
+      <%= content_tag :label, ControlObjectiveItem.human_attribute_name(:post_audit_work_papers) %>
     </p>
     <div class="in_column_items">
       <div class="column_headers">
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'name' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :name %></h3>
         </div>
         <div class="item_column" style="width: 20%;">
-          <h3><%= WorkPaper.human_attribute_name 'code' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :code %></h3>
         </div>
         <div class="item_column" style="width: 15%;">
-          <h3><%= WorkPaper.human_attribute_name 'number_of_pages' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
         </div>
         <div class="item_column" style="width: 25%;">
-          <h3><%= WorkPaper.human_attribute_name 'description' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :description %></h3>
         </div>
         <div class="item_column" style="width: 10%;">
-          <h3><%= WorkPaper.human_attribute_name 'file_model' %></h3>
+          <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
         </div>
         <div class="item_column" style="width: 10%;"></div>
         <div style="clear: both;"></div>
       </div>
 
       <div id="post_audit_work_papers">
-        <% co_f.fields_for :post_audit_work_papers do |wp_f| -%>
+        <%= co_f.fields_for :post_audit_work_papers do |wp_f| %>
           <%= render :partial => 'work_papers/work_paper', :locals =>
             {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
             :child_index => 'NEW_RECORD'} %>
-        <% end -%>
+        <% end %>
       </div>
     </div>
 
     <p class="add_item">
       <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-        '#post_audit_work_paper', :class => :add_nested_item,
-        :rel => :post_audit_work_papers %>
+        '#', :'data-template' => :post_audit_work_paper,
+        :'data-event' => :add_nested_item,
+        :'data-container' => :post_audit_work_papers %>
     </p>
   </div>
 
@@ -243,33 +245,32 @@
   <p>
     <span class="button"><%= co_f.submit submit_button_text %></span>
   </p>
-<% end -%>
+<% end %>
 <!--[eoform:control_objective_item] -->
 <%= set_focus_to_first_element %>
 <script type="text/javascript">
   var ControlObjectiveCalcs = {
     effectiveness: function() {
-      var postAuditQualifications =
-        $('control_objective_item_post_audit_qualification');
-      var preAuditQualifications =
-        $('control_objective_item_pre_audit_qualification');
-      var postAuditQualification = $F(postAuditQualifications);
-      var preAuditQualification = $F(preAuditQualifications);
-      var maxValue = $A(postAuditQualifications.options).map(function(e) {
+      var selectedValues = new Array();
+      var preAuditElement = $('control_objective_item_pre_audit_qualification');
+      var postAuditElement = $('control_objective_item_post_audit_qualification');
+      var maxValue = $A(preAuditElement.options).map(function(e) {
         return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
       }).max();
-      var postAuditSelected = postAuditQualification.match(/^\d+$/);
-      var percentage = postAuditSelected ?
-        (parseInt(postAuditQualification) * 100.0 / maxValue) : 100;
 
-      if(preAuditQualification.match(/^\d+$/)) {
-        percentage += parseInt(preAuditQualification) * 100.0 / maxValue;
-        percentage -= postAuditSelected ? 0 : 100;
-        percentage /= postAuditSelected ? 2.0 : 1.0;
-      }
+      selectedValues.push($F(preAuditElement).match(/^\d+$/) ?
+        parseInt($F(preAuditElement)) : null);
+      selectedValues.push($F(postAuditElement).match(/^\d+$/) ?
+        parseInt($F(postAuditElement)) : null);
+
+      var total = selectedValues.compact().size() == 0 ? -1 :
+        selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
+
+      var percentage = total == -1 || maxValue == 0 ? 100 :
+        ((total / selectedValues.compact().size()) * 100.0 / maxValue).toFixed(0);
 
       $('effectiveness').setValue(new String("#{percentage}%").interpolate(
-        {percentage: percentage.toFixed(0)}));
+        {percentage: percentage}));
 
       var oldColor = $('effectiveness').getStyle('border-color');
 

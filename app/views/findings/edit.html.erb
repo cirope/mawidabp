@@ -6,9 +6,9 @@
   :user_id => params[:user_id]) %> |
 <%= link_to t(:'label.list'), findings_path(params[:completed],
   :user_id => params[:user_id]) %> |
-<% unless @auth_user.audited? || @finding.new_record? -%>
+<% unless @auth_user.audited? || @finding.new_record? %>
   <%= link_to t(:'finding.follow_up_report.download'),
     :action => :follow_up_pdf, :id => @finding %> |
-<% end -%>
+<% end %>
 <%= link_to_back %>
 </div>

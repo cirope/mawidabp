@@ -1,8 +1,8 @@
-<% finding = @finding_answer.finding -%>
-<% organization = finding.review.organization -%>
+<% finding = @finding_answer.finding %>
+<% organization = finding.review.organization %>
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
   finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization),
-  :protocol => URL_PROTOCOL) -%>
+  :protocol => URL_PROTOCOL) %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2 style="margin-bottom: 1em;"><%=h organization.name %></h2>
 

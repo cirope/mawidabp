@@ -6,10 +6,7 @@ class ProcedureControlItem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:procedure_control_subitem_ids]
-
-  named_scope :list_for_process_control, lambda { |process_control_id|
+  scope :list_for_process_control, lambda { |process_control_id|
     {
       :conditions => { :process_control_id => process_control_id }
     }

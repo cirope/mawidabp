@@ -1,6 +1,6 @@
-<% id = "organization_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" -%>
-<% hide = is_dynamic || f.object.marked_for_destruction? -%>
-<div class="organization item" <%= 'style="display: none;"' if hide %> id="<%= id %>">
+<% id = "organization_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
+<div class="organization item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 30%;">
       <%= f.text_field :name, :maxlength => 255, :size => 10 %>
@@ -12,10 +12,10 @@
       <%= f.text_area :description, :style => 'height: 5em;' %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) -%>
+      <%= remove_item_link(f) %>
     </div>
   </div>
 </div>
-<% if is_dynamic -%>
+<% if is_dynamic %>
 <script type="text/javascript">Helper.showItem('<%= id %>');</script>
-<% end -%>
+<% end %>

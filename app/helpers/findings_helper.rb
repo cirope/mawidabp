@@ -34,19 +34,19 @@ module FindingsHelper
     end
   end
 
-  def show_review_with_conclusion_status_as_acronym(review)
+  def show_review_with_conclusion_status_as_abbr(review)
     review_data = review.has_final_review? ?
       t(:'review.with_final_review') : t(:'review.without_final_review')
     review_data << " | #{l(review.issue_date(true), :format => :long)}"
 
-    content_tag(:acronym, h(review.identification), :title => review_data)
+    content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
-  def show_finding_review_code_with_control_objective_as_acronym(finding)
-    control_objective_text = "#{ControlObjectiveItem.human_name}: " +
+  def show_finding_review_code_with_control_objective_as_abbr(finding)
+    control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
       finding.control_objective_item.control_objective_text
 
-    content_tag(:acronym, h(finding.review_code), :title => control_objective_text)
+    content_tag(:abbr, h(finding.review_code), :title => control_objective_text)
   end
 
 
@@ -58,7 +58,7 @@ module FindingsHelper
       form.check_box(:notify_users, :style => 'margin: 0em 0em 0em 1em;')
     ]
 
-    label_and_check.map {|tag| content_tag(:span, tag)}.join
+    raw label_and_check.map {|tag| content_tag(:span, tag)}.join
   end
 
   def finding_relation_type_field(form)

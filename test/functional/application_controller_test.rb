@@ -137,9 +137,12 @@ class ApplicationControllerTest < ActionController::TestCase
     from_date = Date.parse '2011-10-09'
     to_date = Date.parse '2000-10-09'
 
+    generated_range = @controller.send(:make_date_range, {
+        :from_date => '2011-10-09', :to_date => '2000-10-09'
+      }).map { |d| d.to_s(:db) }
+
     # Fechas válidas con el orden invertido
-    assert_equal [to_date, from_date], @controller.send(:make_date_range,
-      {:from_date => '2011-10-09', :to_date => '2000-10-09'})
+    assert_equal [to_date.to_s(:db), from_date.to_s(:db)], generated_range
   end
 
   test 'extract operator' do

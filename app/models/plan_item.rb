@@ -9,11 +9,8 @@ class PlanItem < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :business_unit_data, :overloaded
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:resource_ids]
-
    # Named scopes
-  named_scope :list_unused, lambda { |period_id|
+  scope :list_unused, lambda { |period_id|
     {
       :include => [{:plan => :period}, :review],
       :conditions => [
@@ -41,7 +38,7 @@ class PlanItem < ActiveRecord::Base
   serialize :predecessors, Array
   
   # Restricciones
-  validates_presence_of :project, :order_number
+  validates :project, :order_number, :presence => true
   validates_length_of :project, :predecessors, :maximum => 255,
     :allow_nil => true, :allow_blank => true
   validates_numericality_of :order_number, :plan_id, :business_unit_id,
@@ -173,7 +170,7 @@ class PlanItem < ActiveRecord::Base
 
   def can_be_destroyed?
     if self.review
-      self.errors.add_to_base I18n.t(:'plan.errors.plan_item_related')
+      self.errors.add :base, I18n.t(:'plan.errors.plan_item_related')
 
       false
     else

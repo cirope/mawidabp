@@ -17,20 +17,37 @@ class UsersControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    public_actions = [:login]
-    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy,
-      :blank_password, :edit_password, :update_password, :edit_personal_data,
-      :update_personal_data, :logout, :new_initial, :create_initial]
+    id_param = {:id => users(:administrator_user).to_param}
+    public_actions = [
+      [:get, :login]
+    ]
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param],
+      [:put, :blank_password, id_param],
+      [:get, :edit_password, id_param],
+      [:put, :update_password, id_param],
+      [:get, :edit_personal_data, id_param],
+      [:put, :update_personal_data, id_param],
+      [:get, :logout, id_param],
+      [:get, :new_initial],
+      [:post, :create_initial],
+    ]
 
     private_actions.each do |action|
-      get action
+      send *action
       assert_redirected_to :controller => :users, :action => :login
       assert [I18n.t(:'message.must_be_authenticated'),
-        I18n.t(:'user.confirmation_link_invalid')].include?(flash[:alert])
+        I18n.t(:'user.confirmation_link_invalid')].include?(flash.alert)
     end
 
     public_actions.each do |action|
-      get action
+      send *action
       assert_response :success
     end
   end
@@ -347,7 +364,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_kind_of LoginRecord, login_record
     assert_not_nil I18n.t(:'message.password_expire_in_x',
       :count => get_test_parameter(:security_expire_notification).to_i - 2),
-      flash[:notice]
+      flash.notice
   end
 
   test 'concurrent users' do
@@ -642,7 +659,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert !user.reload.enable?
-    assert_equal I18n.t(:'user.correctly_disabled'), flash[:notice]
+    assert_equal I18n.t(:'user.correctly_disabled'), flash.notice
     assert_redirected_to users_path
   end
 
@@ -652,7 +669,7 @@ class UsersControllerTest < ActionController::TestCase
       delete :destroy, :id => users(:audited_user).user
     end
 
-    assert_equal I18n.t(:'user.will_be_orphan_findings'), flash[:alert]
+    assert_equal I18n.t(:'user.will_be_orphan_findings'), flash.alert
     assert_redirected_to users_path
   end
 
@@ -675,7 +692,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'edit password' do
     perform_auth
-    get :edit_password, {:user => nil}
+    get :edit_password, {:id => users(:blank_password_user).to_param}
     assert_response :success
     assert_not_nil assigns(:auth_user)
     assert_select '#error_body', false
@@ -686,6 +703,7 @@ class UsersControllerTest < ActionController::TestCase
     perform_auth
     assert_difference 'OldPassword.count' do
       put :update_password, {
+        :id => users(:administrator_user).to_param,
         :user => {
           :password => 'new_password_123',
           :password_confirmation => 'new_password_123'
@@ -699,7 +717,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'change blank password' do
-    get :edit_password, {:user => users(:blank_password_user).user,
+    get :edit_password, {:id => users(:blank_password_user).user,
       :confirmation_hash => users(:blank_password_user).change_password_hash}
     assert_response :success
     assert_select '#error_body', false
@@ -707,6 +725,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'OldPassword.count' do
       put :update_password, {
+        :id => users(:blank_password_user).to_param,
         :user => {
           :password => 'new_password_123',
           :password_confirmation => 'new_password_123'
@@ -721,13 +740,14 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil user.last_access
 
     # No se puede usar 2 veces el mismo hash
-    get :edit_password, {:user => nil,
+    get :edit_password, {:id => users(:blank_password_user).to_param,
       :confirmation_hash => users(:blank_password_user).change_password_hash}
     assert_redirected_to :controller => :users, :action => :login
   end
 
   test 'change expired blank password' do
     put :update_password, {
+      :id => users(:blank_password_user).to_param,
       :user => {
         :password => 'new_password_123',
         :password_confirmation => 'new_password_123'
@@ -753,7 +773,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'new initial with invalid hash' do
     get :new_initial, :hash => "#{groups(:main_group).admin_hash}x"
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
   end
 
   test 'create initial' do
@@ -782,7 +802,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'user.correctly_created'), flash[:notice]
+    assert_equal I18n.t(:'user.correctly_created'), flash.notice
   end
 
   test 'create initial with invalid hash' do
@@ -811,7 +831,7 @@ class UsersControllerTest < ActionController::TestCase
     end
     
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
   end
 
   test 'get initial roles' do
@@ -830,12 +850,12 @@ class UsersControllerTest < ActionController::TestCase
       :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
 
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash[:alert]
+    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
   end
 
   test 'edit personal data' do
     perform_auth
-    get :edit_personal_data, {:user => users(:administrator_user).user}
+    get :edit_personal_data, {:id => users(:administrator_user).user}
     assert_response :success
     assert_not_nil assigns(:auth_user)
     assert_select '#error_body', false
@@ -846,6 +866,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_difference 'User.count' do
       perform_auth
       put :update_personal_data, {
+        :id => users(:administrator_user).to_param,
         :user => {
           :name => 'Updated Name',
           :last_name => 'Updated Last Name',
@@ -902,7 +923,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
   test 'user reviews reassignment edit' do
@@ -938,7 +959,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
   test 'user reassignment of nothing edit' do
@@ -973,7 +994,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
   test 'user findings release edit' do
@@ -1002,7 +1023,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 
   test 'user reviews release edit' do
@@ -1031,7 +1052,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 
   test 'user release edit of nothing' do
@@ -1060,7 +1081,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_path
-    assert_equal I18n.t(:'user.user_release_completed'), flash[:notice]
+    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 
   test 'export to pdf' do

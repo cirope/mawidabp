@@ -64,8 +64,8 @@ class PrivilegeTest < ActiveSupport::TestCase
     @privilege.module = nil
     assert @privilege.invalid?
     assert_equal 1, @privilege.errors.count
-    assert_equal error_message_from_model(@privilege, :module, :blank),
-      @privilege.errors.on(:module)
+    assert_equal [error_message_from_model(@privilege, :module, :blank)],
+      @privilege.errors[:module]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -76,7 +76,7 @@ class PrivilegeTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@privilege, :module, :too_long,
       :count => 255), error_message_from_model(@privilege, :module, :inclusion),
     error_message_from_model(@privilege, :module, :invalid)].sort,
-    @privilege.errors.on(:module).sort
+    @privilege.errors[:module].sort
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -86,7 +86,7 @@ class PrivilegeTest < ActiveSupport::TestCase
     assert_equal 2, @privilege.errors.count
     assert_equal [error_message_from_model(@privilege, :module, :inclusion),
       error_message_from_model(@privilege, :module, :invalid)].sort,
-      @privilege.errors.on(:module).sort
+      @privilege.errors[:module].sort
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -94,8 +94,8 @@ class PrivilegeTest < ActiveSupport::TestCase
     @privilege.module = privileges(:admin_follow_up_notifications).module
     assert @privilege.invalid?
     assert_equal 1, @privilege.errors.count
-    assert_equal error_message_from_model(@privilege, :module, :taken),
-      @privilege.errors.on(:module)
+    assert_equal [error_message_from_model(@privilege, :module, :taken)],
+      @privilege.errors[:module]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -104,8 +104,8 @@ class PrivilegeTest < ActiveSupport::TestCase
     @privilege.module = 'administration_parameters'
     assert @privilege.invalid?
     assert_equal 1, @privilege.errors.count
-    assert_equal error_message_from_model(@privilege, :module, :invalid),
-      @privilege.errors.on(:module)
+    assert_equal [error_message_from_model(@privilege, :module, :invalid)],
+      @privilege.errors[:module]
   end
 
   test 'mark implicit privileges function' do

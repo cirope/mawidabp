@@ -2,68 +2,68 @@
   :locals => {:action => :cost_analysis, :extra_params => {},
   :forms => {:date_range => true}} %>
 
-<% @periods.each do |period| -%>
+<% @periods.each do |period| %>
   <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.human_name}: #{period.inspect}" %></strong>
+    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
   <div style="margin: 1em;">
     <h1><%= t :'follow_up_committee.cost_analysis.weaknesses' %></h1>
-    <% unless @weaknesses_data[period].blank? -%>
+    <% unless @weaknesses_data[period].blank? %>
       <table class="summary_table">
         <thead>
           <tr>
-            <% @column_order.each do |col_name, col_width| -%>
+            <% @column_order.each do |col_name, col_width| %>
               <th style="width: <%= "#{col_width}%" %>">
                 <%= t "follow_up_committee.cost_analysis.column_#{col_name}" %>
               </th>
-            <% end -%>
+            <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @weaknesses_data[period].each do |data| -%>
+          <% @weaknesses_data[period].each do |data| %>
             <tr>
-              <% @column_order.map(&:first).each do |col_name| -%>
-                <td><%= data[col_name].to_utf8 %></td>
-              <% end -%>
+              <% @column_order.map(&:first).each do |col_name| %>
+                <td><%= raw data[col_name].to_utf8 %></td>
+              <% end %>
             </tr>
-          <% end -%>
+          <% end %>
         </tbody>
       </table>
-    <% else -%>
+    <% else %>
       <p style="margin: 1em;">
         <em><%= t :'follow_up_committee.cost_analysis.without_weaknesses' %></em>
       </p>
-    <% end -%>
+    <% end %>
 
     <h1><%= t :'follow_up_committee.cost_analysis.oportunities' %></h1>
-    <% unless @oportunities_data[period].blank? -%>
+    <% unless @oportunities_data[period].blank? %>
       <table class="summary_table">
         <thead>
           <tr>
-            <% @column_order.each do |col_name, col_width| -%>
+            <% @column_order.each do |col_name, col_width| %>
               <th style="width: <%= "#{col_width}%" %>">
                 <%= t "follow_up_committee.cost_analysis.column_#{col_name}" %>
               </th>
-            <% end -%>
+            <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @oportunities_data[period].each do |data| -%>
+          <% @oportunities_data[period].each do |data| %>
             <tr>
-              <% @column_order.map(&:first).each do |col_name| -%>
-                <td><%= data[col_name].to_utf8 %></td>
-              <% end -%>
+              <% @column_order.map(&:first).each do |col_name| %>
+                <td><%= raw data[col_name].to_utf8 %></td>
+              <% end %>
             </tr>
-          <% end -%>
+          <% end %>
         </tbody>
       </table>
-    <% else -%>
+    <% else %>
       <p style="margin: 1em;">
         <em><%= t :'follow_up_committee.cost_analysis.without_oportunities' %></em>
       </p>
-    <% end -%>
+    <% end %>
   </div>
-<% end -%>
+<% end %>
 
 <div id="links">
   <%= link_to t(:'label.back'), :action => :index %> |

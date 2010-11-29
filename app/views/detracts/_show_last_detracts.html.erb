@@ -1,7 +1,7 @@
 <h1 style="font-weight: normal;"><%= textilize_without_paragraph(
   t(:'detract.last_detracts', :count => LAST_DETRACTORS_LIMIT,
-    :user => @user.informal_name.strip)) %></h1>
-<% unless @detracts.blank? -%>
+    :user => @user.try(:informal_name).try(:strip))) %></h1>
+<% unless @detracts.blank? %>
   <table class="summary_table">
     <thead>
       <tr>
@@ -17,9 +17,9 @@
           <td><%= h detract.value %></td>
           <td><%= h detract.observations %></td>
         </tr>
-      <% end -%>
+      <% end %>
     </tbody>
   </table>
-<% else -%>
+<% else %>
   <h3><%= t(:'detract.user_without_detracts') %></h3>
-<% end -%>
+<% end %>

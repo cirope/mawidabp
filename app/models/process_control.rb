@@ -9,13 +9,10 @@ class ProcessControl < ActiveRecord::Base
   # Callbacks
   before_destroy :can_be_destroyed?
 
-  # Asociaciones que deben ser registradas cuando cambien
-  @@associations_attributes_for_log = [:control_objective_ids]
-
   # Named scopes
-  named_scope :list, :order =>['best_practice_id ASC',
+  scope :list, :order =>['best_practice_id ASC',
     "#{table_name}.order ASC"].join(', ')
-  named_scope :list_for_period, lambda { |period_id|
+  scope :list_for_period, lambda { |period_id|
     {
       :select => connection.distinct('process_controls.id, name', 'name'),
       :include => [:procedure_control_items => [:procedure_control]],
@@ -26,7 +23,7 @@ class ProcessControl < ActiveRecord::Base
       :order => "#{table_name}.order ASC"
     }
   }
-  named_scope :list_for_log, lambda { |id|
+  scope :list_for_log, lambda { |id|
     {
       :conditions => {:id => id}
     }
@@ -63,10 +60,6 @@ class ProcessControl < ActiveRecord::Base
 
   accepts_nested_attributes_for :control_objectives, :allow_destroy => true
 
-  def associations_attributes_for_log
-    @@associations_attributes_for_log
-  end
-
   def <=>(other)
     if other.kind_of?(ProcessControl)
       if self.best_practice_id == other.best_practice_id
@@ -85,7 +78,7 @@ class ProcessControl < ActiveRecord::Base
         co.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
       
-      self.errors.add_to_base errors.reject { |e| e.blank? }.join(
+      self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 
       false
