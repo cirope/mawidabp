@@ -5,10 +5,9 @@ nbproject/private/
 private/
 public/error_files/
 # Descomentar cuando esté estable la ayuda
-public/images/help/
-public/files/
-
+public/images/help
 tmp/
+vendor/cache/
 
 # No ignorar
 !doc/README_FOR_APP
