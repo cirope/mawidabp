@@ -203,18 +203,18 @@ class WorkPaper < ActiveRecord::Base
 
       Zip::ZipFile.foreach(zip_path) do |entry|
         if entry.file?
-          full_filename = File.join base_dir, entry.name
-          ext = File.extname(full_filename)[1..-1]
+          filename = File.join base_dir, entry.name
+          ext = File.extname(filename)[1..-1]
 
-          unless full_filename == zip_path || File.exist?(full_filename)
-            entry.extract(full_filename)
+          unless filename == zip_path || File.exist?(filename)
+            entry.extract(filename)
           end
 
-          if File.basename(full_filename, File.extname(full_filename)) ==
+          if File.basename(filename, File.extname(filename)) ==
               File.basename(self.file_model.filename, '.zip')
-            self.file_model.filename = File.basename(full_filename)
+            self.file_model.filename = File.basename(filename)
             self.file_model.content_type = Mime::Type.lookup_by_extension ext
-            self.file_model.size = File.size(full_filename)
+            self.file_model.size = File.size(filename)
           end
         end
       end

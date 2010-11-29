@@ -124,7 +124,7 @@
             <td><%= finding_answer.answer_type_text %></td>
             <td>
               <%= finding_answer.file_model ?
-                link_to(t(:'label.download'), finding_answer.file_model.public_filename) : '---' %>
+                link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
           </tr>
@@ -154,7 +154,7 @@
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format h(work_paper.description) %></td>
             <td><%= work_paper.file_model ?
-              link_to(t(:'label.download'), work_paper.file_model.public_filename) : '---' %></td>
+              link_to(t(:'label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>
       </tbody>

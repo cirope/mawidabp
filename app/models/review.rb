@@ -1096,7 +1096,7 @@ class Review < ActiveRecord::Base
       end
 
       if self.file_model
-        self.add_file_to_zip self.file_model.full_filename,
+        self.add_file_to_zip self.file_model.file.path,
           self.file_model.filename, dirs[:survey], zipfile
       end
 
@@ -1131,8 +1131,8 @@ class Review < ActiveRecord::Base
 
   def add_work_paper_to_zip(wp, dir, zipfile)
     if wp.file_model
-      self.add_file_to_zip(wp.file_model.full_filename, wp.file_model.filename,
-        dir, zipfile)
+      self.add_file_to_zip(wp.file_model.file.path,
+        wp.file_model.file_file_name, dir, zipfile)
     else
       identification = self.sanitized_identification
       wp.create_pdf_cover(identification, self)
