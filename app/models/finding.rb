@@ -424,7 +424,7 @@ class Finding < ActiveRecord::Base
     end
   end
   validates_each :finding_user_assignments do |record, attr, value|
-    users = value.map(&:user)
+    users = value.map{|fua| fua.user unless fua.marked_for_destruction?}.compact
     
     unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
         users.any?(&:supervisor?) && users.any?(&:manager?)

@@ -66,7 +66,10 @@
     <tbody>
       <tr>
         <td><b><%= t(:'workflow.row_time') %></b></td>
-        <td><%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %></td>
+        <td>
+          <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
+          | <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_unit_cost)) %>
+        </td>
         <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
       </tr>
       <tr style="vertical-align: text-top;">

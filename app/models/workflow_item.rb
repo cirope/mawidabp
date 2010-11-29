@@ -135,6 +135,10 @@ class WorkflowItem < ActiveRecord::Base
     self.human_resource_utilizations.sum(&:cost)
   end
 
+  def human_unit_cost
+    self.human_resource_utilizations.sum(&:units)
+  end
+
   def material_cost
     self.material_resource_utilizations.sum(&:cost)
   end
