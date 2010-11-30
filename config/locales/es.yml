@@ -762,6 +762,7 @@ es:
     correctly_created: "Organización agregada correctamente."
     correctly_updated: "Organización actualizada correctamente."
     stale_object_error: "La organización no fue actualizada, intente nuevamente."
+    new_organization_can_not_have_image: "Podrá cargar un isologotipo de la organización luego de haberla creado"
 
   parameter:
     index_title: "Listado de parámetros"
@@ -1136,6 +1137,7 @@ es:
     hide_resource_utilization: "Ocultar recursos"
     download_global_workflow: "Descargar programa de trabajo global"
     download_detailed_workflow: "Descargar programa de trabajo detallado"
+    worked_hours: "Tiempo dedicado: %{count} unidades"
     period:
       title: "Periodo (%{number})"
       range: "%{from_date} al %{to_date}"

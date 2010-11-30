@@ -17,16 +17,22 @@
     <%= o_f.label :description %>
     <%= o_f.text_area :description %>
   </p>
-  <p class="form_item">
-    <% @organization.build_image_model unless @organization.image_model %>
-    <%= o_f.fields_for :image_model do |im_f| %>
-      <%= im_f.label :image,
-        Organization.human_attribute_name(:image_model), :class => :inline %>
-      <span class="file_container">
-        <%= im_f.file_field :image, :class => 'inline_item file', :size => nil %>
-      </span>
-    <% end %>
-  </p>
+  <% unless @organization.new_record? %>
+    <p class="form_item">
+      <% @organization.build_image_model unless @organization.image_model %>
+      <%= o_f.fields_for :image_model do |im_f| %>
+        <%= im_f.label :image,
+          Organization.human_attribute_name(:image_model), :class => :inline %>
+        <span class="file_container">
+          <%= im_f.file_field :image, :class => 'inline_item file', :size => nil %>
+        </span>
+      <% end %>
+    </p>
+  <% else %>
+    <p>
+      <%= t(:'organization.new_organization_can_not_have_image') %>
+    </p>
+  <% end %>
   </div>
 
   <%= hidden_lock_version(o_f) %>

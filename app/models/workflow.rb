@@ -201,4 +201,8 @@ class Workflow < ActiveRecord::Base
   def cost
     self.workflow_items.to_a.sum(&:cost)
   end
+
+  def human_unit_cost
+    self.workflow_items.to_a.sum(&:human_unit_cost)
+  end
 end
