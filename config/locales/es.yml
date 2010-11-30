@@ -762,6 +762,7 @@ es:
     correctly_created: "Organización agregada correctamente."
     correctly_updated: "Organización actualizada correctamente."
     stale_object_error: "La organización no fue actualizada, intente nuevamente."
+    new_organization_can_not_have_image: "Podrá cargar un isologotipo de la organización luego de haberla creado"
 
   parameter:
     index_title: "Listado de parámetros"

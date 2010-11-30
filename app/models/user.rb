@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
   # Restricciones
   validates_format_of :name, :last_name, :with => /\A\w[\w\s]*\z/,
     :allow_nil => true, :allow_blank => true
-  validates_presence_of :name, :last_name, :language, :email
+  validates :name, :last_name, :language, :email, :presence => true
   validates_uniqueness_of :user, :email, :case_sensitive => false
   validates_uniqueness_of :name, :case_sensitive => false, :scope => :last_name
   validates_length_of :user, :in => 5..30

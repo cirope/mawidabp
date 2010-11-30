@@ -1,7 +1,7 @@
 <% if @organization.image_model && @organization.image_model.valid? &&
     @organization.errors.empty? %>
   <div id="organization_logo">
-    <%= image_logo_tag %>
+    <%= organization_image_tag %>
   </div>
 <% end %>
 

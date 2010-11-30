@@ -1,6 +1,7 @@
 class Organization < ActiveRecord::Base
   include ParameterSelector
   include Trimmer
+  include Comparable
 
   trimmed_fields :name, :prefix
   
@@ -12,7 +13,9 @@ class Organization < ActiveRecord::Base
   INVALID_PREFIXES = ['www', APP_ADMIN_PREFIX]
 
   # Callbacks
+  before_save :change_current_organization_id
   after_create :create_initial_data
+  after_save :restore_current_organization_id
   
   # Named scopes
   scope :list, :order => 'name ASC'
@@ -59,6 +62,10 @@ class Organization < ActiveRecord::Base
         GlobalModelConfig.current_organization_id).group_id
     end
   end
+
+  def <=>(other)
+    self.prefix <=> other.prefix
+  end
   
   # Crea la configuración inicial de la organización
   def create_initial_data
@@ -73,6 +80,15 @@ class Organization < ActiveRecord::Base
         :parameter => Parameter.find_parameter(o.id, param_name)
       }
     end
+  end
+
+  def change_current_organization_id
+    @_current_organization_id = GlobalModelConfig.current_organization_id
+    GlobalModelConfig.current_organization_id = self.id if self.id
+  end
+
+  def restore_current_organization_id
+    GlobalModelConfig.current_organization_id = @_current_organization_id
   end
 
   private
