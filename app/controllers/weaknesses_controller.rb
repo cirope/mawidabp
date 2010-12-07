@@ -37,16 +37,15 @@ class WeaknessesController < ApplicationController
     build_search_conditions Weakness,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @weaknesses = Weakness.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => {:control_objective_item =>
-          {:review => [:period, :plan_item, :conclusion_final_review]}},
-      :conditions => [@conditions, parameters],
-      :order => @order_by || [
+    @weaknesses = Weakness.includes(
+      :control_objective_item =>
+        {:review => [:period, :plan_item, :conclusion_final_review]}
+    ).where(@conditions, parameters).order(
+      @order_by || [
         "#{Review.table_name}.identification ASC",
         "#{Weakness.table_name}.review_code ASC"
       ].join(', ')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -78,8 +77,9 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/new.xml
   def new
     @title = t :'weakness.new_title'
-    @weakness = Weakness.new({:control_objective_item_id =>
-        params[:control_objective_item]}, true)
+    @weakness = Weakness.new(
+      {:control_objective_item_id => params[:control_objective_item]}, true
+    )
 
     respond_to do |format|
       format.html # new.html.erb
@@ -184,17 +184,15 @@ class WeaknessesController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * POST /weaknesses/auto_complete_for_finding_relation
@@ -227,21 +225,15 @@ class WeaknessesController < ApplicationController
 
       parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => {
-        :control_objective_item => {
-          :review => [:period, :conclusion_final_review]
-        }
-      },
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @findings = Finding.includes(
+      :control_objective_item => {:review => [:period, :conclusion_final_review]}
+    ).where(conditions.map {|c| "(#{c})"}.join(' AND '), parameters).order(
+      [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(','),
-      :limit => 5
-    }
-
-    @findings = Finding.all(find_options)
+      ].join(',')
+    ).limit(5)
   end
 
   private
@@ -252,20 +244,16 @@ class WeaknessesController < ApplicationController
   # devuelve nil.
   # _id_::  ID de la debilidad que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Weakness.first(
-      :include => {:control_objective_item => {:review => :period}},
-      :conditions => {
-        :id => id,
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
-      :readonly => false)
+    Weakness.includes(:control_objective_item => {:review => :period}).where(
+      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+    ).first(:readonly => false)
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
+    @action_privileges.update(
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
       :auto_complete_for_finding_relation => :read
-    })
+    )
   end
 end

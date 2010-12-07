@@ -12,10 +12,11 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes.xml
   def index
     @title = t :'resource_class.index_title'
-    @resource_classes = ResourceClass.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :conditions => {:organization_id => @auth_organization.id},
-      :order => 'name ASC')
+    @resource_classes = ResourceClass.where(
+      :organization_id => @auth_organization.id
+    ).order('name ASC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -129,9 +130,8 @@ class ResourceClassesController < ApplicationController
   # usuario) devuelve nil.
   # _id_::  ID de la clase de recurso que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ResourceClass.first(
-      :conditions => {:id => id, :organization_id => @auth_organization.id},
-      :readonly => false
-    )
+    ResourceClass.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end

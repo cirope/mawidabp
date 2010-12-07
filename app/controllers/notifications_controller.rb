@@ -5,11 +5,9 @@ class NotificationsController < ApplicationController
   # * GET /notifications.xml
   def index
     @title = t :'notification.index_title'
-    @notifications = Notification.paginate(:page => params[:page],
-      :conditions => {:user_id => @auth_user.id},
-      :per_page => APP_LINES_PER_PAGE,
-      :order => ['status ASC', 'created_at DESC'].join(', ')
-    )
+    @notifications = Notification.where(:user_id => @auth_user.id).order(
+      ['status ASC', 'created_at DESC'].join(', ')
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,8 +19,9 @@ class NotificationsController < ApplicationController
   # * GET /notifications/1.xml
   def show
     @title = t :'notification.show_title'
-    @notification = Notification.first(:conditions =>
-        {:confirmation_hash => params[:id], :user_id => @auth_user.id})
+    @notification = Notification.where(
+      :confirmation_hash => params[:id], :user_id => @auth_user.id
+    ).first
 
     respond_to do |format|
       format.html # show.html.erb
@@ -35,8 +34,9 @@ class NotificationsController < ApplicationController
   # * GET /notifications/1/edit
   def edit
     @title = t :'notification.edit_title'
-    @notification = Notification.first(:conditions =>
-        {:confirmation_hash => params[:id], :user_id => @auth_user.id})
+    @notification = Notification.where(
+      :confirmation_hash => params[:id], :user_id => @auth_user.id
+    ).first
 
     redirect_to notifications_path unless @notification
   end
@@ -48,8 +48,9 @@ class NotificationsController < ApplicationController
   # * PUT /notifications/1.xml
   def update
     @title = t :'notification.edit_title'
-    @notification = Notification.first(:conditions =>
-        {:confirmation_hash => params[:id], :user_id => @auth_user.id})
+    @notification = Notification.where(
+      :confirmation_hash => params[:id], :user_id => @auth_user.id
+    ).first
 
     respond_to do |format|
       if @notification.update_attributes(params[:notification])
@@ -70,10 +71,10 @@ class NotificationsController < ApplicationController
   # * GET /notifications/confirm
   # * GET /notifications/confirm.xml
   def confirm
-    @notification = Notification.first(:conditions => {
-        :status => Notification::STATUS[:unconfirmed],
-        :confirmation_hash => params[:id]}
-    )
+    @notification = Notification.where(
+      :status => Notification::STATUS[:unconfirmed],
+      :confirmation_hash => params[:id]
+    ).first
 
     @auth_organization =
       @notification.try(:user).try(:organizations).try(:first)

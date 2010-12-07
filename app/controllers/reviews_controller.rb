@@ -20,15 +20,14 @@ class ReviewsController < ApplicationController
 
     build_search_conditions Review, default_conditions
 
-    @reviews = Review.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => [:period, {:plan_item => :business_unit}],
-      :order => [
+    @reviews = Review.includes(:period, {:plan_item => :business_unit}).where(
+      @conditions
+    ).order(
+      [
         "#{Period.table_name}.start DESC",
         "#{Review.table_name}.created_at DESC"
-      ].join(', '),
-      :conditions => @conditions
-    )
+      ].join(', ')
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -194,14 +193,10 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/procedure_control_data/1
   def procedure_control_data
-    @procedure_control = ProcedureControl.first(
-      :include => :period,
-      :conditions => {
-        :id => params[:id],
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :readonly => true
-    )
+    @procedure_control = ProcedureControl.includes(:period).where(
+      :id => params[:id],
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first(:readonly => true)
 
     render :template => 'procedure_controls/show'
   end
@@ -233,17 +228,15 @@ class ReviewsController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations).where(
+      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * POST /reviews/auto_complete_for_procedure_control_subitem
@@ -264,18 +257,18 @@ class ReviewsController < ApplicationController
 
       parameters["procedure_control_subitem_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => {:control_objective => {:process_control => :best_practice},
-        :procedure_control_item => :procedure_control},
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @procedure_control_subitems = ProcedureControlSubitem.includes(
+      :control_objective => {:process_control => :best_practice},
+      :procedure_control_item => :procedure_control
+    ).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order(
+      [
         "#{ProcessControl.table_name}.name ASC",
         "#{ControlObjective.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @procedure_control_subitems = ProcedureControlSubitem.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * GET /reviews/estimated_amount/1
@@ -294,14 +287,9 @@ class ReviewsController < ApplicationController
   #
   # _id_::  ID del informe que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Review.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :readonly => false
-    )
+    Review.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first(:readonly => false)
   end
 
   # Indica si existe el informe indicado, siempre que pertenezca a la
@@ -311,17 +299,13 @@ class ReviewsController < ApplicationController
   #
   # _id_::  ID del informe que se quiere recuperar
   def exists?(id) #:doc:
-    Review.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      }
-    )
+    Review.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
+    @action_privileges.update(
       :review_data => :read,
       :download_work_papers => :read,
       :plan_item_data => :read,
@@ -330,6 +314,6 @@ class ReviewsController < ApplicationController
       :auto_complete_for_user => :read,
       :auto_complete_for_procedure_control_subitem => :read,
       :estimated_amount => :read
-    })
+    )
   end
 end

@@ -19,11 +19,11 @@ class ConclusionDraftReviewsController < ApplicationController
 
     build_search_conditions ConclusionDraftReview, default_conditions
 
-    @conclusion_draft_reviews = ConclusionDraftReview.paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE,
-      :include => { :review => [:period, { :plan_item => :business_unit }] },
-      :conditions => @conditions,
-      :order => 'issue_date DESC')
+    @conclusion_draft_reviews = ConclusionDraftReview.includes(
+      :review => [:period, { :plan_item => :business_unit }]
+    ).where(@conditions).order('issue_date DESC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -271,25 +271,18 @@ class ConclusionDraftReviewsController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => ['users.last_name ASC', 'users.name ASC'].join(','),
-      :limit => 10
-    }
 
-    @users = User.all(find_options)
+    @users = User.includes(:organizations).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(['users.last_name ASC', 'users.name ASC'].join(',')).limit(10)
   end
 
   def check_for_approval
     if params[:id] && params[:id].to_i > 0
-      review = Review.first(
-        :include => :period,
-        :conditions =>{
-          :id => params[:id],
-          "#{Period.table_name}.organization_id" => @auth_organization.id
-        }
-      )
+      review = Review.includes(:period).where(
+        :id => params[:id],
+        "#{Period.table_name}.organization_id" => @auth_organization.id
+      ).first
 
       render :json => {
         :approved => review.is_approved?,
@@ -309,17 +302,17 @@ class ConclusionDraftReviewsController < ApplicationController
   # devuelve nil.
   # _id_::  ID del informe borrador que se quiere recuperar
   def find_with_organization(id) #:doc:
-    conclusion_draft_review = ConclusionDraftReview.first(
-      :include => {:review => :period},
-      :conditions => [
+    conclusion_draft_review = ConclusionDraftReview.includes(
+      :review => :period
+    ).where(
+      [
         [
           "#{ConclusionDraftReview.table_name}.id = :id",
           "#{Period.table_name}.organization_id = :organization_id"
         ].join(' AND '),
         {:id => id, :organization_id => @auth_organization.id}
-      ],
-      :readonly => false
-    )
+      ]
+    ).first(:readonly => false)
 
     conclusion_draft_review.has_final_review? ? nil : conclusion_draft_review
   end

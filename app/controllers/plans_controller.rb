@@ -16,18 +16,14 @@ class PlansController < ApplicationController
   # * GET /plans.xml
   def index
     @title = t :'plan.index_title'
-    @plans = Plan.paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :period,
-      :conditions => {
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :order => [
+    @plans = Plan.includes(:period).where(
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).order(
+      [
         'period_id DESC',
         "#{Plan.table_name}.created_at DESC"
       ].join(',')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -178,17 +174,15 @@ class PlansController < ApplicationController
 
       parameters["business_unit_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :business_unit_type,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @business_units = BusinessUnit.includes(:business_unit_type).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(
+      [
         "#{BusinessUnit.table_name}.name ASC",
         "#{BusinessUnitType.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @business_units = BusinessUnit.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * POST /plans/auto_complete_for_user
@@ -206,17 +200,15 @@ class PlansController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => [:organizations, :resource],
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations, :resource).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * GET /plans/resource_data/1
@@ -234,14 +226,9 @@ class PlansController < ApplicationController
   # usuario) devuelve nil.
   # _id_::  ID del plan de trabajo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Plan.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :readonly => false
-    )
+    Plan.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first(:readonly => false)
   end
 
   # Indica si existe el plan de trabajo indicado, siempre que pertenezca a la
@@ -250,21 +237,17 @@ class PlansController < ApplicationController
   # autenticó el usuario) devuelve false.
   # _id_::  ID del plan de trabajo que se quiere recuperar
   def exists?(id) #:doc:
-    Plan.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      }
-    )
+    Plan.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :auto_complete_for_business_unit_business_unit_id => :read,
-        :auto_complete_for_user => :read,
-        :resource_data => :read
-      })
+    @action_privileges.update(
+      :export_to_pdf => :read,
+      :auto_complete_for_business_unit_business_unit_id => :read,
+      :auto_complete_for_user => :read,
+      :resource_data => :read
+    )
   end
 end

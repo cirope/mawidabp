@@ -24,15 +24,12 @@ class DetractsController < ApplicationController
 
     build_search_conditions User, [conditions.join(' AND '), parameters]
 
-    @users = User.paginate(:page => params[:page],
-      :include => :organizations,
-      :conditions => @conditions,
-      :per_page => APP_LINES_PER_PAGE,
-      :order => [
+    @users = User.includes(:organizations).where(@conditions).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ].join(', ')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -84,13 +81,11 @@ class DetractsController < ApplicationController
         [@auth_user.id]
     end
 
-    @detracts = @user.detracts.all(
-      :include => {:user => :children},
-      :conditions => conditions,
-      :order => "#{Detract.table_name}.created_at DESC",
-      :limit => LAST_DETRACTORS_LIMIT,
-      :readonly => false
-    )
+    @detracts = @user.detracts.includes(
+      :user => :children
+    ).where(conditions).order("#{Detract.table_name}.created_at DESC").limit(
+      LAST_DETRACTORS_LIMIT
+    ).all(:readonly => false)
 
     respond_to do |format|
       format.html { render :partial => 'show_last_detracts' }
@@ -146,9 +141,7 @@ class DetractsController < ApplicationController
       conditions["#{User.table_name}.id"] = @auth_user.id
     end
 
-    Detract.first(
-      :include => {:user => :children},
-      :conditions => conditions,
+    Detract.includes(:user => :children).where(conditions).first(
       :readonly => false
     )
   end

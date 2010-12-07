@@ -41,12 +41,11 @@ class LoginRecordsController < ApplicationController
       build_search_conditions LoginRecord, default_conditions
     end
 
-    @login_records = LoginRecord.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :user,
-      :conditions => @conditions || default_conditions,
-      :order => "#{LoginRecord.table_name}.start DESC"
-    )
+    @login_records = LoginRecord.includes(:user).where(
+      @conditions || default_conditions
+    ).order(
+      "#{LoginRecord.table_name}.start DESC"
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -64,11 +63,9 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/1.xml
   def show
     @title = t :'login_record.show_title'
-    @login_record = LoginRecord.first(
-      :conditions => {
-        :id => params[:id], :organization_id => @auth_organization.id
-      }
-    )
+    @login_record = LoginRecord.where(
+      :id => params[:id], :organization_id => @auth_organization.id
+    ).first
 
     respond_to do |format|
       format.html # show.html.erb
@@ -81,9 +78,8 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
-    login_records = LoginRecord.all(
-      :include => :user,
-      :conditions => [
+    login_records = LoginRecord.includes(:user).where(
+      [
         [
           'organization_id = :organization_id',
           'created_at BETWEEN :from_date AND :to_date'
@@ -93,9 +89,8 @@ class LoginRecordsController < ApplicationController
           :to_date => to_date.to_time.end_of_day,
           :organization_id => @auth_organization.id
         }
-      ],
-      :order => 'start DESC'
-    )
+      ]
+    ).order('start DESC')
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 

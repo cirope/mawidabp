@@ -11,9 +11,8 @@ class GroupsController < ApplicationController
   # * GET /groups.xml
   def index
     @title = t :'group.index_title'
-    @groups = Group.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :order => 'name ASC'
+    @groups = Group.order('name ASC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|

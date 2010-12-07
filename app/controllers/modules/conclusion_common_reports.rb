@@ -31,11 +31,11 @@ module ConclusionCommonReports
           @weaknesses_counts[period]["#{key}_weaknesses"] =
             Weakness.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").for_period(period).finals(
-              true).count(:conditions => conditions, :group => :state)
+              true).where(conditions).group(:state).count
           @weaknesses_counts[period]["#{key}_oportunities"] =
             Oportunity.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").for_period(period).finals(
-              true).count(:conditions => conditions, :group => :state)
+              true).where(conditions).group(:state).count
         end
       end
     end
@@ -216,8 +216,9 @@ module ConclusionCommonReports
               weaknesses_count[s[1]] ||= {}
               weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
                 @from_date, @to_date, false).send("#{audit_type_symbol}_audit").
-                for_period(period).finals(true).count(:conditions => {
-                  :state => s[1], :risk => rl[1]}.merge(conditions || {}))
+                for_period(period).finals(true).where(
+                  {:state => s[1], :risk => rl[1]}.merge(conditions || {})
+                ).count
               weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
             end
           end
@@ -543,13 +544,10 @@ module ConclusionCommonReports
   private
 
   def periods_for_interval
-    Period.all({
-        :include => {:reviews => :conclusion_final_review},
-        :conditions => [
-          "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
-          { :from_date => @from_date, :to_date => @to_date }
-        ]
-    })
+    Period.includes(:reviews => :conclusion_final_review).where(
+      "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
+      { :from_date => @from_date, :to_date => @to_date }
+    )
   end
 
   def get_weaknesses_synthesis_table_data(weaknesses_count,

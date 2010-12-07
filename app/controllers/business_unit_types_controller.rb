@@ -11,11 +11,11 @@ class BusinessUnitTypesController < ApplicationController
   # * GET /business_unit_types.xml
   def index
     @title = t :'business_unit_type.index_title'
-    @business_unit_types = BusinessUnitType.paginate(
+    @business_unit_types = BusinessUnitType.where(
+      :organization_id => @auth_organization.id
+    ).order(['external ASC', 'name ASC'].join(', ')).paginate(
       :page => params[:page],
-      :conditions => { :organization_id => @auth_organization.id },
-      :per_page => APP_LINES_PER_PAGE,
-      :order => ['external ASC', 'name ASC'].join(', ')
+      :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -132,9 +132,8 @@ class BusinessUnitTypesController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
   def find_with_organization(id) #:doc:
-    BusinessUnitType.first(
-      :readonly => false,
-      :conditions => { :id => id, :organization_id => @auth_organization.id }
-    )
+    BusinessUnitType.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end

@@ -13,9 +13,12 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices.xml
   def index
     @title = t :'best_practice.index_title'
-    @best_practices = BestPractice.paginate(:page => params[:page],
-      :conditions => {:organization_id => @auth_organization.id},
-      :per_page => APP_LINES_PER_PAGE, :order => 'created_at DESC')
+    @best_practices = BestPractice.where(
+      :organization_id => @auth_organization.id
+    ).order('created_at DESC').paginate(
+      :page => params[:page],
+      :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -135,7 +138,8 @@ class BestPracticesController < ApplicationController
   # usuario) devuelve nil.
   # _id_::  ID de la buena práctica que se quiere recuperar
   def find_with_organization(id) #:doc:
-    BestPractice.first(:readonly => false, :conditions =>
-        {:id => id, :organization_id => @auth_organization.id})
+    BestPractice.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end

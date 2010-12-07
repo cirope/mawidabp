@@ -49,7 +49,7 @@
   </div>
 </div>
 
-<% unless Rails.env == 'production' %>
+<% unless Rails.env.production? %>
   <%= link_to_function t(:'error.show_details'),
     "Effect.SlideDown('error_details'); this.hide();", :id => 'show_link' %>
   <div style="display: none; margin: 2em 0em;" id="error_details">

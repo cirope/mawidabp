@@ -19,11 +19,11 @@ class ConclusionFinalReviewsController < ApplicationController
 
     build_search_conditions ConclusionFinalReview, default_conditions
 
-    @conclusion_final_reviews = ConclusionFinalReview.paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE,
-      :include => { :review => [:period, { :plan_item => :business_unit }] },
-      :conditions => @conditions,
-      :order => @order_by || 'issue_date DESC')
+    @conclusion_final_reviews = ConclusionFinalReview.includes(
+      :review => [:period, { :plan_item => :business_unit }]
+    ).where(@conditions).order(@order_by || 'issue_date DESC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -79,8 +79,8 @@ class ConclusionFinalReviewsController < ApplicationController
         }
       end
     else
-      conclusion_final_review = ConclusionFinalReview.first(:conditions =>
-          {:review_id => params[:review]})
+      conclusion_final_review = ConclusionFinalReview.where(
+        :review_id => params[:review]).first
       
       redirect_to edit_conclusion_final_review_path(conclusion_final_review)
     end
@@ -276,11 +276,9 @@ class ConclusionFinalReviewsController < ApplicationController
 
     build_search_conditions ConclusionFinalReview, default_conditions
 
-    conclusion_final_reviews = ConclusionFinalReview.all(
-      :include => { :review => [:period, { :plan_item => :business_unit }] },
-      :conditions => @conditions,
-      :order => @order_by || 'issue_date DESC'
-    )
+    conclusion_final_reviews = ConclusionFinalReview.includes(
+      :review => [:period, { :plan_item => :business_unit }]
+    ).where(@conditions).order(@order_by || 'issue_date DESC')
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 
@@ -381,14 +379,10 @@ class ConclusionFinalReviewsController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => ['users.last_name ASC', 'users.name ASC'].join(','),
-      :limit => 10
-    }
 
-    @users = User.all(find_options)
+    @users = User.includes(:organizations).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(['users.last_name ASC', 'users.name ASC'].join(',')).limit(10)
   end
 
   private
@@ -399,13 +393,10 @@ class ConclusionFinalReviewsController < ApplicationController
   # devuelve nil.
   # _id_::  ID del informe definitivo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ConclusionFinalReview.first(
-      :include => {:review => :period},
-      :conditions => {
-        :id => id,
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
-      :readonly => false)
+    ConclusionFinalReview.includes(:review => :period).where(
+      :id => id,
+      Period.table_name => {:organization_id => @auth_organization.id}
+    ).first(:readonly => false)
   end
 
   def load_privileges #:nodoc:

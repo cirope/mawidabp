@@ -11,10 +11,9 @@ class PeriodsController < ApplicationController
   # * GET /periods.xml
   def index
     @title = t :'period.index_title'
-    @periods = Period.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :conditions => {:organization_id => @auth_organization.id},
-      :order => 'start DESC')
+    @periods = Period.where(:organization_id => @auth_organization.id).order(
+      'start DESC'
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -131,9 +130,8 @@ class PeriodsController < ApplicationController
   # nil.
   # _id_::  ID del periodo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Period.first(
-      :conditions => {:id => id, :organization_id => @auth_organization.id},
-      :readonly => false
-    )
+    Period.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end

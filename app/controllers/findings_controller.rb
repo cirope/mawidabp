@@ -15,18 +15,6 @@ class FindingsController < ApplicationController
     @title = t :'finding.index_title'
     @self_and_descendants = @auth_user.descendants + [@auth_user]
 
-    options = {
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => [
-        {
-          :control_objective_item => {
-            :review => [:conclusion_final_review, :period, :plan_item]
-          }
-        },
-        :users
-      ]
-    }
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}
@@ -50,13 +38,19 @@ class FindingsController < ApplicationController
     
     build_search_conditions Finding, default_conditions
 
-    options[:order] = @order_by || [
-      "#{Review.table_name}.created_at DESC",
-      "#{Finding.table_name}.state ASC",
-      "#{Finding.table_name}.review_code ASC"
-    ].join(', ')
-
-    @findings = Finding.paginate(options.merge(:conditions => @conditions))
+    @findings = Finding.includes(
+      {
+        :control_objective_item => {
+          :review => [:conclusion_final_review, :period, :plan_item]
+        }
+      }, :users
+      ).where(@conditions).order(
+        @order_by || [
+          "#{Review.table_name}.created_at DESC",
+          "#{Finding.table_name}.state ASC",
+          "#{Finding.table_name}.review_code ASC"
+        ].join(', ')
+      ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -131,16 +125,6 @@ class FindingsController < ApplicationController
   # * GET /findings/export_to_pdf
   def export_to_pdf
     detailed = !params[:include_details].blank?
-    options = {
-      :include => [
-        {
-          :control_objective_item => {
-            :review => [:conclusion_final_review, :period, :plan_item]
-          }
-        },
-        :users
-      ]
-    }
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}
@@ -165,13 +149,19 @@ class FindingsController < ApplicationController
 
     build_search_conditions Finding, default_conditions
 
-    options[:order] = @order_by || [
-      "#{Review.table_name}.created_at DESC",
-      "#{Finding.table_name}.state ASC",
-      "#{Finding.table_name}.review_code ASC"
-    ].join(', ')
-
-    findings = Finding.all(options.merge(:conditions => @conditions))
+    findings = Finding.includes(
+      {
+        :control_objective_item => {
+          :review => [:conclusion_final_review, :period, :plan_item]
+        }
+      }, :users
+    ).order(
+      @order_by || [
+        "#{Review.table_name}.created_at DESC",
+        "#{Finding.table_name}.state ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ].join(', ')
+    ).where(@conditions)
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 
@@ -325,17 +315,15 @@ class FindingsController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * POST /findings/auto_complete_for_finding_relation
@@ -368,21 +356,15 @@ class FindingsController < ApplicationController
 
       parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => {
-        :control_objective_item => {
-          :review => [:period, :conclusion_final_review]
-        }
-      },
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @findings = Finding.includes(:control_objective_item =>
+        {:review => [:period, :conclusion_final_review]}
+    ).where([conditions.map {|c| "(#{c})"}.join(' AND '), parameters]).order(
+      [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(','),
-      :limit => 5
-    }
-
-    @findings = Finding.all(find_options)
+      ].join(',')
+    ).limit(5)
   end
 
   private
@@ -393,28 +375,27 @@ class FindingsController < ApplicationController
   # nil.
   # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
   def find_with_organization(id) #:doc:
-    options = {
-      :include => [{:control_objective_item => {:review => :period}}],
-      :conditions => {
-        :id => id,
-        :final => false,
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
-      :readonly => false
+    includes = [{:control_objective_item => {:review => :period}}]
+    conditions = {
+      :id => id,
+      :final => false,
+      Period.table_name => {:organization_id => @auth_organization.id}
     }
 
     unless @auth_user.committee?
-      options[:include] << :users
-      options[:conditions][User.table_name] = {
+      includes << :users
+      conditions[User.table_name] = {
         :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
       }
     end
-    
-    finding = Finding.first(options)
+
+    finding = Finding.includes(includes).where(conditions).first(
+      :readonly => false
+    )
 
     # TODO: eliminar cuando se corrija el problema que hace que include solo
     # traiga el primer usuario
-    finding.users.reload if finding
+    finding.try(:reload)
 
     finding.finding_prefix = true if finding
 

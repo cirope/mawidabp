@@ -31,21 +31,20 @@ module FollowUpCommonReports
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
             Weakness.list_all_by_date(@from_date, @to_date, false).send(
-              "#{audit_type_symbol}_audit").finals(false).for_period(
-              period).count(:conditions => conditions, :group => :state)
+              :"#{audit_type_symbol}_audit").finals(false).for_period(
+              period).where(conditions).group(:state).count
           @weaknesses_counts[period]["#{key}_oportunities"] =
             Oportunity.list_all_by_date(@from_date, @to_date, false).send(
-              "#{audit_type_symbol}_audit").finals(false).for_period(
-              period).count(:conditions => conditions, :group => :state)
+              :"#{audit_type_symbol}_audit").finals(false).for_period(
+              period).where(conditions).group(:state).count
           being_implemented_counts = {:current => 0, :stale => 0,
             :current_rescheduled => 0, :stale_rescheduled => 0}
 
           @status.each do |state|
             if state.first == :being_implemented
               being_implemented = Weakness.list_all_by_date(@from_date,
-                @to_date, false).send("#{audit_type_symbol}_audit").finals(
-                false).for_period(period).being_implemented.all(
-                :conditions => conditions)
+                @to_date, false).send(:"#{audit_type_symbol}_audit").finals(
+                false).for_period(period).being_implemented.where(conditions)
 
               being_implemented.each do |w|
                 unless w.stale?
@@ -101,7 +100,7 @@ module FollowUpCommonReports
 
         pdf.move_pointer PDF_FONT_SIZE * 2
 
-         pdf.add_title t("conclusion_committee_report.findings_type_#{audit_type_symbol}"),
+         pdf.add_title t(:"conclusion_committee_report.findings_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
         (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
@@ -262,16 +261,18 @@ module FollowUpCommonReports
               weaknesses_count[s[1]] ||= {}
                 weaknesses_count[s[1]][rl[1]] =
                   Weakness.list_all_by_date(@from_date, @to_date, false).send(
-                    "#{audit_type_symbol}_audit").finals(false).for_period(
-                    period).count(:conditions => {
-                      :state => s[1], :risk => rl[1]}.merge(conditions || {}))
+                    :"#{audit_type_symbol}_audit").finals(false).for_period(
+                    period).where(
+                      {:state => s[1], :risk => rl[1]}.merge(conditions || {})
+                    ).count
                 weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
               if s.first == :being_implemented
                 being_implemented = Weakness.list_all_by_date(
-                  @from_date, @to_date, false).send("#{audit_type_symbol}_audit").
-                  finals(false).for_period(period).being_implemented.all(
-                  :conditions => {:risk => rl[1]}.merge(conditions || {}))
+                  @from_date, @to_date, false).send(:"#{audit_type_symbol}_audit").
+                  finals(false).for_period(period).being_implemented.where(
+                    {:risk => rl[1]}.merge(conditions || {})
+                  )
 
                 being_implemented.each do |f|
                   unless f.stale?
@@ -350,7 +351,7 @@ module FollowUpCommonReports
 
         pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.add_title t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
+        pdf.add_title t(:"conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
         (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
@@ -405,7 +406,7 @@ module FollowUpCommonReports
       @audit_types.each do |audit_type|
         @data[period][audit_type] = []
         conclusion_final_review = ConclusionFinalReview.list_all_by_date(
-          @from_date, @to_date).send("#{audit_type}_audit").for_period(period)
+          @from_date, @to_date).send(:"#{audit_type}_audit").for_period(period)
         reviews_by_audit_type = {}
 
         conclusion_final_review.each do |cfr|
@@ -418,7 +419,7 @@ module FollowUpCommonReports
         end
 
         reviews_by_audit_type.each do |bu_type, bu_data|
-          title = "#{Review.human_attribute_name('audit_type')}: #{bu_type}"
+          title = "#{Review.human_attribute_name(:audit_type)}: #{bu_type}"
           business_units = {}
 
           bu_data.values.each do |cfrs|
@@ -635,8 +636,8 @@ module FollowUpCommonReports
 
                 unless bu_data[:oportunities_table_data].blank?
                   columns = {
-                    'state' => [Oportunity.human_attribute_name('state'), 30],
-                    'count' => [Oportunity.human_attribute_name('count'), 70]
+                    'state' => [Oportunity.human_attribute_name(:state), 30],
+                    'count' => [Oportunity.human_attribute_name(:count), 70]
                   }
 
                   columns.each do |col_name, col_data|
@@ -695,13 +696,10 @@ module FollowUpCommonReports
   private
 
   def periods_for_interval
-    Period.all({
-        :include => {:reviews => :conclusion_final_review},
-        :conditions => [
-          "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
-          { :from_date => @from_date, :to_date => @to_date }
-        ]
-    })
+    Period.includes(:reviews => :conclusion_final_review).where(
+      "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
+      { :from_date => @from_date, :to_date => @to_date }
+    )
   end
 
   # Devuelve el ID de la organización seleccionada, sólo si el usuario está

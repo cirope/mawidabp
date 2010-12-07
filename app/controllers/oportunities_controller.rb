@@ -36,16 +36,16 @@ class OportunitiesController < ApplicationController
     build_search_conditions Oportunity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @oportunities = Oportunity.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => {:control_objective_item =>
-          {:review => [:period, :plan_item, :conclusion_final_review]}},
-      :conditions => [@conditions, parameters],
-      :order => @order_by || [
+    @oportunities = Oportunity.includes(
+      :control_objective_item => {
+        :review => [:period, :plan_item, :conclusion_final_review]
+      }
+    ).where([@conditions, parameters]).order(
+      @order_by || [
         "#{Review.table_name}.identification ASC",
         "#{Oportunity.table_name}.review_code ASC"
       ].join(', ')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -183,17 +183,15 @@ class OportunitiesController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations).where(
+      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # * POST /oportunities/auto_complete_for_finding_relation
@@ -226,21 +224,17 @@ class OportunitiesController < ApplicationController
 
       parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => {
-        :control_objective_item => {
-          :review => [:period, :conclusion_final_review]
-        }
-      },
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @findings = Finding.includes(
+      :control_objective_item => {
+        :review => [:period, :conclusion_final_review]
+      }
+    ).where([conditions.map {|c| "(#{c})"}.join(' AND '), parameters]).order(
+      [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(','),
-      :limit => 5
-    }
-
-    @findings = Finding.all(find_options)
+      ].join(',')
+    ).limit(5)
   end
 
   private
@@ -251,20 +245,16 @@ class OportunitiesController < ApplicationController
   # autenticó el usuario) devuelve nil.
   # _id_::  ID de la oportunidad que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Oportunity.first(
-      :include => [:control_objective_item => {:review => :period}],
-      :conditions => {
-        :id => id,
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
-      :readonly => false)
+    Oportunity.includes(:control_objective_item => {:review => :period}).where(
+      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+    ).first(:readonly => false)
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
+    @action_privileges.update(
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
       :auto_complete_for_finding_relation => :read
-    })
+    )
   end
 end

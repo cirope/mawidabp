@@ -128,9 +128,8 @@ class RolesController < ApplicationController
   # 
   # _id_::  ID del informe que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Role.first(
-      :conditions => {:id => id, :organization_id => @auth_organization.id},
-      :readonly => false
-    )
+    Role.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end
