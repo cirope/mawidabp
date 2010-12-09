@@ -19,20 +19,17 @@ class ControlObjectiveItemsController < ApplicationController
 
     build_search_conditions ControlObjectiveItem, default_conditions
 
-    @control_objectives = ControlObjectiveItem.paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE,
-      :include => [
+    @control_objectives = ControlObjectiveItem.includes(
         {:review => :period},
         {:control_objective => :process_control},
         :weaknesses
-      ],
-      :conditions => @conditions,
-      :order => [
+    ).where(@conditions).order(
+      [
         "#{Review.table_name}.period_id DESC",
         "#{Review.table_name}.identification ASC",
         "#{ControlObjectiveItem.table_name}.created_at DESC"
       ].join(', ')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -64,14 +61,11 @@ class ControlObjectiveItemsController < ApplicationController
   def edit
     @title = t :'control_objective_item.edit_title'
     if params[:control_objective] && params[:review]
-      @control_objective_item = ControlObjectiveItem.first(
-        :include => :review,
-        :conditions => {
-          :control_objective_id => params[:control_objective],
-          :review_id => params[:review],
-          Review.table_name => {:organization_id => @auth_organization.id}
-        },
-        :order => 'created_at DESC')
+      @control_objective_item = ControlObjectiveItem.includes(:review).where(
+        :control_objective_id => params[:control_objective],
+        :review_id => params[:review],
+        Review.table_name => {:organization_id => @auth_organization.id}
+      ).order('created_at DESC').first
       session[:back_to] = edit_review_path(params[:review].to_i)
     else
       @control_objective_item = find_with_organization(params[:id])
@@ -130,13 +124,8 @@ class ControlObjectiveItemsController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del objetivo de control que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ControlObjectiveItem.first(
-      :include => {:review => :period},
-      :conditions => {
-        :id => id,
-        Period.table_name => {:organization_id => @auth_organization.id}
-      },
-      :readonly => false
-    )
+    ControlObjectiveItem.includes(:review => :period).where(
+      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+    ).first(:readonly => false)
   end
 end

@@ -1,4 +1,4 @@
-require File.join('modules', 'conclusion_common_reports')
+require 'modules/conclusion_common_reports'
 
 class ConclusionManagementReportsController < ApplicationController
   include ConclusionCommonReports

@@ -1,11 +1,11 @@
 class Oportunity < Finding
   # Named scopes
-  scope :all_for_report,
-    :conditions => {
+  scope :all_for_report, lambda {
+    where(
       :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
       :final => true
-    },
-    :order => 'state ASC'
+    ).order('state ASC')
+  }
 
   # Restricciones
   validates_each :review_code do |record, attr, value|

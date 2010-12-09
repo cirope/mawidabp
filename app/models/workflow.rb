@@ -17,8 +17,9 @@ class Workflow < ActiveRecord::Base
 
   # Restricciones
   validates :period_id, :review_id, :presence => true
-  validates_uniqueness_of :review_id, :allow_nil => true, :allow_blank => true
-  validates_numericality_of :period_id, :review_id, :only_integer => true,
+  validates :review_id, :uniqueness => true, :allow_nil => true,
+    :allow_blank => true
+  validates :period_id, :review_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validate :check_if_is_frozen
 
@@ -101,7 +102,7 @@ class Workflow < ActiveRecord::Base
     pdf.add_title "#{Workflow.model_name.human}\n", (PDF_FONT_SIZE * 1.25).round,
       :center
 
-    pdf.add_description_item Workflow.human_attribute_name('review_id'),
+    pdf.add_description_item Workflow.human_attribute_name(:review_id),
       self.review.to_s, 0, false
 
     pdf.add_description_item(I18n.t(:'workflow.period.title',

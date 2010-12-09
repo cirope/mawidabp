@@ -76,9 +76,9 @@ class UsersControllerTest < ActionController::TestCase
       post :create_session,
         :user => { :user => 'someone', :password => 'without authorization' }
 
-      error_record = ErrorRecord.find(:first,
-        :conditions => ['data LIKE :data', {:data => '%someone%'}],
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        'data LIKE :data', :data => '%someone%'
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -93,9 +93,9 @@ class UsersControllerTest < ActionController::TestCase
       post :create_session,
         :user => { :user => 'someone', :password => 'without authorization' }
 
-      error_record = ErrorRecord.find(:first,
-        :conditions => ['data LIKE :data', {:data => '%someone%'}],
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        'data LIKE :data', :data => '%someone%'
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -110,12 +110,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:administrator_user).user,
           :password => 'wrong password'
         }
-      error_record = ErrorRecord.find(:first,
-        :conditions => {
-          :user_id => users(:administrator_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:administrator_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -132,12 +130,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:administrator_user).user,
           :password => 'wrong password'
         }
-      error_record = ErrorRecord.find(:first,
-        :conditions => {
-          :user_id => users(:administrator_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:administrator_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -152,12 +148,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:disabled_user).user,
           :password => PLAIN_PASSWORDS[users(:disabled_user).user]
         }
-      error_record = ErrorRecord.find(:first,
-        :conditions => {
-          :user_id => users(:disabled_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:disabled_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -174,12 +168,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:disabled_user).user,
           :password => PLAIN_PASSWORDS[users(:disabled_user).user]
         }
-      error_record = ErrorRecord.find(:first,
-        :conditions => {
-          :user_id => users(:disabled_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:disabled_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -196,12 +188,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:bare_user).user,
           :password => PLAIN_PASSWORDS[users(:bare_user).user]
         }
-      error_record = ErrorRecord.first(
-        :conditions => {
-          :user_id => users(:bare_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:bare_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -217,12 +207,9 @@ class UsersControllerTest < ActionController::TestCase
       max_attempts.times do
         post :create_session,
           :user => { :user => user.user, :password => 'wrong password' }
-        error_record = ErrorRecord.find(:first,
-          :conditions => {
-            :user_id => user.id,
-            :error => ErrorRecord::ERRORS[:on_login]
-          },
-          :order => 'created_at DESC')
+        error_record = ErrorRecord.where(
+          :user_id => user.id, :error => ErrorRecord::ERRORS[:on_login]
+        ).order('created_at DESC').first
         assert_kind_of ErrorRecord, error_record
         assert_response :success
         # en div#alert se leen los mensajes de flash[]
@@ -230,12 +217,10 @@ class UsersControllerTest < ActionController::TestCase
       end
 
       assert_response :success
-      error_record = ErrorRecord.find(:first,
-          :conditions => {
-            :user_id => users(:administrator_user).id,
-            :error => ErrorRecord::ERRORS[:user_disabled]
-          },
-          :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:administrator_user).id,
+        :error => ErrorRecord::ERRORS[:user_disabled]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       user = User.find users(:administrator_user).id
       assert_equal max_attempts, user.failed_attempts
@@ -263,10 +248,10 @@ class UsersControllerTest < ActionController::TestCase
       }
 
     assert_redirected_to :controller => :welcome, :action => :index
-    login_record = LoginRecord.first(:conditions => {
-        :user_id => users(:administrator_user).id,
-        :organization_id => organizations(:default_organization).id
-      })
+    login_record = LoginRecord.where(
+      :user_id => users(:administrator_user).id,
+      :organization_id => organizations(:default_organization).id
+    ).first
     assert_kind_of LoginRecord, login_record
   end
 
@@ -280,10 +265,10 @@ class UsersControllerTest < ActionController::TestCase
       }
 
     assert_redirected_to :controller => :groups, :action => :index
-    login_record = LoginRecord.first(:conditions => {
-        :user_id => users(:administrator_user).id,
-        :organization_id => organizations(:default_organization).id
-      })
+    login_record = LoginRecord.where(
+      :user_id => users(:administrator_user).id,
+      :organization_id => organizations(:default_organization).id
+    ).first
     assert_kind_of LoginRecord, login_record
   end
 
@@ -294,12 +279,10 @@ class UsersControllerTest < ActionController::TestCase
           :user => users(:administrator_user).user,
           :password => users(:administrator_user).password
         }
-      error_record = ErrorRecord.first(
-        :conditions => {
-          :user_id => users(:administrator_user).id,
-          :error => ErrorRecord::ERRORS[:on_login]
-        },
-        :order => 'created_at DESC')
+      error_record = ErrorRecord.where(
+        :user_id => users(:administrator_user).id,
+        :error => ErrorRecord::ERRORS[:on_login]
+      ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
@@ -357,10 +340,10 @@ class UsersControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
     assert_redirected_to(:controller => :welcome, :action => :index)
-    login_record = LoginRecord.find(:first, :conditions => {
-        :user_id => users(:administrator_user).id,
-        :organization_id => organizations(:default_organization).id
-      })
+    login_record = LoginRecord.where(
+      :user_id => users(:administrator_user).id,
+      :organization_id => organizations(:default_organization).id
+    ).first
     assert_kind_of LoginRecord, login_record
     assert_not_nil I18n.t(:'message.password_expire_in_x',
       :count => get_test_parameter(:security_expire_notification).to_i - 2),
@@ -368,12 +351,10 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'concurrent users' do
-    parameter = Parameter.first(
-      :conditions => {
-        :organization_id => organizations(:default_organization).id,
-        :name => 'security_allow_concurrent_sessions'
-      }
-    )
+    parameter = Parameter.where(
+      :organization_id => organizations(:default_organization).id,
+      :name => 'security_allow_concurrent_sessions'
+    ).first
 
     assert parameter.update_attributes(:value => 0)
 
@@ -420,11 +401,10 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to edit_password_user_url(users(:first_time_user))
-    login_record = LoginRecord.first(
-      :conditions => {
-        :user_id => users(:first_time_user).id,
-        :organization_id => organizations(:default_organization).id
-      })
+    login_record = LoginRecord.where(
+      :user_id => users(:first_time_user).id,
+      :organization_id => organizations(:default_organization).id
+    ).first
     assert_kind_of LoginRecord, login_record
   end
 

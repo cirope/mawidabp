@@ -4,10 +4,11 @@ class HelpContent < ActiveRecord::Base
   }
   
   # Restricciones
-  validates_presence_of :language
-  validates_length_of :language, :maximum => 10, :allow_nil => true,
+  validates :language, :presence => true
+  validates :language, :length => {:maximum => 10}, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :language, :allow_blank => true, :allow_nil => true
+  validates :language, :uniqueness => {:case_sensitive => false},
+    :allow_blank => true, :allow_nil => true
 
   # Relaciones
   has_many :help_items, :dependent => :destroy, :order => 'order_number ASC'

@@ -11,25 +11,23 @@ class PlanItem < ActiveRecord::Base
 
    # Named scopes
   scope :list_unused, lambda { |period_id|
-    {
-      :include => [{:plan => :period}, :review],
-      :conditions => [
-        [
-          "#{Plan.table_name}.period_id = :period_id",
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{Review.table_name}.plan_item_id IS NULL",
-          "#{table_name}.business_unit_id IS NOT NULL",
-        ].join(' AND '),
-        {
-          :period_id => period_id,
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => [
+    includes(:review, {:plan => :period}).where(
+      [
+        "#{Plan.table_name}.period_id = :period_id",
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{Review.table_name}.plan_item_id IS NULL",
+        "#{table_name}.business_unit_id IS NOT NULL",
+      ].join(' AND '),
+      {
+        :period_id => period_id,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(
+      [
         "#{PlanItem.table_name}.order_number ASC",
         "#{PlanItem.table_name}.project ASC"
       ].join(', ')
-    }
+    )
   }
 
   # Callbacks
@@ -39,10 +37,10 @@ class PlanItem < ActiveRecord::Base
   
   # Restricciones
   validates :project, :order_number, :presence => true
-  validates_length_of :project, :predecessors, :maximum => 255,
+  validates :project, :predecessors, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
-  validates_numericality_of :order_number, :plan_id, :business_unit_id,
-    :only_integer => true, :allow_nil => true
+  validates :order_number, :plan_id, :business_unit_id,
+    :numericality => {:only_integer => true}, :allow_nil => true
   validates_date :start
   validates_date :end, :on_or_after => :start
   validates_each :project do |record, attr, value|
@@ -180,16 +178,16 @@ class PlanItem < ActiveRecord::Base
 
   def status_text(long = true)
     if self.try(:review).try(:has_final_review?)
-      I18n.t("plan.item_status.concluded.#{long ? :long : :short}")
+      I18n.t(:"plan.item_status.concluded.#{long ? :long : :short}")
     elsif self.try(:review)
       if self.end >= Date.today
-        I18n.t("plan.item_status.executing_in_time.#{long ? :long : :short}")
+        I18n.t(:"plan.item_status.executing_in_time.#{long ? :long : :short}")
       else
-        I18n.t("plan.item_status.executing_overtime.#{long ? :long : :short}")
+        I18n.t(:"plan.item_status.executing_overtime.#{long ? :long : :short}")
       end
     elsif !self.try(:review) && self.try(:business_unit)
       if self.try(:start) && self.start < Date.today
-        I18n.t("plan.item_status.delayed.#{long ? :long : :short}")
+        I18n.t(:"plan.item_status.delayed.#{long ? :long : :short}")
       end
     end
   end

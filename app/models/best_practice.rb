@@ -10,22 +10,19 @@ class BestPractice < ActiveRecord::Base
 
   # Named scopes
   scope :list, lambda {
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id
-      },
-      :order => 'name ASC'
-    }
+    where(
+      :organization_id => GlobalModelConfig.current_organization_id
+    ).order('name ASC')
   }
 
   # Restricciones
-  validates_presence_of :name, :organization_id
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :organization_id, :presence => true
+  validates :name, :length => { :maximum => 255 }, :allow_nil => true,
     :allow_blank => true
-  validates_numericality_of :organization_id, :only_integer => true,
+  validates :organization_id, :numericality => { :only_integer => true },
     :allow_blank => true, :allow_nil => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :organization_id
+  validates :name, :uniqueness =>
+    { :case_sensitive => false, :scope => :organization_id }
   validates_each :process_controls do |record, attr, value|
     unless value.all? {|pc| !pc.marked_for_destruction? || pc.can_be_destroyed?}
       record.errors.add attr, :locked

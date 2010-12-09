@@ -7,15 +7,13 @@ class ProcedureControlItem < ActiveRecord::Base
   }
 
   scope :list_for_process_control, lambda { |process_control_id|
-    {
-      :conditions => { :process_control_id => process_control_id }
-    }
+    where(:process_control_id => process_control_id)
   }
   
   # Restricciones
-  validates_presence_of :process_control_id, :aproach, :frequency, :order
-  validates_numericality_of :process_control_id, :procedure_control_id,
-    :aproach, :frequency, :order, :only_integer => true, :allow_nil => true
+  validates :process_control_id, :aproach, :frequency, :order, :presence => true
+  validates :process_control_id, :procedure_control_id, :aproach, :frequency,
+    :order, :numericality => {:only_integer => true}, :allow_nil => true
   validates_each :process_control_id do |record, attr, value|
     pc = record.procedure_control
 
@@ -35,7 +33,8 @@ class ProcedureControlItem < ActiveRecord::Base
   belongs_to :procedure_control
   has_one :best_practice, :through => :process_control
   has_many :procedure_control_subitems, :dependent => :destroy,
-    :after_add => :assign_procedure_control_item, :order => '"order" ASC'
+    :after_add => :assign_procedure_control_item,
+    :order => "#{ProcedureControlSubitem.table_name}.order ASC"
   has_many :control_objectives, :through => :process_control, :uniq => true
 
   accepts_nested_attributes_for :procedure_control_subitems,

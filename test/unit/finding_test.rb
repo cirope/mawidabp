@@ -759,8 +759,9 @@ class FindingTest < ActiveSupport::TestCase
       review_codes_by_user[user] = findings_by_user.map(&:review_code)
     end
 
-    unanswered_finding = Finding.count(:conditions => {
-        :state => Finding::STATUS[:unanswered]})
+    unanswered_finding = Finding.where(
+      :state => Finding::STATUS[:unanswered]
+    ).count
     assert_not_equal 0, findings.size
 
     ActionMailer::Base.delivery_method = :test
@@ -779,8 +780,9 @@ class FindingTest < ActiveSupport::TestCase
       end
     end
 
-    assert_not_equal unanswered_finding, Finding.count(:conditions => {
-        :state => Finding::STATUS[:unanswered]})
+    assert_not_equal unanswered_finding, Finding.where(
+      :state => Finding::STATUS[:unanswered]
+    ).count
     assert Finding.confirmed_and_stale.empty?
   end
 
@@ -788,8 +790,9 @@ class FindingTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    unanswered_findings = Finding.count(:conditions => {
-        :state => Finding::STATUS[:unanswered]})
+    unanswered_findings = Finding.where(
+      :state => Finding::STATUS[:unanswered]
+    ).count
     assert_equal 1, Finding.confirmed_and_stale.size
 
     Finding.confirmed_and_stale.each do |finding|
@@ -806,8 +809,9 @@ class FindingTest < ActiveSupport::TestCase
       Finding.mark_as_unanswered_if_necesary
     end
 
-    assert_equal unanswered_findings, Finding.count(:conditions => {
-        :state => Finding::STATUS[:unanswered]})
+    assert_equal unanswered_findings, Finding.where(
+      :state => Finding::STATUS[:unanswered]
+    ).count
     assert !Finding.confirmed_and_stale.empty?
   end
 

@@ -6,7 +6,8 @@ class ConclusionDraftReview < ConclusionReview
   attr_accessor :force_approval
 
   # Restricciones
-  validates_uniqueness_of :review_id, :allow_blank => true, :allow_nil => true
+  validates :review_id, :uniqueness => true, :allow_blank => true,
+    :allow_nil => true
 
   def check_for_approval
     self.approved = self.review && (self.review.is_approved? ||

@@ -65,10 +65,10 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (Rails.env == 'development' ?
+URL_HOST = (Rails.env.development? ?
     'mawidaweb.com.ar:3000' : 'mawidaweb.com.ar').freeze
 # Protocolo a utilizar para formar los links absolutos
-URL_PROTOCOL = (Rails.env == 'development' ? 'http' : 'https').freeze
+URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
 # AND)
 SEARCH_AND_REGEXP = /\s*[;]+\s*|\s+AND\s+|\s+Y\s+/i

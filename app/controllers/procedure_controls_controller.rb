@@ -15,14 +15,10 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls.xml
   def index
     @title = t :'procedure_control.index_title'
-    @procedure_controls = ProcedureControl.paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :period,
-      :conditions => {
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :order => "#{ProcedureControl.table_name}.created_at DESC"
+    @procedure_controls = ProcedureControl.includes(:period).where(
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).order("#{ProcedureControl.table_name}.created_at DESC").paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -279,8 +275,9 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/get_control_objectives/?process_control=id
   def get_control_objectives
     options = [[t(:'helpers.select.prompt'), '']]
-    control_objectives = ControlObjective.all(
-      :conditions => {:process_control_id => params[:process_control]})
+    control_objectives = ControlObjective.where(
+      :process_control_id => params[:process_control]
+    )
 
     control_objectives.each { |co| options << [co.name, co.id] }
 
@@ -292,8 +289,9 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/get_process_controls/?best_practice=id
   def get_process_controls
     options = [[t(:'helpers.select.prompt'), '']]
-    process_controls = ProcessControl.all(
-      :conditions => {:best_practice_id => params[:best_practice]})
+    process_controls = ProcessControl.where(
+      :best_practice_id => params[:best_practice]
+    )
 
     process_controls.each { |pc| options << [pc.name, pc.id] }
 
@@ -306,11 +304,12 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/get_json_control_objective/?control_objective=id
   def get_control_objective
     if params[:control_objective]
-      control_objective = ControlObjective.first(
-        :include => {:process_control => :best_practice},
-        :conditions => {:id => params[:control_objective], :best_practices =>
-            {:organization_id => @auth_organization.id}}
-      )
+      control_objective = ControlObjective.includes(
+        :process_control => :best_practice
+      ).where(
+        :id => params[:control_objective],
+        :best_practices => { :organization_id => @auth_organization.id }
+      ).first
     end
 
     control_objective ||= ControlObjective.new
@@ -328,14 +327,9 @@ class ProcedureControlsController < ApplicationController
   # con la que se autenticó el usuario) devuelve nil.
   # _id_::  ID del procedimiento de control que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ProcedureControl.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :readonly => false
-    )
+    ProcedureControl.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first(:readonly => false)
   end
 
   # Indica si existe el procedimiento de control indicado, siempre que
@@ -344,21 +338,17 @@ class ProcedureControlsController < ApplicationController
   # organización con la que se autenticó el usuario) devuelve false.
   # _id_::  ID del plan de trabajo que se quiere recuperar
   def exists?(id) #:doc:
-    ProcedureControl.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      }
-    )
+    ProcedureControl.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :get_control_objectives => :read,
-        :get_process_controls => :read,
-        :get_control_objective => :read
-      })
+    @action_privileges.update(
+      :export_to_pdf => :read,
+      :get_control_objectives => :read,
+      :get_process_controls => :read,
+      :get_control_objective => :read
+    )
   end
 end

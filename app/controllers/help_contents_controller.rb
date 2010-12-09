@@ -10,8 +10,9 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents.xml
   def index
     @title = t :'help_content.index_title'
-    @help_contents = HelpContent.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE, :order => 'language ASC')
+    @help_contents = HelpContent.order('language ASC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb

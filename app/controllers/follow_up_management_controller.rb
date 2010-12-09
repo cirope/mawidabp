@@ -1,4 +1,4 @@
-require File.join('modules', 'follow_up_common_reports')
+require 'modules/follow_up_common_reports'
 
 class FollowUpManagementController < ApplicationController
   include FollowUpCommonReports

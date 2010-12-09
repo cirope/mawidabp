@@ -6,8 +6,8 @@ class FindingUserAssignment < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :user_id
-  validates_numericality_of :user_id, :only_integer => true,
+  validates :user_id, :presence => true
+  validates :user_id, :numericality => {:only_integer => true},
     :allow_blank => true, :allow_nil => true
 
   # Relaciones

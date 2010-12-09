@@ -16,18 +16,14 @@ class WorkflowsController < ApplicationController
   # * GET /workflows.xml
   def index
     @title = t :'workflow.index_title'
-    @workflows = Workflow.paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :period,
-      :conditions => {
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :order => [
+    @workflows = Workflow.includes(:period).where(
+      "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).order(
+      [
         "#{Period.table_name}.number DESC",
         "#{Workflow.table_name}.created_at DESC"
       ].join(', ')
-    )
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -183,17 +179,15 @@ class WorkflowsController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => [:organizations, :resource],
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
+
+    @users = User.includes(:organizations, :resource).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order(
+      [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
-
-    @users = User.all(find_options)
+      ].join(',')
+    ).limit(10)
   end
 
   # Lista los informes del periodo indicado, devuelve un Hash en JSON
@@ -232,14 +226,9 @@ class WorkflowsController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del programa de trabajo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Workflow.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      },
-      :readonly => false
-    )
+    Workflow.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first(:readonly => false)
   end
 
   # Indica si existe el programa de trabajo indicado, siempre que pertenezca a
@@ -248,22 +237,18 @@ class WorkflowsController < ApplicationController
   # que se autenticó el usuario) devuelve false.
   # _id_::  ID del programa de trabajo que se quiere recuperar
   def exists?(id) #:doc:
-    Workflow.first(
-      :include => :period,
-      :conditions => {
-        :id => id,
-        "#{Period.table_name}.organization_id" => @auth_organization.id
-      }
-    )
+    Workflow.includes(:period).where(
+      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).first
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :auto_complete_for_user => :read,
-        :reviews_for_period => :read,
-        :resource_data => :read,
-        :estimated_amount => :read
-      })
+    @action_privileges.update(
+      :export_to_pdf => :read,
+      :auto_complete_for_user => :read,
+      :reviews_for_period => :read,
+      :resource_data => :read,
+      :estimated_amount => :read
+    )
   end
 end

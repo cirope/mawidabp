@@ -12,11 +12,8 @@ class ParametersController < ApplicationController
   def index
     @title = t :'parameter.index_title'
     @type = APP_PARAMETER_TYPES.include?(params[:type]) ? params[:type] : :admin
-    @parameters = Parameter.paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :order => "#{Parameter.table_name}.name ASC",
-      :conditions => [
+    @parameters = Parameter.where(
+      [
         [
           'name LIKE :name',
           'organization_id = :organization_id'
@@ -26,6 +23,8 @@ class ParametersController < ApplicationController
           :organization_id => @auth_organization.id
         }
       ]
+    ).order('name ASC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -113,9 +112,8 @@ class ParametersController < ApplicationController
   # nil.
   # _id_::  ID del parámetro que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Parameter.first(
-      :conditions => {:id => id, :organization_id => @auth_organization.id},
-      :readonly => false
-    )
+    Parameter.where(
+      :id => id, :organization_id => @auth_organization.id
+    ).first(:readonly => false)
   end
 end

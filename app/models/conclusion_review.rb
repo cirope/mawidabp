@@ -37,18 +37,12 @@ class ConclusionReview < ActiveRecord::Base
 
   # Named scopes
   scope :for_period, lambda { |period|
-    {
-      :include => { :review =>:period },
-      :conditions => { "#{Period.table_name}.id" => period.id }
-    }
+    includes(:review =>:period).where("#{Period.table_name}.id" => period.id)
   }
   scope :by_business_unit_type, lambda { |business_unit_type|
-    {
-      :include => {
-        :review => {:plan_item => {:business_unit => :business_unit_type}}
-      },
-      :conditions => { "#{BusinessUnitType.table_name}.id" => business_unit_type }
-    }
+    includes(
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    ).where("#{BusinessUnitType.table_name}.id" => business_unit_type)
   }
   scope :by_business_unit_names, lambda { |*business_unit_names|
     conditions = []
@@ -59,12 +53,9 @@ class ConclusionReview < ActiveRecord::Base
       parameters[:"bu_#{i}"] = "%#{business_unit_name}%".downcase
     end
 
-    {
-      :include => {
-        :review => { :plan_item => :business_unit }
-      },
-      :conditions => [conditions.join(' OR '), parameters]
-    }
+    includes(:plan_item => :business_unit).where(
+      conditions.join(' OR '), parameters
+    )
   }
 
   # Callbacks

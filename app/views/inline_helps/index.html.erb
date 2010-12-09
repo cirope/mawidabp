@@ -13,11 +13,10 @@
   </thead>
 
   <tbody>
-    <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="6"></td><td></td></tr>
     <% @inline_helps.each do |inline_help| %>
       <tr class="<%= cycle(:even, :odd) %>">
         <td></td>
-        <td><%= t "lang.#{inline_help.language}" %></td>
+        <td><%= t inline_help.language, :scope => :lang %></td>
         <td><%=h inline_help.name %></td>
         <td><%= super_truncate inline_help.content, 25 %></td>
         <td><%= link_to_show inline_help %></td>
@@ -25,7 +24,6 @@
         <td><%= button_to_destroy inline_help %></td>
         <td></td>
       </tr>
-      <tr class="<%= cycle(:even, :odd) %>"><td></td><td colspan="6"></td><td></td></tr>
     <% end %>
   </tbody>
 </table>

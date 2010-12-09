@@ -7,22 +7,19 @@ class ProcedureControl < ActiveRecord::Base
 
   # Named scope
   scope :list_by_period, lambda { |period_id|
-    {
-      :include => :period,
-      :conditions => {
-        "#{Period.table_name}.organization_id" =>
-          GlobalModelConfig.current_organization_id,
-        "#{table_name}.period_id" => period_id
-      },
-      :order => 'number DESC'
-    }
+    includes(:period).where(
+      "#{Period.table_name}.organization_id" =>
+        GlobalModelConfig.current_organization_id,
+      "#{table_name}.period_id" => period_id
+    ).order('number DESC')
   }
   
   # Restricciones
-  validates_presence_of :period_id
-  validates_numericality_of :period_id, :allow_nil => true,
-    :only_integer => true
-  validates_uniqueness_of :period_id, :allow_nil => true, :allow_blank => true
+  validates :period_id, :presence => true
+  validates :period_id, :numericality => {:only_integer => true},
+    :allow_nil => true
+  validates :period_id, :uniqueness => true, :allow_nil => true,
+    :allow_blank => true
 
   
   # Relaciones

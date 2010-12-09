@@ -68,7 +68,7 @@ class ConclusionCommitteeReportsController < ApplicationController
       business_unit_types.each do |but|
         columns = {'business_unit_report_name' => [but.business_unit_label, 15],
           'review' => [Review.model_name.human, 16],
-          'score' => ["#{Review.human_attribute_name('score')} (1)", 15],
+          'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
           'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],

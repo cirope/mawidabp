@@ -11,84 +11,65 @@ class Period < ActiveRecord::Base
   
   # Named scopes
   scope :list, lambda {
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id
-      },
-      :order => 'number DESC'
-    }
+    where(:organization_id => GlobalModelConfig.current_organization_id).order(
+      'number DESC'
+    )
   }
   scope :list_by_date, lambda { |from_date, to_date|
-    {
-      :conditions => [
+    where(
+      [
+        "#{table_name}.organization_id = :organization_id",
         [
-          "#{table_name}.organization_id = :organization_id",
-          [
-            "#{table_name}.start BETWEEN :from_date AND :to_date",
-            "#{table_name}.end BETWEEN :from_date AND :to_date"
-          ].join(' OR ')
-        ].map {|c| "(#{c})"}.join(' AND '),
-        {
-          :from_date => from_date,
-          :to_date => to_date,
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
-    }
+          "#{table_name}.start BETWEEN :from_date AND :to_date",
+          "#{table_name}.end BETWEEN :from_date AND :to_date"
+        ].join(' OR ')
+      ].map {|c| "(#{c})"}.join(' AND '),
+      {
+        :from_date => from_date,
+        :to_date => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
   }
   scope :currents, lambda {
-    {
-      :conditions => [
-        [
-          'organization_id = :organization_id',
-          "#{table_name}.start <= :today",
-          "#{table_name}.end >= :today"
-        ].join(' AND '), {
-          :organization_id => GlobalModelConfig.current_organization_id,
-          :today => Date.today
-        }
-      ],
-      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
-    }
+    where(
+      [
+        'organization_id = :organization_id',
+        "#{table_name}.start <= :today",
+        "#{table_name}.end >= :today"
+      ].join(' AND '),
+      {
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :today => Date.today
+      }
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
   }
   scope :list_all_without_plans, lambda {
-    {
-      :include => :plans,
-      :conditions => [
-        [
-          "#{table_name}.organization_id = :organization_id",
-          "#{Plan.table_name}.period_id IS NULL"
-        ].join(' AND '),
-        {
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
-    }
+    includes(:plans).where(
+      [
+        "#{table_name}.organization_id = :organization_id",
+        "#{Plan.table_name}.period_id IS NULL"
+      ].join(' AND '),
+      {:organization_id => GlobalModelConfig.current_organization_id}
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
   }
   scope :list_all_without_procedure_controls, lambda {
-    {
-      :include => :procedure_controls,
-      :conditions => [
-        [
-          "#{table_name}.organization_id = :organization_id",
-          "#{ProcedureControl.table_name}.period_id IS NULL"
-        ].join(' AND '),
-        {
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => ["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', ')
-    }
+    includes(:procedure_controls).where(
+      [
+        "#{table_name}.organization_id = :organization_id",
+        "#{ProcedureControl.table_name}.period_id IS NULL"
+      ].join(' AND '),
+      {:organization_id => GlobalModelConfig.current_organization_id}
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
   }
 
   
   # Restricciones
-  validates_numericality_of :number, :only_integer => true, :allow_nil => true
+  validates :number, :numericality => {:only_integer => true},
+    :allow_nil => true
   validates :number, :start, :end, :description, :organization_id,
     :presence => true
-  validates_uniqueness_of :number, :scope => :organization_id
+  validates :number, :uniqueness => {:scope => :organization_id}
   validates_date :start, :allow_nil => true, :allow_blank => true
   validates_date :end, :allow_nil => true, :allow_blank => true,
     :after => :start

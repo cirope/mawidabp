@@ -9,36 +9,29 @@ class BusinessUnitType < ActiveRecord::Base
 
   # Named scopes
   scope :list, lambda {
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id
-      },
-      :order => ['external ASC', 'name ASC'].join(', ')
-    }
+    where(:organization_id => GlobalModelConfig.current_organization_id).order(
+      ['external ASC', 'name ASC'].join(', ')
+    )
   }
   scope :internal_audit, lambda {
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :external => false
-      }
-    }
+    where(
+      :organization_id => GlobalModelConfig.current_organization_id,
+      :external => false
+    )
   }
   scope :external_audit, lambda {
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :external => true
-      }
-    }
+    where(
+      :organization_id => GlobalModelConfig.current_organization_id,
+      :external => true
+    )
   }
   
   # Restricciones
   validates :name, :business_unit_label, :presence => true
-  validates_length_of :name, :business_unit_label, :project_label,
-    :maximum => 255, :allow_nil => true, :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :organization_id
+  validates :name, :business_unit_label, :project_label,
+    :length => { :maximum => 255 }, :allow_nil => true, :allow_blank => true
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :organization_id}
   validates_each :business_units do |record, attr, value|
     locked = false
 

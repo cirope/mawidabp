@@ -13,11 +13,11 @@ class BusinessUnit < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Restricciones
-  validates_presence_of :name
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :presence => true
+  validates :name, :length => { :maximum => 255 }, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :business_unit_type_id
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :business_unit_type_id}
   
   # Relaciones
   belongs_to :business_unit_type

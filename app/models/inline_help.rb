@@ -4,11 +4,11 @@ class InlineHelp < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :language, :name
-  validates_uniqueness_of :name, :scope => :language, :allow_nil => true,
+  validates :language, :name, :presence => true
+  validates :name, :uniqueness => {:scope => :language}, :allow_nil => true,
     :allow_blank => true
-  validates_length_of :language, :maximum => 10, :allow_nil => true,
+  validates :language, :length => {:maximum => 10}, :allow_nil => true,
     :allow_blank => true
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
 end

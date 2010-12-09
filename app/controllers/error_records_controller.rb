@@ -29,11 +29,11 @@ class ErrorRecordsController < ApplicationController
       build_search_conditions ErrorRecord, default_conditions
     end
 
-    @error_records = ErrorRecord.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :user,
-      :conditions => @conditions || default_conditions,
-      :order => "#{ErrorRecord.table_name}.created_at DESC")
+    @error_records = ErrorRecord.includes(:user).where(
+      @conditions || default_conditions
+    ).order("#{ErrorRecord.table_name}.created_at DESC").paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -51,11 +51,9 @@ class ErrorRecordsController < ApplicationController
   # * GET /error_records/1.xml
   def show
     @title = t :'error_record.show_title'
-    @error_record = ErrorRecord.first(
-      :conditions => {
-        :organization_id => @auth_organization.id, :id => params[:id]
-      }
-    )
+    @error_record = ErrorRecord.where(
+      :organization_id => @auth_organization.id, :id => params[:id]
+    ).first
 
     respond_to do |format|
       format.html # show.html.erb
@@ -68,9 +66,8 @@ class ErrorRecordsController < ApplicationController
   # * GET /error_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
-    error_records = ErrorRecord.all(
-      :include => :user,
-      :conditions => [
+    error_records = ErrorRecord.includes(:user).where(
+      [
         [
           'organization_id = :organization_id',
           'created_at BETWEEN :from_date AND :to_date'
@@ -80,9 +77,8 @@ class ErrorRecordsController < ApplicationController
           :to_date => to_date.to_time.end_of_day,
           :organization_id => @auth_organization.id
         }
-      ],
-      :order => 'created_at DESC'
-    )
+      ]
+    ).order('created_at DESC')
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 

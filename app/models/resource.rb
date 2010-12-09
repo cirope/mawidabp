@@ -6,14 +6,14 @@ class Resource < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :name
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :presence => true
+  validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :resource_class_id
-  validates_numericality_of :cost_per_unit, :greater_than_or_equal_to => 0,
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :resource_class_id}
+  validates :cost_per_unit, :numericality => {:greater_than_or_equal_to => 0},
     :allow_nil => true
-  validates_numericality_of :resource_class_id, :only_integer => true,
+  validates :resource_class_id, :numericality => {:only_integer => true},
     :allow_nil => true
   
   # Relaciones

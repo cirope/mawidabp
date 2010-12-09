@@ -20,39 +20,33 @@ class Role < ActiveRecord::Base
 
   # Named scopes
   scope :list, lambda { |organization_id|
-    {
-      :conditions => {
-        :organization_id => organization_id ||
-          GlobalModelConfig.current_organization_id
-      },
-      :order => 'name ASC'
-    }
+    where(
+      :organization_id =>
+        organization_id || GlobalModelConfig.current_organization_id
+    ).order('name ASC')
   }
   scope :list_by_organization_and_group, lambda { |organization, group|
-    {
-      :include => :organization,
-      :conditions => {
-        "#{table_name}.organization_id" => organization.id,
-        "#{Organization.table_name}.group_id" => group.id
-      }
-    }
+    includes(:organization).where(
+      "#{table_name}.organization_id" => organization.id,
+      "#{Organization.table_name}.group_id" => group.id
+    )
   }
 
   # Callbacks
   before_validation :check_auth_privileges
 
   # Restricciones
-  validates_format_of :name, :with => /\A\w[\w\s-]*\z/,
+  validates :name, :format => {:with => /\A\w[\w\s-]*\z/},
     :allow_nil => true, :allow_blank => true
-  validates_presence_of :name, :organization_id, :role_type
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :organization_id, :role_type, :presence => true
+  validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_inclusion_of :role_type, :in => TYPES.values, :allow_nil => true,
+  validates :role_type, :inclusion => {:in => TYPES.values}, :allow_nil => true,
     :allow_blank => true
-  validates_numericality_of :organization_id, :integer_only => true,
+  validates :organization_id, :numericality => {:integer_only => true},
     :allow_nil => true, :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :organization_id
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :organization_id}
   
   # Relaciones
   belongs_to :organization
@@ -78,7 +72,7 @@ class Role < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   TYPES.each do |type, value|
-    define_method("#{type}?".to_sym) { self.role_type == value }
+    define_method(:"#{type}?") { self.role_type == value }
   end
 
   def get_type
@@ -138,9 +132,9 @@ class Role < ActiveRecord::Base
   end
 
   [:read, :modify, :erase, :approval].each do |action|
-    define_method "has_privilege_for_#{action}?".to_sym do |module_name|
+    define_method :"has_privilege_for_#{action}?" do |module_name|
       self.privileges.any? do |p|
-        p.module.to_sym == module_name.to_sym && p.send("#{action}?".to_sym)
+        p.module.to_sym == module_name.to_sym && p.send(:"#{action}?")
       end
     end
   end

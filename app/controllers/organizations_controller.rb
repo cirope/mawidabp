@@ -13,10 +13,10 @@ class OrganizationsController < ApplicationController
   # * GET /organizations.xml
   def index
     @title = t :'organization.index_title'
-    @organizations = Organization.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :conditions => {:group_id => @auth_organization.group_id},
-      :order => 'name ASC'
+    @organizations = Organization.where(
+      :group_id => @auth_organization.group_id
+    ).order('name ASC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -145,11 +145,6 @@ class OrganizationsController < ApplicationController
   #
   # _id_::  ID de la organización que se quiere buscar
   def find_if_allowed(id) #:doc:
-    Organization.first(
-      :conditions => {
-        :group_id => @auth_organization.group_id,
-        :id => id
-      }
-    )
+    Organization.where(:group_id => @auth_organization.group_id, :id => id).first
   end
 end

@@ -3,9 +3,10 @@ class Weakness < Finding
   attr_reader :approval_errors
 
   # Named scopes
-  scope :all_for_report, :order => 'risk DESC, state ASC', :conditions =>
-    {:state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
-    :final => true}
+  scope :all_for_report, where(
+    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
+    :final => true
+  ).order('risk DESC, state ASC')
 
   # Restricciones
   validates :risk, :priority, :presence => true

@@ -38,12 +38,10 @@ class UsersController < ApplicationController
 
     build_search_conditions User, default_conditions
 
-    @users = User.paginate(:page => params[:page],
-      :per_page => APP_LINES_PER_PAGE,
-      :include => :organizations,
-      :conditions => @conditions,
-      :order => "#{User.table_name}.user ASC")
-
+    @users = User.includes(:organizations).where(@conditions).order(
+      "#{User.table_name}.user ASC"
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    
     respond_to do |format|
       format.html {
         if @users.size == 1 && !@query.blank? && !params[:page]
@@ -221,9 +219,7 @@ class UsersController < ApplicationController
         conditions["#{Organization.table_name}.id"] = @organization.id
       end
 
-      auth_user = User.first(
-        :include => :organizations,
-        :conditions => conditions,
+      auth_user = User.includes(:organizations).where(conditions).first(
         :readonly => false
       )
 
@@ -603,10 +599,7 @@ class UsersController < ApplicationController
 
     build_search_conditions User, default_conditions
     
-    users = User.all(
-      :include => :organizations,
-      :conditions => @conditions,
-      :order => "#{User.table_name}.user ASC")
+    users = User.includes(:organizations).where(@conditions).order('user ASC')
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 
@@ -704,16 +697,14 @@ class UsersController < ApplicationController
 
       parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
     end
-    find_options = {
-      :include => :organizations,
-      :conditions => [conditions.map {|c| "(#{c})"}.join(' AND '), parameters],
-      :order => [
-        "#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"
-      ].join(','),
-      :limit => 10
-    }
 
-    @users = User.all(find_options)
+    @users = User.includes(:organizations).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order(
+      [
+        "#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"
+      ].join(',')
+    ).limit(10)
   end
 
   private
@@ -724,25 +715,21 @@ class UsersController < ApplicationController
   # nil.
   # _id_::  ID (campo usuario) del usuario que se quiere recuperar
   def find_with_organization(id, field = :user) #:doc:
-    User.first(
-      :include => :organizations,
-      :conditions => [
+    User.includes(:organizations).where(
+      [
+        "#{User.table_name}.#{field} = :id",
         [
-          "#{User.table_name}.#{field} = :id",
-          [
-            "#{Organization.table_name}.id = :organization_id",
-            "#{Organization.table_name}.id IS NULL"
-          ].join(' OR ')
-        ].map {|c| "(#{c})"}.join(' AND '),
-        {:id => id, :organization_id => @auth_organization.id}
-      ],
-      :readonly => false
-    )
+          "#{Organization.table_name}.id = :organization_id",
+          "#{Organization.table_name}.id IS NULL"
+        ].join(' OR ')
+      ].map {|c| "(#{c})"}.join(' AND '),
+      {:id => id, :organization_id => @auth_organization.id}
+    ).first(:readonly => false)
   end
 
   def load_privileges #:nodoc:
     if @action_privileges
-      @action_privileges.update({
+      @action_privileges.update(
         :auto_complete_for_user => :read,
         :roles => :read,
         :export_to_pdf => :read,
@@ -751,7 +738,7 @@ class UsersController < ApplicationController
         :reassignment_update => :modify,
         :release_edit => :modify,
         :release_update => :modify
-      })
+      )
     end
   end
 end

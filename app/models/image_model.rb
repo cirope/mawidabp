@@ -15,7 +15,7 @@ class ImageModel < ActiveRecord::Base
     :message => I18n.t(:invalid, :scope => [:activerecord, :errors, :models, :image_model, :attributes, :image_content_type])
   validates_attachment_size :image, :less_than => 20.megabytes,
     :message => I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes)
-  validates_length_of :image_file_name, :image_content_type, :maximum => 255,
+  validates :image_file_name, :image_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
 
   def image_size(style_name = :original)

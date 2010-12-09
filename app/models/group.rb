@@ -12,13 +12,13 @@ class Group < ActiveRecord::Base
   after_save :send_notification_if_necesary
 
   # Restricciones
-  validates_presence_of :name, :admin_email
-  validates_length_of :name, :admin_hash, :maximum => 255, :allow_nil => true,
+  validates :name, :admin_email, :presence => true
+  validates :name, :admin_hash, :length => {:maximum => 255},
+    :allow_nil => true, :allow_blank => true
+  validates :admin_email, :length => {:maximum => 100}, :allow_nil => true,
     :allow_blank => true
-  validates_length_of :admin_email, :maximum => 100, :allow_nil => true,
-    :allow_blank => true
-  validates_uniqueness_of :name, :admin_email, :case_sensitive => false
-  validates_format_of :admin_email, :with => EMAIL_REGEXP, :allow_nil => true,
+  validates :name, :admin_email, :uniqueness => {:case_sensitive => false}
+  validates :admin_email, :format => {:with => EMAIL_REGEXP}, :allow_nil => true,
     :allow_blank => true
 
   # Relaciones

@@ -5,9 +5,10 @@ class OrganizationRole < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :organization_id, :role_id
-  validates_numericality_of :user_id, :organization_id, :role_id,
-    :only_integer => true, :allow_nil => true, :allow_blank => true
+  validates :organization_id, :role_id, :presence => true
+  validates :user_id, :organization_id, :role_id,
+    :numericality => {:only_integer => true}, :allow_nil => true,
+    :allow_blank => true
   validates_each :role_id do |record, attr, value|
     organization_roles = record.user.try(:organization_roles) || []
     same_organization_roles = organization_roles.select do |o_r|

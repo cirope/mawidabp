@@ -8,13 +8,11 @@ class VersionsController < ApplicationController
   # * GET /versions/1.xml
   def show
     @title = t :'version.show_title'
-    @version = Version.first(
-      :conditions => {
-        :id => params[:id],
-        :organization_id => @auth_organization.id,
-        :important => true
-      }
-    )
+    @version = Version.where(
+      :id => params[:id],
+      :organization_id => @auth_organization.id,
+      :important => true
+    ).first
 
     respond_to do |format|
       format.html # show.html.erb
@@ -30,40 +28,7 @@ class VersionsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:security_changes_report])
 
     unless params[:download]
-      @versions = Version.paginate(
-        :page => params[:page],
-        :per_page => APP_LINES_PER_PAGE,
-        :conditions => [
-          [
-            'organization_id = :organization_id',
-            'created_at BETWEEN :from_date AND :to_date',
-            'item_type IN (:types)',
-            'important = :boolean_true'
-          ].join(' AND '),
-          {
-            :from_date => @from_date,
-            :to_date => @to_date.to_time.end_of_day,
-            :organization_id => @auth_organization.id,
-            :types => ['User', 'Parameter'],
-            :boolean_true => true
-          }
-        ],
-        :order => 'created_at DESC')
-
-      respond_to do |format|
-        format.html # index.html.erb
-        format.xml  { render :xml => @versions }
-      end
-    else
-      download_security_changes_report
-    end
-  end
-
-  private
-
-  def download_security_changes_report
-    versions = Version.all(
-      :conditions => [
+      @versions = Version.where(
         [
           'organization_id = :organization_id',
           'created_at BETWEEN :from_date AND :to_date',
@@ -77,8 +42,37 @@ class VersionsController < ApplicationController
           :types => ['User', 'Parameter'],
           :boolean_true => true
         }
-      ],
-      :order => 'created_at DESC')
+      ).order('created_at DESC').paginate(
+        :page => params[:page],:per_page => APP_LINES_PER_PAGE
+      )
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @versions }
+      end
+    else
+      download_security_changes_report
+    end
+  end
+
+  private
+
+  def download_security_changes_report
+    versions = Version.where(
+      [
+        'organization_id = :organization_id',
+        'created_at BETWEEN :from_date AND :to_date',
+        'item_type IN (:types)',
+        'important = :boolean_true'
+      ].join(' AND '),
+      {
+        :from_date => @from_date,
+        :to_date => @to_date.to_time.end_of_day,
+        :organization_id => @auth_organization.id,
+        :types => ['User', 'Parameter'],
+        :boolean_true => true
+      }
+    ).order('created_at DESC')
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 
@@ -139,8 +133,8 @@ class VersionsController < ApplicationController
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :security_changes_report => :read
-      })
+    @action_privileges.update(
+      :security_changes_report => :read
+    )
   end
 end

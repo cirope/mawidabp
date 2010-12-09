@@ -9,21 +9,21 @@ class ControlObjective < ActiveRecord::Base
   before_destroy :can_be_destroyed?
   
   # Named scopes
-  scope :list, :order => ['process_control_id ASC',
-    "#{table_name}.order ASC"].join(', ')
+  scope :list, order(
+    ['process_control_id ASC', "#{table_name}.order ASC"].join(', ')
+  )
   scope :list_for_process_control, lambda { |process_control|
-    {
-      :conditions => {:process_control_id => process_control.id},
-      :order => ['process_control_id ASC', "#{table_name}.order ASC"].join(', ')
-    }
+    where(:process_control_id => process_control.id).order(
+      ['process_control_id ASC', "#{table_name}.order ASC"].join(', ')
+    )
   }
 
   # Restricciones
-  validates_presence_of :name
-  validates_numericality_of :relevance, :risk, :only_integer => true,
+  validates :name, :presence => true
+  validates :relevance, :risk, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :process_control_id
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :process_control_id}
   validates_each :controls do |record, attr, value|
     has_active_controls = value &&
       value.reject(&:marked_for_destruction?).size > 0

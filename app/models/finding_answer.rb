@@ -16,9 +16,10 @@ class FindingAnswer < ActiveRecord::Base
     :finding_id, :user_id, :created_at
 
   # Restricciones
-  validates_presence_of :finding_id, :answer_type, :answer
-  validates_numericality_of :finding_id, :user_id, :file_model_id, :answer_type,
-    :only_integer => true, :allow_nil => true, :allow_blank => true
+  validates :finding_id, :answer_type, :answer, :presence => true
+  validates :finding_id, :user_id, :file_model_id, :answer_type,
+    :numericality => {:only_integer => true}, :allow_nil => true,
+    :allow_blank => true
   
   # Relaciones
   belongs_to :finding

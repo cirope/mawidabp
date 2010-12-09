@@ -118,63 +118,52 @@ class Finding < ActiveRecord::Base
 
   # Named scopes
   scope :with_prefix, lambda { |prefix|
-    {
-      :conditions => ['review_code LIKE ?', "#{prefix}%"],
-      :order => 'review_code ASC'
-    }
+    where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
   scope :all_for_reallocation_with_review, lambda { |review|
-    {
-      :include => {:control_objective_item => :review},
-      :conditions => {
-        :reviews => {:id => review.id},
-        :state => PENDING_STATUS,
-        :final => false
-      }
-    }
+    includes(:control_objective_item => :review).where(
+      :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false
+    )
   }
-  scope :all_for_reallocation,
-    :conditions => {:state => PENDING_STATUS, :final => false}
-  scope :for_notification, :conditions => {
-    :state => STATUS[:notify],
-    :final => false
-  }
-  scope :finals, lambda { |use_finals|
-    { :conditions => { :final => use_finals } }
-  }
-  scope :sort_by_code, :order => 'review_code ASC'
+  scope :all_for_reallocation, where(:state => PENDING_STATUS, :final => false)
+  scope :for_notification, where(:state => STATUS[:notify], :final => false)
+  scope :finals, lambda { |use_finals| where(:final => use_finals) }
+  scope :sort_by_code, order('review_code ASC')
   scope :for_period, lambda { |period|
-    {
-      :include => { :control_objective_item => { :review =>:period } },
-      :conditions => { "#{Period.table_name}.id" => period.id }
-    }
+    includes(:control_objective_item => { :review =>:period }).where(
+      "#{Period.table_name}.id" => period.id
+    )
   }
-  scope :next_to_expire, :conditions => [
-    [
-      'follow_up_date = :warning_date',
-      'state = :being_implemented_state',
-      'final = :boolean_false'
-    ].join(' AND '),
-    {
-      :warning_date =>
-        FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date,
-      :being_implemented_state => STATUS[:being_implemented],
-      :boolean_false => false
-    }
-  ]
-  scope :unconfirmed_for_notification, :conditions => [
-    [
-      'first_notification_date >= :stale_unconfirmed_date',
-      'state = :state',
-      'final = :boolean_false'
-    ].join(' AND '),
-    {
-      :state => STATUS[:unconfirmed],
-      :boolean_false => false,
-      :stale_unconfirmed_date =>
-        FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
-    }
-  ]
+  scope :next_to_expire, lambda {
+    where(
+      [
+        'follow_up_date = :warning_date',
+        'state = :being_implemented_state',
+        'final = :boolean_false'
+      ].join(' AND '),
+      {
+        :warning_date =>
+          FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date,
+        :being_implemented_state => STATUS[:being_implemented],
+        :boolean_false => false
+      }
+    )
+  }
+  scope :unconfirmed_for_notification, lambda {
+    where(
+      [
+        'first_notification_date >= :stale_unconfirmed_date',
+        'state = :state',
+        'final = :boolean_false'
+      ].join(' AND '),
+      {
+        :state => STATUS[:unconfirmed],
+        :boolean_false => false,
+        :stale_unconfirmed_date =>
+          FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
+      }
+    )
+  }
   scope :unanswered_and_stale, lambda { |factor|
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
@@ -203,16 +192,12 @@ class Finding < ActiveRecord::Base
       'notification_level = :notification_level'
     ].join(' AND ')
 
-    {
-      :include => { :control_objective_item => { :review => :period } },
-      :conditions => [
-        [
-          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
-          fix_conditions
-        ].join(' AND '),
-        parameters
-      ]
-    }
+    includes(:control_objective_item => { :review => :period }).where(
+      [
+        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
+      ].join(' AND '),
+      parameters
+    )
   }
   scope :unconfirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
@@ -240,16 +225,12 @@ class Finding < ActiveRecord::Base
       'final = :boolean_false'
     ].join(' AND ')
 
-    {
-      :include => { :control_objective_item => { :review => :period } },
-      :conditions => [
-        [
-          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
-          fix_conditions
-        ].join(' AND '),
-        parameters
-      ]
-    }
+    includes(:control_objective_item => { :review => :period }).where(
+      [
+        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
+      ].join(' AND '),
+      parameters
+    )
   }
   scope :confirmed_and_stale, lambda {
     stale_parameters = Organization.all_parameters(
@@ -284,76 +265,63 @@ class Finding < ActiveRecord::Base
       'notification_level = :notification_level'
     ].join(' AND ')
 
-    where(
+    includes(
+      :finding_answers, {:control_objective_item => {:review => :period}}
+    ).where(
       [
-        [
-          "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})",
-          fix_conditions
-        ].join(' AND '),
-        parameters
-      ]
-    ).includes(:finding_answers,
-      {:control_objective_item => {:review => :period}})
+        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
+      ].join(' AND '),
+      parameters
+    )
   }
-  scope :being_implemented, :conditions =>
-    {:state => STATUS[:being_implemented]}
+  scope :being_implemented, where({:state => STATUS[:being_implemented]})
   scope :list_all_by_date, lambda { |from_date, to_date, order|
-    {
-      :include => {
-        :control_objective_item => {:review =>
-            [:period, :conclusion_final_review, {:plan_item => :business_unit}]}
-      },
-      :conditions => [
-        [
-          "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
-          "#{Period.table_name}.organization_id = :organization_id",
-          'state IN (:states)'
-        ].join(' AND '),
-        {
-          :begin => from_date, :end => to_date,
-          :organization_id => GlobalModelConfig.current_organization_id,
-          :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
-        }
-      ],
-      :order => order ? [
+    includes(
+      :control_objective_item => {:review =>
+          [:period, :conclusion_final_review, {:plan_item => :business_unit}]}
+    ).where(
+      [
+        "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
+        "#{Period.table_name}.organization_id = :organization_id",
+        'state IN (:states)'
+      ].join(' AND '),
+      {
+        :begin => from_date, :end => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
+      }
+    ).order(
+      order ? [
         "#{Period.table_name}.start ASC",
         "#{Period.table_name}.end ASC"
       ].join(', ') : nil
-    }
+    )
   }
   scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
-    {
-      :include => {
-        :control_objective_item =>
-          {:review => [:period, :conclusion_final_review]}
-      },
-      :conditions => [
-        [
-          "#{Review.table_name}.created_at BETWEEN :begin AND :end",
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{ConclusionFinalReview.table_name}.review_id IS NULL"
-        ].join(' AND '),
-        {
-          :begin => from_date, :end => to_date,
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ]
-    }
+    includes(
+      :control_objective_item => {:review => [:period, :conclusion_final_review]}
+    ).where(
+      [
+        "#{Review.table_name}.created_at BETWEEN :begin AND :end",
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+      ].join(' AND '),
+      {
+        :begin => from_date, :end => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    )
   }
-  scope :internal_audit,
-    :include => {
-      :control_objective_item => {
-        :review => {:plan_item => {:business_unit => :business_unit_type}}
-      }
-    },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  scope :external_audit,
-    :include => {
-      :control_objective_item => {
-        :review => {:plan_item => {:business_unit => :business_unit_type}}
-      }
-    },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
+  scope :internal_audit, includes(
+    :control_objective_item => {
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    }
+  ).where("#{BusinessUnitType.table_name}.external" => false)
+  scope :external_audit, includes(
+    :control_objective_item => {
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    }
+  ).where("#{BusinessUnitType.table_name}.external" => true)
 
   # Restricciones sobre los atributos
   attr_protected :first_notification_date, :final
@@ -370,9 +338,10 @@ class Finding < ActiveRecord::Base
   # Restricciones
   validates :control_objective_item_id, :description, :review_code,
     :presence => true
-  validates_length_of :review_code, :type, :maximum => 255, :allow_nil => true,
-    :allow_blank => true
-  validates_numericality_of :control_objective_item_id, :only_integer => true,
+  validates :review_code, :type, :length => {:maximum => 255},
+    :allow_nil => true, :allow_blank => true
+  validates :control_objective_item_id,
+    :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :solution_date, :origination_date,
@@ -794,9 +763,10 @@ class Finding < ActiveRecord::Base
     conditions = []
     conditions << 'created_at >= :filter_start' if start_date
     conditions << 'created_at <= :filter_end' if end_date
-    conditions.blank? ? self.versions : self.versions.all(
-      :conditions => [conditions.join(' AND '),
-        {:filter_start => start_date, :filter_end => end_date}])
+    conditions.blank? ? self.versions : self.versions.where(
+      conditions.join(' AND '),
+      {:filter_start => start_date, :filter_end => end_date}
+    )
   end
 
   def versions_after_final_review(end_date = nil)
