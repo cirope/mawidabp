@@ -128,7 +128,7 @@ class Finding < ActiveRecord::Base
   scope :all_for_reallocation, where(:state => PENDING_STATUS, :final => false)
   scope :for_notification, where(:state => STATUS[:notify], :final => false)
   scope :finals, lambda { |use_finals| where(:final => use_finals) }
-  scope :sort_by_code, :order => 'review_code ASC'
+  scope :sort_by_code, order('review_code ASC')
   scope :for_period, lambda { |period|
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id

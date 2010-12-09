@@ -78,10 +78,9 @@ class HelpItemsControllerTest < ActionController::TestCase
       }
     end
 
-    help_item = HelpItem.first(
-      :conditions => {:name => 'New name'},
-      :order => 'created_at DESC'
-    )
+    help_item = HelpItem.where(:name => 'New name').order(
+      'created_at DESC'
+    ).first
     assert_redirected_to show_content_help_content_path(help_item)
   end
 

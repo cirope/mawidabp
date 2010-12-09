@@ -55,8 +55,9 @@ class DetractsController < ApplicationController
     @user = @detract.try(:user) || (@auth_user unless @has_approval)
 
     if @user
-      @detracts = @user.detracts.for_organization(@auth_organization).all(
-        :limit => LAST_DETRACTORS_LIMIT, :order => 'created_at DESC')
+      @detracts = @user.detracts.for_organization(@auth_organization).order(
+        'created_at DESC'
+      ).limit(LAST_DETRACTORS_LIMIT)
     end
 
     respond_to do |format|

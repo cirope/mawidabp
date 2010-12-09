@@ -51,7 +51,8 @@ class ProcessControl < ActiveRecord::Base
   # Relaciones
   belongs_to :best_practice
   has_many :procedure_control_items, :dependent => :destroy
-  has_many :control_objectives, :dependent => :destroy, :order => '"order" ASC'
+  has_many :control_objectives, :dependent => :destroy,
+    :order => "#{ControlObjective.table_name}.order ASC"
 
   accepts_nested_attributes_for :control_objectives, :allow_destroy => true
 

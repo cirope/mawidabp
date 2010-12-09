@@ -51,11 +51,11 @@ module ActiveRecord
             include ActiveRecord::Acts::Tree::InstanceMethods
 
             def self.roots
-              all(:conditions => "#{configuration[:foreign_key]} IS NULL", :order => #{configuration[:order].nil? ? 'nil' : %Q{"#{configuration[:order]}"}})
+              where("#{configuration[:foreign_key]} IS NULL").order(#{configuration[:order].nil? ? 'nil' : %Q{"#{configuration[:order]}"}})
             end
 
             def self.root
-              first(:conditions => "#{configuration[:foreign_key]} IS NULL", :order => #{configuration[:order].nil? ? 'nil' : %Q{"#{configuration[:order]}"}})
+              where("#{configuration[:foreign_key]} IS NULL").order(#{configuration[:order].nil? ? 'nil' : %Q{"#{configuration[:order]}"}}).first
             end
           EOV
         end

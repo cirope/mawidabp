@@ -256,8 +256,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
 
-    assert @review.control_objective_items.first(
-      :conditions => {:finished => false}).update_attribute(:finished, true)
+    assert @review.control_objective_items.where(
+      :finished => false
+    ).first.update_attribute(:finished, true)
     assert @review.reload.must_be_approved?
 
     @review.control_objective_items.clear
