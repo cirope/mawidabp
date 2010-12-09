@@ -16,9 +16,10 @@ class Plan < ActiveRecord::Base
   attr_readonly :period_id
 
   # Restricciones
-  validates_presence_of :period_id
-  validates_uniqueness_of :period_id, :allow_nil => true, :allow_blank => true
-  validates_numericality_of :period_id, :only_integer => true,
+  validates :period_id, :presence => true
+  validates :period_id, :uniqueness => true, :allow_nil => true,
+    :allow_blank => true
+  validates :period_id, :numericality => {:only_integer => true},
     :allow_nil => true
   validates_each :plan_items do |record, attr, value|
     unless value.all? {|pi| !pi.marked_for_destruction? || pi.can_be_destroyed?}

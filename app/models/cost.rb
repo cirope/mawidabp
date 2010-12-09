@@ -4,15 +4,15 @@ class Cost < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :audit, :conditions => {:cost_type => 'audit'}
-  scope :audited, :conditions => {:cost_type => 'audited'}
+  scope :audit, where(:cost_type => 'audit')
+  scope :audited, where(:cost_type => 'audited')
   
   # Restricciones
-  validates_presence_of :cost, :cost_type, :user_id, :item_id, :item_type
-  validates_numericality_of :user_id, :item_id, :only_integer => true,
+  validates :cost, :cost_type, :user_id, :item_id, :item_type, :presence => true
+  validates :user_id, :item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
-  validates_numericality_of :cost, :allow_nil => true, :allow_blank => true,
-    :greater_than_or_equal_to => 0
+  validates :cost, :numericality => {:greater_than_or_equal_to => 0},
+    :allow_nil => true, :allow_blank => true
 
   # Relaciones
   belongs_to :user

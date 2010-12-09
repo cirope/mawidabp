@@ -19,12 +19,12 @@ class WorkflowItem < ActiveRecord::Base
   # Restricciones
   validate :check_if_is_frozen
   validates :task, :order_number, :presence => true
-  validates_length_of :predecessors, :maximum => 255, :allow_nil => true,
+  validates :predecessors, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :task, :case_sensitive => false,
-    :scope => :workflow_id
-  validates_numericality_of :order_number, :workflow_id, :only_integer => true,
-    :allow_nil => true
+  validates :task, :uniqueness =>
+    {:case_sensitive => false, :scope => :workflow_id}
+  validates :order_number, :workflow_id, :numericality =>
+    {:only_integer => true}, :allow_nil => true
   validates_date :start
   validates_date :end, :on_or_after => :start
   validates_each :start, :end do |record, attr, value|

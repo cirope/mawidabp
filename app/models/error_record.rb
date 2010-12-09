@@ -28,7 +28,7 @@ class ErrorRecord < ActiveRecord::Base
   attr_accessor :request, :user_name, :error_type
 
   # Restricciones
-  validates_inclusion_of :error, :in => ERRORS.values
+  validates :error, :inclusion => {:in => ERRORS.values}
 
   # Relaciones
   belongs_to :user

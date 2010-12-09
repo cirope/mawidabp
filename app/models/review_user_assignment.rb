@@ -23,10 +23,11 @@ class ReviewUserAssignment < ActiveRecord::Base
   before_save :check_user_modification
   
   # Restricciones
-  validates_presence_of :assignment_type, :user_id
-  validates_numericality_of :assignment_type, :user_id, :review_id,
-    :only_integer => true, :allow_blank => true, :allow_nil => true
-  validates_inclusion_of :assignment_type, :in => TYPES.values,
+  validates :assignment_type, :user_id, :presence => true
+  validates :assignment_type, :user_id, :review_id,
+    :numericality => {:only_integer => true}, :allow_blank => true,
+    :allow_nil => true
+  validates :assignment_type, :inclusion => {:in => TYPES.values},
     :allow_blank => true, :allow_nil => true
   validates_each :user do |record, attr, value|
     review = record.review
@@ -185,10 +186,10 @@ class ReviewUserAssignment < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   TYPES.each do |type, value|
-    define_method("#{type}?".to_sym) { self.assignment_type == value }
+    define_method(:"#{type}?") { self.assignment_type == value }
   end
 
   def type_text
-    I18n.t "review.user_assignment.type_#{TYPES.invert[self.assignment_type]}"
+    I18n.t :"review.user_assignment.type_#{TYPES.invert[self.assignment_type]}"
   end
 end

@@ -10,38 +10,35 @@ class ConclusionFinalReview < ConclusionReview
 
   # Named scopes
   scope :list_all_by_date, lambda { |from_date, to_date|
-    {
-      :include => {
-        :review => [:period, {:control_objective_items => :weaknesses},
-          {:plan_item => {:business_unit => :business_unit_type}}]
-      },
-      :conditions => [
-        [
-          "#{Period.table_name}.organization_id = :organization_id",
-          'issue_date BETWEEN :from_date AND :to_date'
-        ].join(' AND '),
-        {
-          :from_date => from_date, :to_date => to_date,
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => [
+    includes(
+      :review => [
+        :period,
+        { :control_objective_items => :weaknesses },
+        { :plan_item => { :business_unit => :business_unit_type } }
+      ]
+    ).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        'issue_date BETWEEN :from_date AND :to_date'
+      ].join(' AND '),
+      {
+        :from_date => from_date, :to_date => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(
+      [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         'issue_date ASC'
       ].join(', ')
-    }
+    )
   }
-  scope :internal_audit,
-    :include => {
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  scope :external_audit,
-    :include => {
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
+  scope :internal_audit, includes(
+    :review => {:plan_item => {:business_unit => :business_unit_type}}
+  ).where("#{BusinessUnitType.table_name}.external" => false)
+  scope :external_audit, includes(
+    :review => {:plan_item => {:business_unit => :business_unit_type}}
+  ).where("#{BusinessUnitType.table_name}.external" => true)
 
   # Callbacks
   before_save :check_for_approval
@@ -52,7 +49,8 @@ class ConclusionFinalReview < ConclusionReview
 
   # Restricciones
   validates :close_date, :presence => true
-  validates_uniqueness_of :review_id, :allow_blank => true, :allow_nil => true
+  validates :review_id, :uniqueness => true, :allow_blank => true,
+    :allow_nil => true
   validates_date :close_date, :allow_nil => true, :allow_blank => true,
     :on => :create, :on_or_after => lambda { |conclusion_review|
       conclusion_review.issue_date || Date.today
@@ -83,8 +81,9 @@ class ConclusionFinalReview < ConclusionReview
     super(attributes)
 
     if import_from_draft && self.review
-      draft = ConclusionDraftReview.first(:conditions =>
-          {:review_id => self.review_id}, :order => 'created_at DESC')
+      draft = ConclusionDraftReview.where({:review_id => self.review_id}).order(
+        'created_at DESC'
+      ).first
 
       self.attributes = draft.attributes if draft
     end

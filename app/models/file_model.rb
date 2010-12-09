@@ -12,6 +12,6 @@ class FileModel < ActiveRecord::Base
   # Restricciones
   validates_attachment_size :file, :less_than => 10.megabytes,
     :message => I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes)
-  validates_length_of :file_file_name, :file_content_type, :maximum => 255,
+  validates :file_file_name, :file_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
 end

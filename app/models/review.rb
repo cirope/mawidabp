@@ -39,123 +39,101 @@ class Review < ActiveRecord::Base
   
   # Named scopes
   scope :list, lambda {
-    {
-      :include => :period,
-      :conditions => {
-        "#{Period.table_name}.organization_id" =>
-          GlobalModelConfig.current_organization_id
-      },
-      :order => 'identification ASC'
-    }
+    includes(:period).where(
+      "#{Period.table_name}.organization_id" =>
+        GlobalModelConfig.current_organization_id
+    ).order('identification ASC')
   }
   scope :list_with_approved_draft, lambda {
-    {
-      :include => [:period, :conclusion_draft_review],
-      :conditions => {
-        ConclusionReview.table_name => {:approved => true},
-        Period.table_name => {
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      },
-      :order => 'identification ASC'
-    }
+    includes(:period, :conclusion_draft_review).where(
+      ConclusionReview.table_name => {:approved => true},
+      Period.table_name => {
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order('identification ASC')
   }
   scope :list_with_final_review, lambda {
-    {
-      :include => [:period, :conclusion_final_review],
-      :conditions => [
-        [
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL"
-        ].join(' AND '),
-        { :organization_id => GlobalModelConfig.current_organization_id }
-      ],
-      :order => 'identification ASC'
-    }
+    includes(:period, :conclusion_final_review).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+      ].join(' AND '),
+      { :organization_id => GlobalModelConfig.current_organization_id }
+    ).order('identification ASC')
   }
   scope :list_without_final_review, lambda {
-    {
-      :include => [:period, :conclusion_final_review],
-      :conditions => [
-        [
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{ConclusionReview.table_name}.review_id IS NULL"
-        ].join(' AND '),
-        { :organization_id => GlobalModelConfig.current_organization_id }
-      ],
-      :order => 'identification ASC'
-    }
+    includes(:period, :conclusion_final_review).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{ConclusionReview.table_name}.review_id IS NULL"
+      ].join(' AND '),
+      { :organization_id => GlobalModelConfig.current_organization_id }
+    ).order('identification ASC')
   }
   scope :list_without_draft_review, lambda {
-    {
-      :include => [:period, :conclusion_draft_review],
-      :conditions => [
-        [
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{ConclusionReview.table_name}.review_id IS NULL"
-        ].join(' AND '),
-        { :organization_id => GlobalModelConfig.current_organization_id }
-      ],
-      :order => 'identification ASC'
-    }
+    includes(:period, :conclusion_draft_review).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{ConclusionReview.table_name}.review_id IS NULL"
+      ].join(' AND '),
+      { :organization_id => GlobalModelConfig.current_organization_id }
+    ).order('identification ASC')
   }
   scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
-    {
-      :include => [:period, :conclusion_final_review,
-        {:plan_item => {:business_unit => :business_unit_type}}],
-      :conditions => [
-        [
-          "#{Period.table_name}.organization_id = :organization_id",
-          "#{table_name}.created_at BETWEEN :from_date AND :to_date",
-          "#{ConclusionFinalReview.table_name}.review_id IS NULL"
-        ].join(' AND '),
-        {
-          :from_date => from_date, :to_date => to_date.to_time.end_of_day,
-          :organization_id => GlobalModelConfig.current_organization_id
-        }
-      ],
-      :order => [
+    includes(
+      :period, :conclusion_final_review, {
+        :plan_item => {:business_unit => :business_unit_type}
+      }
+    ).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{table_name}.created_at BETWEEN :from_date AND :to_date",
+        "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+      ].join(' AND '),
+      {
+        :from_date => from_date, :to_date => to_date.to_time.end_of_day,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(
+      [
         "#{Period.table_name}.start ASC",
         "#{Period.table_name}.end ASC",
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
       ].join(', ')
-    }
+    )
   }
   scope :list_all_without_workflow, lambda { |period_id|
-    {
-      :include => [:period, :workflow],
-      :conditions => [
-          [
-            "#{Period.table_name}.organization_id = :organization_id",
-            "#{table_name}.period_id = :period_id",
-            "#{Workflow.table_name}.review_id IS NULL"
-          ].join(' AND '),
-          {
-            :organization_id => GlobalModelConfig.current_organization_id,
-            :period_id => period_id
-          }
-        ],
-        :order => "#{table_name}.identification ASC"
-    }
+    includes(:period, :workflow).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{table_name}.period_id = :period_id",
+        "#{Workflow.table_name}.review_id IS NULL"
+      ].join(' AND '),
+      {
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :period_id => period_id
+      }
+    ).order("#{table_name}.identification ASC")
   }
-  scope :internal_audit,
-    :include => { :plan_item => {:business_unit => :business_unit_type} },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => false }
-  scope :external_audit,
-    :include => { :plan_item => {:business_unit => :business_unit_type} },
-    :conditions => { "#{BusinessUnitType.table_name}.external" => true }
+  scope :internal_audit, includes(
+    :plan_item => {:business_unit => :business_unit_type}
+  ).where("#{BusinessUnitType.table_name}.external" => false)
+  scope :external_audit, includes(
+    :plan_item => {:business_unit => :business_unit_type}
+  ).where("#{BusinessUnitType.table_name}.external" => true)
 
   # Restricciones
-  validates_format_of :identification, :with => /\A\w[\w\s]*\z/,
+  validates :identification, :format => {:with => /\A\w[\w\s]*\z/},
     :allow_nil => true, :allow_blank => true
-  validates_length_of :identification, :maximum => 255, :allow_nil => true,
+  validates :identification, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_presence_of :identification, :description, :period_id, :plan_item_id
-  validates_uniqueness_of :identification, :plan_item_id,
-    :case_sensitive => false
-  validates_numericality_of :period_id, :plan_item_id, :only_integer => true,
+  validates :identification, :description, :period_id, :plan_item_id,
+    :presence => true
+  validates :identification, :plan_item_id,
+    :uniqueness => {:case_sensitive => false}
+  validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates_each :review_user_assignments do |record, attr, value|
     unless record.has_audited? && record.has_auditor? &&
@@ -362,7 +340,7 @@ class Review < ActiveRecord::Base
       review_errors << I18n.t(:'review.errors.without_survey')
     end
 
-    errors << ["#{Review.model_name.human}", review_errors] unless review_errors.blank?
+    errors << [Review.model_name.human, review_errors] unless review_errors.blank?
 
     (@approval_errors = errors).blank?
   end
@@ -469,8 +447,8 @@ class Review < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE * 2
 
-    note_text = self.file_model ? I18n.t('review.survey.with_attachment') :
-      I18n.t('review.survey.without_attachment')
+    note_text = self.file_model ? I18n.t(:'review.survey.with_attachment') :
+      I18n.t(:'review.survey.without_attachment')
 
     pdf.add_footnote "<i>#{note_text}</i>"
 
@@ -777,8 +755,8 @@ class Review < ActiveRecord::Base
       columns, column_data = {}, []
       column_names = {
         'count' => I18n.t(:'review.weaknesses_count'),
-        'risk' => Weakness.human_attribute_name('risk'),
-        'state' => Weakness.human_attribute_name('state')
+        'risk' => Weakness.human_attribute_name(:risk),
+        'state' => Weakness.human_attribute_name(:state)
       }
 
       column_names.each do |col_name, col_text|
@@ -849,8 +827,8 @@ class Review < ActiveRecord::Base
 
       columns, column_data = {}, []
       column_names = {
-        'count' => Oportunity.human_attribute_name('count'),
-        'state' => Oportunity.human_attribute_name('state')
+        'count' => Oportunity.human_attribute_name(:count),
+        'state' => Oportunity.human_attribute_name(:state)
       }
 
       column_names.each do |col_name, col_text|
@@ -1122,8 +1100,8 @@ class Review < ActiveRecord::Base
   def work_papers_zip_path
     filename_prefix = I18n.t(:'review.work_papers').downcase.gsub(
       /[^A-Za-z0-9\.\-]+/, '_')
-    path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/..../) +
-      [Review.table_name] + ('%08d' % self.id).scan(/..../) +
+    path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/) +
+      [Review.table_name] + ('%08d' % self.id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
 
     File.join *path

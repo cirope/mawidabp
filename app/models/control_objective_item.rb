@@ -35,10 +35,11 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   # Validaciones
   validates :control_objective_text, :control_objective_id, :presence => true
-  validates_numericality_of :control_objective_id, :review_id,
-    :allow_nil => true, :only_integer => true
-  validates_numericality_of :relevance, :only_integer => true,
-    :allow_blank => true, :allow_nil => true, :greater_than_or_equal_to => 0
+  validates :control_objective_id, :review_id,
+    :numericality => {:only_integer => true}, :allow_nil => true
+  validates :relevance, :numericality =>
+    {:only_integer => true, :greater_than_or_equal_to => 0},
+    :allow_blank => true, :allow_nil => true
   validates_date :audit_date, :allow_nil => true, :allow_blank => true
   validates_each :audit_date do |record, attr, value|
     period = record.review.period if record.review

@@ -5,10 +5,10 @@ class HelpItem < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :name, :description, :order_number
-  validates_numericality_of :order_number, :only_integer => true,
+  validates :name, :description, :order_number, :presence => true
+  validates :order_number, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
   
   # Relaciones

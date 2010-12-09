@@ -6,7 +6,7 @@ class Comment < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :comment
+  validates :comment, :presence => true
 
   # Relaciones
   belongs_to :commentable, :polymorphic => true

@@ -9,11 +9,11 @@ class Control < ActiveRecord::Base
     :validates_presence_of_design_tests, :validates_presence_of_compliance_tests
 
   # Restricciones
-  validates_presence_of :control, :if => :validates_presence_of_control
-  validates_presence_of :effects, :if => :validates_presence_of_effects
-  validates_presence_of :design_tests,
+  validates :control, :presence => true, :if => :validates_presence_of_control
+  validates :effects, :presence => true, :if => :validates_presence_of_effects
+  validates :design_tests, :presence => true,
     :if => :validates_presence_of_design_tests
-  validates_presence_of :compliance_tests,
+  validates :compliance_tests, :presence => true,
     :if => :validates_presence_of_compliance_tests
 
   # Relaciones

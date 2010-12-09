@@ -10,30 +10,25 @@ class ProcessControl < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, :order =>['best_practice_id ASC',
-    "#{table_name}.order ASC"].join(', ')
+  scope :list, order(
+    ['best_practice_id ASC', "#{table_name}.order ASC"].join(', ')
+  )
   scope :list_for_period, lambda { |period_id|
-    {
-      :select => connection.distinct('process_controls.id, name', 'name'),
-      :include => [:procedure_control_items => [:procedure_control]],
-      :conditions => {
-        :procedure_control_items =>
-          {:procedure_controls => {:period_id => period_id}}
-      },
-      :order => "#{table_name}.order ASC"
-    }
+    select(connection.distinct('process_controls.id, name', 'name')).includes(
+      :procedure_control_items => [:procedure_control]
+    ).where(
+      :procedure_control_items => {
+        :procedure_controls => {:period_id => period_id}
+      }
+    ).order("#{table_name}.order ASC")
   }
-  scope :list_for_log, lambda { |id|
-    {
-      :conditions => {:id => id}
-    }
-  }
+  scope :list_for_log, lambda { |id| where(:id => id)  }
   
   # Restricciones
-  validates_presence_of :name, :order
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
+  validates :name, :order, :presence => true
+  validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_numericality_of :order, :only_integer => true
+  validates :order, :numericality => {:only_integer => true}
   validates_each :name do |record, attr, value|
     best_practice = record.best_practice
 

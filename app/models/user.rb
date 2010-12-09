@@ -45,35 +45,26 @@ class User < ActiveRecord::Base
 
   # Named scopes
   scope :list, lambda {
-    {
-      :include => :organizations,
-      :conditions => {:organizations => {
-          :id => GlobalModelConfig.current_organization_id
-        }
-      }
-    }
+    includes(:organizations).where(
+      :organizations => { :id => GlobalModelConfig.current_organization_id }
+    )
   }
   scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
-    {
-      :conditions => [
-        [
-          'change_password_hash = :confirmation_hash',
-          'password_changed > :time'
-        ].join(' AND '), {
-          :confirmation_hash => confirmation_hash,
-          :time => BLANK_PASSWORD_STALE_DAYS.days.ago.to_date,
-        }
-      ],
-      :limit => 1
-    }
+    where(
+      [
+        'change_password_hash = :confirmation_hash', 'password_changed > :time'
+      ].join(' AND '),
+      {
+        :confirmation_hash => confirmation_hash,
+        :time => BLANK_PASSWORD_STALE_DAYS.days.ago.to_date,
+      }
+    ).limit(1)
   }
-  scope :all_with_findings_for_notification,
-    :include => {:finding_user_assignments => :finding},
-    :conditions => {
-      :findings => {:state => Finding::STATUS[:notify], :final => false}
-    },
-    :order =>
-      ["#{table_name}.last_name ASC", "#{table_name}.name ASC"].join(', ')
+  scope :all_with_findings_for_notification, includes(
+    :finding_user_assignments => :finding
+  ).where(
+    :findings => {:state => Finding::STATUS[:notify], :final => false}
+  ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"].join(', '))
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?
@@ -83,21 +74,22 @@ class User < ActiveRecord::Base
   after_save :reset_to_important_change
 
   # Restricciones
-  validates_format_of :name, :last_name, :with => /\A\w[\w\s]*\z/,
+  validates :name, :last_name, :format => {:with => /\A\w[\w\s]*\z/},
     :allow_nil => true, :allow_blank => true
   validates :name, :last_name, :language, :email, :presence => true
-  validates_uniqueness_of :user, :email, :case_sensitive => false
-  validates_uniqueness_of :name, :case_sensitive => false, :scope => :last_name
-  validates_length_of :user, :in => 5..30
-  validates_length_of :name, :last_name, :email,
-    :maximum => 100, :allow_nil => true, :allow_blank => true
-  validates_length_of :language, :maximum => 10, :allow_nil => true,
-    :allow_blank => true
-  validates_length_of :password, :maximum => 128, :allow_nil => true,
-    :allow_blank => true
-  validates_length_of :function, :salt, :change_password_hash, :maximum => 255,
+  validates :user, :email, :uniqueness => {:case_sensitive => false}
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :last_name}
+  validates :user, :length => {:in => 5..30}
+  validates :name, :last_name, :email, :length => {:maximum => 100},
     :allow_nil => true, :allow_blank => true
-  validates_confirmation_of :password, :unless => :is_encrypted?
+  validates :language, :length => {:maximum => 10}, :allow_nil => true,
+    :allow_blank => true
+  validates :password, :length => {:maximum => 128}, :allow_nil => true,
+    :allow_blank => true
+  validates :function, :salt, :change_password_hash,
+    :length => {:maximum => 255}, :allow_nil => true, :allow_blank => true
+  validates :password, :confirmation => true, :unless => :is_encrypted?
   validates_each :manager_id do |record, attr, value|
     if value
       parent = User.find(value)

@@ -18,12 +18,8 @@ class Organization < ActiveRecord::Base
   after_save :restore_current_organization_id
   
   # Named scopes
-  scope :list, :order => 'name ASC'
-  scope :list_for_group, lambda { |group|
-    {
-      :conditions => { :group_id => group.id }
-    }
-  }
+  scope :list, order('name ASC')
+  scope :list_for_group, lambda { |group| where(:group_id => group.id) }
 
   # Atributos de solo lectura
   attr_readonly :group_id
@@ -32,14 +28,15 @@ class Organization < ActiveRecord::Base
   attr_accessor :must_create_parameters, :must_create_roles
   
   # Restricciones
-  validates_format_of :prefix, :with => /\A[A-Za-z][A-Za-z0-9\-]+\z/,
+  validates :prefix, :format => {:with => /\A[A-Za-z][A-Za-z0-9\-]+\z/},
     :allow_nil => true, :allow_blank => true
   validates :name, :prefix, :presence => true
-  validates_length_of :name, :prefix, :maximum => 255, :allow_nil => true,
+  validates :name, :prefix, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :prefix, :case_sensitive => false
-  validates_uniqueness_of :name, :case_sensitive => false, :scope => :group_id
-  validates_exclusion_of :prefix, :in => INVALID_PREFIXES
+  validates :prefix, :uniqueness => {:case_sensitive => false}
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :group_id}
+  validates :prefix, :exclusion => {:in => INVALID_PREFIXES}
   
   # Relaciones
   belongs_to :group

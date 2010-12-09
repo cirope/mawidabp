@@ -6,13 +6,10 @@ class WorkPaper < ActiveRecord::Base
   }
   
   # Named scopes
+  scope :sorted_by_code, order('code ASC')
   scope :with_prefix, lambda { |prefix|
-    {
-      :conditions => ['code LIKE :code', { :code => "#{prefix}%" }],
-      :order => 'code ASC'
-    }
+    where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
   }
-  scope :sorted_by_code, :order => 'code ASC'
 
   # Restricciones de los atributos
   attr_accessor :code_prefix, :neighbours
@@ -25,11 +22,12 @@ class WorkPaper < ActiveRecord::Base
   
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true
-  validates_numericality_of :number_of_pages, :only_integer => true,
-    :allow_nil => true, :allow_blank => true, :less_than => 100000
-  validates_numericality_of :organization_id, :only_integer => true,
+  validates :number_of_pages, :numericality =>
+    {:only_integer => true, :less_than => 100000}, :allow_nil => true,
+    :allow_blank => true
+  validates :organization_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
-  validates_length_of :name, :code, :maximum => 255, :allow_nil => true,
+  validates :name, :code, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
   validates_each :code, :on => :create do |record, attr, value|
     if record.check_code_prefix
@@ -110,21 +108,21 @@ class WorkPaper < ActiveRecord::Base
     unless self.name.blank?
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_description_item WorkPaper.human_attribute_name('name'),
+      pdf.add_description_item WorkPaper.human_attribute_name(:name),
         self.name, 0, false
     end
 
     unless self.description.blank?
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_description_item WorkPaper.human_attribute_name('description'),
+      pdf.add_description_item WorkPaper.human_attribute_name(:description),
         self.description, 0, false
     end
 
     unless self.code.blank?
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_description_item WorkPaper.human_attribute_name('code'),
+      pdf.add_description_item WorkPaper.human_attribute_name(:code),
         self.code, 0, false
     end
 
@@ -132,7 +130,7 @@ class WorkPaper < ActiveRecord::Base
       pdf.move_pointer PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(
-        'number_of_pages'), self.number_of_pages.to_s, 0, false
+        :number_of_pages), self.number_of_pages.to_s, 0, false
     end
 
     pdf.save_as self.absolute_cover_path(filename)

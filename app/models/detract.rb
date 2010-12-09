@@ -7,9 +7,7 @@ class Detract < ActiveRecord::Base
 
   # Named scopes
   scope :for_organization, lambda { |organization|
-    {
-      :conditions => { :organization_id => organization.id }
-    }
+    where(:organization_id => organization.id)
   }
 
   # Restricciones sobre los atributos
@@ -17,9 +15,10 @@ class Detract < ActiveRecord::Base
   attr_protected :organization_id
 
   # Restricciones
-  validates_presence_of :value, :user_id
-  validates_numericality_of :value, :greater_than_or_equal_to => 0,
-    :less_than_or_equal_to => 1, :allow_nil => true, :allow_blank => true
+  validates :value, :user_id, :presence => true
+  validates :value, :numericality =>
+    {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 1},
+    :allow_nil => true, :allow_blank => true
 
   # Relaciones
   belongs_to :user

@@ -9,39 +9,45 @@ class Notification < ActiveRecord::Base
 
   # Named scopes
   scope :not_confirmed, where(:status => STATUS[:unconfirmed])
-  scope :confirmed_or_stale, :conditions => [
-    [
-      'status = :status_confirmed',
+  scope :confirmed_or_stale, lambda {
+    where(
       [
-        'status = :status_unconfirmed', 'created_at <= :stale_date'
-      ].join(' AND ')
-    ].join(' OR '),
-    {
-      :status_confirmed => STATUS[:confirmed],
-      :status_unconfirmed => STATUS[:unconfirmed],
-      :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
-    }
-  ]
-  scope :rejected_or_new, :conditions => [
-    [
-      'status = :status_rejected',
+        'status = :status_confirmed',
+        [
+          'status = :status_unconfirmed',
+          'created_at <= :stale_date'
+        ].join(' AND ')
+      ].join(' OR '),
+      {
+        :status_confirmed => STATUS[:confirmed],
+        :status_unconfirmed => STATUS[:unconfirmed],
+        :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
+      }
+    )
+  }
+  scope :rejected_or_new, lambda {
+    where(
       [
-        'status = :status_unconfirmed', 'created_at > :stale_date'
-      ].join(' AND ')
-    ].join(' OR '),
-    {
-      :status_rejected => STATUS[:confirmed],
-      :status_unconfirmed => STATUS[:unconfirmed],
-      :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
-    }
-  ]
+        'status = :status_rejected',
+        [
+          'status = :status_unconfirmed', 'created_at > :stale_date'
+        ].join(' AND ')
+      ].join(' OR '),
+      {
+        :status_rejected => STATUS[:confirmed],
+        :status_unconfirmed => STATUS[:unconfirmed],
+        :stale_date => NOTIFICATIONS_STALE_DAYS.days.ago_in_business
+      }
+    )
+  }
 
   # Restricciones
   validates :confirmation_hash, :user_id, :presence => true
-  validates_numericality_of :user_who_confirm_id, :user_id, :status,
-    :only_integer => true, :allow_nil => true, :allow_blank => true
-  validates_length_of :confirmation_hash, :maximum => 255, :allow_nil => true,
+  validates :user_who_confirm_id, :user_id, :status,
+    :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
+  validates :confirmation_hash, :length => {:maximum => 255},
+    :allow_nil => true, :allow_blank => true
   validates_datetime :confirmation_date, :allow_nil => true,
     :allow_blank => true
 

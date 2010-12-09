@@ -9,24 +9,21 @@ class ProcedureControlSubitem < ActiveRecord::Base
   
   # Named scopes
   scope :list_for_item, lambda { |procedure_control_item_id|
-    {
-      #:select => connection.distinct('control_objective_id', nil),
-      :conditions => { :procedure_control_item_id => procedure_control_item_id }
-    }
+    where(:procedure_control_item_id => procedure_control_item_id)
   }
 
   scope :list_not_in, lambda { |control_objective_ids|
-    {
-      :conditions => ['control_objective_id NOT IN :control_objectives_ids',
-        {:control_objectives_ids => control_objective_ids}]
-    }
+    where(
+      'control_objective_id NOT IN :control_objectives_ids',
+      {:control_objectives_ids => control_objective_ids}
+    )
   }
 
   # Restricciones
-  validates_presence_of :control_objective_text, :control_objective_id,
-    :risk, :order
-  validates_numericality_of :procedure_control_item_id, :control_objective_id,
-    :risk, :order, :only_integer => true, :allow_nil => true
+  validates :control_objective_text, :control_objective_id,
+    :risk, :order, :presence => true
+  validates :procedure_control_item_id, :control_objective_id,
+    :risk, :order, :numericality => {:only_integer => true}, :allow_nil => true
   validates_each :controls do |record, attr, value|
     has_active_controls = value &&
       value.reject(&:marked_for_destruction?).size > 0

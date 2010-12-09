@@ -10,8 +10,8 @@ class FindingRelation < ActiveRecord::Base
   }
 
   # Restricciones
-  validates_presence_of :finding_relation_type, :related_finding_id
-  validates_inclusion_of :finding_relation_type, :in => TYPES.values,
+  validates :finding_relation_type, :related_finding_id, :presence => true
+  validates :finding_relation_type, :inclusion => {:in => TYPES.values},
     :allow_nil => true, :allow_blank => true
   validates_each :related_finding_id do |record, attr, value|
     repeated_relations = record.finding.finding_relations.select do |fr|
@@ -27,10 +27,10 @@ class FindingRelation < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   TYPES.each do |type, value|
-    define_method("#{type}?".to_sym) { self.finding_relation_type == value }
+    define_method(:"#{type}?") { self.finding_relation_type == value }
   end
 
   def finding_relation_type_text
-    I18n.t("finding_relation.types.#{TYPES.invert[self.finding_relation_type]}")
+    I18n.t(:"finding_relation.types.#{TYPES.invert[self.finding_relation_type]}")
   end
 end

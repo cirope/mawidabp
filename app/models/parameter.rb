@@ -11,12 +11,10 @@ class Parameter < ActiveRecord::Base
   # Named scopes
   # Deprecated
   scope :all_parameters, lambda { |name|
-    {
-      :conditions => {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :name => name.to_s
-      }
-    }
+    where(
+      :organization_id => GlobalModelConfig.current_organization_id,
+      :name => name.to_s
+    )
   }
 
   # Callbacks
@@ -27,19 +25,19 @@ class Parameter < ActiveRecord::Base
   attr_readonly :name
   
   # Restricciones
-  validates_format_of :name, :with => /\A\w+\z/,
+  validates :name, :format => {:with => /\A\w+\z/},
     :allow_nil => true, :allow_blank => true
-  validates_presence_of :name, :value, :organization_id
-  validates_length_of :name, :maximum => 100, :allow_nil => true,
+  validates :name, :value, :organization_id, :presence => true
+  validates :name, :length => {:maximum => 100}, :allow_nil => true,
     :allow_blank => true
-  validates_uniqueness_of :name, :case_sensitive => false,
-    :scope => :organization_id
+  validates :name, :uniqueness =>
+    {:case_sensitive => false, :scope => :organization_id}
 
   # Relaciones
   belongs_to :organization
 
   def to_s
-    I18n.t "parameter.#{self.name}"
+    I18n.t self.name, :scope => :parameter
   end
 
   def add_to_cache
@@ -59,9 +57,9 @@ class Parameter < ActiveRecord::Base
     parameter = Parameter.find_in_cache(organization_id, name, version)
 
     unless parameter
-      parameter = self.first(
-        :conditions => {:name => name.to_s, :organization_id => organization_id}
-      ).try(:version_of, version)
+      parameter = where(
+        :name => name.to_s, :organization_id => organization_id
+      ).first.try(:version_of, version)
 
       Parameter.write_in_cache(parameter)
     end

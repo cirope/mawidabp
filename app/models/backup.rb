@@ -5,7 +5,7 @@ class Backup < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  validates_presence_of :backup_type
-  validates_inclusion_of :backup_type, :in => [0, 1], :allow_nil => true,
+  validates :backup_type, :presence => true
+  validates :backup_type, :inclusion => { :in => [0, 1] }, :allow_nil => true,
     :allow_blank => true
 end

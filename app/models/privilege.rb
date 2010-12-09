@@ -8,10 +8,10 @@ class Privilege < ActiveRecord::Base
   after_validation :mark_implicit_privileges
   
   # Restricciones
-  validates_presence_of :module
-  validates_length_of :module, :maximum => 255, :allow_nil => true,
+  validates :module, :presence => true
+  validates :module, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates_inclusion_of :module, :in => APP_MODULES, :allow_nil => true,
+  validates :module, :inclusion => {:in => APP_MODULES}, :allow_nil => true,
     :allow_blank => true
   validates_each :module do |record, attr, value|
     ## Permitido el por el tipo de rol
@@ -42,7 +42,7 @@ class Privilege < ActiveRecord::Base
   end
 
   def to_s
-    privilege_string = I18n.t("actioncontroller.#{self.module}")
+    privilege_string = I18n.t(self.module, :scope => :actioncontroller)
 
     privilege_array = [:approval, :erase, :modify, :read].map do |p|
       "#{Privilege.human_attribute_name(p)}: " +
