@@ -414,13 +414,9 @@ class Finding < ActiveRecord::Base
   has_many :notifications, :through => :notification_relations, :uniq => true,
     :order => 'created_at'
   has_many :costs, :as => :item, :dependent => :destroy
-  # TODO: cambiar la linea de abajo por la comentada cuando termine el proceso de "papelización"
   has_many :work_papers, :as => :owner, :dependent => :destroy,
-    :before_add => :prepare_work_paper,
+    :before_add => [:check_for_final_review, :prepare_work_paper],
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
-#  has_many :work_papers, :as => :owner, :dependent => :destroy,
-#    :before_add => [:check_for_final_review, :prepare_work_paper],
-#    :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
   has_many :finding_user_assignments, :after_add => :user_assignment_added,
@@ -558,19 +554,14 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  def can_be_modified?(include_error_messages = true)
-    # TODO: Eliminar las dos líneas inferiores cuando termine el proceso de "papelización"
-    if self.implemented_audited? && !self.changed? &&
-        self.work_papers.reject(&:new_record?).empty?
-      true
-    elsif !self.final? || self.final_changed? ||
+  def can_be_modified?
+    if !self.final? || self.final_changed? ||
         (!self.changed? && !self.control_objective_item.review.is_frozen?)
       true
     else
       msg = I18n.t(:'finding.readonly')
 
-      # TODO: Eliminar el parámetro "include_error_messages" cuando termine el proceso de "papelización"
-      if !self.errors.full_messages.include?(msg) && include_error_messages
+      if !self.errors.full_messages.include?(msg)
         self.errors.add_to_base msg
       end
 

@@ -310,24 +310,23 @@ class WeaknessTest < ActiveSupport::TestCase
     uneditable_weakness.final = true
 
     assert_no_difference ['Weakness.count', 'WorkPaper.count'] do
-      # TODO: descomentar cuando termine la "papelización"
-#      assert_raise(RuntimeError) do
-#        uneditable_weakness.update_attributes({
-#        :work_papers_attributes => {
-#            '1_new' => {
-#              :name => 'New post_workpaper name',
-#              :code => 'New post_workpaper code',
-#              :number_of_pages => '10',
-#              :description => 'New post_workpaper description',
-#              :organization_id => organizations(:default_organization).id,
-#              :file_model_attributes => {
-#                :file => ActionDispatch::Http::UploadedFile.new(
-#                  TEST_FILE, 'text/plain')
-#              }
-#            }
-#          }
-#        })
-#      end
+      assert_raise(RuntimeError) do
+        uneditable_weakness.update_attributes({
+        :work_papers_attributes => {
+            :'1_new' => {
+              :name => 'New post_workpaper name',
+              :code => 'New post_workpaper code',
+              :number_of_pages => '10',
+              :description => 'New post_workpaper description',
+              :organization_id => organizations(:default_organization).id,
+              :file_model_attributes => {
+                :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
+                  'text/plain')
+              }
+            }
+          }
+        })
+      end
     end
   end
 

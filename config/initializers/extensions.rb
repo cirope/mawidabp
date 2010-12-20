@@ -83,6 +83,8 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
 end
 
 # Agrega una conversión de UTF-8 a ISO a la funcion text de PDF::Writer
+require 'iconv'
+
 CONVERTER_TO_ISO = Iconv.new 'ISO-8859-15//IGNORE//TRANSLIT', 'UTF-8'
 CONVERTER_TO_UTF8 = Iconv.new 'UTF-8//IGNORE//TRANSLIT', 'ISO-8859-15'
 
