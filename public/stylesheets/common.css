@@ -1397,8 +1397,7 @@ ul.raw_list ul {
     height: 100%;
     width: auto;
     cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity = 0);
+    opacity: 1;
     -moz-opacity: 0;
 }
 
@@ -1465,6 +1464,10 @@ span.popup_closebox:hover, a.popup_closebox:hover {
     background: #2c3234;
     color: #cdcdcd;
     text-decoration: none;
+}
+
+.clear {
+    clear: both;
 }
 
 .popup_draghandle {

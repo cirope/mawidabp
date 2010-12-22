@@ -1,0 +1,29 @@
+div#links {
+    float: right;
+    width: 98%;
+    padding: .5em 2em;
+}
+
+.stylized_file span.file_container input.file {
+    filter: alpha(opacity = 0);
+}
+/*
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+.clearfix {
+    display: block;
+}
+
+.clearfix {
+    height: 1px;
+}*/

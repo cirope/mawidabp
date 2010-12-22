@@ -144,7 +144,7 @@
   </div>
 
   <% unless @finding.important_dates.blank? %>
-    <h1 style="clear: both;">
+    <h1 class="clear">
       <%= t(:'finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
     </h1>
@@ -156,7 +156,7 @@
   <% end %>
 
   <div>
-    <h1 style="clear: both;">
+    <h1 class="clear">
       <%= t(:'finding.responsibles', :count => @finding.users.size) %>
     </h1>
 
@@ -168,7 +168,7 @@
         <h3><%= t(:'finding.send_notification') %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>
-      <div style="clear: both;"></div>
+      <div class="clear"></div>
     </div>
 
     <div id="finding_user_assignments">
@@ -200,7 +200,7 @@
         <h3><%= FindingRelation.human_attribute_name :finding_relation_type %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>
-      <div style="clear: both;"></div>
+      <div class="clear"></div>
     </div>
 
     <div id="finding_relations">
@@ -247,7 +247,7 @@
         <h3><%= FindingAnswer.human_attribute_name :created_at %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>
-      <div style="clear: both;"></div>
+      <div class="clear"></div>
     </div>
     
     <div id="finding_answers">
@@ -285,7 +285,7 @@
         <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
       </div>
       <div class="item_column" style="width: 10%;"></div>
-      <div style="clear: both;"></div>
+      <div class="clear"></div>
     </div>
 
     <div id="work_papers">
@@ -350,7 +350,7 @@
       <div class="item_column" style="width: 75%;">
         <h3><%= Cost.human_attribute_name :description %></h3>
       </div>
-      <div style="clear: both;"></div>
+      <div class="clear"></div>
     </div>
 
     <div id="costs">
