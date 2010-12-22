@@ -127,7 +127,7 @@
   <% end %>
 
   <% unless @review.control_objective_items.empty? %>
-    <div class="items" style="margin-top: 2em;">
+    <div class="textual_items" style="margin-top: 2em;">
       <h1><%= t(:'review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
         <% pre_template = post_template = nil %>
@@ -193,39 +193,6 @@
 <%= set_focus_to_first_element %>
 <script type="text/javascript">
 //<![CDATA[
-  document.on('change', 'select.post_audit_qualification, select.pre_audit_qualification', function(event, element) {
-    var parent = element.up('.control_objective_item');
-    var selectedValues = new Array();
-    var preAuditElement = parent.down('.pre_audit_qualification');
-    var postAuditElement = parent.down('.post_audit_qualification');
-    var maxValue = $A(element.options).map(function(e) {
-      return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
-    }).max();
-
-    selectedValues.push($F(preAuditElement).match(/^\d+$/) ?
-      parseInt($F(preAuditElement)) : null);
-    selectedValues.push($F(postAuditElement).match(/^\d+$/) ?
-      parseInt($F(postAuditElement)) : null);
-
-    var total = selectedValues.compact().size() == 0 ? -1 :
-      selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
-
-    var percentage = total == -1 || maxValue == 0 ? 100 :
-      ((total / selectedValues.compact().size()) * 100.0 / maxValue).toFixed(0);
-    var effectivenessElement = parent.down('input.effectiveness');
-
-    effectivenessElement.setValue(new String("#{percentage}%").interpolate(
-      {percentage: percentage}));
-
-    var oldColor = effectivenessElement.getStyle('border-color');
-
-    if(!oldColor) {
-      effectivenessElement.setStyle({borderColor: '#47ae00'});
-      Element.setStyle.delay(0.8, effectivenessElement,
-        {borderColor: oldColor});
-    }
-  });
-
   if($('review_plan_item_id')) {
     Event.observe('review_plan_item_id', 'change', function() {
       var data_url = '<%= plan_item_data_reviews_path %>';

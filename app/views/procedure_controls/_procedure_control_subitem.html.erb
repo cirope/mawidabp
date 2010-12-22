@@ -2,29 +2,33 @@
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
-    <div class="item_field" style="width: 15%;">
+    <div class="item_field" style="width: 13%;">
       <%= f.select :control_objective_id, control_objectives,
         {:prompt => true},
         {:id => "procedure_control_subitem_#{id}_control_objective",
           :class => :control_objective} %>
     </div>
-    <div class="item_field" style="width: 15%;">
+    <div class="item_field" style="width: 13%;">
       <%= f.text_area :control_objective_text, :class => :control_objective_text,
         :id => "procedure_control_subitem_#{id}_control_objective_texts" %>
     </div>
 
-    <%= f.fields_for :controls, f.object.controls[0] do |c_f| %>
-      <div class="item_field" style="width: 15%;">
+    <%= f.fields_for :control do |c_f| %>
+      <div class="item_field" style="width: 13%;">
         <%= c_f.text_area :control, :class => :control,
           :id => "procedure_control_subitem_#{id}_control" %>
       </div>
-      <div class="item_field" style="width: 15%;">
+      <div class="item_field" style="width: 13%;">
         <%= c_f.text_area :design_tests, :class => :tests,
           :id => "procedure_control_subitem_#{id}_design_tests" %>
       </div>
-      <div class="item_field" style="width: 15%;">
+      <div class="item_field" style="width: 13%;">
         <%= c_f.text_area :compliance_tests, :class => :tests,
           :id => "procedure_control_subitem_#{id}_compliance_tests" %>
+      </div>
+      <div class="item_field" style="width: 13%;">
+        <%= c_f.text_area :sustantive_tests, :class => :tests,
+          :id => "procedure_control_subitem_#{id}_sustantive_tests" %>
       </div>
       <div class="item_field" style="width: 10%;">
         <%= c_f.text_area :effects, :class => :effects,
@@ -71,6 +75,8 @@
               controlObjective.controls[0].design_tests);
             Form.Element.setValue(parentId + '_compliance_tests',
               controlObjective.controls[0].compliance_tests);
+            Form.Element.setValue(parentId + '_sustantive_tests',
+              controlObjective.controls[0].sustantive_tests);
             Form.Element.setValue(parentId + '_effects',
               controlObjective.controls[0].effects);
             Form.Element.setValue(parentId + '_risk', controlObjective.risk);

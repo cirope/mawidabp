@@ -28,13 +28,12 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     assert_difference ['ControlObjective.count', 'Control.count'] do
       @control_objective = ControlObjective.create(
         :name => 'New name',
-        :controls_attributes => {
-          :new_1 => {
-            :control => 'New control',
-            :effects => 'New effects',
-            :design_tests => 'New design tests',
-            :compliance_tests => 'New compliance tests'
-          }
+        :control_attributes => {
+          :control => 'New control',
+          :effects => 'New effects',
+          :design_tests => 'New design tests',
+          :compliance_tests => 'New compliance tests',
+          :sustantive_tests => 'New sustantive tests'
         },
         :relevance =>
           get_test_parameter(:admin_control_objective_importances).first[1],
@@ -112,10 +111,10 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates that have at least one control' do
     assert @control_objective.valid?
-    @control_objective.control_ids = []
+    @control_objective.control = nil
     assert @control_objective.invalid?
     assert_equal 1, @control_objective.errors.count
-    assert_equal [error_message_from_model(@control_objective, :controls,
-      :blank)], @control_objective.errors[:controls]
+    assert_equal [error_message_from_model(@control_objective, :control,
+      :blank)], @control_objective.errors[:control]
   end
 end

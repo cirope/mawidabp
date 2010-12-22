@@ -441,8 +441,8 @@ class Finding < ActiveRecord::Base
       end
     end
 
-    unless self.control_objective_item.try(:controls).blank?
-      self.effect ||= self.control_objective_item.controls.first.try(:effects)
+    if self.control_objective_item.try(:control)
+      self.effect ||= self.control_objective_item.control.effects
     end
 
     self.state ||= STATUS[:incomplete]

@@ -8,8 +8,9 @@
         <tr>
           <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>
           <th><%= Control.human_attribute_name :control %></th>
-          <th><%= Control.human_attribute_name :compliance_tests %></th>
           <th><%= Control.human_attribute_name :design_tests %></th>
+          <th><%= Control.human_attribute_name :compliance_tests %></th>
+          <th><%= Control.human_attribute_name :sustantive_tests %></th>
           <th><%= Control.human_attribute_name :effects %></th>
           <th><%= ProcedureControlSubitem.human_attribute_name :risk %></th>
         </tr>
@@ -18,10 +19,11 @@
         <% pci.procedure_control_subitems.each do |pcs| %>
           <tr>
             <td><%= simple_format h(pcs.control_objective_text) %></td>
-            <td><%= simple_format h(pcs.controls.first.control) %></td>
-            <td><%= simple_format h(pcs.controls.first.compliance_tests) %></td>
-            <td><%= simple_format h(pcs.controls.first.design_tests) %></td>
-            <td><%= simple_format h(pcs.controls.first.effects) %></td>
+            <td><%= simple_format h(pcs.control.control) %></td>
+            <td><%= simple_format h(pcs.control.design_tests) %></td>
+            <td><%= simple_format h(pcs.control.compliance_tests) %></td>
+            <td><%= simple_format h(pcs.control.sustantive_tests) %></td>
+            <td><%= simple_format h(pcs.control.effects) %></td>
             <td><%= pcs.risk_text %></td>
           </tr>
         <% end %>

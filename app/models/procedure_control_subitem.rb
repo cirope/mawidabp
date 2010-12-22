@@ -24,11 +24,10 @@ class ProcedureControlSubitem < ActiveRecord::Base
     :risk, :order, :presence => true
   validates :procedure_control_item_id, :control_objective_id,
     :risk, :order, :numericality => {:only_integer => true}, :allow_nil => true
-  validates_each :controls do |record, attr, value|
-    has_active_controls = value &&
-      value.reject(&:marked_for_destruction?).size > 0
+  validates_each :control do |record, attr, value|
+    has_active_control = value && !value.marked_for_destruction?
 
-    record.errors.add attr, :blank unless has_active_controls
+    record.errors.add attr, :blank unless has_active_control
   end
   validates_each :control_objective_id do |record, attr, value|
     pci = record.procedure_control_item
@@ -47,15 +46,15 @@ class ProcedureControlSubitem < ActiveRecord::Base
   # Relaciones
   belongs_to :control_objective
   belongs_to :procedure_control_item
-  has_many :controls, :as => :controllable, :dependent => :destroy,
+  has_one :control, :as => :controllable, :dependent => :destroy,
     :order => "#{Control.table_name}.order ASC"
 
-  accepts_nested_attributes_for :controls, :allow_destroy => true
+  accepts_nested_attributes_for :control, :allow_destroy => true
 
   def initialize(attributes = nil)
     super(attributes)
 
-    self.controls.build if self.controls.blank?
+    self.build_control unless self.control
   end
 
   def fill_control_objective_text

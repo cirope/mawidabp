@@ -765,11 +765,11 @@ div.in_column_items {
     width: 95%;
 }
 
-div.items {
+div.items, div.textual_items {
     width: 98%;
 }
 
-div.items, div.in_column_items {
+div.items, div.textual_items, div.in_column_items {
     clear: both;
 }
 

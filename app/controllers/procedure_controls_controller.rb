@@ -160,20 +160,23 @@ class ProcedureControlsController < ApplicationController
     pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
-      'compliance_tests', 'effects', 'risk']
+      'compliance_tests', 'sustantive_tests', 'effects', 'risk']
     procedure_control_column_order = ['process_control_id', 'aproach',
       'frequency']
     column_width = {'control_objective_text' => 15, 'control' => 35,
-      'compliance_tests' => 35, 'effects' => 8, 'risk' => 7}
+      'compliance_tests' => 18, 'sustantive_tests' => 17, 'effects' => 8,
+      'risk' => 7}
     procedure_control_column_width = {'process_control_id' => 70,
       'aproach' => 15, 'frequency' => 15}
     columns = {}
     procedure_control_columns = {}
     column_data = []
     
-    column_order.each do |c_name|
+    column_order.each_with_index do |c_name, i|
       columns[c_name] = PDF::SimpleTable::Column.new(c_name) do |column|
-        column.heading = ProcedureControlSubitem.human_attribute_name(c_name)
+        column.heading = [0, 5].include?(i) ?
+          ProcedureControlSubitem.human_attribute_name(c_name) :
+          Control.human_attribute_name(c_name)
         column.justification = :full
         column.width = pdf.percent_width(column_width[c_name])
       end
@@ -231,9 +234,10 @@ class ProcedureControlsController < ApplicationController
       pci.procedure_control_subitems.each do |pcs|
         column_data << {
           'control_objective_text' => pcs.control_objective_text.to_iso,
-          'control' => pcs.controls.first.control.to_iso,
-          'compliance_tests' => pcs.controls.first.compliance_tests.to_iso,
-          'effects' => pcs.controls.first.effects.to_iso,
+          'control' => pcs.control.control.to_iso,
+          'compliance_tests' => pcs.control.compliance_tests.to_iso,
+          'sustantive_tests' => pcs.control.sustantive_tests.to_iso,
+          'effects' => pcs.control.effects.to_iso,
           'risk' => pcs.risk_text.to_iso
         }
       end
@@ -315,8 +319,11 @@ class ProcedureControlsController < ApplicationController
     control_objective ||= ControlObjective.new
 
     render :json => control_objective.to_json(:only => [:name, :risk],
-      :include => {:controls =>
-          {:only => [:control, :effects, :design_tests,:compliance_tests]}})
+      :include => {:control => {:only =>
+            [:control, :effects, :design_tests, :compliance_tests, :sustantive_tests]
+        }
+      }
+    )
   end
 
   private

@@ -142,19 +142,18 @@ class ReviewsControllerTest < ActionController::TestCase
                   :control_objective_items_attributes => {
                     :new_1 => {
                       :control_objective_text => 'New text',
-                      :controls_attributes => {
-                        :new_1 => {
-                          :control => 'New control',
-                          :effects => 'New effects',
-                          :design_tests => 'New design tests',
-                          :compliance_tests => 'New compliance tests'
-                        }
+                      :control_attributes => {
+                        :control => 'New control',
+                        :effects => 'New effects',
+                        :design_tests => 'New design tests',
+                        :compliance_tests => 'New compliance tests',
+                        :sustantive_tests => 'New sustantive tests'
                       },
                       :relevance => get_test_parameter(
                         :admin_control_objective_importances).last[1],
-                      :pre_audit_qualification => get_test_parameter(
+                      :design_score => get_test_parameter(
                         :admin_control_objective_qualifications).last[1],
-                      :post_audit_qualification => get_test_parameter(
+                      :compliance_score => get_test_parameter(
                         :admin_control_objective_qualifications).last[1],
                       :audit_date => Time.now.to_date,
                       :auditor_comment => 'New comment',
@@ -191,19 +190,18 @@ class ReviewsControllerTest < ActionController::TestCase
                     },
                     :new_2 => {
                       :control_objective_text => 'New text',
-                      :controls_attributes => {
-                        :new_1 => {
-                          :control => 'New control',
-                          :effects => 'New effects',
-                          :design_tests => 'New design tests',
-                          :compliance_tests => 'New compliance tests'
-                        }
+                      :control_attributes => {
+                        :control => 'New control',
+                        :effects => 'New effects',
+                        :design_tests => 'New design tests',
+                        :compliance_tests => 'New compliance tests',
+                        :sustantive_tests => 'New sustantive tests'
                       },
                       :relevance => get_test_parameter(
                         :admin_control_objective_importances).last[1],
-                      :pre_audit_qualification => get_test_parameter(
+                      :design_score => get_test_parameter(
                         :admin_control_objective_qualifications).last[1],
-                      :post_audit_qualification => get_test_parameter(
+                      :compliance_score => get_test_parameter(
                         :admin_control_objective_qualifications).last[1],
                       :audit_date => Time.now.to_date,
                       :auditor_comment => 'New comment',
@@ -282,20 +280,19 @@ class ReviewsControllerTest < ActionController::TestCase
               :id => control_objective_items(
                 :bcra_A4609_security_management_responsible_dependency_item_editable).id,
               :control_objective_text => 'Updated text',
-              :controls_attributes => {
-                controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id => {
-                  :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
-                  :control => 'Updated control',
-                  :effects => 'Updated effects',
-                  :design_tests => 'Updated design tests',
-                  :compliance_tests => 'Updated compliance tests'
-                }
+              :control_attributes => {
+                :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
+                :control => 'Updated control',
+                :effects => 'Updated effects',
+                :design_tests => 'Updated design tests',
+                :compliance_tests => 'Updated compliance tests',
+                :sustantive_tests => 'Updated sustantive tests'
               },
               :relevance => get_test_parameter(
                 :admin_control_objective_importances).last[1],
-              :pre_audit_qualification => get_test_parameter(
+              :design_score => get_test_parameter(
                 :admin_control_objective_qualifications).last[1],
-              :post_audit_qualification => get_test_parameter(
+              :compliance_score => get_test_parameter(
                 :admin_control_objective_qualifications).last[1],
               :audit_date => Time.now.to_date,
               :auditor_comment => 'Updated comment',

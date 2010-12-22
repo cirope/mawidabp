@@ -53,3 +53,7 @@ gem 'mksm-rubyzip', :require => 'zip/zip'
 # group :development, :test do
 #   gem 'webrat'
 # end
+
+group :test do
+  gem 'turn'
+end

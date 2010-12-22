@@ -31,13 +31,12 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
         :control_objective_id =>
           control_objectives(:iso_27000_security_policy_3_1).id,
         :control_objective_text => 'New CO text',
-        :controls_attributes => {
-          :new_1 => {
-            :control => 'New control',
-            :design_tests => 'New design tests',
-            :compliance_tests => 'New compliance tests',
-            :effects => 'New effects'
-          }
+        :control_attributes => {
+          :control => 'New control',
+          :design_tests => 'New design tests',
+          :compliance_tests => 'New compliance tests',
+          :sustantive_tests => 'New sustantive tests',
+          :effects => 'New effects'
         },
         :risk =>
           get_test_parameter(:admin_control_objective_risk_levels).first[1],
@@ -57,13 +56,12 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
           procedure_control_items(:procedure_control_item_iso_27001_2).id,
         :control_objective_id =>
           control_objectives(:iso_27000_security_policy_3_1).id,
-        :controls_attributes => {
-          :new_1 => {
-            :control => 'Updated control',
-            :design_tests => 'Updated design tests',
-            :compliance_tests => 'Updated compliance tests',
-            :effects => 'Updated effects'
-          }
+        :control_attributes => {
+          :control => 'Updated control',
+          :design_tests => 'Updated design tests',
+          :compliance_tests => 'Updated compliance tests',
+          :sustantive_tests => 'Updated sustantive tests',
+          :effects => 'Updated effects'
         },
         :risk =>
           get_test_parameter(:admin_control_objective_risk_levels).first[1],
@@ -73,7 +71,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
       assert_equal control_objectives(:iso_27000_security_policy_3_1).name,
         procedure_control_subitem.reload.control_objective_text
       assert_equal 'Updated control',
-        procedure_control_subitem.controls.last.control
+        procedure_control_subitem.control.control
     end
   end
 
@@ -150,10 +148,10 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates that have at least one control' do
     assert @procedure_control_subitem.valid?
-    @procedure_control_subitem.control_ids = []
+    @procedure_control_subitem.control = nil
     assert @procedure_control_subitem.invalid?
     assert_equal 1, @procedure_control_subitem.errors.count
     assert_equal [error_message_from_model(@procedure_control_subitem,
-        :controls, :blank)], @procedure_control_subitem.errors[:controls]
+        :control, :blank)], @procedure_control_subitem.errors[:control]
   end
 end

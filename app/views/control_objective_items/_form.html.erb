@@ -56,7 +56,7 @@
       <%= co_f.label :control_objective_text %>
       <%= co_f.text_area :control_objective_text, :readonly => readonly %>
     </p>
-    <%= co_f.fields_for :controls, @control_objective_item.controls[0] do |c_f| %>
+    <%= co_f.fields_for :control do |c_f| %>
       <p>
         <%= c_f.label :effects %>
         <%= c_f.text_area :effects, :readonly => readonly %>
@@ -64,6 +64,19 @@
       <p>
         <%= c_f.label :control %>
         <%= c_f.text_area :control, :readonly => readonly %>
+      </p>
+
+      <p class="form_item">
+        <%= content_tag :label, ControlObjectiveItem.human_attribute_name(
+          :effectiveness), :class => :inline %>
+        <%= text_field_tag :effectiveness,
+          "#{@control_objective_item.effectiveness}%", :class => :inline_item,
+          :readonly => true %>
+      </p>
+      <p class="form_item">
+        <%= co_f.label :finished, nil, :class => :inline %>
+        <%= co_f.check_box :finished, :class => :inline_item,
+          :disabled => readonly %>
       </p>
 
       <% content_for :design_tests do %>
@@ -75,12 +88,17 @@
         <%= c_f.label :compliance_tests %>
         <%= c_f.text_area :compliance_tests, :readonly => readonly %>
       <% end %>
+
+      <% content_for :sustantive_tests do %>
+        <%= c_f.label :sustantive_tests %>
+        <%= c_f.text_area :sustantive_tests, :readonly => readonly %>
+      <% end %>
     <% end %>
   </div>
   <div class="form_column_right">
     <p>
-      <%= co_f.label :pre_audit_qualification %>
-      <%= co_f.select :pre_audit_qualification,
+      <%= co_f.label :design_score %>
+      <%= co_f.select :design_score,
         parameter_in(@auth_organization.id,
         :admin_control_objective_qualifications,
         @control_objective_item.created_at, true),
@@ -91,8 +109,8 @@
       <%= yield :design_tests %>
     </p>
     <p>
-      <%= co_f.label :post_audit_qualification %>
-      <%= co_f.select :post_audit_qualification,
+      <%= co_f.label :compliance_score %>
+      <%= co_f.select :compliance_score,
         parameter_in(@auth_organization.id,
         :admin_control_objective_qualifications,
         @control_objective_item.created_at, true),
@@ -103,32 +121,32 @@
       <%= yield :compliance_tests %>
     </p>
     <p>
+      <%= co_f.label :sustantive_score %>
+      <%= co_f.select :sustantive_score,
+        parameter_in(@auth_organization.id,
+        :admin_control_objective_qualifications,
+        @control_objective_item.created_at, true),
+        {:include_blank => t(:'control_objective_item.not_rated')},
+        {:disabled => readonly} %>
+    </p>
+    <p>
+      <%= yield :sustantive_tests %>
+    </p>
+    <p>
       <%= co_f.label :auditor_comment %>
       <%= co_f.text_area :auditor_comment, :readonly => readonly %>
-    </p>
-    <p class="form_item">
-      <%= content_tag :label, ControlObjectiveItem.human_attribute_name(
-        'effectiveness'), :class => :inline %>
-      <%= text_field_tag :effectiveness,
-        "#{@control_objective_item.effectiveness}%", :class => :inline_item,
-        :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= co_f.label :finished, nil, :class => :inline %>
-      <%= co_f.check_box :finished, :class => :inline_item,
-        :disabled => readonly %>
     </p>
   </div>
 
   <h1 style="clear: both; margin-bottom: 0em;">
-    <%= ControlObjectiveItem.human_attribute_name('weaknesses') %>
+    <%= ControlObjectiveItem.human_attribute_name(:weaknesses) %>
   </h1>
 
   <table class="summary_table">
     <thead>
       <tr>
         <% Finding::STATUS.keys.each do |status| %>
-          <th><%= t("finding.status_#{status}") %></th>
+          <th><%= t(:"finding.status_#{status}") %></th>
         <% end %>
       </tr>
     </thead>
@@ -136,7 +154,7 @@
       <tr>
         <% Finding::STATUS.keys.each do |status| %>
           <td><%= @control_objective_item.
-              weaknesses.select { |w| w.send "#{status}?" }.size %></td>
+              weaknesses.select { |w| w.send :"#{status}?" }.size %></td>
         <% end %>
       </tr>
     </tbody>
@@ -151,7 +169,7 @@
   </p>
 
   <h1 style="clear: both;">
-    <%= ControlObjectiveItem.human_attribute_name('work_papers') %>
+    <%= ControlObjectiveItem.human_attribute_name(:work_papers) %>
   </h1>
 
   <div class="form_column_left">
@@ -252,16 +270,19 @@
   var ControlObjectiveCalcs = {
     effectiveness: function() {
       var selectedValues = new Array();
-      var preAuditElement = $('control_objective_item_pre_audit_qualification');
-      var postAuditElement = $('control_objective_item_post_audit_qualification');
-      var maxValue = $A(preAuditElement.options).map(function(e) {
+      var designElement = $('control_objective_item_design_score');
+      var complianceElement = $('control_objective_item_compliance_score');
+      var sustantiveElement = $('control_objective_item_sustantive_score');
+      var maxValue = $A(designElement.options).map(function(e) {
         return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
       }).max();
 
-      selectedValues.push($F(preAuditElement).match(/^\d+$/) ?
-        parseInt($F(preAuditElement)) : null);
-      selectedValues.push($F(postAuditElement).match(/^\d+$/) ?
-        parseInt($F(postAuditElement)) : null);
+      selectedValues.push($F(designElement).match(/^\d+$/) ?
+        parseInt($F(designElement)) : null);
+      selectedValues.push($F(complianceElement).match(/^\d+$/) ?
+        parseInt($F(complianceElement)) : null);
+      selectedValues.push($F(sustantiveElement).match(/^\d+$/) ?
+        parseInt($F(sustantiveElement)) : null);
 
       var total = selectedValues.compact().size() == 0 ? -1 :
         selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
@@ -281,11 +302,11 @@
     }
   }
 
-  Event.observe('control_objective_item_post_audit_qualification', 'change', function() {
+  Event.observe('control_objective_item_compliance_score', 'change', function() {
     ControlObjectiveCalcs.effectiveness();
   });
 
-  Event.observe('control_objective_item_pre_audit_qualification', 'change', function() {
+  Event.observe('control_objective_item_design_score', 'change', function() {
     ControlObjectiveCalcs.effectiveness();
   });
 </script>

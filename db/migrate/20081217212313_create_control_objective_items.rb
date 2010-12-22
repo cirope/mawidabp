@@ -3,8 +3,9 @@ class CreateControlObjectiveItems < ActiveRecord::Migration
     create_table :control_objective_items do |t|
       t.text :control_objective_text
       t.integer :relevance
-      t.integer :pre_audit_qualification
-      t.integer :post_audit_qualification
+      t.integer :design_score
+      t.integer :compliance_score
+      t.integer :sustantive_score
       t.date :audit_date
       t.text :auditor_comment
       t.boolean :finished

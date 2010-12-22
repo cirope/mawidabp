@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100920114555) do
+ActiveRecord::Schema.define(:version => 20101221125541) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -77,16 +77,17 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
   create_table "control_objective_items", :force => true do |t|
     t.text     "control_objective_text"
     t.integer  "relevance"
-    t.integer  "pre_audit_qualification"
-    t.integer  "post_audit_qualification"
+    t.integer  "design_score"
+    t.integer  "compliance_score"
     t.date     "audit_date"
     t.text     "auditor_comment"
     t.integer  "control_objective_id"
     t.integer  "review_id"
-    t.integer  "lock_version",             :default => 0
+    t.integer  "lock_version",           :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "finished"
+    t.integer  "sustantive_score"
   end
 
   add_index "control_objective_items", ["control_objective_id"], :name => "index_control_objective_items_on_control_objective_id"
@@ -114,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
     t.string   "controllable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "sustantive_tests"
   end
 
   add_index "controls", ["controllable_type", "controllable_id"], :name => "index_controls_on_controllable_type_and_controllable_id"
@@ -182,6 +184,16 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
   add_index "finding_answers", ["file_model_id"], :name => "index_finding_answers_on_file_model_id"
   add_index "finding_answers", ["finding_id"], :name => "index_finding_answers_on_finding_id"
   add_index "finding_answers", ["user_id"], :name => "index_finding_answers_on_user_id"
+
+  create_table "finding_control_objective_item_relations", :force => true do |t|
+    t.integer  "finding_id"
+    t.integer  "control_objective_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "finding_control_objective_item_relations", ["control_objective_item_id"], :name => "finding_control_objective_item_relations_coi_id_idx"
+  add_index "finding_control_objective_item_relations", ["finding_id"], :name => "finding_control_objective_item_relations_finding_id_idx"
 
   create_table "finding_relations", :force => true do |t|
     t.integer  "finding_relation_type"

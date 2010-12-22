@@ -3,8 +3,9 @@ class CreateControls < ActiveRecord::Migration
     create_table :controls do |t|
       t.text :control
       t.text :effects
-      t.text :compliance_tests
       t.text :design_tests
+      t.text :compliance_tests
+      t.text :sustantive_tests
       t.integer :order
       t.references :controllable, :polymorphic => true
 

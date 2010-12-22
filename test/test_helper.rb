@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = 'test'
 require File.expand_path(File.dirname(__FILE__) + '/../config/environment')
 require 'rails/test_help'
+begin; require 'turn'; rescue LoadError; end
 
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method

@@ -223,13 +223,12 @@ class Review < ActiveRecord::Base
           self.control_objective_items.build(
             :control_objective_id => pcs.control_objective_id,
             :control_objective_text => pcs.control_objective_text,
-            :controls_attributes => {
-              :new_1 => {
-                :control => pcs.controls.first.control,
-                :effects => pcs.controls.first.effects,
-                :design_tests => pcs.controls.first.design_tests,
-                :compliance_tests => pcs.controls.first.compliance_tests
-              }
+            :control_attributes => {
+              :control => pcs.control.control,
+              :effects => pcs.control.effects,
+              :design_tests => pcs.control.design_tests,
+              :compliance_tests => pcs.control.compliance_tests,
+              :sustantive_tests => pcs.control.sustantive_tests
             }
           )
         end
@@ -245,8 +244,7 @@ class Review < ActiveRecord::Base
     other.control_objective_items.each do |coi|
       self.control_objective_items.build(coi.attributes.merge({
             :id => nil,
-            :controls_attributes =>
-              coi.controls.map { |c| c.attributes.merge :id => nil }
+            :control_attributes => coi.control.attributes.merge(:id => nil)
           }
         )
       )

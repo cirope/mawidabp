@@ -11,7 +11,7 @@
 
   <div class="show_item">
     <b><%= Control.human_attribute_name :effects %>:</b>
-    <%= simple_format h(@control_objective_item.controls.first.effects) %>
+    <%= simple_format h(@control_objective_item.control.effects) %>
   </div>
 
   <div class="show_item">
@@ -21,27 +21,37 @@
 
   <div class="show_item">
     <b><%= Control.human_attribute_name :control %>:</b>
-    <%= simple_format h(@control_objective_item.controls.first.control) %>
+    <%= simple_format h(@control_objective_item.control.control) %>
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :pre_audit_qualification %>:</b>
-    <%=h @control_objective_item.pre_audit_qualification_text %>
+    <b><%= ControlObjectiveItem.human_attribute_name :design_score %>:</b>
+    <%=h @control_objective_item.design_score_text %>
   </div>
 
   <div class="show_item">
     <b><%= Control.human_attribute_name :design_tests %>:</b>
-    <%= simple_format h(@control_objective_item.controls.first.design_tests) %>
+    <%= simple_format h(@control_objective_item.control.design_tests) %>
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :post_audit_qualification %>:</b>
-    <%=h @control_objective_item.post_audit_qualification_text %>
+    <b><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</b>
+    <%=h @control_objective_item.compliance_score_text %>
   </div>
 
   <div class="show_item">
     <b><%= Control.human_attribute_name :compliance_tests %>:</b>
-    <%= simple_format h(@control_objective_item.controls.first.compliance_tests) %>
+    <%= simple_format h(@control_objective_item.control.compliance_tests) %>
+  </div>
+
+  <div class="show_item">
+    <b><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</b>
+    <%=h @control_objective_item.sustantive_score_text %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Control.human_attribute_name :sustantive_tests %>:</b>
+    <%= simple_format h(@control_objective_item.control.sustantive_tests) %>
   </div>
 
   <div class="show_item">

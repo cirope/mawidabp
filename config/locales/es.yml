@@ -352,14 +352,15 @@ es:
     not_rated: "No evaluado"
     errors:
       not_finished: "no está terminado"
-      without_post_audit_quelification: "sin calificación de cumplimiento y/o sustantivas"
+      without_score: "sin calificar"
       without_relevance: "sin importancia"
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
       without_controls: "sin controles"
-      without_compliance_tests: "sin pruebas de cumplimiento y/o sustantivas"
-      without_auditor_comment: "sin comentarios del auditor"
       without_design_tests: "sin evaluación de diseño"
+      without_compliance_tests: "sin pruebas de cumplimiento"
+      without_sustantive_tests: "sin pruebas sustantivas"
+      without_auditor_comment: "sin comentarios del auditor"
 
   customize_report_form:
     create: "Generar"
@@ -1340,7 +1341,8 @@ es:
         control: "Controles identificados"
         effects: "Efectos"
         design_tests: "Evaluación de diseño"
-        compliance_tests: "Pruebas de cumplimiento y/o sustantivas"
+        compliance_tests: "Pruebas de cumplimiento"
+        sustantive_tests: "Pruebas sustantivas"
         <<: *commons
       control_objective:
         name: "Objetivo de control"
@@ -1351,8 +1353,9 @@ es:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
         relevance: "Importancia"
-        pre_audit_qualification: "Calificación evaluación de diseño"
-        post_audit_qualification: "Calificación pruebas de cumplimiento y/o sustantivas"
+        design_score: "Calificación evaluación de diseño"
+        compliance_score: "Calificación pruebas de cumplimiento"
+        sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de auditoría"
         auditor_comment: "Comentarios del auditor"
         finished: "Terminado"
@@ -1362,14 +1365,13 @@ es:
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         work_papers: "Papeles de trabajo"
-        controls:
-          one: "Control"
-          other: "Controles"
+        control:
           order: "Objetivo de control (orden)"
           control: "Objetivo de control (controles identificados)"
           effects: "Objetivo de control (efectos)"
           design_tests: "Objetivo de control (evaluación de diseño)"
-          compliance_tests: "Objetivo de control (pruebas de cumplimiento y/o sustantivas)"
+          compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
+          sustantive_tests: "Objetivo de control (pruebas sustantivas)"
         pre_audit_work_papers:
           one: "Papel de trabajo (diseño)"
           other: "Papel de trabajo (diseño)"
@@ -1718,49 +1720,6 @@ es:
           assignment_type: "Integrante (rol)"
           user: "Integrante"
           user_id: "Integrante"
-        control_objective_items:
-          control_objective_id: "Objetivo de control"
-          control_objective_text: "Objetivo de control"
-          relevance: "Objetivo de control (importancia)"
-          pre_audit_qualification: "Objetivo de control (calificación evaluación de diseño)"
-          post_audit_qualification: "Objetivo de control (calificación pruebas de cumplimiento y/o sustantivas)"
-          audit_date: "Objetivo de control (fecha de auditoría)"
-          auditor_comment: "Objetivo de control (comentarios del auditor)"
-          finished: "Objetivo de control (terminado)"
-          process_control_id: "Objetivo de control (proceso de negocio)"
-          effectiveness: "Objetivo de control (efectividad de control)"
-          controls:
-            one: "Control"
-            other: "Controles"
-            order: "Objetivo de control (orden)"
-            control: "Objetivo de control (controles identificados)"
-            effects: "Objetivo de control (efectos)"
-            design_tests: "Objetivo de control (evaluación de diseño)"
-            compliance_tests: "Objetivo de control (pruebas de cumplimiento y/o sustantivas)"
-          pre_audit_work_papers:
-            one: "Papel de trabajo (diseño)"
-            other: "Papel de trabajo (diseño)"
-            name: "Papel de trabajo (nombre)"
-            code: "Papel de trabajo (código)"
-            description: "Papel de trabajo (descripción)"
-            number_of_pages: "Papel de trabajo (cantidad de páginas)"
-            file_model:
-              one: "Papel de trabajo (archivo)"
-              file_file_name: "Papel de trabajo (nombre de archivo)"
-              file_content_type: "Papel de trabajo (tipo de archivo)"
-              file_file_size: "Papel de trabajo (tamaño de archivo)"
-          post_audit_work_papers:
-            one: "Papel de trabajo (cumplimiento y/o sustantivas)"
-            other: "Papel de trabajo (cumplimiento y/o sustantivas)"
-            name: "Papel de trabajo (nombre)"
-            code: "Papel de trabajo (código)"
-            description: "Papel de trabajo (descripción)"
-            number_of_pages: "Papel de trabajo (cantidad de páginas)"
-            file_model:
-              one: "Papel de trabajo (archivo)"
-              file_file_name: "Papel de trabajo (nombre de archivo)"
-              file_content_type: "Papel de trabajo (tipo de archivo)"
-              file_file_size: "Papel de trabajo (tamaño de archivo)"
         <<: *commons
       review_user_assignment:
         assignment_type: "Rol"
@@ -1902,10 +1861,6 @@ es:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
-        control_objective_item:
-          attributes:
-            post_audit_qualification:
-              blank: "no puede estar en blanco, o bien debe tener una Calificación evaluación de diseño"
         finding:
           attributes:
             follow_up_date:

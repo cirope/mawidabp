@@ -61,20 +61,15 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     record.errors.add attr, :taken if is_duplicated
   end
-  validates_each :controls do |record, attr, value|
-    active_controls = value &&
-      value.reject(&:marked_for_destruction?).size > 0
+  validates_each :control do |record, attr, value|
+    active_control = value && !value.marked_for_destruction?
 
-    record.errors.add attr, :blank unless active_controls
+    record.errors.add attr, :blank unless active_control
   end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
   validates :audit_date, :relevance, :auditor_comment, :presence => true,
     :if => :finished
-  validates_each :post_audit_qualification, :if => :finished do |record, attr, value|
-    if value.blank? && record.pre_audit_qualification.blank?
-      record.errors.add attr, :blank
-    end
-  end
+  validate :score_completion
   
   # Relaciones
   belongs_to :control_objective
@@ -99,10 +94,10 @@ class ControlObjectiveItem < ActiveRecord::Base
     :before_add => [:check_for_final_review, :prepare_work_paper,
     :mark_as_post_audit], :before_remove => :check_for_final_review,
     :conditions => {:work_paper_type => 'ControlObjectiveItemPostAudit'}
-  has_many :controls, :as => :controllable, :dependent => :destroy,
+  has_one :control, :as => :controllable, :dependent => :destroy,
     :order => "#{Control.table_name}.order ASC"
 
-  accepts_nested_attributes_for :controls, :allow_destroy => true
+  accepts_nested_attributes_for :control, :allow_destroy => true
   accepts_nested_attributes_for :pre_audit_work_papers, :allow_destroy => true
   accepts_nested_attributes_for :post_audit_work_papers, :allow_destroy => true
 
@@ -114,7 +109,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
 
     self.finished ||= false
-    self.controls.build if self.controls.blank?
+    self.build_control unless self.control
   end
 
   def check_for_final_review(_)
@@ -156,29 +151,33 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
   end
 
+  def score_completion
+    if self.finished
+      if !self.design_score && !self.compliance_score && !self.sustantive_score
+        self.errors.add :design_score, :blank
+        self.errors.add :compliance_score, :blank
+        self.errors.add :sustantive_score, :blank
+      end
+    end
+  end
+
   def effectiveness
     parameter_qualifications = self.get_parameter(
       :admin_control_objective_qualifications)
     highest_qualification =
       parameter_qualifications.map { |item| item[1].to_i }.max || 0
-    qualifications = []
-
-    if highest_qualification > 0
-      if self.post_audit_qualification
-        post_audit = self.post_audit_qualification * 100.0 /
-          highest_qualification
-        qualifications << post_audit.round
-      end
-
-      if self.pre_audit_qualification
-        pre_audit = self.pre_audit_qualification * 100.0 /
-          highest_qualification
-        qualifications << pre_audit.round
-      end
+    scores = [
+      self.design_score,
+      self.compliance_score,
+      self.sustantive_score
+    ].compact
+    
+    if highest_qualification > 0 && scores.size > 0
+      average = scores.sum { |s| s * 100.0 / highest_qualification } /
+        scores.size
     end
 
-    qualifications.empty? ? 100 :
-      (qualifications.sum / qualifications.size.to_f).round
+    scores.empty? ? 100 : average.round
   end
 
   def fill_control_objective_text
@@ -196,9 +195,8 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t(:'control_objective_item.errors.not_finished')
     end
 
-    if !self.post_audit_qualification?
-      errors << I18n.t(
-        :'control_objective_item.errors.without_post_audit_quelification')
+    if !self.design_score && !self.compliance_score && !self.sustantive_score
+      errors << I18n.t(:'control_objective_item.errors.without_score')
     end
 
     if self.relevance && self.relevance <= 0
@@ -209,27 +207,29 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t(:'control_objective_item.errors.without_audit_date')
     end
 
-    if self.controls.first.try(:effects).blank?
+    if self.control.try(:effects).blank?
       errors << I18n.t(:'control_objective_item.errors.without_effects')
     end
 
-    if self.controls.first.try(:control).blank?
-      errors << I18n.t(
-        :'control_objective_item.errors.without_controls')
-    end
-
-    if self.controls.first.try(:compliance_tests).blank?
-      errors << I18n.t(
-        :'control_objective_item.errors.without_compliance_tests')
+    if self.control.try(:control).blank?
+      errors << I18n.t(:'control_objective_item.errors.without_controls')
     end
 
     if self.auditor_comment.blank?
       errors << I18n.t(:'control_objective_item.errors.without_auditor_comment')
     end
 
-    if self.pre_audit_qualification &&
-        self.controls.first.try(:design_tests).blank?
+    if self.design_score && self.control.try(:design_tests).blank?
       errors << I18n.t(:'control_objective_item.errors.without_design_tests')
+    end
+
+    if self.compliance_score && self.control.try(:compliance_tests).blank?
+      errors << I18n.t(
+        :'control_objective_item.errors.without_compliance_tests')
+    end
+
+    if self.sustantive_score && self.control.try(:sustantive_tests).blank?
+      errors << I18n.t(:'control_objective_item.errors.without_sustantive_tests')
     end
 
     (@approval_errors = errors).blank?
@@ -248,15 +248,15 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def enable_control_validations
     if self.finished
-      self.controls.each {|c| c.validates_presence_of_control = true}
-      self.controls.each {|c| c.validates_presence_of_effects = true}
+      self.control.validates_presence_of_control = true
+      self.control.validates_presence_of_effects = true
 
-      if self.post_audit_qualification
-        self.controls.each {|c| c.validates_presence_of_compliance_tests = true}
+      if self.compliance_score
+        self.control.validates_presence_of_compliance_tests = true
       end
 
-      if self.pre_audit_qualification
-        self.controls.each {|c| c.validates_presence_of_design_tests = true}
+      if self.design_score
+        self.control.validates_presence_of_design_tests = true
       end
     end
   end
@@ -277,28 +277,40 @@ class ControlObjectiveItem < ActiveRecord::Base
         relevance.first) : ''
   end
 
-  def pre_audit_qualification_text(show_value = false)
-    post_audit_qualifications = self.get_parameter(
+  def design_score_text(show_value = false)
+    compliance_scores = self.get_parameter(
       :admin_control_objective_qualifications)
-    pre_audit_qualification = post_audit_qualifications.detect do |r|
-      r.last == self.pre_audit_qualification
+    design_score = compliance_scores.detect do |r|
+      r.last == self.design_score
     end
 
-    pre_audit_qualification ? (show_value ?
-        "#{pre_audit_qualification.first} (#{pre_audit_qualification.last})" :
-        pre_audit_qualification.first) : ''
+    design_score ? (show_value ?
+        "#{design_score.first} (#{design_score.last})" :
+        design_score.first) : ''
   end
 
-  def post_audit_qualification_text(show_value = false)
-    post_audit_qualifications = self.get_parameter(
+  def compliance_score_text(show_value = false)
+    compliance_scores = self.get_parameter(
       :admin_control_objective_qualifications)
-    post_audit_qualification = post_audit_qualifications.detect do |r|
-      r.last == self.post_audit_qualification
+    compliance_score = compliance_scores.detect do |r|
+      r.last == self.compliance_score
     end
 
-    post_audit_qualification ? (show_value ?
-        "#{post_audit_qualification.first} (#{post_audit_qualification.last})" :
-        post_audit_qualification.first) : ''
+    compliance_score ? (show_value ?
+        "#{compliance_score.first} (#{compliance_score.last})" :
+        compliance_score.first) : ''
+  end
+
+  def sustantive_score_text(show_value = false)
+    sustantive_scores = self.get_parameter(
+      :admin_control_objective_qualifications)
+    sustantive_score = sustantive_scores.detect do |r|
+      r.last == self.sustantive_score
+    end
+
+    sustantive_score ? (show_value ?
+        "#{sustantive_score.first} (#{sustantive_score.last})" :
+        sustantive_score.first) : ''
   end
 
   def to_pdf(organization = nil)
@@ -322,15 +334,15 @@ class ControlObjectiveItem < ActiveRecord::Base
         :audit_date),
       (I18n.l(self.audit_date, :format => :long) if self.audit_date), 0, false)
     pdf.add_description_item(Control.human_attribute_name(:effects),
-      self.controls.first.effects, 0, false)
+      self.control.effects, 0, false)
     pdf.add_description_item(Control.human_attribute_name(:control),
-      self.controls.first.control, 0, false)
+      self.control.control, 0, false)
     pdf.add_description_item(Control.human_attribute_name(:compliance_tests),
-      self.controls.first.compliance_tests, 0, false)
+      self.control.compliance_tests, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :auditor_comment), self.auditor_comment, 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
-        :post_audit_qualification), self.post_audit_qualification_text(true),
+        :compliance_score), self.compliance_score_text(true),
       0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :effectiveness), "#{self.effectiveness}%", 0, false)

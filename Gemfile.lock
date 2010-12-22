@@ -55,6 +55,7 @@ GEM
     RedCloth (4.2.3)
     aaronh-chronic (0.3.9)
     abstract (1.0.0)
+    ansi (1.2.2)
     arel (2.0.6)
     builder (2.1.2)
     cgi_multipart_eof_fix (2.5.0)
@@ -108,6 +109,8 @@ GEM
       hoe (>= 1.1.7)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
+    turn (0.8.1)
+      ansi (>= 1.2.2)
     tzinfo (0.3.23)
     uuidtools (2.1.1)
     validates_timeliness (3.0.3)
@@ -137,6 +140,7 @@ DEPENDENCIES
   rails!
   smurf
   transaction-simple
+  turn
   uuidtools
   validates_timeliness (~> 3.0)
   whenever

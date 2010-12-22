@@ -32,6 +32,7 @@ class ControlTest < ActiveSupport::TestCase
         :effects => 'New effects',
         :design_tests => 'New design tests',
         :compliance_tests => 'New compliance tests',
+        :sustantive_tests => 'New sustantive tests',
         :order => 1,
         :controllable => control_objectives(:iso_27000_security_policy_3_1)
       )
@@ -58,6 +59,7 @@ class ControlTest < ActiveSupport::TestCase
     @control.effects = ' '
     @control.design_tests = ' '
     @control.compliance_tests = ' '
+    @control.sustantive_tests = ' '
 
     assert @control.valid?
 
@@ -65,15 +67,18 @@ class ControlTest < ActiveSupport::TestCase
     @control.validates_presence_of_effects = true
     @control.validates_presence_of_design_tests = true
     @control.validates_presence_of_compliance_tests = true
+    @control.validates_presence_of_sustantive_tests = true
 
     assert @control.invalid?
-    assert_equal 4, @control.errors.size
+    assert_equal 5, @control.errors.size
     assert_equal [error_message_from_model(@control, :control, :blank)],
       @control.errors[:control]
     assert_equal [error_message_from_model(@control, :effects, :blank)],
       @control.errors[:effects]
     assert_equal [error_message_from_model(@control, :design_tests, :blank)],
       @control.errors[:design_tests]
+    assert_equal [error_message_from_model(@control, :compliance_tests,
+        :blank)], @control.errors[:compliance_tests]
     assert_equal [error_message_from_model(@control, :compliance_tests,
         :blank)], @control.errors[:compliance_tests]
   end

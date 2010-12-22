@@ -6,7 +6,8 @@ class Control < ActiveRecord::Base
   }
 
   attr_accessor :validates_presence_of_control, :validates_presence_of_effects,
-    :validates_presence_of_design_tests, :validates_presence_of_compliance_tests
+    :validates_presence_of_design_tests, :validates_presence_of_compliance_tests,
+    :validates_presence_of_sustantive_tests
 
   # Restricciones
   validates :control, :presence => true, :if => :validates_presence_of_control
@@ -15,6 +16,8 @@ class Control < ActiveRecord::Base
     :if => :validates_presence_of_design_tests
   validates :compliance_tests, :presence => true,
     :if => :validates_presence_of_compliance_tests
+  validates :sustantive_tests, :presence => true,
+    :if => :validates_presence_of_sustantive_tests
 
   # Relaciones
   belongs_to :controllable, :polymorphic => true

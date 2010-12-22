@@ -21,10 +21,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal retrived_coi.control_objective_text,
       @control_objective_item.control_objective_text
     assert_equal retrived_coi.relevance, @control_objective_item.relevance
-    assert_equal retrived_coi.pre_audit_qualification,
-      @control_objective_item.pre_audit_qualification
-    assert_equal retrived_coi.post_audit_qualification,
-      @control_objective_item.post_audit_qualification
+    assert_equal retrived_coi.design_score,
+      @control_objective_item.design_score
+    assert_equal retrived_coi.compliance_score,
+      @control_objective_item.compliance_score
     assert_equal retrived_coi.audit_date, @control_objective_item.audit_date
     assert_equal retrived_coi.auditor_comment,
       @control_objective_item.auditor_comment
@@ -38,22 +38,23 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
         :control_objective_text => 'New text',
         :relevance =>
           get_test_parameter(:admin_control_objective_importances).last[1],
-        :pre_audit_qualification =>
+        :design_score =>
           get_test_parameter(:admin_control_objective_qualifications).last[1],
-        :post_audit_qualification =>
+        :compliance_score =>
+          get_test_parameter(:admin_control_objective_qualifications).last[1],
+        :sustantive_score =>
           get_test_parameter(:admin_control_objective_qualifications).last[1],
         :audit_date => 10.days.from_now.to_date,
         :auditor_comment => 'New comment',
         :control_objective_id =>
           control_objectives(:iso_27000_security_organization_4_1).id,
         :review_id => reviews(:review_with_conclusion).id,
-        :controls_attributes => {
-          :new_1 => {
-            :control => 'New control',
-            :effects => 'New effects',
-            :design_tests => 'New design tests',
-            :compliance_tests => 'New compliance tests'
-          }
+        :control_attributes => {
+          :control => 'New control',
+          :effects => 'New effects',
+          :design_tests => 'New design tests',
+          :compliance_tests => 'New compliance tests',
+          :sustantive_tests => 'New compliance tests'
         }
       )
     end
@@ -133,83 +134,117 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       @control_objective_item.errors[:audit_date]
   end
 
-  test 'effectiveness without pre audit qualification' do
+  test 'effectiveness with only compliance score' do
     qualifications = @control_objective_item.get_parameter(
       :admin_control_objective_qualifications)
     high_qualification_value = qualifications.map { |item| item[1].to_i }.max
 
-    @control_objective_item.post_audit_qualification =
-      high_qualification_value - 1
-    @control_objective_item.pre_audit_qualification = nil
+    @control_objective_item.design_score = nil
+    @control_objective_item.compliance_score = high_qualification_value - 1
+    @control_objective_item.sustantive_score = nil
 
     assert_equal (high_qualification_value - 1) * 100 /
       high_qualification_value, @control_objective_item.effectiveness
   end
 
-  test 'effectiveness without post audit qualification' do
+  test 'effectiveness with only design score' do
     qualifications = @control_objective_item.get_parameter(
       :admin_control_objective_qualifications)
     high_qualification_value = qualifications.map { |item| item[1].to_i }.max
 
-    @control_objective_item.post_audit_qualification = nil
-    @control_objective_item.pre_audit_qualification =
-      high_qualification_value - 1
+    @control_objective_item.design_score = high_qualification_value - 1
+    @control_objective_item.compliance_score = nil
+    @control_objective_item.sustantive_score = nil
+
+    assert_equal (high_qualification_value - 1) * 100 /
+      high_qualification_value, @control_objective_item.effectiveness
+  end
+
+  test 'effectiveness with only sustantive score' do
+    qualifications = @control_objective_item.get_parameter(
+      :admin_control_objective_qualifications)
+    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+
+    @control_objective_item.design_score = nil
+    @control_objective_item.compliance_score = nil
+    @control_objective_item.sustantive_score = high_qualification_value - 1
+
+    assert_equal (high_qualification_value - 1) * 100 /
+      high_qualification_value, @control_objective_item.effectiveness
+  end
+
+  test 'effectiveness with all scores' do
+    qualifications = @control_objective_item.get_parameter(
+      :admin_control_objective_qualifications)
+    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+
+    @control_objective_item.design_score = high_qualification_value
+    @control_objective_item.compliance_score = high_qualification_value - 1
+    @control_objective_item.sustantive_score = high_qualification_value - 2
 
     assert_equal (high_qualification_value - 1) * 100 /
       high_qualification_value, @control_objective_item.effectiveness
   end
 
   test 'validations when is finished' do
-    @control_objective_item.post_audit_qualification = nil
-    @control_objective_item.pre_audit_qualification = nil
+    @control_objective_item.design_score = nil
+    @control_objective_item.compliance_score = nil
+    @control_objective_item.sustantive_score = nil
     @control_objective_item.audit_date = nil
     @control_objective_item.relevance = nil
     @control_objective_item.finished = false
-    @control_objective_item.controls[0].effects = '   '
-    @control_objective_item.controls[0].control = '   '
-    @control_objective_item.controls[0].compliance_tests = '   '
+    @control_objective_item.control.effects = '   '
+    @control_objective_item.control.control = '   '
     @control_objective_item.auditor_comment = '   '
-    @control_objective_item.controls[0].design_tests = '   '
+    @control_objective_item.control.design_tests = '   '
+    @control_objective_item.control.compliance_tests = '   '
+    @control_objective_item.control.sustantive_tests = '   '
 
     assert @control_objective_item.valid?
 
     @control_objective_item.finished = true
 
     assert @control_objective_item.invalid?
-    assert_equal 6, @control_objective_item.errors.count
+    assert_equal 8, @control_objective_item.errors.count
     assert_equal [error_message_from_model(@control_objective_item,
-      :post_audit_qualification, :blank)],
-      @control_objective_item.errors[:post_audit_qualification]
+        :design_score, :blank)], @control_objective_item.errors[:design_score]
+  assert_equal [error_message_from_model(@control_objective_item,
+        :compliance_score, :blank)],
+    @control_objective_item.errors[:compliance_score]
+  assert_equal [error_message_from_model(@control_objective_item,
+        :sustantive_score, :blank)],
+    @control_objective_item.errors[:sustantive_score]
     assert_equal [error_message_from_model(@control_objective_item,
       :audit_date, :blank)], @control_objective_item.errors[:audit_date]
     assert_equal [error_message_from_model(@control_objective_item,
       :relevance, :blank)], @control_objective_item.errors[:relevance]
-    assert_equal [error_message_from_model(@control_objective_item.controls[0],
-      :effects, :blank)], @control_objective_item.controls[0].errors[:effects]
-    assert_equal [error_message_from_model(@control_objective_item.controls[0],
-      :control, :blank)], @control_objective_item.controls[0].errors[:control]
+    assert_equal [error_message_from_model(@control_objective_item.control,
+      :effects, :blank)], @control_objective_item.control.errors[:effects]
+    assert_equal [error_message_from_model(@control_objective_item.control,
+      :control, :blank)], @control_objective_item.control.errors[:control]
     assert_equal [error_message_from_model(@control_objective_item,
       :auditor_comment, :blank)], @control_objective_item.errors[
       :auditor_comment]
 
-    @control_objective_item.pre_audit_qualification = 0
+    @control_objective_item.design_score = 0
 
     assert !@control_objective_item.valid?
     assert_equal 6, @control_objective_item.errors.count
-    assert_blank @control_objective_item.errors[:post_audit_qualification]
-    assert_equal [error_message_from_model(@control_objective_item.controls[0],
-      :design_tests, :blank)], @control_objective_item.controls[0].errors[
+    assert_blank @control_objective_item.errors[:compliance_score]
+    assert_blank @control_objective_item.errors[:sustantive_score]
+    assert_equal [error_message_from_model(@control_objective_item.control,
+      :design_tests, :blank)], @control_objective_item.control.errors[
       :design_tests]
   end
 
-  test 'effectiveness with pre audit qualification' do
+  test 'effectiveness with design and compliance scores' do
     qualifications = @control_objective_item.get_parameter(
       :admin_control_objective_qualifications)
     high_qualification_value = qualifications.map { |item| item[1].to_i }.max
 
-    @control_objective_item.post_audit_qualification =
-      high_qualification_value - 1
-    @control_objective_item.pre_audit_qualification = 0
+    @control_objective_item.design_score = 0
+    @control_objective_item.compliance_score = high_qualification_value - 1
+    @control_objective_item.sustantive_score = nil
 
     # La calificación de post sólo participa en el 50% del cálculo de
     # efectividad
@@ -219,7 +254,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   test 'must be approved' do
     assert @control_objective_item.finished?
-    assert_not_nil @control_objective_item.post_audit_qualification
+    assert_not_nil @control_objective_item.compliance_score
     assert @control_objective_item.relevance > 0
 
     assert @control_objective_item.must_be_approved?
@@ -230,7 +265,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.post_audit_qualification = nil
+    @control_objective_item.design_score = nil
+    @control_objective_item.compliance_score = nil
+    @control_objective_item.sustantive_score = nil
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
@@ -240,17 +277,17 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.controls[0].effects = '  '
+    @control_objective_item.control.effects = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.controls[0].control = '  '
+    @control_objective_item.control.control = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.controls[0].compliance_tests = '  '
+    @control_objective_item.control.compliance_tests = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
@@ -260,14 +297,14 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    assert @control_objective_item.pre_audit_qualification
-    @control_objective_item.controls[0].design_tests = '  '
+    assert @control_objective_item.design_score
+    @control_objective_item.control.design_tests = '  '
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
     @control_objective_item.reload
-    @control_objective_item.pre_audit_qualification = nil
-    @control_objective_item.controls[0].design_tests = '  '
+    @control_objective_item.design_score = nil
+    @control_objective_item.control.design_tests = '  '
     assert @control_objective_item.must_be_approved?
     assert @control_objective_item.approval_errors.blank?
 

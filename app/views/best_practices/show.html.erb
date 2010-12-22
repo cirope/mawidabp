@@ -8,8 +8,9 @@
         <tr>
           <th><%= ControlObjective.human_attribute_name :name %></th>
           <th><%= Control.human_attribute_name :control %></th>
-          <th><%= Control.human_attribute_name :compliance_tests %></th>
           <th><%= Control.human_attribute_name :design_tests %></th>
+          <th><%= Control.human_attribute_name :compliance_tests %></th>
+          <th><%= Control.human_attribute_name :sustantive_tests %></th>
           <th><%= Control.human_attribute_name :effects %></th>
           <th><%= ControlObjective.human_attribute_name :risk %></th>
         </tr>
@@ -18,10 +19,11 @@
         <% pc.control_objectives.each do |co| %>
           <tr>
             <td><%= simple_format h(co.name) %></td>
-            <td><%= simple_format h(co.controls.first.control) %></td>
-            <td><%= simple_format h(co.controls.first.compliance_tests) %></td>
-            <td><%= simple_format h(co.controls.first.design_tests) %></td>
-            <td><%= simple_format h(co.controls.first.effects) %></td>
+            <td><%= simple_format h(co.control.control) %></td>
+            <td><%= simple_format h(co.control.design_tests) %></td>
+            <td><%= simple_format h(co.control.compliance_tests) %></td>
+            <td><%= simple_format h(co.control.sustantive_tests) %></td>
+            <td><%= simple_format h(co.control.effects) %></td>
             <td><%= co.risk_text %></td>
           </tr>
         <% end %>
