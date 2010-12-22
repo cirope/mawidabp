@@ -247,8 +247,9 @@ class ReviewsController < ApplicationController
       "#{BestPractice.table_name}.organization_id = :organization_id",
       "#{ProcedureControl.table_name}.period_id = :period_id"
     ]
-    parameters = {:organization_id => @auth_organization.id,
-      :period_id => params[:period_id]}
+    parameters = {:organization_id => @auth_organization.id}
+    parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
+    
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{ProcedureControlSubitem.table_name}.control_objective_text) LIKE :procedure_control_subitem_data_#{i}",

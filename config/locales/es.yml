@@ -361,6 +361,9 @@ es:
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
       without_auditor_comment: "sin comentarios del auditor"
+    review:
+      edit: 'Editar informe'
+      show: 'Ver informe'
 
   customize_report_form:
     create: "Generar"

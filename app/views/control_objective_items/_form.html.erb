@@ -302,11 +302,15 @@
     }
   }
 
+  Event.observe('control_objective_item_design_score', 'change', function() {
+    ControlObjectiveCalcs.effectiveness();
+  });
+
   Event.observe('control_objective_item_compliance_score', 'change', function() {
     ControlObjectiveCalcs.effectiveness();
   });
 
-  Event.observe('control_objective_item_design_score', 'change', function() {
+  Event.observe('control_objective_item_sustantive_score', 'change', function() {
     ControlObjectiveCalcs.effectiveness();
   });
 </script>

@@ -266,7 +266,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def is_in_a_final_review?
-    self.review && self.review.has_final_review?
+    self.review.try(:has_final_review?)
   end
 
   def relevance_text(show_value = false)
