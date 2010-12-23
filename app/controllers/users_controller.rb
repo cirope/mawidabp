@@ -724,7 +724,9 @@ class UsersController < ApplicationController
         ].join(' OR ')
       ].map {|c| "(#{c})"}.join(' AND '),
       {:id => id, :organization_id => @auth_organization.id}
-    ).first(:readonly => false)
+    ).first(
+      :readonly => false
+    ) || (find_with_organization(id, :id) unless field == :id)
   end
 
   def load_privileges #:nodoc:

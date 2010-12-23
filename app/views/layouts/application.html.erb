@@ -41,7 +41,7 @@
         <div id="app_content">
           <%= yield %>
         </div>
-        <div style="clear: both; margin: 0px; padding: 0px;">&nbsp;</div>
+        <div class="clear" style="margin: 0px; padding: 0px;">&nbsp;</div>
         <%= render :partial => 'shared/notice' if flash.notice %>
         <%= render :partial => 'shared/alert' if flash.alert %>
       </div>
