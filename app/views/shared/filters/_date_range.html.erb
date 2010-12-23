@@ -8,7 +8,7 @@
               <%= f.label :from_date, t(:'conclusion_committee_report.from_date'),
                 :class => :inline %>
               <%= f.calendar_date_select :from_date, :size => nil,
-                :value => l(@from_date), :class => :inline_item %>
+                :value => l(@from_date), :class => :inline_date_item %>
             </p>
           </td>
           <td>
@@ -16,7 +16,7 @@
               <%= f.label :to_date, t(:'conclusion_committee_report.to_date'),
                 :class => :inline %>
               <%= f.calendar_date_select :to_date, :size => nil,
-                :value => l(@to_date), :class => :inline_item %>
+                :value => l(@to_date), :class => :inline_date_item %>
             </p>
           </td>
         </tr>

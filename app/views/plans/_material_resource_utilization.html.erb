@@ -37,7 +37,7 @@
       method: 'get',
       onSuccess: function(response) {
         $('<%= id %>_cost_per_unit').setValue(
-          response.responseJSON.resource.cost_per_unit);
+          response.responseJSON.resource.cost_per_unit || '');
       },
       onComplete: function() {
         Helper.hideLoading(id);

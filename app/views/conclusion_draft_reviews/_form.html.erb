@@ -52,7 +52,7 @@
     </p>
     <p class="form_item">
       <%= f.label :issue_date, nil, :class => :inline %>
-      <%= f.calendar_date_select :issue_date, :class => :inline_item %>
+      <%= f.calendar_date_select :issue_date, :class => :inline_date_item %>
     </p>
   </div>
 
@@ -187,9 +187,9 @@
           if(transport.responseText.isJSON()) {
             var reviewData = transport.responseJSON.review;
 
-            $('business_unit').setValue(reviewData.business_unit.name);
-            $('project').setValue(reviewData.plan_item.project);
-            $('score').setValue(reviewData.score_text);
+            $('business_unit').setValue(reviewData.business_unit.name || '');
+            $('project').setValue(reviewData.plan_item.project || '');
+            $('score').setValue(reviewData.score_text || '');
             $('conclusion_draft_review_applied_procedures').focus();
           }
         },

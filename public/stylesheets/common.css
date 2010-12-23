@@ -840,7 +840,7 @@ input[type="submit"], input[type="button"] {
 input[type="text"], input[type="password"], textarea {
     border: 2px solid #c2bfb7;
     padding: 2px;
-    width: 94%;
+    width: 92%;
     margin: 0em 0em .6em 0em;
 }
 
@@ -865,13 +865,17 @@ form input[type="file"].inline_item {
     margin: 0px;
 }
 
-form input[type="text"].inline_item {
+form input[type="text"].inline_item, form input[type="text"].inline_date_item {
     margin: 0px;
-    width: 65%;
+    width: 64%;
 }
 
 form input[type="radio"].inline_item {
     margin-top: 4px;
+}
+
+form input[type="text"].inline_date_item {
+    width: 60%;
 }
 
 form input[type="submit"].shadowed_button,
@@ -883,7 +887,7 @@ form input[type="button"].shadowed_button {
 }
 
 form label, .filter label {
-    width: 94%;
+    width: 92%;
     background: #c2bfb7;
     color: #151215;
     padding: 4px;
@@ -1013,7 +1017,7 @@ select[multiple="multiple"] {
 
 select {
     margin: .3em 0em;
-    width: 94%;
+    width: 92%;
     margin: 0em 0em .6em 0em;
     font-family: verdana, sans-serif, arial, helvetica;
     font-size: 11px;

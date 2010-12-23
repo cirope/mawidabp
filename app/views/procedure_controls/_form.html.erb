@@ -6,7 +6,7 @@
   <%= pc_f.error_messages %>
 
   <div class="form_column_left">
-    <% if (controller.action_name == 'new' || controller.action_name == 'create') %>
+    <% if [:new, :create].include?(controller.action_name.to_sym) %>
       <p class="form_item">
         <%= pc_f.label :period_id, nil, :class => :inline %>
         <%= pc_f.select :period_id,
@@ -16,7 +16,7 @@
       </p>
     <% else %>
       <p class="form_item">
-        <label class="inline"><%= ProcedureControl.human_attribute_name 'period_id' %>:</label>
+        <label class="inline"><%= ProcedureControl.human_attribute_name :period_id %>:</label>
         <%= text_field nil, :period_description,
           :value => @procedure_control.period.try(:inspect), :readonly => true,
           :size => nil, :class => :inline_item %>
