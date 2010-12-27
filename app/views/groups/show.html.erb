@@ -8,6 +8,27 @@
     <b><%= Group.human_attribute_name :description %>:</b>
     <%= h @group.description %>
   </p>
+
+  <% unless @group.organizations.empty? %>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= Organization.human_attribute_name :name %></th>
+          <th><%= Organization.human_attribute_name :prefix %></th>
+          <th><%= Organization.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.organizations.each do |organization| %>
+          <tr>
+            <td><%= organization.name %></td>
+            <td><%= organization.prefix %></td>
+            <td><%= organization.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </div>
 
 <div id="links">
