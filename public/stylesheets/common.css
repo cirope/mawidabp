@@ -865,7 +865,7 @@ form input[type="file"].inline_item {
     margin: 0px;
 }
 
-form input[type="text"].inline_item, form input[type="text"].inline_date_item {
+form input[type="text"].inline_item, form input[type="text"].inline_tight_item {
     margin: 0px;
     width: 64%;
 }
@@ -874,7 +874,7 @@ form input[type="radio"].inline_item {
     margin-top: 4px;
 }
 
-form input[type="text"].inline_date_item {
+form input[type="text"].inline_tight_item {
     width: 60%;
 }
 
@@ -912,13 +912,19 @@ form select[multiple="multiple"] {
     width: 95%;
 }
 
-form select.inline_item, .filter select.inline_item {
+form select.inline_item,
+form select.inline_tight_item,
+.filter select.inline_item {
     margin: 0px;
-    width: 67%;
+    width: 64%;
 }
 
 form .inline_item, .filter .inline_item {
     margin: 4px 0px;
+}
+
+form select.inline_tight_item {
+    width: 60%;
 }
 
 form.button_to {

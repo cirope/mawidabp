@@ -18,14 +18,14 @@
     </p>
     <% if [:new, :create].include?(controller.action_name.to_sym) %>
       <p class="form_item">
-        <%= r_f.label :period_id, nil, :class => :inline %>
+        <%= r_f.label :period_id, raw(Review.human_attribute_name(:period_id) +
+            link_to_add(new_period_path(:back_to => new_review_path))), :class => :inline %>
         <%= r_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
           {:prompt => true}, {:class => :inline_item} %>
-        <%= link_to_add new_period_path(:back_to => new_review_path) %>
       </p>
     <% else %>
       <p class="form_item">
-        <label class="inline"><%= Review.human_attribute_name :period_id %>:</label>
+        <label class="inline"><%= Review.human_attribute_name :period_id %></label>
         <%= text_field_tag :period_description, @review.period.inspect,
           :class => :inline_item, :size => nil, :readonly => true %>
         <%=  %>

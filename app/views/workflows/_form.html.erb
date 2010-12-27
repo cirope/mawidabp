@@ -23,10 +23,10 @@
   <div class="form_column_left">
     <p class="form_item">
       <% if @workflow.new_record? %>
-        <%= w_f.label :period_id, nil, :class => :inline %>
+        <%= w_f.label :period_id, raw(Workflow.human_attribute_name(:period_id) +
+            link_to_add(new_period_path(:back_to => new_workflow_path))), :class => :inline %>
         <%= w_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
           {:prompt => true}, {:class => :inline_item} %>
-        <%= link_to_add new_period_path(:back_to => new_workflow_path) %>
       <% else %>
         <label class="inline"><%= Workflow.human_attribute_name :period_id %>:</label>
         <%= text_field_tag :period_description, @workflow.period.inspect,

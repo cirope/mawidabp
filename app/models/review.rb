@@ -239,7 +239,7 @@ class Review < ActiveRecord::Base
   def clone_from(other)
     self.attributes = other.attributes.merge(
       :id => nil, :period_id => nil, :plan_item_id => nil,
-      :identification => nil)
+      :identification => nil, :file_model_id => nil)
 
     other.control_objective_items.each do |coi|
       self.control_objective_items.build(coi.attributes.merge({

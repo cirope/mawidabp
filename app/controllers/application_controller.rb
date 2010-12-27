@@ -269,7 +269,7 @@ class ApplicationController < ActionController::Base
       search_term =~ op_regex
     end
 
-    operator ? [search_term.sub(operator.first, ' '), operator.last] : search_term
+    operator ? [search_term.sub(operator.first, ''), operator.last] : search_term
   end
 
   def build_search_conditions(model, default_conditions = {})

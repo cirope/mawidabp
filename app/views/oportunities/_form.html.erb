@@ -31,7 +31,7 @@
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <label class="inline"><%= ControlObjective.model_name.human %>:</label>
+      <label class="inline"><%= ControlObjective.model_name.human %></label>
       <%= text_field nil, :control_objective_name, :size => nil,
         :value => "#{@oportunity.control_objective_item.control_objective_text} (#{@oportunity.control_objective_item.process_control.name})",
         :class => :inline_item, :readonly => true %>

@@ -21,21 +21,21 @@
   <%= co_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
-      <label class="inline"><%= Review.model_name.human %>:</label>
+      <label class="inline"><%= Review.model_name.human %></label>
       <%= text_field_tag :review_identification,
         @control_objective_item.review.identification,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= ProcessControl.model_name.human %>:</label>
+      <label class="inline"><%= ProcessControl.model_name.human %></label>
       <%= text_field_tag :process_control_name,
         @control_objective_item.control_objective.process_control.name,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
 
     <p class="form_item">
-      <label class="inline"><%= Period.model_name.human %>:</label>
+      <label class="inline"><%= Period.model_name.human %></label>
       <%= text_field_tag :period, @control_objective_item.review.period.inspect,
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
@@ -49,7 +49,7 @@
     </p>
     <p class="form_item">
       <%= co_f.label :audit_date, nil, :class => :inline %>
-      <%= co_f.calendar_date_select :audit_date, :class => :inline_date_item,
+      <%= co_f.calendar_date_select :audit_date, :class => :inline_tight_item,
         :readonly => readonly %>
     </p>
     <p>
