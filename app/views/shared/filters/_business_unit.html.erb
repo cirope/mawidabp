@@ -1,9 +1,9 @@
 <div id="business_unit_filter" class="filter" <%= 'style="display: none;"' unless display %>>
   <div>
-    <table style="border: none; margin: .5em 0em; width: 100%;">
+    <table class="generic_filter">
       <tbody>
         <tr>
-          <td style="padding-right: 1em; width: 50%;">
+          <td>
             <p class="form_item" style="margin: 0em;">
               <% selected = params[action] ?
                 params[action][:business_unit_type] : nil %>
@@ -15,7 +15,7 @@
                 {:class => :inline_item} %>
             </p>
           </td>
-          <td style="padding-right: 1em; width: 50%;">
+          <td>
             <p class="form_item" style="margin: 0em;">
               <% business_unit_filter = params[action] ?
                 params[action][:business_unit] : nil %>

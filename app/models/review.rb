@@ -462,10 +462,10 @@ class Review < ActiveRecord::Base
   end
 
   def survey_pdf_name
-    identification = self.identification.gsub /[^A-Za-z0-9\.\-]+/, '_'
-    survey = Review.human_attribute_name('survey').downcase.gsub(/\s+/, '_')
+    identification = self.identification
+    survey = Review.human_attribute_name(:survey).downcase
 
-    "#{survey}-#{identification}.pdf"
+    "#{survey}-#{identification}.pdf".sanitized_for_filename
   end
 
   def score_sheet(organization = nil, draft = false)
@@ -1013,26 +1013,24 @@ class Review < ActiveRecord::Base
   end
 
   def sanitized_identification
-    self.identification.strip.gsub /[^A-Za-z0-9\.\-]+/, '_'
+    self.identification.strip.sanitized_for_filename
   end
 
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
     dirs = {
-      :pre_audit => I18n.t(:'review.pre_audit_work_papers').gsub(/\//, '|'),
-      :post_audit => I18n.t(:'review.post_audit_work_papers').gsub(/\//, '|'),
-      :weaknesses => I18n.t(:'review.weaknesses_work_papers').gsub(/\//, '|'),
-      :oportunities => I18n.t(:'review.oportunities_work_papers').gsub(/\//, '|'),
-      :follow_up => I18n.t(:'review.follow_up_work_papers').gsub(/\//, '|'),
-      :survey => Review.human_attribute_name(:survey).gsub(/\//, '|')
+      :pre_audit => I18n.t(:'review.pre_audit_work_papers').sanitized_for_filename,
+      :post_audit => I18n.t(:'review.post_audit_work_papers').sanitized_for_filename,
+      :weaknesses => I18n.t(:'review.weaknesses_work_papers').sanitized_for_filename,
+      :oportunities => I18n.t(:'review.oportunities_work_papers').sanitized_for_filename,
+      :follow_up => I18n.t(:'review.follow_up_work_papers').sanitized_for_filename,
+      :survey => Review.human_attribute_name(:survey).sanitized_for_filename
     }
 
     FileUtils.rm filename if File.exists?(filename)
     FileUtils.makedirs File.dirname(filename)
 
     Zip::ZipFile.open(filename, Zip::ZipFile::CREATE) do |zipfile|
-      dirs.values.each { |d| zipfile.mkdir d }
-
       self.control_objective_items.each do |coi|
         coi.pre_audit_work_papers.each do |pa_wp|
           self.add_work_paper_to_zip pa_wp, dirs[:pre_audit], zipfile
@@ -1096,8 +1094,7 @@ class Review < ActiveRecord::Base
   end
 
   def work_papers_zip_path
-    filename_prefix = I18n.t(:'review.work_papers').downcase.gsub(
-      /[^A-Za-z0-9\.\-]+/, '_')
+    filename_prefix = I18n.t(:'review.work_papers').downcase.sanitized_for_filename
     path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/) +
       [Review.table_name] + ('%08d' % self.id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
@@ -1119,7 +1116,7 @@ class Review < ActiveRecord::Base
   end
 
   def add_file_to_zip(file_path, zip_filename, zip_dir, zipfile)
-    zip_filename = File.join zip_dir, zip_filename
+    zip_filename = File.join zip_dir, zip_filename.sanitized_for_filename
     
     zipfile.add(zip_filename, file_path) { true } if File.exist?(file_path)
   end

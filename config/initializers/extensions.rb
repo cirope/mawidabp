@@ -166,6 +166,10 @@ class String
         chunk : "#{chunk}#{split_character}"
     end.join
   end
+
+  def sanitized_for_filename
+    @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
+  end
 end
 
 class Version

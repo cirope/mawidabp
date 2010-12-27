@@ -377,8 +377,8 @@ class ConclusionReview < ActiveRecord::Base
 
     (index_items || '').each_line do |line|
       unless line.blank?
-        pdf_name = "#{'%02d' % cover_count}_" +
-          "#{line.strip.downcase.gsub(/[^A-Za-z0-9\.\-]+/, '_')}.pdf"
+        pdf_name = "#{'%02d' % cover_count}_#{line.strip.downcase}.pdf".
+          sanitized_for_filename
 
         self.create_cover_pdf(organization, line.strip, pdf_name)
 
@@ -391,7 +391,7 @@ class ConclusionReview < ActiveRecord::Base
     cover_paths << self.absolute_workflow_pdf_path
 
     cois_dir = I18n.t(:'conclusion_review.bundle.control_objectives_dir',
-      :prefix => '%02d' % cover_count)
+      :prefix => '%02d' % cover_count).sanitized_for_filename
     cover_count += 1
 
     self.create_findings_sheet_pdf(organization, cover_count)
@@ -399,7 +399,7 @@ class ConclusionReview < ActiveRecord::Base
     cover_count += 1 if File.exist?(cover_paths.last)
 
     findings_dir = I18n.t(:'conclusion_review.bundle.findings_dir',
-      :prefix => '%02d' % cover_count)
+      :prefix => '%02d' % cover_count).sanitized_for_filename
     cover_count += 1 unless self.findings.blank?
 
     self.create_findings_follow_up_pdf(organization, cover_count)

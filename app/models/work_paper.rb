@@ -222,6 +222,6 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def sanitized_code
-    self.code.gsub(/[^A-Za-z0-9\.\-]+/, '_')
+    self.code.sanitized_for_filename
   end
 end

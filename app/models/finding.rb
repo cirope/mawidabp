@@ -932,7 +932,7 @@ class Finding < ActiveRecord::Base
 
   def pdf_name
     ("#{self.class.model_name.human.downcase.gsub(/\s+/, '_')}-" +
-      "#{self.review_code}.pdf").gsub(/[^A-Za-z0-9\.\-]+/, '_')
+      "#{self.review_code}.pdf").sanitized_for_filename
   end
 
   def follow_up_pdf(organization = nil)
@@ -1275,7 +1275,7 @@ class Finding < ActiveRecord::Base
   end
 
   def follow_up_pdf_name
-    code = self.review_code.gsub /[^A-Za-z0-9\.\-]+/, '_'
+    code = self.review_code.sanitized_for_filename
 
     I18n.t(:'finding.follow_up_report.pdf_name', :code => code)
   end

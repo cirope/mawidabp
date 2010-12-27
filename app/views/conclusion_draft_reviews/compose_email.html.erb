@@ -10,16 +10,16 @@
   <div class="form_column_left">
     <p class="form_item">
       <%= content_tag :label, t(:'conclusion_review.include_global_score_sheet'),
-        :class => :inline, :for => :conclusion_review_include_global_score_sheet,
-        :style => 'width: 94%;' %>
+        :class => :inline_long,
+        :for => :conclusion_review_include_global_score_sheet %>
       <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
         true, :class => :inline_item %>
     </p>
 
     <p class="form_item">
       <%= content_tag :label, t(:'conclusion_review.include_score_sheet'),
-        :class => :inline, :for => :conclusion_review_include_score_sheet,
-        :style => 'width: 94%;' %>
+        :class => :inline_long,
+        :for => :conclusion_review_include_score_sheet %>
       <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
         :class => :inline_item %>
     </p>
