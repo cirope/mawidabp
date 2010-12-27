@@ -533,7 +533,7 @@ class UsersController < ApplicationController
       flash.notice = t(:'user.user_reassignment_completed')
       redirect_to users_path
     elsif !@other
-      @user.errors.add_to_base t(:'user.errors.must_select_a_user')
+      @user.errors.add :base, t(:'user.errors.must_select_a_user')
       render :action => :reassignment_edit
     else
       flash.alert = t(:'user.user_reassignment_failed')

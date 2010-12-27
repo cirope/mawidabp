@@ -29,7 +29,7 @@ class Review < ActiveRecord::Base
   })
 
   # Callbacks
-  before_validation :set_proper_parent#, :can_be_modified?
+  before_validation :set_proper_parent, :can_be_modified?
   before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
@@ -188,13 +188,13 @@ class Review < ActiveRecord::Base
   end
 
   def can_be_modified?
-    unless self.has_final_review? && self.changed?
-      true
-    else
+    if self.has_final_review? && self.changed?
       msg = I18n.t(:'review.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
+    else
+      true
     end
   end
 

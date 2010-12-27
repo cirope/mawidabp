@@ -27,7 +27,7 @@ class Notifier < ActionMailer::Base
     
     @user = user
     @grouped_findings = findings.group_by(&:organization)
-    @notification = Notification.create(:user_id => user.id, :findings => findings)
+    @notification = Notification.create(:user => user, :findings => findings)
 
     mail(
       :to => [user.email],
@@ -37,7 +37,7 @@ class Notifier < ActionMailer::Base
 
   def notify_new_finding(user, finding)
     @user, @finding = user, finding
-    @notification = Notification.create(:user_id => user.id, :findings => [finding])
+    @notification = Notification.create(:user => user, :findings => [finding])
     
     mail(
       :to => [user.email],

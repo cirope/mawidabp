@@ -138,8 +138,8 @@ class ReviewUserAssignment < ActiveRecord::Base
             unconfirmed_findings).deliver
         end
       else
-        self.errors.add_to_base(
-          I18n.t(:'review_user_assignment.cannot_be_reassigned'))
+        self.errors.add :base,
+          I18n.t(:'review_user_assignment.cannot_be_reassigned')
       end
 
       transfered

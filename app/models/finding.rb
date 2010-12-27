@@ -555,14 +555,14 @@ class Finding < ActiveRecord::Base
   end
 
   def can_be_modified?
-    if !self.final? || self.final_changed? ||
+    if self.final == false || self.final_changed? ||
         (!self.changed? && !self.control_objective_item.review.is_frozen?)
       true
     else
       msg = I18n.t(:'finding.readonly')
 
       if !self.errors.full_messages.include?(msg)
-        self.errors.add_to_base msg
+        self.errors.add :base, msg
       end
 
       false
@@ -575,7 +575,7 @@ class Finding < ActiveRecord::Base
       true
     else
       msg = I18n.t(:'finding.readonly')
-      self.errors.add_to_base msg unless self.errors.full_messages.include?(msg)
+      self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
 
       false
     end
@@ -597,7 +597,10 @@ class Finding < ActiveRecord::Base
         end
 
         if finding_user_assignment
-          Notifier.notify_new_finding(self.users.find(user_id), self).deliver
+          user = self.users.detect {|u| u.id == user_id.to_i} ||
+            User.find(user_id)
+          
+          Notifier.notify_new_finding(user, self).deliver
         end
       end
     end

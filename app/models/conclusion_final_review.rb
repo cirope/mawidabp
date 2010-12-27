@@ -139,8 +139,8 @@ class ConclusionFinalReview < ConclusionReview
     if all_created
       true
     else
-      self.errors.add_to_base(
-        I18n.t(:'conclusion_final_review.stale_object_error'))
+      self.errors.add :base,
+        I18n.t(:'conclusion_final_review.stale_object_error')
 
       false
     end
