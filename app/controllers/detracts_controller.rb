@@ -89,7 +89,7 @@ class DetractsController < ApplicationController
     ).all(:readonly => false)
 
     respond_to do |format|
-      format.html { render :partial => 'show_last_detracts' }
+      format.html { render '_show_last_detracts' }
       format.xml  { render :xml => @detracts }
     end
   end
