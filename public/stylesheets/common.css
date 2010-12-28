@@ -1429,6 +1429,7 @@ ul.raw_list ul {
     width: auto;
     cursor: pointer;
     opacity: 0;
+    filter: alpha(opacity = 0);
     -moz-opacity: 0;
 }
 
