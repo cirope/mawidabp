@@ -1,10 +1,4 @@
-<% @displayed_process_controls ||= [] %>
 <% control_objective_item = co_f.object %>
-<% process_control = control_objective_item.control_objective.process_control.name %>
-<% unless @displayed_process_controls.include?(process_control) %>
-  <h3><%= process_control %></h3>
-  <% @displayed_process_controls << process_control %>
-<% end %>
 <div class="control_objective_item">
   <div>
     <ul class="raw_list<%= ' red bold' if control_objective_item.try(:invalid?) %>">

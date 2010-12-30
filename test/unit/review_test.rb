@@ -493,8 +493,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert new_review.control_objective_items.size > 0
     assert new_review.review_user_assignments.size > 0
-    assert_equal @review.control_objective_items,
-      new_review.control_objective_items
+    assert_equal @review.control_objective_items.map(&:control_objective_id).sort,
+      new_review.control_objective_items.map(&:control_objective_id).sort
     assert_equal @review.review_user_assignments,
       new_review.review_user_assignments
   end

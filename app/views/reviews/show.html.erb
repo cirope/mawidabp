@@ -51,68 +51,67 @@
     </tbody>
   </table>
 
-  <% displayed_process_controls ||= [] %>
-  <% @review.control_objective_items.sort.each do |coi| %>
-    <% process_control = coi.control_objective.process_control.name %>
-    <% unless displayed_process_controls.include?(process_control) %>
-      <h1><%= process_control %></h1>
-      <% displayed_process_controls << process_control %>
+  <% control_objective_items = @review.control_objective_items.sort_by_process_control %>
+  <% control_objective_items.group_by(&:process_control).each do |pc, cois| %>
+    <h1><%= pc.name %></h1>
+
+    <% cois.each do |coi| %>
+      <h2><%=h coi.control_objective_text %></h2>
+      <div style="margin: 1em;">
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
+          <%= h(coi.relevance_text(false)) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
+          <%= l(coi.audit_date) if coi.audit_date %>
+        </div>
+        <div class="show_item">
+          <b><%= Control.human_attribute_name :effects %>:</b>
+          <%= simple_format h(coi.control.effects) %>
+        </div>
+        <div class="show_item">
+          <b><%= Control.human_attribute_name :control %>:</b>
+          <%= simple_format h(coi.control.control) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
+          <%= "#{coi.effectiveness}%" %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :design_score %>:</b>
+          <%= h(coi.design_score_text) %>
+        </div>
+        <div class="show_item">
+          <b><%= Control.human_attribute_name :design_tests %>:</b>
+          <%= simple_format h(coi.control.design_tests) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</b>
+          <%= h(coi.compliance_score_text) %>
+        </div>
+        <div class="show_item">
+          <b><%= Control.human_attribute_name :compliance_tests %>:</b>
+          <%= simple_format h(coi.control.compliance_tests) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</b>
+          <%= h(coi.sustantive_score_text) %>
+        </div>
+        <div class="show_item">
+          <b><%= Control.human_attribute_name :sustantive_tests %>:</b>
+          <%= simple_format h(coi.control.sustantive_tests) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
+          <%= simple_format h(coi.auditor_comment) %>
+        </div>
+        <div class="show_item">
+          <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
+          <%= t coi.finished ? :'label.yes' : :'label.no' %>
+        </div>
+      </div>
     <% end %>
-    <h2><%=h coi.control_objective_text %></h2>
-    <div style="margin: 1em;">
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
-        <%= h(coi.relevance_text(false)) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :audit_date %>:</b>
-        <%= l(coi.audit_date) if coi.audit_date %>
-      </div>
-      <div class="show_item">
-        <b><%= Control.human_attribute_name :effects %>:</b>
-        <%= simple_format h(coi.control.effects) %>
-      </div>
-      <div class="show_item">
-        <b><%= Control.human_attribute_name :control %>:</b>
-        <%= simple_format h(coi.control.control) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
-        <%= "#{coi.effectiveness}%" %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :design_score %>:</b>
-        <%= h(coi.design_score_text) %>
-      </div>
-      <div class="show_item">
-        <b><%= Control.human_attribute_name :design_tests %>:</b>
-        <%= simple_format h(coi.control.design_tests) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :compliance_score %>:</b>
-        <%= h(coi.compliance_score_text) %>
-      </div>
-      <div class="show_item">
-        <b><%= Control.human_attribute_name :compliance_tests %>:</b>
-        <%= simple_format h(coi.control.compliance_tests) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :sustantive_score %>:</b>
-        <%= h(coi.sustantive_score_text) %>
-      </div>
-      <div class="show_item">
-        <b><%= Control.human_attribute_name :sustantive_tests %>:</b>
-        <%= simple_format h(coi.control.sustantive_tests) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :auditor_comment %>:</b>
-        <%= simple_format h(coi.auditor_comment) %>
-      </div>
-      <div class="show_item">
-        <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
-        <%= t coi.finished ? :'label.yes' : :'label.no' %>
-      </div>
-    </div>
   <% end %>
 </div>
 
