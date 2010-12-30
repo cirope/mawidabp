@@ -1,4 +1,5 @@
 class Notification < ActiveRecord::Base
+  include Comparable
   
   # Constantes
   STATUS = {
@@ -67,6 +68,10 @@ class Notification < ActiveRecord::Base
     self.confirmation_hash ||= UUIDTools::UUID.random_create.to_s
   end
 
+  def <=>(other)
+    self.id <=> other.id
+  end
+
   def to_param
     self.confirmation_hash
   end
@@ -84,8 +89,11 @@ class Notification < ActiveRecord::Base
           finding.confirmed! if self.user.can_act_as_audited?
 
           finding.notifications.each do |notification|
-            unless notification.notified? || notification.id == self.id ||
-                (self.user.can_act_as_audited? ^ notification.user.can_act_as_audited?)
+            restrictions = !notification.notified? && notification != self &&
+              self.user.can_act_as_audited? &&
+              !notification.user.can_act_as_audited?
+            
+            if restrictions
               notification.update_attributes!(
                 :status => confirmed ?
                   STATUS[:confirmed] : STATUS[:rejected],
@@ -103,7 +111,7 @@ class Notification < ActiveRecord::Base
   end
 
   STATUS.each do |status_type, status_value|
-    define_method("#{status_type}?") { self.status == status_value }
+    define_method(:"#{status_type}?") { self.status == status_value }
   end
 
   def notified?
@@ -111,7 +119,7 @@ class Notification < ActiveRecord::Base
   end
 
   def status_text
-    I18n.t("notification.status_#{STATUS.invert[self.status]}")
+    I18n.t(:"notification.status_#{STATUS.invert[self.status]}")
   end
 
   def stale?

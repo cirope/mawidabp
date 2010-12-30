@@ -442,9 +442,9 @@ var HTMLUtil = {
         element.update(optionsString);
 
         if (element.options.length > 0) {
-            element.enable();
-        } else {
-            element.disable();
+            element.enable()
+        } else {
+            element.disable()
         }
     }
 }

@@ -110,8 +110,8 @@ module AutoCompleteMacrosHelper
   # auto_complete action if you need to decorate it further.
   def auto_complete_result(entries, field, phrase = nil)
     return unless entries
-    items = entries.map { |entry| content_tag("li", phrase ? highlight(entry[field], phrase) : h(entry[field])) }
-    content_tag("ul", items.uniq)
+    items = entries.map { |entry| content_tag(:li, phrase ? highlight(entry[field], phrase) : h(entry[field])) }
+    content_tag(:ul, items.uniq)
   end
   
   # Wrapper for text_field with added AJAX autocompletion functionality.
@@ -124,7 +124,7 @@ module AutoCompleteMacrosHelper
 
     raw((completion_options[:skip_style] ? '' : auto_complete_stylesheet) +
     text_field(object, method, tag_options) +
-    content_tag(:div, '', :id => "#{field_id}_auto_complete", :class => :auto_complete) +
+    content_tag(:div, content_tag(:div, '', :id => "#{field_id}_auto_complete", :class => :auto_complete), :class => :auto_complete_container) +
     auto_complete_field(field_id, { :url => { :action => "auto_complete_for_#{object}_#{method}" } }.update(completion_options)))
   end
 

@@ -520,11 +520,17 @@ div#user {
     margin-right: .5em;
 }
 
+div.auto_complete_container {
+    position: relative;
+    z-index: 1;
+}
+
 div.auto_complete {
     position: absolute;
     width: 100%;
     background: #ffffff;
-    z-index: 1;
+    top: 0em !important;
+    left: 0em !important;
 }
 
 div.auto_complete ul {
@@ -536,7 +542,7 @@ div.auto_complete ul {
 }
 
 div.auto_complete ul li {
-    display:block;
+    display: block;
     cursor: pointer;
     margin: 0em;
     padding: .3em;
@@ -565,7 +571,7 @@ div.auto_complete span.informal {
 
 div.auto_complete p.empty_result {
     background-color: #f2f2f2;
-    color: #aa0000;
+    color: #cc0000;
     border: 2px dotted #2c3234;
     font-weight: bold;
     text-align: center;

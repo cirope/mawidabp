@@ -95,12 +95,12 @@ class NotificationTest < ActiveSupport::TestCase
   test 'dynamic functions' do
     Notification::STATUS.each do |status, value|
       @notification.status = value
-      assert @notification.send("#{status}?".to_sym)
+      assert @notification.send(:"#{status}?")
 
       Notification::STATUS.each do |k, v|
         unless k == status
           @notification.status = v
-          assert !@notification.send("#{status}?".to_sym)
+          assert !@notification.send(:"#{status}?")
         end
       end
     end
@@ -109,50 +109,50 @@ class NotificationTest < ActiveSupport::TestCase
   test 'notify function' do
     @notification = Notification.find(notifications(
         :bare_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
-    pendings = @notification.findings.select do |f|
-      f.notifications.any? { |n| !n.notified? }
-    end
-
-    confirmed = @notification.findings.select { |f| f.confirmed? }
+    pendings = @notification.findings.select(&:unconfirmed?)
+    confirmed = @notification.findings.select(&:confirmed?)
 
     assert confirmed.empty?
     assert !pendings.empty?
     assert_nil @notification.confirmation_date
+    assert !@notification.user.can_act_as_audited?
     assert @notification.notify!
 
-    pendings = @notification.findings(true).select do |f|
-      f.notifications(true).any? { |n| !n.notified? }
-    end
-    confirmed = @notification.findings(true).select { |f| f.confirmed? }
+    pendings = @notification.findings.reload.select(&:unconfirmed?)
+    confirmed = @notification.findings.reload.select(&:confirmed?)
 
     # No se confirma porque no es un auditado (es bare_user)
     assert confirmed.empty?
     assert !pendings.empty?
+    assert @notification.confirmed?
     assert_not_nil @notification.confirmation_date
 
     @notification = Notification.find(notifications(
         :audited_user_bcra_A4609_data_proccessing_impact_analisys_weakness_unconfirmed).id)
-    pendings = @notification.findings.select do |f|
-      f.notifications.any? { |n| !n.notified? }
-    end
-
-    confirmed = @notification.findings.select { |f| f.confirmed? }
+    pendings = @notification.findings.select(&:unconfirmed?)
+    confirmed = @notification.findings.select(&:confirmed?)
+    notifications_for_not_audit_users = @notification.findings.map do |f|
+      f.notifications.select do |n|
+        !n.user.can_act_as_audited? && !n.confirmed?
+      end
+    end.flatten.compact.uniq
 
     assert confirmed.empty?
-    assert !pendings.empty?
+    assert pendings.size > 1
+    assert !notifications_for_not_audit_users.empty?
+    assert @notification.user.can_act_as_audited?
     assert_nil @notification.confirmation_date
     assert @notification.notify!
     assert @notification.confirmed?
     assert_not_nil @notification.confirmation_date
 
-    pendings = @notification.findings(true).select do |f|
-      f.notifications(true).any? { |n| !n.notified? }
-    end
-    confirmed = @notification.findings(true).select { |f| f.confirmed? }
+    pendings = @notification.findings.reload.select(&:unconfirmed?)
+    confirmed = @notification.findings.reload.select(&:confirmed?)
 
     # Se confirma porque es un auditado (es audited_user)
     assert !confirmed.empty?
     assert pendings.empty?
+    assert notifications_for_not_audit_users.all? { |n| n.reload.confirmed? }
 
     # Rechazar la notificación
     assert @notification.notify!(false)
