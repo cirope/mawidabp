@@ -56,4 +56,5 @@ gem 'mksm-rubyzip', :require => 'zip/zip'
 
 group :test do
   gem 'turn'
+  gem 'ruby-prof'
 end
