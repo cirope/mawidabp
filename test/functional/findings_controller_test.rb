@@ -213,7 +213,6 @@ class FindingsControllerTest < ActionController::TestCase
                 :new_1 => {
                   :answer => 'New answer',
                   :auditor_comments => 'New auditor comments',
-                  :answer_type => get_test_parameter(:admin_finding_answers_types).first[1],
                   :user_id => users(:administrator_user).id,
                   :notify_users => '1',
                   :file_model_attributes => {
@@ -314,7 +313,6 @@ class FindingsControllerTest < ActionController::TestCase
               :new_1 => {
                 :answer => 'New answer',
                 :auditor_comments => 'New audited comments',
-                :answer_type => get_test_parameter(:admin_finding_answers_types).first[1],
                 :user_id => users(:audited_user).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,

@@ -12,12 +12,12 @@ class FindingAnswer < ActiveRecord::Base
   attr_accessor :notify_users
 
   # Restricciones para la actualización de algunos parámetros
-  attr_readonly :answer_type, :answer, :auditor_comments, :file_model_id,
-    :finding_id, :user_id, :created_at
+  attr_readonly :answer, :auditor_comments, :file_model_id, :finding_id,
+    :user_id, :created_at
 
   # Restricciones
-  validates :finding_id, :answer_type, :answer, :presence => true
-  validates :finding_id, :user_id, :file_model_id, :answer_type,
+  validates :finding_id, :answer, :presence => true
+  validates :finding_id, :user_id, :file_model_id,
     :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
   
@@ -27,13 +27,6 @@ class FindingAnswer < ActiveRecord::Base
   belongs_to :file_model, :dependent => :destroy
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
-
-  def answer_type_text
-    answer_types = self.get_parameter(:admin_finding_answers_types)
-    answer_type = answer_types.detect { |at| at.last == self.answer_type }
-
-    answer_type ? answer_type.first : ''
-  end
 
   def send_notification_to_users
     if self.notify_users == true || self.notify_users == '1'

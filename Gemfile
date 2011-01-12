@@ -24,10 +24,6 @@ gem 'color', :require => false
 # Sólo para pdf-writer
 gem 'transaction-simple', :require => false
 
-group :development do
-  gem 'mongrel'
-end
-
 source 'http://gems.github.com'
 gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
@@ -53,6 +49,10 @@ gem 'mksm-rubyzip', :require => 'zip/zip'
 # group :development, :test do
 #   gem 'webrat'
 # end
+
+group :development do
+  gem 'mongrel'
+end
 
 group :test do
   gem 'turn'

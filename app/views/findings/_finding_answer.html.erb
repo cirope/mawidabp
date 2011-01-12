@@ -5,15 +5,9 @@
     <div class="item_field" style="width: 20%; text-align: left;">
     <%= "#{finding_answer.user.last_name}, #{finding_answer.user.name}" %>
     </div>
-    <div class="item_field" style="width: 20%;">
+    <div class="item_field" style="width: 40%;">
       <%= f.text_area :answer, :class => :focused,
         :readonly => !finding_answer.new_record? %>
-    </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.select :answer_type, parameter_in(@auth_organization.id,
-      :admin_finding_answers_types, finding_answer.created_at),
-      {:prompt => true},
-      {:disabled => !finding_answer.new_record?} %>
     </div>
     <% if !f.object.file_model || f.object.file_model.new_record? %>
       <div class="item_field" style="width: 10%;">

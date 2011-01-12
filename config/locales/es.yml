@@ -797,7 +797,6 @@ es:
     admin_review_scores: "Calificaciones ponderadas de los informes"
     admin_review_code_expresion: "Formato del código de identificación de informes"
     admin_weaknesses_states: "Estados de las observaciones y oportunidades de mejora"
-    admin_finding_answers_types: "Tipos de respuesta de las observaciones"
     security_acount_expire_time: "Días para la eliminación de cuentas inactivas"
     security_allow_concurrent_sessions: "Permitir sesiones simultáneas para el mismo usuario"
     security_attempts_count: "Cantidad de intentos fallidos de conexión"
@@ -1360,7 +1359,7 @@ es:
         compliance_score: "Calificación pruebas de cumplimiento"
         sustantive_score: "Calificación pruebas sustantivas"
         audit_date: "Fecha de auditoría"
-        auditor_comment: "Comentarios del auditor"
+        auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         process_control_id: "Proceso de negocio"
         pre_audit_work_papers: "Papeles de trabajo (diseño)"
@@ -1461,7 +1460,6 @@ es:
           one: "Comentarios"
           answer: "Comentario"
           auditor_comments: "Comentario (comentarios del auditor)"
-          answer_type: "Comentario (tipo)"
           user_id: "Comentario (usuario)"
           notify_users: "Comentario (enviar notificación)"
           file_model:
@@ -1485,7 +1483,6 @@ es:
       finding_answer:
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
-        answer_type: "Tipo de comentario"
         finding_id: "Observación / Oportunidad"
         user_id: "Usuario"
         file_model: "Anexo"

@@ -104,10 +104,6 @@
           <th><%= User.model_name.human %></th>
           <th><%= FindingAnswer.human_attribute_name :answer %></th>
           <th>
-            <%= FindingAnswer.human_attribute_name :answer_type %>
-            <%= show_inline_help_for(:finding_answer_type) %>
-          </th>
-          <th>
             <%= FindingAnswer.human_attribute_name :file_model %>
             <%= show_inline_help_for(:finding_file_model) %>
           </th>
@@ -121,7 +117,6 @@
           <tr>
             <td><%= h finding_answer.user.full_name %></td>
             <td><%= simple_format h(finding_answer.answer) %></td>
-            <td><%= finding_answer.answer_type_text %></td>
             <td>
               <%= finding_answer.file_model ?
                 link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>

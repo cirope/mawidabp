@@ -173,7 +173,6 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
   create_table "finding_answers", :force => true do |t|
     t.text     "answer"
     t.text     "auditor_comments"
-    t.integer  "answer_type"
     t.integer  "finding_id"
     t.integer  "user_id"
     t.datetime "created_at"

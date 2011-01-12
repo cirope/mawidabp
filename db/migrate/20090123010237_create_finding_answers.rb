@@ -3,7 +3,6 @@ class CreateFindingAnswers < ActiveRecord::Migration
     create_table :finding_answers do |t|
       t.text :answer
       t.text :auditor_comments
-      t.integer :answer_type
       t.references :finding
       t.references :user
       t.references :file_model

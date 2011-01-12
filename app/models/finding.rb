@@ -1212,8 +1212,7 @@ class Finding < ActiveRecord::Base
     end
 
     unless self.finding_answers.blank?
-      column_names = {'answer' => 35, 'answer_type' => 15, 'user_id' => 30,
-        'created_at' => 20}
+      column_names = {'answer' => 50, 'user_id' => 30, 'created_at' => 20}
       columns, column_data = {}, []
 
       column_names.each do |col_name, col_size|
@@ -1227,7 +1226,6 @@ class Finding < ActiveRecord::Base
       self.finding_answers.each do |finding_answer|
         column_data << {
           'answer' => finding_answer.answer.try(:to_iso),
-          'answer_type' => finding_answer.answer_type_text.to_iso,
           'user_id' => finding_answer.user.try(:full_name).try(:to_iso),
           'created_at' => I18n.l(finding_answer.created_at,
             :format => :validation).to_iso
@@ -1246,8 +1244,7 @@ class Finding < ActiveRecord::Base
           table.width = pdf.page_usable_width
           table.columns = columns
           table.data = column_data
-          table.column_order = ['user_id', 'answer', 'answer_type',
-            'created_at']
+          table.column_order = ['user_id', 'answer', 'created_at']
           table.split_rows = true
           table.row_gap = (PDF_FONT_SIZE * 0.75).round
           table.font_size = PDF_FONT_SIZE

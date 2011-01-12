@@ -40,14 +40,6 @@ DEFAULT_PARAMETERS = {
     ['Medio', 1],
     ['Alto', 2]
   ],
-  :admin_finding_answers_types => [
-    ['Respuesta', 0],
-    ['Recordatorio', 1],
-    ['Comité', 2],
-    ['Sugerencia', 3],
-    ['Aclaración', 4],
-    ['Requerimiento', 5]
-  ],
   :admin_finding_stale_confirmed_days => '3',
   :admin_finding_risk_levels => [
     ['Bajo', 0],

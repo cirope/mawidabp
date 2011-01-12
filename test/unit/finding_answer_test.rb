@@ -18,7 +18,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_equal fixture_finding_answer.answer, @finding_answer.answer
     assert_equal fixture_finding_answer.auditor_comments,
       @finding_answer.auditor_comments
-    assert_equal fixture_finding_answer.answer_type, @finding_answer.answer_type
     assert_equal fixture_finding_answer.finding_id, @finding_answer.finding_id
     assert_equal fixture_finding_answer.user_id, @finding_answer.user_id
     assert_equal fixture_finding_answer.file_model_id,
@@ -36,8 +35,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
         @finding_answer = FindingAnswer.create(
           :answer => 'New answer',
           :auditor_comments => 'New auditor comments',
-          :answer_type =>
-            get_test_parameter(:admin_finding_answers_types).first[1],
           :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
           :user => users(:administrator_user),
           :file_model => file_models(:text_file)
@@ -58,8 +55,6 @@ class FindingAnswerTest < ActiveSupport::TestCase
       @finding_answer = FindingAnswer.create(
         :answer => 'New answer',
         :auditor_comments => 'New auditor comments',
-        :answer_type =>
-          get_test_parameter(:admin_finding_answers_types).first[1],
         :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
         :user => users(:administrator_user),
         :file_model => file_models(:text_file),
@@ -86,15 +81,12 @@ class FindingAnswerTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @finding_answer.answer = '      '
     @finding_answer.finding_id = nil
-    @finding_answer.answer_type = nil
     assert @finding_answer.invalid?
-    assert_equal 3, @finding_answer.errors.count
+    assert_equal 2, @finding_answer.errors.count
     assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
       @finding_answer.errors[:answer]
     assert_equal [error_message_from_model(@finding_answer, :finding_id,
         :blank)], @finding_answer.errors[:finding_id]
-    assert_equal [error_message_from_model(@finding_answer, :answer_type,
-      :blank)], @finding_answer.errors[:answer_type]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -102,16 +94,13 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.finding_id = '?nil'
     @finding_answer.user_id = '?123'
     @finding_answer.file_model_id = 'incorrect'
-    @finding_answer.answer_type = '12.3'
     assert @finding_answer.invalid?
-    assert_equal 4, @finding_answer.errors.count
+    assert_equal 3, @finding_answer.errors.count
     assert_equal [error_message_from_model(@finding_answer, :finding_id,
       :not_a_number)], @finding_answer.errors[:finding_id]
     assert_equal [error_message_from_model(@finding_answer, :user_id,
       :not_a_number)], @finding_answer.errors[:user_id]
     assert_equal [error_message_from_model(@finding_answer, :file_model_id,
       :not_a_number)], @finding_answer.errors[:file_model_id]
-    assert_equal [error_message_from_model(@finding_answer, :answer_type,
-      :not_an_integer)], @finding_answer.errors[:answer_type]
   end
 end

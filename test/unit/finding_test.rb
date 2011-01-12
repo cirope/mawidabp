@@ -350,7 +350,6 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'unconfirmed to confirmed after audited response' do
-    answer_type = get_test_parameter(:admin_finding_answers_types).first[1]
     finding = Finding.find(findings(
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
@@ -361,7 +360,6 @@ class FindingTest < ActiveSupport::TestCase
     finding.finding_answers << FindingAnswer.new(
       :answer => 'New administrator answer',
       :auditor_comments => 'New auditor comments',
-      :answer_type => answer_type,
       :user => users(:administrator_user)
     )
 
@@ -371,7 +369,6 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers << FindingAnswer.new(
       :answer => 'New audited answer',
-      :answer_type => answer_type,
       :user => users(:audited_user)
     )
 
@@ -799,8 +796,6 @@ class FindingTest < ActiveSupport::TestCase
       finding.finding_answers << FindingAnswer.new(
         :answer => 'New answer',
         :auditor_comments => 'New auditor comments',
-        :answer_type =>
-          get_test_parameter(:admin_finding_answers_types).first[1],
         :user => users(:audited_user)
       )
     end
