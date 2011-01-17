@@ -1013,7 +1013,7 @@ class Finding < ActiveRecord::Base
     pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
     
     important_attributes = [:state, :risk, :priority, :follow_up_date]
-    important_changed_versions = []
+    important_changed_versions = [Version.new]
     previous_version = self.versions.first
 
     while (previous_version.try(:event) &&
@@ -1025,7 +1025,8 @@ class Finding < ActiveRecord::Base
         old_value = previous_version.reify ?
           previous_version.reify.send(attribute) : nil
 
-        current_value != old_value
+        current_value != old_value &&
+          !(current_value.blank? && old_value.blank?)
       end
 
       if has_important_changes
@@ -1080,8 +1081,10 @@ class Finding < ActiveRecord::Base
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
-          pdf.add_description_item(User.model_name.human, version.whodunnit ?
-              User.find(version.whodunnit).try(:full_name) : nil)
+          pdf.add_description_item(User.model_name.human,
+            version.previous.try(:whodunnit) ?
+              User.find(version.previous.whodunnit).try(:full_name) : nil
+          )
 
           pdf.move_pointer PDF_FONT_SIZE
 
