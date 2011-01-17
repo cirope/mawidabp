@@ -310,7 +310,7 @@ es:
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "CONFIRMACIÓN DE CORREOS\nPLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
@@ -1270,7 +1270,7 @@ es:
       login_record: "Registro de ingreso"
       notification: "Notificación"
       old_password: "Contraseña anterior"
-      oportunity: "Oportunidad"
+      oportunity: "Oportunidad de mejora"
       organization: "Organización"
       parameter: "Parámetro"
       period: "Periodo"
@@ -1283,7 +1283,7 @@ es:
       process_control: "Proceso de negocio"
       review: "Informe"
       resource: "Recurso"
-      resource_class: "Clase"
+      resource_class: "Clase de recurso"
       role: "Perfil"
       user: "Usuario"
       weakness: "Observación"
@@ -1455,10 +1455,12 @@ es:
           finding_relation_type: "Relación (tipo)"
         finding_user_assignments:
           one: "Usuario relacionado"
+          user: 'Usuario relacionado (usuario)'
           user_id: 'Usuario relacionado (usuario)'
         finding_answers:
           one: "Comentarios"
           answer: "Comentario"
+          commitment_date: "Fecha de compromiso"
           auditor_comments: "Comentario (comentarios del auditor)"
           user_id: "Comentario (usuario)"
           notify_users: "Comentario (enviar notificación)"
@@ -1483,6 +1485,7 @@ es:
       finding_answer:
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
+        commitment_date: "Fecha de compromiso"
         finding_id: "Observación / Oportunidad"
         user_id: "Usuario"
         file_model: "Anexo"
@@ -1497,6 +1500,7 @@ es:
       finding_user_assignment:
         finding_id: 'Observación / Oportunidad de mejora'
         user_id: 'Usuario'
+        user: 'Usuario'
         <<: *commons
       group:
         name: "Nombre"
@@ -1910,9 +1914,8 @@ es:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
         review_user_assignment:
           attributes:
-            user:
+            user_id:
               invalid: "debe tener un perfil acorde a su rol dentro del informe"
-              role_taken: "ya existe otro supervidor y/o gerente"
         user:
           attributes:
             organization_roles:
@@ -2001,6 +2004,10 @@ es:
   helpers:
     select:
       prompt: "Seleccionar ..."
+    submit:
+      create: "Guardar %{model}"
+      update: "Actualizar %{model}"
+      submit: "Guardar %{model}"
 
   time:
     formats:

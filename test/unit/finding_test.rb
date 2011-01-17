@@ -603,6 +603,19 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'commitment date' do
+    assert_nil @finding.commitment_date
+    assert_difference '@finding.finding_answers.count' do
+      @finding.finding_answers.create(
+        :answer => 'New answer',
+        :commitment_date => 10.days.from_now.to_date,
+        :user => users(:audited_user),
+        :notify_users => false
+      )
+    end
+    assert_equal 10.days.from_now.to_date, @finding.commitment_date
+  end
+
   test 'follow up pdf' do
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 

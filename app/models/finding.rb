@@ -393,8 +393,8 @@ class Finding < ActiveRecord::Base
     end
   end
   validates_each :finding_user_assignments do |record, attr, value|
-    users = value.map{|fua| fua.user unless fua.marked_for_destruction?}.compact
-    
+    users = value.reject(&:marked_for_destruction?).map(&:user)
+
     unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
         users.any?(&:supervisor?) && users.any?(&:manager?)
       record.errors.add attr, :invalid
@@ -419,9 +419,11 @@ class Finding < ActiveRecord::Base
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
-  has_many :finding_user_assignments, :after_add => :user_assignment_added,
-    :after_remove => :user_assignment_removed
-  has_many :users, :through => :finding_user_assignments, :uniq => true,
+  has_many :finding_user_assignments, :include => :user,
+    :after_add => :user_assignment_added,
+    :after_remove => :user_assignment_removed,
+    :inverse_of => :finding
+  has_many :users, :through => :finding_user_assignments,
     :order => 'last_name ASC, name ASC'
   
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
@@ -435,9 +437,9 @@ class Finding < ActiveRecord::Base
   def initialize(attributes = nil, import_users = false)
     super(attributes)
 
-    if import_users && self.control_objective_item.try(:review)
-      self.control_objective_item.review.users.each do |u|
-        self.finding_user_assignments.build(:user => u)
+    if import_users && self.try(:control_objective_item).try(:review)
+      self.control_objective_item.review.review_user_assignments.map do |rua|
+        self.finding_user_assignments.build(:user_id => rua.user_id)
       end
     end
 
@@ -492,6 +494,7 @@ class Finding < ActiveRecord::Base
   end
 
   def set_proper_parent
+    self.finding_answers.each { |fa| fa.finding = self }
     self.finding_relations.each { |fr| fr.finding = self }
     self.finding_user_assignments.each { |fua| fua.finding = self }
   end
@@ -834,6 +837,11 @@ class Finding < ActiveRecord::Base
     end
 
     date_for_notification
+  end
+
+  def commitment_date
+    self.finding_answers.where('commitment_date IS NOT NULL').first.try(
+      :commitment_date)
   end
 
   def to_pdf(organization = nil)

@@ -3,16 +3,16 @@
 <div class="finding_answer item" <%= raw 'style="display: none;"' if hide %>>
   <div>
     <div class="item_field" style="width: 20%; text-align: left;">
-    <%= "#{finding_answer.user.last_name}, #{finding_answer.user.name}" %>
+      <%= finding_answer.user.full_name %>
     </div>
     <div class="item_field" style="width: 40%;">
       <%= f.text_area :answer, :class => :focused,
         :readonly => !finding_answer.new_record? %>
     </div>
-    <% if !f.object.file_model || f.object.file_model.new_record? %>
+    <% if !finding_answer.file_model || finding_answer.file_model.new_record? %>
       <div class="item_field" style="width: 10%;">
-        <% if f.object.new_record? %>
-          <% f.object.build_file_model %>
+        <% if finding_answer.new_record? %>
+          <% finding_answer.build_file_model %>
           <%= f.fields_for :file_model do |fm_f| %>
             <span class="file_container">
               <%= fm_f.file_field :file, :class => 'inline_item file' %>
@@ -24,13 +24,32 @@
       </div>
     <% else %>
       <div class="item_field" style="width: 10%;">
-        <%= link_to_download f.object.file_model.file.url %>
+        <%= link_to_download finding_answer.file_model.file.url %>
       </div>
     <% end %>
     <div class="item_field" style="width: 20%; text-align: left;">
-    <%= finding_answer.created_at ?
-      l(finding_answer.created_at, :format => :long) :
-      finding_answer_notification_check(f) %>
+      <% if finding_answer.created_at %>
+        <%= l(finding_answer.created_at, :format => :long) %>
+        <% if finding_answer.commitment_date %>
+          <br />
+          <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+          <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+        <% end %>
+      <% else %>
+        <% if finding_answer.user.can_act_as_audited? &&
+            finding_answer.finding.pending? &&
+            finding_answer.finding.commitment_date.blank? %>
+          <div style="margin-bottom: .5em; clear: both;">
+            <%= f.label :commitment_date,
+              raw(FindingAnswer.human_attribute_name(:commitment_date) +
+                show_inline_help_for(:finding_answer_commitment_date,
+                "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")),
+              :class => :plain_label, :style => 'display: block;'%>
+            <%= f.calendar_date_select :commitment_date, :class => :inline_tight_item %>
+          </div>
+        <% end %>
+      <div style="clear: both;"><%= finding_answer_notification_check(f) %></div>
+      <% end %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
     <%= remove_item_link(f) if finding_answer.new_record? %>

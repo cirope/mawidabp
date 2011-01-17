@@ -23,8 +23,8 @@ class WorkPaper < ActiveRecord::Base
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true
   validates :number_of_pages, :numericality =>
-    {:only_integer => true, :less_than => 100000}, :allow_nil => true,
-    :allow_blank => true
+    {:only_integer => true, :less_than => 100000, :greater_than => 0},
+    :allow_nil => true, :allow_blank => true
   validates :organization_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates :name, :code, :length => {:maximum => 255}, :allow_nil => true,

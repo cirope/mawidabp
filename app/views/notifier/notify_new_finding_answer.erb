@@ -4,7 +4,7 @@
   finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization),
   :protocol => URL_PROTOCOL) %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2 style="margin-bottom: 1em;"><%=h organization.name %></h2>
+  <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
 
   <h3 style="font-weight: normal;"><%= textilize_without_paragraph(
     t(:'notifier.notify_new_finding_answer.finding_data',
@@ -13,12 +13,24 @@
 
   <p>
     <b><%= FindingAnswer.human_attribute_name(:user_id) %></b>:
-    <%=h @finding_answer.user.full_name_with_function %>
+    <%= @finding_answer.user.full_name_with_function %>
   </p>
   <p>
     <b><%= FindingAnswer.human_attribute_name(:answer) %></b>:
-    <span style="font-style: italic;"><%=h @finding_answer.answer %></span>
+    <span style="font-style: italic;"><%= @finding_answer.answer %></span>
   </p>
+  <% if @finding_answer.commitment_date %>
+    <p>
+      <b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+      <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, :format => :long) %></span>
+    </p>
+  <% end %>
+  <% if @finding_answer.file_model.try(:file) %>
+    <p>
+      <b><%= FindingAnswer.human_attribute_name(:file_model) %></b>:
+      <span style="font-style: italic;"><%= @finding_answer.file_model.file_file_name %></span>
+    </p>
+  <% end %>
 
   <p>
     <%= link_to t(:'notifier.notify_new_finding_answer.finding_link'),

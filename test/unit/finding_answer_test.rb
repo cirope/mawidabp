@@ -18,6 +18,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
     assert_equal fixture_finding_answer.answer, @finding_answer.answer
     assert_equal fixture_finding_answer.auditor_comments,
       @finding_answer.auditor_comments
+    assert_equal fixture_finding_answer.commitment_date,
+      @finding_answer.commitment_date
     assert_equal fixture_finding_answer.finding_id, @finding_answer.finding_id
     assert_equal fixture_finding_answer.user_id, @finding_answer.user_id
     assert_equal fixture_finding_answer.file_model_id,
@@ -25,7 +27,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   # Prueba la creación de una respuesta a una observación
-  test 'create without notification' do
+  test 'auditor create without notification' do
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
@@ -44,7 +46,26 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   # Prueba la creación de una respuesta a una observación
-  test 'create with notification' do
+  test 'audited create without notification' do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert_difference 'FindingAnswer.count' do
+        @finding_answer = FindingAnswer.create(
+          :answer => 'New answer',
+          :commitment_date => 10.days.from_now.to_date,
+          :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+          :user => users(:audited_user),
+          :file_model => file_models(:text_file)
+        )
+      end
+    end
+  end
+
+  # Prueba la creación de una respuesta a una observación
+  test 'auditor create with notification' do
     counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
 
     ActionMailer::Base.delivery_method = :test
@@ -57,6 +78,26 @@ class FindingAnswerTest < ActiveSupport::TestCase
         :auditor_comments => 'New auditor comments',
         :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
         :user => users(:administrator_user),
+        :file_model => file_models(:text_file),
+        :notify_users => true
+      )
+    end
+  end
+
+  # Prueba la creación de una respuesta a una observación
+  test 'audited create with notification' do
+    counts_array = ['FindingAnswer.count', 'ActionMailer::Base.deliveries.size']
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_difference counts_array do
+      @finding_answer = FindingAnswer.create(
+        :answer => 'New answer',
+        :commitment_date => 10.days.from_now.to_date,
+        :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
+        :user => users(:audited_user),
         :file_model => file_models(:text_file),
         :notify_users => true
       )
@@ -78,9 +119,10 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates blank attributes' do
+  test 'validates blank attributes with auditor' do
     @finding_answer.answer = '      '
     @finding_answer.finding_id = nil
+    @finding_answer.commitment_date = ''
     assert @finding_answer.invalid?
     assert_equal 2, @finding_answer.errors.count
     assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
@@ -90,17 +132,34 @@ class FindingAnswerTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates blank attributes with audited' do
+    @finding_answer.user = users(:audited_user)
+    @finding_answer.answer = '      '
+    @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
+    @finding_answer.commitment_date = ''
+    assert @finding_answer.invalid?
+    assert_equal 2, @finding_answer.errors.count
+    assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
+      @finding_answer.errors[:answer]
+    assert_equal [error_message_from_model(@finding_answer, :commitment_date,
+        :blank)], @finding_answer.errors[:commitment_date]
+  end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @finding_answer.finding_id = '?nil'
     @finding_answer.user_id = '?123'
     @finding_answer.file_model_id = 'incorrect'
+    @finding_answer.commitment_date = '13/13/13'
     assert @finding_answer.invalid?
-    assert_equal 3, @finding_answer.errors.count
+    assert_equal 4, @finding_answer.errors.count
     assert_equal [error_message_from_model(@finding_answer, :finding_id,
       :not_a_number)], @finding_answer.errors[:finding_id]
     assert_equal [error_message_from_model(@finding_answer, :user_id,
       :not_a_number)], @finding_answer.errors[:user_id]
     assert_equal [error_message_from_model(@finding_answer, :file_model_id,
       :not_a_number)], @finding_answer.errors[:file_model_id]
+  assert_equal [error_message_from_model(@finding_answer, :commitment_date,
+      :invalid_date)], @finding_answer.errors[:commitment_date]
   end
 end

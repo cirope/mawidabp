@@ -128,7 +128,7 @@
     </table>
   <% end %>
 
-  <% unless @auth_user.audited? || @finding.work_papers.blank? %>
+  <% unless @finding.work_papers.blank? %>
     <h3><%= t(:'finding.work_papers') %></h3>
 
     <table class="summary_table">

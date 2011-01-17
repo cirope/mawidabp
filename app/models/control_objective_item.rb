@@ -24,9 +24,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  scope :sort_by_process_control,
-    includes(:process_control).order("#{ProcessControl.table_name}.name ASC")
-
   # Atributos no persistentes
   attr_reader :approval_errors
 
@@ -75,7 +72,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   
   # Relaciones
   belongs_to :control_objective
-  belongs_to :review
+  belongs_to :review, :inverse_of => :control_objective_items
   has_many :weaknesses, :dependent => :destroy, :order => 'review_code ASC',
     :conditions => {:final => false}
   has_many :oportunities, :dependent => :destroy, :order => 'review_code ASC',
@@ -85,7 +82,6 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :final_oportunities, :dependent => :destroy,
     :order => 'review_code ASC', :class_name => 'Oportunity',
     :conditions => {:final => true}
-  has_one :process_control, :through => :control_objective
   has_many :pre_audit_work_papers, :class_name => 'WorkPaper',
     :as => :owner, :dependent => :destroy, :order => 'created_at ASC',
     :before_add => [:check_for_final_review, :prepare_work_paper,
@@ -172,6 +168,10 @@ class ControlObjectiveItem < ActiveRecord::Base
     self.pre_audit_work_papers + self.post_audit_work_papers
   end
 
+  def process_control
+    self.control_objective.try(:process_control)
+  end
+
   def must_be_approved?
     errors = []
 
@@ -241,6 +241,10 @@ class ControlObjectiveItem < ActiveRecord::Base
 
       if self.design_score
         self.control.validates_presence_of_design_tests = true
+      end
+
+      if self.sustantive_score
+        self.control.validates_presence_of_sustantive_tests = true
       end
     end
   end

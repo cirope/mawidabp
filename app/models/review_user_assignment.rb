@@ -29,51 +29,41 @@ class ReviewUserAssignment < ActiveRecord::Base
     :allow_nil => true
   validates :assignment_type, :inclusion => {:in => TYPES.values},
     :allow_blank => true, :allow_nil => true
-  validates_each :user do |record, attr, value|
-    review = record.review
-    user = User.find(record.user_id) if record.user_id &&
-      User.exists?(record.user_id)
-
+  validates_each :user_id do |record, attr, value|
     # Recarga porque el cache se trae el usuario anterior aun cuando el user_id
     # ha cambiado
-    unless user.blank?
-      if review
-        supervisor_count, manager_count, user_count = 0, 0, 0
+    user = User.find(value) if value && User.exists?(value)
 
-        review.review_user_assignments.each do |rua|
-          unless rua.marked_for_destruction?
-            another_record = (!record.new_record? && rua.id != record.id) ||
-                (record.new_record? && rua.object_id != record.object_id)
+    if user && record.review
+      users = record.review.review_user_assignments.reject(
+        &:marked_for_destruction?).map(&:user_id)
 
-            supervisor_count += 1 if rua.supervisor? && another_record
-            manager_count += 1 if rua.manager? && another_record
-            user_count += 1 if rua.user_id == record.user_id && another_record
-          end
-        end
+      record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
 
-        record.errors.add attr, :taken if user_count > 0
-
-        if (supervisor_count > 0 && record.supervisor?) ||
-            (manager_count > 0 && record.manager?)
-          record.errors.add attr, :role_taken
-        end
-
-        if (record.auditor? && !user.auditor?) ||
-            (record.supervisor? && !user.supervisor?) ||
-            (record.manager? && !user.manager?) ||
-            (record.audited? && !user.can_act_as_audited?)
-          record.errors.add attr, :invalid
-        end
+      if (record.auditor? && !user.auditor?) ||
+          (record.supervisor? && !user.supervisor?) ||
+          (record.manager? && !user.manager?) ||
+          (record.audited? && !user.can_act_as_audited?)
+        record.errors.add attr, :invalid
       end
     end
   end
 
   # Relaciones
-  belongs_to :review
-  belongs_to :user
+  belongs_to :review, :inverse_of => :review_user_assignments
+  belongs_to :user, :inverse_of => :review_user_assignments
 
   def <=>(other)
-    self.user_id.to_i <=> other.user_id.to_i
+    if self.review_id == other.review_id
+      self.user_id <=> other.user_id
+    else
+      -1
+    end
+  end
+
+  def ==(other)
+    other.kind_of?(ReviewUserAssignment) && other.id &&
+      (self.id == other.id || (self <=> other) == 0)
   end
 
   def can_be_modified?

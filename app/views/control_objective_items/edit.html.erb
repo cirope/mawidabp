@@ -1,5 +1,4 @@
-<%= render :partial => 'form',
-  :locals => {:submit_button_text => t(:'label.modify')} %>
+<%= render :partial => 'form' %>
 
 <div id="links">
   <%= link_to_unless @control_objective_item.is_in_a_final_review?,

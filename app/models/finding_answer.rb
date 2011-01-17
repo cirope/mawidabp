@@ -20,6 +20,11 @@ class FindingAnswer < ActiveRecord::Base
   validates :finding_id, :user_id, :file_model_id,
     :numericality => {:only_integer => true}, :allow_nil => true,
     :allow_blank => true
+  validates_date :commitment_date, :allow_nil => true, :allow_blank => true
+  validates :commitment_date, :presence => true, :if => lambda { |fa|
+    fa.user.try(:can_act_as_audited?) && fa.finding.try(:pending?) &&
+      fa.finding.commitment_date.blank?
+  }
   
   # Relaciones
   belongs_to :finding
@@ -32,8 +37,7 @@ class FindingAnswer < ActiveRecord::Base
     if self.notify_users == true || self.notify_users == '1'
       users = self.finding.users - [self.user]
 
-      Notifier.notify_new_finding_answer(users,
-        (self unless users.blank?)).deliver
+      Notifier.notify_new_finding_answer(users, self).deliver unless users.blank?
     end
   end
 end

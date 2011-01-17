@@ -1,10 +1,10 @@
 <!--[form:finding]-->
 <%= form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
-  {:method => :put, :class => 'edit_finding', :multipart => true,
+  {:method => :put, :class => :edit_finding, :multipart => true,
   :id => "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
     <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
-      :object => FindingAnswer.new(:user_id => @auth_user.id))}';" %>
+      :object => @finding.finding_answers.new(:user_id => @auth_user.id))}';" %>
   <% end %>
   <%= f_f.error_messages %>
 
@@ -172,9 +172,7 @@
         <%= show_inline_help_for(:finding_file_model) %>
       </h3>
     </div>
-    <div class="item_column" style="width: 20%;">
-      <h3><%= FindingAnswer.human_attribute_name :created_at %></h3>
-    </div>
+    <div class="item_column" style="width: 20%;">&nbsp;</div>
     <div class="item_column" style="width: 5%;"></div>
     <div class="clear"></div>
   </div>
@@ -191,6 +189,34 @@
       :'data-template' => :finding_answer,
       :'data-event' => :add_nested_item, :'data-container' => :finding_answers %>
   </p>
+
+  <% unless @finding.work_papers.blank? %>
+    <h1><%= t(:'finding.work_papers') %></h1>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.work_papers.each do |work_paper| %>
+          <tr>
+            <td><%= h work_paper.name %></td>
+            <td><%= h work_paper.code %></td>
+            <td><%= work_paper.number_of_pages %></td>
+            <td><%= simple_format h(work_paper.description) %></td>
+            <td><%= work_paper.file_model ?
+              link_to(t(:'label.download'), work_paper.file_model.file.url) : '---' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <div style="clear: both; margin-top: 2em;">
     <div class="title" style="font-weight: normal;">
@@ -252,7 +278,7 @@
 
   <%= hidden_lock_version(f_f) %>
   <p>
-    <span class="button"><%= f_f.submit submit_button_text %></span>
+    <span class="button"><%= f_f.submit %></span>
   </p>
 <% end %>
 <!--[eoform:finding] -->

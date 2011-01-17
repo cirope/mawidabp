@@ -921,6 +921,11 @@ form label.error_field, .filter label.error_field {
     color: #ffffff;
 }
 
+form label.error_field.plain_label, .filter label.error_field.plain_label {
+    background-color: inherit;
+    color: #aa0000;
+}
+
 form select[multiple="multiple"] {
     width: 95%;
 }

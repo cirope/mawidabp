@@ -425,9 +425,17 @@ var HTMLUtil = {
         if(input && !input.up('div.stylized_file')) {
             element.observe('mousemove', function(event) {
                 var left = (event.pointerX() -
-                    this.positionedOffset()['left']) - input.getWidth() - 5;
+                    this.positionedOffset()['left']) - input.getWidth();
+                var containerLayout =
+                    input.up('span.file_container').getLayout();
+                var xMin = containerLayout.get('left') +
+                    containerLayout.get('width');
+                var xMax = xMin + containerLayout.get('width');
 
-                input.setStyle({left: left + 'px'});
+                // Esta pregunta es por un bug en IE7 con overflow: hidden
+                if(event.pointerX() >= xMin && event.pointerX() <= xMax) {
+                    input.setStyle({left: left + 'px'});
+                }
             }).wrap('div', {'class' : 'stylized_file'});
         }
     },

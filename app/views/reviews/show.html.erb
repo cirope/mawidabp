@@ -51,7 +51,7 @@
     </tbody>
   </table>
 
-  <% control_objective_items = @review.control_objective_items.sort_by_process_control %>
+  <% control_objective_items = @review.control_objective_items %>
   <% control_objective_items.group_by(&:process_control).each do |pc, cois| %>
     <h1><%= pc.name %></h1>
 

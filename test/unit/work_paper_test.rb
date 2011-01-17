@@ -91,6 +91,13 @@ class WorkPaperTest < ActiveSupport::TestCase
     assert_equal 1, @work_paper.errors.count
     assert_equal [error_message_from_model(@work_paper, :number_of_pages,
       :less_than, :count => 100000)], @work_paper.errors[:number_of_pages]
+
+    @work_paper.reload
+    @work_paper.number_of_pages = '0'
+    assert @work_paper.invalid?
+    assert_equal 1, @work_paper.errors.count
+    assert_equal [error_message_from_model(@work_paper, :number_of_pages,
+      :greater_than, :count => 0)], @work_paper.errors[:number_of_pages]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

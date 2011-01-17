@@ -76,4 +76,20 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
       @finding_user_assignment, :user_id, :not_a_number)],
       @finding_user_assignment.errors[:user_id]
   end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates duplicated user' do
+    finding = @finding_user_assignment.finding
+    # Para que ARel cargue la relación
+    finding.finding_user_assignments.map(&:user_id)
+    finding_user_assignment = finding.finding_user_assignments.build(
+      :user_id => @finding_user_assignment.user_id
+    )
+    finding_user_assignment.finding = finding
+    finding_user_assignment.invalid?
+    assert finding_user_assignment.invalid?
+    assert_equal 1, finding_user_assignment.errors.count
+    assert_equal [error_message_from_model(finding_user_assignment, :user_id,
+        :taken)], finding_user_assignment.errors[:user_id]
+  end
 end

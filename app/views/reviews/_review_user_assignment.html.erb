@@ -5,7 +5,7 @@
     <div class="item_field" style="width: 40%;">
       <% unless readonly %>
         <div class="search">
-          <% errors_on_user = f.object.errors[:user_id] || f.object.errors[:user] %>
+          <% errors_on_user = f.object.errors[:user_id] | f.object.errors[:user] %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete(:review_user_assignment, :user_data,

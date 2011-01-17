@@ -29,3 +29,7 @@ table.date_filter td, table.generic_filter td {
     padding-right: 1em;
     width: 50%;
 }
+
+.stylized_file span.file_container input.file {
+    width: 23px;
+}

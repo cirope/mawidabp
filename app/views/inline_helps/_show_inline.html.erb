@@ -23,20 +23,20 @@
     </div>
   </div>
 
-<script type="text/javascript">
-(function() {
-  var functionName = '<%= name.to_s.camelize(:lower) %>';
+  <script type="text/javascript">
+  (function() {
+    var functionName = '<%= name.to_s.camelize(:lower) %>';
 
-  PopupListener[functionName] = function (linkName) {
-    var linkId = linkName ?
-      'help_link_' + linkName : 'help_link_<%=  link_name %>';
+    PopupListener[functionName] = function(linkName) {
+      var linkId = linkName ?
+        'help_link_' + linkName : 'help_link_<%=  link_name %>';
 
-    new Popup(
-      'inline_item_<%=  name %>', linkId, {trigger: 'click', position: 'below'}
-    );
-  }
+      new Popup(
+        'inline_item_<%=  name %>', linkId, {trigger: 'click', position: 'below'}
+      );
+    }
 
-  PopupListener[functionName]();
-})();
-</script>
+    PopupListener[functionName]();
+  })();
+  </script>
 <% end %>

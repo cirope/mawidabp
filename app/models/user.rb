@@ -159,7 +159,7 @@ class User < ActiveRecord::Base
     :order => "#{Detract.table_name}.created_at ASC"
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
   has_many :review_user_assignments, :dependent => :destroy,
-    :include => :review, :order => 'assignment_type DESC'
+    :include => :review, :order => 'assignment_type DESC', :inverse_of => :user
   has_many :reviews, :through => :review_user_assignments, :uniq => true
   has_many :organization_roles, :dependent => :destroy,
     :order => 'organization_id ASC', :after_add => :mark_roles_as_changed,

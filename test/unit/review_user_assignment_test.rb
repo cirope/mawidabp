@@ -104,57 +104,31 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES[:supervisor]
     assert @review_user_assignment.invalid?
-    assert_equal 2, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-        @review_user_assignment, :user, :invalid), error_message_from_model(
-        @review_user_assignment, :user, :role_taken)].sort,
-      @review_user_assignment.errors[:user].sort
+    assert_equal 1, @review_user_assignment.errors.count
+    assert_equal [error_message_from_model(@review_user_assignment, :user_id,
+        :invalid)], @review_user_assignment.errors[:user_id]
 
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES[:manager]
     assert @review_user_assignment.invalid?
-    assert_equal 2, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-        @review_user_assignment, :user, :invalid), error_message_from_model(
-        @review_user_assignment, :user, :role_taken)].sort,
-      @review_user_assignment.errors[:user].sort
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates has one supervisor and one manager' do
-    review_user_assignment = ReviewUserAssignment.find(
-      review_user_assignments(:review_with_conclusion_auditor).id)
-    review_user_assignment.assignment_type =
-      ReviewUserAssignment::TYPES[:supervisor]
-    review_user_assignment.user = users(:supervisor_second_user)
-    assert review_user_assignment.invalid?
-    assert_equal 1, review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      review_user_assignment, :user, :role_taken)],
-      review_user_assignment.errors[:user]
-
-    review_user_assignment.reload
-    assert review_user_assignment.valid?
-    assert review_user_assignment.errors.empty?
-
-    review_user_assignment.assignment_type =
-      ReviewUserAssignment::TYPES[:manager]
-    review_user_assignment.user = users(:manager_second_user)
-    assert review_user_assignment.invalid?
-    assert_equal 1, review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      review_user_assignment, :user, :role_taken)],
-      review_user_assignment.errors[:user]
+    assert_equal 1, @review_user_assignment.errors.count
+    assert_equal [error_message_from_model(@review_user_assignment, :user_id,
+        :invalid)], @review_user_assignment.errors[:user_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated user' do
-    @review_user_assignment.user_id = users(:first_time_user).id
-    assert @review_user_assignment.invalid?
-    assert_equal 1, @review_user_assignment.errors.count
+    review = @review_user_assignment.review
+    # Para que ARel cargue la relación
+    review.review_user_assignments.map(&:user_id)
+    review_user_assignment = review.review_user_assignments.build(
+      @review_user_assignment.attributes.merge(:id => nil))
+    review_user_assignment.review = review
+    assert review_user_assignment.invalid?
+    assert_equal 1, review_user_assignment.errors.count
     assert_equal [error_message_from_model(
-      @review_user_assignment, :user, :taken)],
-      @review_user_assignment.errors[:user]
+      review_user_assignment, :user_id, :taken)],
+      review_user_assignment.errors[:user_id]
   end
 
   test 'user reassignment' do

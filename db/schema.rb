@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "file_model_id"
+    t.date     "commitment_date"
   end
 
   add_index "finding_answers", ["file_model_id"], :name => "index_finding_answers_on_file_model_id"

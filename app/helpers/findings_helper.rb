@@ -2,7 +2,7 @@ module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
     finding = form.object
     options = finding.next_status_list.map do |k, v|
-      [t("finding.status_#{k}"), v]
+      [t(:"finding.status_#{k}"), v]
     end
 
     form.select :state, sort_options_array(options),
@@ -63,7 +63,7 @@ module FindingsHelper
 
   def finding_relation_type_field(form)
     options = FindingRelation::TYPES.map do |type, value|
-      [t("finding_relation.types.#{type}"), value]
+      [t(:"finding_relation.types.#{type}"), value]
     end
 
     form.select :finding_relation_type, options, :prompt => true
