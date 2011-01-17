@@ -777,29 +777,26 @@ class Finding < ActiveRecord::Base
   end
 
   def status_change_history
-    last_version = self.versions.last
-    self.user_who_make_it = last_version.try(:whodunnit) ?
-      User.find(last_version.whodunnit) : nil
-    findings_with_status_changed = [self]
-    last_added_version = self
+    last_state = nil
+    findings_with_status_changed = []
 
-    self.versions.reverse.each do |version|
-      old_finding = version.reify
+    self.versions.each do |version|
+      finding = version.reify
 
-      if old_finding && old_finding.state != last_added_version.state
-        last_added_version = old_finding
+      if finding && finding.state != last_state
+        last_state = finding.state
 
         if version.previous.try(:whodunnit)
-          old_finding.user_who_make_it = User.find(version.previous.whodunnit)
+          finding.user_who_make_it = User.find(version.previous.whodunnit)
         end
         
-        findings_with_status_changed << old_finding
-      elsif old_finding
-        findings_with_status_changed[-1] = old_finding
+        findings_with_status_changed << finding
       end
     end
 
-    findings_with_status_changed.sort {|f1, f2| f1.updated_at <=> f2.updated_at}
+    findings_with_status_changed << self if last_state != self.state
+
+    findings_with_status_changed
   end
 
   def users_for_scaffold_notification(level = 1)
