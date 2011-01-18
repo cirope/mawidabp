@@ -3,7 +3,7 @@ SUPPORT_EMAIL = 'soporte@mawidaweb.com.ar'.freeze
 # Teléfono de soporte
 SUPPORT_PHONE = '(0261) 449-8885'.freeze
 # Dirección principal de soporte
-SUPPORT_URL = 'http://soporte.mawidaweb.com.ar/'.freeze
+SUPPORT_URL = 'https://soporte.mawidaweb.com.ar/'.freeze
 # Ruta hasta el directorio de configuración
 CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público

@@ -53,17 +53,29 @@
   <%= link_to_function t(:'error.show_details'),
     "Effect.SlideDown('error_details'); this.hide();", :id => 'show_link' %>
   <div style="display: none; margin: 2em 0em;" id="error_details">
-    <%= link_to_function t(:'error.hide_details'),
-      "Effect.SlideUp('error_details'); $('show_link').appear();" %>
-    <!-- Final -->
-    <h2 style="margin: 1em 0em;"><%=h error.message %></h2>
-    <h3>Backtrace:</h3>
-    <pre style="margin-top: .5em;"><%=h error.backtrace.join("\n") %></pre>
+    <div>
+      <%= link_to_function t(:'error.hide_details'),
+        "Effect.SlideUp('error_details'); $('show_link').appear();" %>
+      <!-- Final -->
+      <h2 style="margin: 1em 0em;"><%=h error.message %></h2>
+      <h3 style="margin-bottom: 1em;">Backtrace:</h3>
+      <pre><%=h error.backtrace.join("\n") %></pre>
 
-    <% unless params.empty? %>
-    <h3 style="margin-top: 1em;">Parameters:</h3>
-    <pre style="margin-top: .5em;"><%=h params.inspect %></pre>
-    <% end %>
-    <div class="clear"></div>
+      <% unless params.empty? %>
+        <h3 style="margin: 1em 0em;">Parameters:</h3>
+        <pre><%=h params.inspect %></pre>
+      <% end %>
+      
+      <h3 style="margin: 1em 0em;">Environment:</h3>
+      <div style="margin-top: 1em;">
+        <% filtered_env = request.filtered_env %>
+        <% filtered_env.keys.sort.each do |key| %>
+          <div style="margin: .5em 0em;">
+            <em><%= key %></em>: <%= filtered_env[key].inspect %>
+          </div>
+        <% end -%>
+      </div>
+      <div class="clear"></div>
+    </div>
   </div>
 <% end %>

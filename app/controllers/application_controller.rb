@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
       create_exception_file exception
 
       if login_check && response.redirect_url.blank?
-        render :template => 'errors/show', :locals => { :error => exception }
+        render :template => 'shared/error', :locals => { :error => exception }
       end
 
       # En caso que la presentación misma de la excepción no salga como se espera
@@ -239,6 +239,7 @@ class ApplicationController < ActionController::Base
   def create_exception_file(exception) #:doc:
     if @auth_user
       dir_name = "#{ERROR_FILES_PATH}#{@auth_user.user}#{File::SEPARATOR}"
+      filtered_env = request.filtered_env
 
       FileUtils.makedirs dir_name
 
@@ -248,6 +249,12 @@ class ApplicationController < ActionController::Base
         out << "#{exception.class}: #{exception.message}\n\n"
 
         exception.backtrace.each { |l| out << "#{l}\n" }
+        
+        out << "\nENV\n\n"
+
+        filtered_env.keys.sort.each do |key|
+          out << "#{key}: #{filtered_env[key].inspect}\n"
+        end
       end
     end
   end
