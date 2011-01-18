@@ -22,9 +22,6 @@
           :readonly => true %>
       <% end %>
     </div>
-    <div class="item_field" style="width: 20%;">
-      <%= check_box_tag "user[#{id}][must_confirm]", 1, user.can_act_as_audited? %>
-    </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= remove_item_link nil, 'user' %>
     </div>

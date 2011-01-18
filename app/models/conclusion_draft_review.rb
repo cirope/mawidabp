@@ -11,8 +11,7 @@ class ConclusionDraftReview < ConclusionReview
 
   def check_for_approval
     self.approved = self.review && (self.review.is_approved? ||
-        (self.force_approval? && self.review.can_be_approved_by_force)) &&
-      (self.notifications_approved? || self.force_approval?)
+        (self.force_approval? && self.review.can_be_approved_by_force))
 
     true
   end

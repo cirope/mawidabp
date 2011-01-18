@@ -268,64 +268,19 @@ class ReviewTest < ActiveSupport::TestCase
       I18n.t(:'review.errors.without_control_objectives'))
   end
 
-  test 'must be approved function with notifications' do
-    assert @review.must_be_approved?
-
-    @review.conclusion_draft_review.notification_relations.create(
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
-
-    assert @review.is_approved?
-
-    assert @review.conclusion_draft_review.notifications(true).first.notify!(
-      false)
-
-    assert !@review.is_approved?
-    assert !@review.approval_errors.blank?
-
-    # Ahora el mismo usuario crea confirma una nueva notificación
-    @review.conclusion_draft_review.notification_relations.create(
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
-
-    assert @review.conclusion_draft_review.notifications(true).first.notify!(
-      true)
-
-    assert @review.is_approved?
-  end
-
   test 'can be sended' do
     assert @review.can_be_sended?
-    notification_relation = nil
 
-    assert_difference ['Notification.count', 'NotificationRelation.count'] do
-      notification_relation = @review.conclusion_draft_review.
-        notification_relations.create(
-        :notification => Notification.new(
-          :user => users(:administrator_user)
-        )
-      )
-    end
+    review_weakness = @review.control_objective_items.first.weaknesses.first
+    oportunity = Weakness.new review_weakness.attributes.merge({
+        :state => Finding::STATUS[:implemented_audited],
+        :review_code => @review.next_weakness_code('O')})
+    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+      review_weakness)
 
-    assert !@review.reload.can_be_sended?
+    oportunity.solution_date = nil
 
-    assert notification_relation.notification.notify!(false)
-
-    assert @review.reload.can_be_sended?
-
-    # Ahora el mismo usuario crea confirma una nueva notificación
-    @review.conclusion_draft_review.notification_relations.create(
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
-
-    assert notification_relation.notification.notify!(true)
-    
+    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.can_be_sended?
   end
 

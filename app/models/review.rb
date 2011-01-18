@@ -299,7 +299,7 @@ class Review < ActiveRecord::Base
       self.created_at.to_date
   end
 
-  def must_be_approved?(with_notifications = true)
+  def must_be_approved?
     errors = []
     review_errors = []
     self.can_be_approved_by_force = true
@@ -327,11 +327,6 @@ class Review < ActiveRecord::Base
         ]
       end
     end
-
-    if with_notifications && self.conclusion_draft_review &&
-        !self.conclusion_draft_review.notifications_approved?
-      review_errors << I18n.t(:'review.errors.notifications_not_approved')
-    end
     
     if self.survey.blank?
       review_errors << I18n.t(:'review.errors.without_survey')
@@ -345,13 +340,7 @@ class Review < ActiveRecord::Base
   alias_method :is_approved?, :must_be_approved?
 
   def can_be_sended?
-    conclusion_review = self.conclusion_final_review ||
-        self.conclusion_draft_review
-    notifications_rejected = conclusion_review.try(:notifications_rejected?)
-
-    self.must_be_approved? ||
-      (conclusion_review.try(:last_notifications).try(:empty?) ||
-        notifications_rejected)
+    self.must_be_approved?
   end
 
   def has_audited?

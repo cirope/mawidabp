@@ -272,7 +272,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'send by email' do
     perform_auth
-    counts_array = ['ActionMailer::Base.deliveries.size', 'Notification.count']
     conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
         :conclusion_with_conclusion_draft_review).id)
 
@@ -280,20 +279,18 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference counts_array do
+    assert_difference 'ActionMailer::Base.deliveries.size' do
       put :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
             :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name,
-            :must_confirm => '1'
+            :data => users(:administrator_user).name
           },
           # Con duplicados igual envía solo un correo
           users(:administrator_user).id + 1 => {
             :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name,
-            :must_confirm => '1'
+            :data => users(:administrator_user).name
           }
         }
       }
@@ -302,27 +299,21 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_redirected_to :action => :edit, :id => conclusion_review.id
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
-    conclusion_review.notifications.clear
-
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
-      assert_difference 'Notification.count' do
-        put :send_by_email, {
-          :id => conclusion_review.id,
-          :user => {
-            users(:administrator_user).id => {
-              :id => users(:administrator_user).id,
-              :data => users(:administrator_user).name,
-              :must_confirm => '1'
-            },
-            # Sin confirmación
-            users(:audited_user).id => {
-              :id => users(:audited_user).id,
-              :data => users(:audited_user).name,
-              :must_confirm => '0'
-            }
+      put :send_by_email, {
+        :id => conclusion_review.id,
+        :user => {
+          users(:administrator_user).id => {
+            :id => users(:administrator_user).id,
+            :data => users(:administrator_user).name
+          },
+          # Sin confirmación
+          users(:audited_user).id => {
+            :id => users(:audited_user).id,
+            :data => users(:audited_user).name
           }
         }
-      end
+      }
     end
 
     assert_redirected_to :action => :edit, :id => conclusion_review.id
@@ -348,8 +339,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :user => {
           users(:administrator_user).id => {
             :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name,
-            :must_confirm => '0'
+            :data => users(:administrator_user).name
           }
         }
       }
@@ -374,8 +364,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :user => {
           users(:administrator_user).id => {
             :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name,
-            :must_confirm => '0'
+            :data => users(:administrator_user).name
           }
         }
       }
@@ -392,7 +381,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'can not send by email with final review' do
     perform_auth
-    counts_array = ['ActionMailer::Base.deliveries.size', 'Notification.count']
     conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
         :conclusion_current_draft_review).id)
 
@@ -400,14 +388,13 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_no_difference counts_array do
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
       put :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
             :id => users(:administrator_user).id,
-            :data => users(:administrator_user).name,
-            :must_confirm => '1'
+            :data => users(:administrator_user).name
           }
         }
       }

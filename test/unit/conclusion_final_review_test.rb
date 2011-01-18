@@ -125,27 +125,17 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'validates force approved review' do
     assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?
-
+    
     conclusion_draft_review = @conclusion_review.conclusion_draft_review
-    conclusion_draft_review.notification_relations.create(
-      :model => conclusion_draft_review,
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
+
+    assert conclusion_draft_review.approved?
+
+    @conclusion_review.review.update_attribute :survey, nil
 
     assert conclusion_draft_review.check_for_approval
     assert !conclusion_draft_review.approved?
 
-    assert conclusion_draft_review.notifications(true).first.notify!(false)
-
-    assert conclusion_draft_review.check_for_approval
-    assert !conclusion_draft_review.approved?
-    assert conclusion_draft_review.save
-
-    assert !@conclusion_review.reload.check_for_approval
-    assert !@conclusion_review.approved?
-
+    # Ahora se elije saltar esta validación
     conclusion_draft_review.force_approval = true
 
     assert conclusion_draft_review.check_for_approval

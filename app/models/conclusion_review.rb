@@ -76,9 +76,6 @@ class ConclusionReview < ActiveRecord::Base
   belongs_to :review
   has_one :plan_item, :through => :review
   has_many :control_objective_items, :through => :review
-  has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, :through => :notification_relations, :uniq => true,
-    :order => 'created_at DESC'
 
   def self.columns_for_sort
     HashWithIndifferentAccess.new({
@@ -111,32 +108,8 @@ class ConclusionReview < ActiveRecord::Base
       (self.review.weaknesses + self.review.oportunities)
   end
 
-  def create_notification_for(user)
-    Notification.create(
-      :user => user,
-      :notification_relations => [NotificationRelation.new(:model => self)]
-    )
-  end
-
   def send_by_email_to(user, options = {})
     Notifier.conclusion_review_notification(user, self, options).deliver
-  end
-
-  def last_notifications
-    notifications_by_user = self.notifications.group_by(&:user)
-    last_notifications = notifications_by_user.map do |_, notifications|
-      notifications.sort {|n1, n2| n1.created_at <=> n2.created_at}.last
-    end
-
-    last_notifications
-  end
-
-  def notifications_approved?
-    self.last_notifications.all? { |n| n.confirmed? || n.stale? }
-  end
-
-  def notifications_rejected?
-    self.last_notifications.any? { |n| n.rejected? }
   end
 
   def to_pdf(organization = nil)

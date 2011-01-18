@@ -226,7 +226,6 @@ class ConclusionDraftReviewsController < ApplicationController
         user = User.find(user_data[:id]) if user_data[:id]
         send_options = {
           :note => note,
-          :notify => (user_data[:must_confirm] == '1'),
           :include_score_sheet => include_score_sheet,
           :include_global_score_sheet => include_global_score_sheet
         }

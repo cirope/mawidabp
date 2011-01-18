@@ -126,13 +126,6 @@ class ConclusionReviewTest < ActiveSupport::TestCase
       @conclusion_review.errors[:close_date]
   end
 
-  test 'create notification for' do
-    assert_difference ['Notification.count', 'NotificationRelation.count'] do
-      @conclusion_review.create_notification_for(User.find(users(
-            :administrator_user).id))
-    end
-  end
-
   test 'send by email' do
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -141,15 +134,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     user = User.find users(:administrator_user).id
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      assert_no_difference 'Notification.count' do
-        @conclusion_review.send_by_email_to(user, :notify => false)
-      end
-    end
-
-    assert_difference 'ActionMailer::Base.deliveries.size' do
-      assert_difference 'Notification.count' do
-        @conclusion_review.send_by_email_to(user, :notify => true)
-      end
+      @conclusion_review.send_by_email_to(user)
     end
   end
 

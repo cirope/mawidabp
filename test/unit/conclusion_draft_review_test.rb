@@ -97,21 +97,11 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
       :taken)], @conclusion_review.errors[:review_id]
   end
 
-  test 'check for approval with rejected notifications' do
-    assert @conclusion_review.check_for_approval
+  test 'validates force approved review' do
+    assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?
 
-    @conclusion_review.notification_relations.create(
-      :model => @conclusion_review,
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
-
-    assert @conclusion_review.reload.check_for_approval
-    assert !@conclusion_review.approved?
-
-    assert @conclusion_review.notifications(true).first.notify!(false)
+    @conclusion_review.review.update_attribute :survey, nil
 
     assert @conclusion_review.check_for_approval
     assert !@conclusion_review.approved?
@@ -121,21 +111,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
 
     assert @conclusion_review.check_for_approval
     assert @conclusion_review.approved?
-
-    @conclusion_review.force_approval = false
-    
-    assert @conclusion_review.check_for_approval
-    assert !@conclusion_review.approved?
-
-    # Ahora el mismo usuario crea confirma una nueva notificación
-    @conclusion_review.notification_relations.create(
-      :model => @conclusion_review,
-      :notification => Notification.new(
-        :user => users(:administrator_user)
-      )
-    )
-
-    assert @conclusion_review.notifications(true).first.notify!(true)
+    assert @conclusion_review.save
 
     assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?

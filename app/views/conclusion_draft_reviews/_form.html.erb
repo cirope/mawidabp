@@ -98,19 +98,6 @@
     </div>
   </div>
 
-  <% unless @conclusion_draft_review.notifications.blank? %>
-    <div id="notifications" style="margin: 2em 0em;">
-      <h1><%= t(:'conclusion_draft_review.notifications_statuses') %></h1>
-      <ul class="raw_list">
-        <% @conclusion_draft_review.last_notifications.each do |notification| %>
-          <li><%= notification.user.full_name %>: <strong><%= notification.status_text %></strong>
-            (<%=t(:'conclusion_draft_review.notification_sended_at',
-              :date => l(notification.created_at, :format => :long)) %>)</li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <%= hidden_lock_version(f) %>
   
   <p>

@@ -180,8 +180,6 @@ es:
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
     last_verified_date: "La última comprobación se realizó el %{date}"
-    notifications_statuses: "Estado de las últimas notificaciones"
-    notification_sended_at: "Enviada el %{date}"
     has_final_review: "Ya se emitió un informe definitivo y por lo tanto no es posible seguir trabajando con el informe borrador"
 
   conclusion_audit_report:
@@ -299,7 +297,6 @@ es:
     conclusion: "CONCLUSIÓN"
     findings: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
-    must_confirm_the_review: "¿Debe confirmar?"
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
@@ -693,8 +690,6 @@ es:
     conclusion_review_notification:
       title: "Informe de auditoría %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
-      confirm: "Confirmar la recepción y APROBAR el informe"
-      reject: "Confirmar la recepción y NO APROBAR el informe"
     findings_expiration_warning:
       title: "Notificación de observaciones cercanas al vencimiento"
       body_title:
@@ -969,7 +964,6 @@ es:
     process_control_qualification_explanation: "La calificación del proceso de negocio se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
-      notifications_not_approved: "tiene notificaciones sin aprobar"
       without_survey: "no tiene relevamiento"
       without_control_objectives: "no tiene objetivos de control"
     survey:

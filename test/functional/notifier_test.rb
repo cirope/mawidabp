@@ -220,67 +220,60 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    assert_difference 'Notification.count' do
-      response = Notifier.conclusion_review_notification(user, conclusion_review,
-        :notify => true, :include_score_sheet => true,
-        :include_global_score_sheet => true,
-        :note => 'note in *textile*').deliver
-      title = I18n.t(:'notifier.conclusion_review_notification.title',
-        :review => conclusion_review.review.identification)
-      text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
+    response = Notifier.conclusion_review_notification(user, conclusion_review,
+      :include_score_sheet => true, :include_global_score_sheet => true,
+      :note => 'note in *textile*').deliver
+    title = I18n.t(:'notifier.conclusion_review_notification.title',
+      :review => conclusion_review.review.identification)
+    text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
-      assert !ActionMailer::Base.deliveries.empty?
-      assert_equal title, response.subject
-      assert_equal 3, response.attachments.size
-      assert_match /textile/, text_part
-      assert response.to.include?(user.email)
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal title, response.subject
+    assert_equal 3, response.attachments.size
+    assert_match /textile/, text_part
+    assert response.to.include?(user.email)
 
-      elements.each do |element|
-        assert text_part.include?(element)
-      end
+    elements.each do |element|
+      assert text_part.include?(element)
     end
 
-    assert_no_difference 'Notification.count' do
-      response = Notifier.conclusion_review_notification(user, conclusion_review,
-        :notify => false, :include_score_sheet => true).deliver
-      title = I18n.t(:'notifier.conclusion_review_notification.title',
-        :review => conclusion_review.review.identification)
-      elements.delete(I18n.t(:'conclusion_review.global_score_sheet'))
-      text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
+    response = Notifier.conclusion_review_notification(user, conclusion_review,
+      :include_score_sheet => true).deliver
+    title = I18n.t(:'notifier.conclusion_review_notification.title',
+      :review => conclusion_review.review.identification)
+    elements.delete(I18n.t(:'conclusion_review.global_score_sheet'))
+    text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
-      assert !ActionMailer::Base.deliveries.empty?
-      assert_equal title, response.subject
-      assert_equal 2, response.attachments.size
-      assert response.to.include?(user.email)
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal title, response.subject
+    assert_equal 2, response.attachments.size
+    assert response.to.include?(user.email)
 
-      elements.each do |element|
-        assert text_part.include?(element)
-      end
-
-      assert !text_part.include?(I18n.t(:'conclusion_review.global_score_sheet'))
+    elements.each do |element|
+      assert text_part.include?(element)
     end
 
-    assert_no_difference 'Notification.count' do
-      response = Notifier.conclusion_review_notification(user, conclusion_review,
-        :notify => false).deliver
-      title = I18n.t(:'notifier.conclusion_review_notification.title',
-        :review => conclusion_review.review.identification)
-      text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
+    assert !text_part.include?(I18n.t(:'conclusion_review.global_score_sheet'))
 
-      elements.delete(I18n.t(:'conclusion_review.score_sheet'))
+    response = Notifier.conclusion_review_notification(user,
+      conclusion_review).deliver
+    title = I18n.t(:'notifier.conclusion_review_notification.title',
+      :review => conclusion_review.review.identification)
+    text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
-      assert !ActionMailer::Base.deliveries.empty?
-      assert_equal title, response.subject
-      assert_equal 1, response.attachments.size
-      assert response.to.include?(user.email)
+    elements.delete(I18n.t(:'conclusion_review.score_sheet'))
 
-      elements.each do |element|
-        assert text_part.include?(element)
-      end
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal title, response.subject
+    assert_equal 1, response.attachments.size
+    assert response.to.include?(user.email)
 
-      assert !text_part.include?(I18n.t(:'conclusion_review.score_sheet'))
-      assert !text_part.include?(I18n.t(:'conclusion_review.global_score_sheet'))
+    elements.each do |element|
+      assert text_part.include?(element)
     end
+
+    assert !text_part.include?(I18n.t(:'conclusion_review.score_sheet'))
+    assert !text_part.include?(I18n.t(:'conclusion_review.global_score_sheet'))
   end
 
   test 'deliver findings expiration warning' do

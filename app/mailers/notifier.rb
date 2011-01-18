@@ -126,6 +126,7 @@ class Notifier < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
+    raise 'lala' if options.has_key?(:notify)
     title = I18n.t(:'notifier.conclusion_review_notification.title',
       :review => conclusion_review.review.identification)
     elements = [
@@ -146,8 +147,6 @@ class Notifier < ActionMailer::Base
     @conclusion_review = conclusion_review
     @body_title = body_title
     @note = options[:note]
-    @notification = options[:notify] ?
-      conclusion_review.create_notification_for(user) : nil
 
     if File.exist?(conclusion_review.absolute_pdf_path)
       attachments[conclusion_review.pdf_name] =
