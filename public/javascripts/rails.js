@@ -139,6 +139,12 @@
     if (!confirm(message)) event.stop();
   });
 
+  document.on("click", "*[data-function]", function(event, element) {
+    if (event.stopped) return;
+    eval(element.readAttribute('data-function'));
+    event.stop();
+  });
+
   document.on("click", "a[data-remote]", function(event, element) {
     if (event.stopped) return;
     handleRemote(element);

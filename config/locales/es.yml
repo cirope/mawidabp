@@ -115,7 +115,6 @@ es:
     sort_by: "Ordenar por..."
     under_construction: "En mantenimiento, disculpe las molestias"
     unsaved_data_warning: "Ha modificado el contenido, si abandona la página perderá todos los cambios"
-    unsupported_browser: "Su navegador no cumple con todos los estándares internacionales requeridos por la aplicación, por favor en su lugar utilice Mozilla Firefox y abra la siguiente dirección: %{url}"
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"

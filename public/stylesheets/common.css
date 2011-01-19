@@ -499,23 +499,6 @@ div#unexpected_error .column_right {
     width: 320px;
 }
 
-div#unsupported_browser {
-    margin: 1em auto;
-    background: #aa0000;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 1.4em;
-    text-align: center;
-    padding: .5em 1em;
-    border: 4px solid #c2bfb7;
-    width: 625px;
-}
-
-div#unsupported_browser a {
-    font-weight: normal;
-    color: #ffffff;
-}
-
 div#user {
     margin-right: .5em;
 }

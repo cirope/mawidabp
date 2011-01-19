@@ -18,21 +18,7 @@
       </div>
     <% end %>
     <!--[eoform:user] -->
-    <% content_for :extra_bottom do %>
-      <div id="unsupported_browser" style="display: none;">
-        <%= textilize t(:'message.unsupported_browser',
-          :url => request.host_with_port) %>
-      </div>
-      <script type="text/javascript">
-      //<![CDATA[
-        if(!Prototype.Browser.WebKit && !Prototype.Browser.Gecko) {
-          Element.show('unsupported_browser');
-        }
-      //]]>
-      </script>
-
-      <%= set_focus_to_first_element %>
-    <% end %>
+    <%= set_focus_to_first_element %>
   <% else %>
     <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
       <%= t :'message.no_organization' %>
