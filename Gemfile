@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :path => '/home/franco/github/rails'
+gem 'rails', :git => 'franco@mawidaweb.com.ar:/home/franco/github/rails', :branch => '3-0-stable_fix_active_support_i18n_load'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

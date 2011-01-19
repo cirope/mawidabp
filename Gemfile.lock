@@ -1,12 +1,7 @@
 GIT
-  remote: https://github.com/paneq/calendar_date_select.git
-  revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
-  branch: rails3test
-  specs:
-    calendar_date_select (1.16.1)
-
-PATH
-  remote: /home/franco/github/rails
+  remote: franco@mawidaweb.com.ar:/home/franco/github/rails
+  revision: 7e2c676324d6b86d9c987b8276b3057d7e5b5656
+  branch: 3-0-stable_fix_active_support_i18n_load
   specs:
     actionmailer (3.0.4.rc)
       actionpack (= 3.0.4.rc)
@@ -47,6 +42,13 @@ PATH
       activesupport (= 3.0.4.rc)
       rake (>= 0.8.7)
       thor (~> 0.14.4)
+
+GIT
+  remote: https://github.com/paneq/calendar_date_select.git
+  revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
+  branch: rails3test
+  specs:
+    calendar_date_select (1.16.1)
 
 GEM
   remote: http://rubygems.org/
@@ -93,7 +95,7 @@ GEM
     paperclip (2.3.8)
       activerecord
       activesupport
-    pg (0.10.0)
+    pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)

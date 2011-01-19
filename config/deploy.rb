@@ -1,5 +1,7 @@
+require 'bundler/capistrano'
+
 set :application, 'mawidabp'
-set :repository,  '/home/franco/git/mawida_app'
+set :repository,  'file:///home/franco/git/mawida_app'
 set :deploy_to, '/var/rails/mawidabp'
 set :user, 'deployer'
 set :password, '!QAZxsw2'
@@ -9,14 +11,13 @@ set :use_sudo, false
 
 set :scm, :git
 set :branch, 'master'
+set :local_repository, 'mawidaweb.com.ar:/home/franco/git/mawida_app'
+
+set :bundle_without, [:test]
 
 role :web, 'mawidaweb.com.ar' # Your HTTP server, Apache/etc
 role :app, 'mawidaweb.com.ar' # This may be the same as your `Web` server
 role :db,  'mawidaweb.com.ar', :primary => true # This is where Rails migrations will run
-
-# If you are using Passenger mod_rails uncomment this:
-# if you're still using the script/reapear helper you will need
-# these http://github.com/rails/irs_process_scripts
 
 after 'deploy:symlink', 'deploy:update_crontab', 'deploy:create_shared_symlinks'
 
