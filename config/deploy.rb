@@ -1,7 +1,7 @@
 require 'bundler/capistrano'
 
 set :application, 'mawidabp'
-set :repository,  'file:///home/franco/git/mawida_app'
+set :repository,  'https://github.com/francocatena/mawida_app.git'
 set :deploy_to, '/var/rails/mawidabp'
 set :user, 'deployer'
 set :password, '!QAZxsw2'
@@ -11,7 +11,6 @@ set :use_sudo, false
 
 set :scm, :git
 set :branch, 'master'
-set :local_repository, 'mawidaweb.com.ar:/home/franco/git/mawida_app'
 
 set :bundle_without, [:test]
 
