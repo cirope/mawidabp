@@ -215,10 +215,10 @@ class WorkPaper < ActiveRecord::Base
           end
 
           if File.basename(filename, File.extname(filename)) ==
-              File.basename(self.file_model.filename, '.zip')
-            self.file_model.filename = File.basename(filename)
-            self.file_model.content_type = Mime::Type.lookup_by_extension ext
-            self.file_model.size = File.size(filename)
+              File.basename(self.file_model.file_file_name, '.zip')
+            self.file_model.file_file_name = File.basename(filename)
+            self.file_model.file_content_type = Mime::Type.lookup_by_extension ext
+            self.file_model.file_file_size = File.size(filename)
           end
         end
       end

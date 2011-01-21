@@ -1,6 +1,6 @@
 GIT
   remote: franco@mawidaweb.com.ar:/home/franco/github/rails
-  revision: 7e2c676324d6b86d9c987b8276b3057d7e5b5656
+  revision: 6b316411ec38fc4af3e87eefe72244622ec223c9
   branch: 3-0-stable_fix_active_support_i18n_load
   specs:
     actionmailer (3.0.4.rc)
