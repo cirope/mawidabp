@@ -30,9 +30,6 @@ class Oportunity < Finding
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.get_parameter(
       :admin_code_prefix_for_work_papers_in_oportunities)
-    work_paper.neighbours =
-      (self.control_objective_item.try(:review).try(:work_papers) || []) +
-      self.work_papers.reject { |wp| wp == work_paper }
   end
 
   def prefix

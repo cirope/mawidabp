@@ -28,7 +28,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   attr_reader :approval_errors
 
   # Callbacks
-  before_validation :can_be_modified?, :enable_control_validations
+  before_validation :set_proper_parent, :can_be_modified?,
+    :enable_control_validations
   before_destroy :can_be_destroyed?
   before_validation(:on => :create) { fill_control_objective_text }
 
@@ -119,8 +120,6 @@ class ControlObjectiveItem < ActiveRecord::Base
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.get_parameter(
       :admin_code_prefix_for_work_papers_in_control_objectives)
-    work_paper.neighbours = (self.review.try(:work_papers) || []) +
-      self.work_papers.reject { |wp| wp == work_paper }
   end
 
   def mark_as_pre_audit(work_paper)
@@ -129,6 +128,10 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def mark_as_post_audit(work_paper)
     work_paper.work_paper_type = 'ControlObjectiveItemPostAudit'
+  end
+
+  def set_proper_parent
+    self.work_papers.each { |wp| wp.owner = self }
   end
 
   def score_completion

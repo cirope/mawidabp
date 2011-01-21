@@ -204,9 +204,10 @@
 
       $('business_unit').setValue('');
       $('audit_type').setValue('');
-
+      
       if(!$F(this).blank()) {
         new Ajax.Request(data_url, {
+          method: 'get',
           parameters: {id: $F(this)},
           onCreate: function() {
             Helper.showLoading(element);

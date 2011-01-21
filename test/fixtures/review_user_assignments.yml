@@ -13,7 +13,7 @@ current_review_manager:
   review: current_review
   user: manager_user
 
-review_with_conclusion_auditor:
+review_with_conclusion_bare_auditor:
   assignment_type: <%= ReviewUserAssignment::TYPES[:auditor] %>
   review: review_with_conclusion
   user: bare_user

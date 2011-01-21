@@ -35,9 +35,6 @@ class Weakness < Finding
     work_paper.code_prefix = self.get_parameter(self.finding_prefix ?
         :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
         :admin_code_prefix_for_work_papers_in_weaknesses)
-    work_paper.neighbours =
-      (self.control_objective_item.try(:review).try(:work_papers) || []) +
-      self.work_papers.reject { |wp| wp == work_paper }
   end
   
   def risk_text

@@ -279,7 +279,7 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.sort
   end
 
-  test 'work papers can be added to uneditable control objectives' do
+  test 'work papers can be added to uneditable weaknesses' do
     uneditable_weakness = Weakness.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 

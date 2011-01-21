@@ -7,6 +7,8 @@ class WorkPaperTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
+    GlobalModelConfig.current_organization_id =
+      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -28,13 +30,13 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.create(
+        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',
         :description => 'New description',
         :organization => organizations(:default_organization),
         :code_prefix => 'PTOC',
-        :neighbours => [],
         :file_model_attributes => {
           :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
@@ -115,13 +117,13 @@ class WorkPaperTest < ActiveSupport::TestCase
   test 'zip created' do
     assert_difference 'WorkPaper.count' do
       @work_paper = WorkPaper.create(
+        :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',
         :number_of_pages => '10',
         :description => 'New description',
         :organization => organizations(:default_organization),
         :code_prefix => 'PTOC',
-        :neighbours => [],
         :file_model_attributes => {
           :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
         }
@@ -131,23 +133,28 @@ class WorkPaperTest < ActiveSupport::TestCase
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
   end
 
-  test 'duplicated codes' do
-    other_work_paper = WorkPaper.find work_papers(:image_work_paper).id
+  test 'validates duplicated codes' do
+    other_work_paper = WorkPaper.find work_papers(:text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
 
     assert_no_difference 'WorkPaper.count' do
-      @work_paper = WorkPaper.create(
-        :name => 'New name',
-        :code => other_work_paper.code,
-        :number_of_pages => '10',
-        :description => 'New description',
-        :organization => organizations(:default_organization),
-        :code_prefix => 'PTOC',
-        :neighbours => [other_work_paper],
-        :file_model_attributes => {
-          :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+      assert !other_work_paper.owner.update_attributes(
+        :work_papers_attributes => {
+          :new_1 => {
+            :name => 'New name',
+            :code => other_work_paper.code,
+            :number_of_pages => '10',
+            :description => 'New description',
+            :organization => organizations(:default_organization),
+            :code_prefix => 'PTO',
+            :file_model_attributes => {
+              :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+            }
+          }
         }
       )
     end
+
+    @work_paper = other_work_paper.owner.work_papers.detect(&:new_record?)
 
     assert_equal 1, @work_paper.errors.count
     assert_equal [error_message_from_model(@work_paper, :code, :taken)],

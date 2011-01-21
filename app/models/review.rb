@@ -156,15 +156,13 @@ class Review < ActiveRecord::Base
   has_one :workflow, :dependent => :destroy
   has_many :control_objective_items, :inverse_of => :review,
     :dependent => :destroy, :after_add => :assign_review
-  has_many :weaknesses, :through => :control_objective_items, :uniq => true
-  has_many :oportunities, :through => :control_objective_items, :uniq => true
-  has_many :final_weaknesses, :through => :control_objective_items,
-    :uniq => true
-  has_many :final_oportunities, :through => :control_objective_items,
-    :uniq => true
+  has_many :weaknesses, :through => :control_objective_items
+  has_many :oportunities, :through => :control_objective_items
+  has_many :final_weaknesses, :through => :control_objective_items
+  has_many :final_oportunities, :through => :control_objective_items
   has_many :review_user_assignments, :dependent => :destroy, :include => :user,
     :order => 'assignment_type DESC', :inverse_of => :review
-  has_many :users, :through => :review_user_assignments, :uniq => true
+  has_many :users, :through => :review_user_assignments
 
   accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true

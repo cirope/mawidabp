@@ -329,14 +329,18 @@ module ApplicationHelper
   # Devuelve HTML con un link para eliminar un componente de un formulario
   #
   # * _fields_:: El objeto form para el que se va a generar el link
-  def remove_item_link(fields = nil, class_for_remove = nil)
+  def remove_item_link(fields = nil, class_for_remove = nil, options = {})
     new_record = fields.nil? || fields.object.new_record?
     out = String.new.html_safe
+    link_options = {
+      :title => t(:'label.delete'),
+      :'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
+      :'data-event' => (new_record ? :remove_item : :hide_item)
+    }
+
     out << fields.hidden_field(:_destroy, :class => :destroy,
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to('X', '#', :title => t(:'label.delete'),
-      :'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
-      :'data-event' => (new_record ? :remove_item : :hide_item))
+    out << link_to('X', '#', link_options.merge(options))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un

@@ -871,7 +871,7 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'work papers can be added to uneditable control objectives' do
+  test 'work papers can be added to uneditable findings' do
     uneditable_finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 

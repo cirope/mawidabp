@@ -1,5 +1,6 @@
 class WorkPaper < ActiveRecord::Base
   include ParameterSelector
+  include Comparable
   
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
@@ -12,7 +13,7 @@ class WorkPaper < ActiveRecord::Base
   }
 
   # Restricciones de los atributos
-  attr_accessor :code_prefix, :neighbours
+  attr_accessor :code_prefix
   attr_readonly :organization_id, :code
   attr_accessor_with_default :check_code_prefix, true
 
@@ -29,29 +30,21 @@ class WorkPaper < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates :name, :code, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
+  validates :code, :uniqueness => { :scope => :owner_id }, :allow_nil => true,
+    :allow_blank => true
   validates_each :code, :on => :create do |record, attr, value|
-    if record.check_code_prefix
+    if record.check_code_prefix && !record.marked_for_destruction?
       raise 'No code_prefix is set!' unless record.code_prefix
 
       regex = Regexp.new "\\A(#{record.code_prefix})\\s\\d+\\Z"
 
       record.errors.add attr, :invalid unless value =~ regex
 
-      raise 'The neighbours array is not set!' unless record.neighbours
+      # TODO: Eliminar, duplicado para validar los objetos en memoria
+      codes = record.owner.work_papers.reject(
+        &:marked_for_destruction?).map(&:code)
 
-      taken_codes = []
-
-      record.neighbours.each do |wp|
-        another_work_paper = (!record.new_record? && record.id != wp.id) ||
-          (record.new_record? && record.object_id != wp.object_id)
-
-        if another_work_paper && !record.marked_for_destruction? &&
-            record.code.strip == wp.code.strip
-          taken_codes << record.code.strip
-        end
-      end
-
-      unless taken_codes.blank?
+      if codes.select { |c| c.strip == value.strip }.size > 1
         record.errors.add attr, :taken
       end
     end
@@ -66,6 +59,19 @@ class WorkPaper < ActiveRecord::Base
 
   def inspect
     "#{self.code} - #{self.name} (#{self.pages_to_s})"
+  end
+
+  def <=>(other)
+    if self.owner_id == other.owner_id && self.owner_type == other.owner_type
+      self.code <=> other.code
+    else
+      -1
+    end
+  end
+
+  def ==(other)
+    other.kind_of?(WorkPaper) && other.id &&
+      (self.id == other.id || (self <=> other) == 0)
   end
 
   def pages_to_s

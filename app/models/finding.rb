@@ -112,10 +112,6 @@ class Finding < ActiveRecord::Base
 
   EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete]
 
-  # Atributos no persistente
-  attr_accessor :users_for_notification, :user_who_make_it,
-    :nested_finding_relation
-
   # Named scopes
   scope :with_prefix, lambda { |prefix|
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
@@ -325,8 +321,10 @@ class Finding < ActiveRecord::Base
 
   # Restricciones sobre los atributos
   attr_protected :first_notification_date, :final
-  attr_accessor :nested_user, :finding_prefix, :avoid_changes_notification
   attr_readonly :review_code
+  # Atributos no persistente
+  attr_accessor :nested_user, :finding_prefix, :avoid_changes_notification,
+    :users_for_notification, :user_who_make_it, :nested_finding_relation
 
   # Callbacks
   before_create :can_be_created?
@@ -415,7 +413,7 @@ class Finding < ActiveRecord::Base
     :order => 'created_at'
   has_many :costs, :as => :item, :dependent => :destroy
   has_many :work_papers, :as => :owner, :dependent => :destroy,
-    :before_add => [:check_for_final_review, :prepare_work_paper],
+    :before_add => [:prepare_work_paper, :check_for_final_review],
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
@@ -497,6 +495,7 @@ class Finding < ActiveRecord::Base
     self.finding_answers.each { |fa| fa.finding = self }
     self.finding_relations.each { |fr| fr.finding = self }
     self.finding_user_assignments.each { |fua| fua.finding = self }
+    self.work_papers.each { |wp| wp.owner = self }
   end
 
   def check_for_valid_relation(finding_relation)
@@ -516,9 +515,6 @@ class Finding < ActiveRecord::Base
   def prepare_work_paper(work_paper)
     work_paper.code_prefix ||= self.get_parameter(
       :admin_code_prefix_for_work_papers_in_weaknesses_follow_up)
-    work_paper.neighbours ||= 
-      (self.control_objective_item.try(:review).try(:work_papers) || []) +
-      self.work_papers.reject { |wp| wp == work_paper }
   end
 
   def answer_added(finding_answer)

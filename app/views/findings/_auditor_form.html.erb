@@ -6,16 +6,17 @@
   :id => "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
     <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
-      :object => @finding.finding_answers.new(:user_id => @auth_user.id))}';" %>
+        :object => @finding.finding_answers.new(:user_id => @auth_user.id))}';" %>
     <%= raw "var finding_relation='#{generate_template(f_f, :finding_relations,
-      :object => FindingRelation.new(:finding_id => @finding.id))}';" %>
+        :object => FindingRelation.new(:finding_id => @finding.id))}';" %>
     <%= raw "var work_paper='#{generate_template(f_f, :work_papers,
-          {:form_builder_local => :wp_f,
-          :partial => 'work_papers/work_paper',
-          :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-          :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <%= raw "var lastWorkPaperCode = '#{next_weakness_work_paper_code(
-        @finding, true) if @finding.kind_of?(Weakness)}';" %>
+        {:form_builder_local => :wp_f,
+        :partial => 'work_papers/work_paper',
+        :locals => {:child_index => 'NEW_RECORD', :frozen => false},
+        :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
+    <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness) ?
+        next_weakness_work_paper_code(@finding, true) :
+        next_oportunity_work_paper_code(@finding)}';" %>
     <%= raw "var finding_user_assignment='#{generate_template(f_f,
         :finding_user_assignments, :locals => {:readonly => users_readonly})}';" %>
   <% end %>

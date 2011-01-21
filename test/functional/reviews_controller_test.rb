@@ -149,14 +149,6 @@ class ReviewsControllerTest < ActionController::TestCase
                         :compliance_tests => 'New compliance tests',
                         :sustantive_tests => 'New sustantive tests'
                       },
-                      :relevance => get_test_parameter(
-                        :admin_control_objective_importances).last[1],
-                      :design_score => get_test_parameter(
-                        :admin_control_objective_qualifications).last[1],
-                      :compliance_score => get_test_parameter(
-                        :admin_control_objective_qualifications).last[1],
-                      :audit_date => Time.now.to_date,
-                      :auditor_comment => 'New comment',
                       :control_objective_id => control_objectives(
                         :iso_27000_security_organization_4_1).id,
                       :pre_audit_work_papers_attributes => {
@@ -268,8 +260,8 @@ class ReviewsControllerTest < ActionController::TestCase
           :period_id => periods(:current_period).id,
           :plan_item_id => plan_items(:current_plan_item_2).id,
           :review_user_assignments_attributes => {
-            review_user_assignments(:review_with_conclusion_auditor).id => {
-              :id => review_user_assignments(:review_with_conclusion_auditor).id,
+            review_user_assignments(:review_with_conclusion_bare_auditor).id => {
+              :id => review_user_assignments(:review_with_conclusion_bare_auditor).id,
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
               :user => users(:bare_user)
             }
@@ -288,14 +280,6 @@ class ReviewsControllerTest < ActionController::TestCase
                 :compliance_tests => 'Updated compliance tests',
                 :sustantive_tests => 'Updated sustantive tests'
               },
-              :relevance => get_test_parameter(
-                :admin_control_objective_importances).last[1],
-              :design_score => get_test_parameter(
-                :admin_control_objective_qualifications).last[1],
-              :compliance_score => get_test_parameter(
-                :admin_control_objective_qualifications).last[1],
-              :audit_date => Time.now.to_date,
-              :auditor_comment => 'Updated comment',
               :control_objective_id =>
                 control_objectives(:iso_27000_security_organization_4_1).id
             }
