@@ -116,7 +116,7 @@ GEM
       ansi (>= 1.2.2)
     tzinfo (0.3.24)
     uuidtools (2.1.1)
-    validates_timeliness (3.0.3)
+    validates_timeliness (3.0.4)
       timeliness (~> 0.3.2)
     whenever (0.6.2)
       aaronh-chronic (>= 0.3.9)

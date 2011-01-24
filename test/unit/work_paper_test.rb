@@ -133,6 +133,20 @@ class WorkPaperTest < ActiveSupport::TestCase
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
   end
 
+  test 'unzip if necesary' do
+    assert @work_paper.update_attributes(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+
+    assert_equal '.html', File.extname(TEST_FILE_FULL_PATH)
+  end
+
   test 'validates duplicated codes' do
     other_work_paper = WorkPaper.find work_papers(:text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
 
