@@ -417,10 +417,7 @@ class Finding < ActiveRecord::Base
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
-  has_many :finding_user_assignments, :include => :user,
-    :after_add => :user_assignment_added,
-    :after_remove => :user_assignment_removed,
-    :inverse_of => :finding
+  has_many :finding_user_assignments, :include => :user, :inverse_of => :finding
   has_many :users, :through => :finding_user_assignments,
     :order => 'last_name ASC, name ASC'
   
@@ -524,31 +521,22 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  def user_assignment_added(finding_user_assignment)
-    @users_added ||= []
-    @users_added << finding_user_assignment.user if finding_user_assignment.user
-  end
-  
-  def user_assignment_removed(finding_user_assignment)
-    @users_removed ||= []
-    
-    if finding_user_assignment.user
-      @users_removed << finding_user_assignment.user
-    end
-  end
-
   def notify_changes_to_users
     unless self.avoid_changes_notification
-      if !@users_added.blank? && !@users_removed.blank?
-        Notifier.reassigned_findings_notification(@users_added, @users_removed,
-          self, false).deliver
-      elsif @users_added.blank? && !@users_removed.blank?
+      added = self.finding_user_assignments.select(&:new_record?).map(&:user)
+      removed = self.finding_user_assignments.select(
+        &:marked_for_destruction?).map(&:user)
+
+      if !added.blank? && !removed.blank?
+        Notifier.reassigned_findings_notification(added, removed, self,
+          false).deliver
+      elsif added.blank? && !removed.blank?
         title = I18n.t(:'finding.responsibility_removed',
           :class_name => self.class.model_name.human.downcase,
           :review_code => self.review_code,
           :review => self.review.try(:identification))
 
-        Notifier.changes_notification(@users_removed, :title => title).deliver
+        Notifier.changes_notification(removed, :title => title).deliver
       end
     end
   end

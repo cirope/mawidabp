@@ -499,8 +499,7 @@ class FindingTest < ActiveSupport::TestCase
       assert @finding.update_attributes(:description => 'Updated description')
     end
 
-    @finding.finding_user_assignments.delete(
-      @finding.finding_user_assignments.first)
+    @finding.finding_user_assignments.first.mark_for_destruction
     @finding.finding_user_assignments.build(:user => new_user)
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
@@ -515,8 +514,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    @finding.finding_user_assignments.delete(
-      @finding.finding_user_assignments.first)
+    @finding.finding_user_assignments.first.mark_for_destruction
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.save
