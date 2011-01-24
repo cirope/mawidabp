@@ -121,6 +121,14 @@ class ReviewTest < ActiveSupport::TestCase
       @review.errors[:identification]
     assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
       @review.errors[:plan_item_id]
+
+    # La identificación sólo debe ser única dentro de la organización
+    @review.period_id = periods(:current_period_second_organization).id
+    @review.period.reload
+    assert @review.invalid?
+    assert_equal 1, @review.errors.count
+    assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
+      @review.errors[:plan_item_id]
   end
 
   test 'validates valid attributes' do

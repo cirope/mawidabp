@@ -131,10 +131,26 @@ class Review < ActiveRecord::Base
     :allow_blank => true
   validates :identification, :description, :period_id, :plan_item_id,
     :presence => true
-  validates :identification, :plan_item_id,
-    :uniqueness => {:case_sensitive => false}
+  validates :plan_item_id, :uniqueness => {:case_sensitive => false}
   validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
+  validates_each :identification do |record, attr, value|
+    organization_id = record.period.try(:organization_id)
+    reviews = Review.includes(:period).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        'identification = :identification',
+        (record.id ? "#{table_name}.id != :id" : "#{table_name}.id IS NOT NULL")
+      ].join(' AND '),
+      {
+        :organization_id => organization_id,
+        :identification => value,
+        :id => record.id
+      }
+    )
+
+    record.errors.add attr, :taken if reviews.count > 0
+  end
   validates_each :review_user_assignments do |record, attr, value|
     unless record.has_audited? && record.has_auditor? &&
         record.has_supervisor? && record.has_manager?
