@@ -6,11 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
-    <%= stylesheet_link_tag 'common', :media => :all %>
-    <%= stylesheet_link_tag 'mobile', :media => 'only screen and (min-device-width : 320px) and (max-device-width : 480px)' %>
-    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7', :media => :all %><![endif]-->
-    <%= javascript_include_tag :defaults, :cache => 'main' %>
-    <%= calendar_date_select_includes 'silver' %>
+    <%= default_stylesheets %>
+    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7'%><![endif]-->
+    <%= default_javascripts %>
   </head>
   <body>
     <div id="content">

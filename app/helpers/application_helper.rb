@@ -7,6 +7,24 @@
 module ApplicationHelper
   include ParameterSelector
 
+  def default_stylesheets
+    sheets = ['common', 'mobile']
+    sheets |= calendar_date_select_stylesheets(:style => 'silver').to_a
+    sheets << {:cache => 'main'}
+
+    stylesheet_link_tag *sheets
+  end
+
+  def default_javascripts
+    libs = [:defaults, 'popup.js']
+    libs |= calendar_date_select_javascripts(
+      :locale => (@auth_user.language if @auth_user)
+    ).to_a
+    libs << {:cache => 'main'}
+
+    javascript_include_tag *libs
+  end
+
   def textilize(text)
     if text.blank?
       ''
