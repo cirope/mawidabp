@@ -601,7 +601,11 @@ class Finding < ActiveRecord::Base
   def mark_as_unconfirmed!
     self.first_notification_date = Date.today unless self.unconfirmed?
     self.state = STATUS[:unconfirmed] if self.notify?
-    
+
+    self.save(:validate => false)
+
+  rescue ActiveRecord::StaleObjectError
+    self.review.reload
     self.save(:validate => false)
   end
 

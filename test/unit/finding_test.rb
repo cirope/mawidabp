@@ -357,7 +357,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_nil finding.confirmation_date
     assert finding.notifications.not_confirmed.detect { |n| n.user.can_act_as_audited? }
 
-    finding.finding_answers << FindingAnswer.new(
+    finding.finding_answers.build(
       :answer => 'New administrator answer',
       :auditor_comments => 'New auditor comments',
       :user => users(:administrator_user)
@@ -367,7 +367,7 @@ class FindingTest < ActiveSupport::TestCase
     assert finding.unconfirmed?
     assert finding.notifications.not_confirmed.detect { |n| n.user.can_act_as_audited? }
 
-    finding.finding_answers << FindingAnswer.new(
+    finding.finding_answers.build(
       :answer => 'New audited answer',
       :user => users(:audited_user)
     )
