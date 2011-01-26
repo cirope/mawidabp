@@ -1,7 +1,9 @@
 # Learn more: http://github.com/javan/whenever
 # 
 # Para actualizar la tabla de cron de desarrollo:
-# whenever --update-crontab --set environment=development
+# whenever --set environment=development --update-crontab mawidabp
+# Para eliminarla
+# whenever -c mawidabp
 
 env :PATH, '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
 

@@ -91,6 +91,19 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   final: false
   notification_level: 0
 
+bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
+  type: Oportunity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: OM03
+  description: Description 2o
+  answer: Answer 2o
+  audit_comments: Audit comments 2o
+  state: <%= Finding::STATUS[:notify] %>
+  origination_date:
+  solution_date:
+  final: false
+  notification_level: 0
+
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable

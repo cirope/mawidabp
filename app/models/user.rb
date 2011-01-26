@@ -709,8 +709,9 @@ class User < ActiveRecord::Base
   def self.notify_new_findings
     # Sólo si no es sábado o domingo
     unless [0, 6].include?(Date.today.wday)
+      emails = []
       findings = User.all_with_findings_for_notification.inject([]) do |f, user|
-        Notifier.notify_new_findings(user).deliver
+        emails << Notifier.notify_new_findings(user)
 
         f | user.findings.for_notification
       end
@@ -719,6 +720,8 @@ class User < ActiveRecord::Base
         all_changed = findings.all? { |finding| finding.mark_as_unconfirmed! }
 
         raise ActiveRecord::Rollback unless all_changed
+
+        emails.each { |email| email.deliver }
       end
     end
   end
