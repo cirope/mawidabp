@@ -386,12 +386,14 @@ class UserTest < ActiveSupport::TestCase
 
   test 'blank password' do
     assert_not_nil @user.password
+    counts_array = ['@user.old_passwords.count',
+      'ActionMailer::Base.deliveries.size']
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size' do
+    assert_difference counts_array do
       @user.blank_password!(organizations(:default_organization))
     end
 

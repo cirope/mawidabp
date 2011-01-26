@@ -322,16 +322,9 @@ class UsersController < ApplicationController
     @user = find_with_organization(params[:id])
 
     if @user
-      old_password = OldPassword.new(
-        :password => @user.password,
-        :user => @user
-      )
+      @user.blank_password!(@auth_organization)
 
-      if old_password.save
-        @user.blank_password!(@auth_organization)
-        
-        redirect_to_index t(:'user.password_reseted', :user => @user.user)
-      end
+      redirect_to_index t(:'user.password_reseted', :user => @user.user)
     end
   end
 

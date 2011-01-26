@@ -152,6 +152,7 @@ class User < ActiveRecord::Base
   
   # Relaciones
   belongs_to :resource
+  has_many :old_passwords, :dependent => :destroy
   has_many :login_records, :dependent => :destroy
   has_many :error_records, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
@@ -306,7 +307,7 @@ class User < ActiveRecord::Base
     
     if self.password && self.password_was != self.password
       @last_passwords = nil
-      OldPassword.create(:password => self.password_was, :user => self)
+      self.old_passwords.create(:password => self.password_was)
     end
   end
 
@@ -327,6 +328,8 @@ class User < ActiveRecord::Base
   end
 
   def blank_password!(organization, notify = true)
+    self.old_passwords.build(:password => self.password)
+
     self.password = nil
     self.enable = true
     self.failed_attempts = 0
@@ -445,8 +448,10 @@ class User < ActiveRecord::Base
   end
 
   def last_passwords
-    @last_passwords ||= OldPassword.lasts(self.id,
-      self.get_parameter(:security_password_count).to_i)
+    limit = self.get_parameter(:security_password_count).to_i - 1
+
+    @last_passwords ||= self.old_passwords.order('created_at DESC').limit(
+      limit > 0 ? limit : 0)
   end
 
   def create_new_salt
