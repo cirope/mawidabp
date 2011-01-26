@@ -1,5 +1,8 @@
 require 'bundler/capistrano'
 
+set :whenever_command, 'bundle exec whenever'
+require 'whenever/capistrano'
+
 set :application, 'mawidabp'
 set :repository,  'https://github.com/francocatena/mawida_app.git'
 set :deploy_to, '/var/rails/mawidabp'
@@ -18,7 +21,7 @@ role :web, 'mawidaweb.com.ar' # Your HTTP server, Apache/etc
 role :app, 'mawidaweb.com.ar' # This may be the same as your `Web` server
 role :db,  'mawidaweb.com.ar', :primary => true # This is where Rails migrations will run
 
-after 'deploy:symlink', 'deploy:update_crontab', 'deploy:create_shared_symlinks'
+after 'deploy:symlink', 'deploy:create_shared_symlinks'
 
 namespace :deploy do
   task :start do
@@ -41,10 +44,5 @@ namespace :deploy do
 
       run "ln -s #{shared_files_path} #{release_files_path}"
     end
-  end
-
-  desc 'Update the crontab file'
-  task :update_crontab do
-    run "cd #{release_path} && whenever --update-crontab #{application}"
   end
 end
