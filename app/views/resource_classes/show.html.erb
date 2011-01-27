@@ -1,6 +1,7 @@
 <div id="showed_data">
   <p>
-    <b><%= ResourceClass.human_attribute_name :name %>:</b>
+    <b><%= raw(ResourceClass.human_attribute_name(:name) +
+        show_inline_help_for(:resource_class_name)) %>:</b>
     <%=h @resource_class.name %>
   </p>
 

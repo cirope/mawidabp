@@ -4,7 +4,8 @@
 
   <div class="form_column_left">
     <p class="form_item">
-      <%= f.label :number, nil, :class => :inline %>
+      <%= f.label :number, raw(Period.human_attribute_name(:number) +
+          show_inline_help_for(:period_number)), :class => :inline %>
       <%= f.text_field :number, :class => :inline_item %>
     </p>
     <p>

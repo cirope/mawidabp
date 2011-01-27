@@ -7,7 +7,8 @@
 
   <div class="form_column_left">
     <p>
-      <%= rc_f.label :name %>
+      <%= rc_f.label :name, raw(ResourceClass.human_attribute_name(:name) +
+          show_inline_help_for(:resource_class_name)) %>
       <%= rc_f.text_field :name, :maxlength => 255, :size => 10 %>
     </p>
     <p class="form_item">

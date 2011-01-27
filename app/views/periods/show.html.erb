@@ -1,6 +1,7 @@
 <div id="showed_data">
 <p>
-  <b><%= Period.human_attribute_name :number %>:</b>
+  <b><%= raw(Period.human_attribute_name(:number) +
+      show_inline_help_for(:period_number)) %>:</b>
   <%=h @period.number %>
 </p>
 

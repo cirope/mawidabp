@@ -1,7 +1,8 @@
 <table>
   <thead>
     <tr>
-      <th><%= ResourceClass.human_attribute_name :name %></th>
+      <th><%= raw(ResourceClass.human_attribute_name(:name) +
+        show_inline_help_for(:resource_class_name)) %></th>
       <th class="expendable"><%= ResourceClass.human_attribute_name :unit %></th>
       <th></th>
       <th></th>

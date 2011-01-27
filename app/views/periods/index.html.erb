@@ -1,7 +1,8 @@
 <table>
   <thead>
     <tr>
-      <th><%= Period.human_attribute_name :number %></th>
+      <th><%= raw(Period.human_attribute_name(:number) +
+        show_inline_help_for(:period_number)) %></th>
       <th class="expendable"><%= Period.human_attribute_name :description %></th>
       <th class="expendable"><%= Period.human_attribute_name :start %></th>
       <th class="expendable"><%= Period.human_attribute_name :end %></th>

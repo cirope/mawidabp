@@ -27,10 +27,12 @@
   <div class="items">
     <div class="column_headers nested_items">
       <div class="item_column" style="width: 23%;">
-        <h3><%= BestPractice.model_name.human %></h3>
+        <h3><%= raw(BestPractice.model_name.human +
+          show_inline_help_for(:procedure_control_best_practice)) %></h3>
       </div>
       <div class="item_column" style="width: 23%;">
-        <h3><%= ProcessControl.model_name.human %></h3>
+        <h3><%= raw(ProcessControl.model_name.human +
+          show_inline_help_for(:procedure_control_process_control)) %></h3>
       </div>
       <div class="item_column" style="width: 23%;">
         <h3><%= ProcedureControlItem.human_attribute_name :aproach %></h3>

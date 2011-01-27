@@ -1,6 +1,6 @@
 <% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) %>
 <% can_edit = @auth_user.admin? %>
-<span style="display: inline;">
+<span class="popup_link_container">
   <span id="help_link_<%= link_name %>" class="popup_link" title="<%= t(:'inline_help.link_title') %>">?</span>
 </span>
 
@@ -14,8 +14,8 @@
           :back_to => request.path) %> |
       <% elsif can_edit %>
         <%= link_to t(:'label.new'), new_inline_help_path(
-          :inline_help => {:language => @auth_user.language, :name => name.to_s},
-          :back_to => request.path) %> |
+          :language => @auth_user.language, :name => name.to_s,
+          :back_to => request.path.to_s) %> |
       <% end %>
       <a id="help_closebox_<%= name %>" class="popup_closebox" href="#" onclick="return false;">
         <%= t(:'label.close') %>

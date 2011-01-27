@@ -35,7 +35,10 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps/new.xml
   def new
     @title = t :'inline_help.new_title'
-    @inline_help = InlineHelp.new(params[:inline_help])
+    @inline_help = InlineHelp.new(
+      :language => params[:language],
+      :name => params[:name]
+    )
     session[:back_to] = params[:back_to]
 
     respond_to do |format|

@@ -1049,6 +1049,11 @@ span.info_box {
     vertical-align: middle;
 }
 
+span.popup_link_container {
+    display: inline;
+    vertical-align: text-top;
+}
+
 table {
     margin: 1%;
     width: 98%;
