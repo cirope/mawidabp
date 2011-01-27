@@ -16,6 +16,11 @@ module ControlObjectiveItemsHelper
   end
 
   def next_control_objective_work_paper_code(control_objective_item)
-    next_review_work_paper_code control_objective_item.review
+    code_from_review = next_review_work_paper_code(
+      control_objective_item.review)
+    code_from_control_objective = control_objective_item.work_papers.reject(
+      &:marked_for_destruction?).map(&:code).sort.last
+
+    [code_from_review, code_from_control_objective].compact.max
   end
 end

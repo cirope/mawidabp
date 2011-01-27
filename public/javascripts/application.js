@@ -208,7 +208,10 @@ var Helper = {
      * Oculta el elemento indicado
      */
     hideItem: function(element, options) {
-        Effect.SlideUp(element, Util.merge({duration: 0.5}, options));
+        Effect.SlideUp(element, Util.merge({
+            duration: 0.5,
+            afterFinish: function() { element.fire("item:hidden"); }
+        }, options));
     },
 
     /**
@@ -243,6 +246,8 @@ var Helper = {
                 FormUtil.completeSortNumbers();
             }
         }, options));
+
+        element.fire("item:removed");
     },
 
     /**
@@ -254,7 +259,10 @@ var Helper = {
         if(e != null && !e.visible()) {
             Effect.SlideDown(e, Util.merge({
                 duration: 0.5,
-                afterFinish: function() {FormManipulation.focusFirst(e);}
+                afterFinish: function() {
+                    FormManipulation.focusFirst(e);
+                    e.fire("item:displayed");
+                }
             }, options));
         }
     },
@@ -709,6 +717,15 @@ Event.observe(window, 'load', function() {
 
     document.on('submit', function() {State.unsavedData = false;});
 
+    // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
+    document.on("item:removed", '.work_paper', function(event, element) {
+        var workPaperCode = element.down('input[name$="[code]"]').getValue();
+
+        if(workPaperCode == lastWorkPaperCode) {
+          lastWorkPaperCode = lastWorkPaperCode.previous(2);
+        }
+    });
+
     if($('app_content')) {
         Observer.attachToAppContent();
         
@@ -847,11 +864,21 @@ Number.prototype.rnd = function() {
     return Math.floor(Math.random() * this + 1)
 }
 
-String.prototype.next = function() {
+String.prototype.next = function(padded) {
     if(this.match(/\d+$/)) {
         var currentNumber = parseInt(this.match(/\d+$/).first(), 10);
 
-        return this.replace(/\d+$/, (currentNumber + 1).toPaddedString(2));
+        return this.replace(/\d+$/, (currentNumber + 1).toPaddedString(padded || 0));
+    } else {
+        return this;
+    }
+}
+
+String.prototype.previous = function(padded) {
+    if(this.match(/\d+$/)) {
+        var currentNumber = parseInt(this.match(/\d+$/).first(), 10);
+
+        return this.replace(/\d+$/, (currentNumber - 1).toPaddedString(padded || 0));
     } else {
         return this;
     }

@@ -50,17 +50,17 @@
 </div>
 <script type="text/javascript">HTMLUtil.stylizeAllInputFiles();</script>
 <% if is_dynamic %>
-<script type="text/javascript">
-(function() {
-  var id = '<%= id %>';
+  <script type="text/javascript">
+  (function() {
+    var id = '<%= id %>';
 
-  Helper.showItem(id);
+    Helper.showItem(id);
 
-  if(typeof(lastWorkPaperCode) != 'undefined') {
-    lastWorkPaperCode = lastWorkPaperCode.next();
+    if(lastWorkPaperCode) {
+      lastWorkPaperCode = lastWorkPaperCode.next(2);
 
-    $(id).down('.work_paper_code').setValue(lastWorkPaperCode);
-  }
-})();
-</script>
+      $(id).down('.work_paper_code').setValue(lastWorkPaperCode);
+    }
+  })();
+  </script>
 <% end %>

@@ -747,19 +747,15 @@ div.item_field input[type="text"].date {
     width: 70%;
 }
 
-div.in_column_items {
-    width: 95%;
-}
-
 div.items, div.textual_items {
     width: 98%;
 }
 
-div.items, div.textual_items, div.in_column_items {
+div.items, div.textual_items {
     clear: both;
 }
 
-div.items *, div.in_column_items * {
+div.items * {
     vertical-align: middle;
 }
 

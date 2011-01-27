@@ -522,7 +522,7 @@ class Finding < ActiveRecord::Base
   end
 
   def notify_changes_to_users
-    unless self.avoid_changes_notification
+  unless self.avoid_changes_notification
       added = self.finding_user_assignments.select(&:new_record?).map(&:user)
       removed = self.finding_user_assignments.select(
         &:marked_for_destruction?).map(&:user)
