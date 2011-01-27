@@ -83,22 +83,15 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :final_oportunities, :dependent => :destroy,
     :order => 'review_code ASC', :class_name => 'Oportunity',
     :conditions => {:final => true}
-  has_many :pre_audit_work_papers, :class_name => 'WorkPaper',
-    :as => :owner, :dependent => :destroy, :order => 'created_at ASC',
-    :before_add => [:check_for_final_review, :prepare_work_paper,
-    :mark_as_pre_audit], :before_remove => :check_for_final_review,
-    :conditions => {:work_paper_type => 'ControlObjectiveItemPreAudit'}
-  has_many :post_audit_work_papers, :class_name => 'WorkPaper',
-    :as => :owner, :dependent => :destroy, :order => 'created_at ASC',
-    :before_add => [:check_for_final_review, :prepare_work_paper,
-    :mark_as_post_audit], :before_remove => :check_for_final_review,
-    :conditions => {:work_paper_type => 'ControlObjectiveItemPostAudit'}
+  has_many :work_papers, :as => :owner, :dependent => :destroy,
+    :order => 'code ASC, created_at ASC',
+    :before_add => [:check_for_final_review, :prepare_work_paper],
+    :before_remove => :check_for_final_review
   has_one :control, :as => :controllable, :dependent => :destroy,
     :order => "#{Control.table_name}.order ASC"
 
   accepts_nested_attributes_for :control, :allow_destroy => true
-  accepts_nested_attributes_for :pre_audit_work_papers, :allow_destroy => true
-  accepts_nested_attributes_for :post_audit_work_papers, :allow_destroy => true
+  accepts_nested_attributes_for :work_papers, :allow_destroy => true
 
   def initialize(attributes = nil)
     super(attributes)
@@ -120,14 +113,6 @@ class ControlObjectiveItem < ActiveRecord::Base
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.get_parameter(
       :admin_code_prefix_for_work_papers_in_control_objectives)
-  end
-
-  def mark_as_pre_audit(work_paper)
-    work_paper.work_paper_type = 'ControlObjectiveItemPreAudit'
-  end
-
-  def mark_as_post_audit(work_paper)
-    work_paper.work_paper_type = 'ControlObjectiveItemPostAudit'
   end
 
   def set_proper_parent
@@ -165,10 +150,6 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def fill_control_objective_text
     self.control_objective_text ||= self.control_objective.try(:name)
-  end
-
-  def work_papers
-    self.pre_audit_work_papers + self.post_audit_work_papers
   end
 
   def process_control

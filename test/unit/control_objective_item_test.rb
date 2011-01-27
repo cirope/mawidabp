@@ -347,12 +347,12 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_no_difference 'ControlObjectiveItem.count' do
       assert_difference 'WorkPaper.count' do
         uneditable_control_objective_item.update_attributes({
-        :post_audit_work_papers_attributes => {
+        :work_papers_attributes => {
             '1_new' => {
-              :name => 'New post_workpaper name',
+              :name => 'New workpaper name',
               :code => 'PTOC 20',
               :number_of_pages => '10',
-              :description => 'New post_workpaper description',
+              :description => 'New workpaper description',
               :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {
                 :file => fixture_file_upload(TEST_FILE, 'text/plain')
@@ -371,10 +371,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_no_difference ['ControlObjectiveItem.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
         uneditable_control_objective_item.update_attributes({
-        :post_audit_work_papers_attributes => {
+        :work_papers_attributes => {
             '1_new' => {
-              :name => 'New post_workpaper name',
-              :code => 'New post_workpaper code',
+              :name => 'New workpaper name',
+              :code => 'New workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
               :organization_id => organizations(:default_organization).id,

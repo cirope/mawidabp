@@ -151,26 +151,24 @@ class ReviewsControllerTest < ActionController::TestCase
                       },
                       :control_objective_id => control_objectives(
                         :iso_27000_security_organization_4_1).id,
-                      :pre_audit_work_papers_attributes => {
+                      :work_papers_attributes => {
                         :new_1 => {
-                          :name => 'New pre_workpaper name',
+                          :name => 'New workpaper name',
                           :code => 'PTOC 20',
                           :number_of_pages => '10',
-                          :description => 'New pre_workpaper description',
+                          :description => 'New workpaper description',
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
-                        }
-                      },
-                      :post_audit_work_papers_attributes => {
-                        :new_1 => {
-                          :name => 'New post_workpaper name',
+                        },
+                        :new_2 => {
+                          :name => 'New workpaper2 name',
                           :code => 'PTOC 21',
                           :number_of_pages => '10',
-                          :description => 'New post_workpaper description',
+                          :description => 'New workpaper2 description',
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
@@ -199,26 +197,24 @@ class ReviewsControllerTest < ActionController::TestCase
                       :auditor_comment => 'New comment',
                       :control_objective_id => control_objectives(
                         :iso_27000_security_organization_4_2).id,
-                      :pre_audit_work_papers_attributes => {
+                      :work_papers_attributes => {
                         :new_1 => {
-                          :name => 'New pre_workpaper name',
+                          :name => 'New workpaper name',
                           :code => 'PTOC 22',
                           :number_of_pages => '10',
-                          :description => 'New pre_workpaper description',
+                          :description => 'New workpaper description',
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
                           }
-                        }
-                      },
-                      :post_audit_work_papers_attributes => {
-                        :new_1 => {
-                          :name => 'New post_workpaper name',
+                        },
+                        :new_2 => {
+                          :name => 'New workpaper2 name',
                           :code => 'PTOC 23',
                           :number_of_pages => '10',
-                          :description => 'New post_workpaper description',
+                          :description => 'New workpaper2 description',
                           :organization_id =>
                             organizations(:default_organization).id,
                           :file_model_attributes => {

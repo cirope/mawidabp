@@ -130,28 +130,10 @@
     <div class="textual_items" style="margin-top: 2em;">
       <h1><%= t(:'review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
-        <% pre_template = post_template = nil %>
         <% control_objective_items = @review.control_objective_items %>
         <% control_objective_items.group_by(&:process_control).each do |pc, cois| %>
           <h3><%= pc.name %></h3>
           <%= r_f.fields_for :control_objective_items, cois do |coi_f| %>
-            <% unless frozen %>
-              <% pre_template ||= generate_template(coi_f,
-                :post_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
-              <% post_template ||= generate_template(coi_f,
-                :pre_audit_work_papers, {:form_builder_local => :wp_f,
-                :partial => 'work_papers/work_paper',
-                :child_index => 'NEW_SUBRECORD',
-                :locals => {:child_index => 'NEW_SUBRECORD', :frozen => false},
-                :object => WorkPaper.new(:organization_id => @auth_organization.id)}) %>
-              <% js_extra << "var post_audit_work_paper='#{pre_template}';" unless pre_template == 0 %>
-              <% js_extra << "var pre_audit_work_paper='#{post_template}';" unless post_template == 0 %>
-              <% pre_template = post_template = 0 %>
-            <% end %>
             <%= render :partial => 'control_objective_item', :locals => {
               :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
           <% end %>

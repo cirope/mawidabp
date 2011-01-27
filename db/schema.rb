@@ -618,13 +618,11 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
     t.integer  "number_of_pages"
     t.integer  "owner_id"
     t.string   "owner_type"
-    t.string   "work_paper_type"
   end
 
   add_index "work_papers", ["file_model_id"], :name => "index_work_papers_on_file_model_id"
   add_index "work_papers", ["organization_id"], :name => "index_work_papers_on_organization_id"
   add_index "work_papers", ["owner_type", "owner_id"], :name => "index_work_papers_on_owner_type_and_owner_id"
-  add_index "work_papers", ["work_paper_type"], :name => "index_work_papers_on_work_paper_type"
 
   create_table "workflow_items", :force => true do |t|
     t.text     "task"

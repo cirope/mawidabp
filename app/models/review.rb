@@ -385,8 +385,7 @@ class Review < ActiveRecord::Base
     work_papers = []
 
     self.control_objective_items.each do |coi|
-      work_papers.concat(coi.post_audit_work_papers.with_prefix(prefix) +
-          coi.pre_audit_work_papers.with_prefix(prefix))
+      work_papers.concat(coi.work_papers.with_prefix(prefix))
     end
 
     last_work_paper_code(prefix, work_papers)
@@ -424,7 +423,7 @@ class Review < ActiveRecord::Base
     work_papers = []
 
     self.control_objective_items.each do |coi|
-      work_papers.concat(coi.pre_audit_work_papers + coi.post_audit_work_papers)
+      work_papers.concat(coi.work_papers)
     end
 
     (self.oportunities + self.final_oportunities).each do |w|
@@ -1021,8 +1020,7 @@ class Review < ActiveRecord::Base
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
     dirs = {
-      :pre_audit => I18n.t(:'review.pre_audit_work_papers').sanitized_for_filename,
-      :post_audit => I18n.t(:'review.post_audit_work_papers').sanitized_for_filename,
+      :control_objectives => I18n.t(:'review.control_objectives_work_papers').sanitized_for_filename,
       :weaknesses => I18n.t(:'review.weaknesses_work_papers').sanitized_for_filename,
       :oportunities => I18n.t(:'review.oportunities_work_papers').sanitized_for_filename,
       :follow_up => I18n.t(:'review.follow_up_work_papers').sanitized_for_filename,
@@ -1034,12 +1032,8 @@ class Review < ActiveRecord::Base
 
     Zip::ZipFile.open(filename, Zip::ZipFile::CREATE) do |zipfile|
       self.control_objective_items.each do |coi|
-        coi.pre_audit_work_papers.each do |pa_wp|
-          self.add_work_paper_to_zip pa_wp, dirs[:pre_audit], zipfile
-        end
-
-        coi.post_audit_work_papers.each do |pa_wp|
-          self.add_work_paper_to_zip pa_wp, dirs[:post_audit], zipfile
+        coi.work_papers.each do |pa_wp|
+          self.add_work_paper_to_zip pa_wp, dirs[:control_objectives], zipfile
         end
       end
       

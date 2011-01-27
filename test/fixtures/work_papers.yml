@@ -5,7 +5,6 @@ image_work_paper:
   description: Image Work Paper Description
   file_model: 
   organization: default_organization
-  work_paper_type: ControlObjectiveItemPreAudit
   owner_id: <%= Fixtures.identify(:iso_27000_security_organization_4_2_item_editable) %>
   owner_type: ControlObjectiveItem
 
@@ -16,7 +15,6 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item:
   description: Text Work Paper Description
   file_model: 
   organization: default_organization
-  work_paper_type: ControlObjectiveItemPreAudit
   owner_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
   owner_type: ControlObjectiveItem
 
@@ -27,7 +25,6 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item_edita
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  work_paper_type: ControlObjectiveItemPreAudit
   owner_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
   owner_type: ControlObjectiveItem
 
