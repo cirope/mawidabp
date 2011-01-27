@@ -1353,10 +1353,8 @@ es:
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
         process_control_id: "Proceso de negocio"
-        work_papers: "Papeles de trabajo"
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
-        work_papers: "Papeles de trabajo"
         control:
           order: "Objetivo de control (orden)"
           control: "Objetivo de control (controles identificados)"
@@ -1366,7 +1364,7 @@ es:
           sustantive_tests: "Objetivo de control (pruebas sustantivas)"
         work_papers:
           one: "Papel de trabajo"
-          other: "Papel de trabajo"
+          other: "Papeles de trabajo"
           name: "Papel de trabajo (nombre)"
           code: "Papel de trabajo (código)"
           description: "Papel de trabajo (descripción)"
