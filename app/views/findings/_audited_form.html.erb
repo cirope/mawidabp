@@ -191,7 +191,7 @@
   </p>
 
   <% unless @finding.work_papers.blank? %>
-    <h1><%= t(:'finding.work_papers') %></h1>
+    <h1><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
 
     <table class="summary_table">
       <thead>

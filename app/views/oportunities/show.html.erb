@@ -30,7 +30,8 @@
   </div>
 
   <div class="show_item">
-    <b><%= Oportunity.human_attribute_name :state %>:</b>
+    <b><%= raw(Oportunity.human_attribute_name(:state) +
+      show_inline_help_for(:finding_state)) %>:</b>
     <%=h @oportunity.state_text %>
   </div>
 
@@ -44,12 +45,13 @@
     <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
   </div>
 
-  <h3><%= t(:'finding.related_users') %></h3>
+  <h3><%= raw(t(:'finding.responsibles', :count => @oportunity.users.size) +
+      show_inline_help_for(:finding_responsibles)) %></h3>
   <%= array_to_ul @oportunity.users.map { |u| u.full_name_with_function(@oportunity.created_at) },
     :class => :raw_list %>
 
   <% unless @oportunity.work_papers.empty? %>
-    <h3><%= t(:'finding.work_papers') %></h3>
+    <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
     <table class="summary_table">
       <thead>
         <tr>
@@ -57,6 +59,7 @@
           <th><%= WorkPaper.human_attribute_name :code %></th>
           <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
           <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
         </tr>
       </thead>
       <tbody>

@@ -11,10 +11,12 @@
     <thead>
       <tr>
         <th><%= WorkflowItem.human_attribute_name :order_number %></th>
-        <th><%= WorkflowItem.human_attribute_name :task %></th>
+        <th><%= raw(WorkflowItem.human_attribute_name(:task) +
+              show_inline_help_for(:workflow_task)) %></th>
         <th><%= WorkflowItem.human_attribute_name :start %></th>
         <th><%= WorkflowItem.human_attribute_name :end %></th>
-        <th><%= WorkflowItem.human_attribute_name :predecessors %></th>
+        <th><%= raw(WorkflowItem.human_attribute_name(:predecessors) +
+              show_inline_help_for(:workflow_predecessors)) %></th>
         <th><%= WorkflowItem.human_attribute_name :human_resources_cost %></th>
         <th><%= WorkflowItem.human_attribute_name :material_resources_cost %></th>
         <th><%= WorkflowItem.human_attribute_name :total_resources_cost %></th>

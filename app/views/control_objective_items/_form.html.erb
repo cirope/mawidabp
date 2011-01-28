@@ -35,7 +35,10 @@
         :size => nil, :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <%= co_f.label :relevance, nil, :class => :inline %>
+      <%= co_f.label :relevance, raw(
+        ControlObjectiveItem.human_attribute_name(:relevance) +
+          show_inline_help_for(:control_objective_item_relevance)),
+        :class => :inline %>
       <%= co_f.select :relevance, parameter_in(@auth_organization.id,
         :admin_control_objective_importances,
         @control_objective_item.created_at, true),
@@ -53,23 +56,30 @@
     </p>
     <%= co_f.fields_for :control do |c_f| %>
       <p>
-        <%= c_f.label :effects %>
+        <%= c_f.label :effects, raw(Control.human_attribute_name(:effects) +
+            show_inline_help_for(:control_objective_item_effects)) %>
         <%= c_f.text_area :effects, :readonly => readonly %>
       </p>
       <p>
-        <%= c_f.label :control %>
+        <%= c_f.label :control, raw(Control.human_attribute_name(:control) +
+            show_inline_help_for(:control_objective_item_control)) %>
         <%= c_f.text_area :control, :readonly => readonly %>
       </p>
 
       <p class="form_item">
-        <%= content_tag :label, ControlObjectiveItem.human_attribute_name(
-          :effectiveness), :class => :inline %>
+        <%= content_tag :label, raw(
+          ControlObjectiveItem.human_attribute_name(:effectiveness) +
+            show_inline_help_for(:control_objective_item_effectiveness)),
+          :class => :inline %>
         <%= text_field_tag :effectiveness,
           "#{@control_objective_item.effectiveness}%", :class => :inline_item,
           :readonly => true %>
       </p>
       <p class="form_item">
-        <%= co_f.label :finished, nil, :class => :inline %>
+        <%= co_f.label :finished, raw(
+          ControlObjectiveItem.human_attribute_name(:finished) +
+            show_inline_help_for(:control_objective_item_finished)),
+          :class => :inline %>
         <%= co_f.check_box :finished, :class => :inline_item,
           :disabled => readonly %>
       </p>
@@ -133,39 +143,12 @@
     </p>
   </div>
 
-  <h1 style="clear: both; margin-bottom: 0em;">
-    <%= ControlObjectiveItem.human_attribute_name(:weaknesses) %>
-  </h1>
+  <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
 
-  <table class="summary_table">
-    <thead>
-      <tr>
-        <% Finding::STATUS.keys.each do |status| %>
-          <th><%= t(:"finding.status_#{status}") %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% Finding::STATUS.keys.each do |status| %>
-          <td><%= @control_objective_item.
-              weaknesses.select { |w| w.send :"#{status}?" }.size %></td>
-        <% end %>
-      </tr>
-    </tbody>
-  </table>
-
-  <p style="margin-bottom: 1.2em;">
-    <%= link_to_unless @control_objective_item.weaknesses.blank?,
-      t(:'control_objective_item.view_all_weaknesses'),
-      weaknesses_path(:control_objective => @control_objective_item) %> |
-    <%= link_to_unless readonly, t(:'control_objective_item.add_weakness'),
-      new_weakness_path(:control_objective_item => @control_objective_item) %>
-  </p>
-
-  <h1 class="clear">
-    <%= ControlObjectiveItem.human_attribute_name(:work_papers,
-      :count => @control_objective_item.work_papers.size) %>
+  <h1>
+    <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
+      :count => @control_objective_item.work_papers.size) +
+      show_inline_help_for(:control_objective_item_work_papers)) %>
   </h1>
 
   <div>

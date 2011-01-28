@@ -10,17 +10,20 @@
   </div>
 
   <div class="show_item">
-    <b><%= Control.human_attribute_name :effects %>:</b>
+    <b><%= raw(Control.human_attribute_name(:effects) +
+      show_inline_help_for(:control_objective_item_effects)) %>:</b>
     <%= simple_format h(@control_objective_item.control.effects) %>
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>
+    <b><%= raw(ControlObjectiveItem.human_attribute_name(:relevance) +
+      show_inline_help_for(:control_objective_item_relevance)) %>:</b>
     <%=h @control_objective_item.relevance_text %>
   </div>
 
   <div class="show_item">
-    <b><%= Control.human_attribute_name :control %>:</b>
+    <b><%= raw(Control.human_attribute_name(:control) +
+      show_inline_help_for(:control_objective_item_control)) %>:</b>
     <%= simple_format h(@control_objective_item.control.control) %>
   </div>
 
@@ -65,14 +68,47 @@
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :effectiveness %>:</b>
+    <b><%= raw(ControlObjectiveItem.human_attribute_name(:effectiveness) +
+      show_inline_help_for(:control_objective_item_effectiveness)) %>:</b>
     <%= "#{@control_objective_item.effectiveness}%" %>
   </div>
 
   <div class="show_item">
-    <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
+    <b><%= raw(ControlObjectiveItem.human_attribute_name(:finished) +
+      show_inline_help_for(:control_objective_item_finished)) %>:</b>
     <%=t @control_objective_item.finished? ? :'label.yes' : :'label.no' %>
   </div>
+
+  <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
+
+  <% unless @control_objective_item.work_papers.empty? %>
+    <h1 class="clear"><%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
+        :count => @control_objective_item.work_papers.size) +
+        show_inline_help_for(:control_objective_item_work_papers)) %></h1>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @control_objective_item.work_papers.each do |wp| %>
+          <tr>
+            <td><%=h wp.name %></td>
+            <td><%=h wp.code %></td>
+            <td><%=h wp.number_of_pages %></td>
+            <td><%= simple_format h(wp.description) %></td>
+            <td><%= wp.file_model ?
+              link_to(t(:'label.download'), wp.file_model.file.url) : '---' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </div>
 
 <div id="links">

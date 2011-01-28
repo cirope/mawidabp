@@ -592,7 +592,9 @@ class UsersController < ApplicationController
 
     build_search_conditions User, default_conditions
     
-    users = User.includes(:organizations).where(@conditions).order('user ASC')
+    users = User.includes(:organizations).where(@conditions).order(
+      "#{User.table_name}.user ASC"
+    )
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 

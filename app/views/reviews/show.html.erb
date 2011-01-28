@@ -1,6 +1,7 @@
 <div id="showed_data">
   <div class="show_item">
-    <b><%= Review.human_attribute_name :identification %>:</b>
+    <b><%= raw(Review.human_attribute_name(:identification) +
+      show_inline_help_for(:review_identification)) %>:</b>
     <%=h @review.identification %>
   </div>
 
@@ -20,17 +21,20 @@
   </div>
 
   <div class="show_item">
-    <b><%= Review.human_attribute_name :audit_type %>:</b>
+    <b><%= raw(Review.human_attribute_name(:audit_type) +
+      show_inline_help_for(:review_audit_type)) %>:</b>
     <%=h review_business_unit_type_text(@review) %>
   </div>
 
   <div class="show_item">
-    <b><%= Review.human_attribute_name :survey %>:</b>
+    <b><%= raw(Review.human_attribute_name(:survey) +
+      show_inline_help_for(:review_survey)) %>:</b>
     <%= simple_format h(@review.survey) %>
   </div>
 
   <div class="show_item">
-    <b><%= Review.human_attribute_name :description %>:</b>
+    <b><%= raw(Review.human_attribute_name(:description) +
+      show_inline_help_for(:review_description)) %>:</b>
     <%= simple_format h(@review.description) %>
   </div>
 
@@ -38,7 +42,8 @@
     <thead>
       <tr>
         <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
-        <th><%= ReviewUserAssignment.human_attribute_name :assignment_type %></th>
+        <th><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
+            show_inline_help_for(:review_user_assignment_type)) %></th>
       </tr>
     </thead>
     <tbody>

@@ -50,7 +50,8 @@
   </div>
 
   <div class="show_item">
-    <b><%= Weakness.human_attribute_name :state %>:</b>
+    <b><%= raw(Weakness.human_attribute_name(:state) +
+      show_inline_help_for(:finding_state)) %>:</b>
     <%=h @weakness.state_text %>
   </div>
 
@@ -60,7 +61,8 @@
   </div>
 
   <div class="show_item">
-    <b><%= Weakness.human_attribute_name :follow_up_date %>:</b>
+    <b><%= raw(Weakness.human_attribute_name(:follow_up_date) +
+      show_inline_help_for(:finding_follow_up_date)) %>:</b>
     <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
   </div>
 
@@ -69,12 +71,13 @@
     <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
   </div>
 
-  <h3><%= t(:'finding.related_users') %></h3>
+  <h3><%= raw(t(:'finding.responsibles', :count => @weakness.users.size) +
+    show_inline_help_for(:finding_responsibles)) %></h3>
   <%= array_to_ul @weakness.users.map { |u| u.full_name_with_function(@weakness.created_at) },
     :class => :raw_list %>
 
   <% unless @weakness.work_papers.empty? %>
-    <h3><%= t(:'finding.work_papers') %></h3>
+    <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
     <table class="summary_table">
       <thead>
         <tr>

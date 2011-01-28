@@ -6,10 +6,10 @@
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Period.model_name.human, nil, 'period' %>
-      <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
+      <%= make_filterable_column raw(Review.human_attribute_name(:identification) + show_inline_help_for(:review_identification)), nil, 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), {:expendable => true}, 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
-      <%= make_not_available_column Review.human_attribute_name(:description), :expendable => true %>
+      <%= make_not_available_column raw(Review.human_attribute_name(:description) + show_inline_help_for(:review_description)), :expendable => true %>
       <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>

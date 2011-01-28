@@ -430,7 +430,6 @@ es:
     stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
     download: "Descargar listado general"
     download_detailed: "Descargar listado detallado"
-    related_users: "Usuarios relacionados"
     work_papers: "Papeles de trabajo"
     finding_relations: "Relaciones con otras observaciones"
     finding_answers: "Comentarios de seguimiento"
@@ -1331,7 +1330,7 @@ es:
         <<: *commons
       control:
         order: "Orden"
-        control: "Controles identificados"
+        control: "Controles"
         effects: "Efectos"
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento"
@@ -1357,7 +1356,7 @@ es:
         weaknesses: "Observaciones"
         control:
           order: "Objetivo de control (orden)"
-          control: "Objetivo de control (controles identificados)"
+          control: "Objetivo de control (controles)"
           effects: "Objetivo de control (efectos)"
           design_tests: "Objetivo de control (evaluación de diseño)"
           compliance_tests: "Objetivo de control (pruebas de cumplimiento)"

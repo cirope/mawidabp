@@ -12,7 +12,9 @@
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
-      <%= r_f.label :identification, nil, :class => :inline %>
+      <%= r_f.label :identification,
+        raw(Review.human_attribute_name(:identification) +
+          show_inline_help_for(:review_identification)), :class => :inline %>
       <%= r_f.text_field :identification, :readonly => readonly,
         :class => :inline_item %>
     </p>
@@ -55,20 +57,22 @@
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <%= label_tag :audit_type, Review.human_attribute_name(:audit_type),
-        :class => :inline %>
+      <%= label_tag :audit_type, raw(Review.human_attribute_name(:audit_type) +
+          show_inline_help_for(:review_audit_type)), :class => :inline %>
       <%= text_field_tag :audit_type,
         review_business_unit_type_text(@review),
         :class => :inline_item, :readonly => true %>
     </p>
     <p>
-      <%= r_f.label :description %>
+      <%= r_f.label :description, raw(Review.human_attribute_name(:description) +
+          show_inline_help_for(:review_description)) %>
       <%= r_f.text_area :description, :readonly => readonly %>
     </p>
   </div>
   <div class="form_column_right">
     <p>
-      <%= r_f.label :survey %>
+      <%= r_f.label :survey, raw(Review.human_attribute_name(:survey) +
+          show_inline_help_for(:review_survey)) %>
       <%= r_f.text_area :survey, :readonly => readonly,
         :style => 'height: 16em;' %>
     </p>
@@ -103,7 +107,8 @@
         <h3><%= ReviewUserAssignment.human_attribute_name :user %></h3>
       </div>
       <div class="item_column" style="width: 20%;">
-        <h3><%= ReviewUserAssignment.human_attribute_name :assignment_type %></h3>
+        <h3><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
+          show_inline_help_for(:review_user_assignment_type)) %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>
       <div class="clear"></div>

@@ -51,8 +51,10 @@
   <div class="form_column_right">
     <p class="form_item">
       <%= f.label :state, raw(Oportunity.human_attribute_name(:state) +
-        (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : '')), :class => :inline %>
+          show_inline_help_for(:finding_state) +
+          (show_history_changes ? finding_show_status_change_history(
+            :finding_status_change_history) : '')),
+        :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
     <% if show_history_changes %>
@@ -122,8 +124,13 @@
   <table class="item_container">
     <thead>
       <tr>
-        <th style="width: 52%;"><%= t(:'finding.related_users') %></th>
-        <th style="width: 48%;"><%= t(:'finding.work_papers') %></th>
+        <th style="width: 52%;">
+          <%= raw(t(:'finding.responsibles', :count => @oportunity.users.size) +
+              show_inline_help_for(:finding_responsibles)) %></th>
+        <th style="width: 48%;">
+          <%= raw(t(:'finding.work_papers') +
+              show_inline_help_for(:finding_work_papers)) %>
+        </th>
       </tr>
     </thead>
     <tbody>

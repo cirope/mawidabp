@@ -48,12 +48,12 @@
         :style => 'height: 11em;' %>
     </p>
     <p>
-      <%= f.label :audit_recommendations %>
-      <%= f.text_area :audit_recommendations, :readonly => readonly %>
-    </p>
-    <p>
       <%= f.label :effect %>
       <%= f.text_area :effect, :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :audit_recommendations %>
+      <%= f.text_area :audit_recommendations, :readonly => readonly %>
     </p>
   </div>
   <div class="form_column_right">
@@ -73,8 +73,10 @@
     </p>
     <p class="form_item">
       <%= f.label :state, raw(Weakness.human_attribute_name(:state) +
-        (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : '')), :class => :inline %>
+          show_inline_help_for(:finding_state) +
+          (show_history_changes ? finding_show_status_change_history(
+            :finding_status_change_history) : '')),
+        :class => :inline %>
       <%= finding_status_field(f, true, readonly) %>
     </p>
 
@@ -106,7 +108,8 @@
       <%= f.calendar_date_select :origination_date, :readonly => readonly %>
     </p>
     <p>
-      <%= f.label :follow_up_date %>
+      <%= f.label :follow_up_date, raw(Weakness.human_attribute_name(:follow_up_date) +
+          show_inline_help_for(:finding_follow_up_date)) %>
       <%= f.calendar_date_select :follow_up_date, :readonly => readonly %>
     </p>
     <p>
@@ -149,8 +152,14 @@
   <table class="item_container">
     <thead>
       <tr>
-        <th style="width: 52%;"><%= t(:'finding.related_users') %></th>
-        <th style="width: 48%;"><%= t(:'finding.work_papers') %></th>
+        <th style="width: 52%;">
+          <%= raw(t(:'finding.responsibles', :count => @weakness.users.size) +
+            show_inline_help_for(:finding_responsibles)) %>
+        </th>
+        <th style="width: 48%;">
+          <%= raw(t(:'finding.work_papers') +
+            show_inline_help_for(:finding_work_papers)) %>
+        </th>
       </tr>
     </thead>
     <tbody>
