@@ -8,7 +8,8 @@
   <h2 style="margin-bottom: 2em;"><%= l @conclusion_draft_review.issue_date, :format => :long %></h2>
 
   <p>
-    <b><%= t(:'conclusion_review.issue_date_title') %></b>:
+    <b><%= raw(t(:'conclusion_review.issue_date_title') +
+      show_inline_help_for(:conclusion_review_issue_date)) %></b>:
     <%= l(@conclusion_draft_review.issue_date, :format => :long) %>
   </p>
   <p>

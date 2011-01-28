@@ -51,12 +51,16 @@
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <%= f.label :issue_date, nil, :class => :inline %>
+      <%= f.label :issue_date, raw(
+        ConclusionDraftReview.human_attribute_name(:issue_date) +
+          show_inline_help_for(:conclusion_review_issue_date)),
+        :class => :inline %>
       <%= f.calendar_date_select :issue_date, :class => :inline_tight_item %>
     </p>
   </div>
 
   <div id="approval_text">
+    <%= show_inline_help_for(:conclusion_review_approved) %>
     <%= content_tag(:div, t(:'conclusion_draft_review.approved'),
       :class => 'green bold', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
