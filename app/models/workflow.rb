@@ -34,7 +34,7 @@ class Workflow < ActiveRecord::Base
       "#{WorkflowItem.table_name}.order_number ASC",
       "#{WorkflowItem.table_name}.start ASC",
       "#{WorkflowItem.table_name}.end ASC"
-    ].join(', ')
+    ]
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true

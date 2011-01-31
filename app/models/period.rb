@@ -29,7 +29,7 @@ class Period < ActiveRecord::Base
         :to_date => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
   scope :currents, lambda {
     where(
@@ -42,7 +42,7 @@ class Period < ActiveRecord::Base
         :organization_id => GlobalModelConfig.current_organization_id,
         :today => Date.today
       }
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
   scope :list_all_without_plans, lambda {
     includes(:plans).where(
@@ -51,7 +51,7 @@ class Period < ActiveRecord::Base
         "#{Plan.table_name}.period_id IS NULL"
       ].join(' AND '),
       {:organization_id => GlobalModelConfig.current_organization_id}
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
   scope :list_all_without_procedure_controls, lambda {
     includes(:procedure_controls).where(
@@ -60,7 +60,7 @@ class Period < ActiveRecord::Base
         "#{ProcedureControl.table_name}.period_id IS NULL"
       ].join(' AND '),
       {:organization_id => GlobalModelConfig.current_organization_id}
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"].join(', '))
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
 
   

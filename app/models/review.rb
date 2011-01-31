@@ -101,7 +101,7 @@ class Review < ActiveRecord::Base
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
-      ].join(', ')
+      ]
     )
   }
   scope :list_all_without_workflow, lambda { |period_id|

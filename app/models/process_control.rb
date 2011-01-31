@@ -10,9 +10,7 @@ class ProcessControl < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, order(
-    ['best_practice_id ASC', "#{table_name}.order ASC"].join(', ')
-  )
+  scope :list, order(['best_practice_id ASC', "#{table_name}.order ASC"])
   scope :list_for_period, lambda { |period_id|
     select(connection.distinct('process_controls.id, name', 'name')).includes(
       :procedure_control_items => [:procedure_control]

@@ -273,7 +273,9 @@ class ConclusionDraftReviewsController < ApplicationController
 
     @users = User.includes(:organizations).where(
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(['users.last_name ASC', 'users.name ASC'].join(',')).limit(10)
+    ).order(
+      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
+    ).limit(10)
   end
 
   def check_for_approval

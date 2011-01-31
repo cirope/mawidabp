@@ -22,7 +22,7 @@ class WorkflowsController < ApplicationController
       [
         "#{Period.table_name}.number DESC",
         "#{Workflow.table_name}.created_at DESC"
-      ].join(', ')
+      ]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
@@ -183,10 +183,7 @@ class WorkflowsController < ApplicationController
     @users = User.includes(:organizations, :resource).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order(
-      [
-        "#{User.table_name}.last_name ASC",
-        "#{User.table_name}.name ASC"
-      ].join(',')
+      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
   end
 

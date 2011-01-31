@@ -287,10 +287,8 @@ class Finding < ActiveRecord::Base
         :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
       }
     ).order(
-      order ? [
-        "#{Period.table_name}.start ASC",
-        "#{Period.table_name}.end ASC"
-      ].join(', ') : nil
+      order ?
+        ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
     )
   }
   scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
@@ -454,14 +452,14 @@ class Finding < ActiveRecord::Base
         :field => [
           "#{Finding.table_name}.risk ASC",
           "#{Finding.table_name}.state ASC"
-        ].join(', ')
+        ]
       },
       :risk_desc => {
         :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.descendant')})",
         :field => [
           "#{Finding.table_name}.risk DESC",
           "#{Finding.table_name}.state ASC"
-        ].join(', ')
+        ]
       },
       :state => {
         :name => Finding.human_attribute_name(:state),

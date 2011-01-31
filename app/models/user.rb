@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     :finding_user_assignments => :finding
   ).where(
     :findings => {:state => Finding::STATUS[:notify], :final => false}
-  ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"].join(', '))
+  ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?

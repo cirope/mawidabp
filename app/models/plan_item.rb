@@ -26,7 +26,7 @@ class PlanItem < ActiveRecord::Base
       [
         "#{PlanItem.table_name}.order_number ASC",
         "#{PlanItem.table_name}.project ASC"
-      ].join(', ')
+      ]
     )
   }
 

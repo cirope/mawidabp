@@ -30,7 +30,7 @@ class ConclusionFinalReview < ConclusionReview
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         'issue_date ASC'
-      ].join(', ')
+      ]
     )
   }
   scope :internal_audit, includes(

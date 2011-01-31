@@ -44,7 +44,7 @@ class OportunitiesController < ApplicationController
       @order_by || [
         "#{Review.table_name}.identification ASC",
         "#{Oportunity.table_name}.review_code ASC"
-      ].join(', ')
+      ]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
@@ -190,7 +190,7 @@ class OportunitiesController < ApplicationController
       [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(',')
+      ]
     ).limit(10)
   end
 
@@ -233,7 +233,7 @@ class OportunitiesController < ApplicationController
       [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(',')
+      ]
     ).limit(5)
   end
 

@@ -49,7 +49,7 @@ class FindingsController < ApplicationController
           "#{Review.table_name}.created_at DESC",
           "#{Finding.table_name}.state ASC",
           "#{Finding.table_name}.review_code ASC"
-        ].join(', ')
+        ]
       ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
@@ -160,7 +160,7 @@ class FindingsController < ApplicationController
         "#{Review.table_name}.created_at DESC",
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(', ')
+      ]
     ).where(@conditions)
 
     pdf = PDF::Writer.create_generic_pdf :landscape
@@ -322,7 +322,7 @@ class FindingsController < ApplicationController
       [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(',')
+      ]
     ).limit(10)
   end
 
@@ -363,7 +363,7 @@ class FindingsController < ApplicationController
       [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
-      ].join(',')
+      ]
     ).limit(5)
   end
 

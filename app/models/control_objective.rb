@@ -9,12 +9,10 @@ class ControlObjective < ActiveRecord::Base
   before_destroy :can_be_destroyed?
   
   # Named scopes
-  scope :list, order(
-    ['process_control_id ASC', "#{table_name}.order ASC"].join(', ')
-  )
+  scope :list, order(['process_control_id ASC', "#{table_name}.order ASC"])
   scope :list_for_process_control, lambda { |process_control|
     where(:process_control_id => process_control.id).order(
-      ['process_control_id ASC', "#{table_name}.order ASC"].join(', ')
+      ['process_control_id ASC', "#{table_name}.order ASC"]
     )
   }
 

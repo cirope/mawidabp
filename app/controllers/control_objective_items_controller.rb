@@ -28,7 +28,7 @@ class ControlObjectiveItemsController < ApplicationController
         "#{Review.table_name}.period_id DESC",
         "#{Review.table_name}.identification ASC",
         "#{ControlObjectiveItem.table_name}.created_at DESC"
-      ].join(', ')
+      ]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|

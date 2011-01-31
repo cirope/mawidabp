@@ -18,12 +18,9 @@ class PlansController < ApplicationController
     @title = t :'plan.index_title'
     @plans = Plan.includes(:period).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).order(
-      [
-        'period_id DESC',
-        "#{Plan.table_name}.created_at DESC"
-      ].join(',')
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).order(['period_id DESC', "#{Plan.table_name}.created_at DESC"]).paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -181,7 +178,7 @@ class PlansController < ApplicationController
       [
         "#{BusinessUnit.table_name}.name ASC",
         "#{BusinessUnitType.table_name}.name ASC"
-      ].join(',')
+      ]
     ).limit(10)
   end
 
@@ -204,10 +201,7 @@ class PlansController < ApplicationController
     @users = User.includes(:organizations, :resource).where(
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
     ).order(
-      [
-        "#{User.table_name}.last_name ASC",
-        "#{User.table_name}.name ASC"
-      ].join(',')
+      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
   end
 

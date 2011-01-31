@@ -23,10 +23,7 @@ class ReviewsController < ApplicationController
     @reviews = Review.includes(:period, {:plan_item => :business_unit}).where(
       @conditions
     ).order(
-      [
-        "#{Period.table_name}.start DESC",
-        "#{Review.table_name}.created_at DESC"
-      ].join(', ')
+      ["#{Period.table_name}.start DESC", "#{Review.table_name}.created_at DESC"]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
@@ -232,10 +229,7 @@ class ReviewsController < ApplicationController
     @users = User.includes(:organizations).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      [
-        "#{User.table_name}.last_name ASC",
-        "#{User.table_name}.name ASC"
-      ].join(',')
+      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
   end
 
@@ -268,7 +262,7 @@ class ReviewsController < ApplicationController
       [
         "#{ProcessControl.table_name}.name ASC",
         "#{ControlObjective.table_name}.name ASC"
-      ].join(',')
+      ]
     ).limit(10)
   end
 

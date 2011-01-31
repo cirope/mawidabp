@@ -28,7 +28,7 @@ class DetractsController < ApplicationController
       [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
-      ].join(', ')
+      ]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|

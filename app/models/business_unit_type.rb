@@ -10,7 +10,7 @@ class BusinessUnitType < ActiveRecord::Base
   # Named scopes
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id).order(
-      ['external ASC', 'name ASC'].join(', ')
+      ['external ASC', 'name ASC']
     )
   }
   scope :internal_audit, lambda {
