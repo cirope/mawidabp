@@ -11,6 +11,7 @@
     <%= default_javascripts %>
     <%= javascript_tag do %>
       <%= raw "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
+      <%= raw "State.validationFailedMessage = '#{t(:'message.validation_failed_message')}';" %>
       <%= content_for :js_extra %>
     <% end %>
   </head>

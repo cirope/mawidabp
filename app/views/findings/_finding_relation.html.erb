@@ -14,7 +14,7 @@
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
           <%= text_field_with_auto_complete :finding, :nested_finding_relation,
             {:id => "finding_finding_relation_#{id}",
-            :class => "search#{' error_field' unless finding_relation.errors[:related_finding_id].empty?}",
+            :class => "search required#{' error_field' unless finding_relation.errors[:related_finding_id].empty?}",
             :title => t(:'label.search'),
             :value => finding_relation.related_finding.to_s},
             {:indicator => :loading, :skip_style => true,

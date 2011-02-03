@@ -673,41 +673,17 @@ class Finding < ActiveRecord::Base
   def important_dates
     important_dates = []
 
-    if self.unconfirmed?
-      notification_date = self.versions.last.try(:created_at)
-    else
-      unconfirmed_version = self.versions.detect do |v|
-        v.reify.try(:unconfirmed?)
-      end
-
-      if unconfirmed_version.try(:previous)
-        notification_date = unconfirmed_version.previous.created_at
-      end
-    end
-
-    if notification_date
+    if self.first_notification_date
       important_dates << I18n.t(:'finding.important_dates.notification_date',
-        :date => I18n.l(notification_date, :format => :very_long).strip)
+        :date => I18n.l(self.first_notification_date, :format => :long).strip)
     end
 
-    if self.confirmed?
-      confirmation_date = self.versions.last.try(:created_at)
-    else
-      confirmed_version = self.versions.detect { |v| v.reify.try(:confirmed?) }
-
-      if confirmed_version.try(:previous)
-        confirmation_date = confirmed_version.previous.created_at
-      end
-    end
-
-    if confirmation_date
+    if self.confirmation_date
       important_dates << I18n.t(:'finding.important_dates.confirmation_date',
-        :date => I18n.l(confirmation_date, :format => :very_long).strip)
+        :date => I18n.l(self.confirmation_date, :format => :long).strip)
     end
 
-    if self.confirmed? || self.unconfirmed? ||
-        Finding.confirmed_and_stale.exists?(self.id)
-
+    if self.confirmed? || self.unconfirmed?
       if self.confirmation_date
         max_notification_date = self.stale_confirmed_days.days.
           ago_in_business.to_date

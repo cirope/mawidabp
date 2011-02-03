@@ -473,16 +473,21 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.find findings(
       :iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification).id
 
-    assert_equal 1, finding.important_dates.size
+    # Fecha de notificación y de cambio de estado a Sin Respuesta
+    assert_equal 2, finding.important_dates.size
     
     finding = Finding.find findings(
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
     assert_equal 0, finding.important_dates.size
-    assert finding.update_attribute(:state, Finding::STATUS[:unconfirmed])
-    assert_equal 1, finding.important_dates.size
-    assert finding.update_attributes(:state => Finding::STATUS[:confirmed])
+    assert finding.mark_as_unconfirmed!
+    # Fecha de notificación y de cambio de estado a Sin Respuesta
     assert_equal 2, finding.important_dates.size
+
+    finding.confirmed!
+    assert finding.reload.confirmed?
+    # Fecha de notificación, de confirmación y de cambio de estado a Sin Respuesta
+    assert_equal 3, finding.important_dates.size
   end
 
   test 'notify changes to users' do

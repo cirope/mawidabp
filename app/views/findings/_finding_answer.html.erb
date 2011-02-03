@@ -6,7 +6,7 @@
       <%= finding_answer.user.full_name %>
     </div>
     <div class="item_field" style="width: 40%;">
-      <%= f.text_area :answer, :class => :focused,
+      <%= f.text_area :answer, :class => 'required focused',
         :readonly => !finding_answer.new_record? %>
     </div>
     <% if !finding_answer.file_model || finding_answer.file_model.new_record? %>
@@ -45,7 +45,7 @@
                 show_inline_help_for(:finding_answer_commitment_date,
                 "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")),
               :class => :plain_label, :style => 'display: block;'%>
-            <%= f.calendar_date_select :commitment_date, :class => :inline_tight_item %>
+            <%= f.calendar_date_select :commitment_date, :class => 'required inline_tight_item' %>
           </div>
         <% end %>
       <div style="clear: both;"><%= finding_answer_notification_check(f) %></div>

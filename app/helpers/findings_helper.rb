@@ -66,7 +66,8 @@ module FindingsHelper
       [t(:"finding_relation.types.#{type}"), value]
     end
 
-    form.select :finding_relation_type, options, :prompt => true
+    form.select :finding_relation_type, options, {:prompt => true},
+      {:class => :required}
   end
 
   def finding_show_status_change_history(dom_id)

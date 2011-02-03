@@ -13,7 +13,9 @@ var State = {
     // Variable con los mensajes que se deben mostrar diferidos
     showMessages: new Array(),
     // Variable para indicar si la sesión ha expirado
-    sessionExpire: false
+    sessionExpire: false,
+    // Mensaje de error para mostrar cuando falla la validación en línea
+    validationFailedMessage: undefined
 }
 
 // Utilidades para asistir al autocompletado
@@ -210,7 +212,7 @@ var Helper = {
     hideItem: function(element, options) {
         Effect.SlideUp(element, Util.merge({
             duration: 0.5,
-            afterFinish: function() { element.fire("item:hidden"); }
+            afterFinish: function() {element.fire("item:hidden");}
         }, options));
     },
 
@@ -688,8 +690,8 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 Event.observe(window, 'load', function() {
-    document.on('ajax:after', function(e) { Helper.showLoading(e); });
-    document.on('ajax:complete', function(e) { Helper.hideLoading(e); });
+    document.on('ajax:after', function(e) {Helper.showLoading(e);});
+    document.on('ajax:complete', function(e) {Helper.hideLoading(e);});
 
     document.on('keydown', function(e) {
         if ((e.keyCode || e.which) == 32 && e.ctrlKey) {
@@ -715,7 +717,25 @@ Event.observe(window, 'load', function() {
         }
     });
 
-    document.on('submit', function() {State.unsavedData = false;});
+    document.on('submit', function(event) {
+        var hasErrors = false;
+
+        $$('.required').each(function(e) {
+            if(e.getValue().blank()) {
+                e.addClassName('error_field');
+                hasErrors = true;
+            } else {
+                e.removeClassName('error_field');
+            }
+        });
+
+        if(hasErrors && State.validationFailedMessage) {
+            alert(State.validationFailedMessage);
+            event.stop();
+        } else {
+            State.unsavedData = false;
+        }
+    });
 
     // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
     document.on("item:removed", '.work_paper', function(event, element) {
@@ -785,7 +805,7 @@ Event.observe(window, 'load', function() {
 
     if(!Prototype.Browser.MobileSafari) {
         $w('menu menu_level_1 menu_level_2').each(function(e) {
-            if($(e)) { Element.show(e); }
+            if($(e)) {Element.show(e);}
         });
     }
 
