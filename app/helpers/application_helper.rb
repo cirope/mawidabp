@@ -16,7 +16,7 @@ module ApplicationHelper
   end
 
   def default_javascripts
-    libs = [:defaults, 'validation.js', 'popup.js']
+    libs = [:defaults, 'validation.js', 'ui.js', 'popup.js']
     libs |= calendar_date_select_javascripts(
       :locale => (@auth_user.language if @auth_user)
     ).to_a
