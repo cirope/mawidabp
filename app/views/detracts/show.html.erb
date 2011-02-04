@@ -32,7 +32,7 @@
       </thead>
       
       <tbody>
-        <% @detract.user.children.each do |child| %>
+        <% @user.children.each do |child| %>
           <tr>
             <td><%= h child.full_name %></td>
             <td><%= h child.detracts.last.try(:value) %></td>

@@ -69,6 +69,10 @@
         min-width: 300px;
     }
 
+    div#menu, div#menu_level_1, div#menu_level_2 {
+      display: none;
+    }
+
     div#mobile_menu {
         display: block;
         clear: both;

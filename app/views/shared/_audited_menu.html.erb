@@ -1,7 +1,7 @@
 <% controller_name = controller.controller_name.to_sym %>
 <% submenu_items_1_content = '' %>
 <% submenu_items_2_content = '' %>
-<div id="menu" style="display: none; <%= 'border-top: 12px solid #F7AC07;' if Rails.env.development? %>">
+<div id="menu" <%= 'style="border-top: 12px solid #F7AC07;"' if Rails.env.development? %>>
   <div id="session">
     <div id="user">[ <%= link_to user.user, edit_personal_data_user_path(user),
       {:title => t(:'user.change_personal_data')} %> ]</div>
@@ -48,8 +48,8 @@
     <% end %>
   </ul>
 </div>
-<div id="menu_level_1" style="display: none;"><%= raw submenu_items_1_content %>&nbsp;</div>
-<div id="menu_level_2" style="display: none;"><%= raw submenu_items_2_content %>&nbsp;</div>
+<div id="menu_level_1"><%= raw submenu_items_1_content %>&nbsp;</div>
+<div id="menu_level_2"><%= raw submenu_items_2_content %>&nbsp;</div>
 
 <%= javascript_tag do %>
   <%= yield :javascript_menu %>

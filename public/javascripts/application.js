@@ -783,12 +783,6 @@ Event.observe(window, 'load', function() {
         }
     });
 
-    if(!Prototype.Browser.MobileSafari) {
-        $w('menu menu_level_1 menu_level_2').each(function(e) {
-            if($(e)) {Element.show(e);}
-        });
-    }
-
     Helper.updateDimensions();
 });
 
