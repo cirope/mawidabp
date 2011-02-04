@@ -44,6 +44,14 @@ GIT
       thor (~> 0.14.4)
 
 GIT
+  remote: https://github.com/francocatena/paperclip.git
+  revision: 0bca09a13436c2e8dd91fcf96d7e6fccc4a25dab
+  specs:
+    paperclip (2.3.8)
+      activerecord
+      activesupport
+
+GIT
   remote: https://github.com/paneq/calendar_date_select.git
   revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
   branch: rails3test
@@ -114,9 +122,6 @@ GEM
     paper_trail (1.6.4)
       actionpack (>= 2.3)
       activerecord (>= 2.3)
-    paperclip (2.3.8)
-      activerecord
-      activesupport
     pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -166,7 +171,7 @@ DEPENDENCIES
   mongrel
   newrelic_rpm
   paper_trail
-  paperclip
+  paperclip!
   pg
   rails!
   ruby-debug

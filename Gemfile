@@ -16,7 +16,7 @@ gem 'smurf', :git => 'https://github.com/thumblemonks/smurf.git', :require => fa
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'
-gem 'paperclip'
+gem 'paperclip', :git => 'https://github.com/francocatena/paperclip.git'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer

@@ -22,9 +22,9 @@ class ActiveRecord::Base
   # Devuelve siempre una versión correcta para la fecha
   def version_of(date = nil)
     if date && date.to_time <= Time.now && self.respond_to?(:versions)
-      self.versions.where('created_at <= :from', :from => date.to_time).order(
-        'created_at DESC'
-      ).first.try(:reify) || self.versions.first.try(:reify) || self
+      self.versions.order('created_at ASC').where(
+        'created_at <= :from', :from => date.to_time
+      ).last.try(:reify) || self.versions.first.try(:reify) || self
     else
       self
     end
