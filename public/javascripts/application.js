@@ -397,8 +397,7 @@ var HTMLUtil = {
     var src = e.readAttribute('src');
 
     if(src && !src.match(/_hover/)) {
-      e.writeAttribute('src', src.sub(/^(.*)\.(.*?)$/,
-        '#{1}_hover.#{2}'));
+      e.writeAttribute('src', src.sub(/^(.*)\.(.*?)$/, '#{1}_hover.#{2}'));
     } else {
       HTMLUtil.replaceWithNormalImage(e);
     }
@@ -720,12 +719,6 @@ Event.observe(window, 'load', function() {
     }
   });
 
-  document.on('change', 'form', function(event, element) {
-    if(!element.hasClassName('no_observe_changes')) {
-      State.unsavedData = true;
-    }
-  });
-
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
   document.on("item:removed", '.work_paper', function(event, element) {
     var workPaperCode = element.down('input[name$="[code]"]').getValue();
@@ -845,42 +838,3 @@ Element.addMethods({
     e.update(e.innerHTML == originalText ? alternateText : originalText);
   }
 });
-
-// Verifica antes de cerrar la ventana que los datos no hayan cambiado
-window.onbeforeunload = function () {
-  if (State.unsavedData) {
-    $$('form').each(function(form) {
-      Form.getElements(form).each(function(e) {
-        if(e.retrieve('reset_value')) { e.setValue(e.retrieve('reset_value')); }
-      });
-    });
-
-    return State.unsavedDataWarning;
-  } else {
-    return undefined;
-  }
-}.bind(this);
-
-Number.prototype.rnd = function() {
-  return Math.floor(Math.random() * this + 1)
-}
-
-String.prototype.next = function(padded) {
-  if(this.match(/\d+$/)) {
-    var currentNumber = parseInt(this.match(/\d+$/).first(), 10);
-
-    return this.replace(/\d+$/, (currentNumber + 1).toPaddedString(padded || 0));
-  } else {
-    return this;
-  }
-}
-
-String.prototype.previous = function(padded) {
-  if(this.match(/\d+$/)) {
-    var currentNumber = parseInt(this.match(/\d+$/).first(), 10);
-
-    return this.replace(/\d+$/, (currentNumber - 1).toPaddedString(padded || 0));
-  } else {
-    return this;
-  }
-}
