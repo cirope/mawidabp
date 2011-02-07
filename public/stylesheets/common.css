@@ -561,7 +561,7 @@ div.auto_complete p.empty_result {
     padding: .3em;
 }
 
-div.column_headers, div.simple_column_headers {
+div.column_headers {
     color: #151215;
     border-bottom: 2px dotted #e3e0dd;
     margin-bottom: .7em;

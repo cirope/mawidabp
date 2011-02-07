@@ -3,7 +3,7 @@
 <div class="finding_review_assignment item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 95%;">
-      <% unless readonly %>
+      <% if is_dynamic %>
         <div class="search">
           <% errors_on_finding = f.object.errors[:finding_id] | f.object.errors[:finding] %>
           <%= f.hidden_field :finding_id, :value => f.object.finding_id,
@@ -19,11 +19,6 @@
             :after_update_element => 'AutoComplete.itemSelected',
             :param_name => 'finding_data'}) %>
         </div>
-      <% else %>
-        <%= f.hidden_field :finding_id, :value => f.object.finding_id,
-          :id => "hidden_finding_id_#{id}" %>
-        <%= text_field_tag "finding_review_assignment_finding_#{id}",
-          f.object.finding.try(:to_s), :readonly => true %>
       <% end %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">

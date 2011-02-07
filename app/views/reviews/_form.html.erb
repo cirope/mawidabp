@@ -3,14 +3,16 @@
 <!--[form:review]-->
 <%= form_for @review, :html => { :multipart => true } do |r_f| %>
   <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-  <% js_extra << "var control_objective='#{escape_javascript render(
-    :partial => 'procedure_control_subitem',
-    :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
-    :is_dynamic => true})}';" %>
-  <% js_extra << "var review_user_assignment='#{generate_template(r_f,
-    :review_user_assignments, :locals => {:readonly => readonly})}';" %>
-  <% js_extra << "var finding_review_assignment='#{generate_template(r_f,
-    :finding_review_assignments, :locals => {:readonly => readonly})}';" %>
+  <% unless readonly %>
+    <% js_extra << "var control_objective='#{escape_javascript render(
+      :partial => 'procedure_control_subitem',
+      :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
+      :is_dynamic => true})}';" %>
+    <% js_extra << "var review_user_assignment='#{generate_template(r_f,
+      :review_user_assignments, :locals => {:readonly => readonly})}';" %>
+    <% js_extra << "var finding_review_assignment='#{generate_template(r_f,
+      :finding_review_assignments, :locals => {:readonly => readonly})}';" %>
+  <% end %>
   <%= r_f.error_messages %>
   <div class="form_column_left">
     <p class="form_item">
@@ -174,7 +176,15 @@
   <div class="items" style="margin-top: 2em;">
     <h1><%= t(:'review.findings_label') %></h1>
     
-    <div class="simple_column_headers">
+    <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
+    <% unless finding_relations.empty? %>
+      <%= r_f.fields_for :finding_review_assignments, finding_relations do |fra_f| %>
+        <%= render :partial => 'finding_review_assignment_readonly',
+          :locals => {:f => fra_f, :is_dynamic => false, :readonly => readonly} %>
+      <% end %>
+    <% end %>
+    
+    <div class="column_headers">
       <div class="item_column" style="width: 95%;">
         <h3><%= FindingReviewAssignment.human_attribute_name :finding %></h3>
       </div>
@@ -182,12 +192,7 @@
       <div class="clear"></div>
     </div>
 
-    <div id="finding_review_assignments">
-      <%= r_f.fields_for :finding_review_assignments do |fra_f| %>
-        <%= render :partial => 'finding_review_assignment',
-          :locals => {:f => fra_f, :is_dynamic => false, :readonly => readonly} %>
-      <% end %>
-    </div>
+    <div id="finding_review_assignments"></div>
   </div>
 
   <% unless readonly %>
