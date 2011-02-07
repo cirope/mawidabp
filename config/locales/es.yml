@@ -918,6 +918,8 @@ es:
     bundle: "Legajo"
     copy: "Copiar"
     view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
+    findings_label: "Observaciones / Oportunidades de mejora reiteradas"
+    add_finding_assignment: "Agregar observación / oportunidad de mejora reiterada"
     add_user_assignment: "Agregar usuario relacionado"
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
@@ -1254,6 +1256,7 @@ es:
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
+      finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
       help_content: "Contenido de ayuda"
       help_item: "Registro de ayuda"
@@ -1273,6 +1276,7 @@ es:
       procedure_control_subitem: "Subítem del procedimiento de control"
       process_control: "Proceso de negocio"
       review: "Informe"
+      review_user_assignment: "Asignación de usuario a informe"
       resource: "Recurso"
       resource_class: "Clase de recurso"
       role: "Perfil"
@@ -1472,6 +1476,12 @@ es:
         finding_id: 'Observación / Oportunidad de mejora'
         related_finding_id: 'Observación / Oportunidad de mejora relacionada'
         finding_relation_type: 'Tipo'
+        <<: *commons
+      finding_review_assignment:
+        finding_id: 'Observación / Oportunidad de mejora'
+        finding: 'Observación / Oportunidad de mejora'
+        review_id: 'Informe'
+        review: 'Informe'
         <<: *commons
       finding_user_assignment:
         finding_id: 'Observación / Oportunidad de mejora'
@@ -1694,6 +1704,11 @@ es:
           file_file_name: "Anexo (nombre de archivo)"
           file_content_type: "Anexo (tipo de archivo)"
           file_file_size: "Anexo (tamaño de archivo)"
+        finding_review_assignments:
+          one: "Observación / Oportunidad de mejora"
+          other: "Observaciones / Oportunidades de mejora"
+          finding: "Observación / Oportunidad de mejora"
+          finding_id: "Observación / Oportunidad de mejora"
         review_user_assignments:
           one: "Integrante"
           other: "Integrantes"

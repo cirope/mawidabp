@@ -233,6 +233,41 @@ class ReviewsController < ApplicationController
     ).limit(10)
   end
 
+  # * POST /reviews/auto_complete_for_finding
+  def auto_complete_for_finding
+    @tokens = params[:finding_data][0..100].split(
+      SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+    @tokens.reject! { |t| t.blank? }
+    conditions = [
+      "#{Finding.table_name}.final = :boolean_false",
+      "#{Period.table_name}.organization_id = :organization_id",
+      "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+    ].compact
+    parameters = {
+      :boolean_false => false,
+      :organization_id => @auth_organization.id
+    }
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{Finding.table_name}.review_code) LIKE :finding_data_#{i}",
+        "LOWER(#{Finding.table_name}.description) LIKE :finding_data_#{i}",
+        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :finding_data_#{i}",
+        "LOWER(#{Review.table_name}.identification) LIKE :finding_data_#{i}",
+      ].join(' OR ')
+
+      parameters["finding_data_#{i}".to_sym] = "%#{t.downcase}%"
+    end
+
+    @findings = Finding.includes(:control_objective_item =>
+        {:review => [:period, :conclusion_final_review]}
+    ).where([conditions.map {|c| "(#{c})"}.join(' AND '), parameters]).order(
+      [
+        "#{Review.table_name}.identification ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ]
+    ).limit(5)
+  end
+
   # * POST /reviews/auto_complete_for_procedure_control_subitem
   def auto_complete_for_procedure_control_subitem
     @tokens = params[:procedure_control_subitem_data][0..100].split(/[\s,]/).uniq

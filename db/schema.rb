@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100920114555) do
+ActiveRecord::Schema.define(:version => 20110207140509) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -195,6 +195,15 @@ ActiveRecord::Schema.define(:version => 20100920114555) do
 
   add_index "finding_relations", ["finding_id"], :name => "index_finding_relations_on_finding_id"
   add_index "finding_relations", ["related_finding_id"], :name => "index_finding_relations_on_related_finding_id"
+
+  create_table "finding_review_assignments", :force => true do |t|
+    t.integer  "finding_id"
+    t.integer  "review_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "finding_review_assignments", ["finding_id", "review_id"], :name => "index_finding_review_assignments_on_finding_id_and_review_id"
 
   create_table "finding_user_assignments", :force => true do |t|
     t.integer  "finding_id"

@@ -178,9 +178,12 @@ class Review < ActiveRecord::Base
   has_many :final_oportunities, :through => :control_objective_items
   has_many :review_user_assignments, :dependent => :destroy, :include => :user,
     :order => 'assignment_type DESC', :inverse_of => :review
+  has_many :finding_review_assignments, :dependent => :destroy,
+    :inverse_of => :review
   has_many :users, :through => :review_user_assignments
 
   accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
+  accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
   accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
 

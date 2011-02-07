@@ -102,7 +102,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'create review' do
     perform_auth
-    assert_difference 'Review.count' do
+    assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
       # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
       assert_difference ['ControlObjectiveItem.count', 'Control.count'], 3 do
         assert_difference 'WorkPaper.count', 4 do
@@ -119,6 +119,12 @@ class ReviewsControllerTest < ActionController::TestCase
                     [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
                   :file_model_attributes => {:file => Rack::Test::UploadedFile.new(
                       TEST_FILE_FULL_PATH, 'text/plain')
+                  },
+                  :finding_review_assignments_attributes => {
+                    :new_1 => {
+                      :finding_id =>
+                        findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                    }
                   },
                   :review_user_assignments_attributes => {
                     :new_1 => {
@@ -447,5 +453,35 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_equal 0, assigns(:procedure_control_subitems).size # None
     assert_select '#error_body', false
     assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+  end
+
+  test 'auto complete for finding relation' do
+    perform_auth
+    post :auto_complete_for_finding, {
+      :finding_data => 'O01'
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 2, assigns(:findings).size # Se excluye la observación O01 que no tiene informe definitivo
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_finding'
+
+    post :auto_complete_for_finding, {
+      :finding_data => 'O01, 1 2 3'
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 1, assigns(:findings).size # Solo O01 del informe 1 2 3
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_finding'
+
+    post :auto_complete_for_finding, {
+      :finding_data => 'x_none',
+    }
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 0, assigns(:findings).size # Sin resultados
+    assert_select '#error_body', false
+    assert_template 'reviews/auto_complete_for_finding'
   end
 end

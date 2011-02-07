@@ -185,6 +185,7 @@ MawidaApp::Application.routes.draw do
       get :estimated_amount
       get :plan_item_data
       post :auto_complete_for_user
+      post :auto_complete_for_finding
       post :auto_complete_for_procedure_control_subitem
     end
   end

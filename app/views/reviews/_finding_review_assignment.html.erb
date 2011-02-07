@@ -1,0 +1,36 @@
+<% id = dynamic_object_id('finding_review_assignment', f) %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
+<div class="finding_review_assignment item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
+  <div>
+    <div class="item_field" style="width: 95%;">
+      <% unless readonly %>
+        <div class="search">
+          <% errors_on_finding = f.object.errors[:finding_id] | f.object.errors[:finding] %>
+          <%= f.hidden_field :finding_id, :value => f.object.finding_id,
+            :id => "hidden_finding_id_#{id}", :class => :autocomplete_id_item %>
+          <%= text_field_with_auto_complete(:finding_review_assignment, :finding_data,
+            {:id => "finding_review_assignment_finding_#{id}",
+            :class => "search #{'error_field' unless errors_on_finding.blank?}",
+            :title => t(:'label.search'),
+            :style => 'width: 95%;',
+            :value => f.object.finding.try(:to_s)},
+            {:indicator => :loading, :skip_style => true,
+            :url => {:action => :auto_complete_for_finding},
+            :after_update_element => 'AutoComplete.itemSelected',
+            :param_name => 'finding_data'}) %>
+        </div>
+      <% else %>
+        <%= f.hidden_field :finding_id, :value => f.object.finding_id,
+          :id => "hidden_finding_id_#{id}" %>
+        <%= text_field_tag "finding_review_assignment_finding_#{id}",
+          f.object.finding.try(:to_s), :readonly => true %>
+      <% end %>
+    </div>
+    <div class="item_field item_controls" style="width: 5%;">
+      <%= remove_item_link(f) unless readonly %>
+    </div>
+  </div>
+</div>
+<% if is_dynamic %>
+<script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<% end %>
