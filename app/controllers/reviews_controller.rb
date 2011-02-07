@@ -240,12 +240,14 @@ class ReviewsController < ApplicationController
     @tokens.reject! { |t| t.blank? }
     conditions = [
       "#{Finding.table_name}.final = :boolean_false",
+      "#{Finding.table_name}.state IN(:states)",
       "#{Period.table_name}.organization_id = :organization_id",
       "#{ConclusionReview.table_name}.review_id IS NOT NULL"
     ].compact
     parameters = {
       :boolean_false => false,
-      :organization_id => @auth_organization.id
+      :organization_id => @auth_organization.id,
+      :states => Finding::PENDING_STATUS
     }
     @tokens.each_with_index do |t, i|
       conditions << [

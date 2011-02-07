@@ -118,6 +118,16 @@
       </div>
     <% end %>
   <% end %>
+
+  <% unless @review.finding_review_assignments.empty? %>
+    <h1><%= t(:'review.findings_label') %></h1>
+
+    <ul class="raw_list">
+      <% @review.finding_review_assignments.each do |fra| %>
+        <li><%= fra.finding %></li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
 
 <div id="links">
