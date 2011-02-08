@@ -385,11 +385,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:findings)
     assert assigns(:findings).size > 0
-    assert(
-      assigns(:findings).all? do |f|
-        f.review.plan_item_id != review.plan_item_id
-      end
-    )
+    assert assigns(:findings).all?(&:pending?)
     assert(
       assigns(:findings).all? do |f|
         f.review.plan_item.business_unit_id == review.plan_item.business_unit_id

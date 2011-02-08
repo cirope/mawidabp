@@ -223,13 +223,11 @@ class ReviewsController < ApplicationController
         "#{Finding.table_name}.state IN(:states)",
         "#{Period.table_name}.organization_id = :organization_id",
         "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{Plan.table_name}.id <> :plan_id",
         "#{BusinessUnit.table_name}.id = :business_unit_id"
       ].join(' AND '),
       :boolean_false => false,
       :organization_id => @auth_organization.id,
       :states => Finding::PENDING_STATUS,
-      :plan_id => plan_item.plan_id,
       :business_unit_id => plan_item.business_unit_id
     ).includes(
       :control_objective_item => {
