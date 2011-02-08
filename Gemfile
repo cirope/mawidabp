@@ -11,7 +11,7 @@ gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', '~> 3.0'
-gem 'RedCloth'
+gem 'RedCloth', :require => 'redcloth'
 gem 'smurf', :git => 'https://github.com/thumblemonks/smurf.git', :require => false
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'

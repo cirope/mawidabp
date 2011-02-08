@@ -315,6 +315,16 @@ class ConclusionReview < ActiveRecord::Base
       end
     end
 
+    unless self.review.finding_review_assignments.empty?
+      pdf.add_subtitle(I18n.t(:'conclusion_review.finding_review_assignments'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE)
+      repeated_findings = self.review.finding_review_assignments.map do |fra|
+        fra.finding.to_s.to_iso
+      end
+
+      pdf.add_list(repeated_findings, PDF_FONT_SIZE)
+    end
+
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_review_auditors_table(
