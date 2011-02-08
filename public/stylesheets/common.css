@@ -44,6 +44,11 @@ a.image_link:hover {
     color: inherit;
 }
 
+a.link_without_action {
+  color: #a5a5a5;
+  text-decoration: none;
+}
+
 a[data-event="remove_item"],
 a[data-event="remove_list_item"],
 a[data-event="hide_item"] {

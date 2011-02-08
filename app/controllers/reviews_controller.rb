@@ -175,14 +175,17 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/plan_item_data/1
   def plan_item_data
-    business_unit = PlanItem.find_by_id(params[:id]).try(:business_unit)
+    plan_item = PlanItem.find_by_id(params[:id])
+    business_unit = plan_item.try(:business_unit)
     name = business_unit.try(:name)
     
     type = business_unit.business_unit_type.name if business_unit
     
     render :json => {
       :business_unit_name => name,
-      :business_unit_type => type
+      :business_unit_type => type,
+      :link_to_suggested_findings =>
+        (suggested_findings_review_path(:id => plan_item.id) if plan_item)
     }.to_json
   end
 
@@ -207,6 +210,41 @@ class ReviewsController < ApplicationController
     review.survey_pdf(@auth_organization)
 
     redirect_to review.relative_survey_pdf_path
+  end
+
+  # Muestra sugerencias de observaciones / oportunidades de mejora reiteradas
+  #
+  # * GET /reviews/suggested_findings
+  def suggested_findings
+    plan_item = PlanItem.find(params[:id])
+    @findings = Finding.where(
+      [
+        "#{Finding.table_name}.final = :boolean_false",
+        "#{Finding.table_name}.state IN(:states)",
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+        "#{Plan.table_name}.id <> :plan_id",
+        "#{BusinessUnit.table_name}.id = :business_unit_id"
+      ].join(' AND '),
+      :boolean_false => false,
+      :organization_id => @auth_organization.id,
+      :states => Finding::PENDING_STATUS,
+      :plan_id => plan_item.plan_id,
+      :business_unit_id => plan_item.business_unit_id
+    ).includes(
+      :control_objective_item => {
+        :review => [
+          {:plan_item => [:plan, :business_unit]},
+          :period,
+          :conclusion_final_review
+        ]
+      }
+    ).order(
+      [
+        "#{Review.table_name}.identification ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ]
+    )
   end
 
   # * POST /reviews/auto_complete_for_user
@@ -343,7 +381,9 @@ class ReviewsController < ApplicationController
       :plan_item_data => :read,
       :procedure_control_data => :read,
       :survey_pdf => :read,
+      :suggested_findings => :read,
       :auto_complete_for_user => :read,
+      :auto_complete_for_finding => :read,
       :auto_complete_for_procedure_control_subitem => :read,
       :estimated_amount => :read
     )

@@ -174,6 +174,7 @@ MawidaApp::Application.routes.draw do
   resources :reviews do
     member do
       get :survey_pdf
+      get :suggested_findings
       get :review_data
       get :weaknesses_and_oportunities
       get :download_work_papers

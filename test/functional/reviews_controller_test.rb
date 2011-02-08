@@ -377,6 +377,28 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_redirected_to review.relative_survey_pdf_path
   end
 
+  test 'suggested findings' do
+    perform_auth
+    review = Review.find reviews(:current_review).id
+
+    get :suggested_findings, :id => review.plan_item_id
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).size > 0
+    assert(
+      assigns(:findings).all? do |f|
+        f.review.plan_item_id != review.plan_item_id
+      end
+    )
+    assert(
+      assigns(:findings).all? do |f|
+        f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
+      end
+    )
+    assert_select '#error_body', false
+    assert_template 'reviews/suggested_findings'
+  end
+
   test 'download work papers' do
     perform_auth
 

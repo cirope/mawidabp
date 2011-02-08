@@ -230,7 +230,7 @@ var Helper = {
   hideLoading: function(element) {
     $('loading').hide();
 
-    if($(element)) { $(element).enable(); }
+    Try.these(function() { $(element).enable(); })
   },
 
   /**
@@ -292,7 +292,7 @@ var Helper = {
   showLoading: function(element) {
     $('loading').show();
 
-    if($(element)) { $(element).disable(); }
+    Try.these(function() { $(element).disable(); })
   },
 
   /**
@@ -699,8 +699,8 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 Event.observe(window, 'load', function() {
-  document.on('ajax:after', function(e) { Helper.showLoading(e); });
-  document.on('ajax:complete', function(e) { Helper.hideLoading(e); });
+  document.on('ajax:after', function(event, e) { Helper.showLoading(e); });
+  document.on('ajax:complete', function(event, e) { Helper.hideLoading(e); });
 
   document.on('keydown', function(e) {
     if ((e.keyCode || e.which) == 32 && e.ctrlKey) {

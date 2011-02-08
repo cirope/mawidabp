@@ -175,6 +175,7 @@
 
   <div class="items" style="margin-top: 2em;">
     <h1><%= t(:'review.findings_label') %></h1>
+    <div id="suggested_findings"></div>
     
     <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
     <% unless finding_relations.empty? %>
@@ -200,7 +201,13 @@
       <%= link_to t(:'review.add_finding_assignment'), '#',
         :'data-event' => :add_nested_item,
         :'data-template' => :finding_review_assignment,
-        :'data-container' => :finding_review_assignments %>
+        :'data-container' => :finding_review_assignments %> |
+      <%= link_to t(:'review.suggest_findings'), @review.plan_item_id ?
+        suggested_findings_review_path(:id => @review.plan_item_id) : '#',
+        :remote => true, :'data-update' => :suggested_findings,
+        :'data-condition' => "$('link_to_suggested_findings').readAttribute('href') != '#'",
+        :id => :link_to_suggested_findings,
+        :class => (:link_without_action unless @review.plan_item_id) %>
     </p>
   <% end %>
 
@@ -221,7 +228,7 @@
     Event.observe('review_plan_item_id', 'change', function() {
       var data_url = '<%= plan_item_data_reviews_path %>';
       var amount_url = '<%= estimated_amount_reviews_path %>';
-      var element = $(this);
+      var element = $('review_plan_item_id');
 
       $('business_unit').setValue('');
       $('audit_type').setValue('');
@@ -238,6 +245,17 @@
 
             $('business_unit').setValue(planItemData.business_unit_name);
             $('audit_type').setValue(planItemData.business_unit_type);
+
+            if(planItemData.link_to_suggested_findings) {
+              $('link_to_suggested_findings').writeAttribute(
+                'href', planItemData.link_to_suggested_findings);
+              $('link_to_suggested_findings').removeClassName(
+                'link_without_action');
+            } else {
+              $('link_to_suggested_findings').writeAttribute('href', '#');
+              $('link_to_suggested_findings').addClassName(
+                'link_without_action');
+            }
           },
           onComplete: function() {
             Helper.hideLoading(element);
@@ -256,6 +274,9 @@
             });
           }
         });
+      } else {
+        $('link_to_suggested_findings').writeAttribute('href', '#');
+        $('link_to_suggested_findings').addClassName('link_without_action');
       }
     });
   }
