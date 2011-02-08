@@ -923,6 +923,7 @@ es:
     add_finding_assignment: "Agregar observación / oportunidad de mejora reiterada"
     add_user_assignment: "Agregar usuario relacionado"
     suggest_findings: 'Sugerir observaciones / oportunidades de mejora reiteradas'
+    without_suggested_findings: 'Sin observaciones / oportunidades de mejora reiteradas'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"

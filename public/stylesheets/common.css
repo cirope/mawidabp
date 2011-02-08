@@ -1266,6 +1266,14 @@ ul.raw_list ul {
     margin-left: 3em;
 }
 
+.align-top {
+  vertical-align: text-top !important;
+}
+
+.align-top * {
+  vertical-align: text-top !important;
+}
+
 .bold {
     font-weight: bold;
 }

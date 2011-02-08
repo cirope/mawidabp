@@ -1,6 +1,10 @@
-<% unless @findings.empty? %>
+<% if @findings.empty? %>
+  <p class="align-top" style="margin: 1em 0em; color: #47ae00; font-weight: bold;">
+    <%= t(:'review.without_suggested_findings') %>
+  </p>
+<% else %>
   <% @findings.each_with_index do |finding, i| %>
-    <div class="finding_review_assignment">
+    <div class="finding_review_assignment align-top">
       <div>
         <ul class="raw_list">
           <li>
@@ -15,3 +19,14 @@
     </div>
   <% end %>
 <% end %>
+
+<script type="text/javascript">
+(function() {
+  Try.these(function() {
+    new Effect.Highlight('suggested_findings', {
+      duration: 2,
+      queue: { position: 'end', scope: 'review', limit: 1 }
+    });
+  });
+}).delay(0.3);
+</script>
