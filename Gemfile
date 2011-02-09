@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'franco@mawidaweb.com.ar:/home/franco/github/rails', :branch => '3-0-stable_fix_active_support_i18n_load'
+gem 'rails', :git => 'franco@mawidaweb.com.ar:/home/franco/github/rails', :branch => '3-0-stable_fix-time-nil-assignments'
 
 gem 'bundler'
 gem 'pg'
@@ -11,7 +11,7 @@ gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', '~> 3.0'
-gem 'RedCloth', :require => 'redcloth'
+gem 'RedCloth', '4.2.5', :require => 'redcloth'
 gem 'smurf', :git => 'https://github.com/thumblemonks/smurf.git', :require => false
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
