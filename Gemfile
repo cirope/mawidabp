@@ -12,7 +12,7 @@ gem 'uuidtools'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', '~> 3.0'
 gem 'RedCloth', '4.2.5', :require => 'redcloth'
-gem 'smurf', :git => 'https://github.com/thumblemonks/smurf.git', :require => false
+gem 'smurf'
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'

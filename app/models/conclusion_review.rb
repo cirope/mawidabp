@@ -319,7 +319,7 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_subtitle(I18n.t(:'conclusion_review.finding_review_assignments'),
         PDF_FONT_SIZE, PDF_FONT_SIZE)
       repeated_findings = self.review.finding_review_assignments.map do |fra|
-        fra.finding.to_s.to_iso
+        fra.finding.to_s
       end
 
       pdf.add_list(repeated_findings, PDF_FONT_SIZE)
