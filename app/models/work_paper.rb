@@ -201,7 +201,8 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def unzip_if_necesary
-    if self.file_model && File.extname(self.file_model.file_file_name) == '.zip'
+    if !@unziped && self.file_model &&
+        File.extname(self.file_model.file_file_name) == '.zip'
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
@@ -223,7 +224,11 @@ class WorkPaper < ActiveRecord::Base
         end
       end
 
-      FileUtils.rm zip_path
+      # Pregunta para evitar eliminar el archivo si es un zip con el mismo
+      # nombre
+      FileUtils.rm zip_path unless zip_path == self.file_model.file.path
+      
+      @unziped = true
     end
   end
 
