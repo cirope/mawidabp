@@ -204,13 +204,13 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def can_be_modified?
-    unless self.is_in_a_final_review? && self.changed?
-      true
-    else
+    if self.is_in_a_final_review? && self.changed?
       msg = I18n.t(:'control_objective_item.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
+    else
+      true
     end
   end
 

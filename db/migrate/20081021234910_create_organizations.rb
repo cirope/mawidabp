@@ -12,12 +12,14 @@ class CreateOrganizations < ActiveRecord::Migration
     end
 
     add_index :organizations, :prefix, :unique => true
+    add_index :organizations, :name
     add_index :organizations, :group_id
     add_index :organizations, :image_model_id
   end
 
   def self.down
     remove_index :organizations, :column => :prefix
+    remove_index :organizations, :column => :name
     remove_index :organizations, :column => :group_id
     remove_index :organizations, :column => :image_model_id
 

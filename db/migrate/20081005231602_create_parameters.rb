@@ -11,11 +11,13 @@ class CreateParameters < ActiveRecord::Migration
     end
 
     add_index :parameters, :organization_id
+    add_index :parameters, :name
     add_index :parameters, [:name, :organization_id], :unique => true
   end
 
   def self.down
     remove_index :parameters, :column => :organization_id
+    remove_index :parameters, :column => :name
     remove_index :parameters, :column => [:name, :organization_id]
 
     drop_table :parameters

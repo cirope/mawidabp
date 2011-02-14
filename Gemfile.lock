@@ -1,7 +1,22 @@
 GIT
-  remote: franco@mawidaweb.com.ar:/home/franco/github/rails
-  revision: 68850a5e4ff0c7f53460778fcbeb43f412ce27a2
-  branch: 3-0-stable_fix-time-nil-assignments
+  remote: https://github.com/francocatena/paperclip.git
+  revision: 0bca09a13436c2e8dd91fcf96d7e6fccc4a25dab
+  specs:
+    paperclip (2.3.8)
+      activerecord
+      activesupport
+
+GIT
+  remote: https://github.com/paneq/calendar_date_select.git
+  revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
+  branch: rails3test
+  specs:
+    calendar_date_select (1.16.1)
+
+GIT
+  remote: https://github.com/rails/rails.git
+  revision: abea073ddaf260525aa5158e0d375c839c43ca3d
+  branch: 3-0-stable
   specs:
     actionmailer (3.0.4)
       actionpack (= 3.0.4)
@@ -43,26 +58,11 @@ GIT
       rake (>= 0.8.7)
       thor (~> 0.14.4)
 
-GIT
-  remote: https://github.com/francocatena/paperclip.git
-  revision: 0bca09a13436c2e8dd91fcf96d7e6fccc4a25dab
-  specs:
-    paperclip (2.3.8)
-      activerecord
-      activesupport
-
-GIT
-  remote: https://github.com/paneq/calendar_date_select.git
-  revision: 8e7ec79435a68665df40b14bd90f47e6ac5e9135
-  branch: rails3test
-  specs:
-    calendar_date_select (1.16.1)
-
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
   specs:
-    RedCloth (4.2.5)
+    RedCloth (4.2.7)
     aaronh-chronic (0.3.9)
     abstract (1.0.0)
     ansi (1.2.2)
@@ -153,7 +153,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  RedCloth (= 4.2.5)
+  RedCloth
   bundler
   calendar_date_select!
   capistrano
