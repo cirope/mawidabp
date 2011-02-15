@@ -1,48 +1,67 @@
 <div id="showed_data">
-<p>
-  <b><%= User.human_attribute_name 'user' %>:</b>
-  <%=h @user.user %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :user %>:</b>
+    <%= @user.user %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'name' %>:</b>
-  <%=h @user.name %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :name %>:</b>
+    <%= @user.name %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'last_name' %>:</b>
-  <%=h @user.last_name %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :last_name %>:</b>
+    <%= @user.last_name %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'language' %>:</b>
-  <%=h @user.language %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :email %>:</b>
+    <%= @user.email %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'enable' %>:</b>
-  <%=t @user.enable? ? :'label.yes' : :'label.no' %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :language %>:</b>
+    <%= @user.language %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'failed_attempts' %>:</b>
-  <%=h @user.failed_attempts %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :enable %>:</b>
+    <%=t @user.enable? ? :'label.yes' : :'label.no' %>
+  </p>
 
-<p>
-  <b><%= User.human_attribute_name 'password_changed' %>:</b>
-  <%=h l(@user.password_changed, :format => :long) %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :failed_attempts %>:</b>
+    <%= @user.failed_attempts %>
+  </p>
 
-<p>
-  <b><%= t(:'user.profiles_label') %>:</b>
-  <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
-</p>
+  <p>
+    <b><%= User.human_attribute_name :password_changed %>:</b>
+    <%= l(@user.password_changed, :format => :long) %>
+  </p>
 
-<p>
-  <b><%= t(:'user.organizations_label') %>:</b>
-  <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
-</p>
+  <p>
+    <b><%= t(:'user.profiles_label') %>:</b>
+    <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
+  </p>
+
+  <p>
+    <b><%= t(:'user.organizations_label') %>:</b>
+    <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
+  </p>
+  <% if @user.parent %>
+    <p>
+      <b><%= User.human_attribute_name(:manager_id) %>:</b>
+      <%= link_to @user.parent.full_name, @user.parent %>
+    </p>
+  <% end %>
+  <% unless @user.children.blank? %>
+    <p><strong><%= t(:'user.children') %></strong></p>
+    <ul class="raw_list">
+      <% @user.children.each do |child| %>
+        <li><%= link_to child.full_name, child %></li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
 
 <div id="links">

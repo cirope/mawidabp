@@ -438,7 +438,7 @@ div#session a:hover {
 }
 
 div#showed_data {
-    margin: 0em 1em 1em 1em;
+    margin: 1em;
 }
 
 div#showed_data > p, div#showed_data div.show_item {
