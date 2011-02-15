@@ -431,7 +431,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'edit user when search match only one result' do
     perform_auth
     get :index, :search => {:query => 'admin', :columns => ['user', 'name']}
-    assert_redirected_to edit_user_path(users(:administrator_user))
+    assert_redirected_to user_path(users(:administrator_user))
     assert_not_nil assigns(:users)
     assert_equal 1, assigns(:users).size
   end

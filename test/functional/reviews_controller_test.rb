@@ -60,7 +60,7 @@ class ReviewsControllerTest < ActionController::TestCase
       :query => '1 1',
       :columns => ['identification', 'project']
     }
-    assert_redirected_to edit_review_path(reviews(:past_review))
+    assert_redirected_to review_path(reviews(:past_review))
     assert_not_nil assigns(:reviews)
     assert_equal 1, assigns(:reviews).size
   end

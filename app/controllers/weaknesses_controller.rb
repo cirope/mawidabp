@@ -50,7 +50,7 @@ class WeaknessesController < ApplicationController
     respond_to do |format|
       format.html {
         if @weaknesses.size == 1 && !@query.blank? && !params[:page]
-          redirect_to edit_weakness_path(@weaknesses.first)
+          redirect_to weakness_path(@weaknesses.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @weaknesses }

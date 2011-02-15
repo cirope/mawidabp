@@ -67,7 +67,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       :query => '1 2 4 y 1w',
       :columns => ['description', 'review']
     }
-    assert_redirected_to edit_weakness_path(
+    assert_redirected_to weakness_path(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:weaknesses)
     assert_equal 1, assigns(:weaknesses).size

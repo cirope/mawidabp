@@ -67,7 +67,7 @@ class OportunitiesControllerTest < ActionController::TestCase
       :columns => ['description', 'review']
     }
 
-    assert_redirected_to edit_oportunity_path(
+    assert_redirected_to oportunity_path(
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity))
     assert_not_nil assigns(:oportunities)
     assert_equal 1, assigns(:oportunities).size

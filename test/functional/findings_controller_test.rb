@@ -100,7 +100,7 @@ class FindingsControllerTest < ActionController::TestCase
       :columns => ['description', 'review']
     }
     
-    assert_redirected_to edit_finding_path('incomplete',
+    assert_redirected_to finding_path('incomplete',
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:findings)
     assert_equal 1, assigns(:findings).size

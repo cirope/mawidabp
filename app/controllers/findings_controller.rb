@@ -55,7 +55,7 @@ class FindingsController < ApplicationController
     respond_to do |format|
       format.html {
         if @findings.size == 1 && !@query.blank? && !params[:page]
-          redirect_to edit_finding_path(params[:completed], @findings.first)
+          redirect_to finding_path(params[:completed], @findings.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @findings }
