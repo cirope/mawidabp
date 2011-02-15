@@ -522,7 +522,7 @@ class Finding < ActiveRecord::Base
   end
 
   def notify_changes_to_users
-  unless self.avoid_changes_notification
+    if !self.incomplete? && !self.avoid_changes_notification
       added = self.finding_user_assignments.select(&:new_record?).map(&:user)
       removed = self.finding_user_assignments.select(
         &:marked_for_destruction?).map(&:user)
@@ -577,7 +577,9 @@ class Finding < ActiveRecord::Base
   end
 
   def check_users_for_notification
-    unless (self.users_for_notification || []).reject(&:blank?).blank?
+    if !self.incomplete? &&
+        !(self.users_for_notification || []).reject(&:blank?).empty?
+      
       self.users_for_notification.reject(&:blank?).uniq.each do |user_id|
         finding_user_assignment = self.finding_user_assignments.detect do |fua|
           fua.user_id == user_id.to_i

@@ -286,7 +286,7 @@ class FindingTest < ActiveSupport::TestCase
     end
 
     assert @finding.invalid?
-    assert 1, @finding.errors.size
+    assert_equal 1, @finding.errors.size
     assert_equal [error_message_from_model(@finding, :finding_user_assignments,
         :invalid)], @finding.errors[:finding_user_assignments]
   end
@@ -295,7 +295,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
 
     assert @finding.invalid?
-    assert 1, @finding.errors.size
+    assert_equal 1, @finding.errors.size
     assert_equal [error_message_from_model(@finding, :finding_user_assignments,
         :invalid)], @finding.errors[:finding_user_assignments]
   end
@@ -304,7 +304,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.finding_user_assignments.delete_if { |fua| fua.user.supervisor? }
 
     assert @finding.invalid?
-    assert 1, @finding.errors.size
+    assert_equal 1, @finding.errors.size
     assert_equal [error_message_from_model(@finding, :finding_user_assignments,
         :invalid)], @finding.errors[:finding_user_assignments]
   end
@@ -313,7 +313,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.finding_user_assignments.delete_if { |fua| fua.user.manager? }
 
     assert @finding.invalid?
-    assert 1, @finding.errors.size
+    assert_equal 1, @finding.errors.size
     assert_equal [error_message_from_model(@finding, :finding_user_assignments,
         :invalid)], @finding.errors[:finding_user_assignments]
   end
@@ -512,6 +512,64 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'avoid notify changes to users' do
+    new_user = User.find(users(:administrator_second_user).id)
+
+    assert !@finding.finding_user_assignments.blank?
+    assert !@finding.finding_user_assignments.detect{|fua| fua.user == new_user}
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert @finding.update_attributes(:description => 'Updated description')
+    end
+
+    @finding.finding_user_assignments.first.mark_for_destruction
+    @finding.finding_user_assignments.build(:user => new_user)
+    @finding.avoid_changes_notification = true
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert @finding.save
+    end
+  end
+
+  test 'avoid notify changes to users if incomplete' do
+    new_user = User.find(users(:administrator_second_user).id)
+    fuas = @finding.finding_user_assignments.map do |fua|
+      fua.attributes.merge(:id => nil)
+    end
+    finding = Finding.new(@finding.attributes.merge(
+        :id => nil,
+        :state => Finding::STATUS[:incomplete],
+        :review_code => 'O99',
+        :control_objective_item_id => control_objective_items(
+          :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+        :finding_user_assignments_attributes => fuas
+      )
+    )
+
+    assert finding.save
+    assert !finding.finding_user_assignments.blank?
+    assert !finding.finding_user_assignments.detect{|fua| fua.user == new_user}
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert finding.update_attributes(:description => 'Updated description')
+    end
+
+    finding.finding_user_assignments.first.mark_for_destruction
+    finding.finding_user_assignments.build(:user => new_user)
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert finding.save
+    end
+  end
+
   test 'notify deletion of user' do
     assert !@finding.finding_user_assignments.blank?
 
@@ -659,6 +717,32 @@ class FindingTest < ActiveSupport::TestCase
     response = ActionMailer::Base.deliveries.first
 
     assert_equal I18n.t(:'notifier.notify_new_finding.title'), response.subject
+  end
+
+  test 'not notify users if is incomplete' do
+    fuas = @finding.finding_user_assignments.map do |fua|
+      fua.attributes.merge(:id => nil)
+    end
+    finding = Finding.new(@finding.attributes.merge(
+        :id => nil,
+        :state => Finding::STATUS[:incomplete],
+        :review_code => 'O99',
+        :control_objective_item_id => control_objective_items(
+          :bcra_A4609_security_management_responsible_dependency_item_editable).id,
+        :finding_user_assignments_attributes => fuas
+      )
+    )
+    assert finding.save
+    
+    finding.users_for_notification = [users(:administrator_user).id]
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      assert finding.save
+    end
   end
 
   test 'notify for stale and unconfirmed findings' do
