@@ -63,11 +63,11 @@
     <% end %>
     <p>
       <%= f.label :solution_date %>
-      <%= f.calendar_date_select :solution_date, :readonly => readonly %>
+      <%= f.calendar_date_select :solution_date, :disabled => readonly %>
     </p>
     <p>
       <%= f.label :origination_date %>
-      <%= f.calendar_date_select :origination_date, :readonly => readonly %>
+      <%= f.calendar_date_select :origination_date, :disabled => readonly %>
     </p>
 
     <% if @oportunity.must_have_a_comment? %>

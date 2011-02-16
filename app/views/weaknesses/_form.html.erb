@@ -105,16 +105,16 @@
     </p>
     <p>
       <%= f.label :origination_date %>
-      <%= f.calendar_date_select :origination_date, :readonly => readonly %>
+      <%= f.calendar_date_select :origination_date, :disabled => readonly %>
     </p>
     <p>
       <%= f.label :follow_up_date, raw(Weakness.human_attribute_name(:follow_up_date) +
           show_inline_help_for(:finding_follow_up_date)) %>
-      <%= f.calendar_date_select :follow_up_date, :readonly => readonly %>
+      <%= f.calendar_date_select :follow_up_date, :disabled => readonly %>
     </p>
     <p>
       <%= f.label :solution_date %>
-      <%= f.calendar_date_select :solution_date, :readonly => readonly %>
+      <%= f.calendar_date_select :solution_date, :disabled => readonly %>
     </p>
   </div>
 
