@@ -35,7 +35,11 @@ namespace :deploy do
 
   desc 'Creates the symlinks for the shared folders'
   task :create_shared_symlinks do
-    shared_paths = [['public', 'error_files'], ['private']]
+    shared_paths = [
+      ['public', 'error_files'],
+      ['private'],
+      ['config', 'app_config.yml']
+    ]
 
     shared_paths.each do |path|
       shared_files_path = File.join(shared_path, *path)

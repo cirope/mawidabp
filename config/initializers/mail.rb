@@ -9,6 +9,6 @@ MawidaApp::Application.config.action_mailer.smtp_settings = {
   :domain => 'mawidaweb.com.ar',
   :port => 25,
   :user_name => 'soporte@mawidaweb.com.ar',
-  :password => '5rdxcft6',
+  :password => APP_CONFIG['smtp_password'],
   :authentication => :plain
 }
