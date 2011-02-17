@@ -1274,24 +1274,27 @@ class Finding < ActiveRecord::Base
   def self.mark_as_unanswered_if_necesary
     # Sólo si no es sábado o domingo (porque no tiene sentido)
     unless [0, 6].include?(Date.today.wday)
+      findings, users = [], []
+
       Finding.transaction do
-        findings = Finding.confirmed_and_stale.reject do |finding|
-          finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
+        findings |= Finding.confirmed_and_stale.reject do |c_finding|
+          c_finding.finding_answers.any? { |fa| fa.user.can_act_as_audited? }
         end
 
-        findings |= Finding.unconfirmed_and_stale.reject do |finding|
-          finding.finding_answers.detect { |fa| fa.user.can_act_as_audited? }
+        findings |= Finding.unconfirmed_and_stale.reject do |u_finding|
+          u_finding.finding_answers.any? { |fa| fa.user.can_act_as_audited? }
         end
 
         users = findings.inject([]) do |u, finding|
           finding.update_attribute :state, Finding::STATUS[:unanswered]
           u | finding.users
         end
+      end
 
-        users.each do |user|
-          Notifier.unanswered_findings_notification(user,
-            findings.select { |f| f.users.include?(user) }).deliver
-        end
+      users.each do |user|
+        findings_for_user = findings.select { |f| f.users.include?(user) }
+
+        Notifier.unanswered_findings_notification(user, findings_for_user).deliver
       end
     end
   end

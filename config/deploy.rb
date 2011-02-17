@@ -7,7 +7,6 @@ set :application, 'mawidabp'
 set :repository,  'https://github.com/francocatena/mawida_app.git'
 set :deploy_to, '/var/rails/mawidabp'
 set :user, 'deployer'
-set :password, '!QAZxsw2'
 set :group_writable, false
 set :shared_children, %w(system log pids private public config)
 set :use_sudo, false

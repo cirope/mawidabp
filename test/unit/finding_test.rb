@@ -885,6 +885,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'not mark stale and confirmed findings if has an answer' do
     GlobalModelConfig.current_organization_id = nil
+
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     unanswered_findings = Finding.where(
@@ -893,14 +894,19 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, Finding.confirmed_and_stale.size
 
     Finding.confirmed_and_stale.each do |finding|
-      finding.finding_answers << FindingAnswer.new(
+      finding.finding_answers.create(
         :answer => 'New answer',
-        :auditor_comments => 'New auditor comments',
         :user => users(:audited_user)
       )
     end
 
-    assert_no_difference 'Finding.confirmed_and_stale.count' do
+    counts = ['Finding.confirmed_and_stale.count',
+      'ActionMailer::Base.deliveries.size']
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    assert_no_difference counts do
       Finding.mark_as_unanswered_if_necesary
     end
 
