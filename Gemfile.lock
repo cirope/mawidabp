@@ -15,7 +15,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 41c35abed778a7a03e7a9c14009321cd6bc11c26
+  revision: ff5db1840e91442f7e5f44e1c8f910149a0affee
   branch: 3-0-stable
   specs:
     actionmailer (3.0.4)
@@ -81,6 +81,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fastthread (1.0.7)
+    foreigner (0.9.1)
     gem_plugin (0.2.3)
     highline (1.6.1)
     hoe (2.9.1)
@@ -158,6 +159,7 @@ DEPENDENCIES
   calendar_date_select!
   capistrano
   color
+  foreigner
   memcache-client
   metaskills-pdf-writer
   mini_magick

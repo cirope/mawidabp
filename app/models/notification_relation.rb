@@ -6,6 +6,6 @@ class NotificationRelation < ActiveRecord::Base
   }
   
   # Relaciones
-  belongs_to :notification, :dependent => :destroy
+  belongs_to :notification
   belongs_to :model, :polymorphic => true, :readonly => true
 end

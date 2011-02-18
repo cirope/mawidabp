@@ -38,7 +38,9 @@ class GroupTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de un grupo
   test 'delete' do
-    assert_difference('Group.count', -1) { @group.destroy }
+    group = Group.find(Group.find groups(:second_group).id)
+    
+    assert_difference('Group.count', -1) { group.destroy }
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

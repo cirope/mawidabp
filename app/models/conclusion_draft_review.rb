@@ -9,6 +9,10 @@ class ConclusionDraftReview < ConclusionReview
   validates :review_id, :uniqueness => true, :allow_blank => true,
     :allow_nil => true
 
+  def can_be_destroyed?
+    !self.review.has_final_review?
+  end
+
   def check_for_approval
     self.approved = self.review && (self.review.is_approved? ||
         (self.force_approval? && self.review.can_be_approved_by_force))

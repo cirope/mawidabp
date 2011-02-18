@@ -41,7 +41,15 @@ class ImageModelTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de un modelo de archivo
   test 'delete' do
-    assert_difference('ImageModel.count', -1) { @image_model.destroy }
+    assert_difference('ImageModel.count', -1) do
+      # Elimina la dependencia para evitar problemas con la clave foránea
+      Organization.update_all(
+        {:image_model_id => nil},
+        {:image_model_id => @image_model.id}
+      )
+
+      @image_model.destroy
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

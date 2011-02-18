@@ -166,7 +166,7 @@ class Review < ActiveRecord::Base
   belongs_to :plan_item
   belongs_to :file_model
   has_one :organization, :through => :period
-  has_one :conclusion_draft_review
+  has_one :conclusion_draft_review, :dependent => :destroy
   has_one :conclusion_final_review
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy

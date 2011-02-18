@@ -129,13 +129,19 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'destroy organization' do
-    perform_auth(users(:administrator_second_user),
-      organizations(:second_organization))
-    
-    assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
-      delete :destroy, :id => organizations(:second_organization).id
+    begin
+      PaperTrail.enabled = false
+
+      organization = Organization.find(organizations(:second_organization).id)
+      perform_auth(users(:administrator_second_user), organization)
+
+      assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
+        delete :destroy, :id => organizations(:second_organization).id
+      end
+
+      assert_redirected_to organizations_path
+    ensure
+      PaperTrail.enabled = true
     end
-    
-    assert_redirected_to organizations_path
   end
 end

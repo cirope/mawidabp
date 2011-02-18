@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110207140509) do
+ActiveRecord::Schema.define(:version => 20110217181213) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20110207140509) do
     t.datetime "updated_at"
   end
 
+  add_index "business_unit_types", ["external"], :name => "index_business_unit_types_on_external"
+  add_index "business_unit_types", ["name"], :name => "index_business_unit_types_on_name"
   add_index "business_unit_types", ["organization_id"], :name => "index_business_unit_types_on_organization_id"
 
   create_table "business_units", :force => true do |t|
@@ -44,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20110207140509) do
   end
 
   add_index "business_units", ["business_unit_type_id"], :name => "index_business_unit_on_business_unit_type_id"
+  add_index "business_units", ["name"], :name => "index_business_unit_on_name"
 
   create_table "comments", :force => true do |t|
     t.text     "comment"
@@ -383,6 +386,7 @@ ActiveRecord::Schema.define(:version => 20110207140509) do
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"
   add_index "organizations", ["image_model_id"], :name => "index_organizations_on_image_model_id"
+  add_index "organizations", ["name"], :name => "index_organizations_on_name"
   add_index "organizations", ["prefix"], :name => "index_organizations_on_prefix", :unique => true
 
   create_table "parameters", :force => true do |t|
@@ -395,6 +399,8 @@ ActiveRecord::Schema.define(:version => 20110207140509) do
     t.datetime "updated_at"
   end
 
+  add_index "parameters", ["name", "organization_id"], :name => "index_parameters_on_name_and_organization_id", :unique => true
+  add_index "parameters", ["name"], :name => "index_parameters_on_name"
   add_index "parameters", ["organization_id"], :name => "index_parameters_on_organization_id"
 
   create_table "periods", :force => true do |t|
@@ -656,5 +662,110 @@ ActiveRecord::Schema.define(:version => 20110207140509) do
 
   add_index "workflows", ["period_id"], :name => "index_workflows_on_period_id"
   add_index "workflows", ["review_id"], :name => "index_workflows_on_review_id"
+
+  add_foreign_key "best_practices", "organizations", :name => "best_practices_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "business_unit_types", "organizations", :name => "business_unit_types_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "business_units", "business_unit_types", :name => "business_units_business_unit_type_id_fk", :dependent => :restrict
+
+  add_foreign_key "comments", "users", :name => "comments_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "conclusion_reviews", "reviews", :name => "conclusion_reviews_review_id_fk", :dependent => :restrict
+
+  add_foreign_key "control_objective_items", "control_objectives", :name => "control_objective_items_control_objective_id_fk", :dependent => :restrict
+  add_foreign_key "control_objective_items", "reviews", :name => "control_objective_items_review_id_fk", :dependent => :restrict
+
+  add_foreign_key "control_objectives", "process_controls", :name => "control_objectives_process_control_id_fk", :dependent => :restrict
+
+  add_foreign_key "costs", "users", :name => "costs_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "detracts", "organizations", :name => "detracts_organization_id_fk", :dependent => :restrict
+  add_foreign_key "detracts", "users", :name => "detracts_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "error_records", "organizations", :name => "error_records_organization_id_fk", :dependent => :restrict
+  add_foreign_key "error_records", "users", :name => "error_records_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "finding_answers", "file_models", :name => "finding_answers_file_model_id_fk", :dependent => :restrict
+  add_foreign_key "finding_answers", "findings", :name => "finding_answers_finding_id_fk", :dependent => :restrict
+  add_foreign_key "finding_answers", "users", :name => "finding_answers_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "finding_relations", "findings", :name => "finding_relations_finding_id_fk", :dependent => :restrict
+  add_foreign_key "finding_relations", "findings", :name => "finding_relations_related_finding_id_fk", :column => "related_finding_id", :dependent => :restrict
+
+  add_foreign_key "finding_review_assignments", "findings", :name => "finding_review_assignments_finding_id_fk", :dependent => :restrict
+  add_foreign_key "finding_review_assignments", "reviews", :name => "finding_review_assignments_review_id_fk", :dependent => :restrict
+
+  add_foreign_key "finding_user_assignments", "findings", :name => "finding_user_assignments_finding_id_fk", :dependent => :restrict
+  add_foreign_key "finding_user_assignments", "users", :name => "finding_user_assignments_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "findings", "control_objective_items", :name => "findings_control_objective_item_id_fk", :dependent => :restrict
+
+  add_foreign_key "help_items", "help_contents", :name => "help_items_help_content_id_fk", :dependent => :restrict
+  add_foreign_key "help_items", "help_items", :name => "help_items_parent_id_fk", :column => "parent_id", :dependent => :restrict
+
+  add_foreign_key "login_records", "organizations", :name => "login_records_organization_id_fk", :dependent => :restrict
+  add_foreign_key "login_records", "users", :name => "login_records_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "notification_relations", "notifications", :name => "notification_relations_notification_id_fk", :dependent => :restrict
+
+  add_foreign_key "notifications", "users", :name => "notifications_user_id_fk", :dependent => :restrict
+  add_foreign_key "notifications", "users", :name => "notifications_user_who_confirm_id_fk", :column => "user_who_confirm_id", :dependent => :restrict
+
+  add_foreign_key "old_passwords", "users", :name => "old_passwords_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "organization_roles", "organizations", :name => "organization_roles_organization_id_fk", :dependent => :restrict
+  add_foreign_key "organization_roles", "roles", :name => "organization_roles_role_id_fk", :dependent => :restrict
+  add_foreign_key "organization_roles", "users", :name => "organization_roles_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "organizations", "groups", :name => "organizations_group_id_fk", :dependent => :restrict
+  add_foreign_key "organizations", "image_models", :name => "organizations_image_model_id_fk", :dependent => :restrict
+
+  add_foreign_key "parameters", "organizations", :name => "parameters_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "periods", "organizations", :name => "periods_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "plan_items", "business_units", :name => "plan_items_business_unit_id_fk", :dependent => :restrict
+  add_foreign_key "plan_items", "plans", :name => "plan_items_plan_id_fk", :dependent => :restrict
+
+  add_foreign_key "plans", "periods", :name => "plans_period_id_fk", :dependent => :restrict
+
+  add_foreign_key "privileges", "roles", :name => "privileges_role_id_fk", :dependent => :restrict
+
+  add_foreign_key "procedure_control_items", "procedure_controls", :name => "procedure_control_items_procedure_control_id_fk", :dependent => :restrict
+  add_foreign_key "procedure_control_items", "process_controls", :name => "procedure_control_items_process_control_id_fk", :dependent => :restrict
+
+  add_foreign_key "procedure_control_subitems", "control_objectives", :name => "procedure_control_subitems_control_objective_id_fk", :dependent => :restrict
+  add_foreign_key "procedure_control_subitems", "procedure_control_items", :name => "procedure_control_subitems_procedure_control_item_id_fk", :dependent => :restrict
+
+  add_foreign_key "procedure_controls", "periods", :name => "procedure_controls_period_id_fk", :dependent => :restrict
+
+  add_foreign_key "process_controls", "best_practices", :name => "process_controls_best_practice_id_fk", :dependent => :restrict
+
+  add_foreign_key "resource_classes", "organizations", :name => "resource_classes_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "resources", "resource_classes", :name => "resources_resource_class_id_fk", :dependent => :restrict
+
+  add_foreign_key "review_user_assignments", "reviews", :name => "review_user_assignments_review_id_fk", :dependent => :restrict
+  add_foreign_key "review_user_assignments", "users", :name => "review_user_assignments_user_id_fk", :dependent => :restrict
+
+  add_foreign_key "reviews", "file_models", :name => "reviews_file_model_id_fk", :dependent => :restrict
+  add_foreign_key "reviews", "periods", :name => "reviews_period_id_fk", :dependent => :restrict
+  add_foreign_key "reviews", "plan_items", :name => "reviews_plan_item_id_fk", :dependent => :restrict
+
+  add_foreign_key "roles", "organizations", :name => "roles_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "users", "resources", :name => "users_resource_id_fk", :dependent => :restrict
+  add_foreign_key "users", "users", :name => "users_manager_id_fk", :column => "manager_id", :dependent => :restrict
+
+  add_foreign_key "versions", "organizations", :name => "versions_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "work_papers", "file_models", :name => "work_papers_file_model_id_fk", :dependent => :restrict
+  add_foreign_key "work_papers", "organizations", :name => "work_papers_organization_id_fk", :dependent => :restrict
+
+  add_foreign_key "workflow_items", "workflows", :name => "workflow_items_workflow_id_fk", :dependent => :restrict
+
+  add_foreign_key "workflows", "periods", :name => "workflows_period_id_fk", :dependent => :restrict
+  add_foreign_key "workflows", "reviews", :name => "workflows_review_id_fk", :dependent => :restrict
 
 end

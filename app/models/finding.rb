@@ -415,7 +415,8 @@ class Finding < ActiveRecord::Base
     :before_remove => :check_for_final_review, :order => 'created_at ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
-  has_many :finding_user_assignments, :include => :user, :inverse_of => :finding
+  has_many :finding_user_assignments, :dependent => :destroy, :include => :user,
+    :inverse_of => :finding
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
   has_many :users, :through => :finding_user_assignments,

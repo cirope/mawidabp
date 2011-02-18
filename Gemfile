@@ -4,6 +4,7 @@ gem 'rails', :git => 'https://github.com/rails/rails.git', :branch => '3-0-stabl
 
 gem 'bundler'
 gem 'pg'
+gem 'foreigner'
 gem 'ya2yaml'
 gem 'memcache-client'
 gem 'calendar_date_select', :git => 'https://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'

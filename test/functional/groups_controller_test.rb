@@ -170,8 +170,9 @@ class GroupsControllerTest < ActionController::TestCase
 
   test 'destroy group' do
     perform_auth
+    
     assert_difference 'Group.count', -1 do
-      delete :destroy, :id => groups(:main_group).id
+      delete :destroy, :id => groups(:second_group).id
     end
 
     assert_redirected_to groups_path

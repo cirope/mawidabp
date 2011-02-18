@@ -90,7 +90,9 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de una organización
   test 'delete' do
-    assert_difference('Organization.count', -1) { @organization.destroy }
+    organization = Organization.find organizations(:second_organization).id
+
+    assert_difference('Organization.count', -1) { organization.destroy }
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

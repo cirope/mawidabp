@@ -55,7 +55,7 @@ class Notification < ActiveRecord::Base
   # Relaciones
   belongs_to :user
   belongs_to :user_who_confirm, :class_name => 'User'
-  has_many :notification_relations
+  has_many :notification_relations, :dependent => :destroy
   has_many :findings, :through => :notification_relations, :source => :model,
     :source_type => 'Finding'
   has_many :conclusion_reviews, :through => :notification_relations,

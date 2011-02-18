@@ -355,17 +355,16 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.unconfirmed?
     assert_nil finding.confirmation_date
-    assert finding.notifications.not_confirmed.detect { |n| n.user.can_act_as_audited? }
+    assert finding.notifications.not_confirmed.any? { |n| n.user.can_act_as_audited? }
 
     finding.finding_answers.build(
       :answer => 'New administrator answer',
-      :auditor_comments => 'New auditor comments',
       :user => users(:administrator_user)
     )
 
     # La respuesta es de un usuario administrador
     assert finding.unconfirmed?
-    assert finding.notifications.not_confirmed.detect { |n| n.user.can_act_as_audited? }
+    assert finding.notifications.not_confirmed.any? { |n| n.user.can_act_as_audited? }
 
     finding.finding_answers.build(
       :answer => 'New audited answer',
@@ -374,7 +373,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.confirmed?
     assert_not_nil finding.confirmation_date
-    assert !finding.notifications.not_confirmed.reload.detect { |n| n.user.can_act_as_audited? }
+    assert !finding.notifications.not_confirmed.reload.any? { |n| n.user.can_act_as_audited? }
     assert_equal users(:audited_user).id,
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
     assert finding.save

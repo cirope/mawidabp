@@ -54,6 +54,16 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de informes borradores
   test 'destroy' do
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_difference 'ConclusionDraftReview.count', -1 do
+      conclusion_review.destroy
+    end
+  end
+
+  # Prueba de eliminación de informes borradores
+  test 'can not be destroyed' do
     assert_no_difference 'ConclusionDraftReview.count' do
       @conclusion_review.destroy
     end

@@ -16,6 +16,7 @@ class Organization < ActiveRecord::Base
   before_save :change_current_organization_id
   after_create :create_initial_data
   after_save :restore_current_organization_id
+  before_destroy :can_be_destroyed?
   
   # Named scopes
   scope :list, order('name ASC')
@@ -45,6 +46,13 @@ class Organization < ActiveRecord::Base
   has_many :parameters, :dependent => :destroy
   has_many :roles, :dependent => :destroy
   has_many :organization_roles, :dependent => :destroy
+  has_many :best_practices, :dependent => :destroy
+  has_many :login_records, :dependent => :destroy
+  has_many :error_records, :dependent => :destroy
+  has_many :work_papers, :dependent => :destroy
+  has_many :periods, :dependent => :destroy
+  has_many :resource_classes, :dependent => :destroy
+  has_many :detracts, :dependent => :destroy
   has_many :users, :through => :organization_roles, :uniq => true,
     :readonly => true
 
@@ -86,6 +94,21 @@ class Organization < ActiveRecord::Base
 
   def restore_current_organization_id
     GlobalModelConfig.current_organization_id = @_current_organization_id
+  end
+
+  def can_be_destroyed?
+    unless self.best_practices.all? { |bp| bp.can_be_destroyed? }
+      errors = self.best_practices.map do |bp|
+        bp.errors.full_messages.join(APP_ENUM_SEPARATOR)
+      end
+
+      self.errors.add :base, errors.reject { |e| e.blank? }.join(
+        APP_ENUM_SEPARATOR)
+
+      false
+    else
+      true
+    end
   end
 
   private
