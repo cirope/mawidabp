@@ -697,8 +697,15 @@ module FollowUpCommonReports
 
   def periods_for_interval
     Period.includes(:reviews => :conclusion_final_review).where(
-      "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
-      { :from_date => @from_date, :to_date => @to_date }
+      [
+        "#{ConclusionFinalReview.table_name}.issue_date BETWEEN :from_date AND :to_date",
+        "#{Period.table_name}.organization_id = :organization_id"
+      ].join(' AND '),
+      {
+        :from_date => @from_date,
+        :to_date => @to_date,
+        :organization_id => @auth_organization.id
+      }
     )
   end
 
