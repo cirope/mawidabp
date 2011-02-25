@@ -9,6 +9,8 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     GlobalModelConfig.current_organization_id =
       organizations(:default_organization).id
+    @work_paper.code_prefix = @work_paper.get_parameter(
+      :admin_code_prefix_for_work_papers_in_control_objectives)
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -141,10 +143,64 @@ class WorkPaperTest < ActiveSupport::TestCase
     )
 
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
-
     assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.html', File.extname(@work_paper.file_model.file.path)
+  end
 
-    assert_equal '.html', File.extname(TEST_FILE_FULL_PATH)
+  test 'add a zip attachment' do
+    zip_filename = '/tmp/test.zip'
+    FileUtils.rm zip_filename if File.exists?(zip_filename)
+
+    Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+      zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
+    end
+
+    assert @work_paper.update_attributes(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(zip_filename)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+
+    FileUtils.rm zip_filename
+  end
+
+  test 'modify a zip attachment repeatedly' do
+    zip_filename = '/tmp/test.zip'
+    FileUtils.rm zip_filename if File.exists?(zip_filename)
+
+    Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+      zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
+    end
+
+    assert @work_paper.update_attributes(
+      :file_model_attributes => {
+        :file => Rack::Test::UploadedFile.new(zip_filename)
+      }
+    )
+
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert @work_paper.update_attributes(:number_of_pages => 1234)
+    assert @work_paper.update_attributes(:name => 'Updated test name')
+    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+    assert_nothing_raised { @work_paper.unzip_if_necesary }
+    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+
+    count = 0
+
+    assert_difference 'count' do
+      Zip::ZipFile.foreach(@work_paper.file_model.file.path) do |entry|
+        count += 1
+      end
+    end
+
+    assert Zip::ZipFile.open(@work_paper.file_model.file.path).find_entry(
+      'test.txt')
+
+    FileUtils.rm zip_filename
   end
 
   test 'validates duplicated codes' do
