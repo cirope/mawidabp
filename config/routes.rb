@@ -12,7 +12,7 @@ MawidaApp::Application.routes.draw do
   resources :inline_helps
 
   match 'welcome', :as => 'welcome', :to => 'welcome#index'
-  
+
   match 'execution_reports', :as => 'execution_reports',
     :to => 'execution_reports#index'
 
@@ -38,7 +38,7 @@ MawidaApp::Application.routes.draw do
     member do
       get :show_content
     end
-    
+
     collection do
       get :show_content
     end
@@ -181,7 +181,7 @@ MawidaApp::Application.routes.draw do
       get :estimated_amount
       get :procedure_control_data
     end
-    
+
     collection do
       get :estimated_amount
       get :plan_item_data
@@ -198,7 +198,7 @@ MawidaApp::Application.routes.draw do
       post :auto_complete_for_user
       post :auto_complete_for_finding_relation
     end
-    
+
     member do
       get :follow_up_pdf
     end
@@ -274,7 +274,7 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :users do 
+  resources :users do
     collection do
       get :login
       post :create_session
@@ -353,7 +353,6 @@ MawidaApp::Application.routes.draw do
 
   match 'private/:path', :to => 'file_models#download',
     :constraints => { :path => /.+/ }
-  match ':controller(/:action)/page/:page', :constraints => { :page => /\d+/ }
 
   # See how all your routes lay out with "rake routes"
 
