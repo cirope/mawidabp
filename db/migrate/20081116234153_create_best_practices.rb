@@ -10,10 +10,12 @@ class CreateBestPractices < ActiveRecord::Migration
     end
 
     add_index :best_practices, :organization_id
+    add_index :best_practices, :created_at
   end
 
   def self.down
     remove_index :best_practices, :column => :organization_id
+    remove_index :best_practices, :column => :created_at
 
     drop_table :best_practices
   end

@@ -14,6 +14,7 @@ class CreateVersions < ActiveRecord::Migration
     add_index :versions, :whodunnit
     add_index :versions, :organization_id
     add_index :versions, :created_at
+    add_index :versions, :important
   end
 
   def self.down
@@ -21,6 +22,7 @@ class CreateVersions < ActiveRecord::Migration
     remove_index :versions, :column => :whodunnit
     remove_index :versions, :column => :organization_id
     remove_index :versions, :column => :created_at
+    remove_index :versions, :column => :important
 
     drop_table :versions
   end

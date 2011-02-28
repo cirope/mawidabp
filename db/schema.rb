@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
     t.datetime "updated_at"
   end
 
+  add_index "best_practices", ["created_at"], :name => "index_best_practices_on_created_at"
   add_index "best_practices", ["organization_id"], :name => "index_best_practices_on_organization_id"
 
   create_table "business_unit_types", :force => true do |t|
@@ -148,6 +149,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
     t.datetime "updated_at"
   end
 
+  add_index "detracts", ["created_at"], :name => "index_detracts_on_created_at"
   add_index "detracts", ["organization_id"], :name => "index_detracts_on_organization_id"
   add_index "detracts", ["user_id"], :name => "index_detracts_on_user_id"
 
@@ -160,6 +162,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
     t.datetime "updated_at"
   end
 
+  add_index "error_records", ["created_at"], :name => "index_error_records_on_created_at"
   add_index "error_records", ["organization_id"], :name => "index_error_records_on_organization_id"
   add_index "error_records", ["user_id"], :name => "index_error_records_on_user_id"
 
@@ -574,6 +577,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
     t.integer  "role_type"
   end
 
+  add_index "roles", ["name"], :name => "index_roles_on_name"
   add_index "roles", ["organization_id"], :name => "index_roles_on_organization_id"
 
   create_table "users", :force => true do |t|
@@ -601,6 +605,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["group_admin"], :name => "index_users_on_group_admin"
   add_index "users", ["manager_id"], :name => "index_users_on_manager_id"
   add_index "users", ["resource_id"], :name => "index_users_on_resource_id"
   add_index "users", ["user"], :name => "index_users_on_user", :unique => true
@@ -617,6 +622,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
   end
 
   add_index "versions", ["created_at"], :name => "index_versions_on_created_at"
+  add_index "versions", ["important"], :name => "index_versions_on_important"
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
   add_index "versions", ["organization_id"], :name => "index_versions_on_organization_id"
   add_index "versions", ["whodunnit"], :name => "index_versions_on_whodunnit"

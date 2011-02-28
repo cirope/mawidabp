@@ -10,10 +10,12 @@ class CreateRoles < ActiveRecord::Migration
     end
 
     add_index :roles, :organization_id
+    add_index :roles, :name
   end
 
   def self.down
     remove_index :roles, :column => :organization_id
+    remove_index :roles, :column => :name
 
     drop_table :roles
   end

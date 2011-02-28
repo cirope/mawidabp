@@ -12,11 +12,13 @@ class CreateDetracts < ActiveRecord::Migration
 
     add_index :detracts, :user_id
     add_index :detracts, :organization_id
+    add_index :detracts, :created_at
   end
 
   def self.down
     remove_index :detracts, :column => :user_id
     remove_index :detracts, :column => :organization_id
+    remove_index :detracts, :column => :created_at
 
     drop_table :detracts
   end

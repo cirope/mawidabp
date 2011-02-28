@@ -28,6 +28,7 @@ class CreateUsers < ActiveRecord::Migration
     add_index :users, :change_password_hash, :unique => true
     add_index :users, :resource_id
     add_index :users, :manager_id
+    add_index :users, :group_admin
   end
 
   def self.down
@@ -36,6 +37,7 @@ class CreateUsers < ActiveRecord::Migration
     remove_index :users, :column => :change_password_hash
     remove_index :users, :column => :resource_id
     remove_index :users, :column => :manager_id
+    remove_index :users, :column => :group_admin
 
     drop_table :users
   end

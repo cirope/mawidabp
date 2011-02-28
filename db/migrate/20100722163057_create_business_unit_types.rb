@@ -11,11 +11,13 @@ class CreateBusinessUnitTypes < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :business_unit_types, :name
     add_index :business_unit_types, :external
     add_index :business_unit_types, :organization_id
   end
 
   def self.down
+    remove_index :business_unit_types, :column => :name
     remove_index :business_unit_types, :column => :external
     remove_index :business_unit_types, :column => :organization_id
 
