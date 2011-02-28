@@ -1070,7 +1070,7 @@ class Review < ActiveRecord::Base
 
       if self.file_model
         self.add_file_to_zip self.file_model.file.path,
-          self.file_model.filename, dirs[:survey], zipfile
+          self.file_model.file_file_name, dirs[:survey], zipfile
       end
 
       unless self.survey.blank?
@@ -1093,7 +1093,7 @@ class Review < ActiveRecord::Base
   end
 
   def work_papers_zip_path
-    filename_prefix = I18n.t(:'review.work_papers').downcase.sanitized_for_filename
+    filename_prefix = Review.human_attribute_name(:work_papers).downcase.sanitized_for_filename
     path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/) +
       [Review.table_name] + ('%08d' % self.id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{self.sanitized_identification}.zip"]

@@ -358,7 +358,7 @@ es:
       without_design_tests: "sin evaluación de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
       without_sustantive_tests: "sin pruebas sustantivas"
-      without_auditor_comment: "sin comentarios del auditor"
+      without_auditor_comment: "sin conclusiones del auditor"
     review:
       edit: 'Editar informe'
       show: 'Ver informe'
@@ -1702,6 +1702,7 @@ es:
         plan_item_id: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
+        work_papers: "Papeles de trabajo"
         file_model:
           one: "Anexo (archivo)"
           file_file_name: "Anexo (nombre de archivo)"

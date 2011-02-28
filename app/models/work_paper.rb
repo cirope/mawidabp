@@ -163,7 +163,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def filename_with_prefix
-    filename = self.file_model.file_file_name
+    filename = self.file_model.file_file_name.sub /^(zip-)*/i, ''
     code_suffix = File.extname(filename) == '.zip' ? '-zip' : ''
 
     filename.starts_with?(self.sanitized_code) ?
@@ -177,7 +177,7 @@ class WorkPaper < ActiveRecord::Base
     directory = File.dirname original_filename
     filename = File.basename original_filename, File.extname(original_filename)
     zip_filename = File.join directory,
-      "#{self.sanitized_code}-#{filename.sub(/^#{Regexp.quote(self.sanitized_code)}(-zip-)?/, '')}.zip"
+      "#{self.sanitized_code}-#{filename.sub(/^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')}.zip"
     pdf_filename = self.absolute_cover_path
 
     self.create_pdf_cover
