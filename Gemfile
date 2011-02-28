@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', :git => 'https://github.com/rails/rails.git', :branch => '3-0-stable'
+gem 'rails', '3.0.5'
 
 gem 'bundler'
 gem 'pg'
