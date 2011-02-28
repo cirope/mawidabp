@@ -57,7 +57,7 @@ class Parameter < ActiveRecord::Base
     parameter = Parameter.find_in_cache(organization_id, name, version)
 
     unless parameter
-      parameter = where(
+      parameter = Parameter.where(
         :name => name.to_s, :organization_id => organization_id
       ).first.try(:version_of, version)
 
