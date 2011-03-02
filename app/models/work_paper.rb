@@ -36,7 +36,7 @@ class WorkPaper < ActiveRecord::Base
     if record.check_code_prefix && !record.marked_for_destruction?
       raise 'No code_prefix is set!' unless record.code_prefix
 
-      regex = Regexp.new "\\A(#{record.code_prefix})\\s\\d+\\Z"
+      regex = /^(#{Regexp.escape(record.code_prefix)})\s\d+$/
 
       record.errors.add attr, :invalid unless value =~ regex
 

@@ -207,6 +207,6 @@ class Plan < ActiveRecord::Base
   end
 
   def cost
-    self.plan_items.inject(0) { |sum, pi| sum + pi.cost }
+    self.plan_items.inject(0.0) { |sum, pi| sum + pi.cost }
   end
 end

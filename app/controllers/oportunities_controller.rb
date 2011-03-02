@@ -181,7 +181,7 @@ class OportunitiesController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -222,7 +222,7 @@ class OportunitiesController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @findings = Finding.includes(
@@ -235,6 +235,33 @@ class OportunitiesController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
+  end
+
+  # * POST /oportunities/auto_complete_for_control_objective_item
+  def auto_complete_for_control_objective_item
+    @tokens = params[:control_objective_item_data][0..100].split(
+      SEARCH_AND_REGEXP).uniq
+    @tokens.reject! {|t| t.blank?}
+    conditions = [
+      "#{Period.table_name}.organization_id = :organization_id",
+      "#{ConclusionReview.table_name}.review_id IS NULL"
+    ]
+    parameters = {:organization_id => @auth_organization.id}
+
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}",
+        "LOWER(#{Review.table_name}.identification) LIKE :control_objective_item_data_#{i}"
+      ].join(' OR ')
+
+      parameters[:"control_objective_item_data_#{i}"] = "%#{t.downcase}%"
+    end
+
+    @control_objective_items = ControlObjectiveItem.includes(
+      :review => [:period, :conclusion_final_review]
+    ).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order("#{Review.table_name}.identification ASC").limit(10)
   end
 
   private
@@ -254,7 +281,8 @@ class OportunitiesController < ApplicationController
     @action_privileges.update(
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read
+      :auto_complete_for_finding_relation => :read,
+      :auto_complete_for_control_objective_item => :read
     )
   end
 end

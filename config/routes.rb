@@ -197,6 +197,7 @@ MawidaApp::Application.routes.draw do
     collection do
       post :auto_complete_for_user
       post :auto_complete_for_finding_relation
+      post :auto_complete_for_control_objective_item
     end
 
     member do
@@ -250,6 +251,7 @@ MawidaApp::Application.routes.draw do
     collection do
       post :auto_complete_for_user
       post :auto_complete_for_finding_relation
+      post :auto_complete_for_control_objective_item
     end
   end
 

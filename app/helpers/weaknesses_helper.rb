@@ -42,12 +42,4 @@ module WeaknessesHelper
 
     [code_from_review, code_from_weakness].compact.max
   end
-
-  def next_weakness_code(weakness)
-    review = weakness.control_objective_item.try(:review)
-    code_prefix = parameter_in(@auth_organization.id,
-      :admin_code_prefix_for_weaknesses, review.try(:created_at))
-
-    review ? review.next_weakness_code(code_prefix) : "#{code_prefix}1".strip
-  end
 end

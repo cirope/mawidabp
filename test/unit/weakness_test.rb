@@ -37,7 +37,7 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness = Weakness.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
-        :review_code => 'O20',
+        :review_code => 'O020',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -60,7 +60,7 @@ class WeaknessTest < ActiveSupport::TestCase
       )
 
       assert @weakness.save, @weakness.errors.full_messages.join('; ')
-      assert_equal 'O20', @weakness.review_code
+      assert_equal 'O020', @weakness.review_code
     end
 
     # No se puede crear una observación de un objetivo que está en un informe
@@ -91,11 +91,9 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una debilidad
   test 'update' do
-    assert @weakness.update_attributes(
-      :review_code => 'O20', :description => 'Updated description'),
+    assert @weakness.update_attributes(:description => 'Updated description'),
       @weakness.errors.full_messages.join('; ')
     @weakness.reload
-    assert_not_equal 'O20', @weakness.review_code
     assert_equal 'Updated description', @weakness.description
   end
 
@@ -186,15 +184,41 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.errors[:review_code]
   end
 
+  test 'next code' do
+    assert_equal 'O003', @weakness.next_code
+  end
+
+  test 'next work paper code' do
+    assert_equal 'PTO 04', @weakness.last_work_paper_code
+  end
+
+  test 'review code is updated when control objective is changed' do
+    weakness = Weakness.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+
+    assert weakness.update_attributes(:control_objective_item_id =>
+        control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
+    assert_equal 'O005', weakness.review_code
+  end
+
+  test 'work paper codes are updated when control objective is changed' do
+    weakness = Weakness.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+
+    assert weakness.update_attributes(:control_objective_item_id =>
+        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert_equal 'PTO 06', weakness.work_papers.first.code
+  end
+
   test 'dynamic functions' do
     Finding::STATUS.each do |status, value|
       @weakness.state = value
-      assert @weakness.send("#{status}?".to_sym)
+      assert @weakness.send(:"#{status}?")
 
       Finding::STATUS.each do |k, v|
         unless k == status
           @weakness.state = v
-          assert !@weakness.send("#{status}?".to_sym)
+          assert !@weakness.send(:"#{status}?")
         end
       end
     end
@@ -332,7 +356,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   test 'list all follow up dates and rescheduled function' do
     @weakness = Weakness.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity).id)
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
     assert @weakness.all_follow_up_dates.blank?
     assert !@weakness.rescheduled?
     assert_not_nil @weakness.follow_up_date

@@ -476,7 +476,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'auto complete for finding relation' do
     perform_auth
     post :auto_complete_for_finding, {
-      :finding_data => 'O01'
+      :finding_data => 'O001'
     }
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -485,7 +485,7 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/auto_complete_for_finding'
 
     post :auto_complete_for_finding, {
-      :finding_data => 'O01, 1 2 3'
+      :finding_data => 'O001, 1 2 3'
     }
     assert_response :success
     assert_not_nil assigns(:findings)

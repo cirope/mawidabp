@@ -37,7 +37,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding = Finding.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
-        :review_code => 'O20',
+        :review_code => 'O020',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -60,7 +60,7 @@ class FindingTest < ActiveSupport::TestCase
       )
 
       assert @finding.save, @finding.errors.full_messages.join('; ')
-      assert_equal 'O20', @finding.review_code
+      assert_equal 'O020', @finding.review_code
     end
 
     # No se puede crear una observación de un objetivo que está en un informe
@@ -69,7 +69,7 @@ class FindingTest < ActiveSupport::TestCase
       Finding.create(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
-        :review_code => 'O20',
+        :review_code => 'O020',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -399,12 +399,12 @@ class FindingTest < ActiveSupport::TestCase
     # Funciones status?
     Finding::STATUS.each do |status, value|
       @finding.state = value
-      assert @finding.send("#{status}?".to_sym)
+      assert @finding.send(:"#{status}?")
 
       Finding::STATUS.each do |k, v|
         unless k == status
           @finding.state = v
-          assert !@finding.send("#{status}?".to_sym)
+          assert !@finding.send(:"#{status}?")
         end
       end
     end
@@ -542,7 +542,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.new(@finding.attributes.merge(
         :id => nil,
         :state => Finding::STATUS[:incomplete],
-        :review_code => 'O99',
+        :review_code => 'O099',
         :control_objective_item_id => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         :finding_user_assignments_attributes => fuas
@@ -725,7 +725,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = Finding.new(@finding.attributes.merge(
         :id => nil,
         :state => Finding::STATUS[:incomplete],
-        :review_code => 'O99',
+        :review_code => 'O099',
         :control_objective_item_id => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         :finding_user_assignments_attributes => fuas

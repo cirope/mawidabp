@@ -1122,23 +1122,23 @@ class Review < ActiveRecord::Base
 
   private
 
-  def last_work_paper_code(prefix, work_papers)
+  def last_work_paper_code(prefix, work_papers, show_next = false)
     last_code = work_papers.map do |wp|
       wp.code.match(/\d+\Z/)[0].to_i if wp.code =~ /\d+\Z/
     end.compact.sort.last
 
     last_number = last_code.blank? ? 0 : last_code
+    last_number += 1 if show_next
 
     "#{prefix} #{'%.2d' % last_number}".strip
   end
 
   def next_finding_code(prefix, findings)
-    last_code = findings.map do |f|
-      f.review_code.match(/\d+\Z/)[0].to_i if f.review_code =~ /\d+\Z/
-    end.compact.sort.last
+    last_review_code = findings.order('review_code ASC').last.try(:review_code)
+    last_number = (last_review_code || '0').match(/\d+\Z/)[0].to_i || 0
 
-    last_number = last_code.blank? ? 0 : last_code
-
-    "#{prefix}#{'%.2d' % last_number.next}".strip
+    raise 'A review can not have more than 999 findings' if last_number > 999
+    
+    "#{prefix}#{'%.3d' % last_number.next}".strip
   end
 end

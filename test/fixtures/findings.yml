@@ -2,7 +2,7 @@
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  review_code: O01
+  review_code: O001
   description: Description 1w
   answer: Answer 1w
   audit_comments: Audit comments 1w
@@ -20,7 +20,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  review_code: O02
+  review_code: O002
   description: Description 2w
   answer: Answer 2w
   audit_comments: Audit comments 2w
@@ -41,7 +41,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  review_code: O0<%= level + 3 %>
+  review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
   audit_comments: Audit comments <%= level %>w
@@ -62,7 +62,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  review_code: O03
+  review_code: O003
   description: Description 3w
   answer: Answer 3w
   audit_comments: Audit comments 3w
@@ -81,7 +81,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
 bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  review_code: OM01
+  review_code: OM001
   description: Description 1o
   answer: Answer 1o
   audit_comments: Audit comments 1o
@@ -94,7 +94,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  review_code: OM03
+  review_code: OM003
   description: Description 2o
   answer: Answer 2o
   audit_comments: Audit comments 2o
@@ -107,7 +107,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  review_code: OM01
+  review_code: OM001
   description: Description 1o
   answer: Answer 1o
   audit_comments: Audit comments 1o
@@ -117,10 +117,10 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   final: false
   notification_level: 0
 
-bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity:
+bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  review_code: O03
+  review_code: O003
   description: Description 3w
   answer: Answer 3w
   audit_comments: Audit comments 3w
@@ -138,7 +138,7 @@ bcra_A4609_security_management_responsible_dependency_editable_being_implemented
 bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  review_code: O02
+  review_code: O002
   description: Description 2w
   answer: Answer 2w
   audit_comments: Audit comments 2w
@@ -156,7 +156,7 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  review_code: O01
+  review_code: O001
   description: Description 1w
   answer: Answer 1w
   audit_comments: Audit comments 1w
@@ -174,7 +174,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  review_code: OM03
+  review_code: OM003
   description: Description 3o
   answer: Answer 3o
   audit_comments: Audit comments 3o
@@ -186,10 +186,24 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   final: false
   notification_level: 0
 
+iso_27000_security_organization_4_2_item_editable_oportunity:
+  type: Oportunity
+  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  review_code: OM001
+  description: Description o
+  answer: Answer o
+  audit_comments: Audit comments 3o
+  state: <%= Finding::STATUS[:confirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= Date.today.to_s(:db) %>
+  final: false
+  notification_level: 0
+
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  review_code: OM02
+  review_code: OM002
   description: Description 2o
   answer: Answer 2o
   audit_comments: Audit comments 2o
@@ -203,7 +217,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
 iso_27000_security_policy_3_1_item_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  review_code: O01
+  review_code: O001
   description: Description 1wx
   answer: Answer 1w
   audit_comments: Audit comment 1w

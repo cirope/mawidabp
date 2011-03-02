@@ -236,6 +236,33 @@ class WeaknessesController < ApplicationController
     ).limit(5)
   end
 
+  # * POST /weaknesses/auto_complete_for_control_objective_item
+  def auto_complete_for_control_objective_item
+    @tokens = params[:control_objective_item_data][0..100].split(
+      SEARCH_AND_REGEXP).uniq
+    @tokens.reject! {|t| t.blank?}
+    conditions = [
+      "#{Period.table_name}.organization_id = :organization_id",
+      "#{ConclusionReview.table_name}.review_id IS NULL"
+    ]
+    parameters = {:organization_id => @auth_organization.id}
+
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}",
+        "LOWER(#{Review.table_name}.identification) LIKE :control_objective_item_data_#{i}"
+      ].join(' OR ')
+
+      parameters[:"control_objective_item_data_#{i}"] = "%#{t.downcase}%"
+    end
+
+    @control_objective_items = ControlObjectiveItem.includes(
+      :review => [:period, :conclusion_final_review]
+    ).where(
+      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+    ).order("#{Review.table_name}.identification ASC").limit(10)
+  end
+
   private
 
   # Busca la debilidad indicada siempre que pertenezca a la organización. En el
@@ -253,7 +280,8 @@ class WeaknessesController < ApplicationController
     @action_privileges.update(
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read
+      :auto_complete_for_finding_relation => :read,
+      :auto_complete_for_control_objective_item => :read
     )
   end
 end

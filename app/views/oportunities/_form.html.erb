@@ -31,21 +31,40 @@
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <label class="inline"><%= ControlObjective.model_name.human %></label>
-      <%= text_field nil, :control_objective_name, :size => nil,
-        :value => "#{@oportunity.control_objective_item.control_objective_text} (#{@oportunity.control_objective_item.process_control.name})",
-        :class => :inline_item, :readonly => true %>
-      <%= f.hidden_field :control_objective_item_id %>
-    </p>
-    <p class="form_item">
       <%= f.label :review_code, nil, :class => :inline %>
       <%= f.text_field :review_code, :class => :inline_item, :maxlength => 255,
         :size => 10, :readonly => true %>
     </p>
+    <div>
+      <label for="oportunity_control_objective_item">
+        <%= ControlObjective.model_name.human %>
+      </label>
+      <% if !readonly && !@oportunity.new_record? %>
+        <div class="search">
+          <%= f.hidden_field :control_objective_item_id,
+            :class => :autocomplete_id_item %>
+          <%= text_field_with_auto_complete(:oportunity, :auto_control_objective_item,
+            {:id => :oportunity_control_objective_item,
+            :class => "search#{' error_field' unless (@oportunity.errors[:control_objective_item_id] | @oportunity.errors[:control_objective_item]).blank?}",
+            :title => t(:'label.search'),
+            :value => @oportunity.control_objective_item.try(:control_objective_text)},
+            {:indicator => :loading, :skip_style => true,
+            :url => {:action => :auto_complete_for_control_objective_item},
+            :after_update_element => 'AutoComplete.itemSelected',
+            :param_name => 'control_objective_item_data'}) %>
+        </div>
+      <% else %>
+        <%= text_field nil, :control_objective_name, :size => nil,
+          :id => :oportunity_control_objective_item,
+          :value => "#{@oportunity.control_objective_item.control_objective_text} (#{@oportunity.control_objective_item.process_control.name})",
+          :readonly => true %>
+        <%= f.hidden_field :control_objective_item_id %>
+      <% end %>
+    </div>
     <p>
       <%= f.label :description %>
       <%= f.text_area :description, :readonly => readonly, :class => :focused,
-        :style => 'height: 21em;' %>
+        :style => 'height: 19em;' %>
     </p>
   </div>
   <div class="form_column_right">

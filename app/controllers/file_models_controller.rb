@@ -16,7 +16,7 @@ class FileModelsController < ApplicationController
     end
     allowed_paths = organization_paths.map { |p| Regexp.escape(p) }.join('|')
 
-    base_regexp = Regexp.new("^(#{allowed_paths})")
+    base_regexp = /^(#{allowed_paths})/
 
     if file_name =~ base_regexp && File.file?(file_name)
       response.headers['Cache-Control'] = 'private'

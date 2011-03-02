@@ -319,10 +319,10 @@ class Finding < ActiveRecord::Base
 
   # Restricciones sobre los atributos
   attr_protected :first_notification_date, :final
-  attr_readonly :review_code
   # Atributos no persistente
-  attr_accessor :nested_user, :finding_prefix, :avoid_changes_notification,
-    :users_for_notification, :user_who_make_it, :nested_finding_relation
+  attr_accessor :nested_user, :auto_control_objective_item, :finding_prefix,
+    :avoid_changes_notification, :users_for_notification, :user_who_make_it,
+    :nested_finding_relation
 
   # Callbacks
   before_create :can_be_created?
@@ -330,6 +330,7 @@ class Finding < ActiveRecord::Base
   before_destroy :can_be_destroyed?
   after_update :notify_changes_to_users
   before_validation :set_proper_parent
+  before_validation :change_review_code, :on => :update
 
   # Restricciones
   validates :control_objective_item_id, :description, :review_code,
@@ -634,21 +635,45 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  STATUS.each do |status_type, status_value|
-    define_method("#{status_type}?") { self.state == status_value }
+  def next_code
+    raise 'Must be implemented in the subclasses'
+  end
+
+  def last_work_paper_code
+    raise 'Must be implemented in the subclasses'
+  end
+
+  def change_review_code
+    if self.control_objective_item_id_changed? &&
+        self.control_objective_item_id &&
+        ControlObjectiveItem.exists?(self.control_objective_item_id)
+      old_coi = ControlObjectiveItem.find(self.control_objective_item_id_was)
+      new_coi = ControlObjectiveItem.find(self.control_objective_item_id)
+
+      self.control_objective_item = new_coi
+
+      unless old_coi.review_id == new_coi.review_id
+        self.review_code = self.next_code
+
+        # Para evitar que sea tenido en cuenta en la próxima iteración
+        self.work_papers.each { |wp| wp.code = nil }
+        self.work_papers.each { |wp| wp.code = self.last_work_paper_code.next }
+      end
+    end
   end
 
   STATUS.each do |status_type, status_value|
-    define_method("was_#{status_type}?") { self.state_was == status_value }
+    define_method(:"#{status_type}?") { self.state == status_value }
+    define_method(:"was_#{status_type}?") { self.state_was == status_value }
   end
 
   def state_text
-    self.state ? I18n.t("finding.status_#{STATUS.invert[self.state]}") : '-'
+    self.state ? I18n.t(:"finding.status_#{STATUS.invert[self.state]}") : '-'
   end
   
   def stale?
     self.being_implemented? && self.follow_up_date &&
-      self.follow_up_date < Time.now.to_date
+      self.follow_up_date < Date.today
   end
 
   def pending?

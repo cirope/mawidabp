@@ -175,8 +175,8 @@ class FindingsControllerTest < ActionController::TestCase
               :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
             :finding => {
               :control_objective_item_id => control_objective_items(
-                :bcra_A4609_data_proccessing_impact_analisys_item).id,
-              :review_code => 'O20',
+                :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
+              :review_code => 'O020',
               :description => 'Updated description',
               :answer => 'Updated answer',
               :audit_comments => 'Updated audit comments',
@@ -260,8 +260,8 @@ class FindingsControllerTest < ActionController::TestCase
             :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
           :finding => {
             :control_objective_item_id => control_objective_items(
-              :bcra_A4609_data_proccessing_impact_analisys_item).id,
-            :review_code => 'O20',
+              :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
+            :review_code => 'O020',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -360,7 +360,7 @@ class FindingsControllerTest < ActionController::TestCase
           :finding => {
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
-            :review_code => 'O20',
+            :review_code => 'O020',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -497,12 +497,12 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity).id)
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
     perform_auth
     post :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O01',
+      :finding_relation_data => 'O001',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }
@@ -517,7 +517,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     post :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O01',
+      :finding_relation_data => 'O001',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }
@@ -529,7 +529,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     post :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O01, 1 2 3',
+      :finding_relation_data => 'O001, 1 2 3',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }

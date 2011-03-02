@@ -397,9 +397,9 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_match /\Apre\d+\Z/, generated_code
 
-    assert_equal "#{weakness_prefix}#{'%.2d' % weakness_number.next}",
+    assert_equal "#{weakness_prefix}#{'%.3d' % weakness_number.next}",
       @review.reload.next_weakness_code(weakness_prefix)
-    assert_equal 'New prefix01',
+    assert_equal 'New prefix001',
       @review.reload.next_weakness_code('New prefix')
   end
 
@@ -411,9 +411,9 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_match /\Apre\d+\Z/, generated_code
 
-    assert_equal "#{oportunity_prefix}#{'%.2d' % oportunity_number.next}",
+    assert_equal "#{oportunity_prefix}#{'%.3d' % oportunity_number.next}",
       @review.reload.next_oportunity_code(oportunity_prefix)
-    assert_equal 'New prefix01',
+    assert_equal 'New prefix001',
       @review.reload.next_oportunity_code('New prefix')
   end
 

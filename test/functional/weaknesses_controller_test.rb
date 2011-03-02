@@ -102,7 +102,7 @@ class WeaknessesControllerTest < ActionController::TestCase
         :weakness => {
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
-          :review_code => 'O20',
+          :review_code => 'O020',
           :description => 'New description',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
@@ -165,7 +165,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           :weakness => {
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
-            :review_code => 'O20',
+            :review_code => 'O020',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -223,7 +223,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     assert_not_nil assigns(:weakness)
     assert_redirected_to edit_weakness_path(assigns(:weakness))
-    assert_equal 'O20', assigns(:weakness).review_code
+    assert_equal 'O020', assigns(:weakness).review_code
   end
 
   test 'destroy weakness' do
@@ -274,11 +274,11 @@ class WeaknessesControllerTest < ActionController::TestCase
 
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_editable_being_implemented_oportunity).id)
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
     
     perform_auth
     post :auto_complete_for_finding_relation, {
-      :finding_relation_data => 'O01',
+      :finding_relation_data => 'O001',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }
@@ -292,7 +292,7 @@ class WeaknessesControllerTest < ActionController::TestCase
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
     post :auto_complete_for_finding_relation, {
-      :finding_relation_data => 'O01',
+      :finding_relation_data => 'O001',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }
@@ -304,7 +304,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     post :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O01, 1 2 3',
+      :finding_relation_data => 'O001, 1 2 3',
       :finding_id => finding.id,
       :review_id => finding.review.id
     }
@@ -324,5 +324,31 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_equal 0, assigns(:findings).size # Sin resultados
     assert_select '#error_body', false
     assert_template 'weaknesses/auto_complete_for_finding_relation'
+  end
+
+  test 'auto complete for control objective item' do
+    perform_auth
+    post :auto_complete_for_control_objective_item, { :control_objective_item_data => 'dependencia' }
+    assert_response :success
+    assert_not_nil assigns(:control_objective_items)
+    assert_equal 1, assigns(:control_objective_items).size # Sólo bcra_A4609_security_management_responsible_dependency_item_editable porque no tiene informe definitivo
+    assert_equal control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,
+      assigns(:control_objective_items).first.id
+    assert_select '#error_body', false
+    assert_template 'weaknesses/auto_complete_for_control_objective_item'
+
+    post :auto_complete_for_control_objective_item, { :control_objective_item_data => '1 2 4' }
+    assert_response :success
+    assert_not_nil assigns(:control_objective_items)
+    assert_equal 2, assigns(:control_objective_items).size # Todos los del informe 1 2 4
+    assert_select '#error_body', false
+    assert_template 'weaknesses/auto_complete_for_control_objective_item'
+
+    post :auto_complete_for_control_objective_item, { :control_objective_item_data => 'x_none' }
+    assert_response :success
+    assert_not_nil assigns(:control_objective_items)
+    assert_equal 0, assigns(:control_objective_items).size # Sin resultados
+    assert_select '#error_body', false
+    assert_template 'weaknesses/auto_complete_for_control_objective_item'
   end
 end

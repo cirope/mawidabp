@@ -151,15 +151,41 @@ class OportunityTest < ActiveSupport::TestCase
       @oportunity.errors[:control_objective_item_id]
   end
 
+  test 'next code' do
+    assert_equal 'OM004', @oportunity.next_code
+  end
+
+  test 'next work paper code' do
+    assert_equal 'PTOM 00', @oportunity.last_work_paper_code
+  end
+
+  test 'review code is updated when control objective is changed' do
+    oportunity = Oportunity.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+
+    assert oportunity.update_attributes(:control_objective_item_id =>
+        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert_equal 'OM004', oportunity.review_code
+  end
+
+  test 'work paper codes are updated when control objective is changed' do
+    oportunity = Oportunity.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+
+    assert oportunity.update_attributes(:control_objective_item_id =>
+        control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+    assert_equal 'PTOM 04', oportunity.work_papers.first.code
+  end
+
   test 'dynamic functions' do
     Finding::STATUS.each do |status, value|
       @oportunity.state = value
-      assert @oportunity.send("#{status}?".to_sym)
+      assert @oportunity.send(:"#{status}?")
 
       Finding::STATUS.each do |k, v|
         unless k == status
           @oportunity.state = v
-          assert !@oportunity.send("#{status}?".to_sym)
+          assert !@oportunity.send(:"#{status}?")
         end
       end
     end
