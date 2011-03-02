@@ -168,6 +168,16 @@ class OportunityTest < ActiveSupport::TestCase
     assert_equal 'OM004', oportunity.review_code
   end
 
+  test 'can not change to a control objective in a final review' do
+    oportunity = Oportunity.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_oportunity).id)
+
+    assert_raise RuntimeError do
+      oportunity.update_attributes(:control_objective_item_id =>
+        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+    end
+  end
+
   test 'work paper codes are updated when control objective is changed' do
     oportunity = Oportunity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_oportunity).id)

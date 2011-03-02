@@ -653,6 +653,10 @@ class Finding < ActiveRecord::Base
       self.control_objective_item = new_coi
 
       unless old_coi.review_id == new_coi.review_id
+        if new_coi.review.try(:is_frozen?)
+          raise 'Can not change to a frozen review!'
+        end
+        
         self.review_code = self.next_code
 
         # Para evitar que sea tenido en cuenta en la próxima iteración

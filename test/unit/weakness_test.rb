@@ -201,6 +201,16 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_equal 'O005', weakness.review_code
   end
 
+  test 'can not change to a control objective in a final review' do
+    weakness = Weakness.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
+
+    assert_raise RuntimeError do
+      weakness.update_attributes(:control_objective_item_id =>
+        control_objective_items(:iso_27000_security_policy_3_1_item).id)
+    end
+  end
+
   test 'work paper codes are updated when control objective is changed' do
     weakness = Weakness.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)

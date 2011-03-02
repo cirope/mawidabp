@@ -293,9 +293,6 @@ class FindingsControllerTest < ActionController::TestCase
                 :user_id => users(:administrator_user).id
               }
             },
-            :user_ids => [users(:administrator_user).id, users(:bare_user).id,
-              users(:audited_user).id, users(:manager_user).id,
-              users(:supervisor_user).id],
             :work_papers_attributes => {
               :new_1 => {
                 :name => 'New workpaper name',
