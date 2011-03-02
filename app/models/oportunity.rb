@@ -37,16 +37,16 @@ class Oportunity < Finding
       self.control_objective_item.review.organization.id) : nil
   end
 
-  def next_code
-    review = self.control_objective_item.try(:review)
+  def next_code(review = nil)
+    review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
       :admin_code_prefix_for_oportunities, review.try(:created_at))
 
     review ? review.next_oportunity_code(code_prefix) : "#{code_prefix}1".strip
   end
 
-  def last_work_paper_code
-    review = self.control_objective_item.try(:review)
+  def last_work_paper_code(review = nil)
+    review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
       :admin_code_prefix_for_work_papers_in_oportunities,
       review.try(:created_at))

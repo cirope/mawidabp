@@ -58,16 +58,16 @@ class Weakness < Finding
     self.all_follow_up_dates.size > 0
   end
 
-  def next_code
-    review = self.control_objective_item.try(:review)
+  def next_code(review = nil)
+    review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
       :admin_code_prefix_for_weaknesses, review.try(:created_at))
 
     review ? review.next_weakness_code(code_prefix) : "#{code_prefix}1".strip
   end
 
-  def last_work_paper_code
-    review = self.control_objective_item.try(:review)
+  def last_work_paper_code(review = nil)
+    review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
       :admin_code_prefix_for_work_papers_in_weaknesses, review.try(:created_at))
 

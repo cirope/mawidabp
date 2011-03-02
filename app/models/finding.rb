@@ -635,11 +635,11 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  def next_code
+  def next_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
 
-  def last_work_paper_code
+  def last_work_paper_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
 
@@ -650,18 +650,22 @@ class Finding < ActiveRecord::Base
       old_coi = ControlObjectiveItem.find(self.control_objective_item_id_was)
       new_coi = ControlObjectiveItem.find(self.control_objective_item_id)
 
-      self.control_objective_item = new_coi
-
       unless old_coi.review_id == new_coi.review_id
         if new_coi.review.try(:is_frozen?)
           raise 'Can not change to a frozen review!'
         end
-        
-        self.review_code = self.next_code
+
+        # Cambio al anterior para que no lo tome en cuenta en el código
+        self.control_objective_item = old_coi
+        self.review_code = self.next_code(new_coi.review)
 
         # Para evitar que sea tenido en cuenta en la próxima iteración
         self.work_papers.each { |wp| wp.code = nil }
-        self.work_papers.each { |wp| wp.code = self.last_work_paper_code.next }
+        self.work_papers.each do |wp|
+          wp.code = self.last_work_paper_code(new_coi.review).next
+        end
+
+        self.control_objective_item = new_coi
       end
     end
   end

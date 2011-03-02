@@ -14,7 +14,7 @@ class WorkPaper < ActiveRecord::Base
 
   # Restricciones de los atributos
   attr_accessor :code_prefix
-  attr_readonly :organization_id, :code
+  attr_readonly :organization_id
   attr_accessor_with_default :check_code_prefix, true
 
   # Callbacks
@@ -30,8 +30,8 @@ class WorkPaper < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates :name, :code, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  validates :code, :uniqueness => { :scope => :owner_id }, :allow_nil => true,
-    :allow_blank => true
+  validates :code, :uniqueness => { :scope => :owner_id }, :on => :create,
+    :allow_nil => true, :allow_blank => true
   validates_each :code, :on => :create do |record, attr, value|
     if record.check_code_prefix && !record.marked_for_destruction?
       raise 'No code_prefix is set!' unless record.code_prefix
