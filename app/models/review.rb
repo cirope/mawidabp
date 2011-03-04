@@ -221,7 +221,7 @@ class Review < ActiveRecord::Base
   end
 
   def has_final_review?
-    self.conclusion_final_review != nil
+    self.conclusion_final_review
   end
 
   def is_frozen?
@@ -1022,6 +1022,7 @@ class Review < ActiveRecord::Base
 
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
+    weaknesses, oportunities, findings = [], [], []
     dirs = {
       :control_objectives => I18n.t(:'review.control_objectives_work_papers').sanitized_for_filename,
       :weaknesses => I18n.t(:'review.weaknesses_work_papers').sanitized_for_filename,
@@ -1052,19 +1053,19 @@ class Review < ActiveRecord::Base
 
       weaknesses.each do |w|
         w.work_papers.each do |w_wp|
-          self.add_work_paper_to_zip w_wp, dirs[:weaknesses], zipfile
+          self.add_work_paper_to_zip w_wp, dirs[:weaknesses], zipfile, 'E_'
         end
       end
 
       oportunities.each do |o|
         o.work_papers.each do |o_wp|
-          self.add_work_paper_to_zip o_wp, dirs[:oportunities], zipfile
+          self.add_work_paper_to_zip o_wp, dirs[:oportunities], zipfile, 'E_'
         end
       end
 
       findings.each do |f|
         f.work_papers.each do |f_wp|
-          self.add_work_paper_to_zip f_wp, dirs[:follow_up], zipfile
+          self.add_work_paper_to_zip f_wp, dirs[:follow_up], zipfile, 'S_'
         end
       end
 
@@ -1101,12 +1102,12 @@ class Review < ActiveRecord::Base
     File.join *path
   end
 
-  def add_work_paper_to_zip(wp, dir, zipfile)
+  def add_work_paper_to_zip(wp, dir, zipfile, prefix = nil)
     if wp.file_model
       self.add_file_to_zip(wp.file_model.file.path,
         wp.file_model.file_file_name, dir, zipfile)
     else
-      identification = self.sanitized_identification
+      identification = "#{prefix}#{self.sanitized_identification}"
       wp.create_pdf_cover(identification, self)
 
       self.add_file_to_zip(wp.absolute_cover_path(identification),
