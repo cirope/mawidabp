@@ -7,7 +7,7 @@
 
 env :PATH, '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
 
-every 1.day, :at => '15:00' do
+every 1.day, :at => '20:00' do
   runner 'Finding.notify_for_unconfirmed_for_notification_findings'
   runner 'User.notify_new_findings'
   runner 'Finding.mark_as_unanswered_if_necesary'
