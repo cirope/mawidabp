@@ -36,7 +36,8 @@
     </p>
     <div>
       <label for="weakness_control_objective_item">
-        <%= ControlObjective.model_name.human %>
+        <%= raw(ControlObjective.model_name.human +
+          show_inline_help_for(:finding_control_objective_item)) %>
       </label>
       <% if !readonly && !@weakness.new_record? %>
         <div class="search">
