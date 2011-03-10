@@ -1440,6 +1440,7 @@ es:
           one: "Usuario relacionado"
           user: 'Usuario relacionado (usuario)'
           user_id: 'Usuario relacionado (usuario)'
+          process_owner: 'Dueño del proceso (usuario)'
         finding_answers:
           one: "Comentarios"
           answer: "Comentario"
@@ -1490,6 +1491,7 @@ es:
         finding_id: 'Observación / Oportunidad de mejora'
         user_id: 'Usuario'
         user: 'Usuario'
+        process_owner: 'Dueño del proceso'
         <<: *commons
       group:
         name: "Nombre"
@@ -1871,6 +1873,10 @@ es:
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
+        finding_user_assignment:
+          attributes:
+            process_owner:
+              invalid: "solo puede ser asignado a usuarios de tipo auditado"
         image_model:
           attributes:
             image_content_type:

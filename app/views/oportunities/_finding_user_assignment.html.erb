@@ -2,7 +2,7 @@
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="finding_user_assignment item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
   <div>
-    <div class="item_field" style="width: 90%;">
+    <div class="item_field" style="width: 75%;">
       <% unless readonly %>
         <div class="search">
           <%= f.hidden_field :user_id, :value => f.object.user_id,
@@ -23,6 +23,10 @@
         <%= text_field_tag "oportunity_user_#{id}",
           f.object.user.full_name_with_function(@oportunity.created_at), :readonly => true %>
       <% end %>
+    </div>
+    <div class="item_field" style="width: 15%;">
+      <%= f.check_box :process_owner,
+        :disabled => readonly || (f.object.user && !f.object.user.can_act_as_audited?) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= remove_item_link(f) unless readonly %>

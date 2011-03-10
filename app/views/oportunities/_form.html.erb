@@ -141,78 +141,80 @@
       :'data-container' => :finding_relations %>
   </p>
 
-  <table class="item_container">
-    <thead>
-      <tr>
-        <th style="width: 52%;">
-          <%= raw(t(:'finding.responsibles', :count => @oportunity.users.size) +
-              show_inline_help_for(:finding_responsibles)) %></th>
-        <th style="width: 48%;">
-          <%= raw(t(:'finding.work_papers') +
-              show_inline_help_for(:finding_work_papers)) %>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="width: 52%; padding-top: 1em;">
-          <div id="finding_user_assignments">
-            <%= f.fields_for :finding_user_assignments do |fua_f| %>
-              <%= render :partial => 'finding_user_assignment', :locals =>
-                {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
-            <% end %>
-          </div>
-        </td>
-        <td style="width: 48%; padding-top: 1em;">
-          <div class="column_headers">
-            <div class="item_column" style="width: 20%;">
-              <h3><%= WorkPaper.human_attribute_name :name %></h3>
-            </div>
-            <div class="item_column" style="width: 20%;">
-              <h3><%= WorkPaper.human_attribute_name :code %></h3>
-            </div>
-            <div class="item_column" style="width: 15%;">
-              <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
-            </div>
-            <div class="item_column" style="width: 25%;">
-              <h3><%= WorkPaper.human_attribute_name :description %></h3>
-            </div>
-            <div class="item_column" style="width: 10%;">
-              <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
-            </div>
-            <div class="item_column" style="width: 10%;"></div>
-            <div class="clear"></div>
-          </div>
+  <h1>
+    <%= t(:'finding.responsibles', :count => @oportunity.users.size) %>
+    <%= show_inline_help_for(:finding_responsibles) %>
+  </h1>
 
-          <div id="work_papers">
-            <%= f.fields_for :work_papers do |wp_f| %>
-              <%= render :partial => 'work_papers/work_paper', :locals =>
-                {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
-                :child_index => 'NEW_RECORD'} %>
-            <% end %>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <%= link_to_unless readonly, t(:'finding.add_user'), '#',
-            :'data-template' => :finding_user_assignment,
-            :'data-event' => :add_nested_item,
-            :'data-container' => :finding_user_assignments %>
-        </td>
-        <td>
-          <%= link_to_unless frozen, t(:'finding.add_work_paper'), '#',
-            :'data-template' => :work_paper, :'data-event' => :add_nested_item,
-            :'data-container' => :work_papers %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="column_headers">
+    <div class="item_column" style="width: 75%;">
+      <h3><%= User.model_name.human %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
+        show_inline_help_for(:finding_user_assignment_process_owner)) %></h3>
+    </div>
+    <div class="item_column" style="width: 5%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="finding_user_assignments">
+    <%= f.fields_for :finding_user_assignments do |fua_f| %>
+      <%= render :partial => 'finding_user_assignment', :locals =>
+        {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to_unless readonly, t(:'finding.add_user'), '#',
+      :'data-template' => :finding_user_assignment,
+      :'data-event' => :add_nested_item,
+      :'data-container' => :finding_user_assignments %>
+  </p>
+
+  <h1>
+    <%= t(:'finding.work_papers') %>
+    <%= show_inline_help_for(:finding_work_papers) %>
+  </h1>
+
+  <div class="column_headers">
+    <div class="item_column" style="width: 20%;">
+      <h3><%= WorkPaper.human_attribute_name :name %></h3>
+    </div>
+    <div class="item_column" style="width: 20%;">
+      <h3><%= WorkPaper.human_attribute_name :code %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
+    </div>
+    <div class="item_column" style="width: 25%;">
+      <h3><%= WorkPaper.human_attribute_name :description %></h3>
+    </div>
+    <div class="item_column" style="width: 10%;">
+      <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
+    </div>
+    <div class="item_column" style="width: 10%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="work_papers">
+    <%= f.fields_for :work_papers do |wp_f| %>
+      <%= render :partial => 'work_papers/work_paper', :locals =>
+        {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
+        :child_index => 'NEW_RECORD'} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to_unless frozen, t(:'finding.add_work_paper'), '#',
+      :'data-template' => :work_paper, :'data-event' => :add_nested_item,
+      :'data-container' => :work_papers %>
+  </p>
 
   <%= hidden_lock_version(f) %>
   
   <p>
-     <span class="button"><%= f.submit %></span>
+     <span class="button"><%= f.submit nil, :disabled => frozen %></span>
   </p>
 <% end %>
 <!--[eoform:oportunity] -->

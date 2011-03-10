@@ -189,12 +189,30 @@ class FindingsControllerTest < ActionController::TestCase
               :priority => get_test_parameter(:admin_priorities).first[1],
               :follow_up_date => '',
               :finding_user_assignments_attributes => {
-                :new_1 => { :user_id => users(:bare_user).id },
-                :new_2 => { :user_id => users(:audited_user).id },
-                :new_3 => { :user_id => users(:auditor_user).id },
-                :new_4 => { :user_id => users(:manager_user).id },
-                :new_5 => { :user_id => users(:supervisor_user).id },
-                :new_6 => { :user_id => users(:administrator_user).id }
+                :new_1 => {
+                  :user_id => users(:bare_user).id,
+                  :process_owner => '0'
+                },
+                :new_2 => {
+                  :user_id => users(:audited_user).id,
+                  :process_owner => '1'
+                },
+                :new_3 => {
+                  :user_id => users(:auditor_user).id,
+                  :process_owner => '0'
+                },
+                :new_4 => {
+                  :user_id => users(:manager_user).id,
+                  :process_owner => '0'
+                },
+                :new_5 => {
+                  :user_id => users(:supervisor_user).id,
+                  :process_owner => '0'
+                },
+                :new_6 => {
+                  :user_id => users(:administrator_user).id,
+                  :process_owner => '0'
+                }
               },
               :work_papers_attributes => {
                 :new_1 => {
@@ -275,22 +293,28 @@ class FindingsControllerTest < ActionController::TestCase
             :follow_up_date => 3.days.from_now.to_date,
             :finding_user_assignments_attributes => {
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
-                :user_id => users(:bare_user).id
+                :user_id => users(:bare_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
-                :user_id => users(:audited_user).id
+                :user_id => users(:audited_user).id,
+                :process_owner => '1'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
-                :user_id => users(:auditor_user).id
+                :user_id => users(:auditor_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
-                :user_id => users(:manager_user).id
+                :user_id => users(:manager_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
-                :user_id => users(:supervisor_user).id
+                :user_id => users(:supervisor_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
-                :user_id => users(:administrator_user).id
+                :user_id => users(:administrator_user).id,
+                :process_owner => '0'
               }
             },
             :work_papers_attributes => {
@@ -372,22 +396,28 @@ class FindingsControllerTest < ActionController::TestCase
             :users_for_notification => [users(:bare_user).id],
             :finding_user_assignments_attributes => {
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
-                :user_id => users(:bare_user).id
+                :user_id => users(:bare_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
-                :user_id => users(:audited_user).id
+                :user_id => users(:audited_user).id,
+                :process_owner => '1'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
-                :user_id => users(:auditor_user).id
+                :user_id => users(:auditor_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
-                :user_id => users(:manager_user).id
+                :user_id => users(:manager_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
-                :user_id => users(:supervisor_user).id
+                :user_id => users(:supervisor_user).id,
+                :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
-                :user_id => users(:administrator_user).id
+                :user_id => users(:administrator_user).id,
+                :process_owner => '0'
               }
             }
           }

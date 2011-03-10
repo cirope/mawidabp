@@ -1,6 +1,7 @@
 class CreateFindingUserAssignments < ActiveRecord::Migration
   def self.up
     create_table :finding_user_assignments do |t|
+      t.boolean :process_owner, :default => false
       t.references :finding
       t.references :user
 

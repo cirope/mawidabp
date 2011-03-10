@@ -92,4 +92,14 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(finding_user_assignment, :user_id,
         :taken)], finding_user_assignment.errors[:user_id]
   end
+
+  test 'validates process owner' do
+    @finding_user_assignment.process_owner = true
+
+    assert @finding_user_assignment.invalid?
+    assert_equal 1, @finding_user_assignment.errors.size
+    assert_equal [error_message_from_model(@finding_user_assignment,
+        :process_owner, :invalid)],
+      @finding_user_assignment.errors[:process_owner]
+  end
 end

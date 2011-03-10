@@ -417,7 +417,8 @@ class Finding < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
   has_many :finding_user_assignments, :dependent => :destroy, :include => :user,
-    :inverse_of => :finding
+    :inverse_of => :finding, :before_add => :check_for_final_review,
+    :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
   has_many :users, :through => :finding_user_assignments,
@@ -839,6 +840,10 @@ class Finding < ActiveRecord::Base
   def commitment_date
     self.finding_answers.where('commitment_date IS NOT NULL').first.try(
       :commitment_date)
+  end
+
+  def process_owners
+    self.finding_user_assignments.owners.map(&:user)
   end
 
   def to_pdf(organization = nil)

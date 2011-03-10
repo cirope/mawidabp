@@ -166,6 +166,10 @@
         <h3><%= User.model_name.human %></h3>
       </div>
       <div class="item_column" style="width: 15%;">
+        <h3><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
+        show_inline_help_for(:finding_user_assignment_process_owner)) %></h3>
+      </div>
+      <div class="item_column" style="width: 15%;">
         <h3><%= t(:'finding.send_notification') %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>

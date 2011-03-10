@@ -32,6 +32,9 @@
       <% end %>
     </div>
     <div class="item_field" style="width: 15%;">
+      <%= f.check_box :process_owner, :disabled => f.object.user && !f.object.user.can_act_as_audited? %>
+    </div>
+    <div class="item_field" style="width: 15%;">
       <% if is_dynamic || is_a_new_relation %>
         <%= check_box_tag "user_for_notification", '1', false,
           :class => :user_for_notification_selector %>

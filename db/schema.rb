@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "process_owner", :default => false
   end
 
   add_index "finding_user_assignments", ["finding_id", "user_id"], :name => "index_finding_user_assignments_on_finding_id_and_user_id"
