@@ -4,13 +4,6 @@ require 'test_helper'
 class NotificationsControllerTest < ActionController::TestCase
   fixtures :notifications
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = [:confirm]
-    @private_actions = [:index, :show, :edit, :update]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do

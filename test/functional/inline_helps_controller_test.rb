@@ -4,13 +4,6 @@ require 'test_helper'
 class InlineHelpsControllerTest < ActionController::TestCase
   fixtures :inline_helps
 
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
-  def setup
-    @public_actions = []
-    @private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
