@@ -1435,7 +1435,7 @@ es:
           one: "Relación"
           other: "Relaciones"
           related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
-          finding_relation_type: "Relación (tipo)"
+          description: "Relación (descripción)"
         finding_user_assignments:
           one: "Usuario relacionado"
           user: 'Usuario relacionado (usuario)'
@@ -1479,7 +1479,7 @@ es:
       finding_relation:
         finding_id: 'Observación / Oportunidad de mejora'
         related_finding_id: 'Observación / Oportunidad de mejora relacionada'
-        finding_relation_type: 'Tipo'
+        description: 'Descripción'
         <<: *commons
       finding_review_assignment:
         finding_id: 'Observación / Oportunidad de mejora'

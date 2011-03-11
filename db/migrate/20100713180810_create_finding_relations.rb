@@ -1,7 +1,7 @@
 class CreateFindingRelations < ActiveRecord::Migration
   def self.up
     create_table :finding_relations do |t|
-      t.integer :finding_relation_type
+      t.string :description, :null => false
       t.references :finding
       t.references :related_finding
 

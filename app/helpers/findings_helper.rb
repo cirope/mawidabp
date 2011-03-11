@@ -61,15 +61,6 @@ module FindingsHelper
     raw label_and_check.map {|tag| content_tag(:span, tag)}.join
   end
 
-  def finding_relation_type_field(form)
-    options = FindingRelation::TYPES.map do |type, value|
-      [t(:"finding_relation.types.#{type}"), value]
-    end
-
-    form.select :finding_relation_type, options, {:prompt => true},
-      {:class => :required}
-  end
-
   def finding_show_status_change_history(dom_id)
     content_tag(:span,
       link_to_function(

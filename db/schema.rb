@@ -192,11 +192,11 @@ ActiveRecord::Schema.define(:version => 20110217181213) do
   add_index "finding_answers", ["user_id"], :name => "index_finding_answers_on_user_id"
 
   create_table "finding_relations", :force => true do |t|
-    t.integer  "finding_relation_type"
     t.integer  "finding_id"
     t.integer  "related_finding_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "description",        :null => false
   end
 
   add_index "finding_relations", ["finding_id"], :name => "index_finding_relations_on_finding_id"

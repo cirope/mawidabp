@@ -12,8 +12,8 @@ class FindingRelationTest < ActiveSupport::TestCase
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of FindingRelation, @finding_relation
-    assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).finding_relation_type,
-      @finding_relation.finding_relation_type
+    assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).description,
+      @finding_relation.description
     assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).finding_id,
       @finding_relation.finding_id
     assert_equal finding_relations(:iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_duplicated_of_iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).related_finding_id,
@@ -24,7 +24,7 @@ class FindingRelationTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'FindingRelation.count' do
       @finding_relation = FindingRelation.create(
-        :finding_relation_type => FindingRelation::TYPES[:duplicated],
+        :description => 'Duplicated',
         :finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
         :related_finding_id => findings(:iso_27000_security_policy_3_1_item_weakness).id
       )
@@ -33,12 +33,11 @@ class FindingRelationTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un perfil
   test 'update' do
-    assert @finding_relation.duplicated?
-    assert @finding_relation.update_attributes(
-      :finding_relation_type => FindingRelation::TYPES[:related]),
+    assert_equal 'Duplicated', @finding_relation.description
+    assert @finding_relation.update_attributes(:description => 'Related'),
       @finding_relation.errors.full_messages.join('; ')
     @finding_relation.reload
-    assert @finding_relation.related?
+    assert_equal 'Related', @finding_relation.description
   end
 
   # Prueba de eliminación de un perfil
@@ -49,26 +48,23 @@ class FindingRelationTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @finding_relation.related_finding_id = ' '
-    @finding_relation.finding_relation_type = nil
+    @finding_relation.description = nil
     assert @finding_relation.invalid?
     assert_equal 2, @finding_relation.errors.count
     assert_equal [error_message_from_model(@finding_relation,
-      :related_finding_id, :blank)],
+        :related_finding_id, :blank)],
       @finding_relation.errors[:related_finding_id]
-    assert_equal [error_message_from_model(@finding_relation,
-      :finding_relation_type, :blank)],
-      @finding_relation.errors[:finding_relation_type]
+    assert_equal [error_message_from_model(@finding_relation, :description,
+        :blank)], @finding_relation.errors[:description]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates included attributes' do
-    @finding_relation.finding_relation_type =
-      FindingRelation::TYPES.values.sort.last.next
+  test 'validates length attributes' do
+    @finding_relation.description = 'abcde' * 52
     assert @finding_relation.invalid?
     assert_equal 1, @finding_relation.errors.count
-    assert_equal [error_message_from_model(@finding_relation,
-      :finding_relation_type, :inclusion)],
-      @finding_relation.errors[:finding_relation_type]
+    assert_equal [error_message_from_model(@finding_relation, :description,
+        :too_long, :count => 255)], @finding_relation.errors[:description]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -83,17 +79,5 @@ class FindingRelationTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(finding_relation,
         :related_finding_id, :taken)],
       finding_relation.errors[:related_finding_id]
-  end
-
-  test 'dynamic functions' do
-    FindingRelation::TYPES.each do |type, value|
-      @finding_relation.finding_relation_type = value
-      assert @finding_relation.send("#{type}?".to_sym)
-
-      (FindingRelation::TYPES.values - [value]).each do |v|
-        @finding_relation.finding_relation_type = v
-        assert !@finding_relation.send("#{type}?".to_sym)
-      end
-    end
   end
 end

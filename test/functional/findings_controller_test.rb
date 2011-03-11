@@ -241,7 +241,7 @@ class FindingsControllerTest < ActionController::TestCase
               },
               :finding_relations_attributes => {
                 :new_1 => {
-                  :finding_relation_type => FindingRelation::TYPES[:duplicated],
+                  :description => 'Duplicated',
                   :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
                 }
               },
@@ -343,7 +343,7 @@ class FindingsControllerTest < ActionController::TestCase
             },
             :finding_relations_attributes => {
               :new_1 => {
-                :finding_relation_type => FindingRelation::TYPES[:duplicated],
+                :description => 'Duplicated',
                 :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
               }
             },
