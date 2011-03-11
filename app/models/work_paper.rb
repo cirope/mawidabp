@@ -143,7 +143,9 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil)
-    filename ||= self.file_model.file_file_name if self.file_model
+    if self.file_model
+      filename ||= self.file_model.file_file_name.sanitized_for_filename
+    end
 
     if filename.starts_with?(self.sanitized_code)
       I18n.t :'work_paper.cover_name', :prefix => '',
@@ -164,6 +166,7 @@ class WorkPaper < ActiveRecord::Base
 
   def filename_with_prefix
     filename = self.file_model.file_file_name.sub /^(zip-)*/i, ''
+    filename = filename.sanitized_for_filename
     code_suffix = File.extname(filename) == '.zip' ? '-zip' : ''
 
     filename.starts_with?(self.sanitized_code) ?
@@ -176,8 +179,9 @@ class WorkPaper < ActiveRecord::Base
     original_filename = self.file_model.file.path
     directory = File.dirname original_filename
     filename = File.basename original_filename, File.extname(original_filename)
-    zip_filename = File.join directory,
-      "#{self.sanitized_code}-#{filename.sub(/^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')}.zip"
+    filename = filename.sanitized_for_filename.sub(
+      /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
+    zip_filename = File.join directory, "#{self.sanitized_code}-#{filename}.zip"
     pdf_filename = self.absolute_cover_path
 
     self.create_pdf_cover
