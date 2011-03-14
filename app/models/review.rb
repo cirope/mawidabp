@@ -179,7 +179,7 @@ class Review < ActiveRecord::Base
   has_many :review_user_assignments, :dependent => :destroy, :include => :user,
     :order => 'assignment_type DESC', :inverse_of => :review
   has_many :finding_review_assignments, :dependent => :destroy,
-    :inverse_of => :review
+    :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
   has_many :users, :through => :review_user_assignments
 
   accepts_nested_attributes_for :review_user_assignments, :allow_destroy => true
@@ -226,6 +226,12 @@ class Review < ActiveRecord::Base
 
   def is_frozen?
     self.has_final_review? && self.conclusion_final_review.is_frozen?
+  end
+
+  def check_if_is_in_a_final_review(finding_review_assignment)
+    unless finding_review_assignment.finding.try(:is_in_a_final_review?)
+      raise 'The finding must be in a final review'
+    end
   end
 
   def procedure_control_subitem_ids=(ids)

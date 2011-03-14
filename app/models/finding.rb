@@ -44,7 +44,8 @@ class Finding < ActiveRecord::Base
     :implemented_audited => 2,
     :assumed_risk => 3,
     :notify => 4,
-    :incomplete => 5
+    :incomplete => 5,
+    :repeated => 6
   }.freeze
 
   STATUS_TRANSITIONS = {
@@ -101,7 +102,10 @@ class Finding < ActiveRecord::Base
       :implemented,
       :implemented_audited,
       :assumed_risk
-    ]
+    ],
+    :repeated => [
+      :repeated
+    ],
   }
 
   PENDING_STATUS = [

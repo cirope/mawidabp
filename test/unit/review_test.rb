@@ -349,6 +349,34 @@ class ReviewTest < ActiveSupport::TestCase
     end
   end
 
+  test 'add a related finding from a final review' do
+    assert_difference '@review.finding_review_assignments.count' do
+      assert @review.update_attributes(
+        :finding_review_assignments_attributes => {
+          :new_1 => {
+            :finding_id =>
+              findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+          }
+        }
+      )
+    end
+  end
+
+  test 'can not add a related finding without a final review' do
+    assert_no_difference '@review.finding_review_assignments.count' do
+      assert_raise RuntimeError do
+        @review.update_attributes(
+          :finding_review_assignments_attributes => {
+            :new_1 => {
+              :finding_id =>
+                findings(:iso_27000_security_organization_4_2_item_editable_oportunity).id.to_s
+            }
+          }
+        )
+      end
+    end
+  end
+
   test 'effectiveness function' do
     coi_count = @review.control_objective_items.inject(0) do |acc, coi|
       acc + coi.relevance

@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/thoughtbot/paperclip.git
-  revision: 6a10b358bff2562a5c9b1585f0c8122b540966a3
+  revision: 1738ea1dcaf65860c53088cc62ad7f0887e629ca
   specs:
     paperclip (2.3.8)
       activerecord
@@ -99,7 +99,7 @@ GEM
       rails (~> 3)
     pg (0.10.1)
     polyglot (0.3.1)
-    rack (1.2.1)
+    rack (1.2.2)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
     rack-test (0.5.7)
