@@ -63,9 +63,13 @@
       <% end %>
     </div>
     <p>
+      <%= f.label :original_id %>
+      <%= finding_original_if_field(f, readonly) %>
+    </p>
+    <p>
       <%= f.label :description %>
       <%= f.text_area :description, :readonly => readonly, :class => :focused,
-        :style => 'height: 19em;' %>
+        :style => 'height: 15em;' %>
     </p>
   </div>
   <div class="form_column_right">

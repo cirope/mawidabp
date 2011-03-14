@@ -526,11 +526,20 @@ class Finding < ActiveRecord::Base
   end
 
   def check_for_reiteration
-    if self.original_id_changed? && self.original_id_was.nil?
-      self.original.state = STATUS[:repeated]
-      self.origination_date = self.original.origination_date
-    elsif self.original_id_changed? && !self.original_id_was.nil?
-      raise 'Original finding can not be changed'
+    review = self.control_objective_item.try(:review)
+
+    if self.original_id_changed? && review
+      is_not_included = review.finding_review_assignments.empty? ||
+        !review.finding_review_assignments.detect { |fra| fra.finding == self.original }
+
+      raise 'Not included in review' if is_not_included
+
+      if self.original_id_was.nil?
+        self.original.state = STATUS[:repeated]
+        self.origination_date = self.original.origination_date
+      else
+        raise 'Original finding can not be changed'
+      end
     end
   end
 

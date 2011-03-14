@@ -182,7 +182,7 @@ class WeaknessesController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -223,7 +223,7 @@ class WeaknessesController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @findings = Finding.includes(

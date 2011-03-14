@@ -711,6 +711,19 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
+  test 'not mark as duplicated if original is not included in review' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    original = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+
+    finding.review.finding_review_assignments.clear
+
+    assert_raise RuntimeError do
+      finding.update_attributes(:original_id => original.id)
+    end
+  end
+
   test 'follow up pdf' do
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 

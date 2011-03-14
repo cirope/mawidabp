@@ -11,6 +11,16 @@ module FindingsHelper
       :disabled => (disabled || finding.unconfirmed?)}
   end
 
+  def finding_original_if_field(form, readonly)
+    review = form.object.control_objective_item.try(:review)
+    findings = (review.try(:finding_review_assignments) || []).map do |fra|
+      [fra.finding, fra.finding_id]
+    end
+    
+    form.select :original_id, findings, {:prompt => true},
+      {:disabled => readonly}
+  end
+
   def finding_follow_up_date_text(finding)
     html_classes = []
 

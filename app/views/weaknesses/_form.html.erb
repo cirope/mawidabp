@@ -62,6 +62,10 @@
       <% end %>
     </div>
     <p>
+      <%= f.label :original_id %>
+      <%= finding_original_if_field(f, readonly) %>
+    </p>
+    <p>
       <%= f.label :description %>
       <%= f.text_area :description, :readonly => readonly, :class => :focused %>
     </p>
@@ -71,7 +75,8 @@
     </p>
     <p>
       <%= f.label :audit_recommendations %>
-      <%= f.text_area :audit_recommendations, :readonly => readonly %>
+      <%= f.text_area :audit_recommendations, :style => 'height: 4em;',
+        :readonly => readonly %>
     </p>
   </div>
   <div class="form_column_right">

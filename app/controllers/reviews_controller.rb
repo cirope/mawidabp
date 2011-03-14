@@ -227,7 +227,9 @@ class ReviewsController < ApplicationController
       ].join(' AND '),
       :boolean_false => false,
       :organization_id => @auth_organization.id,
-      :states => Finding::PENDING_STATUS,
+      :states => [
+        Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
+      ],
       :business_unit_id => plan_item.business_unit_id
     ).includes(
       :control_objective_item => {
@@ -283,7 +285,9 @@ class ReviewsController < ApplicationController
     parameters = {
       :boolean_false => false,
       :organization_id => @auth_organization.id,
-      :states => Finding::PENDING_STATUS
+      :states => [
+        Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
+      ],
     }
     @tokens.each_with_index do |t, i|
       conditions << [

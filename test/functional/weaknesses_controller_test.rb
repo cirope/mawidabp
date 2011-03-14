@@ -293,7 +293,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
-    
+
     perform_auth
     post :auto_complete_for_finding_relation, {
       :finding_relation_data => 'O001',
