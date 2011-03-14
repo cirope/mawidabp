@@ -701,6 +701,14 @@ class FindingTest < ActiveSupport::TestCase
     assert original.reload.repeated?
     assert finding.reload.original
     assert_equal original.origination_date, finding.origination_date
+
+    # Intentar asignar otra relacionada
+    original = Finding.find(
+      findings(:iso_27000_security_policy_3_1_item_weakness).id)
+
+    assert_raise RuntimeError do
+      finding.update_attributes(:original_id => original.id)
+    end
   end
 
   test 'follow up pdf' do

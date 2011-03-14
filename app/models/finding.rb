@@ -351,14 +351,16 @@ class Finding < ActiveRecord::Base
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :solution_date, :origination_date,
     :allow_nil => true, :allow_blank => true
-  validates_each :follow_up_date, :unless => :incomplete? do |record, attr, value|
+  validates_each :follow_up_date,
+    :if => proc { |f| !f.incomplete? && !f.repeated? } do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
     record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
   end
-  validates_each :solution_date, :unless => :incomplete? do |record, attr, value|
+  validates_each :solution_date,
+    :if => proc { |f| !f.incomplete? && !f.repeated? } do |record, attr, value|
     check_for_blank = record.implemented_audited? || record.assumed_risk?
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
@@ -380,6 +382,11 @@ class Finding < ActiveRecord::Base
     
     if record.implemented_audited? && record.work_papers.empty?
       record.errors.add attr, :must_have_a_work_paper
+    end
+
+    # No puede marcarse como repetida si no está en un informe definitivo
+    if value && record.state_changed? && record.repeated?
+      record.errors.add attr, :invalid unless record.is_in_a_final_review?
     end
   end
   validates_each :review_code do |record, attr, value|

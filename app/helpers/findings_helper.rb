@@ -1,7 +1,7 @@
 module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
     finding = form.object
-    options = finding.next_status_list.map do |k, v|
+    options = finding.next_status_list.except(:repeated).map do |k, v|
       [t(:"finding.status_#{k}"), v]
     end
 

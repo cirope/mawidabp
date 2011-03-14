@@ -472,6 +472,7 @@ es:
     status_assumed_risk: "Riesgo asumido"
     status_notify: "Notificar"
     status_incomplete: "Incompleta"
+    status_repeated: "Reiterada"
     view_completed: "Ver implementadas"
     view_cost_details: "Listado de actividades anteriores relacionadas a la observación / oportunidad de mejora"
     view_pending: "Ver pendientes"
