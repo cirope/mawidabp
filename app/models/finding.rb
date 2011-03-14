@@ -73,13 +73,15 @@ class Finding < ActiveRecord::Base
       :being_implemented,
       :implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :repeated
     ],
     :implemented => [
       :implemented,
       :being_implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :repeated
     ],
     :implemented_audited => [
       :implemented_audited
@@ -114,7 +116,8 @@ class Finding < ActiveRecord::Base
     STATUS[:incomplete]
   ]
 
-  EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete]
+  EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete,
+    :repeated]
 
   # Named scopes
   scope :with_prefix, lambda { |prefix|
@@ -330,7 +333,8 @@ class Finding < ActiveRecord::Base
 
   # Callbacks
   before_create :can_be_created?
-  before_save :can_be_modified?, :check_users_for_notification
+  before_save :can_be_modified?, :check_users_for_notification,
+    :check_for_reiteration
   before_destroy :can_be_destroyed?
   after_update :notify_changes_to_users
   before_validation :set_proper_parent
@@ -404,6 +408,8 @@ class Finding < ActiveRecord::Base
 
   # Relaciones
   belongs_to :control_objective_item
+  belongs_to :original, :dependent => :destroy, :autosave => true,
+    :class_name => 'Finding'
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
@@ -509,6 +515,15 @@ class Finding < ActiveRecord::Base
           (!related_finding.is_in_a_final_review? &&
             related_finding.review.id != self.control_objective_item.try(:review_id)))
       raise 'Invalid finding for asociation'
+    end
+  end
+
+  def check_for_reiteration
+    if self.original_id_changed? && self.original_id_was.nil?
+      self.original.state = STATUS[:repeated]
+      self.origination_date = self.original.origination_date
+    elsif self.original_id_changed? && !self.original_id_was.nil?
+      raise 'Original finding can not be changed'
     end
   end
 

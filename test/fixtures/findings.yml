@@ -14,6 +14,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
 
@@ -53,6 +54,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date:
+  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>

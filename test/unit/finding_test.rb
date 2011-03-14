@@ -16,6 +16,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'search' do
     finding = findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
     assert_kind_of Finding, @finding
+    assert_equal finding.original_id, @finding.original_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
     assert_equal finding.review_code, @finding.review_code
@@ -686,6 +687,20 @@ class FindingTest < ActiveSupport::TestCase
       )
     end
     assert_equal 10.days.from_now.to_date, @finding.commitment_date
+  end
+
+  test 'mark as duplicated' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    original = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+
+    assert_not_equal original.origination_date, finding.origination_date
+    assert !original.repeated?
+    assert finding.update_attributes(:original_id => original.id)
+    assert original.reload.repeated?
+    assert finding.reload.original
+    assert_equal original.origination_date, finding.origination_date
   end
 
   test 'follow up pdf' do
