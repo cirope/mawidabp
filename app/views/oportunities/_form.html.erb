@@ -1,7 +1,7 @@
 <% readonly = @oportunity.final? %>
 <% review = @oportunity.review || (@oportunity.control_objective_item ?
     @oportunity.control_objective_item.review : nil) %>
-<% frozen = review.try :is_frozen? %>
+<% frozen = review.try(:is_frozen?) || @oportunity.repeated? %>
 <% show_history_changes = @oportunity.status_change_history.size > 1 %>
 <!--[form:oportunity]-->
 <%= form_for @oportunity, :html => {:multipart => true} do |f| %>
@@ -63,8 +63,8 @@
       <% end %>
     </div>
     <p>
-      <%= f.label :original_id %>
-      <%= finding_original_if_field(f, readonly) %>
+      <%= f.label :repeated_of_id %>
+      <%= finding_repeated_of_if_field(f, readonly) %>
     </p>
     <p>
       <%= f.label :description %>
@@ -113,43 +113,15 @@
       <%= f.text_area :audit_comments, :readonly => readonly %>
     </p>
   </div>
-  
+
   <div style="clear: both; margin-top: 2em;">
     <h1>
-      <%= t(:'finding.finding_relations') %>
-      <%= show_inline_help_for(:finding_relations) %>
+      <%= t(:'finding.responsibles', :count => @oportunity.users.size) %>
+      <%= show_inline_help_for(:finding_responsibles) %>
     </h1>
-
-    <div class="column_headers">
-      <div class="item_column" style="width: 60%;">
-        <h3><%= FindingRelation.human_attribute_name :related_finding_id %></h3>
-      </div>
-      <div class="item_column" style="width: 30%;">
-        <h3><%= FindingRelation.human_attribute_name :description %></h3>
-      </div>
-      <div class="item_column" style="width: 5%;"></div>
-      <div class="clear"></div>
-    </div>
-
-    <div id="finding_relations">
-      <%= f.fields_for :finding_relations do |fr_f| %>
-        <%= render :partial => 'finding_relation', :locals =>
-          {:f => fr_f, :is_dynamic => false} %>
-      <% end %>
-    </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#',
-      :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
-      :'data-container' => :finding_relations %>
-  </p>
-
-  <h1>
-    <%= t(:'finding.responsibles', :count => @oportunity.users.size) %>
-    <%= show_inline_help_for(:finding_responsibles) %>
-  </h1>
-
+  
   <div class="column_headers">
     <div class="item_column" style="width: 75%;">
       <h3><%= User.model_name.human %></h3>
@@ -174,6 +146,53 @@
       :'data-template' => :finding_user_assignment,
       :'data-event' => :add_nested_item,
       :'data-container' => :finding_user_assignments %>
+  </p>
+
+  <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
+    <h1><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
+    <ul class="raw_list">
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless (repeated_children = @oportunity.repeated_children).blank? %>
+    <h1><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
+    <ul class="raw_list">
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h1>
+    <%= t(:'finding.finding_relations') %>
+    <%= show_inline_help_for(:finding_relations) %>
+  </h1>
+
+  <div class="column_headers">
+    <div class="item_column" style="width: 60%;">
+      <h3><%= FindingRelation.human_attribute_name :related_finding_id %></h3>
+    </div>
+    <div class="item_column" style="width: 30%;">
+      <h3><%= FindingRelation.human_attribute_name :description %></h3>
+    </div>
+    <div class="item_column" style="width: 5%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="finding_relations">
+    <%= f.fields_for :finding_relations do |fr_f| %>
+      <%= render :partial => 'finding_relation', :locals =>
+        {:f => fr_f, :is_dynamic => false} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to t(:'finding.add_finding_relation'), '#',
+      :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
+      :'data-container' => :finding_relations %>
   </p>
 
   <h1>

@@ -128,6 +128,24 @@
     </table>
   <% end %>
 
+  <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
+    <h3><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <ul class="raw_list">
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless (repeated_children = @finding.repeated_children).blank? %>
+    <h3><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <ul class="raw_list">
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <% unless @finding.work_papers.blank? %>
     <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
 

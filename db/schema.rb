@@ -244,15 +244,15 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.integer  "parent_id"
     t.integer  "notification_level",        :default => 0
     t.date     "origination_date"
-    t.integer  "original_id"
+    t.integer  "repeated_of_id"
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"
   add_index "findings", ["created_at"], :name => "index_findings_on_created_at"
   add_index "findings", ["final"], :name => "index_findings_on_final"
   add_index "findings", ["first_notification_date"], :name => "index_findings_on_first_notification_date"
-  add_index "findings", ["original_id"], :name => "index_findings_on_original_id"
   add_index "findings", ["parent_id"], :name => "index_findings_on_parent_id"
+  add_index "findings", ["repeated_of_id"], :name => "index_findings_on_repeated_of_id"
   add_index "findings", ["state"], :name => "index_findings_on_state"
   add_index "findings", ["type"], :name => "index_findings_on_type"
 

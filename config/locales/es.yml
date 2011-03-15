@@ -442,6 +442,8 @@ es:
     add_user: "Agregar usuario"
     add_work_paper: "Agregar papel de trabajo"
     has_work_papers: "Papeles de trabajo"
+    repeated_ancestors: "Reiterada de"
+    repeated_children: "Reiterada en"
     change_history: "Historial de cambios"
     auditors:
       one: "Auditor"
@@ -1410,7 +1412,7 @@ es:
         control_objective_item_id: "Objetivo de control"
         description: "Observación / Oportunidad"
         type: "Tipo"
-        original_id: "Reiterada de"
+        repeated_of_id: "Reiterada de"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
         answer: "Respuesta"

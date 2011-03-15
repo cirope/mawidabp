@@ -415,8 +415,9 @@ class Finding < ActiveRecord::Base
 
   # Relaciones
   belongs_to :control_objective_item
-  belongs_to :original, :dependent => :destroy, :autosave => true,
-    :class_name => 'Finding'
+  belongs_to :repeated_of, :foreign_key => 'repeated_of_id',
+    :dependent => :destroy, :autosave => true, :class_name => 'Finding'
+  has_one :repeated_in, :foreign_key => 'repeated_of_id', :class_name => 'Finding'
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
@@ -528,15 +529,17 @@ class Finding < ActiveRecord::Base
   def check_for_reiteration
     review = self.control_objective_item.try(:review)
 
-    if self.original_id_changed? && review
+    if self.repeated_of_id_changed? && review
       is_not_included = review.finding_review_assignments.empty? ||
-        !review.finding_review_assignments.detect { |fra| fra.finding == self.original }
+        !review.finding_review_assignments.detect { |fra| fra.finding == self.repeated_of }
 
       raise 'Not included in review' if is_not_included
 
-      if self.original_id_was.nil?
-        self.original.state = STATUS[:repeated]
-        self.origination_date = self.original.origination_date
+      if self.repeated_of_id_was.nil?
+        raise 'Original can not be repeated' if self.repeated_of.repeated?
+        
+        self.repeated_of.state = STATUS[:repeated]
+        self.origination_date = self.repeated_of.origination_date
       else
         raise 'Original finding can not be changed'
       end
@@ -581,6 +584,7 @@ class Finding < ActiveRecord::Base
 
   def can_be_modified?
     if self.final == false || self.final_changed? ||
+        (self.repeated? && self.state_changed?) ||
         (!self.changed? && !self.control_objective_item.review.is_frozen?)
       true
     else
@@ -879,6 +883,24 @@ class Finding < ActiveRecord::Base
 
   def process_owners
     self.finding_user_assignments.owners.map(&:user)
+  end
+
+  def repeated_ancestors
+    node, nodes = self, []
+    nodes << node = node.repeated_of while node.repeated_of
+    nodes
+  end
+
+  def repeated_root
+    node = self
+    node = node.repeated_of while node.repeated_of
+    node
+  end
+
+  def repeated_children
+    node, nodes = self, []
+    nodes << node = node.repeated_in while node.repeated_in
+    nodes
   end
 
   def to_pdf(organization = nil)

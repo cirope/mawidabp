@@ -50,6 +50,24 @@
   <%= array_to_ul @oportunity.users.map { |u| u.full_name_with_function(@oportunity.created_at) },
     :class => :raw_list %>
 
+  <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
+    <h3><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <ul class="raw_list">
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless (repeated_children = @oportunity.repeated_children).blank? %>
+    <h3><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <ul class="raw_list">
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <% unless @oportunity.work_papers.empty? %>
     <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
     <table class="summary_table">

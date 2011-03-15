@@ -1,9 +1,9 @@
 module FindingsHelper
   def finding_status_field(form, inline = true, disabled = false)
     finding = form.object
-    options = finding.next_status_list.except(:repeated).map do |k, v|
-      [t(:"finding.status_#{k}"), v]
-    end
+    statuses = finding.repeated? ?
+      finding.next_status_list : finding.next_status_list.except(:repeated)
+    options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
 
     form.select :state, sort_options_array(options),
       {:prompt => true},
@@ -11,14 +11,19 @@ module FindingsHelper
       :disabled => (disabled || finding.unconfirmed?)}
   end
 
-  def finding_original_if_field(form, readonly)
-    review = form.object.control_objective_item.try(:review)
-    findings = (review.try(:finding_review_assignments) || []).map do |fra|
-      [fra.finding, fra.finding_id]
+  def finding_repeated_of_if_field(form, readonly)
+    if form.object.repeated_of
+      text_field_tag :repeated_of_finding, form.object.repeated_of, :disabled => true
+    else
+      review = form.object.control_objective_item.try(:review)
+      fras = (review.try(:finding_review_assignments) || []).reject do |fra|
+        fra.finding.repeated?
+      end
+      findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
+      
+      form.select :repeated_of_id, findings, {:prompt => true},
+        {:disabled => readonly}
     end
-    
-    form.select :original_id, findings, {:prompt => true},
-      {:disabled => readonly}
   end
 
   def finding_follow_up_date_text(finding)

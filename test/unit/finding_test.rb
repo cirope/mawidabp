@@ -16,7 +16,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'search' do
     finding = findings(:bcra_A4609_data_proccessing_impact_analisys_weakness)
     assert_kind_of Finding, @finding
-    assert_equal finding.original_id, @finding.original_id
+    assert_equal finding.repeated_of_id, @finding.repeated_of_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
     assert_equal finding.review_code, @finding.review_code
@@ -692,35 +692,40 @@ class FindingTest < ActiveSupport::TestCase
   test 'mark as duplicated' do
     finding = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
-    original = Finding.find(findings(
+    repeated_of = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
-    assert_not_equal original.origination_date, finding.origination_date
-    assert !original.repeated?
-    assert finding.update_attributes(:original_id => original.id)
-    assert original.reload.repeated?
-    assert finding.reload.original
-    assert_equal original.origination_date, finding.origination_date
+    assert_equal 0, finding.repeated_ancestors.size
+    assert_equal 0, repeated_of.repeated_children.size
+    assert_not_equal repeated_of.origination_date, finding.origination_date
+    assert !repeated_of.repeated?
+    assert finding.update_attributes(:repeated_of_id => repeated_of.id)
+    assert repeated_of.reload.repeated?
+    assert finding.reload.repeated_of
+    assert_equal repeated_of.origination_date, finding.origination_date
+    assert_equal 1, finding.repeated_ancestors.size
+    assert_equal 1, repeated_of.repeated_children.size
+    assert_equal repeated_of, finding.repeated_root
 
     # Intentar asignar otra relacionada
-    original = Finding.find(
+    repeated_of = Finding.find(
       findings(:iso_27000_security_policy_3_1_item_weakness).id)
 
     assert_raise RuntimeError do
-      finding.update_attributes(:original_id => original.id)
+      finding.update_attributes(:repeated_of_id => repeated_of.id)
     end
   end
 
-  test 'not mark as duplicated if original is not included in review' do
+  test 'not mark as duplicated if repeated_of is not included in review' do
     finding = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
-    original = Finding.find(findings(
+    repeated_of = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
 
     finding.review.finding_review_assignments.clear
 
     assert_raise RuntimeError do
-      finding.update_attributes(:original_id => original.id)
+      finding.update_attributes(:repeated_of_id => repeated_of.id)
     end
   end
 

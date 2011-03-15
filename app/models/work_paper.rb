@@ -216,7 +216,7 @@ class WorkPaper < ActiveRecord::Base
       end
 
       FileUtils.rm Dir.glob(File.join(File.dirname(pdf_filename), '*.pdf'))
-      FileUtils.rm original_filename
+      FileUtils.rm original_filename if File.exists?(original_filename)
       
       self.file_model.update_attributes(
         :file_file_name => File.basename(zip_filename),
