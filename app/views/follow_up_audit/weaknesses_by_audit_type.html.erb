@@ -8,7 +8,7 @@
   </h1>
   <% @audit_types.each do |type| %>
     <h1 class="center_title">
-      <%= t("conclusion_committee_report.findings_type_#{type}") %>
+      <%= t(:"conclusion_committee_report.findings_type_#{type}") %>
     </h1>
     <% unless @data[period][type].blank? %>
       <% @data[period][type].each do |data_item| %>
@@ -65,6 +65,12 @@
                 <% end %>
               <% end %>
             </div>
+            <% if bu_data[:repeated_count] > 0 %>
+              <p style="margin-bottom: .5em;">
+                <%= t(:'follow_up_committee.repeated_count',
+                  :count => bu_data[:repeated_count]) %>
+              </p>
+            <% end %>
           <% end %>
         </div>
       <% end %>

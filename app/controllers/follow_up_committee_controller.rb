@@ -75,6 +75,7 @@ class FollowUpCommitteeController < ApplicationController
           'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
         column_data = []
         review_scores = []
+        repeated_count = 0
         name = but.name
 
         conclusion_reviews.for_period(period).each do |c_r|
@@ -105,7 +106,12 @@ class FollowUpCommitteeController < ApplicationController
                 sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
               weaknesses_count[w.risk_text] ||= 0
-              weaknesses_count[w.risk_text] += 1
+              
+              if w.repeated?
+                repeated_count += 1
+              else
+                weaknesses_count[w.risk_text] += 1
+              end
             end
 
             weaknesses_count_text = weaknesses_count.values.sum == 0 ?
@@ -114,9 +120,10 @@ class FollowUpCommitteeController < ApplicationController
             process_control_text = process_controls.sort do |pc1, pc2|
               pc1[1] <=> pc2[1]
             end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
-            oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
-              c_r.review.final_oportunities.count.to_s :
-              t(:'conclusion_committee_report.synthesis_report.without_oportunities')
+            oportunities_count_text = c_r.review.oportunities.not_repeated.count > 0 ?
+              c_r.review.oportunities.not_repeated.count.to_s :
+              t(:'follow_up_committee.synthesis_report.without_oportunities')
+            repeated_count += c_r.review.oportunities.repeated.count
 
             review_scores << c_r.review.effectiveness
             column_data << {
@@ -138,7 +145,8 @@ class FollowUpCommitteeController < ApplicationController
           :external => but.external,
           :columns => columns,
           :column_data => column_data,
-          :review_scores => review_scores
+          :review_scores => review_scores,
+          :repeated_count => repeated_count
         }
       end
     end
@@ -200,7 +208,7 @@ class FollowUpCommitteeController < ApplicationController
         pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
         pdf.text(
-          t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+          t(:'follow_up_committee.synthesis_report.organization_score_note',
             :audit_types =>
               @audits_by_business_unit[period].map { |data|
                 data[:name]
@@ -256,6 +264,7 @@ class FollowUpCommitteeController < ApplicationController
             end
             table.column_order = @column_order
             table.split_rows = true
+            table.row_gap = (PDF_FONT_SIZE * 1.25).round
             table.font_size = (PDF_FONT_SIZE * 0.75).round
             table.shade_color = Color::RGB.from_percentage(95, 95, 95)
             table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
@@ -269,7 +278,7 @@ class FollowUpCommitteeController < ApplicationController
           scores = data[:review_scores]
 
           unless scores.blank?
-            title = t(:'conclusion_committee_report.synthesis_report.generic_score_average',
+            title = t(:'follow_up_committee.synthesis_report.generic_score_average',
               :audit_type => data[:name])
             text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
           else
@@ -279,6 +288,11 @@ class FollowUpCommitteeController < ApplicationController
           pdf.move_pointer PDF_FONT_SIZE
 
           pdf.text text, :font_size => PDF_FONT_SIZE
+          
+          if data[:repeated_count] > 0
+            pdf.text(t(:'follow_up_committee.synthesis_report.repeated_count',
+                :count => data[:repeated_count]), :font_size => PDF_FONT_SIZE)
+          end
         else
           pdf.text t(:'follow_up_committee.synthesis_report.without_audits_in_the_period')
         end
@@ -324,10 +338,12 @@ class FollowUpCommitteeController < ApplicationController
       @oportunities_data[period] ||= []
       total_weaknesses_audit_cost, total_weaknesses_audited_cost = 0, 0
       total_oportunities_audit_cost, total_oportunities_audited_cost = 0, 0
-      weaknesses_by_review = Weakness.list_all_by_date(@from_date, @to_date, false).
-        finals(false).for_period(period).group_by(&:review)
-      oportunities_by_review  = Oportunity.list_all_by_date(@from_date, @to_date, false).
-        finals(false).for_period(period).group_by(&:review)
+      weaknesses_by_review = Weakness.with_status_for_report.list_all_by_date(
+        @from_date, @to_date, false).finals(false).for_period(period).group_by(
+        &:review)
+      oportunities_by_review = Oportunity.with_status_for_report.list_all_by_date(
+        @from_date, @to_date, false).finals(false).for_period(period).group_by(
+        &:review)
 
       unless weaknesses_by_review.blank?
         weaknesses_by_review.each do |review, weaknesses|

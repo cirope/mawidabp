@@ -123,6 +123,8 @@ class Finding < ActiveRecord::Base
   scope :with_prefix, lambda { |prefix|
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
+  scope :repeated, where(:state => STATUS[:repeated])
+  scope :not_repeated, where('state <> ?', STATUS[:repeated])
   scope :all_for_reallocation_with_review, lambda { |review|
     includes(:control_objective_item => :review).where(
       :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false
@@ -285,19 +287,20 @@ class Finding < ActiveRecord::Base
     ).where(
       [
         "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
-        "#{Period.table_name}.organization_id = :organization_id",
-        'state IN (:states)'
+        "#{Period.table_name}.organization_id = :organization_id"
       ].join(' AND '),
       {
         :begin => from_date, :end => to_date,
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :states => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
+        :organization_id => GlobalModelConfig.current_organization_id
       }
     ).order(
       order ?
         ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
     )
   }
+  scope :with_status_for_report, where(
+    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
+  )
   scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
     includes(
       :control_objective_item => {:review => [:period, :conclusion_final_review]}

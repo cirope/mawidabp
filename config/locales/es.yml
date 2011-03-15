@@ -541,6 +541,9 @@ es:
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
+    repeated_count:
+      one: "Con una observación / oportunidad de mejora reiterada"
+      other: "Con %{count} observaciones / oportunidades de mejora reiteradas"
     expired: "Vencida"
     not_expired: "No vencida"
     from_date: "Desde"
@@ -578,6 +581,7 @@ es:
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average: "Promedio de las calificaciones de %{audit_type}"
+      repeated_count: "Observaciones / oportunidades de mejora reiteradas: %{count}"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:

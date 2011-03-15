@@ -10,7 +10,7 @@
     <% @audit_types.each do |audit_type| %>
       <% audit_type_symbol = audit_type.kind_of?(Symbol) ? audit_type : audit_type.first %>
       <h1 class="center_title">
-        <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
+        <%= t(:"conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
       </h1>
       <% (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i| %>
         <% if audit_type.kind_of?(Symbol) %>
@@ -23,6 +23,12 @@
           :table_data => @tables_data[period][key],
           :being_implemented_resume => @being_implemented_resumes[period][key],
           :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
+        <% if @repeated_counts[period][key] > 0 %>
+          <p>
+            <%= t(:'follow_up_committee.repeated_count',
+              :count => @repeated_counts[period][key]) %>
+          </p>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

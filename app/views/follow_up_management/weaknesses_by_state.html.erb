@@ -9,7 +9,7 @@
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.kind_of?(Symbol) ? audit_type : audit_type.first %>
     <h1 class="center_title">
-      <%= t "conclusion_committee_report.findings_type_#{audit_type_symbol}" %>
+      <%= t :"conclusion_committee_report.findings_type_#{audit_type_symbol}" %>
     </h1>
 
     <% (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i| %>
@@ -21,10 +21,11 @@
       <% end %>
       <% weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"] %>
       <% oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"] %>
+      <% repeated_count = @weaknesses_counts[period]["#{key}_repeated"] %>
       <% total_weaknesses = weaknesses_count.values.sum %>
       <% total_oportunities = oportunities_count.values.sum %>
 
-      <% if (total_oportunities + total_weaknesses) > 0 %>
+      <% if (total_oportunities + total_weaknesses + repeated_count) > 0 %>
         <table class="summary_table" style="margin: 1em;">
           <thead>
             <tr>
@@ -52,7 +53,7 @@
               <% weaknesses_percentage = total_weaknesses > 0 ? w_count.to_f / total_weaknesses * 100 : 0.0 %>
               <% oportunities_percentage = total_oportunities > 0 ? o_count.to_f / total_oportunities * 100 : 0.0 %>
               <tr>
-                <td><strong><%= t("finding.status_#{state.first}") %></strong></td>
+                <td><strong><%= t(:"finding.status_#{state.first}") %></strong></td>
                 <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" +
                   (state.first == :being_implemented && w_count != 0 ? ' *' : '') %></td>
                 <% if audit_type_symbol == :internal %>
@@ -74,6 +75,11 @@
 
         <% unless @being_implemented_resumes[period][key].blank? %>
           <p style="margin-left: 1em;">* <%= raw @being_implemented_resumes[period][key] %></p>
+        <% end %>
+        <% if repeated_count > 0 %>
+          <p style="margin-left: 1em;">
+            <%= t(:'follow_up_committee.repeated_count', :count => repeated_count) %>
+          </p>
         <% end %>
       <% else %>
         <p style="margin: 1em;">

@@ -218,7 +218,9 @@ class ExecutionReportsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @audit_types = [:internal, :external]
     @counts = []
-    @status = Finding::STATUS.sort { |s1, s2| s1.last <=> s2.last }
+    @status = Finding::STATUS.except(:repeated).sort do |s1, s2|
+      s1.last <=> s2.last
+    end
     @reviews = Review.list_all_without_final_review_by_date(
         @from_date, @to_date)
 

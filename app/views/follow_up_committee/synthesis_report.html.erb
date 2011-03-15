@@ -55,11 +55,17 @@
           <% end %>
         </tbody>
       </table>
-      <p style="margin: 1em">
+      <p style="margin: 1em 1em .5em 1em">
         <%= synthesis_report_score_average(
-         t(:'conclusion_committee_report.synthesis_report.generic_score_average',
+         t(:'follow_up_committee.synthesis_report.generic_score_average',
            :audit_type => data[:name]), data[:review_scores]) %>
       </p>
+      <% if data[:repeated_count] > 0 %>
+        <p style="margin-left: 1em;">
+          <%= t(:'follow_up_committee.synthesis_report.repeated_count',
+            :count => data[:repeated_count]) %>
+        </p>
+      <% end %>
     <% else %>
       <p style="margin: 1em;">
         <em><%= t :'follow_up_committee.synthesis_report.without_audits_in_the_period' %></em>

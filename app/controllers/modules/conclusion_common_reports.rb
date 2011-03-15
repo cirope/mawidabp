@@ -29,13 +29,15 @@ module ConclusionCommonReports
           end
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
-            Weakness.list_all_by_date(@from_date, @to_date, false).send(
-              "#{audit_type_symbol}_audit").for_period(period).finals(
-              true).where(conditions).group(:state).count
+            Weakness.list_all_by_date(@from_date, @to_date, false).
+              with_status_for_report.send(:"#{audit_type_symbol}_audit").
+              for_period(period).finals(true).where(conditions).group(
+              :state).count
           @weaknesses_counts[period]["#{key}_oportunities"] =
-            Oportunity.list_all_by_date(@from_date, @to_date, false).send(
-              "#{audit_type_symbol}_audit").for_period(period).finals(
-              true).where(conditions).group(:state).count
+            Oportunity.list_all_by_date(@from_date, @to_date, false).
+            with_status_for_report.send(:"#{audit_type_symbol}_audit").
+            for_period(period).finals(true).where(conditions).group(
+            :state).count
         end
       end
     end
@@ -215,8 +217,9 @@ module ConclusionCommonReports
             statuses.each do |s|
               weaknesses_count[s[1]] ||= {}
               weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
-                @from_date, @to_date, false).send("#{audit_type_symbol}_audit").
-                for_period(period).finals(true).where(
+                @from_date, @to_date, false).with_status_for_report.send(
+                :"#{audit_type_symbol}_audit").for_period(period).finals(
+                true).where(
                   {:state => s[1], :risk => rl[1]}.merge(conditions || {})
                 ).count
               weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
@@ -311,7 +314,7 @@ module ConclusionCommonReports
         @data[period][audit_type] = []
         reviews_by_audit_type = {}
         conclusion_final_review = ConclusionFinalReview.list_all_by_date(
-          @from_date, @to_date).send("#{audit_type}_audit").for_period(period)
+          @from_date, @to_date).send(:"#{audit_type}_audit").for_period(period)
 
         conclusion_final_review.each do |cfr|
           business_unit = cfr.review.plan_item.business_unit

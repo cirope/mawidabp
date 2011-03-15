@@ -30,21 +30,28 @@ module FollowUpCommonReports
           end
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
-            Weakness.list_all_by_date(@from_date, @to_date, false).send(
-              :"#{audit_type_symbol}_audit").finals(false).for_period(
-              period).where(conditions).group(:state).count
+            Weakness.with_status_for_report.list_all_by_date(
+            @from_date, @to_date, false).send(
+            :"#{audit_type_symbol}_audit").finals(false).for_period(
+            period).where(conditions).group(:state).count
           @weaknesses_counts[period]["#{key}_oportunities"] =
-            Oportunity.list_all_by_date(@from_date, @to_date, false).send(
+            Oportunity.with_status_for_report.list_all_by_date(
+            @from_date, @to_date, false).send(
+            :"#{audit_type_symbol}_audit").finals(false).for_period(
+            period).where(conditions).group(:state).count
+          @weaknesses_counts[period]["#{key}_repeated"] =
+            Finding.list_all_by_date(@from_date, @to_date, false).send(
               :"#{audit_type_symbol}_audit").finals(false).for_period(
-              period).where(conditions).group(:state).count
+              period).repeated.where(conditions).count
           being_implemented_counts = {:current => 0, :stale => 0,
             :current_rescheduled => 0, :stale_rescheduled => 0}
 
           @status.each do |state|
             if state.first == :being_implemented
-              being_implemented = Weakness.list_all_by_date(@from_date,
-                @to_date, false).send(:"#{audit_type_symbol}_audit").finals(
-                false).for_period(period).being_implemented.where(conditions)
+              being_implemented = Weakness.with_status_for_report.
+                list_all_by_date(@from_date, @to_date, false).send(
+                :"#{audit_type_symbol}_audit").finals(false).for_period(
+                period).being_implemented.where(conditions)
 
               being_implemented.each do |w|
                 unless w.stale?
@@ -118,10 +125,11 @@ module FollowUpCommonReports
 
           weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
           oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
+          repeated_count = @weaknesses_counts[period]["#{key}_repeated"]
           total_weaknesses = weaknesses_count.values.sum
           total_oportunities = oportunities_count.values.sum
 
-          if (total_weaknesses + total_oportunities) > 0
+          if (total_weaknesses + total_oportunities + repeated_count) > 0
             columns = {
               'state' => [Finding.human_attribute_name(:state), 30],
               'weaknesses_count' => [
@@ -197,6 +205,12 @@ module FollowUpCommonReports
 
             add_being_implemented_resume(pdf,
               @being_implemented_resumes[period][key])
+
+            if repeated_count > 0
+              pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+              pdf.text t(:'follow_up_committee.repeated_count',
+                :count => repeated_count, :font_size => PDF_FONT_SIZE)
+            end
           else
             pdf.text t(:'follow_up_committee.without_weaknesses'),
               :font_size => PDF_FONT_SIZE
@@ -225,6 +239,7 @@ module FollowUpCommonReports
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
+    @repeated_counts = {}
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
     risk_levels = parameter_in(@auth_organization.id,
@@ -244,6 +259,10 @@ module FollowUpCommonReports
             :current_rescheduled => 0, :stale_rescheduled => 0}
           audit_type_symbol = audit_type.kind_of?(Symbol) ?
             audit_type : audit_type.first
+          repeated_count = Finding.list_all_by_date(
+            @from_date, @to_date, false).send(
+            :"#{audit_type_symbol}_audit").finals(false).repeated.for_period(
+            period).count
 
           if audit_type.kind_of?(Symbol)
             key = audit_type
@@ -260,7 +279,8 @@ module FollowUpCommonReports
             statuses.each do |s|
               weaknesses_count[s[1]] ||= {}
                 weaknesses_count[s[1]][rl[1]] =
-                  Weakness.list_all_by_date(@from_date, @to_date, false).send(
+                  Weakness.with_status_for_report.list_all_by_date(
+                    @from_date, @to_date, false).send(
                     :"#{audit_type_symbol}_audit").finals(false).for_period(
                     period).where(
                       {:state => s[1], :risk => rl[1]}.merge(conditions || {})
@@ -268,9 +288,10 @@ module FollowUpCommonReports
                 weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
               if s.first == :being_implemented
-                being_implemented = Weakness.list_all_by_date(
-                  @from_date, @to_date, false).send(:"#{audit_type_symbol}_audit").
-                  finals(false).for_period(period).being_implemented.where(
+                being_implemented = Weakness.with_status_for_report.
+                  list_all_by_date(@from_date, @to_date, false).send(
+                  :"#{audit_type_symbol}_audit").finals(false).for_period(
+                  period).being_implemented.where(
                     {:risk => rl[1]}.merge(conditions || {})
                   )
 
@@ -309,6 +330,8 @@ module FollowUpCommonReports
             end
           end
 
+          @repeated_counts[period] ||= {}
+          @repeated_counts[period][key] = repeated_count
           @being_implemented_resumes[period] ||= {}
           @being_implemented_resumes[period][key] =
             being_implemented_resume_from_counts(being_implemented_counts)
@@ -373,6 +396,13 @@ module FollowUpCommonReports
             @being_implemented_resumes[period][key])
           add_being_implemented_resume(pdf,
             @highest_being_implemented_resumes[period][key], 2)
+
+          if @repeated_counts[period][key] > 0
+            pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+            pdf.text t(:'follow_up_committee.repeated_count',
+              :count => @repeated_counts[period][key],
+              :font_size => PDF_FONT_SIZE)
+          end
         end
       end
     end
@@ -421,6 +451,7 @@ module FollowUpCommonReports
         reviews_by_audit_type.each do |bu_type, bu_data|
           title = "#{Review.human_attribute_name(:audit_type)}: #{bu_type}"
           business_units = {}
+          repeated_count = 0
 
           bu_data.values.each do |cfrs|
             unless cfrs.empty?
@@ -436,6 +467,8 @@ module FollowUpCommonReports
                 review = cfr.review
                 weaknesses |= review.weaknesses
                 oportunities |= review.oportunities
+                repeated_count += review.weaknesses.repeated.count +
+                  review.oportunities.repeated.count
               end
 
               grouped_weaknesses = weaknesses.group_by(&:state)
@@ -456,7 +489,7 @@ module FollowUpCommonReports
                     o_count.to_f / total_oportunities * 100 : 0.0
 
                   oportunities_table_data << {
-                    'state' => "<b>#{t("finding.status_#{s[0]}")}</b>".to_iso,
+                    'state' => "<b>#{t(:"finding.status_#{s[0]}")}</b>".to_iso,
                     'count' =>
                       "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
                   }
@@ -533,6 +566,7 @@ module FollowUpCommonReports
 
               business_units[business_unit] = {
                 :conclusion_reviews => cfrs,
+                :repeated_count => repeated_count,
                 :weaknesses_table_data => weaknesses_table_data,
                 :oportunities_table_data => oportunities_table_data,
                 :being_implemented_resume => being_implemented_resume,
@@ -670,6 +704,13 @@ module FollowUpCommonReports
                 else
                   pdf.text t(:'follow_up_committee.without_oportunities')
                 end
+              end
+
+              if bu_data[:repeated_count] > 0
+                pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+                pdf.text t(:'follow_up_committee.repeated_count',
+                  :count => bu_data[:repeated_count],
+                  :font_size => PDF_FONT_SIZE)
               end
             end
           end
