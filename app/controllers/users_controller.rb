@@ -708,6 +708,8 @@ class UsersController < ApplicationController
   # nil.
   # _id_::  ID (campo usuario) del usuario que se quiere recuperar
   def find_with_organization(id, field = :user) #:doc:
+    id = field == :id ? id.to_i : id
+    
     User.includes(:organizations).where(
       [
         "#{User.table_name}.#{field} = :id",
