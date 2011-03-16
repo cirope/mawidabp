@@ -1,4 +1,4 @@
-class AddOriginalIdToFindings < ActiveRecord::Migration
+class AddRepeatedOfIdToFindings < ActiveRecord::Migration
   def self.up
     add_column :findings, :repeated_of_id, :integer
 
