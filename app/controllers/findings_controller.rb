@@ -382,7 +382,7 @@ class FindingsController < ApplicationController
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    unless @auth_user.committee?
+    if @auth_user.can_act_as_audited?
       includes << :users
       conditions[User.table_name] = {
         :id => @auth_user.descendants.map(&:id) + [@auth_user.id]

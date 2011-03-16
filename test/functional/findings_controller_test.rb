@@ -149,7 +149,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit finding' do
-    perform_auth users(:supervisor_second_user)
+    perform_auth users(:audited_second_user)
     get :edit, :completed => 'complete',
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
