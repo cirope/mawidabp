@@ -709,6 +709,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
   add_foreign_key "finding_user_assignments", "users", :name => "finding_user_assignments_user_id_fk", :dependent => :restrict
 
   add_foreign_key "findings", "control_objective_items", :name => "findings_control_objective_item_id_fk", :dependent => :restrict
+  add_foreign_key "findings", "findings", :name => "findings_repeated_of_id_fk", :column => "repeated_of_id", :dependent => :restrict
 
   add_foreign_key "help_items", "help_contents", :name => "help_items_help_content_id_fk", :dependent => :restrict
   add_foreign_key "help_items", "help_items", :name => "help_items_parent_id_fk", :column => "parent_id", :dependent => :restrict
