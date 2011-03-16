@@ -405,11 +405,16 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
 
-    audited_users = finding.users.select { |u| u.can_act_as_audited? }
+    audited_users = finding.users.select(&:can_act_as_audited?)
 
     unless audited_users.blank?
+      process_owners = finding.process_owners
+      users = audited_users.map do |u|
+        u.full_name + (process_owners.include?(u) ?
+            " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" : '')
+      end
       body << "<b>#{finding.class.human_attribute_name(:user_ids)}:</b> " +
-        "#{audited_users.map { |u| u.full_name }.join('; ')}\n"
+        "#{users.join('; ')}\n"
     end
 
     unless finding.audit_comments.blank?
