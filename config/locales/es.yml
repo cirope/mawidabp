@@ -542,8 +542,8 @@ es:
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
     repeated_count:
-      one: "Con una observación / oportunidad de mejora reiterada"
-      other: "Con %{count} observaciones / oportunidades de mejora reiteradas"
+      one: "Una observación / oportunidad de mejora reiterada"
+      other: "%{count} observaciones / oportunidades de mejora reiteradas"
     expired: "Vencida"
     not_expired: "No vencida"
     from_date: "Desde"
@@ -581,7 +581,9 @@ es:
       without_weaknesses: "Sin observaciones"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average: "Promedio de las calificaciones de %{audit_type}"
-      repeated_count: "Observaciones / oportunidades de mejora reiteradas: %{count}"
+      repeated_count:
+        one: "Una observación / oportunidad de mejora reiterada"
+        other: "%{count} observaciones / oportunidades de mejora reiteradas"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:
@@ -926,11 +928,11 @@ es:
     bundle: "Legajo"
     copy: "Copiar"
     view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
-    findings_label: "Observaciones / Oportunidades de mejora reiteradas"
-    add_finding_assignment: "Agregar observación / oportunidad de mejora reiterada"
+    findings_label: "Observaciones / Oportunidades de mejora pendientes"
+    add_finding_assignment: "Agregar observación / oportunidad de mejora pendiente"
     add_user_assignment: "Agregar usuario relacionado"
-    suggest_findings: 'Sugerir observaciones / oportunidades de mejora reiteradas'
-    without_suggested_findings: 'Sin observaciones / oportunidades de mejora reiteradas'
+    suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
+    without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1719,10 +1721,10 @@ es:
           file_content_type: "Anexo (tipo de archivo)"
           file_file_size: "Anexo (tamaño de archivo)"
         finding_review_assignments:
-          one: "Observación / Oportunidad de mejora reiterada"
-          other: "Observaciones / Oportunidades de mejora reiteradas"
-          finding: "Observación / Oportunidad de mejora reiterada"
-          finding_id: "Observación / Oportunidad de mejora reiterada"
+          one: "Observación / Oportunidad de mejora pendiente"
+          other: "Observaciones / Oportunidades de mejora pendientes"
+          finding: "Observación / Oportunidad de mejora pendiente"
+          finding_id: "Observación / Oportunidad de mejora pendiente"
         review_user_assignments:
           one: "Integrante"
           other: "Integrantes"

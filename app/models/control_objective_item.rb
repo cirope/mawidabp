@@ -361,59 +361,64 @@ class ControlObjectiveItem < ActiveRecord::Base
       "#{self.control_objective_text.chomp}\n"
 
     unless finding.review_code.blank?
-      head << "<b>#{finding.class.human_attribute_name('review_code')}:</b> " +
+      head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
         "#{finding.review_code.chomp}\n"
     end
 
+    unless finding.repeated_ancestors.blank?
+      head << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
+        " #{finding.repeated_ancestors.join(' | ')}\n"
+    end
+
     unless finding.description.blank?
-      head << "<b>#{finding.class.human_attribute_name('description')}:</b> " +
+      head << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         finding.description.chomp
     end
 
     if weakness && !finding.risk_text.blank?
-      body << "<b>#{Weakness.human_attribute_name('risk')}:</b> " +
+      body << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
         "#{finding.risk_text.chomp}\n"
     end
 
     if weakness && !finding.effect.blank?
-      body << "<b>#{Weakness.human_attribute_name('effect')}:</b> " +
+      body << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
         "#{finding.effect.chomp}\n"
     end
 
     if weakness && !finding.audit_recommendations.blank?
-      body << "<b>#{Weakness.human_attribute_name('audit_recommendations')}: " +
+      body << "<b>#{Weakness.human_attribute_name(:audit_recommendations)}: " +
         "</b>#{finding.audit_recommendations}\n"
     end
 
     unless finding.answer.blank?
-      body << "<b>#{finding.class.human_attribute_name('answer')}:</b> " +
+      body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
         "#{finding.answer.chomp}\n"
     end
 
     if weakness && !finding.implemented_audited?
       unless finding.follow_up_date.blank?
-        body << "<b>#{Weakness.human_attribute_name('follow_up_date')}:</b> " +
+        body << "<b>#{Weakness.human_attribute_name(:follow_up_date)}:</b> " +
           "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
       end
     elsif !finding.solution_date.blank?
-      body << "<b>#{finding.class.human_attribute_name('solution_date')}:"+
+      body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
 
     audited_users = finding.users.select { |u| u.can_act_as_audited? }
 
     unless audited_users.blank?
-      body << "<b>#{finding.class.human_attribute_name('user_ids')}:</b> " +
+      body << "<b>#{finding.class.human_attribute_name(:user_ids)}:</b> " +
         "#{audited_users.map { |u| u.full_name }.join('; ')}\n"
     end
 
     unless finding.audit_comments.blank?
-      body << "<b>#{finding.class.human_attribute_name('audit_comments')}:" +
+      body << "<b>#{finding.class.human_attribute_name(:audit_comments)}:" +
         "</b> #{finding.audit_comments.chomp}\n"
     end
 
     unless finding.state_text.blank?
-      body << "<b>#{finding.class.human_attribute_name('state')}:</b> " +
+      body << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
         finding.state_text.chomp
     end
 

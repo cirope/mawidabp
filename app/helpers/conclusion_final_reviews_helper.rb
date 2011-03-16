@@ -91,42 +91,47 @@ module ConclusionFinalReviewsHelper
 
     unless finding.review_code.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(
-      'review_code')}:</b> #{h(finding.review_code)}"
+      :review_code)}:</b> #{h(finding.review_code)}"
+    end
+
+    unless finding.repeated_ancestors.blank?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :repeated_of_id)}:</b> #{h(finding.repeated_ancestors.join(' | '))}"
     end
 
     unless finding.description.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(
-      'description')}:</b> #{h(finding.description)}"
+      :description)}:</b> #{h(finding.description)}"
     end
 
     if weakness && !finding.risk_text.blank?
-      body_rows << "<b>#{Weakness.human_attribute_name('risk')}:</b> " +
+      body_rows << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
         "#{h(finding.risk_text)}"
     end
 
     if weakness && !finding.effect.blank?
-      body_rows << "<b>#{Weakness.human_attribute_name('effect')}:</b> " +
+      body_rows << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
         "#{h(finding.effect)}"
     end
 
     if weakness && !finding.audit_recommendations.blank?
       body_rows << "<b>#{Weakness.human_attribute_name(
-      'audit_recommendations')}: </b>#{h(finding.audit_recommendations)}"
+      :audit_recommendations)}: </b>#{h(finding.audit_recommendations)}"
     end
 
     unless finding.answer.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name('answer')}:</b> " +
+      body_rows << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
         "#{h(finding.answer)}"
     end
 
     if weakness && !finding.implemented_audited?
       unless finding.follow_up_date.blank?
         body_rows << "<b>#{Weakness.human_attribute_name(
-        'follow_up_date')}:</b> #{I18n.l(finding.follow_up_date,
+        :follow_up_date)}:</b> #{I18n.l(finding.follow_up_date,
         :format => :long)}"
       end
     elsif !finding.solution_date.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name('solution_date')}:"+
+      body_rows << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}"
     end
 
@@ -134,16 +139,16 @@ module ConclusionFinalReviewsHelper
 
     unless audited_users.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(
-      'user_ids')}:</b> #{h(audited_users.map { |u| u.full_name }.join('; '))}"
+      :user_ids)}:</b> #{h(audited_users.map { |u| u.full_name }.join('; '))}"
     end
 
     unless finding.audit_comments.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(
-      'audit_comments')}: </b> #{h(finding.audit_comments)}"
+      :audit_comments)}: </b> #{h(finding.audit_comments)}"
     end
 
     unless finding.state_text.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name('state')}:</b> " +
+      body_rows << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
         h(finding.state_text)
     end
 

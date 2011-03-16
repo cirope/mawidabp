@@ -51,6 +51,54 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       end
     end
 
+    final_findings_count =
+      (review.final_weaknesses + review.final_oportunities).size
+
+    assert_equal findings_count, final_findings_count
+    assert_not_equal 0, Finding.finals(true).count
+    assert Finding.finals(true).all? { |f| f.parent }
+  end
+
+  # Prueba la creación de un informe final con observaciones reiteradas
+  test 'create with repeated findings' do
+    review = Review.find reviews(:review_with_conclusion).id
+    findings = review.weaknesses + review.oportunities
+    repeated_id = findings(
+      :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+
+    assert findings.size > 0
+
+    assert_difference 'Finding.repeated.count' do
+      assert review.update_attributes(
+        :finding_review_assignments_attributes => {
+          :new_1 => {:finding_id => repeated_id}
+        }
+      )
+      assert findings.detect(&:being_implemented?).update_attributes(
+        :repeated_of_id => repeated_id
+      )
+    end
+
+    assert_difference 'ConclusionFinalReview.count' do
+      assert_difference 'Finding.count', findings.size do
+        @conclusion_review = ConclusionFinalReview.new({
+          :review => review,
+          :issue_date => Time.now.to_date,
+          :close_date => 2.days.from_now.to_date,
+          :applied_procedures => 'New applied procedures',
+          :conclusion => 'New conclusion'
+        }, false)
+
+        assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
+        # Asegurarse que le asigna el tipo correcto
+        assert_equal 'ConclusionFinalReview', @conclusion_review.type
+      end
+    end
+
+    final_findings_count =
+      (review.final_weaknesses + review.final_oportunities).size
+
+    assert_equal findings.size, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
     assert Finding.finals(true).all? { |f| f.parent }
   end

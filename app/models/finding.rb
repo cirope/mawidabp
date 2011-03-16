@@ -539,7 +539,9 @@ class Finding < ActiveRecord::Base
       raise 'Not included in review' if is_not_included
 
       if self.repeated_of_id_was.nil?
-        raise 'Original can not be repeated' if self.repeated_of.repeated?
+        if self.repeated_of.repeated? && !self.final
+          raise 'Original can not be repeated'
+        end
         
         self.repeated_of.state = STATUS[:repeated]
         self.origination_date = self.repeated_of.origination_date
