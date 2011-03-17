@@ -84,7 +84,7 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/1/edit
   def edit
     @title = t :'procedure_control.edit_title'
-    @procedure_control = find_with_organization(params[:id])
+    @procedure_control = find_with_organization(params[:id], true)
   end
 
   # Crea un nuevo procedimiento de control siempre que cumpla con las
@@ -115,7 +115,7 @@ class ProcedureControlsController < ApplicationController
   # * PUT /procedure_controls/1.xml
   def update
     @title = t :'procedure_control.edit_title'
-    @procedure_control = find_with_organization(params[:id])
+    @procedure_control = find_with_organization(params[:id], true)
 
     respond_to do |format|
       if @procedure_control.update_attributes(params[:procedure_control])
@@ -151,7 +151,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/export_to_pdf/1
   def export_to_pdf
-    @procedure_control = find_with_organization(params[:id])
+    @procedure_control = find_with_organization(params[:id], true)
     pdf = PDF::Writer.create_generic_pdf :landscape, false
 
     pdf.start_page_numbering pdf.absolute_x_middle, (pdf.bottom_margin / 2.0),
@@ -333,8 +333,17 @@ class ProcedureControlsController < ApplicationController
   # procedimiento de control con ese ID o que no pertenece a la organización
   # con la que se autenticó el usuario) devuelve nil.
   # _id_::  ID del procedimiento de control que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ProcedureControl.includes(:period).where(
+  def find_with_organization(id, include_all = false) #:doc:
+    include = include_all ? [
+      :period, {
+        :procedure_control_items => [
+          {:process_control => :control_objectives},
+          {:procedure_control_subitems => :control}
+        ]
+      }
+    ] : [:period]
+    
+    ProcedureControl.includes(*include).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)
   end

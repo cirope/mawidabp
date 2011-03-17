@@ -18,7 +18,7 @@ class PlansController < ApplicationController
     @title = t :'plan.index_title'
     @plans = Plan.includes(:period).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).order(['period_id DESC', "#{Plan.table_name}.created_at DESC"]).paginate(
+    ).order("#{Period.table_name}.start DESC").paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
@@ -70,7 +70,7 @@ class PlansController < ApplicationController
   # * GET /plans/1/edit
   def edit
     @title = t :'plan.edit_title'
-    @plan = find_with_organization(params[:id])
+    @plan = find_with_organization(params[:id], true)
   end
 
   # Crea un nuevo plan de trabajo siempre que cumpla con las validaciones.
@@ -105,7 +105,7 @@ class PlansController < ApplicationController
   # * PUT /plans/1.xml
   def update
     @title = t :'plan.edit_title'
-    @plan = find_with_organization(params[:id])
+    @plan = find_with_organization(params[:id], true)
     @plan.plan_items.sort! do |pi_a, pi_b|
       pi_a.order_number <=> pi_b.order_number
     end
@@ -147,7 +147,7 @@ class PlansController < ApplicationController
   # 
   # * GET /plans/export_to_pdf/1
   def export_to_pdf
-    @plan = find_with_organization(params[:id])
+    @plan = find_with_organization(params[:id], true)
     @plan.to_pdf @auth_organization, !params[:include_details].blank?
 
     respond_to do |format|
@@ -169,7 +169,7 @@ class PlansController < ApplicationController
         "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
       ].join(' OR ')
 
-      parameters["business_unit_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"business_unit_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @business_units = BusinessUnit.includes(:business_unit_type).where(
@@ -195,7 +195,7 @@ class PlansController < ApplicationController
         "LOWER(#{Resource.table_name}.name) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @users = User.includes(:organizations, :resource).where(
@@ -219,8 +219,18 @@ class PlansController < ApplicationController
   # ese ID o que no pertenece a la organización con la que se autenticó el
   # usuario) devuelve nil.
   # _id_::  ID del plan de trabajo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Plan.includes(:period).where(
+  def find_with_organization(id, include_all = false) #:doc:
+    include = include_all ? [
+      :period, {
+        :plan_items => [
+          :business_unit,
+          :resource_utilizations,
+          {:review => :conclusion_final_review}
+        ]
+      }
+    ] : [:period]
+    
+    Plan.includes(*include).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)
   end
