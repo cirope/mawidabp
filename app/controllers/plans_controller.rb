@@ -81,9 +81,6 @@ class PlansController < ApplicationController
   def create
     @title = t :'plan.new_title'
     @plan = Plan.new(params[:plan])
-    @plan.plan_items.sort! do |pi_a, pi_b|
-      pi_a.order_number <=> pi_b.order_number
-    end
 
     respond_to do |format|
       if @plan.save
@@ -106,10 +103,7 @@ class PlansController < ApplicationController
   def update
     @title = t :'plan.edit_title'
     @plan = find_with_organization(params[:id], true)
-    @plan.plan_items.sort! do |pi_a, pi_b|
-      pi_a.order_number <=> pi_b.order_number
-    end
-
+    
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
         flash.notice = t :'plan.correctly_updated'

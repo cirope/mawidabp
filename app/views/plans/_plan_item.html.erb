@@ -32,7 +32,7 @@
       </div>
       <% else %>
         <%= text_field_tag "plan_item_business_unit_#{id}",
-          f.object.business_unit.name, :readonly => true %>
+          f.object.business_unit.name, :disabled => true %>
         <%= f.hidden_field :business_unit_id,
           :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}" %>

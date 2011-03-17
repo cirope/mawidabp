@@ -137,11 +137,11 @@ class PlanItem < ActiveRecord::Base
   end
 
   def material_resource_utilizations
-    self.resource_utilizations.select { |ru| ru.material? }
+    self.resource_utilizations.select(&:material?)
   end
 
   def human_resource_utilizations
-    self.resource_utilizations.select { |ru| ru.human?}
+    self.resource_utilizations.select(&:human?)
   end
 
   def plain_predecessors

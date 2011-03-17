@@ -81,24 +81,28 @@
     </div>
 
     <div id="plan_items">
-      <%= p_f.fields_for :plan_items, @plan.plan_items.sort do |pi_f| %>
-        <% mru_template = nil %>
-        <% content_for :js_extra do %>
-          <% hru_template ||= generate_template(pi_f, :resource_utilizations,
-            :object => ResourceUtilization.new(:resource_type => 'User'),
-            :partial => 'human_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') %>
-          <% mru_template ||= generate_template(pi_f, :resource_utilizations,
-            :object => ResourceUtilization.new(:resource_type => 'Resource'),
-            :partial => 'material_resource_utilization',
-            :child_index => 'NEW_SUBRECORD') %>
-          <%= raw "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-          <%= raw "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
-          <% mru_template = 0 %>
-          <% hru_template = 0 %>
+      <% count = 0 # TODO: esto debería desaparecer cuando corrijan un error en Rails %>
+      <% @plan.plan_items.sort.each do |pi| %>
+        <% index = (pi.new_record? ? 100000000 : 0) + (count += 1) %>
+        <%= p_f.fields_for :plan_items, pi, :child_index => index do |pi_f| %>
+          <% mru_template = nil %>
+          <% content_for :js_extra do %>
+            <% hru_template ||= generate_template(pi_f, :resource_utilizations,
+              :object => ResourceUtilization.new(:resource_type => 'User'),
+              :partial => 'human_resource_utilization',
+              :child_index => 'NEW_SUBRECORD') %>
+            <% mru_template ||= generate_template(pi_f, :resource_utilizations,
+              :object => ResourceUtilization.new(:resource_type => 'Resource'),
+              :partial => 'material_resource_utilization',
+              :child_index => 'NEW_SUBRECORD') %>
+            <%= raw "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
+            <%= raw "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
+            <% mru_template = 0 %>
+            <% hru_template = 0 %>
+          <% end %>
+          <%= render :partial => 'plan_item', :locals =>
+            {:f => pi_f, :is_dynamic => false} %>
         <% end %>
-        <%= render :partial => 'plan_item', :locals =>
-          {:f => pi_f, :is_dynamic => false} %>
       <% end %>
     </div>
   </div>

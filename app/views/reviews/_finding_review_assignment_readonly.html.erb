@@ -6,7 +6,10 @@
           :id => "hidden_finding_id_#{f.object.finding_id}" %>
         <%= f.object.finding.try(:to_s) %>
         <strong>[<%= f.object.finding.try(:state_text) %>]</strong> |
-        <%= link_to t(:'label.show'), finding_path('incomplete', f.object.finding) if f.object.finding %> |
+        <% if f.object.finding %>
+          <%= link_to t(:'label.show'), finding_path(
+            f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %> |
+        <% end %>
         <%= remove_item_link(f) unless readonly %>
       </li>
     </ul>
