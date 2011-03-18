@@ -212,8 +212,10 @@
 </div>
 
 <div id="links">
-  <b><%= link_to t(:'label.edit'), edit_finding_path(params[:completed],
-    @finding, :user_id => params[:user_id]) %></b> |
+  <% if @finding.pending? %>
+    <b><%= link_to t(:'label.edit'), edit_finding_path(params[:completed],
+      @finding, :user_id => params[:user_id]) %></b> |
+  <% end %>
   <% unless @auth_user.audited? %>
     <%= link_to t(:'finding.follow_up_report.download'),
       :action => :follow_up_pdf, :id => @finding %> |

@@ -451,13 +451,13 @@ module FollowUpCommonReports
         reviews_by_audit_type.each do |bu_type, bu_data|
           title = "#{Review.human_attribute_name(:audit_type)}: #{bu_type}"
           business_units = {}
-          repeated_count = 0
 
           bu_data.values.each do |cfrs|
             unless cfrs.empty?
               business_unit = cfrs.first.plan_item.business_unit
               weaknesses = []
               oportunities = []
+              repeated_count = 0
 
               cfrs.sort! do |cfr1, cfr2|
                 cfr1.review.effectiveness <=> cfr2.review.effectiveness
