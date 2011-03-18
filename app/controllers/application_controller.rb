@@ -53,13 +53,17 @@ class ApplicationController < ActionController::Base
 
   def load_user
     if @auth_user.nil? && session[:user_id]
-      @auth_user = User.find session[:user_id]
+      @auth_user = User.includes(
+        :organization_roles => {:role => :privileges}
+      ).find(session[:user_id])
     end
   end
 
   def load_organization
     if @auth_organization.nil? && session[:organization_id]
-      @auth_organization = Organization.find session[:organization_id]
+      @auth_organization = Organization.includes(:roles).find(
+        session[:organization_id]
+      )
     end
   end
 

@@ -15,12 +15,14 @@ class CreateReviews < ActiveRecord::Migration
     add_index :reviews, :period_id
     add_index :reviews, :plan_item_id
     add_index :reviews, :file_model_id
+    add_index :reviews, :identification
   end
 
   def self.down
     remove_index :reviews, :column => :period_id
     remove_index :reviews, :column => :plan_item_id
     remove_index :reviews, :column => :file_model_id
+    remove_index :reviews, :column => :identification
 
     drop_table :reviews
   end

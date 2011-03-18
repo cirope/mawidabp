@@ -25,8 +25,10 @@ class ExecutionReportsController < ApplicationController
     @risk_levels = []
     @audits_by_period = []
     audits_by_business_unit = []
-    raw_reviews = Review.list_all_without_final_review_by_date(
-      @from_date, @to_date)
+    raw_reviews = Review.includes(
+      {:control_objective_items => :control_objective},
+      {:plan_item => :business_unit}
+    ).list_all_without_final_review_by_date(@from_date, @to_date)
 
     raw_reviews.group_by(&:period).each do |period, reviews|
       audits_by_business_unit = []
@@ -221,8 +223,7 @@ class ExecutionReportsController < ApplicationController
     @status = Finding::STATUS.except(:repeated).sort do |s1, s2|
       s1.last <=> s2.last
     end
-    @reviews = Review.list_all_without_final_review_by_date(
-        @from_date, @to_date)
+    @reviews = Review.list_all_without_final_review_by_date @from_date, @to_date
 
     @reviews.group_by(&:period).each do |period, reviews|
       count_for_period = {}

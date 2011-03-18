@@ -30,8 +30,10 @@ class ControlObjective < ActiveRecord::Base
   
   # Relaciones
   belongs_to :process_control
-  has_many :control_objective_items, :dependent => :nullify
-  has_many :procedure_control_subitems, :dependent => :nullify
+  has_many :control_objective_items, :inverse_of => :control_objective,
+    :dependent => :nullify
+  has_many :procedure_control_subitems, :inverse_of => :control_objective,
+    :dependent => :nullify
   has_one :control, :as => :controllable, :dependent => :destroy,
     :order => "#{Control.table_name}.order ASC"
 

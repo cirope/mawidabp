@@ -570,6 +570,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
   end
 
   add_index "reviews", ["file_model_id"], :name => "index_reviews_on_file_model_id"
+  add_index "reviews", ["identification"], :name => "index_reviews_on_identification"
   add_index "reviews", ["period_id"], :name => "index_reviews_on_period_id"
   add_index "reviews", ["plan_item_id"], :name => "index_reviews_on_plan_item_id"
 

@@ -72,7 +72,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   validate :score_completion
   
   # Relaciones
-  belongs_to :control_objective
+  belongs_to :control_objective, :inverse_of => :control_objective_items
   belongs_to :review, :inverse_of => :control_objective_items
   has_many :weaknesses, :dependent => :destroy, :order => 'review_code ASC',
     :conditions => {:final => false}
@@ -84,7 +84,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     :order => 'review_code ASC', :class_name => 'Oportunity',
     :conditions => {:final => true}
   has_many :work_papers, :as => :owner, :dependent => :destroy,
-    :order => 'code ASC, created_at ASC',
+    :order => 'code ASC',
     :before_add => [:check_for_final_review, :prepare_work_paper],
     :before_remove => :check_for_final_review
   has_one :control, :as => :controllable, :dependent => :destroy,

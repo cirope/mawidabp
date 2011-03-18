@@ -37,12 +37,13 @@ class OportunitiesController < ApplicationController
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
     @oportunities = Oportunity.includes(
+      :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
       }
     ).where([@conditions, parameters]).order(
       @order_by || [
-        "#{Review.table_name}.identification ASC",
+        "#{Review.table_name}.identification DESC",
         "#{Oportunity.table_name}.review_code ASC"
       ]
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
@@ -272,7 +273,12 @@ class OportunitiesController < ApplicationController
   # autenticó el usuario) devuelve nil.
   # _id_::  ID de la oportunidad que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Oportunity.includes(:control_objective_item => {:review => :period}).where(
+    Oportunity.includes(
+      :finding_relations,
+      :work_papers,
+      {:finding_user_assignments => :user},
+      {:control_objective_item => {:review => :period}}
+    ).where(
       :id => id, Period.table_name => {:organization_id => @auth_organization.id}
     ).first(:readonly => false)
   end

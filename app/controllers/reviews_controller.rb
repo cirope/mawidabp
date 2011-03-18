@@ -22,9 +22,9 @@ class ReviewsController < ApplicationController
 
     @reviews = Review.includes(:period, {:plan_item => :business_unit}).where(
       @conditions
-    ).order(
-      ["#{Period.table_name}.start DESC", "#{Review.table_name}.created_at DESC"]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).order('identification DESC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -359,7 +359,13 @@ class ReviewsController < ApplicationController
   #
   # _id_::  ID del informe que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Review.includes(:period).where(
+    Review.includes(
+      :period,
+      {:plan_item => :business_unit},
+      {:control_objective_items => :control_objective},
+      {:review_user_assignments => :user},
+      {:finding_review_assignments => :finding}
+    ).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)
   end

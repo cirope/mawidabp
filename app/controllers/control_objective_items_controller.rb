@@ -20,15 +20,12 @@ class ControlObjectiveItemsController < ApplicationController
     build_search_conditions ControlObjectiveItem, default_conditions
 
     @control_objectives = ControlObjectiveItem.includes(
+        :weaknesses,
+        :work_papers,
         {:review => :period},
-        {:control_objective => :process_control},
-        :weaknesses
+        {:control_objective => :process_control}
     ).where(@conditions).order(
-      [
-        "#{Review.table_name}.period_id DESC",
-        "#{Review.table_name}.identification ASC",
-        "#{ControlObjectiveItem.table_name}.created_at DESC"
-      ]
+      "#{Review.table_name}.identification DESC"
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
@@ -124,7 +121,9 @@ class ControlObjectiveItemsController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del objetivo de control que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ControlObjectiveItem.includes(:review => :period).where(
+    ControlObjectiveItem.includes(
+      :control, :weaknesses, :work_papers, {:review => :period}
+    ).where(
       :id => id, Period.table_name => {:organization_id => @auth_organization.id}
     ).first(:readonly => false)
   end

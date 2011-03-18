@@ -434,7 +434,7 @@ class Finding < ActiveRecord::Base
   has_many :costs, :as => :item, :dependent => :destroy
   has_many :work_papers, :as => :owner, :dependent => :destroy,
     :before_add => [:prepare_work_paper, :check_for_final_review],
-    :before_remove => :check_for_final_review, :order => 'created_at ASC'
+    :before_remove => :check_for_final_review, :order => 'code ASC'
   has_many :comments, :as => :commentable, :dependent => :destroy,
     :order => 'created_at ASC'
   has_many :finding_user_assignments, :dependent => :destroy, :include => :user,
@@ -443,7 +443,7 @@ class Finding < ActiveRecord::Base
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
   has_many :users, :through => :finding_user_assignments,
-    :order => 'last_name ASC, name ASC'
+    :order => 'last_name ASC'
   
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true

@@ -16,14 +16,11 @@ class WorkflowsController < ApplicationController
   # * GET /workflows.xml
   def index
     @title = t :'workflow.index_title'
-    @workflows = Workflow.includes(:period).where(
+    @workflows = Workflow.includes(:period, :review).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).order(
-      [
-        "#{Period.table_name}.number DESC",
-        "#{Workflow.table_name}.created_at DESC"
-      ]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).order("#{Review.table_name}.identification DESC").paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -223,7 +220,7 @@ class WorkflowsController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del programa de trabajo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Workflow.includes(:period).where(
+    Workflow.includes(:period, {:workflow_items => :resource_utilizations}).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)
   end
