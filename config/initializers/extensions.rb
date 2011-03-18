@@ -26,7 +26,7 @@ class ActiveRecord::Base
       # versiones
       self.versions.order('created_at ASC').where(
         'created_at > :from', :from => date.to_time
-      ).first.try(:reify) || self
+      ).first.try(:reify, :has_one => false) || self
     else
       self
     end
@@ -177,9 +177,9 @@ end
 class Version
   def changes_until(other)
     changes = []
-    old_attributes = self.reify.try(:attributes) || {}
-    new_attributes =
-      (other.try(:reify) || self.item.try(:reload)).try(:attributes) || {}
+    old_attributes = self.reify(:has_one => false).try(:attributes) || {}
+    new_attributes = (other.try(:reify, :has_one => false) ||
+        self.item.try(:reload)).try(:attributes) || {}
     item_class = self.try(:class) || self.item.try(:class)
 
     old_attributes.each do |attribute, old_value|

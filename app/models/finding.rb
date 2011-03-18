@@ -826,7 +826,7 @@ class Finding < ActiveRecord::Base
     findings_with_status_changed = []
 
     self.versions.each do |version|
-      finding = version.reify
+      finding = version.reify(:has_one => false)
 
       if finding && finding.state != last_state
         last_state = finding.state
@@ -1087,10 +1087,10 @@ class Finding < ActiveRecord::Base
           last_checked_version = (previous_version.try(:next) ||
             Version.new(:object => object_to_string(self))))
       has_important_changes = important_attributes.any? do |attribute|
-        current_value = last_checked_version.reify ?
-          last_checked_version.reify.send(attribute) : nil
-        old_value = previous_version.reify ?
-          previous_version.reify.send(attribute) : nil
+        current_value = last_checked_version.reify(:has_one => false) ?
+          last_checked_version.reify(:has_one => false).send(attribute) : nil
+        old_value = previous_version.reify(:has_one => false) ?
+          previous_version.reify(:has_one => false).send(attribute) : nil
 
         current_value != old_value &&
           !(current_value.blank? && old_value.blank?)
@@ -1121,10 +1121,10 @@ class Finding < ActiveRecord::Base
       end
 
       previous_version = important_changed_versions.shift
-      previous_finding = previous_version.reify
+      previous_finding = previous_version.reify(:has_one => false)
 
       important_changed_versions.each do |version|
-        version_finding = version.reify
+        version_finding = version.reify(:has_one => false)
         column_data = []
 
         important_attributes.each do |attribute|

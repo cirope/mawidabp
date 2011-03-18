@@ -138,7 +138,7 @@ class Weakness < Finding
     if @all_follow_up_dates.empty?
       last_date = self.follow_up_date
       dates = self.versions_after_final_review(end_date).map do |v|
-        v.reify.try(:follow_up_date)
+        v.reify(:has_one => false).try(:follow_up_date)
       end
 
       dates.each do |d|
