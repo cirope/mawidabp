@@ -132,4 +132,8 @@ class Period < ActiveRecord::Base
 
     errors.blank?
   end
+
+  def contains?(date)
+    date.respond_to?(:between?) && date.between?(self.start, self.end)
+  end
 end

@@ -111,6 +111,19 @@ class PlanTest < ActiveSupport::TestCase
     assert_equal calculated_amount, @plan.estimated_amount
   end
 
+  test 'estimated amount for business unit type' do
+    but_id = business_unit_types(:cycle).id
+    plan_items = @plan.plan_items.for_business_unit_type(but_id)
+
+    calculated_amount = plan_items.inject(0) do |sum, pi|
+      sum + pi.resource_utilizations.inject(0) {|t, ru| t + ru.cost}
+    end
+
+    assert_not_equal plan_items.size, @plan.plan_items.size
+    assert calculated_amount > 0
+    assert_equal calculated_amount, @plan.estimated_amount(but_id)
+  end
+
   test 'pdf conversion' do
     FileUtils.rm @plan.absolute_pdf_path if File.exist?(@plan.absolute_pdf_path)
 
@@ -146,17 +159,39 @@ class PlanTest < ActiveSupport::TestCase
     assert_equal cost, @plan.cost
   end
 
-  test 'clone from' do
+  test 'clone from without period' do
     new_plan = Plan.new
     new_plan.clone_from(@plan)
 
     assert new_plan.plan_items.size > 0
     assert new_plan.plan_items.any? { |pi| pi.resource_utilizations.size > 0 }
-    assert_equal @plan.plan_items, new_plan.plan_items
-    assert @plan.plan_items.all? { |pi|
+    assert_equal @plan.plan_items.size, new_plan.plan_items.size
+    assert new_plan.plan_items.all? { |pi|
       new_plan.plan_items.any? { |npi|
         npi.resource_utilizations == pi.resource_utilizations
       }
     }
+  end
+
+  test 'clone from with period' do
+    period = Period.find periods(:unused_period).id
+    new_plan = Plan.new(:period_id => period.id)
+    new_plan.clone_from(@plan)
+
+    assert new_plan.plan_items.size > 0
+    assert new_plan.plan_items.any? { |pi| pi.resource_utilizations.size > 0 }
+    assert_equal @plan.plan_items.size, new_plan.plan_items.size
+    assert new_plan.plan_items.all? { |pi|
+      period.contains?(pi.start) && period.contains?(pi.end) &&
+        !@plan.period.contains?(pi.start) && !@plan.period.contains?(pi.end)
+    }
+    assert new_plan.plan_items.all? { |pi|
+      new_plan.plan_items.any? { |npi|
+        npi.resource_utilizations == pi.resource_utilizations
+      }
+    }
+    assert new_plan.allow_duplication?
+    assert new_plan.allow_overload?
+    assert new_plan.valid?
   end
 end

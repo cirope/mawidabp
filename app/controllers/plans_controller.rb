@@ -5,7 +5,8 @@ require 'pdf/simpletable'
 # Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
 # (#PlanItem)
 class PlansController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_filter :auth, :load_privileges, :check_privileges,
+    :find_business_unit_type
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
   hide_action :find_with_organization, :update_auth_user_id, :exists?,
     :load_privileges
@@ -49,15 +50,10 @@ class PlansController < ApplicationController
   def new
     @title = t :'plan.new_title'
     @plan = Plan.new
-    clone_id = params[:clone_from].respond_to?(:to_i) ?
-      params[:clone_from].to_i : 0
+    clone_id = params[:clone_from].to_i
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
 
-    if clone_plan
-      @plan.clone_from clone_plan
-    else
-      @plan.plan_items.build
-    end
+    @plan.clone_from clone_plan if clone_plan
 
     respond_to do |format|
       format.html # new.html.erb
@@ -81,11 +77,14 @@ class PlansController < ApplicationController
   def create
     @title = t :'plan.new_title'
     @plan = Plan.new(params[:plan])
+    clone_id = params[:clone_from].to_i
+    clone_plan = find_with_organization(clone_id) if exists?(clone_id)
+
+    @plan.clone_from clone_plan if clone_plan
 
     respond_to do |format|
       if @plan.save
-        flash.notice = t :'plan.correctly_created'
-        format.html { redirect_to(plans_path) }
+        format.html { redirect_to(edit_plan_path(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_created')) }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => :new }
@@ -106,8 +105,7 @@ class PlansController < ApplicationController
     
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
-        flash.notice = t :'plan.correctly_updated'
-        format.html { redirect_to(plans_path) }
+        format.html { redirect_to(edit_plan_path(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_updated')) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -158,6 +156,12 @@ class PlansController < ApplicationController
       "#{BusinessUnitType.table_name}.organization_id = :organization_id"
     ]
     parameters = {:organization_id => @auth_organization.id}
+
+    if params[:business_unit_type_id].to_i > 0
+      conditions << "#{BusinessUnitType.table_name}.id = :but_id"
+      parameters[:but_id] = params[:business_unit_type_id].to_i
+    end
+
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
@@ -208,6 +212,12 @@ class PlansController < ApplicationController
 
   private
 
+  def find_business_unit_type
+    if params[:business_unit_type].to_i > 0
+      @business_unit_type = BusinessUnitType.find params[:business_unit_type].to_i
+    end
+  end
+
   # Busca el plan de trabajo indicado siempre que pertenezca a la organización.
   # En el caso que no se encuentre (ya sea que no existe un plan de trabajo con
   # ese ID o que no pertenece a la organización con la que se autenticó el
@@ -217,8 +227,8 @@ class PlansController < ApplicationController
     include = include_all ? [
       :period, {
         :plan_items => [
-          :business_unit,
           :resource_utilizations,
+          :business_unit,
           {:review => :conclusion_final_review}
         ]
       }

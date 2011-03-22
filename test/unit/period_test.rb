@@ -123,4 +123,12 @@ class PeriodTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@period, :number, :not_an_integer)],
       @period.errors[:number]
   end
+
+  test 'contains' do
+    assert @period.contains?(@period.start)
+    assert @period.contains?(@period.end)
+    assert !@period.contains?(nil)
+    assert !@period.contains?(@period.end + 1.day)
+    assert !@period.contains?(@period.start - 1.day)
+  end
 end

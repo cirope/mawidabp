@@ -859,6 +859,8 @@ es:
     hide_resource_utilization: "Ocultar recursos"
     download_global_plan: "Descargar plan de auditoria global"
     download_detailed_plan: "Descargar plan de auditoria detallado"
+    without_business_unit_type: "Sin unidad de negocio"
+    show_all: "Ver todos"
     item_status:
       note: "Los estados deben leerse como sigue: C = Concluido; E = En ejecución dentro de lo planeado; E (FP) = En ejecución fuera de lo planeado; R = Retrasado"
       concluded:

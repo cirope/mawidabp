@@ -29,6 +29,17 @@ class PlanItem < ActiveRecord::Base
       ]
     )
   }
+  scope :for_business_unit_type, lambda { |business_unit_type|
+    if business_unit_type.to_i > 0
+      condition = "#{BusinessUnit.table_name}.business_unit_type_id = :but_id"
+    elsif !business_unit_type.blank?
+      condition = "#{BusinessUnit.table_name}.business_unit_type_id IS NULL"
+    end
+    
+    includes(:business_unit).where(
+      condition, :but_id => business_unit_type.to_i
+    ).order('order_number ASC')
+  }
 
   # Callbacks
   before_destroy :can_be_destroyed?
@@ -134,6 +145,18 @@ class PlanItem < ActiveRecord::Base
 
   def <=>(other)
     self.order_number <=> other.order_number
+  end
+
+  def ==(other)
+    if other.kind_of?(PlanItem)
+      if self.new_record? && other.new_record?
+        self.object_id == other.object_id
+      else
+        self.id == other.id
+      end
+    else
+      -1
+    end
   end
 
   def material_resource_utilizations

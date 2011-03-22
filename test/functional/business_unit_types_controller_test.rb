@@ -108,14 +108,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
             business_units(:business_unit_two).id => {
               :id => business_units(:business_unit_two).id,
               :name => 'Updated business unit two'
-            },
-            business_units(:business_unit_three).id => {
-              :id => business_units(:business_unit_three).id,
-              :name => 'Updated business unit three'
-            },
-            business_units(:business_unit_four).id => {
-              :id => business_units(:business_unit_four).id,
-              :name => 'Updated business unit four'
             }
           }
         }

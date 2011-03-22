@@ -8,11 +8,11 @@ business_unit_two:
 
 business_unit_three:
   name: Business unit three
-  business_unit_type: cycle
+  business_unit_type: consolidated_substantive
 
 business_unit_four:
   name: Business unit four
-  business_unit_type: cycle
+  business_unit_type: consolidated_substantive
 
 business_unit_fifth:
   name: Business unit fifth
