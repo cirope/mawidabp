@@ -159,12 +159,14 @@ class Plan < ActiveRecord::Base
     (BusinessUnitType.list + [nil]).each do |but|
       items = (grouped_plan_items[but] || []).sort
       column_data = []
+      total_cost = 0.0
 
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title but.try(:name) || I18n.t(:'plan.without_business_unit_type')
 
       items.each do |plan_item|
         total_resource_text = currency_mask % plan_item.cost
+        total_cost += plan_item.cost
 
         column_data << {
           'order_number' => plan_item.order_number,
@@ -186,7 +188,7 @@ class Plan < ActiveRecord::Base
         'order_number' => '', 'status' => '', 'business_unit_id' => '',
         'project' => '', 'start' => '', 'end' => '', 'human_resources_cost' => '',
         'material_resources_cost' => '',
-        'total_resources_cost' => "<b>#{currency_mask % self.cost}</b>"
+        'total_resources_cost' => "<b>#{currency_mask % total_cost}</b>"
       }
 
       pdf.move_pointer PDF_FONT_SIZE
