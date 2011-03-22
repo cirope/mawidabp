@@ -58,6 +58,15 @@ class PlansControllerTest < ActionController::TestCase
     assert_template 'plans/new'
   end
 
+  test 'new plan with business unit type' do
+    perform_auth
+    get :new, :business_unit_type => business_unit_types(:cycle).to_param
+    assert_response :success
+    assert_not_nil assigns(:plan)
+    assert_select '#error_body', false
+    assert_template 'plans/new'
+  end
+
   test 'clone plan' do
     perform_auth
     plan = Plan.find plans(:current_plan).id
@@ -117,7 +126,19 @@ class PlansControllerTest < ActionController::TestCase
     get :edit, :id => plans(:past_plan).id
     assert_response :success
     assert_not_nil assigns(:plan)
-    assert_select '#error_body', false, response_from_page_or_rjs
+    assert_nil assigns(:business_unit_type)
+    assert_select '#error_body', false
+    assert_template 'plans/edit'
+  end
+
+  test 'edit plan with business unit type' do
+    perform_auth
+    get :edit, :id => plans(:past_plan).id,
+      :business_unit_type => business_unit_types(:cycle).to_param
+    assert_response :success
+    assert_not_nil assigns(:plan)
+    assert_not_nil assigns(:business_unit_type)
+    assert_select '#error_body', false
     assert_template 'plans/edit'
   end
 
@@ -162,8 +183,8 @@ class PlansControllerTest < ActionController::TestCase
     resource_utilization = ResourceUtilization.find(
       resource_utilizations(:auditor_for_20_units_past_plan_item_1).id)
 
-    assert_redirected_to plans_path
     assert_not_nil assigns(:plan)
+    assert_redirected_to edit_plan_path(assigns(:plan))
     assert_equal 'Updated project', assigns(:plan).plan_items.find(
       plan_items(:past_plan_item_1).id).project
     assert_in_delta 8.75, resource_utilization.cost_per_unit, 0.01
@@ -332,6 +353,16 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:business_units)
     assert_equal 4, assigns(:business_units).size # All in the organization (one, two, three and four)
+    assert_select '#error_body', false
+    assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
+
+    post :auto_complete_for_business_unit_business_unit_id, {
+      :business_unit_data => 'business',
+      :business_unit_type_id => business_unit_types(:cycle).id
+    }
+    assert_response :success
+    assert_not_nil assigns(:business_units)
+    assert_equal 2, assigns(:business_units).size # All in the organization (one and two)
     assert_select '#error_body', false
     assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
   end

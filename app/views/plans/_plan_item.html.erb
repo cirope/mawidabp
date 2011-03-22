@@ -28,7 +28,8 @@
           :url => {:controller => :plans,
             :action => :auto_complete_for_business_unit_business_unit_id},
           :after_update_element => 'AutoComplete.itemSelected',
-          :param_name => 'business_unit_data'}) %>
+          :param_name => 'business_unit_data',
+          :parameters => ("business_unit_type_id=#{@business_unit_type.id}" if @business_unit_type)}) %>
       </div>
       <% else %>
         <%= text_field_tag "plan_item_business_unit_#{id}",
@@ -53,8 +54,10 @@
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) %> |
       <%= link_to_move %>
+      <% unless f.object.try(:review) %>
+        | <%= remove_item_link(f)  %>
+      <% end %>
     </div>
 
     <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
