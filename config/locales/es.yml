@@ -1755,6 +1755,7 @@ es:
         email: "E-Mail"
         function: "Cargo"
         language: "Lenguaje"
+        notes: "Notas"
         failed_attempts: "Intentos fallidos"
         enable: "Habilitado"
         last_access: "Último acceso"

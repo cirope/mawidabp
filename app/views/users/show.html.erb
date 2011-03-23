@@ -20,13 +20,28 @@
   </p>
 
   <p>
+    <b><%= User.human_attribute_name :function %>:</b>
+    <%= @user.function %>
+  </p>
+
+  <p>
     <b><%= User.human_attribute_name :language %>:</b>
     <%= @user.language %>
   </p>
 
   <p>
+    <b><%= User.human_attribute_name :resource_id %>:</b>
+    <%= @user.resource %>
+  </p>
+
+  <p>
     <b><%= User.human_attribute_name :enable %>:</b>
     <%=t @user.enable? ? :'label.yes' : :'label.no' %>
+  </p>
+
+  <p>
+    <b><%= User.human_attribute_name :logged_in %>:</b>
+    <%=t @user.logged_in? ? :'label.yes' : :'label.no' %>
   </p>
 
   <p>
@@ -62,6 +77,11 @@
       <% end %>
     </ul>
   <% end %>
+
+  <div>
+    <b><%= User.human_attribute_name :notes %>:</b>
+    <%= simple_format @user.notes %>
+  </div>
 </div>
 
 <div id="links">

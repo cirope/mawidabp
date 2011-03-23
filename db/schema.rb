@@ -607,6 +607,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.integer  "resource_id"
     t.integer  "manager_id"
     t.boolean  "group_admin",                         :default => false
+    t.text     "notes"
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true

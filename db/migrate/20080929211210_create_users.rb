@@ -18,6 +18,7 @@ class CreateUsers < ActiveRecord::Migration
       t.datetime :last_access
       t.integer :manager_id
       t.integer :failed_attempts, :default => 0
+      t.text :notes
       t.integer :lock_version, :default => 0
 
       t.timestamps

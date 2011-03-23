@@ -29,6 +29,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal users(:administrator_second_user).logged_in, @user.logged_in
     assert_equal users(:administrator_second_user).group_admin,
       @user.group_admin
+    assert_equal users(:administrator_second_user).notes, @user.notes
     assert_equal users(:administrator_second_user).resource_id,
       @user.resource_id
     assert_equal users(:administrator_second_user).manager_id,
@@ -52,6 +53,7 @@ class UserTest < ActiveSupport::TestCase
         :enable => true,
         :failed_attempts => 0,
         :logged_in => false,
+        :notes => 'Some user notes',
         :resource_id => resources(:auditor_resource).id,
         :parent => users(:administrator_user),
         :organization_roles_attributes => {

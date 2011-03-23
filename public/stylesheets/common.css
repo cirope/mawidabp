@@ -91,7 +91,7 @@ div#actions {
     float: right;
 }
 
-div#actions span.button {
+div#actions span.button, div#actions div.button {
     margin: 0em 0em 0em 1em;
     float: right;
 }

@@ -16,6 +16,7 @@ administrator_user:
   group_admin: true
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:admin_second] = 'admin123' %>
 <% salt = Digest::SHA512.hexdigest("admin_second#{rand}") %>
@@ -36,6 +37,7 @@ administrator_second_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
 <% salt = Digest::SHA512.hexdigest("bare#{rand}") %>
@@ -56,6 +58,7 @@ bare_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
 <% salt = Digest::SHA512.hexdigest("first_time_user#{rand}") %>
@@ -75,6 +78,7 @@ first_time_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:expired] = 'expired123' %>
 <% salt = Digest::SHA512.hexdigest("expired#{rand}") %>
@@ -96,6 +100,7 @@ expired_user:
   last_access: <%= DEFAULT_PARAMETERS[:security_acount_expire_time].to_i.days.ago.yesterday %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
 <% salt = Digest::SHA512.hexdigest("disabled#{rand}") %>
@@ -116,6 +121,7 @@ disabled_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("blank_password#{rand}") %>
@@ -137,6 +143,7 @@ blank_password_user:
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
 <% salt = Digest::SHA512.hexdigest("expired_blank_password#{rand}") %>
@@ -158,6 +165,7 @@ expired_blank_password_user:
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:president_user] = 'president123' %>
 <% salt = Digest::SHA512.hexdigest("president#{rand}") %>
@@ -177,6 +185,7 @@ president_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:general_manager_user] = 'general_manager123' %>
 <% salt = Digest::SHA512.hexdigest("general_manager#{rand}") %>
@@ -197,6 +206,7 @@ general_manager_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:president_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
 <% salt = Digest::SHA512.hexdigest("coordinator_manager#{rand}") %>
@@ -217,6 +227,7 @@ coordinator_manager_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:general_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager#{rand}") %>
@@ -237,6 +248,7 @@ plain_manager_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
 <% salt = Digest::SHA512.hexdigest("manager#{rand}") %>
@@ -257,6 +269,7 @@ manager_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("manager_second#{rand}") %>
@@ -277,6 +290,7 @@ manager_second_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
 <% salt = Digest::SHA512.hexdigest("plain_manager_second#{rand}") %>
@@ -297,6 +311,7 @@ plain_manager_second_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor#{rand}") %>
@@ -317,6 +332,7 @@ supervisor_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
 <% salt = Digest::SHA512.hexdigest("supervisor_second#{rand}") %>
@@ -337,6 +353,7 @@ supervisor_second_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
 <% salt = Digest::SHA512.hexdigest("audited#{rand}") %>
@@ -357,6 +374,7 @@ audited_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:plain_manager_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
 <% salt = Digest::SHA512.hexdigest("audited_second#{rand}") %>
@@ -377,6 +395,7 @@ audited_second_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:plain_manager_second_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:committee] = 'committee123' %>
 <% salt = Digest::SHA512.hexdigest("committee#{rand}") %>
@@ -397,6 +416,7 @@ committee_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:administrator_user) %>
+  notes: User notes
 
 <% PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
 <% salt = Digest::SHA512.hexdigest("auditor#{rand}") %>
@@ -417,3 +437,4 @@ auditor_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= Fixtures.identify(:supervisor_user) %>
+  notes: User notes

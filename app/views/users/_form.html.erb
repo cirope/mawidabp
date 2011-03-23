@@ -30,6 +30,10 @@
     </p>
   </div>
   <div class="form_column_right">
+    <p>
+      <%= u_f.label :notes %>
+      <%= u_f.text_area :notes, :style => 'height: 5em;' %>
+    </p>
     <p class="form_item">
       <%= u_f.label :resource_id, nil, :class => :inline %>
       <%= user_resource_field(u_f) %>
