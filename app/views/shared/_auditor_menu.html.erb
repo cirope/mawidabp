@@ -7,52 +7,47 @@
       {:title => t(:'user.change_personal_data')} %> ]</div>
     <%= link_to t(:'menu.exit'), logout_user_path(user) %>
   </div>
-  <% cache "auditor_menu_#{@current_module}" do %>
-    <ul class="menu_level_0" id="main_menu">
-      <% APP_AUDITOR_MENU_ITEMS.each do |menu_item| %>
-        <% selected = menu_item.submenu_names.include?(@current_module) %>
-        <li <%= raw('class="selected"') if selected %>>
-          <%= link_to(menu_item.to_s, url_for(menu_item.url),
-            :id => "link_#{menu_item.name}", :class => :menu_item_1) %>
-        </li>
+  <ul class="menu_level_0" id="main_menu">
+    <% APP_AUDITOR_MENU_ITEMS.each do |menu_item| %>
+      <% selected = menu_item.submenu_names.include?(@current_module) %>
+      <li <%= raw('class="selected"') if selected %>>
+        <%= link_to(menu_item.to_s, url_for(menu_item.url),
+          :id => "link_#{menu_item.name}", :class => :menu_item_1) %>
+      </li>
 
+      <% unless menu_item.children.blank? %>
+        <% submenu_items_1_content << render(:partial => 'shared/submenu',
+            :locals => {
+              :menu_item => menu_item,
+              :controller_name => controller_name,
+              :display => selected,
+              :level => 1,
+              :include_dynamic => true
+            })
+        %>
+      <% end %>
 
-        <% unless menu_item.children.blank? %>
-          <% submenu_items_1_content << render(:partial => 'shared/submenu',
+      <% menu_item.children.each do |submenu_item| %>
+        <% selected = submenu_item.submenu_names.include?(@current_module) %>
+        <% unless submenu_item.children.blank? %>
+          <% submenu_items_2_content << render(:partial => 'shared/submenu',
               :locals => {
-                :menu_item => menu_item,
+                :menu_item => submenu_item,
                 :controller_name => controller_name,
                 :display => selected,
-                :level => 1,
+                :level => 2,
                 :include_dynamic => true
               })
           %>
         <% end %>
-
-        <% menu_item.children.each do |submenu_item| %>
-          <% selected = submenu_item.submenu_names.include?(@current_module) %>
-          <% unless submenu_item.children.blank? %>
-            <% submenu_items_2_content << render(:partial => 'shared/submenu',
-                :locals => {
-                  :menu_item => submenu_item,
-                  :controller_name => controller_name,
-                  :display => selected,
-                  :level => 2,
-                  :include_dynamic => true
-                })
-            %>
-          <% end %>
-        <% end %>
       <% end %>
-    </ul>
-  <% end %>
+    <% end %>
+  </ul>
 </div>
 
-<% cache "auditor_dynamic_menu_#{@current_module}" do %>
-  <div id="menu_level_1"><%= raw submenu_items_1_content %>&nbsp;</div>
-  <div id="menu_level_2"><%= raw submenu_items_2_content %>&nbsp;</div>
+<div id="menu_level_1"><%= raw submenu_items_1_content %>&nbsp;</div>
+<div id="menu_level_2"><%= raw submenu_items_2_content %>&nbsp;</div>
 
-  <%= javascript_tag do %>
-    <%= yield :javascript_menu %>
-  <% end %>
+<%= javascript_tag do %>
+  <%= yield :javascript_menu %>
 <% end %>
