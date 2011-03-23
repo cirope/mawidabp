@@ -97,6 +97,10 @@
 </div>
 
 <div id="links">
+  <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
+    <%= link_to t(:'conclusion_draft_review.new_conclusion_final_review'),
+      new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |
+  <% end %>
   <%= link_to t(:'label.edit'), edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
   <%= link_to t(:'label.list'), conclusion_draft_reviews_path %> |
   <%= link_to t(:'label.download'), :action => :export_to_pdf,
