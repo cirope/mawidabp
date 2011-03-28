@@ -3,7 +3,7 @@
     :columns_for_sort => ConclusionFinalReview.columns_for_sort
   },
   :columns => @query.blank? ?
-    ConclusionDraftReview::COLUMNS_FOR_SEARCH.keys : @columns
+    ConclusionFinalReview::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 <table>
   <thead id="column_headers">

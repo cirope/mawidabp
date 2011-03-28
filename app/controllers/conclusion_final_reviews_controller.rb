@@ -394,7 +394,17 @@ class ConclusionFinalReviewsController < ApplicationController
   # devuelve nil.
   # _id_::  ID del informe definitivo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ConclusionFinalReview.includes(:review => :period).where(
+    ConclusionFinalReview.includes(
+      :review => [
+        :period,
+        :plan_item,
+        {
+          :control_objective_items => [
+            :control, :final_weaknesses, :final_oportunities
+          ]
+        }
+      ]
+    ).where(
       :id => id,
       Period.table_name => {:organization_id => @auth_organization.id}
     ).first(:readonly => false)

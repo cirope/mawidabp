@@ -16,11 +16,15 @@ class CreateConclusionReviews < ActiveRecord::Migration
 
     add_index :conclusion_reviews, :review_id
     add_index :conclusion_reviews, :type
+    add_index :conclusion_reviews, :issue_date
+    add_index :conclusion_reviews, :close_date
   end
 
   def self.down
     remove_index :conclusion_reviews, :column => :review_id
     remove_index :conclusion_reviews, :column => :type
+    remove_index :conclusion_reviews, :column => :issue_date
+    remove_index :conclusion_reviews, :column => :close_date
 
     drop_table :conclusion_reviews
   end

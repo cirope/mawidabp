@@ -20,10 +20,14 @@ class ConclusionDraftReviewsController < ApplicationController
     build_search_conditions ConclusionDraftReview, default_conditions
 
     @conclusion_draft_reviews = ConclusionDraftReview.includes(
-      :review => [:period, { :plan_item => :business_unit }]
-    ).where(@conditions).order('issue_date DESC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+      :review => [
+        :period,
+        :conclusion_final_review,
+        {:plan_item => :business_unit}
+      ]
+    ).where(@conditions).order(
+      "#{ConclusionDraftReview.table_name}.issue_date DESC"
+    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -304,7 +308,12 @@ class ConclusionDraftReviewsController < ApplicationController
   # _id_::  ID del informe borrador que se quiere recuperar
   def find_with_organization(id) #:doc:
     conclusion_draft_review = ConclusionDraftReview.includes(
-      :review => :period
+      :review => [
+        :period,
+        :conclusion_final_review,
+        :plan_item,
+        {:control_objective_items => [:control, :weaknesses, :oportunities]}
+      ]
     ).where(
       [
         [
