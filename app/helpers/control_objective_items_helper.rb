@@ -32,9 +32,10 @@ module ControlObjectiveItemsHelper
 
   def control_objective_weaknesses_summary_row(control_objective_item)
     Finding::STATUS.except(:repeated).keys.map do |status|
-      weaknesses_count = control_objective_item.final_weaknesses.select do |w|
-        w.send :"#{status}?"
-      end.size
+      weaknesses =  control_objective_item.is_in_a_final_review? ?
+        control_objective_item.final_weaknesses :
+        control_objective_item.weaknesses
+      weaknesses_count = weaknesses.select { |w| w.send :"#{status}?" }.size
 
       content_tag :td, weaknesses_count
     end.join
