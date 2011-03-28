@@ -23,4 +23,20 @@ module ControlObjectiveItemsHelper
 
     [code_from_review, code_from_control_objective].compact.max
   end
+
+  def control_objective_weaknesses_summary_headers
+    Finding::STATUS.except(:repeated).keys.map do |status|
+      content_tag :th, t(:"finding.status_#{status}")
+    end.join
+  end
+
+  def control_objective_weaknesses_summary_row(control_objective_item)
+    Finding::STATUS.except(:repeated).keys.map do |status|
+      weaknesses_count = control_objective_item.final_weaknesses.select do |w|
+        w.send :"#{status}?"
+      end.size
+
+      content_tag :td, weaknesses_count
+    end.join
+  end
 end

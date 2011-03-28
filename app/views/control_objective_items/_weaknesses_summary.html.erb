@@ -5,17 +5,12 @@
 <table class="summary_table">
   <thead>
     <tr>
-      <% Finding::STATUS.keys.each do |status| %>
-        <th><%= t(:"finding.status_#{status}") %></th>
-      <% end %>
+      <%= raw control_objective_weaknesses_summary_headers %>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <% Finding::STATUS.keys.each do |status| %>
-        <td><%= @control_objective_item.
-            weaknesses.select { |w| w.send :"#{status}?" }.size %></td>
-      <% end %>
+      <%= raw control_objective_weaknesses_summary_row(@control_objective_item) %>
     </tr>
   </tbody>
 </table>
