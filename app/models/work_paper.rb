@@ -145,15 +145,12 @@ class WorkPaper < ActiveRecord::Base
   def pdf_cover_name(filename = nil)
     if self.file_model
       filename ||= self.file_model.file_file_name.sanitized_for_filename
+      filename = filename.sanitized_for_filename.sub(
+        /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
     end
-
-    if filename.starts_with?(self.sanitized_code)
-      I18n.t :'work_paper.cover_name', :prefix => '',
-        :filename => File.basename(filename, File.extname(filename))
-    else
-      I18n.t :'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
-        :filename => File.basename(filename, File.extname(filename))
-    end
+    
+    I18n.t :'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
+      :filename => File.basename(filename, File.extname(filename))
   end
 
   def absolute_cover_path(filename = nil)
@@ -187,37 +184,14 @@ class WorkPaper < ActiveRecord::Base
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
-      # No crea un nuevo zip si el que estaba ya era uno creado por el sistema
-      abort_zip_creation = false
-
-      if File.extname(original_filename) == '.zip'
-        entry_for_remove = nil
-
-        Zip::ZipFile.foreach(original_filename) do |entry|
-          if entry.file? && entry.name == File.basename(pdf_filename)
-            entry_for_remove = entry
-            abort_zip_creation = true
-          end
-        end
-
-        if entry_for_remove
-          Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
-            zipfile.remove entry_for_remove
-            zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
-          end
-        end
+      Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+        zipfile.add(self.filename_with_prefix, original_filename) { true }
+        zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
       end
 
-      if !abort_zip_creation
-        Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
-          zipfile.add(self.filename_with_prefix, original_filename) { true }
-          zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
-        end
-      end
-
-      FileUtils.rm Dir.glob(File.join(File.dirname(pdf_filename), '*.pdf'))
+      FileUtils.rm pdf_filename if File.exists?(pdf_filename)
       FileUtils.rm original_filename if File.exists?(original_filename)
-      
+
       self.file_model.update_attributes(
         :file_file_name => File.basename(zip_filename),
         :file_content_type => 'application/zip',
@@ -245,7 +219,7 @@ class WorkPaper < ActiveRecord::Base
             entry.extract(filename)
           end
 
-          if File.extname(filename) != '.pdf'
+          if File.basename(filename) != self.pdf_cover_name
             self.file_model.file_file_name = File.basename(filename)
             self.file_model.file_content_type = Mime::Type.lookup_by_extension ext
             self.file_model.file_file_size = File.size(filename)
