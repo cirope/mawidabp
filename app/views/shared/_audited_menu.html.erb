@@ -7,7 +7,7 @@
       {:title => t(:'user.change_personal_data')} %> ]</div>
     <%= link_to t(:'menu.exit'), logout_user_path(user) %>
   </div>
-  <% cache "audited_#{@current_module}_#{user.roles(@auth_organization.try(:id)).map(&:cache_key).join('_')}" do %>
+  <% cache "audited_#{user.language}_#{@current_module}_#{user.roles(@auth_organization.try(:id)).map(&:cache_key).join('_')}" do %>
     <ul class="menu_level_0" id="main_menu">
       <% APP_AUDITED_MENU_ITEMS.each do |menu_item| %>
         <% selected = menu_item.controllers.include?(controller_name) &&
@@ -51,7 +51,7 @@
   <% end %>
 </div>
 
-<% cache "audited_#{@current_module}_#{user.roles(@auth_organization.id).map(&:cache_key).join('_')}_js" do %>
+<% cache "audited_#{user.language}_#{@current_module}_#{user.roles(@auth_organization.id).map(&:cache_key).join('_')}_js" do %>
   <div id="menu_level_1"><%= raw submenu_items_1_content %>&nbsp;</div>
   <div id="menu_level_2"><%= raw submenu_items_2_content %>&nbsp;</div>
 

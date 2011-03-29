@@ -1,42 +1,46 @@
 <% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) %>
 <% can_edit = @auth_user.admin? %>
-<span class="popup_link_container">
-  <span id="help_link_<%= link_name %>" class="popup_link" title="<%= t(:'inline_help.link_title') %>">?</span>
-</span>
+<% cache "#{inline_help.try(:cache_key)}_#{@auth_user.language}_#{can_edit}_link" do %>
+  <span class="popup_link_container">
+    <span id="help_link_<%= link_name %>" class="popup_link" title="<%= t(:'inline_help.link_title') %>">?</span>
+  </span>
+<% end %>
 
 <% content_for :extra_html_bottom do %>
-  <div id="inline_item_<%= name %>" class="popup" style="display: none;">
-    <%= textilize inline_help.try(:content) %>
+  <% cache "#{inline_help.try(:cache_key)}_#{@auth_user.language}_#{can_edit}_html" do %>
+    <div id="inline_item_<%= name %>" class="popup" style="display: none;">
+      <%= textilize inline_help.try(:content) %>
 
-    <div class="action_links">
-      <% if can_edit && inline_help %>
-        <%= link_to t(:'label.edit'), edit_inline_help_path(inline_help,
-          :back_to => request.path) %> |
-      <% elsif can_edit %>
-        <%= link_to t(:'label.new'), new_inline_help_path(
-          :language => @auth_user.language, :name => name.to_s,
-          :back_to => request.path.to_s) %> |
-      <% end %>
-      <a id="help_closebox_<%= name %>" class="popup_closebox" href="#" onclick="return false;">
-        <%= t(:'label.close') %>
-      </a>
+      <div class="action_links">
+        <% if can_edit && inline_help %>
+          <%= link_to t(:'label.edit'), edit_inline_help_path(inline_help,
+            :back_to => request.path) %> |
+        <% elsif can_edit %>
+          <%= link_to t(:'label.new'), new_inline_help_path(
+            :language => @auth_user.language, :name => name.to_s,
+            :back_to => request.path.to_s) %> |
+        <% end %>
+        <a id="help_closebox_<%= name %>" class="popup_closebox" href="#" onclick="return false;">
+          <%= t(:'label.close') %>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <script type="text/javascript">
-  (function() {
-    var functionName = '<%= name.to_s.camelize(:lower) %>';
+    <script type="text/javascript">
+    (function() {
+      var functionName = '<%= name.to_s.camelize(:lower) %>';
 
-    PopupListener[functionName] = function(linkName) {
-      var linkId = linkName ?
-        'help_link_' + linkName : 'help_link_<%=  link_name %>';
+      PopupListener[functionName] = function(linkName) {
+        var linkId = linkName ?
+          'help_link_' + linkName : 'help_link_<%=  link_name %>';
 
-      new Popup(
-        'inline_item_<%=  name %>', linkId, {trigger: 'click', position: 'below'}
-      );
-    }
+        new Popup(
+          'inline_item_<%=  name %>', linkId, {trigger: 'click', position: 'below'}
+        );
+      }
 
-    PopupListener[functionName]();
-  })();
-  </script>
+      PopupListener[functionName]();
+    })();
+    </script>
+  <% end %>
 <% end %>
