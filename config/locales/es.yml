@@ -709,7 +709,7 @@ es:
       phone_label: "Teléfono"
       warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'Mawida Buenas Prácticas'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Para garantizar un correcto funcionamiento recomendamos utilizar *Mozilla Firefox*"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"

@@ -160,14 +160,32 @@ class RoleTest < ActiveSupport::TestCase
     end
   end
 
+  test 'is touched when a privilege is updated' do
+    updated_at = @role.updated_at
+
+    assert @role.update_attributes(
+      :privileges_attributes => {
+        privileges(:admin_administration_parameters).id => {
+          :id => privileges(:admin_administration_parameters).id,
+          :approval => false,
+          :erase => false,
+          :modify => false,
+          :read => false,
+        }
+      }
+    )
+
+    assert_not_equal updated_at, @role.reload.updated_at
+  end
+
   test 'dynamic functions' do
     Role::TYPES.each do |type, value|
       @role.role_type = value
-      assert @role.send("#{type}?".to_sym)
+      assert @role.send(:"#{type}?")
 
       (Role::TYPES.values - [value]).each do |v|
         @role.role_type = v
-        assert !@role.send("#{type}?".to_sym)
+        assert !@role.send(:"#{type}?")
       end
     end
   end

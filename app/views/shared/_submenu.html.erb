@@ -4,7 +4,7 @@
       <% selected = submenu_item.submenu_names.include?(@current_module) %>
       <li <%= raw 'class="selected"' if selected %>>
         <%= raw generate_menu_link(submenu_item.submenu_names, include_dynamic ?
-          @current_module :nil, submenu_item.to_s, url_for(submenu_item.url),
+          @current_module : nil, submenu_item.to_s, url_for(submenu_item.url),
           :class => submenu_item.html_class) %>
       </li>
     <% end %>

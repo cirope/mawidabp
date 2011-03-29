@@ -61,9 +61,7 @@ class ApplicationController < ActionController::Base
 
   def load_organization
     if @auth_organization.nil? && session[:organization_id]
-      @auth_organization = Organization.includes(:roles).find(
-        session[:organization_id]
-      )
+      @auth_organization = Organization.find(session[:organization_id])
     end
   end
 
@@ -116,11 +114,11 @@ class ApplicationController < ActionController::Base
         :destroy => :erase
       })
       
-      unless @auth_user.try(:change_password_hash)
+      if @auth_user.try(:change_password_hash)
+        @auth_privileges = {}
+      else
         @auth_privileges = @auth_organization ?
           @auth_user.try(:privileges, @auth_organization) : {}
-      else
-        @auth_privileges = {}
       end
     end
   end

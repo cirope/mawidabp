@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
     unless organization_id
       self.organization_roles.reject do |o_r|
         o_r.marked_for_destruction?
-      end.map(&:role)
+      end.map(&:role).sort
     else
       if @organization_roles_cache[organization_id]
         @organization_roles_cache[organization_id]
@@ -224,7 +224,7 @@ class User < ActiveRecord::Base
         end
 
         @organization_roles_cache[organization_id] =
-          filtered_organization_roles.map(&:role)
+          filtered_organization_roles.map(&:role).sort
       end
     end
   end
@@ -505,7 +505,7 @@ class User < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   Role::TYPES.each do |type, value|
-    define_method("#{type}?".to_sym) do
+    define_method(:"#{type}?") do
       self.roles(GlobalModelConfig.current_organization_id).any? do |role|
         role.role_type == value
       end

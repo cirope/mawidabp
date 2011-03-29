@@ -34,6 +34,7 @@ class Role < ActiveRecord::Base
 
   # Callbacks
   before_validation :check_auth_privileges
+  before_save :check_change_in_privileges
 
   # Restricciones
   validates :name, :format => {:with => /\A\w[\w\s-]*\z/},
@@ -68,6 +69,10 @@ class Role < ActiveRecord::Base
 
   def <=>(other)
     other.kind_of?(Role) ? self.role_type <=> other.role_type : -1
+  end
+
+  def check_change_in_privileges
+    self.touch if !self.new_record? && self.privileges.any?(&:changed?)
   end
 
   # Definición dinámica de todos los métodos "tipo?"

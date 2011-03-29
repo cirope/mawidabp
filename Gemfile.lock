@@ -63,7 +63,7 @@ GEM
     cgi_multipart_eof_fix (2.5.0)
     color (1.4.1)
     columnize (0.3.2)
-    daemons (1.1.0)
+    daemons (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fastthread (1.0.7)

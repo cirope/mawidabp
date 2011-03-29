@@ -1366,6 +1366,7 @@ ul.raw_list ul {
     background: inherit;
     font-weight: normal;
     text-decoration: line-through;
+    padding: .1em 1em;
 }
 
 .move {
