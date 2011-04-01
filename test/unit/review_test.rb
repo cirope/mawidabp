@@ -48,6 +48,10 @@ class ReviewTest < ActiveSupport::TestCase
           }
       )
     end
+
+    assert @review.score > 0
+    assert @review.achieved_scale > 0
+    assert @review.top_scale > 0
   end
 
   # Prueba de actualización de un reporte
@@ -178,11 +182,18 @@ class ReviewTest < ActiveSupport::TestCase
     
     average = (total / cois_count).round
 
-    assert_equal average, @review.score.last
+    scores = get_test_parameter(:admin_review_scores)
+    scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
+    count = scores.size + 1
+
+    assert_equal average, @review.score_array.last
+    assert_equal average, @review.score
     assert !@review.score_text.blank?
-    assert(get_test_parameter(:admin_review_scores).any? do |s|
-        s[0] == @review.score.first
-      end)
+    assert(scores.any? { |s| count -= 1; s[0] == @review.score_array.first })
+    assert count > 0
+    assert_equal count, @review.achieved_scale
+    assert scores.size > 0
+    assert_equal scores.size, @review.top_scale
   end
 
   test 'must be approved function' do

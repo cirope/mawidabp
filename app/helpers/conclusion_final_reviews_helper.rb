@@ -10,7 +10,7 @@ module ConclusionFinalReviewsHelper
 
   def conclusion_review_score_details_table(review)
     scores = review.get_parameter(:admin_review_scores)
-    review_score = review.score.first
+    review_score = review.score_array.first
     header = String.new.html_safe
     footer = String.new.html_safe
     width = (100.0 / scores.size).truncate
@@ -24,7 +24,7 @@ module ConclusionFinalReviewsHelper
 
       header << content_tag(:th, (score[0] != review_score ?
             raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):
-            raw("<b>#{column_text.upcase} (#{review.effectiveness}%)</b>")),
+            raw("<b>#{column_text.upcase} (#{review.score}%)</b>")),
         :style => "width: #{width}%;")
 
       footer << content_tag(:td, "#{max_percentage}% - #{min_percentage}%")

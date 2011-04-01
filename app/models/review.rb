@@ -30,12 +30,14 @@ class Review < ActiveRecord::Base
 
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
+  before_save :calculate_score
   before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
   attr_reader :approval_errors, :procedure_control_subitem_ids
   attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
   attr_readonly :plan_item_id
+  attr_protected :score, :top_scale, :achieved_scale
   
   # Named scopes
   scope :list, lambda {
@@ -285,22 +287,31 @@ class Review < ActiveRecord::Base
     self.business_unit.business_unit_type.external
   end
 
+  def calculate_score
+    self.score_array # Recalcula score y asigna achieved_scale y top_scale
+  end
+
   # Devuelve la calificación del informe, siempre es un arreglo de dos elementos
   # como sigue: ['nota en texto', integer_promedio], por ejemplo
   # ['Satisfactorio', 90]
-  def score
-    average = self.effectiveness
-    scores = parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_review_scores, self.created_at)
-    
-    scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
-    score = scores.detect { |s| average >= s[1].to_i }
+  def score_array
+    organization_id = GlobalModelConfig.current_organization_id ||
+      self.period.try(:organization_id)
+    scores = parameter_in(organization_id, :admin_review_scores, self.created_at)
+    count = scores.size + 1
 
-    [score ? score[0] : '-', average]
+    self.effectiveness # Recalcula score
+    scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
+    score_description = scores.detect {|s| count -= 1; self.score >= s[1].to_i}
+
+    self.achieved_scale = count
+    self.top_scale = scores.size
+
+    [score_description ? score_description[0] : '-', self.score]
   end
 
   def score_text
-    score = self.score
+    score = self.score_array
 
     "#{score.first} (#{score.last}%)"
   end
@@ -313,7 +324,7 @@ class Review < ActiveRecord::Base
       acc + coi.effectiveness * (coi.relevance || 0)
     end
 
-    coi_count > 0 ? (total / coi_count.to_f).round : 100
+    self.score = coi_count > 0 ? (total / coi_count.to_f).round : 100
   end
 
   def issue_date(include_draft = false)
@@ -514,7 +525,7 @@ class Review < ActiveRecord::Base
     column_data << {
       'name' => "<b>#{Review.model_name.human}</b> ".to_iso,
       'relevance' => '',
-      'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
+      'effectiveness' => "<b>#{self.score}%</b>*".to_iso
     }
 
     process_controls.each do |process_control, coi_data|
@@ -708,7 +719,7 @@ class Review < ActiveRecord::Base
 
     column_data << {
       'name' => "<b>#{Review.model_name.human}</b>".to_iso,
-      'effectiveness' => "<b>#{self.effectiveness}%</b>*".to_iso
+      'effectiveness' => "<b>#{self.score}%</b>*".to_iso
     }
 
     process_controls.each do |process_control, coi_data|
@@ -947,7 +958,7 @@ class Review < ActiveRecord::Base
 
   def add_score_details_table(pdf)
     scores = self.get_parameter(:admin_review_scores)
-    review_score = self.score.first
+    review_score = self.score_array.first
     columns = {}
     column_data = {}
 
@@ -961,7 +972,7 @@ class Review < ActiveRecord::Base
       columns[score[1]] = PDF::SimpleTable::Column.new(score[1]) do |c|
         heading = PDF::SimpleTable::Column::Heading.new(
           score[0] != review_score ? column_text.to_iso :
-            "<b>#{column_text.upcase} (#{self.effectiveness}%)</b>".to_iso
+            "<b>#{column_text.upcase} (#{self.score}%)</b>".to_iso
         )
         heading.justification = :center
         c.heading = heading

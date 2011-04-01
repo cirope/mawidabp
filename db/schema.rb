@@ -75,6 +75,8 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.date     "close_date"
   end
 
+  add_index "conclusion_reviews", ["close_date"], :name => "index_conclusion_reviews_on_close_date"
+  add_index "conclusion_reviews", ["issue_date"], :name => "index_conclusion_reviews_on_issue_date"
   add_index "conclusion_reviews", ["review_id"], :name => "index_conclusion_reviews_on_review_id"
   add_index "conclusion_reviews", ["type"], :name => "index_conclusion_reviews_on_type"
 
@@ -421,6 +423,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
   end
 
   add_index "periods", ["end"], :name => "index_periods_on_end"
+  add_index "periods", ["number"], :name => "index_periods_on_number"
   add_index "periods", ["organization_id"], :name => "index_periods_on_organization_id"
   add_index "periods", ["start"], :name => "index_periods_on_start"
 
@@ -567,6 +570,9 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.datetime "updated_at"
     t.integer  "file_model_id"
     t.text     "survey"
+    t.integer  "score"
+    t.integer  "top_scale"
+    t.integer  "achieved_scale"
   end
 
   add_index "reviews", ["file_model_id"], :name => "index_reviews_on_file_model_id"

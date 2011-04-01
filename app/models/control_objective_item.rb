@@ -130,8 +130,10 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def effectiveness
+    organization_id = GlobalModelConfig.current_organization_id ||
+      self.review.try(:period).try(:organization_id)
     parameter_qualifications = self.get_parameter(
-      :admin_control_objective_qualifications)
+      :admin_control_objective_qualifications, false, organization_id)
     highest_qualification =
       parameter_qualifications.map { |item| item[1].to_i }.max || 0
     scores = [

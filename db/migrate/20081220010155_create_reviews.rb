@@ -4,6 +4,9 @@ class CreateReviews < ActiveRecord::Migration
       t.string :identification
       t.text :description
       t.text :survey
+      t.integer :score
+      t.integer :top_scale
+      t.integer :achieved_scale
       t.references :period
       t.references :plan_item
       t.references :file_model

@@ -125,7 +125,7 @@ class FollowUpCommitteeController < ApplicationController
               t(:'follow_up_committee.synthesis_report.without_oportunities')
             repeated_count += c_r.review.oportunities.repeated.count
 
-            review_scores << c_r.review.effectiveness
+            review_scores << c_r.review.score
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
               'review' => c_r.review.to_s,

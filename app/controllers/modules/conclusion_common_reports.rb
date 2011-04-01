@@ -335,9 +335,7 @@ module ConclusionCommonReports
               weaknesses = []
               oportunities = []
 
-              cfrs.sort! do |cfr1, cfr2|
-                cfr1.review.effectiveness <=> cfr2.review.effectiveness
-              end
+              cfrs.sort! {|cfr1, cfr2| cfr1.review.score <=> cfr2.review.score}
 
               cfrs.each do |cfr|
                 review = cfr.review

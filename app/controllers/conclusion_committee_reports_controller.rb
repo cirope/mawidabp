@@ -118,7 +118,7 @@ class ConclusionCommitteeReportsController < ApplicationController
               c_r.review.final_oportunities.count.to_s :
               t(:'conclusion_committee_report.synthesis_report.without_oportunities')
 
-            review_scores << c_r.review.effectiveness
+            review_scores << c_r.review.score
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
               'review' => c_r.review.to_s,
