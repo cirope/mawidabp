@@ -147,6 +147,32 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       high_qualification_value, @control_objective_item.effectiveness
   end
 
+  test 'review effectiveness modification' do
+    qualifications = @control_objective_item.get_parameter(
+      :admin_control_objective_qualifications)
+    min_qualification_value = qualifications.map { |item| item[1].to_i }.min
+    review = @control_objective_item.review
+
+    review.save!
+    
+    old_score = review.score
+
+    assert_not_equal min_qualification_value,
+      @control_objective_item.compliance_score
+    assert review.update_attributes(
+      :control_objective_items_attributes => {
+        @control_objective_item.id => {
+          :id => @control_objective_item.id,
+          :compliance_score => min_qualification_value
+        }
+      }
+    )
+
+    puts "#{old_score} <> #{review.score}"
+    
+    assert_not_equal old_score, review.score
+  end
+
   test 'effectiveness with only design score' do
     qualifications = @control_objective_item.get_parameter(
       :admin_control_objective_qualifications)

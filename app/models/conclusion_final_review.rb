@@ -1,12 +1,15 @@
 class ConclusionFinalReview < ConclusionReview
   # Constantes
-  COLUMNS_FOR_SEARCH[:close_date] = {
-    :column => "#{table_name}.close_date",
+  COLUMNS_FOR_SEARCH = {
+    :close_date => {
+      :column => "#{table_name}.close_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
       :conversion_method => lambda {
         |value| ValidatesTimeliness::Parser.parse(value, :date)
-      }, :regexp => SEARCH_DATE_REGEXP
-  }
+      },
+      :regexp => SEARCH_DATE_REGEXP
+    }
+  }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
 
   # Named scopes
   scope :list_all_by_date, lambda { |from_date, to_date|

@@ -57,6 +57,7 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1/edit
   def edit
     @title = t :'control_objective_item.edit_title'
+    
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.includes(:review).where(
         :control_objective_id => params[:control_objective],
@@ -67,6 +68,8 @@ class ControlObjectiveItemsController < ApplicationController
     else
       @control_objective_item = find_with_organization(params[:id])
     end
+
+    @review = @control_objective_item.review
   end
 
   # Actualiza el contenido de un objetivo de control siempre que cumpla con las
@@ -77,14 +80,27 @@ class ControlObjectiveItemsController < ApplicationController
   def update
     @title = t :'control_objective_item.edit_title'
     @control_objective_item = find_with_organization(params[:id])
+    review = @control_objective_item.review
 
     respond_to do |format|
-      if @control_objective_item.update_attributes(
-          params[:control_objective_item])
+      updated = review.update_attributes(
+        :control_objective_items_attributes => {
+          @control_objective_item.id => params[:control_objective_item].merge(
+            :id => @control_objective_item.id
+          )
+        }
+      )
+      # Se carga el objetivo del informe para poder reportar los errores
+      @control_objective_item = review.control_objective_items.detect do |coi|
+        coi.id == @control_objective_item.id
+      end
+      
+      if updated
         flash.notice = t :'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
-        format.html { redirect_to(back_to || edit_control_objective_item_path(
-              @control_objective_item)) }
+        format.html {
+          redirect_to(back_to || edit_control_objective_item_path(@control_objective_item))
+        }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

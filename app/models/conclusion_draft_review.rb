@@ -1,4 +1,7 @@
 class ConclusionDraftReview < ConclusionReview
+  # Constantes
+  COLUMNS_FOR_SEARCH = GENERIC_COLUMNS_FOR_SEARCH
+
   # Callbacks
   before_save :check_for_approval
 

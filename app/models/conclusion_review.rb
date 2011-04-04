@@ -8,7 +8,7 @@ class ConclusionReview < ActiveRecord::Base
   }
 
   # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+  GENERIC_COLUMNS_FOR_SEARCH = {
     :issue_date => {
       :column => "#{table_name}.issue_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
@@ -33,7 +33,7 @@ class ConclusionReview < ActiveRecord::Base
       :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
-  })
+  }.with_indifferent_access
 
   # Named scopes
   scope :for_period, lambda { |period|
