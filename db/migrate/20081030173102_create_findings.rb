@@ -21,6 +21,7 @@ class CreateFindings < ActiveRecord::Migration
       t.text :audit_recommendations
       t.text :effect
       t.integer :risk
+      t.integer :highest_risk
       t.integer :priority
       t.date :follow_up_date
 

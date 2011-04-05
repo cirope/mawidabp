@@ -1,12 +1,19 @@
 class Weakness < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
+  attr_protected :highest_risk
+
+  # Callbacks
+  before_save :assign_highest_risk
 
   # Named scopes
   scope :all_for_report, where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true
   ).order(['risk DESC', 'state ASC'])
+  scope :with_highest_risk, where(
+    "#{table_name}.highest_risk = #{table_name}.risk"
+  )
 
   # Restricciones
   validates :risk, :priority, :presence => true
@@ -37,6 +44,14 @@ class Weakness < Finding
     work_paper.code_prefix = self.get_parameter(self.finding_prefix ?
         :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
         :admin_code_prefix_for_work_papers_in_weaknesses)
+  end
+
+  def assign_highest_risk
+    organization_id = GlobalModelConfig.current_organization_id ||
+      self.control_objective_item.try(:review).try(:period).try(:organization_id)
+    risks = self.get_parameter(:admin_finding_risk_levels, false,
+      organization_id)
+    self.highest_risk = risks.map(&:last).max
   end
   
   def risk_text

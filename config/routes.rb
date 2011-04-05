@@ -84,6 +84,7 @@ MawidaApp::Application.routes.draw do
   [
     'cost_analysis', 'create_cost_analysis',
     'synthesis_report', 'create_synthesis_report',
+    'notorious_reviews_report', 'create_notorious_reviews_report',
     'weaknesses_by_state', 'create_weaknesses_by_state',
     'weaknesses_by_risk', 'create_weaknesses_by_risk',
     'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type'

@@ -85,6 +85,43 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       'synthesis_report', 0)
   end
 
+  test 'notorious reviews report' do
+    perform_auth
+
+    get :notorious_reviews_report
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/notorious_reviews_report'
+
+    assert_nothing_raised(Exception) do
+      get :notorious_reviews_report, :notorious_reviews_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/notorious_reviews_report'
+  end
+
+  test 'create notorious_reviews report' do
+    perform_auth
+
+    get :create_notorious_reviews_report, :notorious_reviews_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'conclusion_committee_report.notorious_reviews_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'notorious_reviews_report', 0)
+  end
+
   test 'weaknesses by state report' do
     perform_auth
 

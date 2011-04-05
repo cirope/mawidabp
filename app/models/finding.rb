@@ -3,7 +3,7 @@ class Finding < ActiveRecord::Base
   include ParameterSelector
 
   # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+  COLUMNS_FOR_SEARCH = {
     :issue_date => {
       :column => "#{ConclusionReview.table_name}.issue_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
@@ -28,11 +28,11 @@ class Finding < ActiveRecord::Base
       :column => "LOWER(#{table_name}.description)", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
-  })
+  }.with_indifferent_access
 
   acts_as_tree
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { GlobalModelConfig.current_organization_id }
   }
 
   STATUS = {
@@ -328,11 +328,11 @@ class Finding < ActiveRecord::Base
   ).where("#{BusinessUnitType.table_name}.external" => true)
 
   # Restricciones sobre los atributos
-  attr_protected :first_notification_date, :final
+  attr_protected :first_notification_date, :final, :force_modification
   # Atributos no persistente
   attr_accessor :nested_user, :auto_control_objective_item, :finding_prefix,
     :avoid_changes_notification, :users_for_notification, :user_who_make_it,
-    :nested_finding_relation
+    :nested_finding_relation, :force_modification
 
   # Callbacks
   before_create :can_be_created?
@@ -588,7 +588,7 @@ class Finding < ActiveRecord::Base
   end
 
   def can_be_modified?
-    if self.final == false || self.final_changed? ||
+    if self.force_modification || self.final == false || self.final_changed? ||
         (self.repeated? && self.state_changed?) ||
         (!self.changed? && !self.control_objective_item.review.is_frozen?)
       true

@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.integer  "notification_level",        :default => 0
     t.date     "origination_date"
     t.integer  "repeated_of_id"
+    t.integer  "highest_risk"
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"

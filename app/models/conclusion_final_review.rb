@@ -16,7 +16,6 @@ class ConclusionFinalReview < ConclusionReview
     includes(
       :review => [
         :period,
-        { :control_objective_items => :weaknesses },
         { :plan_item => { :business_unit => :business_unit_type } }
       ]
     ).where(
