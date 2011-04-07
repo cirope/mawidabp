@@ -7,11 +7,11 @@ GIT
 
 GIT
   remote: https://github.com/thoughtbot/paperclip.git
-  revision: 1738ea1dcaf65860c53088cc62ad7f0887e629ca
+  revision: 7003961daf851db6e722e76099be50ba72982032
   specs:
-    paperclip (2.3.8)
-      activerecord
-      activesupport
+    paperclip (2.3.10)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
 
 GEM
   remote: http://rubygems.org/
@@ -95,7 +95,7 @@ GEM
     net-ssh-gateway (1.0.1)
       net-ssh (>= 1.99.1)
     newrelic_rpm (2.14.1)
-    paper_trail (2.2.0)
+    paper_trail (2.2.2)
       rails (~> 3)
     pg (0.10.1)
     polyglot (0.3.1)

@@ -37,11 +37,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # TODO: Eliminar cuando PaperTrail tenga esta opción por defecto
-  def paper_trail_enabled_for_controller
-    true
-  end
-
   def current_user
     load_user
 
