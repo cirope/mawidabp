@@ -20,8 +20,10 @@ class ApplicationController < ActionController::Base
   # para mostrar un mensaje de error personalizado
   rescue_from Exception do |exception|
     begin
-      STDERR << "#{exception.class}: #{exception.message}\n\n"
-      exception.backtrace.each { |l| STDERR << "#{l}\n" }
+      error = "#{exception.class}: #{exception.message}\n\n"
+      exception.backtrace.each { |l| error << "#{l}\n" }
+
+      logger.error(error)
 
       @title = t :'error.title'
       create_exception_file exception
@@ -32,8 +34,10 @@ class ApplicationController < ActionController::Base
 
       # En caso que la presentación misma de la excepción no salga como se espera
       rescue => ex
-        STDERR << "#{ex.class}: #{ex.message}\n\n"
-        ex.backtrace.each { |l| STDERR << "#{l}\n" }
+        error = "#{ex.class}: #{ex.message}\n\n"
+        ex.backtrace.each { |l| error << "#{l}\n" }
+
+        logger.error(error)
     end
   end
 

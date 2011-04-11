@@ -8,6 +8,23 @@ module ReviewsHelper
     content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
+  def review_plan_item_field(form, readonly)
+    require 'ostruct' unless defined? OpenStruct
+
+    grouped_plan_items = PlanItem.list_unused(@review.period_id).group_by(
+      &:business_unit_type)
+    
+    business_unit_types = grouped_plan_items.map do |but, plan_items|
+      sorted_plan_items = plan_items.sort_by(&:project)
+      
+      OpenStruct.new({:name => but.name, :plan_items => sorted_plan_items})
+    end
+
+    form.grouped_collection_select :plan_item_id, business_unit_types,
+      :plan_items, :name, :id, :project, {:prompt => true},
+      {:class => :inline_item, :disabled => readonly}
+  end
+
   def review_business_unit_type_text(review)
     review.plan_item.try(:business_unit).try(:business_unit_type).try(:name)
   end

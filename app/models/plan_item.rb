@@ -9,7 +9,7 @@ class PlanItem < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :business_unit_data, :overloaded
 
-   # Named scopes
+  # Named scopes
   scope :list_unused, lambda { |period_id|
     includes(:review, {:plan => :period}).where(
       [
@@ -138,6 +138,7 @@ class PlanItem < ActiveRecord::Base
   belongs_to :plan
   belongs_to :business_unit
   has_one :review
+  has_one :business_unit_type, :through => :business_unit
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
 

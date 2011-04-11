@@ -5,14 +5,6 @@ GIT
   specs:
     calendar_date_select (1.16.1)
 
-GIT
-  remote: https://github.com/thoughtbot/paperclip.git
-  revision: 7003961daf851db6e722e76099be50ba72982032
-  specs:
-    paperclip (2.3.10)
-      activerecord (>= 2.3.0)
-      activesupport (>= 2.3.2)
-
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
@@ -46,7 +38,7 @@ GEM
       activemodel (= 3.0.6)
       activesupport (= 3.0.6)
     activesupport (3.0.6)
-    ansi (1.2.2)
+    ansi (1.2.3)
     arel (2.0.9)
     builder (2.1.2)
     capistrano (2.5.21)
@@ -97,6 +89,9 @@ GEM
     newrelic_rpm (2.14.1)
     paper_trail (2.2.2)
       rails (~> 3)
+    paperclip (2.3.11)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
     pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.2)
@@ -161,7 +156,7 @@ DEPENDENCIES
   mongrel
   newrelic_rpm
   paper_trail
-  paperclip!
+  paperclip
   pg
   rails (= 3.0.6)
   ruby-debug

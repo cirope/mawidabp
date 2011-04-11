@@ -40,10 +40,7 @@
     <% if @review.new_record? %>
       <p class="form_item">
         <%= r_f.label :plan_item_id, nil, :class => :inline %>
-        <%= r_f.select :plan_item_id,
-          PlanItem.list_unused(@review.period_id).map { |pi| [pi.project, pi.id] },
-          {:prompt => true},
-          {:class => :inline_item, :disabled => readonly} %>
+        <%= review_plan_item_field(r_f, readonly) %>
       </p>
     <% else %>
       <p class="form_item">
