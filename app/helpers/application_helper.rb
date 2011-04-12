@@ -326,7 +326,7 @@ module ApplicationHelper
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    link_to(image_tag('move.png', :size => '6x14', :alt => '[M]'), '#',
+    link_to(image_tag('move.gif', :size => '6x14', :alt => '[M]'), '#',
       *(args << options))
   end
 
