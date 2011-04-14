@@ -7,18 +7,14 @@
     <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
   <% @audit_types.each do |audit_type| %>
-    <% audit_type_symbol = audit_type.kind_of?(Symbol) ? audit_type : audit_type.first %>
+    <% audit_type_symbol = audit_type.first %>
     <h1 class="center_title">
       <%= t :"conclusion_committee_report.findings_type_#{audit_type_symbol}" %>
     </h1>
 
-    <% (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i| %>
-      <% if audit_type.kind_of?(Symbol) %>
-        <% key = audit_type_symbol %>
-      <% else %>
-        <% key = "#{audit_type_symbol}_#{audit_type.last[i][1]}" %>
-        <h2 class="simple_title"><%= audit_type.last[i][0] %></h2>
-      <% end %>
+    <% audit_type.last.each do |audit_types| %>
+      <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
+      <h2 class="simple_title"><%= audit_types.first %></h2>
       <% weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"] %>
       <% oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"] %>
       <% repeated_count = @weaknesses_counts[period]["#{key}_repeated"] %>

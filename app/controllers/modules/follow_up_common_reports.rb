@@ -4,7 +4,7 @@ module FollowUpCommonReports
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
     @audit_types = [
-      :internal,
+      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
     @weaknesses_counts = {}
@@ -16,18 +16,11 @@ module FollowUpCommonReports
       @weaknesses_counts[period] ||= {}
 
       @audit_types.each do |audit_type|
-        audit_type_symbol = audit_type.kind_of?(Symbol) ?
-          audit_type : audit_type.first
+        audit_type_symbol = audit_type.first
 
-        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
-          if audit_type.kind_of?(Symbol)
-            key = audit_type
-          else
-            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
-            conditions = {
-              "#{BusinessUnitType.table_name}.id" => audit_type.last[i][1]
-            }
-          end
+        audit_type.last.each do |audit_types|
+          key = "#{audit_type_symbol}_#{audit_types.last}"
+          conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
 
           @weaknesses_counts[period]["#{key}_weaknesses"] =
             Weakness.with_status_for_report.list_all_by_date(
@@ -102,26 +95,19 @@ module FollowUpCommonReports
         (PDF_FONT_SIZE * 1.25).round, :justify
       
       @audit_types.each do |audit_type|
-        audit_type_symbol = audit_type.kind_of?(Symbol) ?
-          audit_type : audit_type.first
+        audit_type_symbol = audit_type.first
 
         pdf.move_pointer PDF_FONT_SIZE * 2
 
          pdf.add_title t(:"conclusion_committee_report.findings_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
-          if audit_type.kind_of? Symbol
-            key = audit_type_symbol
+        audit_type.last.each do |audit_types|
+          key = "#{audit_type_symbol}_#{audit_types.last}"
 
-            pdf.move_pointer PDF_FONT_SIZE
-          else
-            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
-
-            pdf.move_pointer PDF_FONT_SIZE
-            pdf.add_title audit_type.last[i][0], PDF_FONT_SIZE, :justify
-            pdf.move_pointer PDF_FONT_SIZE
-          end
+          pdf.move_pointer PDF_FONT_SIZE
+          pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
+          pdf.move_pointer PDF_FONT_SIZE
 
           weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
           oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
@@ -235,7 +221,7 @@ module FollowUpCommonReports
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
     @audit_types = [
-      :internal,
+      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
@@ -250,7 +236,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       @audit_types.each do |audit_type|
-        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
+        audit_type.last.each do |audit_types|
           weaknesses_count = {}
           weaknesses_count_by_risk = {}
           being_implemented_counts = {:current => 0, :stale => 0,
@@ -264,14 +250,8 @@ module FollowUpCommonReports
             :"#{audit_type_symbol}_audit").finals(false).repeated.for_period(
             period).count
 
-          if audit_type.kind_of?(Symbol)
-            key = audit_type
-          else
-            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
-            conditions = {
-              "#{BusinessUnitType.table_name}.id" => audit_type.last[i][1]
-            }
-          end
+          key = "#{audit_type_symbol}_#{audit_types.last}"
+          conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
 
           risk_levels.each do |rl|
             weaknesses_count_by_risk[rl[0]] = 0
@@ -377,18 +357,12 @@ module FollowUpCommonReports
         pdf.add_title t(:"conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        (audit_type.kind_of?(Symbol) ? 1 : audit_type.last.size).times do |i|
-          if audit_type.kind_of? Symbol
-            key = audit_type_symbol
+        audit_type.last.each do |audit_types|
+          key = "#{audit_type_symbol}_#{audit_types.last}"
 
-            pdf.move_pointer PDF_FONT_SIZE
-          else
-            key = "#{audit_type_symbol}_#{audit_type.last[i][1]}"
-
-            pdf.move_pointer PDF_FONT_SIZE
-            pdf.add_title audit_type.last[i][0], PDF_FONT_SIZE, :justify
-            pdf.move_pointer PDF_FONT_SIZE
-          end
+          pdf.move_pointer PDF_FONT_SIZE
+          pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
+          pdf.move_pointer PDF_FONT_SIZE
 
           add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
 
