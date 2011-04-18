@@ -33,6 +33,7 @@ es:
     send: "Enviar"
     show: "Ver"
     update: "Actualizar"
+    without_data: "Sin datos"
 
   lang:
     es: "Español"
@@ -1056,6 +1057,8 @@ es:
     password_reseted: "La contraseña del usuario %{user} ha sido blanqueada."
     password_correctly_updated: "Contraseña actualizada correctamente."
     password_stale_object_error: "La contraseña no pudo ser actualizada, intente nuevamente."
+    status: "Estado"
+    status_title: "Estado"
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
     add_child: "Agregar nueva persona a cargo"
     add_organization_role: "Agregar un nuevo perfil dentro de una organización"
@@ -1078,6 +1081,14 @@ es:
     release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
+    high_risk_weaknesses:
+      one: '*Una* observación de *riesgo alto*'
+      other: '*%{count}* observaciones de *riesgo alto*'
+      image_label: 'Observaciones de riesgo alto'
+    weaknesses:
+      one: '*Una* observación'
+      other: '*%{count}* observaciones'
+      image_label: 'Observaciones'
     responsibility_modification:
       title: "Modificación de responsabilidades"
       old_responsible: "Responsable anterior: %{responsible}"

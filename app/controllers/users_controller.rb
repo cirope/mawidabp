@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     :update_password, :new_initial, :create_initial, :initial_roles]
   before_filter :load_privileges
   before_filter :check_privileges, :except => [:login, :create_session, :logout,
-    :edit_password, :update_password, :edit_personal_data,
+    :user_status, :edit_password, :update_password, :edit_personal_data,
     :update_personal_data, :new_initial, :create_initial, :initial_roles]
   layout proc { |controller|
     controller.request.xhr? ? false :
@@ -159,6 +159,21 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
+    end
+  end
+
+  # Muestra el estado de un usuario
+  #
+  # * GET /users/1/user_status
+  # * GET /users/1/user_status.xml
+  def user_status
+    @title = t :'user.status_title'
+    @user = @auth_user.audited? ?
+      @auth_user : find_with_organization(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @user }
     end
   end
 
@@ -729,6 +744,7 @@ class UsersController < ApplicationController
       @action_privileges.update(
         :auto_complete_for_user => :read,
         :roles => :read,
+        :user_status => :read,
         :export_to_pdf => :read,
         :blank_password => :modify,
         :reassignment_edit => :modify,

@@ -18,6 +18,8 @@ gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'
 gem 'paperclip'
+gem 'rmagick'
+gem 'gruff'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer

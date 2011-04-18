@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     ).limit(1)
   }
   scope :all_with_findings_for_notification, includes(
-    :finding_user_assignments => :finding
+    :finding_user_assignments => :raw_finding
   ).where(
     :findings => {:state => Finding::STATUS[:notify], :final => false}
   ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
@@ -167,7 +167,12 @@ class User < ActiveRecord::Base
     :after_remove => :mark_roles_as_changed
   has_many :organizations, :through => :organization_roles, :uniq => true
   has_many :finding_user_assignments
-  has_many :findings, :through => :finding_user_assignments, :uniq => true
+  has_many :findings, :through => :finding_user_assignments,
+    :source => :raw_finding, :class_name => 'Finding', :uniq => true
+  has_many :weaknesses, :through => :finding_user_assignments,
+    :source_type => 'Weakness', :source => :finding, :uniq => true
+  has_many :oportunities, :through => :finding_user_assignments,
+    :source_type => 'Oportunity', :source => :finding, :uniq => true
 
   accepts_nested_attributes_for :organization_roles, :allow_destroy => true,
     :reject_if => proc { |attributes|

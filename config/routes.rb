@@ -290,6 +290,7 @@ MawidaApp::Application.routes.draw do
     end
 
     member do
+      get :user_status
       get :logout
       get :edit_password
       put :update_password

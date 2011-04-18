@@ -13,6 +13,7 @@ class FindingsController < ApplicationController
   # * GET /findings.xml
   def index
     @title = t :'finding.index_title'
+    @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
 
     default_conditions = {
@@ -20,15 +21,15 @@ class FindingsController < ApplicationController
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    if @auth_user.committee?
-      if params[:user_id]
+    if @auth_user.committee? || @selected_user
+      if @selected_user
         default_conditions[User.table_name] = {:id => params[:user_id]}
       end
     else
       self_and_descendants_ids = @self_and_descendants.map(&:id)
       default_conditions[User.table_name] = {
-        :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
-          params[:user_id] : self_and_descendants_ids
+        :id => self_and_descendants_ids.include?(@selected_user.try(:id)) ?
+          @selected_user.id : self_and_descendants_ids
       }
     end
     

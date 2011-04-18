@@ -218,10 +218,12 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner", :default => false
+    t.boolean  "process_owner",                :default => false
+    t.string   "finding_type",  :limit => nil
   end
 
-  add_index "finding_user_assignments", ["finding_id", "user_id"], :name => "index_finding_user_assignments_on_finding_id_and_user_id"
+  add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], :name => "index_finding_user_assignments_on_finding_id_finding_type_and_u"
+  add_index "finding_user_assignments", ["finding_id", "finding_type"], :name => "index_finding_user_assignments_on_finding_id_and_finding_type"
 
   create_table "findings", :force => true do |t|
     t.string   "type"

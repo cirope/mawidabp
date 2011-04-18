@@ -85,7 +85,7 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
     finding_user_assignment = finding.finding_user_assignments.build(
       :user_id => @finding_user_assignment.user_id
     )
-    finding_user_assignment.finding = finding
+    finding_user_assignment.raw_finding = finding
     finding_user_assignment.invalid?
     assert finding_user_assignment.invalid?
     assert_equal 1, finding_user_assignment.errors.count

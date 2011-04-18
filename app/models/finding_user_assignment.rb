@@ -21,14 +21,16 @@ class FindingUserAssignment < ActiveRecord::Base
     end
   end
   validates_each :user_id do |record, attr, value|
-    users = record.finding.finding_user_assignments.reject(
-      &:marked_for_destruction?).map(&:user_id)
+    users = (record.finding || record.raw_finding).finding_user_assignments.
+      reject(&:marked_for_destruction?).map(&:user_id)
     
     record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
   end
 
   # Relaciones
-  belongs_to :finding, :inverse_of => :finding_user_assignments
+  belongs_to :finding, :inverse_of => :finding_user_assignments,
+    :polymorphic => true
+  belongs_to :raw_finding, :foreign_key => :finding_id, :class_name => 'Finding'
   belongs_to :user
 
   def <=>(other)
@@ -45,6 +47,6 @@ class FindingUserAssignment < ActiveRecord::Base
   end
 
   def can_be_modified?
-    self.finding.can_be_modified?
+    (self.finding || self.raw_finding).can_be_modified?
   end
 end

@@ -1,65 +1,78 @@
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_auditor_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_audited_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_bare_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_manager_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_supervisor_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_first_time_user:
   finding: bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
+  finding_type: Weakness
   user: first_time_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_administrator_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_auditor_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_audited_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_bare_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_manager_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_supervisor_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
@@ -67,26 +80,31 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_supervi
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification_auditor_user:
   finding: iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification_audited_user:
   finding: iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification_bare_user:
   finding: iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification_manager_user:
   finding: iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification_supervisor_user:
   finding: iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
@@ -94,330 +112,396 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_administrator_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_auditor_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_audited_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_bare_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_manager_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_supervisor_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_administrator_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_auditor_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_audited_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_bare_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: bare_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_manager_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_supervisor_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_administrator_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_auditor_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_audited_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_bare_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: bare_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_manager_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2_supervisor_user:
   finding: bcra_A4609_security_management_responsible_dependency_notify_oportunity_2
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_administrator_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_auditor_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_audited_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_first_time_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: first_time_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_manager_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity_supervisor_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_administrator_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_auditor_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_audited_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_bare_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_manager_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness_supervisor_user:
   finding: bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_administrator_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_auditor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_audited_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_bare_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_manager_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_weakness_supervisor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_weakness
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_weakness
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_administrator_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_auditor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_audited_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_bare_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: bare_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_manager_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity_supervisor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_editable_oportunity
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_administrator_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_audited_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_bare_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: bare_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_manager_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_supervisor_user:
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_administrator_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: administrator_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_auditor_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: auditor_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_audited_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: audited_user
   process_owner: true
 
 iso_27000_security_policy_3_1_item_weakness_bare_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: bare_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_manager_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: manager_user
   process_owner: false
 
 iso_27000_security_policy_3_1_item_weakness_supervisor_user:
   finding: iso_27000_security_policy_3_1_item_weakness
+  finding_type: Weakness
   user: supervisor_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_oportunity_administrator_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: administrator_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_oportunity_auditor_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: auditor_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_oportunity_audited_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: audited_user
   process_owner: true
 
 iso_27000_security_organization_4_2_item_editable_oportunity_bare_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: bare_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_oportunity_manager_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: manager_user
   process_owner: false
 
 iso_27000_security_organization_4_2_item_editable_oportunity_supervisor_user:
   finding: iso_27000_security_organization_4_2_item_editable_oportunity
+  finding_type: Oportunity
   user: supervisor_user
   process_owner: false

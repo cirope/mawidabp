@@ -1101,6 +1101,15 @@ class UsersControllerTest < ActionController::TestCase
     assert roles.any? { |r| r.first == roles(:admin_role).name }
   end
 
+  test 'show user status' do
+    perform_auth
+    get :user_status, :id => users(:administrator_user).user
+    assert_response :success
+    assert_not_nil assigns(:user)
+    assert_select '#error_body', false
+    assert_template 'users/user_status'
+  end
+
   test 'auto complete for user' do
     perform_auth
     post :auto_complete_for_user, { :user_data => 'admin' }

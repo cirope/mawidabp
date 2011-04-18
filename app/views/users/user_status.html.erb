@@ -1,0 +1,32 @@
+<h1 class="title"><%= @user.informal_name %></h1>
+
+<section class="float_image">
+  <h2 style="font-weight: normal;">
+    <%= textilize_without_paragraph(t(:'user.high_risk_weaknesses',
+        :count => @user.weaknesses.for_current_organization.finals(false).with_highest_risk.count)) %>
+  </h2>
+  <div class="image_frame">
+    <%= draw_user_weaknesses_graph(@user,
+      @user.weaknesses.for_current_organization.finals(false).with_highest_risk,
+      t(:'user.high_risk_weaknesses.image_label')) %>
+  </div>
+</section>
+
+<section class="float_image">
+  <h2 style="font-weight: normal;">
+    <%= link_to textilize_without_paragraph(t(:'user.weaknesses',
+        :count => @user.weaknesses.for_current_organization.finals(false).count)),
+      findings_path(:completed => 'incomplete', :user_id => @user.id)  %>
+  </h2>
+  <div class="image_frame">
+    <%= draw_user_weaknesses_graph(@user,
+      @user.weaknesses.for_current_organization.finals(false),
+      t(:'user.weaknesses.image_label')) %>
+  </div>
+</section>
+
+<div id="links">
+  <%= link_to t(:'label.show'), user_path(@user) %> |
+  <%= link_to t(:'label.list'), users_path %> |
+  <%= link_to_back %>
+</div>

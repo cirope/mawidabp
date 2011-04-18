@@ -14,6 +14,7 @@
     </div>
   </div>
   <%= link_to t(:'label.show'), @user %> |
+  <%= link_to t(:'user.status'), user_status_user_path(@user) %> |
   <%= link_to t(:'label.list'), users_path %> |
   <%= link_to t(:'user.reassign_to_another_user'),
     reassignment_edit_user_path(@user) %> |

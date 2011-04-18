@@ -27,4 +27,37 @@ module UsersHelper
       Organization.list_for_group(group), :name, :id), {:prompt => true},
       {:id => "#{id}_organization_id"}
   end
+
+  def draw_user_weaknesses_graph(user, findings, image_label = nil)
+    @seq ||= 0
+    g = Gruff::Pie.new
+    gruped_findings = findings.group_by(&:state)
+    g.theme_pastel
+    g.no_data_message = t(:'label.without_data')
+
+    gruped_findings.each do |status, weaknesses|
+      g.data "#{weaknesses.first.state_text} (#{weaknesses.size})",
+        weaknesses.size
+    end
+
+    path_without_root = ('%08d' % @auth_organization.id).scan(/\d{4}/) +
+      ('%08d' % @auth_user.id).scan(/\d{4}/) + ['graph', user.user]
+    fs_path = "#{PRIVATE_PATH}#{path_without_root.join(File::SEPARATOR)}"
+
+    FileUtils.mkdir_p fs_path
+
+    image_name = "findings_#{@seq += 1}.gif"
+    image_path = "#{fs_path}#{File::SEPARATOR}#{image_name}"
+
+    g.write image_path
+
+    img = Magick::ImageList.new image_path
+    img.resize! 0.5
+    img.write image_path
+
+    size = Paperclip::Geometry.from_file(File.new(image_path, 'r'))
+
+    image_tag("/private/#{path_without_root.join('/')}/#{image_name}",
+      :size => size.to_s, :alt => image_label)
+  end
 end
