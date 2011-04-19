@@ -4,8 +4,8 @@ class ConclusionFinalReview < ConclusionReview
     :close_date => {
       :column => "#{table_name}.close_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
-      :conversion_method => lambda {
-        |value| ValidatesTimeliness::Parser.parse(value, :date)
+      :conversion_method => lambda { |value|
+        Timeliness.parse(value, :date).to_s(:db)
       },
       :regexp => SEARCH_DATE_REGEXP
     }
