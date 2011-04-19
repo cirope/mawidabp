@@ -12,9 +12,10 @@ class ConclusionReview < ActiveRecord::Base
     :issue_date => {
       :column => "#{table_name}.issue_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
-      :conversion_method => lambda {
-        |value| Timeliness::Parser.parse(value, :date)
-      }, :regexp => SEARCH_DATE_REGEXP
+      :conversion_method => lambda { |value|
+        Timeliness.parse(value, :date).to_s(:db)
+      },
+      :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
       :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
