@@ -19,7 +19,8 @@ class FileModelsController < ApplicationController
     base_regexp = /^(#{allowed_paths})/
 
     if file_name =~ base_regexp && File.file?(file_name)
-      response.headers['Cache-Control'] = 'private'
+      response.headers['Last-Modified'] = File.mtime(file_name).httpdate
+      response.headers['Cache-Control'] = 'private, no-store'
       extname = File.extname(file_name)[1..-1]
       mime_type = Mime::Type.lookup_by_extension(extname)
 
