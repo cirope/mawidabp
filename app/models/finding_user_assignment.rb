@@ -9,7 +9,7 @@ class FindingUserAssignment < ActiveRecord::Base
   scope :owners, where(:process_owner => true)
 
   # Callbacks
-  before_save :can_be_modified?
+  before_save :can_be_modified?, :assign_finding_type
 
   # Restricciones
   validates :user_id, :presence => true
@@ -48,5 +48,9 @@ class FindingUserAssignment < ActiveRecord::Base
 
   def can_be_modified?
     (self.finding || self.raw_finding).can_be_modified?
+  end
+
+  def assign_finding_type
+    self.finding_type = self.finding.try(:type) || self.raw_finding.try(:type)
   end
 end
