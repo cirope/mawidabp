@@ -607,6 +607,11 @@ div.drop_list_hover {
   border: 2px solid #2c3234;
 }
 
+div.float_image {
+  float: left;
+  margin-right: 2em;
+}
+
 div.form_column_left {
   float: left;
   width: 48%;
@@ -1028,12 +1033,6 @@ p.add_item {
 p.note {
   font-size: .8em;
   font-style: italic;
-}
-
-section.float_image {
-  display: block;
-  float: left;
-  margin-right: 2em;
 }
 
 select[multiple="multiple"] {
