@@ -623,7 +623,7 @@ class Finding < ActiveRecord::Base
   end
 
   def can_be_destroyed?
-    self.is_in_a_final_review? ? false : true
+    self.is_in_a_final_review? || self.repeated_of ? false : true
   end
 
   def is_in_a_final_review?

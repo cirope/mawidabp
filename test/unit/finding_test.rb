@@ -707,6 +707,11 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, repeated_of.repeated_children.size
     assert_equal repeated_of, finding.repeated_root
 
+    # No se puede eliminar una observación reiterada
+    assert_no_difference 'Finding.count' do
+      assert !finding.destroy
+    end
+
     # Intentar asignar otra relacionada
     repeated_of = Finding.find(
       findings(:iso_27000_security_policy_3_1_item_weakness).id)
