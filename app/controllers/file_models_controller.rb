@@ -21,8 +21,7 @@ class FileModelsController < ApplicationController
     if file_name =~ base_regexp && File.file?(file_name)
       response.headers['Last-Modified'] = File.mtime(file_name).httpdate
       response.headers['Cache-Control'] = 'private, no-store'
-      extname = File.extname(file_name)[1..-1]
-      mime_type = Mime::Type.lookup_by_extension(extname)
+      mime_type = Mime::Type.lookup_by_extension(File.extname(file_name)[1..-1])
 
       send_file file_name, :url_based_filename => true,
         :type => (mime_type || 'application/octet-stream')
