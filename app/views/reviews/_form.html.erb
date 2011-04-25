@@ -203,7 +203,7 @@
         suggested_findings_review_path(:id => @review.plan_item_id) : '#',
         :remote => true, :'data-update' => :suggested_findings,
         :'data-condition' => "$('link_to_suggested_findings').readAttribute('href') != '#'",
-        :id => :link_to_suggested_findings,
+        :id => :link_to_suggested_findings, :onclick => 'return false;',
         :class => (:link_without_action unless @review.plan_item_id) %>
     </p>
   <% end %>

@@ -79,6 +79,7 @@
         :method => :get,
         :'data-condition' => "!$F('conclusion_draft_review_review_id').blank()",
         :remote => true, :style => 'margin-left: 1em;',
+        :onclick => 'return false;',
         :id => 'check_for_approval'} %>
     </div>
     <% if @conclusion_draft_review.updated_at %>

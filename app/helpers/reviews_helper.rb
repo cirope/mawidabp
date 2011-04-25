@@ -67,7 +67,7 @@ module ReviewsHelper
       link_to(t(:'review.view_procedure_control_for_the_period'),
         {:action => :procedure_control_data, :id => procedure_control},
         :remote => true, :'data-update' => :procedure_control_data,
-        :method => :get)
+        :method => :get, :onclick => 'return false;')
     else
       content_tag :span, t(:'review.view_procedure_control_for_the_period')
     end
