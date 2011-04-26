@@ -192,7 +192,7 @@ es:
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
     synthesis_report_title: "Informe de síntesis al directorio"
-    notorious_reviews_report_title: "Informes notorios"
+    high_risk_weaknesses_report_title: "Observaciones de riesgo"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
@@ -202,7 +202,7 @@ es:
     findings_type_external: "Observaciones Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
-    notorious_weaknesses: "Observaciones notorias"
+    high_risk_weaknesses: "Observaciones de riesgo"
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -224,8 +224,8 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-    notorious_reviews_report:
-      pdf_name: "informes_notorios_%{from_date}_al_%{to_date}.pdf"
+    high_risk_weaknesses_report:
+      pdf_name: "observaciones_de_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
@@ -534,10 +534,10 @@ es:
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
-    notorious_reviews_report_title: "Informes notorios"
+    high_risk_weaknesses_report_title: "Observaciones de riesgo"
     weakness_summary: "Resumen de observaciones"
     cost_analysis_title: "Análisis de costos"
-    notorious_weaknesses: "Observaciones notorias"
+    high_risk_weaknesses: "Observaciones de riesgo"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -579,8 +579,8 @@ es:
       without_weaknesses: "Sin Observaciones en el periodo"
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
-    notorious_reviews_report:
-      pdf_name: "informes_notorios_%{from_date}_al_%{to_date}.pdf"
+    high_risk_weaknesses_report:
+      pdf_name: "observaciones_de_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"

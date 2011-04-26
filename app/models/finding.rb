@@ -126,6 +126,9 @@ class Finding < ActiveRecord::Base
   }
   scope :repeated, where(:state => STATUS[:repeated])
   scope :not_repeated, where('state <> ?', STATUS[:repeated])
+  scope :with_pending_status, where(
+    :state => STATUS.except(EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
+  )
   scope :all_for_reallocation_with_review, lambda { |review|
     includes(:control_objective_item => :review).where(
       :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false

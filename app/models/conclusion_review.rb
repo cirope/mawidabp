@@ -62,14 +62,7 @@ class ConclusionReview < ActiveRecord::Base
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
      ).where(
-      [
-        "#{Review.table_name}.achieved_scale = :lowest_scale",
-        [
-          "#{Review.table_name}.achieved_scale <> #{Review.table_name}.top_scale",
-          "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
-        ].join(' AND ')
-      ].join(' OR '),
-      { :lowest_scale => 1 }
+       "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
     )
   }
   scope :with_business_unit_type, lambda { |but_id|

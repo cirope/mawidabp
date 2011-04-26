@@ -1,5 +1,5 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :notorious_reviews_report, :extra_params => {},
+  :locals => {:action => :high_risk_weaknesses_report, :extra_params => {},
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
@@ -10,12 +10,12 @@
   <% @notorious_reviews[period].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
       <h1 class="center_title">
-        <%= t :'follow_up_committee.notorious_reviews_report.internal_audit_weaknesses' %>
+        <%= t :'conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses' %>
       </h1>
       <% @internal_title_showed = true %>
     <% elsif data[:external] && !@external_title_showed %>
       <h1 class="center_title">
-        <%= t :'follow_up_committee.notorious_reviews_report.external_audit_weaknesses' %>
+        <%= t :'conclusion_committee_report.high_risk_weaknesses_report.external_audit_weaknesses' %>
       </h1>
       <% @external_title_showed = true %>
     <% end %>
@@ -44,7 +44,7 @@
       </table>
     <% else %>
       <p style="margin: 1em;">
-        <em><%= t :'follow_up_committee.notorious_reviews_report.without_audits_in_the_period' %></em>
+        <em><%= t :'conclusion_committee_report.high_risk_weaknesses_report.without_audits_in_the_period' %></em>
       </p>
     <% end %>
   <% end %>
@@ -60,17 +60,17 @@
   <%= render :partial => 'shared/customize_report_form', :locals => {
     :options => {
       :form_name => 'report',
-      :url => request.query_parameters.merge({:action => :create_notorious_reviews_report}),
+      :url => request.query_parameters.merge({:action => :create_high_risk_weaknesses_report}),
       :fields => [
         {
           :name => :report_title,
           :label => t(:'customize_report_form.title'),
-          :value => t(:'follow_up_committee.notorious_reviews_report.title')
+          :value => t(:'conclusion_committee_report.high_risk_weaknesses_report.title')
         },
         {
           :name => :report_subtitle,
           :label => t(:'customize_report_form.subtitle'),
-          :value => t(:'follow_up_committee.notorious_reviews_report.subtitle')
+          :value => t(:'conclusion_committee_report.high_risk_weaknesses_report.subtitle')
         }
       ]
     }

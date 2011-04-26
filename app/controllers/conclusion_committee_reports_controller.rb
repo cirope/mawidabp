@@ -515,27 +515,26 @@ class ConclusionCommitteeReportsController < ApplicationController
   # Crea un PDF con los informes más notorios para un determinado rango de
   # fechas
   #
-  # * GET /conclusion_committee_reports/notorious_reviews_report
-  def notorious_reviews_report
-    @title = t :'conclusion_committee_report.notorious_reviews_report_title'
-    @from_date, @to_date = *make_date_range(params[:notorious_reviews_report])
+  # * GET /conclusion_committee_reports/high_risk_weaknesses_report
+  def high_risk_weaknesses_report
+    @title = t :'conclusion_committee_report.high_risk_weaknesses_report_title'
+    @from_date, @to_date = *make_date_range(params[:high_risk_weaknesses_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'review', 'score',
-      'notorious_weaknesses']
+      'high_risk_weaknesses']
     @filters = []
     @notorious_reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date).notorious(true)
 
     @periods.each do |period|
-      count = 0
       BusinessUnitType.list.each do |but|
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
           'review' => [Review.model_name.human, 15],
           'score' => [Review.human_attribute_name(:score), 15],
-          'notorious_weaknesses' =>
-            [t(:'conclusion_committee_report.notorious_weaknesses'), 55]
+          'high_risk_weaknesses' =>
+            [t(:'conclusion_committee_report.high_risk_weaknesses'), 55]
         }
         column_data = []
         name = but.name
@@ -543,28 +542,37 @@ class ConclusionCommitteeReportsController < ApplicationController
           conclusion_reviews.for_period(period).with_business_unit_type(but.id)
 
         conclusion_review_per_unit_type.each do |c_r|
-          notorious_weaknesses = []
+          high_risk_weaknesses = []
+          weaknesses =
+            c_r.review.final_weaknesses.with_highest_risk.with_pending_status
+          
+          weaknesses.each do |w|
+            audited = w.users.select(&:audited?).map do |u|
+              w.process_owners.include?(u) ?
+                "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
+                u.full_name
+            end
 
-          c_r.review.final_weaknesses.with_highest_risk.each do |w|
-            notorious_weaknesses << [
+            high_risk_weaknesses << [
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
+              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}"
             ].join("\n")
           end
 
-          if notorious_weaknesses.size == 0
-            t(:'conclusion_committee_report.notorious_reviews_report.without_weaknesses')
+          if high_risk_weaknesses.size == 0
+            t(:'conclusion_committee_report.high_risk_weaknesses_report.without_weaknesses')
           end
 
           column_data << {
             'business_unit_report_name' => c_r.review.business_unit.name,
             'review' => c_r.review.to_s,
             'score' => c_r.review.score_text,
-            'notorious_weaknesses' => notorious_weaknesses.blank? ?
-              t(:'conclusion_committee_report.notorious_reviews_report.without_weaknesses') :
-              notorious_weaknesses
+            'high_risk_weaknesses' => high_risk_weaknesses.blank? ?
+              t(:'conclusion_committee_report.high_risk_weaknesses_report.without_weaknesses') :
+              high_risk_weaknesses
           }
         end
 
@@ -582,9 +590,9 @@ class ConclusionCommitteeReportsController < ApplicationController
   # Crea un PDF con los informes más notorios para un determinado rango de
   # fechas
   #
-  # * POST /conclusion_committee_reports/create_notorious_reviews_report
-  def create_notorious_reviews_report
-    self.notorious_reviews_report
+  # * POST /conclusion_committee_reports/create_high_risk_weaknesses_report
+  def create_high_risk_weaknesses_report
+    self.high_risk_weaknesses_report
 
     pdf = PDF::Writer.create_generic_pdf :landscape
 
@@ -623,10 +631,10 @@ class ConclusionCommitteeReportsController < ApplicationController
         end
 
         if !data[:external] && !@internal_title_showed
-          title = t :'conclusion_committee_report.notorious_reviews_report.internal_audit_weaknesses'
+          title = t :'conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses'
           @internal_title_showed = true
         elsif data[:external] && !@external_title_showed
-          title = t :'conclusion_committee_report.notorious_reviews_report.external_audit_weaknesses'
+          title = t :'conclusion_committee_report.high_risk_weaknesses_report.external_audit_weaknesses'
           @external_title_showed = true
         end
 
@@ -671,7 +679,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           end
         else
           pdf.text(
-            t(:'conclusion_committee_report.notorious_reviews_report.without_audits_in_the_period'))
+            t(:'conclusion_committee_report.high_risk_weaknesses_report.without_audits_in_the_period'))
         end
       end
     end
@@ -684,14 +692,14 @@ class ConclusionCommitteeReportsController < ApplicationController
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.notorious_reviews_report.pdf_name',
+      t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'notorious_reviews_report', 0)
+        :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.notorious_reviews_report.pdf_name',
+      t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'notorious_reviews_report', 0)
+        :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
   end
 
   private
@@ -708,8 +716,8 @@ class ConclusionCommitteeReportsController < ApplicationController
         :create_synthesis_report => :read,
         :cost_analysis => :read,
         :create_cost_analysis => :read,
-        :notorious_reviews_report => :read,
-        :create_notorious_reviews_report => :read
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read
       })
   end
 end
