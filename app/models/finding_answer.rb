@@ -33,6 +33,12 @@ class FindingAnswer < ActiveRecord::Base
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
 
+  def initialize(attributes = nil)
+    super(attributes)
+
+    self.notify_users = true if self.notify_users.nil?
+  end
+
   def send_notification_to_users
     if self.notify_users == true || self.notify_users == '1'
       users = self.finding.users - [self.user]
