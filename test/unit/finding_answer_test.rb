@@ -39,7 +39,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
           :auditor_comments => 'New auditor comments',
           :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
           :user => users(:administrator_user),
-          :file_model => file_models(:text_file)
+          :file_model => file_models(:text_file),
+          :notify_users => false
         )
       end
     end
@@ -58,7 +59,8 @@ class FindingAnswerTest < ActiveSupport::TestCase
           :commitment_date => 10.days.from_now.to_date,
           :finding => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness),
           :user => users(:audited_user),
-          :file_model => file_models(:text_file)
+          :file_model => file_models(:text_file),
+          :notify_users => false
         )
       end
     end
