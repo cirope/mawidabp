@@ -452,7 +452,8 @@ class Finding < ActiveRecord::Base
   has_many :users, :through => :finding_user_assignments,
     :order => 'last_name ASC'
   
-  accepts_nested_attributes_for :finding_answers, :allow_destroy => false
+  accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
+    :reject_if => lambda { |attributes| attributes['answer'].blank? }
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false

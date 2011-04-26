@@ -3,8 +3,10 @@
     <%= f.text_field :raw_cost, :maxlength => 255, :size => 10,
       :class => "required #{:error_field unless f.object.errors[:cost].blank?}" %>
   </div>
-  <div class="item_field item_controls" style="width: 75%;">
-    <%= f.text_area :description, :style => 'height: 3em;' %>
+  <div class="item_field" style="width: 75%;">
+    <%= f.text_field :description %>
+  </div>
+  <div style="display: none;">
     <%= f.hidden_field :user_id %>
     <%= f.hidden_field :cost_type %>
   </div>

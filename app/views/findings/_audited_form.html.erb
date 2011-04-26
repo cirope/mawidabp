@@ -200,6 +200,7 @@
   </div>
 
   <div id="finding_answers">
+    <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f_f.fields_for :finding_answers do |fa_f| %>
       <%= render :partial => 'finding_answer', :locals =>
         {:f => fa_f, :is_dynamic => false} %>
