@@ -8,8 +8,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :synthesis_report, :weaknesses_by_state,
-      :weaknesses_by_risk, :weaknesses_by_audit_type]
+    private_actions = [:index, :synthesis_report, :high_risk_weaknesses_report,
+      :fixed_weaknesses_report, :weaknesses_by_state, :weaknesses_by_risk,
+      :weaknesses_by_audit_type]
 
     private_actions.each do |action|
       get action
@@ -85,7 +86,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       'synthesis_report', 0)
   end
 
-  test 'notorious reviews report' do
+  test 'high risk weaknesses report' do
     perform_auth
 
     get :high_risk_weaknesses_report
@@ -105,7 +106,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
   end
 
-  test 'create notorious_reviews report' do
+  test 'create high risk weaknesses report' do
     perform_auth
 
     get :create_high_risk_weaknesses_report, :high_risk_weaknesses_report => {
@@ -120,6 +121,43 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'high_risk_weaknesses_report', 0)
+  end
+
+  test 'fixed weaknesses report' do
+    perform_auth
+
+    get :fixed_weaknesses_report
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
+
+    assert_nothing_raised(Exception) do
+      get :fixed_weaknesses_report, :fixed_weaknesses_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
+  end
+
+  test 'create fixed weaknesses report' do
+    perform_auth
+
+    get :create_fixed_weaknesses_report, :fixed_weaknesses_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'fixed_weaknesses_report', 0)
   end
 
   test 'weaknesses by state report' do

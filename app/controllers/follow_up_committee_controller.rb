@@ -501,8 +501,8 @@ class FollowUpCommitteeController < ApplicationController
       0)
   end
 
-  # Crea un PDF con los informes más notorios para un determinado rango de
-  # fechas
+  # Crea un PDF con las observaciones de riesgo alto para un determinado rango
+  # de fechas
   #
   # * GET /conclusion_committee_reports/high_risk_weaknesses_report
   def high_risk_weaknesses_report
@@ -551,10 +551,6 @@ class FollowUpCommitteeController < ApplicationController
             ].join("\n")
           end
 
-          if high_risk_weaknesses.size == 0
-            t(:'conclusion_committee_report.high_risk_weaknesses_report.without_weaknesses')
-          end
-
           column_data << {
             'business_unit_report_name' => c_r.review.business_unit.name,
             'review' => c_r.review.to_s,
@@ -576,8 +572,8 @@ class FollowUpCommitteeController < ApplicationController
     end
   end
 
-  # Crea un PDF con los informes más notorios para un determinado rango de
-  # fechas
+  # Crea un PDF con las observaciones de riesgo alto para un determinado rango
+  # de fechas
   #
   # * POST /follow_up_committee/create_high_risk_weaknesses_report
   def create_high_risk_weaknesses_report
@@ -602,73 +598,75 @@ class FollowUpCommitteeController < ApplicationController
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+      unless @notorious_reviews[period].blank?
+        pdf.move_pointer PDF_FONT_SIZE
+        pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
+          (PDF_FONT_SIZE * 1.25).round, :justify
 
-      pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_pointer PDF_FONT_SIZE
 
-      @notorious_reviews[period].each do |data|
-        columns = data[:columns]
-        column_data = []
+        @notorious_reviews[period].each do |data|
+          columns = data[:columns]
+          column_data = []
 
-        @column_order.each do |col_name|
-          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading = columns[col_name].first
-            column.width = pdf.percent_width columns[col_name].last
-          end
-        end
-
-        if !data[:external] && !@internal_title_showed
-          title = t :'follow_up_committee.high_risk_weaknesses_report.internal_audit_weaknesses'
-          @internal_title_showed = true
-        elsif data[:external] && !@external_title_showed
-          title = t :'follow_up_committee.high_risk_weaknesses_report.external_audit_weaknesses'
-          @external_title_showed = true
-        end
-
-        if title
-          pdf.move_pointer PDF_FONT_SIZE * 2
-          pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
-        end
-
-        pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
-
-        data[:column_data].each do |row|
-          new_row = {}
-
-          row.each do |column_name, column_content|
-            new_row[column_name] = column_content.kind_of?(Array) ?
-              column_content.join("\n\n").to_iso :
-              column_content.to_iso
-          end
-
-          column_data << new_row
-        end
-
-        unless column_data.blank?
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data.sort do |row1, row2|
-              row1['score'].match(/(\d+)%/)[0].to_i <=>
-                row2['score'].match(/(\d+)%/)[0].to_i
+          @column_order.each do |col_name|
+            columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+              column.heading = columns[col_name].first
+              column.width = pdf.percent_width columns[col_name].last
             end
-            table.column_order = @column_order
-            table.split_rows = true
-            table.row_gap = PDF_FONT_SIZE
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.render_on pdf
           end
-        else
-          pdf.text(
-            t(:'follow_up_committee.high_risk_weaknesses_report.without_audits_in_the_period'))
+
+          if !data[:external] && !@internal_title_showed
+            title = t :'follow_up_committee.high_risk_weaknesses_report.internal_audit_weaknesses'
+            @internal_title_showed = true
+          elsif data[:external] && !@external_title_showed
+            title = t :'follow_up_committee.high_risk_weaknesses_report.external_audit_weaknesses'
+            @external_title_showed = true
+          end
+
+          if title
+            pdf.move_pointer PDF_FONT_SIZE * 2
+            pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
+          end
+
+          pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
+
+          data[:column_data].each do |row|
+            new_row = {}
+
+            row.each do |column_name, column_content|
+              new_row[column_name] = column_content.kind_of?(Array) ?
+                column_content.join("\n\n").to_iso :
+                column_content.to_iso
+            end
+
+            column_data << new_row
+          end
+
+          unless column_data.blank?
+            PDF::SimpleTable.new do |table|
+              table.width = pdf.page_usable_width
+              table.columns = columns
+              table.data = column_data.sort do |row1, row2|
+                row1['score'].match(/(\d+)%/)[0].to_i <=>
+                  row2['score'].match(/(\d+)%/)[0].to_i
+              end
+              table.column_order = @column_order
+              table.split_rows = true
+              table.row_gap = PDF_FONT_SIZE
+              table.font_size = (PDF_FONT_SIZE * 0.75).round
+              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
+              table.shade_headings = true
+              table.position = :left
+              table.orientation = :right
+              table.render_on pdf
+            end
+          else
+            pdf.text(
+              t(:'follow_up_committee.high_risk_weaknesses_report.without_audits_in_the_period'))
+          end
         end
       end
     end
@@ -689,6 +687,196 @@ class FollowUpCommitteeController < ApplicationController
       t(:'follow_up_committee.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
+  end
+
+  # Crea un PDF con las observaciones solucionadas para un determinado rango de
+  # fechas
+  #
+  # * GET /conclusion_committee_reports/fixed_weaknesses_report
+  def fixed_weaknesses_report
+    @title = t :'conclusion_committee_report.fixed_weaknesses_report_title'
+    @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
+    @periods = periods_for_interval
+    @column_order = ['business_unit_report_name', 'review', 'score',
+      'fixed_weaknesses']
+    @filters = []
+    @reviews = {}
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
+      @to_date)
+
+    @periods.each do |period|
+      BusinessUnitType.list.each do |but|
+        columns = {
+          'business_unit_report_name' => [but.business_unit_label, 15],
+          'review' => [Review.model_name.human, 15],
+          'score' => [Review.human_attribute_name(:score), 15],
+          'fixed_weaknesses' =>
+            [t(:'conclusion_committee_report.fixed_weaknesses'), 55]
+        }
+        column_data = []
+        name = but.name
+        conclusion_review_per_unit_type =
+          conclusion_reviews.for_period(period).with_business_unit_type(but.id)
+
+        conclusion_review_per_unit_type.each do |c_r|
+          fixed_weaknesses = []
+          weaknesses = c_r.review.weaknesses.with_solution_date_between(
+            @from_date, @to_date)
+
+          weaknesses.each do |w|
+            audited = w.users.select(&:audited?).map do |u|
+              w.process_owners.include?(u) ?
+                "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
+                u.full_name
+            end
+
+            fixed_weaknesses << [
+              "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
+              "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
+              "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
+              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}"
+            ].join("\n")
+          end
+
+          unless fixed_weaknesses.blank?
+            column_data << {
+              'business_unit_report_name' => c_r.review.business_unit.name,
+              'review' => c_r.review.to_s,
+              'score' => c_r.review.score_text,
+              'fixed_weaknesses' => fixed_weaknesses
+            }
+          end
+        end
+
+        unless column_data.blank?
+          @reviews[period] ||= []
+          @reviews[period] << {
+            :name => name,
+            :external => but.external,
+            :columns => columns,
+            :column_data => column_data
+          }
+        end
+      end
+    end
+  end
+
+  # Crea un PDF con las observaciones solucionadas para un determinado rango de
+  # fechas
+  #
+  # * POST /follow_up_committee/create_fixed_weaknesses_report
+  def create_fixed_weaknesses_report
+    self.fixed_weaknesses_report
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_description_item(
+      t(:'follow_up_committee.period.title'),
+      t(:'follow_up_committee.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    @periods.each do |period|
+      unless @reviews[period].blank?
+        pdf.move_pointer PDF_FONT_SIZE
+        pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
+          (PDF_FONT_SIZE * 1.25).round, :justify
+
+        pdf.move_pointer PDF_FONT_SIZE
+
+        @reviews[period].each do |data|
+          columns = data[:columns]
+          column_data = []
+
+          @column_order.each do |col_name|
+            columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+              column.heading = columns[col_name].first
+              column.width = pdf.percent_width columns[col_name].last
+            end
+          end
+
+          if !data[:external] && !@internal_title_showed
+            title = t :'follow_up_committee.fixed_weaknesses_report.internal_audit_weaknesses'
+            @internal_title_showed = true
+          elsif data[:external] && !@external_title_showed
+            title = t :'follow_up_committee.fixed_weaknesses_report.external_audit_weaknesses'
+            @external_title_showed = true
+          end
+
+          if title
+            pdf.move_pointer PDF_FONT_SIZE * 2
+            pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
+          end
+
+          pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
+
+          data[:column_data].each do |row|
+            new_row = {}
+
+            row.each do |column_name, column_content|
+              new_row[column_name] = column_content.kind_of?(Array) ?
+                column_content.join("\n\n").to_iso :
+                column_content.to_iso
+            end
+
+            column_data << new_row
+          end
+
+          unless column_data.blank?
+            PDF::SimpleTable.new do |table|
+              table.width = pdf.page_usable_width
+              table.columns = columns
+              table.data = column_data.sort do |row1, row2|
+                row1['score'].match(/(\d+)%/)[0].to_i <=>
+                  row2['score'].match(/(\d+)%/)[0].to_i
+              end
+              table.column_order = @column_order
+              table.split_rows = true
+              table.row_gap = PDF_FONT_SIZE
+              table.font_size = (PDF_FONT_SIZE * 0.75).round
+              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+              table.heading_font_size = PDF_FONT_SIZE
+              table.shade_headings = true
+              table.position = :left
+              table.orientation = :right
+              table.render_on pdf
+            end
+          else
+            pdf.text(
+              t(:'follow_up_committee.fixed_weaknesses_report.without_audits_in_the_period'))
+          end
+        end
+      end
+    end
+
+    unless @filters.empty?
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text t(:'follow_up_committee.applied_filters',
+        :filters => @filters.to_sentence, :count => @filters.size),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+    end
+
+    pdf.custom_save_as(
+      t(:'follow_up_committee.fixed_weaknesses_report.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+
+    redirect_to PDF::Writer.relative_path(
+      t(:'follow_up_committee.fixed_weaknesses_report.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
   end
 
   private

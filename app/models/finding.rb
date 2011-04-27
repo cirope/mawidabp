@@ -336,6 +336,12 @@ class Finding < ActiveRecord::Base
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     }
   ).where("#{BusinessUnitType.table_name}.external" => true)
+  scope :with_solution_date_between, lambda { |from_date, to_date|
+    where(
+      "#{table_name}.solution_date BETWEEN :from_date AND :to_date",
+      :from_date => from_date, :to_date => to_date
+    )
+  }
 
   # Restricciones sobre los atributos
   attr_protected :first_notification_date, :final, :force_modification
