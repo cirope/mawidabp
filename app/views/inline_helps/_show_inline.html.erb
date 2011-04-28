@@ -10,7 +10,7 @@
 <% unless @rendered_helps.include?(name) %>
   <% @rendered_helps << name %>
   <% content_for :extra_html_bottom do %>
-    <% cache "#{inline_help.try(:cache_key)}_#{@auth_user.language}_#{can_edit}_html" do %>
+    <% cache "#{inline_help.try(:cache_key) || link_name}_#{@auth_user.language}_#{can_edit}_html" do %>
       <div id="inline_item_<%= name %>" class="popup" style="display: none;">
         <%= textilize inline_help.try(:content) %>
 
