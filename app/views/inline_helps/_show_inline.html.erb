@@ -1,7 +1,7 @@
 <% @rendered_helps ||= [] %>
 <% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) %>
 <% can_edit = @auth_user.admin? %>
-<% cache "#{inline_help.try(:cache_key)}_#{@auth_user.language}_#{can_edit}_link" do %>
+<% cache "#{inline_help.try(:cache_key) || link_name}_#{@auth_user.language}_#{can_edit}_link" do %>
   <span class="popup_link_container">
     <span id="help_link_<%= link_name %>" class="popup_link" title="<%= t(:'inline_help.link_title') %>">?</span>
   </span>
