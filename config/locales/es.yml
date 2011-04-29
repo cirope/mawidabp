@@ -266,6 +266,7 @@ es:
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
+      period_summary: "Resumen del periodo %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
@@ -635,6 +636,7 @@ es:
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
+      period_summary: "Resumen del periodo %{period}"
     weaknesses_by_risk:
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
