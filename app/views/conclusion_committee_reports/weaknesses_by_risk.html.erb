@@ -19,6 +19,13 @@
             :table_data => @tables_data[period][key]} %>
       <% end %>
     <% end %>
+    
+    <h1 class="center_title">
+      <%= t(:'conclusion_committee_report.weaknesses_by_risk.period_summary',
+        :period => period.inspect) %>
+    </h1>
+    <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+      :table_data => @tables_data[period]['total']} %>
   <% end %>
 </div>
 

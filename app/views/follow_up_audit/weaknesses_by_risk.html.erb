@@ -27,6 +27,21 @@
         <% end %>
       <% end %>
     <% end %>
+
+    <h1 class="center_title">
+      <%= t(:'follow_up_committee.weaknesses_by_risk.period_summary',
+        :period => period.inspect) %>
+    </h1>
+    <%= render :partial => 'weaknesses_synthesis_table', :locals => {
+      :table_data => @tables_data[period]['total'],
+      :being_implemented_resume => @being_implemented_resumes[period]['total'],
+      :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
+    <% if @repeated_counts[period]['total'] > 0 %>
+      <p>
+        <%= t(:'follow_up_committee.repeated_count',
+          :count => @repeated_counts[period]['total']) %>
+      </p>
+    <% end %>
   <% end %>
 </div>
 

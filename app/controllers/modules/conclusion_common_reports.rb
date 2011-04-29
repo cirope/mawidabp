@@ -134,6 +134,9 @@ module ConclusionCommonReports
       sort { |s1, s2| s1.last <=> s2.last }
 
     @periods.each do |period|
+      total_weaknesses_count = {}
+      total_weaknesses_count_by_risk = {}
+
       @audit_types.each do |audit_type|
         weaknesses_count = {}
         weaknesses_count_by_risk = {}
@@ -145,6 +148,7 @@ module ConclusionCommonReports
 
           risk_levels.each do |rl|
             weaknesses_count_by_risk[rl[0]] = 0
+            total_weaknesses_count_by_risk[rl[0]] ||= 0
 
             statuses.each do |s|
               weaknesses_count[s[1]] ||= {}
@@ -155,6 +159,13 @@ module ConclusionCommonReports
                   {:state => s[1], :risk => rl[1]}.merge(conditions || {})
                 ).count
               weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+              total_weaknesses_count_by_risk[rl[0]] +=
+                weaknesses_count[s[1]][rl[1]]
+
+              total_weaknesses_count[s[1]] ||= {}
+              total_weaknesses_count[s[1]][rl[1]] ||= 0
+              total_weaknesses_count[s[1]][rl[1]] +=
+                weaknesses_count[s[1]][rl[1]]
             end
           end
 
@@ -163,6 +174,9 @@ module ConclusionCommonReports
             weaknesses_count, weaknesses_count_by_risk, risk_levels)
         end
       end
+
+      @tables_data[period]['total'] = get_weaknesses_synthesis_table_data(
+        total_weaknesses_count, total_weaknesses_count_by_risk, risk_levels)
     end
   end
 
@@ -207,6 +221,15 @@ module ConclusionCommonReports
           add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
         end
       end
+
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title(
+        t(:'conclusion_committee_report.weaknesses_by_risk.period_summary',
+          :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
+      )
+      pdf.move_pointer PDF_FONT_SIZE
+
+      add_weaknesses_synthesis_table(pdf, @tables_data[period]['total'])
     end
 
     pdf.custom_save_as(
