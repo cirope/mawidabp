@@ -13,7 +13,6 @@ gem 'uuidtools'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', '~> 3.0'
 gem 'RedCloth'
-gem 'smurf'
 gem 'whenever', :require => false
 gem 'will_paginate', '~> 3.0.beta'
 gem 'paper_trail'
@@ -29,8 +28,9 @@ source 'http://gems.github.com'
 gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
 
-# Use unicorn as the web server
-# gem 'unicorn'
+group :production do
+  gem 'smurf'
+end
 
 group :development do
   gem 'ruby-debug'

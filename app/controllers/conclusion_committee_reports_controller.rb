@@ -520,7 +520,7 @@ class ConclusionCommitteeReportsController < ApplicationController
     @title = t :'conclusion_committee_report.high_risk_weaknesses_report_title'
     @from_date, @to_date = *make_date_range(params[:high_risk_weaknesses_report])
     @periods = periods_for_interval
-    @column_order = ['business_unit_report_name', 'review', 'score',
+    @column_order = ['business_unit_report_name', 'score',
       'high_risk_weaknesses']
     @filters = []
     @notorious_reviews = {}
@@ -531,10 +531,9 @@ class ConclusionCommitteeReportsController < ApplicationController
       BusinessUnitType.list.each do |but|
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
-          'review' => [Review.model_name.human, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'high_risk_weaknesses' =>
-            [t(:'conclusion_committee_report.high_risk_weaknesses'), 55]
+            [t(:'conclusion_committee_report.high_risk_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -554,6 +553,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
 
             high_risk_weaknesses << [
+              "<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
@@ -562,23 +562,24 @@ class ConclusionCommitteeReportsController < ApplicationController
             ].join("\n")
           end
 
-          column_data << {
-            'business_unit_report_name' => c_r.review.business_unit.name,
-            'review' => c_r.review.to_s,
-            'score' => c_r.review.score_text,
-            'high_risk_weaknesses' => high_risk_weaknesses.blank? ?
-              t(:'conclusion_committee_report.high_risk_weaknesses_report.without_weaknesses') :
-              high_risk_weaknesses
-          }
+          unless high_risk_weaknesses.blank?
+            column_data << {
+              'business_unit_report_name' => c_r.review.business_unit.name,
+              'score' => c_r.review.score_text,
+              'high_risk_weaknesses' => high_risk_weaknesses
+            }
+          end
         end
 
-        @notorious_reviews[period] ||= []
-        @notorious_reviews[period] << {
-          :name => name,
-          :external => but.external,
-          :columns => columns,
-          :column_data => column_data
-        }
+        unless column_data.blank?
+          @notorious_reviews[period] ||= []
+          @notorious_reviews[period] << {
+            :name => name,
+            :external => but.external,
+            :columns => columns,
+            :column_data => column_data
+          }
+        end
       end
     end
   end
@@ -708,8 +709,7 @@ class ConclusionCommitteeReportsController < ApplicationController
     @title = t :'conclusion_committee_report.fixed_weaknesses_report_title'
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
     @periods = periods_for_interval
-    @column_order = ['business_unit_report_name', 'review', 'score',
-      'fixed_weaknesses']
+    @column_order = ['business_unit_report_name', 'score', 'fixed_weaknesses']
     @filters = []
     @reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
@@ -719,10 +719,9 @@ class ConclusionCommitteeReportsController < ApplicationController
       BusinessUnitType.list.each do |but|
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
-          'review' => [Review.model_name.human, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'fixed_weaknesses' =>
-            [t(:'conclusion_committee_report.fixed_weaknesses'), 55]
+            [t(:'conclusion_committee_report.fixed_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -732,7 +731,7 @@ class ConclusionCommitteeReportsController < ApplicationController
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []
           weaknesses = c_r.review.final_weaknesses.with_solution_date_between(
-            @from_date, @to_date)
+            @from_date, @to_date).with_highest_risk
 
           weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
@@ -742,6 +741,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
 
             fixed_weaknesses << [
+              "<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",
@@ -754,7 +754,6 @@ class ConclusionCommitteeReportsController < ApplicationController
           unless fixed_weaknesses.blank?
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
-              'review' => c_r.review.to_s,
               'score' => c_r.review.score_text,
               'fixed_weaknesses' => fixed_weaknesses
             }
