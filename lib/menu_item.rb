@@ -29,7 +29,7 @@ class MenuItem
 
   def to_s
     @translations ||= {}
-    @translations[I18n.locale] ||= I18n.t("menu.#{self.translation_string}")
+    @translations[I18n.locale] ||= I18n.t(:"menu.#{self.translation_string}")
   end
 
   def self_and_ancestors

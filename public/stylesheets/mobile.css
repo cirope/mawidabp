@@ -8,33 +8,6 @@
         padding: 0px;
     }
 
-    div#app_content ul#main_mobile_menu,
-    div#app_content ul.menu_level_1,
-    div#app_content ul.menu_level_2 {
-        width: 90%;
-        margin: 0em auto;
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-
-    div#app_content ul#main_mobile_menu li,
-    div#app_content ul.menu_level_1 li,
-    div#app_content ul.menu_level_2 li {
-        display: block;
-        border-bottom: 1px solid #2c3234;
-    }
-
-    div#app_content ul#main_mobile_menu li a,
-    div#app_content ul.menu_level_1 li a,
-    div#app_content ul.menu_level_2 li a {
-        display: block;
-        clear: both;
-        width: 90%;
-        padding: 1em;
-        color: #2c3234;
-        background: transparent;
-    }
-
     div#login {
         margin: 2em auto;
         height: 15em;
@@ -72,7 +45,7 @@
     div#menu, div#menu_level_1, div#menu_level_2 {
       display: none;
     }
-
+    
     div#mobile_menu {
         display: block;
         clear: both;
@@ -92,6 +65,20 @@
         padding: .5em;
         text-decoration: none;
     }
+    
+    div#session {
+      float: none;
+      width: 90%;
+      text-align: center;
+      font-size: 1.2em;
+      border-bottom: 2px dotted #2c3234;
+      padding: .5em 1em;
+      margin: 0em auto;
+    }
+    
+    div#session * {
+      display: inline;
+    }
 
     div.form_column_left, div.form_column_right {
         display: block;
@@ -106,12 +93,46 @@
     textarea.double_height {
         height: 6em;
     }
+    
+    ul#main_mobile_menu {
+      font-size: 1.2em;
+    }
 
+    ul#main_mobile_menu,
+    ul.menu_level_1,
+    ul.menu_level_2 {
+        width: 90%;
+        margin: 0em auto;
+        font-weight: bold;
+    }
+
+    ul#main_mobile_menu li,
+    ul.menu_level_1 li,
+    ul.menu_level_2 li {
+        display: block;
+        border-bottom: 1px solid #2c3234;
+    }
+
+    ul#main_mobile_menu li a,
+    ul.menu_level_1 li a,
+    ul.menu_level_2 li a {
+        display: block;
+        clear: both;
+        width: 90%;
+        padding: 1em;
+        color: #2c3234;
+        background: transparent;
+    }
+    
     ul.menu_list {
-        width: 85%;
+        width: 90%;
     }
 
     .expendable {
         display: none;
+    }
+    
+    .mobile_link {
+      display: block;
     }
 }

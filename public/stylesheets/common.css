@@ -1525,8 +1525,18 @@ span.popup_closebox:hover, a.popup_closebox:hover {
   text-decoration: none;
 }
 
+.aditional_link_info {
+  display: block;
+  color: #999999;
+  font-size: .8em;
+}
+
 .clear {
   clear: both;
+}
+
+.mobile_link {
+  display: none !important;
 }
 
 .popup_draghandle {

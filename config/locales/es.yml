@@ -40,7 +40,8 @@ es:
 
   menu:
     exit: "Salir"
-    show_menu: "Ver menu"
+    show_menu: "Ver menú"
+    hide_menu: "Ocultar menú"
     administration_title: "ADMINISTRACIÓN"
     administration:
       organization_title: "Organización"

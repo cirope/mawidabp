@@ -5,7 +5,7 @@ var State = {
   // Contador para generar un ID único
   newIdCounter: 0,
   // Dimensiones del área visible del navegador
-  dimensions: $H({ width: 0, height: 0 }),
+  dimensions: $H({width: 0, height: 0}),
   // Registra la variación en el contenido de los formularios
   unsavedData: false,
   // Texto con la advertencia de que hay datos sin guardar
@@ -181,7 +181,7 @@ var FormUtil = {
   completeSortNumbers: function() {
     var order = 1;
 
-    $$('input.sort_number').each(function(e) { e.setValue(order++); });
+    $$('input.sort_number').each(function(e) {e.setValue(order++);});
   }
 }
 
@@ -220,7 +220,7 @@ var Helper = {
   hideItem: function(element, options) {
     Effect.SlideUp(element, Util.merge({
       duration: 0.5,
-      afterFinish: function() { element.fire("item:hidden"); }
+      afterFinish: function() {element.fire("item:hidden");}
     }, options));
   },
 
@@ -230,7 +230,7 @@ var Helper = {
   hideLoading: function(element) {
     $('loading').hide();
 
-    Try.these(function() { $(element).enable(); })
+    Try.these(function() {$(element).enable();})
   },
 
   /**
@@ -292,7 +292,7 @@ var Helper = {
   showLoading: function(element) {
     $('loading').show();
 
-    Try.these(function() { $(element).disable(); })
+    Try.these(function() {$(element).disable();})
   },
 
   /**
@@ -302,7 +302,7 @@ var Helper = {
     if($('time_left')) {
       $('time_left').down('span.message').update(message);
 
-      if(!$('time_left').visible()) { Element.appear('time_left'); }
+      if(!$('time_left').visible()) {Element.appear('time_left');}
     }
 
     State.sessionExpire = State.sessionExpire || expired
@@ -315,7 +315,7 @@ var Helper = {
           'hide_element_#{element_id}_content']);
 
         links.each(function(link) {
-          Element.toggle(link.interpolate({ element_id: elementId }));
+          Element.toggle(link.interpolate({element_id: elementId}));
         });
       }
     });
@@ -325,7 +325,7 @@ var Helper = {
      * Intercambia los efectos de desplegar y contraer sobre un elemento
      */
   toggleItem: function(element, options) {
-    Effect.toggle(element, 'slide', Util.merge({ duration: 0.5 }, options));
+    Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
   },
 
   /**
@@ -378,7 +378,7 @@ var HTMLUtil = {
      */
   optionsFromArray: function(optionsArray, selectedValue, includeBlank) {
     var options = $A(optionsArray).collect(function(e) {
-      var vals = { text: e[0], value: e[1] };
+      var vals = {text: e[0], value: e[1]};
       var option_string = selectedValue && e[0] == selectedValue ?
         '<option selected="selected" value=#{value}>#{text}</option>' :
         '<option value=#{value}>#{text}</option>'
@@ -419,7 +419,7 @@ var HTMLUtil = {
      * Función para ordenar un arreglo de opciones para usar en un select
      */
   sortOptionsArray: function(optionsArray) {
-    return $A(optionsArray).sortBy(function(s) { return s[0]; });
+    return $A(optionsArray).sortBy(function(s) {return s[0];});
   },
 
   /**
@@ -451,9 +451,9 @@ var HTMLUtil = {
 
         // Esta pregunta es por un bug en IE7 con overflow: hidden
         if(event.pointerX() >= xMin && event.pointerX() <= xMax) {
-          input.setStyle({ left: left + 'px' });
+          input.setStyle({left: left + 'px'});
         }
-      }).wrap('div', { 'class' : 'stylized_file' });
+      }).wrap('div', {'class' : 'stylized_file'});
     }
   },
 
@@ -480,8 +480,27 @@ var Menu = {
      * Muestra el menú principal
      */
   show: function() {
-    $('app_content').update($('main_menu').clone(true).writeAttribute('id',
-      'main_mobile_menu'));
+    $('app_content').hide();
+    
+    if($('main_mobile_menu')) {
+      $('main_mobile_menu').show();
+    } else {
+      $('app_content').insert({
+        after: $('main_menu').clone(true).writeAttribute('id', 'main_mobile_menu')
+      }).insert({
+        after: $('session')
+      });
+    }
+    
+    $('show_menu').hide();
+    $('hide_menu').show();
+  },
+  
+  hide: function() {
+    $('main_mobile_menu').hide();
+    $('app_content').show();
+    $('hide_menu').hide();
+    $('show_menu').show();
   }
 }
 
@@ -526,7 +545,7 @@ var Observer = {
 
       if(e) {
         e.storeStyleProperty('background');
-        e.setStyle({ 'background': '#b1aea6' });
+        e.setStyle({'background': '#b1aea6'});
       }
     });
   },
@@ -534,16 +553,26 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal en móviles
      */
   attachToMobileMenu: function() {
-    Event.observe('app_content', 'click', function(event) {
+    Event.observe('main_container', 'click', function(event) {
       var e = Event.findElement(event, 'a');
       var menuName = e ? e.readAttribute('href').replace(/.*#/, '') : '';
       var content = State.menu.get(menuName);
 
       if(e && (e.hasClassName('menu_item_1') ||
         e.hasClassName('menu_item_2')) && content) {
-        $('app_content').update(content);
+        $('main_mobile_menu').store(
+          'previous-' + e.up('ul').readAttribute('data-level'),
+          $('main_mobile_menu').innerHTML.escapeHTML()
+        );
+        $('main_mobile_menu').update(content);
 
         Event.stop(event);
+      } else if(e && e.hasClassName('back')) {
+        $('main_mobile_menu').update(
+          $('main_mobile_menu').retrieve(
+            'previous-' + e.up('ul').readAttribute('data-level').previous()
+          ).unescapeHTML()
+        );
       }
     });
   },
@@ -567,7 +596,7 @@ var Observer = {
 
           if($(e).up('span.file_container')) {
             $(e).up('span.file_container').hide();
-            $(e).up('span.file_container').insert({ after: imageTag });
+            $(e).up('span.file_container').insert({after: imageTag});
           }
         }
       });
@@ -607,7 +636,7 @@ var Search = {
             hiddenColumn.setAttribute('id', 'search_column_' +
               column);
 
-            columnNamesDiv.insert({ bottom: hiddenColumn });
+            columnNamesDiv.insert({bottom: hiddenColumn});
           });
 
           e.addClassName('selected');
@@ -699,8 +728,8 @@ var Util = {
 
 // Funciones ejecutadas cuando se carga cada página
 Event.observe(window, 'load', function() {
-  document.on('ajax:after', function(event, e) { Helper.showLoading(e); });
-  document.on('ajax:complete', function(event, e) { Helper.hideLoading(e); });
+  document.on('ajax:after', function(event, e) {Helper.showLoading(e);});
+  document.on('ajax:complete', function(event, e) {Helper.hideLoading(e);});
 
   document.on('keydown', function(e) {
     if ((e.keyCode || e.which) == 32 && e.ctrlKey) {
@@ -812,7 +841,7 @@ Element.addMethods({
   resetToOriginalText: function(element) {
     var originalText = $(element).retrieve('original_text')
 
-    if(originalText) { $(element).update(originalText); }
+    if(originalText) {$(element).update(originalText);}
   },
   restoreStyleProperty: function(element, property) {
     var oldValue = element.retrieve('old_' + property);
@@ -824,7 +853,7 @@ Element.addMethods({
     }
   },
   showOrHide: function(element, options) {
-    Effect.toggle(element, 'slide', Util.merge({ duration: 0.5 }, options));
+    Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
   },
   storeStyleProperty: function(element, property) {
     element.store('old_' + property, element.getStyle(property));

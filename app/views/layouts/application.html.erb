@@ -26,6 +26,7 @@
     <div id="main_container">
       <div id="mobile_menu">
         <%= link_to_function t(:'menu.show_menu'), 'Menu.show()', :id => :show_menu %>
+        <%= link_to_function t(:'menu.hide_menu'), 'Menu.hide()', :id => :hide_menu, :style => 'display: none;' %>
       </div>
       <% if @auth_user && @auth_user.password %>
         <div id="menu_container">
