@@ -546,6 +546,7 @@ class FollowUpCommitteeController < ApplicationController
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
+              "<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}",
               "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}"
             ].join("\n")
@@ -734,6 +735,7 @@ class FollowUpCommitteeController < ApplicationController
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
+              "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",
               "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}"
             ].join("\n")
