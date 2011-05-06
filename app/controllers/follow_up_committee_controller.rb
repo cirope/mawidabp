@@ -9,7 +9,10 @@ class FollowUpCommitteeController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :get_organization, :add_weaknesses_synthesis_table,
     :being_implemented_resume_from_counts, :add_being_implemented_resume,
-    :make_date_range, :get_weaknesses_synthesis_table_data
+    :make_date_range, :get_weaknesses_synthesis_table_data,
+    :weaknesses_by_state, :create_weaknesses_by_state, :weaknesses_by_risk,
+    :create_weaknesses_by_risk, :weaknesses_by_audit_type,
+    :create_weaknesses_by_audit_type
 
   # Muestra una lista con los reportes disponibles
   #
@@ -888,14 +891,10 @@ class FollowUpCommitteeController < ApplicationController
         :create_synthesis_report => :read,
         :cost_analysis => :read,
         :create_cost_analysis => :read,
-        :weaknesses_by_state => :read,
-        :create_weaknesses_by_state => :read,
-        :weaknesses_by_risk => :read,
-        :create_weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read,
-        :create_weaknesses_by_audit_type => :read,
         :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read
       })
   end
 end
