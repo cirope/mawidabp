@@ -82,7 +82,6 @@ MawidaApp::Application.routes.draw do
   end
 
   [
-    'cost_analysis', 'create_cost_analysis',
     'synthesis_report', 'create_synthesis_report',
     'high_risk_weaknesses_report', 'create_high_risk_weaknesses_report',
     'fixed_weaknesses_report', 'create_fixed_weaknesses_report'
@@ -95,17 +94,23 @@ MawidaApp::Application.routes.draw do
       :to => "follow_up_committee##{action}"
   end
 
-  match "conclusion_committee_reports/cost_analysis",
-    :as => 'cost_analysis_conclusion_committee_reports',
-    :to => "conclusion_committee_reports#cost_analysis"
-  match 'conclusion_committee_reports/cost_analysis/detailed',
-    :as => 'detailed_cost_analysis_conclusion_committee_reports',
-    :to => 'conclusion_committee_reports#cost_analysis',
+  match "conclusion_audit_reports/cost_analysis",
+    :as => 'cost_analysis_conclusion_audit_reports',
+    :to => 'conclusion_audit_reports#cost_analysis'
+  match "conclusion_audit_reports/create_cost_analysis",
+    :as => 'create_cost_analysis_conclusion_audit_reports',
+    :to => 'conclusion_audit_reports#create_cost_analysis'
+  match 'conclusion_audit_reports/cost_analysis/detailed',
+    :as => 'detailed_cost_analysis_conclusion_audit_reports',
+    :to => 'conclusion_audit_reports#cost_analysis',
     :include_details => 1
 
-  match 'follow_up_committee/cost_analysis',
-    :as => 'cost_analysis_follow_up_committee',
-    :to => 'follow_up_committee#cost_analysis'
+  match 'follow_up_audit/cost_analysis',
+    :as => 'cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#cost_analysis'
+  match 'follow_up_audit/create_cost_analysis',
+    :as => 'create_cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#create_cost_analysis'
 
   scope ':completed', :completed => /complete|incomplete/ do
     resources :findings, :except => [:destroy] do

@@ -186,32 +186,11 @@ es:
 
   conclusion_audit_report:
     index_title: "Reportes de auditoría"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-
-  conclusion_committee_report:
-    index_title: "Reportes de conclusión"
-    synthesis_report_title: "Informe de síntesis al directorio"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo"
-    fixed_weaknesses_report_title: "Observaciones solucionadas"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-    findings_type_external: "Observaciones Auditorías Externas"
-    weaknesses_type_internal: "Observaciones Auditoría Interna"
-    weaknesses_type_external: "Observaciones Auditorías Externas"
-    high_risk_weaknesses: "Observaciones de riesgo"
-    fixed_weaknesses: "Observaciones solucionadas"
-    from_date: "Desde"
-    to_date: "Hasta"
-    invalid_dates: "Verifique el rango de fechas, no es válido."
-    applied_filters:
-      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
-      other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -227,6 +206,27 @@ es:
       general_title: "ANÁLISIS DE COSTOS\nDE AUDÍTORIA INTERNA"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+
+  conclusion_committee_report:
+    index_title: "Reportes de conclusión"
+    synthesis_report_title: "Informe de síntesis al directorio"
+    high_risk_weaknesses_report_title: "Observaciones de riesgo"
+    fixed_weaknesses_report_title: "Observaciones solucionadas"
+    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+    findings_type_external: "Observaciones Auditorías Externas"
+    weaknesses_type_internal: "Observaciones Auditoría Interna"
+    weaknesses_type_external: "Observaciones Auditorías Externas"
+    high_risk_weaknesses: "Observaciones de riesgo"
+    fixed_weaknesses: "Observaciones solucionadas"
+    from_date: "Desde"
+    to_date: "Hasta"
+    invalid_dates: "Verifique el rango de fechas, no es válido."
+    applied_filters:
+      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
+      other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     fixed_weaknesses_report:
       pdf_name: "observaciones_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -539,9 +539,22 @@ es:
 
   follow_up_audit:
     index_title: "Reportes de auditoría"
+    cost_analysis_title: "Análisis de costos"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    cost_analysis:
+      column_business_unit: "Unidad de negocio"
+      column_project: "Proyecto"
+      column_review: "Informe"
+      column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
+      column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
+      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
+      weaknesses: "OBSERVACIONES"
+      oportunities: "OPORTUNIDADES DE MEJORA"
+      without_weaknesses: "Sin Observaciones en el periodo"
+      without_oportunities: "Sin Oportunidades de Mejora en el periodo"
+      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
   follow_up_committee:
     index_title: "Reportes de comité"
@@ -551,7 +564,6 @@ es:
     high_risk_weaknesses_report_title: "Observaciones de riesgo"
     fixed_weaknesses_report_title: "Observaciones solucionadas"
     weakness_summary: "Resumen de observaciones"
-    cost_analysis_title: "Análisis de costos"
     high_risk_weaknesses: "Observaciones de riesgo"
     fixed_weaknesses: "Observaciones solucionadas"
     weaknesses_being_implemented_current:
@@ -583,18 +595,6 @@ es:
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
-    cost_analysis:
-      column_business_unit: "Unidad de negocio"
-      column_project: "Proyecto"
-      column_review: "Informe"
-      column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
-      column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
-      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
-      weaknesses: "OBSERVACIONES"
-      oportunities: "OPORTUNIDADES DE MEJORA"
-      without_weaknesses: "Sin Observaciones en el periodo"
-      without_oportunities: "Sin Oportunidades de Mejora en el periodo"
-      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
       pdf_name: "observaciones_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
