@@ -483,13 +483,15 @@ var Menu = {
     $('app_content').hide();
     
     if($('main_mobile_menu')) {
+      $('session').show();
       $('main_mobile_menu').show();
     } else {
       $('app_content').insert({
-        after: $('main_menu').clone(true).writeAttribute('id', 'main_mobile_menu')
-      }).insert({
-        after: $('session')
+        after: $('main_menu').clone(true).writeAttribute(
+          'id', 'main_mobile_menu'
+        )
       });
+      $('main_mobile_menu').insert({ before: $('session') })
     }
     
     $('show_menu').hide();
@@ -498,6 +500,7 @@ var Menu = {
   
   hide: function() {
     $('main_mobile_menu').hide();
+    $('session').hide();
     $('app_content').show();
     $('hide_menu').hide();
     $('show_menu').show();
