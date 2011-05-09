@@ -133,6 +133,6 @@
     }
     
     .mobile_link {
-      display: block;
+      display: block !important;
     }
 }
