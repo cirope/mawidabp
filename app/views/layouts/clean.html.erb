@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
+    <%= favicon_link_tag %>
     <%= default_stylesheets %>
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7'%><![endif]-->
     <%= default_javascripts %>
