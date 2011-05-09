@@ -297,7 +297,7 @@ class Review < ActiveRecord::Base
   def score_array
     organization_id = GlobalModelConfig.current_organization_id ||
       self.period.try(:organization_id)
-    scores = parameter_in(organization_id, :admin_review_scores, self.created_at)
+    scores = parameter_in organization_id, :admin_review_scores, self.created_at
     count = scores.size + 1
 
     self.effectiveness # Recalcula score

@@ -188,7 +188,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert_equal average, @review.score_array.last
     assert_equal average, @review.score
-    assert !@review.score_text.blank?
+    assert !@review.reload.score_text.blank?
     assert(scores.any? { |s| count -= 1; s[0] == @review.score_array.first })
     assert count > 0
     assert_equal count, @review.achieved_scale

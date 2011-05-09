@@ -405,7 +405,7 @@ module ConclusionCommonReports
                   cr.review.final_oportunities.size
 
                 text = "<C:bullet /> <b>#{cr.review}</b>: " +
-                  cr.review.score_text
+                  cr.review.reload.score_text
 
                 if findings_count == 0
                   text << " (#{t(:'conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"

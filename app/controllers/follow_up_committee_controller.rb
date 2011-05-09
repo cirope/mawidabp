@@ -132,7 +132,7 @@ class FollowUpCommitteeController < ApplicationController
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
               'review' => c_r.review.to_s,
-              'score' => c_r.review.score_text,
+              'score' => c_r.review.reload.score_text,
               'process_control' => process_control_text,
               'weaknesses_count' => @risk_levels.blank? ?
                 t(:'follow_up_committee.synthesis_report.without_weaknesses') :
@@ -378,7 +378,7 @@ class FollowUpCommitteeController < ApplicationController
           unless high_risk_weaknesses.blank?
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
-              'score' => c_r.review.score_text,
+              'score' => c_r.review.reload.score_text,
               'high_risk_weaknesses' => high_risk_weaknesses
             }
           end
@@ -567,7 +567,7 @@ class FollowUpCommitteeController < ApplicationController
           unless fixed_weaknesses.blank?
             column_data << {
               'business_unit_report_name' => c_r.review.business_unit.name,
-              'score' => c_r.review.score_text,
+              'score' => c_r.review.reload.score_text,
               'fixed_weaknesses' => fixed_weaknesses
             }
           end

@@ -616,7 +616,7 @@ module FollowUpCommonReports
                   cr.review.oportunities.size
 
                 text = "<C:bullet /> <b>#{cr.review}</b>: " +
-                  cr.review.score_text
+                  cr.review.reload.score_text
 
                 if findings_count == 0
                   text << " (#{t(:'follow_up_committee.weaknesses_by_audit_type.without_weaknesses')})"
