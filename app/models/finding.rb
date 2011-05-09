@@ -440,8 +440,9 @@ class Finding < ActiveRecord::Base
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
-  has_many :finding_answers, :dependent => :destroy,
-    :after_add => :answer_added, :order => 'created_at ASC'
+  has_many :finding_answers, :dependent => :destroy, :validate => true,
+    :after_add => :answer_added, :order => 'created_at ASC',
+    :conditions => "#{FindingAnswer.table_name}.answer IS NOT NULL"
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :finding_relations, :dependent => :destroy,
     :before_add => :check_for_valid_relation
