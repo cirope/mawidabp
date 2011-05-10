@@ -246,11 +246,18 @@ class FindingsController < ApplicationController
         rescheduled_text << dates.join("\n")
       end
       
+      audited = finding.users.select(&:audited?).map do |u|
+        finding.process_owners.include?(u) ?
+          "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
+          u.full_name
+      end
+      
       finding_data = [
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
         "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
         ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
+        "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
       ].compact.join("\n")
 
