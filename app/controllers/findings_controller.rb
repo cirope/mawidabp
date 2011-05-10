@@ -171,27 +171,25 @@ class FindingsController < ApplicationController
 
     column_order = [
       ['review', [Review.model_name.human,
-          PlanItem.human_attribute_name(:project)].to_sentence, 10],
+          PlanItem.human_attribute_name(:project)].to_sentence, 0],
       ['project', PlanItem.human_attribute_name(:project), 0],
-      ['review_code', Finding.human_attribute_name(:review_code), 7],
+      ['review_code', Finding.human_attribute_name(:review_code), 0],
       ['description', Finding.human_attribute_name(:description),
-        detailed ? 25 : 47],
-      ['state', Finding.human_attribute_name(:state), 10],
+        detailed ? 48 : 80],
       ['rescheduled', t(:'weakness.previous_follow_up_dates') +
           " (#{Finding.human_attribute_name(:rescheduled)})", 10],
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
-            :follow_up_date : :solution_date), 10],
-      ['risk', Weakness.human_attribute_name(:risk), 6]
+            :follow_up_date : :solution_date), 10]
     ]
     columns = {}
     column_data = []
 
     if detailed
       column_order << [
-        'audit_comments', Finding.human_attribute_name(:audit_comments), 10
+        'audit_comments', Finding.human_attribute_name(:audit_comments), 15
       ]
       column_order << [
-        'answer', Finding.human_attribute_name(:answer), 12
+        'answer', Finding.human_attribute_name(:answer), 17
       ]
     end
 
@@ -247,15 +245,19 @@ class FindingsController < ApplicationController
 
         rescheduled_text << dates.join("\n")
       end
+      
+      finding_data = [
+        "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
+        "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
+        "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
+        ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
+        "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
+      ].compact.join("\n")
 
       column_data << {
-        'review' => finding.review.to_s.to_iso,
-        'review_code' => finding.review_code.to_iso,
-        'description' => finding.description.to_iso,
-        'state' => finding.state_text.to_iso,
+        'description' => finding_data.to_iso,
         'rescheduled' => rescheduled_text.to_iso,
         'date' => stale ? "<b>#{date_text}</b>" : date_text,
-        'risk' => (finding.risk_text.to_iso if finding.kind_of?(Weakness)),
         'audit_comments' => (finding.audit_comments.try(:to_iso) if detailed),
         'answer' => (finding.answer.try(:to_iso) if detailed)
       }

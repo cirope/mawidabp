@@ -78,9 +78,17 @@
 
 <div id="links">
   <%= pagination_links @findings %>
-  <%= link_to t(:'finding.download'), export_to_pdf_findings_path(:search => params[:search]) %> |
+  <%= link_to t(:'finding.download'),
+    export_to_pdf_findings_path(
+      :search => params[:search],
+      :user_id => @selected_user.try(:id)
+    ) %> |
   <%= link_to t(:'finding.download_detailed'),
-    export_to_pdf_findings_path(:search => params[:search], :include_details => 1) %>
+    export_to_pdf_findings_path(
+      :search => params[:search],
+      :user_id => @selected_user.try(:id),
+      :include_details => 1
+    ) %>
   <div class="clear"></div>
 </div>
 
