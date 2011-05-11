@@ -39,6 +39,14 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
+  
+  test 'list findings in xml' do
+    perform_auth
+    get :index, :completed => 'incomplete', :format => :xml
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert @response.headers['Content-Type'].start_with?('application/xml')
+  end
 
   test 'list findings for follow_up_committee' do
     perform_auth users(:committee_user)

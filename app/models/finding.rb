@@ -440,9 +440,8 @@ class Finding < ActiveRecord::Base
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
-  has_many :finding_answers, :dependent => :destroy, :validate => true,
-    :after_add => :answer_added, :order => 'created_at ASC',
-    :conditions => "#{FindingAnswer.table_name}.answer IS NOT NULL"
+  has_many :finding_answers, :dependent => :destroy,
+    :after_add => :answer_added, :order => 'created_at ASC'
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :finding_relations, :dependent => :destroy,
     :before_add => :check_for_valid_relation
@@ -523,6 +522,38 @@ class Finding < ActiveRecord::Base
   def to_s
     "#{self.review_code} - #{self.control_objective_item.try(:review)}"
   end
+  
+  def to_xml(options = {})
+    default_options = {
+      :skip_types => true,
+      :only => [:id, :review_code, :description, :follow_up_date,
+        :solution_date, :origination_date, :answer],
+      :methods => [:risk_text, :state_text, :review_text]
+    }
+    
+    super(default_options.merge(options)) do |xml|
+      if self.finding_user_assignments.empty?
+        xml.tag! 'users' # empty tag
+      else
+        xml.users do
+          self.finding_user_assignments.each do |fua|
+            xml.user do
+              xml.tag! :name, fua.user.full_name
+              xml.tag! :user, fua.user.user
+              xml.tag! :function, fua.user.function
+              xml.tag! :process_owner, fua.process_owner
+            end
+          end
+        end
+      end
+      
+      yield(xml) if block_given?
+    end
+  end
+  
+  def review_text
+    self.control_objective_item.try(:review).try(:identification)
+  end
 
   def check_for_final_review(_)
     if self.final? && self.review && self.review.is_frozen?
@@ -579,7 +610,7 @@ class Finding < ActiveRecord::Base
   end
 
   def answer_added(finding_answer)
-    if (self.unconfirmed? || self.notify?) &&
+    if (self.unconfirmed? || self.notify?) && !finding_answer.answer.blank? &&
         finding_answer.user.try(:can_act_as_audited?)
       self.confirmed! finding_answer.user
     end

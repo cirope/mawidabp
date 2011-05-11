@@ -88,6 +88,12 @@
       :search => params[:search],
       :user_id => @selected_user.try(:id),
       :include_details => 1
+    ) %> |
+  <%= link_to t(:'finding.download_xml'),
+    findings_path(
+      :search => params[:search],
+      :user_id => @selected_user.try(:id),
+      :format => :xml
     ) %>
   <div class="clear"></div>
 </div>

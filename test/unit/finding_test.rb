@@ -391,6 +391,25 @@ class FindingTest < ActiveSupport::TestCase
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
     assert finding.save
   end
+  
+  test 'unconfirmed with empty audited response must not change' do
+    finding = Finding.find(findings(
+        :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
+
+    assert finding.unconfirmed?
+    assert_nil finding.confirmation_date
+    assert finding.notifications.not_confirmed.any? { |n| n.user.can_act_as_audited? }
+
+    finding.finding_answers.build(
+      :answer => '',
+      :user => users(:audited_user)
+    )
+
+    assert !finding.confirmed?
+    assert_nil finding.confirmation_date
+    assert finding.notifications.not_confirmed.reload.any? { |n| n.user.can_act_as_audited? }
+    assert !finding.save
+  end
 
   test 'status change from confirmed must have an answer' do
     finding = Finding.find(findings(

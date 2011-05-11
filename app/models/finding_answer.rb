@@ -12,8 +12,7 @@ class FindingAnswer < ActiveRecord::Base
   attr_accessor :notify_users
 
   # Restricciones para la actualización de algunos parámetros
-  attr_readonly :answer, :auditor_comments, :file_model_id, :finding_id,
-    :user_id, :created_at
+  attr_readonly :answer, :file_model_id, :finding_id, :user_id, :created_at
 
   # Restricciones
   validates :finding_id, :answer, :presence => true

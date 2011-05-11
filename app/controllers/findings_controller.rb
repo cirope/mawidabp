@@ -51,15 +51,22 @@ class FindingsController < ApplicationController
           "#{Finding.table_name}.state ASC",
           "#{Finding.table_name}.review_code ASC"
         ]
-      ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+      )
 
     respond_to do |format|
       format.html {
+        @findings = @findings.paginate(
+          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+        )
+        
         if @findings.size == 1 && !@query.blank? && !params[:page]
           redirect_to finding_path(params[:completed], @findings.first)
         end
       } # index.html.erb
-      format.xml  { render :xml => @findings }
+      format.xml  {
+        headers['Content-disposition'] = "attachment; filename=#{@title.underscore.sanitized_for_filename}.xml"
+        render :xml => @findings
+      }
     end
   end
 
@@ -246,7 +253,7 @@ class FindingsController < ApplicationController
         rescheduled_text << dates.join("\n")
       end
       
-      audited = finding.users.select(&:audited?).map do |u|
+      audited = finding.reload.users.select(&:audited?).map do |u|
         finding.process_owners.include?(u) ?
           "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
           u.full_name
