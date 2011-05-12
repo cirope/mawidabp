@@ -95,10 +95,6 @@ class Role < ActiveRecord::Base
   end
 
   def check_auth_privileges
-    if restoring_model
-      @auth_privileges = Hash.new(Hash.new(true))
-    end
-
     unless self.has_auth_privileges?
       raise 'Must inject the auth privileges before save a Role'
     end

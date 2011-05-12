@@ -112,17 +112,18 @@
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 40%;">
-        <h3><%= OrganizationRole.human_attribute_name 'organization_id' %></h3>
+        <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
       </div>
       <div class="item_column" style="width: 40%;">
-        <h3><%= OrganizationRole.human_attribute_name 'role_id' %></h3>
+        <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
       </div>
       <div class="item_column" style="width: 10%;"></div>
       <div class="clear"></div>
     </div>
 
     <div id="organization_roles">
-      <%= u_f.fields_for :organization_roles do |or_f| %>
+      <% organization_roles = @user.organization_roles.for_group(@auth_organization.group_id) %>
+      <%= u_f.fields_for :organization_roles, organization_roles do |or_f| %>
         <%= render :partial => 'organization_role', :locals =>
           {:f => or_f, :is_dynamic => false} %>
       <% end %>

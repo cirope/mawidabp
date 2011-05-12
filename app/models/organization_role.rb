@@ -3,6 +3,13 @@ class OrganizationRole < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
     :important => true
   }
+  
+  # Named scopes
+  scope :for_group, lambda { |group_id|
+    includes(:organization).where(
+      "#{Organization.table_name}.group_id" => group_id
+    )
+  }
 
   # Restricciones
   validates :organization_id, :role_id, :presence => true
