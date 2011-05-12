@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :fixed_weaknesses_report, :extra_params => {},
-  :forms => {:date_range => true}} %>
+  :forms => {:date_range => true, :business_unit => true}} %>
 
 <% @periods.each do |period| %>
   <% unless @reviews[period].blank? %>

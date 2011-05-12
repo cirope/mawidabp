@@ -103,6 +103,21 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'follow_up_committee/high_risk_weaknesses_report'
   end
+  
+  test 'filtered high risk weaknesses report' do
+    perform_auth
+    
+    get :high_risk_weaknesses_report, :high_risk_weaknesses_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'three'
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'follow_up_committee/high_risk_weaknesses_report'
+  end
 
   test 'create high risk weaknesses report' do
     perform_auth
@@ -135,6 +150,21 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date
         }
     end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'follow_up_committee/fixed_weaknesses_report'
+  end
+  
+  test 'filtered fixed weaknesses report' do
+    perform_auth
+    
+    get :fixed_weaknesses_report, :fixed_weaknesses_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'three'
+    }
 
     assert_response :success
     assert_select '#error_body', false

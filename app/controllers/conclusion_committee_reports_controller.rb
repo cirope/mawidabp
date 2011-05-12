@@ -325,6 +325,29 @@ class ConclusionCommitteeReportsController < ApplicationController
     @notorious_reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date).notorious(true)
+    
+    if params[:high_risk_weaknesses_report]
+      unless params[:high_risk_weaknesses_report][:business_unit_type].blank?
+        @selected_business_unit = BusinessUnitType.find(
+          params[:high_risk_weaknesses_report][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(
+          @selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
+          "\"#{@selected_business_unit.name.strip}\""
+      end
+
+      unless params[:high_risk_weaknesses_report][:business_unit].blank?
+        business_units = params[:high_risk_weaknesses_report][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+
+        unless business_units.empty?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(
+            *business_units)
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
+            "\"#{params[:high_risk_weaknesses_report][:business_unit].strip}\""
+        end
+      end
+    end
 
     @periods.each do |period|
       BusinessUnitType.list.each do |but|
@@ -515,6 +538,29 @@ class ConclusionCommitteeReportsController < ApplicationController
     @reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date)
+    
+    if params[:fixed_weaknesses_report]
+      unless params[:fixed_weaknesses_report][:business_unit_type].blank?
+        @selected_business_unit = BusinessUnitType.find(
+          params[:fixed_weaknesses_report][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(
+          @selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
+          "\"#{@selected_business_unit.name.strip}\""
+      end
+
+      unless params[:fixed_weaknesses_report][:business_unit].blank?
+        business_units = params[:fixed_weaknesses_report][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+
+        unless business_units.empty?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(
+            *business_units)
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
+            "\"#{params[:fixed_weaknesses_report][:business_unit].strip}\""
+        end
+      end
+    end
 
     @periods.each do |period|
       BusinessUnitType.list.each do |but|

@@ -104,6 +104,21 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
   end
+  
+  test 'filtered high risk weaknesses report' do
+    perform_auth
+
+    get :high_risk_weaknesses_report, :high_risk_weaknesses_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
+  end
 
   test 'create high risk weaknesses report' do
     perform_auth
@@ -136,6 +151,21 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date
         }
     end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
+  end
+  
+  test 'filtered fixed weaknesses report' do
+    perform_auth
+    
+    get :fixed_weaknesses_report, :fixed_weaknesses_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+    }
 
     assert_response :success
     assert_select '#error_body', false
