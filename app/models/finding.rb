@@ -1476,7 +1476,7 @@ class Finding < ActiveRecord::Base
     # Sólo si no es sábado o domingo (porque no tiene sentido)
     unless [0, 6].include?(Date.today.wday)
       users = Finding.next_to_expire.inject([]) do |u, finding|
-        u | finding.users.select { |u| u.can_act_as_audited? }
+        u | finding.users
       end
 
       users.each do |user|

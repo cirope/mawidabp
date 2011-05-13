@@ -42,7 +42,9 @@ class FindingAnswer < ActiveRecord::Base
     if self.notify_users == true || self.notify_users == '1'
       users = self.finding.users - [self.user]
 
-      Notifier.notify_new_finding_answer(users, self).deliver unless users.blank?
+      if !users.blank? && !self.answer.blank?
+        Notifier.notify_new_finding_answer(users, self).deliver
+      end
     end
   end
 end

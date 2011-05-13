@@ -897,7 +897,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 7 do
       Finding.warning_users_about_expiration
     end
 
