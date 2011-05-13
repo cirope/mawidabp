@@ -221,6 +221,42 @@
       :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
       :'data-container' => :finding_relations %>
   </p>
+  
+  <% unless @weakness.finding_answers.blank? %>
+    <h1>
+      <%= t(:'finding.finding_answers') %>
+      <%= show_inline_help_for(:finding_comments) %>
+    </h1>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :created_at %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weakness.finding_answers.each do |finding_answer| %>
+          <tr>
+            <td><%= h finding_answer.user.full_name %></td>
+            <td><%= simple_format h(finding_answer.answer) %></td>
+            <td>
+              <%= finding_answer.file_model ?
+                link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
+            </td>
+            <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <h1>
     <%= t(:'finding.work_papers') %>
