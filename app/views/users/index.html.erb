@@ -20,7 +20,13 @@
       <% expire_time = parameter_in(@auth_organization.id,
         :security_session_expire_time, user.created_at).to_i %>
       <tr class="<%= cycle(:even, :odd) %> <%= user.enable? ? :enabled_item : :disabled_item %>">
-        <td><%= show_info(t(:'user.without_organization'), :class => :red) if user.organizations.blank? %></td>
+        <td>
+          <% if user.organizations.blank? %>
+            <%= show_info(t(:'user.without_organization'), :class => :red) %>
+          <% elsif !user.notes.blank? %>
+            <%= show_info(user.notes) %>
+          <% end %>
+        </td>
         <td class="nowrap"><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= h user.full_name %></td>
         <td class="expendable"><%= super_truncate(user.function || '-', 40) %></td>
