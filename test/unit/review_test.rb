@@ -243,7 +243,6 @@ class ReviewTest < ActiveSupport::TestCase
     assert oportunity.save
 
     @review.reload.must_be_approved?
-    puts @review.approval_errors
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?

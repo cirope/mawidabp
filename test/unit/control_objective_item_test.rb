@@ -167,8 +167,6 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
         }
       }
     )
-
-    puts "#{old_score} <> #{review.score}"
     
     assert_not_equal old_score, review.score
   end
