@@ -8,7 +8,8 @@ class CreateFindingUserAssignments < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :finding_user_assignments, [:finding_id, :finding_type, :user_id]
+    add_index :finding_user_assignments, [:finding_id, :finding_type, :user_id],
+      :name => 'finding_user_assignments_on_id_type_and_user_id'
     add_index :finding_user_assignments, [:finding_id, :finding_type]
   end
 
