@@ -88,4 +88,17 @@ module FindingsHelper
       ), :style => 'margin-left: .25em;'
     )
   end
+  
+  def finding_responsibles_list(finding)
+    users = finding.users.map do |u|
+      if finding.process_owners.include?(u)
+        content_tag(:b, u.full_name_with_function(finding.created_at) +
+            " | #{FindingUserAssignment.human_attribute_name(:process_owner)}")
+      else
+        u.full_name_with_function(finding.created_at)
+      end
+    end
+    
+    array_to_ul users, :class => :raw_list
+  end
 end

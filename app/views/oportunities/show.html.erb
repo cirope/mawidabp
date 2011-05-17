@@ -47,8 +47,7 @@
 
   <h3><%= raw(t(:'finding.responsibles', :count => @oportunity.users.size) +
       show_inline_help_for(:finding_responsibles)) %></h3>
-  <%= array_to_ul @oportunity.users.map { |u| u.full_name_with_function(@oportunity.created_at) },
-    :class => :raw_list %>
+  <%= finding_responsibles_list(@oportunity) %>
 
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
     <h3><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>

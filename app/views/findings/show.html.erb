@@ -90,7 +90,7 @@
   <% end %>
 
   <h3><%= t(:'finding.responsibles', :count => @finding.users.size) %></h3>
-  <%= array_to_ul @finding.users.map { |u| u.full_name_with_function(@finding.created_at) }, :class => :raw_list %>
+  <%= finding_responsibles_list(@finding) %>
   
   <% unless @finding.finding_answers.blank? %>
     <h3>
