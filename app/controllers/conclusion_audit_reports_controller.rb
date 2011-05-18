@@ -1,7 +1,9 @@
-require 'modules/conclusion_common_reports'
+require 'modules/conclusion_reports/conclusion_common_reports'
+require 'modules/conclusion_reports/conclusion_high_risk_reports'
 
 class ConclusionAuditReportsController < ApplicationController
   include ConclusionCommonReports
+  include ConclusionHighRiskReports
   
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :add_weaknesses_synthesis_table,
@@ -233,7 +235,11 @@ class ConclusionAuditReportsController < ApplicationController
         :weaknesses_by_audit_type => :read,
         :create_weaknesses_by_audit_type => :read,
         :cost_analysis => :read,
-        :create_cost_analysis => :read
+        :create_cost_analysis => :read,
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read
       })
   end
 end

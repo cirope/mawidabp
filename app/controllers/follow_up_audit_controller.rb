@@ -1,7 +1,9 @@
-require 'modules/follow_up_common_reports'
+require 'modules/follow_up_reports/follow_up_common_reports'
+require 'modules/follow_up_reports/follow_up_high_risk_reports'
 
 class FollowUpAuditController < ApplicationController
   include FollowUpCommonReports
+  include FollowUpHighRiskReports
 
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :get_organization,
@@ -211,7 +213,11 @@ class FollowUpAuditController < ApplicationController
         :weaknesses_by_audit_type => :read,
         :create_weaknesses_by_audit_type => :read,
         :cost_analysis => :read,
-        :create_cost_analysis => :read
+        :create_cost_analysis => :read,
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read
       })
   end
 end

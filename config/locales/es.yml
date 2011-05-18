@@ -191,6 +191,8 @@ es:
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -544,6 +546,8 @@ es:
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"

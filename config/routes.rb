@@ -81,8 +81,16 @@ MawidaApp::Application.routes.draw do
       :to => "follow_up_audit##{action}"
   end
 
+  ['synthesis_report', 'create_synthesis_report'].each do |action|
+    match "conclusion_committee_reports/#{action}",
+      :as => "#{action}_conclusion_committee_reports",
+      :to => "conclusion_committee_reports##{action}"
+    match "follow_up_committee/#{action}",
+      :as => "#{action}_follow_up_committee",
+      :to => "follow_up_committee##{action}"
+  end
+  
   [
-    'synthesis_report', 'create_synthesis_report',
     'high_risk_weaknesses_report', 'create_high_risk_weaknesses_report',
     'fixed_weaknesses_report', 'create_fixed_weaknesses_report'
   ].each do |action|
@@ -92,6 +100,12 @@ MawidaApp::Application.routes.draw do
     match "follow_up_committee/#{action}",
       :as => "#{action}_follow_up_committee",
       :to => "follow_up_committee##{action}"
+    match "conclusion_audit_reports/#{action}",
+      :as => "#{action}_conclusion_audit_reports",
+      :to => "conclusion_audit_reports##{action}"
+    match "follow_up_audit/#{action}",
+      :as => "#{action}_follow_up_audit",
+      :to => "follow_up_audit##{action}"
   end
 
   match "conclusion_audit_reports/cost_analysis",
