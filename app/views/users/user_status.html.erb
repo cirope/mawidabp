@@ -14,9 +14,7 @@
 
 <div class="float_image">
   <h2 style="font-weight: normal;">
-    <%= link_to textilize_without_paragraph(t(:'user.weaknesses',
-        :count => @user.weaknesses.for_current_organization.finals(false).count)),
-      findings_path(:completed => 'incomplete', :user_id => @user.id)  %>
+    <%= user_weaknesses_links(@user) %>
   </h2>
   <div class="image_frame">
     <%= draw_user_weaknesses_graph(@user,

@@ -1118,8 +1118,12 @@ es:
       other: '*%{count}* observaciones de *riesgo alto*'
       image_label: 'Observaciones de riesgo alto'
     weaknesses:
-      one: '*Una* observación'
-      other: '*%{count}* observaciones'
+      pending:
+        one: '*Una* observación pendiente'
+        other: '*%{count}* observaciones pendientes'
+      complete:
+        one: '*Una* observación solucionada'
+        other: '*%{count}* observaciones solucionadas'
       image_label: 'Observaciones'
     responsibility_modification:
       title: "Modificación de responsabilidades"
