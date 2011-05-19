@@ -71,6 +71,7 @@ module FollowUpHighRiskReports
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
               "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
+              "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
             ].compact.join("\n")
           end
@@ -285,6 +286,7 @@ module FollowUpHighRiskReports
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
               "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
+              "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
             ].compact.join("\n")
           end
