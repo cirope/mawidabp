@@ -245,7 +245,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'check for approval' do
     perform_auth
-    get :check_for_approval, :id => reviews(:current_review).id
+    get :check_for_approval, :id => reviews(:current_review).id,
+      :format => :json
     assert_response :success
 
     approval_hash = nil

@@ -283,19 +283,25 @@ class ConclusionDraftReviewsController < ApplicationController
   end
 
   def check_for_approval
+    @format = params[:format] ||= 'json'
+    
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
         :id => params[:id],
         "#{Period.table_name}.organization_id" => @auth_organization.id
       ).first
-
-      render :json => {
+      
+      response = {
         :approved => review.is_approved?,
         :can_be_approved_by_force => review.can_be_approved_by_force,
         :errors => review.approval_errors
-      }.to_json
+      }
     else
-      render :json => ''
+      response = ''
+    end
+    
+    respond_to do |format|
+      format.json { render :json => response.to_json }
     end
   end
 
