@@ -50,7 +50,10 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
-      :subject => t(:'notifier.notify_new_finding_answer.title')
+      :subject => t(
+        :'notifier.notify_new_finding_answer.title',
+        :review => finding_answer.finding.review.to_s
+      )
     )
   end
 

@@ -736,7 +736,7 @@ es:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"
     notify_new_finding_answer:
-      title: "Tiene un nuevo comentario"
+      title: "Nuevo comentario en el informe %{review}"
       finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
       finding_link: "Ver observación / oportunidad de mejora"
     notify_new_findings:

@@ -73,8 +73,8 @@ class NotifierTest < ActionMailer::TestCase
     response = Notifier.notify_new_finding_answer(user, finding_answer).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert_equal I18n.t(:'notifier.notify_new_finding_answer.title'),
-      response.subject
+    assert_equal I18n.t(:'notifier.notify_new_finding_answer.title',
+      :review => finding_answer.finding.review.to_s), response.subject
     assert_match Regexp.new(I18n.t(:'notifier.notify_new_finding_answer.finding_link')),
       response.body.decoded
     assert_equal user.email, response.to.first
