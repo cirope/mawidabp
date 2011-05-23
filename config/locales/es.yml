@@ -816,6 +816,8 @@ es:
     correctly_updated: "Oportunidad actualizada correctamente."
     stale_object_error: "La oportunidad no fue actualizada, intente nuevamente."
     edit_control_objective: "Editar objetivo de control"
+    show_follow_up: 'Ver en seguimiento'
+    edit_follow_up: 'Editar en seguimiento'
 
   organization:
     index_title: "Listado de organizaciones"
@@ -1172,6 +1174,8 @@ es:
     see_all: "Ver todas"
     edit_control_objective: "Editar objetivo de control"
     previous_follow_up_dates: "Fechas de implementación anteriores"
+    show_follow_up: 'Ver en seguimiento'
+    edit_follow_up: 'Editar en seguimiento'
     errors:
       not_valid_state: "tiene un estado no permitido"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
