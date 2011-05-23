@@ -84,7 +84,7 @@
         url    = element.readAttribute('action');
         params = element.serialize();
       } else {
-        method = element.readAttribute('data-method') || 'get';
+        method = element.readAttribute('data-remote-method') || 'get';
         url    = element.readAttribute('href');
         params = eval(element.readAttribute('data-params')) || {};
       }

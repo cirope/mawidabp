@@ -283,8 +283,6 @@ class ConclusionDraftReviewsController < ApplicationController
   end
 
   def check_for_approval
-    @format = params[:format] ||= 'json'
-    
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
         :id => params[:id],
