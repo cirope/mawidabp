@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.datetime "updated_at"
     t.boolean  "finished"
     t.integer  "sustantive_score"
+    t.integer  "order_number"
   end
 
   add_index "control_objective_items", ["control_objective_id"], :name => "index_control_objective_items_on_control_objective_id"

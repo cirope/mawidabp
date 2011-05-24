@@ -2,6 +2,7 @@ class CreateControlObjectiveItems < ActiveRecord::Migration
   def self.up
     create_table :control_objective_items do |t|
       t.text :control_objective_text
+      t.integer :order_number
       t.integer :relevance
       t.integer :design_score
       t.integer :compliance_score

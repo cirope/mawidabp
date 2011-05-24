@@ -32,14 +32,14 @@
   </p>
 
   <h2 style="margin: 1em 0em; text-decoration: underline;"><%= t(:'conclusion_review.objectives_and_scopes') %></h2>
-  <% grouped_control_objectives = @conclusion_final_review.control_objective_items.group_by(&:'process_control') %>
+  <% grouped_control_objectives = @conclusion_final_review.review.grouped_control_objective_items %>
   <% grouped_control_objectives.each do |process_control, cois| %>
     <p>
       <b><%= ProcessControl.model_name.human %></b>:
       <%= process_control.name %>
     </p>
     <ul class="raw_list">
-      <% cois.each do |coi| %>
+      <% cois.sort.each do |coi| %>
         <li><%= coi.control_objective_text %></li>
       <% end %>
     </ul>

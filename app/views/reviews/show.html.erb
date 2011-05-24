@@ -55,12 +55,11 @@
       <% end %>
     </tbody>
   </table>
-
-  <% control_objective_items = @review.control_objective_items %>
-  <% control_objective_items.group_by(&:process_control).each do |pc, cois| %>
+  
+  <% @review.grouped_control_objective_items.each do |pc, cois| %>
     <h1><%= pc.name %></h1>
 
-    <% cois.each do |coi| %>
+    <% cois.sort.each do |coi| %>
       <h2><%=h coi.control_objective_text %></h2>
       <div style="margin: 1em;">
         <div class="show_item">

@@ -136,13 +136,24 @@
     <div class="textual_items" style="margin-top: 2em;">
       <h1><%= t(:'review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
-        <% control_objective_items = @review.control_objective_items %>
-        <% control_objective_items.group_by(&:process_control).each do |pc, cois| %>
-          <h3><%= pc.name %></h3>
-          <%= r_f.fields_for :control_objective_items, cois do |coi_f| %>
-            <%= render :partial => 'control_objective_item', :locals => {
-              :co_f => coi_f, :readonly => readonly, :frozen => frozen} %>
-          <% end %>
+        <% @review.grouped_control_objective_items.each do |pc, cois| %>
+          <div id="process_control_<%= pc.id %>" class="process_control">
+            <h3>
+              <%= pc.name %>
+              <%= link_to_move :class => 'image_link process_control_move' unless readonly %>
+            </h3>
+            <%= r_f.fields_for :control_objective_items, cois.sort do |coi_f| %>
+              <%= render :partial => 'control_objective_item', :locals => {
+                :co_f => coi_f, :readonly => readonly} %>
+            <% end %>
+          </div>
+          <script type="text/javascript">
+            Helper.makeSortable(
+              'process_control_<%= pc.id %>',
+              '#process_control_<%= pc.id %> div.control_objective_item',
+              '#process_control_<%= pc.id %> a.move'
+            );
+          </script>
         <% end %>
       </div>
     </div>
@@ -277,6 +288,13 @@
       }
     });
   }
+  
+  Helper.makeSortable(
+    'control_objective_items',
+    '#control_objective_items div.process_control',
+    '#control_objective_items a.process_control_move'
+  );
+  FormUtil.completeSortNumbers();
 
   HTMLUtil.stylizeAllInputFiles();
 //]]>

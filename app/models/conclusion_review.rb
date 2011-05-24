@@ -175,14 +175,13 @@ class ConclusionReview < ActiveRecord::Base
     pdf.add_subtitle I18n.t(:'conclusion_review.objectives_and_scopes'),
       PDF_FONT_SIZE, PDF_FONT_SIZE
 
-    grouped_control_objectives = self.control_objective_items.group_by(
-      &:'process_control')
+    grouped_control_objectives = self.review.grouped_control_objective_items
 
     grouped_control_objectives.each do |process_control, cois|
       pdf.text "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>", :justification => :full
 
-      cois.each do |coi|
+      cois.sort.each do |coi|
         pdf.text "<C:bullet/> #{coi.control_objective_text}",
           :left => PDF_FONT_SIZE * 2, :justification => :full
       end
@@ -332,7 +331,7 @@ class ConclusionReview < ActiveRecord::Base
       pdf.add_subtitle(I18n.t(:'conclusion_review.finding_review_assignments'),
         PDF_FONT_SIZE, PDF_FONT_SIZE)
       repeated_findings = self.review.finding_review_assignments.map do |fra|
-        fra.finding.to_s
+        "#{fra.finding.to_s} [<b>#{fra.finding.state_text}</b>]"
       end
 
       pdf.add_list(repeated_findings, PDF_FONT_SIZE)

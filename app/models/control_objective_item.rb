@@ -1,6 +1,7 @@
 class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
-
+  include Comparable
+  
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :review => {
@@ -117,6 +118,32 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def set_proper_parent
     self.work_papers.each { |wp| wp.owner = self }
+  end
+  
+  def <=>(other)
+    if other.kind_of?(ControlObjectiveItem)
+      if self.id == other.id
+        0
+      elsif self.review_id == other.review_id
+        (self.order_number || -1) <=> (other.order_number || -1)
+      else
+        -1
+      end
+    else
+      -1
+    end
+  end
+  
+  def ==(other)
+    if other.kind_of?(ControlObjectiveItem)
+      if self.new_record? && other.new_record?
+        self.object_id == other.object_id
+      else
+        self.id == other.id
+      end
+    else
+      false
+    end
   end
 
   def score_completion

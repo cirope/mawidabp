@@ -173,7 +173,8 @@ class Review < ActiveRecord::Base
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
   has_many :control_objective_items, :inverse_of => :review,
-    :dependent => :destroy, :after_add => :assign_review
+    :dependent => :destroy, :after_add => :assign_review,
+    :order => 'order_number ASC'
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
@@ -451,6 +452,25 @@ class Review < ActiveRecord::Base
     end
 
     work_papers
+  end
+  
+  def grouped_control_objective_items
+    grouped_control_objective_items = {}
+    
+    self.control_objective_items.each do |coi|
+      grouped_control_objective_items[coi.process_control] ||= []
+      
+      unless grouped_control_objective_items[coi.process_control].include?(coi)
+        grouped_control_objective_items[coi.process_control] << coi
+      end
+    end
+    
+    grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
+      pc1 = gcoi1.last.map(&:order_number).compact.min || -1
+      pc2 = gcoi2.last.map(&:order_number).compact.min || -1
+      
+      pc1 <=> pc2
+    end
   end
 
   def survey_pdf(organization = nil)
