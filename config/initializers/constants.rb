@@ -1,9 +1,9 @@
 # Dirección del correo electrónico de soporte
-SUPPORT_EMAIL = 'soporte@mawidaweb.com.ar'.freeze
+SUPPORT_EMAIL = 'soporte@mawida.com.ar'.freeze
 # Teléfono de soporte
 SUPPORT_PHONE = '(0261) 449-8885/87'.freeze
 # Dirección principal de soporte
-SUPPORT_URL = 'https://soporte.mawidaweb.com.ar/'.freeze
+SUPPORT_URL = 'https://soporte.mawida.com.ar/'.freeze
 # Ruta hasta el directorio de configuración
 CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público
@@ -37,7 +37,7 @@ FINDING_STALE_UNCONFIRMED_DAYS = 1
 LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las
 # notificaciones a esta cuenta)
-NOTIFICATIONS_EMAIL = 'notificaciones@mawidaweb.com.ar'.freeze
+NOTIFICATIONS_EMAIL = 'notificaciones@mawida.com.ar'.freeze
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Ruta hasta donde se almacenan los archivos de errores
@@ -66,7 +66,7 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (Rails.env.development? ?
-    'mawidaweb.com.ar:3000' : 'mawidaweb.com.ar').freeze
+    'mawidaqa.com.ar:3000' : 'mawida.com.ar').freeze
 # Protocolo a utilizar para formar los links absolutos
 URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador

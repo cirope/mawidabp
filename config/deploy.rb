@@ -16,9 +16,9 @@ set :branch, 'master'
 
 set :bundle_without, [:test]
 
-role :web, 'mawidaweb.com.ar' # Your HTTP server, Apache/etc
-role :app, 'mawidaweb.com.ar' # This may be the same as your `Web` server
-role :db,  'mawidaweb.com.ar', :primary => true # This is where Rails migrations will run
+role :web, 'mawida.com.ar' # Your HTTP server, Apache/etc
+role :app, 'mawida.com.ar' # This may be the same as your `Web` server
+role :db,  'mawida.com.ar', :primary => true # This is where Rails migrations will run
 
 after 'deploy:symlink', 'deploy:create_shared_symlinks'
 
