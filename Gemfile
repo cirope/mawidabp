@@ -6,7 +6,7 @@ gem 'bundler'
 # TODO: Eliminar cuando se corrija el error en Rails o Rake
 gem 'rake', '0.8.7'
 gem 'pg'
-gem 'foreigner', '1.0.0'
+gem 'foreigner'
 gem 'ya2yaml'
 gem 'memcache-client'
 gem 'calendar_date_select', :git => 'https://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'

@@ -54,7 +54,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fastthread (1.0.7)
-    foreigner (1.0.0)
+    foreigner (1.0.2)
       activerecord (>= 3.0.0)
     gem_plugin (0.2.3)
     gruff (0.3.6)
@@ -151,7 +151,7 @@ DEPENDENCIES
   calendar_date_select!
   capistrano
   color
-  foreigner (= 1.0.0)
+  foreigner
   gruff
   memcache-client
   metaskills-pdf-writer
