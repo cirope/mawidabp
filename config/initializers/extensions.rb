@@ -130,7 +130,17 @@ class String
 
     # Por línea para evitar un desborde en la función iconv cuando el string es
     # muy grande
-    self.each_line { |substr| result << CONVERTER_TO_ISO.iconv(substr) }
+    self.each_line do |line|
+      if line.length < 2048
+        result << CONVERTER_TO_ISO.iconv(line)
+      else
+        line.scan(/.{1,2048}/) do |chunk|
+          result << CONVERTER_TO_ISO.iconv(chunk)
+        end
+        
+        result << "\n" if line.match(/\n/)
+      end
+    end
     
     result
   end
@@ -140,7 +150,17 @@ class String
 
     # Por línea para evitar un desborde en la función iconv cuando el string es
     # muy grande
-    self.each_line { |substr| result << CONVERTER_TO_UTF8.iconv(substr) }
+    self.each_line do |line|
+      if line.length < 2048
+        result << CONVERTER_TO_UTF8.iconv(line)
+      else
+        line.scan(/.{1,2048}/) do |chunk|
+          result << CONVERTER_TO_UTF8.iconv(chunk)
+        end
+        
+        result << "\n" if line.match(/\n/)
+      end
+    end
 
     result
   end
