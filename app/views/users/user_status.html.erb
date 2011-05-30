@@ -1,13 +1,13 @@
+<% filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete %>
 <h1 class="title"><%= @user.informal_name %></h1>
 
 <div class="float_image">
   <h2 style="font-weight: normal;">
     <%= textilize_without_paragraph(t(:'user.high_risk_weaknesses',
-        :count => @user.weaknesses.for_current_organization.finals(false).with_highest_risk.count)) %>
+        :count => filtered_weaknesses.with_highest_risk.count)) %>
   </h2>
   <div class="image_frame">
-    <%= draw_user_weaknesses_graph(@user,
-      @user.weaknesses.for_current_organization.finals(false).with_highest_risk,
+    <%= draw_user_weaknesses_graph(@user, filtered_weaknesses.with_highest_risk,
       t(:'user.high_risk_weaknesses.image_label')) %>
   </div>
 </div>
@@ -17,8 +17,7 @@
     <%= user_weaknesses_links(@user) %>
   </h2>
   <div class="image_frame">
-    <%= draw_user_weaknesses_graph(@user,
-      @user.weaknesses.for_current_organization.finals(false),
+    <%= draw_user_weaknesses_graph(@user, filtered_weaknesses,
       t(:'user.weaknesses.image_label')) %>
   </div>
 </div>

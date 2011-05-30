@@ -62,7 +62,8 @@ module UsersHelper
   end
   
   def user_weaknesses_links(user)
-    filtered_weaknesses = user.weaknesses.for_current_organization.finals(false)
+    filtered_weaknesses = user.weaknesses.for_current_organization.finals(
+      false).not_incomplete
     pending_count = filtered_weaknesses.with_pending_status.count
     complete_count = filtered_weaknesses.count - pending_count
     

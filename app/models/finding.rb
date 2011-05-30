@@ -290,6 +290,7 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :being_implemented, where({:state => STATUS[:being_implemented]})
+  scope :not_incomplete, where("state <> ?", Finding::STATUS[:incomplete])
   scope :list_all_by_date, lambda { |from_date, to_date, order|
     includes(
       :control_objective_item => {:review =>
