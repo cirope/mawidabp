@@ -604,14 +604,17 @@ class User < ActiveRecord::Base
       Finding.transaction do
         if options[:with_findings]
           self.findings.all_for_reallocation.each do |f|
+            old_fua = f.finding_user_assignments.detect {|fua| fua.user == self}
             f.avoid_changes_notification = true
 
             unless f.users.include?(other)
-              f.finding_user_assignments.create(:user => other)
+              f.finding_user_assignments.create(
+                :user => other,
+                :process_owner => old_fua.process_owner
+              )
             end
 
-            f.finding_user_assignments.delete(
-              f.finding_user_assignments.detect { |fua| fua.user == self })
+            f.finding_user_assignments.delete(old_fua)
 
             unconfirmed_findings << f if f.unconfirmed?
 
