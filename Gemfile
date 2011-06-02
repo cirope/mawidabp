@@ -3,8 +3,6 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.7'
 
 gem 'bundler'
-# TODO: Eliminar cuando se corrija el error en Rails o Rake
-gem 'rake', '0.8.7'
 gem 'pg'
 gem 'foreigner'
 gem 'ya2yaml'
