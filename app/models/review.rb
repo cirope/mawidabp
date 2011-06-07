@@ -729,11 +729,11 @@ class Review < ActiveRecord::Base
       c.justification = :center
       c.width = pdf.percent_width(30)
     end
-
+    
     self.control_objective_items.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
-        coi.control_objective_text, coi.effectiveness
+        coi.control_objective_text, coi.effectiveness || 0, coi.relevance || 0
       ]
     end
 
@@ -743,8 +743,9 @@ class Review < ActiveRecord::Base
     }
 
     process_controls.each do |process_control, coi_data|
+      coi_relevance_count = coi_data.inject(0) { |t, e| t + e[2] }.to_f
       effectiveness_average = coi_data.inject(0) do |t, e|
-          (t + e.last  / coi_data.size.to_f)
+        t + (e[1] * e[2])  / coi_relevance_count
       end
 
       column_data << {
