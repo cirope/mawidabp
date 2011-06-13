@@ -217,7 +217,7 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#',
+    <%= link_to_unless frozen, t(:'finding.add_finding_relation'), '#',
       :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
       :'data-container' => :finding_relations %>
   </p>
