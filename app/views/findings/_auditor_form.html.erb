@@ -238,6 +238,30 @@
       :'data-event' => :add_nested_item,
       :'data-container' => :finding_relations %>
   </p>
+  
+  <% unless @finding.inverse_finding_relations.blank? %>
+    <h1>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h1>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <div style="clear: both; margin-top: 2em;">
     <h1>

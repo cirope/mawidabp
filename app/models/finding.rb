@@ -446,6 +446,8 @@ class Finding < ActiveRecord::Base
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :finding_relations, :dependent => :destroy,
     :before_add => :check_for_valid_relation
+  has_many :inverse_finding_relations, :readonly => true,
+    :foreign_key => :related_finding_id, :class_name => 'FindingRelation'
   has_many :notifications, :through => :notification_relations, :uniq => true,
     :order => 'created_at'
   has_many :costs, :as => :item, :dependent => :destroy

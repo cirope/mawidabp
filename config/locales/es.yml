@@ -462,7 +462,8 @@ es:
     download_detailed: "Descargar listado detallado"
     download_xml: 'Descargar listado en XML'
     work_papers: "Papeles de trabajo"
-    finding_relations: "Relaciones con otras observaciones"
+    finding_relations: "Relacionada con"
+    inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"

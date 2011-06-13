@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.8'
+gem 'rails', '3.0.9.rc5'
 
 gem 'bundler'
 gem 'pg'
@@ -33,7 +33,7 @@ group :production do
 end
 
 group :development do
-  gem 'ruby-debug'
+  #gem 'ruby-debug'
   gem 'capistrano'
   gem 'mongrel'
 end

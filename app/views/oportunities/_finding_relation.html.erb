@@ -28,7 +28,7 @@
           :id => "hidden_related_finding_#{id}" %>
         <%= text_field_tag "finding_finding_relation_#{id}",
           finding_relation.related_finding.try(:to_s), :readonly => true,
-          :class => ('error_field' if finding_relation.errors[:related_finding_id]) %>
+          :class => ('error_field' unless finding_relation.errors[:related_finding_id].blank?) %>
       <% end %>
     </div>
     <div class="item_field" style="width: 30%;">

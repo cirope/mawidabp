@@ -195,6 +195,30 @@
       :'data-container' => :finding_relations %>
   </p>
   
+  <% unless @oportunity.inverse_finding_relations.blank? %>
+    <h1>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h1>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
   <% unless @oportunity.finding_answers.blank? %>
     <h1>
       <%= t(:'finding.finding_answers') %>
