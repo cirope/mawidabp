@@ -92,6 +92,54 @@
   <h3><%= t(:'finding.responsibles', :count => @finding.users.size) %></h3>
   <%= finding_responsibles_list(@finding) %>
   
+  <% unless @finding.finding_relations.blank? %>
+    <h3>
+      <%= t(:'finding.finding_relations') %>
+      <%= show_inline_help_for(:finding_relations) %>
+    </h3>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.finding_relations.each do |fr| %>
+          <tr>
+            <td><%= fr.related_finding %></td>
+            <td><%= fr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
+  <% unless @finding.inverse_finding_relations.blank? %>
+    <h3>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h3>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
   <% unless @finding.finding_answers.blank? %>
     <h3>
       <%= t(:'finding.finding_answers') %>
