@@ -94,7 +94,7 @@
     </p>
     <p>
       <%= link_to_unless @review.new_record?, t(:'review.survey.download'),
-        :action => :survey_pdf, :id => @review %>
+        :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
     </p>
     <div id="estimated_amount" style="margin-top: .5em;">
       <%= render :partial => 'estimated_amount',

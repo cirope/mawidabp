@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.9.rc5'
+gem 'rails', '3.0.9'
 
 gem 'bundler'
 gem 'pg'

@@ -81,19 +81,22 @@
   <%= link_to t(:'finding.download'),
     export_to_pdf_findings_path(
       :search => params[:search],
-      :user_id => @selected_user.try(:id)
+      :user_id => @selected_user.try(:id),
+      :_ts => Time.now.to_i
     ) %> |
   <%= link_to t(:'finding.download_detailed'),
     export_to_pdf_findings_path(
       :search => params[:search],
       :user_id => @selected_user.try(:id),
-      :include_details => 1
+      :include_details => 1,
+      :_ts => Time.now.to_i
     ) %> |
   <%= link_to t(:'finding.download_xml'),
     findings_path(
       :search => params[:search],
       :user_id => @selected_user.try(:id),
-      :format => :xml
+      :format => :xml,
+      :_ts => Time.now.to_i
     ) %>
   <div class="clear"></div>
 </div>

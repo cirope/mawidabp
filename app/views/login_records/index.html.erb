@@ -32,9 +32,10 @@
 </table>
 
 <div id="links">
-<%= pagination_links @login_records %>
-<%= link_to t(:'label.back'), :action => :choose %> |
-<%= link_to t(:'label.download'), :action => :export_to_pdf,
-    :range => {:from_date => @from_date, :to_date => @to_date} %>
-<div class="clear"></div>
+  <%= pagination_links @login_records %>
+  <%= link_to t(:'label.back'), :action => :choose %> |
+  <%= link_to t(:'label.download'), :action => :export_to_pdf,
+      :range => {:from_date => @from_date, :to_date => @to_date},
+      :_ts => Time.now.to_i %>
+  <div class="clear"></div>
 </div>

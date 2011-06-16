@@ -44,6 +44,7 @@
 <div id="links">
   <%= pagination_links @users %>
   <%= link_to t(:'label.new'), new_user_path %> |
-  <%= link_to t(:'label.download'), export_to_pdf_users_path(:search => params[:search]) %>
+  <%= link_to t(:'label.download'), export_to_pdf_users_path(
+    :search => params[:search], :_ts => Time.now.to_i) %>
   <div class="clear"></div>
 </div>
