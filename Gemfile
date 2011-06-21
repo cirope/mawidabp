@@ -33,7 +33,6 @@ group :production do
 end
 
 group :development do
-  gem 'linecache', '0.43' # TODO: remover cuando se solucione en Rails
   gem 'ruby-debug'
   gem 'capistrano'
   gem 'mongrel'
