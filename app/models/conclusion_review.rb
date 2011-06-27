@@ -757,22 +757,7 @@ class ConclusionReview < ActiveRecord::Base
           I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
             :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
       end
-
-      weaknesses.each do |weakness|
-        pdf.start_new_page
-        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
-
-        pdf.add_title I18n.t(
-          :'conclusion_review.findings_follow_up.weakness_title_in_singular'),
-          (PDF_FONT_SIZE * 1.5).round, :center
-
-        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
-
-        pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
-          :justification => :center
-      end
-
+      
       column_data = []
 
       unless oportunities.blank?
@@ -808,6 +793,21 @@ class ConclusionReview < ActiveRecord::Base
         pdf.text "\n#{
           I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
             :font_size => (PDF_FONT_SIZE * 0.75), :justification => :full
+      end
+
+      weaknesses.each do |weakness|
+        pdf.start_new_page
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
+
+        pdf.add_title I18n.t(
+          :'conclusion_review.findings_follow_up.weakness_title_in_singular'),
+          (PDF_FONT_SIZE * 1.5).round, :center
+
+        pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
+
+        pdf.text [weakness.review_code, weakness.risk_text,
+          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
+          :justification => :center
       end
 
       oportunities.each do |oportunity|
