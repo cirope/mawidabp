@@ -474,6 +474,7 @@ es:
     has_work_papers: "Papeles de trabajo"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
+    undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     auditors:
       one: "Auditor"

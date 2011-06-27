@@ -62,7 +62,7 @@
       <% end %>
     </div>
     <p>
-      <%= f.label :repeated_of_id %>
+      <%= finding_repeated_of_label(f, readonly) %>
       <%= finding_repeated_of_if_field(f, readonly) %>
     </p>
     <p>
@@ -336,3 +336,30 @@
 <% end %>
 <!--[eoform:weakness] -->
 <%= set_focus_to_first_element %>
+
+<% if @weakness.repeated_of && !readonly %>
+  <% content_for :extra_html_bottom do %>
+    <div id="inline_undo_reiteration" class="popup" style="display: none;">
+      <div>
+        <%= button_to t(:'finding.undo_reiteration'),
+          undo_reiteration_weakness_path(@weakness), :method => :put %>
+      </div>
+      <br />
+      <a id="help_closebox_undo_reiteration" class="popup_closebox" href="#" onclick="return false;">
+        <%= t(:'label.cancel') %>
+      </a>
+    </div>
+    <script type="text/javascript">
+    (function() {
+      PopupListener['inlineundoreiteration'] = function(link) {
+        new Popup(
+          'inline_undo_reiteration', 'show_inline_undo_reiteration',
+          {trigger: 'click', position: 'below'}
+        );
+      }
+
+      PopupListener['inlineundoreiteration']();
+    })();
+    </script>
+  <% end %>
+<% end %>

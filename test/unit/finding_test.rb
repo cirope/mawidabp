@@ -739,6 +739,25 @@ class FindingTest < ActiveSupport::TestCase
       finding.update_attributes(:repeated_of_id => repeated_of.id)
     end
   end
+  
+  test 'undo reiteration' do
+    finding = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    repeated_of = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    repeated_of_original_state = repeated_of.state
+    
+    assert !repeated_of.repeated?
+    assert finding.update_attributes(:repeated_of_id => repeated_of.id)
+    assert repeated_of.reload.repeated?
+    assert finding.reload.repeated_of
+    
+    finding.undo_reiteration
+    
+    assert !repeated_of.reload.repeated?
+    assert_nil finding.reload.repeated_of
+    assert_equal repeated_of_original_state, repeated_of.state
+  end
 
   test 'not mark as duplicated if repeated_of is not included in review' do
     finding = Finding.find(findings(

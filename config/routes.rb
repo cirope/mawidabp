@@ -220,6 +220,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
+      put :undo_reiteration
     end
   end
 
@@ -264,6 +265,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
+      put :undo_reiteration
     end
 
     collection do

@@ -349,7 +349,7 @@ class Finding < ActiveRecord::Base
   # Atributos no persistente
   attr_accessor :nested_user, :auto_control_objective_item, :finding_prefix,
     :avoid_changes_notification, :users_for_notification, :user_who_make_it,
-    :nested_finding_relation, :force_modification
+    :nested_finding_relation, :force_modification, :undoing_reiteration
 
   # Callbacks
   before_create :can_be_created?
@@ -584,7 +584,7 @@ class Finding < ActiveRecord::Base
   def check_for_reiteration
     review = self.control_objective_item.try(:review)
 
-    if self.repeated_of_id_changed? && review
+    if !self.undoing_reiteration && self.repeated_of_id_changed? && review
       is_not_included = review.finding_review_assignments.empty? ||
         !review.finding_review_assignments.detect { |fra| fra.finding == self.repeated_of }
 
@@ -600,6 +600,23 @@ class Finding < ActiveRecord::Base
       else
         raise 'Original finding can not be changed'
       end
+    end
+  end
+  
+  def undo_reiteration
+    versions  = self.repeated_of.versions.select do |v|
+      finding = v.reify(:has_one => false)
+      finding.try(:state) && !finding.repeated?
+    end
+    
+    if !versions.blank?
+      self.repeated_of.update_attribute(
+        :state, versions.last.reify(:has_one => false).state
+      )
+      self.undoing_reiteration = true
+      self.update_attribute :repeated_of_id, nil
+    else
+      raise 'Unknown previous repeated state'
     end
   end
 

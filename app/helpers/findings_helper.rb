@@ -10,6 +10,25 @@ module FindingsHelper
       {:class => (:inline_item if inline),
       :disabled => (disabled || finding.unconfirmed?)}
   end
+  
+  def finding_repeated_of_label(form, readonly)
+    if form.object.repeated_of && !readonly
+      link = content_tag(:span,
+        "[#{t(:'finding.undo_reiteration')}]",
+        :id => :show_inline_undo_reiteration,
+        :class => :popup_link,
+        :title => t(:'finding.undo_reiteration'),
+        :style => 'color: #666666;'
+      )
+      
+      form.label :repeated_of_id, raw(
+        Finding.human_attribute_name(:repeated_of_id) + ' ' +
+        content_tag(:span, raw(link), :class => :popup_link_container)
+      ), :for => :repeated_of_finding
+    else
+      form.label :repeated_of_id
+    end
+  end
 
   def finding_repeated_of_if_field(form, readonly)
     if form.object.repeated_of

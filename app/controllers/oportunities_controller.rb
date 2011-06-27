@@ -167,6 +167,19 @@ class OportunitiesController < ApplicationController
 
     redirect_to oportunity.relative_follow_up_pdf_path
   end
+  
+  # Deshace la reiteración de la oportunidad
+  #
+  # * PUT /oportunities/undo_reiteration/1
+  def undo_reiteration
+    @oportunity = find_with_organization(params[:id])
+    @oportunity.undo_reiteration
+    
+    respond_to do |format|
+      format.html { redirect_to(edit_oportunity_url(@oportunity)) }
+      format.xml  { head :ok }
+    end
+  end
 
   # * POST /oportunities/auto_complete_for_user
   def auto_complete_for_user

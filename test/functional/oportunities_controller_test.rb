@@ -260,6 +260,27 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     assert_redirected_to oportunity.relative_follow_up_pdf_path
   end
+  
+  test 'undo reiteration' do
+    perform_auth
+    oportunity = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
+    repeated_of = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    repeated_of_original_state = repeated_of.state
+    
+    assert !repeated_of.repeated?
+    assert oportunity.update_attributes(:repeated_of_id => repeated_of.id)
+    assert repeated_of.reload.repeated?
+    assert oportunity.reload.repeated_of
+    
+    put :undo_reiteration, :id => oportunity.to_param
+    assert_redirected_to edit_oportunity_path(oportunity)
+    
+    assert !repeated_of.reload.repeated?
+    assert_nil oportunity.reload.repeated_of
+    assert_equal repeated_of_original_state, repeated_of.state
+  end
 
   test 'auto complete for user' do
     perform_auth
