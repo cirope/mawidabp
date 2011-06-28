@@ -27,6 +27,7 @@ es:
     move: "Mover"
     new: "Nuevo"
     next: "Siguiente"
+    "or": 'o'
     previous: "Anterior"
     save: "Guardar"
     search: "Buscar"

@@ -313,11 +313,9 @@
 <% if @oportunity.repeated_of && !readonly %>
   <% content_for :extra_html_bottom do %>
     <div id="inline_undo_reiteration" class="popup" style="display: none;">
-      <div>
-        <%= button_to t(:'finding.undo_reiteration'),
-          undo_reiteration_oportunity_path(@oportunity), :method => :put %>
-      </div>
-      <br />
+      <%= button_to t(:'finding.undo_reiteration'),
+        undo_reiteration_oportunity_path(@oportunity), :method => :put %>
+      <%= t(:'label.or') %>
       <a id="help_closebox_undo_reiteration" class="popup_closebox" href="#" onclick="return false;">
         <%= t(:'label.cancel') %>
       </a>
