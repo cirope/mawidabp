@@ -90,7 +90,9 @@
       <%= f.calendar_date_select :solution_date, :disabled => readonly %>
     </p>
     <p>
-      <%= f.label :origination_date %>
+      <%= f.label :origination_date,
+        raw(Oportunity.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)) %>
       <%= f.calendar_date_select :origination_date, :disabled => readonly %>
     </p>
 
