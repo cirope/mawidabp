@@ -301,7 +301,8 @@ class OportunitiesController < ApplicationController
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
       :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read
+      :auto_complete_for_control_objective_item => :read,
+      :undo_reiteration => :modify
     )
   end
 end
