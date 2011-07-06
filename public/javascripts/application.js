@@ -4,8 +4,6 @@ var State = {
   menu: new Hash(),
   // Contador para generar un ID único
   newIdCounter: 0,
-  // Dimensiones del área visible del navegador
-  dimensions: $H({width: 0, height: 0}),
   // Registra la variación en el contenido de los formularios
   unsavedData: false,
   // Texto con la advertencia de que hay datos sin guardar
@@ -326,13 +324,6 @@ var Helper = {
      */
   toggleItem: function(element, options) {
     Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
-  },
-
-  /**
-     * Función invocada cuando se redimensiona el área visible del navegador
-     */
-  updateDimensions: function() {
-    State.dimensions = $H(document.viewport.getDimensions());
   }
 }
 
@@ -816,12 +807,6 @@ Event.observe(window, 'load', function() {
       });
     }
   });
-
-  Helper.updateDimensions();
-});
-
-Event.observe(window, 'resize', function() {
-  Helper.updateDimensions();
 });
 
 // Funciones que se agregan a todos lo elementos

@@ -119,7 +119,7 @@
         <%= f_f.label :follow_up_date,
           raw(Finding.human_attribute_name(:follow_up_date) +
           show_inline_help_for(:finding_follow_up_date)) %>
-        <%= calendar_date_select f_f, :follow_up_date %>
+        <%= calendar_text_field f_f, :follow_up_date %>
       </p>
       <%= show_weakness_previous_follow_up_dates @finding %>
     <% end %>

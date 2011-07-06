@@ -8,15 +8,15 @@ module ApplicationHelper
   include ParameterSelector
 
   def default_stylesheets
-    sheets = ['common', 'mobile']
-    sheets << {:cache => 'main'}
+    sheets = ['common', 'jquery/ui-custom', 'mobile']
+    sheets << { :cache => 'main' }
 
     stylesheet_link_tag *sheets
   end
 
   def default_javascripts
     libs = [:defaults, 'extensions', 'form_modification', 'validation', 'ui',
-      'popup']
+      'datepicker/jquery.ui.datepicker-es']
     libs << {:cache => 'main'}
 
     javascript_include_tag *libs

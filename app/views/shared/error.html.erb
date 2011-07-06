@@ -51,11 +51,11 @@
 
 <% unless Rails.env.production? %>
   <%= link_to_function t(:'error.show_details'),
-    "Effect.SlideDown('error_details'); this.hide()", :id => 'show_link' %>
+    "$('#error_details').slideDown(); $(this).fadeOut()", :id => 'show_link' %>
   <div style="display: none; margin: 2em 0em;" id="error_details">
     <div>
       <%= link_to_function t(:'error.hide_details'),
-        "Effect.SlideUp('error_details'); $('show_link').appear()" %>
+        "$('#error_details').slideUp(); $('#show_link').fadeIn()" %>
       <!-- Final -->
       <h2 style="margin: 1em 0em;"><%=h error.message %></h2>
       <h3 style="margin-bottom: 1em;">Backtrace:</h3>
