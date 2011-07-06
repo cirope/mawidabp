@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.9'
 
 gem 'bundler'
 gem 'pg'
@@ -8,7 +8,6 @@ gem 'foreigner'
 gem 'ya2yaml'
 gem 'memcache-client'
 gem 'jquery-rails'
-gem 'calendar_date_select', :git => 'https://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
 gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'

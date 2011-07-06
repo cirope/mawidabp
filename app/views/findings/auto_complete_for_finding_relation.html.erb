@@ -17,6 +17,10 @@
             <%= highlight(h(f.control_objective_item.review.to_s), @tokens) %>
           </span>
           <span style="display: block;">
+            <b><%= Finding.human_attribute_name(:state) %></b>:
+            <%= f.state_text %>
+          </span>
+          <span style="display: block;">
             <b><%= ControlObjectiveItem.human_attribute_name(:control_objective_text) %></b>:
             <%= highlight(h(f.control_objective_item.control_objective_text), @tokens) %>
           </span>

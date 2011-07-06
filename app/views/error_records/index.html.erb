@@ -38,6 +38,7 @@
 <%= link_to t(:'label.back'), :controller => :login_records,
   :action => :choose %> |
 <%= link_to t(:'label.download'), :action => :export_to_pdf,
-  :range => {:from_date => @from_date, :to_date => @to_date} %>
+  :range => {:from_date => @from_date, :to_date => @to_date},
+  :_ts => Time.now.to_i %>
 <div class="clear"></div>
 </div>

@@ -75,7 +75,8 @@
       :form_name => 'report',
       :url => request.query_parameters.merge({
           :action => :create_cost_analysis,
-          :include_details => params[:include_details]
+          :include_details => params[:include_details],
+          :_ts => Time.now.to_i
         }),
       :fields => [
         {

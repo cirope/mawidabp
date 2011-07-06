@@ -9,7 +9,6 @@ module ApplicationHelper
 
   def default_stylesheets
     sheets = ['common', 'mobile']
-    sheets |= calendar_date_select_stylesheets(:style => 'silver').to_a
     sheets << {:cache => 'main'}
 
     stylesheet_link_tag *sheets
@@ -18,9 +17,6 @@ module ApplicationHelper
   def default_javascripts
     libs = [:defaults, 'extensions', 'form_modification', 'validation', 'ui',
       'popup']
-    libs |= calendar_date_select_javascripts(
-      :locale => (@auth_user.language if @auth_user)
-    ).to_a
     libs << {:cache => 'main'}
 
     javascript_include_tag *libs
@@ -43,6 +39,16 @@ module ApplicationHelper
     if textiled[-4..-1] == '</p>' then textiled = textiled[0..-5] end
     
     textiled.html_safe
+  end
+  
+  def calendar_text_field(form, attribute, time = false, value = nil, options = {})
+    value ||= form.object.send(attribute)
+    default_options = {:class => :calendar}
+    
+    default_options[:value] = l(value, :format => time ? :minimal : :default) if value
+    default_options[:'data-time'] = true if time
+    
+    form.text_field attribute, default_options.merge(options)
   end
 
   def super_truncate(text, length = 30)

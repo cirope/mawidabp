@@ -66,7 +66,55 @@
       <% end %>
     </ul>
   <% end %>
+  
+  <% unless @oportunity.finding_relations.blank? %>
+    <h3>
+      <%= t(:'finding.finding_relations') %>
+      <%= show_inline_help_for(:finding_relations) %>
+    </h3>
     
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.finding_relations.each do |fr| %>
+          <tr>
+            <td><%= fr.related_finding %></td>
+            <td><%= fr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
+  <% unless @oportunity.inverse_finding_relations.blank? %>
+    <h3>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h3>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
   <% unless @oportunity.finding_answers.blank? %>
     <h3>
       <%= t(:'finding.finding_answers') %>
@@ -96,7 +144,14 @@
               <%= finding_answer.file_model ?
                 link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
-            <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
+            <td>
+              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+              <% if finding_answer.commitment_date %>
+                <br />
+                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

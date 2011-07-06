@@ -27,6 +27,7 @@ es:
     move: "Mover"
     new: "Nuevo"
     next: "Siguiente"
+    "or": 'o'
     previous: "Anterior"
     save: "Guardar"
     search: "Buscar"
@@ -462,7 +463,8 @@ es:
     download_detailed: "Descargar listado detallado"
     download_xml: 'Descargar listado en XML'
     work_papers: "Papeles de trabajo"
-    finding_relations: "Relaciones con otras observaciones"
+    finding_relations: "Relacionada con"
+    inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
@@ -473,6 +475,7 @@ es:
     has_work_papers: "Papeles de trabajo"
     repeated_ancestors: "Reiterada de"
     repeated_children: "Reiterada en"
+    undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
     auditors:
       one: "Auditor"

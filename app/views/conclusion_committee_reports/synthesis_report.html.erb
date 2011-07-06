@@ -83,7 +83,9 @@
   <%= render :partial => 'shared/customize_report_form', :locals => {
     :options => {
       :form_name => 'report',
-      :url => request.query_parameters.merge({:action => :create_synthesis_report}),
+      :url => request.query_parameters.merge(
+        {:action => :create_synthesis_report, :_ts => Time.now.to_i}
+      ),
       :fields => [
         {
           :name => :report_title,

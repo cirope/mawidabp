@@ -37,7 +37,7 @@
 <div id="links">
   <%= pagination_links @conclusion_final_reviews %>
   <%= link_to t(:'label.new'), new_conclusion_final_review_path %> |
-  <%= link_to t(:'label.download'),
-    export_list_to_pdf_conclusion_final_reviews_path(:search => params[:search]) %>
-<div class="clear"></div>
+  <%= link_to t(:'label.download'), export_list_to_pdf_conclusion_final_reviews_path(
+    :search => params[:search], :_ts => Time.now.to_i) %>
+  <div class="clear"></div>
 </div>

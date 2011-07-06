@@ -43,10 +43,10 @@
     <%= f.text_field :project, :maxlength => 255, :size => 10 %>
     </div>
     <div class="item_field" style="width: 13%;">
-    <%= f.calendar_date_select :start, :class => :date %>
+    <%= calendar_text_field f, :start, false, nil, :class => :date %>
     </div>
     <div class="item_field" style="width: 13%;">
-    <%= f.calendar_date_select :end, :class => :date %>
+    <%= calendar_text_field f, :end, false, nil, :class => :date %>
     </div>
     <div class="item_field" style="width: 13%;">
     <%= f.text_field :plain_predecessors, :maxlength => 255, :size => 10,

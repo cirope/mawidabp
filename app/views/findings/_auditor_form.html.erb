@@ -112,14 +112,14 @@
       <%= f_f.label :origination_date,
         raw(Finding.human_attribute_name(:origination_date) +
         show_inline_help_for(:finding_origination_date)) %>
-      <%= f_f.calendar_date_select :origination_date %>
+      <%= calendar_text_field f_f, :origination_date %>
     </p>
     <% if @finding.kind_of? Weakness %>
       <p>
         <%= f_f.label :follow_up_date,
           raw(Finding.human_attribute_name(:follow_up_date) +
           show_inline_help_for(:finding_follow_up_date)) %>
-        <%= f_f.calendar_date_select :follow_up_date %>
+        <%= calendar_date_select f_f, :follow_up_date %>
       </p>
       <%= show_weakness_previous_follow_up_dates @finding %>
     <% end %>
@@ -127,7 +127,7 @@
       <%= f_f.label :solution_date,
         raw(Finding.human_attribute_name(:solution_date) +
         show_inline_help_for(:finding_solution_date)) %>
-      <%= f_f.calendar_date_select :solution_date %>
+      <%= calendar_text_field f_f, :solution_date %>
       <%= f_f.hidden_field :id %>
     </p>
     <p>
@@ -238,6 +238,30 @@
       :'data-event' => :add_nested_item,
       :'data-container' => :finding_relations %>
   </p>
+  
+  <% unless @finding.inverse_finding_relations.blank? %>
+    <h1>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h1>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <div style="clear: both; margin-top: 2em;">
     <h1>

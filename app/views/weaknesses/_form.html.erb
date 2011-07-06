@@ -62,7 +62,7 @@
       <% end %>
     </div>
     <p>
-      <%= f.label :repeated_of_id %>
+      <%= finding_repeated_of_label(f, readonly) %>
       <%= finding_repeated_of_if_field(f, readonly) %>
     </p>
     <p>
@@ -127,17 +127,22 @@
       <%= f.text_area :audit_comments, :readonly => readonly %>
     </p>
     <p>
-      <%= f.label :origination_date %>
-      <%= f.calendar_date_select :origination_date, :disabled => readonly %>
+      <%= f.label :origination_date,
+        raw(Weakness.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)) %>
+      <%= calendar_text_field f, :origination_date, false, nil,
+        :disabled => readonly %>
     </p>
     <p>
       <%= f.label :follow_up_date, raw(Weakness.human_attribute_name(:follow_up_date) +
           show_inline_help_for(:finding_follow_up_date)) %>
-      <%= f.calendar_date_select :follow_up_date, :disabled => readonly %>
+      <%= calendar_text_field f, :follow_up_date, false, nil,
+        :disabled => readonly %>
     </p>
     <p>
       <%= f.label :solution_date %>
-      <%= f.calendar_date_select :solution_date, :disabled => readonly %>
+      <%= calendar_text_field f, :solution_date, false, nil,
+        :disabled => readonly %>
     </p>
   </div>
 
@@ -217,10 +222,34 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#',
+    <%= link_to_unless frozen, t(:'finding.add_finding_relation'), '#',
       :'data-template' => :finding_relation, :'data-event' => :add_nested_item,
       :'data-container' => :finding_relations %>
   </p>
+  
+  <% unless @weakness.inverse_finding_relations.blank? %>
+    <h1>
+      <%= t(:'finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h1>
+    
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weakness.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
   
   <% unless @weakness.finding_answers.blank? %>
     <h1>
@@ -251,7 +280,14 @@
               <%= finding_answer.file_model ?
                 link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
-            <td><%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %></td>
+            <td>
+              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+              <% if finding_answer.commitment_date %>
+                <br />
+                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -305,3 +341,28 @@
 <% end %>
 <!--[eoform:weakness] -->
 <%= set_focus_to_first_element %>
+
+<% if @weakness.repeated_of && !readonly %>
+  <% content_for :extra_html_bottom do %>
+    <div id="inline_undo_reiteration" class="popup" style="display: none;">
+      <%= button_to t(:'finding.undo_reiteration'),
+        undo_reiteration_weakness_path(@weakness), :method => :put %>
+      <%= t(:'label.or') %>
+      <a id="help_closebox_undo_reiteration" class="popup_closebox" href="#" onclick="return false;">
+        <%= t(:'label.cancel') %>
+      </a>
+    </div>
+    <script type="text/javascript">
+    (function() {
+      PopupListener['inlineundoreiteration'] = function(link) {
+        new Popup(
+          'inline_undo_reiteration', 'show_inline_undo_reiteration',
+          {trigger: 'click', position: 'below'}
+        );
+      }
+
+      PopupListener['inlineundoreiteration']();
+    })();
+    </script>
+  <% end %>
+<% end %>

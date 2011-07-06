@@ -1,12 +1,12 @@
-# =Controlador de debilidades
+# =Controlador de observaciones
 #
-# Lista, muestra, crea, modifica y elimina debilidades (#Weakness)
+# Lista, muestra, crea, modifica y elimina observaciones (#Weakness)
 class WeaknessesController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :load_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
-  # Lista las debilidades
+  # Lista las observaciones
   #
   # * GET /weaknesses
   # * GET /weaknesses.xml
@@ -58,7 +58,7 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # Muestra el detalle de una debilidad
+  # Muestra el detalle de una observación
   #
   # * GET /weaknesses/1
   # * GET /weaknesses/1.xml
@@ -72,7 +72,7 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # Permite ingresar los datos para crear una nueva debilidad
+  # Permite ingresar los datos para crear una nueva observación
   #
   # * GET /weaknesses/new
   # * GET /weaknesses/new.xml
@@ -88,7 +88,7 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # Recupera los datos para modificar una debilidad
+  # Recupera los datos para modificar una observación
   #
   # * GET /weaknesses/1/edit
   def edit
@@ -96,7 +96,7 @@ class WeaknessesController < ApplicationController
     @weakness = find_with_organization(params[:id])
   end
 
-  # Crea una debilidad siempre que cumpla con las validaciones.
+  # Crea una observación siempre que cumpla con las validaciones.
   #
   # * POST /weaknesses
   # * POST /weaknesses.xml
@@ -116,7 +116,7 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # Actualiza el contenido de una debilidad siempre que cumpla con las
+  # Actualiza el contenido de una observación siempre que cumpla con las
   # validaciones.
   #
   # * PUT /weaknesses/1
@@ -144,7 +144,7 @@ class WeaknessesController < ApplicationController
     redirect_to :action => :edit
   end
 
-  # Elimina una debilidad
+  # Elimina una observación
   #
   # * DELETE /weaknesses/1
   # * DELETE /weaknesses/1.xml
@@ -158,7 +158,7 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # Crea el documento de seguimiento de la oportunidad
+  # Crea el documento de seguimiento de la observación
   #
   # * GET /weaknesses/follow_up_pdf/1
   def follow_up_pdf
@@ -167,6 +167,19 @@ class WeaknessesController < ApplicationController
     weakness.follow_up_pdf(@auth_organization)
 
     redirect_to weakness.relative_follow_up_pdf_path
+  end
+  
+  # Deshace la reiteración de la observación
+  #
+  # * PUT /weaknesses/undo_reiteration/1
+  def undo_reiteration
+    @weakness = find_with_organization(params[:id])
+    @weakness.undo_reiteration
+    
+    respond_to do |format|
+      format.html { redirect_to(edit_weakness_url(@weakness)) }
+      format.xml  { head :ok }
+    end
   end
 
   # * POST /weaknesses/auto_complete_for_user
@@ -287,7 +300,8 @@ class WeaknessesController < ApplicationController
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
       :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read
+      :auto_complete_for_control_objective_item => :read,
+      :undo_reiteration => :modify
     )
   end
 end

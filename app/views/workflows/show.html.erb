@@ -83,8 +83,9 @@
   <%= link_to t(:'label.edit'), edit_workflow_path(@workflow) %> |
   <%= link_to t(:'label.list'), workflows_path %> |
   <%= link_to t(:'workflow.download_global_workflow'),
-    export_to_pdf_workflow_path %> |
+    export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
   <%= link_to t(:'workflow.download_detailed_workflow'),
-    export_to_pdf_workflow_path(:include_details => 1) %> |
+    export_to_pdf_workflow_path(:include_details => 1,
+    :_ts => Time.now.to_i) %> |
   <%= link_to_back %>
 </div>

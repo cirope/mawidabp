@@ -56,15 +56,15 @@
         ConclusionFinalReview.human_attribute_name(:issue_date) +
           show_inline_help_for(:conclusion_review_issue_date)),
         :class => :inline %>
-      <%= cfr_f.calendar_date_select :issue_date, :class => :inline_tight_item,
-        :readonly => readonly %>
+      <%= calendar_text_field cfr_f, :issue_date, false, nil,
+        :class => :inline_tight_item, :readonly => readonly %>
     </p>
     <p class="form_item">
       <%= cfr_f.label :close_date, raw(
         ConclusionFinalReview.human_attribute_name(:close_date) +
           show_inline_help_for(:conclusion_review_close_date)), :class => :inline %>
-      <%= cfr_f.calendar_date_select :close_date, :class => :inline_tight_item,
-        :readonly => readonly %>
+      <%= calendar_text_field cfr_f, :close_date, false, nil,
+        :class => :inline_tight_item, :readonly => readonly %>
     </p>
   </div>
 

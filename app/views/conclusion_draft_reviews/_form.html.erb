@@ -55,7 +55,8 @@
         ConclusionDraftReview.human_attribute_name(:issue_date) +
           show_inline_help_for(:conclusion_review_issue_date)),
         :class => :inline %>
-      <%= f.calendar_date_select :issue_date, :class => :inline_tight_item %>
+      <%= calendar_text_field f, :issue_date, false, nil,
+        :class => :inline_tight_item %>
     </p>
   </div>
 

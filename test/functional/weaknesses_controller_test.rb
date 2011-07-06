@@ -18,7 +18,8 @@ class WeaknessesControllerTest < ActionController::TestCase
       [:get, :edit, id_param],
       [:post, :create],
       [:put, :update, id_param],
-      [:delete, :destroy, id_param]
+      [:delete, :destroy, id_param],
+      [:put, :undo_reiteration, id_param]
     ]
 
     private_actions.each do |action|
@@ -270,6 +271,27 @@ class WeaknessesControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to weakness.relative_follow_up_pdf_path
+  end
+  
+  test 'undo reiteration' do
+    perform_auth
+    weakness = Finding.find(findings(
+        :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
+    repeated_of = Finding.find(findings(
+        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    repeated_of_original_state = repeated_of.state
+    
+    assert !repeated_of.repeated?
+    assert weakness.update_attributes(:repeated_of_id => repeated_of.id)
+    assert repeated_of.reload.repeated?
+    assert weakness.reload.repeated_of
+    
+    put :undo_reiteration, :id => weakness.to_param
+    assert_redirected_to edit_weakness_path(weakness)
+    
+    assert !repeated_of.reload.repeated?
+    assert_nil weakness.reload.repeated_of
+    assert_equal repeated_of_original_state, repeated_of.state
   end
 
   test 'auto complete for user' do
