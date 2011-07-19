@@ -67,7 +67,7 @@
     </p>
     <p>
       <%= f.label :description %>
-      <%= f.text_area :description, :readonly => readonly, :class => :focused %>
+      <%= f.text_area :description, :readonly => readonly, :autofocus => true %>
     </p>
     <p>
       <%= f.label :effect %>
@@ -340,7 +340,6 @@
   </p>
 <% end %>
 <!--[eoform:weakness] -->
-<%= set_focus_to_first_element %>
 
 <% if @weakness.repeated_of && !readonly %>
   <% content_for :extra_html_bottom do %>

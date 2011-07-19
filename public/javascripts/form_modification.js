@@ -1,6 +1,6 @@
-Event.observe(window, 'load', function() {
-  document.on('change', 'form', function(event, element) {
-    if(!element.hasClassName('no_observe_changes')) {
+jQuery(function() {
+  $('form').change(function() {
+    if(!$(this).hasClass('no_observe_changes')) {
       State.unsavedData = true;
     }
   });
@@ -9,9 +9,11 @@ Event.observe(window, 'load', function() {
 // Verifica antes de cerrar la ventana que los datos no hayan cambiado
 window.onbeforeunload = function () {
   if (State.unsavedData) {
-    $$('form').each(function(form) {
-      Form.getElements(form).each(function(e) {
-        if(e.retrieve('reset_value')) { e.setValue(e.retrieve('reset_value')); }
+    $('form').each(function() {
+      $(':input, :checkbox', $(this)).each(function() {
+        if($(this).data('reset-value')) {
+          $(this).val($(this).data('reset-value'));
+        }
       });
     });
 

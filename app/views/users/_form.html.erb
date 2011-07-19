@@ -10,7 +10,7 @@
   <div class="form_column_left">
     <p>
       <%= u_f.label :user %>
-      <%= u_f.text_field :user, :maxlength => 30, :size => 10 %>
+      <%= u_f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>
     </p>
     <p>
       <%= u_f.label :name %>
@@ -144,4 +144,3 @@
   </p>
 <% end %>
 <!--[eoform:user] -->
-<%= set_focus_to_first_element %>

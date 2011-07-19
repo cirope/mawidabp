@@ -6,7 +6,7 @@
       <%= finding_answer.user.full_name %>
     </div>
     <div class="item_field" style="width: 40%;">
-      <%= f.text_area :answer, :class => :focused,
+      <%= f.text_area :answer, :autofocus => true,
         :readonly => !finding_answer.new_record? %>
     </div>
     <% if !finding_answer.file_model || finding_answer.file_model.new_record? %>

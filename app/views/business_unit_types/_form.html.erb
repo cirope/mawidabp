@@ -9,7 +9,7 @@
     <p>
       <%= but_f.label :name %>
       <%= but_f.text_field :name, :maxlength => 255, :size => 10,
-        :class => :focused %>
+        :autofocus => true %>
     </p>
     <p>
       <%= but_f.label :business_unit_label %>
@@ -54,4 +54,3 @@
   </p>
 <% end %>
 <!--[eoform:business_unit_type] -->
-<%= set_focus_to_first_element %>

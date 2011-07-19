@@ -12,7 +12,7 @@
         :readonly => true %>
     </div>
     <div class="item_field" style="width: 50%;">
-      <%= f.text_area :task, :style => 'height: 5em;', :class => :focused %>
+      <%= f.text_area :task, :style => 'height: 5em;', :autofocus => true %>
     </div>
     <div class="item_field" style="width: 10%;">
       <%= calendar_text_field f, :start, false, nil, :class => :date %>

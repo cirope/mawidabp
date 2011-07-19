@@ -7,7 +7,7 @@
     <%= form_for @user, :url => create_session_users_path do |f| %>
       <p>
         <%= f.label :user %>
-        <%= f.text_field :user, :maxlength => 30, :size => 10 %>
+        <%= f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>
       </p>
       <p>
         <%= f.label :password %>
@@ -18,7 +18,6 @@
       </div>
     <% end %>
     <!--[eoform:user] -->
-    <%= set_focus_to_first_element %>
   <% else %>
     <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
       <%= t :'message.no_organization' %>

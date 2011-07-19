@@ -1,7 +1,7 @@
 // Mantiene el estado de la aplicación
 var State = {
   // Hash con el contenido del menú
-  menu: new Hash(),
+  menu: {},
   // Contador para generar un ID único
   newIdCounter: 0,
   // Registra la variación en el contenido de los formularios
@@ -9,26 +9,11 @@ var State = {
   // Texto con la advertencia de que hay datos sin guardar
   unsavedDataWarning: undefined,
   // Variable con los mensajes que se deben mostrar diferidos
-  showMessages: new Array(),
+  showMessages: [],
   // Variable para indicar si la sesión ha expirado
   sessionExpire: false,
   // Mensaje de error para mostrar cuando falla la validación en línea
   validationFailedMessage: undefined
-}
-
-// Utilidades para asistir al autocompletado
-var AutoComplete = {
-  /**
-     * Escribe en el primer campo oculto del contenedor de la búsqueda (div.search)
-     * el ID del objeto seleccionado
-     */
-  itemSelected: function(text, li) {
-    var objectId = $(li).id.strip().match(/id_(\d+)$/)[1];
-
-    $(text).setValue($F(text).strip());
-    $(text).up('div.search').select('.autocomplete_id_item').invoke(
-      'setValue', objectId);
-  }
 }
 
 // Utilidades para manipular algunos comportamientos del navegador
@@ -37,57 +22,51 @@ var BrowserManipulation = {
      * Carga la nueva URL con los parámetros indicados (debe ser un Hash)
      */
   changeLocation: function(baseUrl, parameters) {
-    var currentUrl = window.location.toString();
-    var oldParameters = currentUrl.include('?') ?
-    currentUrl.toQueryParams() : {};
+    var params = Util.merge(jQuery.url(undefined, true).param(), parameters);
 
     Helper.showLoading();
+    var query = [];
+    
+    for(var param in params) {
+      var arg = [encodeURIComponent(param)];
+      
+      if(params[param]) {arg.push(encodeURIComponent(params[param]));}
+      
+      query.push(arg.join('='))
+    }
 
-    window.location = baseUrl + '?' +
-    $H(oldParameters).merge(parameters).toQueryString();
+    window.location = baseUrl + '?' + query.join('&');
   }
 }
 
 // Manejadores de eventos
 var EventHandler = {
-  eventList: $A([
-    'addNestedItem',
-    'addNestedSubitem',
-    'hideItem',
-    'historyBack',
-    'insertRecordItem',
-    'insertRecordSubitem',
-    'removeItem',
-    'removeListItem'
-  ]),
 
   /**
      * Agrega un ítem anidado
      */
   addNestedItem: function(e) {
-    var template = eval(e.readAttribute('data-template'));
+    var template = eval(e.data('template'));
 
-    $(e.readAttribute('data-container')).insert({
-      bottom: Util.replaceIds(template, /NEW_RECORD/)
-    });
+    $(e.data('container')).append(Util.replaceIds(template, /NEW_RECORD/g));
+
+    e.trigger('item:added', e);
   },
 
   /**
      * Agrega un subitem dentro de un ítem
      */
   addNestedSubitem: function(e) {
-    var parent = '.' + e.readAttribute('data-parent');
-    var child = '.' + e.readAttribute('data-child');
-    var childContainer = e.up(parent).down(child);
-    var parentObjectId = e.up(parent).downForIdFromName();
-    var template = eval(e.readAttribute('data-template'));
+    var parent = '.' + e.data('parent');
+    var child = '.' + e.data('child');
+    var childContainer = $(child, e.parents(parent));
+    var parentObjectId = e.parents(parent).mw('downForIdFromName');
+    var template = eval(e.data('template'));
 
     template = template.replace(/(attributes[_\]\[]+)\d+/g, '$1' +
       parentObjectId);
 
-    childContainer.insert({
-      bottom: Util.replaceIds(template, /NEW_SUBRECORD/)
-    });
+    childContainer.append(Util.replaceIds(template, /NEW_SUBRECORD/g));
   },
 
   /**
@@ -95,22 +74,17 @@ var EventHandler = {
      * dinámico)
      */
   hideItem: function(e) {
-    var target = e.readAttribute('data-target');
+    Helper.hide(e.parents(e.data('target')));
 
-    Helper.hideItem(e.up(target));
+    e.prev('input[type=hidden].destroy').val('1');
 
-    var hiddenInput = e.previous('input[type=hidden].destroy') ||
-    e.up('a').previous('input[type=hidden].destroy');
-
-    if(hiddenInput) {
-      hiddenInput.setValue('1');
-    }
-
-    if(e.up(target).down('input.sort_number')) {
-      e.up(target).down('input.sort_number').
-      addClassName('hidden_sort_number').
-      removeClassName('sort_number');
-    }
+    e.trigger('item:hidden', e);
+// TODO: completar
+//    if(e.up(target).down('input.sort_number')) {
+//      e.up(target).down('input.sort_number').
+//      addClassName('hidden_sort_number').
+//      removeClassName('sort_number');
+//    }
 
     FormUtil.completeSortNumbers();
   },
@@ -119,47 +93,39 @@ var EventHandler = {
      * Simula el comportamiento del botón "Atrás"
      */
   historyBack: function() {
-    if(window.history.length > 0) {
-      window.history.back(1);
-    }
+    if(window.history.length > 0) {window.history.back(1);}
   },
 
   /**
      * Inserta un elemento al final del contenedor
      */
   insertRecordItem: function(e) {
-    var target = e.readAttribute('data-target');
-    var template = eval(e.readAttribute('data-template'));
+    var template = eval(e.data('template'));
 
-    $(e.up(target)).insert({
-      before: Util.replaceIds(template, /NEW_RECORD/)
-    });
+    e.parents(e.data('target')).before(Util.replaceIds(template, /NEW_RECORD/g));
   },
 
   /**
      * Inserta un subelemento al final del contenedor
      */
   insertRecordSubitem: function(e) {
-    var target = e.readAttribute('data-target');
-    var parent = '.' + e.readAttribute('data-parent');
-    var parentObjectId = e.up(parent).downForIdFromName();
-    var template = eval(e.readAttribute('data-template'));
+    var target = e.data('target');
+    var parent = '.' + e.data('parent');
+    var parentObjectId = e.parents(parent).mw('downForIdFromName');
+    var template = eval(e.data('template'));
 
     template = template.replace(/(attributes[_\]\[]+)\d+/g, '$1' +
       parentObjectId);
 
-    $(e.up(target)).insert({
-      before: Util.replaceIds(template, /NEW_SUBRECORD/)
-    });
+    e.parents(target).before(Util.replaceIds(template, /NEW_SUBRECORD/g));
   },
 
   /**
      * Elimina el elemento del DOM
      */
   removeItem: function(e) {
-    var target = e.readAttribute('data-target');
-
-    Helper.removeItem(e.up(target));
+    Helper.removeItem(e.parents(e.data('target')));
+    
     FormUtil.completeSortNumbers();
   },
 
@@ -167,7 +133,7 @@ var EventHandler = {
      * Elimina el elemento del DOM
      */
   removeListItem: function(e) {
-    Helper.removeItem(e.up('.item'));
+    Helper.removeItem(e.parents('.item'));
   }
 }
 
@@ -177,36 +143,7 @@ var FormUtil = {
      * Completa todos los inputs con la clase "sort_number" con números en secuencia
      */
   completeSortNumbers: function() {
-    var order = 1;
-
-    $$('input.sort_number').each(function(e) {e.setValue(order++);});
-  }
-}
-
-// Utilidades para manipular formularios
-var FormManipulation = {
-  /**
-     * Establece el foco en el primer elemento, siempre que tenga sentido (un input,
-     * un select, un textarea) y no esté deshabilitado o con el atributo readonly
-     */
-  focusFirst: function(container) {
-    var c = $(container) || $$('form').first();
-
-    if(c) {
-      var elements = c.select('.focused', 'input[type=text]', 'select',
-        'textarea', 'input[type=password]');
-
-      while(Object.isArray(elements) && elements.size() > 0) {
-        var element = elements.shift();
-        var readonly = element.readAttribute('readonly') ||
-          element.readAttribute('disabled');
-
-        if(!readonly) {
-          element.focus();
-          elements = undefined;
-        }
-      }
-    }
+    $('input.sort_number').val(function(i) {return i + 1;});
   }
 }
 
@@ -215,65 +152,56 @@ var Helper = {
   /**
      * Oculta el elemento indicado
      */
-  hideItem: function(element, options) {
-    Effect.SlideUp(element, Util.merge({
-      duration: 0.5,
-      afterFinish: function() {element.fire("item:hidden");}
-    }, options));
+  hideItem: function(element, callback) {
+    $(element).stop().slideUp(500, callback);
   },
 
   /**
      * Oculta el elemento que indica que algo se está cargando
      */
   hideLoading: function(element) {
-    $('loading').hide();
+    $('#loading').hide();
 
-    Try.these(function() {$(element).enable();})
+    $(element).attr('disabled', false);
   },
 
   /**
      * Convierte en "ordenable" (utilizando drag & drop) a un componente
      */
   makeSortable: function(elementId, elements, handles) {
-    Sortable.create(elementId, {
-      scroll: window,
-      elements: $$(elements),
-      handles: $$(handles),
-      onChange: function() {
-        FormUtil.completeSortNumbers();
-      }
+    $(elementId).sortable({
+      items: elements,
+      handle: handles,
+      opacity: 0.6,
+      stop: function() {FormUtil.completeSortNumbers();}
     });
   },
 
   /**
      * Elimina el elemento indicado
      */
-  removeItem: function(element, options) {
-    Effect.SlideUp(element, Util.merge({
-      duration: 0.5,
-      afterFinish: function() {
-        $(element).remove();
-        FormUtil.completeSortNumbers();
-      }
-    }, options));
-
-    element.fire("item:removed");
+  removeItem: function(element, callback) {
+    $(element).stop().slideUp(500, function() {
+      $(this).remove();
+      
+      if(jQuery.isFunction(callback)) {callback();}
+    });
   },
 
   /**
      * Muestra el ítem indicado (puede ser un string con el ID o el elemento mismo)
      */
-  showItem: function(element, options) {
+  showItem: function(element, callback) {
     var e = $(element);
 
-    if(e != null && !e.visible()) {
-      Effect.SlideDown(e, Util.merge({
-        duration: 0.5,
-        afterFinish: function() {
-          FormManipulation.focusFirst(e);
-          e.fire("item:displayed");
-        }
-      }, options));
+    if(e.is(':not(:visible)')) {
+      e.stop().slideDown(500, function() {
+        $(
+          '*[autofocus]:not([readonly]):not([disabled]):visible:first', e
+        ).focus();
+
+        if(jQuery.isFunction(callback)) {callback();}
+      });
     }
   },
 
@@ -281,49 +209,44 @@ var Helper = {
      * Muestra el último ítem que cumple con la regla de CSS
      */
   showLastItem: function(cssRule) {
-    Helper.showItem($$(cssRule).last());
+    Helper.showItem($(cssRule).last());
   },
 
   /**
      * Muestra una imagen para indicar que una operación está en curso
      */
   showLoading: function(element) {
-    $('loading').show();
+    $('#loading').show();
 
-    Try.these(function() {$(element).disable();})
+    $(element).attr('disabled', true);
   },
 
   /**
      * Muestra mensajes en el div "time_left" si existe
      */
   showMessage: function(message, expired) {
-    if($('time_left')) {
-      $('time_left').down('span.message').update(message);
+    $('span.message', $('#time_left')).html(message);
+    $('#time_left:not(:visible)').stop().fadeIn();
 
-      if(!$('time_left').visible()) {Element.appear('time_left');}
-    }
-
-    State.sessionExpire = State.sessionExpire || expired
+    State.sessionExpire = State.sessionExpire || expired;
   },
 
   showOrHideWithArrow: function(elementId) {
-    Helper.toggleItem(elementId, {
-      afterFinish: function() {
-        var links = $A(['show_element_#{element_id}_content',
-          'hide_element_#{element_id}_content']);
-
-        links.each(function(link) {
-          Element.toggle(link.interpolate({element_id: elementId}));
-        });
-      }
+    Helper.toggleItem(elementId, function() {
+      var links = [
+        '#show_element_' + elementId + '_content',
+        '#hide_element_' + elementId + '_content'
+      ];
+      
+      $(links.join(', ')).toggle();
     });
   },
 
   /**
      * Intercambia los efectos de desplegar y contraer sobre un elemento
      */
-  toggleItem: function(element, options) {
-    Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
+  toggleItem: function(element, callback) {
+    $(element).slideToggle(500, callback);
   }
 }
 
@@ -334,25 +257,25 @@ var HTMLUtil = {
      * el elemento es a su vez un array se convierte recursivamente en un UL
      */
   arrayToUL: function(array, attributes) {
-    if(Object.isArray(array) && array.length > 0) {
-      var ul = new Element('ul', attributes);
+    if($.isArray(array) && array.length > 0) {
+      var ul = $('<ul></ul>', attributes);
+      
+      $.each(array, function() {
+        var e = $(this);
+        
+        if($.isArray(e) && e.length > 1 && typeof e[0] == 'string' &&
+          $.isArray(e[1])) {
+          var li = $('<li></li>');
 
-      $A(array).each(function(e) {
-        if(Object.isArray(e) && e.length > 1 && Object.isString(e[0]) &&
-          Object.isArray(e[1])) {
-          var li = new Element('li');
+          li.append(e.shift());
+          li.append(HTMLUtil.arrayToUL(e, {}));
 
-          li.insert(e.shift());
-          li.insert(HTMLUtil.arrayToUL(e, {}));
-
-          ul.insert(li);
+          ul.append(li);
         } else {
-          if(Object.isArray(e)) {
-            $A(e).each(function(item) {
-              ul.insert(new Element('li').update(item));
-            });
+          if($.isArray(e)) {
+            $.each(e, function() {ul.append($('<li></li>').html($(this)));});
           } else {
-            ul.insert(new Element('li').update(e));
+            ul.append($('<li></li>').html(e));
           }
         }
       });
@@ -368,13 +291,13 @@ var HTMLUtil = {
      * etiquetas
      */
   optionsFromArray: function(optionsArray, selectedValue, includeBlank) {
-    var options = $A(optionsArray).collect(function(e) {
-      var vals = {text: e[0], value: e[1]};
+    var options = $.map(optionsArray, function() {
+      var e = $(this);
       var option_string = selectedValue && e[0] == selectedValue ?
-        '<option selected="selected" value=#{value}>#{text}</option>' :
-        '<option value=#{value}>#{text}</option>'
+        '<option selected="selected" value=' + e[1] + '>' + e[0] + '</option>' :
+        '<option value=' + e[1] + '>' + e[0] + '</option>'
 
-      return option_string.interpolate(vals);
+      return option_string;
     }).join();
 
     return includeBlank ? '<option value=""></option>' + options : options;
@@ -385,10 +308,10 @@ var HTMLUtil = {
      * _hover
      */
   replaceWithHoverImage: function(e) {
-    var src = e.readAttribute('src');
+    var src = e.attr('src');
 
     if(src && !src.match(/_hover/)) {
-      e.writeAttribute('src', src.sub(/^(.*)\.(.*?)$/, '#{1}_hover.#{2}'));
+      e.attr('src', src.replace(/^(.*)\.(.*?)$/, '$1_hover.$2'));
     } else {
       HTMLUtil.replaceWithNormalImage(e);
     }
@@ -399,28 +322,21 @@ var HTMLUtil = {
      * _hover
      */
   replaceWithNormalImage: function(e) {
-    var src = e.readAttribute('src');
+    var src = e.attr('src');
 
     if(src && src.match(/_hover/)) {
-      e.writeAttribute('src', e.src.sub(/_hover/, ''));
+      e.attr('src', src.replace(/_hover/, ''));
     }
   },
-
-  /**
-     * Función para ordenar un arreglo de opciones para usar en un select
-     */
-  sortOptionsArray: function(optionsArray) {
-    return $A(optionsArray).sortBy(function(s) {return s[0];});
-  },
-
+  
   /**
      * Ejecuta la función HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
      * de un contenedor span con clase file_container
      */
   stylizeAllInputFiles: function() {
-    $$('span.file_container').each(function(e) {
-      HTMLUtil.stylizeInputFile(e);
-      Observer.attachToInputFile(e);
+    $('span.file_container').each(function() {
+      HTMLUtil.stylizeInputFile($(this));
+      Observer.attachToInputFile($(this));
     });
   },
 
@@ -428,23 +344,25 @@ var HTMLUtil = {
      * Aplica un estilo "falso" a los inputs de tipo file
      */
   stylizeInputFile: function(element) {
-    if (!element) return;
+    if (!element || element.length == 0) return;
 
-    var input = element.down('input[type=file]');
+    var input = $('input[type=file]', $(element));
 
-    if(input && !input.up('div.stylized_file')) {
-      element.observe('mousemove', function(event) {
-        var left = (event.pointerX() - this.positionedOffset()['left']) -
-          input.getWidth();
-        var containerLayout = input.up('span.file_container').getLayout();
-        var xMin = containerLayout.get('left') + containerLayout.get('width');
-        var xMax = xMin + containerLayout.get('width');
-
-        // Esta pregunta es por un bug en IE7 con overflow: hidden
-        if(event.pointerX() >= xMin && event.pointerX() <= xMax) {
-          input.setStyle({left: left + 'px'});
-        }
-      }).wrap('div', {'class' : 'stylized_file'});
+    if(input.length > 0 && input.parents('div.stylized_file').length == 0) {
+//      element.mousemove(function(event) {
+//        var left = (event.pointerX() - this.positionedOffset()['left']) -
+//          input.getWidth();
+//        var containerLayout = input.up('span.file_container').getLayout();
+//        var xMin = containerLayout.get('left') + containerLayout.get('width');
+//        var xMax = xMin + containerLayout.get('width');
+//
+//        // Esta pregunta es por un bug en IE7 con overflow: hidden
+//        if(event.pointerX() >= xMin && event.pointerX() <= xMax) {
+//          input.setStyle({left: left + 'px'});
+//        }
+//      });
+//      
+//      element.observe('mousemove').wrap('div', {'class' : 'stylized_file'});
     }
   },
 
@@ -455,13 +373,8 @@ var HTMLUtil = {
   updateOptions: function(selectElement, optionsString) {
     var element = $(selectElement);
 
-    element.update(optionsString);
-
-    if (element.options.length > 0) {
-      element.enable()
-    } else {
-      element.disable()
-    }
+    element.html(optionsString);
+    element.attr('disabled', element.options.length > 0);
   }
 }
 
@@ -471,30 +384,28 @@ var Menu = {
      * Muestra el menú principal
      */
   show: function() {
-    $('app_content').hide();
+    $('#app_content').hide();
     
-    if($('main_mobile_menu')) {
-      $('session').show();
-      $('main_mobile_menu').show();
+    if($('#main_mobile_menu')) {
+      $('#session').show();
+      $('#main_mobile_menu').show();
     } else {
-      $('app_content').insert({
-        after: $('main_menu').clone(true).writeAttribute(
-          'id', 'main_mobile_menu'
-        )
-      });
-      $('main_mobile_menu').insert({ before: $('session') })
+      $('#app_content').after(
+        $('#main_menu').clone().attr('id', 'main_mobile_menu')
+      );
+      $('#main_mobile_menu').before($('#session'))
     }
     
-    $('show_menu').hide();
-    $('hide_menu').show();
+    $('#show_menu').hide();
+    $('#hide_menu').show();
   },
   
   hide: function() {
-    $('main_mobile_menu').hide();
-    $('session').hide();
-    $('app_content').show();
-    $('hide_menu').hide();
-    $('show_menu').show();
+    $('#main_mobile_menu').hide();
+    $('#session').hide();
+    $('#app_content').show();
+    $('#hide_menu').hide();
+    $('#show_menu').show();
   }
 }
 
@@ -504,9 +415,9 @@ var Observer = {
      * Adjunta eventos a la sección app_content
      */
   attachToAppContent: function() {
-    $('app_content').on('click', function(event, element) {
-      if (element.hasClassName('file_container')) {
-        element.down('input[type=file]').click();
+    $('#app_content').live('click', function() {
+      if ($(this).hasClass('file_container')) {
+        $('input[type=file]', $(this)).click();
       }
     });
   },
@@ -515,31 +426,34 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal
      */
   attachToMenu: function() {
-    Event.observe('menu_container', 'click', function(event) {
-      var e = Event.findElement(event, 'a');
-      var menuName = e ? e.readAttribute('href').replace(/.*#/, '') : '';
-      var content = State.menu.get(menuName);
+    $('#menu_container a').click(function(event) {
+      var e = $(this);
+      var menuName = e.length > 0 ? e.attr('href').replace(/.*#/, '') : '';
+      var content = State.menu[menuName];
 
-      if(e && e.hasClassName('menu_item_1') && content) {
-        $('menu_level_1').update(content);
-        $('menu_level_2').update('&nbsp;');
-        $$('.menu_item_1').invoke('restoreStyleProperty', 'background');
+      if(e.hasClass('menu_item_1') && content) {
+        $('#menu_level_1').html(content);
+        $('#menu_level_2').html('&nbsp;');
+        $('.menu_item_1').mw('restoreStyleProperty', 'background-color');
 
-        Event.stop(event);
-      } else if (e && e.hasClassName('menu_item_2') && content) {
-        $('menu_level_2').update(content);
-        $$('.menu_item_2').invoke('restoreStyleProperty', 'background');
+        event.stopPropagation();
+        event.preventDefault();
+      } else if (e.hasClass('menu_item_2') && content) {
+        $('#menu_level_2').html(content);
+        $('.menu_item_2').mw('restoreStyleProperty', 'background-color');
 
-        Event.stop(event);
-      } else if (e) {
-        $$('.menu_item_1').invoke('restoreStyleProperty', 'background');
-        $$('.menu_item_2').invoke('restoreStyleProperty', 'background');
+        event.stopPropagation();
+        event.preventDefault();
+      } else if (e.length > 0) {
+        $('.menu_item_1').mw('restoreStyleProperty', 'background-color');
+        $('.menu_item_2').mw('restoreStyleProperty', 'background-color');
+        
         Helper.showLoading();
       }
 
-      if(e) {
-        e.storeStyleProperty('background');
-        e.setStyle({'background': '#b1aea6'});
+      if(e.length > 0) {
+        e.mw('storeStyleProperty', 'background-color');
+        e.css('background-color', '#b1aea6');
       }
     });
   },
@@ -547,50 +461,52 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal en móviles
      */
   attachToMobileMenu: function() {
-    Event.observe('main_container', 'click', function(event) {
-      var e = Event.findElement(event, 'a');
-      var menuName = e ? e.readAttribute('href').replace(/.*#/, '') : '';
-      var content = State.menu.get(menuName);
+    $('#main_container').click(function(event) {
+      var e = event.target.nodeName == 'a' ? $(event.target) :
+        $('a', $(event.target));
+      var menuName = e.length > 0 ? e.attr('href').replace(/.*#/, '') : '';
+      var content = State.menu[menuName];
 
-      if(e && (e.hasClassName('menu_item_1') ||
-        e.hasClassName('menu_item_2')) && content) {
-        $('main_mobile_menu').store(
-          'previous-' + e.up('ul').readAttribute('data-level'),
-          $('main_mobile_menu').innerHTML.escapeHTML()
+      if(e.length > 0 && e.is('.menu_item_1, .menu_item_2') && content) {
+        $('#main_mobile_menu').data(
+          'previous-' + e.parents('ul').data('level'),
+          $('#main_mobile_menu').html().escapeHTML()
         );
-        $('main_mobile_menu').update(content);
+        $('#main_mobile_menu').html(content);
 
-        Event.stop(event);
-      } else if(e && e.hasClassName('back')) {
-        $('main_mobile_menu').update(
-          $('main_mobile_menu').retrieve(
-            'previous-' + e.up('ul').readAttribute('data-level').previous()
+        event.stopPropagation();
+        event.preventDefault();
+      } else if(e.length > 0 && e.hasClass('back')) {
+        $('#main_mobile_menu').html(
+          $('#main_mobile_menu').data(
+            'previous-' + e.parents('ul').data('level').previous()
           ).unescapeHTML()
         );
       }
     });
   },
   attachToInputFile: function(span) {
-    var input = span ? span.down('input[type=file]') : undefined;
+    var input = span.length > 0 ? $('input[type=file]', span) : undefined;
 
-    if(input) {
-      Event.stopObserving(input, 'change');
+    if(input && input.length > 0) {
+      $(input).unbind('change');
             
-      Event.observe(input, 'change', function(event) {
-        var e = Event.findElement(event, 'input[type="file"]');
+      $(input).change(function(event) {
+        var e = event.target.nodeName == 'input' ? $(event.target) :
+          $('input[type="file"]', $(event.target));
 
-        if(e && e.hasClassName('file') && !$F(e).blank()) {
-          var imageTag = new Element('img', {
+        if(e.length > 0 && e.hasClass('file') && !$(e).val().match(/^\s*$/)) {
+          var imageTag = $('<img />', {
             src: '/images/new_document.gif',
             width: 22,
             height: 20,
-            alt: $F(e),
-            title: $F(e)
+            alt: $(e).val(),
+            title: $(e).val()
           });
 
-          if($(e).up('span.file_container')) {
-            $(e).up('span.file_container').hide();
-            $(e).up('span.file_container').insert({after: imageTag});
+          if($(e).parents('span.file_container').length > 0) {
+            $(e).parents('span.file_container').hide();
+            $(e).parents('span.file_container').after(imageTag);
           }
         }
       });
@@ -605,80 +521,71 @@ var PopupListener = {}
 // Funciones relacionadas con la búsqueda
 var Search = {
   observe: function() {
-    Event.observe('column_headers', 'click', function(event) {
-      var e = Event.findElement(event, 'th');
+    $('#column_headers').click(function(event) {
+      var e = event.target.nodeName == 'th' ? $(event.target) :
+        $('th', $(event.target));
 
-      if(e && e.hasClassName('filterable')) {
-        var columns = $A(e.select('input[type="hidden"]').invoke('getValue'));
-        var hiddenFilter = columns.collect(function(c) {
-          return 'input[value="' + c + '"]';
+      if(e.length > 0 && e.hasClass('filterable')) {
+        var columns = $('input[type="hidden"]', e).map(function() {
+          return $(this).val();
+        });
+        var hiddenFilter = $.map(columns)(function() {
+          return 'input[value="' + this + '"]';
         }).join(', ');
-        var columnNamesDiv = $('search_column_names');
+        var columnNamesDiv = $('#search_column_names');
 
-        if(e.hasClassName('selected')) {
-          e.addClassName('disabled');
-          e.removeClassName('selected');
+        if(e.hasClass('selected')) {
+          e.addClass('disabled');
+          e.removeClass('selected');
 
-          columnNamesDiv.select(hiddenFilter).invoke('remove');
+          $(hiddenFilter, columnNamesDiv).remove();
         } else {
-          columns.each(function(column) {
-            var hiddenColumn = new Element('input');
-                        
-            hiddenColumn.setValue(column);
-            hiddenColumn.setAttribute('type', 'hidden');
-            hiddenColumn.setAttribute('name', 'search[columns][]');
-            hiddenColumn.setAttribute('id', 'search_column_' +
-              column);
+          $.each(columns, function() {
+            var hiddenColumn = $('<input />', {
+              'id': 'search_column_' + this,
+              'type': 'hidden',
+              'name': 'search[columns][]'
+            }).val(this);
 
-            columnNamesDiv.insert({bottom: hiddenColumn});
+            columnNamesDiv.append(hiddenColumn);
           });
 
-          e.addClassName('selected');
-          e.removeClassName('disabled');
+          e.addClass('selected');
+          e.removeClass('disabled');
         }
 
-        $('search_query').focus();
+        $('#search_query').focus();
       }
     });
   },
-  show: function(options) {
-    var search = $('search');
+  
+  show: function() {
+    var search = $('#search:not(:visible):not(:animated)');
 
-    if(search && !search.visible()) {
-      var headers = Element.select($('column_headers'), 'th');
-      var default_options = {
-        duration: 0.5,
-        queue: {
-          position: 'end',
-          scope: 'search',
-          limit: 1
-        },
-        afterFinish: function() {
-          $('search_query').focus();
-        }
-      }
+    if(search.length > 0) {
+      var headers = $('th', $('#column_headers'));
 
-      headers.each(function(th) {
-        if(th.hasClassName('filterable')) {
-          th.addClassName('selected');
+      headers.each(function() {
+        if($(this).hasClass('filterable')) {
+          $(this).addClass('selected');
         } else {
-          th.addClassName('not_available');
+          $(this).addClass('not_available');
         }
       });
 
-      if($('filter_box')) {
-        Element.hide('filter_box')
-        Element.show(search);
-        $('search_query').focus();
+      if($('#filter_box').length > 0) {
+        $('#filter_box').hide();
+        $(search).show();
+        $('#search_query').focus();
       } else {
-        Effect.Appear(search, Util.merge(default_options, options));
+        search.fadeIn(500, function() {$(this).focus()});
       }
 
-      Element.hide('show_search_link');
+      $('#show_search_link').hide();
 
       Search.observe();
     } else if(search) {
-      $('search_query').focus();
+      $('#search_query').focus();
     }
   }
 }
@@ -689,25 +596,25 @@ var Util = {
      * Combina dos hash javascript nativos
      */
   merge: function(hashOne, hashTwo) {
-    return $H(hashOne).merge($H(hashTwo)).toObject();
+    return jQuery.extend({}, hashOne, hashTwo);
   },
 
   /**
      * Agrega al nombre del objeto y el atributo un número aleatorio
      */
   randomizeIdsAndNames: function(cssSelector, objectName, attributeNames) {
-    $$(cssSelector).each(function(e) {
+    $(cssSelector).each(function() {
       var rand = new Number(Math.random()).toString().match(/0\.(\d+)/)[1];
-      var input;
       var count = 0;
-
-      while((input = e.down('input.' + objectName, count))) {
-        input.writeAttribute('id', objectName + '_' +
-          attributeNames[count] + '_' + rand);
-        input.writeAttribute('name', objectName + '[' +
-          attributeNames[count] + '_' + rand + ']');
+      
+      $('input.' + objectName, $(cssSelector)).each(function() {
+        $(this).attr('id', objectName + '_' + attributeNames[count] + '_' +
+          rand)
+        $(this).attr('name', objectName + '[' + attributeNames[count] + '_' +
+          rand + ']');
+        
         count++;
-      }
+      });
     });
   },
 
@@ -716,142 +623,112 @@ var Util = {
      * único generado con la fecha y un número incremental
      */
   replaceIds: function(s, regex){
-    return s.gsub(regex, new Date().getTime() + State.newIdCounter++);
+    return s.replace(regex, new Date().getTime() + State.newIdCounter++);
   }
 }
 
 // Funciones ejecutadas cuando se carga cada página
-Event.observe(window, 'load', function() {
-  document.on('ajax:after', function(event, e) {Helper.showLoading(e);});
-  document.on('ajax:complete', function(event, e) {Helper.hideLoading(e);});
+jQuery(function($) {
+  var eventList = $.map(EventHandler, function(v, k ) {return k;});
+  var commonRestrictions = ':not([readonly]):not([disabled]):visible:first';
+  
+  // Para que los navegadores que no soportan HTML5 funcionen con autofocus
+  if($('[autofocus]' + commonRestrictions).length > 0) {
+    $('[autofocus]' + commonRestrictions).focus();
+  } else {
+    $(':input' + commonRestrictions)
+  }
+  
+  $(document).bind('ajax:after', function(event) {
+    Helper.showLoading($(event.target));
+  });
+  
+  $(document).bind('ajax:complete', function(event) {
+    Helper.hideLoading($(event.target));
+  });
 
-  document.on('keydown', function(e) {
-    if ((e.keyCode || e.which) == 32 && e.ctrlKey) {
+  $(document).keydown(function(event) {
+    if (event.which == 32 && event.ctrlKey) {
       Search.show();
-      Event.stop(e);
+      
+      event.stopPropagation();
+      event.preventDefault();
     }
   });
 
-  document.on('click', 'a[data-event]', function(event, element) {
-    if(event.stopped) return;
-    var eventName = element.readAttribute('data-event').dasherize().camelize();
+  $('a[data-event]').live('click', function(event) {
+    if (event.stopped) return;
+    var eventName = $(this).data('event');
 
-    if(EventHandler.eventList.include(eventName)) {
-      EventHandler[eventName](element);
-      Event.stop(event);
+    if($.inArray(eventName, eventList) != -1) {
+      EventHandler[eventName]($(this));
+      
+      event.preventDefault();
+      event.stopPropagation();
     }
   });
 
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
-  document.on("item:removed", '.work_paper', function(event, element) {
-    var workPaperCode = element.down('input[name$="[code]"]').getValue();
+  $('.work_paper').live("item:removed", function() {
+    var workPaperCode = $('input[name$="[code]"]', $(this)).val();
 
     if(workPaperCode == lastWorkPaperCode) {
       lastWorkPaperCode = lastWorkPaperCode.previous(2);
     }
   });
 
-  if($('app_content')) {
+  if($('#app_content').length > 0) {
     Observer.attachToAppContent();
-        
-    Event.observe('app_content', 'mouseover', function(event) {
-      var e = Event.findElement(event, 'img');
-
-      if(e && e.hasClassName('change_on_hover')) {
-        HTMLUtil.replaceWithHoverImage(e);
+    
+    $('img').mouseover(function() {
+      if($(this).hasClass('change_on_hover')) {
+        HTMLUtil.replaceWithHoverImage($(this));
       }
     });
-
-    Event.observe('app_content', 'mouseout', function(event) {
-      var e = Event.findElement(event, 'img');
-
-      if(e && e.hasClassName('change_on_hover')) {
-        HTMLUtil.replaceWithNormalImage(e);
+    
+    $('img').mouseout(function() {
+      if($(this).hasClass('change_on_hover')) {
+        HTMLUtil.replaceWithNormalImage($(this));
       }
     });
   }
 
-  if($('menu_container') && !Prototype.Browser.MobileSafari) {
+  if($('#menu_container').length > 0 && !/Apple.*Mobile/.test(navigator.userAgent)) {
     Observer.attachToMenu();
-  } else if($('mobile_menu')) {
+  } else if($('#mobile_menu').length > 0) {
     Observer.attachToMobileMenu();
   }
 
   // Mensajes diferidos
-  if(Object.isArray(State.showMessages)) {
-    $A(State.showMessages).each(function(messageData) {
-      var time = messageData.get('time');
-      var message = messageData.get('message');
-      var expired = messageData.get('expired');
-
-      messageData.set('timer_id',
-        Helper.showMessage.delay(time, message, expired));
+  if($.isArray(State.showMessages)) {
+    $.each(State.showMessages, function() {
+      var message = this.message;
+      var expired = this.expired;
+      
+      this.timer_id = window.setTimeout(
+        "Helper.showMessage('" + message + "', " + expired + ")",
+        this.time * 1000
+      );
     });
   }
-
-  Ajax.Responders.register({
+  
+  $(document).bind({
     // Reinicia los timers con los mensajes diferidos
-    onCreate: function() {
-      $A(State.showMessages).each(function(messageData) {
+    ajaxStart: function() {
+      $.each(State.showMessages, function() {
         if(!State.sessionExpire) {
-          window.clearTimeout(messageData.get('timer_id'));
-          $('time_left').hide();
+          window.clearTimeout(this.timer_id);
+          $('#time_left').hide();
 
-          var time = messageData.get('time');
-          var message = messageData.get('message');
-          var expired = messageData.get('expired');
+          var message = this.message;
+          var expired = this.expired;
 
-          messageData.set('timer_id',
-            Helper.showMessage.delay(time, message, expired));
+          this.timer_id = window.setTimeout(
+            "Helper.showMessage('" + message + "', " + expired + ")",
+            this.time * 1000
+          );
         }
       });
     }
   });
-});
-
-// Funciones que se agregan a todos lo elementos
-Element.addMethods({
-  downForIdFromName: function(element) {
-    var e = $(element);
-    var id = -1;
-    var index = 0;
-
-    do {
-      var name = e.down('*[name]', index++).readAttribute('name');
-
-      if(name.match(/.*\[(\d+)\]/)) {
-        id = name.match(/.*\[(\d+)\]/)[1];
-      }
-    } while(name && id == -1);
-
-    return id != -1 ? id : null;
-  },
-  resetToOriginalText: function(element) {
-    var originalText = $(element).retrieve('original_text')
-
-    if(originalText) {$(element).update(originalText);}
-  },
-  restoreStyleProperty: function(element, property) {
-    var oldValue = element.retrieve('old_' + property);
-    var newStyle = $H();
-
-    if(!Object.isUndefined(oldValue)) {
-      newStyle.set(property, oldValue);
-      element.setStyle(newStyle.toObject());
-    }
-  },
-  showOrHide: function(element, options) {
-    Effect.toggle(element, 'slide', Util.merge({duration: 0.5}, options));
-  },
-  storeStyleProperty: function(element, property) {
-    element.store('old_' + property, element.getStyle(property));
-  },
-  toggleContent: function(element, originalText, alternateText) {
-    var e = $(element);
-
-    e.store('original_text', originalText);
-    e.store('alternate_text', alternateText);
-
-    e.update(e.innerHTML == originalText ? alternateText : originalText);
-  }
 });

@@ -43,7 +43,7 @@
         :admin_control_objective_importances,
         @control_objective_item.created_at, true),
         {:include_blank => t(:'control_objective_item.not_rated')},
-        {:class => 'inline_item focused', :disabled => readonly} %>
+        {:class => :inline_item, :autofocus => true, :disabled => readonly} %>
     </p>
     <p class="form_item">
       <%= co_f.label :audit_date, nil, :class => :inline %>
@@ -197,7 +197,6 @@
   </p>
 <% end %>
 <!--[eoform:control_objective_item] -->
-<%= set_focus_to_first_element %>
 <script type="text/javascript">
   var ControlObjectiveCalcs = {
     effectiveness: function() {

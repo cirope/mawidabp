@@ -17,13 +17,13 @@
 
 <% if include_dynamic %>
   <% content_for :javascript_menu do %>
-    <%= raw "State.menu.set('menu_#{menu_item.menu_name}', '#{escape_javascript(
+    <%= raw "State.menu['menu_#{menu_item.menu_name}'] = '#{escape_javascript(
       render(:partial => 'shared/submenu', :locals => {
         :menu_item => menu_item,
         :controller_name => controller_name,
         :display => true,
         :level => level,
         :include_dynamic => false
-      }))}');" %>
+      }))}';" %>
   <% end %>
 <% end %>

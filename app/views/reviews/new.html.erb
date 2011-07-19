@@ -11,7 +11,8 @@
 <script type="text/javascript">
   $('review_period_id').observe('change', function() {
     BrowserManipulation.changeLocation('<%= new_review_path %>',
-      $H({period: $F(this)}));
+      {period: $F(this)}
+    );
     
     Helper.showLoading(this);
   });

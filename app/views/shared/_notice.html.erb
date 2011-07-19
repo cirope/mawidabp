@@ -1,6 +1,6 @@
 <div id="notice" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
   <p><%= flash.notice %></p>
-  <div id="close_notice"><%= link_to_function 'X', "$('notice').fade()",
+  <div id="close_notice"><%= link_to_function 'X', "$('#notice').fadeOut()",
     :title => t(:'label.close') %></div>
 </div>
-<%= javascript_tag "Element.fade.delay(7, 'notice');" %>
+<%= javascript_tag "$('#notice').delay(7000).fadeOut();"%>

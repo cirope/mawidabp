@@ -8,7 +8,7 @@
         <%= f.label :review_id, nil, :class => :inline %>
         <%= f.select :review_id,
           Review.list_without_draft_review.map { |r| [r.identification, r.id] },
-          {:prompt => true}, {:class => 'inline_item focused'} %>
+          {:prompt => true}, {:class => :inline_item, :autofocus => true} %>
       <% else %>
         <%= f.hidden_field :review_id %>
         <%= content_tag :label,
@@ -110,7 +110,6 @@
   </p>
 <% end %>
 <!--[eoform:conclusion_draft_review] -->
-<%= set_focus_to_first_element %>
 <script type="text/javascript">
   function showOrHideErrors() {
     if($('approval_errors_detail')) {

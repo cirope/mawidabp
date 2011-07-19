@@ -15,8 +15,11 @@ module ApplicationHelper
   end
 
   def default_javascripts
-    libs = [:defaults, 'extensions', 'form_modification', 'validation', 'ui',
-      'datepicker/jquery.ui.datepicker-es']
+    libs = [
+      :defaults, 'autocomplete', 'extensions', 'form_modification',
+      'validation', 'ui', 'datepicker/jquery.ui.datepicker-es', 'jquery.url',
+      'jquery.mw'
+    ]
     libs << {:cache => 'main'}
 
     javascript_include_tag *libs
@@ -343,12 +346,6 @@ module ApplicationHelper
   # * _delay_::   Delay en segundos que se quiere aplicar
   def set_focus_to(dom_id, delay = 0)
     javascript_tag "$('#{dom_id.to_s}').focus.delay(#{delay});"
-  end
-
-  # Devuelve el HTML (con el tag <script>) para establecer el foco en el primer
-  # elemento del primer formulario declarado
-  def set_focus_to_first_element
-    javascript_tag 'FormManipulation.focusFirst();'
   end
 
   # Devuelve HTML con un link para eliminar un componente de un formulario

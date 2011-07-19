@@ -139,8 +139,7 @@
           method: 'get',
           parameters: { process_control: $F(this) },
           onSuccess: function(transport) {
-            procedureControlItemHash.set('<%= id %>',
-              transport.responseJSON);
+            procedureControlItemHash['<%= id %>'] = transport.responseJSON;
 
             $$('#' + parentId + ' select.control_objective').each(function(e) {
               HTMLUtil.updateOptions(e, HTMLUtil.optionsFromArray(transport.responseJSON));
@@ -169,6 +168,6 @@
   <% content_for :js_extra_bottom do %>
     <% options = [[t(:'helpers.select.prompt'), '']] +
         f.object.control_objectives.map { |co| [co.name, co.id] } %>
-    <%= raw "procedureControlItemHash.set('#{id}', '#{escape_javascript(options.to_json)}'.evalJSON(true));" %>
+    <%= raw "procedureControlItemHash['#{id}'] = '#{escape_javascript(options.to_json)}'.evalJSON(true);" %>
   <% end %>
 <% end %>

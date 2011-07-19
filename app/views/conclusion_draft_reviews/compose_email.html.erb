@@ -28,7 +28,7 @@
       <%= content_tag :label, t(:'conclusion_review.email_note'),
         :for => :conclusion_review_email_note %>
       <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
-        :cols => 40 %>
+        :cols => 40, :autofocus => true %>
     </p>
   </div>
 
@@ -60,7 +60,6 @@
   </p>
 <% end %>
 <!--[eoform:conclusion_draft_review] -->
-<%= set_focus_to_first_element %>
 
 <div id="links">
 <%= link_to t(:'label.edit'), edit_conclusion_draft_review_path(@conclusion_draft_review) %> |

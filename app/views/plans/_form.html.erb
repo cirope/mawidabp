@@ -32,7 +32,7 @@
         <%= p_f.select :period_id,
           Period.list_all_without_plans.map { |p| [p.inspect, p.id] },
           {:prompt => true},
-          {:class => 'inline_item focused'} %>
+          {:class => :inline_item, :autofocus => true} %>
       </p>
     <% else %>
       <p class="form_item">
@@ -144,7 +144,6 @@
   </p>
 <% end %>
 <!--[eoform:plan] -->
-<%= set_focus_to_first_element %>
 <script type="text/javascript">
   Helper.makeSortable('plan_items', '#plan_items div.plan_item', '#plan_items a.move');
 

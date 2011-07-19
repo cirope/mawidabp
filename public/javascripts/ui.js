@@ -1,45 +1,44 @@
-var MAX_TEXT_AREA_HEIGHT = 400;
+jQuery(function() {
+  var MAX_TEXT_AREA_HEIGHT = 400;
 
-var UIManipulation = {
-  changeHeight: function(element, height) {
-    new Effect.Morph(element, {
-      style: 'height: ' + height + 'px',
-      duration: 0.3
-    });
-  },
-  restoreHeight: function(event, element) {
-    var originalHeight = element.retrieve('original-height');
+  var UIManipulation = {
+    changeHeight: function(element, height) {
+      element.effect('size', { to: { height: height } }, 300);
+    },
+    restoreHeight: function() {
+      var originalHeight = $(this).data('original-height');
 
-    if(originalHeight) {
-      UIManipulation.changeHeight(element, originalHeight);
-    }
+      if(originalHeight) {
+        UIManipulation.changeHeight($(this), originalHeight);
+      }
 
-    element.stopObserving('blur', UIManipulation.restoreHeight);
-  },
-  fitToContent: function(element) {
-    var adjustedHeight = element.getLayout().get('height');
+      $(this).unbind('blur', UIManipulation.restoreHeight);
+    },
+    fitToContent: function(element) {
+      var adjustedHeight = element.height();
 
-    if(MAX_TEXT_AREA_HEIGHT > adjustedHeight) {
-      adjustedHeight = Math.max(element.scrollHeight, adjustedHeight);
-      adjustedHeight = Math.min(MAX_TEXT_AREA_HEIGHT, adjustedHeight);
+      if(MAX_TEXT_AREA_HEIGHT > adjustedHeight) {
+        adjustedHeight = Math.max(element.scrollHeight, adjustedHeight);
+        adjustedHeight = Math.min(MAX_TEXT_AREA_HEIGHT, adjustedHeight);
 
-      if(adjustedHeight > element.getHeight()) {
-        if(!element.retrieve('original-height')) {
-          element.store('original-height', element.getLayout().get('height'));
+        if(adjustedHeight > element.height()) {
+          if(!element.data('original-height')) {
+            element.data('original-height', element.height());
+          }
+
+          element.blur(UIManipulation.restoreHeight);
+
+          UIManipulation.changeHeight(element, adjustedHeight);
         }
-        
-        element.on('blur', UIManipulation.restoreHeight);
-
-        UIManipulation.changeHeight(element, adjustedHeight);
       }
     }
-  }
-};
+  };
 
-document.on('keyup', 'textarea', function(event, element) {
-  UIManipulation.fitToContent(element);
-});
+  $('textarea').live('keyup', function() {
+    UIManipulation.fitToContent($(this));
+  });
 
-document.on('click', 'textarea', function(event, element) {
-  UIManipulation.fitToContent(element);
+  $('textarea').live('click', function() {
+    UIManipulation.fitToContent($(this));
+  });
 });

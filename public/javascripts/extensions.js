@@ -21,3 +21,11 @@ String.prototype.next = function(pad) {
 String.prototype.previous = function(pad) {
   return StringManipulation.changeTextWithNumberBy(this, -1, pad);
 }
+
+String.prototype.escapeHTML = function() {
+  return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+String.prototype.unescapeHTML = function() {
+  return this.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+}

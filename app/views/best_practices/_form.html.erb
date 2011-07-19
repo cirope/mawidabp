@@ -8,7 +8,7 @@
     <p>
       <%= bp_f.label :name %>
       <%= bp_f.text_field :name, :maxlength => 255, :size => 10,
-        :class => :focused %>
+        :autofocus => true %>
     </p>
     <p>
       <%= bp_f.label :description %>
@@ -58,4 +58,3 @@
   <% end %>
 <% end %>
 <!--[eoform:best_practice] -->
-<%= set_focus_to_first_element %>

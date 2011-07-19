@@ -68,7 +68,7 @@
     </p>
     <p>
       <%= f.label :description %>
-      <%= f.text_area :description, :readonly => readonly, :class => :focused,
+      <%= f.text_area :description, :readonly => readonly, :autofocus => true,
         :style => 'height: 15em;' %>
     </p>
   </div>
@@ -311,7 +311,6 @@
   </p>
 <% end %>
 <!--[eoform:oportunity] -->
-<%= set_focus_to_first_element %>
 
 <% if @oportunity.repeated_of && !readonly %>
   <% content_for :extra_html_bottom do %>
