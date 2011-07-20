@@ -1,4 +1,3 @@
-// Funciones que se agregan a todos lo elementos
 jQuery(function($) {
   var methods = {
     downForIdFromName: function() {
@@ -23,16 +22,8 @@ jQuery(function($) {
 
       if(originalText) {$(this).html(originalText);}
     },
-    restoreStyleProperty: function(property) {
-      var oldValue = $(this).data('mw-old-' + property);
-
-      if(!oldValue) {$(this).css({property: oldValue});}
-    },
     showOrHide: function(duration) {
       $(this).slideToggle(duration);
-    },
-    storeStyleProperty: function(property) {
-      $(this).data('mw-old-' + property, $(this).css(property));
     },
     toggleContent: function(originalText, alternateText) {
       $(this).data('mw-original-text', originalText);

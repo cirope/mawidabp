@@ -17,8 +17,8 @@ module ApplicationHelper
   def default_javascripts
     libs = [
       :defaults, 'autocomplete', 'extensions', 'form_modification',
-      'validation', 'ui', 'datepicker/jquery.ui.datepicker-es', 'jquery.url',
-      'jquery.mw'
+      'validation', 'ui', 'jquery-ui-timepicker-addon',
+      'datepicker/jquery.ui.datepicker-es', 'jquery.url', 'jquery.mw'
     ]
     libs << {:cache => 'main'}
 
@@ -46,7 +46,7 @@ module ApplicationHelper
   
   def calendar_text_field(form, attribute, time = false, value = nil, options = {})
     value ||= form.object.send(attribute)
-    default_options = {:class => :calendar}
+    default_options = { :class => "#{options.delete(:class)} calendar" }
     
     default_options[:value] = l(value, :format => time ? :minimal : :default) if value
     default_options[:'data-time'] = true if time
@@ -243,7 +243,7 @@ module ApplicationHelper
 
   # Devuelve el HTML de un vínculo para volver (history.back())
   def link_to_back
-    link_to t(:'label.back'), '#', :'data-event' => :history_back
+    link_to t(:'label.back'), '#', :'data-event' => 'historyBack'
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
@@ -357,7 +357,7 @@ module ApplicationHelper
     link_options = {
       :title => t(:'label.delete'),
       :'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
-      :'data-event' => (new_record ? :remove_item : :hide_item)
+      :'data-event' => (new_record ? 'removeItem' : 'hideItem')
     }
 
     out << fields.hidden_field(:_destroy, :class => :destroy,

@@ -105,7 +105,7 @@
 
     <p class="add_item">
       <%= link_to t(:'user.add_child'), '#', :'data-template' => :child,
-        :'data-event' => :add_nested_item, :'data-container' => :children %>
+        :'data-event' => 'addNestedItem', :'data-container' => :children %>
     </p>
   <% end %>
   
@@ -136,7 +136,7 @@
   <p class="add_item">
     <%= link_to t(:'user.add_organization_role'), '#',
       :'data-template' => :organization_role,
-      :'data-event' => :add_nested_item,
+      :'data-event' => 'addNestedItem',
       :'data-container' => :organization_roles %>
   </p>
   <p>

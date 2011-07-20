@@ -49,18 +49,18 @@ a.link_without_action {
   text-decoration: none;
 }
 
-a[data-event="remove_item"],
-a[data-event="remove_list_item"],
-a[data-event="hide_item"] {
+a[data-event="removeItem"],
+a[data-event="removeListItem"],
+a[data-event="hideItem"] {
   font-size: 12px;
   font-weight: bold;
   padding: 1px 3px;
   text-decoration: none;
 }
 
-a[data-event="remove_item"]:hover,
-a[data-event="remove_list_item"]:hover,
-a[data-event="hide_item"]:hover {
+a[data-event="removeItem"]:hover,
+a[data-event="removeListItem"]:hover,
+a[data-event="hideItem"]:hover {
   background: #aa0000;
   color: #ffffff;
 }
@@ -279,6 +279,10 @@ div#menu ul > li {
   vertical-align: middle;
 }
 
+div#menu_container a.highlight {
+  background: #b1aea6;
+}
+
 div#menu_level_1 {
   margin-top: 3px;
   color: #7b7b7b;
@@ -414,7 +418,7 @@ div#search input[type="submit"] {
   margin: 0px;
 }
 
-div#search table, .filter table {
+div#search table, .filter table.date_filer, .filter table.generic_filter {
   width: 100%;
   border: none;
   padding: 0px;
@@ -1077,12 +1081,61 @@ span.popup_link_container {
   vertical-align: text-top;
 }
 
-table {
+table.list {
   margin: 1%;
   width: 98%;
   empty-cells: show;
   border-collapse: collapse;
   border: 2px solid #c2bfb7;
+}
+
+table.list th {
+  color: #151215;
+  background-color: #c2bfb7;
+  padding: 4px;
+  font-size: 14px;
+  text-align: left;
+}
+
+table.list th select.filter {
+  color: inherit;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+table.list th.disabled {
+  color: #7b7b7b;
+}
+
+table.list th.filterable {
+  cursor: default;
+}
+
+table.list th.not_available {
+  text-decoration: line-through;
+  color: #f2f2f2;
+}
+
+table.list tr.odd {
+  background-color: #f2f2f2;
+}
+
+table.list tr.odd:hover, table.list tr.even:hover {
+  background: #e3e0dd;
+}
+
+table.list tr.odd > td, table.list tr.even > td {
+  padding: .2em .5em;
+}
+
+table.list tr.readonly_item, table.list tr.disabled_item {
+  color: #a5a5a5;
+}
+
+table.list tr.writable_item, table.list tr.enabled_item {
+  color: inherit;
 }
 
 table#help_table {
@@ -1180,55 +1233,6 @@ textarea {
 
 textarea.double_height {
   height: 14em;
-}
-
-th {
-  color: #151215;
-  background-color: #c2bfb7;
-  padding: 4px;
-  font-size: 14px;
-  text-align: left;
-}
-
-th select.filter {
-  color: inherit;
-  margin-top: 4px;
-  margin-bottom: 2px;
-  font-size: 1em;
-  font-weight: bold;
-}
-
-th.disabled {
-  color: #7b7b7b;
-}
-
-th.filterable {
-  cursor: default;
-}
-
-th.not_available {
-  text-decoration: line-through;
-  color: #f2f2f2;
-}
-
-tr.odd {
-  background-color: #f2f2f2;
-}
-
-tr.odd:hover, tr.even:hover {
-  background: #e3e0dd;
-}
-
-tr.odd > td, tr.even > td {
-  padding: .2em .5em;
-}
-
-tr.readonly_item, tr.disabled_item {
-  color: #a5a5a5;
-}
-
-tr.writable_item, tr.enabled_item {
-  color: inherit;
 }
 
 ul.menu_level_0, ul.menu_level_1, ul.menu_level_2 {
@@ -1448,7 +1452,7 @@ ul.raw_list ul {
   position: relative;
   height: 100%;
   width: auto;
-  cursor: pointer;
+  cursor: pointer !important;
   opacity: 0;
   filter: alpha(opacity = 0);
   -moz-opacity: 0;
@@ -1545,4 +1549,8 @@ span.popup_closebox:hover, a.popup_closebox:hover {
 
 .popup_draghandle {
   cursor: move;
+}
+
+.ui-datepicker-trigger {
+  display: none;
 }

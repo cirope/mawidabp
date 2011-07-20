@@ -126,7 +126,7 @@
   <% unless readonly %>
     <p class="add_item">
       <%= link_to t(:'review.add_user_assignment'), '#',
-        :'data-event' => :add_nested_item,
+        :'data-event' => 'addNestedItem',
         :'data-template' => :review_user_assignment,
         :'data-container' => :review_user_assignments %>
     </p>
@@ -175,7 +175,7 @@
 
     <p class="add_item">
       <%= link_to t(:'review.add_control_objective'), '#',
-        :'data-event' => :add_nested_item,
+        :'data-event' => 'addNestedItem',
         :'data-template' => :control_objective,
         :'data-container' => :control_objectives %>
     </p>
@@ -207,7 +207,7 @@
   <% unless readonly %>
     <p class="add_item">
       <%= link_to t(:'review.add_finding_assignment'), '#',
-        :'data-event' => :add_nested_item,
+        :'data-event' => 'addNestedItem',
         :'data-template' => :finding_review_assignment,
         :'data-container' => :finding_review_assignments %> |
       <%= link_to t(:'review.suggest_findings'), @review.plan_item_id ?

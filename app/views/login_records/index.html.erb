@@ -8,7 +8,7 @@
   :columns => @query.blank? ? LoginRecord::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table>
+<table class="list">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>

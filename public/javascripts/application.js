@@ -49,8 +49,6 @@ var EventHandler = {
     var template = eval(e.data('template'));
 
     $(e.data('container')).append(Util.replaceIds(template, /NEW_RECORD/g));
-
-    e.trigger('item:added', e);
   },
 
   /**
@@ -74,17 +72,14 @@ var EventHandler = {
      * dinámico)
      */
   hideItem: function(e) {
-    Helper.hide(e.parents(e.data('target')));
+    var target = e.data('target');
+    
+    Helper.hideItem(e.parents(target));
 
     e.prev('input[type=hidden].destroy').val('1');
-
-    e.trigger('item:hidden', e);
-// TODO: completar
-//    if(e.up(target).down('input.sort_number')) {
-//      e.up(target).down('input.sort_number').
-//      addClassName('hidden_sort_number').
-//      removeClassName('sort_number');
-//    }
+    
+    $('input.sort_number', e.parents(target)).addClass('hidden_sort_number').
+      removeClass('sort_number');
 
     FormUtil.completeSortNumbers();
   },
@@ -348,21 +343,20 @@ var HTMLUtil = {
 
     var input = $('input[type=file]', $(element));
 
-    if(input.length > 0 && input.parents('div.stylized_file').length == 0) {
-//      element.mousemove(function(event) {
-//        var left = (event.pointerX() - this.positionedOffset()['left']) -
-//          input.getWidth();
-//        var containerLayout = input.up('span.file_container').getLayout();
-//        var xMin = containerLayout.get('left') + containerLayout.get('width');
-//        var xMax = xMin + containerLayout.get('width');
-//
-//        // Esta pregunta es por un bug en IE7 con overflow: hidden
-//        if(event.pointerX() >= xMin && event.pointerX() <= xMax) {
-//          input.setStyle({left: left + 'px'});
-//        }
-//      });
-//      
-//      element.observe('mousemove').wrap('div', {'class' : 'stylized_file'});
+    if(input.parents('div.stylized_file').length == 0) {
+      element.mousemove(function(event) {
+        var left = (event.pageX - $(this).offset().left) - input.width() + 10;
+        var container = input.parents('span.file_container');
+        var xMin = container.position().left + container.width();
+        var xMax = xMin + container.width();
+
+        // Esta pregunta es por un bug en IE7 con overflow: hidden
+        if(event.pageX >= xMin && event.pageX <= xMax) {
+          input.css({left: left + 'px'});
+        }
+      });
+      
+      element.wrap('<div class="stylized_file"></div>');
     }
   },
 
@@ -426,57 +420,48 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal
      */
   attachToMenu: function() {
-    $('#menu_container a').click(function(event) {
-      var e = $(this);
-      var menuName = e.length > 0 ? e.attr('href').replace(/.*#/, '') : '';
+    $('#menu_container a').live('click', function(event) {
+      var menuName = $(this).attr('href').replace(/.*#/, '')
       var content = State.menu[menuName];
-
-      if(e.hasClass('menu_item_1') && content) {
+      
+      if($(this).hasClass('menu_item_1') && content) {
         $('#menu_level_1').html(content);
         $('#menu_level_2').html('&nbsp;');
-        $('.menu_item_1').mw('restoreStyleProperty', 'background-color');
-
-        event.stopPropagation();
-        event.preventDefault();
-      } else if (e.hasClass('menu_item_2') && content) {
-        $('#menu_level_2').html(content);
-        $('.menu_item_2').mw('restoreStyleProperty', 'background-color');
-
-        event.stopPropagation();
-        event.preventDefault();
-      } else if (e.length > 0) {
-        $('.menu_item_1').mw('restoreStyleProperty', 'background-color');
-        $('.menu_item_2').mw('restoreStyleProperty', 'background-color');
+        $('.menu_item_1').removeClass('highlight');
         
-        Helper.showLoading();
+        event.stopPropagation();
+        event.preventDefault();
+      } else if($(this).hasClass('menu_item_2') && content) {
+        $('#menu_level_2').html(content);
+        $('.menu_item_2').removeClass('highlight');
+        
+        event.stopPropagation();
+        event.preventDefault();
       }
-
-      if(e.length > 0) {
-        e.mw('storeStyleProperty', 'background-color');
-        e.css('background-color', '#b1aea6');
-      }
+      
+      $(this).addClass('highlight');
     });
   },
   /**
      * Agrega un listener a los eventos de click en el menú principal en móviles
      */
   attachToMobileMenu: function() {
-    $('#main_container').click(function(event) {
-      var e = event.target.nodeName == 'a' ? $(event.target) :
-        $('a', $(event.target));
-      var menuName = e.length > 0 ? e.attr('href').replace(/.*#/, '') : '';
+    $('#main_container a').click(function(event) {
+      var e = $(this);
+      var menuName = e.attr('href').replace(/.*#/, '');
       var content = State.menu[menuName];
 
-      if(e.length > 0 && e.is('.menu_item_1, .menu_item_2') && content) {
+      if(e.is('.menu_item_1, .menu_item_2') && content) {
         $('#main_mobile_menu').data(
           'previous-' + e.parents('ul').data('level'),
           $('#main_mobile_menu').html().escapeHTML()
         );
+        
         $('#main_mobile_menu').html(content);
 
         event.stopPropagation();
         event.preventDefault();
-      } else if(e.length > 0 && e.hasClass('back')) {
+      } else if(e.hasClass('back')) {
         $('#main_mobile_menu').html(
           $('#main_mobile_menu').data(
             'previous-' + e.parents('ul').data('level').previous()
@@ -630,14 +615,9 @@ var Util = {
 // Funciones ejecutadas cuando se carga cada página
 jQuery(function($) {
   var eventList = $.map(EventHandler, function(v, k ) {return k;});
-  var commonRestrictions = ':not([readonly]):not([disabled]):visible:first';
   
   // Para que los navegadores que no soportan HTML5 funcionen con autofocus
-  if($('[autofocus]' + commonRestrictions).length > 0) {
-    $('[autofocus]' + commonRestrictions).focus();
-  } else {
-    $(':input' + commonRestrictions)
-  }
+  $('[autofocus]:not([readonly]):not([disabled]):visible:first').focus();
   
   $(document).bind('ajax:after', function(event) {
     Helper.showLoading($(event.target));
@@ -665,6 +645,17 @@ jQuery(function($) {
       
       event.preventDefault();
       event.stopPropagation();
+    }
+  });
+  
+  $('input.calendar:not(.hasDatepicker)').live('focus', function() {
+    if($(this).data('time')) {
+      $(this).datetimepicker({showOn: 'both'}).focus();
+    } else {
+      $(this).datepicker({
+        showOn: 'both',
+        onSelect: function() { $(this).datepicker('hide'); }
+      }).focus();
     }
   });
 

@@ -210,7 +210,7 @@
   <p class="add_item">
     <%= link_to t(:'finding.add_finding_answer'), '#',
       :'data-template' => :finding_answer,
-      :'data-event' => :add_nested_item, :'data-container' => :finding_answers %>
+      :'data-event' => 'addNestedItem', :'data-container' => :finding_answers %>
   </p>
 
   <% unless @finding.work_papers.blank? %>

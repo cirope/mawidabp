@@ -1,7 +1,7 @@
 <div class="parameter_value item" <%= raw 'style="display: none;"' if item == ['', ''] %>>
   <div>
     <div class="item_field" style="width: 45%;">
-      <%= text_field :parameter, "key_#{number}", :value => item[0], :class => 'parameter' %>
+      <%= text_field :parameter, "key_#{number}", :value => item[0], :class => 'parameter', :autofocus => true %>
     </div>
     <div class="item_field" style="width: 45%;">
       <%= text_field :parameter, "value_#{number}", :value => item[1], :class => 'parameter' %>

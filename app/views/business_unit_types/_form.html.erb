@@ -44,8 +44,9 @@
 
   <p class="add_item">
     <%= link_to t(:'business_unit_type.add_business_unit'), '#',
-      :'data-template' => :business_unit, :'data-container' => :business_units,
-      :'data-event' => :add_nested_item %>
+      :'data-template' => :business_unit,
+      :'data-container' => '#business_units',
+      :'data-event' => 'addNestedItem' %>
   </p>
 
   <%= hidden_lock_version(but_f) %>

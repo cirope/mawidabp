@@ -21,15 +21,15 @@ jQuery(function($){
 		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['es']);
         
-//        $.timepicker.regional['es'] = {
-//                timeOnlyTitle: 'Seleccione horario',
-//                timeText: 'Tiempo',
-//                hourText: 'Hora',
-//                minuteText: 'Minuto',
-//                secondText: 'Segundo',
-//                currentText: 'Ahora',
-//                closeText: 'Listo',
-//                ampm: false
-//        };
-//        $.timepicker.setDefaults($.timepicker.regional['es']);
+        $.timepicker.regional['es'] = {
+                timeOnlyTitle: 'Seleccione horario',
+                timeText: 'Tiempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Ahora',
+                closeText: 'Listo',
+                ampm: false
+        };
+        $.timepicker.setDefaults($.timepicker.regional['es']);
 });

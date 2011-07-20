@@ -132,7 +132,7 @@
 
   <p class="add_item">
     <%= link_to t(:'label.add_item'), '#', :'data-template' => :workflow_item,
-      :'data-event' => :add_nested_item, :'data-container' => :workflow_items %>
+      :'data-event' => 'addNestedItem', :'data-container' => :workflow_items %>
   </p>
 
   <% if @workflow.overloaded? %>
