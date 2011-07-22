@@ -433,6 +433,11 @@ class ControlObjectiveItem < ActiveRecord::Base
       body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
+    
+    unless finding.origination_date.blank?
+      body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
+        "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
+    end
 
     audited_users = finding.users.select(&:can_act_as_audited?)
 

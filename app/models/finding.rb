@@ -1032,6 +1032,11 @@ class Finding < ActiveRecord::Base
         (I18n.l(self.solution_date, :format => :long) if self.solution_date), 0,
         false)
     end
+    
+    unless self.origination_date.blank?
+      pdf.add_description_item(self.class.human_attribute_name('origination_date'),
+        I18n.l(self.origination_date, :format => :long), 0, false)
+    end
 
     audited = self.users.select { |u| u.can_act_as_audited? }.map(&:full_name)
 
