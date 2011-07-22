@@ -2,7 +2,7 @@
   :options => {},
   :columns => @query.blank? ? ControlObjectiveItem::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table>
+<table class="list">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>

@@ -5,7 +5,7 @@
   :columns => @query.blank? ?
     ConclusionFinalReview::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table>
+<table class="list">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>

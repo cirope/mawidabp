@@ -1081,6 +1081,59 @@ span.popup_link_container {
   vertical-align: text-top;
 }
 
+table#help_table {
+  border: none;
+}
+
+table#help_table > tbody > tr > td {
+  padding: .5em 0em;
+  vertical-align: text-top;
+}
+
+table.date_filter, table.generic_filter {
+  border: none;
+  margin: .5em 0em;
+  width: 100%;
+}
+
+table.date_filter td:nth-child(1), table.date_filter td:nth-child(2),
+table.generic_filter td:nth-child(1), table.generic_filter td:nth-child(2) {
+  padding-right: 1em;
+  width: 50%;
+}
+
+table.date_filter label.inline_item,
+table.generic_filter label.inline_item {
+  width: 30%;
+}
+
+table.date_filter input[type="text"].inline_item,
+table.generic_filter input[type="text"].inline_item {
+  width: 70%;
+}
+
+table.item_container {
+  margin: 0px;
+  clear: both;
+  border: none;
+}
+
+table.item_container tbody {
+  margin-top: 1em;
+}
+
+table.item_container td {
+  vertical-align: top;
+}
+
+table.item_container th {
+  background: inherit;
+  padding: 0px 0px 5px 0px;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 2px dotted #cecece;
+}
+
 table.list {
   margin: 1%;
   width: 98%;
@@ -1136,54 +1189,6 @@ table.list tr.readonly_item, table.list tr.disabled_item {
 
 table.list tr.writable_item, table.list tr.enabled_item {
   color: inherit;
-}
-
-table#help_table {
-  border: none;
-}
-
-table#help_table > tbody > tr > td {
-  padding: .5em 0em;
-  vertical-align: text-top;
-}
-
-table.date_filter, table.generic_filter {
-  border: none;
-  margin: .5em 0em;
-  width: 100%;
-}
-
-table.date_filter td:nth-child(1), table.date_filter td:nth-child(2),
-table.generic_filter td:nth-child(1), table.generic_filter td:nth-child(2) {
-  padding-right: 1em;
-  width: 50%;
-}
-
-table.date_filter input[type="text"].inline_item,
-table.generic_filter input[type="text"].inline_item {
-  width: 60%;
-}
-
-table.item_container {
-  margin: 0px;
-  clear: both;
-  border: none;
-}
-
-table.item_container tbody {
-  margin-top: 1em;
-}
-
-table.item_container td {
-  vertical-align: top;
-}
-
-table.item_container th {
-  background: inherit;
-  padding: 0px 0px 5px 0px;
-  font-size: 14px;
-  font-weight: bold;
-  border-bottom: 2px dotted #cecece;
 }
 
 table.summary_table {

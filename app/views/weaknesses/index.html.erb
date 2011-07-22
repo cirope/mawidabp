@@ -4,7 +4,7 @@
     :columns => @query.blank? ? Weakness::COLUMNS_FOR_SEARCH.keys : @columns
   } %>
 <% end %>
-<table>
+<table class="list">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>

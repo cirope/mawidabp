@@ -2,7 +2,7 @@
   :options => {},
   :columns => @query.blank? ? Review::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table>
+<table class="list">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Period.model_name.human, nil, 'period' %>

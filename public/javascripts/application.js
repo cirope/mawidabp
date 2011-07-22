@@ -560,16 +560,15 @@ var Search = {
 
       if($('#filter_box').length > 0) {
         $('#filter_box').hide();
-        $(search).show();
-        $('#search_query').focus();
+        $(search).fadeIn(300, function() { $('#search_query').focus(); });
       } else {
-        search.fadeIn(500, function() {$(this).focus()});
+        search.fadeIn(300, function() { $('#search_query').focus(); });
       }
 
       $('#show_search_link').hide();
 
       Search.observe();
-    } else if(search) {
+    } else {
       $('#search_query').focus();
     }
   }
