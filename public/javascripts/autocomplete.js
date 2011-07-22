@@ -12,12 +12,20 @@ var AutoComplete = {
       
       input.autocomplete({
         source: function(request, response) {
-          return jQuery.ajax({
+          var extra;
+          
+          if(input.data('autocompleteParams')) {
+            eval('extra = ' + input.data('autocompleteParams'));
+          }
+          
+          var params = Util.merge({q: request.term}, extra);
+          
+          return $.ajax({
             url: input.data('autocompleteUrl'),
             dataType: 'json',
-            data: {q: request.term},
+            data: params,
             success: function(data) {
-              response(jQuery.map(data, function(item) {
+              response($.map(data, function(item) {
                   var content = $('<div>');
                   
                   content.append($('<span class="label">').text(item.label));

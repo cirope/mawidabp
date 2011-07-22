@@ -687,9 +687,9 @@ class UsersController < ApplicationController
     redirect_to PDF::Writer.relative_path(pdf_name, User.table_name)
   end
 
-  # * POST /users/auto_complete_for_user
+  # * GET /users/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ["#{Organization.table_name}.id = :organization_id"]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
@@ -713,6 +713,10 @@ class UsersController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
   end
 
   private

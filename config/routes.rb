@@ -303,7 +303,7 @@ MawidaApp::Application.routes.draw do
       get :new_initial
       post :create_initial
       get :export_to_pdf
-      post :auto_complete_for_user
+      get :auto_complete_for_user
       get :roles
       get :initial_roles
     end

@@ -1556,6 +1556,17 @@ span.popup_closebox:hover, a.popup_closebox:hover {
   cursor: move;
 }
 
+.ui-autocomplete span.informal {
+  display: block;
+  white-space: normal;
+  font-size: .75em;
+  color: #676767;
+}
+
+.ui-autocomplete span.label {
+  white-space: normal;
+}
+
 .ui-datepicker-trigger {
   display: none;
 }

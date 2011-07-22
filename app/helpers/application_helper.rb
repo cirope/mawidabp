@@ -372,7 +372,7 @@ module ApplicationHelper
   def remove_list_item_link(fields)
     link_to('X', '#', :title => t(:'label.delete'),
       :'data-target' => ".#{fields.object.class.name.underscore}",
-      :'data-event' => :remove_list_item)
+      :'data-event' => 'removeListItem')
   end
 
   # Devuelve HTML con un link para agregar un elemento

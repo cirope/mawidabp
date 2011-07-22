@@ -42,6 +42,9 @@ class User < ActiveRecord::Base
     :reallocation_errors, :nested_user
   attr_accessor_with_default :is_an_important_change, true
   attr_accessor_with_default :password_was_encrypted, false
+  
+  # Alias de atributos
+  alias_attribute :informal, :user
 
   # Named scopes
   scope :list, lambda {
@@ -202,6 +205,15 @@ class User < ActiveRecord::Base
   def to_param
     self.user_changed? ? self.user_was : self.user
   end
+  
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+    
+    super(default_options.merge(options || {}))
+  end
 
   def set_proper_parent
     self.organization_roles.each { |o_r| o_r.user = self }
@@ -262,6 +274,8 @@ class User < ActiveRecord::Base
     "#{version.full_name}#{version.string_to_append_if_function}".concat(
       version.string_to_append_if_disable.to_s)
   end
+  
+  alias_method :label, :full_name_with_function
 
   def full_name_with_resource(from = nil)
     version = self.version_of from

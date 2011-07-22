@@ -155,7 +155,7 @@ var Helper = {
      * Oculta el elemento que indica que algo se está cargando
      */
   hideLoading: function(element) {
-    $('#loading').hide();
+    $('#loading:visible').hide();
 
     $(element).attr('disabled', false);
   },
@@ -211,7 +211,7 @@ var Helper = {
      * Muestra una imagen para indicar que una operación está en curso
      */
   showLoading: function(element) {
-    $('#loading').show();
+    $('#loading:not(:visible)').show();
 
     $(element).attr('disabled', true);
   },
@@ -286,14 +286,13 @@ var HTMLUtil = {
      * etiquetas
      */
   optionsFromArray: function(optionsArray, selectedValue, includeBlank) {
-    var options = $.map(optionsArray, function() {
-      var e = $(this);
-      var option_string = selectedValue && e[0] == selectedValue ?
+    var options = $.map(optionsArray, function(e) {
+      var optionString = selectedValue && e[0] == selectedValue ?
         '<option selected="selected" value=' + e[1] + '>' + e[0] + '</option>' :
         '<option value=' + e[1] + '>' + e[0] + '</option>'
 
-      return option_string;
-    }).join();
+      return optionString;
+    }).join(' ');
 
     return includeBlank ? '<option value=""></option>' + options : options;
   },
@@ -368,7 +367,7 @@ var HTMLUtil = {
     var element = $(selectElement);
 
     element.html(optionsString);
-    element.attr('disabled', element.options.length > 0);
+    element.attr('disabled', $('option', element).length == 0);
   }
 }
 
@@ -560,9 +559,9 @@ var Search = {
 
       if($('#filter_box').length > 0) {
         $('#filter_box').hide();
-        $(search).fadeIn(300, function() { $('#search_query').focus(); });
+        $(search).fadeIn(300, function() {$('#search_query').focus();});
       } else {
-        search.fadeIn(300, function() { $('#search_query').focus(); });
+        search.fadeIn(300, function() {$('#search_query').focus();});
       }
 
       $('#show_search_link').hide();
@@ -653,7 +652,7 @@ jQuery(function($) {
     } else {
       $(this).datepicker({
         showOn: 'both',
-        onSelect: function() { $(this).datepicker('hide'); }
+        onSelect: function() {$(this).datepicker('hide');}
       }).focus();
     }
   });
@@ -721,4 +720,11 @@ jQuery(function($) {
       });
     }
   });
+  
+  $('#loading').bind({
+    ajaxStart: function() { $(this).show(); },
+    ajaxStop: function() { $(this).hide(); }
+  });
+  
+  AutoComplete.observeAll();
 });
