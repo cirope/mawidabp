@@ -10,7 +10,7 @@ class FileModel < ActiveRecord::Base
     :url => '/private/:organization_id/:class/:id/:basename.:extension'
 
   # Restricciones
-  validates_attachment_size :file, :less_than => 10.megabytes,
+  validates_attachment_size :file, :less_than => 20.megabytes,
     :message => lambda { I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes) }
   validates :file_file_name, :file_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
