@@ -1,26 +1,36 @@
 <!--[form:parameter]-->
 <%= form_for @parameter, :url => parameter_path(params[:type], @parameter),
   :html => {:method => :put} do |f| %>
+  <%= content_for :js_extra do %>
+    <%= raw "var parameter_value = \"#{escape_javascript(
+      render(:partial => 'parameter_value', :locals => {:id => 'NEW_RECORD', :item => ['', '']})
+    )}\";" %>
+  <% end %>
   <%= f.error_messages %>
   <div class="form_column_left">
   <p class="form_item">
-    <%= label nil, :parameter_name, Parameter.human_attribute_name('name'),
+    <%= label nil, :parameter_name, Parameter.human_attribute_name(:name),
         :class => :inline %>
     <%= text_field nil, :parameter_name,
         :value => t("parameter.#{@parameter.name}"), :readonly => true,
         :size => nil, :class => :inline_item %>
   </p>
   <% if @parameter.value.kind_of? Array %>
-    <div id="parameter_value" class="items">
-    <% @parameter.value.each do |item| %>
-      <% if item.kind_of?(Array) && item.size == 2 %>
-        <%= render :partial => 'parameter_value', :locals => {:number => rand(), :item => item} %>
+    <div id="parameter_values" class="items">
+      <% count = 0 %>
+      <% @parameter.value.each do |item| %>
+        <% if item.kind_of?(Array) && item.size == 2 %>
+          <%= render :partial => 'parameter_value', :locals => {
+            :id => (count += 1), :item => item
+          } %>
+        <% end %>
       <% end %>
-    <% end %>
     </div>
-    
+  
     <p class="add_item">
-      <%= add_parameter_value_link t(:'parameter.add_value') %>
+      <%= link_to t(:'parameter.add_value'), '#',
+        :'data-template' => :parameter_value, :'data-event' => 'addNestedItem',
+        :'data-container' => '#parameter_values' %>
     </p>
   <% else %>
     <p>

@@ -50,3 +50,8 @@
   <%= link_to t(:'label.list'), detracts_path %> |
   <%= link_to_back %>
 </div>
+<script type="text/javascript">
+  $('a.show_last_detracts').live('ajax:success', function(event, data) {
+    $('#last_detracts').html(data);
+  });
+</script>

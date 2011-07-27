@@ -708,6 +708,7 @@ es:
     correctly_updated: "Registro de ayuda en línea actualizado correctamente."
     stale_object_error: "El registro de ayuda en línea no fue actualizado, intente nuevamente."
     link_title: "Haga click para ver la ayuda en línea de este elemento"
+    inline_title: 'Ayuda'
 
   login_record:
     index_title: "Registros de ingreso"

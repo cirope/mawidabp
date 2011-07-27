@@ -43,7 +43,7 @@
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :order, :class => :sort_number %>
-      <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
+      <%= insert_record_link(f, :'data-event' => 'insertRecordSubitem',
         :'data-target' => :'.procedure_control_subitem',
         :'data-parent' => :procedure_control_item) %> |
       <%= remove_item_link(f) %>

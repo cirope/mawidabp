@@ -204,7 +204,7 @@ var Helper = {
      * Muestra el último ítem que cumple con la regla de CSS
      */
   showLastItem: function(cssRule) {
-    Helper.showItem($(cssRule).last());
+    Helper.showItem($(cssRule + ':last'));
   },
 
   /**
@@ -227,7 +227,7 @@ var Helper = {
   },
 
   showOrHideWithArrow: function(elementId) {
-    Helper.toggleItem(elementId, function() {
+    Helper.toggleItem('#' + elementId, function() {
       var links = [
         '#show_element_' + elementId + '_content',
         '#hide_element_' + elementId + '_content'
@@ -498,10 +498,6 @@ var Observer = {
   }
 }
 
-// Funciones para mostrar las ayudas en línea (se completa dinámico desde el
-// partial)
-var PopupListener = {}
-
 // Funciones relacionadas con la búsqueda
 var Search = {
   observe: function() {
@@ -583,25 +579,6 @@ var Util = {
   },
 
   /**
-     * Agrega al nombre del objeto y el atributo un número aleatorio
-     */
-  randomizeIdsAndNames: function(cssSelector, objectName, attributeNames) {
-    $(cssSelector).each(function() {
-      var rand = new Number(Math.random()).toString().match(/0\.(\d+)/)[1];
-      var count = 0;
-      
-      $('input.' + objectName, $(cssSelector)).each(function() {
-        $(this).attr('id', objectName + '_' + attributeNames[count] + '_' +
-          rand)
-        $(this).attr('name', objectName + '[' + attributeNames[count] + '_' +
-          rand + ']');
-        
-        count++;
-      });
-    });
-  },
-
-  /**
      * Reemplaza todas las ocurrencias de la expresión regular 'regex' con un ID
      * único generado con la fecha y un número incremental
      */
@@ -664,6 +641,24 @@ jQuery(function($) {
     if(workPaperCode == lastWorkPaperCode) {
       lastWorkPaperCode = lastWorkPaperCode.previous(2);
     }
+  });
+  
+  $('.popup').dialog({
+    autoOpen: false,
+    draggable: false,
+    resizable: false,
+    close: function() {
+      $(this).parents('.ui-dialog').show().fadeOut(500);
+    },
+    open: function(){
+      $(this).parents('.ui-dialog').hide().fadeIn(500);
+    }
+  });
+  
+  $('span.popup_link').live('click', function(event) {
+    $($(this).data('helpDialog')).dialog('open').dialog(
+      'option', 'position', [event.pageX, event.pageY]
+    );
   });
 
   if($('#app_content').length > 0) {

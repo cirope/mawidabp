@@ -322,17 +322,5 @@
         <%= t(:'label.cancel') %>
       </a>
     </div>
-    <script type="text/javascript">
-    (function() {
-      PopupListener['inlineundoreiteration'] = function(link) {
-        new Popup(
-          'inline_undo_reiteration', 'show_inline_undo_reiteration',
-          {trigger: 'click', position: 'below'}
-        );
-      }
-
-      PopupListener['inlineundoreiteration']();
-    })();
-    </script>
   <% end %>
 <% end %>

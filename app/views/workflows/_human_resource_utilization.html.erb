@@ -33,7 +33,7 @@
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-      <%= insert_record_link(f, :'data-event' => :insert_record_subitem,
+      <%= insert_record_link(f, :'data-event' => 'insertRecordSubitem',
         :'data-parent' => :workflow_item,
         :class_to_insert => :human_resource_utilization) %> |
       <%= remove_item_link(f, 'human_resource_utilization') %>

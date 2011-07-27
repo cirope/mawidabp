@@ -93,11 +93,11 @@
         <p style="margin-bottom: 1em;">
           <%= link_to t(:'plan.add_material_resource_utilization'), '#',
             :'data-template' => :material_resource_utilization,
-            :'data-event' => :add_nested_subitem, :'data-parent' => :plan_item,
+            :'data-event' => 'addNestedSubitem', :'data-parent' => :plan_item,
             :'data-child' => :material_resource_utilizations %> |
           <%= link_to t(:'plan.add_human_resource_utilization'), '#',
             :'data-template' => :human_resource_utilization,
-            :'data-event' => :add_nested_subitem, :'data-parent' => :plan_item,
+            :'data-event' => 'addNestedSubitem', :'data-parent' => :plan_item,
             :'data-child' => :human_resource_utilizations %>
         </p>
       </div>

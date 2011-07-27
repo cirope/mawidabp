@@ -56,7 +56,7 @@
         <p style="margin-bottom: 1em;">
           <%= link_to t(:'best_practice.add_control_objective'), '#',
             :'data-template' => :control_objective,
-            :'data-event' => :add_nested_subitem,
+            :'data-event' => 'addNestedSubitem',
             :'data-parent' => :process_control,
             :'data-child' => :control_objectives %>
         </p>
@@ -66,5 +66,5 @@
 </div>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
 <% end %>
