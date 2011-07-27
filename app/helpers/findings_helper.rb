@@ -103,7 +103,7 @@ module FindingsHelper
           :alt => t(:'finding.show_status_change_history'),
           :title => t(:'finding.show_status_change_history')
         ),
-        "Element.showOrHide('#{dom_id}')", :class => :image_link
+        "('##{dom_id}').slideToggle()", :class => :image_link
       ), :style => 'margin-left: .25em;'
     )
   end

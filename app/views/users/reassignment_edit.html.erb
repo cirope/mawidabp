@@ -3,7 +3,8 @@
   <p class="form_item">
     <%= content_tag :label, t(:'user.reassign_with_findings'),
       :class => :inline, :for => :user_with_findings, :style => 'width: 40em;' %>
-    <%= check_box_tag 'user[with_findings]', 1, true, :class => :inline_item %>
+    <%= check_box_tag 'user[with_findings]', 1, true, :autofocus => true,
+      :class => :inline_item %>
   </p>
   <p class="form_item">
     <%= content_tag :label, t(:'user.reassign_with_reviews'),
@@ -14,7 +15,7 @@
   <% unless @user.reallocation_errors.blank? %>
     <p style="margin: 1em 0em;">
       <%= link_to_function t(:'label.details'),
-        "$('error_details').showOrHide()", :class => 'bold red' %>
+        "$('#error_details').slideToggle()", :class => 'bold red' %>
       <div id="error_details" style="display: none; margin-top: 1em;">
         <%= array_to_ul(@user.reallocation_errors, :class => :raw_list) %>
       </div>
@@ -24,30 +25,30 @@
   <h1><%= t(:'user.new_user_label') %></h1>
   <div class="form_column_left">
     <div class="search">
-      <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id_item %>
-      <%= text_field_with_auto_complete(:user, :user_data,
-        {:id => 'autocomplete_user_id', :class => :search,
-        :title => t(:'label.search'), :value => nil},
-        {:indicator => :loading, :skip_style => true,
-        :url => auto_complete_for_user_users_path,
-        :after_update_element => 'AutoComplete.itemSelected',
-        :param_name => 'user_data'}) %>
+      <%= f.text_field :user_data,
+        :id => 'autocomplete_user_id',
+        :value => nil,
+        :class => [:search, :autocomplete_field].join(' '),
+        :title => t(:'label.search'),
+        :autocomplete => :off,
+        :'data-autocomplete-url' => auto_complete_for_user_users_path %>
+      <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id %>
     </div>
   </div>
 
   <h1 class="clear"><%= t(:'user.old_user_label') %></h1>
   <p>
-    <b><%= User.human_attribute_name 'user' %>:</b>
+    <b><%= User.human_attribute_name :user %>:</b>
     <%=h @user.user %>
   </p>
 
   <p>
-    <b><%= User.human_attribute_name 'name' %>:</b>
+    <b><%= User.human_attribute_name :name %>:</b>
     <%=h @user.name %>
   </p>
 
   <p>
-    <b><%= User.human_attribute_name 'last_name' %>:</b>
+    <b><%= User.human_attribute_name :last_name %>:</b>
     <%=h @user.last_name %>
   </p>
   <p>

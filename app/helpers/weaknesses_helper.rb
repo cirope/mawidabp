@@ -15,7 +15,7 @@ module WeaknessesHelper
       dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
 
       out << link_to_function(t(:'weakness.previous_follow_up_dates'),
-        "$('previous_follow_up_dates').showOrHide()")
+        "$('#previous_follow_up_dates').slideToggle()")
       
       out << content_tag(:div, content_tag(:ol, list),
         :id => :'previous_follow_up_dates', :style => 'display: none; margin-bottom: 1em;')

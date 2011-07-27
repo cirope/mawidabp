@@ -331,12 +331,11 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_not_nil review_data
-    assert_not_nil review_data['review']
-    assert_not_nil review_data['review']['score_text']
-    assert_not_nil review_data['review']['plan_item']
-    assert_not_nil review_data['review']['plan_item']['project']
-    assert_not_nil review_data['review']['business_unit']
-    assert_not_nil review_data['review']['business_unit']['name']
+    assert_not_nil review_data['score_text']
+    assert_not_nil review_data['plan_item']
+    assert_not_nil review_data['plan_item']['project']
+    assert_not_nil review_data['business_unit']
+    assert_not_nil review_data['business_unit']['name']
   end
 
   test 'plan item data' do

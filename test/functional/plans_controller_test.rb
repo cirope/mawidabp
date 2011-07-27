@@ -403,7 +403,6 @@ class PlansControllerTest < ActionController::TestCase
     end
 
     assert_not_nil resource_data
-    assert_not_nil resource_data['resource']
-    assert_not_nil resource_data['resource']['cost_per_unit']
+    assert_not_nil resource_data['cost_per_unit']
   end
 end

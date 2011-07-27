@@ -22,9 +22,6 @@ jQuery(function($) {
 
       if(originalText) {$(this).html(originalText);}
     },
-    showOrHide: function(duration) {
-      $(this).slideToggle(duration);
-    },
     toggleContent: function(originalText, alternateText) {
       $(this).data('mw-original-text', originalText);
       $(this).data('mw-alternate-text', alternateText);

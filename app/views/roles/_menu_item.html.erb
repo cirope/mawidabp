@@ -1,29 +1,22 @@
 <% unless menu_item.exclude_from_privileges %>
-  <% privilege = @role.privileges.detect {|p| p.module == menu_item.menu_name} ||
+  <% privilege = @role.privileges.detect { |p| p.module == menu_item.menu_name } ||
     @role.privileges.build(:module => menu_item.menu_name) %>
   <%= role_form.fields_for :privileges, privilege do |f| %>
-  <% parent_name = menu_item.parent.try(:menu_name) %>
-  <tr id="<%= menu_item.menu_name %>" class="menu_item highlight_on_hover <%= 'bold' unless menu_item.parent %>">
-    <td>
-      <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= raw 'class="red bold"' if privilege.errors.size > 0 %>>
-        <%= menu_item.to_s %>
-      </span>
-      <%= f.hidden_field :module %>
-      <%= f.hidden_field :id unless privilege.new_record? %>
-    </td>
-    <td>
-      <%= f.check_box :read, :class => "read_check #{parent_name}" %>
-    </td>
-    <td>
-      <%= f.check_box :modify, :class => "modify_check #{parent_name}" %>
-    </td>
-    <td>
-      <%= f.check_box :erase, :class => "erase_check #{parent_name}" %>
-    </td>
-    <td>
-      <%= f.check_box :approval, :class => "approval_check #{parent_name}" %>
-    </td>
-  </tr>
+    <% parent_name_attribute = "data-parent=\"#{menu_item.parent.try(:menu_name)}\"" if menu_item.parent.try(:menu_name) %>
+    <% classes = ['menu_item', 'highlight_on_hover', ('bold' unless menu_item.parent)].compact %>
+    <tr id="<%= menu_item.menu_name %>" class="<%= classes.join(' ') %>" <%= raw parent_name_attribute %>>
+      <td>
+        <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %> <%= raw 'class="red bold"' if privilege.errors.size > 0 %>>
+          <%= menu_item.to_s %>
+        </span>
+        <%= f.hidden_field :module %>
+        <%= f.hidden_field :id unless privilege.new_record? %>
+      </td>
+      <td><%= f.check_box :read, :'data-type' => :read %></td>
+      <td><%= f.check_box :modify, :'data-type' => :modify %></td>
+      <td><%= f.check_box :erase, :'data-type' => :erase %></td>
+      <td><%= f.check_box :approval, :'data-type' => :approval %></td>
+    </tr>
   <% end %>
   <% menu_item.children.each do |submenu_item| %>
     <%= render :partial => 'menu_item', :locals => {

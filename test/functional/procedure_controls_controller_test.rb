@@ -219,10 +219,9 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert_response :success
     control_objective = ActiveSupport::JSON.decode(@response.body)
     assert_equal control_objectives(:iso_27000_security_policy_3_1).name,
-      control_objective['control_objective']['name']
+      control_objective['name']
     assert_equal control_objectives(:iso_27000_security_policy_3_1).
-      control.control,
-      control_objective['control_objective']['control']['control']
+      control.control, control_objective['control']['control']
   end
 
   test 'get procedure controls' do
