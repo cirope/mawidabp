@@ -165,10 +165,11 @@ var Helper = {
      */
   makeSortable: function(elementId, elements, handles) {
     $(elementId).sortable({
+      axis: 'y',
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() {FormUtil.completeSortNumbers();}
+      stop: function() { FormUtil.completeSortNumbers(); }
     });
   },
 
@@ -659,6 +660,8 @@ jQuery(function($) {
     $($(this).data('helpDialog')).dialog('open').dialog(
       'option', 'position', [event.pageX, event.pageY]
     );
+    
+    return false;
   });
 
   if($('#app_content').length > 0) {

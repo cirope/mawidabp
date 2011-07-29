@@ -9,7 +9,7 @@
     <p>
       <%= rc_f.label :name, raw(ResourceClass.human_attribute_name(:name) +
           show_inline_help_for(:resource_class_name)) %>
-      <%= rc_f.text_field :name, :maxlength => 255, :size => 10 %>
+      <%= rc_f.text_field :name, :maxlength => 255, :autofocus => true %>
     </p>
     <p class="form_item">
       <%= rc_f.label :resource_class_type, nil, :class => :inline %>
@@ -50,7 +50,7 @@
   <p class="add_item">
     <%= link_to t(:'resource_class.add_resource'), '#',
       :'data-template' => :resource, :'data-event' => 'addNestedItem',
-      :'data-container' => :resources %>
+      :'data-container' => '#resources' %>
   </p>
 
   <div style="display:none">

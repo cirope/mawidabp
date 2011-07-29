@@ -46,7 +46,7 @@
   </div>
   <div class="form_column_right">
     <p>
-      <%= Plan.human_attribute_name('estimated_amount') %>:
+      <%= Plan.human_attribute_name :estimated_amount %>:
       <b><%= t(:'number.currency.format.unit') %><span id="estimated_amount"><%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %></span></b>
       <% unless params[:business_unit_type].blank? %>
         <%= link_to_function t(:'plan.calculate_estimated_amount'),
@@ -145,26 +145,22 @@
 <% end %>
 <!--[eoform:plan] -->
 <script type="text/javascript">
-  Helper.makeSortable('plan_items', '#plan_items div.plan_item', '#plan_items a.move');
+  Helper.makeSortable('#plan_items', 'div.plan_item', 'a.move');
 
   function calculateEstimatedAmount() {
-    var estimatedElement = $('estimated_amount');
     var estimatedTotal = 0;
 
-    $$('input[name*=cost_per_unit]').each(function(e) {
-      var value = $F(e).sub(/^[^\d.]+/, '');
-      var unitsString = $F($(e).up('div.item_field').previous(
-        'div.item_field').down('input[name*=units]')).sub(/^[^\d.]+/, '');
-      var units = unitsString.match(/^[.\d+]?\d+/) ?
-        parseFloat(unitsString) : 0;
+    $('input[name$="[cost_per_unit]"]').each(function(i, e) {
+      var value = $(e).val();
+      var unitsString =
+        $(e).parents('.plan_item').find('input[name$="[units]"]:first').val();
+      var units = parseFloat(unitsString) || 0;
 
-      estimatedTotal += value.match(/^[.\d+]?\d+/) ?
-        parseFloat(value) * units : 0;
+      estimatedTotal += (parseFloat(value) || 0) * units;
     });
 
-    estimatedElement.update(estimatedTotal.toFixed(2));
-    new Effect.Highlight(estimatedElement, {
-      queue: { position: 'end', scope: 'plan_cost', limit: 1 }
-    });
+    $('#estimated_amount').html(
+      estimatedTotal.toFixed(2)
+    ).stop(true, true).effect('highlight', {}, 2000);
   }
 </script>
