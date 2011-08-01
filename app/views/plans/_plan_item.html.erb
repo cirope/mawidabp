@@ -52,6 +52,7 @@
       :class => (:error_field unless f.object.errors[:predecessors].blank?) %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
+      <%= f.hidden_field :id %>
       <%= insert_record_link(f) %> |
       <%= link_to_move %>
       <% unless f.object.try(:review) %>

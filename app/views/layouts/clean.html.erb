@@ -21,6 +21,6 @@
     <div class="clear" style="margin: 0px; padding: 0px;">&nbsp;</div>
     <%= render :partial => 'shared/notice' if flash.notice %>
     <%= render :partial => 'shared/alert' if flash.alert %>
-    <%= content_for :extra_bottom %>
+    <%= yield :extra_bottom %>
   </body>
 </html>

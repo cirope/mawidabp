@@ -1,21 +1,14 @@
 jQuery(function($) {
   var methods = {
     downForIdFromName: function() {
-      var e = $(this);
-      var id = -1;
+      var id;
+      var name = $(this).find('[name$="[id]"]:first').attr('name');
 
-      do {
-        var nameElement = $('*[name]:not([data-mw-without-id])', e);
-        var name = nameElement.attr('name');
+      if(name.match(/.*\[(\d+)\]/)) {
+        id = name.match(/.*\[(\d+)\]/)[1];
+      }
 
-        if(name.match(/.*\[(\d+)\]/)) {
-          id = name.match(/.*\[(\d+)\]/)[1];
-        } else {
-          nameElement.data('mw-without-id', true);
-        }
-      } while(name && id == -1);
-
-      return id != -1 ? id : null;
+      return id;
     },
     resetToOriginalText: function() {
       var originalText = $(this).data('mw-original-html');

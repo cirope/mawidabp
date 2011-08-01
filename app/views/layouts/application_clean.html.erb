@@ -16,7 +16,7 @@
     <%= javascript_tag do %>
       <%= raw "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
       <%= raw "State.validationFailedMessage = '#{t(:'message.validation_failed_message')}';" %>
-      <%= content_for :js_extra %>
+      <%= yield :js_extra %>
     <% end %>
   </head>
   <body>
@@ -51,8 +51,8 @@
       </div>
     </div>
     <%= javascript_tag do %>
-      <%= content_for :js_extra_bottom %>
+      <%= yield :js_extra_bottom %>
     <% end %>
-    <%= content_for :extra_html_bottom %>
+    <%= yield :extra_html_bottom %>
   </body>
 </html>

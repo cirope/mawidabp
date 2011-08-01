@@ -1,7 +1,7 @@
 <!--[form:procedure_control]-->
 <%= form_for @procedure_control do |pc_f| %>
-  <% js_extra = "var procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
-  <% js_extra << 'var procedureControlItemHash = new Hash();' %>
+  <% js_extra = 'var procedureControlItemHash = {};' %>
+  <% js_extra << "\nvar procedure_control_item='#{generate_template(pc_f, :procedure_control_items)}';" %>
 
   <%= pc_f.error_messages %>
 
@@ -52,7 +52,7 @@
         <% pci_template ||= generate_template(pci_f,
           :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
           :locals => {:control_objectives => []}) unless pci_template == 0 %>
-        <% js_extra << "var procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
+        <% js_extra << "\nvar procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
         <% pci_template = 0 %>
         <%= render :partial => 'procedure_control_item', :locals =>
           {:f => pci_f, :is_dynamic => false} %>
@@ -64,11 +64,11 @@
     <%= link_to t(:'procedure_control.add_procedure_control_item'), '#',
       :'data-template' => :procedure_control_item,
       :'data-event' => 'addNestedItem',
-      :'data-container' => :procedure_control_items %>
+      :'data-container' => '#procedure_control_items' %>
   </p>
 
   <div style="display:none">
-  <%= pc_f.hidden_field :lock_version %>
+    <%= pc_f.hidden_field :lock_version %>
   </div>
 
   <p>
@@ -81,13 +81,13 @@
 <!--[eoform:procedure_control] -->
 <script type="text/javascript">
   function clearControlObjectives(procedure_control_subitems_id) {
-    $$('#' + procedure_control_subitems_id + ' select.control_objective').each(
-      function(e) {
-        e.selectedIndex = 0;
-        e.disable();
+    $('#' + procedure_control_subitems_id + ' select.control_objective').each(
+      function(i, e) {
+        $(e).val('');
+        $(e).attr('disabled', true);
       }
     );
 
-    $$('#' + procedure_control_subitems_id + ' textarea').invoke('clear');
+    $('#' + procedure_control_subitems_id + ' textarea').val('');
   }
 </script>

@@ -55,9 +55,9 @@ var EventHandler = {
      * Agrega un subitem dentro de un ítem
      */
   addNestedSubitem: function(e) {
-    var parent = '.' + e.data('parent');
-    var child = '.' + e.data('child');
-    var childContainer = $(child, e.parents(parent));
+    var parent = '.' + e.data('parent') + ':first';
+    var child = '.' + e.data('child') + ':first';
+    var childContainer = e.parents(parent).find(child);
     var parentObjectId = e.parents(parent).mw('downForIdFromName');
     var template = eval(e.data('template'));
 
@@ -105,7 +105,7 @@ var EventHandler = {
      */
   insertRecordSubitem: function(e) {
     var target = e.data('target');
-    var parent = '.' + e.data('parent');
+    var parent = '.' + e.data('parent') + ':first';
     var parentObjectId = e.parents(parent).mw('downForIdFromName');
     var template = eval(e.data('template'));
 

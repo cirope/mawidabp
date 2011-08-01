@@ -410,7 +410,7 @@ module ApplicationHelper
   def insert_record_link(fields, user_options = {})
     options = {
       :label => t(:'label.insert_record_item'),
-      :'data-event' => :insert_record_item
+      :'data-event' => 'insertRecordItem'
     }.merge(user_options)
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
     
