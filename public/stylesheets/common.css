@@ -793,6 +793,10 @@ div.nested_items > div.item_column > h3 {
   padding-left: 17px;
 }
 
+div.plan_item div.hidden_items {
+  margin-left: 3em;
+}
+
 div.search {
   padding-right: 16px;
 }

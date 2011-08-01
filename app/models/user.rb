@@ -245,6 +245,10 @@ class User < ActiveRecord::Base
       end
     end
   end
+  
+  def cost_per_unit
+    self.resource.try(:cost_per_unit)
+  end
 
   def informal_name(from = nil)
     version = self.version_of from

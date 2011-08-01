@@ -148,9 +148,9 @@ class PlansController < ApplicationController
     end
   end
 
-  # * POST /plans/auto_complete_for_business_unit_business_unit_id
+  # * GET /plans/auto_complete_for_business_unit_business_unit_id
   def auto_complete_for_business_unit_business_unit_id
-    @tokens = params[:business_unit_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{BusinessUnitType.table_name}.organization_id = :organization_id"
@@ -178,11 +178,15 @@ class PlansController < ApplicationController
         "#{BusinessUnitType.table_name}.name ASC"
       ]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @business_units }
+    end
   end
 
-  # * POST /plans/auto_complete_for_user
+  # * GET /plans/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ["#{Organization.table_name}.id = :organization_id"]
     parameters = {:organization_id => @auth_organization.id}
@@ -201,6 +205,14 @@ class PlansController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json {
+        render :json => @users.to_json(
+          :methods => [:label, :informal, :cost_per_unit]
+        )
+      }
+    end
   end
 
   # * GET /plans/resource_data/1

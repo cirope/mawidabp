@@ -5,7 +5,11 @@ module PlansHelper
     form.grouped_collection_select(:resource_id, resource_classes, :resources,
       :to_s, :id, :to_s,
       {:prompt => true},
-      {:class => (:inline_item if inline), :id => "#{id}_resource_id"})
+      {
+        :class => (:inline_item if inline), :id => "#{id}_resource_id",
+        :autofocus => true
+      }
+    )
   end
 
   def show_plan_item_info(plan_item)

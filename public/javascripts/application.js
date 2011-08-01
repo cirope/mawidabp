@@ -658,7 +658,10 @@ jQuery(function($) {
   
   $('span.popup_link').live('click', function(event) {
     $($(this).data('helpDialog')).dialog('open').dialog(
-      'option', 'position', [event.pageX, event.pageY]
+      'option', 'position', [
+        event.pageX - $(window).scrollLeft(),
+        event.pageY - $(window).scrollTop()
+      ]
     );
     
     return false;

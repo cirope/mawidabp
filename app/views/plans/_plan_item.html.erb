@@ -17,19 +17,18 @@
     <div class="item_field" style="width: 20%;">
       <% unless f.object.business_unit %>
       <div class="search">
-        <% errors_on_business_unit = f.object.errors[:business_unit_id] %>
+        <% field_classes = [:search, :autocomplete_field] %>
+        <% field_classes << :error_field unless f.object.errors[:business_unit_id].blank? %>
+        <%= text_field_tag 'plan_item[business_unit_data]', '',
+          :id => "plan_item_business_unit_#{id}",
+          :class => field_classes.join(' '),
+          :title => t(:'label.search'),
+          :autocomplete => :off,
+          :autofocus => true,
+          :'data-autocomplete-params' => ("{business_unit_type_id: #{@business_unit_type.id}}" if @business_unit_type),
+          :'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
         <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
-          :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id_item %>
-        <%= text_field_with_auto_complete(:plan_item, :business_unit_data,
-          {:id => "plan_item_business_unit_#{id}",
-          :class => "search #{'error_field' unless errors_on_business_unit.blank?}",
-          :title => t(:'label.search'), :value => ''},
-          {:indicator => :loading, :skip_style => true,
-          :url => {:controller => :plans,
-            :action => :auto_complete_for_business_unit_business_unit_id},
-          :after_update_element => 'AutoComplete.itemSelected',
-          :param_name => 'business_unit_data',
-          :parameters => ("business_unit_type_id=#{@business_unit_type.id}" if @business_unit_type)}) %>
+          :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id %>
       </div>
       <% else %>
         <%= text_field_tag "plan_item_business_unit_#{id}",
@@ -105,10 +104,11 @@
   </div>
 </div>
 <script type="text/javascript">
-  Helper.makeSortable('plan_items', '#plan_items div.plan_item',
-    '#plan_items a.move');
   FormUtil.completeSortNumbers();
 </script>
 <% if is_dynamic %>
-<script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<script type="text/javascript">
+  Helper.showItem('#<%= id %>');
+  AutoComplete.observeAll();
+</script>
 <% end %>

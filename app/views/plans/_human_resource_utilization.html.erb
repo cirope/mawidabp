@@ -5,18 +5,18 @@
     <div class="item_field" style="width: 30%;">
       <% if f.object.new_record? %>
         <div class="search">
-          <% errors_on_user = f.object.errors[:resource_id] %>
-          <%= f.hidden_field :resource_id, :value => f.object.resource_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete(:resource_utilization, :user_data,
-            {:id => "resource_utilization_user_#{id}",
-            :class => "search #{'error_field' unless errors_on_user.blank?}",
+          <% field_classes = [:search, :autocomplete_field] %>
+          <% field_classes << :error_field unless f.object.errors[:resource_id].blank? %>
+          <%= text_field_tag 'resource_utilization[user_data]',
+            f.object.resource.try(:full_name_with_resource),
+            :id => "resource_utilization_user_#{id}",
+            :class => field_classes.join(' '),
             :title => t(:'label.search'),
-            :value => f.object.resource.try(:full_name_with_resource)},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_user},
-            :after_update_element => :autocompleteUserAndCost,
-            :param_name => 'user_data'}) %>
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-url' => auto_complete_for_user_plans_path(:format => :json) %>
+          <%= f.hidden_field :resource_id, :value => f.object.resource_id,
+            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
         </div>
       <% else %>
         <%= f.hidden_field :resource_id, :value => f.object.resource_id,
@@ -42,5 +42,8 @@
   </div>
 </div>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">
+    Helper.showItem('#<%= id %>');
+    AutoComplete.observeAll();
+  </script>
 <% end %>

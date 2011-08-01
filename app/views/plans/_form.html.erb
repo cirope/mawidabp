@@ -1,20 +1,3 @@
-<script type="text/javascript">
-  function autocompleteUserAndCost(text, li) {
-    AutoComplete.itemSelected(text, li);
-
-    var objectId = $(li).id.strip().match(/id_(\d+)$/)[1];
-    var costPerUnit = $F("cost_of_" + objectId);
-    var jumps = 0;
-    var costField;
-
-    do {
-      costField = $(text).up('div.item_field').next('div.item_field',
-        jumps++).down('input[name*=cost_per_unit]');
-    } while(!costField);
-
-    costField.setValue(costPerUnit);
-  }
-</script>
 <!--[form:plan]-->
 <%= form_for @plan do |p_f| %>
   <% content_for :js_extra do %>
@@ -116,7 +99,7 @@
 
     <p class="add_item">
       <%= link_to t(:'plan.add_plan_item'), '#', :'data-template' => :plan_item,
-        :'data-event' => 'addNestedItem', :'data-container' => :plan_items %>
+        :'data-event' => 'addNestedItem', :'data-container' => '#plan_items' %>
     </p>
   <% end %>
 
@@ -145,22 +128,33 @@
 <% end %>
 <!--[eoform:plan] -->
 <script type="text/javascript">
+function calculateEstimatedAmount() {
+  var estimatedTotal = 0;
+
+  $('input[name$="[cost_per_unit]"]').each(function(i, e) {
+    var value = $(e).val();
+    var unitsString = $(e).parents('.item').find('input[name$="[units]"]').val();
+    var units = parseFloat(unitsString) || 0;
+
+    estimatedTotal += (parseFloat(value) || 0) * units;
+  });
+
+  $('#estimated_amount').html(
+    estimatedTotal.toFixed(2)
+  ).stop(true, true).effect('highlight', {}, 2000);
+}
+
+jQuery(function() {
+  $('input.autocomplete_field').live('autocomplete:update', function() {
+    var item = $(this).data('item');
+    
+    if (item.cost_per_unit) {
+      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+        item.cost_per_unit
+      );
+    }
+  });
+  
   Helper.makeSortable('#plan_items', 'div.plan_item', 'a.move');
-
-  function calculateEstimatedAmount() {
-    var estimatedTotal = 0;
-
-    $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-      var value = $(e).val();
-      var unitsString =
-        $(e).parents('.plan_item').find('input[name$="[units]"]:first').val();
-      var units = parseFloat(unitsString) || 0;
-
-      estimatedTotal += (parseFloat(value) || 0) * units;
-    });
-
-    $('#estimated_amount').html(
-      estimatedTotal.toFixed(2)
-    ).stop(true, true).effect('highlight', {}, 2000);
-  }
+});
 </script>

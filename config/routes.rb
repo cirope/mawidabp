@@ -237,8 +237,8 @@ MawidaApp::Application.routes.draw do
 
     collection do
       get :resource_data
-      post :auto_complete_for_business_unit_business_unit_id
-      post :auto_complete_for_user
+      get :auto_complete_for_business_unit_business_unit_id
+      get :auto_complete_for_user
     end
   end
 

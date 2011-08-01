@@ -329,66 +329,72 @@ class PlansControllerTest < ActionController::TestCase
 
   test 'auto complete for business_unit business_unit' do
     perform_auth
-    post :auto_complete_for_business_unit_business_unit_id, {
-      :business_unit_data => 'fifth'
+    get :auto_complete_for_business_unit_business_unit_id, {
+      :q => 'fifth', :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:business_units)
-    assert_equal 0, assigns(:business_units).size # Fifth is in another organization
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
+    
+    business_units = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, business_units.size # Fifth is in another organization
+    
+    get :auto_complete_for_business_unit_business_unit_id, {
+      :q => 'one', :format => :json
+    }
+    assert_response :success
+    
+    business_units = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, business_units.size # One only
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
+    
+    get :auto_complete_for_business_unit_business_unit_id, {
+      :q => 'business', :format => :json
+    }
+    assert_response :success
+    
+    business_units = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 4, business_units.size # All in the organization (one, two, three and four)
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
 
-    post :auto_complete_for_business_unit_business_unit_id, {
-      :business_unit_data => 'one'
+    get :auto_complete_for_business_unit_business_unit_id, {
+      :q => 'business',
+      :business_unit_type_id => business_unit_types(:cycle).id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:business_units)
-    assert_equal 1, assigns(:business_units).size # One only
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
-
-    post :auto_complete_for_business_unit_business_unit_id, {
-      :business_unit_data => 'business'
-    }
-    assert_response :success
-    assert_not_nil assigns(:business_units)
-    assert_equal 4, assigns(:business_units).size # All in the organization (one, two, three and four)
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
-
-    post :auto_complete_for_business_unit_business_unit_id, {
-      :business_unit_data => 'business',
-      :business_unit_type_id => business_unit_types(:cycle).id
-    }
-    assert_response :success
-    assert_not_nil assigns(:business_units)
-    assert_equal 2, assigns(:business_units).size # All in the organization (one and two)
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_business_unit_business_unit_id'
+    
+    business_units = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, business_units.size # All in the organization (one and two)
+    assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
   end
 
   test 'auto complete for user' do
     perform_auth
-    post :auto_complete_for_user, { :user_data => 'admin' }
+    get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Administrator
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Administrator
+    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
-    post :auto_complete_for_user, { :user_data => 'blank' }
+    get :auto_complete_for_user, { :q=> 'blank', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 2, assigns(:users).size # Blank and Expired blank
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, users.size # Blank and Expired blank
+    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
-    post :auto_complete_for_user, { :user_data => 'xyz' }
+    post :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 0, assigns(:users).size # None
-    assert_select '#error_body', false
-    assert_template 'plans/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, users.size # None
   end
 
   test 'resource data' do

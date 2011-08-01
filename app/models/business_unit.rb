@@ -8,6 +8,9 @@ class BusinessUnit < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
+  
+  # Alias de atributos
+  alias_attribute :label, :name
 
   # Callbacks
   before_destroy :can_be_destroyed?
@@ -23,6 +26,19 @@ class BusinessUnit < ActiveRecord::Base
   belongs_to :business_unit_type
   has_many :plan_items, :dependent => :destroy
 
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+    
+    super(default_options.merge(options || {}))
+  end
+  
+  def informal
+    self.business_unit_type.try(:name)
+  end
+  
   def can_be_destroyed?
     unless self.plan_items.empty?
       self.errors.add :base,
