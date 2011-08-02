@@ -417,88 +417,93 @@ class ReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for user' do
     perform_auth
-    post :auto_complete_for_user, { :user_data => 'admin' }
+    get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Administrator
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Administrator
+    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
-    post :auto_complete_for_user, { :user_data => 'blank' }
+    get :auto_complete_for_user, { :q => 'blank', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 2, assigns(:users).size # Blank and Expired blank
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, users.size # Blank and Expired blank
+    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
-    post :auto_complete_for_user, { :user_data => 'xyz' }
+    post :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 0, assigns(:users).size # None
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, users.size
   end
 
   test 'auto complete for procedure control subitem' do
     perform_auth
-    post :auto_complete_for_procedure_control_subitem, {
-      :procedure_control_subitem_data => 'ges seg',
-      :period_id => periods(:past_period).id
+    get :auto_complete_for_procedure_control_subitem, {
+      :q => 'ges seg', :period_id => periods(:past_period).id, :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:procedure_control_subitems)
-    assert_equal 2, assigns(:procedure_control_subitems).size # Gestión de la seguridad
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+    
+    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, procedure_control_subitems.size # Gestión de la seguridad
+    assert(
+      procedure_control_subitems.all? do
+        |pcs| (pcs['label'] + pcs['informal']).match /ges.*seg/i
+      end
+    )
 
-    post :auto_complete_for_procedure_control_subitem, {
-      :procedure_control_subitem_data => 'depen',
-      :period_id => periods(:past_period).id
+    get :auto_complete_for_procedure_control_subitem, {
+      :q => 'depen', :period_id => periods(:past_period).id, :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:procedure_control_subitems)
-    assert_equal 1, assigns(:procedure_control_subitems).size # Dependencia del área responsable
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+    
+    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, procedure_control_subitems.size # Dependencia del área responsable
+    assert(
+      procedure_control_subitems.all? do
+        |pcs| (pcs['label'] + pcs['informal']).match /depen/i
+      end
+    )
 
-    post :auto_complete_for_procedure_control_subitem, {
-      :procedure_control_subitem_data => 'xyz',
-      :period_id => periods(:past_period).id
+    get :auto_complete_for_procedure_control_subitem, {
+      :q => 'xyz', :period_id => periods(:past_period).id, :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:procedure_control_subitems)
-    assert_equal 0, assigns(:procedure_control_subitems).size # None
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_procedure_control_subitem'
+    
+    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, procedure_control_subitems.size # None
   end
 
   test 'auto complete for finding relation' do
     perform_auth
-    post :auto_complete_for_finding, {
-      :finding_data => 'O001'
-    }
+    get :auto_complete_for_finding, { :q => 'O001', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size # Se excluye la observación O01 que no tiene informe definitivo
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_finding'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    post :auto_complete_for_finding, {
-      :finding_data => 'O001, 1 2 3'
-    }
+    get :auto_complete_for_finding, { :q => 'O001, 1 2 3', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size # Solo O01 del informe 1 2 3
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_finding'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, findings.size # Solo O01 del informe 1 2 3
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    post :auto_complete_for_finding, {
-      :finding_data => 'x_none',
-    }
+    get :auto_complete_for_finding, { :q => 'x_none', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 0, assigns(:findings).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'reviews/auto_complete_for_finding'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, findings.size # Sin resultados
   end
 end

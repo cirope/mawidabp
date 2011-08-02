@@ -21,12 +21,5 @@
 <% end %>
 
 <script type="text/javascript">
-(function() {
-  Try.these(function() {
-    new Effect.Highlight('suggested_findings', {
-      duration: 2,
-      queue: { position: 'end', scope: 'review', limit: 1 }
-    });
-  });
-}).delay(0.3);
+  $('#suggested_findings').stop(true, true).effect('highlight', {}, 2000);
 </script>

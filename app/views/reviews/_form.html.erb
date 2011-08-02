@@ -128,7 +128,7 @@
       <%= link_to t(:'review.add_user_assignment'), '#',
         :'data-event' => 'addNestedItem',
         :'data-template' => :review_user_assignment,
-        :'data-container' => :review_user_assignments %>
+        :'data-container' => '#review_user_assignments' %>
     </p>
   <% end %>
 
@@ -149,9 +149,9 @@
           </div>
           <script type="text/javascript">
             Helper.makeSortable(
-              'process_control_<%= pc.id %>',
-              '#process_control_<%= pc.id %> div.control_objective_item',
-              '#process_control_<%= pc.id %> a.move'
+              '#process_control_<%= pc.id %>',
+              'div.control_objective_item',
+              'a.move'
             );
           </script>
         <% end %>
@@ -177,7 +177,7 @@
       <%= link_to t(:'review.add_control_objective'), '#',
         :'data-event' => 'addNestedItem',
         :'data-template' => :control_objective,
-        :'data-container' => :control_objectives %>
+        :'data-container' => '#control_objectives' %>
     </p>
   <% end %>
 
@@ -209,12 +209,10 @@
       <%= link_to t(:'review.add_finding_assignment'), '#',
         :'data-event' => 'addNestedItem',
         :'data-template' => :finding_review_assignment,
-        :'data-container' => :finding_review_assignments %> |
+        :'data-container' => '#finding_review_assignments' %> |
       <%= link_to t(:'review.suggest_findings'), @review.plan_item_id ?
-        suggested_findings_review_path(:id => @review.plan_item_id) : '#',
-        :remote => true, :'data-update' => :suggested_findings,
-        :'data-condition' => "$('link_to_suggested_findings').readAttribute('href') != '#'",
-        :id => :link_to_suggested_findings,
+        suggested_findings_review_path(:id => @review.plan_item_id, :format => :html) : '#',
+        :remote => true, :id => :link_to_suggested_findings,
         :class => (:link_without_action unless @review.plan_item_id) %>
     </p>
   <% end %>
@@ -231,69 +229,67 @@
 <!--[eoform:review] -->
 <script type="text/javascript">
 //<![CDATA[
-  if($('review_plan_item_id')) {
-    Event.observe('review_plan_item_id', 'change', function() {
-      var data_url = '<%= plan_item_data_reviews_path %>';
-      var amount_url = '<%= estimated_amount_reviews_path %>';
-      var element = $('review_plan_item_id');
+  $('#review_plan_item_id').change(function() {
+    var data_url = '<%= plan_item_data_reviews_path %>';
+    var amount_url = '<%= estimated_amount_reviews_path %>';
+    var element = $(this);
 
-      $('business_unit').setValue('');
-      $('audit_type').setValue('');
+    $('#business_unit').val('');
+    $('#audit_type').val('');
+
+    if(!$(this).val().match(/^\s*$/)) {
+      Helper.showLoading(element);
       
-      if(!$F(this).blank()) {
-        new Ajax.Request(data_url, {
-          method: 'get',
-          parameters: {id: $F(this)},
-          onCreate: function() {
-            Helper.showLoading(element);
-          },
-          onSuccess: function(transport) {
-            var planItemData = transport.responseJSON;
+      $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
+        $('#business_unit').val(data.business_unit_name);
+        $('#audit_type').val(data.business_unit_type);
 
-            $('business_unit').setValue(planItemData.business_unit_name);
-            $('audit_type').setValue(planItemData.business_unit_type);
-
-            if(planItemData.link_to_suggested_findings) {
-              $('link_to_suggested_findings').writeAttribute(
-                'href', planItemData.link_to_suggested_findings);
-              $('link_to_suggested_findings').removeClassName(
-                'link_without_action');
-            } else {
-              $('link_to_suggested_findings').writeAttribute('href', '#');
-              $('link_to_suggested_findings').addClassName(
-                'link_without_action');
-            }
-          },
-          onComplete: function() {
-            Helper.hideLoading(element);
-          }
-        });
-
-        new Ajax.Updater({ success: 'estimated_amount' }, amount_url, {
-          method: 'get',
-          parameters: { id: $F(this) },
-          onCreate: function() { Helper.showLoading(element); },
-          onComplete: function() {
-            Helper.hideLoading(element);
-            new Effect.Highlight('estimated_amount', {
-              duration: 2,
-              queue: { position: 'end', scope: 'review', limit: 1 }
-            });
-          }
-        });
-      } else {
-        $('link_to_suggested_findings').writeAttribute('href', '#');
-        $('link_to_suggested_findings').addClassName('link_without_action');
-      }
-    });
-  }
+        if(data.link_to_suggested_findings) {
+          $('#link_to_suggested_findings').attr(
+            'href', data.link_to_suggested_findings
+          );
+          $('#link_to_suggested_findings').removeClass('link_without_action');
+        } else {
+          $('#link_to_suggested_findings').attr('href', '#');
+          $('#link_to_suggested_findings').addClass('link_without_action');
+        }
+      }).complete(function() {
+        Helper.hideLoading(element);
+      });
+      
+      $.get(amount_url, { id: element.val() }, function(data) {
+        $('#estimated_amount').html(data);
+      }).complete(function() {
+        Helper.hideLoading(element);
+        $('#estimated_amount').stop(true, true).effect('highlight', {}, 2000);
+      });
+    } else {
+      $('#link_to_suggested_findings').attr('href', '#');
+      $('#link_to_suggested_findings').addClass('link_without_action');
+    }
+  });
+  
+  $('#link_to_suggested_findings').click(function() {
+    if($('#link_to_suggested_findings').attr('href') == '#') {
+      return false;
+    }
+  });
+  
+  $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
+    $('#suggested_findings').html(data);
+  });
+  
+  $('#procedure_control_link').live('ajax:success', function(event, data) {
+    $('#procedure_control_data').html(data);
+  });
   
   Helper.makeSortable(
-    'control_objective_items',
-    '#control_objective_items div.process_control',
-    '#control_objective_items a.process_control_move'
+    '#control_objective_items', 'div.process_control', 'a.process_control_move'
   );
+  
   FormUtil.completeSortNumbers();
+  
+  AutoComplete.observeAll();
 
   HTMLUtil.stylizeAllInputFiles();
 //]]>

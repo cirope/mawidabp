@@ -31,7 +31,11 @@ var AutoComplete = {
                   content.append($('<span class="label">').text(item.label));
           
                   if(item.informal) {
-                    content.append($('<span class="informal">').text(item.informal));
+                    content.append(
+                      $('<span class="informal">').html(
+                        item.informal.replace(/\n/g, '<br />')
+                      )
+                    );
                   }
 
                   return {label: content.html(), value: item.label, item: item};
@@ -52,7 +56,7 @@ var AutoComplete = {
           
           return false;
         },
-        open: function() {$('.ui-menu').css('width', input.width());}
+        open: function() { $('.ui-menu').css('width', input.outerWidth() - 4); }
       });
       
       input.data('autocomplete')._renderItem = function(ul, item) {

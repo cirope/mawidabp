@@ -6,18 +6,19 @@
       <% if is_dynamic %>
         <div class="search">
           <% errors_on_finding = f.object.errors[:finding_id] | f.object.errors[:finding] %>
-          <%= f.hidden_field :finding_id, :value => f.object.finding_id,
-            :id => "hidden_finding_id_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete(:finding_review_assignment, :finding_data,
-            {:id => "finding_review_assignment_finding_#{id}",
-            :class => "search #{'error_field' unless errors_on_finding.blank?}",
-            :title => t(:'label.search'),
+          <% field_classes = [:search, :autocomplete_field] %>
+          <% field_classes << :error_field unless errors_on_finding.blank? %>
+          <%= text_field_tag 'finding_review_assignment[finding_data]',
+            f.object.finding.try(:to_s),
+            :id => "finding_review_assignment_finding_#{id}",
+            :class => field_classes.join(' '),
             :style => 'width: 95%;',
-            :value => f.object.finding.try(:to_s)},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_finding},
-            :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'finding_data'}) %>
+            :title => t(:'label.search'),
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-url' => auto_complete_for_finding_reviews_path(:format => :json) %>
+          <%= f.hidden_field :finding_id, :value => f.object.finding_id,
+            :id => "hidden_finding_id_#{id}", :class => :autocomplete_id %>
         </div>
       <% end %>
     </div>
@@ -27,5 +28,8 @@
   </div>
 </div>
 <% if is_dynamic %>
-<script type="text/javascript">Helper.showItem('<%= id %>');</script>
+<script type="text/javascript">
+  Helper.showItem('#<%= id %>');
+  AutoComplete.observeAll();
+</script>
 <% end %>

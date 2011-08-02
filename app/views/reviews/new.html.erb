@@ -9,11 +9,12 @@
 <div id="procedure_control_data"></div>
 
 <script type="text/javascript">
-  $('review_period_id').observe('change', function() {
-    BrowserManipulation.changeLocation('<%= new_review_path %>',
-      {period: $F(this)}
+  $('#review_period_id').change(function() {
+    BrowserManipulation.changeLocation(
+      '<%= new_review_path %>',
+      { period: $(this).val() }
     );
     
-    Helper.showLoading(this);
+    Helper.showLoading($(this));
   });
 </script>

@@ -247,9 +247,9 @@ class ReviewsController < ApplicationController
     )
   end
 
-  # * POST /reviews/auto_complete_for_user
+  # * GET /reviews/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ["#{Organization.table_name}.id = :organization_id"]
     parameters = {:organization_id => @auth_organization.id}
@@ -269,11 +269,15 @@ class ReviewsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
   end
 
-  # * POST /reviews/auto_complete_for_finding
+  # * GET /reviews/auto_complete_for_finding
   def auto_complete_for_finding
-    @tokens = params[:finding_data][0..100].split(
+    @tokens = params[:q][0..100].split(
       SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
@@ -308,11 +312,15 @@ class ReviewsController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
+    
+    respond_to do |format|
+      format.json { render :json => @findings }
+    end
   end
 
-  # * POST /reviews/auto_complete_for_procedure_control_subitem
+  # * GET /reviews/auto_complete_for_procedure_control_subitem
   def auto_complete_for_procedure_control_subitem
-    @tokens = params[:procedure_control_subitem_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{BestPractice.table_name}.organization_id = :organization_id",
@@ -341,6 +349,10 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.table_name}.name ASC"
       ]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @procedure_control_subitems }
+    end
   end
 
   # * GET /reviews/estimated_amount/1

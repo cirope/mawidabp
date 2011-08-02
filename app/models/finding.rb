@@ -526,6 +526,8 @@ class Finding < ActiveRecord::Base
     "#{self.review_code} - #{self.control_objective_item.try(:review)}"
   end
   
+  alias_method :label, :to_s
+  
   def to_xml(options = {})
     default_options = {
       :skip_types => true,
@@ -552,6 +554,28 @@ class Finding < ActiveRecord::Base
       
       yield(xml) if block_given?
     end
+  end
+  
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+    
+    super(default_options.merge(options || {}))
+  end
+  
+  def informal
+    text = "<b>#{Finding.human_attribute_name(:description)}</b>: "
+    text << self.description
+    text << "\n<b>#{Finding.human_attribute_name(:review_code)}</b>: "
+    text << self.review_code
+    text << "\n<b>#{Review.model_name.human}</b>: "
+    text << self.control_objective_item.review.to_s
+    text << "\n<b>#{Finding.human_attribute_name(:state)}</b>: "
+    text << self.state_text
+    text << "\n<b>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</b>: "
+    text << self.control_objective_item.control_objective_text
   end
   
   def review_text

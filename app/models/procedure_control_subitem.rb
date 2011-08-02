@@ -1,6 +1,9 @@
 class ProcedureControlSubitem < ActiveRecord::Base
   include ParameterSelector
   
+  # Alias de atributos
+  alias_attribute :label, :control_objective_text
+  
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -55,6 +58,19 @@ class ProcedureControlSubitem < ActiveRecord::Base
     super(attributes)
 
     self.build_control unless self.control
+  end
+  
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+    
+    super(default_options.merge(options || {}))
+  end
+  
+  def informal
+    self.control_objective.try(:process_control).try(:name)
   end
 
   def fill_control_objective_text

@@ -64,10 +64,15 @@ module ReviewsHelper
     procedure_control = ProcedureControl.list_by_period(review.period_id).first
 
     if procedure_control
-      link_to(t(:'review.view_procedure_control_for_the_period'),
-        {:action => :procedure_control_data, :id => procedure_control},
-        :remote => true, :'data-update' => :procedure_control_data,
-        :'data-remote-method' => :get)
+      link_to(
+        t(:'review.view_procedure_control_for_the_period'),
+        {
+          :action => :procedure_control_data,
+          :id => procedure_control,
+          :format => :html
+        },
+        :remote => true, :id => :procedure_control_link
+      )
     else
       content_tag :span, t(:'review.view_procedure_control_for_the_period')
     end
