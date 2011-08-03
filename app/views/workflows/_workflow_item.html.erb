@@ -25,6 +25,7 @@
         :class => (:error_field unless f.object.errors[:predecessors].blank?) %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
+      <%= f.hidden_field :id %>
       <%= insert_record_link(f) %> |
       <%= remove_item_link(f) %> |
       <%= link_to_move %>
@@ -35,15 +36,15 @@
         <div class="column_headers">
           <div class="item_column" style="width: 30%;">
             <h3>
-              <%= ResourceUtilization.human_attribute_name 'resource_id' %>
+              <%= ResourceUtilization.human_attribute_name :resource_id %>
             </h3>
           </div>
           <div class="item_column" style="width: 20%;">
-            <h3><%= ResourceUtilization.human_attribute_name 'units' %></h3>
+            <h3><%= ResourceUtilization.human_attribute_name :units %></h3>
           </div>
           <div class="item_column" style="width: 20%;">
             <h3>
-              <%= ResourceUtilization.human_attribute_name 'cost_per_unit' %>
+              <%= ResourceUtilization.human_attribute_name :cost_per_unit %>
             </h3>
           </div>
           <div class="item_column" style="width: 10%;"></div>
@@ -79,10 +80,7 @@
 </div>
 <% if is_dynamic %>
 <script type="text/javascript">
-  Helper.showItem('<%= id %>');
-
+  Helper.showItem('#<%= id %>');
   FormUtil.completeSortNumbers();
-  Helper.makeSortable('workflow_items', '#workflow_items div.workflow_item',
-    '#workflow_items a.move');
 </script>
 <% end %>

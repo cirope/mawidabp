@@ -151,7 +151,7 @@ MawidaApp::Application.routes.draw do
       get :resource_data
       get :estimated_amount
       get :reviews_for_period
-      post :auto_complete_for_user
+      get :auto_complete_for_user
     end
   end
 

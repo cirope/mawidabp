@@ -389,7 +389,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_equal 2, users.size # Blank and Expired blank
     assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
-    post :auto_complete_for_user, { :q => 'xyz', :format => :json }
+    get :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
     
     users = ActiveSupport::JSON.decode(@response.body)

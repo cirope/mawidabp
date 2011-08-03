@@ -21,27 +21,21 @@
   </div>
 </div>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
 <% end %>
 <script type="text/javascript">
 (function() {
-  var id = '<%= id %>_resource_id';
+  var id = '#<%= id %>_resource_id';
 
-  Event.observe(id, 'change', function() {
+  $(id).change(function() {
     var url = '<%= resource_data_workflows_path %>';
 
     Helper.showLoading(id);
-
-    new Ajax.Request(url, {
-      parameters: {id: $F(id)},
-      method: 'get',
-      onSuccess: function(response) {
-        $('<%= id %>_cost_per_unit').setValue(
-          response.responseJSON.resource.cost_per_unit || '');
-      },
-      onComplete: function() {
-        Helper.hideLoading(id);
-      }
+    
+    $.get(url, { id: $(this).val(), format: 'json' }, function(data) {
+      $('#<%= id %>_cost_per_unit').val(data.cost_per_unit || '');
+    }).complete(function() {
+      Helper.hideLoading(id);
     });
   });
 })();

@@ -163,7 +163,7 @@ class WorkflowsController < ApplicationController
 
   # * POST /workflows/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ["#{Organization.table_name}.id = :organization_id"]
     parameters = {:organization_id => @auth_organization.id}
@@ -182,6 +182,14 @@ class WorkflowsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json {
+        render :json => @users.to_json(
+          :methods => [:label, :informal, :cost_per_unit]
+        )
+      }
+    end
   end
 
   # Lista los informes del periodo indicado, devuelve un Hash en JSON
@@ -194,7 +202,7 @@ class WorkflowsController < ApplicationController
 
     reviews.each { |r| options << [r.identification, r.id] }
 
-    render :json => options.to_json
+    render :json => options
   end
 
   # * GET /workflows/resource_data/1

@@ -78,7 +78,7 @@ var EventHandler = {
 
     e.prev('input[type=hidden].destroy').val('1');
     
-    $('input.sort_number', e.parents(target)).addClass('hidden_sort_number').
+    e.parents(target).find('input.sort_number').addClass('hidden_sort_number').
       removeClass('sort_number');
 
     FormUtil.completeSortNumbers();
@@ -119,9 +119,9 @@ var EventHandler = {
      * Elimina el elemento del DOM
      */
   removeItem: function(e) {
-    Helper.removeItem(e.parents(e.data('target')));
-    
-    FormUtil.completeSortNumbers();
+    Helper.removeItem(e.parents(e.data('target')), function() {
+      FormUtil.completeSortNumbers();
+    });
   },
 
   /**

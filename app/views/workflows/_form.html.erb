@@ -1,20 +1,3 @@
-<script type="text/javascript">
-  function autocompleteUserAndCost(text, li) {
-    AutoComplete.itemSelected(text, li);
-    
-    var objectId = $(li).id.strip().match(/id_(\d+)$/)[1];
-    var costPerUnit = $F("cost_of_" + objectId);
-    var jumps = 0;
-    var costField;
-
-    do {
-      costField = $(text).up('div.item_field').next('div.item_field',
-        jumps++).down('input[name*=cost_per_unit]');
-    } while(!costField);
-
-    costField.setValue(costPerUnit);
-  }
-</script>
 <!--[form:workflow]-->
 <%= form_for @workflow do |w_f| %>
   <% js_extra = "var workflow_item='#{generate_template(w_f, :workflow_items)}';" %>
@@ -132,7 +115,7 @@
 
   <p class="add_item">
     <%= link_to t(:'label.add_item'), '#', :'data-template' => :workflow_item,
-      :'data-event' => 'addNestedItem', :'data-container' => :workflow_items %>
+      :'data-event' => 'addNestedItem', :'data-container' => '#workflow_items' %>
   </p>
 
   <% if @workflow.overloaded? %>
@@ -154,69 +137,67 @@
 <% end %>
 <!--[eoform:workflow] -->
 <script type="text/javascript">
-  FormUtil.completeSortNumbers();
-  Helper.makeSortable('workflow_items', '#workflow_items div.workflow_item',
-    '#workflow_items a.move');
+function calculateCost() {
+  var costElement = $('#workflow_cost');
+  var estimatedCost = 0;
 
-  if($('workflow_period_id')) {
-    Event.observe('workflow_period_id', 'change', function() {
-      var element = $('workflow_review_id');
+  $('input[name$="[cost_per_unit]"]').each(function(i, e) {
+    var unitsString = $(e).parents('.item').find('input[name$="[units]"]').val();
+    var units = parseFloat(unitsString) || 0;
 
-      if($F(this) > 0) {
-          new Ajax.Request('<%= reviews_for_period_workflows_path %>', {
-            method: 'get',
-            parameters: { period: $F(this) },
-            onSuccess: function(transport) {
-              HTMLUtil.updateOptions(element, HTMLUtil.optionsFromArray(
-                transport.responseJSON));
-            },
-            onCreate: function() { Helper.showLoading(element); },
-            onComplete: function() { Helper.hideLoading(null); }
-          });
-      } else {
-        element.selectedIndex = 0;
-        element.disable();
-      }
-    });
-  }
+    estimatedCost += (parseFloat($(e).val()) || 0) * units;
+  });
 
-  if($('workflow_review_id')) {
-    Event.observe('workflow_review_id', 'change', function() {
-      var url = '<%= estimated_amount_workflows_path %>';
-      var element = $('workflow_review_id');
+  costElement.html(
+    estimatedCost.toFixed(2)
+  ).stop(true, true).effect('highlight', {}, 2000);
+}
+  
+jQuery(function() {
+  $('input.autocomplete_field').live('autocomplete:update', function() {
+    var item = $(this).data('item');
 
-      new Ajax.Updater({ success: 'estimated_amount' }, url, {
-        method: 'get',
-        parameters: { id: $F(this) },
-        onCreate: function() { Helper.showLoading(element); },
-        onComplete: function() {
-          Helper.hideLoading(element);
-          new Effect.Highlight('estimated_amount', {duration: 2});
-        }
+    if (item.cost_per_unit) {
+      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+        item.cost_per_unit
+      );
+    }
+  });
+  
+  $('#workflow_period_id').change(function() {
+    var element = $(this);
+
+    if($(this).val() > 0) {
+      var url = '<%= reviews_for_period_workflows_path %>';
+      
+      Helper.showLoading(element);
+      
+      $.get(url, { period: $(this).val(), format: 'json' }, function(data) {
+        HTMLUtil.updateOptions(element, HTMLUtil.optionsFromArray(data));
+      }).complete(function() {
+        Helper.hideLoading(null);
       });
+    } else {
+      element.val('').attr('disabled', true);
+    }
+  });
+  
+  $('#workflow_review_id').change(function() {
+    var url = '<%= estimated_amount_workflows_path %>';
+    var element = $(this);
+    
+    Helper.showLoading(element);
+    
+    $.get(url, { id: $(this).val() }, function(data) {
+      $('#estimated_amount').html(data).stop(true, true).effect(
+        'highlight', {}, 2000
+      );
+    }).complete(function() {
+      Helper.hideLoading(element);
     });
-  }
+  });
 
-  function calculateCost() {
-    var costElement = $('workflow_cost');
-    var estimatedCost = 0;
-
-    $$('input[name*=cost_per_unit]').each(function(e) {
-      if($(e).id != costElement.id) {
-        var value = $F(e).sub(/^[^\d.]+/, '');
-        var unitsString = $F($(e).up('div.item_field').previous(
-          'div.item_field').down('input[name*=units]')).sub(/^[^\d.]+/, '');
-        var units = unitsString.match(/^[.\d+]?\d+/) ?
-          parseFloat(unitsString) : 0;
-
-        estimatedCost += value.match(/^[.\d+]?\d+/) ?
-          parseFloat(value) * units : 0;
-      }
-    });
-
-    costElement.update(estimatedCost.toFixed(2));
-    new Effect.Highlight(costElement, {
-      queue: { position: 'end', scope: 'workflow_cost', limit: 1 }
-    });
-  }
+  Helper.makeSortable('#workflow_items', 'div.workflow_item', 'a.move');
+  FormUtil.completeSortNumbers();
+});
 </script>
