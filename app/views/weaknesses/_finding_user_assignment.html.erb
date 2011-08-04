@@ -5,17 +5,19 @@
     <div class="item_field" style="width: 75%;">
       <% unless readonly %>
         <div class="search">
+          <% field_classes = [:search, :autocomplete_field] %>
+          <% field_classes << :error_field unless (f.object.errors[:user_id] | f.object.errors[:user]).blank? %>
+          <%= text_field_tag 'weakness[nested_user]',
+            f.object.user.try(:full_name_with_function),
+            :id => "weakness_user_#{id}",
+            :class => field_classes.join(' '),
+            :title => t(:'label.search'),
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-params' => ("{weakness_id: #{@weakness.id}}" unless @weakness.new_record?),
+            :'data-autocomplete-url' => auto_complete_for_user_weaknesses_path %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete(:weakness, :nested_user,
-            {:id => "weakness_user_#{id}",
-            :class => "search #{'error_field' unless (f.object.errors[:user_id] | f.object.errors[:user]).blank?}",
-            :title => t(:'label.search'), :value => f.object.user.try(:full_name_with_function)},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_user},
-            :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'user_data',
-            :parameters => ("weakness_id=#{@weakness.id}" unless @weakness.new_record?)}) %>
+            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
         </div>
       <% else %>
         <%= f.hidden_field :user_id, :value => f.object.user_id,
@@ -34,5 +36,8 @@
   </div>
 </div>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">
+    Helper.showItem('#<%= id %>');
+    AutoComplete.observeAll();
+  </script>
 <% end %>

@@ -45,6 +45,7 @@ GEM
     color (1.4.1)
     columnize (0.3.4)
     daemons (1.1.4)
+    dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     execjs (1.2.4)
@@ -162,6 +163,7 @@ DEPENDENCIES
   bundler
   capistrano
   color
+  dynamic_form
   foreigner
   gruff
   jquery-rails

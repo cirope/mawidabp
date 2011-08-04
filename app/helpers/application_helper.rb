@@ -251,7 +251,7 @@ module ApplicationHelper
     search_link = link_to_function t(:'label.search'), 'Search.show()',
       :id => :show_search_link, :title => t(:'message.search_link_title')
 
-    @query.blank? ? search_link : content_tag(:div, search_link,
+    @query.blank? ? search_link : content_tag(:span, search_link,
       :style => 'display: none;')
   end
 

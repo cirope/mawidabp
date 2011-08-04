@@ -27,6 +27,8 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   # Atributos no persistentes
   attr_reader :approval_errors
+  # Alias de atributos
+  alias_attribute :label, :control_objective_text 
 
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?,
@@ -103,6 +105,19 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     self.finished ||= false
     self.build_control unless self.control
+  end
+  
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+    
+    super(default_options.merge(options || {}))
+  end
+  
+  def informal
+    self.review.try(:to_s)
   end
 
   def check_for_final_review(_)

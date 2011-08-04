@@ -19,6 +19,7 @@ gem 'paper_trail'
 gem 'paperclip'
 gem 'rmagick'
 gem 'gruff'
+gem 'dynamic_form'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer

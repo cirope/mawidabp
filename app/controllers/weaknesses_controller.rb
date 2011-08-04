@@ -182,9 +182,9 @@ class WeaknessesController < ApplicationController
     end
   end
 
-  # * POST /weaknesses/auto_complete_for_user
+  # * GET /weaknesses/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ['organizations.id = :organization_id']
     parameters = {:organization_id => @auth_organization.id}
@@ -207,12 +207,15 @@ class WeaknessesController < ApplicationController
         "#{User.table_name}.name ASC"
       ]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
   end
 
-  # * POST /weaknesses/auto_complete_for_finding_relation
+  # * GET /weaknesses/auto_complete_for_finding_relation
   def auto_complete_for_finding_relation
-    @tokens = params[:finding_relation_data][0..100].split(
-      SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+    @tokens = params[:q][0..100].split(SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
       ("#{Finding.table_name}.id <> :finding_id" unless params[:finding_id].blank?),
@@ -248,12 +251,15 @@ class WeaknessesController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
+    
+    respond_to do |format|
+      format.json { render :json => @findings }
+    end
   end
 
-  # * POST /weaknesses/auto_complete_for_control_objective_item
+  # * GET /weaknesses/auto_complete_for_control_objective_item
   def auto_complete_for_control_objective_item
-    @tokens = params[:control_objective_item_data][0..100].split(
-      SEARCH_AND_REGEXP).uniq
+    @tokens = params[:q][0..100].split(SEARCH_AND_REGEXP).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{Period.table_name}.organization_id = :organization_id",
@@ -275,6 +281,10 @@ class WeaknessesController < ApplicationController
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order("#{Review.table_name}.identification ASC").limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @control_objective_items }
+    end
   end
 
   private
