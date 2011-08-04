@@ -3,27 +3,27 @@ jQuery(function() {
 
   var UIManipulation = {
     changeHeight: function(element, height) {
-      element.effect('size', { to: { height: height } }, 300);
+      element.stop(true, true).animate({ height: height }, 300);
     },
     restoreHeight: function() {
-      var originalHeight = $(this).data('original-height');
+      var originalHeight = $(this).data('originalHeight');
 
       if(originalHeight) {
-        UIManipulation.changeHeight($(this), originalHeight);
+        UIManipulation.changeHeight($(this), parseInt(originalHeight));
       }
 
       $(this).unbind('blur', UIManipulation.restoreHeight);
     },
     fitToContent: function(element) {
-      var adjustedHeight = element.height();
+      var adjustedHeight = element.innerHeight();
 
       if(MAX_TEXT_AREA_HEIGHT > adjustedHeight) {
-        adjustedHeight = Math.max(element.scrollHeight, adjustedHeight);
+        adjustedHeight = Math.max(element.get(0).scrollHeight, adjustedHeight);
         adjustedHeight = Math.min(MAX_TEXT_AREA_HEIGHT, adjustedHeight);
 
-        if(adjustedHeight > element.height()) {
-          if(!element.data('original-height')) {
-            element.data('original-height', element.height());
+        if(adjustedHeight > element.innerHeight()) {
+          if(!element.data('originalHeight')) {
+            element.data('originalHeight', element.innerHeight());
           }
 
           element.blur(UIManipulation.restoreHeight);
@@ -34,11 +34,7 @@ jQuery(function() {
     }
   };
 
-  $('textarea').live('keyup', function() {
-    UIManipulation.fitToContent($(this));
-  });
-
-  $('textarea').live('click', function() {
+  $('textarea').live('keyup click', function() {
     UIManipulation.fitToContent($(this));
   });
 });
