@@ -48,7 +48,7 @@
     <p class="form_item">
       <%= co_f.label :audit_date, nil, :class => :inline %>
       <%= calendar_text_field co_f, :audit_date, false, nil,
-        :class => :inline_tight_item, :disabled => readonly %>
+        :class => :inline_item, :disabled => readonly %>
     </p>
     <p>
       <%= co_f.label :control_objective_text %>
@@ -185,7 +185,7 @@
     <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
       '#', :'data-template' => :work_paper,
       :'data-event' => 'addNestedItem',
-      :'data-container' => :work_papers %>
+      :'data-container' => '#work_papers' %>
   </p>
 
   <%= hidden_lock_version(co_f) %>
@@ -200,48 +200,49 @@
 <script type="text/javascript">
   var ControlObjectiveCalcs = {
     effectiveness: function() {
-      var selectedValues = new Array();
-      var designElement = $('control_objective_item_design_score');
-      var complianceElement = $('control_objective_item_compliance_score');
-      var sustantiveElement = $('control_objective_item_sustantive_score');
-      var maxValue = $A(designElement.options).map(function(e) {
-        return e.value.match(/^\d+$/) ? parseInt(e.value) : 0;
-      }).max();
+      var selectedValues = [];
+      var designElement = $('#control_objective_item_design_score');
+      var complianceElement = $('#control_objective_item_compliance_score');
+      var sustantiveElement = $('#control_objective_item_sustantive_score');
+      var maxValue = 0;
+      var total = 0;
+      var count = 0;
+      
+      $.each(designElement.get(0).options, function(i, e) {
+        if(parseInt(e.value) > maxValue) { maxValue = parseInt(e.value) }
+      });
 
-      selectedValues.push($F(designElement).match(/^\d+$/) ?
-        parseInt($F(designElement)) : null);
-      selectedValues.push($F(complianceElement).match(/^\d+$/) ?
-        parseInt($F(complianceElement)) : null);
-      selectedValues.push($F(sustantiveElement).match(/^\d+$/) ?
-        parseInt($F(sustantiveElement)) : null);
+      selectedValues.push(parseInt(designElement.val()));
+      selectedValues.push(parseInt(complianceElement.val()));
+      selectedValues.push(parseInt(sustantiveElement.val()));
+      
+      $.each(selectedValues, function(i, e) {
+        if(e) {
+          total += e;
+          count += 1;
+        }
+      });
 
-      var total = selectedValues.compact().size() == 0 ? -1 :
-        selectedValues.compact().inject(0.0, function(t, n) { return t + n; });
+      var percentage = count == 0 || maxValue == 0 ?
+        100 : ((total / count) * 100.0 / maxValue).toFixed(0);
 
-      var percentage = total == -1 || maxValue == 0 ? 100 :
-        ((total / selectedValues.compact().size()) * 100.0 / maxValue).toFixed(0);
+      $('#effectiveness').val(percentage + '%');
 
-      $('effectiveness').setValue(new String("#{percentage}%").interpolate(
-        {percentage: percentage}));
-
-      var oldColor = $('effectiveness').getStyle('border-color');
-
-      if(!oldColor) {
-        $('effectiveness').setStyle({borderColor: '#47ae00'});
-        Element.setStyle.delay(0.8, $('effectiveness'), {borderColor: oldColor});
-      }
+      $('#effectiveness').css('border-color', '#47ae00').delay(1000).animate(
+        { 'border-color': '#c2bfB7' }, 50
+      );
     }
   }
 
-  Event.observe('control_objective_item_design_score', 'change', function() {
+  $('#control_objective_item_design_score').change(function() {
     ControlObjectiveCalcs.effectiveness();
   });
 
-  Event.observe('control_objective_item_compliance_score', 'change', function() {
+  $('#control_objective_item_compliance_score').change(function() {
     ControlObjectiveCalcs.effectiveness();
   });
 
-  Event.observe('control_objective_item_sustantive_score', 'change', function() {
+  $('#control_objective_item_sustantive_score').change(function() {
     ControlObjectiveCalcs.effectiveness();
   });
 </script>

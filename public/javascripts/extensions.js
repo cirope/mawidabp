@@ -1,7 +1,7 @@
 var StringManipulation = {
   changeTextWithNumberBy: function(string, change, pad) {
     if(string && string.match(/\d+$/)) {
-      var number = parseInt(string.match(/\d+$/).first(), 10);
+      var number = parseInt(string.match(/\d+$/)[0], 10);
 
       return string.replace(/\d+$/, (number + change).toPaddedString(pad || 0));
     } else {
@@ -12,6 +12,14 @@ var StringManipulation = {
 
 Number.prototype.rnd = function() {
   return Math.floor(Math.random() * this + 1)
+}
+
+Number.prototype.toPaddedString = function(length) {
+  var string = this.toString(10);
+  
+  while (string.length < length) { string = '0' + string; }
+  
+  return string;
 }
 
 String.prototype.next = function(pad) {

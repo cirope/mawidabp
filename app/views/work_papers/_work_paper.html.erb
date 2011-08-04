@@ -3,7 +3,7 @@
 <div class="work_paper item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 20%;">
-      <%= wp_f.text_field :name, :class => 'required tiny_component' %>
+      <%= wp_f.text_field :name, :class => 'required tiny_component', :autofocus => true %>
     </div>
     <div class="item_field" style="width: 20%;">
       <%= wp_f.text_field :code,
@@ -53,14 +53,14 @@
 <% if is_dynamic %>
   <script type="text/javascript">
   (function() {
-    var id = '<%= id %>';
+    var id = '#<%= id %>';
 
     Helper.showItem(id);
 
     if(lastWorkPaperCode) {
       lastWorkPaperCode = lastWorkPaperCode.next(2);
 
-      $(id).down('.work_paper_code').setValue(lastWorkPaperCode);
+      $(id).find('.work_paper_code').val(lastWorkPaperCode);
     }
   })();
   </script>

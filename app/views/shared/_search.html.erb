@@ -15,8 +15,7 @@
               <div id="search_column_names" style="display: none;">
                 <% columns.each do |column| %>
                   <%= f.hidden_field :columns, :value => column,
-                    :name => 'search[columns][]',
-                    :id => "search_column_#{column}" %>
+                    :name => 'search[columns][]' %>
                 <% end %>
               </div>
             </td>

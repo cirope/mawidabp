@@ -82,6 +82,8 @@ var EventHandler = {
       removeClass('sort_number');
 
     FormUtil.completeSortNumbers();
+    
+    e.trigger('item:removed');
   },
 
   /**
@@ -122,6 +124,8 @@ var EventHandler = {
     Helper.removeItem(e.parents(e.data('target')), function() {
       FormUtil.completeSortNumbers();
     });
+    
+    e.trigger('item:removed');
   },
 
   /**
@@ -169,7 +173,7 @@ var Helper = {
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() { FormUtil.completeSortNumbers(); }
+      stop: function() {FormUtil.completeSortNumbers();}
     });
   },
 
@@ -341,7 +345,7 @@ var HTMLUtil = {
   stylizeInputFile: function(element) {
     if (!element || element.length == 0) return;
 
-    var input = $('input[type=file]', $(element));
+    var input = $(element).find('input[type=file]');
 
     if(input.parents('div.stylized_file').length == 0) {
       element.mousemove(function(event) {
@@ -471,16 +475,15 @@ var Observer = {
     });
   },
   attachToInputFile: function(span) {
-    var input = span.length > 0 ? $('input[type=file]', span) : undefined;
+    var input = span.find('input[type=file]');
 
-    if(input && input.length > 0) {
+    if(input.length > 0) {
       $(input).unbind('change');
             
-      $(input).change(function(event) {
-        var e = event.target.nodeName == 'input' ? $(event.target) :
-          $('input[type="file"]', $(event.target));
+      $(input).change(function() {
+        var e = $(this);
 
-        if(e.length > 0 && e.hasClass('file') && !$(e).val().match(/^\s*$/)) {
+        if(e.hasClass('file') && !$(e).val().match(/^\s*$/)) {
           var imageTag = $('<img />', {
             src: '/images/new_document.gif',
             width: 22,
@@ -502,41 +505,35 @@ var Observer = {
 // Funciones relacionadas con la búsqueda
 var Search = {
   observe: function() {
-    $('#column_headers').click(function(event) {
-      var e = event.target.nodeName == 'th' ? $(event.target) :
-        $('th', $(event.target));
+    $('#column_headers th.filterable').click(function() {
+      var e = $(this);
+      var columns = e.find('input[type="hidden"]').map(function() {
+        return $(this).val();
+      }).get();
+      var hiddenFilter = $.map(columns, function(e) {
+        return 'input[value="' + e + '"]';
+      }).join(', ');
+      
+      var columnNamesDiv = $('#search_column_names');
 
-      if(e.length > 0 && e.hasClass('filterable')) {
-        var columns = $('input[type="hidden"]', e).map(function() {
-          return $(this).val();
+      if(e.hasClass('selected')) {
+        e.addClass('disabled').removeClass('selected');
+
+        columnNamesDiv.find(hiddenFilter).remove();
+      } else {
+        $.each(columns, function(i, e) {
+          var hiddenColumn = $('<input />', {
+            'type': 'hidden',
+            'name': 'search[columns][]'
+          }).val(e);
+
+          columnNamesDiv.append(hiddenColumn);
         });
-        var hiddenFilter = $.map(columns)(function() {
-          return 'input[value="' + this + '"]';
-        }).join(', ');
-        var columnNamesDiv = $('#search_column_names');
 
-        if(e.hasClass('selected')) {
-          e.addClass('disabled');
-          e.removeClass('selected');
-
-          $(hiddenFilter, columnNamesDiv).remove();
-        } else {
-          $.each(columns, function() {
-            var hiddenColumn = $('<input />', {
-              'id': 'search_column_' + this,
-              'type': 'hidden',
-              'name': 'search[columns][]'
-            }).val(this);
-
-            columnNamesDiv.append(hiddenColumn);
-          });
-
-          e.addClass('selected');
-          e.removeClass('disabled');
-        }
-
-        $('#search_query').focus();
+        e.addClass('selected').removeClass('disabled');
       }
+
+      $('#search_query').focus();
     });
   },
   
@@ -636,8 +633,8 @@ jQuery(function($) {
   });
 
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
-  $('.work_paper').live("item:removed", function() {
-    var workPaperCode = $('input[name$="[code]"]', $(this)).val();
+  $('.work_paper').live('item:removed', function() {
+    var workPaperCode = $(this).find('input[name$="[code]"]').val();
 
     if(workPaperCode == lastWorkPaperCode) {
       lastWorkPaperCode = lastWorkPaperCode.previous(2);
@@ -723,8 +720,8 @@ jQuery(function($) {
   });
   
   $('#loading').bind({
-    ajaxStart: function() { $(this).show(); },
-    ajaxStop: function() { $(this).hide(); }
+    ajaxStart: function() {$(this).show();},
+    ajaxStop: function() {$(this).hide();}
   });
   
   AutoComplete.observeAll();

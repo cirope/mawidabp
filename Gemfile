@@ -29,7 +29,8 @@ gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
 
 group :production do
-  gem 'smurf', '1.0.6'
+  gem 'therubyracer', :require => false
+  gem 'uglifier'
 end
 
 group :development do
