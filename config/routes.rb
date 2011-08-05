@@ -269,9 +269,9 @@ MawidaApp::Application.routes.draw do
     end
 
     collection do
-      post :auto_complete_for_user
-      post :auto_complete_for_finding_relation
-      post :auto_complete_for_control_objective_item
+      get :auto_complete_for_user
+      get :auto_complete_for_finding_relation
+      get :auto_complete_for_control_objective_item
     end
   end
 

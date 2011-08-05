@@ -15,7 +15,7 @@ module FindingsHelper
     if form.object.repeated_of && !readonly
       link = content_tag(:span,
         "[#{t(:'finding.undo_reiteration')}]",
-        :id => :show_inline_undo_reiteration,
+        :'data-help-dialog' => '#inline_undo_reiteration',
         :class => :popup_link,
         :title => t(:'finding.undo_reiteration'),
         :style => 'color: #666666;'
@@ -103,7 +103,7 @@ module FindingsHelper
           :alt => t(:'finding.show_status_change_history'),
           :title => t(:'finding.show_status_change_history')
         ),
-        "('##{dom_id}').slideToggle()", :class => :image_link
+        "$('##{dom_id}').slideToggle()", :class => :image_link
       ), :style => 'margin-left: .25em;'
     )
   end

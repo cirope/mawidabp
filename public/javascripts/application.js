@@ -645,6 +645,10 @@ jQuery(function($) {
     autoOpen: false,
     draggable: false,
     resizable: false,
+    height: 'auto',
+    minHeight: 50,
+    maxWidth: 400,
+    width: 'auto',
     close: function() {
       $(this).parents('.ui-dialog').show().fadeOut(500);
     },

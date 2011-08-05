@@ -284,26 +284,28 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'auto complete for user' do
     perform_auth
-    post :auto_complete_for_user, { :user_data => 'adm' }
+    get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Sólo Admin (Admin second es de otra organización)
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
+    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
 
-    post :auto_complete_for_user, { :user_data => 'bare' }
+    get :auto_complete_for_user, { :q => 'bare', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Solo Bare
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Sólo Bare
+    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
 
-    post :auto_complete_for_user, { :user_data => 'x_nobody' }
+    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 0, assigns(:users).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, users.size # Sin resultados
   end
 
   test 'auto complete for finding relation' do
@@ -311,78 +313,89 @@ class OportunitiesControllerTest < ActionController::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
 
     perform_auth
-    post :auto_complete_for_finding_relation, {
-      :finding_relation_data => 'O001',
+    get :auto_complete_for_finding_relation, {
+      :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 3, assigns(:findings).size
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 3, findings.size
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
 
-    post :auto_complete_for_finding_relation, {
-      :finding_relation_data => 'O001',
+    get :auto_complete_for_finding_relation, {
+      :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size # Se excluye la observación O01 que no tiene informe definitivo
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    post :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O001, 1 2 3',
+      :q => 'O001, 1 2 3',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size # Solo O01 del informe 1 2 3
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, findings.size # Solo O01 del informe 1 2 3
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    post :auto_complete_for_finding_relation, {
-      :finding_relation_data => 'x_none',
+    get :auto_complete_for_finding_relation, {
+      :q => 'x_none',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 0, assigns(:findings).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, findings.size # Sin resultados
   end
 
   test 'auto complete for control objective item' do
     perform_auth
-    post :auto_complete_for_control_objective_item, { :control_objective_item_data => 'dependencia' }
+    get :auto_complete_for_control_objective_item, { :q => 'dependencia', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:control_objective_items)
-    assert_equal 1, assigns(:control_objective_items).size # Sólo bcra_A4609_security_management_responsible_dependency_item_editable porque no tiene informe definitivo
-    assert_equal control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,
-      assigns(:control_objective_items).first.id
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_control_objective_item'
+    
+    cois = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, cois.size # Sólo bcra_A4609_security_management_responsible_dependency_item_editable porque no tiene informe definitivo
+    assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
+    assert_equal(
+      control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,
+      cois.first['id']
+    )
 
-    post :auto_complete_for_control_objective_item, { :control_objective_item_data => '1 2 4' }
+    get :auto_complete_for_control_objective_item, { :q => '1 2 4', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:control_objective_items)
-    assert_equal 2, assigns(:control_objective_items).size # Todos los del informe 1 2 4
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_control_objective_item'
+    
+    cois = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, cois.size # Todos los del informe 1 2 4
+    assert cois.all? { |f| (f['label'] + f['informal']).match /1 2 4/i }
 
-    post :auto_complete_for_control_objective_item, { :control_objective_item_data => 'x_none' }
+    get :auto_complete_for_control_objective_item, { :q => 'x_none', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:control_objective_items)
-    assert_equal 0, assigns(:control_objective_items).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'oportunities/auto_complete_for_control_objective_item'
+    
+    cois = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, cois.size # Sin resultados
   end
 end
