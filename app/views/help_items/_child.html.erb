@@ -7,7 +7,7 @@
       :readonly => true %>
     </div>
     <div class="item_field" style="width: 30%;">
-    <%= f.text_field :name, :maxlength => 255, :size => 10 %>
+    <%= f.text_field :name, :maxlength => 255, :autofocus => true %>
     </div>
     <div class="item_field" style="width: 50%;">
     <%= f.text_area :description %>
@@ -25,8 +25,5 @@
 </div>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
 <% if is_dynamic %>
-<script type="text/javascript">
-  Helper.makeSortable('children', '#children div.child', '#children a.move');
-  Helper.showItem('<%= id %>');
-</script>
+<script type="text/javascript">Helper.showItem('#<%= id %>');</script>
 <% end %>

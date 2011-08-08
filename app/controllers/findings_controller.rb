@@ -318,7 +318,7 @@ class FindingsController < ApplicationController
 
   # * POST /findings/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ['organizations.id = :organization_id']
     parameters = {:organization_id => @auth_organization.id}
@@ -330,7 +330,7 @@ class FindingsController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -341,12 +341,15 @@ class FindingsController < ApplicationController
         "#{User.table_name}.name ASC"
       ]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
   end
 
   # * POST /findings/auto_complete_for_finding_relation
   def auto_complete_for_finding_relation
-    @tokens = params[:finding_relation_data][0..100].split(
-      SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+    @tokens = params[:q][0..100].split(SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
       ("#{Finding.table_name}.id <> :finding_id" unless params[:finding_id].blank?),
@@ -371,7 +374,7 @@ class FindingsController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters["finding_relation_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @findings = Finding.includes(:control_objective_item =>
@@ -382,6 +385,10 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
+    
+    respond_to do |format|
+      format.json { render :json => @findings }
+    end
   end
 
   private

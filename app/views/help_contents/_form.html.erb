@@ -10,7 +10,7 @@
       <%= hc_f.label :language, nil, :class => :inline %>
       <%= hc_f.select :language,
         AVAILABLE_LOCALES.map{ |lang| [t("lang.#{lang}"), lang.to_s] }.sort{ |a, b| a[0] <=> b[0] },
-        {}, {:class => :inline_item} %>
+        {}, {:class => :inline_item, :autofocus => true} %>
     </p>
   </div>
 
@@ -39,7 +39,7 @@
 
   <p class="add_item">
     <%= link_to t(:'label.add_item'), '#', :'data-template' => :help_item,
-      :'data-event' => 'addNestedItem', :'data-container' => :help_items %>
+      :'data-event' => 'addNestedItem', :'data-container' => '#help_items' %>
   </p>
 
   <%= hidden_lock_version(hc_f) %>
@@ -50,6 +50,5 @@
 <% end %>
 <!--[eoform:help_content] -->
 <script type="text/javascript">
-  Helper.makeSortable('help_items', '#help_items div.help_item',
-    '#help_items a.move');
+  Helper.makeSortable('#help_items', 'div.help_item', 'a.move');
 </script>

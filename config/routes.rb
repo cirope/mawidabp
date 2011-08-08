@@ -136,8 +136,8 @@ MawidaApp::Application.routes.draw do
 
       collection do
         get :export_to_pdf
-        post :auto_complete_for_user
-        post :auto_complete_for_finding_relation
+        get :auto_complete_for_user
+        get :auto_complete_for_finding_relation
       end
     end
   end

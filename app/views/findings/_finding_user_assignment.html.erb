@@ -7,22 +7,24 @@
     <div class="item_field" style="width: 50%;">
       <% unless readonly %>
         <div class="search">
+          <% field_classes = [:search, :autocomplete_field, :required] %>
+          <% field_classes << :error_field unless (f.object.errors[:user_id] | f.object.errors[:user]).blank? %>
+          <%= text_field_tag 'finding[nested_user]',
+            f.object.user.try(:full_name_with_function),
+            :id => "finding_user_#{id}",
+            :class => field_classes.join(' '),
+            :title => t(:'label.search'),
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-params' => ("{finding_id: #{@finding.id}}" unless @finding.new_record?),
+            :'data-autocomplete-url' => auto_complete_for_user_findings_path(:format => :json) %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id_item %>
+            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
           <% if is_dynamic || is_a_new_relation %>
             <%= hidden_field_tag 'finding[users_for_notification][]', nil,
               :id => "hidden_user_for_notification_#{id}",
               :class => :user_for_notification %>
           <% end %>
-          <%= text_field_with_auto_complete :finding, :nested_user,
-            {:id => "finding_user_#{id}",
-            :class => "search required #{'error_field' unless (f.object.errors[:user_id] | f.object.errors[:user]).blank?}",
-            :title => t(:'label.search'), :value => f.object.user.try(:full_name_with_function)},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_user},
-            :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'user_data',
-            :parameters => ("finding_id=#{@finding.id}" unless @finding.new_record?)} %>
         </div>
       <% else %>
         <%= f.hidden_field :user_id, :value => f.object.user_id,
@@ -48,5 +50,8 @@
   </div>
 </div>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">
+    Helper.showItem('#<%= id %>');
+    AutoComplete.observeAll();
+  </script>
 <% end %>

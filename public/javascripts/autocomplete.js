@@ -50,7 +50,7 @@ var AutoComplete = {
           
           input.val(selected.value);
           input.data('item', selected.item);
-          input.next('input.autocomplete_id').val(selected.item.id);
+          input.nextAll('input.autocomplete_id').val(selected.item.id);
           
           input.trigger('autocomplete:update', input);
           

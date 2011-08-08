@@ -505,29 +505,28 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'auto complete for user' do
     perform_auth
-    post :auto_complete_for_user, { :completed => 'incomplete',
-      :user_data => 'adm' }
+    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'adm', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Sólo Admin (Admin second es de otra organización)
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
+    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
 
-    post :auto_complete_for_user, { :completed => 'incomplete',
-      :user_data => 'bare' }
+    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'bare', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Solo Bare
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Sólo Bare
+    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
 
-    post :auto_complete_for_user, { :completed => 'incomplete',
-      :user_data => 'x_nobody' }
+    get :auto_complete_for_user, { :completed => 'incomplete', :q => 'x_nobody', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 0, assigns(:users).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, users.size # Sin resultados
   end
 
   test 'auto complete for finding relation' do
@@ -535,55 +534,62 @@ class FindingsControllerTest < ActionController::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
     perform_auth
-    post :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O001',
+      :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 3, assigns(:findings).size
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 3, findings.size
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     finding = Finding.find(findings(
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
 
-    post :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O001',
+      :q => 'O001',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size # Se excluye la observación O01 que no tiene informe definitivo
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
-    post :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'O001, 1 2 3',
+      :q => 'O001, 1 2 3',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size # Solo O01 del informe 1 2 3
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, findings.size # Solo O01 del informe 1 2 3
+    assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
-    post :auto_complete_for_finding_relation, {
+    get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
-      :finding_relation_data => 'x_none',
+      :q => 'x_none',
       :finding_id => finding.id,
-      :review_id => finding.review.id
+      :review_id => finding.review.id,
+      :format => :json
     }
     assert_response :success
-    assert_not_nil assigns(:findings)
-    assert_equal 0, assigns(:findings).size # Sin resultados
-    assert_select '#error_body', false
-    assert_template 'findings/auto_complete_for_finding_relation'
+    
+    findings = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, findings.size # Sin resultados
   end
 end

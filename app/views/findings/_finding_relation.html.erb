@@ -6,22 +6,21 @@
     <div class="item_field" style="width: 60%;">
       <% if is_dynamic %>
         <div class="search">
-          <% extra_parameters = {
-            :finding_id => (@finding.id unless @finding.new_record?),
-            :review_id => @finding.control_objective_item.try(:review).try(:id)
-          } %>
-          <%= f.hidden_field :related_finding_id,
-            :id => "hidden_related_finding_#{id}", :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete :finding, :nested_finding_relation,
-            {:id => "finding_finding_relation_#{id}",
-            :class => "search required#{' error_field' unless finding_relation.errors[:related_finding_id].empty?}",
+          <% extra_parameters = "review_id: #{@finding.control_objective_item.try(:review).try(:id) || '""'}"  %>
+          <% extra_parameters << ",finding_id: #{@finding.id}" unless @finding.new_record? %>
+          <% field_classes = [:search, :autocomplete_field, :required] %>
+          <% field_classes << :error_field unless finding_relation.errors[:related_finding_id].blank? %>
+          <%= text_field_tag 'finding[nested_finding_relation]',
+            finding_relation.related_finding.to_s,
+            :id => "finding_finding_relation_#{id}",
+            :class => field_classes.join(' '),
             :title => t(:'label.search'),
-            :value => finding_relation.related_finding.to_s},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_finding_relation},
-            :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'finding_relation_data',
-            :parameters => extra_parameters.to_param} %>
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-params' => ("{#{extra_parameters}}"),
+            :'data-autocomplete-url' => auto_complete_for_finding_relation_findings_path(:format => :json) %>
+          <%= f.hidden_field :related_finding_id,
+            :id => "hidden_related_finding_#{id}", :class => :autocomplete_id %>
         </div>
       <% else %>
         <%= f.hidden_field :related_finding_id,
@@ -41,5 +40,8 @@
   </div>
 </div>
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('<%= id %>');</script>
+  <script type="text/javascript">
+    Helper.showItem('#<%= id %>');
+    AutoComplete.observeAll();
+  </script>
 <% end %>

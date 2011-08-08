@@ -210,7 +210,8 @@
   <p class="add_item">
     <%= link_to t(:'finding.add_finding_answer'), '#',
       :'data-template' => :finding_answer,
-      :'data-event' => 'addNestedItem', :'data-container' => :finding_answers %>
+      :'data-event' => 'addNestedItem',
+      :'data-container' => '#finding_answers' %>
   </p>
 
   <% unless @finding.work_papers.blank? %>
@@ -250,7 +251,7 @@
     <% unless @finding.costs.blank? %>
       <p style="margin-bottom: 1em;">
         <%= link_to_function t(:'finding.view_cost_details'),
-          "Effect.toggle('cost_details', 'slide')" %>
+          "$('#cost_details').slideToggle()" %>
       </p>
       <div id="cost_details" style="display: none;">
         <div>

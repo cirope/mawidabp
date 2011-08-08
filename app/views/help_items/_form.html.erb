@@ -7,7 +7,7 @@
 
   <p>
     <%= hi_f.label :name %>
-    <%= hi_f.text_field :name, :maxlength => 255, :size => 10 %>
+    <%= hi_f.text_field :name, :maxlength => 255, :autofocus => true %>
   </p>
 
   <p style="margin-bottom: 1em;">
@@ -40,7 +40,7 @@
 
   <p class="add_item">
     <%= link_to t(:'label.add_item'), '#', :'data-template' => :child,
-      :'data-event' => 'addNestedItem', :'data-container' => :children %>
+      :'data-event' => 'addNestedItem', :'data-container' => '#children' %>
   </p>
 
   <%= hidden_lock_version(hi_f) %>
@@ -51,5 +51,5 @@
 <% end %>
 <!--[eoform:help_item] -->
 <script type="text/javascript">
-  Helper.makeSortable('children', '#children div.child', '#children a.move');
+  Helper.makeSortable('#children', 'div.child', 'a.move');
 </script>

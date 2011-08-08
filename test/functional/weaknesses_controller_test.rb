@@ -307,7 +307,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :auto_complete_for_user, { :q => 'bare', :format => :json }
     assert_response :success
     
-    
     users = ActiveSupport::JSON.decode(@response.body)
     
     assert_equal 1, users.size # Sólo Bare
