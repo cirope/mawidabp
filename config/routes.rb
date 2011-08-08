@@ -168,7 +168,7 @@ MawidaApp::Application.routes.draw do
 
     collection do
       get :check_for_approval
-      post :auto_complete_for_user
+      get :auto_complete_for_user
     end
   end
 
@@ -184,7 +184,7 @@ MawidaApp::Application.routes.draw do
     end
 
     collection do
-      post :auto_complete_for_user
+      get :auto_complete_for_user
       get :export_list_to_pdf
     end
   end

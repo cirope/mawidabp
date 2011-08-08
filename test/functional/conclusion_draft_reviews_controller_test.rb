@@ -408,25 +408,27 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'auto complete for user' do
     perform_auth
-    post :auto_complete_for_user, { :user_data => 'admin' }
+    get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size # Administrator
-    assert_select '#error_body', false
-    assert_template 'conclusion_draft_reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 1, users.size # Administrator
+    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
-    post :auto_complete_for_user, { :user_data => 'blank' }
+    get :auto_complete_for_user, { :q => 'blank', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 2, assigns(:users).size # Blank and Expired blank
-    assert_select '#error_body', false
-    assert_template 'conclusion_draft_reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 2, users.size # Blank and Expired blank
+    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
-    post :auto_complete_for_user, { :user_data => 'xyz' }
+    get :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    assert_not_nil assigns(:users)
-    assert_equal 0, assigns(:users).size # None
-    assert_select '#error_body', false
-    assert_template 'conclusion_draft_reviews/auto_complete_for_user'
+    
+    users = ActiveSupport::JSON.decode(@response.body)
+    
+    assert_equal 0, users.size # None
   end
 end

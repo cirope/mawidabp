@@ -12,7 +12,7 @@
       <% else %>
         <%= f.hidden_field :review_id %>
         <%= content_tag :label,
-          ConclusionDraftReview.human_attribute_name('review_id'),
+          ConclusionDraftReview.human_attribute_name(:review_id),
           :class => :inline %>
         <%= text_field_tag :review,
           @conclusion_draft_review.review.identification,
@@ -21,13 +21,13 @@
     </p>
     <p class="form_item">
       <%= label_tag :business_unit,
-        ConclusionReview.human_attribute_name('business_unit'), :class => :inline %>
+        ConclusionReview.human_attribute_name(:business_unit), :class => :inline %>
       <%= text_field_tag :business_unit,
         (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review),
         :class => :inline_item, :readonly => true %>
     </p>
     <p class="form_item">
-      <%= label_tag :project, ConclusionReview.human_attribute_name('project'),
+      <%= label_tag :project, ConclusionReview.human_attribute_name(:project),
         :class => :inline %>
       <%= text_field_tag :project,
         (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review),
@@ -56,7 +56,7 @@
           show_inline_help_for(:conclusion_review_issue_date)),
         :class => :inline %>
       <%= calendar_text_field f, :issue_date, false, nil,
-        :class => :inline_tight_item %>
+        :class => :inline_item %>
     </p>
   </div>
 
@@ -76,11 +76,7 @@
     <div>
       <%= link_to t(:'conclusion_draft_review.check_for_approval'),
         {:action => :check_for_approval, :format => :json},
-        {:'data-params' => "$H({id: $F('conclusion_draft_review_review_id')}).toQueryString()",
-        :'data-remote-method' => :get,
-        :'data-condition' => "!$F('conclusion_draft_review_review_id').blank()",
-        :remote => true, :style => 'margin-left: 1em;',
-        :id => 'check_for_approval'} %>
+        {:style => 'margin-left: 1em;', :id => 'check_for_approval'} %>
     </div>
     <% if @conclusion_draft_review.updated_at %>
       <div style="margin-left: 1em;">
@@ -112,90 +108,76 @@
 <!--[eoform:conclusion_draft_review] -->
 <script type="text/javascript">
   function showOrHideErrors() {
-    if($('approval_errors_detail')) {
-      Element.showOrHide('approval_errors_detail', {
-        afterFinish: function() {
-          Element.toggleContent('show_or_hide_link',
-            '<%= t(:'error.show_details') %>',
-            '<%= t(:'error.hide_details') %>');
+    $('#approval_errors_detail').slideToggle(300, function() {
+      $('#show_or_hide_link').mw(
+        'toggleContent',
+        '<%= t(:'error.show_details') %>',
+        '<%= t(:'error.hide_details') %>'
+      );
+    });
+  }
+  
+  $('#check_for_approval').click(function(event) {
+    if(parseInt($('#conclusion_draft_review_review_id').val()) > 0) {
+      var url = '<%= url_for({:action => :check_for_approval, :format => :json}) %>';
+
+      $.get(url, { id: $('#conclusion_draft_review_review_id').val() }, function(data) {
+        if(data.approved) {
+          $('#not_approved').hide();
+          $('#approved').show().stop(true, true).effect('highlight', {}, 2000);
+
+          $('#error_list_container').html('');
+          $('#force_approval_prompt').hide();
+        } else {
+          var errorsUl = HTMLUtil.arrayToUL(
+            data.errors, {'id': 'error_list', 'class': 'raw_list'}
+          );
+
+          if($('#approval_errors_detail:visible').length > 0) {
+            $('#approval_errors_detail').slideToggle(300);
+          }
+
+          $('#error_list_container').html(errorsUl);
+
+          $('#show_or_hide_link').mw('resetToOriginalText');
+
+          $('#approved').hide();
+          $('#not_approved').show();
+
+          if(data.can_be_approved_by_force) {
+            $('#force_approval_prompt').show();
+          } else {
+            $('#force_approval_prompt').hide();
+          }
+
+          $('#not_approved').find('p').stop(true, true).effect('highlight', {}, 2000);
         }
       });
     }
-  }
-
-  document.on('ajax:success', '#check_for_approval', function(event, element) {
-    var request = event.memo;
     
-    if(request.responseText.isJSON()) {
-      if(request.responseJSON.approved) {
-        $('approved').show();
-        $('not_approved').hide();
-
-        new Effect.Highlight('approved', {
-          duration: 2,
-          queue: { position: 'end', scope: 'conclusion_draft_review', limit: 1 }
-        });
-
-        $('error_list_container').update('');
-        $('force_approval_prompt').hide();
-      } else {
-        var errorsUl = HTMLUtil.arrayToUL(request.responseJSON.errors,
-        {'id': 'error_list', 'class': 'raw_list'});
-
-        if($('approval_errors_detail').visible()) {
-          Element.showOrHide('approval_errors_detail');
-        }
-
-        $('error_list_container').update(errorsUl);
-
-        $('show_or_hide_link').resetToOriginalText();
-
-        $('approved').hide();
-        $('not_approved').show();
-
-        if(request.responseJSON.can_be_approved_by_force) {
-          $('force_approval_prompt').show();
-        } else {
-          $('force_approval_prompt').hide();
-        }
-
-        new Effect.Highlight($('not_approved').down('p'), {
-          duration: 2,
-          queue: { position: 'end', scope: 'conclusion_draft_review', limit: 1 }
-        });
-      }
-    }
+    event.preventDefault();
   });
 
-  Event.observe('conclusion_draft_review_review_id', 'change', function() {
+  $('#conclusion_draft_review_review_id').change(function() {
     var url = '<%= url_for :controller => :reviews, :action => :review_data,
       :id => 'REVIEW_ID', :format => :json %>';
 
-    if($F(this) > 0) {
-      new Ajax.Request(url.sub(/REVIEW_ID/, $F(this)), {
-        method: 'get',
-        onSuccess: function(transport) {
-          if(transport.responseText.isJSON()) {
-            var reviewData = transport.responseJSON.review;
-
-            $('business_unit').setValue(reviewData.business_unit.name || '');
-            $('project').setValue(reviewData.plan_item.project || '');
-            $('score').setValue(reviewData.score_text || '');
-            $('conclusion_draft_review_applied_procedures').focus();
-          }
-        },
-        onComplete: function() {
-          Helper.hideLoading('conclusion_draft_review_review_id');
-        },
-        onCreate: function() {
-          Helper.showLoading('conclusion_draft_review_review_id');
-        }
+    if(parseInt($(this).val()) > 0) {
+      Helper.showLoading('#conclusion_draft_review_review_id');
+      
+      $.get(url.replace(/REVIEW_ID/, $(this).val()), {format: 'json' }, function(data) {
+        $('#business_unit').val(data.business_unit.name || '');
+        $('#project').val(data.plan_item.project || '');
+        $('#score').val(data.score_text || '');
+        $('#conclusion_draft_review_applied_procedures').focus();
+      }).complete(function() {
+        Helper.hideLoading('#conclusion_draft_review_review_id');
       });
     } else {
-      $('business_unit').setValue('');
-      $('project').setValue('');
+      $('#business_unit').val('');
+      $('#project').val('');
     }
 
-    if($('error_list')) { Element.remove('error_list'); }
+    $('#error_list').remove();
   });
 </script>

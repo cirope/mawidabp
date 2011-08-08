@@ -260,9 +260,7 @@ var HTMLUtil = {
     if($.isArray(array) && array.length > 0) {
       var ul = $('<ul></ul>', attributes);
       
-      $.each(array, function() {
-        var e = $(this);
-        
+      $.each(array, function(i, e) {
         if($.isArray(e) && e.length > 1 && typeof e[0] == 'string' &&
           $.isArray(e[1])) {
           var li = $('<li></li>');
@@ -273,7 +271,7 @@ var HTMLUtil = {
           ul.append(li);
         } else {
           if($.isArray(e)) {
-            $.each(e, function() {ul.append($('<li></li>').html($(this)));});
+            $.each(e, function(i, se) { ul.append($('<li></li>').html(se)); });
           } else {
             ul.append($('<li></li>').html(e));
           }

@@ -11,13 +11,13 @@ jQuery(function($) {
       return id;
     },
     resetToOriginalText: function() {
-      var originalText = $(this).data('mw-original-html');
+      var originalText = $(this).data('mwOriginalText');
 
       if(originalText) {$(this).html(originalText);}
     },
     toggleContent: function(originalText, alternateText) {
-      $(this).data('mw-original-text', originalText);
-      $(this).data('mw-alternate-text', alternateText);
+      $(this).data('mwOriginalText', originalText);
+      $(this).data('mwAlternateText', alternateText);
 
       $(this).html(
         $(this).html() == originalText ? alternateText : originalText

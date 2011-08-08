@@ -5,15 +5,16 @@
     <div class="item_field" style="width: 50%;">
       <% if is_dynamic %>
         <div class="search">
+          <% field_classes = [:search, :autocomplete_field] %>
+          <%= text_field_tag "user[#{id}][data]", '',
+            :id => "user_#{id}_data",
+            :class => field_classes.join(' '),
+            :title => t(:'label.search'),
+            :autocomplete => :off,
+            :autofocus => true,
+            :'data-autocomplete-url' => auto_complete_for_user_conclusion_draft_reviews_path %>
           <%= hidden_field_tag "user[#{id}][id]", user.id,
-            :class => :autocomplete_id_item %>
-          <%= text_field_with_auto_complete "user[#{id}]", :data,
-            {:id => "user_#{id}_data", :class => :search,
-            :title => t(:'label.search'), :value => ''},
-            {:indicator => :loading, :skip_style => true,
-            :url => {:action => :auto_complete_for_user},
-            :after_update_element => 'AutoComplete.itemSelected',
-            :param_name => 'user_data'} %>
+            :class => :autocomplete_id %>
         </div>
       <% else %>
         <%= hidden_field_tag "user[#{id}][id]", user.id %>
@@ -29,5 +30,8 @@
 </div>
 
 <% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('user_<%= id %>');</script>
+  <script type="text/javascript">
+    Helper.showItem('#user_<%= id %>');
+    AutoComplete.observeAll();
+  </script>
 <% end %>

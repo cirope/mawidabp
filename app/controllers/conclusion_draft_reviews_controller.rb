@@ -261,7 +261,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * POST /reviews/auto_complete_for_user
   def auto_complete_for_user
-    @tokens = params[:user_data][0..100].split(/[\s,]/).uniq
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = ['organizations.id = :organization_id']
     parameters = {:organization_id => @auth_organization.id}
@@ -272,7 +272,7 @@ class ConclusionDraftReviewsController < ApplicationController
         "LOWER(users.email) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -280,6 +280,10 @@ class ConclusionDraftReviewsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
+    
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
   end
 
   def check_for_approval
@@ -295,11 +299,11 @@ class ConclusionDraftReviewsController < ApplicationController
         :errors => review.approval_errors
       }
     else
-      response = ''
+      response = {}
     end
     
     respond_to do |format|
-      format.json { render :json => response.to_json }
+      format.json { render :json => response }
     end
   end
 
