@@ -102,14 +102,11 @@
 </div>
 
 <script type="text/javascript">
-  if($('user_id_select')) {
-    Event.observe('user_id_select', 'change', function() {
-      var selectedUser = $F(this);
+  $('#user_id_select').change(function() {
+    if($(this).val()) {
       var url = '<%= findings_path(params[:completed]) %>';
-
-      if(selectedUser) {
-        BrowserManipulation.changeLocation(url, {'user_id': selectedUser});
-      }
-    });
-  }
+      
+      BrowserManipulation.changeLocation(url, {'user_id': $(this).val()});
+    }
+  });
 </script>

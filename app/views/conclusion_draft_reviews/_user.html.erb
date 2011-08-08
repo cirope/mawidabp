@@ -12,7 +12,7 @@
             :title => t(:'label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_user_conclusion_draft_reviews_path %>
+            :'data-autocomplete-url' => auto_complete_for_user_conclusion_draft_reviews_path(:format => :json) %>
           <%= hidden_field_tag "user[#{id}][id]", user.id,
             :class => :autocomplete_id %>
         </div>

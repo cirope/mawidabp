@@ -57,14 +57,14 @@
           show_inline_help_for(:conclusion_review_issue_date)),
         :class => :inline %>
       <%= calendar_text_field cfr_f, :issue_date, false, nil,
-        :class => :inline_tight_item, :readonly => readonly %>
+        :class => :inline_item, :readonly => readonly %>
     </p>
     <p class="form_item">
       <%= cfr_f.label :close_date, raw(
         ConclusionFinalReview.human_attribute_name(:close_date) +
           show_inline_help_for(:conclusion_review_close_date)), :class => :inline %>
       <%= calendar_text_field cfr_f, :close_date, false, nil,
-        :class => :inline_tight_item, :readonly => readonly %>
+        :class => :inline_item, :readonly => readonly %>
     </p>
   </div>
 
@@ -77,51 +77,42 @@
 <!--[eoform:conclusion_final_review] -->
 <script type="text/javascript">
 //<![CDATA[
-  if($('conclusion_final_review_review_id')) {
-    Event.observe('conclusion_final_review_review_id', 'change', function() {
-      var elementsForUpdate = ['applied_procedures', 'conclusion'];
+  $('#conclusion_final_review_review_id').change(function() {
+    var elementsForUpdate = ['applied_procedures', 'conclusion'];
 
-      if(!$F(this).blank()) {
-        var element = $(this);
-        var url = '<%= new_conclusion_final_review_path :format => :json %>';
+    if(!$(this).val().match(/^\s*$/)) {
+      var element = $(this);
+      var url = '<%= new_conclusion_final_review_path :format => :json %>';
 
-        Helper.showLoading(element);
+      Helper.showLoading(element);
+      
+      $.get(url, { review: element.val() }, function(data) {
+        //var finalReview = data.conclusion_final_review;
+        
+        for(var key in data) {
+          var target = $('#conclusion_final_review_' + key);
+          
+          if($.inArray(key, elementsForUpdate) != -1) {
+            target.html(data[key] || '');
+          }
+        }
 
-        new Ajax.Request(url, {
-          method: 'get',
-          parameters: { review: $F(element) },
-          onSuccess: function(transport) {
-            if(transport.responseText.isJSON()) {
-              var finalReview = transport.responseText.evalJSON(true).
-                conclusion_final_review;
-
-              $H(finalReview).each(function(pair) {
-                var target = $("conclusion_final_review_#{key}".interpolate(
-                  {key: pair.key}));
-
-                if(elementsForUpdate.include(pair.key) && target) {
-                  target.update(pair.value || '');
-                }
-              });
-
-              $('business_unit').setValue(
-                finalReview.review.business_unit.name);
-              $('project').setValue(finalReview.review.plan_item.project);
-              $('score').setValue(finalReview.review.score_text);
-              $('conclusion_final_review_applied_procedures').focus();
-            }
-          },
-          onFailure: function() { Helper.hideLoading(element); },
-          onComplete: function() { Helper.hideLoading(element); }
-        });
-      } else {
-        elementsForUpdate.each(function(e) {
-          $("conclusion_final_review_#{key}".interpolate({key: e})).update();
-          $('business_unit').setValue('');
-          $('project').setValue('');
-        });
-      }
-    });
-  }
+        $('#business_unit').val(data.review.business_unit.name);
+        $('#project').val(data.review.plan_item.project);
+        $('#score').val(data.review.score_text);
+        $('#conclusion_final_review_applied_procedures').focus();
+      }).complete(function() {
+        Helper.hideLoading(element);
+      });
+    } else {
+      $.each(elementsForUpdate, function(i, e) {
+        $('#conclusion_final_review_' + e).html('');
+      });
+      
+      $('#business_unit').val('');
+      $('#project').val('');
+      $('#score').val('');
+    }
+  });
 //]]>
 </script>

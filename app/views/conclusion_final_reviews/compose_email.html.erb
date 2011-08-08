@@ -52,7 +52,7 @@
   <p class="add_item">
     <%= link_to t(:'conclusion_review.add_recipient'), '#',
       :'data-template' => :user, :'data-event' => 'addNestedItem',
-      :'data-container' => :users %>
+      :'data-container' => '#users' %>
   </p>
 
   <p>
@@ -62,7 +62,7 @@
 <!--[eoform:conclusion_final_review] -->
 
 <div id="links">
-<%= link_to t(:'label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
-<%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
-<%= link_to_back %>
+  <%= link_to t(:'label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
+  <%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
+  <%= link_to_back %>
 </div>
