@@ -880,17 +880,13 @@ form input[type="file"].inline_item {
   margin: 0px;
 }
 
-form input[type="text"].inline_item, form input[type="text"].inline_tight_item {
+form input[type="text"].inline_item {
   margin: 0px;
   width: 64%;
 }
 
 form input[type="radio"].inline_item {
   margin-top: 4px;
-}
-
-form input[type="text"].inline_tight_item {
-  width: 60%;
 }
 
 form input[type="submit"].shadowed_button,
@@ -940,7 +936,6 @@ form select[multiple="multiple"] {
 }
 
 form select.inline_item,
-form select.inline_tight_item,
 .filter select.inline_item {
   margin: 0px;
   width: 64%;
@@ -948,10 +943,6 @@ form select.inline_tight_item,
 
 form .inline_item, .filter .inline_item {
   margin: 4px 0px;
-}
-
-form select.inline_tight_item {
-  width: 60%;
 }
 
 form.button_to {

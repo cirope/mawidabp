@@ -46,7 +46,7 @@
                 "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")),
               :class => :plain_label, :style => 'display: block;'%>
             <%= calendar_text_field f, :commitment_date, false, nil,
-              :class => 'required inline_tight_item' %>
+              :class => 'required' %>
           </div>
         <% end %>
       <div style="clear: both;"><%= finding_answer_notification_check(f) %></div>
