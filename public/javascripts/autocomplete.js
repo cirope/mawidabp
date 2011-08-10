@@ -26,13 +26,15 @@ var AutoComplete = {
             data: params,
             success: function(data) {
               response($.map(data, function(item) {
-                  var content = $('<div>');
+                  var content = $('<div></div>');
                   
-                  content.append($('<span class="label">').text(item.label));
+                  content.append(
+                    $('<span class="label"></span>').text(item.label)
+                  );
           
                   if(item.informal) {
                     content.append(
-                      $('<span class="informal">').html(
+                      $('<span class="informal"></span>').html(
                         item.informal.replace(/\n/g, '<br />')
                       )
                     );
@@ -60,9 +62,9 @@ var AutoComplete = {
       });
       
       input.data('autocomplete')._renderItem = function(ul, item) {
-        return $('<li></li>')
-          .data('item.autocomplete', item)
-          .append($( "<a></a>" ).html(item.label)).appendTo( ul );
+        return $('<li></li>').data(
+          'item.autocomplete', item
+        ).append($('<a></a>').html(item.label)).appendTo(ul);
       }
     }).data('observed', true);
   }

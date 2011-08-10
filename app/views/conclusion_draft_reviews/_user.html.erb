@@ -19,7 +19,7 @@
       <% else %>
         <%= hidden_field_tag "user[#{id}][id]", user.id %>
         <%= text_field_tag "user[#{id}][data]",
-          user.new_record? ? nil : "#{user.full_name} <#{user.email}>",
+          user.new_record? ? nil : user.full_name_with_function,
           :readonly => true %>
       <% end %>
     </div>

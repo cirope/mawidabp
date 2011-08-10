@@ -39,6 +39,12 @@ table.date_filter td, table.generic_filter td {
     width: 50%;
 }
 
+table.date_filter input[type="text"].inline_item,
+table.generic_filter input[type="text"].inline_item,
+table.generic_filter select.inline_item {
+  width: 65%;
+}
+
 .stylized_file span.file_container input.file {
     width: 23px;
 }

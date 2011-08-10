@@ -769,10 +769,6 @@ div.item_field textarea.tiny_component {
   width: 80%;
 }
 
-div.item_field input[type="text"].date {
-  width: 70%;
-}
-
 div.items, div.textual_items {
   width: 98%;
 }
@@ -1091,6 +1087,11 @@ table.date_filter, table.generic_filter {
   width: 100%;
 }
 
+table.date_filter td, table.generic_filter td {
+    padding-right: 1em;
+    width: 50%;
+}
+
 table.date_filter td:nth-child(1), table.date_filter td:nth-child(2),
 table.generic_filter td:nth-child(1), table.generic_filter td:nth-child(2) {
   padding-right: 1em;
@@ -1103,7 +1104,8 @@ table.generic_filter label.inline_item {
 }
 
 table.date_filter input[type="text"].inline_item,
-table.generic_filter input[type="text"].inline_item {
+table.generic_filter input[type="text"].inline_item,
+table.generic_filter select.inline_item {
   width: 70%;
 }
 

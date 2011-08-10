@@ -172,8 +172,8 @@ var Helper = {
       axis: 'y',
       items: elements,
       handle: handles,
-      opacity: 0.6,
-      stop: function() {FormUtil.completeSortNumbers();}
+      opacity: 0.7,
+      stop: function() { FormUtil.completeSortNumbers(); }
     });
   },
 
@@ -473,30 +473,21 @@ var Observer = {
     });
   },
   attachToInputFile: function(span) {
-    var input = span.find('input[type=file]');
+    span.find('input[type=file]').one('change', function() {
+      var e = $(this);
 
-    if(input.length > 0) {
-      $(input).unbind('change');
-            
-      $(input).change(function() {
-        var e = $(this);
+      if(e.hasClass('file') && !e.val().match(/^\s*$/)) {
+        var imageTag = $('<img />', {
+          src: '/images/new_document.gif',
+          width: 22,
+          height: 20,
+          alt: $(e).val(),
+          title: $(e).val()
+        });
 
-        if(e.hasClass('file') && !$(e).val().match(/^\s*$/)) {
-          var imageTag = $('<img />', {
-            src: '/images/new_document.gif',
-            width: 22,
-            height: 20,
-            alt: $(e).val(),
-            title: $(e).val()
-          });
-
-          if($(e).parents('span.file_container').length > 0) {
-            $(e).parents('span.file_container').hide();
-            $(e).parents('span.file_container').after(imageTag);
-          }
-        }
-      });
-    }
+        $(e).parents('span.file_container').hide().after(imageTag);
+      }
+    });
   }
 }
 

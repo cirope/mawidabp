@@ -229,6 +229,7 @@
 <!--[eoform:review] -->
 <script type="text/javascript">
 //<![CDATA[
+jQuery(function() {
   $('#review_plan_item_id').change(function() {
     var data_url = '<%= plan_item_data_reviews_path %>';
     var amount_url = '<%= estimated_amount_reviews_path %>';
@@ -292,5 +293,6 @@
   AutoComplete.observeAll();
 
   HTMLUtil.stylizeAllInputFiles();
+});
 //]]>
 </script>

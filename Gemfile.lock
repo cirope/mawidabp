@@ -51,12 +51,12 @@ GEM
     execjs (1.2.4)
       multi_json (~> 1.0)
     fastthread (1.0.7)
-    foreigner (1.1.0)
+    foreigner (1.1.1)
       activerecord (>= 3.0.0)
     gem_plugin (0.2.3)
     gruff (0.3.6)
     highline (1.6.2)
-    hoe (2.10.0)
+    hoe (2.11.0)
       rake (~> 0.8)
     i18n (0.5.0)
     jquery-rails (1.0.12)
@@ -152,7 +152,7 @@ GEM
     whenever (0.6.8)
       aaronh-chronic (>= 0.3.9)
       activesupport (>= 2.3.4)
-    will_paginate (3.0.pre4)
+    will_paginate (3.0.0)
     ya2yaml (0.30)
 
 PLATFORMS
