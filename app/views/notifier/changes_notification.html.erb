@@ -1,4 +1,4 @@
-<% organization = @notification.findings.first.try(:review).try(:organization) if @notification %>
+<% organization = @notification.findings.first.try(:organization) if @notification %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= @title %></h2>
   <% if @body.kind_of?(Array) && !@body.blank? %>

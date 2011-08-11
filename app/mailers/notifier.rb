@@ -6,19 +6,27 @@ class Notifier < ActionMailer::Base
 
   def group_welcome_email(group)
     @group, @hash = group, group.admin_hash
+    prefixes = group.organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
     
     mail(
       :to => [group.admin_email],
-      :subject => t(:'notifier.group_welcome_email.title', :name => group.name)
+      :subject => prefixes.upcase + t(
+        :'notifier.group_welcome_email.title', :name => group.name
+      )
     )
   end
 
   def welcome_email(user)
     @user, @hash = user, user.change_password_hash
+    prefixes = user.organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
     
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.welcome_email.title', :name => user.informal_name)
+      :subject => prefixes.upcase + t(
+        :'notifier.welcome_email.title', :name => user.informal_name
+      )
     )
   end
 
@@ -28,29 +36,33 @@ class Notifier < ActionMailer::Base
     @user = user
     @grouped_findings = findings.group_by(&:organization)
     @notification = Notification.create(:user => user, :findings => findings)
+    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.notify_new_findings.title')
+      :subject => prefixes.upcase + t(:'notifier.notify_new_findings.title')
     )
   end
 
   def notify_new_finding(user, finding)
     @user, @finding = user, finding
     @notification = Notification.create(:user => user, :findings => [finding])
+    prefix = "[#{finding.organization.prefix}] "
     
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.notify_new_finding.title')
+      :subject => prefix.upcase + t(:'notifier.notify_new_finding.title')
     )
   end
 
   def notify_new_finding_answer(users, finding_answer)
     @finding_answer = finding_answer
+    prefix = "[#{finding_answer.finding.organization.prefix}] "
 
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
-      :subject => t(
+      :subject => prefix.upcase + t(
         :'notifier.notify_new_finding_answer.title',
         :review => finding_answer.finding.review.to_s
       )
@@ -59,10 +71,15 @@ class Notifier < ActionMailer::Base
 
   def stale_notification(user)
     @notifications = user.notifications.not_confirmed
+    organizations = @notifications.map do |n|
+      n.findings.map(&:organization)
+    end.flatten.uniq
+    prefixes = organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.notification.pending')
+      :subject => prefixes.upcase + t(:'notifier.notification.pending')
     )
   end
 
@@ -71,10 +88,12 @@ class Notifier < ActionMailer::Base
 
     unless filtered_findings.empty?
       @grouped_findings = filtered_findings.group_by(&:organization)
+      prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+      prefixes << ' ' unless prefixes.blank?
 
       mail(
         :to => [user.email],
-        :subject => t(:'notifier.unanswered_findings.title')
+        :subject => prefixes.upcase + t(:'notifier.unanswered_findings.title')
       )
     else
       raise 'Findings and user mismatch'
@@ -83,10 +102,11 @@ class Notifier < ActionMailer::Base
 
   def unanswered_finding_to_manager_notification(finding, users, level)
     @finding, @level = finding, level
+    prefix = "[#{finding.organization.prefix}] ".upcase
 
     mail(
       :to => users.map(&:email),
-      :subject => t(:'notifier.unanswered_finding_to_manager.title')
+      :subject => prefix + t(:'notifier.unanswered_finding_to_manager.title')
     )
   end
 
@@ -98,21 +118,26 @@ class Notifier < ActionMailer::Base
     @grouped_findings = findings_array.group_by(&:organization)
     @notification = notify ?
       Notification.create(:findings => findings_array, :user => new_users) : nil
+    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => [new_users, old_users].flatten.compact.map(&:email),
-      :subject => t(:'notifier.reassigned_findings.title',
-        :count => findings_array.size)
+      :subject => prefixes.upcase + t(
+        :'notifier.reassigned_findings.title',
+        :count => findings_array.size
+      )
     )
   end
 
   def blank_password_notification(user, organization)
     @user, @hash = user, user.change_password_hash
     @organization = organization
+    prefix = "[#{organization.prefix}] "
 
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.blank_password.title')
+      :subject => prefix.upcase + t(:'notifier.blank_password.title')
     )
   end
 
@@ -121,17 +146,24 @@ class Notifier < ActionMailer::Base
     @content = options[:content]
     @body = options[:body]
     @notification = options[:notification]
+    organizations = @notification ?
+      @notification.findings.map(&:organization).uniq : []
+    prefixes = organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
-      :subject => t(:'notifier.changes_notification.title')
+      :subject => prefixes.upcase + t(:'notifier.changes_notification.title')
     )
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
     raise 'lala' if options.has_key?(:notify)
-    title = I18n.t(:'notifier.conclusion_review_notification.title',
-      :review => conclusion_review.review.identification)
+    prefix = "[#{conclusion_review.review.organization.prefix}] "
+    title = I18n.t(
+      :'notifier.conclusion_review_notification.title',
+      :review => conclusion_review.review.identification
+    )
     elements = [
       "*#{Review.model_name.human} #{conclusion_review.review.identification}*"
     ]
@@ -168,15 +200,19 @@ class Notifier < ActionMailer::Base
         File.read(conclusion_review.review.absolute_global_score_sheet_path)
     end
 
-    mail(:to => [user.email], :subject => title)
+    mail(:to => [user.email], :subject => prefix.upcase + title)
   end
 
   def findings_expiration_warning(user, findings)
     @grouped_findings = findings.group_by(&:organization)
+    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => [user.email],
-      :subject => t(:'notifier.findings_expiration_warning.title')
+      :subject => prefixes.upcase + t(
+        :'notifier.findings_expiration_warning.title'
+      )
     )
   end
 end

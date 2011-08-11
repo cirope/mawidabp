@@ -811,7 +811,9 @@ class FindingTest < ActiveSupport::TestCase
     
     response = ActionMailer::Base.deliveries.first
 
-    assert_equal I18n.t(:'notifier.notify_new_finding.title'), response.subject
+    assert response.subject.include?(
+      I18n.t(:'notifier.notify_new_finding.title')
+    )
   end
 
   test 'not notify users if is incomplete' do
