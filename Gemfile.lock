@@ -187,5 +187,5 @@ DEPENDENCIES
   uuidtools
   validates_timeliness (~> 3.0)
   whenever
-  will_paginate (~> 3.0.beta)
+  will_paginate
   ya2yaml

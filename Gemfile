@@ -14,7 +14,7 @@ gem 'newrelic_rpm'
 gem 'validates_timeliness', '~> 3.0'
 gem 'RedCloth'
 gem 'whenever', :require => false
-gem 'will_paginate', '~> 3.0.beta'
+gem 'will_paginate'
 gem 'paper_trail'
 gem 'paperclip'
 gem 'rmagick'

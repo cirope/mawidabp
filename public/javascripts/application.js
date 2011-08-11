@@ -620,6 +620,13 @@ jQuery(function($) {
       }).focus();
     }
   });
+  
+  // Eliminar de los envíos el botón submit y el "snowman"
+  $('form').submit(function() {
+    $(this).find('input[type="submit"], input[name="utf8"]').attr(
+      'disabled', true
+    );
+  });
 
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
   $('.work_paper').live('item:removed', function() {
@@ -656,22 +663,20 @@ jQuery(function($) {
     
     return false;
   });
+  
+  Observer.attachToAppContent();
 
-  if($('#app_content').length > 0) {
-    Observer.attachToAppContent();
-    
-    $('img').mouseover(function() {
-      if($(this).hasClass('change_on_hover')) {
-        HTMLUtil.replaceWithHoverImage($(this));
-      }
-    });
-    
-    $('img').mouseout(function() {
-      if($(this).hasClass('change_on_hover')) {
-        HTMLUtil.replaceWithNormalImage($(this));
-      }
-    });
-  }
+  $('img').mouseover(function() {
+    if($(this).hasClass('change_on_hover')) {
+      HTMLUtil.replaceWithHoverImage($(this));
+    }
+  });
+
+  $('img').mouseout(function() {
+    if($(this).hasClass('change_on_hover')) {
+      HTMLUtil.replaceWithNormalImage($(this));
+    }
+  });
 
   if($('#menu_container').length > 0 && !/Apple.*Mobile/.test(navigator.userAgent)) {
     Observer.attachToMenu();
