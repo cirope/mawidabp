@@ -172,9 +172,12 @@ var Helper = {
       axis: 'y',
       items: elements,
       handle: handles,
-      opacity: 0.7,
+      opacity: 0.6,
       stop: function() { FormUtil.completeSortNumbers(); }
     });
+    
+    // Queridisimo Explorer
+    if($.browser.msie) { $(elementId).find(elements).css('opacity', '1'); }
   },
 
   /**
@@ -619,13 +622,6 @@ jQuery(function($) {
         onSelect: function() {$(this).datepicker('hide');}
       }).focus();
     }
-  });
-  
-  // Eliminar de los envíos el botón submit y el "snowman"
-  $('form').submit(function() {
-    $(this).find('input[type="submit"], input[name="utf8"]').attr(
-      'disabled', true
-    );
   });
 
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
