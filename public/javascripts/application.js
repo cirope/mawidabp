@@ -372,8 +372,9 @@ var HTMLUtil = {
   updateOptions: function(selectElement, optionsString) {
     var element = $(selectElement);
 
-    element.html(optionsString);
-    element.attr('disabled', $('option', element).length == 0);
+    element.html(optionsString).attr(
+      'disabled', $('option', element).length == 0
+    );
   }
 }
 
@@ -414,10 +415,8 @@ var Observer = {
      * Adjunta eventos a la sección app_content
      */
   attachToAppContent: function() {
-    $('#app_content').live('click', function() {
-      if ($(this).hasClass('file_container')) {
-        $('input[type=file]', $(this)).click();
-      }
+    $('.file_container').live('click', function() {
+      $(this).find('input[type=file]').click();
     });
   },
 
@@ -488,7 +487,9 @@ var Observer = {
           title: $(e).val()
         });
 
-        $(e).parents('span.file_container').hide().after(imageTag);
+        if($(e).parents('span.file_container').next('img').length == 0) {
+          $(e).parents('span.file_container').hide().after(imageTag);
+        }
       }
     });
   }
