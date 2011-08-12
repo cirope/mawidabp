@@ -355,14 +355,14 @@ div#notice {
 
 div#notice, div#alert {
   position: fixed;
-  bottom: .5em;
-  left: 5%;
-  right: 5%;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
   font-weight: bold;
   font-size: 1.4em;
   text-align: center;
-  padding: .5em 1em;
-  border: 4px solid #c2bfb7;
+  padding: .75em 0em;
+  opacity: .9;
 }
 
 div#notice div#close_notice, div#alert div#close_alert {
@@ -451,15 +451,16 @@ div#showed_data > p, div#showed_data div.show_item {
 
 div#time_left {
   position: fixed;
-  top: .5em;
-  right: 1em;
+  top: 0em;
+  right: 0em;
+  left: 0em;
   background: #aa0000;
   color: #ffffff;
   font-weight: bold;
   font-size: 1.2em;
   text-align: center;
-  padding: .5em 2em;
-  border: 4px solid #c2bfb7;
+  padding: .75em 0em;
+  opacity: .9;
   z-index: 1;
 }
 

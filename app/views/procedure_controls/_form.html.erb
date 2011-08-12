@@ -11,7 +11,7 @@
         <%= pc_f.label :period_id, nil, :class => :inline %>
         <%= pc_f.select :period_id,
           Period.list_all_without_procedure_controls.map { |p| [p.inspect, p.id] },
-          {:prompt => true}, {:class => :inline_item} %>
+          {:prompt => true}, {:class => :inline_item, :autofocus => true} %>
         <%= link_to_add new_period_path(:back_to => new_procedure_control_path) %>
       </p>
     <% else %>

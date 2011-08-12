@@ -6,7 +6,7 @@
     <p class="form_item">
       <%= f.label :number, raw(Period.human_attribute_name(:number) +
           show_inline_help_for(:period_number)), :class => :inline %>
-      <%= f.text_field :number, :class => :inline_item %>
+      <%= f.text_field :number, :class => :inline_item, :autofocus => true %>
     </p>
     <p>
       <%= f.label :description %>

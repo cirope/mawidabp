@@ -228,7 +228,7 @@ var Helper = {
      * Muestra mensajes en el div "time_left" si existe
      */
   showMessage: function(message, expired) {
-    $('span.message', $('#time_left')).html(message);
+    $('#time_left').find('span.message').html(message);
     $('#time_left:not(:visible)').stop().fadeIn();
 
     State.sessionExpire = State.sessionExpire || expired;
