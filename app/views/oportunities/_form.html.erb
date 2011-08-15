@@ -87,7 +87,9 @@
         :locals => { :finding => @oportunity } %>
     <% end %>
     <p>
-      <%= f.label :solution_date %>
+      <%= f.label :solution_date,
+        raw(Finding.human_attribute_name(:solution_date) +
+        show_inline_help_for(:finding_solution_date)) %>
       <%= calendar_text_field f, :solution_date, false, nil,
         :disabled => readonly %>
     </p>
