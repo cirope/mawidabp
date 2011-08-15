@@ -269,31 +269,29 @@
       <%= show_inline_help_for(:finding_comments) %>
     </h1>
     
-    <% unless @finding.finding_answers.blank? %>
-      <table class="summary_table" id="finding_answers">
-        <thead>
-          <tr>
-            <th><%= User.model_name.human %></th>
-            <th><%= FindingAnswer.human_attribute_name :answer %></th>
-            <th>
-              <%= FindingAnswer.human_attribute_name :file_model %>
-              <%= show_inline_help_for(:finding_file_model) %>
-            </th>
-            <th>
-              <%= FindingAnswer.human_attribute_name :created_at %>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
-          <%= f_f.fields_for :finding_answers do |fa_f| %>
-            <%= render :partial => 'finding_answer', :locals =>
-              {:f => fa_f, :is_dynamic => false} %>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+    <table class="summary_table" id="finding_answers">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :created_at %>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+        <%= f_f.fields_for :finding_answers do |fa_f| %>
+          <%= render :partial => 'finding_answer', :locals =>
+            {:f => fa_f, :is_dynamic => false} %>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 
   <p class="add_item">
