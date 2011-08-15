@@ -203,10 +203,11 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def unzip_if_necesary
-    if self.file_model &&
-        File.extname(self.file_model.file_file_name) == '.zip' &&
-        self.file_model.file_file_name.start_with?(self.sanitized_code) &&
-        !self.file_model.file_file_name.start_with?("#{self.sanitized_code}-zip")
+    file_name = self.file_model.try(:file_file_name) || ''
+    
+    if File.extname(file_name) == '.zip' &&
+        file_name.start_with?(self.sanitized_code) &&
+        !file_name.start_with?("#{self.sanitized_code}-zip")
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 

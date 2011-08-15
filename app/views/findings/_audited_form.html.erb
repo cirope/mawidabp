@@ -181,31 +181,31 @@
     <%= show_inline_help_for(:finding_comments) %>
   </h1>
 
-  <div class="column_headers">
-    <div class="item_column" style="width: 20%;">
-      <h3><%= User.model_name.human %></h3>
-    </div>
-    <div class="item_column" style="width: 40%;">
-      <h3><%= FindingAnswer.human_attribute_name :answer %></h3>
-    </div>
-    <div class="item_column" style="width: 10%;">
-      <h3>
-        <%= FindingAnswer.human_attribute_name :file_model %>
-        <%= show_inline_help_for(:finding_file_model) %>
-      </h3>
-    </div>
-    <div class="item_column" style="width: 20%;">&nbsp;</div>
-    <div class="item_column" style="width: 5%;"></div>
-    <div class="clear"></div>
-  </div>
-
-  <div id="finding_answers">
-    <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
-    <%= f_f.fields_for :finding_answers do |fa_f| %>
-      <%= render :partial => 'finding_answer', :locals =>
-        {:f => fa_f, :is_dynamic => false} %>
-    <% end %>
-  </div>
+  <% unless @finding.finding_answers.blank? %>
+    <table class="summary_table" id="finding_answers">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :created_at %>
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+        <%= f_f.fields_for :finding_answers do |fa_f| %>
+          <%= render :partial => 'finding_answer', :locals =>
+            {:f => fa_f, :is_dynamic => false} %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <p class="add_item">
     <%= link_to t(:'finding.add_finding_answer'), '#',

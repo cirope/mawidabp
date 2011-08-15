@@ -152,7 +152,10 @@ var Helper = {
      * Oculta el elemento indicado
      */
   hideItem: function(element, callback) {
-    $(element).stop().slideUp(500, callback);
+    var func = $(element).is('tr') ? 'fadeOut' : 'slideUp';
+    var time = $(element).is('tr') ? 300 : 500;
+    
+    $(element).stop()[func](time, callback);
   },
 
   /**
@@ -161,7 +164,7 @@ var Helper = {
   hideLoading: function(element) {
     $('#loading:visible').hide();
 
-    $(element).attr('disabled', false);
+    $(element).removeAttr('disabled');
   },
 
   /**
@@ -173,19 +176,22 @@ var Helper = {
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() { FormUtil.completeSortNumbers(); }
+      stop: function() {FormUtil.completeSortNumbers();}
     });
     
     // Queridisimo Explorer
-    if($.browser.msie) { $(elementId).find(elements).css('opacity', '1'); }
+    if($.browser.msie) {$(elementId).find(elements).css('opacity', '1');}
   },
 
   /**
      * Elimina el elemento indicado
      */
   removeItem: function(element, callback) {
-    $(element).stop().slideUp(500, function() {
-      $(this).remove();
+    var func = $(element).is('tr') ? 'fadeOut' : 'slideUp';
+    var time = $(element).is('tr') ? 300 : 500;
+    
+    $(element).stop()[func](time, function() {
+      $(element).remove();
       
       if(jQuery.isFunction(callback)) {callback();}
     });
@@ -197,10 +203,13 @@ var Helper = {
   showItem: function(element, callback) {
     var e = $(element);
 
-    if(e.is(':not(:visible)')) {
-      e.stop().slideDown(500, function() {
-        $(
-          '*[autofocus]:not([readonly]):not([disabled]):visible:first', e
+    if(e.is(':not(:visible):not(:animated)')) {
+      var func = $(element).is('tr') ? 'fadeIn' : 'slideDown';
+      var time = $(element).is('tr') ? 300 : 500;
+      
+      e[func](time, function() {
+        e.find(
+          '*[autofocus]:not([readonly]):not([disabled]):visible:first'
         ).focus();
 
         if(jQuery.isFunction(callback)) {callback();}
@@ -274,7 +283,7 @@ var HTMLUtil = {
           ul.append(li);
         } else {
           if($.isArray(e)) {
-            $.each(e, function(i, se) { ul.append($('<li></li>').html(se)); });
+            $.each(e, function(i, se) {ul.append($('<li></li>').html(se));});
           } else {
             ul.append($('<li></li>').html(e));
           }
@@ -302,41 +311,15 @@ var HTMLUtil = {
 
     return includeBlank ? '<option value=""></option>' + options : options;
   },
-
-  /**
-     * Reemplaza el atributo "src" de un elemento por el mismo con la sufijo
-     * _hover
-     */
-  replaceWithHoverImage: function(e) {
-    var src = e.attr('src');
-
-    if(src && !src.match(/_hover/)) {
-      e.attr('src', src.replace(/^(.*)\.(.*?)$/, '$1_hover.$2'));
-    } else {
-      HTMLUtil.replaceWithNormalImage(e);
-    }
-  },
-
-  /**
-     * Reemplaza el atributo "src" de un elemento por el mismo sin el prefijo
-     * _hover
-     */
-  replaceWithNormalImage: function(e) {
-    var src = e.attr('src');
-
-    if(src && src.match(/_hover/)) {
-      e.attr('src', src.replace(/_hover/, ''));
-    }
-  },
   
   /**
      * Ejecuta la función HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
      * de un contenedor span con clase file_container
      */
   stylizeAllInputFiles: function() {
-    $('span.file_container').each(function() {
-      HTMLUtil.stylizeInputFile($(this));
-      Observer.attachToInputFile($(this));
+    $('span.file_container').each(function(i, e) {
+      HTMLUtil.stylizeInputFile($(e));
+      Observer.attachToInputFile($(e));
     });
   },
 
@@ -412,15 +395,6 @@ var Menu = {
 // Observadores de eventos
 var Observer = {
   /**
-     * Adjunta eventos a la sección app_content
-     */
-  attachToAppContent: function() {
-    $('.file_container').live('click', function() {
-      $(this).find('input[type=file]').click();
-    });
-  },
-
-  /**
      * Agrega un listener a los eventos de click en el menú principal
      */
   attachToMenu: function() {
@@ -474,8 +448,9 @@ var Observer = {
       }
     });
   },
+  
   attachToInputFile: function(span) {
-    span.find('input[type=file]').one('change', function() {
+    span.find('input[type=file]:not(data-observed)').one('change', function() {
       var e = $(this);
 
       if(e.hasClass('file') && !e.val().match(/^\s*$/)) {
@@ -483,13 +458,11 @@ var Observer = {
           src: '/images/new_document.gif',
           width: 22,
           height: 20,
-          alt: $(e).val(),
-          title: $(e).val()
+          alt: e.val(),
+          title: e.val()
         });
-
-        if($(e).parents('span.file_container').next('img').length == 0) {
-          $(e).parents('span.file_container').hide().after(imageTag);
-        }
+        
+        e.parents('span.file_container:visible').hide().after(imageTag);
       }
     });
   }
@@ -659,20 +632,6 @@ jQuery(function($) {
     );
     
     return false;
-  });
-  
-  Observer.attachToAppContent();
-
-  $('img').mouseover(function() {
-    if($(this).hasClass('change_on_hover')) {
-      HTMLUtil.replaceWithHoverImage($(this));
-    }
-  });
-
-  $('img').mouseout(function() {
-    if($(this).hasClass('change_on_hover')) {
-      HTMLUtil.replaceWithNormalImage($(this));
-    }
   });
 
   if($('#menu_container').length > 0 && !/Apple.*Mobile/.test(navigator.userAgent)) {

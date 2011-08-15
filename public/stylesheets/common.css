@@ -1208,7 +1208,7 @@ table.summary_table th, table.summary_table td.header {
 table.summary_table td {
   padding: .3em .5em;
   border: 1px solid #c2bfb7;
-  vertical-align: text-top;
+  vertical-align: top;
 }
 
 table.summary_table td p {
