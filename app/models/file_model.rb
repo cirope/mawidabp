@@ -14,4 +14,7 @@ class FileModel < ActiveRecord::Base
     :message => lambda { I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes) }
   validates :file_file_name, :file_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
+  validates_each :file_file_name do |record, attr, value|
+    record.errors.add attr, :without_extension if File.extname(value.to_s).blank?
+  end
 end

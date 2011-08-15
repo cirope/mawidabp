@@ -1952,6 +1952,10 @@ es:
               taken: "ya tiene creado un informe definitivo"
               invalid: "no está aprobado"
               without_draft: "no tiene borrador"
+        file_model:
+          attributes:
+            file_file_name:
+              without_extension: 'debe tener extensión'
         finding:
           attributes:
             follow_up_date:

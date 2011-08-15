@@ -32,10 +32,10 @@ class FileModelTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un modelo de archivo
   test 'update' do
-    @file_model.file_file_name = 'updated_name'
+    @file_model.file_file_name = 'updated_name.txt'
     assert @file_model.save, @file_model.errors.full_messages.join('; ')
     @file_model.reload
-    assert_equal 'updated_name', @file_model.file_file_name
+    assert_equal 'updated_name.txt', @file_model.file_file_name
   end
 
   # Prueba de eliminación de un modelo de archivo
@@ -67,7 +67,7 @@ class FileModelTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates lenght attributes' do
-    @file_model.file_file_name = 'abc' * 100
+    @file_model.file_file_name = "#{'abc' * 100}.txt"
     @file_model.file_content_type = 'abc' * 100
     assert @file_model.invalid?
     assert_equal 2, @file_model.errors.count
@@ -75,6 +75,16 @@ class FileModelTest < ActiveSupport::TestCase
       :count => 255)], @file_model.errors[:file_file_name]
     assert_equal [error_message_from_model(@file_model, :file_content_type, :too_long,
       :count => 255)], @file_model.errors[:file_content_type]
+  end
+  
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates file must have an extension' do
+    @file_model.file_file_name = 'abc'
+    assert @file_model.invalid?
+    assert_equal 1, @file_model.errors.count
+    assert_equal [
+      error_message_from_model(@file_model, :file_file_name, :without_extension)
+    ], @file_model.errors[:file_file_name]
   end
 
   private
