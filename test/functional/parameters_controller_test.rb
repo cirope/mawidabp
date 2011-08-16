@@ -73,7 +73,7 @@ class ParametersControllerTest < ActionController::TestCase
         }
       }
       
-    assert_redirected_to parameters_path(:type => 'admin')
+    assert_redirected_to parameters_url(:type => 'admin')
     assert_not_nil assigns(:parameter)
     assert_equal 'New value', assigns(:parameter).value
     assert_equal 'New description', assigns(:parameter).description
@@ -97,7 +97,7 @@ class ParametersControllerTest < ActionController::TestCase
         }
       }
       
-    assert_redirected_to parameters_path(:type => 'admin')
+    assert_redirected_to parameters_url(:type => 'admin')
     assert_not_nil assigns(:parameter)
     assert_equal 'New description', assigns(:parameter).description
     assert_equal [['New key 1', '1'], ['New key 2', '2'], ['New key 3', '3'],
@@ -117,7 +117,7 @@ class ParametersControllerTest < ActionController::TestCase
           }
         }
 
-      assert_redirected_to parameters_path(:type => 'admin')
+      assert_redirected_to parameters_url(:type => 'admin')
       assert_not_nil assigns(:parameter)
       assert_equal 'New value', assigns(:parameter).value
       assert_equal 'New description', assigns(:parameter).description

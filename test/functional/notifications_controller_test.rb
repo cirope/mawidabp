@@ -73,7 +73,7 @@ class NotificationsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to notifications_path
+    assert_redirected_to notifications_url
     assert_not_nil assigns(:notification)
     assert_equal 'Updated notes', assigns(:notification).notes
   end

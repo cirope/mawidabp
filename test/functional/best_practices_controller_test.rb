@@ -245,7 +245,7 @@ class BestPracticesControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to edit_best_practice_path(best_practices(:iso_27001).id)
+    assert_redirected_to edit_best_practice_url(best_practices(:iso_27001).id)
     assert_not_nil assigns(:best_practice)
     assert_equal 'updated_best_practice', assigns(:best_practice).name
     assert_equal 'updated process control', ProcessControl.find(
@@ -263,6 +263,6 @@ class BestPracticesControllerTest < ActionController::TestCase
       delete :destroy, :id => best_practices(:useless_best_practice).id
     end
 
-    assert_redirected_to best_practices_path
+    assert_redirected_to best_practices_url
   end
 end

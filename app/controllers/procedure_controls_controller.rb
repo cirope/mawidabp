@@ -99,7 +99,7 @@ class ProcedureControlsController < ApplicationController
     respond_to do |format|
       if @procedure_control.save
         flash.notice = t :'procedure_control.correctly_created'
-        format.html { redirect_to(edit_procedure_control_path(@procedure_control)) }
+        format.html { redirect_to(edit_procedure_control_url(@procedure_control)) }
         format.xml  { render :xml => @procedure_control, :status => :created, :location => @procedure_control }
       else
         format.html { render :action => :new }
@@ -120,7 +120,7 @@ class ProcedureControlsController < ApplicationController
     respond_to do |format|
       if @procedure_control.update_attributes(params[:procedure_control])
         flash.notice = t :'procedure_control.correctly_updated'
-        format.html { redirect_to(edit_procedure_control_path(@procedure_control)) }
+        format.html { redirect_to(edit_procedure_control_url(@procedure_control)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

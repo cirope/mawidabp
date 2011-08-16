@@ -31,7 +31,7 @@ class ControlObjectiveItemsController < ApplicationController
     respond_to do |format|
       format.html {
         if @control_objectives.size == 1 && !@query.blank? && !params[:page]
-          redirect_to control_objective_item_path(@control_objectives.first)
+          redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @control_objective_items }
@@ -64,7 +64,7 @@ class ControlObjectiveItemsController < ApplicationController
         :review_id => params[:review],
         Review.table_name => {:organization_id => @auth_organization.id}
       ).order('created_at DESC').first
-      session[:back_to] = edit_review_path(params[:review].to_i)
+      session[:back_to] = edit_review_url(params[:review].to_i)
     else
       @control_objective_item = find_with_organization(params[:id])
     end
@@ -99,7 +99,7 @@ class ControlObjectiveItemsController < ApplicationController
         flash.notice = t :'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html {
-          redirect_to(back_to || edit_control_objective_item_path(@control_objective_item))
+          redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
         }
         format.xml  { head :ok }
       else

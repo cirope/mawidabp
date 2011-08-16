@@ -60,7 +60,7 @@ class FindingsController < ApplicationController
         )
         
         if @findings.size == 1 && !@query.blank? && !params[:page]
-          redirect_to finding_path(params[:completed], @findings.first)
+          redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb
       format.xml  {
@@ -91,7 +91,7 @@ class FindingsController < ApplicationController
     @title = t :'finding.edit_title'
     @finding = find_with_organization(params[:id])
 
-    redirect_to findings_path unless @finding
+    redirect_to findings_url unless @finding
   end
 
   # Actualiza el contenido de una debilidad u oportunidad siempre que cumpla con
@@ -113,7 +113,7 @@ class FindingsController < ApplicationController
       Finding.transaction do
         if @finding.update_attributes(params[:finding])
           flash.notice = t :'finding.correctly_updated'
-          format.html { redirect_to(edit_finding_path(params[:completed], @finding)) }
+          format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
           format.xml  { head :ok }
         else
           format.html { render :action => :edit }

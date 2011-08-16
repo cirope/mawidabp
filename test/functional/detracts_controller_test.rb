@@ -50,7 +50,7 @@ class DetractsControllerTest < ActionController::TestCase
   test 'new detract when search match only one result' do
     perform_auth
     get :index, :search => {:query => 'admin', :columns => ['user', 'name']}
-    assert_redirected_to new_detract_path(
+    assert_redirected_to new_detract_url(
       :detract => {:user_id => users(:administrator_user).id})
     assert_not_nil assigns(:users)
     assert_equal 1, assigns(:users).size

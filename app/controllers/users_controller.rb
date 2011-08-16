@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html {
         if @users.size == 1 && !@query.blank? && !params[:page]
-          redirect_to user_path(@users.first)
+          redirect_to user_url(@users.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @users }
@@ -101,7 +101,7 @@ class UsersController < ApplicationController
       if @user.save
         @user.send_welcome_email
         flash.notice = t :'user.correctly_created'
-        format.html { redirect_to(users_path) }
+        format.html { redirect_to(users_url) }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
         @user.password = @user.password_confirmation = nil
@@ -130,7 +130,7 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         @user.send_notification_if_necesary
         flash.notice = t :'user.correctly_updated'
-        format.html { redirect_to(users_path) }
+        format.html { redirect_to(users_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -539,7 +539,7 @@ class UsersController < ApplicationController
 
     if @other && @user.reassign_to(@other, options)
       flash.notice = t(:'user.user_reassignment_completed')
-      redirect_to users_path
+      redirect_to users_url
     elsif !@other
       @user.errors.add :base, t(:'user.errors.must_select_a_user')
       render :action => :reassignment_edit
@@ -575,7 +575,7 @@ class UsersController < ApplicationController
 
     if @user.release_for_all_pending_findings(options)
       flash.notice = t(:'user.user_release_completed')
-      redirect_to users_path
+      redirect_to users_url
     else
       flash.alert = t(:'user.user_release_failed')
       render :action => :reassignment_edit

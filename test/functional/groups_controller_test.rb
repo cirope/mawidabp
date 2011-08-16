@@ -161,7 +161,7 @@ class GroupsControllerTest < ActionController::TestCase
       }
     end
     
-    assert_redirected_to groups_path
+    assert_redirected_to groups_url
     assert_not_nil assigns(:group)
     assert_equal 'Updated group', assigns(:group).name
     assert_equal 'Updated default organization',
@@ -175,6 +175,6 @@ class GroupsControllerTest < ActionController::TestCase
       delete :destroy, :id => groups(:second_group).id
     end
 
-    assert_redirected_to groups_path
+    assert_redirected_to groups_url
   end
 end

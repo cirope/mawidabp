@@ -64,7 +64,7 @@ class InlineHelpsController < ApplicationController
       if @inline_help.save
         flash.notice = t :'inline_help.correctly_created'
         back_to, session[:back_to] = session[:back_to], nil
-        format.html { redirect_to(back_to || inline_helps_path) }
+        format.html { redirect_to(back_to || inline_helps_url) }
         format.xml  { render :xml => @inline_help, :status => :created, :location => @inline_help }
       else
         format.html { render :action => :new }
@@ -83,7 +83,7 @@ class InlineHelpsController < ApplicationController
       if @inline_help.update_attributes(params[:inline_help])
         flash.notice = t :'inline_help.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
-        format.html { redirect_to(back_to || inline_helps_path) }
+        format.html { redirect_to(back_to || inline_helps_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

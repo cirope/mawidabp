@@ -69,7 +69,7 @@ class HelpContentsController < ApplicationController
         flash.notice = t :'help_content.correctly_created'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
-              show_content_help_content_path(help_item) : help_contents_path) }
+              show_content_help_content_url(help_item) : help_contents_url) }
         format.xml  { render :xml => @help_content, :status => :created, :location => @help_content }
       else
         format.html { render :action => :new }
@@ -91,7 +91,7 @@ class HelpContentsController < ApplicationController
         flash.notice = t :'help_content.correctly_updated'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
-              show_content_help_content_path(help_item) : help_contents_path) }
+              show_content_help_content_url(help_item) : help_contents_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

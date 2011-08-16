@@ -67,7 +67,7 @@ class OportunitiesControllerTest < ActionController::TestCase
       :columns => ['description', 'review']
     }
 
-    assert_redirected_to oportunity_path(
+    assert_redirected_to oportunity_url(
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity))
     assert_not_nil assigns(:oportunities)
     assert_equal 1, assigns(:oportunities).size
@@ -235,7 +235,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     end
 
     assert_not_nil assigns(:oportunity)
-    assert_redirected_to edit_oportunity_path(assigns(:oportunity))
+    assert_redirected_to edit_oportunity_url(assigns(:oportunity))
     assert_equal 'OM020', assigns(:oportunity).review_code
   end
 
@@ -246,7 +246,7 @@ class OportunitiesControllerTest < ActionController::TestCase
         :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id
     end
 
-    assert_redirected_to oportunities_path
+    assert_redirected_to oportunities_url
   end
 
   test 'follow up pdf' do
@@ -275,7 +275,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert oportunity.reload.repeated_of
     
     put :undo_reiteration, :id => oportunity.to_param
-    assert_redirected_to edit_oportunity_path(oportunity)
+    assert_redirected_to edit_oportunity_url(oportunity)
     
     assert !repeated_of.reload.repeated?
     assert_nil oportunity.reload.repeated_of

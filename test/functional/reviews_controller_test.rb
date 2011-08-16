@@ -60,7 +60,7 @@ class ReviewsControllerTest < ActionController::TestCase
       :query => '1 1',
       :columns => ['identification', 'project']
     }
-    assert_redirected_to review_path(reviews(:past_review))
+    assert_redirected_to review_url(reviews(:past_review))
     assert_not_nil assigns(:reviews)
     assert_equal 1, assigns(:reviews).size
   end
@@ -293,7 +293,7 @@ class ReviewsControllerTest < ActionController::TestCase
     control_objective_item = ControlObjectiveItem.find(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id)
 
-    assert_redirected_to edit_review_path(reviews(:review_with_conclusion).id)
+    assert_redirected_to edit_review_url(reviews(:review_with_conclusion).id)
     assert_not_nil assigns(:review)
     assert_equal 'Updated Description', assigns(:review).description
     assert_equal 'Updated text', control_objective_item.control_objective_text
@@ -305,7 +305,7 @@ class ReviewsControllerTest < ActionController::TestCase
       delete :destroy, :id => reviews(:review_with_conclusion).id
     end
 
-    assert_redirected_to reviews_path
+    assert_redirected_to reviews_url
   end
 
   test 'destroy with final review' do
@@ -314,7 +314,7 @@ class ReviewsControllerTest < ActionController::TestCase
       delete :destroy, :id => reviews(:current_review).id
     end
 
-    assert_redirected_to reviews_path
+    assert_redirected_to reviews_url
     assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash.alert
   end
 

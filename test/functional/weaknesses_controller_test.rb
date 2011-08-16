@@ -68,7 +68,7 @@ class WeaknessesControllerTest < ActionController::TestCase
       :query => '1 2 4 y 1w',
       :columns => ['description', 'review']
     }
-    assert_redirected_to weakness_path(
+    assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:weaknesses)
     assert_equal 1, assigns(:weaknesses).size
@@ -247,7 +247,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     end
 
     assert_not_nil assigns(:weakness)
-    assert_redirected_to edit_weakness_path(assigns(:weakness))
+    assert_redirected_to edit_weakness_url(assigns(:weakness))
     assert_equal 'O020', assigns(:weakness).review_code
   end
 
@@ -258,7 +258,7 @@ class WeaknessesControllerTest < ActionController::TestCase
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
     end
 
-    assert_redirected_to weaknesses_path
+    assert_redirected_to weaknesses_url
   end
 
   test 'follow up pdf' do
@@ -287,7 +287,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert weakness.reload.repeated_of
     
     put :undo_reiteration, :id => weakness.to_param
-    assert_redirected_to edit_weakness_path(weakness)
+    assert_redirected_to edit_weakness_url(weakness)
     
     assert !repeated_of.reload.repeated?
     assert_nil weakness.reload.repeated_of

@@ -80,7 +80,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       :query => '1 2 3',
       :columns => ['identification', 'project']
     }
-    assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
+    assert_redirected_to edit_conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 1, assigns(:conclusion_final_reviews).size
   end
@@ -92,7 +92,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       :columns => ['issue_date']
     }
 
-    assert_redirected_to edit_conclusion_final_review_path(conclusion_reviews(:conclusion_current_final_review))
+    assert_redirected_to edit_conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 1, assigns(:conclusion_final_reviews).size
   end
@@ -128,7 +128,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     perform_auth
     get :new, :review =>
       conclusion_reviews(:conclusion_past_final_review).review_id
-    assert_redirected_to edit_conclusion_final_review_path(
+    assert_redirected_to edit_conclusion_final_review_url(
       conclusion_reviews(:conclusion_past_final_review))
   end
 
@@ -171,7 +171,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to conclusion_final_reviews_path
+    assert_redirected_to conclusion_final_reviews_url
     assert_not_nil assigns(:conclusion_final_review)
     assert_equal 'Updated conclusion',
       assigns(:conclusion_final_review).conclusion

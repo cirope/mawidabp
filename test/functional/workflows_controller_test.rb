@@ -161,7 +161,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     resource_utilization = ResourceUtilization.find(
       resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id)
 
-    assert_redirected_to workflows_path
+    assert_redirected_to workflows_url
     assert_not_nil assigns(:workflow)
     assert_equal 'Updated task', assigns(:workflow).workflow_items.find(
       workflow_items(:with_conclusion_workflow_item_1).id).task
@@ -227,7 +227,7 @@ class WorkflowsControllerTest < ActionController::TestCase
       delete :destroy, :id => workflows(:with_conclusion_workflow).id
     end
 
-    assert_redirected_to workflows_path
+    assert_redirected_to workflows_url
   end
 
   test 'export to pdf' do

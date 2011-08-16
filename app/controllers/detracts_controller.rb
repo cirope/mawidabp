@@ -37,7 +37,7 @@ class DetractsController < ApplicationController
             !params[:page]
 
           redirect_to @has_approval ?
-            new_detract_path(:detract => {:user_id => @users.first.id}) :
+            new_detract_url(:detract => {:user_id => @users.first.id}) :
             {:action => :show, :id => @users.first.detracts.last || 0}
         end
       } # index.html.erb
@@ -119,7 +119,7 @@ class DetractsController < ApplicationController
     respond_to do |format|
       if @detract.save
         flash.notice = t :'detract.correctly_created'
-        format.html { redirect_to(detracts_path) }
+        format.html { redirect_to(detracts_url) }
         format.xml  { render :xml => @detract, :status => :created, :location => @detract }
       else
         format.html { render :action => :new }

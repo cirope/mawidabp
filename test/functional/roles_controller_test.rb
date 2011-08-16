@@ -113,7 +113,7 @@ class RolesControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to roles_path
+    assert_redirected_to roles_url
     assert_not_nil assigns(:role)
     assert_equal 'Updated role', assigns(:role).name
     assert !assigns(:role).privileges.find(privilege.id).approval
@@ -125,6 +125,6 @@ class RolesControllerTest < ActionController::TestCase
       delete :destroy, :id => roles(:auditor_senior_role).id
     end
 
-    assert_redirected_to roles_path
+    assert_redirected_to roles_url
   end
 end

@@ -70,7 +70,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
       }
     end
     
-    assert_redirected_to inline_helps_path
+    assert_redirected_to inline_helps_url
   end
 
   test 'edit inline_help' do
@@ -95,7 +95,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to inline_helps_path
+    assert_redirected_to inline_helps_url
     assert_not_nil assigns(:inline_help)
     assert_equal 'es', assigns(:inline_help).language
     assert_equal 'Updated content', InlineHelp.find(
@@ -108,6 +108,6 @@ class InlineHelpsControllerTest < ActionController::TestCase
       delete :destroy, :id => inline_helps(:es_review_identification).id
     end
 
-    assert_redirected_to inline_helps_path
+    assert_redirected_to inline_helps_url
   end
 end

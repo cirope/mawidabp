@@ -88,7 +88,7 @@ class OrganizationsController < ApplicationController
 
       if saved
         flash.notice = t :'organization.correctly_created'
-        format.html { redirect_to(organizations_path) }
+        format.html { redirect_to(organizations_url) }
         format.xml  { render :xml => @organization, :status => :created, :location => @organization }
       else
         format.html { render :action => :new }
@@ -111,7 +111,7 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       if @organization.update_attributes(params[:organization])
         flash.notice = t :'organization.correctly_updated'
-        format.html { redirect_to(organizations_path) }
+        format.html { redirect_to(organizations_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

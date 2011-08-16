@@ -33,7 +33,7 @@ class ConclusionDraftReviewsController < ApplicationController
       format.html {
         if @conclusion_draft_reviews.size == 1 && !@query.blank? &&
             !params[:page] && !@conclusion_draft_reviews.first.has_final_review?
-          redirect_to edit_conclusion_draft_review_path(
+          redirect_to edit_conclusion_draft_review_url(
             @conclusion_draft_reviews.first)
         end
       }
@@ -89,7 +89,7 @@ class ConclusionDraftReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_draft_review.save
         flash.notice = t :'conclusion_draft_review.correctly_created'
-        format.html { redirect_to(conclusion_draft_reviews_path) }
+        format.html { redirect_to(conclusion_draft_reviews_url) }
         format.xml  { render :xml => @conclusion_draft_review, :status => :created, :location => @conclusion_draft_review }
       else
         format.html { render :action => :new }
@@ -111,7 +111,7 @@ class ConclusionDraftReviewsController < ApplicationController
       if @conclusion_draft_review.update_attributes(
           params[:conclusion_draft_review])
         flash.notice = t :'conclusion_draft_review.correctly_updated'
-        format.html { redirect_to(conclusion_draft_reviews_path) }
+        format.html { redirect_to(conclusion_draft_reviews_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -244,7 +244,7 @@ class ConclusionDraftReviewsController < ApplicationController
       unless users.blank?
         flash.notice = t(:'conclusion_review.review_sended')
 
-        redirect_to edit_conclusion_draft_review_path(
+        redirect_to edit_conclusion_draft_review_url(
           @conclusion_draft_review)
       else
         render :action => :compose_email
@@ -253,7 +253,7 @@ class ConclusionDraftReviewsController < ApplicationController
       flash.alert = t(:'conclusion_review.review_not_approved')
       render :action => :compose_email
     else
-      redirect_to conclusion_draft_reviews_path
+      redirect_to conclusion_draft_reviews_url
     end
   end
 

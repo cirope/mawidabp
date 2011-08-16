@@ -57,7 +57,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
       :columns => ['user', 'data']
     }
 
-    assert_redirected_to error_record_path(
+    assert_redirected_to error_record_url(
       error_records(:wrong_user_failed_attempt))
     assert_not_nil assigns(:error_records)
     assert_equal 1, assigns(:error_records).size

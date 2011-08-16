@@ -84,7 +84,7 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to(edit_plan_path(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_created')) }
+        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_created')) }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => :new }
@@ -105,7 +105,7 @@ class PlansController < ApplicationController
     
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
-        format.html { redirect_to(edit_plan_path(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_updated')) }
+        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_updated')) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

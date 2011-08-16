@@ -123,7 +123,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       }
     }
 
-    assert_redirected_to organizations_path
+    assert_redirected_to organizations_url
     assert_not_nil assigns(:organization)
     assert_equal 'Updated organization', assigns(:organization).name
   end
@@ -139,7 +139,7 @@ class OrganizationsControllerTest < ActionController::TestCase
         delete :destroy, :id => organizations(:second_organization).id
       end
 
-      assert_redirected_to organizations_path
+      assert_redirected_to organizations_url
     ensure
       PaperTrail.enabled = true
     end

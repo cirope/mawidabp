@@ -76,7 +76,7 @@ class BestPracticesController < ApplicationController
     respond_to do |format|
       if @best_practice.save
         flash.notice = t :'best_practice.correctly_created'
-        format.html { redirect_to(edit_best_practice_path(@best_practice)) }
+        format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { render :xml => @best_practice, :status => :created, :location => @best_practice }
       else
         format.html { render :action => :new }
@@ -99,7 +99,7 @@ class BestPracticesController < ApplicationController
     respond_to do |format|
       if @best_practice.update_attributes(params[:best_practice])
         flash.notice = t :'best_practice.correctly_updated'
-        format.html { redirect_to(edit_best_practice_path(@best_practice)) }
+        format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

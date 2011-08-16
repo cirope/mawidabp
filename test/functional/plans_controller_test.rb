@@ -184,7 +184,7 @@ class PlansControllerTest < ActionController::TestCase
       resource_utilizations(:auditor_for_20_units_past_plan_item_1).id)
 
     assert_not_nil assigns(:plan)
-    assert_redirected_to edit_plan_path(assigns(:plan))
+    assert_redirected_to edit_plan_url(assigns(:plan))
     assert_equal 'Updated project', assigns(:plan).plan_items.find(
       plan_items(:past_plan_item_1).id).project
     assert_in_delta 8.75, resource_utilization.cost_per_unit, 0.01
@@ -304,7 +304,7 @@ class PlansControllerTest < ActionController::TestCase
       delete :destroy, :id => plans(:unrelated_plan).id
     end
 
-    assert_redirected_to plans_path
+    assert_redirected_to plans_url
   end
 
   test 'destroy related plan' do
@@ -314,7 +314,7 @@ class PlansControllerTest < ActionController::TestCase
     end
 
     assert_equal I18n.t(:'plan.errors.can_not_be_destroyed'), flash.alert
-    assert_redirected_to plans_path
+    assert_redirected_to plans_url
   end
 
   test 'export to pdf' do

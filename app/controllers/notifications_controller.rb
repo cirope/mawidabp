@@ -38,7 +38,7 @@ class NotificationsController < ApplicationController
       :confirmation_hash => params[:id], :user_id => @auth_user.id
     ).first
 
-    redirect_to notifications_path unless @notification
+    redirect_to notifications_url unless @notification
   end
 
   # Actualiza el contenido de una notificación siempre que cumpla con las
@@ -55,7 +55,7 @@ class NotificationsController < ApplicationController
     respond_to do |format|
       if @notification.update_attributes(params[:notification])
         flash.notice = t :'notification.correctly_updated'
-        format.html { redirect_to(notifications_path) }
+        format.html { redirect_to(notifications_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -94,6 +94,6 @@ class NotificationsController < ApplicationController
       redirect_to params[:reject].blank? ? :back : go_to
     end
   rescue ActionController::RedirectBackError
-    redirect_to notifications_path
+    redirect_to notifications_url
   end
 end

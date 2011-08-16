@@ -67,7 +67,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
       :columns => ['user', 'data']
     }
 
-    assert_redirected_to login_record_path(
+    assert_redirected_to login_record_url(
       login_records(:bare_user_success_login_record))
     assert_not_nil assigns(:login_records)
     assert_equal 1, assigns(:login_records).size

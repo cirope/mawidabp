@@ -165,7 +165,7 @@ class ApplicationController < ActionController::Base
   # _message_:: Mensaje que se mostrará luego de la redirección
   def redirect_to_login(message = nil, type = :notice) #:doc:
     flash[type] = message if message
-    redirect_to login_users_path
+    redirect_to login_users_url
   end
 
   # Reinicia la sessión (conservando el contenido de flash)

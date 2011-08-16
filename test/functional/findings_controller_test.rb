@@ -108,7 +108,7 @@ class FindingsControllerTest < ActionController::TestCase
       :columns => ['description', 'review']
     }
     
-    assert_redirected_to finding_path('incomplete',
+    assert_redirected_to finding_url('incomplete',
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:findings)
     assert_equal 1, assigns(:findings).size
@@ -161,7 +161,7 @@ class FindingsControllerTest < ActionController::TestCase
     get :edit, :completed => 'complete',
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
-    assert_redirected_to findings_path('complete')
+    assert_redirected_to findings_url('complete')
   end
 
   test 'update finding' do
@@ -267,7 +267,7 @@ class FindingsControllerTest < ActionController::TestCase
       end
     end
     
-    assert_redirected_to edit_finding_path('incomplete', assigns(:finding))
+    assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
   end
@@ -368,7 +368,7 @@ class FindingsControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to edit_finding_path('incomplete', assigns(:finding))
+    assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_not_equal 'Updated description', assigns(:finding).description
   end
@@ -433,7 +433,7 @@ class FindingsControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to edit_finding_path('incomplete', assigns(:finding))
+    assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
   end

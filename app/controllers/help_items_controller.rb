@@ -67,7 +67,7 @@ class HelpItemsController < ApplicationController
     respond_to do |format|
       if @help_item.save
         flash.notice = t :'help_item.correctly_created'
-        format.html { redirect_to(show_content_help_content_path(@help_item)) }
+        format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { render :xml => @help_item, :status => :created, :location => @help_item }
       else
         format.html { render :action => :new }
@@ -87,7 +87,7 @@ class HelpItemsController < ApplicationController
     respond_to do |format|
       if @help_item.update_attributes(params[:help_item])
         flash.notice = t :'help_item.correctly_updated'
-        format.html { redirect_to(show_content_help_content_path(@help_item)) }
+        format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

@@ -51,7 +51,7 @@ class OportunitiesController < ApplicationController
     respond_to do |format|
       format.html {
         if @oportunities.size == 1 && !@query.blank? && !params[:page]
-          redirect_to oportunity_path(@oportunities.first)
+          redirect_to oportunity_url(@oportunities.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @oportunities }
@@ -106,7 +106,7 @@ class OportunitiesController < ApplicationController
     respond_to do |format|
       if @oportunity.save
         flash.notice = t :'oportunity.correctly_created'
-        format.html { redirect_to(edit_oportunity_path(@oportunity)) }
+        format.html { redirect_to(edit_oportunity_url(@oportunity)) }
         format.xml  { render :xml => @oportunity, :status => :created, :location => @oportunity }
       else
         format.html { render :action => :new }
@@ -128,7 +128,7 @@ class OportunitiesController < ApplicationController
       Oportunity.transaction do
         if @oportunity.update_attributes(params[:oportunity])
           flash.notice = t :'oportunity.correctly_updated'
-          format.html { redirect_to(edit_oportunity_path(@oportunity)) }
+          format.html { redirect_to(edit_oportunity_url(@oportunity)) }
           format.xml  { head :ok }
         else
           format.html { render :action => :edit }

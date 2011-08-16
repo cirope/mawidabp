@@ -81,7 +81,7 @@ class HelpItemsControllerTest < ActionController::TestCase
     help_item = HelpItem.where(:name => 'New name').order(
       'created_at DESC'
     ).first
-    assert_redirected_to show_content_help_content_path(help_item)
+    assert_redirected_to show_content_help_content_url(help_item)
   end
 
   test 'edit help item' do
@@ -114,7 +114,7 @@ class HelpItemsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to show_content_help_content_path(
+    assert_redirected_to show_content_help_content_url(
       help_items(:help_item_1_es))
     assert_not_nil assigns(:help_item)
     assert_equal 'Updated name', assigns(:help_item).name
@@ -128,6 +128,6 @@ class HelpItemsControllerTest < ActionController::TestCase
       delete :destroy, :id => help_items(:help_item_1_es).id
     end
 
-    assert_redirected_to help_items_path
+    assert_redirected_to help_items_url
   end
 end

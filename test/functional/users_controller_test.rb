@@ -431,7 +431,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'edit user when search match only one result' do
     perform_auth
     get :index, :search => {:query => 'admin', :columns => ['user', 'name']}
-    assert_redirected_to user_path(users(:administrator_user))
+    assert_redirected_to user_url(users(:administrator_user))
     assert_not_nil assigns(:users)
     assert_equal 1, assigns(:users).size
   end
@@ -570,7 +570,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_not_nil assigns(:user)
     assert_equal 'updated_name', assigns(:user).user
   end
@@ -626,7 +626,7 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_not_nil assigns(:user)
     assert_equal 'updated_name_2', assigns(:user).user
   end
@@ -644,7 +644,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert !user.reload.enable?
     assert_equal I18n.t(:'user.correctly_disabled'), flash.notice
-    assert_redirected_to users_path
+    assert_redirected_to users_url
   end
 
   test 'disable audited user' do
@@ -654,7 +654,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_equal I18n.t(:'user.will_be_orphan_findings'), flash.alert
-    assert_redirected_to users_path
+    assert_redirected_to users_url
   end
 
   test 'blank user password' do
@@ -669,7 +669,7 @@ class UsersControllerTest < ActionController::TestCase
       put :blank_password, :id => users(:administrator_user).user
     end
     
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     user = User.find(users(:administrator_user).id)
     assert_nil user.password
   end
@@ -906,7 +906,7 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
@@ -942,7 +942,7 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
@@ -977,7 +977,7 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
   end
 
@@ -1006,7 +1006,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 
@@ -1035,7 +1035,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 
@@ -1064,7 +1064,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to users_path
+    assert_redirected_to users_url
     assert_equal I18n.t(:'user.user_release_completed'), flash.notice
   end
 

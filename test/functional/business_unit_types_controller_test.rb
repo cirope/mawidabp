@@ -114,7 +114,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to business_unit_types_path
+    assert_redirected_to business_unit_types_url
     assert_not_nil assigns(:business_unit_type)
     assert_equal 'Updated business unit type', assigns(:business_unit_type).name
     assert_equal 'Updated business unit one',
@@ -127,6 +127,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
       delete :destroy, :id => business_unit_types(:bcra).id
     end
 
-    assert_redirected_to business_unit_types_path
+    assert_redirected_to business_unit_types_url
   end
 end

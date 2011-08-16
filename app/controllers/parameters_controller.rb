@@ -73,7 +73,7 @@ class ParametersController < ApplicationController
     respond_to do |format|
       if @parameter.update_attributes(clean_parameters(params[:parameter]))
         flash.notice = t :'parameter.correctly_updated'
-        format.html { redirect_to(parameters_path(:type => @type)) }
+        format.html { redirect_to(parameters_url(:type => @type)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

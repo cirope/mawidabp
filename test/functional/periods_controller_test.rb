@@ -116,7 +116,7 @@ class PeriodsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to periods_path
+    assert_redirected_to periods_url
     assert_not_nil assigns(:period)
     assert_equal 'Updated period', assigns(:period).description
   end
@@ -127,7 +127,7 @@ class PeriodsControllerTest < ActionController::TestCase
       delete :destroy, :id => periods(:unused_period).id
     end
 
-    assert_redirected_to periods_path
+    assert_redirected_to periods_url
   end
 
   test 'destroy asociated period' do
@@ -144,6 +144,6 @@ class PeriodsControllerTest < ActionController::TestCase
       I18n.t(:'period.errors.has_procedure_controls',
         :count => period.procedure_controls.size)].join(APP_ENUM_SEPARATOR),
       flash.alert
-    assert_redirected_to periods_path
+    assert_redirected_to periods_url
   end
 end

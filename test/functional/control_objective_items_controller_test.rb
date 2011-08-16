@@ -60,7 +60,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       :query => 'dependencia y responsable',
       :columns => ['control_objective_text', 'review']
     }
-    assert_redirected_to control_objective_item_path(
+    assert_redirected_to control_objective_item_url(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item))
     assert_not_nil assigns(:control_objectives)
     assert_equal 1, assigns(:control_objectives).size
@@ -140,7 +140,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       end
     end
     
-    assert_redirected_to edit_control_objective_item_path(
+    assert_redirected_to edit_control_objective_item_url(
       control_objective_items(
         :bcra_A4609_security_management_responsible_dependency_item_editable))
     assert_not_nil assigns(:control_objective_item)
@@ -155,6 +155,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
         :bcra_A4609_data_proccessing_impact_analisys_item_editable).id
     end
 
-    assert_redirected_to control_objective_items_path
+    assert_redirected_to control_objective_items_url
   end
 end

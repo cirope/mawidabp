@@ -79,7 +79,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       :query => '1 2 4',
       :columns => ['identification', 'project']
     }
-    assert_redirected_to edit_conclusion_draft_review_path(conclusion_reviews(:conclusion_with_conclusion_draft_review))
+    assert_redirected_to edit_conclusion_draft_review_url(conclusion_reviews(:conclusion_with_conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 1, assigns(:conclusion_draft_reviews).size
   end
@@ -91,7 +91,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       :columns => ['issue_date']
     }
 
-    assert_redirected_to edit_conclusion_draft_review_path(conclusion_reviews(
+    assert_redirected_to edit_conclusion_draft_review_url(conclusion_reviews(
         :conclusion_with_conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 1, assigns(:conclusion_draft_reviews).size
@@ -167,7 +167,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to conclusion_draft_reviews_path
+    assert_redirected_to conclusion_draft_reviews_url
     assert_not_nil assigns(:conclusion_draft_review)
     assert_equal 'Updated conclusion',
       assigns(:conclusion_draft_review).conclusion

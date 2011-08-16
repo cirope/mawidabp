@@ -72,7 +72,7 @@ class BusinessUnitTypesController < ApplicationController
     respond_to do |format|
       if @business_unit_type.save
         flash.notice = t :'business_unit_type.correctly_created'
-        format.html { redirect_to(business_unit_types_path) }
+        format.html { redirect_to(business_unit_types_url) }
         format.xml  { render :xml => @business_unit_type, :status => :created, :location => @business_unit_type }
       else
         format.html { render :action => :new }
@@ -94,7 +94,7 @@ class BusinessUnitTypesController < ApplicationController
     respond_to do |format|
       if @business_unit_type.update_attributes(params[:business_unit_type])
         flash.notice = t :'business_unit_type.correctly_updated'
-        format.html { redirect_to(business_unit_types_path) }
+        format.html { redirect_to(business_unit_types_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

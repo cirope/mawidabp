@@ -70,7 +70,7 @@ class PeriodsController < ApplicationController
       if @period.save
         flash.notice = t :'period.correctly_created'
         back_to, session[:back_to] = session[:back_to], nil
-        format.html { redirect_to(back_to || periods_path) }
+        format.html { redirect_to(back_to || periods_url) }
         format.xml  { render :xml => @period, :status => :created, :location => @period }
       else
         format.html { render :action => :new }
@@ -91,7 +91,7 @@ class PeriodsController < ApplicationController
     respond_to do |format|
       if @period.update_attributes(params[:period])
         flash.notice = t :'period.correctly_updated'
-        format.html { redirect_to(periods_path) }
+        format.html { redirect_to(periods_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

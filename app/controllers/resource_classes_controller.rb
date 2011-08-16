@@ -74,7 +74,7 @@ class ResourceClassesController < ApplicationController
     respond_to do |format|
       if @resource_class.save
         flash.notice = t :'resource_class.correctly_created'
-        format.html { redirect_to(resource_classes_path) }
+        format.html { redirect_to(resource_classes_url) }
         format.xml  { render :xml => @resource_class, :status => :created, :location => @resource_class }
       else
         format.html { render :action => :new }
@@ -95,7 +95,7 @@ class ResourceClassesController < ApplicationController
     respond_to do |format|
       if @resource_class.update_attributes(params[:resource_class])
         flash.notice = t :'resource_class.correctly_updated'
-        format.html { redirect_to(resource_classes_path) }
+        format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

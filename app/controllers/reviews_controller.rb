@@ -29,7 +29,7 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       format.html {
         if @reviews.size == 1 && !@query.blank? && !params[:page]
-          redirect_to review_path(@reviews.first)
+          redirect_to review_url(@reviews.first)
         end
       }
       format.xml  { render :xml => @reviews }
@@ -91,7 +91,7 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       if @review.save
         flash.notice = t :'review.correctly_created'
-        format.html { redirect_to(edit_review_path(@review)) }
+        format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { render :xml => @review, :status => :created, :location => @review }
       else
         format.html { render :action => :new }
@@ -113,7 +113,7 @@ class ReviewsController < ApplicationController
     respond_to do |format|
       if @review.update_attributes(params[:review])
         flash.notice = t :'review.correctly_updated'
-        format.html { redirect_to(edit_review_path(@review)) }
+        format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -185,7 +185,7 @@ class ReviewsController < ApplicationController
       :business_unit_name => name,
       :business_unit_type => type,
       :link_to_suggested_findings =>
-        (suggested_findings_review_path(:id => plan_item.id) if plan_item)
+        (suggested_findings_review_url(:id => plan_item.id) if plan_item)
     }.to_json
   end
 

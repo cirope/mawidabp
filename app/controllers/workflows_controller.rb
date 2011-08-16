@@ -96,7 +96,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       if @workflow.save
         flash.notice = t :'workflow.correctly_created'
-        format.html { redirect_to(workflows_path) }
+        format.html { redirect_to(workflows_url) }
         format.xml  { render :xml => @workflow, :status => :created, :location => @workflow }
       else
         format.html { render :action => :new }
@@ -121,7 +121,7 @@ class WorkflowsController < ApplicationController
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
         flash.notice = t :'workflow.correctly_updated'
-        format.html { redirect_to(workflows_path) }
+        format.html { redirect_to(workflows_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

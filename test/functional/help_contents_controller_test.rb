@@ -94,7 +94,7 @@ class HelpContentsControllerTest < ActionController::TestCase
     end
 
     help_content = HelpContent.find_by_language 'it'
-    assert_redirected_to show_content_help_content_path(
+    assert_redirected_to show_content_help_content_url(
       help_content.help_items.first)
   end
 
@@ -126,7 +126,7 @@ class HelpContentsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to show_content_help_content_path(
+    assert_redirected_to show_content_help_content_url(
       help_items(:help_item_1_es))
     assert_not_nil assigns(:help_content)
     assert_equal 'it', assigns(:help_content).language
@@ -140,6 +140,6 @@ class HelpContentsControllerTest < ActionController::TestCase
       delete :destroy, :id => help_contents(:help_es).id
     end
 
-    assert_redirected_to help_contents_path
+    assert_redirected_to help_contents_url
   end
 end

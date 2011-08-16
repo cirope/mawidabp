@@ -70,7 +70,7 @@ class RolesController < ApplicationController
     respond_to do |format|
       if @role.save
         flash.notice = t :'role.correctly_created'
-        format.html { redirect_to(roles_path) }
+        format.html { redirect_to(roles_url) }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
       else
         format.html { render :action => :new }
@@ -92,7 +92,7 @@ class RolesController < ApplicationController
       if @role.update_attributes(params[:role].merge(
             :organization_id => @auth_organization.id))
         flash.notice = t :'role.correctly_updated'
-        format.html { redirect_to(roles_path) }
+        format.html { redirect_to(roles_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }

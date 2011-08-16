@@ -29,7 +29,7 @@ class ConclusionFinalReviewsController < ApplicationController
       format.html {
         if @conclusion_final_reviews.size == 1 && !@query.blank? &&
             !params[:page]
-          redirect_to edit_conclusion_final_review_path(
+          redirect_to edit_conclusion_final_review_url(
             @conclusion_final_reviews.first)
         end
       }
@@ -82,7 +82,7 @@ class ConclusionFinalReviewsController < ApplicationController
       conclusion_final_review = ConclusionFinalReview.where(
         :review_id => params[:review]).first
       
-      redirect_to edit_conclusion_final_review_path(conclusion_final_review)
+      redirect_to edit_conclusion_final_review_url(conclusion_final_review)
     end
   end
 
@@ -106,7 +106,7 @@ class ConclusionFinalReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t :'conclusion_final_review.correctly_created'
-        format.html { redirect_to(conclusion_final_reviews_path) }
+        format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { render :xml => @conclusion_final_review, :status => :created, :location => @conclusion_final_review }
       else
         format.html { render :action => :new }
@@ -128,7 +128,7 @@ class ConclusionFinalReviewsController < ApplicationController
       if @conclusion_final_review.update_attributes(
           params[:conclusion_final_review])
         flash.notice = t :'conclusion_final_review.correctly_updated'
-        format.html { redirect_to(conclusion_final_reviews_path) }
+        format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -259,7 +259,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless users.blank?
       flash.notice = t(:'conclusion_review.review_sended')
 
-      redirect_to edit_conclusion_final_review_path(@conclusion_final_review)
+      redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
       render :action => :compose_email
     end

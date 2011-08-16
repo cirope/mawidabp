@@ -51,7 +51,7 @@ class WeaknessesController < ApplicationController
     respond_to do |format|
       format.html {
         if @weaknesses.size == 1 && !@query.blank? && !params[:page]
-          redirect_to weakness_path(@weaknesses.first)
+          redirect_to weakness_url(@weaknesses.first)
         end
       } # index.html.erb
       format.xml  { render :xml => @weaknesses }
@@ -107,7 +107,7 @@ class WeaknessesController < ApplicationController
     respond_to do |format|
       if @weakness.save
         flash.notice = t :'weakness.correctly_created'
-        format.html { redirect_to(edit_weakness_path(@weakness)) }
+        format.html { redirect_to(edit_weakness_url(@weakness)) }
         format.xml  { render :xml => @weakness, :status => :created, :location => @weakness }
       else
         format.html { render :action => :new }
@@ -129,7 +129,7 @@ class WeaknessesController < ApplicationController
       Weakness.transaction do
         if @weakness.update_attributes(params[:weakness])
           flash.notice = t :'weakness.correctly_updated'
-          format.html { redirect_to(edit_weakness_path(@weakness)) }
+          format.html { redirect_to(edit_weakness_url(@weakness)) }
           format.xml  { head :ok }
         else
           format.html { render :action => :edit }

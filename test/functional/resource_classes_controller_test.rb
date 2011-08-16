@@ -117,7 +117,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
       end
     end
 
-    assert_redirected_to resource_classes_path
+    assert_redirected_to resource_classes_url
     assert_not_nil assigns(:resource_class)
     assert_equal 'Updated resource class', assigns(:resource_class).name
   end
@@ -128,6 +128,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
       delete :destroy, :id => resource_classes(:human_resources).id
     end
 
-    assert_redirected_to resource_classes_path
+    assert_redirected_to resource_classes_url
   end
 end

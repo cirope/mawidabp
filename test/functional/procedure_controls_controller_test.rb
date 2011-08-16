@@ -170,7 +170,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     procedure_control_subitem = ProcedureControlSubitem.find(
       procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id)
 
-    assert_redirected_to edit_procedure_control_path(
+    assert_redirected_to edit_procedure_control_url(
       procedure_controls(:procedure_control_iso_27001).id)
     assert_not_nil assigns(:procedure_control)
     assert_equal 'Updated control',
@@ -183,7 +183,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
       delete :destroy, :id => procedure_controls(:procedure_control_iso_27001).id
     end
 
-    assert_redirected_to procedure_controls_path
+    assert_redirected_to procedure_controls_url
   end
 
   test 'export to pdf' do
