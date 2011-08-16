@@ -2122,4 +2122,6 @@ es:
       last_word_connector: " y "
       
   will_paginate:
-    page_gap: '...'
+    previous_label: "&laquo; Anterior"
+    next_label: "Siguiente &raquo;"
+    page_gap: "..."
