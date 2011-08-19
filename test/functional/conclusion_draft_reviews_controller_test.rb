@@ -141,6 +141,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         }
       }
     end
+    
+    assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
   end
 
   test 'edit conclusion_draft_review' do
@@ -167,7 +169,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to conclusion_draft_reviews_url
+    assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
     assert_not_nil assigns(:conclusion_draft_review)
     assert_equal 'Updated conclusion',
       assigns(:conclusion_draft_review).conclusion

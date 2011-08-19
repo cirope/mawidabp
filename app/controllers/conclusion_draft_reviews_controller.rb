@@ -89,7 +89,7 @@ class ConclusionDraftReviewsController < ApplicationController
     respond_to do |format|
       if @conclusion_draft_review.save
         flash.notice = t :'conclusion_draft_review.correctly_created'
-        format.html { redirect_to(conclusion_draft_reviews_url) }
+        format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { render :xml => @conclusion_draft_review, :status => :created, :location => @conclusion_draft_review }
       else
         format.html { render :action => :new }
@@ -111,7 +111,7 @@ class ConclusionDraftReviewsController < ApplicationController
       if @conclusion_draft_review.update_attributes(
           params[:conclusion_draft_review])
         flash.notice = t :'conclusion_draft_review.correctly_updated'
-        format.html { redirect_to(conclusion_draft_reviews_url) }
+        format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -121,7 +121,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     rescue ActiveRecord::StaleObjectError
       flash.alert = t :'conclusion_draft_review.stale_object_error'
-      redirect_to :action => :edit
+      redirect_to edit_conclusion_draft_review_url(@conclusion_draft_review)
   end
 
   # Exporta el informe en formato PDF
