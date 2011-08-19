@@ -182,7 +182,7 @@
   <% end %>
 
   <div class="items" style="margin-top: 2em;">
-    <h1><%= t(:'review.findings_label') %></h1>
+    <h1><%= raw(t(:'review.findings_label') + show_inline_help_for(:review_findings)) %></h1>
     <div id="suggested_findings"></div>
     
     <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
