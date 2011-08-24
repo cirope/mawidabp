@@ -579,7 +579,7 @@ class Finding < ActiveRecord::Base
   end
   
   def review_text
-    self.control_objective_item.try(:review).try(:identification)
+    self.control_objective_item.try(:review).try(:to_s)
   end
 
   def check_for_final_review(_)
