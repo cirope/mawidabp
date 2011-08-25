@@ -11,7 +11,7 @@ gem 'jquery-rails'
 gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', '~> 3.0'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'whenever', :require => false
 gem 'will_paginate'
@@ -26,6 +26,7 @@ gem 'color', :require => false
 gem 'transaction-simple', :require => false
 
 source 'http://gems.github.com'
+
 gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
 

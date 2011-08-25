@@ -1040,6 +1040,7 @@ es:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_survey: "no tiene relevamiento"
       without_control_objectives: "no tiene objetivos de control"
+      related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
       with_attachment: "Con un archivo adjunto"
       without_attachment: "Sin archivos adjuntos"

@@ -101,47 +101,47 @@ class Weakness < Finding
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?
-      errors << I18n.t(:'weakness.errors.without_solution_date')
+      errors << I18n.t('weakness.errors.without_solution_date')
     elsif self.implemented?
       if self.solution_date?
-        errors << I18n.t(:'weakness.errors.with_solution_date')
+        errors << I18n.t('weakness.errors.with_solution_date')
       end
 
       unless self.follow_up_date?
-        errors << I18n.t(:'weakness.errors.without_follow_up_date')
+        errors << I18n.t('weakness.errors.without_follow_up_date')
       end
     elsif self.being_implemented?
       if self.answer.blank?
-        errors << I18n.t(:'weakness.errors.without_answer')
+        errors << I18n.t('weakness.errors.without_answer')
       end
       
       if self.solution_date?
-        errors << I18n.t(:'weakness.errors.with_solution_date')
+        errors << I18n.t('weakness.errors.with_solution_date')
       end
 
       unless self.follow_up_date?
-        errors << I18n.t(:'weakness.errors.without_follow_up_date')
+        errors << I18n.t('weakness.errors.without_follow_up_date')
       end
     elsif self.assumed_risk? && self.follow_up_date?
-      errors << I18n.t(:'weakness.errors.with_follow_up_date')
+      errors << I18n.t('weakness.errors.with_follow_up_date')
     elsif !self.implemented_audited? && !self.implemented? &&
         !self.being_implemented? && !self.unconfirmed? &&
         !self.assumed_risk?
-      errors << I18n.t(:'weakness.errors.not_valid_state')
+      errors << I18n.t('weakness.errors.not_valid_state')
     end
 
     unless self.has_audited?
-      errors << I18n.t(:'weakness.errors.without_audited')
+      errors << I18n.t('weakness.errors.without_audited')
     end
 
     unless self.has_auditor?
-      errors << I18n.t(:'weakness.errors.without_auditor')
+      errors << I18n.t('weakness.errors.without_auditor')
     end
 
-    errors << I18n.t(:'weakness.errors.without_effect') if self.effect.blank?
+    errors << I18n.t('weakness.errors.without_effect') if self.effect.blank?
 
     if self.audit_comments.blank?
-      errors << I18n.t(:'weakness.errors.without_audit_comments')
+      errors << I18n.t('weakness.errors.without_audit_comments')
     end
 
     (@approval_errors = errors).blank?

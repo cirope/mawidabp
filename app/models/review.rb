@@ -341,7 +341,7 @@ class Review < ActiveRecord::Base
 
     if self.control_objective_items.empty?
       self.can_be_approved_by_force = false
-      review_errors << I18n.t(:'review.errors.without_control_objectives')
+      review_errors << I18n.t('review.errors.without_control_objectives')
     end
 
     self.control_objective_items.each do |coi|
@@ -363,8 +363,17 @@ class Review < ActiveRecord::Base
       end
     end
     
+    self.finding_review_assignments.each do |fra|
+      if !fra.finding.repeated? && !fra.finding.implemented_audited?
+        errors << [
+          "#{Finding.model_name.human} #{fra.finding.review_code} [#{fra.finding.review}]",
+          [I18n.t('review.errors.related_finding_incomplete')]
+        ]
+      end
+    end
+    
     if self.survey.blank?
-      review_errors << I18n.t(:'review.errors.without_survey')
+      review_errors << I18n.t('review.errors.without_survey')
     end
 
     errors << [Review.model_name.human, review_errors] unless review_errors.blank?

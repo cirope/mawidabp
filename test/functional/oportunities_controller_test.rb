@@ -263,6 +263,14 @@ class OportunitiesControllerTest < ActionController::TestCase
   
   test 'undo reiteration' do
     perform_auth
+    review = Review.find(reviews(:review_with_conclusion).id)
+    
+    assert_difference 'review.finding_review_assignments.count' do
+      review.finding_review_assignments.create(
+        :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+      )
+    end
+    
     oportunity = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
     repeated_of = Finding.find(findings(

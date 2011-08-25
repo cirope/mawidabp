@@ -278,12 +278,21 @@ class ReviewTest < ActiveSupport::TestCase
       :finished => false
     ).first.update_attribute(:finished, true)
     assert @review.reload.must_be_approved?
+    
+    assert @review.finding_review_assignments.build(
+      :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    )
+    assert !@review.must_be_approved?
+    assert @review.approval_errors.flatten.include?(
+      I18n.t('review.errors.related_finding_incomplete'))
+    
+    assert @review.reload.must_be_approved?
 
     @review.control_objective_items.clear
 
     assert !@review.reload.must_be_approved?
     assert @review.approval_errors.flatten.include?(
-      I18n.t(:'review.errors.without_control_objectives'))
+      I18n.t('review.errors.without_control_objectives'))
   end
 
   test 'can be sended' do

@@ -54,7 +54,7 @@ GEM
     gem_plugin (0.2.3)
     gruff (0.3.6)
     highline (1.6.2)
-    hoe (2.12.1)
+    hoe (2.12.2)
       rake (~> 0.8)
     i18n (0.5.0)
     jquery-rails (1.0.13)
@@ -84,7 +84,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
       net-ssh (>= 2.0.9)
-    net-ssh (2.2.0)
+    net-ssh (2.2.1)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
     newrelic_rpm (3.1.1)
@@ -176,7 +176,7 @@ DEPENDENCIES
   transaction-simple
   turn
   uuidtools
-  validates_timeliness (~> 3.0)
+  validates_timeliness
   whenever
   will_paginate
   ya2yaml
