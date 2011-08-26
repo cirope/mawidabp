@@ -55,7 +55,8 @@ class FollowUpCommitteeController < ApplicationController
 
       unless params[:synthesis_report][:business_unit].blank?
         business_units = params[:synthesis_report][:business_unit].split(
-          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
 
         unless business_units.empty?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(

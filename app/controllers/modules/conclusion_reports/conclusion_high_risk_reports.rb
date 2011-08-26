@@ -25,8 +25,10 @@ module ConclusionHighRiskReports
       end
 
       unless params[:high_risk_weaknesses_report][:business_unit].blank?
-        business_units = params[:high_risk_weaknesses_report][:business_unit].split(
-          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+        business_units =
+          params[:high_risk_weaknesses_report][:business_unit].split(
+            SPLIT_AND_TERMS_REGEXP
+          ).uniq.map(&:strip)
 
         unless business_units.empty?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(
@@ -241,7 +243,8 @@ module ConclusionHighRiskReports
 
       unless params[:fixed_weaknesses_report][:business_unit].blank?
         business_units = params[:fixed_weaknesses_report][:business_unit].split(
-          SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
 
         unless business_units.empty?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(
