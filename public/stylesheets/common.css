@@ -822,8 +822,19 @@ div.static_content {
   text-align: justify;
 }
 
+div.static_content h2 {
+  margin: 1em 0em;
+  font-size: 1.1em;
+}
+
+div.static_content h3 {
+  font-weight: bold;
+  font-size: 1em;
+  margin: 1em;
+}
+
 div.static_content p {
-  margin-bottom: 1em;
+  margin: 1em 2em;
 }
 
 div.stylized_file {
