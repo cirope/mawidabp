@@ -330,7 +330,7 @@ class FindingsController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -374,7 +374,7 @@ class FindingsController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters[:"finding_relation_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @findings = Finding.includes(:control_objective_item =>

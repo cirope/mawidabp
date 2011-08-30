@@ -174,7 +174,7 @@ class WorkflowsController < ApplicationController
         "LOWER(#{Resource.table_name}.name) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters["user_data_#{i}".to_sym] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations, :resource).where(

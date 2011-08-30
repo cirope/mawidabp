@@ -376,7 +376,7 @@ class ConclusionFinalReviewsController < ApplicationController
         "LOWER(users.email) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations).where(

@@ -4,7 +4,7 @@ module ConclusionHighRiskReports
   #
   # * GET /conclusion_committee_reports/high_risk_weaknesses_report
   def high_risk_weaknesses_report
-    @title = t :'conclusion_committee_report.high_risk_weaknesses_report_title'
+    @title = t('conclusion_committee_report.high_risk_weaknesses_report_title')
     @from_date, @to_date = *make_date_range(params[:high_risk_weaknesses_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score',
@@ -145,10 +145,10 @@ module ConclusionHighRiskReports
           end
 
           if !data[:external] && !@internal_title_showed
-            title = t :'conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses'
+            title = t('conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses')
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t :'conclusion_committee_report.high_risk_weaknesses_report.external_audit_weaknesses'
+            title = t('conclusion_committee_report.high_risk_weaknesses_report.external_audit_weaknesses')
             @external_title_showed = true
           end
 
@@ -222,7 +222,7 @@ module ConclusionHighRiskReports
   #
   # * GET /conclusion_committee_reports/fixed_weaknesses_report
   def fixed_weaknesses_report
-    @title = t :'conclusion_committee_report.fixed_weaknesses_report_title'
+    @title = t('conclusion_committee_report.fixed_weaknesses_report_title')
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score', 'fixed_weaknesses']
@@ -361,10 +361,10 @@ module ConclusionHighRiskReports
           end
 
           if !data[:external] && !@internal_title_showed
-            title = t :'conclusion_committee_report.fixed_weaknesses_report.internal_audit_weaknesses'
+            title = t('conclusion_committee_report.fixed_weaknesses_report.internal_audit_weaknesses')
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t :'conclusion_committee_report.fixed_weaknesses_report.external_audit_weaknesses'
+            title = t('conclusion_committee_report.fixed_weaknesses_report.external_audit_weaknesses')
             @external_title_showed = true
           end
 

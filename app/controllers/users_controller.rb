@@ -705,7 +705,7 @@ class UsersController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters["user_data_#{i}".to_sym] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations).where(

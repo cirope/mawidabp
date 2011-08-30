@@ -51,7 +51,7 @@ class ConclusionReview < ActiveRecord::Base
 
     business_unit_names.each_with_index do |business_unit_name, i|
       conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
-      parameters[:"bu_#{i}"] = "%#{business_unit_name}%".downcase
+      parameters[:"bu_#{i}"] = Unicode::downcase("%#{business_unit_name}%")
     end
 
     includes(:plan_item => :business_unit).where(

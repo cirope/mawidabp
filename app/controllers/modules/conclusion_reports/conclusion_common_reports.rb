@@ -1,6 +1,6 @@
 module ConclusionCommonReports
   def weaknesses_by_state
-    @title = t :'conclusion_committee_report.weaknesses_by_state_title'
+    @title = t('conclusion_committee_report.weaknesses_by_state_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
     @audit_types = [
@@ -120,7 +120,7 @@ module ConclusionCommonReports
   end
 
   def weaknesses_by_risk
-    @title = t :'conclusion_committee_report.weaknesses_by_risk_title'
+    @title = t('conclusion_committee_report.weaknesses_by_risk_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
     @audit_types = [
@@ -246,7 +246,7 @@ module ConclusionCommonReports
   end
 
   def weaknesses_by_audit_type
-    @title = t :'conclusion_committee_report.weaknesses_by_audit_type_title'
+    @title = t('conclusion_committee_report.weaknesses_by_audit_type_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
     @periods = periods_for_interval
     @audit_types = [:internal, :external]

@@ -19,7 +19,7 @@ class ConclusionCommitteeReportsController < ApplicationController
   #
   # * GET /conclusion_committee_reports
   def index
-    @title = t :'conclusion_committee_report.index_title'
+    @title = t('conclusion_committee_report.index_title')
 
     respond_to do |format|
       format.html
@@ -31,7 +31,7 @@ class ConclusionCommitteeReportsController < ApplicationController
   #
   # * GET /conclusion_committee_reports/synthesis_report
   def synthesis_report
-    @title = t :'conclusion_committee_report.synthesis_report_title'
+    @title = t('conclusion_committee_report.synthesis_report_title')
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'review', 'score',
@@ -224,10 +224,10 @@ class ConclusionCommitteeReportsController < ApplicationController
         end
 
         if !data[:external] && !@internal_title_showed
-          title = t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses'
+          title = t('conclusion_committee_report.synthesis_report.internal_audit_weaknesses')
           @internal_title_showed = true
         elsif data[:external] && !@external_title_showed
-          title = t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses'
+          title = t('conclusion_committee_report.synthesis_report.external_audit_weaknesses')
           @external_title_showed = true
         end
 
@@ -317,13 +317,13 @@ class ConclusionCommitteeReportsController < ApplicationController
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :synthesis_report => :read,
-        :create_synthesis_report => :read,
-        :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read,
-        :fixed_weaknesses_report => :read,
-        :create_fixed_weaknesses_report => :read
-      })
+    @action_privileges.update(
+      :synthesis_report => :read,
+      :create_synthesis_report => :read,
+      :high_risk_weaknesses_report => :read,
+      :create_high_risk_weaknesses_report => :read,
+      :fixed_weaknesses_report => :read,
+      :create_fixed_weaknesses_report => :read
+    )
   end
 end

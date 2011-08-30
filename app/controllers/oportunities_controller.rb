@@ -195,7 +195,7 @@ class OportunitiesController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations).where(
@@ -239,7 +239,7 @@ class OportunitiesController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters[:"finding_relation_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @findings = Finding.includes(
@@ -274,7 +274,8 @@ class OportunitiesController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :control_objective_item_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"control_objective_item_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"control_objective_item_data_#{i}"] =
+        "%#{Unicode::downcase(t)}%"
     end
 
     @control_objective_items = ControlObjectiveItem.includes(

@@ -13,7 +13,7 @@ class ConclusionAuditReportsController < ApplicationController
   #
   # * GET /conclusion_audit_reports
   def index
-    @title = t :'conclusion_audit_reports.index_title'
+    @title = t('conclusion_audit_reports.index_title')
 
     respond_to do |format|
       format.html
@@ -22,8 +22,8 @@ class ConclusionAuditReportsController < ApplicationController
   
   def cost_analysis
     @title = t(params[:include_details].blank? ?
-      :'conclusion_audit_report.cost_analysis_title' :
-      :'conclusion_audit_report.detailed_cost_analysis_title')
+      'conclusion_audit_report.cost_analysis_title' :
+      'conclusion_audit_report.detailed_cost_analysis_title')
     @from_date, @to_date = *make_date_range(params[:cost_analysis])
     @periods = periods_for_interval
     @column_order = [['business_unit', 20], ['review', 35],
@@ -136,8 +136,8 @@ class ConclusionAuditReportsController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -175,7 +175,7 @@ class ConclusionAuditReportsController < ApplicationController
         end
       else
         pdf.text(
-          t(:'conclusion_audit_report.cost_analysis.without_audits_in_the_period'),
+          t('conclusion_audit_report.cost_analysis.without_audits_in_the_period'),
           :font_size => PDF_FONT_SIZE)
       end
 
@@ -214,12 +214,12 @@ class ConclusionAuditReportsController < ApplicationController
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_audit_report.cost_analysis.pdf_name',
+      t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_audit_report.cost_analysis.pdf_name',
+      t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
   end
@@ -227,19 +227,19 @@ class ConclusionAuditReportsController < ApplicationController
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :weaknesses_by_state => :read,
-        :create_weaknesses_by_state => :read,
-        :weaknesses_by_risk => :read,
-        :create_weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read,
-        :create_weaknesses_by_audit_type => :read,
-        :cost_analysis => :read,
-        :create_cost_analysis => :read,
-        :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read,
-        :fixed_weaknesses_report => :read,
-        :create_fixed_weaknesses_report => :read
-      })
+    @action_privileges.update(
+      :weaknesses_by_state => :read,
+      :create_weaknesses_by_state => :read,
+      :weaknesses_by_risk => :read,
+      :create_weaknesses_by_risk => :read,
+      :weaknesses_by_audit_type => :read,
+      :create_weaknesses_by_audit_type => :read,
+      :cost_analysis => :read,
+      :create_cost_analysis => :read,
+      :high_risk_weaknesses_report => :read,
+      :create_high_risk_weaknesses_report => :read,
+      :fixed_weaknesses_report => :read,
+      :create_fixed_weaknesses_report => :read
+    )
   end
 end

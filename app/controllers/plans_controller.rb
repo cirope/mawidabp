@@ -167,7 +167,7 @@ class PlansController < ApplicationController
         "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"business_unit_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"business_unit_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @business_units = BusinessUnit.includes(:business_unit_type).where(
@@ -197,7 +197,7 @@ class PlansController < ApplicationController
         "LOWER(#{Resource.table_name}.name) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"user_data_#{i}"] = "%#{t.downcase}%"
+      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
     end
 
     @users = User.includes(:organizations, :resource).where(

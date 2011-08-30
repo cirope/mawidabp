@@ -11,7 +11,7 @@ class ConclusionManagementReportsController < ApplicationController
   #
   # * GET /conclusion_management_reports
   def index
-    @title = t :'conclusion_management_report.index_title'
+    @title = t('conclusion_management_report.index_title')
 
     respond_to do |format|
       format.html

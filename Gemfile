@@ -20,6 +20,7 @@ gem 'paperclip'
 gem 'rmagick'
 gem 'gruff'
 gem 'dynamic_form'
+gem 'unicode'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer
@@ -31,7 +32,7 @@ gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
 
 group :production do
-  gem 'smurf', '1.0.6'
+  gem 'smurf'
 end
 
 group :development do
