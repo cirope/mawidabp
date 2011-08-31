@@ -500,7 +500,8 @@ module ConclusionCommonReports
     @columns = [
       ['process_control', BestPractice.human_attribute_name(:process_controls), 20],
       ['control_objective', ControlObjective.model_name.human, 40],
-      ['weaknesses_count', t('review.weaknesses_count'), 40]
+      ['effectiveness', t('conclusion_committee_report.control_objective_stats.average_effectiveness'), 20],
+      ['weaknesses_count', t('review.weaknesses_count'), 20]
     ]
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
@@ -549,21 +550,28 @@ module ConclusionCommonReports
           end
           
           process_controls[coi.process_control.name] ||= {}
-          new_count = process_controls[coi.process_control.name][coi.control_objective] || {}
+          coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
+          coi_data[:weaknesses] ||= {}
+          coi_data[:effectiveness] ||= []
+          coi_data[:effectiveness] << coi.effectiveness
           
           weaknesses_count.each do |r, c|
-            new_count[r] ||= 0
-            new_count[r] += c
+            coi_data[:weaknesses][r] ||= 0
+            coi_data[:weaknesses][r] += c
           end
           
-          process_controls[coi.process_control.name][coi.control_objective] = new_count
+          process_controls[coi.process_control.name][coi.control_objective] = coi_data
         end
       end
       
       @process_control_data[period] ||= []
       
       process_controls.each do |pc, cos|
-        cos.each do |co, weaknesses_count|
+        cos.each do |co, coi_data|
+          reviews_count = coi_data[:effectiveness].size
+          effectiveness = reviews_count > 0 ?
+            coi_data[:effectiveness].sum / reviews_count : 100
+          weaknesses_count = coi_data[:weaknesses]
           weaknesses_count_text = weaknesses_count.values.sum == 0 ?
             t('conclusion_committee_report.control_objective_stats.without_weaknesses') :
             @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
@@ -571,6 +579,10 @@ module ConclusionCommonReports
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
+            'effectiveness' => t(
+              'conclusion_committee_report.control_objective_stats.average_effectiveness_resume',
+              :effectiveness => "#{'%.2f' % effectiveness}%", :count => reviews_count
+            ),
             'weaknesses_count' => weaknesses_count_text
           }
         end

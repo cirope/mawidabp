@@ -235,6 +235,10 @@ es:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
       subtitle: "INFORMES DEFINITIVOS"
+      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness_resume:
+        one: '%{effectiveness} en un informe'
+        other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
@@ -615,6 +619,10 @@ es:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
       subtitle: "SEGUIMIENTO DE INFORMES"
+      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness_resume:
+        one: '%{effectiveness} en un informe'
+        other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
