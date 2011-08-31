@@ -1,17 +1,19 @@
 <ul class="menu_list">
-  <li><%= link_to t(:'conclusion_committee_report.weaknesses_by_state_title'),
+  <li><%= link_to t('conclusion_committee_report.weaknesses_by_state_title'),
       :action => :weaknesses_by_state %></li>
-  <li><%= link_to t(:'conclusion_committee_report.weaknesses_by_risk_title'),
+  <li><%= link_to t('conclusion_committee_report.weaknesses_by_risk_title'),
       :action => :weaknesses_by_risk %></li>
-  <li><%= link_to t(:'conclusion_committee_report.weaknesses_by_audit_type_title'),
+  <li><%= link_to t('conclusion_committee_report.weaknesses_by_audit_type_title'),
       :action => :weaknesses_by_audit_type %></li>
-  <li><%= link_to t(:'conclusion_audit_report.cost_analysis_title'),
+  <li><%= link_to t('conclusion_committee_report.control_objective_stats_title'),
+      :action => :control_objective_stats %></li>
+  <li><%= link_to t('conclusion_audit_report.cost_analysis_title'),
       :action => :cost_analysis %></li>
-  <li><%= link_to t(:'conclusion_audit_report.detailed_cost_analysis_title'),
+  <li><%= link_to t('conclusion_audit_report.detailed_cost_analysis_title'),
       detailed_cost_analysis_conclusion_audit_reports_path %></li>
-  <li><%= link_to t(:'conclusion_audit_report.high_risk_weaknesses_report_title'),
+  <li><%= link_to t('conclusion_audit_report.high_risk_weaknesses_report_title'),
       :action => :high_risk_weaknesses_report %></li>
-  <li><%= link_to t(:'conclusion_audit_report.fixed_weaknesses_report_title'),
+  <li><%= link_to t('conclusion_audit_report.fixed_weaknesses_report_title'),
       :action => :fixed_weaknesses_report %></li>
 </ul>
 

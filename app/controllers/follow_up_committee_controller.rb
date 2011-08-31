@@ -330,13 +330,15 @@ class FollowUpCommitteeController < ApplicationController
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :synthesis_report => :read,
-        :create_synthesis_report => :read,
-        :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read,
-        :fixed_weaknesses_report => :read,
-        :create_fixed_weaknesses_report => :read
-      })
+    @action_privileges.update(
+      :synthesis_report => :read,
+      :create_synthesis_report => :read,
+      :high_risk_weaknesses_report => :read,
+      :create_high_risk_weaknesses_report => :read,
+      :fixed_weaknesses_report => :read,
+      :create_fixed_weaknesses_report => :read,
+      :control_objective_stats => :read,
+      :create_control_objective_stats => :read
+    )
   end
 end

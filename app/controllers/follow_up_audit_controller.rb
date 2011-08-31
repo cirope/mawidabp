@@ -205,19 +205,21 @@ class FollowUpAuditController < ApplicationController
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :weaknesses_by_state => :read,
-        :create_weaknesses_by_state => :read,
-        :weaknesses_by_risk => :read,
-        :create_weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read,
-        :create_weaknesses_by_audit_type => :read,
-        :cost_analysis => :read,
-        :create_cost_analysis => :read,
-        :high_risk_weaknesses_report => :read,
-        :create_high_risk_weaknesses_report => :read,
-        :fixed_weaknesses_report => :read,
-        :create_fixed_weaknesses_report => :read
-      })
+    @action_privileges.update(
+      :weaknesses_by_state => :read,
+      :create_weaknesses_by_state => :read,
+      :weaknesses_by_risk => :read,
+      :create_weaknesses_by_risk => :read,
+      :weaknesses_by_audit_type => :read,
+      :create_weaknesses_by_audit_type => :read,
+      :cost_analysis => :read,
+      :create_cost_analysis => :read,
+      :high_risk_weaknesses_report => :read,
+      :create_high_risk_weaknesses_report => :read,
+      :fixed_weaknesses_report => :read,
+      :create_fixed_weaknesses_report => :read,
+      :control_objective_stats => :read,
+      :create_control_objective_stats => :read
+    )
   end
 end

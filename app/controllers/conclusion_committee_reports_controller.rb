@@ -71,13 +71,15 @@ class ConclusionCommitteeReportsController < ApplicationController
 
     @periods.each do |period|
       business_unit_types.each do |but|
-        columns = {'business_unit_report_name' => [but.business_unit_label, 15],
+        columns = {
+          'business_unit_report_name' => [but.business_unit_label, 15],
           'review' => [Review.model_name.human, 16],
           'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
-          'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],
-          'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
+          'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]
+        }
         column_data = []
         review_scores = []
         name = but.name
@@ -323,7 +325,9 @@ class ConclusionCommitteeReportsController < ApplicationController
       :high_risk_weaknesses_report => :read,
       :create_high_risk_weaknesses_report => :read,
       :fixed_weaknesses_report => :read,
-      :create_fixed_weaknesses_report => :read
+      :create_fixed_weaknesses_report => :read,
+      :control_objective_stats => :read,
+      :create_control_objective_stats => :read
     )
   end
 end

@@ -17,10 +17,8 @@ MawidaApp::Application.routes.draw do
     :to => 'execution_reports#index'
 
   [
-    'weaknesses_by_state',
-    'create_weaknesses_by_state',
-    'detailed_management_report',
-    'create_detailed_management_report'
+    'weaknesses_by_state', 'create_weaknesses_by_state',
+    'detailed_management_report', 'create_detailed_management_report'
   ].each do |action|
     match "execution_reports/#{action}", :to => "execution_reports##{action}",
       :as => action
@@ -66,7 +64,8 @@ MawidaApp::Application.routes.draw do
   [
     'weaknesses_by_state', 'create_weaknesses_by_state',
     'weaknesses_by_risk', 'create_weaknesses_by_risk',
-    'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type'
+    'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type',
+    'control_objective_stats', 'create_control_objective_stats'
   ].each do |action|
     match "conclusion_management_reports/#{action}",
       :as => "#{action}_conclusion_management_reports",
@@ -81,7 +80,10 @@ MawidaApp::Application.routes.draw do
       :to => "follow_up_audit##{action}"
   end
 
-  ['synthesis_report', 'create_synthesis_report'].each do |action|
+  [
+    'synthesis_report', 'create_synthesis_report',
+    'control_objective_stats', 'create_control_objective_stats'
+  ].each do |action|
     match "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",
       :to => "conclusion_committee_reports##{action}"

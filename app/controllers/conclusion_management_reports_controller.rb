@@ -21,13 +21,15 @@ class ConclusionManagementReportsController < ApplicationController
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :weaknesses_by_state => :read,
-        :create_weaknesses_by_state => :read,
-        :weaknesses_by_risk => :read,
-        :create_weaknesses_by_risk => :read,
-        :weaknesses_by_audit_type => :read,
-        :create_weaknesses_by_audit_type => :read
-      })
+    @action_privileges.update(
+      :weaknesses_by_state => :read,
+      :create_weaknesses_by_state => :read,
+      :weaknesses_by_risk => :read,
+      :create_weaknesses_by_risk => :read,
+      :weaknesses_by_audit_type => :read,
+      :create_weaknesses_by_audit_type => :read,
+      :control_objective_stats => :read,
+      :create_control_objective_stats => :read
+    )
   end
 end

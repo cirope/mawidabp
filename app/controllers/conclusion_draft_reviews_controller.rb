@@ -336,16 +336,16 @@ class ConclusionDraftReviewsController < ApplicationController
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :score_sheet => :read,
-        :download_work_papers => :read,
-        :bundle => :read,
-        :create_bundle => :read,
-        :auto_complete_for_user => :read,
-        :check_for_approval => :read,
-        :compose_email => :modify,
-        :send_by_email => :modify
-      })
+    @action_privileges.update(
+      :export_to_pdf => :read,
+      :score_sheet => :read,
+      :download_work_papers => :read,
+      :bundle => :read,
+      :create_bundle => :read,
+      :auto_complete_for_user => :read,
+      :check_for_approval => :read,
+      :compose_email => :modify,
+      :send_by_email => :modify
+    )
   end
 end

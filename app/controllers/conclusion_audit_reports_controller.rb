@@ -32,7 +32,7 @@ class ConclusionAuditReportsController < ApplicationController
       ['real_amount', 15], ['deviation', 15]]
     @total_cost_data = {}
     @detailed_data = {}
-    currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
+    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
       @to_date)
 
@@ -239,7 +239,9 @@ class ConclusionAuditReportsController < ApplicationController
       :high_risk_weaknesses_report => :read,
       :create_high_risk_weaknesses_report => :read,
       :fixed_weaknesses_report => :read,
-      :create_fixed_weaknesses_report => :read
+      :create_fixed_weaknesses_report => :read,
+      :control_objective_stats => :read,
+      :create_control_objective_stats => :read
     )
   end
 end

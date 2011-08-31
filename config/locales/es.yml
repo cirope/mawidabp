@@ -212,6 +212,7 @@ es:
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
+    control_objective_stats_title: 'Observaciones por objetivo de control'
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
@@ -230,6 +231,12 @@ es:
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    control_objective_stats:
+      pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
+      subtitle: "INFORMES DEFINITIVOS"
+      without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: 'Sin auditorías en el periodo'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -566,6 +573,7 @@ es:
 
   follow_up_committee:
     index_title: "Reportes de comité"
+    control_objective_stats_title: 'Observaciones por objetivo de control'
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
@@ -603,6 +611,11 @@ es:
     applied_filters:
       one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
+    control_objective_stats:
+      pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
+      title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
+      subtitle: "SEGUIMIENTO DE INFORMES"
+      without_weaknesses: 'Sin observaciones'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
