@@ -20,8 +20,7 @@ role :web, 'mawida.com.ar' # Your HTTP server, Apache/etc
 role :app, 'mawida.com.ar' # This may be the same as your `Web` server
 role :db,  'mawida.com.ar', :primary => true # This is where Rails migrations will run
 
-after 'deploy:symlink', 'deploy:create_shared_symlinks',
-  'deploy:precomplile_assets'
+after 'deploy:symlink', 'deploy:create_shared_symlinks'
 
 namespace :deploy do
   task :start do
@@ -48,11 +47,5 @@ namespace :deploy do
 
       run "ln -s #{shared_files_path} #{release_files_path}"
     end
-  end
-  
-  desc 'precompile the assets'
-  task :precomplile_assets, :roles => :web, :except => {:no_release => true} do
-    run "cd #{current_path}; rm -rf public/assets/*"
-    run "cd #{current_path}; RAILS_ENV=production bundle exec rake assets:precompile"
   end
 end
