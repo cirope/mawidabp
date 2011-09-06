@@ -96,8 +96,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   accepts_nested_attributes_for :control, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     if self.control_objective
       self.relevance ||= self.control_objective.relevance

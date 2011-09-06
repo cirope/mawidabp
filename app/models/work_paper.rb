@@ -15,6 +15,7 @@ class WorkPaper < ActiveRecord::Base
   # Restricciones de los atributos
   attr_accessor :code_prefix
   attr_readonly :organization_id
+  attr_protected :organization_id
   attr_accessor_with_default :check_code_prefix, true
 
   # Callbacks
@@ -56,6 +57,12 @@ class WorkPaper < ActiveRecord::Base
   belongs_to :owner, :polymorphic => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
+  
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
+    
+    self.organization_id = GlobalModelConfig.current_organization_id
+  end
 
   def inspect
     "#{self.code} - #{self.name} (#{self.pages_to_s})"

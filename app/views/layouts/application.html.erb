@@ -1,5 +1,5 @@
 <!doctype html>
-<% @title ||= t(:"actioncontroller.#{controller.controller_name}") %>
+<% @title ||= t("actioncontroller.#{controller_name}") %>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,18 +8,18 @@
     <!--[if IE]><![endif]-->
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
     <%= favicon_link_tag %>
-    <%= default_stylesheets %>
+    <%= stylesheet_link_tag 'application' %>
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
-    <%= default_javascripts %>
+    <%= javascript_include_tag 'application' %>
     <%= javascript_tag do %>
-      <%= raw "State.unsavedDataWarning = '#{t(:'message.unsaved_data_warning')}';" %>
-      <%= raw "State.validationFailedMessage = '#{t(:'message.validation_failed_message')}';" %>
+      <%= raw "State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
+      <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
       <%= yield :js_extra %>
     <% end %>
   </head>
   <body>
     <div id="loading" style="display: none;">
-      <%= image_tag 'loading.gif', :size => '43x11', :alt => t(:'message.loading') %>
+      <%= image_tag 'loading.gif', :size => '43x11', :alt => t('message.loading') %>
     </div>
     <% if @auth_organization && parameter_in(@auth_organization.id, :security_session_expire_time).to_i > 0 %>
       <%= render :partial => 'shared/time_left', :locals =>
@@ -27,8 +27,8 @@
     <% end %>
     <div id="main_container">
       <div id="mobile_menu">
-        <%= link_to_function t(:'menu.show_menu'), 'Menu.show()', :id => :show_menu %>
-        <%= link_to_function t(:'menu.hide_menu'), 'Menu.hide()', :id => :hide_menu, :style => 'display: none;' %>
+        <%= link_to_function t('menu.show_menu'), 'Menu.show()', :id => :show_menu %>
+        <%= link_to_function t('menu.hide_menu'), 'Menu.hide()', :id => :hide_menu, :style => 'display: none;' %>
       </div>
       <% if @auth_user && @auth_user.password %>
         <div id="menu_container">

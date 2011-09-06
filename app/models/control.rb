@@ -22,8 +22,8 @@ class Control < ActiveRecord::Base
   # Relaciones
   belongs_to :controllable, :polymorphic => true
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.order ||= 1
   end

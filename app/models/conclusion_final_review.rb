@@ -79,13 +79,11 @@ class ConclusionFinalReview < ConclusionReview
     )
   end
 
-  def initialize(attributes = nil, import_from_draft = true)
-    super(attributes)
+  def initialize(attributes = nil, options = {}, import_from_draft = true)
+    super(attributes, options)
 
     if import_from_draft && self.review
-      draft = ConclusionDraftReview.where({:review_id => self.review_id}).order(
-        'created_at DESC'
-      ).first
+      draft = ConclusionDraftReview.where(:review_id => self.review_id).first
 
       self.attributes = draft.attributes if draft
     end
@@ -108,41 +106,40 @@ class ConclusionFinalReview < ConclusionReview
   def duplicate_review_findings
     findings = self.review.weaknesses + self.review.oportunities
     all_created = false
+    
+    begin
+      findings.all? do |f|
+        finding = f.dup
 
-    Finding.transaction do
-      begin
-        findings.all? do |f|
-          finding = f.clone
-
-          finding.final = true
-          finding.parent = f
-          finding.origination_date ||= f.origination_date ||= self.issue_date
-
-          f.finding_user_assignments.each do |fua|
-            finding.finding_user_assignments.build(
-              fua.attributes.clone.update(:id => nil, :finding_id => nil))
-          end
-          
-          f.work_papers.each do |wp|
-            finding.work_papers.build(
-              wp.attributes.clone.update(:id => nil)).check_code_prefix = false
-          end
-
-          finding.save!
-          f.save!
+        finding.final = true
+        finding.parent = f
+        finding.origination_date ||= f.origination_date ||= self.issue_date
+        
+        f.finding_user_assignments.each do |fua|
+          finding.finding_user_assignments.build(
+            fua.attributes.dup.merge('id' => nil, 'finding_id' => nil)
+          )
         end
 
-        all_created = true
-      rescue ActiveRecord::RecordInvalid
-        raise ActiveRecord::Rollback
+        f.work_papers.each do |wp|
+          finding.work_papers.build(
+            wp.attributes.dup.merge('id' => nil)
+          ).check_code_prefix = false
+        end
+        
+        finding.save!
+        f.save!
       end
+
+      all_created = true
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
     end
 
     if all_created
       true
     else
-      self.errors.add :base,
-        I18n.t(:'conclusion_final_review.stale_object_error')
+      self.errors.add :base, I18n.t('conclusion_final_review.stale_object_error')
 
       false
     end

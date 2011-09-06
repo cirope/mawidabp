@@ -5,7 +5,7 @@ bcra_A4609_security_management_responsible_dependency_control_1:
   compliance_tests: "Pruebas dependencia del área responsable"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency) %>
   order: 1
 
 bcra_A4609_data_proccessing_impact_analisys_control_1:
@@ -15,7 +15,7 @@ bcra_A4609_data_proccessing_impact_analisys_control_1:
   compliance_tests: "Pruebas análisis de impacto"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys) %>
   order: 1
 
 iso_27000_security_policy_3_1_control_1:
@@ -25,7 +25,7 @@ iso_27000_security_policy_3_1_control_1:
   compliance_tests: "Pruebas política de seguridad de la información"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_policy_3_1) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_policy_3_1) %>
   order: 1
 
 iso_27000_security_organization_4_1_control_1:
@@ -35,7 +35,7 @@ iso_27000_security_organization_4_1_control_1:
   compliance_tests: "Pruebas infraestructura de seguridad de la información"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_1) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_1) %>
   order: 1
 
 iso_27000_security_organization_4_2_control_1:
@@ -45,7 +45,7 @@ iso_27000_security_organization_4_2_control_1:
   compliance_tests: "Pruebas seguridad frente al acceso por parte de terceros"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_2) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2) %>
   order: 1
 
 iso_27000_security_organization_4_3_control_1:
@@ -55,7 +55,7 @@ iso_27000_security_organization_4_3_control_1:
   compliance_tests: "Pruebas seguridad frente al acceso por parte de terceros"
   sustantive_tests: "Pruebas sustantivas"
   controllable_type: ControlObjective
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_3) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_3) %>
   order: 1
 
 procedure_control_subitem_iso_27001_1_1_control_1:
@@ -65,7 +65,7 @@ procedure_control_subitem_iso_27001_1_1_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Know effects"
   controllable_type: ProcedureControlSubitem
-  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_iso_27001_1_1) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:procedure_control_subitem_iso_27001_1_1) %>
   order: 1
 
 procedure_control_subitem_iso_27001_1_2_control_1:
@@ -75,7 +75,7 @@ procedure_control_subitem_iso_27001_1_2_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Know effects"
   controllable_type: ProcedureControlSubitem
-  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_iso_27001_1_2) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:procedure_control_subitem_iso_27001_1_2) %>
   order: 1
 
 procedure_control_subitem_bcra_A4609_1_1_control_1:
@@ -85,7 +85,7 @@ procedure_control_subitem_bcra_A4609_1_1_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Know effects"
   controllable_type: ProcedureControlSubitem
-  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_1) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_1) %>
   order: 1
 
 procedure_control_subitem_bcra_A4609_1_2_control_1:
@@ -95,7 +95,7 @@ procedure_control_subitem_bcra_A4609_1_2_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Know effects"
   controllable_type: ProcedureControlSubitem
-  controllable_id: <%= Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_2) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:procedure_control_subitem_bcra_A4609_1_2) %>
   order: 1
 
 bcra_A4609_security_management_responsible_dependency_item_control_1:
@@ -105,7 +105,7 @@ bcra_A4609_security_management_responsible_dependency_item_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
   order: 1
 
 bcra_A4609_data_proccessing_impact_analisys_item_control_1:
@@ -115,7 +115,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_item) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_item) %>
   order: 1
 
 iso_27000_security_policy_3_1_item_control_1:
@@ -125,7 +125,7 @@ iso_27000_security_policy_3_1_item_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_policy_3_1_item) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_policy_3_1_item) %>
   order: 1
 
 iso_27000_security_organization_4_1_item_control_1:
@@ -135,7 +135,7 @@ iso_27000_security_organization_4_1_item_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_1_item) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_1_item) %>
   order: 1
 
 iso_27000_security_organization_4_2_item_control_1:
@@ -145,7 +145,7 @@ iso_27000_security_organization_4_2_item_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:iso_27000_security_organization_4_2_item) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item) %>
   order: 1
 
 bcra_A4609_security_management_responsible_dependency_item_editable_control_1:
@@ -155,7 +155,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
   order: 1
 
 bcra_A4609_data_proccessing_impact_analisys_item_editable_control_1:
@@ -165,5 +165,5 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable_control_1:
   sustantive_tests: "Proposed sustantive tests"
   effects: "Effects"
   controllable_type: ControlObjectiveItem
-  controllable_id: <%= Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_item_editable) %>
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_item_editable) %>
   order: 1

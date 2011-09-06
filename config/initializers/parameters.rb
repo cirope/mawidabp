@@ -79,12 +79,4 @@ DEFAULT_PARAMETERS = {
   :security_password_minimum_length => '8',
   :security_password_minimum_time => '1',
   :security_session_expire_time => '15'
-}
-
-SUGGESTED_PARAMETERS = {
-  :security_password_constraint => [
-    ['none', '/.*/'],
-    ['medium', //],
-    ['high', //]
-  ]
-}
+}.with_indifferent_access.freeze

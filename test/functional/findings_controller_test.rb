@@ -143,7 +143,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/edit'
 
-    auditor_response = response_from_page_or_rjs
+    auditor_response = @response.body.dup
 
     perform_auth users(:audited_user)
     get :edit, :completed => 'complete', :id =>
@@ -153,7 +153,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/edit'
     # Diferentes forms
-    assert_not_equal auditor_response, response_from_page_or_rjs
+    assert_not_equal auditor_response, @response.body
   end
 
   test 'unauthorized edit finding' do
@@ -197,27 +197,33 @@ class FindingsControllerTest < ActionController::TestCase
               :priority => get_test_parameter(:admin_priorities).first[1],
               :follow_up_date => '',
               :finding_user_assignments_attributes => {
-                :new_1 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
                   :user_id => users(:bare_user).id,
                   :process_owner => '0'
                 },
-                :new_2 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
                   :user_id => users(:audited_user).id,
                   :process_owner => '1'
                 },
-                :new_3 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
                   :user_id => users(:auditor_user).id,
                   :process_owner => '0'
                 },
-                :new_4 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
                   :user_id => users(:manager_user).id,
                   :process_owner => '0'
                 },
-                :new_5 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
                   :user_id => users(:supervisor_user).id,
                   :process_owner => '0'
                 },
-                :new_6 => {
+                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+                  :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
                   :user_id => users(:administrator_user).id,
                   :process_owner => '0'
                 }
@@ -228,7 +234,6 @@ class FindingsControllerTest < ActionController::TestCase
                   :code => 'PTSO 20',
                   :number_of_pages => '10',
                   :description => 'New workpaper description',
-                  :organization_id => organizations(:default_organization).id,
                   :file_model_attributes => {
                     :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                       'text/plain')
@@ -404,26 +409,32 @@ class FindingsControllerTest < ActionController::TestCase
             :users_for_notification => [users(:bare_user).id],
             :finding_user_assignments_attributes => {
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
                 :user_id => users(:manager_user).id,
                 :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
               finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+                :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
                 :user_id => users(:administrator_user).id,
                 :process_owner => '0'
               }

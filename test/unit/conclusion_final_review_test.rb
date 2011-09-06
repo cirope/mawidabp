@@ -43,7 +43,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
-        }, false)
+        }, {}, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -87,7 +87,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
-        }, false)
+        }, {}, false)
 
         assert @conclusion_review.save, @conclusion_review.errors.full_messages.join('; ')
         # Asegurarse que le asigna el tipo correcto
@@ -222,7 +222,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
-      }, false)
+      }, {}, false)
 
       assert @conclusion_review.save,
         @conclusion_review.errors.full_messages.join('; ')

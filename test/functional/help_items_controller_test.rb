@@ -63,7 +63,7 @@ class HelpItemsControllerTest < ActionController::TestCase
     assert_difference 'HelpItem.count', 2 do
       post :create, {
         :help_item => {
-          :help_content => help_contents(:help_es),
+          :help_content_id => help_contents(:help_es).id,
           :name => 'New name',
           :description => 'New description',
           :order_number => 10,

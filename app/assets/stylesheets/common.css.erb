@@ -799,7 +799,7 @@ div.search {
 }
 
 div.search input.search {
-  background: transparent url(../images/search.gif) no-repeat scroll 3px;
+  background: transparent url(<%= image_path('search.gif') %>) no-repeat scroll 3px;
   padding-left: 16px;
 }
 
@@ -901,7 +901,7 @@ form input[type="submit"].shadowed_button,
 form input[type="button"].shadowed_button {
   cursor: pointer;
   border: 1px solid #c2bfb7;
-  background: #f6f6f6 url('../images/button_background.png') repeat-x bottom;
+  background: #f6f6f6 url(<%= image_path('button_background.png') %>) repeat-x bottom;
   padding: 0px 4px;
 }
 
@@ -1068,7 +1068,7 @@ div.button input[type="submit"], div.button input[type="button"],
 .popup form.button_to input[type="submit"] {
   cursor: pointer;
   border: 1px solid #c2bfb7;
-  background: #f6f6f6 url('../images/button_background.png') repeat-x bottom;
+  background: #f6f6f6 url(<%= image_path('button_background.png') %>) repeat-x bottom;
   padding: 2px 8px;
 }
 
@@ -1456,7 +1456,7 @@ ul.raw_list ul {
 .stylized_file span.file_container {
   width: 23px;
   height: 26px;
-  background: url(../images/open.gif) no-repeat 0 0;
+  background: url(<%= image_path 'open.gif' %>) no-repeat 0 0;
   display: block;
   overflow: hidden;
   cursor: pointer;

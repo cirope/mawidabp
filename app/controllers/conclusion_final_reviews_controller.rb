@@ -101,7 +101,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t :'conclusion_final_review.new_title'
     @conclusion_final_review = ConclusionFinalReview.new(
-      params[:conclusion_final_review], false)
+      params[:conclusion_final_review], {}, false)
 
     respond_to do |format|
       if @conclusion_final_review.save

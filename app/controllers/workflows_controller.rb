@@ -56,9 +56,9 @@ class WorkflowsController < ApplicationController
     if clone_workflow
       clone_workflow.workflow_items.each do |wi|
         attributes = wi.attributes.merge(
-          :id => nil,
-          :resource_utilizations_attributes =>
-            wi.resource_utilizations.map { |ru| ru.attributes.merge :id => nil }
+          'id' => nil,
+          'resource_utilizations_attributes' =>
+            wi.resource_utilizations.map {|ru| ru.attributes.merge 'id' => nil}
         )
 
         @workflow.workflow_items.build(attributes)

@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
     :important => Proc.new { |user| user.is_an_important_change }
   }
-  acts_as_tree :foreign_key => 'manager_id',
+  acts_as_tree :foreign_key => 'manager_id', :readonly => true,
     :order => 'last_name ASC, name ASC', :dependent_children => :nullify
 
   # Atributos protegidos
@@ -98,10 +98,11 @@ class User < ActiveRecord::Base
       parent = User.find(value)
       is_in_the_same_organization = record.organization_roles.any? do |o_r|
         parent.organization_roles.map(&:organization_id).include?(
-          o_r.organization_id)
+          o_r.organization_id
+        )
       end
 
-      if record.child_ids.include?(value) || !is_in_the_same_organization
+      if record.children.to_a.include?(parent) || !is_in_the_same_organization
         record.errors.add attr, :invalid
       end
     end
@@ -182,8 +183,8 @@ class User < ActiveRecord::Base
       attributes['organization_id'].blank? || attributes['role_id'].blank?
     }
 
-  def initialize(attributes = {})
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.enable ||= false
     self.send_notification_email = true if self.send_notification_email.nil?

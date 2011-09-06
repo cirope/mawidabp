@@ -122,7 +122,7 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     # Para que ARel cargue la relación
     review.review_user_assignments.map(&:user_id)
     review_user_assignment = review.review_user_assignments.build(
-      @review_user_assignment.attributes.merge(:id => nil))
+      @review_user_assignment.attributes.merge('id' => nil))
     review_user_assignment.review = review
     assert review_user_assignment.invalid?
     assert_equal 1, review_user_assignment.errors.count

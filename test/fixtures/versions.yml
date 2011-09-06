@@ -1,32 +1,32 @@
 --- !omap
 - normal_version:
     id: 1
-    item_id: <%= Fixtures.identify(:bare_user_success_login_record) %>
+    item_id: <%= ActiveRecord::Fixtures.identify(:bare_user_success_login_record) %>
     item_type: LoginRecord
     event: create
-    whodunnit: <%= Fixtures.identify(:administrator_user) %>
-    organization_id: <%= Fixtures.identify(:default_organization) %>
+    whodunnit: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
+    organization_id: <%= ActiveRecord::Fixtures.identify(:default_organization) %>
     important: false
     created_at: <%= Time.now.to_s(:db) %>
 
 - important_version:
     id: 2
-    item_id: <%= Fixtures.identify(:bare_user) %>
+    item_id: <%= ActiveRecord::Fixtures.identify(:bare_user) %>
     item_type: User
     event: update
-    whodunnit: <%= Fixtures.identify(:administrator_user) %>
-    organization_id: <%= Fixtures.identify(:default_organization) %>
+    whodunnit: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
+    organization_id: <%= ActiveRecord::Fixtures.identify(:default_organization) %>
     object: {name: 'old_name'}
     important: true
     created_at: <%= Time.now.to_s(:db) %>
 
 - important_new_version:
     id: 3
-    item_id: <%= Fixtures.identify(:bare_user) %>
+    item_id: <%= ActiveRecord::Fixtures.identify(:bare_user) %>
     item_type: User
     event: update
-    whodunnit: <%= Fixtures.identify(:administrator_user) %>
-    organization_id: <%= Fixtures.identify(:default_organization) %>
+    whodunnit: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
+    organization_id: <%= ActiveRecord::Fixtures.identify(:default_organization) %>
     object: {name: 'new_name'}
     important: true
     created_at: <%= Time.now.to_s(:db) %>

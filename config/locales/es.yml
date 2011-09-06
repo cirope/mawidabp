@@ -1933,8 +1933,13 @@ es:
         <<: *commons
 
     errors:
-      # The values :model, :attribute and :value are always available for interpolation
-      # The value :count is available when applicable. Can be used for pluralization.
+      template:
+        header:
+          one: "No se realizaron cambios porque se encontró un error"
+          other: "No se realizaron cambios porque se encontraron %{count} errores"
+        # The variable :count is also available
+        body: "Los siguientes problemas deben solucionarse:"
+        
       messages:
         inclusion: "no está incluido en la lista"
         exclusion: "está reservado"
@@ -2090,14 +2095,6 @@ es:
     weaknesses: "Observaciones"
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
-
-  errors:
-    template:
-      header:
-        one: "No se realizaron cambios porque se encontró un error"
-        other: "No se realizaron cambios porque se encontraron %{count} errores"
-      # The variable :count is also available
-      body: "Los siguientes problemas deben solucionarse:"
 
   date:
     formats:

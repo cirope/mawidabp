@@ -61,8 +61,8 @@ class Notification < ActiveRecord::Base
   has_many :conclusion_reviews, :through => :notification_relations,
     :source => :model, :source_type => 'ConclusionReview'
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.status ||= STATUS[:unconfirmed]
     self.confirmation_hash ||= UUIDTools::UUID.random_create.to_s

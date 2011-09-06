@@ -39,7 +39,7 @@ class FileModelsControllerTest < ActionController::TestCase
     get :download,
       {:path => @file_model.file.url(:original, false).gsub(/^\/private/, "")}
     assert_response :success
-    assert_equal 'some test text', response_from_page_or_rjs.to_s
+    assert_equal 'some test text', @response.body
   end
 
   test 'download unauthorized file' do

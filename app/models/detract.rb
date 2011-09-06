@@ -24,8 +24,8 @@ class Detract < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.organization_id = GlobalModelConfig.current_organization_id
   end

@@ -55,7 +55,7 @@ class UserTest < ActiveSupport::TestCase
         :logged_in => false,
         :notes => 'Some user notes',
         :resource_id => resources(:auditor_resource).id,
-        :parent => users(:administrator_user),
+        :manager_id => users(:administrator_user).id,
         :organization_roles_attributes => {
           :new_1 => {
             :organization_id => organizations(:default_organization).id,
@@ -286,9 +286,13 @@ class UserTest < ActiveSupport::TestCase
 
   test 'validates parent is not child' do
     user = User.find(users(:bare_user).id)
-    bad_child = User.find(users(:administrator_user).id)
-
-    assert !user.update_attributes(:child_ids => [bad_child.id])
+    
+    assert user.parent.valid?
+    assert user.valid?
+    assert !user.update_attributes(
+      :child_ids => [users(:first_time_user).id],
+      :manager_id => users(:first_time_user).id
+    )
     assert_equal 1, user.errors.size
     assert_equal [error_message_from_model(user, :manager_id, :invalid)],
       user.errors[:manager_id]
@@ -350,8 +354,8 @@ class UserTest < ActiveSupport::TestCase
       (1...c).each do |c2|
         assert_no_difference 'OldPassword.count' do
           @user.attributes = {
-            :password => "new_password_123#{c2}",
-            :password_confirmation => "new_password_123#{c2}"
+            'password' => "new_password_123#{c2}",
+            'password_confirmation' => "new_password_123#{c2}"
           }
 
           assert @user.invalid?
@@ -566,12 +570,12 @@ class UserTest < ActiveSupport::TestCase
       finding = Finding.find(findings(
           :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-      new_finding = finding.clone
+      new_finding = finding.dup
       new_finding.state = Finding::STATUS[:notify]
       new_finding.review_code = "O1#{rand(999999999999999)}"
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
-          fua.attributes.dup.merge(:finding_id => nil)
+          fua.attributes.dup.merge('finding_id' => nil)
         end
       )
       

@@ -8,6 +8,7 @@ class ParameterTest < ActiveSupport::TestCase
   def setup
     @parameter = Parameter.find parameters(:parameter_admin_aproach_types).id
     FileUtils.rm_r File.join(Rails.root, 'tmp', 'cache_files'), :force => true
+    Rails.cache.clear if Rails.cache.respond_to?(:clear)
   end
 
   def teardown
@@ -197,8 +198,6 @@ class ParameterTest < ActiveSupport::TestCase
         :value => versions_dates.size,
         :updated_at => versions_dates[-2]
       )
-
-      Parameter.write_in_cache parameter
     end
 
     Parameter.record_timestamps = true

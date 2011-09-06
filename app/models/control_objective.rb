@@ -39,8 +39,8 @@ class ControlObjective < ActiveRecord::Base
 
   accepts_nested_attributes_for :control, :allow_destroy => true
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.build_control unless self.control
   end

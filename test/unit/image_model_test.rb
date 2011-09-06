@@ -93,7 +93,7 @@ class ImageModelTest < ActiveSupport::TestCase
     FileUtils.makedirs "#{TEMP_PATH}image_model_test"
 
     File.open file_path, 'w' do |out|
-      File.open(File.join(PUBLIC_PATH, 'images', 'mail.gif')) do |file|
+      File.open(File.join(Rails.root, 'app', 'assets', 'images', 'mail.gif')) do |file|
         out << file.read
       end
       

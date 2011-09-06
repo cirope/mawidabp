@@ -100,9 +100,9 @@ class Plan < ActiveRecord::Base
 
     other.plan_items.each do |pi|
       attributes = pi.attributes.merge(
-        :id => nil,
-        :resource_utilizations_attributes =>
-          pi.resource_utilizations.map { |ru| ru.attributes.merge :id => nil }
+        'id' => nil,
+        'resource_utilizations_attributes' =>
+          pi.resource_utilizations.map { |ru| ru.attributes.merge 'id' => nil }
       ).with_indifferent_access
 
       if attributes[:start]

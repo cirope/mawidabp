@@ -106,8 +106,7 @@ class DetractsControllerTest < ActionController::TestCase
         :detract => {
           :value => '0.8',
           :observations => 'New observations',
-          :user => users(:administrator_user),
-          :organization => organizations(:default_organization)
+          :user_id => users(:administrator_user).id
         }
       }
     end

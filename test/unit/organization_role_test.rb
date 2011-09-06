@@ -83,7 +83,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     organization_role = OrganizationRole.new(
-      @organization_role.attributes.merge(:id => nil))
+      @organization_role.attributes.merge('id' => nil))
     assert organization_role.invalid?
     assert_equal 1, organization_role.errors.count
     assert_equal [error_message_from_model(organization_role, :role_id,

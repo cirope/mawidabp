@@ -45,7 +45,7 @@ class Parameter < ActiveRecord::Base
   end
 
   def remove_from_cache
-    cache_key = "#{self.organization_id}_#{self.name}"
+    cache_key = "#{Rails.env}_#{self.organization_id}_#{self.name}"
     cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
     cached_versions.delete_if { |p| p.id == self.id }
@@ -64,11 +64,11 @@ class Parameter < ActiveRecord::Base
       Parameter.write_in_cache(parameter)
     end
 
-    parameter.try(:value) || DEFAULT_PARAMETERS[name.to_sym]
+    parameter.try(:value) || DEFAULT_PARAMETERS[name]
   end
 
   def self.find_in_cache(organization_id, name, version = nil)
-    results = Rails.cache.read("#{organization_id}_#{name}") || []
+    results = Rails.cache.read("#{Rails.env}_#{organization_id}_#{name}") || []
     parameter = nil
 
     if version.respond_to?(:to_time)
@@ -79,8 +79,8 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.write_in_cache(parameter)
-    if parameter
-      cache_key = "#{parameter.organization_id}_#{parameter.name}"
+    if parameter && parameter.kind_of?(Parameter)
+      cache_key = "#{Rails.env}_#{parameter.organization_id}_#{parameter.name}"
       cached_versions = Rails.cache.read(cache_key).try(:dup) || []
 
       cached_versions.delete_if do |p|

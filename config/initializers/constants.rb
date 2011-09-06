@@ -51,7 +51,7 @@ PDF_MARGINS = [25, 25, 20, 20].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
-PDF_LOGO = File.join(Rails.root, 'public', 'images', 'logo_pdf.png').freeze
+PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').freeze
 # Dimensiones del logo en pixels, primero el ancho y luego el alto
 PDF_LOGO_SIZE = [352, 90].map { |size| (size / 6.0).round }
 # Tamaño de fuente en los PDF
@@ -65,8 +65,9 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (Rails.env.development? ?
-    'mawidaqa.com.ar:3000' : 'mawida.com.ar').freeze
+URL_HOST = (
+  Rails.env.development? ? 'mawidaqa.com.ar:3000' : 'mawida.com.ar'
+).freeze
 # Protocolo a utilizar para formar los links absolutos
 URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
@@ -85,15 +86,3 @@ SEARCH_ALLOWED_OPERATORS = HashWithIndifferentAccess.new({
     /^\s*(<=|hasta|to)\s+/i => '<=',
     /^\s*[^<>]=\s+/ => '='
 })
-
-# Array con los nombre de los controladores
-APP_CONTROLLERS = [
-  :users, :error_records, :login_records, :roles, :parameters, :organizations,
-  :oportunities, :weaknesses, :reviews, :control_objective_items, :periods,
-  :best_practices, :procedure_controls, :resource_classes, :plans,
-  :conclusion_final_reviews, :conclusion_draft_reviews, :workflows, :findings,
-  :follow_up_audit, :follow_up_committee, :follow_up_management, :notifications,
-  :conclusion_audit_reports, :conclusion_committee_reports,
-  :conclusion_management_reports, :help_contents, :versions, :execution_reports,
-  :welcome
-].freeze

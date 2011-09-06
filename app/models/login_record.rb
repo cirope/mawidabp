@@ -29,8 +29,8 @@ class LoginRecord < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.start ||= Time.now
 

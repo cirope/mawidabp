@@ -346,7 +346,7 @@ class FindingTest < ActiveSupport::TestCase
     Finding::STATUS.each do |status, value|
       @finding.state = value
       keys = @finding.next_status_list.keys
-      expected_keys = Finding::STATUS_TRANSITIONS[status]
+      expected_keys = Finding::STATUS_TRANSITIONS[status].map(&:to_s)
 
       assert_equal expected_keys.size, keys.size
       assert keys.all? { |k| expected_keys.include?(k) }
@@ -569,15 +569,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'avoid notify changes to users if incomplete' do
     new_user = User.find(users(:administrator_second_user).id)
     fuas = @finding.finding_user_assignments.map do |fua|
-      fua.attributes.merge(:id => nil)
+      fua.attributes.merge('id' => nil)
     end
     finding = Finding.new(@finding.attributes.merge(
-        :id => nil,
-        :state => Finding::STATUS[:incomplete],
-        :review_code => 'O099',
-        :control_objective_item_id => control_objective_items(
+        'id' => nil,
+        'state' => Finding::STATUS[:incomplete],
+        'review_code' => 'O099',
+        'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
-        :finding_user_assignments_attributes => fuas
+        'finding_user_assignments_attributes' => fuas
       )
     )
 
@@ -818,15 +818,15 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'not notify users if is incomplete' do
     fuas = @finding.finding_user_assignments.map do |fua|
-      fua.attributes.merge(:id => nil)
+      fua.attributes.merge('id' => nil)
     end
     finding = Finding.new(@finding.attributes.merge(
-        :id => nil,
-        :state => Finding::STATUS[:incomplete],
-        :review_code => 'O099',
-        :control_objective_item_id => control_objective_items(
+        'id' => nil,
+        'state' => Finding::STATUS[:incomplete],
+        'review_code' => 'O099',
+        'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
-        :finding_user_assignments_attributes => fuas
+        'finding_user_assignments_attributes' => fuas
       )
     )
     assert finding.save

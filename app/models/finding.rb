@@ -47,7 +47,7 @@ class Finding < ActiveRecord::Base
     :notify => 4,
     :incomplete => 5,
     :repeated => 6
-  }.freeze
+  }.with_indifferent_access.freeze
 
   STATUS_TRANSITIONS = {
     :confirmed => [
@@ -109,7 +109,7 @@ class Finding < ActiveRecord::Base
     :repeated => [
       :repeated
     ],
-  }
+  }.with_indifferent_access.freeze
 
   PENDING_STATUS = [
     STATUS[:being_implemented], STATUS[:notify], STATUS[:implemented],
@@ -473,8 +473,8 @@ class Finding < ActiveRecord::Base
   accepts_nested_attributes_for :finding_user_assignments,
     :allow_destroy => true
 
-  def initialize(attributes = nil, import_users = false)
-    super(attributes)
+  def initialize(attributes = nil, options = {}, import_users = false)
+    super(attributes, options)
 
     if import_users && self.try(:control_objective_item).try(:review)
       self.control_objective_item.review.review_user_assignments.map do |rua|
@@ -891,7 +891,7 @@ class Finding < ActiveRecord::Base
     state_key = STATUS.invert[state || self.state]
     allowed_keys = STATUS_TRANSITIONS[state_key]
 
-    STATUS.reject {|k,| !allowed_keys.include?(k)}
+    STATUS.reject {|k,| !allowed_keys.include?(k.to_sym)}
   end
   
   def versions_between(start_date = nil, end_date = nil)

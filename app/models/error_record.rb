@@ -34,8 +34,8 @@ class ErrorRecord < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     self.error ||= ERRORS[self.error_type] if self.error_type
 

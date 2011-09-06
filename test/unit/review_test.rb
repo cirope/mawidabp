@@ -202,8 +202,8 @@ class ReviewTest < ActiveSupport::TestCase
 
     review_weakness = @review.control_objective_items.first.weaknesses.first
     oportunity = Weakness.new review_weakness.attributes.merge({
-        :state => Finding::STATUS[:implemented_audited],
-        :review_code => @review.next_weakness_code('O')})
+        'state' => Finding::STATUS[:implemented_audited],
+        'review_code' => @review.next_weakness_code('O')})
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -214,9 +214,13 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge({
-        :state => Finding::STATUS[:implemented],
-        :solution_date => Time.now.to_date, :follow_up_date => nil})
+    oportunity = Weakness.new(
+      oportunity.attributes.merge(
+        'state' => Finding::STATUS[:implemented],
+        'solution_date' => Time.now.to_date,
+        'follow_up_date' => nil
+      )
+    )
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -225,8 +229,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge({
-        :state => Finding::STATUS[:being_implemented]})
+    oportunity = Weakness.new oportunity.attributes.merge(
+        'state' => Finding::STATUS[:being_implemented]
+      )
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -235,8 +240,9 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.approval_errors.blank?
     assert oportunity.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge({
-        :state => Finding::STATUS[:assumed_risk]})
+    oportunity = Weakness.new oportunity.attributes.merge(
+        'state' => Finding::STATUS[:assumed_risk]
+      )
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -248,9 +254,10 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
     assert oportunity.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge({
-        :state => Finding::STATUS[:being_implemented],
-        :follow_up_date => Time.now.to_date})
+    oportunity = Weakness.new oportunity.attributes.merge(
+        'state' => Finding::STATUS[:being_implemented],
+        'follow_up_date' => Time.now.to_date
+      )
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -299,9 +306,10 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.can_be_sended?
 
     review_weakness = @review.control_objective_items.first.weaknesses.first
-    oportunity = Weakness.new review_weakness.attributes.merge({
-        :state => Finding::STATUS[:implemented_audited],
-        :review_code => @review.next_weakness_code('O')})
+    oportunity = Weakness.new review_weakness.attributes.merge(
+        'state' => Finding::STATUS[:implemented_audited],
+        'review_code' => @review.next_weakness_code('O')
+      )
     oportunity.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
@@ -513,7 +521,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   def clone_finding_user_assignments(finding)
     finding.finding_user_assignments.map do |fua|
-      fua.attributes.dup.merge(:finding_id => nil)
+      fua.attributes.dup.merge('finding_id' => nil)
     end
   end
 end

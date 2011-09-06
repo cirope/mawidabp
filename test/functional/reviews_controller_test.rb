@@ -129,20 +129,20 @@ class ReviewsControllerTest < ActionController::TestCase
                   :review_user_assignments_attributes => {
                     :new_1 => {
                       :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-                      :user => users(:first_time_user)
+                      :user_id => users(:first_time_user).id
                     },
                     :new_2 => {
                       :assignment_type =>
                         ReviewUserAssignment::TYPES[:supervisor],
-                      :user => users(:supervisor_user)
+                      :user_id => users(:supervisor_user).id
                     },
                     :new_3 => {
                       :assignment_type => ReviewUserAssignment::TYPES[:manager],
-                      :user => users(:manager_user)
+                      :user_id => users(:manager_user).id
                     },
                     :new_4 => {
                       :assignment_type => ReviewUserAssignment::TYPES[:audited],
-                      :user => users(:audited_user)
+                      :user_id => users(:audited_user).id
                     }
                   },
                   :control_objective_items_attributes => {
@@ -163,8 +163,6 @@ class ReviewsControllerTest < ActionController::TestCase
                           :code => 'PTOC 20',
                           :number_of_pages => '10',
                           :description => 'New workpaper description',
-                          :organization_id =>
-                            organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
@@ -175,8 +173,6 @@ class ReviewsControllerTest < ActionController::TestCase
                           :code => 'PTOC 21',
                           :number_of_pages => '10',
                           :description => 'New workpaper2 description',
-                          :organization_id =>
-                            organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
@@ -209,8 +205,6 @@ class ReviewsControllerTest < ActionController::TestCase
                           :code => 'PTOC 22',
                           :number_of_pages => '10',
                           :description => 'New workpaper description',
-                          :organization_id =>
-                            organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
@@ -221,8 +215,6 @@ class ReviewsControllerTest < ActionController::TestCase
                           :code => 'PTOC 23',
                           :number_of_pages => '10',
                           :description => 'New workpaper2 description',
-                          :organization_id =>
-                            organizations(:default_organization).id,
                           :file_model_attributes => {
                             :file => Rack::Test::UploadedFile.new(
                               TEST_FILE_FULL_PATH, 'text/plain')
@@ -265,7 +257,7 @@ class ReviewsControllerTest < ActionController::TestCase
             review_user_assignments(:review_with_conclusion_bare_auditor).id => {
               :id => review_user_assignments(:review_with_conclusion_bare_auditor).id,
               :assignment_type => ReviewUserAssignment::TYPES[:auditor],
-              :user => users(:bare_user)
+              :user_id => users(:bare_user).id
             }
           },
           :control_objective_items_attributes => {

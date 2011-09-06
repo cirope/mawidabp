@@ -1,5 +1,5 @@
 <!doctype html>
-<% @title ||= t(:"actioncontroller.#{controller.controller_name}") %>
+<% @title ||= t("actioncontroller.#{controller_name}") %>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,9 +8,9 @@
     <!--[if IE]><![endif]-->
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
     <%= favicon_link_tag %>
-    <%= default_stylesheets %>
-    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7'%><![endif]-->
-    <%= default_javascripts %>
+    <%= stylesheet_link_tag 'application' %>
+    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
+    <%= javascript_include_tag 'application' %>
   </head>
   <body>
     <div id="content">

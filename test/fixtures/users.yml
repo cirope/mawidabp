@@ -36,7 +36,7 @@ administrator_second_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:bare_user] = 'bare123' %>
@@ -57,7 +57,7 @@ bare_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:first_time_user] = 'first_time_user' %>
@@ -77,7 +77,7 @@ first_time_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:expired] = 'expired123' %>
@@ -99,7 +99,7 @@ expired_user:
   password_changed: <%= 2.days.ago %>
   last_access: <%= DEFAULT_PARAMETERS[:security_acount_expire_time].to_i.days.ago.yesterday %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:disabled] = 'diasabled123' %>
@@ -120,7 +120,7 @@ disabled_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:blank_password] = 'blank_password123' %>
@@ -142,7 +142,7 @@ blank_password_user:
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:expired_blank_password] = 'expired_blank_password123' %>
@@ -164,7 +164,7 @@ expired_blank_password_user:
   password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:president_user] = 'president123' %>
@@ -205,7 +205,7 @@ general_manager_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
-  manager_id: <%= Fixtures.identify(:president_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:president_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:general_manager_user] = 'coordinator_manager123' %>
@@ -226,7 +226,7 @@ coordinator_manager_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
-  manager_id: <%= Fixtures.identify(:general_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:general_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:plain_manager_user] = 'plain_manager123' %>
@@ -247,7 +247,7 @@ plain_manager_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
-  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:coordinator_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:manager_user] = 'manager123' %>
@@ -268,7 +268,7 @@ manager_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
-  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:coordinator_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:manager_second_user] = 'manager_second123' %>
@@ -289,7 +289,7 @@ manager_second_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:coordinator_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:plain_manager_second_user] = 'plain_manager_second123' %>
@@ -310,7 +310,7 @@ plain_manager_second_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:coordinator_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:coordinator_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:supervisor_user] = 'supervisor123' %>
@@ -331,7 +331,7 @@ supervisor_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:supervisor_second_user] = 'supervisor_second123' %>
@@ -352,7 +352,7 @@ supervisor_second_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:audited_user] = 'audited123' %>
@@ -373,7 +373,7 @@ audited_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:plain_manager_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:plain_manager_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:audited_second_user] = 'audited_second123' %>
@@ -394,7 +394,7 @@ audited_second_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:plain_manager_second_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:plain_manager_second_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:committee] = 'committee123' %>
@@ -415,7 +415,7 @@ committee_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:administrator_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 
 <% PLAIN_PASSWORDS[:auditor_user] = 'auditor123' %>
@@ -436,5 +436,5 @@ auditor_user:
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
-  manager_id: <%= Fixtures.identify(:supervisor_user) %>
+  manager_id: <%= ActiveRecord::Fixtures.identify(:supervisor_user) %>
   notes: User notes

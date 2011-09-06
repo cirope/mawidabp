@@ -27,8 +27,8 @@ class Group < ActiveRecord::Base
 
   accepts_nested_attributes_for :organizations, :allow_destroy => true
   
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
     
     self.send_notification_email = true if self.send_notification_email.nil?
     

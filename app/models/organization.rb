@@ -58,8 +58,8 @@ class Organization < ActiveRecord::Base
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true
 
-  def initialize(attributes = nil)
-    super(attributes)
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
 
     if GlobalModelConfig.current_organization_id &&
         Organization.exists?(GlobalModelConfig.current_organization_id)

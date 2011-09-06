@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.10'
+gem 'rails', '3.1.0'
 
 gem 'bundler'
 gem 'pg'
@@ -31,17 +31,19 @@ source 'http://gems.github.com'
 gem 'metaskills-pdf-writer', :require => 'pdf/writer'
 gem 'mksm-rubyzip', :require => 'zip/zip'
 
-group :production do
-  gem 'smurf'
+group :assets do
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'therubyracer', :require => false
+  gem 'uglifier'
 end
 
 group :development do
-  gem 'ruby-debug'
   gem 'capistrano'
   gem 'mongrel'
+  gem 'ruby-debug'
 end
 
 group :test do
   gem 'turn'
-  gem 'ruby-prof'
 end
