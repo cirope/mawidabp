@@ -16,11 +16,11 @@ set :branch, 'master'
 
 set :bundle_without, [:test]
 
-role :web, 'mawida.com.ar' # Your HTTP server, Apache/etc
-role :app, 'mawida.com.ar' # This may be the same as your `Web` server
-role :db,  'mawida.com.ar', :primary => true # This is where Rails migrations will run
+role :web, 'mawida.com.ar'
+role :app, 'mawida.com.ar'
+role :db,  'mawida.com.ar', :primary => true
 
-after 'deploy:symlink', 'deploy:create_shared_symlinks'
+before 'deploy:finalize_update', 'deploy:create_shared_symlinks'
 
 namespace :deploy do
   task :start do
@@ -29,12 +29,12 @@ namespace :deploy do
   task :stop do
   end
 
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{File.join(current_path,'tmp','restart.txt')}"
+  task :restart, :roles => :app, :except => {:no_release => true} do
+    run "touch #{File.join(current_path, 'tmp', 'restart.txt')}"
   end
 
   desc 'Creates the symlinks for the shared folders'
-  task :create_shared_symlinks do
+  task :create_shared_symlinks, :roles => :app, :except => {:no_release => true} do
     shared_paths = [
       ['public', 'error_files'],
       ['private'],
