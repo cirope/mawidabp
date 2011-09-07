@@ -13,6 +13,9 @@ MawidaApp::Application.configure do
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
+  
+  # Enable assets fingerprinting
+  config.assets.digest = true
 
   # Specifies the header that your server uses for sending files
   config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
