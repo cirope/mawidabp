@@ -9,7 +9,7 @@
 
   <% if @process_control_data[period].blank? %>
     <p style="margin: 1em;">
-      <em><%= t 'conclusion_committee_report.control_objective_stats.without_audits_in_the_period' %></em>
+      <em><%= t 'follow_up_committee.control_objective_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
     <table class="summary_table" style="margin: 0em 1em;">
@@ -34,6 +34,13 @@
       </tbody>
     </table>
   <% end %>
+  
+  <p style="margin: 1em; font-size: 1.1em;">
+    <%= raw t(
+      'follow_up_committee.control_objective_stats.review_score_average',
+      :score => @reviews_score_data[period]
+    ) %>
+  </p>
 <% end %>
 
 <div id="links">

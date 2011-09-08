@@ -17,10 +17,6 @@ class Parameter < ActiveRecord::Base
     )
   }
 
-  # Callbacks
-  after_save :add_to_cache
-  after_destroy :remove_from_cache
-
   # Restricciones de los atributos
   attr_readonly :name
   
@@ -40,64 +36,11 @@ class Parameter < ActiveRecord::Base
     I18n.t self.name, :scope => :parameter
   end
 
-  def add_to_cache
-    Parameter.write_in_cache self
-  end
-
-  def remove_from_cache
-    cache_key = "#{Rails.env}_#{self.organization_id}_#{self.name}"
-    cached_versions = Rails.cache.read(cache_key).try(:dup) || []
-
-    cached_versions.delete_if { |p| p.id == self.id }
-
-    Rails.cache.write(cache_key, cached_versions)
-  end
-
   def self.find_parameter(organization_id, name, version = nil)
-    parameter = Parameter.find_in_cache(organization_id, name, version)
-
-    unless parameter
-      parameter = Parameter.where(
-        :name => name.to_s, :organization_id => organization_id
-      ).first.try(:version_of, version)
-
-      Parameter.write_in_cache(parameter)
-    end
+    parameter = Parameter.where(
+      :name => name.to_s, :organization_id => organization_id
+    ).first.try(:version_of, version)
 
     parameter.try(:value) || DEFAULT_PARAMETERS[name]
-  end
-
-  def self.find_in_cache(organization_id, name, version = nil)
-    results = Rails.cache.read("#{Rails.env}_#{organization_id}_#{name}") || []
-    parameter = nil
-
-    if version.respond_to?(:to_time)
-      parameter = results.detect { |p| version.to_time >= p.updated_at }
-    end
-
-    parameter
-  end
-
-  def self.write_in_cache(parameter)
-    if parameter && parameter.kind_of?(Parameter)
-      cache_key = "#{Rails.env}_#{parameter.organization_id}_#{parameter.name}"
-      cached_versions = Rails.cache.read(cache_key).try(:dup) || []
-
-      cached_versions.delete_if do |p|
-        p.modification_date == parameter.modification_date
-      end
-
-      cached_versions << parameter
-      
-      cached_versions.sort! do |p1, p2|
-        p2.modification_date <=> p1.modification_date
-      end
-
-      Rails.cache.write(cache_key, cached_versions)
-    end
-  end
-
-  def modification_date
-    self.updated_at || self.created_at || Time.now
   end
 end

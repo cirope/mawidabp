@@ -34,6 +34,13 @@
       </tbody>
     </table>
   <% end %>
+  
+  <p style="margin: 1em; font-size: 1.1em;">
+    <%= raw t(
+      'conclusion_committee_report.process_control_stats.review_score_average',
+      :score => @reviews_score_data[period]
+    ) %>
+  </p>
 <% end %>
 
 <div id="links">

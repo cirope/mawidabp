@@ -731,6 +731,8 @@ module FollowUpCommonReports
       @from_date, @to_date
     )
     @process_control_data = {}
+    @reviews_score_data = {}
+    reviews_score_data = {}
     
     if params[:control_objective_stats]
       unless params[:control_objective_stats][:business_unit_type].blank?
@@ -757,6 +759,7 @@ module FollowUpCommonReports
     end
 
     @periods.each do |period|
+      reviews_score_data[period] ||= []
       process_controls = {}
       
       conclusion_reviews.for_period(period).each do |c_r|
@@ -786,7 +789,12 @@ module FollowUpCommonReports
           
           process_controls[coi.process_control.name][coi.control_objective] = coi_data
         end
+        
+        reviews_score_data[period] << c_r.review.score
       end
+      
+      @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
+        (reviews_score_data[period].sum.to_f / reviews_score_data[period].size).round : 100
       
       @process_control_data[period] ||= []
       
@@ -885,6 +893,12 @@ module FollowUpCommonReports
         pdf.text(
           t('follow_up_committee.control_objective_stats.without_audits_in_the_period'))
       end
+      
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text t(
+        'follow_up_committee.control_objective_stats.review_score_average',
+        :score => @reviews_score_data[period]
+      )
     end
 
     unless @filters.empty?
@@ -920,6 +934,8 @@ module FollowUpCommonReports
       @from_date, @to_date
     )
     @process_control_data = {}
+    @reviews_score_data = {}
+    reviews_score_data = {}
     
     if params[:process_control_stats]
       unless params[:process_control_stats][:business_unit_type].blank?
@@ -947,6 +963,7 @@ module FollowUpCommonReports
 
     @periods.each do |period|
       process_controls = {}
+      reviews_score_data[period] ||= []
       
       conclusion_reviews.for_period(period).each do |c_r|
         c_r.review.control_objective_items.each do |coi|
@@ -974,7 +991,12 @@ module FollowUpCommonReports
           
           process_controls[coi.process_control.name] = pc_data
         end
+        
+        reviews_score_data[period] << c_r.review.score
       end
+      
+      @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
+        (reviews_score_data[period].sum.to_f / reviews_score_data[period].size).round : 100
       
       @process_control_data[period] ||= []
       
@@ -1070,6 +1092,12 @@ module FollowUpCommonReports
         pdf.text(
           t('follow_up_committee.process_control_stats.without_audits_in_the_period'))
       end
+      
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text t(
+        'follow_up_committee.control_objective_stats.review_score_average',
+        :score => @reviews_score_data[period]
+      )
     end
 
     unless @filters.empty?

@@ -60,7 +60,3 @@ class ActiveSupport::TestCase
     end
   end
 end
-
-class ActionController::TestCase
-  setup lambda { Rails.cache.clear }
-end
