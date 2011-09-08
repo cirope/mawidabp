@@ -4,10 +4,6 @@ require 'test_helper'
 class ParametersControllerTest < ActionController::TestCase
   fixtures :parameters
 
-  def teardown
-    Rails.cache.clear if Rails.cache.respond_to?(:clear)
-  end
-
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do

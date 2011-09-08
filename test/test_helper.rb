@@ -26,8 +26,9 @@ class ActiveSupport::TestCase
       assert_redirected_to :controller => :users, :action => :login
     end
 
-    post :create_session, {:user =>
-        {:user => user.user, :password => password}}, {}
+    post :create_session, {
+      :user => { :user => user.user, :password => password }
+    }, {}
     assert_redirected_to :controller => :welcome, :action => :index
     assert_not_nil session[:user_id]
     auth_user = User.find(session[:user_id])
@@ -58,4 +59,8 @@ class ActiveSupport::TestCase
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
     end
   end
+end
+
+class ActionController::TestCase
+  setup lambda { Rails.cache.clear }
 end

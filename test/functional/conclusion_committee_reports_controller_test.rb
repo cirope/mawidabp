@@ -240,4 +240,56 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
   end
+  
+  test 'process control stats report' do
+    perform_auth
+
+    get :process_control_stats
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/process_control_stats'
+
+    assert_nothing_raised(Exception) do
+      get :process_control_stats, :process_control_stats => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/process_control_stats'
+  end
+  
+  test 'filtered process control stats report' do
+    perform_auth
+    
+    get :process_control_stats, :process_control_stats => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/process_control_stats'
+  end
+
+  test 'create process control stats report' do
+    perform_auth
+
+    get :create_process_control_stats, :process_control_stats => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t('conclusion_committee_report.process_control_stats.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'process_control_stats', 0)
+  end
 end

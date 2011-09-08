@@ -65,7 +65,8 @@ MawidaApp::Application.routes.draw do
     'weaknesses_by_state', 'create_weaknesses_by_state',
     'weaknesses_by_risk', 'create_weaknesses_by_risk',
     'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type',
-    'control_objective_stats', 'create_control_objective_stats'
+    'control_objective_stats', 'create_control_objective_stats',
+    'process_control_stats', 'create_process_control_stats'
   ].each do |action|
     match "conclusion_management_reports/#{action}",
       :as => "#{action}_conclusion_management_reports",
@@ -82,7 +83,8 @@ MawidaApp::Application.routes.draw do
 
   [
     'synthesis_report', 'create_synthesis_report',
-    'control_objective_stats', 'create_control_objective_stats'
+    'control_objective_stats', 'create_control_objective_stats',
+    'process_control_stats', 'create_process_control_stats'
   ].each do |action|
     match "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",

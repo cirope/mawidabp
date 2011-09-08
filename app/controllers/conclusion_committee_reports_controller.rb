@@ -327,7 +327,9 @@ class ConclusionCommitteeReportsController < ApplicationController
       :fixed_weaknesses_report => :read,
       :create_fixed_weaknesses_report => :read,
       :control_objective_stats => :read,
-      :create_control_objective_stats => :read
+      :create_control_objective_stats => :read,
+      :process_control_stats => :read,
+      :create_process_control_stats => :read
     )
   end
 end

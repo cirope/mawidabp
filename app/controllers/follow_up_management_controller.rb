@@ -31,7 +31,9 @@ class FollowUpManagementController < ApplicationController
       :weaknesses_by_audit_type => :read,
       :create_weaknesses_by_audit_type => :read,
       :control_objective_stats => :read,
-      :create_control_objective_stats => :read
+      :create_control_objective_stats => :read,
+      :process_control_stats => :read,
+      :create_process_control_stats => :read
     )
   end
 end
