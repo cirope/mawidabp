@@ -182,7 +182,7 @@ class FindingsController < ApplicationController
     pdf = PDF::Writer.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
-    pdf.add_title t(:'finding.index_title')
+    pdf.add_title t('finding.index_title')
 
     column_order = [
       ['review', [Review.model_name.human,
@@ -191,7 +191,7 @@ class FindingsController < ApplicationController
       ['review_code', Finding.human_attribute_name(:review_code), 0],
       ['description', Finding.human_attribute_name(:description),
         detailed ? 48 : 80],
-      ['rescheduled', t(:'weakness.previous_follow_up_dates') +
+      ['rescheduled', t('weakness.previous_follow_up_dates') +
           " (#{Finding.human_attribute_name(:rescheduled)})", 10],
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
             :follow_up_date : :solution_date), 10]
@@ -238,7 +238,7 @@ class FindingsController < ApplicationController
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
-    findings.each do |finding|
+    findings.limit(100).each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
       date_text = l(date, :format => :minimal).to_iso if date
@@ -305,8 +305,13 @@ class FindingsController < ApplicationController
         table.render_on pdf
       end
     end
+    
+    if findings.count > 100
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text "<b>#{t('finding.pdf.size_warning', :count => 100)}</b>"
+    end
 
-    pdf_name = t :'finding.pdf.pdf_name'
+    pdf_name = t 'finding.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, Finding.table_name)
 
