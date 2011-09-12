@@ -25,4 +25,38 @@ module FollowUpCommitteeHelper
 
     risks
   end
+  
+  def show_control_objective_weaknesses_report_links(data)
+    if data['weaknesses_count'].kind_of?(Array)
+      new_data = []
+      
+      data['weaknesses_count'].each do |label|
+        ids = @control_objectives_data[data['control_objective']][label] || []
+        url = findings_path('incomplete', :ids => ids)
+        
+        new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
+      end
+      
+      array_to_ul(new_data, :class => :raw_list)
+    else
+      data['weaknesses_count']
+    end
+  end
+  
+  def show_process_control_weaknesses_report_links(data)
+    if data['weaknesses_count'].kind_of?(Array)
+      new_data = []
+      
+      data['weaknesses_count'].each do |label|
+        ids = @process_control_ids_data[data['process_control']][label]
+        url = findings_path('incomplete', :ids => ids)
+        
+        new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
+      end
+      
+      array_to_ul(new_data, :class => :raw_list)
+    else
+      data['weaknesses_count']
+    end
+  end
 end

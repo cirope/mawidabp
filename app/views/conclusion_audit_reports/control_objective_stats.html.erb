@@ -25,9 +25,10 @@
           <tr>
             <% @columns.each do |col_name, _| %>
               <% col_data = data[col_name] %>
-              <td><%= col_data.kind_of?(Array) ?
-                array_to_ul(col_data, :class => :raw_list) :
-                col_data %></td>
+              <td>
+                <%= col_name == 'weaknesses_count' ?
+                  show_control_objective_final_weaknesses_report_links(data) : col_data %>
+              </td>
             <% end %>
           </tr>
         <% end %>

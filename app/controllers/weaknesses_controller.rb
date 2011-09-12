@@ -11,7 +11,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses
   # * GET /weaknesses.xml
   def index
-    @title = t :'weakness.index_title'
+    @title = t 'weakness.index_title'
     default_conditions = [
       "#{Period.table_name}.organization_id = :organization_id",
       [
@@ -25,13 +25,21 @@ class WeaknessesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {:organization_id => @auth_organization.id,
-      :boolean_true => true, :boolean_false => false}
+    parameters = {
+      :organization_id => @auth_organization.id,
+      :boolean_true => true,
+      :boolean_false => false
+    }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
         ":control_objective_id"
       parameters[:control_objective_id] = params[:control_objective].to_i
+    end
+    
+    if params[:ids]
+      default_conditions << "#{Weakness.table_name}.id IN(:ids)"
+      parameters[:ids] = params[:ids]
     end
 
     build_search_conditions Weakness,

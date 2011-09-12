@@ -507,6 +507,7 @@ module ConclusionCommonReports
       @from_date, @to_date
     )
     @process_control_data = {}
+    @control_objectives_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
     
@@ -540,6 +541,9 @@ module ConclusionCommonReports
       
       conclusion_reviews.for_period(period).each do |c_r|
         c_r.review.control_objective_items.each do |coi|
+          process_controls[coi.process_control.name] ||= {}
+          coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
+          coi_data[:weaknesses_ids] ||= {}
           weaknesses_count = {}
           
           coi.final_weaknesses.each do |w|
@@ -550,10 +554,10 @@ module ConclusionCommonReports
             
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
+            coi_data[:weaknesses_ids][w.risk_text] ||= []
+            coi_data[:weaknesses_ids][w.risk_text] << w.id
           end
           
-          process_controls[coi.process_control.name] ||= {}
-          coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
           coi_data[:weaknesses] ||= {}
           coi_data[:effectiveness] ||= []
           coi_data[:effectiveness] << coi.effectiveness
@@ -576,13 +580,27 @@ module ConclusionCommonReports
       
       process_controls.each do |pc, cos|
         cos.each do |co, coi_data|
+          @control_objectives_data[co.name] ||= {}
           reviews_count = coi_data[:effectiveness].size
           effectiveness = reviews_count > 0 ?
             coi_data[:effectiveness].sum / reviews_count : 100
           weaknesses_count = coi_data[:weaknesses]
-          weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-            t('conclusion_committee_report.control_objective_stats.without_weaknesses') :
-            @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
+          
+          if weaknesses_count.values.sum == 0
+            weaknesses_count_text = t(
+              'conclusion_committee_report.control_objective_stats.without_weaknesses'
+            )
+          else
+            weaknesses_count_text = []
+            
+            @risk_levels.each do |risk|
+              text = "#{risk}: #{weaknesses_count[risk] || 0}"
+              
+              @control_objectives_data[co.name][text] = coi_data[:weaknesses_ids][risk]
+              
+              weaknesses_count_text << text
+            end
+          end
           
           @process_control_data[period] << {
             'process_control' => pc,
@@ -710,6 +728,7 @@ module ConclusionCommonReports
       @from_date, @to_date
     )
     @process_control_data = {}
+    @process_control_ids_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
     
@@ -743,6 +762,8 @@ module ConclusionCommonReports
       
       conclusion_reviews.for_period(period).each do |c_r|
         c_r.review.control_objective_items.each do |coi|
+          pc_data = process_controls[coi.process_control.name] ||= {}
+          pc_data[:weaknesses_ids] ||= {}
           weaknesses_count = {}
           
           coi.final_weaknesses.each do |w|
@@ -753,9 +774,10 @@ module ConclusionCommonReports
             
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
+            pc_data[:weaknesses_ids][w.risk_text] ||= []
+            pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
           
-          pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
           pc_data[:effectiveness] << coi.effectiveness
@@ -777,10 +799,28 @@ module ConclusionCommonReports
       @process_control_data[period] ||= []
       
       process_controls.each do |pc, pc_data|
+        @process_control_ids_data[pc] ||= {}
         reviews_count = pc_data[:effectiveness].size
         effectiveness = reviews_count > 0 ?
           pc_data[:effectiveness].sum / reviews_count : 100
         weaknesses_count = pc_data[:weaknesses]
+        
+        if weaknesses_count.values.sum == 0
+          weaknesses_count_text = t(
+            'conclusion_committee_report.process_control_stats.without_weaknesses'
+          )
+        else
+          weaknesses_count_text = []
+            
+          @risk_levels.each do |risk|
+            text = "#{risk}: #{weaknesses_count[risk] || 0}"
+
+            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk]
+
+            weaknesses_count_text << text
+          end
+        end
+        
         weaknesses_count_text = weaknesses_count.values.sum == 0 ?
           t('conclusion_committee_report.process_control_stats.without_weaknesses') :
           @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
