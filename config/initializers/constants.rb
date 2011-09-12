@@ -28,6 +28,8 @@ AVAILABLE_LOCALES = [:es].freeze
 BLANK_PASSWORD_STALE_DAYS = 3
 # Expresión regular para validar direcciones de correo
 EMAIL_REGEXP = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+# Cantidad máxima de observaciones por PDF
+FINDING_MAX_PDF_ROWS = 100
 # Cantidad de días anteriores al vencimiento de una observación en los que el
 # sistema notificará su proximidad
 FINDING_WARNING_EXPIRE_DAYS = 7

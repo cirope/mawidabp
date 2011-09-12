@@ -539,6 +539,7 @@ es:
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     pdf:
       pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
+      size_warning: "El listado es demasiado grande, se ha truncado a %{count} observaciones / oportunidades de mejora."
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
