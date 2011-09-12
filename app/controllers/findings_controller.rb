@@ -237,7 +237,7 @@ class FindingsController < ApplicationController
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
-
+    
     findings.limit(FINDING_MAX_PDF_ROWS).each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
