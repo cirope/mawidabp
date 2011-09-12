@@ -61,6 +61,22 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
+  
+  test 'list weaknesses for specific ids' do
+    perform_auth
+    ids = [
+      findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
+      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
+    ]
+    
+    get :index, :ids => ids
+    assert_response :success
+    assert_not_nil assigns(:weaknesses)
+    assert_equal 2, assigns(:weaknesses).size
+    assert assigns(:weaknesses).all? { |w| ids.include?(w.id) }
+    assert_select '#error_body', false
+    assert_template 'weaknesses/index'
+  end
 
   test 'edit weakness when search match only one result' do
     perform_auth

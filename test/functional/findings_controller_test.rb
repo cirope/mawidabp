@@ -100,6 +100,22 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
+  
+  test 'list findings for specific ids' do
+    perform_auth
+    ids = [
+      findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id,
+      findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
+    ]
+    
+    get :index, :completed => 'incomplete', :ids => ids
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 2, assigns(:findings).size
+    assert assigns(:findings).all? { |f| ids.include?(f.id) }
+    assert_select '#error_body', false
+    assert_template 'findings/index'
+  end
 
   test 'edit finding when search match only one result' do
     perform_auth
