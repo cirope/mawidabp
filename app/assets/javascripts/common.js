@@ -455,7 +455,7 @@ var Observer = {
 
       if(e.hasClass('file') && !e.val().match(/^\s*$/)) {
         var imageTag = $('<img />', {
-          src: '/images/new_document.gif',
+          src: '/assets/new_document.gif',
           width: 22,
           height: 20,
           alt: e.val(),

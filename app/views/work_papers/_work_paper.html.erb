@@ -31,17 +31,19 @@
         <span style="display: block;">
           <%= link_to_download wp_f.object.file_model.file.url %>
         </span>
-        <%= wp_f.fields_for :file_model do |fm_f| %>
-          <span class="file_container">
-            <%= fm_f.file_field :file, :class => 'inline_item file' %>
-          </span>
+        <% unless frozen %>
+          <%= wp_f.fields_for :file_model do |fm_f| %>
+            <span class="file_container">
+              <%= fm_f.file_field :file, :class => 'inline_item file' %>
+            </span>
+          <% end %>
         <% end %>
       </div>
     <% end %>
 
     <div style="display:none">
-    <%= wp_f.hidden_field :lock_version %>
-    <%= wp_f.hidden_field :organization_id %>
+      <%= wp_f.hidden_field :lock_version %>
+      <%= wp_f.hidden_field :organization_id %>
     </div>
 
     <div class="item_field item_controls" style="width: 10%;">
