@@ -44,23 +44,41 @@ class FileModelTest < ActiveSupport::TestCase
       @file_model.destroy
     end
   end
+  
+  test 'delete file when delete_file is one' do
+    assert_difference 'FileModel.count' do
+      @file_model = FileModel.create(
+        :file => Rack::Test::UploadedFile.new(make_file(1), 'text/plain')
+      )
+    end
+    
+    assert @file_model.file?
+    assert @file_model.update_attributes(:delete_file => '1')
+    assert !@file_model.file?
+    
+    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
+  end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validation' do
-    @file_model = FileModel.new(:file => Rack::Test::UploadedFile.new(make_file(1),
-        'text/plain'))
+    @file_model = FileModel.new(
+      :file => Rack::Test::UploadedFile.new(make_file(1), 'text/plain')
+    )
 
     assert @file_model.valid?, @file_model.errors.full_messages.join(' ;')
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
 
-    @file_model = FileModel.new(:file => Rack::Test::UploadedFile.new(make_file(21),
-        'text/plain'))
+    @file_model = FileModel.new(
+      :file => Rack::Test::UploadedFile.new(make_file(21), 'text/plain')
+    )
 
     assert @file_model.invalid?
-    assert_equal [error_message_from_model(@file_model, :file_file_size,
-        :less_than, :count => 20.megabytes)],
-      @file_model.errors[:file_file_size]
+    assert_equal [
+      error_message_from_model(
+        @file_model, :file_file_size, :less_than, :count => 20.megabytes
+      )
+    ], @file_model.errors[:file_file_size]
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
   end

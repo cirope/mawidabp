@@ -267,7 +267,7 @@ module ApplicationHelper
   #
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
   def link_to_download(*args)
-    options = {:label => t(:'label.download')}
+    options = {:label => t('label.download')}
     html_options = {:class => :image_link}
     options.merge!(args.shift) if args.first.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
@@ -383,6 +383,22 @@ module ApplicationHelper
     link_to(image_tag('copy_document.gif', :size => '20x21',
         :alt => options[:label], :title => options.delete(:label)),
       *(args << html_options))
+  end
+  
+  def link_to_delete_attachment(form, name, *args)
+    options = args.extract_options!
+    out = form.hidden_field(
+      "delete_#{name}",
+      :class => 'destroy',
+      :value => form.object.marked_for_destruction? ? 1 : 0
+    )
+    out << link_to(
+      'X', '#', {
+        :title => t('label.delete_file'), 'data-event' => 'removeAttachment'
+      }.merge(options)
+    )
+    
+    raw out
   end
 
   # Devuelve HTML con un link para insertar un componente en un formulario

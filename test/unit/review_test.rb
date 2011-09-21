@@ -516,7 +516,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal @review.review_user_assignments,
       new_review.review_user_assignments
   end
-
+  
   private
 
   def clone_finding_user_assignments(finding)

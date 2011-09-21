@@ -14,6 +14,7 @@ es:
     close: "Cerrar"
     create: "Crear"
     delete: "Baja"
+    delete_file: "Eliminar archivo"
     descendant: "Descendente"
     details: "Detalles"
     disable: "Deshabilitar"

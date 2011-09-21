@@ -495,8 +495,9 @@ class Review < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE * 2
 
-    note_text = self.file_model ? I18n.t(:'review.survey.with_attachment') :
-      I18n.t(:'review.survey.without_attachment')
+    note_text = self.file_model.try(:file?) ?
+      I18n.t('review.survey.with_attachment') :
+      I18n.t('review.survey.without_attachment')
 
     pdf.add_footnote "<i>#{note_text}</i>"
 
@@ -533,13 +534,13 @@ class Review < ActiveRecord::Base
     end
 
     columns['relevance'] = PDF::SimpleTable::Column.new('relevance') do |c|
-      c.heading = I18n.t(:'review.control_objectives_relevance')
+      c.heading = I18n.t('review.control_objectives_relevance')
       c.justification = :center
       c.width = pdf.percent_width(15)
     end
 
     columns['effectiveness'] = PDF::SimpleTable::Column.new('effectiveness') do |c|
-      c.heading = I18n.t(:'review.control_objectives_effectiveness')
+      c.heading = I18n.t('review.control_objectives_effectiveness')
       c.justification = :center
       c.width = pdf.percent_width(15)
     end
@@ -601,12 +602,12 @@ class Review < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
-    pdf.text "<c:uline><b>#{I18n.t(:'review.notes')}</b></c:uline>:",
+    pdf.text "<c:uline><b>#{I18n.t('review.notes')}</b></c:uline>:",
       :font_size => (PDF_FONT_SIZE * 0.75).round
-    pdf.text "<i>* #{I18n.t(:'review.review_qualification_explanation')}</i>",
+    pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     pdf.text(
-      "<i>** #{I18n.t(:'review.process_control_qualification_explanation')}</i>",
+      "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
 
     weaknesses = self.final_weaknesses.all_for_report
@@ -615,7 +616,7 @@ class Review < ActiveRecord::Base
       risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
-      pdf.add_subtitle I18n.t(:'review.weaknesses_summary',
+      pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
@@ -665,7 +666,7 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      pdf.add_subtitle I18n.t(:'review.oportunities_summary'), PDF_FONT_SIZE,
+      pdf.add_subtitle I18n.t('review.oportunities_summary'), PDF_FONT_SIZE,
         PDF_FONT_SIZE
 
       columns, column_data = {}, []

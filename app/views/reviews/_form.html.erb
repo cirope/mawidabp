@@ -79,17 +79,18 @@
     </p>
     <p class="form_item" style="margin-bottom: 0em;">
       <label class="inline"><%= Review.human_attribute_name :file_model_id %></label>
-      <% unless readonly %>
-        <% r_f.object.build_file_model unless r_f.object.file_model %>
-        <%= r_f.fields_for :file_model do |fm_f| %>
+      <% r_f.object.build_file_model unless r_f.object.file_model %>
+      <%= r_f.fields_for :file_model do |fm_f| %>
+        <% unless readonly %>
           <span class="file_container">
             <%= fm_f.file_field :file, :class => 'inline_item file' %>
           </span>
         <% end %>
-      <% end %>
-      
-      <% if r_f.object.file_model.try(:file) && !r_f.object.file_model.new_record? %>
-        <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
+
+        <% if r_f.object.file_model.try(:file?) && !r_f.object.file_model.new_record? %>
+          <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
+          <%= link_to_delete_attachment fm_f, :file %>
+        <% end %>
       <% end %>
     </p>
     <p>

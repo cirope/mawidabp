@@ -116,6 +116,15 @@ var EventHandler = {
 
     e.parents(target).before(Util.replaceIds(template, /NEW_SUBRECORD/g));
   },
+  
+  /**
+   * Marca un archivo adjunto para ser eliminado
+   */
+  removeAttachment: function(e) {
+    e.prevAll('input[type=hidden].destroy').val('1');
+    e.prevAll('a.image_link').fadeOut();
+    e.fadeOut();
+  },
 
   /**
      * Elimina el elemento del DOM
