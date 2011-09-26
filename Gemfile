@@ -21,6 +21,7 @@ gem 'rmagick'
 gem 'gruff'
 gem 'dynamic_form'
 gem 'unicode'
+gem 'capistrano'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer
@@ -39,7 +40,6 @@ group :assets do
 end
 
 group :development do
-  gem 'capistrano'
   gem 'mongrel'
   gem 'ruby-debug'
 end
