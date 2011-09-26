@@ -58,7 +58,7 @@ module FollowUpCommonReports
             @weaknesses_counts[period]["#{key}_repeated"]
 
           @status.each do |state|
-            if state.first == :being_implemented
+            if state.first.to_s == 'being_implemented'
               being_implemented = Weakness.with_status_for_report.
                 list_all_by_date(@from_date, @to_date, false).send(
                 :"#{audit_type_symbol}_audit").finals(false).for_period(
@@ -236,7 +236,7 @@ module FollowUpCommonReports
               total_weaknesses_count[s[1]][rl[1]] +=
                 weaknesses_count[s[1]][rl[1]]
 
-              if s.first == :being_implemented
+              if s.first.to_s == 'being_implemented'
                 being_implemented = Weakness.with_status_for_report.
                   list_all_by_date(@from_date, @to_date, false).send(
                   :"#{audit_type_symbol}_audit").finals(false).for_period(
@@ -497,7 +497,7 @@ module FollowUpCommonReports
                   weaknesses_count[s[1]][rl[1]] = count_for_risk
                   weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
 
-                  if s.first == :being_implemented
+                  if s.first.to_s == 'being_implemented'
                     being_implemented = weaknesses_for_status.select do |w|
                       w.risk == rl[1]
                     end
@@ -1258,7 +1258,7 @@ module FollowUpCommonReports
             "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
           
-          if count > 0 && rl == highest_risk && state[0] == :being_implemented
+          if count > 0 && rl == highest_risk && state[0].to_s == 'being_implemented'
             column_row[rl.first] << '**'
           end
         end
@@ -1266,7 +1266,7 @@ module FollowUpCommonReports
         column_row['count'] = sub_total_count > 0 ?
           "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-'
 
-        if state.first == :being_implemented && sub_total_count != 0
+        if state.first.to_s == 'being_implemented' && sub_total_count != 0
           column_row['count'] << '*'
         end
 
@@ -1332,7 +1332,7 @@ module FollowUpCommonReports
             "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
         }
 
-        if state.first == :being_implemented
+        if state.first.to_s == 'being_implemented'
           if column_data.last['weaknesses_count'] != '0'
             column_data.last['weaknesses_count'] << ' *'
           end
