@@ -8,7 +8,7 @@
   <h2 style="margin-bottom: 2em;"><%= l @conclusion_final_review.issue_date, :format => :long %></h2>
 
   <p>
-    <b><%= raw(t(:'conclusion_review.issue_date_title') +
+    <b><%= raw(t('conclusion_review.issue_date_title') +
       show_inline_help_for(:conclusion_review_issue_date)) %></b>:
     <%= l(@conclusion_final_review.issue_date, :format => :long) %>
   </p>
@@ -25,8 +25,8 @@
   <% end %>
 
   <p>
-    <b><%= t(:'conclusion_review.audit_period_title') %></b>:
-    <%= t(:'conclusion_review.audit_period',
+    <b><%= t('conclusion_review.audit_period_title') %></b>:
+    <%= t('conclusion_review.audit_period',
         :start => I18n.l(@conclusion_final_review.review.plan_item.start, :format => :long),
         :end => I18n.l(@conclusion_final_review.review.plan_item.end, :format => :long)) %>
   </p>
@@ -47,17 +47,17 @@
 
   <% unless @conclusion_final_review.applied_procedures.blank? %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t(:'conclusion_review.applied_procedures') %>
+      <%= t('conclusion_review.applied_procedures') %>
     </h2>
     <p><%= @conclusion_final_review.applied_procedures %></p>
   <% end %>
 
   <h2 style="margin-top: 1em; text-decoration: underline;">
-    <%= t(:'conclusion_review.conclusion') %>
+    <%= t('conclusion_review.conclusion') %>
   </h2>
   <%= conclusion_review_score_details_table @conclusion_final_review.review %>
 
-  <p class="note"><%= t(:'review.review_qualification_explanation') %></p>
+  <p class="note"><%= t('review.review_qualification_explanation') %></p>
 
   <% unless @conclusion_final_review.conclusion.blank? %>
     <p><%= @conclusion_final_review.conclusion %></p>
@@ -69,7 +69,7 @@
 
   <% if review_has_observations %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t(:'conclusion_review.findings') %>
+      <%= t('conclusion_review.findings') %>
     </h2>
 
     <table class="summary_table">
@@ -85,7 +85,7 @@
 
   <% if review_has_oportunities %>
     <h2 style="margin: 1em 0em; text-decoration: underline;">
-      <%= t(:'conclusion_review.oportunities') %>
+      <%= t('conclusion_review.oportunities') %>
     </h2>
 
     <table class="summary_table">
@@ -97,18 +97,20 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
-  <%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
-  <%= link_to t(:'label.download'), :action => :export_to_pdf,
+  <%= link_to t('label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
+  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
+  <%= link_to t('label.download'), :action => :export_to_pdf,
     :id => @conclusion_final_review, :_ts => Time.now.to_i %> |
-  <%= link_to t(:'conclusion_final_review.generate_score_sheet'),
+  <%= link_to t('conclusion_final_review.generate_score_sheet'),
     :action => :score_sheet, :id => @conclusion_final_review,
     :_ts => Time.now.to_i %> |
-  <%= link_to t(:'conclusion_final_review.generate_global_score_sheet'),
+  <%= link_to t('conclusion_final_review.generate_global_score_sheet'),
     :action => :score_sheet, :id => @conclusion_final_review, :global => 1,
     :_ts => Time.now.to_i %> |
-  <%= link_to t(:'conclusion_final_review.download_work_papers'),
+  <%= link_to t('conclusion_final_review.download_work_papers'),
     :action => :download_work_papers, :id => @conclusion_final_review,
     :_ts => Time.now.to_i %> |
+  <%= link_to t('conclusion_final_review.create_bundle'),
+    :action => :bundle, :id => @conclusion_final_review %> |
   <%= link_to_back %>
 </div>
