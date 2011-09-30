@@ -29,8 +29,9 @@ class ConclusionFinalReviewsController < ApplicationController
       format.html {
         if @conclusion_final_reviews.size == 1 && !@query.blank? &&
             !params[:page]
-          redirect_to edit_conclusion_final_review_url(
-            @conclusion_final_reviews.first)
+          redirect_to(
+            conclusion_final_review_url(@conclusion_final_reviews.first)
+          )
         end
       }
       format.xml  { render :xml => @conclusion_final_reviews }

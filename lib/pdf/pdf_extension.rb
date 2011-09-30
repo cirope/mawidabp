@@ -34,7 +34,7 @@ module PDF
         pdf.add_image_from_file(PDF_LOGO, pdf.left_margin, 20,
           PDF_LOGO_SIZE.first, PDF_LOGO_SIZE.last)
 
-        text = I18n.t :'app_copyright', :year => Date.today.year
+        text = I18n.t 'app_copyright', :year => Date.today.year
         x_start = pdf.absolute_left_margin + font_size * 2 + PDF_LOGO_SIZE.first
         pdf.add_text(x_start, 20, text.to_iso, font_size)
 
@@ -107,7 +107,7 @@ module PDF
 
         self.add_organization_image organization, font_size
 
-        text = "<b>#{I18n.t(:'pdf.period_description')}</b>: #{period.number}"
+        text = "<b>#{I18n.t('pdf.period_description')}</b>: #{period.number}"
         x_start = self.absolute_right_margin - self.text_width(text, font_size)
         self.add_text(x_start, y_top - font_height_size, text.to_iso, font_size)
 
@@ -129,7 +129,7 @@ module PDF
         self.add_organization_image organization, font_size
 
         text = identification.blank? ? nil :
-          "<b>#{I18n.t(:'pdf.review_identification')}</b>: #{identification}"
+          "<b>#{I18n.t('pdf.review_identification')}</b>: #{identification}"
         x_start = self.absolute_right_margin - self.text_width(text, font_size)
         self.add_text(x_start, y_top, text.try(:to_iso), font_size)
 
@@ -229,7 +229,7 @@ module PDF
 
     def add_page_footer
       self.start_page_numbering self.absolute_right_margin, 20, 10, :right,
-        I18n.t(:'pdf.page_pattern').to_iso, 1
+        I18n.t('pdf.page_pattern').to_iso, 1
     end
 
     def add_footnote(text, font_size = (PDF_FONT_SIZE * 0.75).round)
