@@ -28,8 +28,8 @@ class User < ActiveRecord::Base
   })
 
   has_paper_trail :ignore => [:last_access, :logged_in], :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
-    :important => Proc.new { |user| user.is_an_important_change }
+    :organization_id => lambda { GlobalModelConfig.current_organization_id },
+    :important => lambda { |user| user.is_an_important_change }
   }
   acts_as_tree :foreign_key => 'manager_id', :readonly => true,
     :order => 'last_name ASC, name ASC', :dependent_children => :nullify

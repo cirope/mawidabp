@@ -3,7 +3,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   include Comparable
 
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => lambda { GlobalModelConfig.current_organization_id }
   }
 
   # Constantes
@@ -52,7 +52,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   # Relaciones
   belongs_to :review, :inverse_of => :review_user_assignments
   belongs_to :user, :inverse_of => :review_user_assignments
-
+  
   def <=>(other)
     if self.review_id == other.review_id
       self.user_id <=> other.user_id
