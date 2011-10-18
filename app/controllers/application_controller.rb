@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
       logger.error(error)
 
-      @title = t :'error.title'
+      @title = t 'error.title'
       create_exception_file exception
 
       if login_check && response.redirect_url.blank?
@@ -90,12 +90,7 @@ class ApplicationController < ActionController::Base
   def auth #:doc:
     action = (params[:action] || 'none').to_sym
 
-    unless login_check
-      go_to = request.fullpath
-      session[:go_to] = go_to unless action == :logout || request.xhr?
-      @auth_user = nil
-      redirect_to_login t(:'message.must_be_authenticated'), :alert
-    else
+    if login_check
       I18n.locale = @auth_user.language
       check_access_time
       response.headers['Cache-Control'] = 'no-cache, no-store'
@@ -104,11 +99,11 @@ class ApplicationController < ActionController::Base
 
       if @auth_user.try(:must_change_the_password?) &&
            ![:edit_password, :update_password].include?(action)
-        flash.notice ||= t :'message.must_change_the_password'
+        flash.notice ||= t 'message.must_change_the_password'
         redirect_to edit_password_user_url(@auth_user)
       end
 
-      @action_privileges = HashWithIndifferentAccess.new(:approval).update({
+      @action_privileges = HashWithIndifferentAccess.new(:approval).update(
         :index => :read,
         :show => :read,
         :new => :modify,
@@ -116,7 +111,7 @@ class ApplicationController < ActionController::Base
         :edit => :modify,
         :update => :modify,
         :destroy => :erase
-      })
+      )
       
       if @auth_user.try(:change_password_hash)
         @auth_privileges = {}
@@ -124,6 +119,11 @@ class ApplicationController < ActionController::Base
         @auth_privileges = @auth_organization ?
           @auth_user.try(:privileges, @auth_organization) : {}
       end
+    else
+      go_to = request.fullpath
+      session[:go_to] = go_to unless action == :logout || request.xhr?
+      @auth_user = nil
+      redirect_to_login t('message.must_be_authenticated'), :alert
     end
   end
 
@@ -216,28 +216,28 @@ class ApplicationController < ActionController::Base
 
     unless allowed_by_type && allowed_by_privileges
       unless request.xhr?
-        flash.alert = t(:'message.insufficient_privileges')
+        flash.alert = t('message.insufficient_privileges')
         redirect_to :back
       else
         render :partial => 'shared/ajax_message', :layout => false,
-          :locals => {:message => t(:'message.insufficient_privileges')}
+          :locals => {:message => t('message.insufficient_privileges')}
       end
     end
 
   rescue ActionController::RedirectBackError
     restart_session
-    redirect_to_login t(:'message.insufficient_privileges'), :alert
+    redirect_to_login t('message.insufficient_privileges'), :alert
   end
 
   def check_group_admin
     unless @auth_user.group_admin == true
-      flash.alert = t(:'message.insufficient_privileges')
+      flash.alert = t('message.insufficient_privileges')
       redirect_to :back
     end
 
   rescue ActionController::RedirectBackError
     restart_session
-    redirect_to_login t(:'message.insufficient_privileges'), :alert
+    redirect_to_login t('message.insufficient_privileges'), :alert
   end
 
   # Crea un archivo en un directorio propio del usuario a partir de una
@@ -249,7 +249,7 @@ class ApplicationController < ActionController::Base
 
       FileUtils.makedirs dir_name
 
-      File.open("#{dir_name}#{t :'error.error_file'}.log", 'w') do |out|
+      File.open("#{dir_name}#{t('error.error_file')}.log", 'w') do |out|
         # TODO: cifrar el contenido cuando esté disponible Rails 2.3 con
         # ActiveSupport::MessageEncryptor
         out << "#{exception.class}: #{exception.message}\n\n"
