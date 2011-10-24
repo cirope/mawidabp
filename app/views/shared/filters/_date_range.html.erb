@@ -5,18 +5,22 @@
         <tr>
           <td>
             <p class="form_item" style="margin: 0em;">
-              <%= f.label :from_date, t(:'conclusion_committee_report.from_date'),
-                :class => :inline %>
+              <%= f.label :from_date, raw(
+                  t('conclusion_committee_report.from_date') +
+                  show_inline_help_for(:report_from_date)
+                ), :class => 'inline' %>
               <%= calendar_text_field f, :from_date, false, @from_date,
-                :size => nil, :class => :inline_item %>
+                :size => nil, :class => 'inline_item' %>
             </p>
           </td>
           <td>
             <p class="form_item" style="margin: 0em;">
-              <%= f.label :to_date, t(:'conclusion_committee_report.to_date'),
-                :class => :inline %>
+              <%= f.label :to_date, raw(
+                  t('conclusion_committee_report.to_date') +
+                  show_inline_help_for(:report_to_date)
+                ), :class => 'inline' %>
               <%= calendar_text_field f, :to_date, false, @to_date,
-                :size => nil, :class => :inline_item %>
+                :size => nil, :class => 'inline_item' %>
             </p>
           </td>
         </tr>
