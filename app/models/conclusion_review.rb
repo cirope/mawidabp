@@ -4,7 +4,7 @@ class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => lambda { GlobalModelConfig.current_organization_id }
   }
 
   # Constantes
@@ -152,7 +152,7 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_description_item(I18n.t(:'conclusion_review.issue_date_title'),
+    pdf.add_description_item(I18n.t('conclusion_review.issue_date_title'),
       I18n.l(self.issue_date, :format => :long))
     pdf.add_description_item(
       self.review.business_unit.business_unit_type.business_unit_label,
@@ -165,14 +165,14 @@ class ConclusionReview < ActiveRecord::Base
     end
 
     pdf.add_description_item(
-      I18n.t(:'conclusion_review.audit_period_title'),
-      I18n.t(:'conclusion_review.audit_period',
+      I18n.t('conclusion_review.audit_period_title'),
+      I18n.t('conclusion_review.audit_period',
         :start => I18n.l(self.review.plan_item.start, :format => :long),
         :end => I18n.l(self.review.plan_item.end, :format => :long)
       )
     )
 
-    pdf.add_subtitle I18n.t(:'conclusion_review.objectives_and_scopes'),
+    pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
       PDF_FONT_SIZE, PDF_FONT_SIZE
 
     grouped_control_objectives = self.review.grouped_control_objective_items
@@ -188,19 +188,19 @@ class ConclusionReview < ActiveRecord::Base
     end
 
     unless self.applied_procedures.blank?
-      pdf.add_subtitle I18n.t(:'conclusion_review.applied_procedures'),
+      pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
         PDF_FONT_SIZE
       pdf.text self.applied_procedures, :justification => :full
     end
 
-    pdf.add_subtitle I18n.t(:'conclusion_review.conclusion'), PDF_FONT_SIZE
+    pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
 
     pdf.move_pointer PDF_FONT_SIZE
 
     self.review.add_score_details_table(pdf)
 
     pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
-    pdf.text "<i>#{I18n.t(:'review.review_qualification_explanation')}</i>",
+    pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
     unless self.conclusion.blank?
@@ -211,17 +211,17 @@ class ConclusionReview < ActiveRecord::Base
 
     review_has_observations = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
-        !(use_finals ? coi.final_weaknesses : coi.weaknesses).blank?
+        !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
       end
     end
 
     if review_has_observations
       pdf.add_subtitle(
-        I18n.t(:'conclusion_review.findings'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+        I18n.t('conclusion_review.findings'), PDF_FONT_SIZE, PDF_FONT_SIZE)
 
       grouped_control_objectives.each do |process_control, cois|
         has_observations = cois.any? do |coi|
-          !(use_finals ? coi.final_weaknesses : coi.weaknesses).blank?
+          !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
         end
 
         if has_observations
@@ -239,7 +239,7 @@ class ConclusionReview < ActiveRecord::Base
           end
 
           cois.each do |coi|
-            (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
+            (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.each do |w|
               column_data.concat coi.pdf_column_data(w, pc_id)
             end
           end
@@ -276,7 +276,7 @@ class ConclusionReview < ActiveRecord::Base
 
     if review_has_oportunities
       pdf.add_subtitle(
-        I18n.t(:'conclusion_review.oportunities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+        I18n.t('conclusion_review.oportunities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
 
       grouped_control_objectives.each do |process_control, cois|
         has_oportunities = cois.any? do |coi|
@@ -328,7 +328,7 @@ class ConclusionReview < ActiveRecord::Base
     end
 
     unless self.review.finding_review_assignments.empty?
-      pdf.add_subtitle(I18n.t(:'conclusion_review.finding_review_assignments'),
+      pdf.add_subtitle(I18n.t('conclusion_review.finding_review_assignments'),
         PDF_FONT_SIZE, PDF_FONT_SIZE)
       repeated_findings = self.review.finding_review_assignments.map do |fra|
         "#{fra.finding.to_s} [<b>#{fra.finding.state_text}</b>]"
@@ -385,7 +385,7 @@ class ConclusionReview < ActiveRecord::Base
     self.create_workflow_pdf(organization)
     cover_paths << self.absolute_workflow_pdf_path
 
-    cois_dir = I18n.t(:'conclusion_review.bundle.control_objectives_dir',
+    cois_dir = I18n.t('conclusion_review.bundle.control_objectives_dir',
       :prefix => '%02d' % cover_count).sanitized_for_filename
     cover_count += 1
 
@@ -393,7 +393,7 @@ class ConclusionReview < ActiveRecord::Base
     cover_paths << self.absolute_findings_sheet_pdf_path(cover_count)
     cover_count += 1 if File.exist?(cover_paths.last)
 
-    findings_dir = I18n.t(:'conclusion_review.bundle.findings_dir',
+    findings_dir = I18n.t('conclusion_review.bundle.findings_dir',
       :prefix => '%02d' % cover_count).sanitized_for_filename
     cover_count += 1 unless self.findings.blank?
 
@@ -449,7 +449,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def bundle_zip_name
-    I18n.t(:'conclusion_review.bundle.zip_name',
+    I18n.t('conclusion_review.bundle.zip_name',
       :identification => self.review.sanitized_identification)
   end
 
@@ -463,11 +463,11 @@ class ConclusionReview < ActiveRecord::Base
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
-    pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+    pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-    pdf.add_title I18n.t(:'conclusion_review.bundle_index.title'),
+    pdf.add_title I18n.t('conclusion_review.bundle_index.title'),
       (PDF_FONT_SIZE * 1.5).round, :center
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
@@ -495,7 +495,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def bundle_index_pdf_name
-    I18n.t(:'conclusion_review.bundle_index.pdf_name')
+    I18n.t('conclusion_review.bundle_index.pdf_name')
   end
 
   def create_cover_pdf(organization = nil, text = nil, pdf_name = 'cover.pdf')
@@ -511,7 +511,7 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.add_title text, PDF_FONT_SIZE * 2, :center
 
-    pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+    pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
     pdf.custom_save_as pdf_name, ConclusionReview.table_name, self.id
   end
@@ -529,7 +529,7 @@ class ConclusionReview < ActiveRecord::Base
     use_finals = !self.kind_of?(ConclusionDraftReview) ||
       self.review.has_final_review?
 
-    pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+    pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
     pdf.add_review_header organization || self.review.try(:organization),
       self.review.try(:identification),
@@ -537,7 +537,7 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-    pdf.add_title I18n.t(:'conclusion_review.workflow.title'),
+    pdf.add_title I18n.t('conclusion_review.workflow.title'),
       (PDF_FONT_SIZE * 1.5).round, :center
 
     pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
@@ -635,7 +635,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def workflow_pdf_name
-    I18n.t(:'conclusion_review.workflow.pdf_name')
+    I18n.t('conclusion_review.workflow.pdf_name')
   end
 
   def create_findings_sheet_pdf(organization = nil, index = 1)
@@ -646,7 +646,7 @@ class ConclusionReview < ActiveRecord::Base
 
     unless weaknesses.blank?
       pdf = PDF::Writer.create_generic_pdf(:portrait, false)
-      pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+      pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
       pdf.add_review_header organization || self.review.try(:organization),
         self.review.try(:identification),
@@ -654,7 +654,7 @@ class ConclusionReview < ActiveRecord::Base
 
       pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-      pdf.add_title I18n.t(:'conclusion_review.findings_sheet.title'),
+      pdf.add_title I18n.t('conclusion_review.findings_sheet.title'),
         (PDF_FONT_SIZE * 1.5).round, :center
 
       pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
@@ -684,7 +684,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def findings_sheet_name(index = 1)
-    I18n.t(:'conclusion_review.findings_sheet.pdf_name',
+    I18n.t('conclusion_review.findings_sheet.pdf_name',
       :prefix => '%02d' % index)
   end
 
@@ -708,14 +708,14 @@ class ConclusionReview < ActiveRecord::Base
       column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
       columns = {}
       column_data = []
-      pdf.add_watermark(I18n.t(:'pdf.draft')) unless use_finals
+      pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
       pdf.add_review_header organization || self.review.try(:organization),
         self.review.try(:identification),
         self.review.try(:plan_item).try(:project)
 
       pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
-      pdf.add_title I18n.t(:'conclusion_review.findings_follow_up.title'),
+      pdf.add_title I18n.t('conclusion_review.findings_follow_up.title'),
         (PDF_FONT_SIZE * 1.5).round, :center
 
       column_order.each do |col_name, col_with|
@@ -754,7 +754,7 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         pdf.text "\n#{
-          I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
+          I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
             :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
       end
       
@@ -791,7 +791,7 @@ class ConclusionReview < ActiveRecord::Base
         end
 
         pdf.text "\n#{
-          I18n.t(:'conclusion_review.findings_follow_up.index_clarification')}",
+          I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
             :font_size => (PDF_FONT_SIZE * 0.75), :justification => :full
       end
 
@@ -840,7 +840,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def findings_follow_up_name(index = 1)
-    I18n.t(:'conclusion_review.findings_follow_up.pdf_name',
+    I18n.t('conclusion_review.findings_follow_up.pdf_name',
       :prefix => '%02d' % index)
   end
 end

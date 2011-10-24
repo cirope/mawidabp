@@ -5,7 +5,7 @@ class Review < ActiveRecord::Base
   trimmed_fields :identification
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => lambda { GlobalModelConfig.current_organization_id }
   }
 
   # Constantes

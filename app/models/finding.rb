@@ -46,7 +46,8 @@ class Finding < ActiveRecord::Base
     :assumed_risk => 3,
     :notify => 4,
     :incomplete => 5,
-    :repeated => 6
+    :repeated => 6,
+    :revoked => 7
   }.with_indifferent_access.freeze
 
   STATUS_TRANSITIONS = {
@@ -56,7 +57,8 @@ class Finding < ActiveRecord::Base
       :being_implemented,
       :implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :revoked
     ],
     :unconfirmed => [
       :unconfirmed,
@@ -68,21 +70,24 @@ class Finding < ActiveRecord::Base
       :being_implemented,
       :implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :revoked
     ],
     :being_implemented => [
       :being_implemented,
       :implemented,
       :implemented_audited,
       :assumed_risk,
-      :repeated
+      :repeated,
+      :revoked
     ],
     :implemented => [
       :implemented,
       :being_implemented,
       :implemented_audited,
       :assumed_risk,
-      :repeated
+      :repeated,
+      :revoked
     ],
     :implemented_audited => [
       :implemented_audited
@@ -96,7 +101,8 @@ class Finding < ActiveRecord::Base
       :being_implemented,
       :implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :revoked
     ],
     :incomplete => [
       :incomplete,
@@ -104,11 +110,15 @@ class Finding < ActiveRecord::Base
       :being_implemented,
       :implemented,
       :implemented_audited,
-      :assumed_risk
+      :assumed_risk,
+      :revoked
     ],
     :repeated => [
       :repeated
     ],
+    :revoked => [
+      :revoked
+    ]
   }.with_indifferent_access.freeze
 
   PENDING_STATUS = [
@@ -117,8 +127,9 @@ class Finding < ActiveRecord::Base
     STATUS[:incomplete]
   ]
 
-  EXCLUDE_FROM_REPORTS_STATUS = [:unconfirmed, :confirmed, :notify, :incomplete,
-    :repeated]
+  EXCLUDE_FROM_REPORTS_STATUS = [
+    :unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked
+  ]
 
   # Named scopes
   scope :with_prefix, lambda { |prefix|
@@ -126,8 +137,10 @@ class Finding < ActiveRecord::Base
   }
   scope :repeated, where(:state => STATUS[:repeated])
   scope :not_repeated, where('state <> ?', STATUS[:repeated])
+  scope :revoked, where(:state => STATUS[:revoked])
+  scope :not_revoked, where('state <> ?', STATUS[:revoked])
   scope :with_pending_status, where(
-    :state => STATUS.except(EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
+    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
   )
   scope :all_for_reallocation_with_review, lambda { |review|
     includes(:control_objective_item => :review).where(
@@ -289,7 +302,7 @@ class Finding < ActiveRecord::Base
       parameters
     )
   }
-  scope :being_implemented, where({:state => STATUS[:being_implemented]})
+  scope :being_implemented, where(:state => STATUS[:being_implemented])
   scope :not_incomplete, where("state <> ?", Finding::STATUS[:incomplete])
   scope :list_all_by_date, lambda { |from_date, to_date, order|
     includes(
@@ -809,12 +822,12 @@ class Finding < ActiveRecord::Base
   end
 
   STATUS.each do |status_type, status_value|
-    define_method(:"#{status_type}?") { self.state == status_value }
-    define_method(:"was_#{status_type}?") { self.state_was == status_value }
+    define_method("#{status_type}?") { self.state == status_value }
+    define_method("was_#{status_type}?") { self.state_was == status_value }
   end
 
   def state_text
-    self.state ? I18n.t(:"finding.status_#{STATUS.invert[self.state]}") : '-'
+    self.state ? I18n.t("finding.status_#{STATUS.invert[self.state]}") : '-'
   end
   
   def stale?
