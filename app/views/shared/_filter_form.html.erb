@@ -1,7 +1,7 @@
 <% url = url_for({:action => action}.merge(extra_params)) %>
 <div id="filter_box">
   <div>
-    <%= form_for action, :url => url, :html => {:method => :get, :class => :no_observe_changes} do |f| %>
+    <%= form_for action, :url => url, :html => {:method => :get, :class => 'no_observe_changes'} do |f| %>
       <% forms.each do |f_name, display| %>
         <%= render :partial => "shared/filters/#{f_name}",
           :locals => {:f => f, :display => display, :action => action} %>
@@ -16,10 +16,11 @@
 
       <div class="actions">
         <span class="button">
-          <%= f.submit t(:'label.apply_filter'), :style => 'display: inline;' %>
+          <%= f.submit t('label.apply_filter'), :style => 'display: inline;' %>
         </span>
-        <span><%= link_to t(:'label.cancel'), url,
-                {:style => 'margin-left: 1em;'} %></span>
+        <span>
+          <%= link_to t('label.cancel'), url, {:style => 'margin-left: 1em;'} %>
+        </span>
       </div>
     <% end %>
   </div>
