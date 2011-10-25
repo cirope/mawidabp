@@ -1,3 +1,4 @@
+<% avoid_inline_help = display[:avoid_inline_help] if display.kind_of?(Hash) %>
 <div id="date_filter" class="filter" <%= 'style="display: none;"' unless display %>>
   <div>
     <table class="date_filter">
@@ -7,7 +8,7 @@
             <p class="form_item" style="margin: 0em;">
               <%= f.label :from_date, raw(
                   t('conclusion_committee_report.from_date') +
-                  show_inline_help_for(:report_from_date)
+                  (show_inline_help_for(:report_from_date) unless avoid_inline_help).to_s
                 ), :class => 'inline' %>
               <%= calendar_text_field f, :from_date, false, @from_date,
                 :size => nil, :class => 'inline_item' %>
@@ -17,7 +18,7 @@
             <p class="form_item" style="margin: 0em;">
               <%= f.label :to_date, raw(
                   t('conclusion_committee_report.to_date') +
-                  show_inline_help_for(:report_to_date)
+                  (show_inline_help_for(:report_to_date) unless avoid_inline_help).to_s
                 ), :class => 'inline' %>
               <%= calendar_text_field f, :to_date, false, @to_date,
                 :size => nil, :class => 'inline_item' %>
