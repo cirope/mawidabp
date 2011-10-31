@@ -64,7 +64,7 @@
   <% end %>
 
   <% review_has_observations = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.final_weaknesses.blank? }
+    cois.any? { |coi| !coi.final_weaknesses.not_revoked.blank? }
   end %>
 
   <% if review_has_observations %>
@@ -80,7 +80,7 @@
   <% end %>
 
   <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.final_oportunities.blank? }
+    cois.any? { |coi| !coi.final_oportunities.not_revoked.blank? }
   end %>
 
   <% if review_has_oportunities %>

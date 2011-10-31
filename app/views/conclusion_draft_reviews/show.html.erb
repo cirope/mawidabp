@@ -26,7 +26,7 @@
 
   <p>
     <b><%= t('conclusion_review.audit_period_title') %></b>:
-    <%= t(:'conclusion_review.audit_period',
+    <%= t('conclusion_review.audit_period',
         :start => I18n.l(@conclusion_draft_review.review.plan_item.start, :format => :long),
         :end => I18n.l(@conclusion_draft_review.review.plan_item.end, :format => :long)) %>
   </p>
@@ -53,7 +53,7 @@
   <% end %>
 
   <h2 style="margin-top: 1em; text-decoration: underline;">
-    <%= t(:'conclusion_review.conclusion') %>
+    <%= t('conclusion_review.conclusion') %>
   </h2>
   <%= conclusion_review_score_details_table @conclusion_draft_review.review %>
 
@@ -64,7 +64,7 @@
   <% end %>
 
   <% review_has_observations = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.weaknesses.blank? }
+    cois.any? { |coi| !coi.weaknesses.not_revoked.blank? }
   end %>
 
   <% if review_has_observations %>
@@ -80,7 +80,7 @@
   <% end %>
 
   <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.oportunities.blank? }
+    cois.any? { |coi| !coi.oportunities.not_revoked.blank? }
   end %>
 
   <% if review_has_oportunities %>

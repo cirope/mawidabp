@@ -37,7 +37,7 @@ module ConclusionFinalReviewsHelper
   def conclusion_review_process_control_weakness_details_table(process_control,
       cois, use_finals = false)
     has_observations = cois.any? do |coi|
-      !(use_finals ? coi.final_weaknesses : coi.weaknesses).blank?
+      !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
     end
 
     if has_observations
@@ -49,7 +49,7 @@ module ConclusionFinalReviewsHelper
         :class => :header)
 
       cois.each do |coi|
-        (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
+        (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.each do |w|
           body << weakness_row_data(coi, w, cycle(:odd, :even, :name => :wc))
         end
       end
@@ -63,7 +63,7 @@ module ConclusionFinalReviewsHelper
   def conclusion_review_process_control_oportunity_details_table(
       process_control, cois, use_finals = false)
     has_oportunities = cois.any? do |coi|
-      !(use_finals ? coi.final_oportunities : coi.oportunities).blank?
+      !(use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.blank?
     end
 
     if has_oportunities
@@ -75,7 +75,7 @@ module ConclusionFinalReviewsHelper
         :class => :header)
 
       cois.each do |coi|
-        (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
+        (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
           body << weakness_row_data(coi, o, cycle(:odd, :even))
         end
       end

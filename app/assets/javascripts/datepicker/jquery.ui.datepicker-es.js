@@ -27,6 +27,7 @@ jQuery(function($){
                 hourText: 'Hora',
                 minuteText: 'Minuto',
                 secondText: 'Segundo',
+                millisecText: 'Milisegundo',
                 currentText: 'Ahora',
                 closeText: 'Listo',
                 ampm: false

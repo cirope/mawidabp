@@ -185,11 +185,11 @@ var Helper = {
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() {FormUtil.completeSortNumbers();}
+      stop: function() { FormUtil.completeSortNumbers(); }
     });
     
     // Queridisimo Explorer
-    if($.browser.msie) {$(elementId).find(elements).css('opacity', '1');}
+    if($.browser.msie) { $(elementId).find(elements).css('opacity', '1'); }
   },
 
   /**
