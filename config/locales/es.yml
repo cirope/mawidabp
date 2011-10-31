@@ -2019,6 +2019,7 @@ es:
               must_be_blank: "debe estar en blanco para el estado seleccionado"
             state:
               must_have_a_comment: "debe tener adjunto un comentario para esta transición"
+              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"

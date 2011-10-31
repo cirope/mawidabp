@@ -274,6 +274,12 @@ class FindingTest < ActiveSupport::TestCase
     finding.comments.build(:comment => 'Test comment',
       :user => users(:administrator_user))
     assert finding.valid?
+    
+    finding.state = Finding::STATUS[:revoked]
+    assert finding.invalid?
+
+    assert_equal [error_message_from_model(finding, :state,
+        :can_not_be_revoked)], finding.errors[:state]
   end
 
   test 'validates implemented audited with work papers' do
