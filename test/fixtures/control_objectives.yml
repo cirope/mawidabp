@@ -39,3 +39,10 @@ iso_27000_security_organization_4_3:
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 4
   process_control: iso_27000_security_policy
+  
+iso_27000_security_organization_4_4:
+  name: "4.4) Seguridad frente al acceso por parte de terceros."
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
+  order: 5
+  process_control: iso_27000_security_policy

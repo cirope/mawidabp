@@ -24,6 +24,15 @@ current_plan_item_3:
   order_number: 3
   plan: current_plan
   business_unit: business_unit_three
+  
+current_plan_item_4:
+  project: Project 4
+  start: <%= 6.days.from_now.to_date.to_s(:db) %>
+  end: <%= 9.days.from_now.to_date.to_s(:db) %>
+  predecessors: <%= [].to_yaml.inspect %>
+  order_number: 4
+  plan: current_plan
+  business_unit: business_unit_three
 
 current_plan_item_4_without_business_unit:
   project: Project 4

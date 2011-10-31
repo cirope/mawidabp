@@ -278,7 +278,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def can_be_destroyed?
-    self.is_in_a_final_review? ? false : true
+    !(self.is_in_a_final_review? || !self.weaknesses.empty? ||
+        !self.oportunities.empty?)
   end
 
   def is_in_a_final_review?

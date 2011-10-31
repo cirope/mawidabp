@@ -71,9 +71,18 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   # Prueba de eliminación de items de objetivos de control
-  test 'delete' do
-    assert_difference 'ControlObjectiveItem.count', -1 do
+  test 'destroy' do
+    assert_no_difference 'ControlObjectiveItem.count' do
       @control_objective_item.destroy
+    end
+    
+    control_objective_item = control_objective_items(
+      :iso_27000_security_organization_4_3_item_editable_without_findings
+    )
+    
+    # Sin observaciones es posible eliminar
+    assert_difference 'ControlObjectiveItem.count', -1 do
+      control_objective_item.destroy
     end
   end
 

@@ -109,16 +109,13 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba de eliminación de debilidades
   test 'delete' do
     # No se puede eliminar si está en un informe definitivo
-    assert_no_difference 'Finding.count', -1 do
-      @finding.destroy
-    end
+    assert_no_difference('Finding.count') { @finding.destroy }
 
     @finding = Finding.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_difference 'Finding.count', -1 do
-      @finding.destroy
-    end
+    # Y tampoco se puede eliminar si NO está en un informe definitivo
+    assert_no_difference('Finding.count') { @finding.destroy }
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

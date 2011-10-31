@@ -25,3 +25,10 @@ review_without_conclusion:
   description: Review Without Conclusion
   survey: Review Without Conclusion Survey
   plan_item: current_plan_item_3
+  
+review_without_conclusion_and_without_findings:
+  period: current_period
+  identification: 1 2 6
+  description: Review Without Conclusion and Without Findings
+  survey: Review Without Conclusion and Without Findings Survey
+  plan_item: current_plan_item_4

@@ -8,7 +8,6 @@ class WeaknessesControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :show, :new, :edit, :create, :update, :destroy]
     id_param = {:id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).to_param}
     public_actions = []
     private_actions = [
@@ -18,7 +17,6 @@ class WeaknessesControllerTest < ActionController::TestCase
       [:get, :edit, id_param],
       [:post, :create],
       [:put, :update, id_param],
-      [:delete, :destroy, id_param],
       [:put, :undo_reiteration, id_param]
     ]
 
@@ -266,17 +264,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_redirected_to edit_weakness_url(assigns(:weakness))
     assert_equal 'O020', assigns(:weakness).review_code
   end
-
-  test 'destroy weakness' do
-    perform_auth
-    assert_difference 'Weakness.count', -1 do
-      delete :destroy, :id => findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
-    end
-
-    assert_redirected_to weaknesses_url
-  end
-
+  
   test 'follow up pdf' do
     perform_auth
     weakness = Weakness.find(findings(

@@ -57,6 +57,16 @@ iso_27000_security_organization_4_3_control_1:
   controllable_type: ControlObjective
   controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_3) %>
   order: 1
+  
+iso_27000_security_organization_4_4_control_1:
+  control: "4.4.1 Identificación de riesgos del acceso de terceras partes."
+  effects: "Efectos seguridad frente al acceso por parte de terceros"
+  design_tests: "Diseño de pruebas seguridad frente al acceso por parte de terceros"
+  compliance_tests: "Pruebas seguridad frente al acceso por parte de terceros"
+  sustantive_tests: "Pruebas sustantivas"
+  controllable_type: ControlObjective
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_4) %>
+  order: 1
 
 procedure_control_subitem_iso_27001_1_1_control_1:
   control: "Main procedures"

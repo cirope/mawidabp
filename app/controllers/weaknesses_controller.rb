@@ -71,7 +71,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/1
   # * GET /weaknesses/1.xml
   def show
-    @title = t :'weakness.show_title'
+    @title = t 'weakness.show_title'
     @weakness = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -85,7 +85,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/new
   # * GET /weaknesses/new.xml
   def new
-    @title = t :'weakness.new_title'
+    @title = t 'weakness.new_title'
     @weakness = Weakness.new(
       {:control_objective_item_id => params[:control_objective_item]}, {}, true
     )
@@ -100,7 +100,7 @@ class WeaknessesController < ApplicationController
   #
   # * GET /weaknesses/1/edit
   def edit
-    @title = t :'weakness.edit_title'
+    @title = t 'weakness.edit_title'
     @weakness = find_with_organization(params[:id])
   end
 
@@ -109,12 +109,12 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses
   # * POST /weaknesses.xml
   def create
-    @title = t :'weakness.new_title'
+    @title = t 'weakness.new_title'
     @weakness = Weakness.new(params[:weakness])
 
     respond_to do |format|
       if @weakness.save
-        flash.notice = t :'weakness.correctly_created'
+        flash.notice = t 'weakness.correctly_created'
         format.html { redirect_to(edit_weakness_url(@weakness)) }
         format.xml  { render :xml => @weakness, :status => :created, :location => @weakness }
       else
@@ -130,13 +130,13 @@ class WeaknessesController < ApplicationController
   # * PUT /weaknesses/1
   # * PUT /weaknesses/1.xml
   def update
-    @title = t :'weakness.edit_title'
+    @title = t 'weakness.edit_title'
     @weakness = find_with_organization(params[:id])
 
     respond_to do |format|
       Weakness.transaction do
         if @weakness.update_attributes(params[:weakness])
-          flash.notice = t :'weakness.correctly_updated'
+          flash.notice = t 'weakness.correctly_updated'
           format.html { redirect_to(edit_weakness_url(@weakness)) }
           format.xml  { head :ok }
         else
@@ -148,22 +148,8 @@ class WeaknessesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'weakness.stale_object_error'
+    flash.alert = t 'weakness.stale_object_error'
     redirect_to :action => :edit
-  end
-
-  # Elimina una observación
-  #
-  # * DELETE /weaknesses/1
-  # * DELETE /weaknesses/1.xml
-  def destroy
-    @weakness = find_with_organization(params[:id])
-    @weakness.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(weaknesses_url) }
-      format.xml  { head :ok }
-    end
   end
 
   # Crea el documento de seguimiento de la observación

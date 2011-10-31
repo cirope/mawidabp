@@ -15,8 +15,7 @@ class OportunitiesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
-      [:delete, :destroy, id_param]
+      [:put, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -237,16 +236,6 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:oportunity)
     assert_redirected_to edit_oportunity_url(assigns(:oportunity))
     assert_equal 'OM020', assigns(:oportunity).review_code
-  end
-
-  test 'destroy oportunity' do
-    perform_auth
-    assert_difference 'Oportunity.count', -1 do
-      delete :destroy, :id => findings(
-        :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id
-    end
-
-    assert_redirected_to oportunities_url
   end
 
   test 'follow up pdf' do

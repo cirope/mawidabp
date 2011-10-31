@@ -116,14 +116,15 @@ class WeaknessTest < ActiveSupport::TestCase
   # Prueba de eliminación de debilidades
   test 'delete' do
     # No se puede eliminar si está en un informe definitivo
-    assert_no_difference 'Weakness.count', -1 do
+    assert_no_difference 'Weakness.count' do
       @weakness.destroy
     end
 
     @weakness = Weakness.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_difference 'Weakness.count', -1 do
+    # Y tampoco se puede eliminar si NO está en un informe definitivo
+    assert_no_difference 'Weakness.count' do
       @weakness.destroy
     end
   end

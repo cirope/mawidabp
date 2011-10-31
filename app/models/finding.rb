@@ -412,6 +412,7 @@ class Finding < ActiveRecord::Base
     end
 
     record.errors.add attr, :must_have_a_comment if record.must_have_a_comment?
+    record.errors.add attr, :can_not_be_revoked if record.can_not_be_revoked?
     
     if record.implemented_audited? && record.work_papers.empty?
       record.errors.add attr, :must_have_a_work_paper
@@ -507,14 +508,14 @@ class Finding < ActiveRecord::Base
   def self.columns_for_sort
     HashWithIndifferentAccess.new({
       :risk_asc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.ascendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.ascendant')})",
         :field => [
           "#{Finding.table_name}.risk ASC",
           "#{Finding.table_name}.state ASC"
         ]
       },
       :risk_desc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t(:'label.descendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.descendant')})",
         :field => [
           "#{Finding.table_name}.risk DESC",
           "#{Finding.table_name}.state ASC"
@@ -683,7 +684,7 @@ class Finding < ActiveRecord::Base
         Notifier.reassigned_findings_notification(added, removed, self,
           false).deliver
       elsif added.blank? && !removed.blank?
-        title = I18n.t(:'finding.responsibility_removed',
+        title = I18n.t('finding.responsibility_removed',
           :class_name => self.class.model_name.human.downcase,
           :review_code => self.review_code,
           :review => self.review.try(:identification))
@@ -699,7 +700,7 @@ class Finding < ActiveRecord::Base
         (!self.changed? && !self.control_objective_item.review.is_frozen?)
       true
     else
-      msg = I18n.t(:'finding.readonly')
+      msg = I18n.t('finding.readonly')
 
       if !self.errors.full_messages.include?(msg)
         self.errors.add :base, msg
@@ -714,15 +715,19 @@ class Finding < ActiveRecord::Base
         (self.changed? || self.marked_for_destruction?)
       true
     else
-      msg = I18n.t(:'finding.readonly')
+      msg = I18n.t('finding.readonly')
       self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
 
       false
     end
   end
+  
+  def allow_destruction!
+    @allow_destruction = true
+  end
 
   def can_be_destroyed?
-    self.is_in_a_final_review? || self.repeated_of ? false : true
+    !!@allow_destruction
   end
 
   def is_in_a_final_review?
@@ -751,6 +756,11 @@ class Finding < ActiveRecord::Base
   def must_have_a_comment?
     self.being_implemented? && self.was_implemented? &&
       !self.comments.detect { |c| c.new_record? && c.valid? }
+  end
+  
+  def can_not_be_revoked?
+    self.revoked? && self.state_changed? &&
+      (self.repeated_of || self.is_in_a_final_review?)
   end
 
   def mark_as_unconfirmed!
@@ -863,12 +873,12 @@ class Finding < ActiveRecord::Base
     important_dates = []
 
     if self.first_notification_date
-      important_dates << I18n.t(:'finding.important_dates.notification_date',
+      important_dates << I18n.t('finding.important_dates.notification_date',
         :date => I18n.l(self.first_notification_date, :format => :long).strip)
     end
 
     if self.confirmation_date
-      important_dates << I18n.t(:'finding.important_dates.confirmation_date',
+      important_dates << I18n.t('finding.important_dates.confirmation_date',
         :date => I18n.l(self.confirmation_date, :format => :long).strip)
     end
 
@@ -886,7 +896,7 @@ class Finding < ActiveRecord::Base
       end
 
       if expiration_diff && expiration_diff >= 0
-        important_dates << I18n.t(:'finding.important_dates.expiration_date',
+        important_dates << I18n.t('finding.important_dates.expiration_date',
           :date => I18n.l(expiration_diff.days.from_now_in_business.to_date,
             :format => :long).strip)
       end
@@ -1102,7 +1112,7 @@ class Finding < ActiveRecord::Base
           :font_size => PDF_FONT_SIZE
       end
     else
-      pdf.add_footnote(I18n.t(:'finding.without_work_papers'))
+      pdf.add_footnote(I18n.t('finding.without_work_papers'))
     end
 
     pdf.custom_save_as(self.pdf_name, self.class.table_name, self.id)
@@ -1124,7 +1134,7 @@ class Finding < ActiveRecord::Base
   def follow_up_pdf(organization = nil)
     pdf = PDF::Writer.create_generic_pdf(:portrait)
     issue_date = self.issue_date ? I18n.l(self.issue_date, :format => :long) :
-      I18n.t(:'finding.without_conclusion_final_review')
+      I18n.t('finding.without_conclusion_final_review')
 
     add_finding_follow_up_header pdf, organization
     
@@ -1182,11 +1192,11 @@ class Finding < ActiveRecord::Base
 
     audited, auditors = *self.users.partition(&:can_act_as_audited?)
 
-    pdf.add_title I18n.t(:'finding.auditors', :count => auditors.size),
+    pdf.add_title I18n.t('finding.auditors', :count => auditors.size),
       PDF_FONT_SIZE, :left
     pdf.add_list auditors.map(&:full_name), PDF_FONT_SIZE * 2
 
-    pdf.add_title I18n.t(:'finding.responsibles', :count => audited.size),
+    pdf.add_title I18n.t('finding.responsibles', :count => audited.size),
       PDF_FONT_SIZE, :left
     pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
     
@@ -1214,7 +1224,7 @@ class Finding < ActiveRecord::Base
       previous_version = last_checked_version
     end
 
-    pdf.add_title I18n.t(:'finding.change_history'),
+    pdf.add_title I18n.t('finding.change_history'),
       (PDF_FONT_SIZE * 1.25).round, :full
 
     if important_changed_versions.size > 1
@@ -1291,7 +1301,7 @@ class Finding < ActiveRecord::Base
       end
     else
       pdf.text(
-        "\n#{I18n.t(:'finding.follow_up_report.without_important_changes')}",
+        "\n#{I18n.t('finding.follow_up_report.without_important_changes')}",
         :font_size => PDF_FONT_SIZE)
     end
 
@@ -1318,7 +1328,7 @@ class Finding < ActiveRecord::Base
 
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'finding.comments'), (PDF_FONT_SIZE * 1.25).round,
+      pdf.add_title I18n.t('finding.comments'), (PDF_FONT_SIZE * 1.25).round,
         :full
 
       pdf.move_pointer PDF_FONT_SIZE
@@ -1369,7 +1379,7 @@ class Finding < ActiveRecord::Base
 
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'finding.follow_up_report.work_papers'),
+      pdf.add_title I18n.t('finding.follow_up_report.work_papers'),
         (PDF_FONT_SIZE * 1.25).round, :full
 
       pdf.move_pointer PDF_FONT_SIZE
@@ -1420,7 +1430,7 @@ class Finding < ActiveRecord::Base
 
       pdf.move_pointer PDF_FONT_SIZE
       
-      pdf.add_title I18n.t(:'finding.follow_up_report.follow_up_comments'),
+      pdf.add_title I18n.t('finding.follow_up_report.follow_up_comments'),
         (PDF_FONT_SIZE * 1.25).round, :full
       
       pdf.move_pointer PDF_FONT_SIZE
@@ -1463,7 +1473,7 @@ class Finding < ActiveRecord::Base
   def follow_up_pdf_name
     code = self.review_code.sanitized_for_filename
 
-    I18n.t(:'finding.follow_up_report.pdf_name', :code => code)
+    I18n.t('finding.follow_up_report.pdf_name', :code => code)
   end
 
   def self.notify_for_unconfirmed_for_notification_findings

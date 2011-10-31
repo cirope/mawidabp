@@ -49,7 +49,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_equal 3, assigns(:reviews).size
+    assert_equal 4, assigns(:reviews).size
     assert_select '#error_body', false
     assert_template 'reviews/index'
   end
@@ -294,7 +294,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'destroy review' do
     perform_auth
     assert_difference 'Review.count', -1 do
-      delete :destroy, :id => reviews(:review_with_conclusion).id
+      delete :destroy, :id => reviews(:review_without_conclusion_and_without_findings).id
     end
 
     assert_redirected_to reviews_url

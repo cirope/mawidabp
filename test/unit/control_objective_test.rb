@@ -57,7 +57,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     # Objetivo de control sin items asociados
     assert_difference 'ControlObjective.count', -1 do
       ControlObjective.find(control_objectives(
-          :iso_27000_security_organization_4_3).id).destroy
+          :iso_27000_security_organization_4_4).id).destroy
     end
   end
 

@@ -213,7 +213,7 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :weaknesses do
+  resources :weaknesses, :except => [:destroy] do
     resources :costs
 
     collection do
@@ -264,7 +264,7 @@ MawidaApp::Application.routes.draw do
 
   resources :periods
 
-  resources :oportunities do
+  resources :oportunities, :except => [:destroy] do
     resources :costs
 
     member do

@@ -64,7 +64,11 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de un reporte
   test 'destroy' do
-    assert_difference('Review.count', -1) { @review.destroy }
+    assert_no_difference('Review.count') { @review.destroy }
+    
+    review = reviews(:review_without_conclusion_and_without_findings)
+    
+    assert_difference('Review.count', -1) { review.destroy }
   end
 
   test 'destroy with final review' do
@@ -212,6 +216,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
+    assert oportunity.allow_destruction!
     assert oportunity.destroy
 
     oportunity = Weakness.new(
@@ -227,6 +232,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
+    assert oportunity.allow_destruction!
     assert oportunity.destroy
 
     oportunity = Weakness.new oportunity.attributes.merge(
@@ -238,6 +244,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
+    assert oportunity.allow_destruction!
     assert oportunity.destroy
 
     oportunity = Weakness.new oportunity.attributes.merge(
@@ -252,6 +259,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
+    assert oportunity.allow_destruction!
     assert oportunity.destroy
 
     oportunity = Weakness.new oportunity.attributes.merge(
@@ -295,10 +303,12 @@ class ReviewTest < ActiveSupport::TestCase
     
     assert @review.reload.must_be_approved?
 
-    @review.control_objective_items.clear
-
-    assert !@review.reload.must_be_approved?
-    assert @review.approval_errors.flatten.include?(
+    review = reviews(:review_without_conclusion_and_without_findings)
+    
+    review.control_objective_items.clear
+    
+    assert !review.must_be_approved?
+    assert review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_control_objectives'))
   end
 

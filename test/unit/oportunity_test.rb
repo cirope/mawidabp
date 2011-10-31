@@ -98,14 +98,15 @@ class OportunityTest < ActiveSupport::TestCase
   # Prueba de eliminación de oportunidades
   test 'delete' do
     # No se puede eliminar si está en un informe definitivo
-    assert_no_difference 'Oportunity.count', -1 do
+    assert_no_difference 'Oportunity.count' do
       @oportunity.destroy
     end
 
     @oportunity = Oportunity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
 
-    assert_difference 'Oportunity.count', -1 do
+    # Y tampoco se puede eliminar si NO está en un informe definitivo
+    assert_no_difference 'Oportunity.count', -1 do
       @oportunity.destroy
     end
   end

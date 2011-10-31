@@ -98,3 +98,15 @@ iso_27000_security_organization_4_2_item_editable:
   finished: true
   control_objective: iso_27000_security_organization_4_2
   review: review_without_conclusion
+  
+iso_27000_security_organization_4_3_item_editable_without_findings:
+  control_objective_text: "4.3) Seguridad frente al acceso por parte de terceros."
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: iso_27000_security_organization_4_3
+  review: review_without_conclusion_and_without_findings

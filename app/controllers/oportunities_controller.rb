@@ -11,7 +11,7 @@ class OportunitiesController < ApplicationController
   # * GET /oportunities
   # * GET /oportunities.xml
   def index
-    @title = t :'oportunity.index_title'
+    @title = t 'oportunity.index_title'
     default_conditions = [
       "#{Period.table_name}.organization_id = :organization_id",
       [
@@ -63,7 +63,7 @@ class OportunitiesController < ApplicationController
   # * GET /oportunities/1
   # * GET /oportunities/1.xml
   def show
-    @title = t :'oportunity.show_title'
+    @title = t 'oportunity.show_title'
     @oportunity = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -77,7 +77,7 @@ class OportunitiesController < ApplicationController
   # * GET /oportunities/new
   # * GET /oportunities/new.xml
   def new
-    @title = t :'oportunity.new_title'
+    @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
       {:control_objective_item_id => params[:control_objective_item]}, {}, true
     )
@@ -92,7 +92,7 @@ class OportunitiesController < ApplicationController
   #
   # * GET /oportunities/1/edit
   def edit
-    @title = t :'oportunity.edit_title'
+    @title = t 'oportunity.edit_title'
     @oportunity = find_with_organization(params[:id])
   end
 
@@ -101,12 +101,12 @@ class OportunitiesController < ApplicationController
   # * POST /oportunities
   # * POST /oportunities.xml
   def create
-    @title = t :'oportunity.new_title'
+    @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(params[:oportunity])
 
     respond_to do |format|
       if @oportunity.save
-        flash.notice = t :'oportunity.correctly_created'
+        flash.notice = t 'oportunity.correctly_created'
         format.html { redirect_to(edit_oportunity_url(@oportunity)) }
         format.xml  { render :xml => @oportunity, :status => :created, :location => @oportunity }
       else
@@ -122,13 +122,13 @@ class OportunitiesController < ApplicationController
   # * PUT /oportunities/1
   # * PUT /oportunities/1.xml
   def update
-    @title = t :'oportunity.edit_title'
+    @title = t 'oportunity.edit_title'
     @oportunity = find_with_organization(params[:id])
 
     respond_to do |format|
       Oportunity.transaction do
         if @oportunity.update_attributes(params[:oportunity])
-          flash.notice = t :'oportunity.correctly_updated'
+          flash.notice = t 'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_url(@oportunity)) }
           format.xml  { head :ok }
         else
@@ -140,22 +140,8 @@ class OportunitiesController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'oportunity.stale_object_error'
+    flash.alert = t 'oportunity.stale_object_error'
     redirect_to :action => :edit
-  end
-
-  # Elimina una oportunidad de mejora
-  #
-  # * DELETE /oportunities/1
-  # * DELETE /oportunities/1.xml
-  def destroy
-    @oportunity = find_with_organization(params[:id])
-    @oportunity.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(oportunities_url) }
-      format.xml  { head :ok }
-    end
   end
 
   # Crea el documento de seguimiento de la oportunidad

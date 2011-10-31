@@ -46,7 +46,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:control_objectives)
-    assert_equal 4, assigns(:control_objectives).size
+    assert_equal 5, assigns(:control_objectives).size
     assert(assigns(:control_objectives).all? do |coi|
       coi.control_objective_text.match(/seguridad/i)
     end)
@@ -152,7 +152,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     perform_auth
     assert_difference 'ControlObjectiveItem.count', -1 do
       delete :destroy, :id => control_objective_items(
-        :bcra_A4609_data_proccessing_impact_analisys_item_editable).id
+        :iso_27000_security_organization_4_3_item_editable_without_findings).id
     end
 
     assert_redirected_to control_objective_items_url
