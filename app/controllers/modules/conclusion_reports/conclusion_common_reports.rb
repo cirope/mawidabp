@@ -16,32 +16,34 @@ module ConclusionCommonReports
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
+        
+        unless audit_type.last.empty?
+          audit_type.last.each do |audit_types|
+            key = "#{audit_type_symbol}_#{audit_types.last}"
+            conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
+            @weaknesses_counts[period]['total_weaknesses'] ||= {}
+            @weaknesses_counts[period]['total_oportunities'] ||= {}
 
-        audit_type.last.each do |audit_types|
-          key = "#{audit_type_symbol}_#{audit_types.last}"
-          conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
-          @weaknesses_counts[period]['total_weaknesses'] ||= {}
-          @weaknesses_counts[period]['total_oportunities'] ||= {}
-
-          @weaknesses_counts[period]["#{key}_weaknesses"] =
-            Weakness.list_all_by_date(@from_date, @to_date, false).
-              with_status_for_report.send(:"#{audit_type_symbol}_audit").
+            @weaknesses_counts[period]["#{key}_weaknesses"] =
+              Weakness.list_all_by_date(@from_date, @to_date, false).
+                with_status_for_report.send("#{audit_type_symbol}_audit").
+                for_period(period).finals(true).where(conditions).group(
+                :state).count
+            @weaknesses_counts[period]["#{key}_oportunities"] =
+              Oportunity.list_all_by_date(@from_date, @to_date, false).
+              with_status_for_report.send("#{audit_type_symbol}_audit").
               for_period(period).finals(true).where(conditions).group(
               :state).count
-          @weaknesses_counts[period]["#{key}_oportunities"] =
-            Oportunity.list_all_by_date(@from_date, @to_date, false).
-            with_status_for_report.send(:"#{audit_type_symbol}_audit").
-            for_period(period).finals(true).where(conditions).group(
-            :state).count
 
-          @weaknesses_counts[period]["#{key}_weaknesses"].each do |state, count|
-            @weaknesses_counts[period]['total_weaknesses'][state] ||= 0
-            @weaknesses_counts[period]['total_weaknesses'][state] += count
-          end
+            @weaknesses_counts[period]["#{key}_weaknesses"].each do |state, count|
+              @weaknesses_counts[period]['total_weaknesses'][state] ||= 0
+              @weaknesses_counts[period]['total_weaknesses'][state] += count
+            end
 
-          @weaknesses_counts[period]["#{key}_oportunities"].each do |state, count|
-            @weaknesses_counts[period]['total_oportunities'][state] ||= 0
-            @weaknesses_counts[period]['total_oportunities'][state] += count
+            @weaknesses_counts[period]["#{key}_oportunities"].each do |state, count|
+              @weaknesses_counts[period]['total_oportunities'][state] ||= 0
+              @weaknesses_counts[period]['total_oportunities'][state] += count
+            end
           end
         end
       end
@@ -60,8 +62,8 @@ module ConclusionCommonReports
     pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -72,30 +74,32 @@ module ConclusionCommonReports
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
+        
+        unless audit_type.last.empty?
+          pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.add_title t("conclusion_committee_report.findings_type_#{audit_type_symbol}"),
+            (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.add_title t(:"conclusion_committee_report.findings_type_#{audit_type_symbol}"),
-          (PDF_FONT_SIZE * 1.25).round, :center
+          audit_type.last.each do |audit_types|
+            key = "#{audit_type_symbol}_#{audit_types.last}"
 
-        audit_type.last.each do |audit_types|
-          key = "#{audit_type_symbol}_#{audit_types.last}"
+            pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
+            pdf.move_pointer PDF_FONT_SIZE
 
-          pdf.move_pointer PDF_FONT_SIZE
-          pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
-          pdf.move_pointer PDF_FONT_SIZE
+            weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
+            oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
 
-          weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
-          oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
-
-          add_weaknesses_by_state_table pdf, weaknesses_count,
-            oportunities_count, audit_type_symbol
+            add_weaknesses_by_state_table pdf, weaknesses_count,
+              oportunities_count, audit_type_symbol
+          end
         end
       end
 
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title(
-        t(:'conclusion_committee_report.weaknesses_by_state.period_summary',
+        t('conclusion_committee_report.weaknesses_by_state.period_summary',
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_pointer PDF_FONT_SIZE
@@ -107,13 +111,13 @@ module ConclusionCommonReports
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.weaknesses_by_state.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_state', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.weaknesses_by_state.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_state', 0)
@@ -141,37 +145,39 @@ module ConclusionCommonReports
         weaknesses_count = {}
         weaknesses_count_by_risk = {}
         audit_type_symbol = audit_type.first
+        
+        unless audit_type.last.empty?
+          audit_type.last.each do |audit_types|
+            key = "#{audit_type_symbol}_#{audit_types.last}"
+            conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
 
-        audit_type.last.each do |audit_types|
-          key = "#{audit_type_symbol}_#{audit_types.last}"
-          conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
+            risk_levels.each do |rl|
+              weaknesses_count_by_risk[rl[0]] = 0
+              total_weaknesses_count_by_risk[rl[0]] ||= 0
 
-          risk_levels.each do |rl|
-            weaknesses_count_by_risk[rl[0]] = 0
-            total_weaknesses_count_by_risk[rl[0]] ||= 0
+              statuses.each do |s|
+                weaknesses_count[s[1]] ||= {}
+                weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
+                  @from_date, @to_date, false).with_status_for_report.send(
+                  "#{audit_type_symbol}_audit").for_period(period).finals(
+                  true).where(
+                    {:state => s[1], :risk => rl[1]}.merge(conditions || {})
+                  ).count
+                weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+                total_weaknesses_count_by_risk[rl[0]] +=
+                  weaknesses_count[s[1]][rl[1]]
 
-            statuses.each do |s|
-              weaknesses_count[s[1]] ||= {}
-              weaknesses_count[s[1]][rl[1]] = Weakness.list_all_by_date(
-                @from_date, @to_date, false).with_status_for_report.send(
-                :"#{audit_type_symbol}_audit").for_period(period).finals(
-                true).where(
-                  {:state => s[1], :risk => rl[1]}.merge(conditions || {})
-                ).count
-              weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
-              total_weaknesses_count_by_risk[rl[0]] +=
-                weaknesses_count[s[1]][rl[1]]
-
-              total_weaknesses_count[s[1]] ||= {}
-              total_weaknesses_count[s[1]][rl[1]] ||= 0
-              total_weaknesses_count[s[1]][rl[1]] +=
-                weaknesses_count[s[1]][rl[1]]
+                total_weaknesses_count[s[1]] ||= {}
+                total_weaknesses_count[s[1]][rl[1]] ||= 0
+                total_weaknesses_count[s[1]][rl[1]] +=
+                  weaknesses_count[s[1]][rl[1]]
+              end
             end
-          end
 
-          @tables_data[period] ||= {}
-          @tables_data[period][key] = get_weaknesses_synthesis_table_data(
-            weaknesses_count, weaknesses_count_by_risk, risk_levels)
+            @tables_data[period] ||= {}
+            @tables_data[period][key] = get_weaknesses_synthesis_table_data(
+              weaknesses_count, weaknesses_count_by_risk, risk_levels)
+          end
         end
       end
 
@@ -192,8 +198,8 @@ module ConclusionCommonReports
     pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -205,26 +211,29 @@ module ConclusionCommonReports
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.kind_of?(Symbol) ?
           audit_type : audit_type.first
+        
+        unless audit_type.last.empty?
 
-        pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.move_pointer PDF_FONT_SIZE * 2
 
-        pdf.add_title t(:"conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
-          (PDF_FONT_SIZE * 1.25).round, :center
+          pdf.add_title t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
+            (PDF_FONT_SIZE * 1.25).round, :center
 
-        audit_type.last.each do |audit_types|
-          key = "#{audit_type_symbol}_#{audit_types.last}"
+          audit_type.last.each do |audit_types|
+            key = "#{audit_type_symbol}_#{audit_types.last}"
 
-          pdf.move_pointer PDF_FONT_SIZE
-          pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
-          pdf.move_pointer PDF_FONT_SIZE
+            pdf.move_pointer PDF_FONT_SIZE
+            pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
+            pdf.move_pointer PDF_FONT_SIZE
 
-          add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
+            add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
+          end
         end
       end
 
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title(
-        t(:'conclusion_committee_report.weaknesses_by_risk.period_summary',
+        t('conclusion_committee_report.weaknesses_by_risk.period_summary',
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_pointer PDF_FONT_SIZE
@@ -233,13 +242,13 @@ module ConclusionCommonReports
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.weaknesses_by_risk.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_risk', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.weaknesses_by_risk.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_risk', 0)
@@ -263,7 +272,7 @@ module ConclusionCommonReports
         @data[period][audit_type] = []
         reviews_by_audit_type = {}
         conclusion_final_review = ConclusionFinalReview.list_all_by_date(
-          @from_date, @to_date).send(:"#{audit_type}_audit").for_period(period)
+          @from_date, @to_date).send("#{audit_type}_audit").for_period(period)
 
         conclusion_final_review.each do |cfr|
           business_unit = cfr.review.plan_item.business_unit
@@ -314,7 +323,7 @@ module ConclusionCommonReports
 
                 oportunities_table_data << {
                   'state' =>
-                    "<b>#{t(:'conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
+                    "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
                   'count' => "<b>#{total_oportunities}</b>"
                 }
               end
@@ -367,8 +376,8 @@ module ConclusionCommonReports
     pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -397,7 +406,7 @@ module ConclusionCommonReports
                 bu.business_unit_type.business_unit_label, bu.name)
               pdf.move_pointer PDF_FONT_SIZE
 
-              pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
+              pdf.text "<b>#{t('actioncontroller.reviews')}</b>"
               pdf.move_pointer PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
@@ -408,7 +417,7 @@ module ConclusionCommonReports
                   cr.review.reload.score_text
 
                 if findings_count == 0
-                  text << " (#{t(:'conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"
+                  text << " (#{t('conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"
                 end
 
                 pdf.text text, :left => PDF_FONT_SIZE * 2
@@ -417,7 +426,7 @@ module ConclusionCommonReports
               pdf.move_pointer PDF_FONT_SIZE
 
               pdf.add_title(
-                t(:'conclusion_committee_report.weaknesses_by_audit_type.weaknesses'),
+                t('conclusion_committee_report.weaknesses_by_audit_type.weaknesses'),
                 PDF_FONT_SIZE)
 
               pdf.move_pointer PDF_FONT_SIZE
@@ -429,7 +438,7 @@ module ConclusionCommonReports
                 pdf.move_pointer PDF_FONT_SIZE
 
                 pdf.add_title(
-                  t(:'conclusion_committee_report.weaknesses_by_audit_type.oportunities'),
+                  t('conclusion_committee_report.weaknesses_by_audit_type.oportunities'),
                   PDF_FONT_SIZE)
 
                 pdf.move_pointer PDF_FONT_SIZE
@@ -466,26 +475,26 @@ module ConclusionCommonReports
                     table.render_on pdf
                   end
                 else
-                  pdf.text t(:'follow_up_committee.without_oportunities')
+                  pdf.text t('follow_up_committee.without_oportunities')
                 end
               end
             end
           end
         else
-          pdf.text t(:'follow_up_committee.without_weaknesses'),
+          pdf.text t('follow_up_committee.without_weaknesses'),
             :font_size => PDF_FONT_SIZE
         end
       end
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
