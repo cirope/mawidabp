@@ -35,6 +35,54 @@ class ConclusionFinalReview < ConclusionReview
       ]
     )
   }
+  scope :list_all_by_solution_date, lambda { |from_date, to_date|
+    includes(
+      :review => [
+        :period,
+        { :plan_item => { :business_unit => :business_unit_type } },
+        { :control_objective_items => :weaknesses }
+      ]
+    ).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date"
+      ].join(' AND '),
+      {
+        :from_date => from_date, :to_date => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(
+      [
+        "#{BusinessUnitType.table_name}.external ASC",
+        "#{BusinessUnitType.table_name}.name ASC",
+        'issue_date ASC'
+      ]
+    )
+  }
+  scope :list_all_by_final_solution_date, lambda { |from_date, to_date|
+    includes(
+      :review => [
+        :period,
+        { :plan_item => { :business_unit => :business_unit_type } },
+        { :control_objective_items => :final_weaknesses }
+      ]
+    ).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date"
+      ].join(' AND '),
+      {
+        :from_date => from_date, :to_date => to_date,
+        :organization_id => GlobalModelConfig.current_organization_id
+      }
+    ).order(
+      [
+        "#{BusinessUnitType.table_name}.external ASC",
+        "#{BusinessUnitType.table_name}.name ASC",
+        'issue_date ASC'
+      ]
+    )
+  }
   scope :internal_audit, includes(
     :review => {:plan_item => {:business_unit => :business_unit_type}}
   ).where("#{BusinessUnitType.table_name}.external" => false)

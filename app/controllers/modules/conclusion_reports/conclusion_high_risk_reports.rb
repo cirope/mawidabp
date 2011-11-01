@@ -11,8 +11,9 @@ module ConclusionHighRiskReports
       'high_risk_weaknesses']
     @filters = []
     @notorious_reviews = {}
-    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date).notorious(true)
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(
+      @from_date, @to_date
+    ).notorious(true)
     
     if params[:high_risk_weaknesses_report]
       unless params[:high_risk_weaknesses_report][:business_unit_type].blank?
@@ -224,12 +225,13 @@ module ConclusionHighRiskReports
   def fixed_weaknesses_report
     @title = t('conclusion_committee_report.fixed_weaknesses_report_title')
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
-    @periods = periods_for_interval
+    @periods = periods_by_solution_date_for_interval
     @column_order = ['business_unit_report_name', 'score', 'fixed_weaknesses']
     @filters = []
     @reviews = {}
-    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date)
+    conclusion_reviews = ConclusionFinalReview.list_all_by_final_solution_date(
+      @from_date, @to_date
+    )
     
     if params[:fixed_weaknesses_report]
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
@@ -431,5 +433,23 @@ module ConclusionHighRiskReports
       t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+  end
+  
+  private
+  
+  def periods_by_solution_date_for_interval
+    Period.includes(:reviews => [
+        :conclusion_final_review, {:control_objective_items => :final_weaknesses}]
+    ).where(
+      [
+        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+        "#{Period.table_name}.organization_id = :organization_id"
+      ].join(' AND '),
+      {
+        :from_date => @from_date,
+        :to_date => @to_date,
+        :organization_id => @auth_organization.id
+      }
+    )
   end
 end

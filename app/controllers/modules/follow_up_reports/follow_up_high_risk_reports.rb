@@ -4,15 +4,16 @@ module FollowUpHighRiskReports
   #
   # * GET /conclusion_committee_reports/high_risk_weaknesses_report
   def high_risk_weaknesses_report
-    @title = t :'conclusion_committee_report.high_risk_weaknesses_report_title'
+    @title = t 'conclusion_committee_report.high_risk_weaknesses_report_title'
     @from_date, @to_date = *make_date_range(params[:high_risk_weaknesses_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score',
       'high_risk_weaknesses']
     @filters = []
     @notorious_reviews = {}
-    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date).notorious(false)
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(
+      @from_date, @to_date
+    ).notorious(false)
     
     if params[:high_risk_weaknesses_report]
       unless params[:high_risk_weaknesses_report][:business_unit_type].blank?
@@ -45,7 +46,7 @@ module FollowUpHighRiskReports
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'high_risk_weaknesses' =>
-            [t(:'conclusion_committee_report.high_risk_weaknesses'), 70]
+            [t('conclusion_committee_report.high_risk_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -71,7 +72,7 @@ module FollowUpHighRiskReports
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               "<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}",
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
@@ -120,8 +121,8 @@ module FollowUpHighRiskReports
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'follow_up_committee.period.title'),
-      t(:'follow_up_committee.period.range',
+      t('follow_up_committee.period.title'),
+      t('follow_up_committee.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -145,10 +146,10 @@ module FollowUpHighRiskReports
           end
 
           if !data[:external] && !@internal_title_showed
-            title = t :'follow_up_committee.high_risk_weaknesses_report.internal_audit_weaknesses'
+            title = t 'follow_up_committee.high_risk_weaknesses_report.internal_audit_weaknesses'
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t :'follow_up_committee.high_risk_weaknesses_report.external_audit_weaknesses'
+            title = t 'follow_up_committee.high_risk_weaknesses_report.external_audit_weaknesses'
             @external_title_showed = true
           end
 
@@ -193,7 +194,7 @@ module FollowUpHighRiskReports
             end
           else
             pdf.text(
-              t(:'follow_up_committee.high_risk_weaknesses_report.without_audits_in_the_period'))
+              t('follow_up_committee.high_risk_weaknesses_report.without_audits_in_the_period'))
           end
         end
       end
@@ -201,18 +202,18 @@ module FollowUpHighRiskReports
 
     unless @filters.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'follow_up_committee.applied_filters',
+      pdf.text t('follow_up_committee.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
     pdf.custom_save_as(
-      t(:'follow_up_committee.high_risk_weaknesses_report.pdf_name',
+      t('follow_up_committee.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'follow_up_committee.high_risk_weaknesses_report.pdf_name',
+      t('follow_up_committee.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
   end
@@ -222,14 +223,15 @@ module FollowUpHighRiskReports
   #
   # * GET /conclusion_committee_reports/fixed_weaknesses_report
   def fixed_weaknesses_report
-    @title = t :'conclusion_committee_report.fixed_weaknesses_report_title'
+    @title = t 'conclusion_committee_report.fixed_weaknesses_report_title'
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
-    @periods = periods_for_interval
+    @periods = periods_by_solution_date_for_interval
     @column_order = ['business_unit_report_name', 'score', 'fixed_weaknesses']
     @filters = []
     @reviews = {}
-    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
-      @to_date)
+    conclusion_reviews = ConclusionFinalReview.list_all_by_solution_date(
+      @from_date, @to_date
+    )
     
     if params[:fixed_weaknesses_report]
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
@@ -261,7 +263,7 @@ module FollowUpHighRiskReports
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'fixed_weaknesses' =>
-            [t(:'conclusion_committee_report.fixed_weaknesses'), 70]
+            [t('conclusion_committee_report.fixed_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -287,7 +289,7 @@ module FollowUpHighRiskReports
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
@@ -336,8 +338,8 @@ module FollowUpHighRiskReports
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'follow_up_committee.period.title'),
-      t(:'follow_up_committee.period.range',
+      t('follow_up_committee.period.title'),
+      t('follow_up_committee.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -361,10 +363,10 @@ module FollowUpHighRiskReports
           end
 
           if !data[:external] && !@internal_title_showed
-            title = t :'follow_up_committee.fixed_weaknesses_report.internal_audit_weaknesses'
+            title = t 'follow_up_committee.fixed_weaknesses_report.internal_audit_weaknesses'
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t :'follow_up_committee.fixed_weaknesses_report.external_audit_weaknesses'
+            title = t 'follow_up_committee.fixed_weaknesses_report.external_audit_weaknesses'
             @external_title_showed = true
           end
 
@@ -409,7 +411,7 @@ module FollowUpHighRiskReports
             end
           else
             pdf.text(
-              t(:'follow_up_committee.fixed_weaknesses_report.without_audits_in_the_period'))
+              t('follow_up_committee.fixed_weaknesses_report.without_audits_in_the_period'))
           end
         end
       end
@@ -417,19 +419,37 @@ module FollowUpHighRiskReports
 
     unless @filters.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'follow_up_committee.applied_filters',
+      pdf.text t('follow_up_committee.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
     pdf.custom_save_as(
-      t(:'follow_up_committee.fixed_weaknesses_report.pdf_name',
+      t('follow_up_committee.fixed_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'follow_up_committee.fixed_weaknesses_report.pdf_name',
+      t('follow_up_committee.fixed_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+  end
+  
+  private
+  
+  def periods_by_solution_date_for_interval
+    Period.includes(:reviews => [
+        :conclusion_final_review, {:control_objective_items => :weaknesses}]
+    ).where(
+      [
+        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+        "#{Period.table_name}.organization_id = :organization_id"
+      ].join(' AND '),
+      {
+        :from_date => @from_date,
+        :to_date => @to_date,
+        :organization_id => @auth_organization.id
+      }
+    )
   end
 end
