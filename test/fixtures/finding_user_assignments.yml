@@ -110,6 +110,36 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 
 <% end %>
 
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete_auditor_user:
+  finding: iso_27000_security_organization_4_2_item_editable_weakness_incomplete
+  finding_type: Weakness
+  user: auditor_user
+  process_owner: false
+
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete_audited_user:
+  finding: iso_27000_security_organization_4_2_item_editable_weakness_incomplete
+  finding_type: Weakness
+  user: audited_user
+  process_owner: true
+
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete_bare_user:
+  finding: iso_27000_security_organization_4_2_item_editable_weakness_incomplete
+  finding_type: Weakness
+  user: bare_user
+  process_owner: false
+
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete_manager_user:
+  finding: iso_27000_security_organization_4_2_item_editable_weakness_incomplete
+  finding_type: Weakness
+  user: manager_user
+  process_owner: false
+
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete_supervisor_user:
+  finding: iso_27000_security_organization_4_2_item_editable_weakness_incomplete
+  finding_type: Weakness
+  user: supervisor_user
+  process_owner: false
+
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification_administrator_user:
   finding: iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification
   finding_type: Weakness

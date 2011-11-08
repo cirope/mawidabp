@@ -12,7 +12,7 @@ class FindingsController < ApplicationController
   # * GET /findings
   # * GET /findings.xml
   def index
-    @title = t :'finding.index_title'
+    @title = t 'finding.index_title'
     @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
 
@@ -79,7 +79,7 @@ class FindingsController < ApplicationController
   # * GET /findings/1
   # * GET /findings/1.xml
   def show
-    @title = t :'finding.show_title'
+    @title = t 'finding.show_title'
     @finding = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -92,7 +92,7 @@ class FindingsController < ApplicationController
   #
   # * GET /findings/1/edit
   def edit
-    @title = t :'finding.edit_title'
+    @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
 
     redirect_to findings_url unless @finding
@@ -105,7 +105,7 @@ class FindingsController < ApplicationController
   # * PUT /findings/1
   # * PUT /findings/1.xml
   def update
-    @title = t :'finding.edit_title'
+    @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
     # Los auditados no pueden modificar desde observaciones las asociaciones
     if @auth_user.can_act_as_audited?
@@ -116,7 +116,7 @@ class FindingsController < ApplicationController
     respond_to do |format|
       Finding.transaction do
         if @finding.update_attributes(params[:finding])
-          flash.notice = t :'finding.correctly_updated'
+          flash.notice = t 'finding.correctly_updated'
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
           format.xml  { head :ok }
         else
@@ -128,7 +128,7 @@ class FindingsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'finding.stale_object_error'
+    flash.alert = t 'finding.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -425,6 +425,10 @@ class FindingsController < ApplicationController
         :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
       }
     end
+    
+    conditions[:state] = params[:completed] == 'incomplete' ?
+      Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
+      Finding::STATUS.values - Finding::PENDING_STATUS
 
     finding = Finding.includes(includes).where(conditions).first(
       :readonly => false
@@ -450,11 +454,11 @@ class FindingsController < ApplicationController
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :follow_up_pdf => :read,
-        :auto_complete_for_user => :read,
-        :auto_complete_for_finding_relation => :read
-      })
+    @action_privileges.update(
+      :export_to_pdf => :read,
+      :follow_up_pdf => :read,
+      :auto_complete_for_user => :read,
+      :auto_complete_for_finding_relation => :read
+    )
   end
 end

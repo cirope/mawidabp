@@ -61,6 +61,26 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 
 <% end %>
 
+iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
+  type: Weakness
+  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  review_code: O005
+  description: Description incomplete_w
+  answer: Answer incomplete_w
+  audit_comments: Audit comments incomplete_w
+  state: <%= Finding::STATUS[:incomplete] %>
+  origination_date: 
+  solution_date: 
+  audit_recommendations: Proposed action 3w
+  effect: Effect incomplete_w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date:
+  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= Date.today.to_s(:db) %>
+  final: false
+  notification_level: 0
+
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
