@@ -140,7 +140,7 @@ class Weakness < Finding
 
     errors << I18n.t('weakness.errors.without_effect') if self.effect.blank?
 
-    if self.audit_comments.blank?
+    if self.audit_comments.blank? && !self.revoked?
       errors << I18n.t('weakness.errors.without_audit_comments')
     end
 

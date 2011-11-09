@@ -209,7 +209,7 @@ class Review < ActiveRecord::Base
 
   def can_be_modified?
     if self.has_final_review? && self.changed?
-      msg = I18n.t(:'review.readonly')
+      msg = I18n.t('review.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
@@ -735,7 +735,7 @@ class Review < ActiveRecord::Base
     end
 
     columns['effectiveness'] = PDF::SimpleTable::Column.new('effectiveness') do |c|
-      c.heading = I18n.t(:'review.control_objectives_effectiveness')
+      c.heading = I18n.t('review.control_objectives_effectiveness')
       c.justification = :center
       c.width = pdf.percent_width(30)
     end
@@ -785,12 +785,12 @@ class Review < ActiveRecord::Base
 
     pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
-    pdf.text "<c:uline><b>#{I18n.t(:'review.notes')}</b></c:uline>:",
+    pdf.text "<c:uline><b>#{I18n.t('review.notes')}</b></c:uline>:",
       :font_size => (PDF_FONT_SIZE * 0.75).round
-    pdf.text "<i>* #{I18n.t(:'review.review_qualification_explanation')}</i>",
+    pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     pdf.text(
-      "<i>** #{I18n.t(:'review.process_control_qualification_explanation')}</i>",
+      "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
 
     weaknesses = self.final_weaknesses.all_for_report
@@ -799,12 +799,12 @@ class Review < ActiveRecord::Base
       risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
-      pdf.add_subtitle I18n.t(:'review.weaknesses_count_summary',
+      pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
       column_names = {
-        'count' => I18n.t(:'review.weaknesses_count'),
+        'count' => I18n.t('review.weaknesses_count'),
         'risk' => Weakness.human_attribute_name(:risk),
         'state' => Weakness.human_attribute_name(:state)
       }
@@ -872,7 +872,7 @@ class Review < ActiveRecord::Base
       risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
         :admin_finding_risk_levels, self.created_at).
         sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
-      pdf.add_subtitle I18n.t(:'review.oportunities_count_summary'),
+      pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 
       columns, column_data = {}, []
@@ -951,10 +951,10 @@ class Review < ActiveRecord::Base
 
     pdf.add_review_header organization, self.identification,
       self.plan_item.project
-    pdf.add_title(global ? I18n.t(:'review.global_score_sheet_title') :
-        I18n.t(:'review.score_sheet_title'))
+    pdf.add_title(global ? I18n.t('review.global_score_sheet_title') :
+        I18n.t('review.score_sheet_title'))
 
-    pdf.add_watermark(I18n.t(:'pdf.draft')) if draft
+    pdf.add_watermark(I18n.t('pdf.draft')) if draft
 
     pdf.move_pointer PDF_FONT_SIZE
 
@@ -969,18 +969,18 @@ class Review < ActiveRecord::Base
     end
 
     pdf.add_description_item(
-      I18n.t(:'review.audit_period_title'),
-      I18n.t(:'review.audit_period',
+      I18n.t('review.audit_period_title'),
+      I18n.t('review.audit_period',
         :start => I18n.l(self.plan_item.start, :format => :long),
         :end => I18n.l(self.plan_item.end, :format => :long)
       )
     )
     
     users = self.review_user_assignments.reject { |rua| rua.audited? }
-    pdf.add_description_item(I18n.t(:'review.auditors'),
+    pdf.add_description_item(I18n.t('review.auditors'),
       users.map { |rua| rua.user.full_name }.join('; '))
 
-    pdf.add_subtitle I18n.t(:'review.score'), PDF_FONT_SIZE, PDF_FONT_SIZE
+    pdf.add_subtitle I18n.t('review.score'), PDF_FONT_SIZE, PDF_FONT_SIZE
 
     self.add_score_details_table(pdf)
 
@@ -1045,7 +1045,7 @@ class Review < ActiveRecord::Base
   def score_sheet_name
     identification = self.sanitized_identification
 
-    "#{I18n.t(:'review.score_sheet_filename')}-#{identification}.pdf"
+    "#{I18n.t('review.score_sheet_filename')}-#{identification}.pdf"
   end
 
   def absolute_global_score_sheet_path
@@ -1061,7 +1061,7 @@ class Review < ActiveRecord::Base
   def global_score_sheet_name
     identification = self.sanitized_identification
 
-    "#{I18n.t(:'review.global_score_sheet_filename')}-#{identification}.pdf"
+    "#{I18n.t('review.global_score_sheet_filename')}-#{identification}.pdf"
   end
 
   def sanitized_identification
@@ -1072,10 +1072,10 @@ class Review < ActiveRecord::Base
     filename = self.absolute_work_papers_zip_path
     weaknesses, oportunities, findings = [], [], []
     dirs = {
-      :control_objectives => I18n.t(:'review.control_objectives_work_papers').sanitized_for_filename,
-      :weaknesses => I18n.t(:'review.weaknesses_work_papers').sanitized_for_filename,
-      :oportunities => I18n.t(:'review.oportunities_work_papers').sanitized_for_filename,
-      :follow_up => I18n.t(:'review.follow_up_work_papers').sanitized_for_filename,
+      :control_objectives => I18n.t('review.control_objectives_work_papers').sanitized_for_filename,
+      :weaknesses => I18n.t('review.weaknesses_work_papers').sanitized_for_filename,
+      :oportunities => I18n.t('review.oportunities_work_papers').sanitized_for_filename,
+      :follow_up => I18n.t('review.follow_up_work_papers').sanitized_for_filename,
       :survey => Review.human_attribute_name(:survey).sanitized_for_filename
     }
 

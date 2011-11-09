@@ -138,8 +138,9 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates special blank attributes' do
     # En estado "En proceso de implementación"
-    @finding = Finding.find(findings(
-        :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
+    @finding = Finding.find(
+      findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    )
     @finding.follow_up_date = nil
     @finding.answer = '   '
     assert @finding.invalid?
@@ -157,6 +158,17 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, @finding.errors.count
     assert_equal [error_message_from_model(@finding, :solution_date, :blank)],
       @finding.errors[:solution_date]
+    
+    @finding = Finding.find(
+      findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
+    )
+    
+    @finding.state = Finding::STATUS[:revoked]
+    @finding.audit_comments = '  '
+    assert @finding.invalid?
+    assert_equal 1, @finding.errors.count
+    assert_equal [error_message_from_model(@finding, :audit_comments, :blank)],
+      @finding.errors[:audit_comments]
   end
 
   test 'validates special not blank attributes' do

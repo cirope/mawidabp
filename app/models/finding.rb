@@ -381,19 +381,22 @@ class Finding < ActiveRecord::Base
   validates :control_objective_item_id,
     :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
+  validates :audit_comments, :presence => true, :if => :revoked?
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :solution_date, :origination_date,
     :allow_nil => true, :allow_blank => true
-  validates_each :follow_up_date,
-    :if => proc { |f| !f.incomplete? && !f.repeated? } do |record, attr, value|
+  validates_each :follow_up_date, :if => proc { |f|
+    !f.incomplete? && !f.revoked? && !f.repeated?
+  } do |record, attr, value|
     check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
         record.implemented? || record.implemented_audited?)
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
     record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
   end
-  validates_each :solution_date,
-    :if => proc { |f| !f.incomplete? && !f.repeated? } do |record, attr, value|
+  validates_each :solution_date, :if => proc { |f|
+    !f.incomplete? && !f.revoked? && !f.repeated?
+  } do |record, attr, value|
     check_for_blank = record.implemented_audited? || record.assumed_risk?
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
@@ -455,7 +458,8 @@ class Finding < ActiveRecord::Base
   belongs_to :control_objective_item
   belongs_to :repeated_of, :foreign_key => 'repeated_of_id',
     :dependent => :destroy, :autosave => true, :class_name => 'Finding'
-  has_one :repeated_in, :foreign_key => 'repeated_of_id', :class_name => 'Finding'
+  has_one :repeated_in, :foreign_key => 'repeated_of_id',
+    :class_name => 'Finding'
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
