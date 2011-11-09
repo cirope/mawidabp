@@ -94,7 +94,7 @@
       <% end %>
     </p>
     <p>
-      <%= link_to_unless @review.new_record?, t(:'review.survey.download'),
+      <%= link_to_unless @review.new_record?, t('review.survey.download'),
         :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
     </p>
     <div id="estimated_amount" style="margin-top: .5em;">
@@ -126,16 +126,16 @@
 
   <% unless readonly %>
     <p class="add_item">
-      <%= link_to t(:'review.add_user_assignment'), '#',
-        :'data-event' => 'addNestedItem',
-        :'data-template' => :review_user_assignment,
-        :'data-container' => '#review_user_assignments' %>
+      <%= link_to t('review.add_user_assignment'), '#',
+        'data-event' => 'addNestedItem',
+        'data-template' => :review_user_assignment,
+        'data-container' => '#review_user_assignments' %>
     </p>
   <% end %>
 
   <% unless @review.control_objective_items.empty? %>
     <div class="textual_items" style="margin-top: 2em;">
-      <h1><%= t(:'review.control_objective_items_label') %></h1>
+      <h1><%= t('review.control_objective_items_label') %></h1>
       <div id="control_objective_items">
         <% @review.grouped_control_objective_items.each do |pc, cois| %>
           <div id="process_control_<%= pc.id %>" class="process_control">
@@ -175,15 +175,15 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'review.add_control_objective'), '#',
-        :'data-event' => 'addNestedItem',
-        :'data-template' => :control_objective,
-        :'data-container' => '#control_objectives' %>
+      <%= link_to t('review.add_control_objective'), '#',
+        'data-event' => 'addNestedItem',
+        'data-template' => :control_objective,
+        'data-container' => '#control_objectives' %>
     </p>
   <% end %>
 
   <div class="items" style="margin-top: 2em;">
-    <h1><%= raw(t(:'review.findings_label') + show_inline_help_for(:review_findings)) %></h1>
+    <h1><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></h1>
     <div id="suggested_findings"></div>
     
     <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
@@ -207,11 +207,11 @@
 
   <% unless readonly %>
     <p class="add_item">
-      <%= link_to t(:'review.add_finding_assignment'), '#',
-        :'data-event' => 'addNestedItem',
-        :'data-template' => :finding_review_assignment,
-        :'data-container' => '#finding_review_assignments' %> |
-      <%= link_to t(:'review.suggest_findings'), @review.plan_item_id ?
+      <%= link_to t('review.add_finding_assignment'), '#',
+        'data-event' => 'addNestedItem',
+        'data-template' => :finding_review_assignment,
+        'data-container' => '#finding_review_assignments' %> |
+      <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
         suggested_findings_review_path(:id => @review.plan_item_id, :format => :html) : '#',
         :remote => true, :id => :link_to_suggested_findings,
         :class => (:link_without_action unless @review.plan_item_id) %>

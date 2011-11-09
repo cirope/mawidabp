@@ -19,9 +19,9 @@
 
   <tbody>
     <% @control_objectives.each do |control_objective| %>
-      <% html_class = "#{cycle(:even, :odd)} " %>
+      <% html_class = "#{cycle('even', 'odd')} " %>
       <% html_class << (control_objective.is_in_a_final_review? ?
-        :readonly_item : :writable_item).to_s %>
+        'readonly_item' : 'writable_item').to_s %>
       <tr class="<%= html_class %>">
         <td class="nowrap"><%= show_review_with_close_date_as_abbr control_objective.review %></td>
         <td class="expendable"><%= super_truncate(control_objective.process_control.name, 30) %></td>

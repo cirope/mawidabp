@@ -2,7 +2,8 @@
 <div class="control_objective_item">
   <ul class="raw_list">
     <li>
-      <%= control_objective_item.control_objective_text %>
+      <%= content_tag :span, control_objective_item.control_objective_text,
+        :class => ('strike lighten' if control_objective_item.finished) %>
 
       <% if control_objective_item.new_record? %>
         <div style="display: none;">
@@ -18,10 +19,10 @@
         </div>
       <% elsif !readonly %>
         | <%= link_to_move %> |
-        <%= link_to t(:'label.edit'), edit_control_objective_item_path(control_objective_item) %> |
+        <%= link_to t('label.edit'), edit_control_objective_item_path(control_objective_item) %> |
         <%= remove_item_link(co_f) %>
         <%= co_f.hidden_field :id %>
-        <%= co_f.hidden_field :order_number, :class => :sort_number %>
+        <%= co_f.hidden_field :order_number, :class => 'sort_number' %>
       <% end -%>
     </li>
   </ul>
