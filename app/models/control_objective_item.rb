@@ -401,7 +401,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   def pdf_column_data(finding, pc_id)
     weakness = finding.kind_of?(Weakness)
     head = ''
-    body = "<b>#{ControlObjective.model_name.human}:</b>" +
+    body = "<b>#{ControlObjective.model_name.human}:</b> " +
       "#{self.control_objective_text.chomp}\n"
 
     unless finding.review_code.blank?
