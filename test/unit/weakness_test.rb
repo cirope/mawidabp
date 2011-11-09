@@ -215,7 +215,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert weakness.update_attributes(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
-    assert_equal 'O005', weakness.review_code
+    assert_equal 'O006', weakness.review_code
   end
 
   test 'can not change to a control objective in a final review' do

@@ -239,7 +239,11 @@ class ConclusionReview < ActiveRecord::Base
           end
 
           cois.each do |coi|
-            (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.each do |w|
+            weaknesses = (
+              use_finals ? coi.final_weaknesses : coi.weaknesses
+            ).not_revoked.sort(&:review_code)
+            
+            weaknesses.each do |w|
               column_data.concat coi.pdf_column_data(w, pc_id)
             end
           end

@@ -132,7 +132,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'show finding' do
     perform_auth
-    get :show, :completed => 'complete',
+    get :show, :completed => 'incomplete',
       :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -152,7 +152,7 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'edit finding' do
     perform_auth
-    get :edit, :completed => 'complete', :id =>
+    get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -162,7 +162,7 @@ class FindingsControllerTest < ActionController::TestCase
     auditor_response = @response.body.dup
 
     perform_auth users(:audited_user)
-    get :edit, :completed => 'complete', :id =>
+    get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
@@ -178,6 +178,15 @@ class FindingsControllerTest < ActionController::TestCase
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
     assert_redirected_to findings_url('complete')
+  end
+  
+  test 'unauthorized edit incomplete finding' do
+    perform_auth users(:audited_user)
+    get :edit, :completed => 'incomplete',
+      :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
+    
+    # No está autorizado el usuario a ver la observación por estar incompleta
+    assert_redirected_to findings_url('incomplete')
   end
 
   test 'update finding' do
