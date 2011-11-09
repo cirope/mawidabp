@@ -399,9 +399,9 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def pdf_column_data(finding, pc_id)
-    body = String.new
     weakness = finding.kind_of?(Weakness)
-    head = "<b>#{ControlObjective.model_name.human}:</b> " +
+    head = ''
+    body = "<b>#{ControlObjective.model_name.human}:</b>" +
       "#{self.control_objective_text.chomp}\n"
 
     unless finding.review_code.blank?
@@ -410,12 +410,12 @@ class ControlObjectiveItem < ActiveRecord::Base
     end
 
     unless finding.repeated_ancestors.blank?
-      head << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
+      body << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
         " #{finding.repeated_ancestors.join(' | ')}\n"
     end
 
     unless finding.description.blank?
-      head << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
+      body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         finding.description.chomp
     end
 
