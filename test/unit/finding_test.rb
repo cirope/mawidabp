@@ -259,8 +259,9 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates exceptional status change' do
-    finding = Finding.find(findings(
-        :iso_27000_security_policy_3_1_item_weakness).id)
+    finding = Finding.find(
+      findings(:iso_27000_security_policy_3_1_item_weakness).id
+    )
 
     finding.state = Finding::STATUS[:implemented]
     assert finding.save
@@ -268,18 +269,24 @@ class FindingTest < ActiveSupport::TestCase
     finding.state = Finding::STATUS[:being_implemented]
     assert finding.invalid?
 
-    assert_equal [error_message_from_model(finding, :state,
-        :must_have_a_comment)], finding.errors[:state]
+    assert_equal [
+      error_message_from_model(finding, :state, :must_have_a_comment)
+    ], finding.errors[:state]
 
-    finding.comments.build(:comment => 'Test comment',
-      :user => users(:administrator_user))
+    finding.comments.build(
+      :comment => 'Test comment',
+      :user => users(:administrator_user)
+    )
+    
     assert finding.valid?
     
     finding.state = Finding::STATUS[:revoked]
     assert finding.invalid?
 
-    assert_equal [error_message_from_model(finding, :state,
-        :can_not_be_revoked)], finding.errors[:state]
+    assert_equal [
+      error_message_from_model(finding, :state, :can_not_be_revoked),
+      error_message_from_model(finding, :state, :invalid)
+    ], finding.errors[:state]
   end
 
   test 'validates implemented audited with work papers' do

@@ -422,6 +422,10 @@ class Finding < ActiveRecord::Base
     if value && record.state_changed? && record.repeated?
       record.errors.add attr, :invalid unless record.is_in_a_final_review?
     end
+    
+    if record.revoked? && record.is_in_a_final_review?
+      record.errors.add attr, :invalid
+    end
   end
   validates_each :review_code do |record, attr, value|
     review = record.control_objective_item.try(:review)

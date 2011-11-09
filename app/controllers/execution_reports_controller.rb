@@ -6,7 +6,7 @@ class ExecutionReportsController < ApplicationController
   #
   # * GET /execution_reports
   def index
-    @title = t :'execution_reports.index_title'
+    @title = t 'execution_reports.index_title'
 
     respond_to do |format|
       format.html
@@ -18,7 +18,7 @@ class ExecutionReportsController < ApplicationController
   #
   # * GET /execution_reports/detailed_management_report
   def detailed_management_report
-    @title = t :'execution_reports.detailed_management_report_title'
+    @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
     @column_order = ['business_unit_report_name', 'review', 'process_control',
       'weaknesses_count', 'oportunities_count']
@@ -39,8 +39,8 @@ class ExecutionReportsController < ApplicationController
           'review' => [Review.model_name.human, 16],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
-          'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (1)", 12],
-          'oportunities_count' => ["#{t(:'review.oportunities_count')} (2)", 12]
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12],
+          'oportunities_count' => ["#{t('review.oportunities_count')} (2)", 12]
         }
         column_data = []
         name = but.name
@@ -66,18 +66,18 @@ class ExecutionReportsController < ApplicationController
             end
 
             weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-              t(:'execution_reports.detailed_management_report.without_weaknesses') :
+              t('execution_reports.detailed_management_report.without_weaknesses') :
               @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
             oportunities_count_text = r.oportunities.count > 0 ?
               r.oportunities.count.to_s :
-              t(:'execution_reports.detailed_management_report.without_oportunities')
+              t('execution_reports.detailed_management_report.without_oportunities')
 
             column_data << {
               'business_unit_report_name' => r.business_unit.name,
               'review' => r.to_s,
               'process_control' => process_controls,
               'weaknesses_count' => @risk_levels.blank? ?
-                t(:'execution_reports.detailed_management_report.without_weaknesses') :
+                t('execution_reports.detailed_management_report.without_weaknesses') :
                 weaknesses_count_text,
               'oportunities_count' => oportunities_count_text
             }
@@ -115,13 +115,13 @@ class ExecutionReportsController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.text '<i>%s</i>' %
-      t(:'execution_reports.detailed_management_report.clarification'),
+      t('execution_reports.detailed_management_report.clarification'),
       :font_size => PDF_FONT_SIZE
 
     pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_description_item(t(:'execution_reports.period.title'),
-      t(:'execution_reports.period.range',
+    pdf.add_description_item(t('execution_reports.period.title'),
+      t('execution_reports.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -142,10 +142,10 @@ class ExecutionReportsController < ApplicationController
         end
 
         if !data[:external] && !@internal_title_showed
-          title = t :'execution_reports.detailed_management_report.internal_audit_weaknesses'
+          title = t 'execution_reports.detailed_management_report.internal_audit_weaknesses'
           @internal_title_showed = true
         elsif data[:external] && !@external_title_showed
-          title = t :'execution_reports.detailed_management_report.external_audit_weaknesses'
+          title = t 'execution_reports.detailed_management_report.external_audit_weaknesses'
           @external_title_showed = true
         end
 
@@ -186,7 +186,7 @@ class ExecutionReportsController < ApplicationController
           end
         else
           pdf.text(
-            t(:'execution_reports.detailed_management_report.without_audits_in_the_period'))
+            t('execution_reports.detailed_management_report.without_audits_in_the_period'))
         end
       end
     end
@@ -194,33 +194,33 @@ class ExecutionReportsController < ApplicationController
     if @audits_by_period.empty?
       pdf.move_pointer PDF_FONT_SIZE
       pdf.text(
-        t(:'execution_reports.detailed_management_report.without_audits_in_the_interval'))
+        t('execution_reports.detailed_management_report.without_audits_in_the_interval'))
     end
 
     pdf.move_pointer PDF_FONT_SIZE
-    pdf.text t(:'execution_reports.detailed_management_report.references',
+    pdf.text t('execution_reports.detailed_management_report.references',
       :risk_types => @risk_levels.to_sentence),
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
     pdf.custom_save_as(
-      t(:'execution_reports.detailed_management_report.pdf_name',
+      t('execution_reports.detailed_management_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'execution_reports.detailed_management_report.pdf_name',
+      t('execution_reports.detailed_management_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
   end
 
   def weaknesses_by_state
-    @title = t :'execution_reports.weaknesses_by_state_title'
+    @title = t 'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @audit_types = [:internal, :external]
     @counts = []
-    @status = Finding::STATUS.except(:repeated).sort do |s1, s2|
+    @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
       s1.last <=> s2.last
     end
     @reviews = Review.list_all_without_final_review_by_date @from_date, @to_date
@@ -255,14 +255,14 @@ class ExecutionReportsController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.text '<i>%s</i>' %
-      t(:'execution_reports.weaknesses_by_state.clarification'),
+      t('execution_reports.weaknesses_by_state.clarification'),
         :font_size => PDF_FONT_SIZE
 
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'execution_reports.period.title'),
-      t(:'execution_reports.period.range',
+      t('execution_reports.period.title'),
+      t('execution_reports.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -291,14 +291,14 @@ class ExecutionReportsController < ApplicationController
               columns = {
                 'state' => [Finding.human_attribute_name('state'), 30],
                 'weaknesses_count' => [
-                  t(:'execution_reports.weaknesses_by_state.weaknesses_column'),
+                  t('execution_reports.weaknesses_by_state.weaknesses_column'),
                   type == :internal ? 35 : 70]
               }
               column_data = []
 
               if type == :internal
                 columns['oportunities_count'] = [
-                  t(:'execution_reports.weaknesses_by_state.oportunities_column'),
+                  t('execution_reports.weaknesses_by_state.oportunities_column'),
                   35]
               end
 
@@ -328,7 +328,7 @@ class ExecutionReportsController < ApplicationController
 
               column_data << {
                 'state' =>
-                  "<b>#{t(:'execution_reports.weaknesses_by_state.total')}</b>".to_iso,
+                  "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>".to_iso,
                 'weaknesses_count' => "<b>#{total_weaknesses}</b>",
                 'oportunities_count' => "<b>#{total_oportunities}</b>"
               }
@@ -356,13 +356,13 @@ class ExecutionReportsController < ApplicationController
                 end
               end
             else
-              pdf.text t(:'execution_reports.without_findings'),
+              pdf.text t('execution_reports.without_findings'),
                 :font_size => PDF_FONT_SIZE
               pdf.move_pointer PDF_FONT_SIZE
             end
           end
         else
-          pdf.text t(:'execution_reports.without_weaknesses'),
+          pdf.text t('execution_reports.without_weaknesses'),
             :font_size => PDF_FONT_SIZE
         end
       end
@@ -370,18 +370,18 @@ class ExecutionReportsController < ApplicationController
 
     if @counts.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'execution_reports.without_weaknesses_in_the_interval'),
+      pdf.text t('execution_reports.without_weaknesses_in_the_interval'),
         :font_size => PDF_FONT_SIZE
     end
 
     pdf.custom_save_as(
-      t(:'execution_reports.weaknesses_by_state.pdf_name',
+      t('execution_reports.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'execution_reports.weaknesses_by_state.pdf_name',
+      t('execution_reports.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)

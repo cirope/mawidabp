@@ -38,7 +38,7 @@ class FindingsController < ApplicationController
     else
       default_conditions[:state] = params[:completed] == 'incomplete' ?
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-        Finding::STATUS.values - Finding::PENDING_STATUS
+        Finding::STATUS.values - Finding::PENDING_STATUS - [Finding::STATUS[:revoked]]
     end
     
     build_search_conditions Finding, default_conditions

@@ -152,7 +152,8 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses + self.review.oportunities
+    findings = self.review.weaknesses.not_revoked +
+      self.review.oportunities.not_revoked
     all_created = false
     
     begin
