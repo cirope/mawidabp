@@ -407,7 +407,7 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal
      */
   attachToMenu: function() {
-    $('#menu_container a').live('click', function(event) {
+    $(document).on('click', '#menu_container a', function(event) {
       var menuName = $(this).attr('href').replace(/.*#/, '')
       var content = State.menu[menuName];
       
@@ -584,7 +584,7 @@ jQuery(function($) {
     }
   });
 
-  $('a[data-event]').live('click', function(event) {
+  $(document).on('click', 'a[data-event]', function(event) {
     if (event.stopped) return;
     var eventName = $(this).data('event');
 
@@ -596,7 +596,7 @@ jQuery(function($) {
     }
   });
   
-  $('input.calendar:not(.hasDatepicker)').live('focus', function() {
+  $(document).on('focus', 'input.calendar:not(.hasDatepicker)', function() {
     if($(this).data('time')) {
       $(this).datetimepicker({showOn: 'both'}).focus();
     } else {
@@ -608,7 +608,7 @@ jQuery(function($) {
   });
 
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
-  $('.work_paper').live('item:removed', function() {
+  $(document).on('item:removed', '.work_paper', function() {
     var workPaperCode = $(this).find('input[name$="[code]"]').val();
 
     if(workPaperCode == lastWorkPaperCode) {
@@ -632,7 +632,7 @@ jQuery(function($) {
     }
   });
   
-  $('span.popup_link').live('click', function(event) {
+  $(document).on('click', 'span.popup_link', function(event) {
     $($(this).data('helpDialog')).dialog('open').dialog(
       'option', 'position', [
         event.pageX - $(window).scrollLeft(),

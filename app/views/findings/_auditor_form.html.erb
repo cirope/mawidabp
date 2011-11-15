@@ -408,7 +408,7 @@
 <!--[eoform:finding] -->
 <%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>
 <script type="text/javascript">
-  $('.user_for_notification_selector').live('click', function() {
+  $(document).on('click', '.user_for_notification_selector', function() {
     var id = $(this).parents('.finding_user_assignment:first').find('.autocomplete_id').val();
     var userField = $(this).parents('.finding_user_assignment').find('.user_for_notification');
 

@@ -154,7 +154,7 @@ function calculateCost() {
 }
   
 jQuery(function() {
-  $('input.autocomplete_field').live('autocomplete:update', function() {
+  $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
     var item = $(this).data('item');
 
     if (item.cost_per_unit) {
