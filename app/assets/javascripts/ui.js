@@ -34,7 +34,7 @@ jQuery(function() {
     }
   };
 
-  $('textarea').live('keyup click', function() {
+  $(document).on('keyup click', 'textarea', function() {
     UIManipulation.fitToContent($(this));
   });
 });

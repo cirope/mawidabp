@@ -51,7 +51,7 @@
   <%= link_to_back %>
 </div>
 <script type="text/javascript">
-  $('a.show_last_detracts').live('ajax:success', function(event, data) {
+  $(document).on('ajax:success', 'a.show_last_detracts', function(event, data) {
     $('#last_detracts').html(data);
   });
 </script>

@@ -281,7 +281,7 @@ jQuery(function() {
     $('#suggested_findings').html(data);
   });
   
-  $('#procedure_control_link').live('ajax:success', function(event, data) {
+  $(document).on('ajax:success', '#procedure_control_link', function(event, data) {
     $('#procedure_control_data').html(data);
   });
   
