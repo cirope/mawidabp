@@ -41,3 +41,11 @@ conclusion_with_conclusion_draft_review:
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true
+  
+conclusion_approved_with_conclusion_draft_review:
+  type: ConclusionDraftReview
+  review: review_approved_with_conclusion
+  issue_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  applied_procedures: With Conclusion Draft Applied Procedures
+  conclusion: With Conclusion Draft Conclusion
+  approved: true

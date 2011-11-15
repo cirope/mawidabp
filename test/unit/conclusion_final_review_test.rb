@@ -39,7 +39,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert_difference 'Finding.count', findings_count do
         @conclusion_review = ConclusionFinalReview.new({
           :review => review,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
@@ -83,7 +83,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       assert_difference 'Finding.count', findings.size do
         @conclusion_review = ConclusionFinalReview.new({
           :review => review,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
@@ -218,7 +218,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_difference 'ConclusionFinalReview.count' do
       @conclusion_review = ConclusionFinalReview.new({
         :review => review,
-        :issue_date => Time.now.to_date,
+        :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'

@@ -98,6 +98,8 @@ class Weakness < Finding
   end
 
   def must_be_approved?
+    return true if self.revoked?
+    
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?

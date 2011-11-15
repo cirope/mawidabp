@@ -31,7 +31,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     assert_difference 'ConclusionDraftReview.count' do
       @conclusion_review = ConclusionDraftReview.create(
         :review => reviews(:review_without_conclusion),
-        :issue_date => Time.now.to_date,
+        :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
@@ -108,6 +108,9 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   end
 
   test 'validates force approved review' do
+    @conclusion_review = conclusion_reviews(
+      :conclusion_approved_with_conclusion_draft_review
+    )
     assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?
 

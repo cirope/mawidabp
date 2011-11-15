@@ -8,7 +8,7 @@ current_workflow_item_1:
 
 current_workflow_item_2:
   task: Task 2
-  start: <%= Time.now.to_date.to_s(:db) %>
+  start: <%= Date.today.to_s(:db) %>
   end: <%= 2.days.from_now.to_date.to_s(:db) %>
   predecessors: <%= [1].to_yaml.inspect %>
   order_number: 2
@@ -56,7 +56,7 @@ with_conclusion_workflow_item_1:
 
 with_conclusion_workflow_item_2:
   task: Task 2
-  start: <%= Time.now.to_date.to_s(:db) %>
+  start: <%= Date.today.to_s(:db) %>
   end: <%= 2.days.from_now.to_date.to_s(:db) %>
   predecessors: <%= [1].to_yaml.inspect %>
   order_number: 2

@@ -110,3 +110,15 @@ iso_27000_security_organization_4_3_item_editable_without_findings:
   finished: true
   control_objective: iso_27000_security_organization_4_3
   review: review_without_conclusion_and_without_findings
+  
+bcra_A4609_security_management_responsible_dependency_item_approved_and_editable:
+  control_objective_text: Dependencia del área responsible
+  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
+  audit_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  auditor_comment: Auditor comment
+  finished: true
+  control_objective: bcra_A4609_security_management_responsible_dependency
+  review: review_approved_with_conclusion

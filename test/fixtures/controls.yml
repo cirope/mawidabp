@@ -177,3 +177,13 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable_control_1:
   controllable_type: ControlObjectiveItem
   controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_item_editable) %>
   order: 1
+  
+bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_control_1:
+  control: "Se considera en la estructura organizacional un área para la protección de los activos de información, con el fin de establecer los mecanismos para la administración y el control de la seguridad sobre el acceso lógico y físico a sus distintos ambientes tecnológicos y recursos de información: equipamiento principal, plataforma de sucursales, equipos departamentales, subsistemas o módulos administradores de seguridad de los sistemas de aplicación, sistemas de transferencias electrónicas de fondos, bases de datos, canales de servicios electrónicos, banca por Internet y otros."
+  design_tests: "Design tests"
+  compliance_tests: "Compliance tests"
+  sustantive_tests: "Proposed sustantive tests"
+  effects: "Effects"
+  controllable_type: ControlObjectiveItem
+  controllable_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable) %>
+  order: 1

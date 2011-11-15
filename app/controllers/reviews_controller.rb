@@ -13,7 +13,7 @@ class ReviewsController < ApplicationController
   # * GET /reviews
   # * GET /reviews.xml
   def index
-    @title = t :'review.index_title'
+    @title = t 'review.index_title'
     default_conditions = {
       "#{Period.table_name}.organization_id" => @auth_organization.id
     }
@@ -41,7 +41,7 @@ class ReviewsController < ApplicationController
   # * GET /reviews/1
   # * GET /reviews/1.xml
   def show
-    @title = t :'review.show_title'
+    @title = t 'review.show_title'
     @review = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -55,7 +55,7 @@ class ReviewsController < ApplicationController
   # * GET /reviews/new
   # * GET /reviews/new.xml
   def new
-    @title = t :'review.new_title'
+    @title = t 'review.new_title'
     first_period = Period.list.first
     @review = Review.new
     clone_id = params[:clone_from].to_i
@@ -75,7 +75,7 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/1/edit
   def edit
-    @title = t :'review.edit_title'
+    @title = t 'review.edit_title'
     @review = find_with_organization(params[:id])
   end
 
@@ -85,12 +85,12 @@ class ReviewsController < ApplicationController
   # * POST /reviews
   # * POST /reviews.xml
   def create
-    @title = t :'review.new_title'
+    @title = t 'review.new_title'
     @review = Review.new(params[:review])
     
     respond_to do |format|
       if @review.save
-        flash.notice = t :'review.correctly_created'
+        flash.notice = t 'review.correctly_created'
         format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { render :xml => @review, :status => :created, :location => @review }
       else
@@ -107,12 +107,12 @@ class ReviewsController < ApplicationController
   # * PUT /reviews/1
   # * PUT /reviews/1.xml
   def update
-    @title = t :'review.edit_title'
+    @title = t 'review.edit_title'
     @review = find_with_organization(params[:id])
 
     respond_to do |format|
       if @review.update_attributes(params[:review])
-        flash.notice = t :'review.correctly_updated'
+        flash.notice = t 'review.correctly_updated'
         format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { head :ok }
       else
@@ -122,7 +122,7 @@ class ReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'review.stale_object_error'
+    flash.alert = t 'review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -134,7 +134,7 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     unless @review.destroy
-      flash.alert = t :'review.errors.can_not_be_destroyed'
+      flash.alert = t 'review.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

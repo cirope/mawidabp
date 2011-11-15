@@ -23,7 +23,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -392,7 +392,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     
     cois = ActiveSupport::JSON.decode(@response.body)
     
-    assert_equal 1, cois.size # Sólo bcra_A4609_security_management_responsible_dependency_item_editable porque no tiene informe definitivo
+    assert_equal 2, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable y bcra_A4609_security_management_responsible_dependency_item_approved_and_editable porque no tienen informes definitivos
     assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
     assert_equal(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,

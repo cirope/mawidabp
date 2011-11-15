@@ -33,7 +33,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert_difference 'ConclusionReview.count' do
       @conclusion_review = ConclusionFinalReview.new({
         :review => reviews(:review_with_conclusion),
-        :issue_date => Time.now.to_date,
+        :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
@@ -113,7 +113,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'validates date attributes between boundaries' do
     @conclusion_review = ConclusionFinalReview.new({
         :review => reviews(:review_with_conclusion),
-        :issue_date => Time.now.to_date,
+        :issue_date => Date.today,
         :close_date => 2.days.ago.to_date,
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
@@ -122,7 +122,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :close_date,
-      :on_or_after, :restriction => I18n.l(Time.now.to_date))],
+      :on_or_after, :restriction => I18n.l(Date.today))],
       @conclusion_review.errors[:close_date]
   end
 

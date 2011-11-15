@@ -353,6 +353,13 @@ class Review < ActiveRecord::Base
           ]
         end
       end
+      
+      coi.weaknesses.select(&:unconfirmed?).each do |w|
+        errors << [
+          "#{Weakness.model_name.human} #{w.review_code}",
+          [I18n.t('weakness.errors.is_unconfirmed')]
+        ]
+      end
 
       unless coi.must_be_approved?
         self.can_be_approved_by_force = false
@@ -382,10 +389,7 @@ class Review < ActiveRecord::Base
   end
 
   alias_method :is_approved?, :must_be_approved?
-
-  def can_be_sended?
-    self.must_be_approved?
-  end
+  alias_method :can_be_sended?, :must_be_approved?
 
   def has_audited?
     self.review_user_assignments.any? do |rua|

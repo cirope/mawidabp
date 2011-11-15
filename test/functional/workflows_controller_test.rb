@@ -88,7 +88,7 @@ class WorkflowsControllerTest < ActionController::TestCase
           :workflow_items_attributes => {
             :new_1 => {
               :task => 'New task',
-              :start => Time.now.to_date,
+              :start => Date.today,
               :end => 10.days.from_now.to_date,
               :plain_predecessors => '',
               :order_number => 1,
@@ -176,7 +176,7 @@ class WorkflowsControllerTest < ActionController::TestCase
         :workflow_items_attributes => {
           :new_1 => {
             :task => 'New task',
-            :start => Time.now.to_date,
+            :start => Date.today,
             :end => 5.days.from_now.to_date,
             :plain_predecessors => '',
             :order_number => 1,

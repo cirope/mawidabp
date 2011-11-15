@@ -65,7 +65,7 @@ class PeriodsControllerTest < ActionController::TestCase
         :period => {
           :number => '20',
           :description => 'New period',
-          :start => Time.now.to_date,
+          :start => Date.today,
           :end => 30.days.from_now.to_date,
           :organization_id => organizations(:default_organization).id
         }
@@ -82,7 +82,7 @@ class PeriodsControllerTest < ActionController::TestCase
         :period => {
           :number => '20',
           :description => 'New period',
-          :start => Time.now.to_date,
+          :start => Date.today,
           :end => 30.days.from_now.to_date,
           :organization_id => organizations(:default_organization).id
         }
@@ -109,7 +109,7 @@ class PeriodsControllerTest < ActionController::TestCase
         :period => {
             :number => '20',
             :description => 'Updated period',
-            :start => Time.now.to_date,
+            :start => Date.today,
             :end => 30.days.from_now.to_date,
             :organization_id => organizations(:default_organization).id
         }

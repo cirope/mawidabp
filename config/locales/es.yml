@@ -1231,6 +1231,7 @@ es:
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
     errors:
+      is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
       with_solution_date: "tiene fecha de solución (y no debería)"

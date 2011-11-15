@@ -22,7 +22,7 @@ class ReviewsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -49,7 +49,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_equal 4, assigns(:reviews).size
+    assert_equal 5, assigns(:reviews).size
     assert_select '#error_body', false
     assert_template 'reviews/index'
   end
@@ -195,7 +195,7 @@ class ReviewsControllerTest < ActionController::TestCase
                         :admin_control_objective_qualifications).last[1],
                       :compliance_score => get_test_parameter(
                         :admin_control_objective_qualifications).last[1],
-                      :audit_date => Time.now.to_date,
+                      :audit_date => Date.today,
                       :auditor_comment => 'New comment',
                       :control_objective_id => control_objectives(
                         :iso_27000_security_organization_4_2).id,
@@ -307,7 +307,7 @@ class ReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to reviews_url
-    assert_equal I18n.t(:'review.errors.can_not_be_destroyed'), flash.alert
+    assert_equal I18n.t('review.errors.can_not_be_destroyed'), flash.alert
   end
 
   test 'review data' do

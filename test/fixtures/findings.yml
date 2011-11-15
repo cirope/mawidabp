@@ -253,3 +253,22 @@ iso_27000_security_policy_3_1_item_weakness:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  
+  
+bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
+  type: Weakness
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  review_code: O001
+  description: Description 1w
+  answer: Answer 1w
+  audit_comments: Audit comments 1w
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date: 
+  solution_date: 
+  audit_recommendations: Proposed action 1w
+  effect: Effect 1w
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0

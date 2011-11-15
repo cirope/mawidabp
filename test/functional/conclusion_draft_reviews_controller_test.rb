@@ -53,7 +53,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 2, assigns(:conclusion_draft_reviews).size
+    assert_equal 3, assigns(:conclusion_draft_reviews).size
     assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
@@ -67,7 +67,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_equal 2, assigns(:conclusion_draft_reviews).size
+    assert_equal 3, assigns(:conclusion_draft_reviews).size
     assert assigns(:conclusion_draft_reviews).all? {|cdr| cdr.issue_date > 3.months.ago.to_date}
     assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
@@ -91,8 +91,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       :columns => ['issue_date']
     }
 
-    assert_redirected_to conclusion_draft_review_url(conclusion_reviews(
-        :conclusion_with_conclusion_draft_review))
+    assert_redirected_to conclusion_draft_review_url(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review)
+    )
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 1, assigns(:conclusion_draft_reviews).size
   end
@@ -134,7 +135,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       post :create, {
         :conclusion_draft_review => {
           :review_id => reviews(:review_without_conclusion).id,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
@@ -161,7 +162,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id,
         :conclusion_draft_review => {
           :review_id => reviews(:review_with_conclusion).id,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion'
@@ -275,8 +276,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'send by email' do
     perform_auth
-    conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
-        :conclusion_with_conclusion_draft_review).id)
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
+    )
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -325,8 +327,9 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'send by email with multiple attachments' do
     perform_auth
-    conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
-        :conclusion_with_conclusion_draft_review).id)
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
+    )
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true

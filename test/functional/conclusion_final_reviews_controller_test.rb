@@ -138,7 +138,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       post :create, {
         :conclusion_final_review => {
           :review_id => reviews(:review_with_conclusion).id,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
@@ -163,7 +163,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
         :id => conclusion_reviews(:conclusion_past_final_review).id,
         :conclusion_final_review => {
           :review_id => reviews(:review_with_conclusion).id,
-          :issue_date => Time.now.to_date,
+          :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
           :applied_procedures => 'Updated applied procedures',
           :conclusion => 'Updated conclusion'

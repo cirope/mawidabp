@@ -7,8 +7,8 @@ class ReviewTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @review = Review.find reviews(:review_with_conclusion).id
-    GlobalModelConfig.current_organization_id = organizations(
-      :default_organization).id
+    GlobalModelConfig.current_organization_id =
+      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -201,80 +201,104 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'must be approved function' do
+    @review = reviews(:review_approved_with_conclusion)
+    
     assert @review.must_be_approved?
     assert @review.approval_errors.blank?
 
-    review_weakness = @review.control_objective_items.first.weaknesses.first
-    oportunity = Weakness.new review_weakness.attributes.merge({
-        'state' => Finding::STATUS[:implemented_audited],
-        'review_code' => @review.next_weakness_code('O')})
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
-      review_weakness)
+    review_weakness = @review.weaknesses.first
+    finding = Weakness.new review_weakness.attributes.merge(
+      'state' => Finding::STATUS[:implemented_audited],
+      'review_code' => @review.next_weakness_code('O')
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
 
-    oportunity.solution_date = nil
+    finding.solution_date = nil
 
-    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert oportunity.allow_destruction!
-    assert oportunity.destroy
+    assert finding.allow_destruction!
+    assert finding.destroy
 
-    oportunity = Weakness.new(
-      oportunity.attributes.merge(
+    finding = Weakness.new(
+      finding.attributes.merge(
         'state' => Finding::STATUS[:implemented],
-        'solution_date' => Time.now.to_date,
+        'solution_date' => Date.today,
         'follow_up_date' => nil
       )
     )
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
-      review_weakness)
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
 
-    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert oportunity.allow_destruction!
-    assert oportunity.destroy
+    assert finding.allow_destruction!
+    assert finding.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge(
+    finding = Weakness.new finding.attributes.merge(
         'state' => Finding::STATUS[:being_implemented]
       )
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
-      review_weakness)
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
 
-    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert oportunity.allow_destruction!
-    assert oportunity.destroy
+    assert finding.allow_destruction!
+    assert finding.destroy
 
-    oportunity = Weakness.new oportunity.attributes.merge(
-        'state' => Finding::STATUS[:assumed_risk]
-      )
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
-      review_weakness)
+    finding = Weakness.new finding.attributes.merge(
+      'state' => Finding::STATUS[:assumed_risk]
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
 
-    assert oportunity.save
-
-    @review.reload.must_be_approved?
+    assert finding.save
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
-    assert oportunity.allow_destruction!
-    assert oportunity.destroy
+    assert finding.allow_destruction!
+    assert finding.destroy
+    
+    finding = Weakness.new finding.attributes.merge(
+      'state' => Finding::STATUS[:unconfirmed],
+      'follow_up_date' => nil,
+      'solution_date' => nil
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
 
-    oportunity = Weakness.new oportunity.attributes.merge(
-        'state' => Finding::STATUS[:being_implemented],
-        'follow_up_date' => Time.now.to_date
-      )
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
-      review_weakness)
+    assert finding.save, finding.errors.full_messages.join('; ')
 
-    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
+    assert !@review.reload.must_be_approved?
+    assert_equal 1, @review.approval_errors.size
+    assert @review.can_be_approved_by_force
+    assert finding.allow_destruction!
+    assert finding.destroy
+
+    finding = Weakness.new finding.attributes.merge(
+      'state' => Finding::STATUS[:being_implemented],
+      'follow_up_date' => Date.today,
+      'solution_date' => Date.today
+    )
+    finding.finding_user_assignments.build(
+      clone_finding_user_assignments(review_weakness)
+    )
+
+    assert finding.save(:validate => false) # Forzado para que no se validen los datos
     # La debilidad tiene una fecha de solución
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
 
-    assert oportunity.update_attribute(:solution_date, nil)
+    assert finding.update_attribute(:solution_date, nil)
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
 
@@ -309,23 +333,26 @@ class ReviewTest < ActiveSupport::TestCase
     
     assert !review.must_be_approved?
     assert review.approval_errors.flatten.include?(
-      I18n.t('review.errors.without_control_objectives'))
+      I18n.t('review.errors.without_control_objectives')
+    )
   end
 
   test 'can be sended' do
+    @review = reviews(:review_approved_with_conclusion)
+    
     assert @review.can_be_sended?
 
     review_weakness = @review.control_objective_items.first.weaknesses.first
-    oportunity = Weakness.new review_weakness.attributes.merge(
+    finding = Weakness.new review_weakness.attributes.merge(
         'state' => Finding::STATUS[:implemented_audited],
         'review_code' => @review.next_weakness_code('O')
       )
-    oportunity.finding_user_assignments.build clone_finding_user_assignments(
+    finding.finding_user_assignments.build clone_finding_user_assignments(
       review_weakness)
 
-    oportunity.solution_date = nil
+    finding.solution_date = nil
 
-    assert oportunity.save(:validate => false) # Forzado para que no se validen los datos
+    assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.can_be_sended?
   end
 
@@ -470,9 +497,9 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'last oportunity code' do
     generated_code = @review.next_oportunity_code('pre')
-    oportunity = @review.oportunities.sort_by_code.last
-    oportunity_number = oportunity.review_code.match(/\d+\Z/)[0].to_i
-    oportunity_prefix = oportunity.review_code.sub(/\d+\Z/, '')
+    finding = @review.oportunities.sort_by_code.last
+    oportunity_number = finding.review_code.match(/\d+\Z/)[0].to_i
+    oportunity_prefix = finding.review_code.sub(/\d+\Z/, '')
 
     assert_match /\Apre\d+\Z/, generated_code
 

@@ -111,7 +111,7 @@ module PDF
         x_start = self.absolute_right_margin - self.text_width(text, font_size)
         self.add_text(x_start, y_top - font_height_size, text.to_iso, font_size)
 
-        text = I18n.l(Time.now.to_date, :format => :long)
+        text = I18n.l(Date.today, :format => :long)
         x_start = self.absolute_right_margin - self.text_width(text, font_size)
         self.add_text(x_start, y_top, text.to_iso, font_size)
 

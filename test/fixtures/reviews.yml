@@ -32,3 +32,10 @@ review_without_conclusion_and_without_findings:
   description: Review Without Conclusion and Without Findings
   survey: Review Without Conclusion and Without Findings Survey
   plan_item: current_plan_item_4
+  
+review_approved_with_conclusion:
+  period: current_period
+  identification: 1 2 7
+  description: Review Approved With Conclusion
+  survey: Review Approved With Conclusion Survey
+  plan_item: current_plan_item_5
