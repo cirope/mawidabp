@@ -7,6 +7,19 @@ module ControlObjectiveItemsHelper
 
     text.blank? || text == '-' ? text : "#{text} (#{relevance})"
   end
+  
+  def control_objective_effectiveness(control_objective_item)
+    if control_objective_item.exclude_from_score
+      content_tag(
+        :abbr,
+        "#{control_objective_item.effectiveness}%",
+        :class => 'strike',
+        :title => t('control_objective_item.excluded_from_score')
+      )
+    else
+      "#{control_objective_item.effectiveness}%"
+    end
+  end
 
   def control_objective_qualification_text(qualification, created_at)
     text = name_for_option_value(parameter_in(@auth_organization.id,

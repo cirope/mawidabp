@@ -12,7 +12,7 @@
       <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:relevance) + show_inline_help_for(:control_objective_item_relevance)), :expendable => true %>
       <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:effectiveness) + show_inline_help_for(:control_objective_item_effectiveness)), :expendable => true %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :expendable => true %>
-      <%= make_not_available_column raw(t(:'control_objective_item.has_work_papers') + show_inline_help_for(:control_objective_item_work_papers)), :expendable => true %>
+      <%= make_not_available_column raw(t('control_objective_item.has_work_papers') + show_inline_help_for(:control_objective_item_work_papers)), :expendable => true %>
       <th colspan="3" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -26,13 +26,13 @@
         <td class="nowrap"><%= show_review_with_close_date_as_abbr control_objective.review %></td>
         <td class="expendable"><%= super_truncate(control_objective.process_control.name, 30) %></td>
         <td><%= super_truncate(control_objective.control_objective_text, 30) %></td>
-        <td class="expendable"><%= t control_objective.finished? ? :'label.yes' : :'label.no' %></td>
+        <td class="expendable"><%= t control_objective.finished? ? 'label.yes' : 'label.no' %></td>
         <td class="expendable"><%= control_objective_relevance_text(control_objective) %></td>
-        <td class="expendable"><%= "#{control_objective.effectiveness}%" %></td>
+        <td class="expendable"><%= control_objective_effectiveness(control_objective) %></td>
         <td class="expendable"><%= link_to_unless control_objective.weaknesses.size == 0,
             control_objective.weaknesses.size,
             weaknesses_path(:control_objective => control_objective) %></td>
-        <td class="expendable"><%= t control_objective.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show control_objective_item_path(control_objective) %></td>
         <td><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>
         <td><%= button_to_destroy(control_objective_item_path(control_objective,

@@ -42,7 +42,7 @@
       <%= co_f.select :relevance, parameter_in(@auth_organization.id,
         :admin_control_objective_importances,
         @control_objective_item.created_at, true),
-        {:include_blank => t(:'control_objective_item.not_rated')},
+        {:include_blank => t('control_objective_item.not_rated')},
         {:class => :inline_item, :autofocus => true, :disabled => readonly} %>
     </p>
     <p class="form_item">
@@ -115,7 +115,7 @@
         parameter_in(@auth_organization.id,
         :admin_control_objective_qualifications,
         @control_objective_item.created_at, true),
-        {:include_blank => t(:'control_objective_item.not_rated')},
+        {:include_blank => t('control_objective_item.not_rated')},
         {:disabled => readonly} %>
     </p>
     <p>
@@ -127,7 +127,7 @@
         parameter_in(@auth_organization.id,
         :admin_control_objective_qualifications,
         @control_objective_item.created_at, true),
-        {:include_blank => t(:'control_objective_item.not_rated')},
+        {:include_blank => t('control_objective_item.not_rated')},
         {:disabled => readonly} %>
     </p>
     <p>
@@ -139,7 +139,7 @@
         parameter_in(@auth_organization.id,
         :admin_control_objective_qualifications,
         @control_objective_item.created_at, true),
-        {:include_blank => t(:'control_objective_item.not_rated')},
+        {:include_blank => t('control_objective_item.not_rated')},
         {:disabled => readonly} %>
     </p>
     <p>
@@ -190,10 +190,10 @@
   </div>
 
   <p class="add_item">
-    <%= link_to_unless frozen, t(:'control_objective_item.add_work_paper'),
-      '#', :'data-template' => :work_paper,
-      :'data-event' => 'addNestedItem',
-      :'data-container' => '#work_papers' %>
+    <%= link_to_unless frozen, t('control_objective_item.add_work_paper'),
+      '#', 'data-template' => :work_paper,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#work_papers' %>
   </p>
 
   <%= hidden_lock_version(co_f) %>

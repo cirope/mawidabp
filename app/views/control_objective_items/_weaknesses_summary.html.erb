@@ -17,8 +17,8 @@
 
 <p style="margin-bottom: 1.2em;">
   <%= link_to_unless @control_objective_item.weaknesses.blank?,
-    t(:'control_objective_item.view_all_weaknesses'),
+    t('control_objective_item.view_all_weaknesses'),
     weaknesses_path(:control_objective => @control_objective_item) %> |
-  <%= link_to_unless readonly, t(:'control_objective_item.add_weakness'),
+  <%= link_to_unless readonly, t('control_objective_item.add_weakness'),
     new_weakness_path(:control_objective_item => @control_objective_item) %>
 </p>
