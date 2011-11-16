@@ -162,7 +162,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def score_completion
-    if self.finished
+    if self.finished && !self.exclude_from_score
       if !self.design_score && !self.compliance_score && !self.sustantive_score
         self.errors.add :design_score, :blank
         self.errors.add :compliance_score, :blank
