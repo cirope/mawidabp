@@ -549,7 +549,7 @@ module ConclusionCommonReports
       process_controls = {}
       
       conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items.each do |coi|
+        c_r.review.control_objective_items_for_score.each do |coi|
           process_controls[coi.process_control.name] ||= {}
           coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
           coi_data[:weaknesses_ids] ||= {}
@@ -770,7 +770,7 @@ module ConclusionCommonReports
       reviews_score_data[period] ||= []
       
       conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items.each do |coi|
+        c_r.review.control_objective_items_for_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
           weaknesses_count = {}

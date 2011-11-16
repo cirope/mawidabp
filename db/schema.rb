@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110314135457) do
+ActiveRecord::Schema.define(:version => 20111116122255) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20110314135457) do
     t.boolean  "finished"
     t.integer  "sustantive_score"
     t.integer  "order_number"
+    t.boolean  "exclude_from_score",     :default => false, :null => false
   end
 
   add_index "control_objective_items", ["control_objective_id"], :name => "index_control_objective_items_on_control_objective_id"

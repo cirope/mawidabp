@@ -175,16 +175,16 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'review score' do
-    assert !@review.control_objective_items.empty?
+    assert !@review.control_objective_items_for_score.empty?
 
-    cois_count = @review.control_objective_items.inject(0) do |acc, coi|
+    cois_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.relevance
     end
-    total = @review.control_objective_items.inject(0) do |acc, coi|
+    total = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.effectiveness * coi.relevance
     end
     
-    average = (total / cois_count).round
+    average = (total / cois_count.to_f).round
 
     scores = get_test_parameter(:admin_review_scores)
     scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
@@ -198,6 +198,22 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal count, @review.achieved_scale
     assert scores.size > 0
     assert_equal scores.size, @review.top_scale
+    
+    assert_difference '@review.control_objective_items_for_score.size', -1 do
+      @review.control_objective_items.first.exclude_from_score = true
+    end
+    
+    assert !@review.control_objective_items_for_score.empty?
+    
+    cois_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
+      acc + coi.relevance
+    end
+    total = @review.control_objective_items_for_score.inject(0) do |acc, coi|
+      acc + coi.effectiveness * coi.relevance
+    end
+    
+    new_average = (total / cois_count.to_f).round
+    assert_not_equal average, new_average
   end
 
   test 'must be approved function' do
@@ -442,16 +458,16 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness function' do
-    coi_count = @review.control_objective_items.inject(0) do |acc, coi|
+    coi_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.relevance
     end
 
-    total = @review.control_objective_items.inject(0) do |acc, coi|
+    total = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.effectiveness * coi.relevance
     end
 
     assert total > 0
-    assert_equal (total / coi_count).round, @review.effectiveness
+    assert_equal (total / coi_count.to_f).round, @review.effectiveness
   end
 
   test 'last control objective work paper code' do

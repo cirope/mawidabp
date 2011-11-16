@@ -1498,6 +1498,7 @@ es:
         audit_date: "Fecha de auditoría"
         auditor_comment: "Conclusiones del auditor"
         finished: "Terminado"
+        exclude_from_score: "No calificar"
         process_control_id: "Proceso de negocio"
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"

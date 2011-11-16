@@ -243,7 +243,8 @@ class Review < ActiveRecord::Base
           ProcedureControlSubitem.exists?(pcs_id.to_i)
         pcs = ProcedureControlSubitem.find(pcs_id)
         control_objective_ids = self.control_objective_items.map(
-          &:control_objective_id)
+          &:control_objective_id
+        )
 
         unless control_objective_ids.include?(pcs.control_objective_id)
           self.control_objective_items.build(
@@ -316,12 +317,16 @@ class Review < ActiveRecord::Base
 
     "#{score.first} (#{score.last}%)"
   end
+  
+  def control_objective_items_for_score
+    self.control_objective_items.reject &:exclude_from_score
+  end
 
   def effectiveness
-    coi_count = self.control_objective_items.inject(0.0) do |acc, coi|
+    coi_count = self.control_objective_items_for_score.inject(0.0) do |acc, coi|
       acc + (coi.relevance || 0)
     end
-    total = self.control_objective_items.inject(0.0) do |acc, coi|
+    total = self.control_objective_items_for_score.inject(0.0) do |acc, coi|
       acc + coi.effectiveness * (coi.relevance || 0)
     end
 
@@ -549,7 +554,7 @@ class Review < ActiveRecord::Base
       c.width = pdf.percent_width(15)
     end
 
-    self.control_objective_items.each do |coi|
+    self.control_objective_items_for_score.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
         coi.control_objective_text, coi.effectiveness || 0, coi.relevance || 0
@@ -744,7 +749,7 @@ class Review < ActiveRecord::Base
       c.width = pdf.percent_width(30)
     end
     
-    self.control_objective_items.each do |coi|
+    self.control_objective_items_for_score.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
         coi.control_objective_text, coi.effectiveness || 0, coi.relevance || 0

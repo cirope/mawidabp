@@ -88,8 +88,8 @@ class FollowUpCommitteeController < ApplicationController
           if c_r.review.business_unit.business_unit_type_id == but.id
             process_controls = {}
             weaknesses_count = {}
-
-            c_r.review.control_objective_items.each do |coi|
+            
+            c_r.review.control_objective_items_for_score.each do |coi|
               process_controls[coi.process_control.name] ||= []
               process_controls[coi.process_control.name] << coi
             end

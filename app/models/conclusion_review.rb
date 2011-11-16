@@ -547,7 +547,8 @@ class ConclusionReview < ActiveRecord::Base
     pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
     grouped_control_objectives = self.control_objective_items.group_by(
-      &:'process_control')
+      &:process_control
+    )
 
     grouped_control_objectives.each do |process_control, cois|
       pdf.move_pointer PDF_FONT_SIZE

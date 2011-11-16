@@ -2,7 +2,7 @@ class ControlObjective < ActiveRecord::Base
   include ParameterSelector
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { GlobalModelConfig.current_organization_id }
   }
 
   # Callbacks
@@ -48,7 +48,7 @@ class ControlObjective < ActiveRecord::Base
   def can_be_destroyed?
     unless self.control_objective_items.blank? &&
         self.procedure_control_subitems.blank?
-      self.errors.add :base, I18n.t(:'control_objective.errors.related')
+      self.errors.add :base, I18n.t('control_objective.errors.related')
 
       false
     else

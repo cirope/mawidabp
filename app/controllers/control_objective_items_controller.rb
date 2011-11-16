@@ -12,7 +12,7 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items
   # * GET /control_objective_items.xml
   def index
-    @title = t :'control_objective_item.index_title'
+    @title = t 'control_objective_item.index_title'
     default_conditions = {
       Period.table_name => {:organization_id => @auth_organization.id}
     }
@@ -43,7 +43,7 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1
   # * GET /control_objective_items/1.xml
   def show
-    @title = t :'control_objective_item.show_title'
+    @title = t 'control_objective_item.show_title'
     @control_objective_item = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -56,7 +56,7 @@ class ControlObjectiveItemsController < ApplicationController
   #
   # * GET /control_objective_items/1/edit
   def edit
-    @title = t :'control_objective_item.edit_title'
+    @title = t 'control_objective_item.edit_title'
     
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.includes(:review).where(
@@ -78,7 +78,7 @@ class ControlObjectiveItemsController < ApplicationController
   # * PUT /control_objective_items/1
   # * PUT /control_objective_items/1.xml
   def update
-    @title = t :'control_objective_item.edit_title'
+    @title = t 'control_objective_item.edit_title'
     @control_objective_item = find_with_organization(params[:id])
     review = @control_objective_item.review
 
@@ -96,7 +96,7 @@ class ControlObjectiveItemsController < ApplicationController
       end
       
       if updated
-        flash.notice = t :'control_objective_item.correctly_updated'
+        flash.notice = t 'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html {
           redirect_to(back_to || edit_control_objective_item_url(@control_objective_item))
@@ -109,7 +109,7 @@ class ControlObjectiveItemsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash.alert = t :'control_objective_item.stale_object_error'
+      flash.alert = t 'control_objective_item.stale_object_error'
       redirect_to :action => :edit
   end
 
