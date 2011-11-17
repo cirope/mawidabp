@@ -1,9 +1,9 @@
 <% first_organization = @grouped_findings.keys.first %>
 <% count = @grouped_findings.map(&:second).sum(&:size) %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t :'notifier.reassigned_findings.title', :count => count %></h2>
+  <h2><%= t 'notifier.reassigned_findings.title', :count => count %></h2>
   <h3 style="text-decoration: underline;">
-    <%= t :'notifier.reassigned_findings.the_following_findings_are_now_reassigned',
+    <%= t 'notifier.reassigned_findings.the_following_findings_are_now_reassigned',
       :count => count %>
   </h3>
 
@@ -13,12 +13,12 @@
       <% unless @new_users.blank? && @old_users.blank? %>
         <ul>
           <% unless @new_users.blank? %>
-            <li><%= t(:'notifier.reassigned_findings.new_responsibles',
+            <li><%= t('notifier.reassigned_findings.new_responsibles',
                     :count => @new_users.size,
                     :responsible => @new_users.map(&:full_name_with_function).join('; ')) %></li>
           <% end %>
           <% unless @old_users.blank? %>
-            <li><%= t(:'notifier.reassigned_findings.old_responsibles',
+            <li><%= t('notifier.reassigned_findings.old_responsibles',
                     :count => @old_users.size,
                     :responsible => @old_users.map(&:full_name_with_function).join('; ')) %></li>
           <% end %>
@@ -32,7 +32,7 @@
 
   <% if @notification %>
     <p>
-      <%= link_to t(:'notifier.notification.confirm'),
+      <%= link_to t('notifier.notification.confirm'),
           confirm_notification_url(@notification,
             :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization),
             :protocol => URL_PROTOCOL) %>

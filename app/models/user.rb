@@ -529,7 +529,7 @@ class User < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   Role::TYPES.each do |type, value|
-    define_method(:"#{type}?") do
+    define_method("#{type}?") do
       self.roles(GlobalModelConfig.current_organization_id).any? do |role|
         role.role_type == value
       end

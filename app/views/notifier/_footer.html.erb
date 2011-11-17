@@ -1,20 +1,20 @@
 <div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
   <p style="color: #cc0000;">
-    <%= textilize_without_paragraph t(:'notifier.footer.warning') %>
+    <%= textilize_without_paragraph t('notifier.footer.warning') %>
   </p>
   <p>
-    <%= t :'notifier.footer.title' %>
+    <%= t 'notifier.footer.title' %>
   </p>
   <ul>
     <li>
-      <b><%= t :'notifier.footer.email_label' %></b>:
+      <b><%= t 'notifier.footer.email_label' %></b>:
       <a href="mailto:<%= SUPPORT_EMAIL %>"><%= SUPPORT_EMAIL %></a>
     </li>
     <li>
-      <b><%= t :'notifier.footer.phone_label' %></b>: <%= SUPPORT_PHONE %>
+      <b><%= t 'notifier.footer.phone_label' %></b>: <%= SUPPORT_PHONE %>
     </li>
   </ul>
   <p>
-    <%= textilize_without_paragraph t(:'notifier.footer.recommendations') %>
+    <%= textilize_without_paragraph t('notifier.footer.recommendations') %>
   </p>
 </div>
