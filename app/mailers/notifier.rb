@@ -1,18 +1,18 @@
 class Notifier < ActionMailer::Base
   helper :application
-  default :from => "\"#{I18n.t(:app_name)}\" <#{NOTIFICATIONS_EMAIL}>",
+  default :from => "\"#{I18n.t('app_name')}\" <#{NOTIFICATIONS_EMAIL}>",
     :charset => 'UTF-8', :content_type => 'text/html',
     :date => proc { Time.now }
 
   def group_welcome_email(group)
     @group, @hash = group, group.admin_hash
-    prefixes = group.organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = group.organizations.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
     
     mail(
       :to => [group.admin_email],
       :subject => prefixes.upcase + t(
-        :'notifier.group_welcome_email.title', :name => group.name
+        'notifier.group_welcome_email.title', :name => group.name
       )
     )
   end
@@ -25,7 +25,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [user.email],
       :subject => prefixes.upcase + t(
-        :'notifier.welcome_email.title', :name => user.informal_name
+        'notifier.welcome_email.title', :name => user.informal_name
       )
     )
   end
@@ -36,12 +36,12 @@ class Notifier < ActionMailer::Base
     @user = user
     @grouped_findings = findings.group_by(&:organization)
     @notification = Notification.create(:user => user, :findings => findings)
-    prefixes = @grouped_findings.keys.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = @grouped_findings.keys.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail(
       :to => [user.email],
-      :subject => prefixes.upcase + t(:'notifier.notify_new_findings.title')
+      :subject => prefixes.upcase + t('notifier.notify_new_findings.title')
     )
   end
 
@@ -52,7 +52,7 @@ class Notifier < ActionMailer::Base
     
     mail(
       :to => [user.email],
-      :subject => prefix.upcase + t(:'notifier.notify_new_finding.title')
+      :subject => prefix.upcase + t('notifier.notify_new_finding.title')
     )
   end
 
@@ -63,7 +63,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
       :subject => prefix.upcase + t(
-        :'notifier.notify_new_finding_answer.title',
+        'notifier.notify_new_finding_answer.title',
         :review => finding_answer.finding.review.to_s
       )
     )
@@ -79,7 +79,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefixes.upcase + t(:'notifier.notification.pending')
+      :subject => prefixes.upcase + t('notifier.notification.pending')
     )
   end
 
@@ -93,7 +93,7 @@ class Notifier < ActionMailer::Base
 
       mail(
         :to => [user.email],
-        :subject => prefixes.upcase + t(:'notifier.unanswered_findings.title')
+        :subject => prefixes.upcase + t('notifier.unanswered_findings.title')
       )
     else
       raise 'Findings and user mismatch'
@@ -106,7 +106,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => users.map(&:email),
-      :subject => prefix + t(:'notifier.unanswered_finding_to_manager.title')
+      :subject => prefix + t('notifier.unanswered_finding_to_manager.title')
     )
   end
 
@@ -124,7 +124,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [new_users, old_users].flatten.compact.map(&:email),
       :subject => prefixes.upcase + t(
-        :'notifier.reassigned_findings.title',
+        'notifier.reassigned_findings.title',
         :count => findings_array.size
       )
     )
@@ -137,7 +137,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefix.upcase + t(:'notifier.blank_password.title')
+      :subject => prefix.upcase + t('notifier.blank_password.title')
     )
   end
 
@@ -153,7 +153,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
-      :subject => prefixes.upcase + t(:'notifier.changes_notification.title')
+      :subject => prefixes.upcase + t('notifier.changes_notification.title')
     )
   end
 
@@ -161,7 +161,7 @@ class Notifier < ActionMailer::Base
     raise 'lala' if options.has_key?(:notify)
     prefix = "[#{conclusion_review.review.organization.prefix}] "
     title = I18n.t(
-      :'notifier.conclusion_review_notification.title',
+      'notifier.conclusion_review_notification.title',
       :review => conclusion_review.review.identification
     )
     elements = [
@@ -169,14 +169,14 @@ class Notifier < ActionMailer::Base
     ]
 
     if options[:include_score_sheet]
-      elements << "*#{I18n.t(:'conclusion_review.score_sheet')}*"
+      elements << "*#{I18n.t('conclusion_review.score_sheet')}*"
     end
 
     if options[:include_global_score_sheet]
-      elements << "*#{I18n.t(:'conclusion_review.global_score_sheet')}*"
+      elements << "*#{I18n.t('conclusion_review.global_score_sheet')}*"
     end
 
-    body_title = I18n.t(:'notifier.conclusion_review_notification.body_title',
+    body_title = I18n.t('notifier.conclusion_review_notification.body_title',
       :elements => elements.to_sentence)
     
     @conclusion_review = conclusion_review
@@ -211,7 +211,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [user.email],
       :subject => prefixes.upcase + t(
-        :'notifier.findings_expiration_warning.title'
+        'notifier.findings_expiration_warning.title'
       )
     )
   end
