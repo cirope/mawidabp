@@ -369,8 +369,7 @@ class Review < ActiveRecord::Base
       unless coi.must_be_approved?
         self.can_be_approved_by_force = false
         errors << [
-          "#{ControlObjectiveItem.model_name.human}: #{coi.control_objective_text}",
-          coi.approval_errors
+          "#{ControlObjectiveItem.model_name.human}: #{coi}", coi.approval_errors
         ]
       end
     end
@@ -554,10 +553,10 @@ class Review < ActiveRecord::Base
       c.width = pdf.percent_width(15)
     end
 
-    self.control_objective_items_for_score.each do |coi|
+    self.control_objective_items.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
-        coi.control_objective_text, coi.effectiveness || 0, coi.relevance || 0
+        coi.to_s, coi.effectiveness || 0, coi.relevance || 0, coi.exclude_from_score
       ]
     end
 
@@ -568,15 +567,19 @@ class Review < ActiveRecord::Base
     }
 
     process_controls.each do |process_control, coi_data|
-      coi_relevance_count = coi_data.inject(0) { |t, e| t + e[2] }.to_f
+      coi_relevance_count = coi_data.inject(0) do |t, e|
+        e[3] ? t : t + e[2]
+      end.to_f
       effectiveness_average = coi_data.inject(0) do |t, e|
-        t + (e[1] * e[2])  / coi_relevance_count
+        e[3] ? t : t + (e[1] * e[2])  / coi_relevance_count
       end
+      exclude_from_score = coi_data.all? { |e| e[3] }
 
       column_data << {
         'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
         'relevance' => '',
-        'effectiveness' => "#{effectiveness_average.round}%**"
+        'effectiveness' =>
+          exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
       }
 
       coi_data.each do |coi|
@@ -584,8 +587,8 @@ class Review < ActiveRecord::Base
           'name' =>
             "        <C:bullet /> <i>#{ControlObjectiveItem.model_name.human}: " +
             "#{coi[0]}</i>".to_iso,
-          'relevance' => "<i>#{coi[2]}</i>".to_iso,
-          'effectiveness' => "<i>#{coi[1].round}%</i>"
+          'relevance' => coi[3] ? '-' : "<i>#{coi[2]}</i>".to_iso,
+          'effectiveness' => coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
         }
       end
     end
@@ -749,10 +752,10 @@ class Review < ActiveRecord::Base
       c.width = pdf.percent_width(30)
     end
     
-    self.control_objective_items_for_score.each do |coi|
+    self.control_objective_items.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
-        coi.control_objective_text, coi.effectiveness || 0, coi.relevance || 0
+        coi.to_s, coi.effectiveness || 0, coi.relevance || 0, coi.exclude_from_score
       ]
     end
 
@@ -762,14 +765,18 @@ class Review < ActiveRecord::Base
     }
 
     process_controls.each do |process_control, coi_data|
-      coi_relevance_count = coi_data.inject(0) { |t, e| t + e[2] }.to_f
+      coi_relevance_count = coi_data.inject(0) do |t, e|
+        e[3] ? t : t + e[2]
+      end.to_f
       effectiveness_average = coi_data.inject(0) do |t, e|
-        t + (e[1] * e[2])  / coi_relevance_count
+        e[3] ? t : t + (e[1] * e[2])  / coi_relevance_count
       end
+      exclude_from_score = coi_data.all? { |e| e[3] }
 
       column_data << {
         'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
-        'effectiveness' => "#{effectiveness_average.round}%**"
+        'effectiveness' =>
+          exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
       }
     end
 

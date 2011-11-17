@@ -403,6 +403,7 @@ es:
     has_work_papers: "Papeles de trabajo"
     not_rated: "No evaluado"
     excluded_from_score: "No se tiene en cuenta en la calificación del informe"
+    not_applicable: "No aplica"
     errors:
       not_finished: "no está terminado"
       without_score: "sin calificar"

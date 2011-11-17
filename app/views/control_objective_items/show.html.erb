@@ -6,7 +6,7 @@
 
   <div class="show_item">
     <b><%= ControlObjectiveItem.human_attribute_name :control_objective_text %>:</b>
-    <%= simple_format h(@control_objective_item.control_objective_text) %>
+    <%= simple_format h(@control_objective_item.to_s) %>
   </div>
 
   <div class="show_item">

@@ -40,7 +40,7 @@
     </p>
     <ul class="raw_list">
       <% cois.sort.each do |coi| %>
-        <li><%= coi.control_objective_text %></li>
+        <li><%= coi.to_s %></li>
       <% end %>
     </ul>
   <% end %>

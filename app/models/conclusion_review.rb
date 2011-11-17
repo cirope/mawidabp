@@ -182,8 +182,8 @@ class ConclusionReview < ActiveRecord::Base
           "<i>#{process_control.name}</i></b>", :justification => :full
 
       cois.sort.each do |coi|
-        pdf.text "<C:bullet/> #{coi.control_objective_text}",
-          :left => PDF_FONT_SIZE * 2, :justification => :full
+        pdf.text "<C:bullet/> #{coi}", :left => PDF_FONT_SIZE * 2,
+          :justification => :full
       end
     end
 
@@ -558,13 +558,14 @@ class ConclusionReview < ActiveRecord::Base
       cois.each do |coi|
         pdf.move_pointer PDF_FONT_SIZE
         pdf.add_description_item(
-          "<C:bullet/> #{ControlObjectiveItem.model_name.human}",
-          coi.control_objective_text, PDF_FONT_SIZE * 2, false)
+          "<C:bullet/> #{ControlObjectiveItem.model_name.human}", coi.to_s,
+          PDF_FONT_SIZE * 2, false
+        )
 
         unless coi.work_papers.blank?
           pdf.move_pointer PDF_FONT_SIZE
           pdf.text "<C:disc/> <b>#{I18n.t(
-            :'conclusion_review.workflow.control_objective_work_papers')}</b>:",
+            'conclusion_review.workflow.control_objective_work_papers')}</b>:",
               :left => PDF_FONT_SIZE * 4
 
           coi.work_papers.each do |wp|
@@ -575,7 +576,7 @@ class ConclusionReview < ActiveRecord::Base
         unless (use_finals ? coi.final_weaknesses : coi.weaknesses).blank?
           pdf.move_pointer PDF_FONT_SIZE
           pdf.text "<C:disc/> <b>#{I18n.t(
-            :'conclusion_review.workflow.control_objective_weaknesses')}</b>:",
+            'conclusion_review.workflow.control_objective_weaknesses')}</b>:",
               :left => PDF_FONT_SIZE * 4
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
@@ -585,7 +586,7 @@ class ConclusionReview < ActiveRecord::Base
             unless w.work_papers.blank?
               pdf.move_pointer PDF_FONT_SIZE
               pdf.text "<C:bullet/> <b>#{I18n.t(
-                :'conclusion_review.workflow.weakness_work_papers')}</b>:",
+                'conclusion_review.workflow.weakness_work_papers')}</b>:",
                   :left => PDF_FONT_SIZE * 8
 
               w.work_papers.each do |wp|
@@ -599,7 +600,7 @@ class ConclusionReview < ActiveRecord::Base
 
         unless (use_finals ? coi.final_oportunities : coi.oportunities).blank?
           title = I18n.t(
-            :'conclusion_review.workflow.control_objective_oportunities')
+            'conclusion_review.workflow.control_objective_oportunities')
 
           pdf.move_pointer PDF_FONT_SIZE
           pdf.text "<C:disc/> <b>#{title}</b>:", :left => PDF_FONT_SIZE * 4
@@ -611,7 +612,7 @@ class ConclusionReview < ActiveRecord::Base
             unless o.work_papers.blank?
               pdf.move_pointer PDF_FONT_SIZE
               pdf.text "<C:bullet/> <b>#{I18n.t(
-                :'conclusion_review.workflow.oportunity_work_papers')}</b>:",
+                'conclusion_review.workflow.oportunity_work_papers')}</b>:",
                   :left => PDF_FONT_SIZE * 8
 
               o.work_papers.each do |wp|
@@ -805,7 +806,7 @@ class ConclusionReview < ActiveRecord::Base
         pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.add_title I18n.t(
-          :'conclusion_review.findings_follow_up.weakness_title_in_singular'),
+          'conclusion_review.findings_follow_up.weakness_title_in_singular'),
           (PDF_FONT_SIZE * 1.5).round, :center
 
         pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
@@ -820,7 +821,7 @@ class ConclusionReview < ActiveRecord::Base
         pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)
 
         pdf.add_title I18n.t(
-          :'conclusion_review.findings_follow_up.oportunity_title_in_singular'),
+          'conclusion_review.findings_follow_up.oportunity_title_in_singular'),
           (PDF_FONT_SIZE * 1.5).round, :center
 
         pdf.move_pointer((PDF_FONT_SIZE * 1.5).round)

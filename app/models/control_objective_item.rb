@@ -72,6 +72,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
   validates :audit_date, :relevance, :auditor_comment, :presence => true,
     :if => :finished
+  validates :auditor_comment, :presence => true, :if => :exclude_from_score
   validate :score_completion
   
   # Relaciones
@@ -105,6 +106,14 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     self.finished ||= false
     self.build_control unless self.control
+  end
+  
+  def to_s
+    if self.exclude_from_score
+      post_fix = " (#{I18n.t('control_objective_item.not_applicable')})"
+    end
+    
+    "#{self.control_objective_text.chomp}#{post_fix}"
   end
   
   def as_json(options = nil)
@@ -172,6 +181,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def effectiveness
+    return 0 if self.exclude_from_score
+    
     organization_id = GlobalModelConfig.current_organization_id ||
       self.review.try(:period).try(:organization_id)
     parameter_qualifications = self.get_parameter(
@@ -204,44 +215,44 @@ class ControlObjectiveItem < ActiveRecord::Base
     errors = []
 
     if !self.finished?
-      errors << I18n.t(:'control_objective_item.errors.not_finished')
+      errors << I18n.t('control_objective_item.errors.not_finished')
     end
 
     if !self.design_score && !self.compliance_score && !self.sustantive_score
-      errors << I18n.t(:'control_objective_item.errors.without_score')
+      errors << I18n.t('control_objective_item.errors.without_score')
     end
 
     if self.relevance && self.relevance <= 0
-      errors << I18n.t(:'control_objective_item.errors.without_relevance')
+      errors << I18n.t('control_objective_item.errors.without_relevance')
     end
 
     if self.audit_date.blank?
-      errors << I18n.t(:'control_objective_item.errors.without_audit_date')
+      errors << I18n.t('control_objective_item.errors.without_audit_date')
     end
 
     if self.control.try(:effects).blank?
-      errors << I18n.t(:'control_objective_item.errors.without_effects')
+      errors << I18n.t('control_objective_item.errors.without_effects')
     end
 
     if self.control.try(:control).blank?
-      errors << I18n.t(:'control_objective_item.errors.without_controls')
+      errors << I18n.t('control_objective_item.errors.without_controls')
     end
 
     if self.auditor_comment.blank?
-      errors << I18n.t(:'control_objective_item.errors.without_auditor_comment')
+      errors << I18n.t('control_objective_item.errors.without_auditor_comment')
     end
 
     if self.design_score && self.control.try(:design_tests).blank?
-      errors << I18n.t(:'control_objective_item.errors.without_design_tests')
+      errors << I18n.t('control_objective_item.errors.without_design_tests')
     end
 
     if self.compliance_score && self.control.try(:compliance_tests).blank?
       errors << I18n.t(
-        :'control_objective_item.errors.without_compliance_tests')
+        'control_objective_item.errors.without_compliance_tests')
     end
 
     if self.sustantive_score && self.control.try(:sustantive_tests).blank?
-      errors << I18n.t(:'control_objective_item.errors.without_sustantive_tests')
+      errors << I18n.t('control_objective_item.errors.without_sustantive_tests')
     end
 
     (@approval_errors = errors).blank?
@@ -249,7 +260,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def can_be_modified?
     if self.is_in_a_final_review? && self.changed?
-      msg = I18n.t(:'control_objective_item.readonly')
+      msg = I18n.t('control_objective_item.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
@@ -259,7 +270,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def enable_control_validations
-    if self.finished
+    if self.finished && !self.exclude_from_score
       self.control.validates_presence_of_control = true
       self.control.validates_presence_of_effects = true
 
@@ -340,8 +351,8 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     pdf.add_description_item(ProcessControl.model_name.human,
       self.process_control.try(:name), 0, false, (PDF_FONT_SIZE * 1.25).round)
-    pdf.add_description_item(ControlObjectiveItem.model_name.human,
-      self.control_objective_text, 0, false, (PDF_FONT_SIZE * 1.25).round)
+    pdf.add_description_item(ControlObjectiveItem.model_name.human, self.to_s, 0,
+      false, (PDF_FONT_SIZE * 1.25).round)
 
     pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
 
@@ -378,7 +389,7 @@ class ControlObjectiveItem < ActiveRecord::Base
           :font_size => PDF_FONT_SIZE
       end
     else
-      pdf.add_footnote(I18n.t(:'control_objective_item.without_work_papers'))
+      pdf.add_footnote I18n.t('control_objective_item.without_work_papers')
     end
 
     pdf.custom_save_as(self.pdf_name, ControlObjectiveItem.table_name,
@@ -402,8 +413,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   def pdf_column_data(finding, pc_id)
     weakness = finding.kind_of?(Weakness)
     head = ''
-    body = "<b>#{ControlObjective.model_name.human}:</b> " +
-      "#{self.control_objective_text.chomp}\n"
+    body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
 
     unless finding.review_code.blank?
       head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
@@ -417,7 +427,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     unless finding.description.blank?
       body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
-        finding.description.chomp
+        "#{finding.description.chomp}\n"
     end
 
     if weakness && !finding.risk_text.blank?

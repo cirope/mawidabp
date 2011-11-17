@@ -241,11 +241,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal 8, @control_objective_item.errors.count
     assert_equal [error_message_from_model(@control_objective_item,
         :design_score, :blank)], @control_objective_item.errors[:design_score]
-  assert_equal [error_message_from_model(@control_objective_item,
-        :compliance_score, :blank)],
-    @control_objective_item.errors[:compliance_score]
-  assert_equal [error_message_from_model(@control_objective_item,
-        :sustantive_score, :blank)],
+    assert_equal [error_message_from_model(@control_objective_item,
+          :compliance_score, :blank)],
+      @control_objective_item.errors[:compliance_score]
+    assert_equal [error_message_from_model(@control_objective_item,
+          :sustantive_score, :blank)],
     @control_objective_item.errors[:sustantive_score]
     assert_equal [error_message_from_model(@control_objective_item,
       :audit_date, :blank)], @control_objective_item.errors[:audit_date]
@@ -268,6 +268,21 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@control_objective_item.control,
       :design_tests, :blank)], @control_objective_item.control.errors[
       :design_tests]
+  end
+  
+  test 'validations when is excluded from score' do
+    @control_objective_item.finished = false
+    @control_objective_item.auditor_comment = '   '
+    
+    assert @control_objective_item.valid?
+    
+    @control_objective_item.exclude_from_score = true
+    
+    assert @control_objective_item.invalid?
+    assert_equal 1, @control_objective_item.errors.count
+    assert_equal [
+      error_message_from_model(@control_objective_item, :auditor_comment, :blank)
+    ], @control_objective_item.errors[:auditor_comment]
   end
 
   test 'effectiveness with design and compliance scores' do

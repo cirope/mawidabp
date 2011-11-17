@@ -14,7 +14,7 @@
   <% if @finding.control_objective_item %>
     <div class="show_item">
       <b><%= ControlObjective.model_name.human %></b>:
-      <%= simple_format h("#{@finding.control_objective_item.control_objective_text} (#{@finding.control_objective_item.process_control.name})") %>
+      <%= simple_format h("#{@finding.control_objective_item.to_s} (#{@finding.control_objective_item.process_control.name})") %>
     </div>
   <% end %>
   <div class="show_item">

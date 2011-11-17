@@ -597,7 +597,7 @@ class Finding < ActiveRecord::Base
     text << "\n<b>#{Finding.human_attribute_name(:state)}</b>: "
     text << self.state_text
     text << "\n<b>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</b>: "
-    text << self.control_objective_item.control_objective_text
+    text << self.control_objective_item.to_s
   end
   
   def review_text
@@ -1054,7 +1054,7 @@ class Finding < ActiveRecord::Base
 
     pdf.add_description_item(
       self.class.human_attribute_name('control_objective_item_id'),
-      self.control_objective_item.control_objective_text, 0, false)
+      self.control_objective_item.to_s, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('review_code'),
       self.review_code, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('description'),
@@ -1163,9 +1163,9 @@ class Finding < ActiveRecord::Base
     
     pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)
-    pdf.add_description_item(Finding.human_attribute_name(
-        :control_objective_item_id),
-      self.control_objective_item.control_objective_text, 0, false)
+    pdf.add_description_item(
+      Finding.human_attribute_name(:control_objective_item_id),
+      self.control_objective_item.to_s, 0, false)
     pdf.add_description_item(self.class.human_attribute_name(:description),
       self.description, 0, false)
     pdf.add_description_item(self.class.human_attribute_name(:state),

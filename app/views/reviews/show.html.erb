@@ -60,7 +60,7 @@
     <h1><%= pc.name %></h1>
 
     <% cois.sort.each do |coi| %>
-      <h2><%=h coi.control_objective_text %></h2>
+      <h2><%=h coi.to_s %></h2>
       <div style="margin: 1em;">
         <div class="show_item">
           <b><%= ControlObjectiveItem.human_attribute_name :relevance %>:</b>

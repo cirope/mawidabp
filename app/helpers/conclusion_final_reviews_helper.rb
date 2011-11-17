@@ -86,8 +86,7 @@ module ConclusionFinalReviewsHelper
 
   def weakness_row_data(coi, finding, html_class = nil)
     weakness = finding.kind_of?(Weakness)
-    body_rows = ["<b>#{ControlObjective.model_name.human}:</b> " +
-      "#{h(coi.control_objective_text)}"]
+    body_rows = ["<b>#{ControlObjective.model_name.human}:</b> #{h(coi.to_s)}"]
 
     unless finding.review_code.blank?
       body_rows << "<b>#{finding.class.human_attribute_name(

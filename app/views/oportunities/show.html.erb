@@ -6,7 +6,7 @@
 
   <div class="show_item">
     <b><%= ControlObjective.model_name.human %>:</b>
-    <%= simple_format h(@oportunity.control_objective_item.try(:control_objective_text)) %>
+    <%= simple_format h(@oportunity.control_objective_item.try(:to_s)) %>
   </div>
   
   <div class="show_item">
