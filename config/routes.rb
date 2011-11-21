@@ -82,6 +82,7 @@ MawidaApp::Application.routes.draw do
   end
 
   [
+    'qa_indicators', 'create_qa_indicators',
     'synthesis_report', 'create_synthesis_report',
     'control_objective_stats', 'create_control_objective_stats',
     'process_control_stats', 'create_process_control_stats'

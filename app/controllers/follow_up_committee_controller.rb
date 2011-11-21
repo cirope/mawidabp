@@ -20,7 +20,7 @@ class FollowUpCommitteeController < ApplicationController
   #
   # * GET /follow_up_committee
   def index
-    @title = t :'follow_up_committee.index_title'
+    @title = t 'follow_up_committee.index_title'
 
     respond_to do |format|
       format.html
@@ -32,7 +32,7 @@ class FollowUpCommitteeController < ApplicationController
   #
   # * GET /follow_up_committee/synthesis_report
   def synthesis_report
-    @title = t :'follow_up_committee.synthesis_report_title'
+    @title = t 'follow_up_committee.synthesis_report_title'
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'review', 'score',
@@ -77,8 +77,8 @@ class FollowUpCommitteeController < ApplicationController
           'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
-          'weaknesses_count' => ["#{t(:'review.weaknesses_count')} (3)", 12],
-          'oportunities_count' => ["#{t(:'review.oportunities_count')} (4)", 12]}
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
+          'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]}
         column_data = []
         review_scores = []
         repeated_count = 0
@@ -121,14 +121,14 @@ class FollowUpCommitteeController < ApplicationController
             end
 
             weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-              t(:'follow_up_committee.synthesis_report.without_weaknesses') :
+              t('follow_up_committee.synthesis_report.without_weaknesses') :
               @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
             process_control_text = process_controls.sort do |pc1, pc2|
               pc1[1] <=> pc2[1]
             end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
             oportunities_count_text = c_r.review.oportunities.not_repeated.count > 0 ?
               c_r.review.oportunities.not_repeated.count.to_s :
-              t(:'follow_up_committee.synthesis_report.without_oportunities')
+              t('follow_up_committee.synthesis_report.without_oportunities')
             repeated_count += c_r.review.oportunities.repeated.count
 
             review_scores << c_r.review.score
@@ -138,7 +138,7 @@ class FollowUpCommitteeController < ApplicationController
               'score' => c_r.review.reload.score_text,
               'process_control' => process_control_text,
               'weaknesses_count' => @risk_levels.blank? ?
-                t(:'follow_up_committee.synthesis_report.without_weaknesses') :
+                t('follow_up_committee.synthesis_report.without_weaknesses') :
                 weaknesses_count_text,
               'oportunities_count' => oportunities_count_text
             }
@@ -178,8 +178,8 @@ class FollowUpCommitteeController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'follow_up_committee.period.title'),
-      t(:'follow_up_committee.period.range',
+      t('follow_up_committee.period.title'),
+      t('follow_up_committee.period.range',
         :from_date => I18n.l(@from_date, :format => :long),
         :to_date => I18n.l(@to_date, :format => :long)))
 
@@ -208,13 +208,13 @@ class FollowUpCommitteeController < ApplicationController
         pdf.move_pointer PDF_FONT_SIZE
 
         pdf.add_title(
-          t(:'follow_up_committee.synthesis_report.organization_score',
+          t('follow_up_committee.synthesis_report.organization_score',
             :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
 
         pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
 
         pdf.text(
-          t(:'follow_up_committee.synthesis_report.organization_score_note',
+          t('follow_up_committee.synthesis_report.organization_score_note',
             :audit_types =>
               @audits_by_business_unit[period].map { |data|
                 data[:name]
@@ -234,10 +234,10 @@ class FollowUpCommitteeController < ApplicationController
         end
 
         if !data[:external] && !@internal_title_showed
-          title = t :'follow_up_committee.synthesis_report.internal_audit_weaknesses'
+          title = t 'follow_up_committee.synthesis_report.internal_audit_weaknesses'
           @internal_title_showed = true
         elsif data[:external] && !@external_title_showed
-          title = t :'follow_up_committee.synthesis_report.external_audit_weaknesses'
+          title = t 'follow_up_committee.synthesis_report.external_audit_weaknesses'
           @external_title_showed = true
         end
 
@@ -284,11 +284,11 @@ class FollowUpCommitteeController < ApplicationController
           scores = data[:review_scores]
 
           unless scores.blank?
-            title = t(:'follow_up_committee.synthesis_report.generic_score_average',
+            title = t('follow_up_committee.synthesis_report.generic_score_average',
               :audit_type => data[:name])
             text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
           else
-            text = t(:'conclusion_committee_report.synthesis_report.without_audits_in_the_period')
+            text = t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')
           end
 
           pdf.move_pointer PDF_FONT_SIZE
@@ -296,35 +296,218 @@ class FollowUpCommitteeController < ApplicationController
           pdf.text text, :font_size => PDF_FONT_SIZE
           
           if data[:repeated_count] > 0
-            pdf.text(t(:'follow_up_committee.synthesis_report.repeated_count',
+            pdf.text(t('follow_up_committee.synthesis_report.repeated_count',
                 :count => data[:repeated_count]), :font_size => PDF_FONT_SIZE)
           end
         else
-          pdf.text t(:'follow_up_committee.synthesis_report.without_audits_in_the_period')
+          pdf.text t('follow_up_committee.synthesis_report.without_audits_in_the_period')
         end
       end
     end
 
     unless @filters.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'follow_up_committee.applied_filters',
+      pdf.text t('follow_up_committee.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
     pdf.move_pointer PDF_FONT_SIZE
-    pdf.text t(:'follow_up_committee.synthesis_report.references',
+    pdf.text t('follow_up_committee.synthesis_report.references',
       :risk_types => @risk_levels.to_sentence),
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
-    pdf.custom_save_as(t(:'follow_up_committee.synthesis_report.pdf_name',
+    pdf.custom_save_as(t('follow_up_committee.synthesis_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'follow_up_committee.synthesis_report.pdf_name',
+      t('follow_up_committee.synthesis_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
+  end
+  
+  # Crea un PDF con un resumen de indicadores de calidad para un determinado
+  # rango de fechas
+  #
+  # * GET /follow_up_committees/qa_indicators
+  def qa_indicators
+    @title = t('follow_up_committee.qa_indicators_title')
+    @from_date, @to_date = *make_date_range(params[:qa_indicators])
+    @periods = periods_for_interval
+    @columns = [
+      ['indicator', t('follow_up_committee.qa_indicators.indicator')],
+      ['value', t('follow_up_committee.qa_indicators.value')]
+    ]
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(
+      @from_date, @to_date
+    )
+    params = { :start => @from_date, :end => @to_date }
+    @indicators = {}
+
+    @periods.each do |period|
+      indicators = {}
+      cfrs = conclusion_reviews.for_period(period)
+      
+      # Production level
+      reviews_count = period.plans.inject(0.0) do |pt, p|
+        pt + p.plan_items.where(
+          'plan_items.start >= :start AND plan_items.end <= :end', params
+        ).select { |pi| pi.review.try(:has_final_review?) }.size
+      end
+      plan_items_count = period.plans.inject(0.0) do |pt, p|
+        pt + p.plan_items.where(
+          'plan_items.start >= :start AND plan_items.end <= :end', params
+        ).count
+      end
+      
+      indicators[:production_level] = plan_items_count > 0 ?
+        (reviews_count / plan_items_count.to_f) * 100 : 100
+      
+      # Highest risk weaknesses solution rate
+      pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.weaknesses.with_highest_risk.where(
+          :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
+        ).count
+      end
+
+      resolved_highest_risk = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.weaknesses.with_highest_risk.where(
+          :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
+        ).count
+      end
+
+      indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
+        (resolved_highest_risk / pending_highest_risk.to_f) * 100 : 100
+      
+      # Medium risk weaknesses solution rate
+      pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.weaknesses.where(
+          'state IN(:state) AND (highest_risk - 1) = risk',
+          :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values
+        ).count
+      end
+
+      resolved_medium_risk = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.weaknesses.where(
+          'state IN(:state) AND (highest_risk - 1) = risk',
+          :state => Weakness::STATUS.except(Weakness::EXCLUDE_FROM_REPORTS_STATUS).values - Weakness::PENDING_STATUS
+        ).count
+      end
+
+      indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
+        (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
+      
+      # Reviews score average
+      indicators[:score_average] = cfrs.size > 0 ?
+        (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
+      
+      # Work papers digitalization
+      wps = WorkPaper.where(
+        'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
+        params.merge(:organization_id => GlobalModelConfig.current_organization_id)
+      )
+      
+      indicators[:digitalized] = wps.size > 0 ?
+        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : 100
+
+      @indicators[period] ||= []
+      @indicators[period] << {
+        :column_data => indicators.map do |k, v|
+          {
+            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{k}"),
+            'value' => "#{'%.1f' % v}%"
+          }
+        end
+      }
+    end
+  end
+
+  # Crea un PDF con un resumen de indicadores de calidad para un determinado
+  # rango de fechas
+  #
+  # * POST /follow_up_committees/create_qa_indicators
+  def create_qa_indicators
+    self.qa_indicators
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_description_item(
+      t('follow_up_committee.period.title'),
+      t('follow_up_committee.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    @periods.each do |period|
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
+        (PDF_FONT_SIZE * 1.25).round, :justify
+      pdf.move_pointer PDF_FONT_SIZE
+      
+      @indicators[period].each do |data|
+        columns = {}
+        column_data = []
+
+        @columns.each do |col_name|
+          columns[col_name.first] = PDF::SimpleTable::Column.new(col_name.first) do |column|
+            column.heading = col_name.last
+            column.width = pdf.percent_width 50
+          end
+        end
+        
+        data[:column_data].each do |row|
+          new_row = {}
+
+          row.each do |column_name, column_content|
+            new_row[column_name] = column_content.to_iso
+          end
+
+          column_data << new_row
+        end
+
+        unless column_data.blank?
+          PDF::SimpleTable.new do |table|
+            table.width = pdf.page_usable_width
+            table.columns = columns
+            table.data = column_data
+            table.column_order = @columns.map(&:first)
+            table.split_rows = true
+            table.row_gap = PDF_FONT_SIZE
+            table.font_size = (PDF_FONT_SIZE * 0.75).round
+            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+            table.heading_font_size = PDF_FONT_SIZE
+            table.shade_headings = true
+            table.position = :left
+            table.orientation = :right
+            table.render_on pdf
+          end
+        else
+          pdf.text(
+            t('follow_up_committee.qa_indicators.without_audits_in_the_period'))
+        end
+      end
+    end
+
+    pdf.custom_save_as(
+      t('follow_up_committee.qa_indicators.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
+
+    redirect_to PDF::Writer.relative_path(
+      t('follow_up_committee.qa_indicators.pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
   end
 
   private
