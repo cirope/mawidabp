@@ -6,7 +6,7 @@ class BusinessUnit < ActiveRecord::Base
   include ParameterSelector
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
   }
   
   # Alias de atributos

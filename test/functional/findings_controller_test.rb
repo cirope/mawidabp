@@ -372,6 +372,7 @@ class FindingsControllerTest < ActionController::TestCase
               :new_1 => {
                 :answer => 'New answer',
                 :auditor_comments => 'New audited comments',
+                :commitment_date => I18n.l(Date.today),
                 :user_id => users(:audited_user).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,

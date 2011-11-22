@@ -4,7 +4,7 @@ class BusinessUnitType < ActiveRecord::Base
   trimmed_fields :name, :business_unit_label, :project_label
 
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
   }
 
   # Named scopes

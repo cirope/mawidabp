@@ -5,7 +5,7 @@ class ProcedureControlSubitem < ActiveRecord::Base
   alias_attribute :label, :control_objective_text
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
   }
   
   before_validation(:on => :create) { fill_control_objective_text }

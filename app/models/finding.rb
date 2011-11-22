@@ -33,7 +33,7 @@ class Finding < ActiveRecord::Base
 
   acts_as_tree
   has_paper_trail :meta => {
-    :organization_id => proc { GlobalModelConfig.current_organization_id }
+    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
   }
 
   STATUS = {
@@ -695,7 +695,8 @@ class Finding < ActiveRecord::Base
         title = I18n.t('finding.responsibility_removed',
           :class_name => self.class.model_name.human.downcase,
           :review_code => self.review_code,
-          :review => self.review.try(:identification))
+          :review => self.review.try(:identification)
+        )
 
         Notifier.changes_notification(removed, :title => title).deliver
       end

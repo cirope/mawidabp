@@ -403,6 +403,7 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       :answer => 'New audited answer',
+      :commitment_date => Date.today,
       :user => users(:audited_user)
     )
 
@@ -411,7 +412,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !finding.notifications.not_confirmed.reload.any? { |n| n.user.can_act_as_audited? }
     assert_equal users(:audited_user).id,
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
-    assert finding.save
+    assert finding.save, finding.errors.full_messages.join('; ')
   end
   
   test 'unconfirmed with empty audited response must not change' do
@@ -551,13 +552,15 @@ class FindingTest < ActiveSupport::TestCase
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
+    ActionMailer::Base.deliveries.clear
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.update_attributes(:description => 'Updated description')
     end
 
-    @finding.finding_user_assignments.first.mark_for_destruction
+    @finding.finding_user_assignments.each do |fua|
+      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+    end
     @finding.finding_user_assignments.build(:user => new_user)
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
@@ -573,18 +576,21 @@ class FindingTest < ActiveSupport::TestCase
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
+    ActionMailer::Base.deliveries.clear
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      assert @finding.update_attributes(:description => 'Updated description')
+      assert @finding.update_attributes(:description => 'Updated description'),
+        @finding.errors.full_messages.join('; ')
     end
 
-    @finding.finding_user_assignments.first.mark_for_destruction
+    @finding.finding_user_assignments.each do |fua|
+      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+    end
     @finding.finding_user_assignments.build(:user => new_user)
     @finding.avoid_changes_notification = true
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      assert @finding.save
+      assert @finding.save, @finding.errors.full_messages.join('; ')
     end
   end
 
@@ -609,13 +615,15 @@ class FindingTest < ActiveSupport::TestCase
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
+    ActionMailer::Base.deliveries.clear
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert finding.update_attributes(:description => 'Updated description')
     end
 
-    finding.finding_user_assignments.first.mark_for_destruction
+    finding.finding_user_assignments.each do |fua|
+      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+    end
     finding.finding_user_assignments.build(:user => new_user)
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
@@ -628,9 +636,11 @@ class FindingTest < ActiveSupport::TestCase
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
+    ActionMailer::Base.deliveries.clear
 
-    @finding.finding_user_assignments.first.mark_for_destruction
+    @finding.finding_user_assignments.each do |fua|
+      fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
+    end
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.save

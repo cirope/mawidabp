@@ -98,7 +98,7 @@ class UserTest < ActiveSupport::TestCase
     assert_no_difference('User.count') { audited.destroy }
 
     assert_equal 1, audited.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       audited.errors.full_messages.join
 
     audited.findings.delete audited.findings.all_for_reallocation
@@ -127,7 +127,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert user.enable?
     assert_equal 1, user.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       user.errors.full_messages.first
   end
 
@@ -154,7 +154,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert user.enable?
     assert_equal 1, user.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       user.errors.full_messages.first
 
     assert_difference 'user.reviews.count', -1 do
@@ -450,8 +450,7 @@ class UserTest < ActiveSupport::TestCase
     auditor_user = User.find users(:auditor_user).id
 
     assert !auditor_user.findings.all_for_reallocation.empty?
-    assert !auditor_user.reviews.list_without_final_review(
-      organizations(:default_organization)).empty?
+    assert !auditor_user.reviews.list_without_final_review.empty?
 
     assert_nothing_raised do
       assert auditor_user.release_for_all_pending_findings(
@@ -459,19 +458,16 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert auditor_user.findings(true).all_for_reallocation.empty?
-    assert auditor_user.reviews(true).list_without_final_review(
-      organizations(:default_organization)).empty?
+    assert auditor_user.reviews(true).list_without_final_review.empty?
   end
 
   test 'try to release all pending findings for a unique audited' do
     audited_user = User.find users(:audited_user).id
     old_findings_count = audited_user.findings.all_for_reallocation.count
-    old_reviews_count = audited_user.reviews.list_without_final_review(
-      organizations(:default_organization)).count
+    old_reviews_count = audited_user.reviews.list_without_final_review.count
 
     assert !audited_user.findings.all_for_reallocation.empty?
-    assert !audited_user.reviews.list_without_final_review(
-      organizations(:default_organization)).empty?
+    assert !audited_user.reviews.list_without_final_review.empty?
 
     assert_nothing_raised do
       assert !audited_user.release_for_all_pending_findings(
@@ -479,14 +475,13 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert !audited_user.findings(true).all_for_reallocation.empty?
-    assert !audited_user.reviews(true).list_without_final_review(
-      organizations(:default_organization)).empty?
+    assert !audited_user.reviews(true).list_without_final_review.empty?
     assert_equal old_findings_count,
       audited_user.findings.all_for_reallocation.count
     assert_equal old_reviews_count, audited_user.reviews.
-      list_without_final_review(organizations(:default_organization)).count
+      list_without_final_review.count
     assert_equal 1, audited_user.errors.size
-    assert_equal I18n.t(:'user.user_release_failed'),
+    assert_equal I18n.t('user.user_release_failed'),
       audited_user.errors.full_messages.first
   end
 

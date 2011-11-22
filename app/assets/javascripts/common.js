@@ -1,25 +1,25 @@
-// Mantiene el estado de la aplicación
+// Mantiene el estado de la aplicacion
 var State = {
-  // Hash con el contenido del menú
+  // Hash con el contenido del menu
   menu: {},
-  // Contador para generar un ID único
+  // Contador para generar un ID unico
   newIdCounter: 0,
-  // Registra la variación en el contenido de los formularios
+  // Registra la variacion en el contenido de los formularios
   unsavedData: false,
   // Texto con la advertencia de que hay datos sin guardar
   unsavedDataWarning: undefined,
   // Variable con los mensajes que se deben mostrar diferidos
   showMessages: [],
-  // Variable para indicar si la sesión ha expirado
+  // Variable para indicar si la sesion ha expirado
   sessionExpire: false,
-  // Mensaje de error para mostrar cuando falla la validación en línea
+  // Mensaje de error para mostrar cuando falla la validacion en linea
   validationFailedMessage: undefined
 }
 
 // Utilidades para manipular algunos comportamientos del navegador
 var BrowserManipulation = {
   /**
-     * Carga la nueva URL con los parámetros indicados (debe ser un Hash)
+     * Carga la nueva URL con los parametros indicados (debe ser un Hash)
      */
   changeLocation: function(baseUrl, parameters) {
     var params = Util.merge(jQuery.url(undefined, true).param(), parameters);
@@ -43,7 +43,7 @@ var BrowserManipulation = {
 var EventHandler = {
 
   /**
-     * Agrega un ítem anidado
+     * Agrega un item anidado
      */
   addNestedItem: function(e) {
     var template = eval(e.data('template'));
@@ -52,7 +52,7 @@ var EventHandler = {
   },
 
   /**
-     * Agrega un subitem dentro de un ítem
+     * Agrega un subitem dentro de un item
      */
   addNestedSubitem: function(e) {
     var parent = '.' + e.data('parent') + ':first';
@@ -69,7 +69,7 @@ var EventHandler = {
 
   /**
      * Oculta un elemento (agregado con alguna de las funciones para agregado
-     * dinámico)
+     * dinamico)
      */
   hideItem: function(e) {
     var target = e.data('target');
@@ -87,7 +87,7 @@ var EventHandler = {
   },
 
   /**
-     * Simula el comportamiento del botón "Atrás"
+     * Simula el comportamiento del boton "Atras"
      */
   historyBack: function() {
     if(window.history.length > 0) {window.history.back(1);}
@@ -148,7 +148,7 @@ var EventHandler = {
 // Utilidades para formularios
 var FormUtil = {
   /**
-     * Completa todos los inputs con la clase "sort_number" con números en secuencia
+     * Completa todos los inputs con la clase "sort_number" con numeros en secuencia
      */
   completeSortNumbers: function() {
     $('input.sort_number').val(function(i) {return i + 1;});
@@ -168,7 +168,7 @@ var Helper = {
   },
 
   /**
-     * Oculta el elemento que indica que algo se está cargando
+     * Oculta el elemento que indica que algo se esta cargando
      */
   hideLoading: function(element) {
     $('#loading:visible').hide();
@@ -207,7 +207,7 @@ var Helper = {
   },
 
   /**
-     * Muestra el ítem indicado (puede ser un string con el ID o el elemento mismo)
+     * Muestra el item indicado (puede ser un string con el ID o el elemento mismo)
      */
   showItem: function(element, callback) {
     var e = $(element);
@@ -227,14 +227,14 @@ var Helper = {
   },
 
   /**
-     * Muestra el último ítem que cumple con la regla de CSS
+     * Muestra el ultimo item que cumple con la regla de CSS
      */
   showLastItem: function(cssRule) {
     Helper.showItem($(cssRule + ':last'));
   },
 
   /**
-     * Muestra una imagen para indicar que una operación está en curso
+     * Muestra una imagen para indicar que una operacion esta en curso
      */
   showLoading: function(element) {
     $('#loading:not(:visible)').show();
@@ -322,7 +322,7 @@ var HTMLUtil = {
   },
   
   /**
-     * Ejecuta la función HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
+     * Ejecuta la funcion HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
      * de un contenedor span con clase file_container
      */
   stylizeAllInputFiles: function() {
@@ -359,7 +359,7 @@ var HTMLUtil = {
 
   /**
      * Actualiza as opciones del select indicado y lo habilita si tiene por lo
-     * menos una opción
+     * menos una opcion
      */
   updateOptions: function(selectElement, optionsString) {
     var element = $(selectElement);
@@ -370,10 +370,10 @@ var HTMLUtil = {
   }
 }
 
-// Manipulación del menú
+// Manipulacion del menu
 var Menu = {
   /**
-     * Muestra el menú principal
+     * Muestra el menu principal
      */
   show: function() {
     $('#app_content').hide();
@@ -404,7 +404,7 @@ var Menu = {
 // Observadores de eventos
 var Observer = {
   /**
-     * Agrega un listener a los eventos de click en el menú principal
+     * Agrega un listener a los eventos de click en el menu principal
      */
   attachToMenu: function() {
     $(document).on('click', '#menu_container a', function(event) {
@@ -430,7 +430,7 @@ var Observer = {
     });
   },
   /**
-     * Agrega un listener a los eventos de click en el menú principal en móviles
+     * Agrega un listener a los eventos de click en el menu principal en moviles
      */
   attachToMobileMenu: function() {
     $('#main_container a').click(function(event) {
@@ -477,7 +477,7 @@ var Observer = {
   }
 }
 
-// Funciones relacionadas con la búsqueda
+// Funciones relacionadas con la busqueda
 var Search = {
   observe: function() {
     $('#column_headers th.filterable').click(function() {
@@ -552,15 +552,15 @@ var Util = {
   },
 
   /**
-     * Reemplaza todas las ocurrencias de la expresión regular 'regex' con un ID
-     * único generado con la fecha y un número incremental
+     * Reemplaza todas las ocurrencias de la expresion regular 'regex' con un ID
+     * unico generado con la fecha y un numero incremental
      */
   replaceIds: function(s, regex){
     return s.replace(regex, new Date().getTime() + State.newIdCounter++);
   }
 }
 
-// Funciones ejecutadas cuando se carga cada página
+// Funciones ejecutadas cuando se carga cada pagina
 jQuery(function($) {
   var eventList = $.map(EventHandler, function(v, k ) {return k;});
   
@@ -607,7 +607,7 @@ jQuery(function($) {
     }
   });
 
-  // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
+  // Cuando se remueve o se oculta un papel de trabajo reutilizar el codigo
   $(document).on('item:removed', '.work_paper', function() {
     var workPaperCode = $(this).find('input[name$="[code]"]').val();
 

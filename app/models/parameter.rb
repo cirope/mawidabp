@@ -2,8 +2,8 @@ class Parameter < ActiveRecord::Base
   include ParameterSelector
   
   has_paper_trail :meta => {
-    :organization_id => Proc.new {GlobalModelConfig.current_organization_id},
-    :important => Proc.new {|parameter| parameter.name.starts_with?('security')}
+    :organization_id => proc { |i| GlobalModelConfig.current_organization_id },
+    :important => proc { |i| i.name.starts_with?('security') }
   }
 
   serialize :value
