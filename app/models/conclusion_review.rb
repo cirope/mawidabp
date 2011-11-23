@@ -241,7 +241,7 @@ class ConclusionReview < ActiveRecord::Base
             ).not_revoked.order('review_code ASC')
             
             weaknesses.each do |w|
-              w_data = coi.pdf_data(w, pc_id)
+              w_data = coi.pdf_data(w)
               
               unless w_data[:column].blank?
                 pdf.move_pointer PDF_FONT_SIZE
@@ -249,7 +249,7 @@ class ConclusionReview < ActiveRecord::Base
                 PDF::SimpleTable.new do |table|
                   table.width = pdf.page_usable_width
                   table.columns = columns
-                  table.data = [w_data[:column]]
+                  table.data = [pc_id => w_data[:column]]
                   table.column_order = [pc_id]
                   table.row_gap = (PDF_FONT_SIZE * 0.75).round
                   table.split_rows = true
@@ -300,7 +300,7 @@ class ConclusionReview < ActiveRecord::Base
 
           cois.each do |coi|
             (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-              o_data = coi.pdf_data(o, pc_id)
+              o_data = coi.pdf_data(o)
               
               unless o_data[:column].blank?
                 pdf.move_pointer PDF_FONT_SIZE
@@ -308,7 +308,7 @@ class ConclusionReview < ActiveRecord::Base
                 PDF::SimpleTable.new do |table|
                   table.width = pdf.page_usable_width
                   table.columns = columns
-                  table.data = [o_data[:column]]
+                  table.data = [pc_id => o_data[:column]]
                   table.column_order = [pc_id]
                   table.row_gap = (PDF_FONT_SIZE * 0.75).round
                   table.split_rows = true

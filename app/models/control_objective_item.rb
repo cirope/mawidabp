@@ -410,7 +410,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     "#{self.class.model_name.human.downcase.gsub(/\s/, '_')}-#{'%08d' % self.id}.pdf"
   end
 
-  def pdf_data(finding, pc_id)
+  def pdf_data(finding)
     weakness = finding.kind_of?(Weakness)
     head = ''
     body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
@@ -487,6 +487,6 @@ class ControlObjectiveItem < ActiveRecord::Base
         finding.state_text.chomp
     end
 
-    { :column => { pc_id => head.to_iso }, :text => body }
+    { :column => head.to_iso, :text => body }
   end
 end
