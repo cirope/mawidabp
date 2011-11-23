@@ -227,9 +227,6 @@ class ConclusionReview < ActiveRecord::Base
         if has_observations
           pc_id = process_control.id.to_s
           columns = {}
-          # Con una columna vacía para evitar un problema con el dibujo de
-          # sombreados
-          column_data = [{pc_id => nil}]
 
           columns[pc_id] = PDF::SimpleTable::Column.new(pc_id) do |c|
             c.heading = "<b><i>#{ProcessControl.model_name.human}: " +
@@ -244,30 +241,33 @@ class ConclusionReview < ActiveRecord::Base
             ).not_revoked.order('review_code ASC')
             
             weaknesses.each do |w|
-              column_data.concat coi.pdf_column_data(w, pc_id)
+              w_data = coi.pdf_data(w, pc_id)
+              
+              unless w_data[:column].blank?
+                pdf.move_pointer PDF_FONT_SIZE
+                
+                PDF::SimpleTable.new do |table|
+                  table.width = pdf.page_usable_width
+                  table.columns = columns
+                  table.data = [w_data[:column]]
+                  table.column_order = [pc_id]
+                  table.row_gap = (PDF_FONT_SIZE * 0.75).round
+                  table.split_rows = true
+                  table.font_size = PDF_FONT_SIZE
+                  table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+                  table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                  table.heading_font_size = PDF_FONT_SIZE
+                  table.shade_headings = true
+                  table.position = :left
+                  table.orientation = :right
+                  table.render_on pdf
+                end
+              end
+
+              pdf.move_pointer PDF_FONT_SIZE
+              pdf.text w_data[:text], :justification => :full
             end
           end
-
-          unless column_data.blank?
-            PDF::SimpleTable.new do |table|
-              table.width = pdf.page_usable_width
-              table.columns = columns
-              table.data = column_data
-              table.column_order = [pc_id]
-              table.row_gap = (PDF_FONT_SIZE * 1.25).round
-              table.split_rows = true
-              table.font_size = PDF_FONT_SIZE
-              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-              table.heading_font_size = PDF_FONT_SIZE
-              table.shade_headings = true
-              table.position = :left
-              table.orientation = :right
-              table.render_on pdf
-            end
-          end
-
-          pdf.move_pointer PDF_FONT_SIZE
         end
       end
     end
@@ -290,9 +290,6 @@ class ConclusionReview < ActiveRecord::Base
         if has_oportunities
           pc_id = process_control.id.to_s
           columns = {}
-          # Con una columna vacía para evitar un problema con el dibujo de
-          # sombreados
-          column_data = [{pc_id => nil}]
 
           columns[pc_id] = PDF::SimpleTable::Column.new(pc_id) do |c|
             c.heading = "<b><i>#{ProcessControl.model_name.human}: " +
@@ -303,30 +300,33 @@ class ConclusionReview < ActiveRecord::Base
 
           cois.each do |coi|
             (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-              column_data.concat coi.pdf_column_data(o, pc_id)
+              o_data = coi.pdf_data(o, pc_id)
+              
+              unless o_data[:column].blank?
+                pdf.move_pointer PDF_FONT_SIZE
+                
+                PDF::SimpleTable.new do |table|
+                  table.width = pdf.page_usable_width
+                  table.columns = columns
+                  table.data = [o_data[:column]]
+                  table.column_order = [pc_id]
+                  table.row_gap = (PDF_FONT_SIZE * 0.75).round
+                  table.split_rows = true
+                  table.font_size = PDF_FONT_SIZE
+                  table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+                  table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+                  table.heading_font_size = PDF_FONT_SIZE
+                  table.shade_headings = true
+                  table.position = :left
+                  table.orientation = :right
+                  table.render_on pdf
+                end
+              end
+
+              pdf.move_pointer PDF_FONT_SIZE
+              pdf.text o_data[:text], :justification => :full
             end
           end
-
-          unless column_data.blank?
-            PDF::SimpleTable.new do |table|
-              table.width = pdf.page_usable_width
-              table.columns = columns
-              table.data = column_data
-              table.column_order = [pc_id]
-              table.row_gap = (PDF_FONT_SIZE * 1.25).round
-              table.split_rows = true
-              table.font_size = PDF_FONT_SIZE
-              table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-              table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-              table.heading_font_size = PDF_FONT_SIZE
-              table.shade_headings = true
-              table.position = :left
-              table.orientation = :right
-              table.render_on pdf
-            end
-          end
-
-          pdf.move_pointer PDF_FONT_SIZE
         end
       end
     end
