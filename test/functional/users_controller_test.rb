@@ -727,7 +727,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'change expired blank password' do
     put :update_password, {
-      :id => users(:blank_password_user).to_param,
+      :id => users(:expired_blank_password_user).to_param,
       :user => {
         :password => 'new_password_123',
         :password_confirmation => 'new_password_123'

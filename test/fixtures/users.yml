@@ -161,7 +161,7 @@ expired_blank_password_user:
   last_access: <%= 20.days.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago %>
+  password_changed: <%= BLANK_PASSWORD_STALE_DAYS.next.days.ago.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
   manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
