@@ -14,7 +14,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -70,7 +70,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
   test 'create synthesis report' do
     perform_auth
-    
     post :create_synthesis_report, :synthesis_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
@@ -79,47 +78,10 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('follow_up_committee.synthesis_report.pdf_name',
+      I18n.t(:'follow_up_committee.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'synthesis_report', 0)
-  end
-  
-  test 'qa indicators' do
-    perform_auth
-
-    get :qa_indicators
-    assert_response :success
-    assert_select '#error_body', false
-    assert_template 'follow_up_committee/qa_indicators'
-
-    assert_nothing_raised(Exception) do
-      get :qa_indicators, :qa_indicators => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
-        }
-    end
-
-    assert_response :success
-    assert_select '#error_body', false
-    assert_template 'follow_up_committee/qa_indicators'
-  end
-
-  test 'create qa indicators' do
-    perform_auth
-
-    post :create_qa_indicators, :qa_indicators => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
-
-    assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('follow_up_committee.qa_indicators.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'qa_indicators', 0)
   end
 
   test 'high risk weaknesses report' do
@@ -168,7 +130,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      I18n.t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'high_risk_weaknesses_report', 0)
@@ -220,7 +182,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      I18n.t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
@@ -272,7 +234,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
+      I18n.t(:'conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)

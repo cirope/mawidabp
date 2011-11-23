@@ -218,7 +218,6 @@ es:
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
-    qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
@@ -277,19 +276,6 @@ es:
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
-    qa_indicators:
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
-      subtitle: ""
-      indicator: "Indicador"
-      value: "Valor"
-      pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
-      indicators:
-        production_level: "Nivel de Producción"
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
-        score_average: "Calificación de informes"
-        digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
@@ -616,7 +602,6 @@ es:
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
-    qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     high_risk_weaknesses: "Observaciones de riesgo alto"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
@@ -690,19 +675,6 @@ es:
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
-    qa_indicators:
-      title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad (Seguimiento)"
-      subtitle: ""
-      indicator: "Indicador"
-      value: "Valor"
-      pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
-      indicators:
-        production_level: "Nivel de Producción"
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
-        score_average: "Calificación de informes"
-        digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
