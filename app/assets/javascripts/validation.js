@@ -18,7 +18,7 @@ jQuery(function() {
       event.preventDefault();
     } else {
       State.unsavedData = false;
-      // Eliminar de los envios el boton submit y el "snowman"
+      // Eliminar de los envíos el botón submit y el "snowman"
       $(this).find('input[type="submit"], input[name="utf8"]').attr(
         'disabled', true
       );

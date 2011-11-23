@@ -2,7 +2,7 @@ class ImageModel < ActiveRecord::Base
   include ParameterSelector
   
   has_paper_trail :meta => {
-    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   has_attached_file :image,

@@ -1,7 +1,7 @@
 class HelpItem < ActiveRecord::Base
   acts_as_tree :order => 'order_number ASC'
   has_paper_trail :meta => {
-    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   # Restricciones

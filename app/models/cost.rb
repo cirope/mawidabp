@@ -1,6 +1,6 @@
 class Cost < ActiveRecord::Base
   has_paper_trail :meta => {
-    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   # Named scopes

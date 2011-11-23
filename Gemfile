@@ -40,11 +40,10 @@ group :assets do
 end
 
 group :development do
-  gem 'mongrel', '1.2.0.pre2'
-  gem 'ruby-debug19', :require => 'ruby-debug'
+  gem 'mongrel'
+  gem 'ruby-debug'
 end
 
 group :test do
-  gem 'minitest', :require => false
-  gem 'turn', :require => false
+  gem 'turn'
 end

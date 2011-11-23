@@ -3,7 +3,7 @@ class PlanItem < ActiveRecord::Base
   include Comparable
 
   has_paper_trail :meta => {
-    :organization_id => proc { |i| GlobalModelConfig.current_organization_id }
+    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   # Atributos no persistentes
