@@ -1406,7 +1406,7 @@ es:
         one: "más de 1 año"
         other: "más de %{count} años"
 
-  attribute_commons: &commons
+  attributes:
     created_at: "Creación"
     updated_at: "Última actualización"
     lock_version: "Versión"
@@ -1473,10 +1473,8 @@ es:
             name: "Objetivo de control"
             relevance: "Objetivo de control (importancia)"
             risk: "Objetivo de control (riesgo)"
-        <<: *commons
       business_unit:
         name: "Nombre"
-        <<: *commons
       business_unit_type:
         name: "Nombre"
         business_unit_label: "Etiqueta de la unidad de negocio en el informe"
@@ -1486,11 +1484,9 @@ es:
           one: "Unidad de negocio"
           other: "Unidades de negocio"
           name: "Unidad de negocio"
-        <<: *commons
       comment:
         comment: "Comentario"
         user_id: "Usuario"
-        <<: *commons
         created_at: "Fecha del comentario"
       conclusion_draft_review:
         force_approval: "Forzar aprobación"
@@ -1504,7 +1500,6 @@ es:
         business_unit: "Unidad de negocio"
         project: "Proyecto"
         approved: "Aprobado"
-        <<: *commons
       control:
         order: "Orden"
         control: "Controles"
@@ -1512,12 +1507,10 @@ es:
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
-        <<: *commons
       control_objective:
         name: "Objetivo de control"
         relevance: "Importancia"
         risk: "Riesgo"
-        <<: *commons
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
@@ -1551,30 +1544,25 @@ es:
             file_file_name: "Papel de trabajo (nombre de archivo)"
             file_content_type: "Papel de trabajo (tipo de archivo)"
             file_file_size: "Papel de trabajo (tamaño de archivo)"
-        <<: *commons
       cost:
         cost: "Tiempo dedicado"
         description: "Descripción de las actividades realizadas"
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-        <<: *commons
       detract:
         organization_id: "Organización"
         user_id: "Usuario"
         value: "Valor"
         observations: "Observaciones"
-        <<: *commons
       error_record:
         user_id: "Usuario"
         error: "Error"
         data: "Datos"
-        <<: *commons
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
         size: "Archivo (tamaño)"
-        <<: *commons
       finding:
         control_objective_item_id: "Objetivo de control"
         description: "Observación / Oportunidad"
@@ -1636,7 +1624,6 @@ es:
             file_file_name: "Papel de trabajo (nombre de archivo)"
             file_content_type: "Papel de trabajo (tipo de archivo)"
             file_file_size: "Papel de trabajo (tamaño de archivo)"
-        <<: *commons
       finding_answer:
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
@@ -1645,25 +1632,21 @@ es:
         user_id: "Usuario"
         file_model: "Anexo"
         notify_users: "Enviar notificación"
-        <<: *commons
         created_at: "Fecha del comentario"
       finding_relation:
         finding_id: 'Observación / Oportunidad de mejora'
         related_finding_id: 'Observación / Oportunidad de mejora relacionada'
         description: 'Descripción'
-        <<: *commons
       finding_review_assignment:
         finding_id: 'Observación / Oportunidad de mejora'
         finding: 'Observación / Oportunidad de mejora'
         review_id: 'Informe'
         review: 'Informe'
-        <<: *commons
       finding_user_assignment:
         finding_id: 'Observación / Oportunidad de mejora'
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Dueño del proceso'
-        <<: *commons
       group:
         name: "Nombre"
         description: "Descripción"
@@ -1674,7 +1657,6 @@ es:
           name: "Organización (nombre)"
           prefix: "Organización (prefijo)"
           description: "Organización (descripción)"
-        <<: *commons
       help_content:
         language: "Idioma"
         help_items:
@@ -1682,7 +1664,6 @@ es:
           description: "Ítem (contenido)"
           order_number: "Ítem (orden)"
           children: "Ítem (temas incluidos)"
-        <<: *commons
       help_item:
         name: "Nombre"
         description: "Contenido"
@@ -1694,23 +1675,19 @@ es:
           order_number: "Ítem (orden)"
           children: "Ítem (temas incluidos)"
         parent: "Tema referente"
-        <<: *commons
       image_model:
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-        <<: *commons
       inline_help:
         language: "Idioma"
         name: "Nombre"
         content: "Contenido"
-        <<: *commons
       login_record:
         user_id: "Usuario"
         start: "Inicio"
         end: "Fin"
         data: "Datos"
-        <<: *commons
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"
@@ -1724,10 +1701,8 @@ es:
       notification_relation:
         model: "Modelo"
         notification: "Notificación"
-        <<: *commons
       old_password:
         password: "Contraseña"
-        <<: *commons
       oportunity:
         control_objective_item_id: "Objetivo de control"
         description: "Oportunidad de mejora"
@@ -1739,7 +1714,6 @@ es:
         state: "Estado"
         origination_date: "Fecha de origen"
         solution_date: "Fecha de solución"
-        <<: *commons
       organization:
         name: "Nombre"
         prefix: "Prefijo"
@@ -1750,23 +1724,19 @@ es:
           image_file_name: "Isologotipo (nombre de archivo)"
           image_content_type: "Isologotipo (tipo de archivo)"
           image_file_size: "Isologotipo (tamaño)"
-        <<: *commons
       organization_role:
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-        <<: *commons
       parameter:
         name: "Nombre"
         value: "Valor"
         description: "Descripción"
-        <<: *commons
       period:
         number: "Número"
         description: "Descripción"
         start: "Inicio"
         end: "Fin"
-        <<: *commons
       plan:
         organization_id: "Organización"
         period_id: "Periodo"
@@ -1788,7 +1758,6 @@ es:
             cost_per_unit: "Recurso (costo por unidad)"
             cost: "Recurso (costo)"
             resource_id: "Recurso"
-        <<: *commons
       plan_item:
         project: "Proyecto"
         start: "Inicio"
@@ -1802,14 +1771,12 @@ es:
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-        <<: *commons
       privilege:
         module: "Módulo"
         read: "Lectura"
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
-        <<: *commons
       procedure_control:
         period_id: "Periodo"
         procedure_control_items:
@@ -1824,28 +1791,23 @@ es:
             control_objective_text: "Procedimiento de control (objetivo de control)"
             risk: "Procedimiento de control (riesgo)"
             control_objective_id: "Procedimiento de control (objetivo de control)"
-        <<: *commons
       procedure_control_item:
         aproach: "Enfoque"
         frequency: "Frecuencia"
         process_control_id: "Proceso de negocio"
-        <<: *commons
       procedure_control_subitem:
         control_objective_text: "Objetivo de control"
         risk: "Riesgo"
         control_objective_id: "Objetivo de control"
-        <<: *commons
       process_control:
         name: "Proceso de negocio"
         order: "Orden"
         control_objectives: "Objetivos de control"
-        <<: *commons
       resource:
         name: "Recurso"
         description: "Descripción"
         cost_per_unit: "Costo por unidad"
         resource_class_id: "Clase"
-        <<: *commons
       resource_class:
         name: "Clase de recurso"
         unit: "Unidad de medida"
@@ -1856,7 +1818,6 @@ es:
           name: "Recurso"
           description: "Recurso (descripción)"
           cost_per_unit: "Recurso (costo por unidad)"
-        <<: *commons
       resource_utilization:
         units: "Cantidad de unidades"
         cost_per_unit: "Costo por unidad"
@@ -1864,7 +1825,6 @@ es:
         resource_id: "Recurso"
         resource_consumer_id: "Consumidor de recurso"
         resource_consumer: "Utilización de recurso"
-        <<: *commons
       review:
         identification: "Identificación"
         description: "Descripción"
@@ -1892,18 +1852,15 @@ es:
           assignment_type: "Integrante (rol)"
           user: "Integrante"
           user_id: "Integrante"
-        <<: *commons
       review_user_assignment:
         assignment_type: "Rol"
         user: "Integrante"
         user_id: "Integrante"
         review: "Informe"
-        <<: *commons
       role:
         name: "Perfil"
         role_type: "Tipo perfil"
         privileges: "Privilegios"
-        <<: *commons
       user:
         user: "Usuario"
         password: "Contraseña"
@@ -1924,12 +1881,10 @@ es:
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'
-        <<: *commons
       version:
         item: "Objeto"
         event: "Evento"
         whodunnit: "Ejecutor"
-        <<: *commons
         created_at: "Fecha"
       weakness:
         control_objective_item_id: "Objetivo de control"
@@ -1947,14 +1902,12 @@ es:
         state: "Estado"
         solution_date: "Fecha de solución"
         work_papers: "Papeles de trabajo"
-        <<: *commons
       work_paper:
         name: "Nombre"
         code: "Código"
         description: "Descripción"
         file_model: "Archivo"
         number_of_pages: "Cantidad de páginas"
-        <<: *commons
       workflow:
         organization_id: "Organización"
         period_id: "Periodo"
@@ -1978,7 +1931,6 @@ es:
             cost_per_unit: "Recurso (costo por unidad)"
             cost: "Recurso (costo)"
             resource_id: "Recurso"
-        <<: *commons
       workflow_item:
         task: "Tarea"
         start: "Inicio"
@@ -1990,7 +1942,6 @@ es:
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-        <<: *commons
 
     errors:
       template:
