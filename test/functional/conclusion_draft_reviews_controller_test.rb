@@ -188,6 +188,19 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to conclusion_review.relative_pdf_path
   end
+  
+  test 'export conclusion draft review without score' do
+    perform_auth
+
+    conclusion_review = ConclusionDraftReview.find(
+      conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :id => conclusion_review.id, :hide_score => '1'
+    end
+
+    assert_redirected_to conclusion_review.relative_pdf_path
+  end
 
   test 'score sheet of final review' do
     perform_auth

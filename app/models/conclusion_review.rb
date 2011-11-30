@@ -125,7 +125,7 @@ class ConclusionReview < ActiveRecord::Base
     Notifier.conclusion_review_notification(user, self, options).deliver
   end
 
-  def to_pdf(organization = nil)
+  def to_pdf(organization = nil, options = {})
     pdf = PDF::Writer.create_generic_pdf(:portrait, false)
     use_finals = !self.kind_of?(ConclusionDraftReview) || self.has_final_review?
     cover_text = "\n\n\n\n#{Review.model_name.human.upcase}\n\n"
@@ -195,13 +195,14 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
 
-    pdf.move_pointer PDF_FONT_SIZE
+    unless options[:hide_score]
+      pdf.move_pointer PDF_FONT_SIZE
+      self.review.add_score_details_table(pdf)
 
-    self.review.add_score_details_table(pdf)
-
-    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
-    pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+      pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
+      pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+    end
 
     unless self.conclusion.blank?
       pdf.move_pointer PDF_FONT_SIZE

@@ -5,6 +5,9 @@
 <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
 <%= link_to t('label.download'), :action => :export_to_pdf,
   :id => @conclusion_draft_review, :_ts => Time.now.to_i %> |
+<%= link_to t('conclusion_draft_review.download_without_score'),
+  :action => :export_to_pdf, :id => @conclusion_draft_review,
+  :hide_score => '1', :_ts => Time.now.to_i %> |
 <%= link_to t('conclusion_draft_review.generate_score_sheet'),
   :action => :score_sheet, :id => @conclusion_draft_review,
   :_ts => Time.now.to_i %> |
