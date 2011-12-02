@@ -224,7 +224,7 @@ class FindingsController < ApplicationController
         "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
       end
 
-      pdf.text t(:'finding.pdf.filtered_by',
+      pdf.text t('finding.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence,
         :count => (@columns - ['issue_date']).size),
@@ -233,7 +233,7 @@ class FindingsController < ApplicationController
 
     unless @order_by_column_name.blank?
       pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
-      pdf.text t(:'finding.pdf.sorted_by',
+      pdf.text t('finding.pdf.sorted_by',
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
@@ -246,7 +246,7 @@ class FindingsController < ApplicationController
         finding.follow_up_date < Date.today
       being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
       rescheduled_text = being_implemented && !finding.rescheduled? ?
-        t(:'label.no') : ''
+        t('label.no') : ''
 
       if being_implemented && finding.rescheduled?
         dates = []
@@ -272,9 +272,19 @@ class FindingsController < ApplicationController
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
         "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
         ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
-        "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+        "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
       ].compact.join("\n")
+      
+      unless (repeated_ancestors = finding.repeated_ancestors).blank?
+        finding_data << "\n<b>#{t('finding.repeated_ancestors')}</b>: "
+        finding_data << repeated_ancestors.map(&:to_s).join(' | ')
+      end
+      
+      unless (repeated_children = finding.repeated_children).blank?
+        finding_data << "\n<b>#{t('finding.repeated_children')}</b>: "
+        finding_data << repeated_children.map(&:to_s).join(' | ')
+      end
 
       column_data << {
         'description' => finding_data.to_iso,

@@ -21,7 +21,7 @@
     <b><%= raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
       show_inline_help_for(:finding_issue_date)) %></b>:
     <%= @finding.issue_date ? l(@finding.issue_date, :format => :long) :
-      t(:'finding.without_conclusion_final_review') %>
+      t('finding.without_conclusion_final_review') %>
   </div>
   <div class="show_item">
     <b><%= Finding.human_attribute_name :description %></b>
@@ -79,7 +79,7 @@
 
   <% unless @finding.important_dates.blank? %>
     <h1 class="clear">
-      <%= t(:'finding.important_dates.title') %>
+      <%= t('finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
     </h1>
     <ul class="raw_list">
@@ -89,12 +89,12 @@
     </ul>
   <% end %>
 
-  <h3><%= t(:'finding.responsibles', :count => @finding.users.size) %></h3>
+  <h3><%= t('finding.responsibles', :count => @finding.users.size) %></h3>
   <%= finding_responsibles_list(@finding) %>
   
   <% unless @finding.finding_relations.blank? %>
     <h3>
-      <%= t(:'finding.finding_relations') %>
+      <%= t('finding.finding_relations') %>
       <%= show_inline_help_for(:finding_relations) %>
     </h3>
     
@@ -118,7 +118,7 @@
   
   <% unless @finding.inverse_finding_relations.blank? %>
     <h3>
-      <%= t(:'finding.inverse_finding_relations') %>
+      <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h3>
     
@@ -142,7 +142,7 @@
   
   <% unless @finding.finding_answers.blank? %>
     <h3>
-      <%= t(:'finding.finding_answers') %>
+      <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h3>
 
@@ -167,7 +167,7 @@
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
               <%= finding_answer.file_model ?
-                link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
               <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
@@ -184,7 +184,7 @@
   <% end %>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h3><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -193,7 +193,7 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h3><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -202,7 +202,7 @@
   <% end %>
 
   <% unless @finding.work_papers.blank? %>
-    <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
 
     <table class="summary_table">
       <thead>
@@ -222,7 +222,7 @@
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format h(work_paper.description) %></td>
             <td><%= work_paper.file_model ?
-              link_to(t(:'label.download'), work_paper.file_model.file.url) : '---' %></td>
+              link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>
       </tbody>
@@ -230,13 +230,13 @@
   <% end %>
 
   <div class="title" style="font-weight: normal;">
-    <%= textilize t(:'finding.costs',
+    <%= textilize t('finding.costs',
       :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
   </div>
 
   <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
-      <%= link_to_function t(:'finding.view_cost_details'),
+      <%= link_to_function t('finding.view_cost_details'),
         "$('#cost_details').slideToggle()" %>
     </p>
     <div id="cost_details" style="display: none;">
@@ -268,14 +268,14 @@
 
 <div id="links">
   <% if @finding.pending? %>
-    <b><%= link_to t(:'label.edit'), edit_finding_path(params[:completed],
+    <b><%= link_to t('label.edit'), edit_finding_path(params[:completed],
       @finding, :user_id => params[:user_id]) %></b> |
   <% end %>
   <% unless @auth_user.audited? %>
-    <%= link_to t(:'finding.follow_up_report.download'),
+    <%= link_to t('finding.follow_up_report.download'),
       :action => :follow_up_pdf, :id => @finding, :_ts => Time.now.to_i %> |
   <% end %>
-  <%= link_to t(:'label.list'), findings_path(params[:completed],
+  <%= link_to t('label.list'), findings_path(params[:completed],
     :user_id => params[:user_id]) %> |
   <%= link_to_back %>
 </div>
