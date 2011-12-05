@@ -14,7 +14,7 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls
   # * GET /procedure_controls.xml
   def index
-    @title = t :'procedure_control.index_title'
+    @title = t 'procedure_control.index_title'
     @procedure_controls = ProcedureControl.includes(:period).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
     ).order("#{ProcedureControl.table_name}.created_at DESC").paginate(
@@ -32,7 +32,7 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/1
   # * GET /procedure_controls/1.xml
   def show
-    @title = t :'procedure_control.show_title'
+    @title = t 'procedure_control.show_title'
     @procedure_control = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -46,7 +46,7 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/new
   # * GET /procedure_controls/new.xml
   def new
-    @title = t :'procedure_control.new_title'
+    @title = t 'procedure_control.new_title'
     @procedure_control = ProcedureControl.new
 
     clone_id = params[:clone_from].respond_to?(:to_i) ?
@@ -83,7 +83,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/1/edit
   def edit
-    @title = t :'procedure_control.edit_title'
+    @title = t 'procedure_control.edit_title'
     @procedure_control = find_with_organization(params[:id], true)
   end
 
@@ -93,12 +93,12 @@ class ProcedureControlsController < ApplicationController
   # * POST /procedure_controls
   # * POST /procedure_controls.xml
   def create
-    @title = t :'procedure_control.new_title'
+    @title = t 'procedure_control.new_title'
     @procedure_control = ProcedureControl.new(params[:procedure_control])
 
     respond_to do |format|
       if @procedure_control.save
-        flash.notice = t :'procedure_control.correctly_created'
+        flash.notice = t 'procedure_control.correctly_created'
         format.html { redirect_to(edit_procedure_control_url(@procedure_control)) }
         format.xml  { render :xml => @procedure_control, :status => :created, :location => @procedure_control }
       else
@@ -114,12 +114,12 @@ class ProcedureControlsController < ApplicationController
   # * PUT /procedure_controls/1
   # * PUT /procedure_controls/1.xml
   def update
-    @title = t :'procedure_control.edit_title'
+    @title = t 'procedure_control.edit_title'
     @procedure_control = find_with_organization(params[:id], true)
 
     respond_to do |format|
       if @procedure_control.update_attributes(params[:procedure_control])
-        flash.notice = t :'procedure_control.correctly_updated'
+        flash.notice = t 'procedure_control.correctly_updated'
         format.html { redirect_to(edit_procedure_control_url(@procedure_control)) }
         format.xml  { head :ok }
       else
@@ -129,7 +129,7 @@ class ProcedureControlsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'procedure_control.stale_object_error'
+    flash.alert = t 'procedure_control.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -155,17 +155,17 @@ class ProcedureControlsController < ApplicationController
     pdf = PDF::Writer.create_generic_pdf :landscape, false
 
     pdf.start_page_numbering pdf.absolute_x_middle, (pdf.bottom_margin / 2.0),
-      10, :center, t(:'pdf.page_pattern').to_iso, 1
+      10, :center, t('pdf.page_pattern').to_iso, 1
     pdf.add_planning_header @auth_organization, @procedure_control.period
     pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
-      'compliance_tests', 'sustantive_tests', 'effects', 'risk']
+      'compliance_tests', 'sustantive_tests', 'effects', 'relevance']
     procedure_control_column_order = ['process_control_id', 'aproach',
       'frequency']
     column_width = {'control_objective_text' => 15, 'control' => 35,
       'compliance_tests' => 18, 'sustantive_tests' => 17, 'effects' => 8,
-      'risk' => 7}
+      'relevance' => 7}
     procedure_control_column_width = {'process_control_id' => 70,
       'aproach' => 15, 'frequency' => 15}
     columns = {}
@@ -238,7 +238,7 @@ class ProcedureControlsController < ApplicationController
           'compliance_tests' => pcs.control.compliance_tests.to_iso,
           'sustantive_tests' => pcs.control.sustantive_tests.to_iso,
           'effects' => pcs.control.effects.to_iso,
-          'risk' => pcs.risk_text.to_iso
+          'relevance' => pcs.relevance_text.to_iso
         }
       end
 
@@ -278,7 +278,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_control_objectives/?process_control=id
   def get_control_objectives
-    options = [[t(:'helpers.select.prompt'), '']]
+    options = [[t('helpers.select.prompt'), '']]
     control_objectives = ControlObjective.where(
       :process_control_id => params[:process_control]
     )
@@ -292,7 +292,7 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/get_process_controls/?best_practice=id
   def get_process_controls
-    options = [[t(:'helpers.select.prompt'), '']]
+    options = [[t('helpers.select.prompt'), '']]
     process_controls = ProcessControl.where(
       :best_practice_id => params[:best_practice]
     )
@@ -318,7 +318,7 @@ class ProcedureControlsController < ApplicationController
 
     control_objective ||= ControlObjective.new
 
-    render :json => control_objective.to_json(:only => [:name, :risk],
+    render :json => control_objective.to_json(:only => [:name, :relevance],
       :include => {:control => {:only =>
             [:control, :effects, :design_tests, :compliance_tests, :sustantive_tests]
         }

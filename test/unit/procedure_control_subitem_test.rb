@@ -16,8 +16,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     fixture_procedure_control_subitem =
       procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1)
     assert_kind_of ProcedureControlSubitem, @procedure_control_subitem
-    assert_equal fixture_procedure_control_subitem.risk,
-      @procedure_control_subitem.risk
+    assert_equal fixture_procedure_control_subitem.relevance,
+      @procedure_control_subitem.relevance
     assert_equal fixture_procedure_control_subitem.order,
       @procedure_control_subitem.order
   end
@@ -38,8 +38,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
           :sustantive_tests => 'New sustantive tests',
           :effects => 'New effects'
         },
-        :risk =>
-          get_test_parameter(:admin_control_objective_risk_levels).first[1],
+        :relevance =>
+          get_test_parameter(:admin_control_objective_importances).first[1],
         :order => 1
       )
 
@@ -63,8 +63,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
           :sustantive_tests => 'Updated sustantive tests',
           :effects => 'Updated effects'
         },
-        :risk =>
-          get_test_parameter(:admin_control_objective_risk_levels).first[1],
+        :relevance =>
+          get_test_parameter(:admin_control_objective_importances).first[1],
         :order => 1
       )
 
@@ -97,7 +97,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
   test 'validates formated attributes' do
     @procedure_control_subitem.procedure_control_item_id = '?123'
     @procedure_control_subitem.control_objective_id = '?123'
-    @procedure_control_subitem.risk = '?123'
+    @procedure_control_subitem.relevance = '?123'
     @procedure_control_subitem.order = '?123'
     assert @procedure_control_subitem.invalid?
     assert_equal 4, @procedure_control_subitem.errors.count
@@ -107,8 +107,9 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@procedure_control_subitem,
       :control_objective_id, :not_a_number)],
       @procedure_control_subitem.errors[:control_objective_id]
-    assert_equal [error_message_from_model(@procedure_control_subitem, :risk,
-      :not_a_number)], @procedure_control_subitem.errors[:risk]
+    assert_equal [error_message_from_model(@procedure_control_subitem,
+        :relevance, :not_a_number)],
+      @procedure_control_subitem.errors[:relevance]
     assert_equal [error_message_from_model(@procedure_control_subitem, :order,
       :not_a_number)], @procedure_control_subitem.errors[:order]
   end
@@ -117,7 +118,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @procedure_control_subitem.control_objective_text = ' '
     @procedure_control_subitem.control_objective_id = nil
-    @procedure_control_subitem.risk = ' '
+    @procedure_control_subitem.relevance = ' '
     @procedure_control_subitem.order = nil
     assert @procedure_control_subitem.invalid?
     assert_equal 4, @procedure_control_subitem.errors.count
@@ -127,8 +128,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@procedure_control_subitem,
       :control_objective_id, :blank)],
       @procedure_control_subitem.errors[:control_objective_id]
-    assert_equal [error_message_from_model(@procedure_control_subitem, :risk,
-      :blank)], @procedure_control_subitem.errors[:risk]
+    assert_equal [error_message_from_model(@procedure_control_subitem,
+        :relevance, :blank)], @procedure_control_subitem.errors[:relevance]
     assert_equal [error_message_from_model(@procedure_control_subitem, :order,
       :blank)], @procedure_control_subitem.errors[:order]
   end

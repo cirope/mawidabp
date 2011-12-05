@@ -53,4 +53,12 @@ module ControlObjectiveItemsHelper
       content_tag :td, weaknesses_count
     end.join
   end
+  
+  def control_objective_weaknesses_link(control_objective_item)
+    weaknesses = control_objective_item.is_in_a_final_review? ?
+      control_objective_item.final_weaknesses : control_objective_item.weaknesses
+    
+    link_to_unless weaknesses.count == 0, weaknesses.count,
+      weaknesses_path(:control_objective => control_objective_item)
+  end
 end

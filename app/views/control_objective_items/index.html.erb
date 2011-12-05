@@ -29,9 +29,7 @@
         <td class="expendable"><%= t control_objective.finished? ? 'label.yes' : 'label.no' %></td>
         <td class="expendable"><%= control_objective_relevance_text(control_objective) %></td>
         <td class="expendable"><%= control_objective_effectiveness(control_objective) %></td>
-        <td class="expendable"><%= link_to_unless control_objective.weaknesses.size == 0,
-            control_objective.weaknesses.size,
-            weaknesses_path(:control_objective => control_objective) %></td>
+        <td class="expendable"><%= control_objective_weaknesses_link(control_objective) %></td>
         <td class="expendable"><%= t control_objective.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show control_objective_item_path(control_objective) %></td>
         <td><%= link_to_edit edit_control_objective_item_path(control_objective) %></td>

@@ -40,9 +40,9 @@
     <% end %>
 
     <div class="item_field" style="width: 10%;">
-      <%= f.select :risk, f.object.get_parameter(
-        :admin_control_objective_risk_levels, true), {}, :class => :risk,
-        :id => "procedure_control_subitem_#{id}_risk" %>
+      <%= f.select :relevance, f.object.get_parameter(
+        :admin_control_objective_importances, true), {}, :class => :relevance,
+        :id => "procedure_control_subitem_#{id}_relevance" %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :order, :class => :sort_number %>
@@ -71,10 +71,8 @@
         $(parentId + '_compliance_tests').val(data.control.compliance_tests || '');
         $(parentId + '_sustantive_tests').val(data.control.sustantive_tests || '');
         $(parentId + '_effects').val(data.control.effects || '');
-        $(parentId + '_risk').val(data.risk || '');
-      }).complete(function() {
-        Helper.hideLoading(element);
-      });
+        $(parentId + '_relevance').val(data.relevance || '');
+      }).complete(function() { Helper.hideLoading(element); });
     }
   });
 </script>

@@ -24,9 +24,10 @@ class ProcedureControlSubitem < ActiveRecord::Base
 
   # Restricciones
   validates :control_objective_text, :control_objective_id,
-    :risk, :order, :presence => true
+    :relevance, :order, :presence => true
   validates :procedure_control_item_id, :control_objective_id,
-    :risk, :order, :numericality => {:only_integer => true}, :allow_nil => true
+    :relevance, :order, :numericality => {:only_integer => true},
+    :allow_nil => true
   validates_each :control do |record, attr, value|
     has_active_control = value && !value.marked_for_destruction?
 
@@ -76,11 +77,12 @@ class ProcedureControlSubitem < ActiveRecord::Base
   def fill_control_objective_text
     self.control_objective_text ||= self.control_objective.try(:name)
   end
+  
+  def relevance_text(show_value = false)
+    relevances = self.get_parameter(:admin_control_objective_importances)
+    relevance = relevances.detect { |r| r.last == self.relevance }
 
-  def risk_text
-    risks = self.get_parameter(:admin_control_objective_risk_levels)
-    risk = risks.detect { |r| r.last == self.risk }
-
-    risk ? risk.first : ''
+    relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
+        relevance.first) : ''
   end
 end

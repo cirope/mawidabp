@@ -101,8 +101,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
                     :sustantive_tests => 'New sustantive tests',
                     :effects => 'New effects'
                   },
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance =>
+                    get_test_parameter(:admin_control_objective_importances).first[1],
                   :control_objective_id =>
                     control_objectives(:iso_27000_security_organization_4_1).id,
                   :order => 1,
@@ -154,8 +154,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
                     :sustantive_tests => 'Updated sustantive tests',
                     :effects => 'Updated effects'
                   },
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance =>
+                    get_test_parameter(:admin_control_objective_importances).first[1],
                   :control_objective_id =>
                     control_objectives(:iso_27000_security_organization_4_1).id,
                   :order => 1,

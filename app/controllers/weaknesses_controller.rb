@@ -23,7 +23,7 @@ class WeaknessesController < ApplicationController
           "#{ConclusionReview.table_name}.review_id IS NOT NULL",
           "#{Weakness.table_name}.final = :boolean_true"
         ].join(' AND ')
-      ].map {|condition| "(#{condition})"}.join(' OR ')
+      ].map { |condition| "(#{condition})" }.join(' OR ')
     ]
     parameters = {
       :organization_id => @auth_organization.id,
@@ -47,8 +47,9 @@ class WeaknessesController < ApplicationController
 
     @weaknesses = Weakness.includes(
       :work_papers,
-      :control_objective_item =>
-        {:review => [:period, :plan_item, :conclusion_final_review]}
+      :control_objective_item => {
+        :review => [:period, :plan_item, :conclusion_final_review]
+      }
     ).where(@conditions, parameters).order(
       @order_by || [
         "#{Review.table_name}.identification DESC",

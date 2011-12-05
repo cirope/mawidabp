@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111116122255) do
+ActiveRecord::Schema.define(:version => 20111205155829) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -485,12 +485,12 @@ ActiveRecord::Schema.define(:version => 20111116122255) do
 
   create_table "procedure_control_subitems", :force => true do |t|
     t.text     "control_objective_text"
-    t.integer  "risk"
     t.integer  "order"
     t.integer  "control_objective_id"
     t.integer  "procedure_control_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "relevance"
   end
 
   add_index "procedure_control_subitems", ["control_objective_id"], :name => "index_procedure_control_subitems_on_control_objective_id"

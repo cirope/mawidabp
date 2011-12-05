@@ -400,7 +400,7 @@ es:
 
   control_objective:
     errors:
-      related: "El objetivo de control no puede ser eliminado, se encuentra relacionado en al menos un informe"
+      related: "El objetivo de control no puede ser eliminado, se encuentra relacionado en al menos un procedimiento y prueba de control"
 
   control_objective_item:
     index_title: "Listado de objetivos de control"
@@ -1790,7 +1790,7 @@ es:
             one: "Procedimiento de control"
             other: "Procedimientos de control"
             control_objective_text: "Procedimiento de control (objetivo de control)"
-            risk: "Procedimiento de control (riesgo)"
+            relevance: "Procedimiento de control (importancia)"
             control_objective_id: "Procedimiento de control (objetivo de control)"
       procedure_control_item:
         aproach: "Enfoque"
@@ -1798,7 +1798,7 @@ es:
         process_control_id: "Proceso de negocio"
       procedure_control_subitem:
         control_objective_text: "Objetivo de control"
-        risk: "Riesgo"
+        relevance: "Importancia"
         control_objective_id: "Objetivo de control"
       process_control:
         name: "Proceso de negocio"
