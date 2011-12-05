@@ -276,6 +276,11 @@ class FindingsController < ApplicationController
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
       ].compact.join("\n")
       
+      unless (relations = finding.finding_relations).blank?
+        finding_data << "\n<b>#{t('finding.finding_relations')}</b>: "
+        finding_data << relations.map(&:to_s).join(' | ')
+      end
+      
       unless (repeated_ancestors = finding.repeated_ancestors).blank?
         finding_data << "\n<b>#{t('finding.repeated_ancestors')}</b>: "
         finding_data << repeated_ancestors.map(&:to_s).join(' | ')

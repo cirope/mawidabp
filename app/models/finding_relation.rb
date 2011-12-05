@@ -18,4 +18,8 @@ class FindingRelation < ActiveRecord::Base
   # Relaciones
   belongs_to :finding
   belongs_to :related_finding, :class_name => 'Finding'
+  
+  def to_s
+    "#{self.finding} [#{self.description}]"
+  end
 end
