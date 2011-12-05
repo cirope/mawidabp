@@ -250,6 +250,7 @@ class Review < ActiveRecord::Base
           self.control_objective_items.build(
             :control_objective_id => pcs.control_objective_id,
             :control_objective_text => pcs.control_objective_text,
+            :relevance => pcs.relevance,
             :control_attributes => {
               :control => pcs.control.control,
               :effects => pcs.control.effects,
