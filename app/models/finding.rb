@@ -676,8 +676,9 @@ class Finding < ActiveRecord::Base
   end
 
   def answer_added(finding_answer)
-    if (self.unconfirmed? || self.notify?) && !finding_answer.answer.blank? &&
-        finding_answer.user.try(:can_act_as_audited?)
+    if (self.unconfirmed? || self.notify? || self.unanswered?) &&
+      !finding_answer.answer.blank? &&
+      finding_answer.user.try(:can_act_as_audited?)
       self.confirmed! finding_answer.user
     end
   end
