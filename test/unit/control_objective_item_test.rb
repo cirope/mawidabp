@@ -319,6 +319,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !@control_objective_item.must_be_approved?
     assert_equal 1, @control_objective_item.approval_errors.size
 
+    @control_objective_item.exclude_from_score = true
+    assert @control_objective_item.must_be_approved?
+
     @control_objective_item.reload
     @control_objective_item.finished = false
     assert !@control_objective_item.must_be_approved?

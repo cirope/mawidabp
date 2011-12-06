@@ -218,7 +218,8 @@ class ControlObjectiveItem < ActiveRecord::Base
       errors << I18n.t('control_objective_item.errors.not_finished')
     end
 
-    if !self.design_score && !self.compliance_score && !self.sustantive_score
+    if !self.design_score && !self.compliance_score &&
+      !self.sustantive_score && !self.exclude_from_score
       errors << I18n.t('control_objective_item.errors.without_score')
     end
 
