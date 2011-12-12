@@ -68,7 +68,6 @@ class Finding < ActiveRecord::Base
     :unanswered => [
       :unanswered,
       :being_implemented,
-      :confirmed,
       :implemented,
       :implemented_audited,
       :assumed_risk,
