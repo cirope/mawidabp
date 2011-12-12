@@ -1507,12 +1507,14 @@ class Finding < ActiveRecord::Base
       findings, users = [], []
 
       Finding.transaction do
-        findings |= Finding.confirmed_and_stale.reject do |c_finding|
-          c_finding.finding_answers.any? { |fa| fa.user.can_act_as_audited? }
+        findings |= Finding.confirmed_and_stale.reject do |c_f|
+          # Si o si hacer un reload, sino trae la asociación de la consulta
+          c_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
         end
 
-        findings |= Finding.unconfirmed_and_stale.reject do |u_finding|
-          u_finding.finding_answers.any? { |fa| fa.user.can_act_as_audited? }
+        findings |= Finding.unconfirmed_and_stale.reject do |u_f|
+          # Si o si hacer un reload, sino trae la asociación de la consulta
+          u_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
         end
 
         users = findings.inject([]) do |u, finding|
