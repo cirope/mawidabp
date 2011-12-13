@@ -378,7 +378,7 @@ var Menu = {
   show: function() {
     $('#app_content').hide();
     
-    if($('#main_mobile_menu')) {
+    if($('#main_mobile_menu').length > 0) {
       $('#session').show();
       $('#main_mobile_menu').show();
     } else {
@@ -433,7 +433,7 @@ var Observer = {
      * Agrega un listener a los eventos de click en el menú principal en móviles
      */
   attachToMobileMenu: function() {
-    $('#main_container a').click(function(event) {
+    $(document).on('click', '#main_container a', function(event) {
       var e = $(this);
       var menuName = e.attr('href').replace(/.*#/, '');
       var content = State.menu[menuName];
@@ -441,18 +441,18 @@ var Observer = {
       if(e.is('.menu_item_1, .menu_item_2') && content) {
         $('#main_mobile_menu').data(
           'previous-' + e.parents('ul').data('level'),
-          $('#main_mobile_menu').html().escapeHTML()
+          $('#main_mobile_menu').html()
         );
         
         $('#main_mobile_menu').html(content);
 
         event.stopPropagation();
         event.preventDefault();
-      } else if(e.hasClass('back')) {
+      } else if(e.is('.back')) {
         $('#main_mobile_menu').html(
           $('#main_mobile_menu').data(
-            'previous-' + e.parents('ul').data('level').previous()
-          ).unescapeHTML()
+            'previous-' + (e.parents('ul').data('level') - 1)
+          )
         );
       }
     });
@@ -643,7 +643,7 @@ jQuery(function($) {
     return false;
   });
 
-  if($('#menu_container').length > 0 && !/Apple.*Mobile/.test(navigator.userAgent)) {
+  if($('#menu_container').length > 0 && !/mobile/i.test(navigator.userAgent)) {
     Observer.attachToMenu();
   } else if($('#mobile_menu').length > 0) {
     Observer.attachToMobileMenu();

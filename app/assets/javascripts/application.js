@@ -15,5 +15,6 @@
 //= require autocomplete
 //= require extensions
 //= require form_modification
+//= require mobile_style
 //= require validation
 //= require ui

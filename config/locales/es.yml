@@ -844,7 +844,7 @@ es:
         one: "La siguiente observación / oportunidad de mejora está próxima a vencer"
         other: "Las siguientes observaciones / oportunidades de mejora están próximas a vencer"
     footer:
-      email_label: "Correo"
+      email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
       warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'Mawida Buenas Prácticas'. Cualquier inquietud comunicarse al área de soporte:"

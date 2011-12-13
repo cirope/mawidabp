@@ -1,7 +1,7 @@
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawida.com.ar'.freeze
 # Teléfono de soporte
-SUPPORT_PHONE = '(0261) 449-8885/87'.freeze
+SUPPORT_PHONE = '(0261) 449-8885 (9 a 13 hs.)'.freeze
 # Dirección principal de soporte
 SUPPORT_URL = 'https://soporte.mawida.com.ar/'.freeze
 # Ruta hasta el directorio de configuración
