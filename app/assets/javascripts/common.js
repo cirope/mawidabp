@@ -643,7 +643,7 @@ jQuery(function($) {
     return false;
   });
 
-  if($('#menu_container').length > 0 && !/mobile/i.test(navigator.userAgent)) {
+  if($('#menu_container').length > 0 && !/mobi|mini/i.test(navigator.userAgent)) {
     Observer.attachToMenu();
   } else if($('#mobile_menu').length > 0) {
     Observer.attachToMobileMenu();

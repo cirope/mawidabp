@@ -3,7 +3,6 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- Ver el porqué de esto en: www.phpied.com/conditional-comments-block-downloads/ -->
     <!--[if IE]><![endif]-->
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
@@ -16,6 +15,7 @@
       <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
       <%= yield :js_extra %>
     <% end %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
   </head>
   <body>
     <div id="loading" style="display: none;">
