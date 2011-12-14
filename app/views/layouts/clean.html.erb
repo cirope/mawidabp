@@ -3,7 +3,6 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!-- Ver el porqué de esto en: www.phpied.com/conditional-comments-block-downloads/ -->
     <!--[if IE]><![endif]-->
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
@@ -11,6 +10,7 @@
     <%= stylesheet_link_tag 'application' %>
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
     <%= javascript_include_tag 'application' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
   </head>
   <body>
     <div id="content">
