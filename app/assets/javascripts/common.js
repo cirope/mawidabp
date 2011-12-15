@@ -643,10 +643,13 @@ jQuery(function($) {
     return false;
   });
 
-  if($('#menu_container').length > 0 && !/mobi|mini|fennec/i.test(navigator.userAgent)) {
+  if($('#menu_container').length > 0 &&
+      (!/mobi|mini|fennec/i.test(navigator.userAgent) ||
+      window.screen.width > 800)) {
     Observer.attachToMenu();
   } else if($('#mobile_menu').length > 0) {
     Observer.attachToMobileMenu();
+    window.scrollTo(0, 1).delay(1000);
   }
 
   // Mensajes diferidos
