@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   # * GET /users
   # * GET /users.xml
   def index
-    @title = t :'user.index_title'
+    @title = t 'user.index_title'
     default_conditions = [
       [
         [
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
   # * GET /users/1
   # * GET /users/1.xml
   def show
-    @title = t :'user.show_title'
+    @title = t 'user.show_title'
     @user = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
   # * GET /users/new
   # * GET /users/new.xml
   def new
-    @title = t :'user.new_title'
+    @title = t 'user.new_title'
     @user = User.new
 
     respond_to do |format|
@@ -84,7 +84,7 @@ class UsersController < ApplicationController
   #
   # * GET /users/1/edit
   def edit
-    @title = t :'user.edit_title'
+    @title = t 'user.edit_title'
     @user = find_with_organization(params[:id])
   end
 
@@ -93,14 +93,14 @@ class UsersController < ApplicationController
   # * POST /users
   # * POST /users.xml
   def create
-    @title = t :'user.new_title'
+    @title = t 'user.new_title'
     @user = User.new(params[:user])
     @user.roles.each {|r| r.inject_auth_privileges(@auth_privileges)}
     
     respond_to do |format|
       if @user.save
         @user.send_welcome_email
-        flash.notice = t :'user.correctly_created'
+        flash.notice = t 'user.correctly_created'
         format.html { redirect_to(users_url) }
         format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
@@ -117,7 +117,7 @@ class UsersController < ApplicationController
   # * PUT /users/1
   # * PUT /users/1.xml
   def update
-    @title = t :'user.edit_title'
+    @title = t 'user.edit_title'
     @user = find_with_organization(params[:id])
     params[:user][:last_access] = nil if @user.expired?
     params[:user][:child_ids] ||= []
@@ -129,7 +129,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update_attributes(params[:user])
         @user.send_notification_if_necesary
-        flash.notice = t :'user.correctly_updated'
+        flash.notice = t 'user.correctly_updated'
         format.html { redirect_to(users_url) }
         format.xml  { head :ok }
       else
@@ -139,7 +139,7 @@ class UsersController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'user.stale_object_error'
+    flash.alert = t 'user.stale_object_error'
     redirect_to edit_user_url(@user)
   end
 
@@ -153,7 +153,7 @@ class UsersController < ApplicationController
     unless @user.disable!
       flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else
-      flash.notice = t :'user.correctly_disabled'
+      flash.notice = t 'user.correctly_disabled'
     end
 
     respond_to do |format|
@@ -167,7 +167,7 @@ class UsersController < ApplicationController
   # * GET /users/1/user_status
   # * GET /users/1/user_status.xml
   def user_status
-    @title = t :'user.status_title'
+    @title = t 'user.status_title'
     @user = @auth_user.audited? ?
       @auth_user : find_with_organization(params[:id])
 
@@ -203,7 +203,7 @@ class UsersController < ApplicationController
     if auth_user.try(:is_enable?) && auth_user.logged_in?
       redirect_to :controller => :welcome
     else
-      @title = t :'user.login_title'
+      @title = t 'user.login_title'
       @user = User.new
       organization_prefix = request.subdomains.first
       @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
@@ -216,7 +216,7 @@ class UsersController < ApplicationController
   #
   # * POST /users/create_session
   def create_session
-    @title = t :'user.login_title'
+    @title = t 'user.login_title'
     @user = User.new(params[:user])
     organization_prefix = request.subdomains.first
     @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
@@ -226,24 +226,27 @@ class UsersController < ApplicationController
     GlobalModelConfig.current_organization_id = @organization.try :id
 
     if @organization || @group_admin_mode
-      conditions = {"#{User.table_name}.user" => @user.user}
-
+      conditions = ["LOWER(#{User.table_name}.user) = :user"]
+      parameters = {:user => @user.user.downcase}
+      
       if @group_admin_mode
-        conditions["#{User.table_name}.group_admin"] = true
+        conditions << "#{User.table_name}.group_admin = :true"
+        parameters[:true] = true
       else
-        conditions["#{Organization.table_name}.id"] = @organization.id
+        conditions << "#{Organization.table_name}.id = :organization_id"
+        parameters[:organization_id] = @organization.id
       end
 
-      auth_user = User.includes(:organizations).where(conditions).first(
-        :readonly => false
-      )
+      auth_user = User.includes(:organizations).where(
+        conditions.join(' AND '), parameters
+      ).first(:readonly => false)
 
       @user.salt = auth_user.salt if auth_user
       @user.encrypt_password
 
       if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
         session[:user_id] = auth_user.id
-        flash.notice ||= t :'message.must_change_the_password'
+        flash.notice ||= t 'message.must_change_the_password'
         session[:go_to] = edit_password_user_url(auth_user)
       elsif !@group_admin_mode && auth_user && auth_user.expired?
         auth_user.is_an_important_change = false
@@ -264,15 +267,15 @@ class UsersController < ApplicationController
 
           if days_for_password_expiration
             flash.notice = t(days_for_password_expiration >= 0 ?
-                :'message.password_expire_in_x' :
-                :'message.password_expired_x_days_ago',
+                'message.password_expire_in_x' :
+                'message.password_expired_x_days_ago',
               :count => days_for_password_expiration.abs)
           end
 
           unless auth_user.allow_concurrent_access?
             auth_user = nil
             @user = User.new
-            flash.alert = t :'message.you_are_already_logged'
+            flash.alert = t 'message.you_are_already_logged'
 
             render :action => :login
           end
@@ -321,7 +324,7 @@ class UsersController < ApplicationController
         end
 
         @user.password = nil
-        flash.alert = t :'message.invalid_user_or_password'
+        flash.alert = t 'message.invalid_user_or_password'
         render :action => :login
       end
     else
@@ -339,7 +342,7 @@ class UsersController < ApplicationController
     if @user
       @user.blank_password!(@auth_organization)
 
-      redirect_to_index t(:'user.password_reseted', :user => @user.user)
+      redirect_to_index t('user.password_reseted', :user => @user.user)
     end
   end
 
@@ -348,7 +351,7 @@ class UsersController < ApplicationController
   # * GET /users/edit_password/1
   # * GET /users/edit_password/1.xml
   def edit_password
-    @title = t :'user.change_password_title'
+    @title = t 'user.change_password_title'
 
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
@@ -360,7 +363,7 @@ class UsersController < ApplicationController
 
     unless @auth_user
       restart_session
-      redirect_to_login t(:'user.confirmation_link_invalid'), :alert
+      redirect_to_login t('user.confirmation_link_invalid'), :alert
     else
       @auth_user.password = nil
     end
@@ -371,7 +374,7 @@ class UsersController < ApplicationController
   # * PUT /users/update_password/1
   # * PUT /users/update_password/1.xml
   def update_password
-    @title = t :'user.change_password_title'
+    @title = t 'user.change_password_title'
     
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
@@ -398,7 +401,7 @@ class UsersController < ApplicationController
           )
           
           restart_session
-          redirect_to_login t(:'user.password_correctly_updated')
+          redirect_to_login t('user.password_correctly_updated')
         end
       else
         @auth_user.password = @auth_user.password_confirmation = nil
@@ -408,11 +411,11 @@ class UsersController < ApplicationController
       @auth_user.password, @auth_user.password_confirmation = nil, nil
     else
       restart_session
-      redirect_to_login t(:'user.confirmation_link_invalid'), :alert
+      redirect_to_login t('user.confirmation_link_invalid'), :alert
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'user.password_stale_object_error'
+    flash.alert = t 'user.password_stale_object_error'
     redirect_to edit_password_user_url(@auth_user)
   end
 
@@ -428,7 +431,7 @@ class UsersController < ApplicationController
       render :layout => 'application_clean'
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated'), :alert
+      redirect_to_login t('message.must_be_authenticated'), :alert
     end
   end
 
@@ -444,13 +447,13 @@ class UsersController < ApplicationController
       if @user.save && group.update_attribute(:admin_hash, nil)
         @user.send_welcome_email
         restart_session
-        redirect_to_login t(:'user.correctly_created')
+        redirect_to_login t('user.correctly_created')
       else
         render :action => :new_initial, :layout => 'application_clean'
       end
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated'), :alert
+      redirect_to_login t('message.must_be_authenticated'), :alert
     end
   end
 
@@ -468,7 +471,7 @@ class UsersController < ApplicationController
       end
     else
       restart_session
-      redirect_to_login t(:'message.must_be_authenticated'), :alert
+      redirect_to_login t('message.must_be_authenticated'), :alert
     end
   end
 
@@ -477,7 +480,7 @@ class UsersController < ApplicationController
   # * GET /users/edit_personal_data/1
   # * GET /users/edit_personal_data/1.xml
   def edit_personal_data
-    @title = t :'user.change_personal_data'
+    @title = t 'user.change_personal_data'
   end
 
   # Cambia los datos del usuario actual
@@ -485,7 +488,7 @@ class UsersController < ApplicationController
   # * PUT /users/update_personal_data/1
   # * PUT /users/update_personal_data/1.xml
   def update_personal_data
-    @title = t :'user.change_personal_data'
+    @title = t 'user.change_personal_data'
 
     attributes = {
       :name => params[:user][:name],
@@ -499,13 +502,13 @@ class UsersController < ApplicationController
 
     if @auth_user.update_attributes(attributes)
       I18n.locale = @auth_user.language
-      flash.notice = t :'user.correctly_updated'
+      flash.notice = t 'user.correctly_updated'
     end
 
     render :action => :edit_personal_data
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'user.password_stale_object_error'
+    flash.alert = t 'user.password_stale_object_error'
     redirect_to edit_personal_data_user_url(@auth_user)
   end
 
@@ -515,7 +518,7 @@ class UsersController < ApplicationController
   # * GET /users/reassignment_edit/1
   # * GET /users/reassignment_edit/1.xml
   def reassignment_edit
-    @title = t :'user.user_reassignment'
+    @title = t 'user.user_reassignment'
     @user = find_with_organization(params[:id])
   end
 
@@ -525,7 +528,7 @@ class UsersController < ApplicationController
   # * PUT /users/reassignment_update/1
   # * PUT /users/reassignment_update/1.xml
   def reassignment_update
-    @title = t :'user.user_reassignment'
+    @title = t 'user.user_reassignment'
     @user = find_with_organization(params[:id])
 
     unless params[:user][:id].blank?
@@ -538,13 +541,13 @@ class UsersController < ApplicationController
     }
 
     if @other && @user.reassign_to(@other, options)
-      flash.notice = t(:'user.user_reassignment_completed')
+      flash.notice = t('user.user_reassignment_completed')
       redirect_to users_url
     elsif !@other
-      @user.errors.add :base, t(:'user.errors.must_select_a_user')
+      @user.errors.add :base, t('user.errors.must_select_a_user')
       render :action => :reassignment_edit
     else
-      flash.alert = t(:'user.user_reassignment_failed')
+      flash.alert = t('user.user_reassignment_failed')
       render :action => :reassignment_edit
     end
   end
@@ -555,7 +558,7 @@ class UsersController < ApplicationController
   # * GET /users/release_edit/1
   # * GET /users/release_edit/1.xml
   def release_edit
-    @title = t :'user.user_release'
+    @title = t 'user.user_release'
     @user = find_with_organization(params[:id])
   end
 
@@ -565,7 +568,7 @@ class UsersController < ApplicationController
   # * PUT /users/release_update/1
   # * PUT /users/release_update/1.xml
   def release_update
-    @title = t :'user.user_release'
+    @title = t 'user.user_release'
     @user = find_with_organization(params[:id])
 
     options = {
@@ -574,10 +577,10 @@ class UsersController < ApplicationController
     }
 
     if @user.release_for_all_pending_findings(options)
-      flash.notice = t(:'user.user_release_completed')
+      flash.notice = t('user.user_release_completed')
       redirect_to users_url
     else
-      flash.alert = t(:'user.user_release_failed')
+      flash.alert = t('user.user_release_failed')
       render :action => :reassignment_edit
     end
   end
@@ -594,7 +597,7 @@ class UsersController < ApplicationController
     @auth_user.logout! if @auth_user
     
     restart_session
-    redirect_to_login t(:'message.session_closed_correctly')
+    redirect_to_login t('message.session_closed_correctly')
   end
 
   # Lista las usuarios
@@ -614,7 +617,7 @@ class UsersController < ApplicationController
     pdf = PDF::Writer.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
-    pdf.add_title t(:'user.index_title')
+    pdf.add_title t('user.index_title')
 
     column_order = [['user', 10], ['name', 10], ['last_name', 10],
       ['email', 17], ['function', 14], ['roles', 10], ['enable', 8],
@@ -637,7 +640,7 @@ class UsersController < ApplicationController
         'email' => user.email.try(:to_iso),
         'function' => user.function.try(:to_iso),
         'roles' => user.roles.map(&:name).join('; ').to_iso,
-        'enable' => t(user.enable? ? :'label.yes' : :'label.no').to_iso,
+        'enable' => t(user.enable? ? 'label.yes' : 'label.no').to_iso,
         'password_changed' => user.password_changed ?
           l(user.password_changed, :format => :minimal).to_iso : '-',
         'last_access' => user.last_access ?
@@ -651,7 +654,7 @@ class UsersController < ApplicationController
         "<b>#{User.human_attribute_name(c)}</b>"
       end
 
-      pdf.text t(:'user.pdf.filtered_by',
+      pdf.text t('user.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence, :count => @columns.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round
@@ -678,9 +681,9 @@ class UsersController < ApplicationController
     end
 
     pdf.move_pointer PDF_FONT_SIZE
-    pdf.text t(:'user.pdf.users_count', :count => users.size)
+    pdf.text t('user.pdf.users_count', :count => users.size)
 
-    pdf_name = t :'user.pdf.pdf_name'
+    pdf_name = t 'user.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, User.table_name)
 
