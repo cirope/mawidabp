@@ -113,12 +113,8 @@ class ApplicationController < ActionController::Base
         :destroy => :erase
       )
       
-      if @auth_user.try(:change_password_hash)
-        @auth_privileges = {}
-      else
-        @auth_privileges = @auth_organization ?
-          @auth_user.try(:privileges, @auth_organization) : {}
-      end
+      @auth_privileges = @auth_organization ?
+        @auth_user.try(:privileges, @auth_organization) : {}
     else
       go_to = request.fullpath
       session[:go_to] = go_to unless action == :logout || request.xhr?
