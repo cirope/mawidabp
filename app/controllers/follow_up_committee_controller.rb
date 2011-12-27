@@ -285,7 +285,7 @@ class FollowUpCommitteeController < ApplicationController
 
           unless scores.blank?
             title = t('follow_up_committee.synthesis_report.generic_score_average',
-              :audit_type => data[:name])
+              :count => scores.size, :audit_type => data[:name])
             text = "<b>#{title}</b>: <i>#{(scores.sum.to_f / scores.size).round}%</i>"
           else
             text = t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')

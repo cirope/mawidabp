@@ -14,7 +14,7 @@
         </strong>
       </p>
       <p style="font-size: .8em; margin-top: 1em;">
-        <%= t(:'conclusion_committee_report.synthesis_report.organization_score_note',
+        <%= t('conclusion_committee_report.synthesis_report.organization_score_note',
           :audit_types => @audits_by_business_unit[period].map {|data| data[:name]}.to_sentence) %>
       </p>
     </div>
@@ -23,12 +23,12 @@
   <% @audits_by_business_unit[period].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
       <h1 class="center_title">
-        <%= t :'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
+        <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
       </h1>
       <% @internal_title_showed = true %>
     <% elsif data[:external] && !@external_title_showed %>
       <h1 class="center_title">
-        <%= t :'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
+        <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
       </h1>
       <% @external_title_showed = true %>
     <% end %>
@@ -57,31 +57,34 @@
       </table>
       <p style="margin: 1em 1em .5em 1em">
         <%= synthesis_report_score_average(
-         t(:'follow_up_committee.synthesis_report.generic_score_average',
-           :audit_type => data[:name]), data[:review_scores]) %>
+         t(
+           'follow_up_committee.synthesis_report.generic_score_average',
+           :audit_type => data[:name],
+           :count => data[:review_scores].try(:size) || 0
+         ), data[:review_scores]) %>
       </p>
       <% if data[:repeated_count] > 0 %>
         <p style="margin-left: 1em;">
-          <%= t(:'follow_up_committee.synthesis_report.repeated_count',
+          <%= t('follow_up_committee.synthesis_report.repeated_count',
             :count => data[:repeated_count]) %>
         </p>
       <% end %>
     <% else %>
       <p style="margin: 1em;">
-        <em><%= t :'follow_up_committee.synthesis_report.without_audits_in_the_period' %></em>
+        <em><%= t 'follow_up_committee.synthesis_report.without_audits_in_the_period' %></em>
       </p>
     <% end %>
   <% end %>
 <% end %>
 
 <div style="margin: 0em 1em;">
-  <%= simple_format t(:'follow_up_committee.synthesis_report.references',
+  <%= simple_format t('follow_up_committee.synthesis_report.references',
     :risk_types => @risk_levels.to_sentence) %>
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.back'), :action => :index %> |
-  <%= link_to_function t(:'label.download'),
+  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to_function t('label.download'),
     "Helper.showItem('#customize_report_form')" %>
 </div>
 <div id="customize_report_form" style="display: none;">
@@ -95,13 +98,13 @@
       :fields => [
         {
           :name => :report_title,
-          :label => t(:'customize_report_form.title'),
-          :value => t(:'follow_up_committee.synthesis_report.title')
+          :label => t('customize_report_form.title'),
+          :value => t('follow_up_committee.synthesis_report.title')
         },
         {
           :name => :report_subtitle,
-          :label => t(:'customize_report_form.subtitle'),
-          :value => t(:'follow_up_committee.synthesis_report.subtitle')
+          :label => t('customize_report_form.subtitle'),
+          :value => t('follow_up_committee.synthesis_report.subtitle')
         }
       ]
     }

@@ -773,19 +773,22 @@ module ConclusionCommonReports
         c_r.review.control_objective_items_for_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
+          pc_data[:reviews] ||= 0
           weaknesses_count = {}
           
           coi.final_weaknesses.each do |w|
             @risk_levels |= parameter_in(
               @auth_organization.id,
               :admin_finding_risk_levels, w.created_at
-            ).sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            ).sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
             
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
             pc_data[:weaknesses_ids][w.risk_text] ||= []
             pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
+          
+          pc_data[:reviews] += 1 if coi.final_weaknesses.size > 0
           
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -811,7 +814,7 @@ module ConclusionCommonReports
         @process_control_ids_data[pc] ||= {}
         reviews_count = pc_data[:effectiveness].size
         effectiveness = reviews_count > 0 ?
-          pc_data[:effectiveness].sum / reviews_count : 100
+          pc_data[:effectiveness].sum.to_f / reviews_count : 100
         weaknesses_count = pc_data[:weaknesses]
         
         if weaknesses_count.values.sum == 0
@@ -838,7 +841,8 @@ module ConclusionCommonReports
           'process_control' => pc,
           'effectiveness' => t(
             'conclusion_committee_report.process_control_stats.average_effectiveness_resume',
-            :effectiveness => "#{'%.2f' % effectiveness}%", :count => reviews_count
+            :effectiveness => "#{'%.2f' % effectiveness}%",
+            :count => pc_data[:reviews]
           ),
           'weaknesses_count' => weaknesses_count_text
         }
