@@ -134,14 +134,15 @@ blank_password_user:
   user: blank_password
   password: <%= Digest::SHA512.hexdigest("#{salt}-blank_password123") %>
   salt: <%= salt %>
-  enable: true
-  failed_attempts: 0
+  enable: false
+  failed_attempts: 5
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
   password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
+  hash_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
   manager_id: <%= ActiveRecord::Fixtures.identify(:administrator_user) %>
   notes: User notes
 

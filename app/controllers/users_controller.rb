@@ -397,6 +397,8 @@ class UsersController < ApplicationController
             :password_confirmation => @auth_user.password,
             :password_changed => Date.today,
             :change_password_hash => nil,
+            :enable => true,
+            :failed_attempts => 0,
             :last_access => session[:last_access] || Time.now
           )
           

@@ -55,11 +55,11 @@ class User < ActiveRecord::Base
   scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
     where(
       [
-        'change_password_hash = :confirmation_hash', 'password_changed > :time'
+        'change_password_hash = :confirmation_hash', 'hash_changed > :time'
       ].join(' AND '),
       {
         :confirmation_hash => confirmation_hash,
-        :time => BLANK_PASSWORD_STALE_DAYS.days.ago.to_date,
+        :time => BLANK_PASSWORD_STALE_DAYS.days.ago,
       }
     ).limit(1)
   }
@@ -352,17 +352,12 @@ class User < ActiveRecord::Base
   end
 
   def blank_password!(organization, notify = true)
-    self.old_passwords.build(:password => self.password)
-
-    self.password = nil
-    self.enable = true
-    self.failed_attempts = 0
-    self.password_changed = Time.new
     self.change_password_hash = UUIDTools::UUID.random_create.to_s
+    self.hash_changed = Time.now
 
     Notifier.blank_password_notification(self, organization).deliver if notify
 
-    self.save(:validate => false)
+    self.save!
   end
 
   def disable!

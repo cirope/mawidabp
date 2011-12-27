@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111205155829) do
+ActiveRecord::Schema.define(:version => 20111227153018) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -619,6 +619,7 @@ ActiveRecord::Schema.define(:version => 20111205155829) do
     t.integer  "manager_id"
     t.boolean  "group_admin",                         :default => false
     t.text     "notes"
+    t.datetime "hash_changed"
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true

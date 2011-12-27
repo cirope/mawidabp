@@ -655,19 +655,18 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'blank user password' do
     perform_auth
-    counts_array = ['OldPassword.count', 'ActionMailer::Base.deliveries.size']
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     
-    assert_difference counts_array do
+    assert_difference 'ActionMailer::Base.deliveries.size' do
       put :blank_password, :id => users(:administrator_user).user
     end
     
     assert_redirected_to users_url
     user = User.find(users(:administrator_user).id)
-    assert_nil user.password
+    assert_not_nil user.change_password_hash
   end
 
   test 'edit password' do
@@ -702,7 +701,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/edit_password'
-
+    
     assert_difference 'OldPassword.count' do
       put :update_password, {
         :id => users(:blank_password_user).to_param,
@@ -718,6 +717,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to :controller => :users, :action => :login
     assert_equal User.digest('new_password_123', user.salt), user.password
     assert_not_nil user.last_access
+    assert_equal 0, user.failed_attempts
 
     # No se puede usar 2 veces el mismo hash
     get :edit_password, {:id => users(:blank_password_user).to_param,
