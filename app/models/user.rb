@@ -319,9 +319,8 @@ class User < ActiveRecord::Base
     unless self.send_notification_email.blank?
       organization = Organization.find GlobalModelConfig.current_organization_id
       
-      self.blank_password!(organization, false)
-      self.log_password_change
-
+      self.reset_password!(organization, false)
+      
       Notifier.welcome_email(self).deliver
     end
   end
@@ -350,12 +349,12 @@ class User < ActiveRecord::Base
       end
     end
   end
-
-  def blank_password!(organization, notify = true)
+  
+  def reset_password!(organization, notify = true)
     self.change_password_hash = UUIDTools::UUID.random_create.to_s
     self.hash_changed = Time.now
 
-    Notifier.blank_password_notification(self, organization).deliver if notify
+    Notifier.restore_password(self, organization).deliver if notify
 
     self.save!
   end

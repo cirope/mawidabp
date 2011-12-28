@@ -389,8 +389,8 @@ class UserTest < ActiveSupport::TestCase
     assert_no_match /New function/, name_from_a_minute_ago
     assert_equal old_name_with_function, name_from_a_minute_ago
   end
-
-  test 'blank password' do
+  
+  test 'reset password' do
     assert_nil @user.change_password_hash
     
     ActionMailer::Base.delivery_method = :test
@@ -398,7 +398,7 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      @user.blank_password!(organizations(:default_organization))
+      @user.reset_password!(organizations(:default_organization))
     end
 
     assert_not_nil @user.reload.change_password_hash

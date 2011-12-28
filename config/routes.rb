@@ -311,6 +311,8 @@ MawidaApp::Application.routes.draw do
       get :auto_complete_for_user
       get :roles
       get :initial_roles
+      get :reset_password
+      post :send_password_reset
     end
 
     member do

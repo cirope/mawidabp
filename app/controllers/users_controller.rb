@@ -6,16 +6,22 @@ require 'pdf/simpletable'
 # ingreso al sistema, permite blanquear la contraseña, cambiarla, etc. y
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
-  before_filter :auth, :except => [:login, :create_session, :edit_password,
-    :update_password, :new_initial, :create_initial, :initial_roles]
+  before_filter :auth, :except => [
+    :login, :create_session, :edit_password, :update_password, :new_initial,
+    :create_initial, :initial_roles, :reset_password, :send_password_reset
+  ]
   before_filter :load_privileges
-  before_filter :check_privileges, :except => [:login, :create_session, :logout,
-    :user_status, :edit_password, :update_password, :edit_personal_data,
-    :update_personal_data, :new_initial, :create_initial, :initial_roles]
+  before_filter :check_privileges, :except => [
+    :login, :create_session, :logout, :user_status, :edit_password,
+    :update_password, :edit_personal_data, :update_personal_data, :new_initial,
+    :create_initial, :initial_roles, :reset_password, :send_password_reset
+  ]
   layout proc { |controller|
-    controller.request.xhr? ? false :
-      (['login', 'create_session'].include?(controller.action_name) ?
-        'clean' : 'application')
+    use_clean = [
+      'login', 'create_session', 'reset_password', 'send_password_reset'
+    ].include?(controller.action_name)
+    
+    controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
   hide_action :find_with_organization, :load_privileges
 
@@ -340,9 +346,35 @@ class UsersController < ApplicationController
     @user = find_with_organization(params[:id])
 
     if @user
-      @user.blank_password!(@auth_organization)
+      @user.reset_password!(@auth_organization)
 
       redirect_to_index t('user.password_reseted', :user => @user.user)
+    end
+  end
+  
+  # Formulario para restablecer contraseña
+  #
+  # * GET /users/reset_password
+  # * GET /users/reset_password.xml
+  def reset_password
+    @title = t 'user.reset_password_title'
+  end
+  
+  # Envio de correo para restablecer contraseña
+  #
+  # * POST /users/send_password_reset
+  # * POST /users/send_password_reset.xml
+  def send_password_reset
+    @title = t 'user.reset_password_title'
+    @auth_organization = Organization.find_by_prefix(request.subdomains.first)
+    @user = find_with_organization(params[:email], :email)
+    
+    if @user
+      @user.reset_password!(@auth_organization)
+
+      redirect_to_login t('user.password_reset_sended')
+    else
+      redirect_to reset_password_users_url, :notice => t('user.unknown_email')
     end
   end
 

@@ -147,20 +147,30 @@ div#errorExplanation ul {
 }
 
 div#login {
+  height: 225px;
+}
+
+div#login, div#reset_password {
+  position: relative;
   margin: 10em auto 0em auto;
   border-top: 12px solid #47ae00;
   border-bottom: 12px solid #151215;
   background: #ede8e8;
   color: #333333;
-  height: 225px;
   width: 625px;
 }
 
-div#login div.submit {
+div#login a, div#reset_password a {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+}
+
+div#login div.submit, div#reset_password div.submit {
   margin: 1em 0em 0em 24em;
 }
 
-div#login label {
+div#login label, div#reset_password label {
   display: block;
   float: left;
   width: 12em;
@@ -170,7 +180,9 @@ div#login label {
   background-color: transparent;
 }
 
-div#login input[type="text"], div#login input[type="password"] {
+div#login input[type="text"],
+div#login input[type="password"],
+div#reset_password input[type="text"] {
   width: 15em;
 }
 
@@ -407,6 +419,17 @@ div#page {
   padding: .5em 1em;
   color: #525252;
   background: #ffffff;
+}
+
+div#reset_password {
+  height: 180px;
+}
+
+div#reset_password p.note {
+  padding: .5em 0em;
+  text-align: center;
+  font-size: 1.2em;
+  font-style: normal;
 }
 
 div#search input[type="text"] {

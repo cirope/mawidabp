@@ -1,6 +1,6 @@
 <div id="login">
   <div id="logo">
-    <%= image_tag 'logo_mini.gif', :size => '139x36', :alt => t(:app_name) %>
+    <%= image_tag 'logo_mini.gif', :size => '139x36', :alt => t('app_name') %>
   </div>
   <% if @organization || @group_admin_mode %>
     <!--[form:user]-->
@@ -14,13 +14,14 @@
         <%= f.password_field :password, :maxlength => 128, :size => 10 %>
       </p>
       <div class="submit">
-        <span class="button"><%= f.submit t(:'user.enter') %></span>
+        <span class="button"><%= f.submit t('user.enter') %></span>
+        <%= link_to t('user.reset_password_title'), reset_password_users_path %>
       </div>
     <% end %>
     <!--[eoform:user] -->
   <% else %>
     <div id="no_organization" class="rounded_top_left rounded_top_right rounded_bottom_left rounded_bottom_right">
-      <%= t :'message.no_organization' %>
+      <%= t 'message.no_organization' %>
     </div>
   <% end %>
 </div>

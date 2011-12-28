@@ -668,6 +668,29 @@ class UsersControllerTest < ActionController::TestCase
     user = User.find(users(:administrator_user).id)
     assert_not_nil user.change_password_hash
   end
+  
+  test 'reset password' do
+    get :reset_password
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'users/reset_password'
+  end
+  
+  test 'send password reset' do
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+    original_hash = users(:blank_password_user).change_password_hash
+    
+    assert_difference 'ActionMailer::Base.deliveries.size' do
+      post :send_password_reset, :email => users(:blank_password_user).email
+    end
+    
+    assert_redirected_to login_users_url
+    user = User.find(users(:blank_password_user).id)
+    assert_not_nil user.change_password_hash
+    assert_not_equal original_hash, user.change_password_hash
+  end
 
   test 'edit password' do
     perform_auth

@@ -129,15 +129,15 @@ class Notifier < ActionMailer::Base
       )
     )
   end
-
-  def blank_password_notification(user, organization)
+  
+  def restore_password(user, organization)
     @user, @hash = user, user.change_password_hash
     @organization = organization
     prefix = "[#{organization.prefix}] "
 
     mail(
       :to => [user.email],
-      :subject => prefix.upcase + t('notifier.blank_password.title')
+      :subject => prefix.upcase + t('notifier.restore_password.title')
     )
   end
 
