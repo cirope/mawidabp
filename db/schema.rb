@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111227153018) do
+ActiveRecord::Schema.define(:version => 20120104140205) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(:version => 20111227153018) do
   add_index "findings", ["created_at"], :name => "index_findings_on_created_at"
   add_index "findings", ["final"], :name => "index_findings_on_final"
   add_index "findings", ["first_notification_date"], :name => "index_findings_on_first_notification_date"
+  add_index "findings", ["follow_up_date"], :name => "index_findings_on_follow_up_date"
   add_index "findings", ["parent_id"], :name => "index_findings_on_parent_id"
   add_index "findings", ["repeated_of_id"], :name => "index_findings_on_repeated_of_id"
   add_index "findings", ["state"], :name => "index_findings_on_state"

@@ -514,7 +514,7 @@ class Finding < ActiveRecord::Base
   end
 
   def self.columns_for_sort
-    HashWithIndifferentAccess.new({
+    HashWithIndifferentAccess.new(
       :risk_asc => {
         :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.ascendant')})",
         :field => [
@@ -536,8 +536,16 @@ class Finding < ActiveRecord::Base
       :review => {
         :name => Review.model_name.human,
         :field => "#{Review.table_name}.identification ASC"
+      },
+      :follow_up_date_asc => {
+        :name => "#{Finding.human_attribute_name(:follow_up_date)}  (#{I18n.t('label.ascendant')})",
+        :field => "#{Finding.table_name}.follow_up_date ASC"
+      },
+      :follow_up_date_desc => {
+        :name => "#{Finding.human_attribute_name(:follow_up_date)}  (#{I18n.t('label.descendant')})",
+        :field => "#{Finding.table_name}.follow_up_date DESC"
       }
-    })
+    )
   end
 
   def <=>(other)

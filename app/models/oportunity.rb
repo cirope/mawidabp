@@ -23,7 +23,9 @@ class Oportunity < Finding
   end
 
   def self.columns_for_sort
-    Finding.columns_for_sort.except(:risk_asc, :risk_desc)
+    Finding.columns_for_sort.except(
+      :risk_asc, :risk_desc, :follow_up_date_asc, :follow_up_date_desc
+    )
   end
 
   def prepare_work_paper(work_paper)
