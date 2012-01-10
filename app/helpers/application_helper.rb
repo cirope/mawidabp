@@ -12,7 +12,7 @@ module ApplicationHelper
       ''
     else
       textilized = RedCloth.new(text, [ :hard_breaks ])
-      textilized.hard_breaks = true if textilized.respond_to?(:'hard_breaks=')
+      textilized.hard_breaks = true if textilized.respond_to?('hard_breaks=')
       textilized.to_html.html_safe
     end
   end
@@ -31,7 +31,7 @@ module ApplicationHelper
     default_options = { :class => "#{options.delete(:class)} calendar" }
     
     default_options[:value] = l(value, :format => time ? :minimal : :default) if value
-    default_options[:'data-time'] = true if time
+    default_options['data-time'] = true if time
     
     form.text_field attribute, default_options.merge(options)
   end
@@ -52,7 +52,7 @@ module ApplicationHelper
 
   def time_in_words_with_abbr(time_in_seconds = 0)
     content_tag(:abbr, time_ago_in_words(time_in_seconds.from_now),
-      :title => t(:'datetime.distance_in_words.x_hours',
+      :title => t('datetime.distance_in_words.x_hours',
         :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
 
@@ -76,7 +76,7 @@ module ApplicationHelper
   # * _id_field_::    Campo o método que se va a usar para identificar al objeto
   def options_array_for(objects, name_field, id_field, show_prompt = false)
     raw_options = objects.map { |o| [o.send(name_field), o.send(id_field)] }
-    show_prompt ? [[t(:'helpers.select.prompt'), nil]] + raw_options :
+    show_prompt ? [[t('helpers.select.prompt'), nil]] + raw_options :
       raw_options
   end
 
@@ -130,7 +130,7 @@ module ApplicationHelper
   #
   # * _submit_label_::  Etiqueta que se quiere mostrar en el botón submit del
   #                     formulario
-  def render_form(submit_label = t(:'label.save'), locals_extra = {})
+  def render_form(submit_label = t('label.save'), locals_extra = {})
     content_tag :div, render(:partial => 'form',
       :locals => {:submit_text => submit_label}.merge(locals_extra)),
       :class => :form_container
@@ -181,13 +181,13 @@ module ApplicationHelper
   # * <em>*args</em>:: Las mismas opciones que button_to sin la etiqueta
   def button_to_destroy(*args)
     options = {
-      :label => t(:'label.delete')
+      :label => t('label.delete')
     }.merge(args.last.kind_of?(Hash) ? args.pop : {})
 
     html_options = {
-      :confirm => t(:'message.confirmation_question'),
+      :confirm => t('message.confirmation_question'),
       :method => :delete,
-      :title => t(:'label.delete'),
+      :title => t('label.delete'),
       :src => path_to_image('delete.gif')
     }.merge(args.last.kind_of?(Hash) ? args.pop : {})
     
@@ -225,13 +225,13 @@ module ApplicationHelper
 
   # Devuelve el HTML de un vínculo para volver (history.back())
   def link_to_back
-    link_to t(:'label.back'), '#', :'data-event' => 'historyBack'
+    link_to t('label.back'), '#', 'data-event' => 'historyBack'
   end
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
-    search_link = link_to_function t(:'label.search'), 'Search.show()',
-      :id => :show_search_link, :title => t(:'message.search_link_title')
+    search_link = link_to_function t('label.search'), 'Search.show()',
+      :id => :show_search_link, :title => t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
       :style => 'display: none;')
@@ -242,7 +242,7 @@ module ApplicationHelper
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
   def link_to_edit(*args)
     html_options = {:class => :image_link}
-    options = {:label => t(:'label.edit')}
+    options = {:label => t('label.edit')}
     options.merge!(args.pop) if args.last.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -255,7 +255,7 @@ module ApplicationHelper
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
   def link_to_show(*args)
     html_options = {:class => :image_link}
-    options = {:label => t(:'label.show')}
+    options = {:label => t('label.show')}
     options.merge!(args.pop) if args.last.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -313,7 +313,7 @@ module ApplicationHelper
     options = {
       :class => 'image_link move',
       :onclick => 'return false;',
-      :title => t(:'label.move')
+      :title => t('label.move')
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -337,12 +337,12 @@ module ApplicationHelper
     new_record = fields.nil? || fields.object.new_record?
     out = String.new.html_safe
     link_options = {
-      :title => t(:'label.delete'),
-      :'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
-      :'data-event' => (new_record ? 'removeItem' : 'hideItem')
+      :title => t('label.delete'),
+      'data-target' => ".#{class_for_remove || fields.object.class.name.underscore}",
+      'data-event' => (new_record ? 'removeItem' : 'hideItem')
     }
 
-    out << fields.hidden_field(:_destroy, :class => :destroy,
+    out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
     out << link_to('X', '#', link_options.merge(options))
   end
@@ -352,9 +352,9 @@ module ApplicationHelper
   #
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_list_item_link(fields)
-    link_to('X', '#', :title => t(:'label.delete'),
-      :'data-target' => ".#{fields.object.class.name.underscore}",
-      :'data-event' => 'removeListItem')
+    link_to('X', '#', :title => t('label.delete'),
+      'data-target' => ".#{fields.object.class.name.underscore}",
+      'data-event' => 'removeListItem')
   end
 
   # Devuelve HTML con un link para agregar un elemento
@@ -363,7 +363,7 @@ module ApplicationHelper
   def link_to_add(*args)
     options = {
       :class => 'action_link add_link',
-      :title => t(:'label.add')
+      :title => t('label.add')
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -376,7 +376,7 @@ module ApplicationHelper
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
   def link_to_clone(*args)
     html_options = {:class => :image_link}
-    options = {:label => t(:'label.copy')}
+    options = {:label => t('label.copy')}
     options.merge!(args.pop) if args.last.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -407,8 +407,8 @@ module ApplicationHelper
   # * _user_options_:: Opciones extra para generar el link (por ejemplo :class)
   def insert_record_link(fields, user_options = {})
     options = {
-      :label => t(:'label.insert_record_item'),
-      :'data-event' => 'insertRecordItem'
+      :label => t('label.insert_record_item'),
+      'data-event' => 'insertRecordItem'
     }.merge(user_options)
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
     
@@ -416,9 +416,9 @@ module ApplicationHelper
       image_tag('insert.gif', :size => '19x13', :alt => options[:label],
         :title => options.delete(:label), :class => options[:class]), "#",
       {
-        :'data-template' => options.delete(:class_to_insert) ||
+        'data-template' => options.delete(:class_to_insert) ||
           fields.object.class.name.underscore,
-        :'data-target' => target || options.delete(:'data-target') ||
+        'data-target' => target || options.delete('data-target') ||
           ".#{fields.object.class.name.underscore}",
         :class => :image_link
       }.merge(options))

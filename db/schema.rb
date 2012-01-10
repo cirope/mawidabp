@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120104140205) do
+ActiveRecord::Schema.define(:version => 20120109142248) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -516,6 +516,15 @@ ActiveRecord::Schema.define(:version => 20120104140205) do
   end
 
   add_index "process_controls", ["best_practice_id"], :name => "index_process_controls_on_best_practice_id"
+
+  create_table "related_user_relations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "related_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "related_user_relations", ["user_id", "related_user_id"], :name => "index_related_user_relations_on_user_id_and_related_user_id"
 
   create_table "resource_classes", :force => true do |t|
     t.string   "name"

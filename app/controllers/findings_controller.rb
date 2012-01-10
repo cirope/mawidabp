@@ -15,6 +15,7 @@ class FindingsController < ApplicationController
     @title = t 'finding.index_title'
     @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
+    @related_users = @auth_user.related_users
 
     default_conditions = {
       :final => false,
@@ -26,7 +27,8 @@ class FindingsController < ApplicationController
         default_conditions[User.table_name] = {:id => params[:user_id]}
       end
     else
-      self_and_descendants_ids = @self_and_descendants.map(&:id)
+      self_and_descendants_ids = @self_and_descendants.map(&:id) +
+        @related_users.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(@selected_user.try(:id)) ?
           @selected_user.id : self_and_descendants_ids
@@ -95,7 +97,9 @@ class FindingsController < ApplicationController
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
 
-    redirect_to findings_url unless @finding
+    if @finding.nil? || !@finding.users.include?(@auth_user)
+      redirect_to findings_url
+    end
   end
 
   # Actualiza el contenido de una debilidad u oportunidad siempre que cumpla con
@@ -107,10 +111,16 @@ class FindingsController < ApplicationController
   def update
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
+    
+    if @finding.nil? || !@finding.users.include?(@auth_user)
+      raise 'Finding can not be updated'
+    end
+    
     # Los auditados no pueden modificar desde observaciones las asociaciones
     if @auth_user.can_act_as_audited?
       params[:finding].delete :finding_user_assignments_attributes
     end
+    
     prepare_parameters
 
     respond_to do |format|
@@ -437,7 +447,8 @@ class FindingsController < ApplicationController
     if @auth_user.can_act_as_audited?
       includes << :users
       conditions[User.table_name] = {
-        :id => @auth_user.descendants.map(&:id) + [@auth_user.id]
+        :id => @auth_user.descendants.map(&:id) +
+          @auth_user.related_users.map(&:id) + [@auth_user.id]
       }
     end
     

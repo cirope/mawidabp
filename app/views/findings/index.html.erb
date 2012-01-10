@@ -1,4 +1,4 @@
-<% if @query.blank? && @order_by.blank? && (@self_and_descendants.size > 1 || @selected_user) %>
+<% if @query.blank? && @order_by.blank? && (@self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user) %>
   <div class="filter" style="margin: 1em;">
     <div>
       <table>
@@ -10,13 +10,13 @@
               <% else %>
                 <%= label_tag :user_id_select, User.model_name.human, :class => :inline %>
                 <%= select nil, :user_id,
-                  sort_options_array(@self_and_descendants.map { |d| [d.full_name_with_function, d.id.to_s] }),
+                  sort_options_array((@self_and_descendants + @related_users).map { |d| [d.full_name_with_function, d.id.to_s] }),
                   {:prompt => true},
                   {:name => :user_id, :id => :user_id_select, :class => :inline_item} %>
               <% end %>
             </td>
             <td class="nowrap" style="text-align: right;">
-              <%= link_to_if @selected_user, t(:'label.cancel'),
+              <%= link_to_if @selected_user, t('label.cancel'),
                 findings_path(params[:completed]),
                 {:style => 'margin-left: 1em;'} %>
             </td>
@@ -47,7 +47,7 @@
           params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), :expendable => true %>
       <%= make_not_available_column Weakness.human_attribute_name(:risk), :expendable => true %>
       <%= make_not_available_column Finding.human_attribute_name(:finding_answers), :expendable => true %>
-      <%= make_not_available_column raw(t(:'finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
+      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -68,9 +68,9 @@
         <% end %>
         <td class="expendable"><%= h finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
         <td class="expendable"><%= h finding.finding_answers.count %></td>
-        <td class="expendable"><%= t finding.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
-        <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? %></td>
+        <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && finding.users.reload.include?(@auth_user) %></td>
       </tr>
     <% end %>
   </tbody>

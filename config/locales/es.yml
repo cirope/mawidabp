@@ -1191,6 +1191,7 @@ es:
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
     add_child: "Agregar nueva persona a cargo"
     add_organization_role: "Agregar un nuevo perfil dentro de una organización"
+    add_related_user_relations: "Agregar usuario relacionado"
     children: "Personal a cargo"
     reassign: "Reasignar"
     reassign_to_another_user: "Reasignar responsabilidades"
@@ -1814,6 +1815,9 @@ es:
         name: "Proceso de negocio"
         order: "Orden"
         control_objectives: "Objetivos de control"
+      related_user_relation:
+        user_id: 'Usuario'
+        related_user_id: 'Usuario relacionado'
       resource:
         name: "Recurso"
         description: "Descripción"

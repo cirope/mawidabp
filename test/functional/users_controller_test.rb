@@ -38,8 +38,8 @@ class UsersControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert [I18n.t(:'message.must_be_authenticated'),
-        I18n.t(:'user.confirmation_link_invalid')].include?(flash.alert)
+      assert [I18n.t('message.must_be_authenticated'),
+        I18n.t('user.confirmation_link_invalid')].include?(flash.alert)
     end
 
     public_actions.each do |action|
@@ -78,7 +78,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -95,7 +95,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -113,7 +113,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -133,7 +133,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -151,7 +151,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -171,7 +171,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -191,7 +191,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -209,7 +209,7 @@ class UsersControllerTest < ActionController::TestCase
         assert_kind_of ErrorRecord, error_record
         assert_response :success
         # en div#alert se leen los mensajes de flash[]
-        assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+        assert_select '#alert p', I18n.t('message.invalid_user_or_password')
       end
 
       assert_response :success
@@ -233,7 +233,7 @@ class UsersControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
     assert_response :success
-    assert_select '#no_organization', I18n.t(:'message.no_organization')
+    assert_select '#no_organization', I18n.t('message.no_organization')
   end
 
   test 'login sucesfully' do
@@ -282,7 +282,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_kind_of ErrorRecord, error_record
       assert_response :success
       # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t(:'message.invalid_user_or_password')
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -341,7 +341,7 @@ class UsersControllerTest < ActionController::TestCase
       :organization_id => organizations(:default_organization).id
     ).first
     assert_kind_of LoginRecord, login_record
-    assert_not_nil I18n.t(:'message.password_expire_in_x',
+    assert_not_nil I18n.t('message.password_expire_in_x',
       :count => get_test_parameter(:security_expire_notification).to_i - 2),
       flash.notice
   end
@@ -370,7 +370,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/login'
-    assert_select '#alert p', I18n.t(:'message.you_are_already_logged')
+    assert_select '#alert p', I18n.t('message.you_are_already_logged')
   end
 
   test 'redirected instead of relogin' do
@@ -452,8 +452,8 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'create user' do
     perform_auth
-    counts_array = ['User.count', 'OrganizationRole.count', 
-      'ActionMailer::Base.deliveries.size']
+    counts_array = ['User.count', 'RelatedUserRelation.count',
+      'OrganizationRole.count', 'ActionMailer::Base.deliveries.size']
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
@@ -476,6 +476,11 @@ class UsersControllerTest < ActionController::TestCase
             :new_1 => {
               :organization_id => organizations(:default_organization).id,
               :role_id => roles(:admin_role).id
+            }
+          },
+          :related_user_relations_attributes => {
+            :new_1 => {
+              :related_user_id => users(:plain_manager_user).id
             }
           }
         }
@@ -639,7 +644,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert !user.reload.enable?
-    assert_equal I18n.t(:'user.correctly_disabled'), flash.notice
+    assert_equal I18n.t('user.correctly_disabled'), flash.notice
     assert_redirected_to users_url
   end
 
@@ -649,7 +654,7 @@ class UsersControllerTest < ActionController::TestCase
       delete :destroy, :id => users(:audited_user).user
     end
 
-    assert_equal I18n.t(:'user.will_be_orphan_findings'), flash.alert
+    assert_equal I18n.t('user.will_be_orphan_findings'), flash.alert
     assert_redirected_to users_url
   end
 
@@ -776,7 +781,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'new initial with invalid hash' do
     get :new_initial, :hash => "#{groups(:main_group).admin_hash}x"
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+    assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
   test 'create initial' do
@@ -805,7 +810,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'user.correctly_created'), flash.notice
+    assert_equal I18n.t('user.correctly_created'), flash.notice
   end
 
   test 'create initial with invalid hash' do
@@ -834,7 +839,7 @@ class UsersControllerTest < ActionController::TestCase
     end
     
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+    assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
   test 'get initial roles' do
@@ -853,7 +858,7 @@ class UsersControllerTest < ActionController::TestCase
       :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
 
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+    assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
   test 'edit personal data' do
@@ -926,7 +931,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
+    assert_equal I18n.t('user.user_reassignment_completed'), flash.notice
   end
 
   test 'user reviews reassignment edit' do
@@ -962,7 +967,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
+    assert_equal I18n.t('user.user_reassignment_completed'), flash.notice
   end
 
   test 'user reassignment of nothing edit' do
@@ -997,7 +1002,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_reassignment_completed'), flash.notice
+    assert_equal I18n.t('user.user_reassignment_completed'), flash.notice
   end
 
   test 'user findings release edit' do
@@ -1026,7 +1031,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
+    assert_equal I18n.t('user.user_release_completed'), flash.notice
   end
 
   test 'user reviews release edit' do
@@ -1055,7 +1060,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
+    assert_equal I18n.t('user.user_release_completed'), flash.notice
   end
 
   test 'user release edit of nothing' do
@@ -1084,7 +1089,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to users_url
-    assert_equal I18n.t(:'user.user_release_completed'), flash.notice
+    assert_equal I18n.t('user.user_release_completed'), flash.notice
   end
 
   test 'export to pdf' do
@@ -1093,7 +1098,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) { get :export_to_pdf }
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'user.pdf.pdf_name'), User.table_name)
+      I18n.t('user.pdf.pdf_name'), User.table_name)
   end
 
   test 'export with search' do
@@ -1107,7 +1112,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'user.pdf.pdf_name'), User.table_name)
+      I18n.t('user.pdf.pdf_name'), User.table_name)
   end
 
   test 'get roles' do

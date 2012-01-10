@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   trimmed_fields :user, :email, :name, :last_name
 
   # Constantes
-  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     :user => {
       :column => "LOWER(#{table_name}.user)", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
       :column => "LOWER(#{table_name}.function)", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
-  })
+  )
 
   has_paper_trail :ignore => [:last_access, :logged_in], :meta => {
     :organization_id => lambda { GlobalModelConfig.current_organization_id },
@@ -171,6 +171,8 @@ class User < ActiveRecord::Base
     :after_remove => :mark_roles_as_changed
   has_many :organizations, :through => :organization_roles, :uniq => true
   has_many :finding_user_assignments
+  has_many :related_user_relations, :dependent => :destroy
+  has_many :related_users, :through => :related_user_relations
   has_many :findings, :through => :finding_user_assignments,
     :source => :raw_finding, :class_name => 'Finding', :uniq => true
   has_many :weaknesses, :through => :finding_user_assignments,
@@ -182,6 +184,8 @@ class User < ActiveRecord::Base
     :reject_if => proc { |attributes|
       attributes['organization_id'].blank? || attributes['role_id'].blank?
     }
+  accepts_nested_attributes_for :related_user_relations, :allow_destroy => true,
+    :reject_if => proc { |attributes| attributes['related_user_id'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
