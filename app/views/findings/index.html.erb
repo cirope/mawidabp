@@ -70,7 +70,7 @@
         <td class="expendable"><%= h finding.finding_answers.count %></td>
         <td class="expendable"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
-        <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && finding.users.reload.include?(@auth_user) %></td>
+        <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>
     <% end %>
   </tbody>

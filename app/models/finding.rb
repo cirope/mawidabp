@@ -573,10 +573,10 @@ class Finding < ActiveRecord::Base
         xml.users do
           self.finding_user_assignments.each do |fua|
             xml.user do
-              xml.tag! :name, fua.user.full_name
-              xml.tag! :user, fua.user.user
-              xml.tag! :function, fua.user.function
-              xml.tag! :process_owner, fua.process_owner
+              xml.tag! 'name', fua.user.full_name
+              xml.tag! 'user', fua.user.user
+              xml.tag! 'function', fua.user.function
+              xml.tag! 'process_owner', fua.process_owner
             end
           end
         end

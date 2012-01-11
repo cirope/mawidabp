@@ -15,7 +15,7 @@ class FindingsController < ApplicationController
     @title = t 'finding.index_title'
     @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
-    @related_users = @auth_user.related_users
+    @related_users = @auth_user.related_users_and_descendants
 
     default_conditions = {
       :final => false,
@@ -97,7 +97,8 @@ class FindingsController < ApplicationController
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
 
-    if @finding.nil? || !@finding.users.include?(@auth_user)
+    if @finding.nil? ||
+        (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
       redirect_to findings_url
     end
   end
@@ -112,7 +113,8 @@ class FindingsController < ApplicationController
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
     
-    if @finding.nil? || !@finding.users.include?(@auth_user)
+    if @finding.nil? ||
+        (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
       raise 'Finding can not be updated'
     end
     
@@ -448,7 +450,7 @@ class FindingsController < ApplicationController
       includes << :users
       conditions[User.table_name] = {
         :id => @auth_user.descendants.map(&:id) +
-          @auth_user.related_users.map(&:id) + [@auth_user.id]
+          @auth_user.related_users_and_descendants.map(&:id) + [@auth_user.id]
       }
     end
     

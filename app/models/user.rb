@@ -295,7 +295,7 @@ class User < ActiveRecord::Base
 
   def string_to_append_if_disable
     unless self.enable? || self.full_name.blank?
-      " - (#{I18n.t(:'user.disabled')})"
+      " - (#{I18n.t('user.disabled')})"
     end
   end
 
@@ -444,6 +444,10 @@ class User < ActiveRecord::Base
 
     self.update_attribute :logged_in, false
   end
+  
+  def related_users_and_descendants
+    self.related_users + self.related_users.map(&:descendants).flatten.uniq
+  end
 
   def allowed_modules
     allowed_modules = []
@@ -491,7 +495,7 @@ class User < ActiveRecord::Base
 
   def has_not_orphan_fingings?
     unless self.findings.all_for_reallocation.blank?
-      self.errors.add :base, I18n.t(:'user.will_be_orphan_findings')
+      self.errors.add :base, I18n.t('user.will_be_orphan_findings')
 
       false
     else
@@ -593,14 +597,14 @@ class User < ActiveRecord::Base
       end
 
       unless all_released
-        self.errors.add :base, I18n.t(:'user.user_release_failed')
+        self.errors.add :base, I18n.t('user.user_release_failed')
         
         raise ActiveRecord::Rollback
       end
     end
 
     if all_released && !items_for_notification.empty?
-      title = I18n.t(:'user.responsibility_release.title')
+      title = I18n.t('user.responsibility_release.title')
 
       Notifier.changes_notification(self, :title => title,
         :content => items_for_notification).deliver
@@ -678,19 +682,19 @@ class User < ActiveRecord::Base
           end.uniq.sort
 
           if (reviews.size + reassigned_reviews.size) > 0
-            title = I18n.t(:'user.responsibility_modification.title')
+            title = I18n.t('user.responsibility_modification.title')
             body = (reviews.blank? ? '' : I18n.t(
-                :'user.responsibility_modification.reassigned_to_findings_from_reviews',
+                'user.responsibility_modification.reassigned_to_findings_from_reviews',
                 :reviews => reviews.to_sentence, :count => reviews.size))
             body << "\n\n" unless body.blank?
             body << (reassigned_reviews.sort!.blank? ? '' : I18n.t(
-              :'user.responsibility_modification.reassigned_to_reviews',
+              'user.responsibility_modification.reassigned_to_reviews',
               :reviews => reassigned_reviews.to_sentence,
               :count => reassigned_reviews.size))
             content = [
-              I18n.t(:'user.responsibility_modification.old_responsible',
+              I18n.t('user.responsibility_modification.old_responsible',
                 :responsible => self.full_name_with_function),
-              I18n.t(:'user.responsibility_modification.new_responsible',
+              I18n.t('user.responsibility_modification.new_responsible',
                 :responsible => other.full_name_with_function)]
 
             Notifier.changes_notification([other, self], :title => title,
@@ -698,7 +702,7 @@ class User < ActiveRecord::Base
           end
 
           unless unconfirmed_findings.blank?
-            title = I18n.t(:'user.unconfirmed_findings')
+            title = I18n.t('user.unconfirmed_findings')
             content = ''
             notification = Notification.create(
               :findings => unconfirmed_findings, :user => other)
