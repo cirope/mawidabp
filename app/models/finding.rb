@@ -559,14 +559,20 @@ class Finding < ActiveRecord::Base
   alias_method :label, :to_s
   
   def to_xml(options = {})
-    default_options = {
-      :skip_types => true,
-      :only => [:id, :review_code, :description, :follow_up_date,
-        :solution_date, :origination_date, :answer],
-      :methods => [:risk_text, :state_text, :review_text]
-    }
+    default_options = { :skip_types => true, :only => [:solution_date] }
     
     super(default_options.merge(options)) do |xml|
+      # Para mantener siempre el mismo orden (ocurrencias ajenas)
+      xml.tag! 'origination-date', self.origination_date
+      xml.tag! 'id', self.id
+      xml.tag! 'follow-up-date', self.follow_up_date
+      xml.tag! 'description', self.description
+      xml.tag! 'review-code', self.review_code
+      xml.tag! 'answer', self.answer
+      xml.tag! 'risk-text', self.risk_text
+      xml.tag! 'state-text', self.state_text
+      xml.tag! 'review-text', self.review_text
+      
       if self.finding_user_assignments.empty?
         xml.tag! 'users' # empty tag
       else
