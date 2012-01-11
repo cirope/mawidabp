@@ -569,7 +569,7 @@ class Finding < ActiveRecord::Base
       xml.tag! 'description', self.description
       xml.tag! 'review-code', self.review_code
       xml.tag! 'answer', self.answer
-      xml.tag! 'risk-text', self.risk_text
+      xml.tag! 'risk-text', (self.risk_text if self.respond_to?(:risk_text))
       xml.tag! 'state-text', self.state_text
       xml.tag! 'review-text', self.review_text
       
