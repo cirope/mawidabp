@@ -845,6 +845,13 @@ module FollowUpCommonReports
           }
         end
       end
+      
+      @process_control_data[period].sort! do |pc_data_1, pc_data_2|
+        ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
+        ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
+        
+        ef1 <=> ef2
+      end
     end
   end
   
@@ -1066,6 +1073,13 @@ module FollowUpCommonReports
           ),
           'weaknesses_count' => weaknesses_count_text
         }
+      end
+      
+      @process_control_data[period].sort! do |pc_data_1, pc_data_2|
+        ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
+        ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
+        
+        ef1 <=> ef2
       end
     end
   end
