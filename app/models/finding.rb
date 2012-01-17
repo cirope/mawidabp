@@ -1554,9 +1554,12 @@ class Finding < ActiveRecord::Base
         until (findings = Finding.unanswered_and_stale(n += 1)).empty?
           findings.each do |finding|
             users = finding.users_for_scaffold_notification(n)
+            has_audited_comments = finding.finding_answers.reload.any? do |fa|
+              fa.user.can_act_as_audited?
+            end
 
             # No notificar si no hace falta
-            unless users.empty?
+            if !users.empty? && !has_audited_comments
               Notifier.unanswered_finding_to_manager_notification(finding,
                 users | finding.users, n).deliver
             end
