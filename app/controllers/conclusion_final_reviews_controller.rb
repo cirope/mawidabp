@@ -12,7 +12,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews
   # * GET /conclusion_final_reviews.xml
   def index
-    @title = t :'conclusion_final_review.index_title'
+    @title = t 'conclusion_final_review.index_title'
     default_conditions = {
       "#{Period.table_name}.organization_id" => @auth_organization.id
     }
@@ -43,7 +43,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/1
   # * GET /conclusion_final_reviews/1.xml
   def show
-    @title = t :'conclusion_final_review.show_title'
+    @title = t 'conclusion_final_review.show_title'
     @conclusion_final_review = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -59,7 +59,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.json
   def new
     unless ConclusionFinalReview.exists?(:review_id => params[:review])
-      @title = t :'conclusion_final_review.new_title'
+      @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review = ConclusionFinalReview.new(
         :review_id => params[:review])
 
@@ -91,7 +91,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/1/edit
   def edit
-    @title = t :'conclusion_final_review.edit_title'
+    @title = t 'conclusion_final_review.edit_title'
     @conclusion_final_review = find_with_organization(params[:id])
   end
 
@@ -100,13 +100,13 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews
   # * POST /conclusion_final_reviews.xml
   def create
-    @title = t :'conclusion_final_review.new_title'
+    @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review = ConclusionFinalReview.new(
       params[:conclusion_final_review], {}, false)
 
     respond_to do |format|
       if @conclusion_final_review.save
-        flash.notice = t :'conclusion_final_review.correctly_created'
+        flash.notice = t 'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { render :xml => @conclusion_final_review, :status => :created, :location => @conclusion_final_review }
       else
@@ -122,13 +122,13 @@ class ConclusionFinalReviewsController < ApplicationController
   # * PUT /conclusion_final_reviews/1
   # * PUT /conclusion_final_reviews/1.xml
   def update
-    @title = t :'conclusion_final_review.edit_title'
+    @title = t 'conclusion_final_review.edit_title'
     @conclusion_final_review = find_with_organization(params[:id])
 
     respond_to do |format|
       if @conclusion_final_review.update_attributes(
           params[:conclusion_final_review])
-        flash.notice = t :'conclusion_final_review.correctly_updated'
+        flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
       else
@@ -138,7 +138,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'conclusion_final_review.stale_object_error'
+    flash.alert = t 'conclusion_final_review.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -190,7 +190,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/bundle/1
   def bundle
-    @title = t :'conclusion_final_review.bundle_title'
+    @title = t 'conclusion_final_review.bundle_title'
     @conclusion_final_review = find_with_organization(params[:id])
   end
 
@@ -210,7 +210,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/compose_email/1
   def compose_email
-    @title = t :'conclusion_final_review.send_by_email'
+    @title = t 'conclusion_final_review.send_by_email'
     @conclusion_final_review = find_with_organization(params[:id])
   end
 
@@ -218,7 +218,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * POST /conclusion_final_reviews/send_by_email/1
   def send_by_email
-    @title = t :'conclusion_final_review.send_by_email'
+    @title = t 'conclusion_final_review.send_by_email'
     @conclusion_final_review = find_with_organization(params[:id])
 
     users = []
@@ -258,7 +258,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     unless users.blank?
-      flash.notice = t(:'conclusion_review.review_sended')
+      flash.notice = t('conclusion_review.review_sended')
 
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
@@ -283,7 +283,7 @@ class ConclusionFinalReviewsController < ApplicationController
     pdf = PDF::Writer.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
-    pdf.add_title t(:'conclusion_final_review.index_title')
+    pdf.add_title t('conclusion_final_review.index_title')
 
     column_order = [
       ['period', Review.human_attribute_name(:period_id), 10],
@@ -322,7 +322,7 @@ class ConclusionFinalReviewsController < ApplicationController
         "<b>#{column_name[1]}</b>"
       end
 
-      pdf.text t(:'conclusion_final_review.pdf.filtered_by',
+      pdf.text t('conclusion_final_review.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence, :count => @columns.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round
@@ -330,7 +330,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     unless @order_by_column_name.blank?
       pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
-      pdf.text t(:'conclusion_final_review.pdf.sorted_by',
+      pdf.text t('conclusion_final_review.pdf.sorted_by',
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
@@ -355,7 +355,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
     end
 
-    pdf_name = t :'conclusion_final_review.pdf.pdf_name'
+    pdf_name = t 'conclusion_final_review.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, ConclusionFinalReview.table_name)
 

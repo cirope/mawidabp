@@ -32,7 +32,7 @@
         :class => :inline %>
       <%= text_field_tag :issue_date, @finding.issue_date ?
         l(@finding.issue_date, :format => :long) :
-        t(:'finding.without_conclusion_final_review'),
+        t('finding.without_conclusion_final_review'),
         :class => :inline_item, :readonly => true %>
     </p>
     <% if @finding.control_objective_item %>
@@ -121,7 +121,7 @@
 
   <% unless @finding.important_dates.blank? %>
     <h1 class="clear">
-      <%= t(:'finding.important_dates.title') %>
+      <%= t('finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
     </h1>
     <ul class="raw_list">
@@ -135,12 +135,12 @@
     <% audited, auditors = *@finding.users.partition(&:audited?) %>
     <% process_owners = @finding.process_owners %>
     <div style="clear: both; margin: 0em 0em 1em 0em;">
-      <h1><%= t(:'finding.responsibles', :count => @finding.users.size) %></h1>
+      <h1><%= t('finding.responsibles', :count => @finding.users.size) %></h1>
       <table class="summary_table" style="margin-bottom: 2em;">
         <thead>
           <tr>
-            <th><%= t(:'finding.audited', :count => audited.size) %></th>
-            <th><%= t(:'finding.reviewers', :count => auditors.size) %></th>
+            <th><%= t('finding.audited', :count => audited.size) %></th>
+            <th><%= t('finding.reviewers', :count => auditors.size) %></th>
           </tr>
         </thead>
         <tbody>
@@ -159,7 +159,7 @@
   <% end %>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h1><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
+    <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -168,7 +168,7 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h1><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
+    <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -177,7 +177,7 @@
   <% end %>
 
   <h1>
-    <%= t(:'finding.finding_answers') %>
+    <%= t('finding.finding_answers') %>
     <%= show_inline_help_for(:finding_comments) %>
   </h1>
     
@@ -206,14 +206,14 @@
   </table>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_answer'), '#',
-      :'data-template' => :finding_answer,
-      :'data-event' => 'addNestedItem',
-      :'data-container' => '#finding_answers' %>
+    <%= link_to t('finding.add_finding_answer'), '#',
+      'data-template' => :finding_answer,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#finding_answers' %>
   </p>
 
   <% unless @finding.work_papers.blank? %>
-    <h1><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
+    <h1><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
 
     <table class="summary_table">
       <thead>
@@ -233,7 +233,7 @@
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format h(work_paper.description) %></td>
             <td><%= work_paper.file_model ?
-              link_to(t(:'label.download'), work_paper.file_model.file.url) : '---' %></td>
+              link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>
       </tbody>
@@ -242,13 +242,13 @@
 
   <div style="clear: both; margin-top: 2em;">
     <div class="title" style="font-weight: normal;">
-      <%= textilize t(:'finding.costs',
+      <%= textilize t('finding.costs',
         :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
     </div>
 
     <% unless @finding.costs.blank? %>
       <p style="margin-bottom: 1em;">
-        <%= link_to_function t(:'finding.view_cost_details'),
+        <%= link_to_function t('finding.view_cost_details'),
           "$('#cost_details').slideToggle()" %>
       </p>
       <div id="cost_details" style="display: none;">

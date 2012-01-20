@@ -10,7 +10,7 @@ class LoginRecordsController < ApplicationController
   #
   # * GET /login_records/choose
   def choose
-    @title = t :'login_record.choose'
+    @title = t 'login_record.choose'
     
     respond_to do |format|
       format.html # choose.html.erb
@@ -22,7 +22,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records
   # * GET /login_records.xml
   def index
-    @title = t :'login_record.index_title'
+    @title = t 'login_record.index_title'
     @from_date, @to_date = *make_date_range(params[:index])
     default_conditions = [
       'organization_id = :organization_id',
@@ -62,7 +62,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/1
   # * GET /login_records/1.xml
   def show
-    @title = t :'login_record.show_title'
+    @title = t 'login_record.show_title'
     @login_record = LoginRecord.where(
       :id => params[:id], :organization_id => @auth_organization.id
     ).first
@@ -95,12 +95,12 @@ class LoginRecordsController < ApplicationController
     pdf = PDF::Writer.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
-    pdf.add_title t(:'login_record.index_title')
+    pdf.add_title t('login_record.index_title')
 
     pdf.move_pointer PDF_FONT_SIZE
 
-    pdf.add_description_item(t(:'login_record.period.title'),
-      t(:'login_record.period.range',
+    pdf.add_description_item(t('login_record.period.title'),
+      t('login_record.period.range',
         :from_date => l(from_date, :format => :long),
         :to_date => l(to_date, :format => :long)))
 
@@ -146,7 +146,7 @@ class LoginRecordsController < ApplicationController
       end
     end
 
-    pdf_name = t(:'login_record.pdf_list_name',
+    pdf_name = t('login_record.pdf_list_name',
       :from_date => from_date.to_formatted_s(:db),
       :to_date => to_date.to_formatted_s(:db))
 

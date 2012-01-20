@@ -51,13 +51,13 @@
 
   <%= hidden_lock_version(n_f) %>
   <p>
-     <span class="button"><%= n_f.submit t(:'label.save') %></span>
+     <span class="button"><%= n_f.submit t('label.save') %></span>
   </p>
 <% end %>
 <!--[eoform:notification] -->
 
 <div id="links">
-  <%= link_to t(:'label.show'), @notification %> |
-  <%= link_to t(:'label.list'), notifications_path %> |
+  <%= link_to t('label.show'), @notification %> |
+  <%= link_to t('label.list'), notifications_path %> |
   <%= link_to_back %>
 </div>

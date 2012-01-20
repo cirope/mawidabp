@@ -4,7 +4,7 @@ class NotificationsController < ApplicationController
   # * GET /notifications
   # * GET /notifications.xml
   def index
-    @title = t :'notification.index_title'
+    @title = t 'notification.index_title'
     @notifications = Notification.where(:user_id => @auth_user.id).order(
       ['status ASC', 'created_at DESC']
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
@@ -18,7 +18,7 @@ class NotificationsController < ApplicationController
   # * GET /notifications/1
   # * GET /notifications/1.xml
   def show
-    @title = t :'notification.show_title'
+    @title = t 'notification.show_title'
     @notification = Notification.where(
       :confirmation_hash => params[:id], :user_id => @auth_user.id
     ).first
@@ -33,7 +33,7 @@ class NotificationsController < ApplicationController
   #
   # * GET /notifications/1/edit
   def edit
-    @title = t :'notification.edit_title'
+    @title = t 'notification.edit_title'
     @notification = Notification.where(
       :confirmation_hash => params[:id], :user_id => @auth_user.id
     ).first
@@ -47,14 +47,14 @@ class NotificationsController < ApplicationController
   # * PUT /notifications/1
   # * PUT /notifications/1.xml
   def update
-    @title = t :'notification.edit_title'
+    @title = t 'notification.edit_title'
     @notification = Notification.where(
       :confirmation_hash => params[:id], :user_id => @auth_user.id
     ).first
 
     respond_to do |format|
       if @notification.update_attributes(params[:notification])
-        flash.notice = t :'notification.correctly_updated'
+        flash.notice = t 'notification.correctly_updated'
         format.html { redirect_to(notifications_url) }
         format.xml  { head :ok }
       else
@@ -64,7 +64,7 @@ class NotificationsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'notification.stale_object_error'
+    flash.alert = t 'notification.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -85,8 +85,8 @@ class NotificationsController < ApplicationController
       :id => @notification.to_param}
 
     unless login_check
-      message = t(:'notification.confirmed') if @notification.try(:confirmed?)
-      message = t(:'notification.rejected') if @notification.try(:rejected?)
+      message = t('notification.confirmed') if @notification.try(:confirmed?)
+      message = t('notification.rejected') if @notification.try(:rejected?)
       session[:go_to] = go_to unless params[:reject].blank?
 
       redirect_to_login message

@@ -51,10 +51,10 @@ class PeriodTest < ActiveSupport::TestCase
 
     assert_equal 4, @period.errors.size
     assert_equal [
-      I18n.t(:'period.errors.has_reviews', :count => @period.reviews.size),
-      I18n.t(:'period.errors.has_plans', :count => @period.plans.size),
-      I18n.t(:'period.errors.has_workflows', :count => @period.workflows.size),
-      I18n.t(:'period.errors.has_procedure_controls',
+      I18n.t('period.errors.has_reviews', :count => @period.reviews.size),
+      I18n.t('period.errors.has_plans', :count => @period.plans.size),
+      I18n.t('period.errors.has_workflows', :count => @period.workflows.size),
+      I18n.t('period.errors.has_procedure_controls',
         :count => @period.procedure_controls.size)].sort,
       @period.errors.full_messages.sort
   end

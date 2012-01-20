@@ -9,7 +9,7 @@ class RolesController < ApplicationController
   # * GET /roles
   # * GET /roles.xml
   def index
-    @title = t :'role.index_title'
+    @title = t 'role.index_title'
     @roles = Role.list(@auth_organization.id).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -25,7 +25,7 @@ class RolesController < ApplicationController
   # * GET /roles/1
   # * GET /roles/1.xml
   def show
-    @title = t :'role.show_title'
+    @title = t 'role.show_title'
     @role = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -39,7 +39,7 @@ class RolesController < ApplicationController
   # * GET /roles/new
   # * GET /roles/new.xml
   def new
-    @title = t :'role.new_title'
+    @title = t 'role.new_title'
     @role = Role.new(params[:role])
 
     respond_to do |format|
@@ -52,7 +52,7 @@ class RolesController < ApplicationController
   #
   # * GET /roles/1/edit
   def edit
-    @title = t :'role.edit_title'
+    @title = t 'role.edit_title'
     @role = find_with_organization(params[:id])
     @role.role_type = params[:role][:role_type] if params[:role]
   end
@@ -62,14 +62,14 @@ class RolesController < ApplicationController
   # * POST /roles
   # * POST /roles.xml
   def create
-    @title = t :'role.new_title'
+    @title = t 'role.new_title'
     @role = Role.new(params[:role].merge(
         :organization_id => @auth_organization.id))
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
       if @role.save
-        flash.notice = t :'role.correctly_created'
+        flash.notice = t 'role.correctly_created'
         format.html { redirect_to(roles_url) }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
       else
@@ -84,14 +84,14 @@ class RolesController < ApplicationController
   # * PUT /roles/1
   # * PUT /roles/1.xml
   def update
-    @title = t :'role.edit_title'
+    @title = t 'role.edit_title'
     @role = find_with_organization(params[:id])
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
       if @role.update_attributes(params[:role].merge(
             :organization_id => @auth_organization.id))
-        flash.notice = t :'role.correctly_updated'
+        flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }
         format.xml  { head :ok }
       else
@@ -101,7 +101,7 @@ class RolesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'role.stale_object_error'
+    flash.alert = t 'role.stale_object_error'
     redirect_to :action => :edit
   end
 

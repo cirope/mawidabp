@@ -12,7 +12,7 @@ class OrganizationsController < ApplicationController
   # * GET /organizations
   # * GET /organizations.xml
   def index
-    @title = t :'organization.index_title'
+    @title = t 'organization.index_title'
     @organizations = Organization.where(
       :group_id => @auth_organization.group_id
     ).order('name ASC').paginate(
@@ -30,7 +30,7 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/1
   # * GET /organizations/1.xml
   def show
-    @title = t :'organization.show_title'
+    @title = t 'organization.show_title'
     @organization = find_if_allowed(params[:id])
 
     respond_to do |format|
@@ -44,7 +44,7 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/new
   # * GET /organizations/new.xml
   def new
-    @title = t :'organization.new_title'
+    @title = t 'organization.new_title'
     @organization = Organization.new
 
     respond_to do |format|
@@ -57,7 +57,7 @@ class OrganizationsController < ApplicationController
   #
   # * GET /organizations/1/edit
   def edit
-    @title = t :'organization.edit_title'
+    @title = t 'organization.edit_title'
     @organization = find_if_allowed(params[:id])
   end
 
@@ -67,7 +67,7 @@ class OrganizationsController < ApplicationController
   # * POST /organizations
   # * POST /organizations.xml
   def create
-    @title = t :'organization.new_title'
+    @title = t 'organization.new_title'
     params[:organization].delete :business_units_attributes
     @organization = Organization.new(params[:organization])
     @organization.must_create_parameters = true
@@ -87,7 +87,7 @@ class OrganizationsController < ApplicationController
       end
 
       if saved
-        flash.notice = t :'organization.correctly_created'
+        flash.notice = t 'organization.correctly_created'
         format.html { redirect_to(organizations_url) }
         format.xml  { render :xml => @organization, :status => :created, :location => @organization }
       else
@@ -104,13 +104,13 @@ class OrganizationsController < ApplicationController
   # * PUT /organizations/1
   # * PUT /organizations/1.xml
   def update
-    @title = t :'organization.edit_title'
+    @title = t 'organization.edit_title'
     @organization = find_if_allowed(params[:id])
     params[:organization].delete :business_units_attributes
 
     respond_to do |format|
       if @organization.update_attributes(params[:organization])
-        flash.notice = t :'organization.correctly_updated'
+        flash.notice = t 'organization.correctly_updated'
         format.html { redirect_to(organizations_url) }
         format.xml  { head :ok }
       else
@@ -120,7 +120,7 @@ class OrganizationsController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'organization.stale_object_error'
+    flash.alert = t 'organization.stale_object_error'
     redirect_to :action => :edit
   end
 

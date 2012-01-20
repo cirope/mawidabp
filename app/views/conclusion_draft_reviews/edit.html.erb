@@ -21,7 +21,7 @@
   :action => :bundle, :id => @conclusion_draft_review %> |
 <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?) &&
     !@conclusion_draft_review.has_final_review?,
-  t(:'conclusion_draft_review.send_by_email'), :action => :compose_email,
+  t('conclusion_draft_review.send_by_email'), :action => :compose_email,
   :id => @conclusion_draft_review) %> |
 <%= link_to_back %>
 </div>

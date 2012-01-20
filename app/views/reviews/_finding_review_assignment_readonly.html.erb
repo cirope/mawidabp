@@ -7,7 +7,7 @@
         <%= f.object.finding.try(:to_s) %>
         <strong>[<%= f.object.finding.try(:state_text) %>]</strong> |
         <% if f.object.finding %>
-          <%= link_to t(:'label.show'), finding_path(
+          <%= link_to t('label.show'), finding_path(
             f.object.finding.pending? ? 'incomplete' : 'complete', f.object.finding) %> |
         <% end %>
         <%= remove_item_link(f) unless readonly %>

@@ -15,7 +15,7 @@
         <td><%=h business_unit_type.name %></td>
         <td class="expendable"><%=h business_unit_type.business_unit_label %></td>
         <td class="expendable"><%=h business_unit_type.project_label %></td>
-        <td><%=t business_unit_type.external ? :'label.yes' : :'label.no' %></td>
+        <td><%=t business_unit_type.external ? 'label.yes' : 'label.no' %></td>
         <td><%= link_to_show business_unit_type %></td>
         <td><%= link_to_edit edit_business_unit_type_path(business_unit_type) %></td>
         <td><%= button_to_destroy business_unit_type %></td>
@@ -26,6 +26,6 @@
 
 <div id="links">
   <%= pagination_links @business_unit_types %>
-  <%= link_to t(:'label.new'), new_business_unit_type_path %>
+  <%= link_to t('label.new'), new_business_unit_type_path %>
   <div class="clear"></div>
 </div>

@@ -4,8 +4,8 @@
   <div>
     <div class="show_hide_field">
       <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
-        t(:'procedure_control.show_procedure_control_subitems'),
-        t(:'procedure_control.hide_procedure_control_subitems') %>
+        t('procedure_control.show_procedure_control_subitems'),
+        t('procedure_control.hide_procedure_control_subitems') %>
     </div>
     <div class="item_field" style="width: 23%;">
       <% unless f.object.process_control_id %>
@@ -84,11 +84,11 @@
         </div>
 
         <p style="margin-bottom: 1em;">
-          <%= link_to t(:'procedure_control.add_procedure_control_subitem'),
-            '#', :'data-template' => :procedure_control_subitem,
-            :'data-event' => 'addNestedSubitem',
-            :'data-parent' => :procedure_control_item,
-            :'data-child' => :procedure_control_subitems %>
+          <%= link_to t('procedure_control.add_procedure_control_subitem'),
+            '#', 'data-template' => :procedure_control_subitem,
+            'data-event' => 'addNestedSubitem',
+            'data-parent' => :procedure_control_item,
+            'data-child' => :procedure_control_subitems %>
         </p>
       </div>
     </div>
@@ -160,7 +160,7 @@
   <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
 <% elsif f.object.try(:process_control).try(:control_objectives) %>
   <% content_for :js_extra_bottom do %>
-    <% options = [[t(:'helpers.select.prompt'), '']] +
+    <% options = [[t('helpers.select.prompt'), '']] +
         f.object.process_control.control_objectives.map { |co| [co.name, co.id] } %>
     <%= raw "procedureControlItemHash['#{id}'] = jQuery.parseJSON('#{escape_javascript(options.to_json)}');" %>
   <% end %>

@@ -10,14 +10,14 @@
         </th>
         <% if audit_type_symbol == :internal %>
           <th style="width: 35%;">
-            <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
+            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
           </th>
           <th style="width: 35%;">
-            <%= t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
+            <%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
           </th>
         <% else %>
           <th style="width: 70%;">
-            <%= t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
+            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
           </th>
         <% end %>
       </tr>
@@ -39,7 +39,7 @@
       <% end %>
       <tr>
         <td>
-          <strong><%= t(:'follow_up_committee.weaknesses_by_state.total') %></strong>
+          <strong><%= t('follow_up_committee.weaknesses_by_state.total') %></strong>
         </td>
         <td><strong><%= total_weaknesses %></strong></td>
         <% if audit_type_symbol == :internal %>
@@ -54,11 +54,11 @@
   <% end %>
   <% if repeated_count > 0 %>
     <p style="margin-left: 1em;">
-      <%= t(:'follow_up_committee.repeated_count', :count => repeated_count) %>
+      <%= t('follow_up_committee.repeated_count', :count => repeated_count) %>
     </p>
   <% end %>
 <% else %>
   <p style="margin: 1em;">
-    <em><%= t(:'follow_up_committee.without_weaknesses') %></em>
+    <em><%= t('follow_up_committee.without_weaknesses') %></em>
   </p>
 <% end %>

@@ -34,7 +34,7 @@
         <div id="session">
           <% if @auth_user %>
             <div id="user">[ <%= @auth_user.user %> ]</div>
-            <%= link_to t(:'menu.exit'), logout_user_path(@auth_user) %>
+            <%= link_to t('menu.exit'), logout_user_path(@auth_user) %>
           <% end %>
         </div>
         <div class="clear">&nbsp;</div>

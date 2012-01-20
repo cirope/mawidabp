@@ -42,13 +42,13 @@
     <thead>
       <tr>
         <th style="width: 10%;"></th>
-        <th style="width: 45%;"><%= t(:'workflow.column_real') %></th>
-        <th style="width: 45%;"><%= t(:'workflow.column_estimated') %></th>
+        <th style="width: 45%;"><%= t('workflow.column_real') %></th>
+        <th style="width: 45%;"><%= t('workflow.column_estimated') %></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><b><%= t(:'workflow.row_time') %></b></td>
+        <td><b><%= t('workflow.row_time') %></b></td>
         <td>
           <%= @workflow.new_record? ? '-' : show_detailed_distance_of_time(@workflow.begining, @workflow.ending) %>
           | <%= t(:worked_hours, :scope => [:workflow], :count => ('%.2f' % @workflow.human_unit_cost)) %>
@@ -56,9 +56,9 @@
         <td><%= @workflow.plan_item ? show_detailed_distance_of_time(@workflow.plan_item.start, @workflow.plan_item.end) : '-' %></td>
       </tr>
       <tr style="vertical-align: text-top;">
-        <td><b><%= t(:'workflow.row_cost') %></b></td>
-        <td><%= t(:'number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
-          <%= link_to_function t(:'workflow.calculate_estimated_amount'),
+        <td><b><%= t('workflow.row_cost') %></b></td>
+        <td><%= t('number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
+          <%= link_to_function t('workflow.calculate_estimated_amount'),
             "calculateCost()", :style => 'margin-left: .5em;' %></td>
         <td>
           <div id="estimated_amount">
@@ -114,13 +114,13 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'label.add_item'), '#', :'data-template' => :workflow_item,
-      :'data-event' => 'addNestedItem', :'data-container' => '#workflow_items' %>
+    <%= link_to t('label.add_item'), '#', 'data-template' => :workflow_item,
+      'data-event' => 'addNestedItem', 'data-container' => '#workflow_items' %>
   </p>
 
   <% if @workflow.overloaded? %>
     <p class="form_item">
-      <%= w_f.label :allow_overload, t(:'workflow.allow_overload'),
+      <%= w_f.label :allow_overload, t('workflow.allow_overload'),
         :class => 'inline error_field' %>
       <%= w_f.check_box :allow_overload, :class => :inline_item %>
     </p>

@@ -31,7 +31,7 @@
         :end => I18n.l(@conclusion_final_review.review.plan_item.end, :format => :long)) %>
   </p>
 
-  <h2 style="margin: 1em 0em; text-decoration: underline;"><%= t(:'conclusion_review.objectives_and_scopes') %></h2>
+  <h2 style="margin: 1em 0em; text-decoration: underline;"><%= t('conclusion_review.objectives_and_scopes') %></h2>
   <% grouped_control_objectives = @conclusion_final_review.review.grouped_control_objective_items %>
   <% grouped_control_objectives.each do |process_control, cois| %>
     <p>

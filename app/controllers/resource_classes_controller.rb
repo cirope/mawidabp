@@ -11,7 +11,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes
   # * GET /resource_classes.xml
   def index
-    @title = t :'resource_class.index_title'
+    @title = t 'resource_class.index_title'
     @resource_classes = ResourceClass.where(
       :organization_id => @auth_organization.id
     ).order('name ASC').paginate(
@@ -29,7 +29,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/1
   # * GET /resource_classes/1.xml
   def show
-    @title = t :'resource_class.show_title'
+    @title = t 'resource_class.show_title'
     @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -43,7 +43,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/new
   # * GET /resource_classes/new.xml
   def new
-    @title = t :'resource_class.new_title'
+    @title = t 'resource_class.new_title'
     @resource_class = ResourceClass.new
     @resource_class.resources.build
 
@@ -57,7 +57,7 @@ class ResourceClassesController < ApplicationController
   #
   # * GET /resource_classes/1/edit
   def edit
-    @title = t :'resource_class.edit_title'
+    @title = t 'resource_class.edit_title'
     @resource_class = find_with_organization(params[:id])
   end
 
@@ -67,13 +67,13 @@ class ResourceClassesController < ApplicationController
   # * POST /resource_classes
   # * POST /resource_classes.xml
   def create
-    @title = t :'resource_class.new_title'
+    @title = t 'resource_class.new_title'
     @resource_class = ResourceClass.new(params[:resource_class].merge(
         :organization_id => @auth_organization.id))
 
     respond_to do |format|
       if @resource_class.save
-        flash.notice = t :'resource_class.correctly_created'
+        flash.notice = t 'resource_class.correctly_created'
         format.html { redirect_to(resource_classes_url) }
         format.xml  { render :xml => @resource_class, :status => :created, :location => @resource_class }
       else
@@ -89,12 +89,12 @@ class ResourceClassesController < ApplicationController
   # * PUT /resource_classes/1
   # * PUT /resource_classes/1.xml
   def update
-    @title = t :'resource_class.edit_title'
+    @title = t 'resource_class.edit_title'
     @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
       if @resource_class.update_attributes(params[:resource_class])
-        flash.notice = t :'resource_class.correctly_updated'
+        flash.notice = t 'resource_class.correctly_updated'
         format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }
       else
@@ -104,7 +104,7 @@ class ResourceClassesController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'resource_class.stale_object_error'
+    flash.alert = t 'resource_class.stale_object_error'
     redirect_to :action => :edit
   end
 

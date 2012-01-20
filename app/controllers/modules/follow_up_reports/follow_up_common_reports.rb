@@ -486,7 +486,7 @@ module FollowUpCommonReports
 
                 oportunities_table_data << {
                   'state' =>
-                    "<b>#{t(:'conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
+                    "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
                   'count' => "<b>#{total_oportunities}</b>"
                 }
               end
@@ -616,7 +616,7 @@ module FollowUpCommonReports
                 bu.business_unit_type.business_unit_label, bu.name)
               pdf.move_pointer PDF_FONT_SIZE
 
-              pdf.text "<b>#{t(:'actioncontroller.reviews')}</b>"
+              pdf.text "<b>#{t('actioncontroller.reviews')}</b>"
               pdf.move_pointer PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
@@ -1300,7 +1300,7 @@ module FollowUpCommonReports
       end
 
       column_row = {
-        'state' => "<b>#{t(:'follow_up_committee.weaknesses_by_risk.total')}</b>",
+        'state' => "<b>#{t('follow_up_committee.weaknesses_by_risk.total')}</b>",
         'count' => "<b>#{total_count}</b>"
       }
 
@@ -1312,7 +1312,7 @@ module FollowUpCommonReports
 
       {:order => column_order, :data => column_data, :columns => columns}
     else
-      t(:'follow_up_committee.without_weaknesses')
+      t('follow_up_committee.without_weaknesses')
     end
   end
 
@@ -1325,14 +1325,14 @@ module FollowUpCommonReports
       columns = {
         'state' => [Finding.human_attribute_name(:state), 30],
         'weaknesses_count' => [
-          t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+          t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
           audit_type_symbol == :internal ? 35 : 70]
       }
       column_data = []
 
       if audit_type_symbol == :internal
         columns['oportunities_count'] = [
-          t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
       end
 
       columns.each do |col_name, col_data|
@@ -1367,7 +1367,7 @@ module FollowUpCommonReports
 
       column_data << {
         'state' =>
-          "<b>#{t(:'follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
+          "<b>#{t('follow_up_committee.weaknesses_by_state.total')}</b>".to_iso,
         'weaknesses_count' => "<b>#{total_weaknesses}</b>",
         'oportunities_count' => "<b>#{total_oportunities}</b>"
       }
@@ -1399,11 +1399,11 @@ module FollowUpCommonReports
 
       if repeated_count > 0
         pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
-        pdf.text t(:'follow_up_committee.repeated_count',
+        pdf.text t('follow_up_committee.repeated_count',
           :count => repeated_count, :font_size => PDF_FONT_SIZE)
       end
     else
-      pdf.text t(:'follow_up_committee.without_weaknesses'),
+      pdf.text t('follow_up_committee.without_weaknesses'),
         :font_size => PDF_FONT_SIZE
     end
   end

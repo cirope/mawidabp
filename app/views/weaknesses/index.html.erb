@@ -15,7 +15,7 @@
       <%= make_not_available_column raw(Weakness.human_attribute_name(:state) + show_inline_help_for(:finding_state)), :expendable => true %>
       <%= make_not_available_column raw(Weakness.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date)), :expendable => true %>
       <%= make_not_available_column Weakness.human_attribute_name(:risk), :expendable => true %>
-      <%= make_not_available_column raw(t(:'finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
+      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
       <th colspan="2" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
@@ -31,7 +31,7 @@
         <td class="expendable"><%= weakness.state_text %></td>
         <td class="expendable"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
         <td class="expendable"><%= weakness.risk_text %></td>
-        <td class="expendable"><%= t weakness.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show weakness %></td>
         <td><%= link_to_edit edit_weakness_path(weakness) %></td>
       </tr>
@@ -42,9 +42,9 @@
 <div id="links">
 <%= pagination_links @weaknesses %>
 <% if params[:control_objective].to_i > 0 %>
-  <%= link_to t(:'label.new'), new_weakness_path(
+  <%= link_to t('label.new'), new_weakness_path(
     :control_objective_item => params[:control_objective]) %>
-  | <%= link_to t(:'weakness.see_all'), weaknesses_path, :class => 'red bold' %>
+  | <%= link_to t('weakness.see_all'), weaknesses_path, :class => 'red bold' %>
 <% end %>
 <div class="clear"></div>
 </div>

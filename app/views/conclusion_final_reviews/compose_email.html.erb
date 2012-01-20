@@ -9,7 +9,7 @@
   
   <div class="form_column_left">
     <p class="form_item">
-      <%= content_tag :label, t(:'conclusion_review.include_global_score_sheet'),
+      <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
         :class => :inline_long,
         :for => :conclusion_review_include_global_score_sheet %>
       <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
@@ -17,7 +17,7 @@
     </p>
 
     <p class="form_item">
-      <%= content_tag :label, t(:'conclusion_review.include_score_sheet'),
+      <%= content_tag :label, t('conclusion_review.include_score_sheet'),
         :class => :inline_long,
         :for => :conclusion_review_include_score_sheet %>
       <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
@@ -25,7 +25,7 @@
     </p>
 
     <p class="form_item">
-      <%= content_tag :label, t(:'conclusion_review.email_note'),
+      <%= content_tag :label, t('conclusion_review.email_note'),
         :for => :conclusion_review_email_note %>
       <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
         :cols => 40 %>
@@ -50,19 +50,19 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'conclusion_review.add_recipient'), '#',
-      :'data-template' => :user, :'data-event' => 'addNestedItem',
-      :'data-container' => '#users' %>
+    <%= link_to t('conclusion_review.add_recipient'), '#',
+      'data-template' => :user, 'data-event' => 'addNestedItem',
+      'data-container' => '#users' %>
   </p>
 
   <p>
-    <span class="button"><%= f.submit t(:'label.send') %></span>
+    <span class="button"><%= f.submit t('label.send') %></span>
   </p>
 <% end %>
 <!--[eoform:conclusion_final_review] -->
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
-  <%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
+  <%= link_to t('label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
+  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
   <%= link_to_back %>
 </div>

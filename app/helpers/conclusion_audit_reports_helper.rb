@@ -6,7 +6,7 @@ module ConclusionAuditReportsHelper
       text = "<b>#{cr.review}</b>: #{cr.review.reload.score_text}"
 
       if findings_count == 0
-        text << " (#{t(:'conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"
+        text << " (#{t('conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"
       end
 
       text

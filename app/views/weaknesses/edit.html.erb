@@ -1,12 +1,12 @@
 <%= render :partial => 'form' %>
 
 <div id="links">
-  <%= link_to t(:'label.show'), @weakness %> |
-  <%= link_to t(:'label.list'), weaknesses_path %> |
-  <%= link_to t(:'weakness.edit_control_objective'),
+  <%= link_to t('label.show'), @weakness %> |
+  <%= link_to t('label.list'), weaknesses_path %> |
+  <%= link_to t('weakness.edit_control_objective'),
     edit_control_objective_item_path(@weakness.control_objective_item) %> |
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
-    <%= link_to t(:'weakness.edit_follow_up'), edit_finding_path('incomplete', @weakness) %> |
+    <%= link_to t('weakness.edit_follow_up'), edit_finding_path('incomplete', @weakness) %> |
   <% end %>
   <%= link_to_back %>
 </div>

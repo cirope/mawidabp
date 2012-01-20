@@ -28,7 +28,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -370,7 +370,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) { get :export_list_to_pdf }
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_final_review.pdf.pdf_name'),
+      I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
   end
 
@@ -385,7 +385,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_final_review.pdf.pdf_name'),
+      I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
   end
 

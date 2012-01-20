@@ -3,7 +3,7 @@
     <p style="font-size: 1.4em; margin-bottom: 1em;">
       <strong><%=h @detract.user.informal_name %></strong>
     </p>
-    <h1><%= t(:'detract.last_detract') %></h1>
+    <h1><%= t('detract.last_detract') %></h1>
     <p>
       <b>
         <%= Detract.human_attribute_name :value %>
@@ -21,12 +21,12 @@
   <% end %>
 
   <% unless @user.try(:children).try(:size).to_i == 0 %>
-    <h1 style="margin-top: 1em;"><%= t(:'user.children') %></h1>
+    <h1 style="margin-top: 1em;"><%= t('user.children') %></h1>
     <table class="summary_table">
       <thead>
         <tr>
           <th><%= Detract.human_attribute_name :user_id %></th>
-          <th><%= t(:'detract.last_detract') %></th>
+          <th><%= t('detract.last_detract') %></th>
           <th></th>
         </tr>
       </thead>
@@ -47,7 +47,7 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.list'), detracts_path %> |
+  <%= link_to t('label.list'), detracts_path %> |
   <%= link_to_back %>
 </div>
 <script type="text/javascript">

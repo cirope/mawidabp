@@ -62,7 +62,7 @@ class Workflow < ActiveRecord::Base
     unless self.is_frozen? && self.changed?
       true
     else
-      msg = I18n.t(:'workflow.readonly')
+      msg = I18n.t('workflow.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
@@ -91,7 +91,7 @@ class Workflow < ActiveRecord::Base
 
   def to_pdf(organization = nil, include_details = true)
     pdf = PDF::Writer.create_generic_pdf :landscape
-    currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
+    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     column_order = ['order_number', 'task', 'start', 'end', 'predecessors',
       'resources']
     columns = {}
@@ -105,8 +105,8 @@ class Workflow < ActiveRecord::Base
     pdf.add_description_item Workflow.human_attribute_name(:review_id),
       self.review.to_s, 0, false
 
-    pdf.add_description_item(I18n.t(:'workflow.period.title',
-        :number => self.period.number), I18n.t(:'workflow.period.range',
+    pdf.add_description_item(I18n.t('workflow.period.title',
+        :number => self.period.number), I18n.t('workflow.period.range',
         :from_date => I18n.l(self.period.start, :format => :long),
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
@@ -159,7 +159,7 @@ class Workflow < ActiveRecord::Base
         !self.workflow_items.all? { |wi| wi.resource_utilizations.blank? }
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'workflow.pdf.resources_utilization'),
+      pdf.add_title I18n.t('workflow.pdf.resources_utilization'),
         (PDF_FONT_SIZE * 1.25).round
 
       self.workflow_items.each do |workflow_item|
@@ -172,14 +172,14 @@ class Workflow < ActiveRecord::Base
     if include_details && !self.review.plan_item.resource_utilizations.blank?
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title I18n.t(:'workflow.pdf.planned_resources_utilization'),
+      pdf.add_title I18n.t('workflow.pdf.planned_resources_utilization'),
         (PDF_FONT_SIZE * 1.25).round
       
       self.review.plan_item.add_resource_data(pdf, false)
 
       pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
 
-      pdf.text I18n.t(:'workflow.pdf.planned_resources_utilization_explanation'),
+      pdf.text I18n.t('workflow.pdf.planned_resources_utilization_explanation'),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
@@ -195,7 +195,7 @@ class Workflow < ActiveRecord::Base
   end
 
   def pdf_name
-    I18n.t :'workflow.pdf.pdf_name',
+    I18n.t 'workflow.pdf.pdf_name',
       :review => self.review.sanitized_identification
   end
 

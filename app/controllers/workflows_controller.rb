@@ -15,7 +15,7 @@ class WorkflowsController < ApplicationController
   # * GET /workflows
   # * GET /workflows.xml
   def index
-    @title = t :'workflow.index_title'
+    @title = t 'workflow.index_title'
     @workflows = Workflow.includes(:period, :review).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
     ).order("#{Review.table_name}.identification DESC").paginate(
@@ -33,7 +33,7 @@ class WorkflowsController < ApplicationController
   # * GET /workflows/1
   # * GET /workflows/1.xml
   def show
-    @title = t :'workflow.show_title'
+    @title = t 'workflow.show_title'
     @workflow = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -47,7 +47,7 @@ class WorkflowsController < ApplicationController
   # * GET /workflows/new
   # * GET /workflows/new.xml
   def new
-    @title = t :'workflow.new_title'
+    @title = t 'workflow.new_title'
     @workflow = Workflow.new
     clone_id = params[:clone_from].respond_to?(:to_i) ?
       params[:clone_from].to_i : 0
@@ -77,7 +77,7 @@ class WorkflowsController < ApplicationController
   #
   # * GET /workflows/1/edit
   def edit
-    @title = t :'workflow.edit_title'
+    @title = t 'workflow.edit_title'
     @workflow = find_with_organization(params[:id])
   end
 
@@ -87,7 +87,7 @@ class WorkflowsController < ApplicationController
   # * POST /workflows
   # * POST /workflows.xml
   def create
-    @title = t :'workflow.new_title'
+    @title = t 'workflow.new_title'
     @workflow = Workflow.new(params[:workflow])
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number.to_i <=> wfi_b.order_number.to_i
@@ -95,7 +95,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       if @workflow.save
-        flash.notice = t :'workflow.correctly_created'
+        flash.notice = t 'workflow.correctly_created'
         format.html { redirect_to(workflows_url) }
         format.xml  { render :xml => @workflow, :status => :created, :location => @workflow }
       else
@@ -112,7 +112,7 @@ class WorkflowsController < ApplicationController
   # * PUT /workflows/1
   # * PUT /workflows/1.xml
   def update
-    @title = t :'workflow.edit_title'
+    @title = t 'workflow.edit_title'
     @workflow = find_with_organization(params[:id])
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number <=> wfi_b.order_number
@@ -120,7 +120,7 @@ class WorkflowsController < ApplicationController
     
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
-        flash.notice = t :'workflow.correctly_updated'
+        flash.notice = t 'workflow.correctly_updated'
         format.html { redirect_to(workflows_url) }
         format.xml  { head :ok }
       else
@@ -130,7 +130,7 @@ class WorkflowsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'workflow.stale_object_error'
+    flash.alert = t 'workflow.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -196,7 +196,7 @@ class WorkflowsController < ApplicationController
   #
   # * GET /reviews/reviews_for_period/?period=id
   def reviews_for_period
-    options = [[t(:'helpers.select.prompt'), '']]
+    options = [[t('helpers.select.prompt'), '']]
     reviews = Review.list_without_final_review.list_all_without_workflow(
       params[:period])
 

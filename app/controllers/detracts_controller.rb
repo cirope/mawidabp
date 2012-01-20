@@ -13,7 +13,7 @@ class DetractsController < ApplicationController
   # * GET /detracts
   # * GET /detracts.xml
   def index
-    @title = t :'detract.index_title'
+    @title = t 'detract.index_title'
     conditions = ["#{Organization.table_name}.id = :organization_id"]
     parameters = {:organization_id => @auth_organization.id}
 
@@ -50,7 +50,7 @@ class DetractsController < ApplicationController
   # * GET /detracts/1
   # * GET /detracts/1.xml
   def show
-    @title = t :'detract.show_title'
+    @title = t 'detract.show_title'
     @detract = find_with_organization(params[:id])
     @user = @detract.try(:user) || (@auth_user unless @has_approval)
 
@@ -99,7 +99,7 @@ class DetractsController < ApplicationController
   # * GET /detracts/new
   # * GET /detracts/new.xml
   def new
-    @title = t :'detract.new_title'
+    @title = t 'detract.new_title'
     @detract = Detract.new(params[:detract])
 
     respond_to do |format|
@@ -113,12 +113,12 @@ class DetractsController < ApplicationController
   # POST /detracts
   # POST /detracts.xml
   def create
-    @title = t :'detract.new_title'
+    @title = t 'detract.new_title'
     @detract = Detract.new(params[:detract])
 
     respond_to do |format|
       if @detract.save
-        flash.notice = t :'detract.correctly_created'
+        flash.notice = t 'detract.correctly_created'
         format.html { redirect_to(detracts_url) }
         format.xml  { render :xml => @detract, :status => :created, :location => @detract }
       else

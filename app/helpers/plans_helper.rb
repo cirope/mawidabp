@@ -42,16 +42,16 @@ module PlansHelper
 
   def show_plan_business_unit_type_info
     label = @business_unit_type.try(:name) ||
-      t(:'plan.without_business_unit_type')
+      t('plan.without_business_unit_type')
     link = @plan.new_record? ? new_plan_path : edit_plan_path(@plan)
 
     content_tag(:h1,
-      raw("#{label} - " + link_to(t(:'plan.show_all'), link)))
+      raw("#{label} - " + link_to(t('plan.show_all'), link)))
   end
 
   def show_plan_group_link(business_unit_type, plan_items)
     label = business_unit_type.try(:name) ||
-      t(:'plan.without_business_unit_type')
+      t('plan.without_business_unit_type')
     parameters = {:business_unit_type => business_unit_type || 'nil'}
     link = @plan.new_record? ?
       new_plan_path(parameters) : edit_plan_path(@plan, parameters)

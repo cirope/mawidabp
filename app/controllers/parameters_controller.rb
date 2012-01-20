@@ -10,7 +10,7 @@ class ParametersController < ApplicationController
   # * GET /parameters
   # * GET /parameters.xml
   def index
-    @title = t :'parameter.index_title'
+    @title = t 'parameter.index_title'
     @type = APP_PARAMETER_TYPES.include?(params[:type]) ? params[:type] : :admin
     @parameters = Parameter.where(
       [
@@ -38,7 +38,7 @@ class ParametersController < ApplicationController
   # * GET /parameters/1
   # * GET /parameters/1.xml
   def show
-    @title = t :'parameter.show_title'
+    @title = t 'parameter.show_title'
     @parameter = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -51,7 +51,7 @@ class ParametersController < ApplicationController
   #
   # * GET /parameters/1/edit
   def edit
-    @title = t :'parameter.edit_title'
+    @title = t 'parameter.edit_title'
     @type = params[:type]
     @parameter = find_with_organization(params[:id])
   end
@@ -62,7 +62,7 @@ class ParametersController < ApplicationController
   # * PUT /parameters/1
   # * PUT /parameters/1.xml
   def update
-    @title = t :'parameter.edit_title'
+    @title = t 'parameter.edit_title'
     @type = APP_PARAMETER_TYPES.include?(params[:type]) ? params[:type] : :admin
     @parameter = find_with_organization(params[:id])
 
@@ -72,7 +72,7 @@ class ParametersController < ApplicationController
 
     respond_to do |format|
       if @parameter.update_attributes(clean_parameters(params[:parameter]))
-        flash.notice = t :'parameter.correctly_updated'
+        flash.notice = t 'parameter.correctly_updated'
         format.html { redirect_to(parameters_url(:type => @type)) }
         format.xml  { head :ok }
       else
@@ -82,7 +82,7 @@ class ParametersController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'parameter.stale_object_error'
+    flash.alert = t 'parameter.stale_object_error'
     redirect_to :action => :edit
   end
 

@@ -14,7 +14,7 @@ class ImageModel < ActiveRecord::Base
   validates_attachment_content_type :image, :content_type => /\Aimage/i,
     :message => lambda { I18n.t(:invalid, :scope => [:activerecord, :errors, :models, :image_model, :attributes, :image_content_type]) }
   validates_attachment_size :image, :less_than => 20.megabytes,
-    :message => lambda { I18n.t(:'activerecord.errors.messages.less_than', :count => 20.megabytes) }
+    :message => lambda { I18n.t('activerecord.errors.messages.less_than', :count => 20.megabytes) }
   validates :image_file_name, :image_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
 

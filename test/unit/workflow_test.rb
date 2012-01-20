@@ -77,7 +77,7 @@ class WorkflowTest < ActiveSupport::TestCase
     assert_equal 2, @workflow.errors.count
     assert_equal [error_message_from_model(@workflow, :review_id, :taken)],
       @workflow.errors[:review_id]
-    assert @workflow.errors.full_messages.include?(I18n.t(:'workflow.readonly'))
+    assert @workflow.errors.full_messages.include?(I18n.t('workflow.readonly'))
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

@@ -1,24 +1,24 @@
-<%= render_form t(:'label.modify'), :url => user_path(@user) %>
+<%= render_form t('label.modify'), :url => user_path(@user) %>
 
 <div id="links">
   <div id="actions">
     <div class="button">
-      <%= button_to_destroy @user, {:label => t(:'label.disable')} %>
+      <%= button_to_destroy @user, {:label => t('label.disable')} %>
     </div>
     <div class="button">
-      <%= button_to t(:'user.reset_password'),
+      <%= button_to t('user.reset_password'),
           { :action => :blank_password, :id => @user },
-          :confirm => t(:'message.confirmation_question'),
+          :confirm => t('message.confirmation_question'),
           :method => :put, :class => :shadowed_button,
-          :title => t(:'user.reset_password') %>
+          :title => t('user.reset_password') %>
     </div>
   </div>
-  <%= link_to t(:'label.show'), @user %> |
-  <%= link_to t(:'user.status'), user_status_user_path(@user) %> |
-  <%= link_to t(:'label.list'), users_path %> |
-  <%= link_to t(:'user.reassign_to_another_user'),
+  <%= link_to t('label.show'), @user %> |
+  <%= link_to t('user.status'), user_status_user_path(@user) %> |
+  <%= link_to t('label.list'), users_path %> |
+  <%= link_to t('user.reassign_to_another_user'),
     reassignment_edit_user_path(@user) %> |
-  <%= link_to t(:'user.release'), release_edit_user_path(@user) %> |
+  <%= link_to t('user.release'), release_edit_user_path(@user) %> |
   <%= link_to_back %>
   <div class="clear"></div>
 </div>

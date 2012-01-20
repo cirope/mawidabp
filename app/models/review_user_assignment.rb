@@ -71,7 +71,7 @@ class ReviewUserAssignment < ActiveRecord::Base
         (self.changed? || self.marked_for_destruction?)
       true
     else
-      msg = I18n.t(:'review.user_assignment.readonly')
+      msg = I18n.t('review.user_assignment.readonly')
       self.errors.add(:base, msg) unless self.errors.full_messages.include?(msg)
 
       false
@@ -107,15 +107,15 @@ class ReviewUserAssignment < ActiveRecord::Base
 
       if transfered
         notification_title = I18n.t(
-          :'review_user_assignment.responsibility_modification.title',
+          'review_user_assignment.responsibility_modification.title',
           :review => self.review.try(:identification))
         notification_body = "#{Review.model_name.human} #{self.review.identification}"
         notification_content = [
           I18n.t(
-            :'review_user_assignment.responsibility_modification.old_responsible',
+            'review_user_assignment.responsibility_modification.old_responsible',
             :responsible => old_user.full_name_with_function),
           I18n.t(
-            :'review_user_assignment.responsibility_modification.new_responsible',
+            'review_user_assignment.responsibility_modification.new_responsible',
             :responsible => new_user.full_name_with_function)
         ]
 
@@ -129,7 +129,7 @@ class ReviewUserAssignment < ActiveRecord::Base
         end
       else
         self.errors.add :base,
-          I18n.t(:'review_user_assignment.cannot_be_reassigned')
+          I18n.t('review_user_assignment.cannot_be_reassigned')
       end
 
       transfered
@@ -154,14 +154,14 @@ class ReviewUserAssignment < ActiveRecord::Base
       
       unless all_valid
         self.errors.add(:base,
-          I18n.t(:'review_user_assignment.cannot_be_destroyed'))
+          I18n.t('review_user_assignment.cannot_be_destroyed'))
         raise ActiveRecord::Rollback
       end
     end
 
     if all_valid && !@cancel_notification &&
         (self.review.oportunities | self.review.weaknesses).size > 0
-      title = I18n.t(:'review_user_assignment.responsibility_removed',
+      title = I18n.t('review_user_assignment.responsibility_removed',
         :review => self.review.try(:identification))
 
       Notifier.changes_notification(self.user, :title => title).deliver

@@ -23,7 +23,7 @@
         <td class="expendable"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
         <td class="expendable"><%= super_truncate review.plan_item.project, 25 %></td>
         <td class="expendable"><%= super_truncate review.description, 25 %></td>
-        <td><%= link_to_clone new_review_path(:clone_from => review.id), :label => t(:'review.copy') %></td>
+        <td><%= link_to_clone new_review_path(:clone_from => review.id), :label => t('review.copy') %></td>
         <td><%= link_to_show review %></td>
         <td><%= link_to_edit edit_review_path(review) %></td>
         <td><%= button_to_destroy review unless has_final %></td>
@@ -34,6 +34,6 @@
 
 <div id="links">
   <%= pagination_links @reviews %>
-  <%= link_to t(:'label.new'), new_review_path %>
+  <%= link_to t('label.new'), new_review_path %>
   <div class="clear"></div>
 </div>

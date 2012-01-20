@@ -22,7 +22,7 @@
       <tr class="<%= cycle('even', 'odd') %> <%= user.enable? ? :enabled_item : :disabled_item %>">
         <td>
           <% if user.organizations.blank? %>
-            <%= show_info(t(:'user.without_organization'), :class => :red) %>
+            <%= show_info(t('user.without_organization'), :class => :red) %>
           <% elsif !user.notes.blank? %>
             <%= show_info(user.notes) %>
           <% end %>
@@ -30,12 +30,12 @@
         <td class="nowrap"><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= h user.full_name %></td>
         <td class="expendable"><%= super_truncate(user.function || '-', 40) %></td>
-        <td class="expendable"><%= t user.logged_in? && user.last_access && user.last_access >= expire_time.minutes.ago ? :'label.yes' : :'label.no' %></td>
+        <td class="expendable"><%= t user.logged_in? && user.last_access && user.last_access >= expire_time.minutes.ago ? 'label.yes' : 'label.no' %></td>
         <td class="expendable"><%= l user.last_access, :format => :short if user.last_access %></td>
         <td class="expendable"><%= h user.failed_attempts %></td>
         <td><%= link_to_show user %></td>
         <td><%= link_to_edit edit_user_path(user) %></td>
-        <td><%= button_to_destroy user, {:label => t(:'label.disable')} %></td>
+        <td><%= button_to_destroy user, {:label => t('label.disable')} %></td>
       </tr>
     <% end %>
   </tbody>
@@ -43,8 +43,8 @@
 
 <div id="links">
   <%= pagination_links @users %>
-  <%= link_to t(:'label.new'), new_user_path %> |
-  <%= link_to t(:'label.download'), export_to_pdf_users_path(
+  <%= link_to t('label.new'), new_user_path %> |
+  <%= link_to t('label.download'), export_to_pdf_users_path(
     :search => params[:search], :_ts => Time.now.to_i) %>
   <div class="clear"></div>
 </div>

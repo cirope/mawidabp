@@ -33,7 +33,7 @@ module UsersHelper
     g = Gruff::Pie.new
     gruped_findings = findings.group_by(&:state)
     g.theme_pastel
-    g.no_data_message = t(:'label.without_data')
+    g.no_data_message = t('label.without_data')
 
     gruped_findings.each do |status, weaknesses|
       g.data "#{weaknesses.first.state_text} (#{weaknesses.size})",
@@ -69,12 +69,12 @@ module UsersHelper
     
     pending_link = link_to_unless(pending_count == 0,
       textilize_without_paragraph(
-        t(:'user.weaknesses.pending', :count => pending_count)
+        t('user.weaknesses.pending', :count => pending_count)
       ), findings_path(:completed => 'incomplete', :user_id => user.id)
     )
     complete_link = link_to_unless(complete_count == 0,
       textilize_without_paragraph(
-        t(:'user.weaknesses.complete', :count => complete_count)
+        t('user.weaknesses.complete', :count => complete_count)
       ), findings_path(:completed => 'complete', :user_id => user.id)
     )
     

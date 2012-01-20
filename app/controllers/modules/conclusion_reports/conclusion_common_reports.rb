@@ -1018,7 +1018,7 @@ module ConclusionCommonReports
       sub_total_count = weaknesses_count_by_risk.sum(&:second)
 
       column_row = {
-        'state' => "<b>#{t(:'conclusion_committee_report.weaknesses_by_risk.total')}</b>",
+        'state' => "<b>#{t('conclusion_committee_report.weaknesses_by_risk.total')}</b>",
         'count' => "<b>#{total_count}</b>"
       }
 
@@ -1030,7 +1030,7 @@ module ConclusionCommonReports
 
       {:order => column_order, :data => column_data, :columns => columns}
     else
-      t(:'follow_up_committee.without_weaknesses')
+      t('follow_up_committee.without_weaknesses')
     end
   end
 
@@ -1043,14 +1043,14 @@ module ConclusionCommonReports
       columns = {
         'state' => [Finding.human_attribute_name(:state), 30],
         'weaknesses_count' => [
-          t(:'conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+          t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
           audit_type_symbol == :internal ? 35 : 70]
       }
       column_data = []
 
       if audit_type_symbol == :internal
         columns['oportunities_count'] = [
-          t(:'conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
       end
 
       columns.each do |col_name, col_data|
@@ -1079,7 +1079,7 @@ module ConclusionCommonReports
 
       column_data << {
         'state' =>
-          "<b>#{t(:'conclusion_committee_report.weaknesses_by_state.total')}</b>".to_iso,
+          "<b>#{t('conclusion_committee_report.weaknesses_by_state.total')}</b>".to_iso,
         'weaknesses_count' => "<b>#{total_weaknesses}</b>",
         'oportunities_count' => "<b>#{total_oportunities}</b>"
       }
@@ -1107,7 +1107,7 @@ module ConclusionCommonReports
         end
       end
     else
-      pdf.text t(:'follow_up_committee.without_weaknesses'),
+      pdf.text t('follow_up_committee.without_weaknesses'),
         :font_size => PDF_FONT_SIZE
     end
   end

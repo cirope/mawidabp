@@ -46,7 +46,7 @@ module ConclusionHighRiskReports
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'high_risk_weaknesses' =>
-            [t(:'conclusion_committee_report.high_risk_weaknesses'), 70]
+            [t('conclusion_committee_report.high_risk_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -72,7 +72,7 @@ module ConclusionHighRiskReports
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               "<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}",
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
@@ -121,8 +121,8 @@ module ConclusionHighRiskReports
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -194,7 +194,7 @@ module ConclusionHighRiskReports
             end
           else
             pdf.text(
-              t(:'conclusion_committee_report.high_risk_weaknesses_report.without_audits_in_the_period'))
+              t('conclusion_committee_report.high_risk_weaknesses_report.without_audits_in_the_period'))
           end
         end
       end
@@ -202,18 +202,18 @@ module ConclusionHighRiskReports
 
     unless @filters.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'conclusion_committee_report.applied_filters',
+      pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
   end
@@ -263,7 +263,7 @@ module ConclusionHighRiskReports
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'fixed_weaknesses' =>
-            [t(:'conclusion_committee_report.fixed_weaknesses'), 70]
+            [t('conclusion_committee_report.fixed_weaknesses'), 70]
         }
         column_data = []
         name = but.name
@@ -289,7 +289,7 @@ module ConclusionHighRiskReports
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-              "<b>#{I18n.t(:'finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
+              "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
               "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}",
               "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
@@ -338,8 +338,8 @@ module ConclusionHighRiskReports
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'conclusion_committee_report.period.title'),
-      t(:'conclusion_committee_report.period.range',
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -411,7 +411,7 @@ module ConclusionHighRiskReports
             end
           else
             pdf.text(
-              t(:'conclusion_committee_report.fixed_weaknesses_report.without_audits_in_the_period'))
+              t('conclusion_committee_report.fixed_weaknesses_report.without_audits_in_the_period'))
           end
         end
       end
@@ -419,18 +419,18 @@ module ConclusionHighRiskReports
 
     unless @filters.empty?
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.text t(:'conclusion_committee_report.applied_filters',
+      pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
     pdf.custom_save_as(
-      t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
   end

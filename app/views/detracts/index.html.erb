@@ -9,7 +9,7 @@
       <%= make_filterable_column User.human_attribute_name(:user), nil, 'user' %>
       <%= make_filterable_column User.human_attribute_name(:name), nil, 'name', 'last_name' %>
       <%= make_filterable_column User.human_attribute_name(:function), {:expendable => true}, 'function' %>
-      <%= make_not_available_column t(:'detract.last_detract') %>
+      <%= make_not_available_column t('detract.last_detract') %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -23,7 +23,7 @@
         <td class="expendable"><%= super_truncate user.function, 25 %></td>
         <td><%= h detract.try(:value) || '-' %></td>
         <td><%= link_to image_tag('new_document.gif', :size => '22x20',
-          :alt => t(:'label.new'), :title => t(:'label.new')),
+          :alt => t('label.new'), :title => t('label.new')),
           new_detract_path(:detract => {:user_id => user.id}),
           :class => :image_link %></td>
         <td><%= link_to_show detract if detract %></td>

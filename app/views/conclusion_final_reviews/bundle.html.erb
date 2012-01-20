@@ -1,19 +1,19 @@
 <!--[form:conclusion_final_review]-->
 <%= form_for 'bundle', :url => {:action => :create_bundle, :id => @conclusion_final_review, :_ts => Time.now.to_i}   do |f| %>
   <p>
-    <%= label_tag :index_items, t(:'conclusion_review.bundle_index.items_label') %>
+    <%= label_tag :index_items, t('conclusion_review.bundle_index.items_label') %>
     <%= text_area_tag :index_items,
-      t(:'conclusion_review.bundle_index.default_items'), :rows => 20,
+      t('conclusion_review.bundle_index.default_items'), :rows => 20,
       :cols => 80, :style => 'height: 20em;' %>
   </p>
 
   <p>
-    <span class="button"><%= f.submit t(:'conclusion_review.bundle.create') %></span>
+    <span class="button"><%= f.submit t('conclusion_review.bundle.create') %></span>
   </p>
 <% end %>
 <!--[eoform:conclusion_final_review] -->
 <div id="links">
-  <%= link_to t(:'label.show'), @conclusion_final_review %> |
-  <%= link_to t(:'label.list'), conclusion_final_reviews_path %> |
+  <%= link_to t('label.show'), @conclusion_final_review %> |
+  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
   <%= link_to_back %>
 </div>

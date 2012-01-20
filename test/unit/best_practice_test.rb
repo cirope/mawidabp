@@ -53,7 +53,7 @@ class BestPracticeTest < ActiveSupport::TestCase
     end
 
     assert_equal 1, @best_practice.errors.size
-    assert_equal I18n.t(:'control_objective.errors.related'),
+    assert_equal I18n.t('control_objective.errors.related'),
       @best_practice.errors.full_messages.join
   end
 

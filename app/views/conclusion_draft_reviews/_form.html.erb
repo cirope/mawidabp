@@ -62,25 +62,25 @@
 
   <div id="approval_text">
     <%= show_inline_help_for(:conclusion_review_approved) %>
-    <%= content_tag(:div, t(:'conclusion_draft_review.approved'),
+    <%= content_tag(:div, t('conclusion_draft_review.approved'),
       :class => 'green bold', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <div id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
       <p class="red bold">
-        <%= t(:'conclusion_draft_review.not_approved') %>
+        <%= t('conclusion_draft_review.not_approved') %>
       </p>
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
-      <%= link_to_function t(:'error.show_details'), 'showOrHideErrors()',
+      <%= link_to_function t('error.show_details'), 'showOrHideErrors()',
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
     </div>
     <div>
-      <%= link_to t(:'conclusion_draft_review.check_for_approval'),
+      <%= link_to t('conclusion_draft_review.check_for_approval'),
         {:action => :check_for_approval, :format => :json},
         {:style => 'margin-left: 1em;', :id => 'check_for_approval'} %>
     </div>
     <% if @conclusion_draft_review.updated_at %>
       <div style="margin-left: 1em;">
-        | <%= t(:'conclusion_draft_review.last_verified_date',
+        | <%= t('conclusion_draft_review.last_verified_date',
           :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
       </div>
     <% end %>
@@ -111,8 +111,8 @@
     $('#approval_errors_detail').slideToggle(300, function() {
       $('#show_or_hide_link').mw(
         'toggleContent',
-        '<%= t(:'error.show_details') %>',
-        '<%= t(:'error.hide_details') %>'
+        '<%= t('error.show_details') %>',
+        '<%= t('error.hide_details') %>'
       );
     });
   }

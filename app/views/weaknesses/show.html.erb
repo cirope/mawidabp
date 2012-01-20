@@ -71,12 +71,12 @@
     <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
   </div>
 
-  <h3><%= raw(t(:'finding.responsibles', :count => @weakness.users.size) +
+  <h3><%= raw(t('finding.responsibles', :count => @weakness.users.size) +
     show_inline_help_for(:finding_responsibles)) %></h3>
   <%= finding_responsibles_list(@weakness) %>
 
   <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
-    <h3><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -85,7 +85,7 @@
   <% end %>
 
   <% unless (repeated_children = @weakness.repeated_children).blank? %>
-    <h3><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -95,7 +95,7 @@
   
   <% unless @weakness.finding_relations.blank? %>
     <h3>
-      <%= t(:'finding.finding_relations') %>
+      <%= t('finding.finding_relations') %>
       <%= show_inline_help_for(:finding_relations) %>
     </h3>
     
@@ -119,7 +119,7 @@
   
   <% unless @weakness.inverse_finding_relations.blank? %>
     <h3>
-      <%= t(:'finding.inverse_finding_relations') %>
+      <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h3>
     
@@ -143,7 +143,7 @@
     
   <% unless @weakness.finding_answers.blank? %>
     <h3>
-      <%= t(:'finding.finding_answers') %>
+      <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h3>
 
@@ -168,7 +168,7 @@
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
               <%= finding_answer.file_model ?
-                link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
               <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
@@ -185,7 +185,7 @@
   <% end %>
 
   <% unless @weakness.work_papers.empty? %>
-    <h3><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
     <table class="summary_table">
       <thead>
         <tr>
@@ -204,7 +204,7 @@
             <td><%=h wp.number_of_pages %></td>
             <td><%= simple_format h(wp.description) %></td>
             <td><%= wp.file_model ?
-              link_to(t(:'label.download'), wp.file_model.file.url) : '---' %></td>
+              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>
       </tbody>
@@ -213,10 +213,10 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_weakness_path(@weakness) %> |
-  <%= link_to t(:'label.list'), weaknesses_path %> |
+  <%= link_to t('label.edit'), edit_weakness_path(@weakness) %> |
+  <%= link_to t('label.list'), weaknesses_path %> |
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>
-    <%= link_to t(:'weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
+    <%= link_to t('weakness.show_follow_up'), finding_path('incomplete', @weakness) %> |
   <% end %>
   <%= link_to_back %>
 </div>

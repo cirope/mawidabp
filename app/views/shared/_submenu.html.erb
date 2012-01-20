@@ -9,7 +9,7 @@
       </li>
     <% end %>
     <li class="mobile_link">
-      <% link_label = t(:'label.back') + '<div class="aditional_link_info">' + (menu_item.ancestors.map(&:to_s) + [menu_item.to_s]).join(' | ') + '</div>' %>
+      <% link_label = t('label.back') + '<div class="aditional_link_info">' + (menu_item.ancestors.map(&:to_s) + [menu_item.to_s]).join(' | ') + '</div>' %>
       <%= link_to raw(link_label), '#', :class => :back %>
     </li>
   </ul>

@@ -15,7 +15,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -63,7 +63,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_state.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_state', 0)
@@ -99,7 +99,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_risk.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_risk', 0)
@@ -136,7 +136,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
@@ -144,7 +144,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   
   test 'cost analysis report' do
     perform_auth
-    expected_title = I18n.t :'conclusion_audit_report.cost_analysis_title'
+    expected_title = I18n.t 'conclusion_audit_report.cost_analysis_title'
 
     get :cost_analysis
     assert_response :success
@@ -175,7 +175,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_audit_report.cost_analysis.pdf_name',
+      I18n.t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
@@ -183,7 +183,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
   test 'detailed cost analysis report' do
     perform_auth
-    expected_title = I18n.t :'conclusion_audit_report.detailed_cost_analysis_title'
+    expected_title = I18n.t 'conclusion_audit_report.detailed_cost_analysis_title'
 
     get :cost_analysis, :include_details => 1
     assert_response :success
@@ -214,7 +214,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_audit_report.cost_analysis.pdf_name',
+      I18n.t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'cost_analysis', 0)
@@ -266,7 +266,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      I18n.t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'high_risk_weaknesses_report', 0)
@@ -318,7 +318,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
@@ -370,7 +370,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.control_objective_stats.pdf_name',
+      I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)

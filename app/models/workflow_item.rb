@@ -147,7 +147,7 @@ class WorkflowItem < ActiveRecord::Base
     unless self.is_frozen? && self.changed?
       true
     else
-      msg = I18n.t(:'workflow.readonly')
+      msg = I18n.t('workflow.readonly')
       self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
 
       false
@@ -174,7 +174,7 @@ class WorkflowItem < ActiveRecord::Base
       ['cost', 20]]
     columns = {}
     column_data = []
-    currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
+    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
 
     column_order.each do |col_name, col_width|
       columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|

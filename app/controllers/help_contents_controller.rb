@@ -9,7 +9,7 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents
   # * GET /help_contents.xml
   def index
-    @title = t :'help_content.index_title'
+    @title = t 'help_content.index_title'
     @help_contents = HelpContent.order('language ASC').paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -25,7 +25,7 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents/1
   # * GET /help_contents/1.xml
   def show
-    @title = t :'help_content.show_title'
+    @title = t 'help_content.show_title'
     @help_content = HelpContent.find(params[:id])
 
     respond_to do |format|
@@ -39,7 +39,7 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents/new
   # * GET /help_contents/new.xml
   def new
-    @title = t :'help_content.new_title'
+    @title = t 'help_content.new_title'
     @help_content = HelpContent.new
 
     respond_to do |format|
@@ -52,7 +52,7 @@ class HelpContentsController < ApplicationController
   # 
   # * GET /help_contents/1/edit
   def edit
-    @title = t :'help_content.edit_title'
+    @title = t 'help_content.edit_title'
     @help_content = HelpContent.find(params[:id])
   end
 
@@ -61,12 +61,12 @@ class HelpContentsController < ApplicationController
   # * POST /help_contents
   # * POST /help_contents.xml
   def create
-    @title = t :'help_content.new_title'
+    @title = t 'help_content.new_title'
     @help_content = HelpContent.new(params[:help_content])
 
     respond_to do |format|
       if @help_content.save
-        flash.notice = t :'help_content.correctly_created'
+        flash.notice = t 'help_content.correctly_created'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
               show_content_help_content_url(help_item) : help_contents_url) }
@@ -83,12 +83,12 @@ class HelpContentsController < ApplicationController
   # * PUT /help_contents/1
   # * PUT /help_contents/1.xml
   def update
-    @title = t :'help_content.edit_title'
+    @title = t 'help_content.edit_title'
     @help_content = HelpContent.find(params[:id])
 
     respond_to do |format|
       if @help_content.update_attributes(params[:help_content])
-        flash.notice = t :'help_content.correctly_updated'
+        flash.notice = t 'help_content.correctly_updated'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
               show_content_help_content_url(help_item) : help_contents_url) }
@@ -100,7 +100,7 @@ class HelpContentsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'help_content.stale_object_error'
+    flash.alert = t 'help_content.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -120,7 +120,7 @@ class HelpContentsController < ApplicationController
 
   # * GET /help_contents/show_content/1
   def show_content
-    @title = t :'help_content.help_title'
+    @title = t 'help_content.help_title'
     @help_item = params[:id] && HelpItem.exists?(params[:id]) ?
       HelpItem.find(params[:id]) :
       HelpContent.find_by_language(I18n.locale.to_s).try(:help_items).try(:first)

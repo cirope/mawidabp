@@ -1,6 +1,6 @@
 <% if @findings.empty? %>
   <p class="align-top" style="margin: 1em 0em; color: #47ae00; font-weight: bold;">
-    <%= t(:'review.without_suggested_findings') %>
+    <%= t('review.without_suggested_findings') %>
   </p>
 <% else %>
   <% @findings.each_with_index do |finding, i| %>
@@ -11,7 +11,7 @@
             <%= hidden_field_tag "review[finding_review_assignments_attributes][#{i + 1000}][finding_id]",
               finding.id, :id => "hidden_finding_id_#{finding.id}" %>
             <%= finding %> |
-            <%= link_to t(:'label.show'), finding %> |
+            <%= link_to t('label.show'), finding %> |
             <%= remove_item_link(nil, 'finding_review_assignment') %>
           </li>
         </ul>

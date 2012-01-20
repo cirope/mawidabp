@@ -834,7 +834,7 @@ class FindingTest < ActiveSupport::TestCase
     response = ActionMailer::Base.deliveries.first
 
     assert response.subject.include?(
-      I18n.t(:'notifier.notify_new_finding.title')
+      I18n.t('notifier.notify_new_finding.title')
     )
   end
 
@@ -1117,7 +1117,7 @@ class FindingTest < ActiveSupport::TestCase
       assert_raise(RuntimeError) do
         uneditable_finding.update_attributes({
         :work_papers_attributes => {
-            :'1_new' => {
+            '1_new' => {
               :name => 'New post_workpaper name',
               :code => 'New post_workpaper code',
               :number_of_pages => '10',

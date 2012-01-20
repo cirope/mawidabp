@@ -130,7 +130,7 @@ class Plan < ActiveRecord::Base
 
   def to_pdf(organization = nil, include_details = true)
     pdf = PDF::Writer.create_generic_pdf :landscape
-    currency_mask = "#{I18n.t(:'number.currency.format.unit')}%.2f"
+    currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     column_order = [['order_number', 6], ['status', 6],
       ['business_unit_id', 16], ['project', 27], ['start', 7.5], ['end', 7.5],
       ['human_resources_cost', 10], ['material_resources_cost', 10],
@@ -139,11 +139,11 @@ class Plan < ActiveRecord::Base
 
     pdf.add_generic_report_header organization
     
-    pdf.add_title "#{I18n.t(:'plan.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round,
+    pdf.add_title "#{I18n.t('plan.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round,
       :center
 
-    pdf.add_description_item(I18n.t(:'plan.period.title',
-        :number => self.period.number), I18n.t(:'plan.period.range',
+    pdf.add_description_item(I18n.t('plan.period.title',
+        :number => self.period.number), I18n.t('plan.period.range',
         :from_date => I18n.l(self.period.start, :format => :long),
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
@@ -162,7 +162,7 @@ class Plan < ActiveRecord::Base
       total_cost = 0.0
 
       pdf.move_pointer PDF_FONT_SIZE
-      pdf.add_title but.try(:name) || I18n.t(:'plan.without_business_unit_type')
+      pdf.add_title but.try(:name) || I18n.t('plan.without_business_unit_type')
 
       items.each do |plan_item|
         total_resource_text = currency_mask % plan_item.cost
@@ -211,14 +211,14 @@ class Plan < ActiveRecord::Base
         end
       end
 
-      pdf.text "\n#{I18n.t(:'plan.item_status.note')}",
+      pdf.text "\n#{I18n.t('plan.item_status.note')}",
         :font_size => (PDF_FONT_SIZE * 0.75).round
 
       if include_details &&
           !items.all? { |pi| pi.resource_utilizations.blank? }
         pdf.move_pointer PDF_FONT_SIZE
 
-        pdf.add_title I18n.t(:'plan.pdf.resource_utilization'),
+        pdf.add_title I18n.t('plan.pdf.resource_utilization'),
           (PDF_FONT_SIZE * 1.25).round
 
         items.each do |plan_item|
@@ -241,7 +241,7 @@ class Plan < ActiveRecord::Base
   end
 
   def pdf_name
-    I18n.t(:'plan.pdf.pdf_name', :period => self.period.number)
+    I18n.t('plan.pdf.pdf_name', :period => self.period.number)
   end
 
   def cost

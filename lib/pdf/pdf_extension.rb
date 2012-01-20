@@ -187,7 +187,7 @@ module PDF
         self.add_organization_image organization, font_size
 
         date_text = I18n.l(date, :format => :long) if date
-        text = I18n.t :'follow_up_committee.print_date', :date => date_text
+        text = I18n.t 'follow_up_committee.print_date', :date => date_text
         x_start = self.absolute_right_margin - self.text_width(text, font_size)
         self.add_text(x_start, y_top, text.to_iso, font_size)
 

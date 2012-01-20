@@ -13,10 +13,10 @@
             :id => "finding_review_assignment_finding_#{id}",
             :class => field_classes.join(' '),
             :style => 'width: 95%;',
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_finding_reviews_path(:format => :json) %>
+            'data-autocomplete-url' => auto_complete_for_finding_reviews_path(:format => :json) %>
           <%= f.hidden_field :finding_id, :value => f.object.finding_id,
             :id => "hidden_finding_id_#{id}", :class => :autocomplete_id %>
         </div>

@@ -12,7 +12,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices
   # * GET /best_practices.xml
   def index
-    @title = t :'best_practice.index_title'
+    @title = t 'best_practice.index_title'
     @best_practices = BestPractice.where(
       :organization_id => @auth_organization.id
     ).order('created_at DESC').paginate(
@@ -31,7 +31,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices/1
   # * GET /best_practices/1.xml
   def show
-    @title = t :'best_practice.show_title'
+    @title = t 'best_practice.show_title'
     @best_practice = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -45,7 +45,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices/new
   # * GET /best_practices/new.xml
   def new
-    @title = t :'best_practice.new_title'
+    @title = t 'best_practice.new_title'
     @best_practice = BestPractice.new
     @best_practice.process_controls.build
 
@@ -59,7 +59,7 @@ class BestPracticesController < ApplicationController
   #
   # * GET /best_practices/1/edit
   def edit
-    @title = t :'best_practice.edit_title'
+    @title = t 'best_practice.edit_title'
     @best_practice = find_with_organization(params[:id])
   end
 
@@ -70,12 +70,12 @@ class BestPracticesController < ApplicationController
   # * POST /best_practices
   # * POST /best_practices.xml
   def create
-    @title = t :'best_practice.new_title'
+    @title = t 'best_practice.new_title'
     @best_practice = BestPractice.new(params[:best_practice])
 
     respond_to do |format|
       if @best_practice.save
-        flash.notice = t :'best_practice.correctly_created'
+        flash.notice = t 'best_practice.correctly_created'
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { render :xml => @best_practice, :status => :created, :location => @best_practice }
       else
@@ -92,13 +92,13 @@ class BestPracticesController < ApplicationController
   # * PUT /best_practices/1
   # * PUT /best_practices/1.xml
   def update
-    @title = t :'best_practice.edit_title'
+    @title = t 'best_practice.edit_title'
     @best_practice = find_with_organization(params[:id])
     params[:best_practice][:organization_id] = @best_practice.organization_id
 
     respond_to do |format|
       if @best_practice.update_attributes(params[:best_practice])
-        flash.notice = t :'best_practice.correctly_updated'
+        flash.notice = t 'best_practice.correctly_updated'
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { head :ok }
       else
@@ -108,7 +108,7 @@ class BestPracticesController < ApplicationController
     end
     
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'best_practice.stale_object_error'
+    flash.alert = t 'best_practice.stale_object_error'
     redirect_to :action => :edit
   end
 

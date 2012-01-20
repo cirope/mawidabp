@@ -7,7 +7,7 @@ class VersionsController < ApplicationController
   # * GET /versions/1
   # * GET /versions/1.xml
   def show
-    @title = t :'version.show_title'
+    @title = t 'version.show_title'
     @version = Version.where(
       :id => params[:id],
       :organization_id => @auth_organization.id,
@@ -24,7 +24,7 @@ class VersionsController < ApplicationController
   #
   # * GET /versions/security_changes_report
   def security_changes_report
-    @title = t :'version.security_changes_report_title'
+    @title = t 'version.security_changes_report_title'
     @from_date, @to_date = *make_date_range(params[:security_changes_report])
 
     unless params[:download]
@@ -123,7 +123,7 @@ class VersionsController < ApplicationController
       end
     end
 
-    pdf_name = t(:'version.pdf_list_name',
+    pdf_name = t('version.pdf_list_name',
       :from_date => @from_date.to_formatted_s(:db),
       :to_date => @to_date.to_formatted_s(:db))
 

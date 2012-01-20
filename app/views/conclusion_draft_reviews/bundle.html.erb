@@ -9,16 +9,16 @@
     :fields => [
       {
         :name => :index_items,
-        :label => t(:'conclusion_review.bundle_index.items_label'),
-        :value => t(:'conclusion_review.bundle_index.default_items')
+        :label => t('conclusion_review.bundle_index.items_label'),
+        :value => t('conclusion_review.bundle_index.default_items')
       }
     ],
-    :submit_label => t(:'conclusion_review.bundle.create')
+    :submit_label => t('conclusion_review.bundle.create')
   }
 } %>
 <!--[eoform:conclusion_draft_review] -->
 <div id="links">
-  <%= link_to t(:'label.show'), @conclusion_draft_review %> |
-  <%= link_to t(:'label.list'), conclusion_draft_reviews_path %> |
+  <%= link_to t('label.show'), @conclusion_draft_review %> |
+  <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
   <%= link_to_back %>
 </div>

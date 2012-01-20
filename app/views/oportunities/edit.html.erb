@@ -1,12 +1,12 @@
 <%= render :partial => 'form' %>
 
 <div id="links">
-  <%= link_to t(:'label.show'), @oportunity %> |
-  <%= link_to t(:'label.list'), oportunities_path %> |
-  <%= link_to t(:'oportunity.edit_control_objective'),
+  <%= link_to t('label.show'), @oportunity %> |
+  <%= link_to t('label.list'), oportunities_path %> |
+  <%= link_to t('oportunity.edit_control_objective'),
     edit_control_objective_item_path(@oportunity.control_objective_item) %> |
   <% if !@oportunity.is_in_a_final_review? && @oportunity.pending? && !@oportunity.incomplete? %>
-    <%= link_to t(:'oportunity.edit_follow_up'), edit_finding_path('incomplete', @oportunity) %> |
+    <%= link_to t('oportunity.edit_follow_up'), edit_finding_path('incomplete', @oportunity) %> |
   <% end %>
   <%= link_to_back %>
 </div>

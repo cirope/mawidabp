@@ -1613,7 +1613,7 @@ class Finding < ActiveRecord::Base
       end
 
       date_text = I18n.l(date, :format => :long) if date
-      text = I18n.t :'finding.follow_up_report.print_date', :date => date_text
+      text = I18n.t 'finding.follow_up_report.print_date', :date => date_text
       x_start = pdf.absolute_right_margin - pdf.text_width(text, font_size)
       pdf.add_text(x_start, y_top, text.to_iso, font_size)
 

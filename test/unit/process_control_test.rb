@@ -51,7 +51,7 @@ class ProcessControlTest < ActiveSupport::TestCase
     end
 
     assert_equal 1, @process_control.errors.size
-    assert_equal I18n.t(:'control_objective.errors.related'),
+    assert_equal I18n.t('control_objective.errors.related'),
       @process_control.errors.full_messages.join
   end
 

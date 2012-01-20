@@ -7,8 +7,8 @@
     </div>
     <div class="show_hide_field">
     <%= link_to_show_hide "resource_utilizations_for_#{id}",
-      t(:'plan.show_resource_utilization'),
-      t(:'plan.hide_resource_utilization') %>
+      t('plan.show_resource_utilization'),
+      t('plan.hide_resource_utilization') %>
     </div>
     <div class="item_field" style="width: 5%;">
     <%= f.text_field :order_number, :class => :sort_number,
@@ -22,11 +22,11 @@
         <%= text_field_tag 'plan_item[business_unit_data]', '',
           :id => "plan_item_business_unit_#{id}",
           :class => field_classes.join(' '),
-          :title => t(:'label.search'),
+          :title => t('label.search'),
           :autocomplete => :off,
           :autofocus => true,
-          :'data-autocomplete-params' => ("{business_unit_type_id: #{@business_unit_type.id}}" if @business_unit_type),
-          :'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
+          'data-autocomplete-params' => ("{business_unit_type_id: #{@business_unit_type.id}}" if @business_unit_type),
+          'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
         <%= f.hidden_field :business_unit_id, :value => f.object.business_unit_id,
           :id => "hidden_business_unit_id_#{id}", :class => :autocomplete_id %>
       </div>
@@ -91,14 +91,14 @@
         </div>
 
         <p style="margin-bottom: 1em;">
-          <%= link_to t(:'plan.add_material_resource_utilization'), '#',
-            :'data-template' => :material_resource_utilization,
-            :'data-event' => 'addNestedSubitem', :'data-parent' => :plan_item,
-            :'data-child' => :material_resource_utilizations %> |
-          <%= link_to t(:'plan.add_human_resource_utilization'), '#',
-            :'data-template' => :human_resource_utilization,
-            :'data-event' => 'addNestedSubitem', :'data-parent' => :plan_item,
-            :'data-child' => :human_resource_utilizations %>
+          <%= link_to t('plan.add_material_resource_utilization'), '#',
+            'data-template' => :material_resource_utilization,
+            'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
+            'data-child' => :material_resource_utilizations %> |
+          <%= link_to t('plan.add_human_resource_utilization'), '#',
+            'data-template' => :human_resource_utilization,
+            'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
+            'data-child' => :human_resource_utilizations %>
         </p>
       </div>
     </div>

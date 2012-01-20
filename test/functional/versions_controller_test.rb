@@ -17,7 +17,7 @@ class VersionsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -56,7 +56,7 @@ class VersionsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'version.pdf_list_name',
+      I18n.t('version.pdf_list_name',
         :from_date => from_date.to_formatted_s(:db),
         :to_date => to_date.to_formatted_s(:db)), Version.table_name)
   end

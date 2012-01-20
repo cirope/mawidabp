@@ -112,14 +112,14 @@
         </div>
         <div class="show_item">
           <b><%= ControlObjectiveItem.human_attribute_name :finished %>:</b>
-          <%= t coi.finished ? :'label.yes' : :'label.no' %>
+          <%= t coi.finished ? 'label.yes' : 'label.no' %>
         </div>
       </div>
     <% end %>
   <% end %>
 
   <% unless @review.finding_review_assignments.empty? %>
-    <h1><%= t(:'review.findings_label') %></h1>
+    <h1><%= t('review.findings_label') %></h1>
 
     <ul class="raw_list">
       <% @review.finding_review_assignments.each do |fra| %>
@@ -130,7 +130,7 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_review_path(@review) %> |
-  <%= link_to t(:'label.list'), reviews_path %> |
+  <%= link_to t('label.edit'), edit_review_path(@review) %> |
+  <%= link_to t('label.list'), reviews_path %> |
   <%= link_to_back %>
 </div>

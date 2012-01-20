@@ -5,7 +5,7 @@ module ConclusionDraftReviewsHelper
   def link_to_new_conclusion_final_review(*args)
     html_options = {:class => :image_link}
     options = {:label =>
-        t(:'conclusion_draft_review.new_conclusion_final_review')}
+        t('conclusion_draft_review.new_conclusion_final_review')}
     options.merge!(args.pop) if args.last.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
@@ -15,6 +15,6 @@ module ConclusionDraftReviewsHelper
   end
 
   def show_has_final_info
-    show_info(t(:'conclusion_draft_review.has_final_review'), :class => :red)
+    show_info(t('conclusion_draft_review.has_final_review'), :class => :red)
   end
 end

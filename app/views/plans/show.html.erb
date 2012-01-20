@@ -1,4 +1,4 @@
-<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" %>
+<% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <div id="showed_data">
   <p>
     <b><%= Plan.human_attribute_name :period_id %></b>:
@@ -49,7 +49,7 @@
   </table>
 
   <% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } %>
-    <h1><%= t(:'plan.pdf.resource_utilization') %></h1>
+    <h1><%= t('plan.pdf.resource_utilization') %></h1>
     
     <% @plan.plan_items.each do |plan_item| %>
       <% unless plan_item.resource_utilizations.blank? %>
@@ -87,11 +87,11 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_plan_path(@plan) %> |
-  <%= link_to t(:'label.list'), plans_path %> |
-  <%= link_to t(:'plan.download_global_plan'), export_to_pdf_plan_path(@plan,
+  <%= link_to t('label.edit'), edit_plan_path(@plan) %> |
+  <%= link_to t('label.list'), plans_path %> |
+  <%= link_to t('plan.download_global_plan'), export_to_pdf_plan_path(@plan,
     :_ts => Time.now.to_i) %> |
-  <%= link_to t(:'plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,
+  <%= link_to t('plan.download_detailed_plan'), export_to_pdf_plan_path(@plan,
     :include_details => 1, :_ts => Time.now.to_i) %> |
   <%= link_to_back %>
 </div>

@@ -111,20 +111,20 @@ class Period < ActiveRecord::Base
     errors = []
 
     unless self.reviews.empty?
-      errors << I18n.t(:'period.errors.has_reviews', :count => self.reviews.size)
+      errors << I18n.t('period.errors.has_reviews', :count => self.reviews.size)
     end
 
     unless self.plans.empty?
-      errors << I18n.t(:'period.errors.has_plans', :count => self.plans.size)
+      errors << I18n.t('period.errors.has_plans', :count => self.plans.size)
     end
 
     unless self.workflows.empty?
-      errors << I18n.t(:'period.errors.has_workflows',
+      errors << I18n.t('period.errors.has_workflows',
         :count => self.workflows.size)
     end
 
     unless self.procedure_controls.empty?
-      errors << I18n.t(:'period.errors.has_procedure_controls',
+      errors << I18n.t('period.errors.has_procedure_controls',
         :count => self.procedure_controls.size)
     end
 

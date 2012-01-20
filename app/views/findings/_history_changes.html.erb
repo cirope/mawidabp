@@ -1,10 +1,10 @@
 <div id="finding_status_change_history" style="display: none;">
   <div>
-    <h2><%= t(:'finding.status_change_history') %></h2>
+    <h2><%= t('finding.status_change_history') %></h2>
     <ul class="raw_list">
       <% finding.status_change_history.each do |historic_finding| %>
         <% title = historic_finding.user_who_make_it.try(:full_name) ||
-          t(:'message.automatic_by_the_system') %>
+          t('message.automatic_by_the_system') %>
         <li>
           <abbr title="<%= title %>"><%= historic_finding.state_text %></abbr>
           (<%= l(historic_finding.updated_at, :format => :long) %>)
@@ -13,7 +13,7 @@
     </ul>
 
     <% unless finding.comments.reject(&:new_record?).empty? %>
-      <h2><%= t(:'finding.comments') %></h2>
+      <h2><%= t('finding.comments') %></h2>
       <table class="summary_table">
         <thead>
           <tr>

@@ -4,8 +4,8 @@
 <div id="menu" <%= raw 'style="border-top: 12px solid #F7AC07;"' if Rails.env.development? %>>
   <div id="session">
     <div id="user">[ <%= link_to user.user, edit_personal_data_user_path(user),
-      {:title => t(:'user.change_personal_data')} %> ]</div>
-    <%= link_to t(:'menu.exit'), logout_user_path(user) %>
+      {:title => t('user.change_personal_data')} %> ]</div>
+    <%= link_to t('menu.exit'), logout_user_path(user) %>
   </div>
   <ul class="menu_level_0" data-level="0" id="main_menu">
     <% APP_AUDITED_MENU_ITEMS.each do |menu_item| %>

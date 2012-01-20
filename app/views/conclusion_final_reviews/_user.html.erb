@@ -9,10 +9,10 @@
           <%= text_field_tag "user[#{id}][data]", '',
             :id => "user_#{id}_data",
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_user_conclusion_final_reviews_path(:format => :json) %>
+            'data-autocomplete-url' => auto_complete_for_user_conclusion_final_reviews_path(:format => :json) %>
           <%= hidden_field_tag "user[#{id}][id]", user.id,
             :class => :autocomplete_id %>
         </div>

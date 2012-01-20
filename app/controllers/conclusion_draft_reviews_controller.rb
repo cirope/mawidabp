@@ -12,7 +12,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews
   # * GET /conclusion_draft_reviews.xml
   def index
-    @title = t :'conclusion_draft_review.index_title'
+    @title = t 'conclusion_draft_review.index_title'
     default_conditions = {
       "#{Period.table_name}.organization_id" => @auth_organization.id
     }
@@ -47,7 +47,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews/1
   # * GET /conclusion_draft_reviews/1.xml
   def show
-    @title = t :'conclusion_draft_review.show_title'
+    @title = t 'conclusion_draft_review.show_title'
     @conclusion_draft_review = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -61,7 +61,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews/new
   # * GET /conclusion_draft_reviews/new.xml
   def new
-    @title = t :'conclusion_draft_review.new_title'
+    @title = t 'conclusion_draft_review.new_title'
     @conclusion_draft_review = ConclusionDraftReview.new
 
     respond_to do |format|
@@ -74,7 +74,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/1/edit
   def edit
-    @title = t :'conclusion_draft_review.edit_title'
+    @title = t 'conclusion_draft_review.edit_title'
     @conclusion_draft_review = find_with_organization(params[:id])
   end
 
@@ -83,13 +83,13 @@ class ConclusionDraftReviewsController < ApplicationController
   # * POST /conclusion_draft_reviews
   # * POST /conclusion_draft_reviews.xml
   def create
-    @title = t :'conclusion_draft_review.new_title'
+    @title = t 'conclusion_draft_review.new_title'
     @conclusion_draft_review = ConclusionDraftReview.new(
       params[:conclusion_draft_review])
 
     respond_to do |format|
       if @conclusion_draft_review.save
-        flash.notice = t :'conclusion_draft_review.correctly_created'
+        flash.notice = t 'conclusion_draft_review.correctly_created'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { render :xml => @conclusion_draft_review, :status => :created, :location => @conclusion_draft_review }
       else
@@ -105,13 +105,13 @@ class ConclusionDraftReviewsController < ApplicationController
   # * PUT /conclusion_draft_reviews/1
   # * PUT /conclusion_draft_reviews/1.xml
   def update
-    @title = t :'conclusion_draft_review.edit_title'
+    @title = t 'conclusion_draft_review.edit_title'
     @conclusion_draft_review = find_with_organization(params[:id])
 
     respond_to do |format|
       if @conclusion_draft_review.update_attributes(
           params[:conclusion_draft_review])
-        flash.notice = t :'conclusion_draft_review.correctly_updated'
+        flash.notice = t 'conclusion_draft_review.correctly_updated'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { head :ok }
       else
@@ -121,7 +121,7 @@ class ConclusionDraftReviewsController < ApplicationController
     end
 
     rescue ActiveRecord::StaleObjectError
-      flash.alert = t :'conclusion_draft_review.stale_object_error'
+      flash.alert = t 'conclusion_draft_review.stale_object_error'
       redirect_to edit_conclusion_draft_review_url(@conclusion_draft_review)
   end
 
@@ -175,7 +175,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/bundle/1
   def bundle
-    @title = t :'conclusion_draft_review.bundle_title'
+    @title = t 'conclusion_draft_review.bundle_title'
     @conclusion_draft_review = find_with_organization(params[:id])
   end
 
@@ -195,7 +195,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/compose_email/1
   def compose_email
-    @title = t :'conclusion_draft_review.send_by_email'
+    @title = t 'conclusion_draft_review.send_by_email'
     @conclusion_draft_review = find_with_organization(params[:id])
   end
 
@@ -203,7 +203,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * POST /conclusion_draft_reviews/send_by_email/1
   def send_by_email
-    @title = t :'conclusion_draft_review.send_by_email'
+    @title = t 'conclusion_draft_review.send_by_email'
     @conclusion_draft_review = find_with_organization(params[:id])
 
     if @conclusion_draft_review.try(:review).try(:can_be_sended?) &&
@@ -245,7 +245,7 @@ class ConclusionDraftReviewsController < ApplicationController
       end
 
       unless users.blank?
-        flash.notice = t(:'conclusion_review.review_sended')
+        flash.notice = t('conclusion_review.review_sended')
 
         redirect_to edit_conclusion_draft_review_url(
           @conclusion_draft_review)
@@ -253,7 +253,7 @@ class ConclusionDraftReviewsController < ApplicationController
         render :action => :compose_email
       end
     elsif @conclusion_draft_review.try(:review)
-      flash.alert = t(:'conclusion_review.review_not_approved')
+      flash.alert = t('conclusion_review.review_not_approved')
       render :action => :compose_email
     else
       redirect_to conclusion_draft_reviews_url

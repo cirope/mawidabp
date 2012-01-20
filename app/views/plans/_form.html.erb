@@ -30,9 +30,9 @@
   <div class="form_column_right">
     <p>
       <%= Plan.human_attribute_name :estimated_amount %>:
-      <b><%= t(:'number.currency.format.unit') %><span id="estimated_amount"><%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %></span></b>
+      <b><%= t('number.currency.format.unit') %><span id="estimated_amount"><%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %></span></b>
       <% unless params[:business_unit_type].blank? %>
-        <%= link_to_function t(:'plan.calculate_estimated_amount'),
+        <%= link_to_function t('plan.calculate_estimated_amount'),
           "calculateEstimatedAmount()", :style => 'margin-left: .5em;' %>
       <% end %>
     </p>
@@ -98,14 +98,14 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'plan.add_plan_item'), '#', :'data-template' => :plan_item,
-        :'data-event' => 'addNestedItem', :'data-container' => '#plan_items' %>
+      <%= link_to t('plan.add_plan_item'), '#', 'data-template' => :plan_item,
+        'data-event' => 'addNestedItem', 'data-container' => '#plan_items' %>
     </p>
   <% end %>
 
   <% if @plan.has_duplication? %>
     <p class="form_item">
-      <%= p_f.label :allow_duplication, t(:'plan.allow_duplication'),
+      <%= p_f.label :allow_duplication, t('plan.allow_duplication'),
         :class => 'inline error_field' %>
       <%= p_f.check_box :allow_duplication, :class => :inline_item %>
     </p>
@@ -113,7 +113,7 @@
 
   <% if @plan.overloaded? %>
     <p class="form_item">
-      <%= p_f.label :allow_overload, t(:'plan.allow_overload'),
+      <%= p_f.label :allow_overload, t('plan.allow_overload'),
         :class => 'inline error_field' %>
       <%= p_f.check_box :allow_overload, :class => :inline_item %>
     </p>

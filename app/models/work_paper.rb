@@ -82,7 +82,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pages_to_s
-    I18n.t(:'work_paper.number_of_pages', :count => self.number_of_pages)
+    I18n.t('work_paper.number_of_pages', :count => self.number_of_pages)
   end
 
   def check_for_modifications
@@ -156,7 +156,7 @@ class WorkPaper < ActiveRecord::Base
         /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
     end
     
-    I18n.t :'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
+    I18n.t 'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
       :filename => File.basename(filename, File.extname(filename))
   end
 

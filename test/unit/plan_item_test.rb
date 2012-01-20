@@ -60,7 +60,7 @@ class PlanItemTest < ActiveSupport::TestCase
     assert_no_difference('PlanItem.count') { @plan_item.destroy }
 
     assert_equal 1, @plan_item.errors.size
-    assert_equal I18n.t(:'plan.errors.plan_item_related'),
+    assert_equal I18n.t('plan.errors.plan_item_related'),
       @plan_item.errors.full_messages.join
   end
 

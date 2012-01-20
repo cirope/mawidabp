@@ -43,7 +43,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
     assert_no_difference('BusinessUnit.count') { @business_unit.destroy }
 
     assert_equal 1, @business_unit.errors.size
-    assert_equal I18n.t(:'business_unit_type.errors.business_unit_related'),
+    assert_equal I18n.t('business_unit_type.errors.business_unit_related'),
       @business_unit.errors.full_messages.first
 
     assert_difference 'BusinessUnit.count', -1 do

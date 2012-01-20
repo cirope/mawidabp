@@ -4,8 +4,8 @@
   <div>
     <div class="show_hide_field">
       <%= link_to_show_hide "resource_utilizations_for_#{id}",
-        t(:'workflow.show_resource_utilization'),
-        t(:'workflow.hide_resource_utilization') %>
+        t('workflow.show_resource_utilization'),
+        t('workflow.hide_resource_utilization') %>
     </div>
     <div class="item_field" style="width: 5%;">
       <%= f.text_field :order_number, :size => nil, :class => :sort_number,
@@ -65,14 +65,14 @@
         </div>
 
         <p style="margin-bottom: 1em;">
-          <%= link_to t(:'workflow.add_material_resource_utilization'), '#',
-            :'data-template' => :material_resource_utilization,
-            :'data-event' => 'addNestedSubitem', :'data-parent' => :workflow_item,
-            :'data-child' => :material_resource_utilizations %> |
-          <%= link_to t(:'workflow.add_human_resource_utilization'), '#',
-            :'data-template' => :human_resource_utilization,
-            :'data-event' => 'addNestedSubitem', :'data-parent' => :workflow_item,
-            :'data-child' => :human_resource_utilizations %>
+          <%= link_to t('workflow.add_material_resource_utilization'), '#',
+            'data-template' => :material_resource_utilization,
+            'data-event' => 'addNestedSubitem', 'data-parent' => :workflow_item,
+            'data-child' => :material_resource_utilizations %> |
+          <%= link_to t('workflow.add_human_resource_utilization'), '#',
+            'data-template' => :human_resource_utilization,
+            'data-event' => 'addNestedSubitem', 'data-parent' => :workflow_item,
+            'data-child' => :human_resource_utilizations %>
         </p>
       </div>
     </div>

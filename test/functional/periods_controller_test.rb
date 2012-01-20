@@ -22,7 +22,7 @@ class PeriodsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -137,11 +137,11 @@ class PeriodsControllerTest < ActionController::TestCase
       delete :destroy, :id => period.id
     end
 
-    assert_equal [I18n.t(:'period.errors.can_not_be_destroyed'),
-      I18n.t(:'period.errors.has_reviews', :count => period.reviews.size),
-      I18n.t(:'period.errors.has_plans', :count => period.plans.size),
-      I18n.t(:'period.errors.has_workflows', :count => period.workflows.size),
-      I18n.t(:'period.errors.has_procedure_controls',
+    assert_equal [I18n.t('period.errors.can_not_be_destroyed'),
+      I18n.t('period.errors.has_reviews', :count => period.reviews.size),
+      I18n.t('period.errors.has_plans', :count => period.plans.size),
+      I18n.t('period.errors.has_workflows', :count => period.workflows.size),
+      I18n.t('period.errors.has_procedure_controls',
         :count => period.procedure_controls.size)].join(APP_ENUM_SEPARATOR),
       flash.alert
     assert_redirected_to periods_url

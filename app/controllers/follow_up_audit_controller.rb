@@ -15,7 +15,7 @@ class FollowUpAuditController < ApplicationController
   #
   # * GET /follow_up_audit
   def index
-    @title = t :'follow_up_audit.index_title'
+    @title = t 'follow_up_audit.index_title'
 
     respond_to do |format|
       format.html
@@ -26,7 +26,7 @@ class FollowUpAuditController < ApplicationController
   #
   # * GET /follow_up_committee/cost_analysis
   def cost_analysis
-    @title = t :'follow_up_audit.cost_analysis_title'
+    @title = t 'follow_up_audit.cost_analysis_title'
     @from_date, @to_date = *make_date_range(params[:cost_analysis])
     @periods = periods_for_interval
     @column_order = [['business_unit', 20], ['project', 20], ['review', 10],
@@ -125,8 +125,8 @@ class FollowUpAuditController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t(:'follow_up_committee.period.title'),
-      t(:'follow_up_committee.period.range',
+      t('follow_up_committee.period.title'),
+      t('follow_up_committee.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -138,7 +138,7 @@ class FollowUpAuditController < ApplicationController
         (PDF_FONT_SIZE * 1.25).round, :justify
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title "#{t(:'follow_up_audit.cost_analysis.weaknesses')}\n",
+      pdf.add_title "#{t('follow_up_audit.cost_analysis.weaknesses')}\n",
         PDF_FONT_SIZE, :center
 
       unless @weaknesses_data[period].blank?
@@ -158,13 +158,13 @@ class FollowUpAuditController < ApplicationController
           table.render_on pdf
         end
       else
-        pdf.text t(:'follow_up_audit.cost_analysis.without_weaknesses'),
+        pdf.text t('follow_up_audit.cost_analysis.without_weaknesses'),
           :font_size => PDF_FONT_SIZE
       end
 
       pdf.move_pointer PDF_FONT_SIZE
 
-      pdf.add_title "#{t(:'follow_up_audit.cost_analysis.oportunities')}\n",
+      pdf.add_title "#{t('follow_up_audit.cost_analysis.oportunities')}\n",
         PDF_FONT_SIZE, :center
 
       unless @oportunities_data[period].blank?
@@ -184,19 +184,19 @@ class FollowUpAuditController < ApplicationController
           table.render_on pdf
         end
       else
-        pdf.text t(:'follow_up_audit.cost_analysis.without_oportunities'),
+        pdf.text t('follow_up_audit.cost_analysis.without_oportunities'),
           :font_size => PDF_FONT_SIZE
       end
     end
 
     pdf.custom_save_as(
-      t(:'follow_up_audit.cost_analysis.pdf_name',
+      t('follow_up_audit.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'follow_up_cost_analysis',
       0)
 
     redirect_to PDF::Writer.relative_path(
-      t(:'follow_up_audit.cost_analysis.pdf_name',
+      t('follow_up_audit.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'follow_up_cost_analysis',
       0)

@@ -16,7 +16,7 @@ class PlansController < ApplicationController
   # * GET /plans
   # * GET /plans.xml
   def index
-    @title = t :'plan.index_title'
+    @title = t 'plan.index_title'
     @plans = Plan.includes(:period).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
     ).order("#{Period.table_name}.start DESC").paginate(
@@ -34,7 +34,7 @@ class PlansController < ApplicationController
   # * GET /plans/1
   # * GET /plans/1.xml
   def show
-    @title = t :'plan.show_title'
+    @title = t 'plan.show_title'
     @plan = find_with_organization(params[:id])
 
     respond_to do |format|
@@ -48,7 +48,7 @@ class PlansController < ApplicationController
   # * GET /plans/new
   # * GET /plans/new.xml
   def new
-    @title = t :'plan.new_title'
+    @title = t 'plan.new_title'
     @plan = Plan.new
     clone_id = params[:clone_from].to_i
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
@@ -65,7 +65,7 @@ class PlansController < ApplicationController
   #
   # * GET /plans/1/edit
   def edit
-    @title = t :'plan.edit_title'
+    @title = t 'plan.edit_title'
     @plan = find_with_organization(params[:id], true)
   end
 
@@ -75,7 +75,7 @@ class PlansController < ApplicationController
   # * POST /plans
   # * POST /plans.xml
   def create
-    @title = t :'plan.new_title'
+    @title = t 'plan.new_title'
     @plan = Plan.new(params[:plan])
     clone_id = params[:clone_from].to_i
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
@@ -84,7 +84,7 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_created')) }
+        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_created')) }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => :new }
@@ -100,12 +100,12 @@ class PlansController < ApplicationController
   # * PUT /plans/1
   # * PUT /plans/1.xml
   def update
-    @title = t :'plan.edit_title'
+    @title = t 'plan.edit_title'
     @plan = find_with_organization(params[:id], true)
     
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
-        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t(:'plan.correctly_updated')) }
+        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -114,7 +114,7 @@ class PlansController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'plan.stale_object_error'
+    flash.alert = t 'plan.stale_object_error'
     redirect_to :action => :edit
   end
 
@@ -126,7 +126,7 @@ class PlansController < ApplicationController
     @plan = find_with_organization(params[:id])
 
     unless @plan.destroy
-      flash.alert = t :'plan.errors.can_not_be_destroyed'
+      flash.alert = t 'plan.errors.can_not_be_destroyed'
     end
 
     respond_to do |format|

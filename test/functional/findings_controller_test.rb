@@ -22,7 +22,7 @@ class FindingsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -482,7 +482,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'export detailed list to pdf' do
@@ -493,7 +493,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'export list with search' do
@@ -508,7 +508,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'export detailed list with search' do
@@ -524,7 +524,7 @@ class FindingsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'finding.pdf.pdf_name'), Finding.table_name)
+      I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
   test 'follow up pdf' do

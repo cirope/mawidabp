@@ -98,7 +98,7 @@ class UserTest < ActiveSupport::TestCase
     assert_no_difference('User.count') { audited.destroy }
 
     assert_equal 1, audited.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       audited.errors.full_messages.join
 
     audited.findings.delete audited.findings.all_for_reallocation
@@ -127,7 +127,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert user.enable?
     assert_equal 1, user.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       user.errors.full_messages.first
   end
 
@@ -154,7 +154,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert user.enable?
     assert_equal 1, user.errors.size
-    assert_equal I18n.t(:'user.will_be_orphan_findings'),
+    assert_equal I18n.t('user.will_be_orphan_findings'),
       user.errors.full_messages.first
 
     assert_difference 'user.reviews.count', -1 do
@@ -484,7 +484,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal old_reviews_count, audited_user.reviews.
       list_without_final_review(organizations(:default_organization)).count
     assert_equal 1, audited_user.errors.size
-    assert_equal I18n.t(:'user.user_release_failed'),
+    assert_equal I18n.t('user.user_release_failed'),
       audited_user.errors.full_messages.first
   end
 

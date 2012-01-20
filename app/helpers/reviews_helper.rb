@@ -2,8 +2,8 @@ module ReviewsHelper
   def show_review_with_close_date_as_abbr(review)
     close_date = review.conclusion_final_review.try(:close_date)
     review_data = close_date ?
-      t(:'review.review_data.close_date', :date => l(close_date, :format => :long)) :
-      t(:'review.review_data.without_close_date')
+      t('review.review_data.close_date', :date => l(close_date, :format => :long)) :
+      t('review.review_data.without_close_date')
 
     content_tag(:abbr, h(review.identification), :title => review_data)
   end
@@ -65,7 +65,7 @@ module ReviewsHelper
 
     if procedure_control
       link_to(
-        t(:'review.view_procedure_control_for_the_period'),
+        t('review.view_procedure_control_for_the_period'),
         {
           :action => :procedure_control_data,
           :id => procedure_control,
@@ -74,7 +74,7 @@ module ReviewsHelper
         :remote => true, :id => :procedure_control_link
       )
     else
-      content_tag :span, t(:'review.view_procedure_control_for_the_period')
+      content_tag :span, t('review.view_procedure_control_for_the_period')
     end
   end
 end

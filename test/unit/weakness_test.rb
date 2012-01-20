@@ -274,7 +274,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.solution_date = nil
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t(:'weakness.errors.without_solution_date'),
+    assert_equal I18n.t('weakness.errors.without_solution_date'),
       @weakness.approval_errors.first
 
     @weakness.state = Finding::STATUS[:implemented]
@@ -282,17 +282,17 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.follow_up_date = nil
     assert !@weakness.must_be_approved?
     assert_equal 2, @weakness.approval_errors.size
-    assert_equal [I18n.t(:'weakness.errors.with_solution_date'),
-      I18n.t(:'weakness.errors.without_follow_up_date')].sort,
+    assert_equal [I18n.t('weakness.errors.with_solution_date'),
+      I18n.t('weakness.errors.without_follow_up_date')].sort,
       @weakness.approval_errors.sort
 
     @weakness.state = Finding::STATUS[:being_implemented]
     @weakness.answer = ' '
     assert !@weakness.must_be_approved?
     assert_equal 3, @weakness.approval_errors.size
-    assert_equal [I18n.t(:'weakness.errors.without_answer'),
-      I18n.t(:'weakness.errors.with_solution_date'),
-      I18n.t(:'weakness.errors.without_follow_up_date')].sort,
+    assert_equal [I18n.t('weakness.errors.without_answer'),
+      I18n.t('weakness.errors.with_solution_date'),
+      I18n.t('weakness.errors.without_follow_up_date')].sort,
       @weakness.approval_errors.sort
 
     @weakness.reload
@@ -300,7 +300,7 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.state = Finding::STATUS[:notify]
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t(:'weakness.errors.not_valid_state'),
+    assert_equal I18n.t('weakness.errors.not_valid_state'),
       @weakness.approval_errors.first
 
     @weakness.reload
@@ -310,14 +310,14 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t(:'weakness.errors.without_audited'),
+    assert_equal I18n.t('weakness.errors.without_audited'),
       @weakness.approval_errors.first
 
     @weakness.reload
     @weakness.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t(:'weakness.errors.without_auditor'),
+    assert_equal I18n.t('weakness.errors.without_auditor'),
       @weakness.approval_errors.first
 
     @weakness.reload
@@ -325,8 +325,8 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.audit_comments = '  '
     assert !@weakness.must_be_approved?
     assert_equal 2, @weakness.approval_errors.size
-    assert_equal [I18n.t(:'weakness.errors.without_effect'),
-      I18n.t(:'weakness.errors.without_audit_comments')].sort,
+    assert_equal [I18n.t('weakness.errors.without_effect'),
+      I18n.t('weakness.errors.without_audit_comments')].sort,
       @weakness.approval_errors.sort
   end
 
@@ -364,7 +364,7 @@ class WeaknessTest < ActiveSupport::TestCase
       assert_raise(RuntimeError) do
         uneditable_weakness.update_attributes({
         :work_papers_attributes => {
-            :'1_new' => {
+            '1_new' => {
               :name => 'New post_workpaper name',
               :code => 'New post_workpaper code',
               :number_of_pages => '10',

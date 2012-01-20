@@ -68,7 +68,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
     end
 
     assert_equal 1, @control_objective.errors.size
-    assert_equal I18n.t(:'control_objective.errors.related'),
+    assert_equal I18n.t('control_objective.errors.related'),
       @control_objective.errors.full_messages.join
   end
 

@@ -6,10 +6,10 @@ module NotificationsHelper
   def link_to_confirm(notification, reject = false)
     unless notification.notified?
       if reject
-        link_to(t(:'notification.reject'),
+        link_to(t('notification.reject'),
           confirm_notification_path(notification, :reject => 1))
       else
-        link_to(t(:'notification.confirm'),
+        link_to(t('notification.confirm'),
           confirm_notification_path(notification))
       end
     end

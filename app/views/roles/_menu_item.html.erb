@@ -12,10 +12,10 @@
         <%= f.hidden_field :module %>
         <%= f.hidden_field :id unless privilege.new_record? %>
       </td>
-      <td><%= f.check_box :read, :'data-type' => :read %></td>
-      <td><%= f.check_box :modify, :'data-type' => :modify %></td>
-      <td><%= f.check_box :erase, :'data-type' => :erase %></td>
-      <td><%= f.check_box :approval, :'data-type' => :approval %></td>
+      <td><%= f.check_box :read, 'data-type' => :read %></td>
+      <td><%= f.check_box :modify, 'data-type' => :modify %></td>
+      <td><%= f.check_box :erase, 'data-type' => :erase %></td>
+      <td><%= f.check_box :approval, 'data-type' => :approval %></td>
     </tr>
   <% end %>
   <% menu_item.children.each do |submenu_item| %>

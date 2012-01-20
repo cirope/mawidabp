@@ -11,11 +11,11 @@
             f.object.user.try(:full_name_with_function),
             :id => "weakness_user_#{id}",
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-params' => ("{weakness_id: #{@weakness.id}}" unless @weakness.new_record?),
-            :'data-autocomplete-url' => auto_complete_for_user_weaknesses_path %>
+            'data-autocomplete-params' => ("{weakness_id: #{@weakness.id}}" unless @weakness.new_record?),
+            'data-autocomplete-url' => auto_complete_for_user_weaknesses_path %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
         </div>

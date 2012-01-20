@@ -12,10 +12,10 @@
             f.object.user.try(:full_name_with_function, f.object.updated_at),
             :id => "review_user_assignment_user_#{id}",
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_user_reviews_path(:format => :json) %>
+            'data-autocomplete-url' => auto_complete_for_user_reviews_path(:format => :json) %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
         </div>

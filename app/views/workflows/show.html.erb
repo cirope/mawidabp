@@ -1,4 +1,4 @@
-<% currency_mask = "#{t(:'number.currency.format.unit')}%.2f" %>
+<% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <div id="showed_data">
   <h1><%=h @workflow.review %></h1>
 
@@ -43,7 +43,7 @@
   </table>
 
   <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
-    <h1><%= t(:'workflow.pdf.resources_utilization') %></h1>
+    <h1><%= t('workflow.pdf.resources_utilization') %></h1>
 
     <% @workflow.workflow_items.each do |workflow_item| %>
       <% unless workflow_item.resource_utilizations.blank? %>
@@ -80,11 +80,11 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_workflow_path(@workflow) %> |
-  <%= link_to t(:'label.list'), workflows_path %> |
-  <%= link_to t(:'workflow.download_global_workflow'),
+  <%= link_to t('label.edit'), edit_workflow_path(@workflow) %> |
+  <%= link_to t('label.list'), workflows_path %> |
+  <%= link_to t('workflow.download_global_workflow'),
     export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
-  <%= link_to t(:'workflow.download_detailed_workflow'),
+  <%= link_to t('workflow.download_detailed_workflow'),
     export_to_pdf_workflow_path(:include_details => 1,
     :_ts => Time.now.to_i) %> |
   <%= link_to_back %>

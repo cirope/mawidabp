@@ -9,7 +9,7 @@ class HelpItemsController < ApplicationController
   # * GET /help_items
   # * GET /help_items.xml
   def index
-    @title = t :'help_item.index_title'
+    @title = t 'help_item.index_title'
     @help_items = HelpItem.order('name ASC').paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -25,7 +25,7 @@ class HelpItemsController < ApplicationController
   # * GET /help_items/1
   # * GET /help_items/1.xml
   def show
-    @title = t :'help_item.show_title'
+    @title = t 'help_item.show_title'
     @help_item = HelpItem.find(params[:id])
 
     respond_to do |format|
@@ -39,7 +39,7 @@ class HelpItemsController < ApplicationController
   # * GET /help_items/new
   # * GET /help_items/new.xml
   def new
-    @title = t :'help_item.new_title'
+    @title = t 'help_item.new_title'
     @help_item = HelpItem.new
 
     respond_to do |format|
@@ -52,7 +52,7 @@ class HelpItemsController < ApplicationController
   #
   # * GET /help_items/1/edit
   def edit
-    @title = t :'help_item.edit_title'
+    @title = t 'help_item.edit_title'
     @help_item = HelpItem.find(params[:id])
   end
 
@@ -61,12 +61,12 @@ class HelpItemsController < ApplicationController
   # * POST /help_items
   # * POST /help_items.xml
   def create
-    @title = t :'help_item.new_title'
+    @title = t 'help_item.new_title'
     @help_item = HelpItem.new(params[:help_item])
 
     respond_to do |format|
       if @help_item.save
-        flash.notice = t :'help_item.correctly_created'
+        flash.notice = t 'help_item.correctly_created'
         format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { render :xml => @help_item, :status => :created, :location => @help_item }
       else
@@ -81,12 +81,12 @@ class HelpItemsController < ApplicationController
   # * PUT /help_items/1
   # * PUT /help_items/1.xml
   def update
-    @title = t :'help_item.edit_title'
+    @title = t 'help_item.edit_title'
     @help_item = HelpItem.find(params[:id])
 
     respond_to do |format|
       if @help_item.update_attributes(params[:help_item])
-        flash.notice = t :'help_item.correctly_updated'
+        flash.notice = t 'help_item.correctly_updated'
         format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { head :ok }
       else
@@ -96,7 +96,7 @@ class HelpItemsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'help_item.stale_object_error'
+    flash.alert = t 'help_item.stale_object_error'
     redirect_to :action => :edit
   end
 

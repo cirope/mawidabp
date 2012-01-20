@@ -48,9 +48,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'group.add_organization'), '#',
-      :'data-template' => :organization,
-      :'data-event' => 'addNestedItem', :'data-container' => :organizations %>
+    <%= link_to t('group.add_organization'), '#',
+      'data-template' => :organization,
+      'data-event' => 'addNestedItem', 'data-container' => :organizations %>
   </p>
 
   <%= hidden_lock_version(g_f) %>

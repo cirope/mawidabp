@@ -46,7 +46,7 @@ class Privilege < ActiveRecord::Base
 
     privilege_array = [:approval, :erase, :modify, :read].map do |p|
       "#{Privilege.human_attribute_name(p)}: " +
-        I18n.t(self.send(p) ? :'label.yes' : :'label.no')
+        I18n.t(self.send(p) ? 'label.yes' : 'label.no')
     end
 
     "#{privilege_string} (#{privilege_array.join(', ')})"

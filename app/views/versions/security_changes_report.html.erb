@@ -29,9 +29,9 @@
 
 <div id="links">
   <%= pagination_links @versions %>
-  <%= link_to t(:'label.back'), :controller => :login_records,
+  <%= link_to t('label.back'), :controller => :login_records,
     :action => :choose %> |
-  <%= link_to t(:'label.download'), :action => :security_changes_report,
+  <%= link_to t('label.download'), :action => :security_changes_report,
     :security_changes_report => {:from_date => @from_date, :to_date => @to_date},
     :download => 1, :_ts => Time.now.to_i %>
   <div class="clear"></div>

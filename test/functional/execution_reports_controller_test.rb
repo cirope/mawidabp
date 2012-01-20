@@ -12,7 +12,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -61,7 +61,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'execution_reports.detailed_management_report.pdf_name',
+      I18n.t('execution_reports.detailed_management_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
@@ -96,7 +96,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'execution_reports.weaknesses_by_state.pdf_name',
+      I18n.t('execution_reports.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)

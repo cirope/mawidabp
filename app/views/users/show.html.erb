@@ -36,12 +36,12 @@
 
   <p>
     <b><%= User.human_attribute_name :enable %>:</b>
-    <%=t @user.enable? ? :'label.yes' : :'label.no' %>
+    <%=t @user.enable? ? 'label.yes' : 'label.no' %>
   </p>
 
   <p>
     <b><%= User.human_attribute_name :logged_in %>:</b>
-    <%=t @user.logged_in? ? :'label.yes' : :'label.no' %>
+    <%=t @user.logged_in? ? 'label.yes' : 'label.no' %>
   </p>
 
   <p>
@@ -55,12 +55,12 @@
   </p>
 
   <p>
-    <b><%= t(:'user.profiles_label') %>:</b>
+    <b><%= t('user.profiles_label') %>:</b>
     <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
   </p>
 
   <p>
-    <b><%= t(:'user.organizations_label') %>:</b>
+    <b><%= t('user.organizations_label') %>:</b>
     <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
   </p>
   <% if @user.parent %>
@@ -70,7 +70,7 @@
     </p>
   <% end %>
   <% unless @user.children.blank? %>
-    <p><strong><%= t(:'user.children') %></strong></p>
+    <p><strong><%= t('user.children') %></strong></p>
     <ul class="raw_list">
       <% @user.children.each do |child| %>
         <li><%= link_to child.full_name, child %></li>
@@ -85,8 +85,8 @@
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.edit'), edit_user_path(@user) %> |
-  <%= link_to t(:'user.status'), user_status_user_path(@user) %> |
-  <%= link_to t(:'label.list'), users_path %> |
+  <%= link_to t('label.edit'), edit_user_path(@user) %> |
+  <%= link_to t('user.status'), user_status_user_path(@user) %> |
+  <%= link_to t('label.list'), users_path %> |
   <%= link_to_back %>
 </div>

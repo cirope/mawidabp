@@ -27,7 +27,7 @@
         <td class="expendable"><%= super_truncate(conclusion_draft_review.review.plan_item.business_unit.name, 25) %></td>
         <td class="expendable"><%= super_truncate(conclusion_draft_review.review.plan_item.project, 30) %></td>
         <td class="expendable"><%= l(conclusion_draft_review.issue_date, :format => :short) if conclusion_draft_review.issue_date %></td>
-        <td class="expendable"><%= t conclusion_draft_review.approved? ? :'label.yes' : :'label.no' %></td>
+        <td class="expendable"><%= t conclusion_draft_review.approved? ? 'label.yes' : 'label.no' %></td>
         <td><%= link_to_new_conclusion_final_review new_conclusion_final_review_path(
               :review => conclusion_draft_review.review_id) if conclusion_draft_review.approved? && !has_final %></td>
         <td><%= link_to_show(conclusion_draft_review) unless has_final %></td>
@@ -39,6 +39,6 @@
 
 <div id="links">
   <%= pagination_links @conclusion_draft_reviews %>
-  <%= link_to t(:'label.new'), new_conclusion_draft_review_path %>
+  <%= link_to t('label.new'), new_conclusion_draft_review_path %>
   <div class="clear"></div>
 </div>

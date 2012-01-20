@@ -14,10 +14,10 @@ module FindingsHelper
   def finding_repeated_of_label(form, readonly)
     if form.object.repeated_of && !readonly
       link = content_tag(:span,
-        "[#{t(:'finding.undo_reiteration')}]",
-        :'data-help-dialog' => '#inline_undo_reiteration',
+        "[#{t('finding.undo_reiteration')}]",
+        'data-help-dialog' => '#inline_undo_reiteration',
         :class => :popup_link,
-        :title => t(:'finding.undo_reiteration'),
+        :title => t('finding.undo_reiteration'),
         :style => 'color: #666666;'
       )
       
@@ -77,7 +77,7 @@ module FindingsHelper
 
   def show_review_with_conclusion_status_as_abbr(review)
     review_data = review.has_final_review? ?
-      t(:'review.with_final_review') : t(:'review.without_final_review')
+      t('review.with_final_review') : t('review.without_final_review')
     review_data << " | #{l(review.issue_date(true), :format => :long)}"
 
     content_tag(:abbr, h(review.identification), :title => review_data)
@@ -107,8 +107,8 @@ module FindingsHelper
       link_to_function(
         image_tag(
           'clock.gif', :size => '11x11',
-          :alt => t(:'finding.show_status_change_history'),
-          :title => t(:'finding.show_status_change_history')
+          :alt => t('finding.show_status_change_history'),
+          :title => t('finding.show_status_change_history')
         ),
         "$('##{dom_id}').slideToggle()", :class => :image_link
       ), :style => 'margin-left: .25em;'

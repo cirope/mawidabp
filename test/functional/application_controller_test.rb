@@ -58,7 +58,7 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_not_nil @controller.send(:session)[:go_to]
     assert_nil @controller.instance_variable_get(:@auth_user)
     assert_redirected_to login_users_url
-    assert_equal I18n.t(:'message.session_time_expired'),
+    assert_equal I18n.t('message.session_time_expired'),
       @controller.send(:flash)[:alert]
   end
 

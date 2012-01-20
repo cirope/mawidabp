@@ -48,10 +48,10 @@
             @oportunity.control_objective_item.try(:control_objective_text),
             :id => 'oportunity_control_objective_item',
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_control_objective_item_oportunities_path(:format => :json) %>
+            'data-autocomplete-url' => auto_complete_for_control_objective_item_oportunities_path(:format => :json) %>
           <%= f.hidden_field :control_objective_item_id,
             :class => :autocomplete_id %>
         </div>
@@ -122,7 +122,7 @@
 
   <div style="clear: both; margin-top: 2em;">
     <h1>
-      <%= t(:'finding.responsibles', :count => @oportunity.users.size) %>
+      <%= t('finding.responsibles', :count => @oportunity.users.size) %>
       <%= show_inline_help_for(:finding_responsibles) %>
     </h1>
   </div>
@@ -148,14 +148,14 @@
   </div>
 
   <p class="add_item">
-    <%= link_to_unless readonly, t(:'finding.add_user'), '#',
-      :'data-template' => :finding_user_assignment,
-      :'data-event' => 'addNestedItem',
-      :'data-container' => '#finding_user_assignments' %>
+    <%= link_to_unless readonly, t('finding.add_user'), '#',
+      'data-template' => :finding_user_assignment,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#finding_user_assignments' %>
   </p>
 
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-    <h1><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
+    <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -164,7 +164,7 @@
   <% end %>
 
   <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-    <h1><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
+    <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -173,7 +173,7 @@
   <% end %>
 
   <h1>
-    <%= t(:'finding.finding_relations') %>
+    <%= t('finding.finding_relations') %>
     <%= show_inline_help_for(:finding_relations) %>
   </h1>
 
@@ -196,14 +196,14 @@
   </div>
 
   <p class="add_item">
-    <%= link_to_unless frozen, t(:'finding.add_finding_relation'), '#',
-      :'data-template' => :finding_relation, :'data-event' => 'addNestedItem',
-      :'data-container' => '#finding_relations' %>
+    <%= link_to_unless frozen, t('finding.add_finding_relation'), '#',
+      'data-template' => :finding_relation, 'data-event' => 'addNestedItem',
+      'data-container' => '#finding_relations' %>
   </p>
   
   <% unless @oportunity.inverse_finding_relations.blank? %>
     <h1>
-      <%= t(:'finding.inverse_finding_relations') %>
+      <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h1>
     
@@ -227,7 +227,7 @@
   
   <% unless @oportunity.finding_answers.blank? %>
     <h1>
-      <%= t(:'finding.finding_answers') %>
+      <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h1>
 
@@ -252,7 +252,7 @@
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
               <%= finding_answer.file_model ?
-                link_to(t(:'label.download'), finding_answer.file_model.file.url) : '---' %>
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
               <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
@@ -269,7 +269,7 @@
   <% end %>
 
   <h1>
-    <%= t(:'finding.work_papers') %>
+    <%= t('finding.work_papers') %>
     <%= show_inline_help_for(:finding_work_papers) %>
   </h1>
 
@@ -302,9 +302,9 @@
   </div>
 
   <p class="add_item">
-    <%= link_to_unless frozen, t(:'finding.add_work_paper'), '#',
-      :'data-template' => :work_paper, :'data-event' => 'addNestedItem',
-      :'data-container' => '#work_papers' %>
+    <%= link_to_unless frozen, t('finding.add_work_paper'), '#',
+      'data-template' => :work_paper, 'data-event' => 'addNestedItem',
+      'data-container' => '#work_papers' %>
   </p>
 
   <%= hidden_lock_version(f) %>
@@ -318,7 +318,7 @@
 <% if @oportunity.repeated_of && !readonly %>
   <% content_for :extra_html_bottom do %>
     <div id="inline_undo_reiteration" class="popup" style="display: none;">
-      <%= button_to t(:'finding.undo_reiteration'),
+      <%= button_to t('finding.undo_reiteration'),
         undo_reiteration_oportunity_path(@oportunity), :method => :put %>
     </div>
   <% end %>

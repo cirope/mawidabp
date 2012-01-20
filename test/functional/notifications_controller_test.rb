@@ -22,13 +22,13 @@ class NotificationsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       send *action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
       flash.alert = nil
       send *action
-      assert_not_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_not_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
   end
 
@@ -86,7 +86,7 @@ class NotificationsControllerTest < ActionController::TestCase
     assert !notification.notified?
     get :confirm, :id => notification.confirmation_hash
     assert_redirected_to :controller => :users, :action => :login
-    assert_equal I18n.t(:'notification.confirmed'), flash.notice
+    assert_equal I18n.t('notification.confirmed'), flash.notice
     assert notification.reload.notified?
     assert notification.confirmed?
   end
@@ -101,7 +101,7 @@ class NotificationsControllerTest < ActionController::TestCase
     get :confirm, :id => notification.confirmation_hash, :reject => 1
     assert_redirected_to :controller => :users, :action => :login
     assert_not_nil session[:go_to]
-    assert_equal I18n.t(:'notification.rejected'), flash.notice
+    assert_equal I18n.t('notification.rejected'), flash.notice
     assert notification.reload.notified?
     assert notification.rejected?
   end

@@ -11,10 +11,10 @@
             f.object.resource.try(:full_name_with_resource),
             :id => "resource_utilization_user_#{id}",
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-url' => auto_complete_for_user_plans_path(:format => :json) %>
+            'data-autocomplete-url' => auto_complete_for_user_plans_path(:format => :json) %>
           <%= f.hidden_field :resource_id, :value => f.object.resource_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
         </div>
@@ -33,8 +33,8 @@
     <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
-      <%= insert_record_link(f, :'data-event' => 'insertRecordSubitem',
-        :'data-parent' => :plan_item,
+      <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
+        'data-parent' => :plan_item,
         :class_to_insert => :human_resource_utilization) %> |
       <%= remove_item_link(f, 'human_resource_utilization') %>
       <%= f.hidden_field :resource_type %>

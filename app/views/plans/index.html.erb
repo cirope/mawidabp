@@ -19,7 +19,7 @@
         <td><%= h l(plan.created_at, :format => :short) %></td>
         <td class="expendable"><%= h l(plan.period.start, :format => :short) %></td>
         <td class="expendable"><%= h l(plan.period.end, :format => :short) %></td>
-        <td><%= link_to_clone new_plan_path(:clone_from => plan.id), :label => t(:'plan.copy') %></td>
+        <td><%= link_to_clone new_plan_path(:clone_from => plan.id), :label => t('plan.copy') %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit edit_plan_path(plan) %></td>
         <td><%= button_to_destroy plan %></td>
@@ -30,6 +30,6 @@
 
 <div id="links">
   <%= pagination_links @plans %>
-  <%= link_to t(:'label.new'), new_plan_path %>
+  <%= link_to t('label.new'), new_plan_path %>
   <div class="clear"></div>
 </div>

@@ -8,11 +8,11 @@
           <%= text_field_tag :nested_user, '',
             :id => "user_child_#{id}",
             :class => field_classes.join(' '),
-            :title => t(:'label.search'),
+            :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            :'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-            :'data-autocomplete-url' => auto_complete_for_user_users_path %>
+            'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+            'data-autocomplete-url' => auto_complete_for_user_users_path %>
           <%= hidden_field_tag 'user[child_ids][]', child.id,
             :id => "hidden_child_#{id}", :class => :autocomplete_id %>
         </div>

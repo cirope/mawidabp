@@ -27,9 +27,9 @@
 <!--[eoform:detract] -->
 
 <div id="links">
-  <%= link_to t(:'label.list'), detracts_path %> |
+  <%= link_to t('label.list'), detracts_path %> |
   <% if @detract.user.detracts.last %>
-    <%= link_to t(:'label.show'), @detract.user.detracts.last %> |
+    <%= link_to t('label.show'), @detract.user.detracts.last %> |
   <% end %>
   <%= link_to_back %>
 </div>

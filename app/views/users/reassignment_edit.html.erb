@@ -1,20 +1,20 @@
 <%= form_for @user, :url => reassignment_update_user_path(@user) do |f| %>
   <%= f.error_messages %>
   <p class="form_item">
-    <%= content_tag :label, t(:'user.reassign_with_findings'),
+    <%= content_tag :label, t('user.reassign_with_findings'),
       :class => :inline, :for => :user_with_findings, :style => 'width: 40em;' %>
     <%= check_box_tag 'user[with_findings]', 1, true, :autofocus => true,
       :class => :inline_item %>
   </p>
   <p class="form_item">
-    <%= content_tag :label, t(:'user.reassign_with_reviews'),
+    <%= content_tag :label, t('user.reassign_with_reviews'),
       :class => :inline, :for => :user_with_reviews, :style => 'width: 40em;' %>
     <%= check_box_tag 'user[with_reviews]', 1, true, :class => :inline_item %>
   </p>
 
   <% unless @user.reallocation_errors.blank? %>
     <p style="margin: 1em 0em;">
-      <%= link_to_function t(:'label.details'),
+      <%= link_to_function t('label.details'),
         "$('#error_details').slideToggle()", :class => 'bold red' %>
       <div id="error_details" style="display: none; margin-top: 1em;">
         <%= array_to_ul(@user.reallocation_errors, :class => :raw_list) %>
@@ -22,21 +22,21 @@
     </p>
   <% end %>
   
-  <h1><%= t(:'user.new_user_label') %></h1>
+  <h1><%= t('user.new_user_label') %></h1>
   <div class="form_column_left">
     <div class="search">
       <%= f.text_field :user_data,
         :id => 'autocomplete_user_id',
         :value => nil,
         :class => [:search, :autocomplete_field].join(' '),
-        :title => t(:'label.search'),
+        :title => t('label.search'),
         :autocomplete => :off,
-        :'data-autocomplete-url' => auto_complete_for_user_users_path %>
+        'data-autocomplete-url' => auto_complete_for_user_users_path %>
       <%= f.hidden_field :id, :value => nil, :class => :autocomplete_id %>
     </div>
   </div>
 
-  <h1 class="clear"><%= t(:'user.old_user_label') %></h1>
+  <h1 class="clear"><%= t('user.old_user_label') %></h1>
   <p>
     <b><%= User.human_attribute_name :user %>:</b>
     <%=h @user.user %>
@@ -52,13 +52,13 @@
     <%=h @user.last_name %>
   </p>
   <p>
-    <span class="button"><%= f.submit t(:'user.reassign') %></span>
+    <span class="button"><%= f.submit t('user.reassign') %></span>
   </p>
 <% end %>
 
 <div id="links">
-  <%= link_to t(:'label.list'), users_path %> |
-  <%= link_to t(:'label.show'), @user %> |
-  <%= link_to t(:'label.edit'), edit_user_path(@user) %> |
+  <%= link_to t('label.list'), users_path %> |
+  <%= link_to t('label.show'), @user %> |
+  <%= link_to t('label.edit'), edit_user_path(@user) %> |
   <%= link_to_back %>
 </div>

@@ -7,10 +7,10 @@
         <%= menu_item.to_s %>
       </span>
     </td>
-    <td><%= t(privilege.read == true ? :'label.yes' : :'label.no') %></td>
-    <td><%= t(privilege.modify == true ? :'label.yes' : :'label.no') %></td>
-    <td><%= t(privilege.erase == true ? :'label.yes' : :'label.no') %></td>
-    <td><%= t(privilege.approval == true ? :'label.yes' : :'label.no') %></td>
+    <td><%= t(privilege.read == true ? 'label.yes' : 'label.no') %></td>
+    <td><%= t(privilege.modify == true ? 'label.yes' : 'label.no') %></td>
+    <td><%= t(privilege.erase == true ? 'label.yes' : 'label.no') %></td>
+    <td><%= t(privilege.approval == true ? 'label.yes' : 'label.no') %></td>
   </tr>
   <% menu_item.children.each do |submenu_item| %>
     <%= render :partial => 'menu_item_show', :locals => {

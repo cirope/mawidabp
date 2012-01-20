@@ -46,7 +46,7 @@
         :class => :inline %>
       <%= text_field_tag :issue_date, @finding.issue_date ?
         l(@finding.issue_date, :format => :long) :
-        t(:'finding.without_conclusion_final_review'),
+        t('finding.without_conclusion_final_review'),
         :class => :inline_item, :readonly => true %>
     </p>
     <% if @finding.control_objective_item %>
@@ -146,7 +146,7 @@
 
   <% unless @finding.important_dates.blank? %>
     <h1 class="clear">
-      <%= t(:'finding.important_dates.title') %>
+      <%= t('finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
     </h1>
     <ul class="raw_list">
@@ -158,7 +158,7 @@
 
   <div>
     <h1 class="clear">
-      <%= t(:'finding.responsibles', :count => @finding.users.size) %>
+      <%= t('finding.responsibles', :count => @finding.users.size) %>
     </h1>
 
     <div class="column_headers">
@@ -170,7 +170,7 @@
         show_inline_help_for(:finding_user_assignment_process_owner)) %></h3>
       </div>
       <div class="item_column" style="width: 15%;">
-        <h3><%= t(:'finding.send_notification') %></h3>
+        <h3><%= t('finding.send_notification') %></h3>
       </div>
       <div class="item_column" style="width: 5%;"></div>
       <div class="clear"></div>
@@ -184,15 +184,15 @@
     </div>
 
     <p class="add_item">
-      <%= link_to_unless users_readonly, t(:'finding.add_user'), '#',
-        :'data-template' => :finding_user_assignment,
-        :'data-event' => 'addNestedItem',
-        :'data-container' => '#finding_user_assignments' %>
+      <%= link_to_unless users_readonly, t('finding.add_user'), '#',
+        'data-template' => :finding_user_assignment,
+        'data-event' => 'addNestedItem',
+        'data-container' => '#finding_user_assignments' %>
     </p>
   </div>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h1><%= raw(t(:'finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
+    <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -201,7 +201,7 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h1><%= raw(t(:'finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
+    <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -210,7 +210,7 @@
   <% end %>
     
   <h1>
-    <%= t(:'finding.finding_relations') %>
+    <%= t('finding.finding_relations') %>
     <%= show_inline_help_for(:finding_relations) %>
   </h1>
 
@@ -233,15 +233,15 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_relation'), '#',
-      :'data-template' => :finding_relation,
-      :'data-event' => 'addNestedItem',
-      :'data-container' => '#finding_relations' %>
+    <%= link_to t('finding.add_finding_relation'), '#',
+      'data-template' => :finding_relation,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#finding_relations' %>
   </p>
   
   <% unless @finding.inverse_finding_relations.blank? %>
     <h1>
-      <%= t(:'finding.inverse_finding_relations') %>
+      <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h1>
     
@@ -265,7 +265,7 @@
 
   <div style="clear: both; margin-top: 2em;">
     <h1>
-      <%= t(:'finding.finding_answers') %>
+      <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h1>
     
@@ -295,14 +295,14 @@
   </div>
 
   <p class="add_item">
-    <%= link_to t(:'finding.add_finding_answer'), '#',
-      :'data-template' => :finding_answer,
-      :'data-event' => 'addNestedItem',
-      :'data-container' => '#finding_answers' %>
+    <%= link_to t('finding.add_finding_answer'), '#',
+      'data-template' => :finding_answer,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#finding_answers' %>
   </p>
 
   <div style="margin-top: 2em;">
-    <h1><%= raw(t(:'finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
+    <h1><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
     
     <div class="column_headers">
       <div class="item_column" style="width: 20%;">
@@ -333,21 +333,21 @@
     </div>
 
     <p class="add_item">
-      <%= link_to t(:'finding.add_work_paper'), '#',
-        :'data-template' => :work_paper, :'data-event' => 'addNestedItem',
-        :'data-container' => '#work_papers' %>
+      <%= link_to t('finding.add_work_paper'), '#',
+        'data-template' => :work_paper, 'data-event' => 'addNestedItem',
+        'data-container' => '#work_papers' %>
     </p>
   </div>
 
   <div style="clear: both; margin-top: 2em;">
     <div class="title" style="font-weight: normal;">
-      <%= textilize t(:'finding.costs',
+      <%= textilize t('finding.costs',
         :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
     </div>
 
     <% unless @finding.costs.blank? %>
       <p style="margin-bottom: 1em;">
-        <%= link_to_function t(:'finding.view_cost_details'),
+        <%= link_to_function t('finding.view_cost_details'),
           "$('#cost_details').slideToggle()" %>
       </p>
       <div id="cost_details" style="display: none;">

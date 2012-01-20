@@ -35,11 +35,11 @@
     <%= hidden_lock_version(f) %>
   </div>
   <p>
-    <span class="button"><%= f.submit t(:'label.modify') %></span>
+    <span class="button"><%= f.submit t('label.modify') %></span>
   </p>
 <% end %>
 
 <div id="links">
-  <%= link_to t(:'user.change_password_title'), edit_password_user_path(@auth_user) %> |
-  <%= link_to t(:'user.status'), user_status_user_path(@auth_user) %>
+  <%= link_to t('user.change_password_title'), edit_password_user_path(@auth_user) %> |
+  <%= link_to t('user.status'), user_status_user_path(@auth_user) %>
 </div>

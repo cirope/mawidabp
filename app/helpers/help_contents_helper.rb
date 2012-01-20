@@ -38,8 +38,8 @@ module HelpContentsHelper
   def link_to_show_hide_help_item(help_item)
     unless help_item.try(:children).blank?
       link_to_show_hide("help_item_#{help_item.id}",
-        t(:'help_item.show_help_item_children'),
-        t(:'help_item.hide_help_item_children'),
+        t('help_item.show_help_item_children'),
+        t('help_item.hide_help_item_children'),
         help_item.is_or_include?(params[:id].try(:to_i)))
     end
   end

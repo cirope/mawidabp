@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
   # * GET /groups
   # * GET /groups.xml
   def index
-    @title = t :'group.index_title'
+    @title = t 'group.index_title'
     @groups = Group.order('name ASC').paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -26,7 +26,7 @@ class GroupsController < ApplicationController
   # * GET /groups/1
   # * GET /groups/1.xml
   def show
-    @title = t :'group.show_title'
+    @title = t 'group.show_title'
     @group = Group.find(params[:id])
 
     respond_to do |format|
@@ -40,7 +40,7 @@ class GroupsController < ApplicationController
   # * GET /groups/new
   # * GET /groups/new.xml
   def new
-    @title = t :'group.new_title'
+    @title = t 'group.new_title'
     @group = Group.new
 
     respond_to do |format|
@@ -53,7 +53,7 @@ class GroupsController < ApplicationController
   #
   # * GET /groups/1/edit
   def edit
-    @title = t :'group.edit_title'
+    @title = t 'group.edit_title'
     @group = Group.find(params[:id])
   end
 
@@ -62,12 +62,12 @@ class GroupsController < ApplicationController
   # * POST /groups
   # * POST /groups.xml
   def create
-    @title = t :'group.new_title'
+    @title = t 'group.new_title'
     @group = Group.new(params[:group])
 
     respond_to do |format|
       if @group.save
-        flash.notice = t :'group.correctly_created'
+        flash.notice = t 'group.correctly_created'
         format.html { redirect_to(groups_url) }
         format.xml  { render :xml => @group, :status => :created, :location => @group }
       else
@@ -82,12 +82,12 @@ class GroupsController < ApplicationController
   # * PUT /groups/1
   # * PUT /groups/1.xml
   def update
-    @title = t :'group.edit_title'
+    @title = t 'group.edit_title'
     @group = Group.find(params[:id])
 
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        flash.notice = t :'group.correctly_updated'
+        flash.notice = t 'group.correctly_updated'
         format.html { redirect_to(groups_url) }
         format.xml  { head :ok }
       else
@@ -97,7 +97,7 @@ class GroupsController < ApplicationController
     end
 
   rescue ActiveRecord::StaleObjectError
-    flash.alert = t :'group.stale_object_error'
+    flash.alert = t 'group.stale_object_error'
     redirect_to :action => :edit
   end
 

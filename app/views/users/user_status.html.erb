@@ -3,12 +3,12 @@
 
 <div class="float_image">
   <h2 style="font-weight: normal;">
-    <%= textilize_without_paragraph(t(:'user.high_risk_weaknesses',
+    <%= textilize_without_paragraph(t('user.high_risk_weaknesses',
         :count => filtered_weaknesses.with_highest_risk.count)) %>
   </h2>
   <div class="image_frame">
     <%= draw_user_weaknesses_graph(@user, filtered_weaknesses.with_highest_risk,
-      t(:'user.high_risk_weaknesses.image_label')) %>
+      t('user.high_risk_weaknesses.image_label')) %>
   </div>
 </div>
 
@@ -18,12 +18,12 @@
   </h2>
   <div class="image_frame">
     <%= draw_user_weaknesses_graph(@user, filtered_weaknesses,
-      t(:'user.weaknesses.image_label')) %>
+      t('user.weaknesses.image_label')) %>
   </div>
 </div>
 
 <div id="links">
-  <%= link_to t(:'label.show'), user_path(@user) %> |
-  <%= link_to t(:'label.list'), users_path %> |
+  <%= link_to t('label.show'), user_path(@user) %> |
+  <%= link_to t('label.list'), users_path %> |
   <%= link_to_back %>
 </div>

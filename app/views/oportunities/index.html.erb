@@ -13,7 +13,7 @@
       <%= make_filterable_column Oportunity.human_attribute_name(:review_code), nil, 'review_code' %>
       <%= make_filterable_column Oportunity.human_attribute_name(:description), {:expendable => true}, 'description' %>
       <%= make_not_available_column raw(Oportunity.human_attribute_name(:state) + show_inline_help_for(:finding_state)), :expendable => true %>
-      <%= make_not_available_column raw(t(:'finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
+      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
       <th colspan="2" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
@@ -27,7 +27,7 @@
         <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(oportunity) %></td>
         <td class="expendable"><%= super_truncate oportunity.description, 20 %></td>
         <td class="expendable"><%= h oportunity.state_text %></td>
-        <td class="expendable"><%= t oportunity.work_papers.blank? ? :'label.no' : :'label.yes' %></td>
+        <td class="expendable"><%= t oportunity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show oportunity %></td>
         <td><%= link_to_edit edit_oportunity_path(oportunity) %></td>
       </tr>
@@ -38,7 +38,7 @@
 <div id="links">
   <%= pagination_links @oportunities %>
   <% if params[:control_objective].to_i > 0 %>
-    <%= link_to t(:'label.new'), new_oportunity_path(
+    <%= link_to t('label.new'), new_oportunity_path(
       :control_objective_item => params[:control_objective]) %>
   <% end %>
   <div class="clear"></div>

@@ -14,7 +14,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -61,7 +61,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'follow_up_committee.weaknesses_by_state.pdf_name',
+      I18n.t('follow_up_committee.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_state', 0)
@@ -97,7 +97,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'follow_up_committee.weaknesses_by_risk.pdf_name',
+      I18n.t('follow_up_committee.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
@@ -134,7 +134,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'follow_up_committee.weaknesses_by_audit_type.pdf_name',
+      I18n.t('follow_up_committee.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_audit_type', 0)
@@ -171,7 +171,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'follow_up_audit.cost_analysis.pdf_name',
+      I18n.t('follow_up_audit.cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'follow_up_cost_analysis', 0)
@@ -223,7 +223,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      I18n.t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'high_risk_weaknesses_report', 0)
@@ -275,7 +275,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.fixed_weaknesses_report.pdf_name',
+      I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
@@ -327,7 +327,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.control_objective_stats.pdf_name',
+      I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)

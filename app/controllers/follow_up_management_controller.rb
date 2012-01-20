@@ -13,7 +13,7 @@ class FollowUpManagementController < ApplicationController
   #
   # * GET /follow_up_management
   def index
-    @title = t :'follow_up_management.index_title'
+    @title = t 'follow_up_management.index_title'
 
     respond_to do |format|
       format.html

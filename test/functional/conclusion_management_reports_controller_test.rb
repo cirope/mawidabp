@@ -14,7 +14,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     private_actions.each do |action|
       get action
       assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t(:'message.must_be_authenticated'), flash.alert
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
     public_actions.each do |action|
@@ -62,7 +62,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_state.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_state', 0)
@@ -98,7 +98,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_risk.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_risk', 0)
@@ -135,7 +135,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :report_title => 'New title'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
@@ -187,7 +187,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to PDF::Writer.relative_path(
-      I18n.t(:'conclusion_committee_report.control_objective_stats.pdf_name',
+      I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
