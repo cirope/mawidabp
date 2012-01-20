@@ -63,9 +63,11 @@ module ApplicationHelper
 
   def show_info(text, html_options = {})
     content_tag(:span, !text.blank? ?
-        content_tag(:abbr, 'i', :title => text,
-        :class => "info #{html_options[:class]}") :
-        '&nbsp;'.html_safe, :class => :info_box).html_safe
+        content_tag(
+          :abbr, 'i', :title => text,
+          :class => "info #{html_options[:class]}"
+        ) : '&nbsp;'.html_safe, :class => 'info_box'
+    ).html_safe
   end
 
   # Genera un array con pares [[name_field_1, id_field_1],......] para ser

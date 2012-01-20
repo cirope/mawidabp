@@ -12,7 +12,7 @@
 
   <tbody>
     <% @notifications.each do |notification| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%=h notification.status_text %></td>
         <td class="expendable"><%=h notification.notification_relations.first.try(:model).try(:class).try(:model_name).try(:human) %></td>
         <td class="expendable"><%=h notification.user_who_confirm.full_name if notification.user_who_confirm %></td>

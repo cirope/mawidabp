@@ -17,7 +17,7 @@
   <tbody>
     <% @users.each do |user| %>
       <% detract = user.detracts.for_organization(@auth_organization).last %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= h user.user %></td>
         <td><%= h user.full_name %></td>
         <td class="expendable"><%= super_truncate user.function, 25 %></td>

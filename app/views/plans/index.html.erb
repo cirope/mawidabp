@@ -14,7 +14,7 @@
 
   <tbody>
     <% @plans.each do |plan| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= show_period_with_dates_as_abbr plan.period %></td>
         <td><%= h l(plan.created_at, :format => :short) %></td>
         <td class="expendable"><%= h l(plan.period.start, :format => :short) %></td>

@@ -10,7 +10,7 @@
 
   <tbody>
     <% @help_items.each do |help_item| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td></td>
         <td><%=h help_item.name %></td>
         <td><%=h truncate(help_item.description, :omission => '...', :length => 25) %></td>

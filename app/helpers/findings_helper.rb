@@ -67,6 +67,13 @@ module FindingsHelper
       ''
     end
   end
+  
+  def finding_updated_at_text(finding)
+    label = Finding.human_attribute_name('updated_at')
+    date = I18n.l(finding.updated_at, :format => :minimal) if finding.updated_at
+    
+    show_info "#{label}: #{date}"
+  end
 
   def show_review_with_conclusion_status_as_abbr(review)
     review_data = review.has_final_review? ?

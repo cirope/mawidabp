@@ -10,7 +10,7 @@
   
   <tbody>
     <% @parameters.each do |parameter| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= super_truncate parameter.to_s, 40 %></td>
         <td class="expendable"><%= super_truncate parameter.description, 40 %></td>
         <td><%= link_to_show parameter_path(@type, parameter) %></td>

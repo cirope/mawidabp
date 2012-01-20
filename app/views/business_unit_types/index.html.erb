@@ -11,7 +11,7 @@
 
   <tbody>
     <% @business_unit_types.each do |business_unit_type| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%=h business_unit_type.name %></td>
         <td class="expendable"><%=h business_unit_type.business_unit_label %></td>
         <td class="expendable"><%=h business_unit_type.project_label %></td>

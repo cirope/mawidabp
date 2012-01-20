@@ -537,6 +537,14 @@ class Finding < ActiveRecord::Base
         :name => Review.model_name.human,
         :field => "#{Review.table_name}.identification ASC"
       },
+      :updated_at_asc => {
+        :name => "#{Finding.human_attribute_name(:updated_at)}  (#{I18n.t('label.ascendant')})",
+        :field => "#{Finding.table_name}.updated_at ASC"
+      },
+      :updated_at_desc => {
+        :name => "#{Finding.human_attribute_name(:updated_at)}  (#{I18n.t('label.descendant')})",
+        :field => "#{Finding.table_name}.updated_at DESC"
+      },
       :follow_up_date_asc => {
         :name => "#{Finding.human_attribute_name(:follow_up_date)}  (#{I18n.t('label.ascendant')})",
         :field => "#{Finding.table_name}.follow_up_date ASC"
@@ -694,6 +702,8 @@ class Finding < ActiveRecord::Base
         finding_answer.user.try(:can_act_as_audited?)
       self.confirmed! finding_answer.user
     end
+    
+    self.updated_at = Time.now
   end
 
   def notify_changes_to_users

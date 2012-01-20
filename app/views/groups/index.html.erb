@@ -9,7 +9,7 @@
 
   <tbody>
     <% @groups.each do |group| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= super_truncate group.name, 30 %></td>
         <td><%= super_truncate group.description, 30 %></td>
         <td><%= link_to_show group %></td>

@@ -12,7 +12,7 @@
 
   <tbody>
     <% @resource_classes.each do |resource_class| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= h resource_class.name %></td>
         <td class="expendable"><%= h name_for_option_value(parameter_in(@auth_organization.id,
           :admin_resource_units, resource_class.created_at), resource_class.unit) %></td>

@@ -14,7 +14,7 @@
 
   <tbody>
     <% @inline_helps.each do |inline_help| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td></td>
         <td><%= t inline_help.language, :scope => :lang %></td>
         <td><%=h inline_help.name %></td>

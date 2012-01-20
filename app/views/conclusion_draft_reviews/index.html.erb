@@ -20,7 +20,7 @@
   <tbody>
     <% @conclusion_draft_reviews.each do |conclusion_draft_review| %>
       <% has_final = conclusion_draft_review.has_final_review? %>
-      <tr class="<%= cycle(:even, :odd) %> <%= has_final ? :readonly_item : :writable_item %>">
+      <tr class="<%= cycle('even', 'odd') %> <%= has_final ? :readonly_item : :writable_item %>">
         <td><%= show_has_final_info if has_final %></td>
         <td><%= show_period_with_dates_as_abbr conclusion_draft_review.review.period %></td>
         <td class="nowrap"><%= h conclusion_draft_review.review.identification %></td>

@@ -12,7 +12,7 @@
 
   <tbody>
     <%  @workflows.each do |workflow| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= show_period_with_dates_as_abbr workflow.period %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr workflow.review %></td>
         <td class="expendable"><%= super_truncate workflow.review.plan_item.project, 30 %></td>

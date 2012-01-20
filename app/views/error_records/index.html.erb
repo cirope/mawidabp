@@ -22,7 +22,7 @@
   
   <tbody>
   <% @error_records.each do |error_record| %>
-    <tr class="<%= cycle(:even, :odd) %>">
+    <tr class="<%= cycle('even', 'odd') %>">
       <td><%=h error_record.user ? error_record.user.user : t(:'error_record.void_user') %></td>
       <td><%=h l(error_record.created_at, :format => :short) %></td>
       <td class="expendable"><%=h error_record.error_text %></td>

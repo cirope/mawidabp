@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     <% @organizations.each do |organization| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td><%= h organization.name %></td>
         <td class="expendable"><strong><%= h organization.prefix %></strong></td>
         <td><%= link_to_show organization %></td>

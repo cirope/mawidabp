@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120109142248) do
+ActiveRecord::Schema.define(:version => 20120120132242) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(:version => 20120109142248) do
   add_index "findings", ["repeated_of_id"], :name => "index_findings_on_repeated_of_id"
   add_index "findings", ["state"], :name => "index_findings_on_state"
   add_index "findings", ["type"], :name => "index_findings_on_type"
+  add_index "findings", ["updated_at"], :name => "index_findings_on_updated_at"
 
   create_table "groups", :force => true do |t|
     t.string   "name"

@@ -15,7 +15,7 @@
 
   <tbody>
   <% @versions.each do |version| %>
-    <tr class="<%= cycle(:even, :odd) %>">
+    <tr class="<%= cycle('even', 'odd') %>">
       <td><%=h l(version.created_at, :format => :short) %></td>
       <td><%=h show_whodunnit(version.whodunnit) %></td>
       <td class="expendable"><%= version.item ?

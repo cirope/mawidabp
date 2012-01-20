@@ -20,7 +20,7 @@
   </thead>
   <tbody>
   <% @login_records.each do |login_record| %>
-    <tr class="<%= cycle(:even, :odd) %>">
+    <tr class="<%= cycle('even', 'odd') %>">
       <td><%=h login_record.user.user %></td>
       <td><%=h l(login_record.start, :format => :short) if login_record.start %></td>
       <td class="expendable"><%=h l(login_record.end, :format => :short) if login_record.end %></td>

@@ -9,7 +9,7 @@
 
   <tbody>
     <% @help_contents.each do |help_content| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
         <td></td>
         <td><%= t "lang.#{help_content.language}" %></td>
         <td><%= link_to_show help_content %></td>

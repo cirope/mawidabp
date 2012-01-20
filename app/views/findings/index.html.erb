@@ -38,6 +38,7 @@
 <table class="list">
   <thead  id="column_headers">
     <tr>
+      <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:review_code), nil, 'review_code' %>
@@ -54,7 +55,8 @@
 
   <tbody>
     <% @findings.each do |finding| %>
-      <tr class="<%= cycle(:even, :odd) %>">
+      <tr class="<%= cycle('even', 'odd') %>">
+        <td><%= finding_updated_at_text finding %></td>
         <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
         <td class="expendable"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
