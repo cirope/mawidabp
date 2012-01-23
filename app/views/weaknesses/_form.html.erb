@@ -344,7 +344,7 @@
 <% end %>
 <!--[eoform:weakness] -->
 
-<% if @weakness.repeated_of && !readonly %>
+<% if !@weakness.new_record? && @weakness.repeated_of && !readonly %>
   <% content_for :extra_html_bottom do %>
     <div id="inline_undo_reiteration" class="popup" style="display: none;">
       <%= button_to t('finding.undo_reiteration'),

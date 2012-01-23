@@ -12,26 +12,26 @@ module FindingsHelper
   end
   
   def finding_repeated_of_label(form, readonly)
-    if form.object.repeated_of && !readonly
+    if !form.object.new_record? && form.object.repeated_of && !readonly
       link = content_tag(:span,
         "[#{t('finding.undo_reiteration')}]",
         'data-help-dialog' => '#inline_undo_reiteration',
-        :class => :popup_link,
+        :class => 'popup_link',
         :title => t('finding.undo_reiteration'),
         :style => 'color: #666666;'
       )
       
       form.label :repeated_of_id, raw(
-        Finding.human_attribute_name(:repeated_of_id) + ' ' +
-        content_tag(:span, raw(link), :class => :popup_link_container)
-      ), :for => :repeated_of_finding
+        Finding.human_attribute_name('repeated_of_id') + ' ' +
+        content_tag(:span, raw(link), :class => 'popup_link_container')
+      ), :for => 'repeated_of_finding'
     else
       form.label :repeated_of_id
     end
   end
 
   def finding_repeated_of_if_field(form, readonly)
-    if form.object.repeated_of
+    if !form.object.new_record? && form.object.repeated_of
       text_field_tag :repeated_of_finding, form.object.repeated_of, :disabled => true
     else
       review = form.object.control_objective_item.try(:review)
