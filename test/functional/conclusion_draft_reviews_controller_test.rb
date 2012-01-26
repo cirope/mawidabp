@@ -196,7 +196,8 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
     assert_nothing_raised(Exception) do
-      get :export_to_pdf, :id => conclusion_review.id, :hide_score => '1'
+      get :export_to_pdf, :id => conclusion_review.id,
+        :export_options => { :hide_score => '1' }
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path

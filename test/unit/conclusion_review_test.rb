@@ -157,6 +157,17 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
+    
+    assert_nothing_raised(Exception) do
+      @conclusion_review.to_pdf(
+        organizations(:default_organization),
+        :hide_control_objectives_excluded_from_score => '1'
+      )
+    end
+
+    assert File.exist?(@conclusion_review.absolute_pdf_path)
+    assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
+    assert_not_equal size, new_size
   end
 
   test 'create bundle zip' do

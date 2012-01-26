@@ -3,20 +3,25 @@
 <div id="links">
 <%= link_to t('label.show'), @conclusion_draft_review %> |
 <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
-<%= link_to t('label.download'), :action => :export_to_pdf,
-  :id => @conclusion_draft_review, :_ts => Time.now.to_i %> |
-<%= link_to t('conclusion_draft_review.download_without_score'),
-  :action => :export_to_pdf, :id => @conclusion_draft_review,
-  :hide_score => '1', :_ts => Time.now.to_i %> |
-<%= link_to t('conclusion_draft_review.generate_score_sheet'),
-  :action => :score_sheet, :id => @conclusion_draft_review,
-  :_ts => Time.now.to_i %> |
-<%= link_to t('conclusion_draft_review.generate_global_score_sheet'),
-  :action => :score_sheet, :id => @conclusion_draft_review, :global => 1,
-  :_ts => Time.now.to_i %> |
-<%= link_to t('conclusion_draft_review.download_work_papers'),
-  :action => :download_work_papers, :id => @conclusion_draft_review,
-  :_ts => Time.now.to_i %> |
+<div class="inline_menu">
+  <h3><%= link_to t('label.show_downloads').html_safe, '#' %> |</h3>
+  <ul style="display: none;">
+    <li><%= link_to t('label.download'), :action => :export_to_pdf,
+      :id => @conclusion_draft_review, :_ts => Time.now.to_i %></li>
+    <li><%= link_to t('conclusion_draft_review.download_without_score'),
+      :action => :export_to_pdf, :id => @conclusion_draft_review,
+      :export_options => {:hide_score => '1'}, :_ts => Time.now.to_i %></li>
+    <li><%= link_to t('conclusion_draft_review.generate_score_sheet'),
+      :action => :score_sheet, :id => @conclusion_draft_review,
+      :_ts => Time.now.to_i %></li>
+    <li><%= link_to t('conclusion_draft_review.generate_global_score_sheet'),
+      :action => :score_sheet, :id => @conclusion_draft_review, :global => 1,
+      :_ts => Time.now.to_i %></li>
+    <li><%= link_to t('conclusion_draft_review.download_work_papers'),
+      :action => :download_work_papers, :id => @conclusion_draft_review,
+      :_ts => Time.now.to_i %></li>
+  </ul>
+</div>
 <%= link_to t('conclusion_draft_review.create_bundle'),
   :action => :bundle, :id => @conclusion_draft_review %> |
 <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?) &&

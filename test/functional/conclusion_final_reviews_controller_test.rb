@@ -189,6 +189,20 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to conclusion_review.relative_pdf_path
   end
+  
+  test 'export conclusion draft review without control objectives excluded from score' do
+    perform_auth
+    
+    conclusion_review = ConclusionFinalReview.find(
+      conclusion_reviews(:conclusion_past_final_review).id)
+
+    assert_nothing_raised(Exception) do
+      get :export_to_pdf, :id => conclusion_review.id,
+        :export_options => {:hide_control_objectives_excluded_from_score => '1'}
+    end
+
+    assert_redirected_to conclusion_review.relative_pdf_path
+  end
 
   test 'score sheet of final review' do
     perform_auth

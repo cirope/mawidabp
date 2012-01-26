@@ -185,11 +185,11 @@ var Helper = {
       items: elements,
       handle: handles,
       opacity: 0.6,
-      stop: function() { FormUtil.completeSortNumbers(); }
+      stop: function() {FormUtil.completeSortNumbers();}
     });
     
     // Queridisimo Explorer
-    if($.browser.msie) { $(elementId).find(elements).css('opacity', '1'); }
+    if($.browser.msie) {$(elementId).find(elements).css('opacity', '1');}
   },
 
   /**
@@ -594,6 +594,15 @@ jQuery(function($) {
       event.preventDefault();
       event.stopPropagation();
     }
+  });
+  
+  $(document).on('click', '.inline_menu h3 a', function(event) {
+    if (event.stopped) return;
+    
+    $(this).parents('.inline_menu').find('ul').slideToggle();
+    
+    event.preventDefault();
+    event.stopPropagation();
   });
   
   $(document).on('focus', 'input.calendar:not(.hasDatepicker)', function() {

@@ -131,9 +131,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def export_to_pdf
     @conclusion_draft_review = find_with_organization(params[:id])
 
-    @conclusion_draft_review.to_pdf(
-      @auth_organization, :hide_score => params[:hide_score]
-    )
+    @conclusion_draft_review.to_pdf(@auth_organization, params[:export_options])
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }

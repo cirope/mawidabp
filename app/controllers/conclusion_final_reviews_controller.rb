@@ -148,7 +148,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def export_to_pdf
     @conclusion_final_review = find_with_organization(params[:id])
     
-    @conclusion_final_review.to_pdf(@auth_organization)
+    @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
@@ -231,7 +231,7 @@ class ConclusionFinalReviewsController < ApplicationController
       note = params[:conclusion_review][:email_note]
     end
 
-    @conclusion_final_review.to_pdf(@auth_organization)
+    @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
 
     if include_score_sheet
       @conclusion_final_review.review.score_sheet @auth_organization, false

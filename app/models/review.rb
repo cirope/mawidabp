@@ -472,10 +472,13 @@ class Review < ActiveRecord::Base
     work_papers
   end
   
-  def grouped_control_objective_items
+  def grouped_control_objective_items(options = {})
     grouped_control_objective_items = {}
+    control_objective_items = options[:hide_excluded_from_score] ?
+      self.control_objective_items.reject(&:exclude_from_score) :
+      self.control_objective_items
     
-    self.control_objective_items.each do |coi|
+    control_objective_items.each do |coi|
       grouped_control_objective_items[coi.process_control] ||= []
       
       unless grouped_control_objective_items[coi.process_control].include?(coi)

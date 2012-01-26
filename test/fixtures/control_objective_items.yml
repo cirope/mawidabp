@@ -64,7 +64,7 @@ iso_27000_security_organization_4_2_item:
   audit_date: <%= 1.year.ago.to_date.to_s(:db) %>
   auditor_comment: Auditor comment
   finished: true
-  exclude_from_score: false
+  exclude_from_score: true
   control_objective: iso_27000_security_organization_4_2
   review: past_review
 

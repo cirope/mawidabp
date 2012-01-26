@@ -125,7 +125,8 @@ class ConclusionReview < ActiveRecord::Base
     Notifier.conclusion_review_notification(user, self, options).deliver
   end
 
-  def to_pdf(organization = nil, options = {})
+  def to_pdf(organization = nil, *args)
+    options = args.extract_options!
     pdf = PDF::Writer.create_generic_pdf(:portrait, false)
     use_finals = !self.kind_of?(ConclusionDraftReview) || self.has_final_review?
     cover_text = "\n\n\n\n#{Review.model_name.human.upcase}\n\n"
@@ -175,7 +176,9 @@ class ConclusionReview < ActiveRecord::Base
     pdf.add_subtitle I18n.t('conclusion_review.objectives_and_scopes'),
       PDF_FONT_SIZE, PDF_FONT_SIZE
 
-    grouped_control_objectives = self.review.grouped_control_objective_items
+    grouped_control_objectives = self.review.grouped_control_objective_items(
+      :hide_excluded_from_score => options[:hide_control_objectives_excluded_from_score] == '1'
+    )
 
     grouped_control_objectives.each do |process_control, cois|
       pdf.text "<b>#{ProcessControl.model_name.human}: " +
