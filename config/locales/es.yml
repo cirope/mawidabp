@@ -524,6 +524,7 @@ es:
     repeated_children: "Reiterada en"
     undo_reiteration: 'Deshacer reiteración'
     change_history: "Historial de cambios"
+    user_finding_answers_count: "Comentarios propios"
     auditors:
       one: "Auditor"
       other: "Auditores"

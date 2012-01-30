@@ -69,7 +69,7 @@
           <td class="expendable"><%= finding_follow_up_date_text(finding) %></td>
         <% end %>
         <td class="expendable"><%= h finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
-        <td class="expendable"><%= h finding.finding_answers.count %></td>
+        <td class="expendable"><%= show_finding_answers_count(finding) %></td>
         <td class="expendable"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
         <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
