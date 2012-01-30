@@ -16,12 +16,15 @@ class ConclusionFinalReviewsController < ApplicationController
     default_conditions = {
       "#{Period.table_name}.organization_id" => @auth_organization.id
     }
-
+    
     build_search_conditions ConclusionFinalReview, default_conditions
+    
+    order = @order_by || "issue_date DESC"
+    order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.includes(
       :review => [:period, { :plan_item => :business_unit }]
-    ).where(@conditions).order(@order_by || 'issue_date DESC').paginate(
+    ).where(@conditions).order(order).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 

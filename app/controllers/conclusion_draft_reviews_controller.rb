@@ -26,7 +26,10 @@ class ConclusionDraftReviewsController < ApplicationController
         {:plan_item => :business_unit}
       ]
     ).where(@conditions).order(
-      "#{ConclusionDraftReview.table_name}.issue_date DESC"
+      [
+        "#{ConclusionDraftReview.table_name}.issue_date DESC",
+        "#{ConclusionFinalReview.table_name}.created_at DESC"
+      ].join(', ')
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
