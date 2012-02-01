@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120120132242) do
+ActiveRecord::Schema.define(:version => 20120201031904) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -156,6 +156,17 @@ ActiveRecord::Schema.define(:version => 20120120132242) do
   add_index "detracts", ["created_at"], :name => "index_detracts_on_created_at"
   add_index "detracts", ["organization_id"], :name => "index_detracts_on_organization_id"
   add_index "detracts", ["user_id"], :name => "index_detracts_on_user_id"
+
+  create_table "e_mails", :force => true do |t|
+    t.text     "to"
+    t.text     "subject"
+    t.text     "body"
+    t.text     "attachments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "e_mails", ["created_at"], :name => "index_e_mails_on_created_at"
 
   create_table "error_records", :force => true do |t|
     t.text     "data"

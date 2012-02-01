@@ -1,0 +1,14 @@
+class CreateEMails < ActiveRecord::Migration
+  def change
+    create_table :e_mails do |t|
+      t.text :to
+      t.text :subject
+      t.text :body
+      t.text :attachments
+
+      t.timestamps
+    end
+    
+    add_index :e_mails, :created_at
+  end
+end

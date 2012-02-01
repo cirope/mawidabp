@@ -1,0 +1,11 @@
+urgent_email:
+  to: sos@mawida.com
+  subject: Save me
+  body: The house is on fire
+  attachments: picture,jpg
+
+notification_email:
+  to: someone@mawida.com
+  subject: The time is running
+  body: Hurry up
+  attachments: ''

@@ -59,6 +59,7 @@ es:
         roles: "Perfiles y Privilegios"
       best_practices: "Buenas prácticas"
       parameters: "Parámetros"
+      e_mails: "Correos"
       detracts: "Detractores"
     planning_title: "PLANIFICACIÓN"
     planning:
@@ -454,6 +455,10 @@ es:
     last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
     without_detract: "No tiene ningún detractor asignado al momento"
     user_without_detracts: "No tiene ningún detractor asignado al momento"
+    
+  email:
+    index_title: "Listado de correos"
+    show_title: "Detalles del correo"
 
   error_record:
     index_title: "Registros de error"
@@ -499,7 +504,7 @@ es:
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
-
+  
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
     show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
@@ -1441,6 +1446,7 @@ es:
       control_objective_item: "Objetivo de control"
       cost: "Costo"
       detract: "Detractor"
+      e_mail: "Correo"
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
@@ -1571,6 +1577,11 @@ es:
         user_id: "Usuario"
         value: "Valor"
         observations: "Observaciones"
+      e_mail:
+        to: "Para"
+        subject: "Asunto"
+        body: "Contenido"
+        attachments: "Adjuntos"
       error_record:
         user_id: "Usuario"
         error: "Error"

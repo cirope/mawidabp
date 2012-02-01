@@ -1,4 +1,6 @@
 MawidaApp::Application.routes.draw do
+  resources :e_mails, :only => [:index, :show]
+
   resources :business_unit_types
 
   resources :groups

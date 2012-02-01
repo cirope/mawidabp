@@ -12,3 +12,5 @@ MawidaApp::Application.config.action_mailer.smtp_settings = {
   :password => APP_CONFIG['smtp_password'],
   :authentication => :plain
 }
+
+ActionMailer::Base.register_observer(MailObserver)
