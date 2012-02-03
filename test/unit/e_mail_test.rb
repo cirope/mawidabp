@@ -16,6 +16,7 @@ class EMailTest < ActiveSupport::TestCase
     assert_equal e_mails(:urgent_email).subject, @email.subject
     assert_equal e_mails(:urgent_email).body, @email.body
     assert_equal e_mails(:urgent_email).attachments, @email.attachments
+    assert_equal e_mails(:urgent_email).organization_id, @email.organization_id
   end
 
   # Prueba la creación de una contraseña antigua

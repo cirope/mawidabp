@@ -5,7 +5,7 @@ class EMailsController < ApplicationController
   # GET /emails.json
   def index
     @title = t 'email.index_title'
-    @emails = EMail.order('created_at DESC').paginate(
+    @emails = EMail.ordered_list.paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 

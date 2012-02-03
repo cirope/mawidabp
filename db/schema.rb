@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120201031904) do
+ActiveRecord::Schema.define(:version => 20120201122347) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -164,9 +164,11 @@ ActiveRecord::Schema.define(:version => 20120201031904) do
     t.text     "attachments"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   add_index "e_mails", ["created_at"], :name => "index_e_mails_on_created_at"
+  add_index "e_mails", ["organization_id"], :name => "index_e_mails_on_organization_id"
 
   create_table "error_records", :force => true do |t|
     t.text     "data"

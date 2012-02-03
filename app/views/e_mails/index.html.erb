@@ -10,10 +10,10 @@
 
   <tbody>
     <% @emails.each do |email| %>
-      <tr>
-        <td><%= l email.created_at, :format => :minimal %></td>
-        <td><%= email.to %></td>
-        <td><%= email.subject %></td>
+      <tr class="<%= cycle('even', 'odd') %>">
+        <td><%= l email.created_at, :format => :short %></td>
+        <td><%= super_truncate email.to %></td>
+        <td><%= super_truncate email.subject %></td>
         <td><%= link_to_show email %></td>
       </tr>
     <% end %>
