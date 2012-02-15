@@ -45,5 +45,6 @@ group :development do
 end
 
 group :test do
-  gem 'turn'
+  gem 'minitest', :require => false
+  gem 'turn', :require => false
 end

@@ -59,7 +59,10 @@ class ProcedureControlsController < ApplicationController
     if clone_procedure_control
       clone_procedure_control.procedure_control_items.each do |pci|
         pcs_attributes = pci.procedure_control_subitems.map do |pcs|
-          pcs.attributes.merge 'id' => nil
+          pcs.attributes.merge(
+            'id' => nil,
+            'control_attributes' => pcs.control.attributes.merge('id' => nil)
+          )
         end
         
         attributes = pci.attributes.merge(
