@@ -70,7 +70,6 @@ class ReviewsControllerTest < ActionController::TestCase
     get :show, :id => reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
-    puts @response.body
     assert_select '#error_body', false
     assert_template 'reviews/show'
   end
