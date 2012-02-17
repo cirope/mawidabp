@@ -1139,6 +1139,7 @@ es:
       with_attachment: "Con un archivo adjunto"
       without_attachment: "Sin archivos adjuntos"
       download: "Descargar relevamiento"
+      download_attachment: "Descargar adjunto"
     review_data:
       close_date: "Fecha de cierre: %{date}"
       without_close_date: "Sin fecha de cierre"

@@ -27,9 +27,7 @@
   </div>
 
   <div class="show_item">
-    <b><%= raw(Review.human_attribute_name(:survey) +
-      show_inline_help_for(:review_survey)) %>:</b>
-    <%= simple_format h(@review.survey) %>
+    <%= show_readonly_review_survey(@review) %>
   </div>
 
   <div class="show_item">

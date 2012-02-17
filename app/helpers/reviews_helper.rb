@@ -77,4 +77,22 @@ module ReviewsHelper
       content_tag :span, t('review.view_procedure_control_for_the_period')
     end
   end
+  
+  def show_readonly_review_survey(review)
+    link_for_download = link_to(
+      t('label.download'),
+      :action => :survey_pdf, :id => review, :_ts => Time.now.to_i
+    ).html_safe
+    link_for_download_attachment = link_to(
+      t('review.survey.download_attachment'), review.file_model.file.url
+    ).html_safe if review.file_model
+    
+    out = "<b>#{Review.human_attribute_name(:survey)}</b>"
+    
+    out << " | #{link_for_download}" unless review.survey.blank?
+    out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
+    out << "#{show_inline_help_for(:review_survey)}:"
+    
+    raw(out + simple_format(h(review.survey)))
+  end
 end
