@@ -348,21 +348,7 @@ class FollowUpCommitteeController < ApplicationController
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period)
-      
-      # Production level
-      reviews_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
-        ).select { |pi| pi.review.try(:has_final_review?) }.size
-      end
-      plan_items_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
-        ).count
-      end
-      
-      indicators[:production_level] = plan_items_count > 0 ?
-        (reviews_count / plan_items_count.to_f) * 100 : 100
+      row_order = [:highest_solution_rate, :digitalized, :medium_solution_rate]
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -398,10 +384,6 @@ class FollowUpCommitteeController < ApplicationController
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
         (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
       
-      # Reviews score average
-      indicators[:score_average] = cfrs.size > 0 ?
-        (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
-      
       # Work papers digitalization
       wps = WorkPaper.where(
         'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
@@ -413,10 +395,10 @@ class FollowUpCommitteeController < ApplicationController
 
       @indicators[period] ||= []
       @indicators[period] << {
-        :column_data => indicators.map do |k, v|
+        :column_data => row_order.map do |i|
           {
-            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{k}"),
-            'value' => "#{'%.1f' % v}%"
+            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
+            'value' => "#{'%.1f' % indicators[i]}%"
           }
         end
       }

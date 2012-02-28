@@ -332,6 +332,8 @@ class ConclusionCommitteeReportsController < ApplicationController
       @from_date, @to_date
     )
     params = { :start => @from_date, :end => @to_date }
+    row_order = [:highest_solution_rate, :score_average, :production_level,
+      :medium_solution_rate]
     @indicators = {}
 
     @periods.each do |period|
@@ -390,22 +392,13 @@ class ConclusionCommitteeReportsController < ApplicationController
       # Reviews score average
       indicators[:score_average] = cfrs.size > 0 ?
         (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
-      
-      # Work papers digitalization
-      wps = WorkPaper.where(
-        'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
-        params.merge(:organization_id => GlobalModelConfig.current_organization_id)
-      )
-      
-      indicators[:digitalized] = wps.size > 0 ?
-        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : 100
 
       @indicators[period] ||= []
       @indicators[period] << {
-        :column_data => indicators.map do |k, v|
+        :column_data => row_order.map do |i|
           {
-            'indicator' => t("conclusion_committee_report.qa_indicators.indicators.#{k}"),
-            'value' => "#{'%.1f' % v}%"
+            'indicator' => t("conclusion_committee_report.qa_indicators.indicators.#{i}"),
+            'value' => "#{'%.1f' % indicators[i]}%"
           }
         end
       }
