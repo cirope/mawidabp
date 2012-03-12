@@ -55,8 +55,8 @@ module FollowUpHighRiskReports
 
         conclusion_review_per_unit_type.each do |c_r|
           high_risk_weaknesses = []
-          weaknesses =
-            c_r.review.weaknesses.with_highest_risk.with_pending_status
+          weaknesses = c_r.review.weaknesses.with_highest_risk.
+            with_pending_status_for_report
 
           weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
