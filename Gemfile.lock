@@ -40,7 +40,6 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
-    cgi_multipart_eof_fix (2.5.0)
     chronic (0.6.7)
     cocaine (0.2.1)
     coffee-rails (3.1.1)
@@ -55,12 +54,11 @@ GEM
     daemons (1.1.8)
     dynamic_form (1.1.4)
     erubis (2.7.0)
+    eventmachine (0.12.10)
     execjs (1.3.0)
       multi_json (~> 1.0)
-    fastthread (1.0.7)
     foreigner (1.1.5)
       activerecord (>= 3.0.0)
-    gem_plugin (0.2.3)
     gruff (0.3.6)
     highline (1.6.11)
     hike (1.2.1)
@@ -87,11 +85,6 @@ GEM
       subexec (~> 0.2.1)
     minitest (2.11.3)
     mksm-rubyzip (0.9.3)
-    mongrel (1.1.5)
-      cgi_multipart_eof_fix (>= 2.4)
-      daemons (>= 1.0.3)
-      fastthread (>= 1.0.1)
-      gem_plugin (>= 0.2.3)
     multi_json (1.1.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -157,6 +150,10 @@ GEM
     subexec (0.2.1)
     therubyracer (0.9.10)
       libv8 (~> 3.3.10)
+    thin (1.3.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.14.6)
     tilt (1.3.3)
     timeliness (0.3.4)
@@ -199,7 +196,6 @@ DEPENDENCIES
   mini_magick
   minitest
   mksm-rubyzip
-  mongrel
   newrelic_rpm
   paper_trail
   paperclip
@@ -209,6 +205,7 @@ DEPENDENCIES
   ruby-debug
   sass-rails
   therubyracer
+  thin
   transaction-simple
   turn
   uglifier
