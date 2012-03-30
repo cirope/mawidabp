@@ -92,23 +92,21 @@ require 'iconv'
 CONVERTER_TO_ISO = Iconv.new 'ISO-8859-15//IGNORE//TRANSLIT', 'UTF-8'
 CONVERTER_TO_UTF8 = Iconv.new 'UTF-8//IGNORE//TRANSLIT', 'ISO-8859-15'
 
-module PDF
-  class Writer
-    include PDF::PDFExtension
-    
-    alias :text_old :text
+class PDF::Writer
+  include PDF::PDFExtension
 
-    def text(utf_text, options = {})
-      text_old utf_text.to_iso, options
-    end
+  alias :text_old :text
 
-    alias :save_as_old :save_as
+  def text(utf_text, options = {})
+    text_old utf_text.to_iso, options
+  end
 
-    def save_as(name)
-      FileUtils.rm name if File.exist?(name)
+  alias :save_as_old :save_as
 
-      save_as_old name
-    end
+  def save_as(name)
+    FileUtils.rm name if File.exist?(name)
+
+    save_as_old name
   end
 end
 
