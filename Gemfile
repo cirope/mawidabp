@@ -22,7 +22,7 @@ gem 'dynamic_form'
 gem 'unicode'
 gem 'capistrano'
 gem 'rubyzip', :require => 'zip/zip'
-gem 'pdf-writer'
+gem 'pdf-writer', :require => 'pdf/writer'
 # Sólo para pdf-writer
 gem 'color', :require => false
 # Sólo para pdf-writer
