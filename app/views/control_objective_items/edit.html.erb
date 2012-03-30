@@ -2,9 +2,6 @@
 
 <div id="links">
   <%= link_to_unless @control_objective_item.is_in_a_final_review?,
-    t('control_objective_item.add_oportunity'),
-    new_oportunity_path(:control_objective_item => @control_objective_item.id) %> |
-  <%= link_to_unless @control_objective_item.is_in_a_final_review?,
     t('control_objective_item.review.edit'),
     edit_review_path(@control_objective_item.review) %> |
   <%= link_to t('control_objective_item.review.show'),

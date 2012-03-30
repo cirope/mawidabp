@@ -366,6 +366,14 @@ class Review < ActiveRecord::Base
           [I18n.t('weakness.errors.is_unconfirmed')]
         ]
       end
+      
+      coi.oportunities.each do |o|
+        unless o.must_be_approved?
+          errors << [
+            "#{Oportunity.model_name.human} #{o.review_code}", o.approval_errors
+          ]
+        end
+      end
 
       unless coi.must_be_approved?
         self.can_be_approved_by_force = false

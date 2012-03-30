@@ -176,10 +176,10 @@ class ReviewUserAssignment < ActiveRecord::Base
 
   # Definición dinámica de todos los métodos "tipo?"
   TYPES.each do |type, value|
-    define_method(:"#{type}?") { self.assignment_type == value }
+    define_method("#{type}?") { self.assignment_type == value }
   end
 
   def type_text
-    I18n.t :"review.user_assignment.type_#{TYPES.invert[self.assignment_type]}"
+    I18n.t "review.user_assignment.type_#{TYPES.invert[self.assignment_type]}"
   end
 end

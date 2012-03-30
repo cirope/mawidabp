@@ -153,6 +153,7 @@
   </div>
 
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
+  <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly} %>
 
   <h1>
     <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,

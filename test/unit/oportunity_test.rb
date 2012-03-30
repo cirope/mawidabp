@@ -203,6 +203,70 @@ class OportunityTest < ActiveSupport::TestCase
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'PTOM 04', oportunity.work_papers.first.code
   end
+  
+  test 'must be approved' do
+    @oportunity = Oportunity.find(
+      findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
+    )
+    
+    assert @oportunity.must_be_approved?
+    assert @oportunity.approval_errors.blank?
+
+    @oportunity.state = Finding::STATUS[:implemented_audited]
+    @oportunity.solution_date = nil
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.without_solution_date'),
+      @oportunity.approval_errors.first
+
+    @oportunity.state = Finding::STATUS[:implemented]
+    @oportunity.solution_date = 2.days.from_now.to_date
+    @oportunity.follow_up_date = nil
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.with_solution_date'),
+      @oportunity.approval_errors.first
+
+    @oportunity.state = Finding::STATUS[:being_implemented]
+    @oportunity.answer = ' '
+    assert !@oportunity.must_be_approved?
+    assert_equal 2, @oportunity.approval_errors.size
+    assert_equal [I18n.t('oportunity.errors.without_answer'),
+      I18n.t('oportunity.errors.with_solution_date')].sort,
+      @oportunity.approval_errors.sort
+
+    @oportunity.reload
+    assert @oportunity.must_be_approved?
+    @oportunity.state = Finding::STATUS[:notify]
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.not_valid_state'),
+      @oportunity.approval_errors.first
+
+    @oportunity.reload
+    @oportunity.finding_user_assignments.delete_if do |fua|
+      fua.user.can_act_as_audited?
+    end
+
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.without_audited'),
+      @oportunity.approval_errors.first
+
+    @oportunity.reload
+    @oportunity.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.without_auditor'),
+      @oportunity.approval_errors.first
+
+    @oportunity.reload
+    @oportunity.audit_comments = '  '
+    assert !@oportunity.must_be_approved?
+    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal I18n.t('oportunity.errors.without_audit_comments'),
+      @oportunity.approval_errors.first
+  end
 
   test 'dynamic functions' do
     Finding::STATUS.each do |status, value|

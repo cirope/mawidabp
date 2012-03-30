@@ -27,6 +27,12 @@ class OportunitiesController < ApplicationController
     ]
     parameters = {:organization_id => @auth_organization.id,
       :boolean_true => true, :boolean_false => false}
+    
+    if params[:control_objective].to_i > 0
+      default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
+        ":control_objective_id"
+      parameters[:control_objective_id] = params[:control_objective].to_i
+    end
 
     if params[:review].to_i > 0
       default_conditions << "#{Review.table_name}.id = :review_id"

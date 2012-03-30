@@ -1,4 +1,7 @@
 class Oportunity < Finding
+  # Acceso a los atributos
+  attr_reader :approval_errors
+  
   # Named scopes
   scope :all_for_report, lambda {
     where(
@@ -62,5 +65,47 @@ class Oportunity < Finding
       &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
 
     [code_from_review, code_from_oportunity].compact.max
+  end
+  
+  def must_be_approved?
+    return true if self.revoked?
+    
+    errors = []
+
+    if self.implemented_audited? && self.solution_date.blank?
+      errors << I18n.t('oportunity.errors.without_solution_date')
+    elsif self.implemented?
+      if self.solution_date?
+        errors << I18n.t('oportunity.errors.with_solution_date')
+      end
+    elsif self.being_implemented?
+      if self.answer.blank?
+        errors << I18n.t('oportunity.errors.without_answer')
+      end
+      
+      if self.solution_date?
+        errors << I18n.t('oportunity.errors.with_solution_date')
+      end
+    elsif self.assumed_risk? && self.follow_up_date?
+      errors << I18n.t('oportunity.errors.with_follow_up_date')
+    elsif !self.implemented_audited? && !self.implemented? &&
+        !self.being_implemented? && !self.unconfirmed? &&
+        !self.assumed_risk?
+      errors << I18n.t('oportunity.errors.not_valid_state')
+    end
+
+    unless self.has_audited?
+      errors << I18n.t('oportunity.errors.without_audited')
+    end
+
+    unless self.has_auditor?
+      errors << I18n.t('oportunity.errors.without_auditor')
+    end
+
+    if self.audit_comments.blank? && !self.revoked?
+      errors << I18n.t('oportunity.errors.without_audit_comments')
+    end
+
+    (@approval_errors = errors).blank?
   end
 end
