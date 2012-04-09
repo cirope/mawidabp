@@ -79,9 +79,10 @@ class LoginRecordTest < ActiveSupport::TestCase
     @login_record.start = 'XX'
     assert @login_record.invalid?
     assert_equal 2, @login_record.errors.count
-    assert_equal [error_message_from_model(@login_record, :start, :blank),
-      error_message_from_model(@login_record, :start, :invalid_date)].sort,
-      @login_record.errors[:start].sort
+    assert_equal [
+      error_message_from_model(@login_record, :start, :blank),
+      error_message_from_model(@login_record, :start, :invalid_datetime)
+    ].sort, @login_record.errors[:start].sort
 
     @login_record.reload
     @login_record.start = ''
@@ -90,7 +91,8 @@ class LoginRecordTest < ActiveSupport::TestCase
     assert_equal 2, @login_record.errors.count
     assert_equal [error_message_from_model(@login_record, :start, :blank)],
       @login_record.errors[:start]
-    assert_equal [error_message_from_model(@login_record, :end, :invalid_date)],
-      @login_record.errors[:end]
+    assert_equal [
+      error_message_from_model(@login_record, :end, :invalid_datetime)
+    ], @login_record.errors[:end]
   end
 end

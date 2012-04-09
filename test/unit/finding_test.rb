@@ -221,10 +221,10 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.update_attribute :state, Finding::STATUS[:incomplete]
 
     @finding.control_objective_item_id = '?nil'
-    @finding.first_notification_date = '12/13/12'
-    @finding.follow_up_date = '12/13/12'
-    @finding.solution_date = '12/13/12'
-    @finding.origination_date = '12/13/12'
+    @finding.first_notification_date = '15/13/12'
+    @finding.follow_up_date = '15/13/12'
+    @finding.solution_date = '15/13/12'
+    @finding.origination_date = '15/13/12'
 
     assert @finding.invalid?
 

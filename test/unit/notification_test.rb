@@ -80,7 +80,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@notification, :user_who_confirm_id,
       :not_a_number)], @notification.errors[:user_who_confirm_id]
     assert_equal [error_message_from_model(@notification, :confirmation_date,
-      :invalid_date)], @notification.errors[:confirmation_date]
+      :invalid_datetime)], @notification.errors[:confirmation_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
