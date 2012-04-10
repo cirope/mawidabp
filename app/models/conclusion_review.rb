@@ -58,6 +58,19 @@ class ConclusionReview < ActiveRecord::Base
       conditions.join(' OR '), parameters
     )
   }
+  scope :by_control_objective_names, lambda { |*control_objective_names|
+    conditions = []
+    parameters = {}
+
+    control_objective_names.each_with_index do |control_objective_name, i|
+      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
+      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
+    end
+
+    includes(:review => {:control_objective_items => :control_objective}).where(
+      conditions.join(' OR '), parameters
+    )
+  }
   scope :notorious, lambda { |final|
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}

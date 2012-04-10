@@ -2,7 +2,7 @@
 <div id="filter_box">
   <div>
     <%= form_for action, :url => url, :html => {:method => :get, :class => 'no_observe_changes'} do |f| %>
-      <% forms.each do |f_name, display| %>
+      <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>
         <%= render :partial => "shared/filters/#{f_name}",
           :locals => {:f => f, :display => display, :action => action} %>
       <% end %>

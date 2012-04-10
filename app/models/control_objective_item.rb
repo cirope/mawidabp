@@ -21,6 +21,19 @@ class ControlObjectiveItem < ActiveRecord::Base
     }
   })
 
+  scope :not_excluded_from_score, where(:exclude_from_score => false)
+  scope :with_names, lambda { |*control_objective_names|
+    conditions = []
+    parameters = {}
+
+    control_objective_names.each_with_index do |control_objective_name, i|
+      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
+      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
+    end
+
+    includes(:control_objective).where(conditions.join(' OR '), parameters)
+  }
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }

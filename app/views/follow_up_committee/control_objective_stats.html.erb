@@ -1,6 +1,11 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :control_objective_stats, :extra_params => {},
-  :forms => {:date_range => true, :business_unit => true}} %>
+  :locals => {
+    :action => :control_objective_stats, :extra_params => {},
+    :forms => {
+      :control_objective => 1, :date_range => 2, :business_unit => 3
+    }
+  }
+%>
 
 <% @periods.each do |period| %>
   <h1 class="simple_title with_border_bottom">

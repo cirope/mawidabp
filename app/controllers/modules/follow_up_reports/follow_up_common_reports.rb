@@ -742,9 +742,10 @@ module FollowUpCommonReports
     @control_objectives_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
+    control_objectives = []
     
     if params[:control_objective_stats]
-      unless params[:control_objective_stats][:business_unit_type].blank?
+      if params[:control_objective_stats][:business_unit_type].present?
         @selected_business_unit = BusinessUnitType.find(
           params[:control_objective_stats][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(
@@ -753,7 +754,7 @@ module FollowUpCommonReports
           "\"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:control_objective_stats][:business_unit].blank?
+      if params[:control_objective_stats][:business_unit].present?
         business_units = params[:control_objective_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
@@ -765,6 +766,20 @@ module FollowUpCommonReports
             "\"#{params[:control_objective_stats][:business_unit].strip}\""
         end
       end
+      
+      if params[:control_objective_stats][:control_objective].present?
+        control_objectives =
+          params[:control_objective_stats][:control_objective].split(
+            SPLIT_AND_TERMS_REGEXP
+          ).uniq.map(&:strip)
+
+        unless control_objectives.empty?
+          conclusion_reviews = conclusion_reviews.by_control_objective_names(
+            *control_objectives)
+          @filters << "<b>#{ControlObjective.model_name.human}</b> = " +
+            "\"#{params[:control_objective_stats][:control_objective].strip}\""
+        end
+      end
     end
 
     @periods.each do |period|
@@ -772,7 +787,7 @@ module FollowUpCommonReports
       process_controls = {}
       
       conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items_for_score.each do |coi|
+        c_r.review.control_objective_items.not_excluded_from_score.with_names(*control_objectives).each do |coi|
           process_controls[coi.process_control.name] ||= {}
           coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
           coi_data[:weaknesses_ids] ||= {}
