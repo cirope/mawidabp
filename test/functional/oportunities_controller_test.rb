@@ -368,27 +368,27 @@ class OportunitiesControllerTest < ActionController::TestCase
 
   test 'auto complete for control objective item' do
     perform_auth
-    get :auto_complete_for_control_objective_item, { :q => 'dependencia', :format => :json }
+    get :auto_complete_for_control_objective_item, {
+      :q => 'dependencia',
+      :review_id => reviews(:review_with_conclusion).id,
+      :format => :json
+    }
     assert_response :success
     
     cois = ActiveSupport::JSON.decode(@response.body)
     
-    assert_equal 2, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable y bcra_A4609_security_management_responsible_dependency_item_approved_and_editable porque no tienen informes definitivos
+    assert_equal 1, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable
     assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
     assert_equal(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item_editable).id,
       cois.first['id']
     )
 
-    get :auto_complete_for_control_objective_item, { :q => '1 2 4', :format => :json }
-    assert_response :success
-    
-    cois = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, cois.size # Todos los del informe 1 2 4
-    assert cois.all? { |f| (f['label'] + f['informal']).match /1 2 4/i }
-
-    get :auto_complete_for_control_objective_item, { :q => 'x_none', :format => :json }
+    get :auto_complete_for_control_objective_item, {
+      :q => 'x_none',
+      :review_id => reviews(:review_with_conclusion).id,
+      :format => :json
+    }
     assert_response :success
     
     cois = ActiveSupport::JSON.decode(@response.body)
