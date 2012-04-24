@@ -8,9 +8,13 @@ module ConclusionCommitteeReportsHelper
   end
 
   def synthesis_report_organization_score_average(audits_by_business_unit)
-    unless audits_by_business_unit.blank?
+    internal_audits_by_business_unit = audits_by_business_unit.reject do |but|
+      but[:external]
+    end
+    
+    unless internal_audits_by_business_unit.blank?
       count = 0
-      total = audits_by_business_unit.inject(0) do |sum, data|
+      total = internal_audits_by_business_unit.inject(0) do |sum, data|
         scores = data[:review_scores]
 
         if scores.blank?
