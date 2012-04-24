@@ -258,14 +258,17 @@ class WeaknessesController < ApplicationController
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{Period.table_name}.organization_id = :organization_id",
-      "#{ConclusionReview.table_name}.review_id IS NULL"
+      "#{ConclusionReview.table_name}.review_id IS NULL",
+      "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {
+      :organization_id => @auth_organization.id,
+      :review_id => params[:review_id].to_i
+    }
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}",
-        "LOWER(#{Review.table_name}.identification) LIKE :control_objective_item_data_#{i}"
+        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}"
       ].join(' OR ')
 
       parameters[:"control_objective_item_data_#{i}"] =
