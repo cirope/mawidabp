@@ -14,6 +14,9 @@ class Weakness < Finding
   scope :with_highest_risk, where(
     "#{table_name}.highest_risk = #{table_name}.risk"
   )
+  scope :with_medium_risk, where(
+    "#{table_name}.risk = (#{table_name}.highest_risk - 1) "
+  )
 
   # Restricciones
   validates :risk, :priority, :presence => true
