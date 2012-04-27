@@ -344,11 +344,29 @@ class FollowUpCommitteeController < ApplicationController
     )
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
-
+    
+    today = Date.today
+    days = total = 0
+    # Medium risk weakenesses being implemented
+    conclusion_reviews.each do |cr|
+      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', today) 
+      weaknesses.each do |w|
+        days+= (today - w.follow_up_date).abs.round
+        total+= 1
+      end
+    end
+          
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period)
-      row_order = [:highest_solution_rate, :digitalized, :medium_solution_rate]
+      row_order = [
+        ['%.1f%', :highest_solution_rate],
+        ['%.1f%', :digitalized],
+        ['%.1f%', :medium_solution_rate],
+        ['%d', :ancient_medium_risk_weaknesses]
+      ]
+      
+      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? days / total : 0
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -392,19 +410,19 @@ class FollowUpCommitteeController < ApplicationController
       
       indicators[:digitalized] = wps.size > 0 ?
         (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : 100
-
+      
       @indicators[period] ||= []
       @indicators[period] << {
-        :column_data => row_order.map do |i|
+        :column_data => row_order.map do |mask, i|
           {
             'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
-            'value' => "#{'%.1f' % indicators[i]}%"
+            'value' => mask % indicators[i]
           }
         end
       }
     end
   end
-
+ 
   # Crea un PDF con un resumen de indicadores de calidad para un determinado
   # rango de fechas
   #
