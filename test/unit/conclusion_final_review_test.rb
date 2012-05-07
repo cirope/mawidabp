@@ -120,6 +120,28 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       @conclusion_review.destroy
     end
   end
+  
+  # Prueba la inclusión de observaciones anuladas en ejecución
+  test 'revoked weaknesses' do
+    review = Review.find reviews(:review_with_conclusion).id
+    weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
+    assert weakness.update_attribute :state, 7
+    
+    @conclusion_review = ConclusionFinalReview.new({
+          :review => review,
+          :issue_date => Date.today,
+          :close_date => 2.days.from_now.to_date,
+          :applied_procedures => 'New applied procedures',
+          :conclusion => 'New conclusion'
+        }, {}, false)
+    
+    assert @conclusion_review.save
+    
+    assert weakness.reload.final
+  
+  end
+  
+
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do

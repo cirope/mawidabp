@@ -179,6 +179,10 @@ class ConclusionFinalReview < ConclusionReview
         finding.save!
         f.save!
       end
+      
+      revoked_findings = self.review.weaknesses.revoked +
+        self.review.oportunities.revoked
+      revoked_findings.each { |rf| rf.final = true; rf.save! }
 
       all_created = true
     rescue ActiveRecord::RecordInvalid
