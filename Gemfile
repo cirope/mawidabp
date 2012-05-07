@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
 gem 'rails', '3.1.3'
 
@@ -15,7 +15,7 @@ gem 'RedCloth'
 gem 'whenever', :require => false
 gem 'will_paginate'
 gem 'paper_trail'
-gem 'paperclip', '3.0.0' # 3.0.1 has a bug
+gem 'paperclip', '3.0.0'
 gem 'rmagick'
 gem 'gruff'
 gem 'dynamic_form'

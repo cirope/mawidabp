@@ -10,11 +10,7 @@ class ApplicationController < ActionController::Base
   include ParameterSelector
   include GlobalModelConfig
   
-  helper :all # include all helpers, all the time
-
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '6f154c0c69d58a9c322590ea42fbe654'
+  protect_from_forgery
 
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado

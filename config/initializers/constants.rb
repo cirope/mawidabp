@@ -67,9 +67,7 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (
-  Rails.env.development? ? 'mawidaqa.com.ar:3000' : 'mawida.com.ar'
-).freeze
+URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawida.com.ar').freeze
 # Protocolo a utilizar para formar los links absolutos
 URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
