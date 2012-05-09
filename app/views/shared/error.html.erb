@@ -65,16 +65,7 @@
         <h3 style="margin: 1em 0em;">Parameters:</h3>
         <pre><%=h params.inspect %></pre>
       <% end %>
-      
-      <h3 style="margin: 1em 0em;">Environment:</h3>
-      <div style="margin-top: 1em;">
-        <% filtered_env = request.filtered_env %>
-        <% filtered_env.keys.sort.each do |key| %>
-          <div style="margin: .5em 0em;">
-            <em><%= key %></em>: <%= filtered_env[key].inspect %>
-          </div>
-        <% end -%>
-      </div>
+       
       <div class="clear"></div>
     </div>
   </div>
