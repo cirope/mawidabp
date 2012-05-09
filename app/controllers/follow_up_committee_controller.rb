@@ -363,6 +363,7 @@ class FollowUpCommitteeController < ApplicationController
         ['%.1f%', :highest_solution_rate],
         ['%.1f%', :digitalized],
         ['%.1f%', :medium_solution_rate],
+        ['%.1f%', :score_average],
         ['%.1f%', :production_level],
         ['%d', :ancient_medium_risk_weaknesses]
       ]
@@ -417,6 +418,10 @@ class FollowUpCommitteeController < ApplicationController
       
       indicators[:production_level] = plan_items_count > 0 ?
         (reviews_count / plan_items_count.to_f) * 100 : 100
+      
+      # Reviews score average
+      indicators[:score_average] = cfrs.size > 0 ?
+        (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
       
       # Work papers digitalization
       wps = WorkPaper.where(

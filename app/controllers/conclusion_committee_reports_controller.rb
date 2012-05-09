@@ -207,7 +207,7 @@ class ConclusionCommitteeReportsController < ApplicationController
       @from_date, @to_date
     )
     params = { :start => @from_date, :end => @to_date }
-    row_order = [:highest_solution_rate, :score_average, :medium_solution_rate]
+    row_order = [:highest_solution_rate, :medium_solution_rate]
     @indicators = {}
 
     @periods.each do |period|
@@ -247,11 +247,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
         (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
-      
-      # Reviews score average
-      indicators[:score_average] = cfrs.size > 0 ?
-        (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
-
+          
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |i|
@@ -260,7 +256,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             'value' => "#{'%.1f' % indicators[i]}%"
           }
         end
-      }
+      }      
     end
   end
 

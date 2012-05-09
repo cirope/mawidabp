@@ -290,7 +290,6 @@ es:
       indicators:
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
-        score_average: "Calificación de informes"
         digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
