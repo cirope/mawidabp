@@ -55,7 +55,7 @@ module UsersHelper
     img.resize! 0.5
     img.write image_path
 
-    size = Paperclip::Geometry.from_file(File.new(image_path, 'r'))
+    size = Paperclip::Geometry.from_file(image_path)
 
     image_tag("/private/#{path_without_root.join('/')}/#{image_name}",
       :size => size.to_s, :alt => image_label)
