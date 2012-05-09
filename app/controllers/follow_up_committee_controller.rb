@@ -363,6 +363,7 @@ class FollowUpCommitteeController < ApplicationController
         ['%.1f%', :highest_solution_rate],
         ['%.1f%', :digitalized],
         ['%.1f%', :medium_solution_rate],
+        ['%.1f%', :production_level],
         ['%d', :ancient_medium_risk_weaknesses]
       ]
       
@@ -401,6 +402,21 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
         (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
+      
+      # Production level
+      reviews_count = period.plans.inject(0.0) do |pt, p|
+        pt + p.plan_items.where(
+          'plan_items.start >= :start AND plan_items.end <= :end', params
+        ).select { |pi| pi.review.try(:has_final_review?) }.size
+      end
+      plan_items_count = period.plans.inject(0.0) do |pt, p|
+        pt + p.plan_items.where(
+          'plan_items.start >= :start AND plan_items.end <= :end', params
+        ).count
+      end
+      
+      indicators[:production_level] = plan_items_count > 0 ?
+        (reviews_count / plan_items_count.to_f) * 100 : 100
       
       # Work papers digitalization
       wps = WorkPaper.where(

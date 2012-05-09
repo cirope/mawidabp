@@ -207,29 +207,13 @@ class ConclusionCommitteeReportsController < ApplicationController
       @from_date, @to_date
     )
     params = { :start => @from_date, :end => @to_date }
-    row_order = [:highest_solution_rate, :score_average, :production_level,
-      :medium_solution_rate]
+    row_order = [:highest_solution_rate, :score_average, :medium_solution_rate]
     @indicators = {}
 
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period)
-      
-      # Production level
-      reviews_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
-        ).select { |pi| pi.review.try(:has_final_review?) }.size
-      end
-      plan_items_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
-        ).count
-      end
-      
-      indicators[:production_level] = plan_items_count > 0 ?
-        (reviews_count / plan_items_count.to_f) * 100 : 100
-      
+           
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
         ct + cr.review.final_weaknesses.with_highest_risk.where(

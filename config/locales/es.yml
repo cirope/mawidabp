@@ -288,7 +288,6 @@ es:
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
-        production_level: "Nivel de Producción"
         highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         score_average: "Calificación de informes"
