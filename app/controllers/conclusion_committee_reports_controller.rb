@@ -206,8 +206,7 @@ class ConclusionCommitteeReportsController < ApplicationController
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     )
-    params = { :start => @from_date, :end => @to_date }
-    row_order = [:highest_solution_rate, :medium_solution_rate]
+    row_order = [:highest_solution_rate]
     @indicators = {}
 
     @periods.each do |period|
