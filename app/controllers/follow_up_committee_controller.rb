@@ -362,7 +362,7 @@ class FollowUpCommitteeController < ApplicationController
       row_order = [
         ['%.1f%', :highest_solution_rate],
         ['%.1f%', :digitalized],
-        ['%.1f%', :score_average],
+        ['%d', :score_average],
         ['%.1f%', :production_level],
         ['%d', :ancient_medium_risk_weaknesses]
       ]
@@ -419,8 +419,9 @@ class FollowUpCommitteeController < ApplicationController
         (reviews_count / plan_items_count.to_f) * 100 : 100
       
       # Reviews score average
-      indicators[:score_average] = cfrs.size > 0 ?
-        (cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / cfrs.size.to_f) : 100
+      internal_cfrs = cfrs.internal_audit
+      indicators[:score_average] = internal_cfrs.size > 0 ?
+        (internal_cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / internal_cfrs.size.to_f).round : 100
       
       # Work papers digitalization
       wps = WorkPaper.where(
