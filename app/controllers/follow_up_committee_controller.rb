@@ -362,7 +362,6 @@ class FollowUpCommitteeController < ApplicationController
       row_order = [
         ['%.1f%', :highest_solution_rate],
         ['%.1f%', :digitalized],
-        ['%.1f%', :medium_solution_rate],
         ['%.1f%', :score_average],
         ['%.1f%', :production_level],
         ['%d', :ancient_medium_risk_weaknesses]
