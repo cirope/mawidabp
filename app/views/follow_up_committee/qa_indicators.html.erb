@@ -1,38 +1,47 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :qa_indicators, :extra_params => {},
   :forms => {:date_range => true}} %>
+<% if @periods.present? %>
+  <% @periods.each do |period| %>
+    <h1 class="simple_title with_border_bottom">
+      <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
+    </h1>
 
-<% @periods.each do |period| %>
-  <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
-  </h1>
-
-  <% @indicators[period].each do |data| %>
-    <% unless data[:column_data].blank? %>
-      <table class="summary_table" style="margin: 0em 1em;">
-        <thead>
-          <tr>
-            <% @columns.each do |col_name| %>
-              <th style="width: 50%;"><%= col_name.last %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% data[:column_data].each do |row| %>
+    <% @indicators[period].each do |data| %>
+      <% unless data[:column_data].blank? %>
+        <table class="summary_table" style="margin: 0em 1em;">
+          <thead>
             <tr>
               <% @columns.each do |col_name| %>
-                <td><%= row[col_name.first] %></td>
+                <th style="width: 50%;"><%= col_name.last %></th>
               <% end %>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t 'follow_up_committee.qa_indicators.without_audits_in_the_period' %></em>
-      </p>
+          </thead>
+          <tbody>
+            <% data[:column_data].each do |row| %>
+              <tr>
+                <% @columns.each do |col_name| %>
+                  <% if col_name.first == 'value' && row[col_name.first] == '0.0%' %>
+                    <td><%= t'follow_up_committee.qa_indicators.without_data' %></td>
+                  <% else %>
+                    <td><%= row[col_name.first] %></td>
+                  <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p style="margin: 1em;">
+          <em><%= t 'follow_up_committee.qa_indicators.without_audits_in_the_period' %></em>
+        </p>
+      <% end %>
     <% end %>
   <% end %>
+<% else %>
+  <h1 class="simple_title with_border_bottom">
+    <%= t 'follow_up_committee.qa_indicators.without_data' %>
+  </h1>
 <% end %>
 
 <div id="links">
