@@ -8,7 +8,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :high_risk_weaknesses_report,
+    private_actions = [:index, :synthesis_report, :high_risk_weaknesses_report,
       :fixed_weaknesses_report]
 
     private_actions.each do |action|
@@ -32,6 +32,59 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_template 'conclusion_committee_reports/index'
   end
 
+  test 'synthesis report' do
+    perform_auth
+
+    get :synthesis_report
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/synthesis_report'
+
+    assert_nothing_raised(Exception) do
+      get :synthesis_report, :synthesis_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_committee_reports/synthesis_report'
+  end
+
+  test 'filtered synthesis report' do
+    perform_auth
+    get :synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+      }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_not_nil assigns(:filters)
+    assert_equal 2, assigns(:filters).size
+    assert_template 'conclusion_committee_reports/synthesis_report'
+  end
+
+  test 'create synthesis report' do
+    perform_auth
+
+    post :create_synthesis_report, :synthesis_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(
+      I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'synthesis_report', 0)
+  end
+  
   test 'qa indicators' do
     perform_auth
 

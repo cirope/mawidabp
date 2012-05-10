@@ -29,6 +29,131 @@ class ConclusionCommitteeReportsController < ApplicationController
   # Crea un PDF con una síntesis de las observaciones para un determinado rango
   # de fechas
   #
+  # * GET /conclusion_committee_reports/synthesis_report
+  def synthesis_report
+    @title = t('conclusion_committee_report.synthesis_report_title')
+    @from_date, @to_date = *make_date_range(params[:synthesis_report])
+    @periods = periods_for_interval
+    @column_order = ['business_unit_report_name', 'review', 'score',
+        'process_control', 'weaknesses_count', 'oportunities_count']
+    @filters = []
+    @risk_levels = []
+    @audits_by_business_unit = {}
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date,
+      @to_date)
+
+    if params[:synthesis_report]
+      unless params[:synthesis_report][:business_unit_type].blank?
+        @selected_business_unit = BusinessUnitType.find(
+          params[:synthesis_report][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(
+          @selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
+          "\"#{@selected_business_unit.name.strip}\""
+      end
+
+      unless params[:synthesis_report][:business_unit].blank?
+        business_units = params[:synthesis_report][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
+
+        unless business_units.empty?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(
+            *business_units)
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
+            "\"#{params[:synthesis_report][:business_unit].strip}\""
+        end
+      end
+    end
+
+    business_unit_types = @selected_business_unit ?
+      [@selected_business_unit] : BusinessUnitType.list
+
+    @periods.each do |period|
+      business_unit_types.each do |but|
+        columns = {
+          'business_unit_report_name' => [but.business_unit_label, 15],
+          'review' => [Review.model_name.human, 16],
+          'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
+          'process_control' =>
+            ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
+          'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]
+        }
+        column_data = []
+        review_scores = []
+        name = but.name
+
+        conclusion_reviews.for_period(period).each do |c_r|
+          if c_r.review.business_unit.business_unit_type_id == but.id
+            process_controls = {}
+            weaknesses_count = {}
+            
+            c_r.review.control_objective_items_for_score.each do |coi|
+              process_controls[coi.process_control.name] ||= []
+              process_controls[coi.process_control.name] << coi
+            end
+
+            process_controls.each do |pc, control_objective_items|
+              coi_count = control_objective_items.inject(0.0) do |acc, coi|
+                acc + (coi.relevance || 0)
+              end
+              total = control_objective_items.inject(0.0) do |acc, coi|
+                acc + coi.effectiveness * (coi.relevance || 0)
+              end
+
+              process_controls[pc] = coi_count > 0 ?
+                (total / coi_count.to_f).round : 100
+            end
+
+            c_r.review.final_weaknesses.each do |w|
+              @risk_levels |= parameter_in(@auth_organization.id,
+                :admin_finding_risk_levels, w.created_at).
+                sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+
+              weaknesses_count[w.risk_text] ||= 0
+              weaknesses_count[w.risk_text] += 1
+            end
+
+           weaknesses_count_text = weaknesses_count.values.sum == 0 ?
+              t('conclusion_committee_report.synthesis_report.without_weaknesses') :
+              @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
+            process_control_text = process_controls.sort do |pc1, pc2|
+              pc1[1] <=> pc2[1]
+            end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
+            oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
+              c_r.review.final_oportunities.count.to_s :
+              t('conclusion_committee_report.synthesis_report.without_oportunities')
+
+            review_scores << c_r.review.score
+            column_data << {
+              'business_unit_report_name' => c_r.review.business_unit.name,
+              'review' => c_r.review.to_s,
+              'score' => c_r.review.reload.score_text,
+              'process_control' => process_control_text,
+              'weaknesses_count' => @risk_levels.blank? ?
+                t('conclusion_committee_report.synthesis_report.without_weaknesses') :
+                weaknesses_count_text,
+              'oportunities_count' => oportunities_count_text
+            }
+          end
+        end
+
+        @audits_by_business_unit[period] ||= []
+        @audits_by_business_unit[period] << {
+          :name => name,
+          :external => but.external,
+          :columns => columns,
+          :column_data => column_data,
+          :review_scores => review_scores
+        }
+      end
+    end
+  end
+
+  # Crea un PDF con una síntesis de las observaciones para un determinado rango
+  # de fechas
+  #
   # * POST /conclusion_committee_reports/create_synthesis_report
   def create_synthesis_report
     self.synthesis_report
