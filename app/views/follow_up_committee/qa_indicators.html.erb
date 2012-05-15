@@ -21,7 +21,7 @@
             <% data[:column_data].each do |row| %>
               <tr>
                 <% @columns.each do |col_name| %>
-                  <% if col_name.first == 'value' && row[col_name.first] == '0.0%' %>
+                  <% if col_name.first == 'value' && row[col_name.first].to_f == 0.0 %>
                     <td><%= t'follow_up_committee.qa_indicators.without_data' %></td>
                   <% else %>
                     <td><%= row[col_name.first] %></td>
