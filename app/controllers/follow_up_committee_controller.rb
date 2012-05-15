@@ -383,7 +383,7 @@ class FollowUpCommitteeController < ApplicationController
       end
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
-        (resolved_highest_risk / pending_highest_risk.to_f) * 100 : 100
+        (resolved_highest_risk / pending_highest_risk.to_f) * 100 : 0
       
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
