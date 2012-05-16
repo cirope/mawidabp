@@ -13,6 +13,10 @@ es:
     cancel: "Cancelar"
     close: "Cerrar"
     create: "Crear"
+    day:
+      zero: 0 dias
+      one: 1 dia
+      other: %{count} dias
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"

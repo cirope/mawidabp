@@ -367,7 +367,7 @@ class FollowUpCommitteeController < ApplicationController
         ['%d', :ancient_medium_risk_weaknesses]
       ]
       
-      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? days / total : 0
+      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? (days/total).round : 0
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -435,10 +435,17 @@ class FollowUpCommitteeController < ApplicationController
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
+          if i == :ancient_medium_risk_weaknesses
+          {
+            'indicator' => t(:'follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses'),
+            'value' => t('label.day', :count => indicators[i])
+          }
+          else
           {
             'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
             'value' => mask % indicators[i]
           }
+          end
         end
       }
     end
