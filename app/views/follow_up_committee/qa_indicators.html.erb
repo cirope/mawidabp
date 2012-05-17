@@ -22,7 +22,7 @@
               <tr>
                 <% @columns.each do |col_name| %>
                   <td>
-                    <% if col_name.first == 'value' && row[col_name.first].to_f == 0.0 %>
+                    <% if col_name.first == 'value' && row[col_name.first].blank? %>
                       <%= t'follow_up_committee.qa_indicators.without_data' %>
                     <% else %>
                       <%= row[col_name.first] %>

@@ -367,7 +367,8 @@ class FollowUpCommitteeController < ApplicationController
         ['%d', :ancient_medium_risk_weaknesses]
       ]
       
-      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? (days/total).round : 0
+      # Ancient mediun risk weaknesses rate
+      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? (days/total).round : nil
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -383,7 +384,7 @@ class FollowUpCommitteeController < ApplicationController
       end
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
-        (resolved_highest_risk / pending_highest_risk.to_f) * 100 : 0
+        (resolved_highest_risk / pending_highest_risk.to_f) * 100 : nil
       
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
@@ -401,7 +402,7 @@ class FollowUpCommitteeController < ApplicationController
       end
 
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
-        (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
+        (resolved_medium_risk / pending_medium_risk.to_f) * 100 : nil
       
       # Production level
       reviews_count = period.plans.inject(0.0) do |pt, p|
@@ -416,12 +417,12 @@ class FollowUpCommitteeController < ApplicationController
       end
       
       indicators[:production_level] = plan_items_count > 0 ?
-        (reviews_count / plan_items_count.to_f) * 100 : 100
+        (reviews_count / plan_items_count.to_f) * 100 : nil
       
       # Reviews score average
       internal_cfrs = cfrs.internal_audit
       indicators[:score_average] = internal_cfrs.size > 0 ?
-        (internal_cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / internal_cfrs.size.to_f).round : 100
+        (internal_cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / internal_cfrs.size.to_f).round : nil
       
       # Work papers digitalization
       wps = WorkPaper.where(
@@ -430,12 +431,12 @@ class FollowUpCommitteeController < ApplicationController
       )
       
       indicators[:digitalized] = wps.size > 0 ?
-        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : 100
+        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : nil
       
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
-          if i == :ancient_medium_risk_weaknesses
+          if i == :ancient_medium_risk_weaknesses && indicators[i]
           {
             'indicator' => t(:'follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses'),
             'value' => t('label.day', :count => indicators[i])
@@ -443,7 +444,7 @@ class FollowUpCommitteeController < ApplicationController
           else
           {
             'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
-            'value' => mask % indicators[i]
+            'value' => (mask % indicators[i] if indicators[i])
           }
           end
         end
@@ -497,7 +498,8 @@ class FollowUpCommitteeController < ApplicationController
           new_row = {}
 
           row.each do |column_name, column_content|
-            new_row[column_name] = column_content.to_iso
+            new_row[column_name] = column_content.present? ? column_content.to_iso :
+              (t'follow_up_committee.qa_indicators.without_data')
           end
 
           column_data << new_row
