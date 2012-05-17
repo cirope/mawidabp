@@ -158,8 +158,12 @@
   </div>
 
   <div class="column_headers">
-    <div class="item_column" style="width: 75%;">
+    <div class="item_column" style="width: 60%;">
       <h3><%= User.model_name.human %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
+        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></h3>
     </div>
     <div class="item_column" style="width: 15%;">
       <h3><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +

@@ -1691,6 +1691,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Dueño del proceso'
+        responsible_auditor: 'Auditor referente'
       group:
         name: "Nombre"
         description: "Descripción"

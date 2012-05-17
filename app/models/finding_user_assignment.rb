@@ -7,6 +7,7 @@ class FindingUserAssignment < ActiveRecord::Base
 
   # Scopes
   scope :owners, where(:process_owner => true)
+  scope :responsibles, where(:responsible_auditor => true)
 
   # Callbacks
   before_save :can_be_modified?, :assign_finding_type

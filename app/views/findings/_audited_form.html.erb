@@ -134,6 +134,7 @@
   <% unless @finding.users.blank? %>
     <% audited, auditors = *@finding.users.partition(&:audited?) %>
     <% process_owners = @finding.process_owners %>
+    <% responsible_auditors = @finding.responsible_auditors %>
     <div style="clear: both; margin: 0em 0em 1em 0em;">
       <h1><%= t('finding.responsibles', :count => @finding.users.size) %></h1>
       <table class="summary_table" style="margin-bottom: 2em;">
@@ -150,7 +151,9 @@
                   audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
                   audited.shift.try(:full_name) %>
               </td>
-              <td><%= auditors.shift.try(:full_name) %></td>
+              <td><%= responsible_auditors.include?(auditors.first) ?
+                   auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
+                  auditors.shift.try(:full_name) %></td>
             </tr>
           <% end %>
         </tbody>

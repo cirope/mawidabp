@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120201122347) do
+ActiveRecord::Schema.define(:version => 20120517151151) do
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -233,8 +233,9 @@ ActiveRecord::Schema.define(:version => 20120201122347) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner",                :default => false
-    t.string   "finding_type",  :limit => nil
+    t.boolean  "process_owner",                      :default => false
+    t.string   "finding_type",        :limit => nil
+    t.boolean  "responsible_auditor"
   end
 
   add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], :name => "index_finding_user_assignments_on_finding_id_finding_type_and_u"

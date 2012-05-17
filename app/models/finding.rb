@@ -1040,6 +1040,10 @@ class Finding < ActiveRecord::Base
   def process_owners
     self.finding_user_assignments.owners.map(&:user)
   end
+  
+  def responsible_auditors
+    self.finding_user_assignments.responsibles.map(&:user)
+  end
 
   def repeated_ancestors
     node, nodes = self, []
