@@ -6,13 +6,12 @@
           <tr>
             <td style="padding-right: 1em; width: 90%;">
               <% if @selected_user %>
-                <h2><%= @selected_user.full_name %></h2>
+                <h2><%= @selected_user.full_name %>
+                <%= t('activerecord.attributes.finding_user_assignment.responsible_auditor') if @is_responsible %>
+                </h2>
               <% else %>
                 <%= label_tag :user_id_select, User.model_name.human, :class => :inline %>
-                <%= select nil, :user_id,
-                  sort_options_array((@self_and_descendants + @related_users).map { |d| [d.full_name_with_function, d.id.to_s] }),
-                  {:prompt => true},
-                  {:name => :user_id, :id => :user_id_select, :class => :inline_item} %>
+                <%= show_finding_related_users %>
               <% end %>
             </td>
             <td class="nowrap" style="text-align: right;">
@@ -100,7 +99,7 @@
     if($(this).val()) {
       var url = '<%= findings_path(params[:completed]) %>';
       
-      BrowserManipulation.changeLocation(url, {'user_id': $(this).val()});
+      BrowserManipulation.changeLocation(url, jQuery.parseJSON($(this).val()));
     }
   });
 </script>

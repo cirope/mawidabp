@@ -16,7 +16,7 @@ class FindingsController < ApplicationController
     @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
     @related_users = @auth_user.related_users_and_descendants
-
+    @is_responsible = params[:as_responsible]
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}
@@ -24,7 +24,13 @@ class FindingsController < ApplicationController
 
     if @auth_user.committee? || @selected_user
       if @selected_user
-        default_conditions[User.table_name] = {:id => params[:user_id]}
+          default_conditions[User.table_name] = {:id => params[:user_id]}
+          
+          if @is_responsible
+            default_conditions[FindingUserAssignment.table_name] = {
+              :responsible_auditor => true
+            }
+          end
       end
     else
       self_and_descendants_ids = @self_and_descendants.map(&:id) +
@@ -51,13 +57,13 @@ class FindingsController < ApplicationController
           :review => [:conclusion_final_review, :period, :plan_item]
         }
       }, :users
-      ).where(@conditions).order(
-        @order_by || [
-          "#{Review.table_name}.created_at DESC",
-          "#{Finding.table_name}.state ASC",
-          "#{Finding.table_name}.review_code ASC"
-        ]
-      )
+    ).where(@conditions).order(
+      @order_by || [
+        "#{Review.table_name}.created_at DESC",
+        "#{Finding.table_name}.state ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ]
+    )
 
     respond_to do |format|
       format.html {

@@ -101,6 +101,18 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
   
+  test 'list findings for responsible auditor' do
+    perform_auth
+    user = User.find(users(:first_time_user).id)
+    get :index, :completed => 'incomplete', :user_id => user.id, :as_responsible => true
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert_equal 1, assigns(:findings).size
+    assert assigns(:findings).all? { |f| f.users.include?(user) }
+    assert_select '#error_body', false
+    assert_template 'findings/index'
+  end
+  
   test 'list findings for specific ids' do
     perform_auth
     ids = [

@@ -45,7 +45,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   finding_type: Weakness
   user: first_time_user
   process_owner: false
-  responsible_auditor: false
+  responsible_auditor: true
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification_administrator_user:
   finding: iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification

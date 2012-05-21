@@ -140,4 +140,25 @@ module FindingsHelper
     
     raw "#{finding_answers_count} / #{user_count}"
   end
+  
+  def show_finding_related_users
+    users = []
+    
+    (@self_and_descendants + @related_users).each do |u|
+      users << [
+        u.full_name_with_function, {:user_id => u.id}.to_json
+      ]
+      
+      unless u.can_act_as_audited?
+        users << [
+          "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.responsible_auditor')}",
+          {:user_id => u.id, :as_responsible => true}.to_json
+        ]
+      end
+    end
+    
+    select nil, :user_id, sort_options_array(users), {:prompt => true},
+      {:name => :user_id, :id => :user_id_select, :class => :inline_item} 
+  end
+  
 end
