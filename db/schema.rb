@@ -10,7 +10,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120517151151) do
+ActiveRecord::Schema.define(:version => 20120528181002) do
+
+  create_table "answer_options", :force => true do |t|
+    t.text     "option"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "answers", :force => true do |t|
+    t.text     "comments"
+    t.integer  "question_id"
+    t.integer  "poll_id"
+    t.text     "answer"
+    t.integer  "answer_option_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -472,6 +489,13 @@ ActiveRecord::Schema.define(:version => 20120517151151) do
 
   add_index "plans", ["period_id"], :name => "index_plans_on_period_id"
 
+  create_table "polls", :force => true do |t|
+    t.text     "comments"
+    t.integer  "questionnaire_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "privileges", :force => true do |t|
     t.string   "module",     :limit => 100
     t.boolean  "read",                      :default => false
@@ -531,6 +555,20 @@ ActiveRecord::Schema.define(:version => 20120517151151) do
   end
 
   add_index "process_controls", ["best_practice_id"], :name => "index_process_controls_on_best_practice_id"
+
+  create_table "questionnaires", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "questions", :force => true do |t|
+    t.integer  "sort_order"
+    t.integer  "answer_type"
+    t.text     "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "related_user_relations", :force => true do |t|
     t.integer  "user_id"
