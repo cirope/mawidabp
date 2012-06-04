@@ -1,11 +1,11 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+question_multi_choice:
+  question: ¿Está de acuerdo con las tareas que ud. realiza en la organización?
+  sort_order: 1
+  answer_type: 1
+  questionnaire: questionnaire_one
+  
+question_written:
+  question: ¿Qué sugerencias propone para el seguimiento de informes?
+  sort_order: 2
+  answer_type: 0
+  questionnaire: questionnaire_one
