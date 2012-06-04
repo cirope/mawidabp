@@ -1,5 +1,25 @@
-<p id="notice"><%= notice %></p>
+<div id="showed_data">
+  <p>
+    <b><%= Questionnaire.human_attribute_name :name %>:</b>
+    <%= @questionnaire.name %>
+  </p>
+  <p>
+    <b><%= Questionnaire.human_attribute_name :questions %>:</b>
+  </p>
+  <ol><% @questionnaire.questions.each do |question| %>
+    <li><b><%= question.question %></b></li>
+    <% if question.answer_type # Si es multi choice %>
+      <ul>
+      <% question.answer_options.each do |ao| %> 
+        <li><%= t "activerecord.attributes.answer_option.options.#{ao.option}" %></li>
+      <% end %>
+      </ul>
+    <% end %>
+  <% end %></ol>
+</div>
 
-
-<%= link_to 'Edit', edit_questionnaire_path(@questionnaire) %> |
-<%= link_to 'Back', questionnaires_path %>
+<div id="links">
+  <%= link_to t('label.edit'), edit_questionnaire_path(@questionnaire) %> |
+  <%= link_to t('label.list'), questionnaires_path %> |
+  <%= link_to_back %>
+</div>

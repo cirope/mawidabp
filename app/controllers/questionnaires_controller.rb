@@ -1,8 +1,12 @@
 class QuestionnairesController < ApplicationController
+  before_filter :auth, :check_privileges
   # GET /questionnaires
   # GET /questionnaires.json
   def index
-    @questionnaires = Questionnaire.all
+    @title = t 'questionnaire.index_title'
+    @questionnaires = Questionnaire.paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,6 +17,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1
   # GET /questionnaires/1.json
   def show
+    @title = t 'questionnaire.show_title'
     @questionnaire = Questionnaire.find(params[:id])
 
     respond_to do |format|
@@ -24,6 +29,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/new
   # GET /questionnaires/new.json
   def new
+    @title = t 'questionnaire.new_title'
     @questionnaire = Questionnaire.new
 
     respond_to do |format|
@@ -34,17 +40,29 @@ class QuestionnairesController < ApplicationController
 
   # GET /questionnaires/1/edit
   def edit
+    @title = t 'questionnaire.edit_title'
     @questionnaire = Questionnaire.find(params[:id])
   end
 
   # POST /questionnaires
   # POST /questionnaires.json
   def create
+    @title = t 'questionnaire.new_title'
     @questionnaire = Questionnaire.new(params[:questionnaire])
-
+    
+    @questionnaire.questions.each do |question|
+      if question.answer_type == 1 # Si es multi choice
+        Question::ANSWER_OPTIONS.each do |option|
+          ao = AnswerOption.new
+          ao.option = option
+          question.answer_options << ao
+        end
+      end
+    end
+    
     respond_to do |format|
       if @questionnaire.save
-        format.html { redirect_to @questionnaire, :notice => 'Questionnaire was successfully created.' }
+        format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_created') }
         format.json { render :json => @questionnaire, :status => :created, :location => @questionnaire }
       else
         format.html { render :action => "new" }
@@ -56,17 +74,33 @@ class QuestionnairesController < ApplicationController
   # PUT /questionnaires/1
   # PUT /questionnaires/1.json
   def update
+    @title = t 'questionnaire.edit_title'
     @questionnaire = Questionnaire.find(params[:id])
-
+    @questionnaire.assign_attributes(params[:questionnaire])
+    @questionnaire.questions.each do |question|
+      if question.answer_type == 1 && question.answer_options.empty? # Si es multi choice
+        Question::ANSWER_OPTIONS.each do |option|
+          ao = AnswerOption.new
+          ao.option = option
+          question.answer_options << ao
+        end
+      elsif question.answer_type == 0 # Si es escrita
+        question.answer_options.clear 
+      end
+    end
+     
     respond_to do |format|
       if @questionnaire.update_attributes(params[:questionnaire])
-        format.html { redirect_to @questionnaire, :notice => 'Questionnaire was successfully updated.' }
+        format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }
         format.json { render :json => @questionnaire.errors, :status => :unprocessable_entity }
       end
     end
+  rescue ActiveRecord::StaleObjectError
+    flash.alert = t 'questionnaire.stale_object_error'
+    redirect_to :action => :edit
   end
 
   # DELETE /questionnaires/1

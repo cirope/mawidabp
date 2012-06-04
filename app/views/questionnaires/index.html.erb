@@ -1,21 +1,28 @@
-<h1>Listing questionnaires</h1>
+<table class="list">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Questionnaire.human_attribute_name :name %></th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @questionnaires.each do |questionnaire| %>
-  <tr>
-    <td><%= link_to 'Show', questionnaire %></td>
-    <td><%= link_to 'Edit', edit_questionnaire_path(questionnaire) %></td>
-    <td><%= link_to 'Destroy', questionnaire, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <tbody>
+    <% @questionnaires.each do |questionnaire| %>
+      <tr class="<%= cycle('even', 'odd') %>">
+        <td></td>
+        <td><%= questionnaire.name %></td>
+        <td><%= link_to_show questionnaire %></td>
+        <td><%= link_to_edit edit_questionnaire_path(questionnaire) %></td>
+        <td><%= button_to_destroy questionnaire %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<br />
-
-<%= link_to 'New Questionnaire', new_questionnaire_path %>
+<div id="links">
+  <%= pagination_links @questionnaires %>
+  <%= link_to t('label.new'), new_questionnaire_path %>
+  <div class="clear"></div>
+</div>

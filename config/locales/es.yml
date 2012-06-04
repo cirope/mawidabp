@@ -64,6 +64,7 @@ es:
       parameters: "Parámetros"
       e_mails: "Correos"
       detracts: "Detractores"
+      questionnaires: "Cuestionarios"
     planning_title: "PLANIFICACIÓN"
     planning:
       periods: "Periodos"
@@ -1069,6 +1070,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
 
+  questionnaire:
+    index_title: "Listado de cuestionarios"
+    edit_title: "Modificar cuestionario"
+    new_title: "Agregar cuestionario"
+    show_title: "Detalles del cuestionario"
+    correctly_created: "El cuestionario ha sido agregado correctamente."
+    correctly_updated: "El cuestionario ha sido actualizado correctamente."
+    stale_object_error: "El cuestionario no fue actualizado, intente nuevamente."
   report:
     index_title: "Listado de reportes"
 
@@ -1450,6 +1459,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   activerecord:
     models:
+      answer: "Respuesta"
+      answer_multi_choice: "Múltiple opción"
+      answer_option: "Opción de respuesta"
+      answer_written: "Respuesta escrita"
       best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
       business_unit_type: "Tipo de unidad de negocio"
@@ -1480,11 +1493,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
+      poll: "Encuesta"
       privilege: "Privilegio"
       procedure_control: "Procedimientos y pruebas de control"
       procedure_control_item: "Registro del procedimiento de control"
       procedure_control_subitem: "Subítem del procedimiento de control"
       process_control: "Proceso de negocio"
+      question: "Cuestión"
+      questionnaire: "Cuestionario"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
       resource: "Recurso"
@@ -1497,6 +1513,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       work_paper: "Papel de trabajo"
 
     attributes:
+      answer:
+        comments: "Comentarios"
+        answer: "Respuesta"
+      answer_option:
+        option: "Opción"
+        options:
+          strongly_disagree: "Muy en desacuerdo"
+          disagree: "En desacuerdo"
+          neither_agree_nor_disagree: "Ni acuerdo ni desacuerdo"
+          agree: "De acuerdo"
+          strongly_agree: "Muy de acuerdo"
       best_practice:
         name: "Nombre"
         description: "Descripción"
@@ -1816,6 +1843,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
+      poll:
+        comments: "Comentarios"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1848,6 +1877,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Proceso de negocio"
         order: "Orden"
         control_objectives: "Objetivos de control"
+      question:
+        sort_order: "Orden"
+        question: "Cuestión"
+        answer_type: "Tipo de respuesta"
+      questionnaire:
+        name: "Nombre"
+        questions: "Cuestiones"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'

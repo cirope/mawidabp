@@ -1,17 +1,46 @@
-<%= form_for(@questionnaire) do |f| %>
-  <% if @questionnaire.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@questionnaire.errors.count, "error") %> prohibited this questionnaire from being saved:</h2>
-
-      <ul>
-      <% @questionnaire.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+<%= form_for(@questionnaire) do |qe_f| %>
+  <%= content_for :js_extra do %>
+    <%= raw "var question='#{generate_template(qe_f, :questions)}';" %>
   <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
+  <%= qe_f.error_messages %>
+  <div class="form_column_left">
+    <p>
+      <%= qe_f.label :name %>
+      <%= qe_f.text_field :name, :maxlength => 255, :autofocus => true %>
+    </p>
   </div>
+  
+  <div class="items">
+    <div class="column_headers">
+      <div class="item_column" style="width: 50%;">
+        <h3><%= t 'activerecord.attributes.questionnaire.questions' %></h3>
+      </div>
+      <div class="item_column" style="width: 15%;">
+        <h3><%= Question.human_attribute_name :answer_type %></h3>
+      <div class="item_column" style="width: 10%;"></div>
+      <div class="clear"></div>
+      </div>
+    </div>
+        
+    <div id="questions">    
+      <% @questionnaire.questions.build if @questionnaire.questions.empty? %>
+      <%= qe_f.fields_for :questions do |qn_f| %>
+        <%= render :partial => 'question', :locals => {:f => qn_f} %>
+      <% end %>
+    </div>  
+                 
+    <p class="add_item">
+      <%= link_to 'Agregar cuestión', '#',
+        :'data-template' => :question, :'data-event' => 'addNestedItem',
+        :'data-container' => '#questions' %>
+    </p>
+  </div>
+  <%= hidden_lock_version(qe_f) %>
+  <p>
+    <span class="button"><%= qe_f.submit %></span>
+  </p>
 <% end %>
+<!--[eoform:help_content] -->
+<script type="text/javascript">
+  Helper.makeSortable('#questions', 'div.question', 'a.move');
+</script>

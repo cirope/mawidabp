@@ -1,5 +1,6 @@
-<h1>New questionnaire</h1>
+<%= render_form t('label.save') %>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', questionnaires_path %>
+<div id="links">
+  <%= link_to t('label.list'), questionnaires_path %> |
+  <%= link_to_back %>
+</div>

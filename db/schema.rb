@@ -10,24 +10,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120528181002) do
+ActiveRecord::Schema.define(:version => 20120530171927) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
     t.integer  "question_id"
+    t.integer  "lock_version", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "answer_options", ["option", "question_id"], :name => "index_answer_options_on_option_and_question_id"
 
   create_table "answers", :force => true do |t|
     t.text     "comments"
     t.integer  "question_id"
     t.integer  "poll_id"
+    t.integer  "lock_version",     :default => 0
     t.text     "answer"
     t.integer  "answer_option_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "answers", ["answer", "question_id", "poll_id"], :name => "index_answers_on_answer_and_question_id_and_poll_id"
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -492,9 +498,12 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
   create_table "polls", :force => true do |t|
     t.text     "comments"
     t.integer  "questionnaire_id"
+    t.integer  "lock_version",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "polls", ["questionnaire_id"], :name => "index_polls_on_questionnaire_id"
 
   create_table "privileges", :force => true do |t|
     t.string   "module",     :limit => 100
@@ -558,17 +567,24 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
 
   create_table "questionnaires", :force => true do |t|
     t.string   "name"
+    t.integer  "lock_version", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "questionnaires", ["name"], :name => "index_questionnaires_on_name"
 
   create_table "questions", :force => true do |t|
     t.integer  "sort_order"
     t.integer  "answer_type"
     t.text     "question"
+    t.integer  "questionnaire_id"
+    t.integer  "lock_version",     :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "questions", ["question", "questionnaire_id"], :name => "index_questions_on_question_and_questionnaire_id"
 
   create_table "related_user_relations", :force => true do |t|
     t.integer  "user_id"

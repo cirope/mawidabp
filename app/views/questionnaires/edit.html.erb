@@ -1,6 +1,7 @@
-<h1>Editing questionnaire</h1>
+<%= render_form t('label.modify') %>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @questionnaire %> |
-<%= link_to 'Back', questionnaires_path %>
+<div id="links">
+  <%= link_to t('label.show'), @questionnaire %> |
+  <%= link_to t('label.list'), questionnaires_path %> |
+  <%= link_to_back %>
+</div>

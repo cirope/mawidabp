@@ -237,7 +237,6 @@ class ApplicationController < ActionController::Base
   def create_exception_file(exception) #:doc:
     if @auth_user
       dir_name = "#{ERROR_FILES_PATH}#{@auth_user.user}#{File::SEPARATOR}"
-      filtered_env = request.filtered_env
 
       FileUtils.makedirs dir_name
 
@@ -249,10 +248,6 @@ class ApplicationController < ActionController::Base
         exception.backtrace.each { |l| out << "#{l}\n" }
         
         out << "\nENV\n\n"
-
-        filtered_env.keys.sort.each do |key|
-          out << "#{key}: #{filtered_env[key].inspect}\n"
-        end
       end
     end
   end

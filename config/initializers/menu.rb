@@ -135,6 +135,12 @@ APP_AUDITOR_MENU_ITEMS = [
         :order => 6,
         :controllers => :detracts,
         :url => {:controller => :detracts}
+      ),
+      MenuItem.new(
+        :questionnaires,
+        :order => 7,
+        :controllers => :questionnaires,
+        :url => {:controller => :questionnaires}
       )
     ]
   ),
