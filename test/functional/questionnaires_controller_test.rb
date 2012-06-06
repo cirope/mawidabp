@@ -1,49 +1,135 @@
 require 'test_helper'
 
 class QuestionnairesControllerTest < ActionController::TestCase
-  setup do
-    @questionnaire = questionnaires(:one)
+    
+  test 'public and private actions' do
+    id_param = {:id => questionnaires(:questionnaire_one).to_param}
+    public_actions = []
+    private_actions = [
+      [:get, :index],
+      [:get, :show, id_param],
+      [:get, :new],
+      [:get, :edit, id_param],
+      [:post, :create],
+      [:put, :update, id_param],
+      [:delete, :destroy, id_param]
+    ]
+
+    private_actions.each do |action|
+      send *action
+      assert_redirected_to :controller => :users, :action => :login
+      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
+    end
+    
+    public_actions.each do |action|
+      send *action
+      assert_response :success
+    end
   end
 
-  test "should get index" do
+  test 'list questionnaires' do
+    perform_auth
     get :index
     assert_response :success
     assert_not_nil assigns(:questionnaires)
+    assert_select '#error_body', false
+    assert_template 'questionnaires/index'
   end
 
-  test "should get new" do
+  test 'show questionnaire' do
+    perform_auth
+    get :show, :id => questionnaires(:questionnaire_one).id
+    assert_response :success
+    assert_not_nil assigns(:questionnaire)
+    assert_select '#error_body', false
+    assert_template 'questionnaires/show'
+  end
+  
+  test 'new questionnaire' do
+    perform_auth
     get :new
     assert_response :success
+    assert_not_nil assigns(:questionnaire)
+    assert_select '#error_body', false
+    assert_template 'questionnaires/new'
   end
 
-  test "should create questionnaire" do
-    assert_difference('Questionnaire.count') do
-      post :create, :questionnaire => @questionnaire.attributes
+  test "create questionnaire" do
+    perform_auth
+    assert_difference 'Questionnaire.count' do
+      assert_difference 'Question.count', 2 do
+        assert_difference 'AnswerOption.count', 5 do
+          post :create, {
+            :questionnaire => {
+              :name => "Nuevo cuestionario",
+              :questions_attributes => {
+                '1' => {
+                  :question => "Cuestion multi choice",
+                  :sort_order => 1,
+                  :answer_type => 1
+                },
+                '2' => {
+                  :question => "Cuestion written",
+                  :sort_order => 2,
+                  :answer_type => 0
+                }
+              }
+            }
+          }
+        end
+      end
     end
-
+    puts assigns(:questionnaire).errors.full_messages.join('; ')
     assert_redirected_to questionnaire_path(assigns(:questionnaire))
   end
 
-  test "should show questionnaire" do
-    get :show, :id => @questionnaire.to_param
+  test 'edit questionnaire' do
+    perform_auth
+    get :edit, :id => questionnaires(:questionnaire_one).id
     assert_response :success
+    assert_not_nil assigns(:questionnaire)
+    assert_select '#error_body', false
+    assert_template 'questionnaires/edit'
   end
 
-  test "should get edit" do
-    get :edit, :id => @questionnaire.to_param
-    assert_response :success
-  end
-
-  test "should update questionnaire" do
-    put :update, :id => @questionnaire.to_param, :questionnaire => @questionnaire.attributes
-    assert_redirected_to questionnaire_path(assigns(:questionnaire))
-  end
-
-  test "should destroy questionnaire" do
-    assert_difference('Questionnaire.count', -1) do
-      delete :destroy, :id => @questionnaire.to_param
+  test "update questionnaire" do
+    perform_auth
+    assert_no_difference ['Questionnaire.count', 'Question.count'] do
+      put :update, {
+        :id => questionnaires(:questionnaire_one).id,
+        :questionnaire => {
+          :name => 'Cuestionario actualizado',
+          :questions_attributes => {
+            '1' =>  {
+              :id => questions(:question_multi_choice).id,
+              :question => 'Cuestion updated',
+              :sort_order => 1,
+              :answer_type => 1,
+            }
+          }
+        }
+      }
+    end
+    
+    puts @response.body
+    assert_redirected_to questionnaires_url
+    puts assigns(:questionnaire).errors.full_messages.join('; ')
+    assert_not_nil assigns(:questionnaire)
+    assert_equal 'Cuestionario actualizado', assigns(:questionnaire).name
+    assert_equal 'Cuestion updated', Question.find(
+      questions(:question_multi_choice).id).question
     end
 
-    assert_redirected_to questionnaires_path
+  test 'destroy questionnaire' do
+    perform_auth
+    assert_difference ['Questionnaire.count'], -1 do
+      assert_difference 'Question.count', -2 do
+        assert_difference ['AnswerOption.count'], -5 do
+          delete :destroy, :id => questionnaires(:questionnaire_one).id
+        end
+      end
+    end
+    
+    assert_redirected_to questionnaires_url
   end
 end
