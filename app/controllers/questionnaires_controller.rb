@@ -51,7 +51,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.new(params[:questionnaire])
     
     @questionnaire.questions.each do |question|
-      if question.answer_type == 1 # Si es multi choice
+      if question.answer_multi_choice?
         Question::ANSWER_OPTIONS.each do |option|
           ao = AnswerOption.new
           ao.option = option
@@ -78,13 +78,13 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.find(params[:id])
     @questionnaire.assign_attributes(params[:questionnaire])
     @questionnaire.questions.each do |question|
-      if question.answer_type == 1 && question.answer_options.empty? # Si es multi choice
+      if question.answer_multi_choice? && question.answer_options.empty?
         Question::ANSWER_OPTIONS.each do |option|
           ao = AnswerOption.new
           ao.option = option
           question.answer_options << ao
         end
-      elsif question.answer_type == 0 # Si es escrita
+      elsif question.answer_written?
         question.answer_options.clear 
       end
     end
