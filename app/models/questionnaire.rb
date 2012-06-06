@@ -4,6 +4,7 @@ class Questionnaire < ActiveRecord::Base
   }  
   # Validaciones
   validates :name, :presence => true
+  validates_uniqueness_of :name, :allow_nil => true, :allow_blank => true
   validates_length_of :name, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones
