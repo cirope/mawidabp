@@ -91,7 +91,7 @@ class QuestionnairesController < ApplicationController
      
     respond_to do |format|
       if @questionnaire.update_attributes(params[:questionnaire])
-        format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_updated') }
+        format.html { redirect_to questionnaires_url, :notice => (t 'questionnaire.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }
