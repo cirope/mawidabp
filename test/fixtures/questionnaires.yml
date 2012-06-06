@@ -1,2 +1,5 @@
 questionnaire_one:
   name: Encuesta al personal de auditoría
+  
+questionnaire_two:
+  name: Encuesta de fin de año
