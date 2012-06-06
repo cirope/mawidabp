@@ -28,4 +28,9 @@ class Question < ActiveRecord::Base
   has_many :answer_options, :dependent => :destroy
   has_many :answer
   belongs_to :questionnaire
+  
+  ANSWER_TYPES.each do |answer_type, answer_value|
+    define_method("answer_#{answer_type}?") { self.answer_type == answer_value }
+  end
+
 end
