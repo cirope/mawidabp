@@ -156,6 +156,7 @@ class User < ActiveRecord::Base
   
   # Relaciones
   belongs_to :resource
+  has_many :polls, :dependent => :destroy
   has_many :old_passwords, :dependent => :destroy
   has_many :login_records, :dependent => :destroy
   has_many :error_records, :dependent => :destroy
