@@ -9,5 +9,6 @@ class AnswerOption < ActiveRecord::Base
     :allow_blank => true
   # Relaciones
   belongs_to :question
+  has_one :answer_multi_choice
   has_many :answer_multi_choice
 end

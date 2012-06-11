@@ -1,5 +1,7 @@
 MawidaApp::Application.routes.draw do
   resources :questionnaires
+  
+  resources :polls
 
   resources :e_mails, :only => [:index, :show]
 

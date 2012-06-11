@@ -15,5 +15,11 @@ class Poll < ActiveRecord::Base
   
   def initialize(attributes = nil, options = {})
     super(attributes, options)
+    
+    if self.questionnaire && self.answers.empty?
+      self.questionnaire.questions.each do |question|
+        self.answers.build(:question => question)
+      end
+    end
   end
 end

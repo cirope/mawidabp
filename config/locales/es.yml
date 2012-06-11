@@ -1055,7 +1055,16 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     errors:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-
+  
+  poll:  
+    index_title: "Listado de encuestas"
+    edit_title: "Modificar encuesta"
+    new_title: "Agregar encuesta"
+    show_title: "Detalles de la encuesta"
+    correctly_created: "La encuesta ha sido agregada correctamente."
+    correctly_updated: "La encuesta ha sido actualizada correctamente."
+    stale_object_error: "La encuesta no fue actualizada, intente nuevamente."
+    
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"
@@ -1069,7 +1078,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     add_procedure_control_subitem: "Agregar procedimiento de control"
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
-
+  
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1516,6 +1525,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
       answer:
         comments: "Comentarios"
         answer: "Respuesta"
+        question: "Cuesti√≥n"
       answer_option:
         option: "Opci√≥n"
         options:
@@ -1845,6 +1855,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         total_resources_cost: "Costo total"
       poll:
         comments: "Comentarios"
+        questionnaire: "Cuestionario"
       privilege:
         module: "M√≥dulo"
         read: "Lectura"
@@ -1884,6 +1895,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
       questionnaire:
         name: "Nombre"
         questions: "Cuestiones"
+        polls: "Encuestas"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'

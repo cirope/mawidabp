@@ -1,0 +1,28 @@
+<table class="list">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= Questionnaire.human_attribute_name :name %></th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @polls.each do |poll| %>
+      <tr class="<%= cycle('even', 'odd') %>">
+        <td></td>
+        <td><%= poll.questionnaire.name %></td>
+        <td><%= link_to_show poll %></td>
+        <td><%= link_to_edit edit_poll_path(poll) %></td>
+        <td><%= button_to_destroy poll %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @polls %>
+  <%= link_to t('label.new'), new_poll_path %>
+  <div class="clear"></div>
+</div>

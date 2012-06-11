@@ -1,0 +1,22 @@
+<%= form_for(@poll) do |p_f| %>
+  <%= p_f.error_messages %>
+  <div class="items">
+    <h3><%= t 'activerecord.attributes.questionnaire.questions' %></h3>
+    <div id="questions">    
+      <%= p_f.fields_for :answers do |a_f| %>    
+        <%= render :partial => 'answer', :locals => {:f => a_f} %>
+      <% end %>
+    </div>  
+  </div>
+  <div class="form_column_left">
+    <p>
+      <%= p_f.label :comments %>
+      <%= p_f.text_area :comments, :maxlength => 255 %>
+    </p>
+  </div>
+  <%= hidden_lock_version(p_f) %>
+  <%= p_f.hidden_field :questionnaire_id %>
+  <p>
+    <span class="button"><%= p_f.submit %></span>
+  </p>
+<% end %>

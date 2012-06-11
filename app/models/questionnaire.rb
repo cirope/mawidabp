@@ -8,7 +8,7 @@ class Questionnaire < ActiveRecord::Base
   validates_length_of :name, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones
-  has_many :poll, :dependent => :destroy
+  has_many :polls, :dependent => :destroy
   has_many :questions, :dependent => :destroy,
     :order => "#{Question.table_name}.sort_order ASC"
   

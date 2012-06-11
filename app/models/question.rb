@@ -8,11 +8,11 @@ class Question < ActiveRecord::Base
     :multi_choice => 1
   }
   ANSWER_OPTIONS = [
-    :strongly_disagree,
-    :disagree,
-    :neither_agree_nor_disagree,
+    :strongly_agree,    
     :agree,
-    :strongly_agree
+    :neither_agree_nor_disagree,
+    :disagree,    
+    :strongly_disagree    
   ]  
   
   # Validaciones
