@@ -111,7 +111,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
       }
     end
     
-    puts @response.body
     assert_redirected_to questionnaires_url
     puts assigns(:questionnaire).errors.full_messages.join('; ')
     assert_not_nil assigns(:questionnaire)

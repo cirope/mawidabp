@@ -27,7 +27,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
     end
   end
   
-  # Prueba de actualización de una cuestión
+  # Prueba de actualización de un cuestionario
   test 'update' do
     assert @questionnaire.update_attributes(:name => 'Updated name'),
       @questionnaire.errors.full_messages.join('; ')
@@ -35,7 +35,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
     assert_equal 'Updated name', @questionnaire.name
   end
   
-  # Prueba de eliminación de una cuestión
+  # Prueba de eliminación de un cuestionario
   test 'delete' do
     assert_difference 'Questionnaire.count', -1 do
       assert_difference 'Question.count', -2 do        

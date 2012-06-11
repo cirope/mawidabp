@@ -1,11 +1,13 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+answer_written:
+  comments: "Exclusivamente a través de mawidabp"
+  answer: "Sugiero que el seguimiento se realice a través de mawidabp"
+  question: question_written
+  poll: poll_one
+  type: <%= AnswerWritten.name %>
+  
+answer_multi_choice:  
+  comments: "Me agrada la forma de trabajo"
+  answer_option: ao1
+  question: question_multi_choice
+  poll: poll_one
+  type: <%= AnswerMultiChoice.name %>
