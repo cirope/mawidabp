@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   validates_each :password do |record, attr, value|
     user = User.find(record.id) if record.id && User.exists?(record.id)
     
-    if user && user.change_password_hash.blank?
+    if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
       password_min_length = record.get_parameter_for_now(
