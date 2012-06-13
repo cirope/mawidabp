@@ -140,11 +140,11 @@ class User < ActiveRecord::Base
       end
 
       # Repetición de contraseñas anteriores
-      if user && value && user.password != digested_password
+      if user && user.password != digested_password
         repeated = record.last_passwords.any? do |p|
           digested_password == p.password
         end
-      elsif user
+      elsif user && value
         repeated = true
       end
 
