@@ -391,7 +391,7 @@ class User < ActiveRecord::Base
   end
 
   def first_login?
-    self.last_access.blank?
+    self.last_access.blank? || self.last_access_was.blank?
   end
 
   def must_change_the_password?
