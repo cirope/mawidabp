@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
       password_regex = Regexp.new record.get_parameter_for_now(
         :security_password_constraint)
 
-      record.errors.add attr, :invalid unless value =~ password_regex
+      record.errors.add attr, :invalid if value && value !~ password_regex
 
       # Longitud mínima
       if password_min_length != 0 && value && value.length < password_min_length
@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
       end
 
       # Repetición de contraseñas anteriores
-      if user && user.password != digested_password
+      if user && value && user.password != digested_password
         repeated = record.last_passwords.any? do |p|
           digested_password == p.password
         end
