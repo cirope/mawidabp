@@ -117,6 +117,7 @@ class ConclusionFinalReview < ConclusionReview
 
   # Relaciones
   has_one :conclusion_draft_review, :through => :review
+  has_many :polls, :as => :pollable
 
   def self.columns_for_sort
     ConclusionReview.columns_for_sort.dup.merge(

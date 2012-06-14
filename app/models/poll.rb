@@ -9,6 +9,7 @@ class Poll < ActiveRecord::Base
   # Relaciones
   belongs_to :questionnaire
   belongs_to :user
+  belongs_to :pollable, :polymorphic => true
   has_many :answers, :dependent => :destroy
   
   accepts_nested_attributes_for :answers
