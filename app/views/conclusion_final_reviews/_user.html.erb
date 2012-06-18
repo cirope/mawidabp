@@ -23,6 +23,10 @@
           :readonly => true %>
       <% end %>
     </div>
+    <div class="item_field" style="width: 30%;">
+      <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id, 
+          :name, :prompt => t('label.no') %>
+    </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= remove_item_link nil, 'user' %>
     </div>

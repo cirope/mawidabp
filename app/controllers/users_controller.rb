@@ -291,9 +291,14 @@ class UsersController < ApplicationController
             auth_user.logged_in!(session[:last_access])
             session[:user_id] = auth_user.id
             session[:organization_id] = @organization.id
-            go_to = session[:go_to] || {:controller => :welcome}
+            if poll = auth_user.first_pending_poll
+              flash.notice = t 'poll.must_answer_poll'
+              go_to = session[:go_to] || edit_poll_url(poll)
+            else
+              go_to = session[:go_to] || { :controller => :welcome }
+            end
             session[:go_to], session[:record_id] = nil, record.id
-
+            
             redirect_to go_to
           end
         end

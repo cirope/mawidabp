@@ -35,7 +35,7 @@ class PollsController < ApplicationController
   # GET /polls/new.json
   def new
     @title = t 'poll.new_title'
-    @poll = Poll.new(:questionnaire_id => Questionnaire.first.try(:id))
+    @poll = Poll.new
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @poll }
@@ -54,7 +54,7 @@ class PollsController < ApplicationController
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
     @poll.user = @auth_user
-    
+        
     respond_to do |format|
       if @poll.save
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
@@ -71,10 +71,10 @@ class PollsController < ApplicationController
   def update
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])
-         
+             
     respond_to do |format|
       if @poll.update_attributes(params[:poll])
-        format.html { redirect_to polls_url, :notice => (t 'poll.correctly_updated') }
+        format.html { redirect_to welcome_url, :notice => (t 'poll.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }

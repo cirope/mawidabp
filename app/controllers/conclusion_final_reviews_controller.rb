@@ -252,14 +252,21 @@ class ConclusionFinalReviewsController < ApplicationController
         :include_score_sheet => include_score_sheet,
         :include_global_score_sheet => include_global_score_sheet
       }
+      
+        if user && !users.include?(user)
+          @conclusion_final_review.send_by_email_to(user, send_options)
 
-      if user && !users.include?(user)
-        @conclusion_final_review.send_by_email_to(user, send_options)
-
-        users << user
+          users << user
+        end
+        
+        if user && user_data[:questionnaire_id].present?
+          @conclusion_final_review.polls.create!(
+            :questionnaire_id => user_data[:questionnaire_id],
+            :user_id => user.id
+          )
+        end
       end
-    end
-
+    
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
 

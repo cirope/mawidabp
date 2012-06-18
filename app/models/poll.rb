@@ -10,7 +10,11 @@ class Poll < ActiveRecord::Base
   belongs_to :questionnaire
   belongs_to :user
   belongs_to :pollable, :polymorphic => true
-  has_many :answers, :dependent => :destroy
+  has_many :answers, :include => :question, :dependent => :destroy, :order => "#{Question.table_name}.sort_order ASC"
+  
+  before_validation(:on => :update) do
+    self.answered = true
+  end
   
   accepts_nested_attributes_for :answers
   

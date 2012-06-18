@@ -4,14 +4,20 @@
       <%= "#{@poll.user.last_name}, #{@poll.user.name}"  %>
   </p>  
   <p>  
+    <b><%= Poll.human_attribute_name :answered %>: </b>
+      <%= @poll.answered ? t('label.yes') : t('label.no')  %>
+  </p>  
+  <p>  
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
   <ol><% @poll.answers.each do |answer| %>
     <li><b><%= answer.question.question %></b></li>
-    <% if answer.question.answer_multi_choice? %>
-      <%= t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}" %>
-    <% elsif answer.question.answer_written? %>
-      <%= answer.answer %>
+    <% if @poll.answered? %>
+      <% if answer.question.answer_multi_choice? %>
+        <%= t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}" %>
+      <% elsif answer.question.answer_written? %>
+        <%= answer.answer %>
+      <% end %>
     <% end %>
     <% if answer.comments.present? %>
     <p>

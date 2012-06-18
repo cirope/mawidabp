@@ -230,7 +230,11 @@ class User < ActiveRecord::Base
     
     self.roles_changed = true
   end
-
+  
+  def first_pending_poll
+    self.polls.detect { |p| p.answered == false }
+  end  
+  
   def roles(organization_id = nil)
     @organization_roles_cache ||= {}
 

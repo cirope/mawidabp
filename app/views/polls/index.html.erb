@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th></th>
-      <th><%= Questionnaire.human_attribute_name :name %></th>
+      <th><%= User.human_attribute_name :user %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -11,7 +11,7 @@
     <% @polls.each do |poll| %>
       <tr class="<%= cycle('even', 'odd') %>">
         <td></td>
-        <td><%= poll.questionnaire.name %></td>
+        <td><%= "#{poll.user.name} #{poll.user.last_name}"  %></td>
         <td><%= link_to_show poll %></td>
         <td><%= link_to_edit edit_poll_path(poll) %></td>
         <td><%= button_to_destroy poll %></td>
