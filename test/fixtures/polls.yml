@@ -1,4 +1,8 @@
 poll_one:
   questionnaire: questionnaire_one
   user: administrator_user
-  comments: "Encuesta al administrador"
+  answered: false
+  comments: Encuesta al administrador
+  pollable_id: <%= ActiveRecord::Fixtures.identify(:conclusion_current_final_review) %>
+  pollable_type: ConclusionReview
+  

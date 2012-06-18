@@ -79,7 +79,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
         end
       end
     end
-    puts assigns(:questionnaire).errors.full_messages.join('; ')
     assert_redirected_to questionnaire_path(assigns(:questionnaire))
   end
 
@@ -112,7 +111,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
     end
     
     assert_redirected_to questionnaires_url
-    puts assigns(:questionnaire).errors.full_messages.join('; ')
     assert_not_nil assigns(:questionnaire)
     assert_equal 'Cuestionario actualizado', assigns(:questionnaire).name
     assert_equal 'Cuestion updated', Question.find(
@@ -128,7 +126,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
         end
       end
     end
-    
     assert_redirected_to questionnaires_url
   end
 end

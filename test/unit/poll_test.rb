@@ -11,13 +11,18 @@ class PollTest < ActiveSupport::TestCase
     assert_equal polls(:poll_one).comments, @poll.comments
     assert_equal polls(:poll_one).questionnaire.id, @poll.questionnaire.id
     assert_equal polls(:poll_one).user.id, @poll.user.id
-  end
+    assert_equal polls(:poll_one).answered, @poll.answered
+    assert_equal polls(:poll_one).pollable.id, @poll.pollable.id
+ end
   
   # Prueba la creación de una encuesta
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
       Poll.create(
         :comments => 'New comments',
+        :answered => false,
+        :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
+        :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
         :answers_attributes => {
           '1' => {

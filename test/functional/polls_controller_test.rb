@@ -60,6 +60,8 @@ class PollsControllerTest < ActionController::TestCase
         post :create, {
           :poll => {
             :comments => "Nuevo comentario",
+            :anwered => false,
+            :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
             :answers_attributes => {
               '1' => {
                 :type => AnswerWritten.name,
@@ -75,7 +77,6 @@ class PollsControllerTest < ActionController::TestCase
         }
       end
     end
-    puts assigns(:poll).errors.full_messages.join('; ')
     assert_redirected_to poll_path(assigns(:poll))
   end
 
@@ -101,7 +102,6 @@ class PollsControllerTest < ActionController::TestCase
     
     assert_redirected_to polls_url
     assert_not_nil assigns(:poll)
-    puts assigns(:poll).errors.full_messages.join('; ')
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
   end
 
