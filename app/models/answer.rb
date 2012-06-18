@@ -25,4 +25,11 @@ class Answer < ActiveRecord::Base
       klass.new attributes.merge(:question_id => question.id), options
     end
   end
+  
+  def poll_answered?
+    if self.poll.present?
+      self.poll.answered 
+    end
+  end
+  
 end
