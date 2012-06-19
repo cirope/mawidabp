@@ -1,4 +1,4 @@
-<% PLAIN_PASSWORDS = HashWithIndifferentAccess.new(:admin => 'admin123') %>
+<% PLAIN_PASSWORDS = { :admin => 'admin123' }.with_indifferent_access %>
 <% salt = Digest::SHA512.hexdigest("admin#{rand}") %>
 administrator_user:
   name: Administrator
@@ -8,6 +8,26 @@ administrator_user:
   function: Administrator function
   user: admin
   password: <%= Digest::SHA512.hexdigest("#{salt}-admin123") %>
+  salt: <%= salt %>
+  enable: true
+  failed_attempts: 0
+  last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
+  logged_in: false
+  group_admin: true
+  password_changed: <%= DEFAULT_PARAMETERS[:security_password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  resource: auditor_resource
+  notes: User notes
+  
+<% PLAIN_PASSWORDS[:poll_user] = 'poll_user123' %>
+<% salt = Digest::SHA512.hexdigest("poll_user#{rand}") %>
+poll_user:
+  name: Poll User
+  last_name: Poll User
+  language: es
+  email: poll@administrator.com
+  function: Poll function
+  user: poll_user
+  password: <%= Digest::SHA512.hexdigest("#{salt}-poll_user123") %>
   salt: <%= salt %>
   enable: true
   failed_attempts: 0

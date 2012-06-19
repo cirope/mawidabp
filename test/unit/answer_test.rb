@@ -41,6 +41,9 @@ class AnswerTest < ActiveSupport::TestCase
   
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
+    assert @answer.valid?
+    assert_equal 0, @answer.errors.count
+    @answer.poll.answered = true
     @answer.answer = '  '
     assert @answer.invalid?
     assert_equal 1, @answer.errors.count

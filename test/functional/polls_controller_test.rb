@@ -60,8 +60,6 @@ class PollsControllerTest < ActionController::TestCase
         post :create, {
           :poll => {
             :comments => "Nuevo comentario",
-            :anwered => false,
-            :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
             :answers_attributes => {
               '1' => {
                 :type => AnswerWritten.name,
@@ -100,9 +98,10 @@ class PollsControllerTest < ActionController::TestCase
       }
     end
     
-    assert_redirected_to polls_url
+    assert_redirected_to welcome_url
     assert_not_nil assigns(:poll)
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
+    assert_equal true, assigns(:poll).answered
   end
 
   test 'destroy poll' do

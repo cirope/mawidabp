@@ -242,7 +242,7 @@ class UsersControllerTest < ActionController::TestCase
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
-
+    
     assert_redirected_to :controller => :welcome, :action => :index
     login_record = LoginRecord.where(
       :user_id => users(:administrator_user).id,
@@ -250,6 +250,31 @@ class UsersControllerTest < ActionController::TestCase
     ).first
     assert_kind_of LoginRecord, login_record
   end
+  
+  test 'login with polls' do
+    
+    user = users(:poll_user)
+    
+    post :create_session,
+      :user => {
+        :user => user.user,
+        :password => PLAIN_PASSWORDS[user.user]
+      }
+      
+    puts @response.body
+    
+    puts "PLAIN_PASSWORDS[user.user]: #{PLAIN_PASSWORDS[user.user]}"
+    puts "User #{user.user}, firts_pending_poll: #{user.first_pending_poll}"
+    
+    assert_redirected_to edit_poll_url(user.first_pending_poll)
+    
+    login_record = LoginRecord.where(
+      :user_id => user.id,
+      :organization_id => organizations(:default_organization).id
+    ).first
+    assert_kind_of LoginRecord, login_record
+  end
+
 
   test 'login sucesfully in admin mode' do
     @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
