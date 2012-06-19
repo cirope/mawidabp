@@ -386,7 +386,7 @@ class User < ActiveRecord::Base
   end
 
   def expired?
-    !self.last_access.blank? && self.last_access <
+    self.last_access.present? && self.last_access <
       self.get_parameter(:security_acount_expire_time).to_i.days.ago
   end
 
