@@ -261,11 +261,6 @@ class UsersControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[user.user]
       }
       
-    puts @response.body
-    
-    puts "PLAIN_PASSWORDS[user.user]: #{PLAIN_PASSWORDS[user.user]}"
-    puts "User #{user.user}, firts_pending_poll: #{user.first_pending_poll}"
-    
     assert_redirected_to edit_poll_url(user.first_pending_poll)
     
     login_record = LoginRecord.where(
