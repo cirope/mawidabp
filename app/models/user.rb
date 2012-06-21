@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   validates_each :password do |record, attr, value|
     user = User.find(record.id) if record.id && User.exists?(record.id)
     
-    if user && user.change_password_hash.blank?
+    if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
       password_min_length = record.get_parameter_for_now(
@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
       password_regex = Regexp.new record.get_parameter_for_now(
         :security_password_constraint)
 
-      record.errors.add attr, :invalid unless value =~ password_regex
+      record.errors.add attr, :invalid if value && value !~ password_regex
 
       # Longitud mínima
       if password_min_length != 0 && value && value.length < password_min_length
@@ -140,11 +140,11 @@ class User < ActiveRecord::Base
       end
 
       # Repetición de contraseñas anteriores
-      if user && user.password != digested_password
+      if user && value && user.password != digested_password
         repeated = record.last_passwords.any? do |p|
           digested_password == p.password
         end
-      elsif user
+      elsif user && value
         repeated = true
       end
 
@@ -396,7 +396,7 @@ class User < ActiveRecord::Base
   end
 
   def first_login?
-    self.last_access.blank?
+    self.last_access.blank? || self.last_access_was.blank?
   end
 
   def must_change_the_password?
