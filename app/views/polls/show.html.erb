@@ -11,17 +11,17 @@
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
   <ol><% @poll.answers.each do |answer| %>
-    <li><b><%= answer.question.question %></b></li>
+    <li><b><%= answer.question.question %></b>
     <% if @poll.answered? %>
       <% if answer.question.answer_multi_choice? %>
-        <%= t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}" %>
+        <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
       <% elsif answer.question.answer_written? %>
-        <%= answer.answer %>
+        <%= ": #{answer.answer}" %>
       <% end %>
-    <% end %>
+    <% end %></li>
     <% if answer.comments.present? %>
     <p>
-      <b><%= Answer.human_attribute_name :comments %>:</b>
+      <b><%= Answer.human_attribute_name :comments %>: </b>
       <%= answer.comments %>
     </p>
   <% end %>
@@ -29,7 +29,7 @@
   
   <% if @poll.comments.present? %>
     <p>
-      <b><%= Poll.human_attribute_name :comments %>:</b>
+      <b><%= Poll.human_attribute_name :comments %>: </b>
       <%= @poll.comments %>
     </p>
   <% end %>

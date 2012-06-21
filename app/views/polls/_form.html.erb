@@ -1,16 +1,12 @@
 <%= form_for(@poll) do |p_f| %>
   <%= p_f.error_messages %>
-  <div class="items">
-    <h3><%= t 'activerecord.attributes.questionnaire.questions' %></h3>
-    <div id="questions">    
-      <%= p_f.fields_for :answers do |a_f| %>    
-        <%= render :partial => 'answer', :locals => {:f => a_f} %>
-      <% end %>
-    </div>  
-  </div>
-  <div class="form_column_left">
+  <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
+  <%= p_f.fields_for :answers do |a_f| %>    
+    <%= render :partial => 'answer', :locals => {:f => a_f} %>
+  <% end %>
+  <div class="form_column_left" style="width: 40%;">
     <p>
-      <%= p_f.label :comments %>
+      <%= p_f.label "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
       <%= p_f.text_area :comments, :maxlength => 255 %>
     </p>
   </div>

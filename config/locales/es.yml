@@ -10,6 +10,7 @@ es:
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
+    optional: Opcional
     cancel: "Cancelar"
     close: "Cerrar"
     create: "Crear"
@@ -1525,7 +1526,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
 
     attributes:
       answer:
-        comments: "Comentarios"
+        comments: "Comentarios respuesta"
         answer: "Respuesta"
         question: "Cuesti√≥n"
       answer_option:
@@ -1856,7 +1857,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
       poll:
-        comments: "Comentarios"
+        comments: "Comentarios encuesta"
         answered: Contestada
         questionnaire: "Cuestionario"
       privilege:
