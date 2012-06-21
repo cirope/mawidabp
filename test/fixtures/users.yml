@@ -24,7 +24,7 @@ poll_user:
   name: Poll User
   last_name: Poll User
   language: es
-  email: poll@administrator.com
+  email: polluser@poll.com
   function: Poll function
   user: poll_user
   password: <%= Digest::SHA512.hexdigest("#{salt}-poll_user123") %>
