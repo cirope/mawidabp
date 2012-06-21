@@ -31,39 +31,10 @@ class PollsController < ApplicationController
     end
   end
 
-  # GET /polls/new
-  # GET /polls/new.json
-  def new
-    @title = t 'poll.new_title'
-    @poll = Poll.new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @poll }
-    end
-  end
-
   # GET /polls/1/edit
   def edit
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])
-  end
-
-  # POST /polls
-  # POST /polls.json
-  def create
-    @title = t 'poll.new_title'
-    @poll = Poll.new(params[:poll])
-    @poll.user = @auth_user
-        
-    respond_to do |format|
-      if @poll.save
-        format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
-        format.json { render :json => @poll, :status => :created, :location => @poll }
-      else
-        format.html { render :action => "new" }
-        format.json { render :json => @poll.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # PUT /polls/1
