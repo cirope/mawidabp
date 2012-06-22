@@ -1,18 +1,24 @@
-<div class="question item">
+<% id = "question_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
+<% hide = is_dynamic || f.object.marked_for_destruction? %>
+<div class="question item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div class="item_field" style="width: 50%;">
-    <%= f.text_field :question, :style => 'height: 3em;' %>
+    <%= f.text_area :question, :autofocus => true, :style => 'height: 3em;' %>
   </div>
-  <div class="item_field" style="width: 15%;">
-    <%= f.check_box :answer_type %>
-    <%= t 'activerecord.models.answer_multi_choice' %>
+  <div class="item_field" style="width: 35%;">
+    <%= f.check_box :answer_type, :id => "#{id}_answer_type" %>
+    <%= content_tag(
+      :label, t('activerecord.models.answer_multi_choice'),
+      :for => "#{id}_answer_type", :class => 'inline'
+    ) %>
   </div>
   <div class="item_field" style="width: 10%;">
-    <%= f.hidden_field :sort_order, :class => :sort_number %>
+    <%= f.hidden_field :sort_order, :class => 'sort_number' %>
     <%= hidden_lock_version(f) %>
     <%= remove_item_link(f) %>
     <%= link_to_move %>
   </div>
 </div>
 <script type="text/javascript">
+  Helper.showItem('#<%= id %>');
   FormUtil.completeSortNumbers();
 </script>

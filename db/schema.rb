@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120530171927) do
+ActiveRecord::Schema.define(:version => 20120528181002) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20120530171927) do
 
   create_table "answers", :force => true do |t|
     t.text     "comments"
+    t.string   "type"
     t.integer  "question_id"
     t.integer  "poll_id"
     t.integer  "lock_version",     :default => 0
@@ -33,7 +34,9 @@ ActiveRecord::Schema.define(:version => 20120530171927) do
     t.datetime "updated_at"
   end
 
-  add_index "answers", ["answer", "question_id", "poll_id"], :name => "index_answers_on_answer_and_question_id_and_poll_id"
+  add_index "answers", ["poll_id"], :name => "index_answers_on_poll_id"
+  add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
+  add_index "answers", ["type", "id"], :name => "index_answers_on_type_and_id"
 
   create_table "best_practices", :force => true do |t|
     t.string   "name"
@@ -497,8 +500,12 @@ ActiveRecord::Schema.define(:version => 20120530171927) do
 
   create_table "polls", :force => true do |t|
     t.text     "comments"
-    t.integer  "questionnaire_id"
+    t.boolean  "answered",         :default => false
     t.integer  "lock_version",     :default => 0
+    t.integer  "user_id"
+    t.integer  "questionnaire_id"
+    t.integer  "pollable_id"
+    t.string   "pollable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

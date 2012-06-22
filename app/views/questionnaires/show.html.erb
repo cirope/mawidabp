@@ -6,16 +6,20 @@
   <p>
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
-  <ol><% @questionnaire.questions.each do |question| %>
-    <li><b><%= question.question %></b></li>
-    <% if question.answer_type # Si es multi choice %>
-      <ul>
-      <% question.answer_options.each do |ao| %> 
-        <li><%= t "activerecord.attributes.answer_option.options.#{ao.option}" %></li>
-      <% end %>
-      </ul>
+  <ol class="raw_list">
+    <% @questionnaire.questions.each do |question| %>
+      <li>
+        <b><%= question.question %></b>
+        <% if question.answer_type # Si es multi choice %>
+          <ul class="raw_list">
+            <% question.answer_options.each do |ao| %> 
+              <li><%= t "activerecord.attributes.answer_option.options.#{ao.option}" %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
     <% end %>
-  <% end %></ol>
+  </ol>
 </div>
 
 <div id="links">

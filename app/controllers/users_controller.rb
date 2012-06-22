@@ -293,7 +293,7 @@ class UsersController < ApplicationController
             session[:organization_id] = @organization.id
             if poll = auth_user.first_pending_poll
               flash.notice = t 'poll.must_answer_poll'
-              go_to = session[:go_to] || edit_poll_url(poll)
+              go_to = edit_poll_url(poll)
             else
               go_to = session[:go_to] || { :controller => :welcome }
             end

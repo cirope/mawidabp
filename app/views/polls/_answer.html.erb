@@ -1,26 +1,36 @@
 <% question = f.object.question %>
-<div class="item_field" style="width: 40%;">
+<div class="answer item">
   <h4><%= "#{question.sort_order} - #{question.question}" %></h4>
+  <br />
+  
+  <div class="item_field" style="width: 46%;">
+    <p>
+      <% if question.answer_multi_choice? %>
+        <% question.answer_options.each do |ao| %> 
+          <% option = ao.option %>
+          <%= f.radio_button :answer_option_id, ao.id, :id => "answer_option_id_#{ao.id}" %>
+          <%= f.label :answer_option_id, (t "activerecord.attributes.answer_option.options.#{option}"), :for => "answer_option_id_#{ao.id}", :class => 'plain_label' %> 
+          <br />
+        <% end %>
+        <%= f.hidden_field :type, :value => AnswerMultiChoice.name %>
+      <% elsif question.answer_written? %>
+        <%= f.label :answer  %>
+        <%= f.text_area :answer %>
+        <%= f.hidden_field :type, :value => AnswerWritten.name %>
+      <% end %>
+    </p>
+  </div>
+  <div class="item_field" style="width: 35%;">
+    <%= f.label(
+      "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
+      :id => "answer_comments_label_#{f.object.id}",
+      :for => "answer_comments_#{f.object.id}"
+    ) %>
+    <%= f.text_area :comments, :id => "answer_comments_#{f.object.id}" %>
+    
+    <%= f.hidden_field :question_id, :value => question.id %>
+    <%= hidden_lock_version(f) %>
+  </div>
 </div>
-<div class="form_column_left" style="width: 30%;">
-  <% if question.answer_multi_choice? %>
-    <% question.answer_options.each do |ao| %> 
-      <% option = ao.option %>
-      <%= f.label :answer_option_id, (t "activerecord.attributes.answer_option.options.#{option}"), :for => "answer_option_id_#{ao.id}" %> 
-      <%= f.radio_button :answer_option_id, ao.id, :id => "answer_option_id_#{ao.id}" %>
-      </br>
-    <% end %>
-    <%= f.hidden_field :type, :value => AnswerMultiChoice.name %>
-  <% elsif question.answer_written? %>
-    <%= f.label :answer  %>
-    <%= f.text_field :answer %>
-    <%= f.hidden_field :type, :value => AnswerWritten.name %>
-  <% end %>
-  <p>
-    <%= f.label "#{Answer.human_attribute_name :comments} (#{t 'label.optional'})" %>
-    <%= f.text_area :comments, :maxlength => 255 %>
-  </p>
-</div>
-<%= f.hidden_field :question_id, :value => question.id %>  
-<%= hidden_lock_version(f) %>
-   
+<br />
+<br />

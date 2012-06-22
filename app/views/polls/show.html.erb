@@ -10,22 +10,25 @@
   <p>  
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
-  <ol><% @poll.answers.each do |answer| %>
-    <li><b><%= answer.question.question %></b>
-    <% if @poll.answered? %>
-      <% if answer.question.answer_multi_choice? %>
-        <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
-      <% elsif answer.question.answer_written? %>
-        <%= ": #{answer.answer}" %>
+  <ol>
+    <% @poll.answers.each do |answer| %>
+      <li><b><%= answer.question.question %></b>
+        <% if @poll.answered? %>
+          <% if answer.question.answer_multi_choice? %>
+            <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
+          <% elsif answer.question.answer_written? %>
+            <%= ": #{answer.answer}" %>
+          <% end %>
+        <% end %>
+      </li>
+      <% if answer.comments.present? %>
+        <p>
+          <b><%= Answer.human_attribute_name :comments %>: </b>
+          <%= answer.comments %>
+        </p>
       <% end %>
-    <% end %></li>
-    <% if answer.comments.present? %>
-    <p>
-      <b><%= Answer.human_attribute_name :comments %>: </b>
-      <%= answer.comments %>
-    </p>
-  <% end %>
-  <% end %></ol>
+    <% end %>
+  </ol>
   
   <% if @poll.comments.present? %>
     <p>

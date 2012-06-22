@@ -1090,6 +1090,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "El cuestionario ha sido agregado correctamente."
     correctly_updated: "El cuestionario ha sido actualizado correctamente."
     stale_object_error: "El cuestionario no fue actualizado, intente nuevamente."
+    add_question: "Agregar cuestión"
   report:
     index_title: "Listado de reportes"
 

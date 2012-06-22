@@ -1,17 +1,27 @@
 <%= form_for(@poll) do |p_f| %>
   <%= p_f.error_messages %>
   <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
+  
   <%= p_f.fields_for :answers do |a_f| %>    
     <%= render :partial => 'answer', :locals => {:f => a_f} %>
   <% end %>
-  <div class="form_column_left" style="width: 40%;">
-    <p>
-      <%= p_f.label "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
-      <%= p_f.text_area :comments, :maxlength => 255 %>
+  
+  <hr />
+  
+  <div class="form_column_left">
+    <p class="form_item">
+      <br />
+      <%= p_f.label(
+        "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})",
+        :id => 'poll_comments_label', :for => 'poll_comments'
+      ) %>
+      <%= p_f.text_area :comments %>
     </p>
   </div>
+  
   <%= hidden_lock_version(p_f) %>
   <%= p_f.hidden_field :questionnaire_id %>
+  
   <p>
     <span class="button"><%= p_f.submit %></span>
   </p>
