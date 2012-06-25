@@ -1,5 +1,13 @@
 class PollsController < ApplicationController
   before_filter :auth
+  
+  layout proc { |controller|
+    use_clean = [
+      'edit'
+    ].include?(controller.action_name)
+    
+    controller.request.xhr? ? false : (use_clean ? 'application_clean' : 'application')
+  }  
   # GET /polls
   # GET /polls.json
   def index
