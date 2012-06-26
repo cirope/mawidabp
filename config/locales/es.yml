@@ -1860,7 +1860,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       poll:
         comments: "Comentarios encuesta"
         answered: Contestada
-        questionnaire: "Cuestionario"
+        questionnaire_id: "Cuestionario"
+        user_id: Usuario
       privilege:
         module: "Módulo"
         read: "Lectura"

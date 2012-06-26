@@ -9,6 +9,38 @@
   <hr />
   
   <div class="form_column_left">
+    <% if @new %>
+      <p class="form_item">
+        <br />
+        <div class="search">
+          <% field_classes = [:search, :autocomplete_field] %>
+          <%= p_f.label :user_id %>
+          <%= p_f.text_field :user_id,
+            :id => "user_id_#{@poll.id}",
+            :value => '',
+            :title => t('label.search'),
+            :autocomplete => :off,
+            'data-autocomplete-params' => ("{user_id: #{@poll.id}}" unless @poll.new_record?),
+            'data-autocomplete-url' => auto_complete_for_user_polls_path %>
+          <%= p_f.hidden_field :user_id, :class => :autocomplete_id %>
+        </div>
+      </p>
+      <p class="form_item">
+        <br />
+        <div class="search">
+          <% field_classes = [:search, :autocomplete_field] %>
+          <%= p_f.label :questionnaire_id %>
+          <%= p_f.text_field :questionnaire_id,
+            :id => "user_id_#{@poll.id}",
+            :value => '',
+            :title => t('label.search'),
+            :autocomplete => :off,
+            'data-autocomplete-params' => ("{user_id: #{@poll.id}}" unless @poll.new_record?),
+            'data-autocomplete-url' => auto_complete_for_user_polls_path %>
+          <%= p_f.hidden_field :questionnaire_id, :class => :autocomplete_id %>
+        </div>
+      </p> 
+    <% end %>
     <p class="form_item">
       <br />
       <%= p_f.label(

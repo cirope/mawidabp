@@ -1,7 +1,12 @@
 MawidaApp::Application.routes.draw do
   resources :questionnaires
   
-  resources :polls
+  resources :polls do
+    collection do
+      get :auto_complete_for_user
+      get :auto_complete_for_questionnaire
+    end
+  end
 
   resources :e_mails, :only => [:index, :show]
 
