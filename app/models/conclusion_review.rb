@@ -291,7 +291,7 @@ class ConclusionReview < ActiveRecord::Base
 
     review_has_oportunities = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
-        !(use_finals ? coi.final_oportunities : coi.oportunities).blank?
+        !(use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.blank?
       end
     end
 
@@ -301,7 +301,7 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_oportunities = cois.any? do |coi|
-          !(use_finals ? coi.final_oportunities : coi.oportunities).blank?
+          !(use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.blank?
         end
 
         if has_oportunities
@@ -316,7 +316,7 @@ class ConclusionReview < ActiveRecord::Base
           end
 
           cois.each do |coi|
-            (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
+            (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
               o_data = coi.pdf_data(o)
               
               unless o_data[:column].blank?
