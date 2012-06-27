@@ -345,13 +345,12 @@ class FollowUpCommitteeController < ApplicationController
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
     
-    today = Date.today
     days = total = 0
     # Medium risk weakenesses being implemented
     conclusion_reviews.each do |cr|
-      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', today) 
+      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', Date.today) 
       weaknesses.each do |w|
-        days+= (today - w.follow_up_date).abs.round
+        days+= (Date.today - w.follow_up_date).abs.round
         total+= 1
       end
     end
@@ -368,7 +367,21 @@ class FollowUpCommitteeController < ApplicationController
       ]
       
       # Ancient mediun risk weaknesses rate
-      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? (days/total).round : nil
+      days = total = 0
+
+      cfrs.each do |cr|
+        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where(
+          'follow_up_date < ?', Date.today
+        )
+
+        weaknesses.each do |w|
+          days+= (Date.today - w.follow_up_date).abs.round
+          total+= 1
+        end
+      end
+
+      indicators[:ancient_medium_risk_weaknesses] = total > 0 ?
+                                                    (days / total).round : nil
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
