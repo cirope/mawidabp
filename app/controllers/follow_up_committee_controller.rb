@@ -419,13 +419,13 @@ class FollowUpCommitteeController < ApplicationController
       
       # Production level
       reviews_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
+        pt + p.plan_items.with_business_unit.between(
+          params[:start], params[:end]
         ).select { |pi| pi.review.try(:has_final_review?) }.size
       end
       plan_items_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
+        pt + p.plan_items.with_business_unit.between(
+          params[:start], params[:end]
         ).count
       end
       
@@ -441,7 +441,10 @@ class FollowUpCommitteeController < ApplicationController
       wps = WorkPaper.where(
         'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
         params.merge(:organization_id => GlobalModelConfig.current_organization_id)
-      )
+      ).select do |wp|
+        wp.owner.respond_to?(:is_in_a_final_review?) &&
+          wp.owner.is_in_a_final_review?
+      end
       
       indicators[:digitalized] = wps.size > 0 ?
         (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : nil
