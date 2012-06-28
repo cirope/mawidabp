@@ -11,6 +11,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal polls(:poll_one).comments, @poll.comments
     assert_equal polls(:poll_one).questionnaire.id, @poll.questionnaire.id
     assert_equal polls(:poll_one).answered, @poll.answered
+    assert_equal polls(:poll_one).user.id, @poll.user.id
     assert_equal polls(:poll_one).pollable.id, @poll.pollable.id
  end
   
@@ -23,6 +24,7 @@ class PollTest < ActiveSupport::TestCase
         :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
         :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
+        :user_id => users(:poll_user).id,
         :answers_attributes => {
           '1' => {
             :answer => 'Answer'
@@ -51,6 +53,18 @@ class PollTest < ActiveSupport::TestCase
     end
   end
   
+  # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates blank attributes' do
+    @poll.user = nil
+    @poll.questionnaire = nil
+    assert @poll.invalid?
+    assert_equal 2, @poll.errors.count
+    assert_equal [error_message_from_model(@poll, :questionnaire_id, :blank)],
+      @poll.errors[:questionnaire_id]
+    assert_equal [error_message_from_model(@poll, :user_id, :blank)],
+      @poll.errors[:user_id]
+  end
+ 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @poll.comments = 'abcde' * 52
