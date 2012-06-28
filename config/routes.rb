@@ -4,7 +4,6 @@ MawidaApp::Application.routes.draw do
   resources :polls do
     collection do
       get :auto_complete_for_user
-      get :auto_complete_for_questionnaire
     end
   end
 

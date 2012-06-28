@@ -1,5 +1,6 @@
 class PollsController < ApplicationController
   before_filter :auth
+  before_filter :load_privileges
   
   layout proc { |controller|
     use_clean = [
@@ -44,7 +45,7 @@ class PollsController < ApplicationController
   def new
     @title = t 'poll.new_title'
     @poll = Poll.new
-    @new = true
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @poll }
@@ -62,7 +63,6 @@ class PollsController < ApplicationController
   def create
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
-    @poll.user = @auth_user
         
     respond_to do |format|
       if @poll.save
@@ -139,7 +139,11 @@ class PollsController < ApplicationController
     end
   end
   
-  def auto_complete_for_questionnaire
-    
+  def load_privileges #:nodoc:
+    if @action_privileges
+      @action_privileges.update(
+        :auto_complete_for_user => :read        
+      )
+    end
   end
 end
