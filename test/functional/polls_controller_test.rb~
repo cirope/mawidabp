@@ -59,6 +59,7 @@ class PollsControllerTest < ActionController::TestCase
       assert_difference 'Answer.count', 2 do
         post :create, {
           :poll => {
+            :comments => "Nuevo comentario",
             :user_id => users(:poll_user).id,
             :questionnaire_id => questionnaires(:questionnaire_one).id
           }
