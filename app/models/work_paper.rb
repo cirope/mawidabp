@@ -16,7 +16,6 @@ class WorkPaper < ActiveRecord::Base
   attr_accessor :code_prefix
   attr_readonly :organization_id
   attr_protected :organization_id
-  attr_writer :check_code_prefix
 
   # Callbacks
   before_save :check_for_modifications
@@ -82,9 +81,18 @@ class WorkPaper < ActiveRecord::Base
   end
   
   def check_code_prefix
-    @check_code_prefix = true if @check_code_prefix.nil?
+    unless @__ccp_first_access
+      @check_code_prefix = true
+      @__ccp_first_access = true
+    end
     
     @check_code_prefix
+  end
+  
+  def check_code_prefix=(check_code_prefix)
+    @__ccp_first_access = true
+    
+    @check_code_prefix = check_code_prefix
   end
 
   def pages_to_s

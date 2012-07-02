@@ -40,8 +40,6 @@ class User < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
     :reallocation_errors, :nested_user
-  attr_writer :is_an_important_change
-  attr_writer :password_was_encrypted
   
   # Alias de atributos
   alias_attribute :informal, :user
@@ -222,15 +220,33 @@ class User < ActiveRecord::Base
   end
   
   def is_an_important_change
-    @is_an_important_change = true if @is_an_important_change.nil?
+    unless @__iaic_first_access
+      @is_an_important_change = true
+      @__iaic_first_access = true
+    end
     
     @is_an_important_change
   end
   
+  def is_an_important_change=(is_an_important_change)
+    @__iaic_first_access = true
+    
+    @is_an_important_change = is_an_important_change
+  end
+  
   def password_was_encrypted
-    @password_was_encrypted = false if @password_was_encrypted.nil?
+    unless @__pwe_first_access
+      @password_was_encrypted = false
+      @__pwe_first_access = true
+    end
     
     @password_was_encrypted
+  end
+  
+  def password_was_encrypted=(password_was_encrypted)
+    @__pwe_first_access = true
+    
+    @password_was_encrypted = password_was_encrypted
   end
 
   def set_proper_parent
