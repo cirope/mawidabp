@@ -232,8 +232,10 @@ class Review < ActiveRecord::Base
   end
 
   def check_if_is_in_a_final_review(finding_review_assignment)
-    unless finding_review_assignment.finding.try(:is_in_a_final_review?)
-      raise 'The finding must be in a final review'
+    finding_review_assignment.finding.tap do |f|
+      if f && !f.is_in_a_final_review?
+        raise 'The finding must be in a final review'
+      end
     end
   end
 

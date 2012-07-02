@@ -15,7 +15,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   }
 
   # Atributos no persistentes
-  attr_accessor_with_default :notify_by_email, true
+  attr_writer :notify_by_email
 
   # Callbacks
   before_validation :can_be_modified?
@@ -64,6 +64,12 @@ class ReviewUserAssignment < ActiveRecord::Base
   def ==(other)
     other.kind_of?(ReviewUserAssignment) && other.id &&
       (self.id == other.id || (self <=> other) == 0)
+  end
+  
+  def notify_by_email
+    @notify_by_email = true if @notify_by_email.nil?
+    
+    @notify_by_email
   end
 
   def can_be_modified?

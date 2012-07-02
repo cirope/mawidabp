@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
     :reallocation_errors, :nested_user
-  attr_accessor_with_default :is_an_important_change, true
-  attr_accessor_with_default :password_was_encrypted, false
+  attr_writer :is_an_important_change
+  attr_writer :password_was_encrypted
   
   # Alias de atributos
   alias_attribute :informal, :user
@@ -219,6 +219,18 @@ class User < ActiveRecord::Base
     }
     
     super(default_options.merge(options || {}))
+  end
+  
+  def is_an_important_change
+    @is_an_important_change = true if @is_an_important_change.nil?
+    
+    @is_an_important_change
+  end
+  
+  def password_was_encrypted
+    @password_was_encrypted = false if @password_was_encrypted.nil?
+    
+    @password_was_encrypted
   end
 
   def set_proper_parent
