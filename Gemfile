@@ -10,7 +10,7 @@ gem 'jquery-rails'
 gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', '3.0.8'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'whenever', :require => false
 gem 'will_paginate'

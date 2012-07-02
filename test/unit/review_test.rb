@@ -376,7 +376,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    audited = @review.review_user_assignments.select { |rua| rua.audited? }
+    audited = @review.review_user_assignments.select { |a| a.audited? }
     @review.review_user_assignments.delete audited
 
     assert !@review.has_audited?
@@ -387,7 +387,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_manager?
     assert @review.valid?
 
-    managers = @review.review_user_assignments.select { |rua| rua.manager? }
+    managers = @review.review_user_assignments.select { |a| a.manager? }
     @review.review_user_assignments.delete managers
 
     assert !@review.has_manager?
@@ -398,7 +398,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    auditors = @review.review_user_assignments.select { |rua| rua.auditor? }
+    auditors = @review.review_user_assignments.select { |a| a.auditor? }
     @review.review_user_assignments.delete auditors
 
     assert !@review.has_auditor?
@@ -409,7 +409,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_supervisor?
     assert @review.valid?
 
-    supervisors = @review.review_user_assignments.select {|rua| rua.supervisor?}
+    supervisors = @review.review_user_assignments.select {|a| a.supervisor?}
     @review.review_user_assignments.delete supervisors
 
     assert !@review.has_supervisor?
@@ -566,8 +566,10 @@ class ReviewTest < ActiveSupport::TestCase
     assert new_review.review_user_assignments.size > 0
     assert_equal @review.control_objective_items.map(&:control_objective_id).sort,
       new_review.control_objective_items.map(&:control_objective_id).sort
-    assert_equal @review.review_user_assignments,
-      new_review.review_user_assignments
+    assert_equal(
+      @review.review_user_assignments.map { |a| [a.assignment_type, a.user_id] },
+      new_review.review_user_assignments.map { |a| [a.assignment_type, a.user_id] }
+    )
   end
   
   private
