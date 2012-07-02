@@ -14,9 +14,6 @@ class ReviewUserAssignment < ActiveRecord::Base
     :manager => 2
   }
 
-  # Atributos no persistentes
-  attr_accessor_with_default :notify_by_email, true
-
   # Callbacks
   before_validation :can_be_modified?
   before_destroy :can_be_modified?, :delete_user_in_all_review_findings
@@ -64,6 +61,21 @@ class ReviewUserAssignment < ActiveRecord::Base
   def ==(other)
     other.kind_of?(ReviewUserAssignment) && other.id &&
       (self.id == other.id || (self <=> other) == 0)
+  end
+  
+  def notify_by_email
+    unless @__nbe_first_access
+      @notify_by_email = true
+      @__nbe_first_access = true
+    end
+    
+    @notify_by_email
+  end
+  
+  def notify_by_email=(notify_by_email)
+    @__nbe_first_access = true
+    
+    @notify_by_email = notify_by_email
   end
 
   def can_be_modified?

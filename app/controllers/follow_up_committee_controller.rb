@@ -375,8 +375,8 @@ class FollowUpCommitteeController < ApplicationController
         )
 
         weaknesses.each do |w|
-          days+= (Date.today - w.follow_up_date).abs.round
-          total+= 1
+          days += (Date.today - w.follow_up_date).abs.round
+          total += 1
         end
       end
 
@@ -419,9 +419,9 @@ class FollowUpCommitteeController < ApplicationController
       
       # Production level
       reviews_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.with_business_unit.between(
-          params[:start], params[:end]
-        ).select { |pi| pi.review.try(:has_final_review?) }.size
+        pt + p.plan_items.joins(
+          :review => :conclusion_final_review
+        ).with_business_unit.between(params[:start], params[:end]).count
       end
       plan_items_count = period.plans.inject(0.0) do |pt, p|
         pt + p.plan_items.with_business_unit.between(
@@ -433,21 +433,20 @@ class FollowUpCommitteeController < ApplicationController
         (reviews_count / plan_items_count.to_f) * 100 : nil
       
       # Reviews score average
-      internal_cfrs = cfrs.internal_audit
+      internal_cfrs = cfrs.internal_audit.includes(:review)
       indicators[:score_average] = internal_cfrs.size > 0 ?
-        (internal_cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / internal_cfrs.size.to_f).round : nil
+        (internal_cfrs.inject(0.0) { |t, cr| t + cr.review.score.to_f } / internal_cfrs.size.to_f).round : nil
       
       # Work papers digitalization
-      wps = WorkPaper.where(
+      wps = WorkPaper.includes(:owner, :file_model).where(
         'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
         params.merge(:organization_id => GlobalModelConfig.current_organization_id)
-      ).select do |wp|
-        wp.owner.respond_to?(:is_in_a_final_review?) &&
-          wp.owner.is_in_a_final_review?
-      end
+      ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
+      
+      wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }
       
       indicators[:digitalized] = wps.size > 0 ?
-        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : nil
+        (wps_with_files.size.to_f / wps.size) * 100 : nil
       
       @indicators[period] ||= []
       @indicators[period] << {
