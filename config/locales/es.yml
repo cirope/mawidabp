@@ -66,6 +66,7 @@ es:
       e_mails: "Correos"
       detracts: "Detractores"
       questionnaires: "Cuestionarios"
+      polls: "Encuestas"
     planning_title: "PLANIFICACIÓN"
     planning:
       periods: "Periodos"
@@ -460,7 +461,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
     without_detract: "No tiene ningún detractor asignado al momento"
     user_without_detracts: "No tiene ningún detractor asignado al momento"
-    
+
   email:
     index_title: "Listado de correos"
     show_title: "Detalles del correo"
@@ -509,7 +510,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
-  
+
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
     show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
@@ -1056,8 +1057,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-  
-  poll:  
+
+  poll:
     answer_poll: ¿Contestar encuesta?
     index_title: "Listado de encuestas"
     edit_title: "Modificar encuesta"
@@ -1066,7 +1067,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "La encuesta ha sido agregada correctamente."
     correctly_updated: "La encuesta ha sido guardada correctamente."
     stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    must_answer_poll: Debe contestar la siguiente encuesta para poder ingresar 
+    must_answer_poll: Debe contestar la siguiente encuesta para poder ingresar
       al sistema
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
@@ -1081,7 +1082,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_procedure_control_subitem: "Agregar procedimiento de control"
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
-  
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1304,7 +1305,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     column_old_value: "Valor anterior"
     without_changes: "Sin cambios"
     pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
-  
+
   weakness:
     index_title: "Listado de observaciones"
     show_title: "Detalles de la observación"
@@ -2052,7 +2053,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           other: "No se realizaron cambios porque se encontraron %{count} errores"
         # The variable :count is also available
         body: "Los siguientes problemas deben solucionarse:"
-        
+
       messages:
         inclusion: "no está incluido en la lista"
         exclusion: "está reservado"
@@ -2181,7 +2182,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
             end:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
               item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-              
+
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
@@ -2262,13 +2263,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       words_connector: ", "
       two_words_connector: " y "
       last_word_connector: " y "
-      
+
   validates_timeliness:
     error_value_formats:
       date: '%d/%m/%Y'
       time: '%H:%M:%S'
       datetime: '%d/%m/%Y %H:%M:%S'
-      
+
   will_paginate:
     previous_label: "&laquo; Anterior"
     next_label: "Siguiente &raquo;"
