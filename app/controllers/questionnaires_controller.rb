@@ -1,5 +1,6 @@
 class QuestionnairesController < ApplicationController
   before_filter :auth, :check_privileges
+
   # GET /questionnaires
   # GET /questionnaires.json
   def index

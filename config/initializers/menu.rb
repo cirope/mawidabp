@@ -140,14 +140,22 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :questionnaires,
         :order => 7,
-        :controllers => :questionnaires,
-        :url => {:controller => :questionnaires}
-      ),
-      MenuItem.new(
-        :polls,
-        :order => 8,
-        :controllers => :polls,
-        :url => {:controller => :polls}
+        :url => '#menu_administration_questionnaires',
+        :class => :menu_item_2,
+        :children => [
+          MenuItem.new(
+            :definition,
+            :order => 1,
+            :controllers => :questionnaires,
+            :url => {:controller => :questionnaires}
+          ),
+          MenuItem.new(
+            :polls,
+            :order => 2,
+            :controllers => :polls,
+            :url => {:controller => :polls}
+          )
+        ]
       )
     ]
   ),

@@ -1,6 +1,5 @@
 class PollsController < ApplicationController
-  before_filter :auth
-  before_filter :load_privileges
+  before_filter :load_privileges, :auth, :check_privileges
   
   layout proc { |controller|
     use_clean = [

@@ -65,8 +65,10 @@ es:
       parameters: "Parámetros"
       e_mails: "Correos"
       detracts: "Detractores"
-      questionnaires: "Cuestionarios"
-      polls: "Encuestas"
+      questionnaires_title: "Cuestionarios"
+      questionnaires:
+        definition: "Definición"
+        polls: "Encuestas"
     planning_title: "PLANIFICACIÓN"
     planning:
       periods: "Periodos"
