@@ -42,10 +42,9 @@ module MawidaApp
     # Enable the asset pipeline
     config.assets.enabled = true
     
-    config.active_record.lock_optimistically = true
-    
-    config.cache_store = :mem_cache_store, 'localhost',
-      { :namespace => "mawidabp_#{Rails.env}".downcase }
+    config.cache_store = :mem_cache_store, 'localhost', {
+      :namespace => "mawidabp_#{Rails.env}".downcase
+    }
 
     # En caso de no tener memcached se pueden user archivos:
     #  config.cache_store = :file_store, File.join(Rails.root, 'tmp', 'cache_files')

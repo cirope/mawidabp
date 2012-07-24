@@ -40,6 +40,7 @@ class PlanItem < ActiveRecord::Base
       condition, :but_id => business_unit_type.to_i
     ).order('order_number ASC')
   }
+  scope :with_business_unit, where("#{table_name}.business_unit_id IS NOT NULL")
 
   # Callbacks
   before_destroy :can_be_destroyed?
@@ -230,6 +231,13 @@ class PlanItem < ActiveRecord::Base
         :red
       end
     end
+  end
+
+  def self.between(_start, _end)
+    where(
+      "#{table_name}.start >= :start AND #{table_name}.end <= :end",
+      :start => _start, :end => _end
+    )
   end
 
   def add_resource_data(pdf, show_description = true)
