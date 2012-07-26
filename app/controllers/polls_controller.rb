@@ -1,13 +1,14 @@
 class PollsController < ApplicationController
-  before_filter :load_privileges, :auth, :check_privileges
-  
+  before_filter :load_privileges, :auth
+  before_filter :check_privileges, :except => [:edit, :update]
+
   layout proc { |controller|
     use_clean = [
       'edit'
     ].include?(controller.action_name)
-    
+
     controller.request.xhr? ? false : (use_clean ? 'application_clean' : 'application')
-  }  
+  }
   # GET /polls
   # GET /polls.json
   def index
@@ -44,7 +45,7 @@ class PollsController < ApplicationController
   def new
     @title = t 'poll.new_title'
     @poll = Poll.new
-    
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render :json => @poll }
@@ -54,7 +55,7 @@ class PollsController < ApplicationController
   # GET /polls/1/edit
   def edit
     @title = t 'poll.edit_title'
-    @poll = Poll.find(params[:id])
+    @poll = @auth_user.polls.find params[:id]
   end
 
   # POST /polls
@@ -62,7 +63,7 @@ class PollsController < ApplicationController
   def create
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
-        
+
     respond_to do |format|
       if @poll.save
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
@@ -78,8 +79,8 @@ class PollsController < ApplicationController
   # PUT /polls/1.json
   def update
     @title = t 'poll.edit_title'
-    @poll = Poll.find(params[:id])
-             
+    @poll = @auth_user.polls.find params[:id]
+
     respond_to do |format|
       if @poll.update_attributes(params[:poll])
         format.html { redirect_to welcome_url, :notice => (t 'poll.correctly_updated') }
@@ -105,7 +106,7 @@ class PollsController < ApplicationController
       format.json { head :ok }
     end
   end
-  
+
    # * GET /polls/auto_complete_for_user
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
@@ -132,16 +133,16 @@ class PollsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
   end
-  
+
   def load_privileges #:nodoc:
     if @action_privileges
       @action_privileges.update(
-        :auto_complete_for_user => :read        
+        :auto_complete_for_user => :read
       )
     end
   end
