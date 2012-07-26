@@ -19,7 +19,7 @@ class PollsControllerTest < ActionController::TestCase
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
-    
+
     public_actions.each do |action|
       send *action
       assert_response :success
@@ -43,7 +43,7 @@ class PollsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'polls/show'
   end
-  
+
   test 'new poll' do
     perform_auth
     get :new
@@ -69,7 +69,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'edit poll' do
-    perform_auth
+    perform_auth users(:poll_user)
     get :edit, :id => polls(:poll_one).id
     assert_response :success
     assert_not_nil assigns(:poll)
@@ -78,7 +78,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test "update poll" do
-    perform_auth
+    perform_auth users(:poll_user)
     assert_no_difference ['Poll.count'] do
       put :update, {
         :id => polls(:poll_one).id,
@@ -87,7 +87,6 @@ class PollsControllerTest < ActionController::TestCase
         }
       }
     end
-    
     assert_redirected_to welcome_url
     assert_not_nil assigns(:poll)
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
@@ -101,7 +100,7 @@ class PollsControllerTest < ActionController::TestCase
         delete :destroy, :id => polls(:poll_one).id
       end
     end
-    
+
     assert_redirected_to polls_url
   end
 end
