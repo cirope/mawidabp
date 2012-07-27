@@ -66,6 +66,7 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       if @poll.save
+        Notifier.pending_poll_email(@poll.user).deliver
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
         format.json { render :json => @poll, :status => :created, :location => @poll }
       else
