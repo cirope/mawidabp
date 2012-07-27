@@ -55,7 +55,7 @@ class PollsControllerTest < ActionController::TestCase
 
   test "create poll" do
     perform_auth
-    assert_difference 'Poll.count' do
+    assert_difference 'Poll.count', ActionMailer::Base.deliveries.count do
       assert_difference 'Answer.count', 2 do
         post :create, {
           :poll => {
