@@ -12,7 +12,7 @@ class Poll < ActiveRecord::Base
   belongs_to :pollable, :polymorphic => true
   has_many :answers, :include => :question, :dependent => :destroy, :order => "#{Question.table_name}.sort_order ASC"
   # Callbacks
-  after_save :send_poll_email
+  after_create :send_poll_email
   before_validation(:on => :update) do
     self.answered = true
   end
