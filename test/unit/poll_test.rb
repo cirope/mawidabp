@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class PollTest < ActiveSupport::TestCase
  def setup
     @poll = Poll.find polls(:poll_one).id
   end
-  
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Poll, @poll
@@ -14,7 +15,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal polls(:poll_one).user.id, @poll.user.id
     assert_equal polls(:poll_one).pollable.id, @poll.pollable.id
  end
-  
+
   # Prueba la creación de una encuesta
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
@@ -24,6 +25,7 @@ class PollTest < ActiveSupport::TestCase
         :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
         :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
+        :organization_id => organizations(:default_organization).id,
         :user_id => users(:poll_user).id,
         :answers_attributes => {
           '1' => {
@@ -33,7 +35,7 @@ class PollTest < ActiveSupport::TestCase
        )
     end
   end
-  
+
   # Prueba de actualización de una encuesta
   test 'update' do
     assert_equal @poll.answered, false
@@ -43,16 +45,16 @@ class PollTest < ActiveSupport::TestCase
     assert_equal 'Updated comments', @poll.comments
     assert_equal @poll.answered, true
   end
-  
+
   # Prueba de eliminación de una encuesta
   test 'delete' do
     assert_difference 'Poll.count', -1 do
       assert_difference 'Answer.count', -2 do
-        @poll.destroy     
+        @poll.destroy
       end
     end
   end
-  
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @poll.user = nil
@@ -64,7 +66,7 @@ class PollTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@poll, :user_id, :blank)],
       @poll.errors[:user_id]
   end
- 
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @poll.comments = 'abcde' * 52
@@ -73,5 +75,5 @@ class PollTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@poll, :comments, :too_long,
       :count => 255)], @poll.errors[:comments]
   end
-  
+
 end

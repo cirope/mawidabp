@@ -9,6 +9,7 @@ class Poll < ActiveRecord::Base
   # Relaciones
   belongs_to :questionnaire
   belongs_to :user
+  belongs_to :organization
   belongs_to :pollable, :polymorphic => true
   has_many :answers, :include => :question, :dependent => :destroy, :order => "#{Question.table_name}.sort_order ASC"
   # Callbacks
@@ -16,7 +17,14 @@ class Poll < ActiveRecord::Base
   before_validation(:on => :update) do
     self.answered = true
   end
-
+  # Named scopes
+  scope :list, lambda {
+    where(:organization_id => GlobalModelConfig.current_organization_id)
+  }
+  scope :by_questionnaire, lambda { |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
+    :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id
+    )
+  }
   accepts_nested_attributes_for :answers
 
   def initialize(attributes = nil, options = {})
@@ -30,7 +38,7 @@ class Poll < ActiveRecord::Base
   end
 
   def send_poll_email
-    Notifier.pending_poll_email(self.user).deliver
+    Notifier.pending_poll_email(self).deliver
   end
 
 end

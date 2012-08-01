@@ -4,16 +4,16 @@ class NotifierTest < ActionMailer::TestCase
   fixtures :users, :findings, :organizations, :groups
 
   test 'pending poll email' do
-    user = User.find(users(:poll_user).id)
+    poll = Poll.find(polls(:poll_one).id)
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.pending_poll_email(user).deliver
+    response = Notifier.pending_poll_email(poll).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert_equal [user.email], response.to
+    assert_equal [poll.user.email], response.to
     assert response.subject.include?(
-      I18n.t('notifier.pending_poll_email.title', :name => user.informal_name)
+      I18n.t('notifier.pending_poll_email.title', :name => poll.user.informal_name)
     )
   end
 

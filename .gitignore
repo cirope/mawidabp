@@ -5,6 +5,8 @@ log/
 nbproject/private/
 private/
 public/error_files/
+[#]*
+[.#]*
 # Descomentar cuando esté estable la ayuda
 public/images/help
 tmp/

@@ -4,13 +4,15 @@ class Notifier < ActionMailer::Base
     :charset => 'UTF-8', :content_type => 'text/html',
     :date => proc { Time.now }
 
-  def pending_poll_email(user)
-    @user = user
-    @hash = user.change_password_hash
+  def pending_poll_email(poll)
+    @user = poll.user
+    @hash = @user.change_password_hash
+    @organization = poll.organization
+
     mail(
       :to => @user.email,
-      :subject => t(
-        'notifier.pending_poll_email.title', :name => user.informal_name
+      :subject => "[#{@organization.prefix.upcase}] " + t(
+        'notifier.pending_poll_email.title', :name => @user.informal_name
       )
     )
   end

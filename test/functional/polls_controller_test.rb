@@ -60,7 +60,8 @@ class PollsControllerTest < ActionController::TestCase
         post :create, {
           :poll => {
             :user_id => users(:poll_user).id,
-            :questionnaire_id => questionnaires(:questionnaire_one).id
+            :questionnaire_id => questionnaires(:questionnaire_one).id,
+            :organization_id => organizations(:default_organization).id
           }
         }
       end
