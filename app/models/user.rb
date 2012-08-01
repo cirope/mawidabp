@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
@@ -40,7 +41,7 @@ class User < ActiveRecord::Base
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
     :reallocation_errors, :nested_user
-  
+
   # Alias de atributos
   alias_attribute :informal, :user
 
@@ -112,7 +113,7 @@ class User < ActiveRecord::Base
   end
   validates_each :password do |record, attr, value|
     user = User.find(record.id) if record.id && User.exists?(record.id)
-    
+
     if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
@@ -151,7 +152,7 @@ class User < ActiveRecord::Base
   end
   validates_format_of :email, :with => EMAIL_REGEXP, :allow_nil => true,
     :allow_blank => true
-  
+
   # Relaciones
   belongs_to :resource
   has_many :polls, :dependent => :destroy
@@ -192,7 +193,7 @@ class User < ActiveRecord::Base
     self.enable ||= false
     self.send_notification_email = true if self.send_notification_email.nil?
     self.password_changed = Time.now
-    
+
     if self.send_notification_email
       self.change_password_hash = UUIDTools::UUID.random_create.to_s
     end
@@ -209,43 +210,43 @@ class User < ActiveRecord::Base
   def to_param
     self.user_changed? ? self.user_was : self.user
   end
-  
+
   def as_json(options = nil)
     default_options = {
       :only => [:id],
       :methods => [:label, :informal]
     }
-    
+
     super(default_options.merge(options || {}))
   end
-  
+
   def is_an_important_change
     unless @__iaic_first_access
       @is_an_important_change = true
       @__iaic_first_access = true
     end
-    
+
     @is_an_important_change
   end
-  
+
   def is_an_important_change=(is_an_important_change)
     @__iaic_first_access = true
-    
+
     @is_an_important_change = is_an_important_change
   end
-  
+
   def password_was_encrypted
     unless @__pwe_first_access
       @password_was_encrypted = false
       @__pwe_first_access = true
     end
-    
+
     @password_was_encrypted
   end
-  
+
   def password_was_encrypted=(password_was_encrypted)
     @__pwe_first_access = true
-    
+
     @password_was_encrypted = password_was_encrypted
   end
 
@@ -255,14 +256,16 @@ class User < ActiveRecord::Base
 
   def mark_roles_as_changed(organization_role)
     organization_role.user = self unless organization_role.frozen?
-    
+
     self.roles_changed = true
   end
-  
+
   def first_pending_poll
-    self.polls.detect { |p| p.answered == false }
-  end  
-  
+    self.polls.detect { |p|
+      p.answered == false && p.organization.id == GlobalModelConfig.current_organization_id
+    }
+  end
+
   def roles(organization_id = nil)
     @organization_roles_cache ||= {}
 
@@ -283,7 +286,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def cost_per_unit
     self.resource.try(:cost_per_unit)
   end
@@ -316,7 +319,7 @@ class User < ActiveRecord::Base
     "#{version.full_name}#{version.string_to_append_if_function}".concat(
       version.string_to_append_if_disable.to_s)
   end
-  
+
   alias_method :label, :full_name_with_function
 
   def full_name_with_resource(from = nil)
@@ -355,16 +358,16 @@ class User < ActiveRecord::Base
   def send_notification_if_necesary
     unless self.send_notification_email.blank?
       organization = Organization.find GlobalModelConfig.current_organization_id
-      
+
       self.reset_password!(organization, false)
-      
+
       Notifier.welcome_email(self).deliver
     end
   end
 
   def log_password_change
     self.encrypt_password if self.password
-    
+
     if self.password && self.password_was != self.password
       @last_passwords = nil
       self.old_passwords.create(:password => self.password_was)
@@ -386,7 +389,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def reset_password!(organization, notify = true)
     self.change_password_hash = UUIDTools::UUID.random_create.to_s
     self.hash_changed = Time.now
@@ -477,7 +480,7 @@ class User < ActiveRecord::Base
 
     self.update_attribute :logged_in, false
   end
-  
+
   def related_users_and_descendants
     self.related_users + self.related_users.map(&:descendants).flatten.uniq
   end
@@ -499,7 +502,7 @@ class User < ActiveRecord::Base
   # Cifra la contraseña con SHA512
   def encrypt_password
     self.salt ||= self.create_new_salt
-    
+
     unless is_encrypted?
       self.password = User.digest(self.password, self.salt)
       self.password_was_encrypted = true
@@ -516,7 +519,7 @@ class User < ActiveRecord::Base
   def create_new_salt
     Digest::SHA512.hexdigest(self.object_id.to_s + rand.to_s)
   end
-  
+
   def self.digest(string, salt)
     Digest::SHA512.hexdigest("#{salt}-#{string}")
   end
@@ -543,7 +546,7 @@ class User < ActiveRecord::Base
   def get_type
     self.roles(GlobalModelConfig.current_organization_id).max.try(:get_type)
   end
-    
+
   def privileges(organization)
     privileges = HashWithIndifferentAccess.new
 
@@ -587,7 +590,7 @@ class User < ActiveRecord::Base
 
   def release_for_all_pending_findings(options = {})
     options.assert_valid_keys(:with_reviews, :with_findings)
-    
+
     all_released = true
     items_for_notification = []
     self.reallocation_errors ||= []
@@ -608,7 +611,7 @@ class User < ActiveRecord::Base
           end
         end
       end
-    
+
 
       if options[:with_reviews]
         self.review_user_assignments.each do |rua|
@@ -620,7 +623,7 @@ class User < ActiveRecord::Base
               all_released = false
               description =
                 "#{Review.model_name.human}: *#{rua.review.identification.strip}*"
-              
+
               self.reallocation_errors << [description,rua.errors.full_messages]
             end
           else
@@ -631,7 +634,7 @@ class User < ActiveRecord::Base
 
       unless all_released
         self.errors.add :base, I18n.t('user.user_release_failed')
-        
+
         raise ActiveRecord::Rollback
       end
     end
@@ -648,7 +651,7 @@ class User < ActiveRecord::Base
 
   def reassign_to(other, options = {})
     options.assert_valid_keys(:with_reviews, :with_findings)
-    
+
     unconfirmed_findings = []
     reassigned_reviews = []
     all_reassigned = true
@@ -694,7 +697,7 @@ class User < ActiveRecord::Base
               unconfirmed_findings.concat(unconfirmed_findings_in_review)
 
               reassigned_reviews << "*#{rua.review.identification}*"
-              
+
               unless rua.update_attribute :user, other
                 all_reassigned = false
                 description = "#{Review.model_name.human}: " +
@@ -749,7 +752,7 @@ class User < ActiveRecord::Base
                 content << "_#{f.review_code}_"
                 content << "\n** #{model.human_attribute_name('description')}: "
                 content << "_#{f.description}_"
-                
+
                 if f.respond_to?(:risk_text)
                   content << "\n** #{model.human_attribute_name('risk')}: "
                   content << "_#{f.risk_text}_"

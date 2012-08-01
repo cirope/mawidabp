@@ -14,10 +14,10 @@ class PollsController < ApplicationController
   def index
     @title = t 'poll.index_title'
     if params[:id]
-      @polls = Poll.where("questionnaire_id = ?", params[:id]).paginate(
+      @polls = Poll.by_questionnaire(params[:id]).paginate(
         :page => params[:page], :per_page => APP_LINES_PER_PAGE)
     else
-      @polls = Poll.paginate(
+      @polls = Poll.list.paginate(
         :page => params[:page], :per_page => APP_LINES_PER_PAGE
       )
     end
@@ -63,6 +63,7 @@ class PollsController < ApplicationController
   def create
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
+    @poll.organization = @auth_organization
 
     respond_to do |format|
       if @poll.save
