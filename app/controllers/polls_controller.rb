@@ -32,7 +32,11 @@ class PollsController < ApplicationController
   # GET /polls/1.json
   def show
     @title = t 'poll.show_title'
-    @poll = Poll.find(params[:id])
+    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+
+    if @poll.nil?
+      redirect_to polls_url
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -55,7 +59,11 @@ class PollsController < ApplicationController
   # GET /polls/1/edit
   def edit
     @title = t 'poll.edit_title'
-    @poll = @auth_user.polls.find params[:id]
+    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+
+    if @poll.nil?
+      redirect_to polls_url
+    end
   end
 
   # POST /polls
@@ -80,7 +88,11 @@ class PollsController < ApplicationController
   # PUT /polls/1.json
   def update
     @title = t 'poll.edit_title'
-    @poll = @auth_user.polls.find params[:id]
+    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+
+    if @poll.nil?
+      redirect_to polls_url
+    end
 
     respond_to do |format|
       if @poll.update_attributes(params[:poll])

@@ -21,10 +21,14 @@ class Poll < ActiveRecord::Base
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
-  scope :by_questionnaire, lambda { |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
-    :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id
-    )
+  scope :by_questionnaire, lambda {
+    |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
+      :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
   }
+  scope :by_organization, lambda {
+    |org_id, poll_id| where('id = :poll_id AND organization_id = :org_id', :org_id => org_id, :poll_id => poll_id)
+  }
+
   accepts_nested_attributes_for :answers
 
   def initialize(attributes = nil, options = {})

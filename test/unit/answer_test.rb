@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class AnswerTest < ActiveSupport::TestCase
@@ -5,7 +6,7 @@ class AnswerTest < ActiveSupport::TestCase
   def setup
     @answer = Answer.find answers(:answer_written).id
   end
-  
+
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of Answer, @answer
@@ -13,7 +14,7 @@ class AnswerTest < ActiveSupport::TestCase
     assert_equal answers(:answer_written).comments, @answer.comments
     assert_equal answers(:answer_written).type, @answer.type
   end
-  
+
   # Prueba la creación de una respuesta
   test 'create' do
     assert_difference 'Answer.count' do
@@ -25,7 +26,7 @@ class AnswerTest < ActiveSupport::TestCase
       )
     end
   end
-  
+
   # Prueba de actualización de una respuesta
   test 'update' do
     assert @answer.update_attributes(:answer => 'Updated answer'),
@@ -33,24 +34,35 @@ class AnswerTest < ActiveSupport::TestCase
     @answer.reload
     assert_equal 'Updated answer', @answer.answer
   end
-  
+
   # Prueba de eliminación de respuesta
   test 'delete' do
     assert_difference('Answer.count', -1) { @answer.destroy }
   end
-  
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
+    # Cuestión escrita
     assert @answer.valid?
     assert_equal 0, @answer.errors.count
-    @answer.poll.answered = true
     @answer.answer = '  '
+    @answer.save
     assert @answer.invalid?
     assert_equal 1, @answer.errors.count
     assert_equal [error_message_from_model(@answer, :answer, :blank)],
       @answer.errors[:answer]
+    # Cuestión multi choice
+    answer = answers(:answer_multi_choice)
+    assert answer.valid?
+    assert_equal 0, answer.errors.count
+    answer.answer_option = nil
+    answer.save
+    assert answer.invalid?
+    assert_equal 1, answer.errors.count
+    assert_equal [error_message_from_model(answer, :answer_option, :blank)],
+      answer.errors[:answer_option]
   end
-  
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @answer.answer = 'abcde' * 52
