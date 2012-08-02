@@ -3,7 +3,7 @@ class Poll < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
   # Validaciones
-  validates :questionnaire_id, :user_id, :presence => true
+  validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones
