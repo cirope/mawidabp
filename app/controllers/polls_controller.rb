@@ -34,10 +34,6 @@ class PollsController < ApplicationController
     @title = t 'poll.show_title'
     @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
 
-    if @poll.nil?
-      redirect_to polls_url
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @poll }
@@ -59,10 +55,10 @@ class PollsController < ApplicationController
   # GET /polls/1/edit
   def edit
     @title = t 'poll.edit_title'
-    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+    @poll = Poll.by_user(@auth_user.id, @auth_organization.id, params[:id]).first
 
     if @poll.nil?
-      redirect_to polls_url
+      redirect_to polls_url, :alert => (t 'poll.not_found')
     end
   end
 
@@ -88,10 +84,10 @@ class PollsController < ApplicationController
   # PUT /polls/1.json
   def update
     @title = t 'poll.edit_title'
-    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+    @poll = Poll.by_user(@auth_user.id, @auth_organization.id, params[:id]).first
 
     if @poll.nil?
-      redirect_to polls_url
+      redirect_to polls_url, :alert => (t 'poll.not_found')
     end
 
     respond_to do |format|

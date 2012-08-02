@@ -21,10 +21,6 @@ class QuestionnairesController < ApplicationController
     @title = t 'questionnaire.show_title'
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
-    if @questionnaire.nil?
-      redirect_to questionnaires_url
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @questionnaire }
@@ -49,7 +45,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url
+      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
     end
   end
 
@@ -88,7 +84,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url
+      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
     end
 
     @questionnaire.assign_attributes(params[:questionnaire])

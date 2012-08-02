@@ -28,6 +28,11 @@ class Poll < ActiveRecord::Base
   scope :by_organization, lambda {
     |org_id, poll_id| where('id = :poll_id AND organization_id = :org_id', :org_id => org_id, :poll_id => poll_id)
   }
+  scope :by_user, lambda {
+    |user_id, org_id, id| where('id = :id AND organization_id = :org_id AND user_id = :user_id',
+      :org_id => org_id, :id => id, :user_id => user_id
+      )
+  }
 
   accepts_nested_attributes_for :answers
 

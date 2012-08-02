@@ -1065,7 +1065,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
 
   poll:
-    answer_poll: ¿Contestar encuesta?
+    answer_poll: "¿Contestar encuesta?"
     index_title: "Listado de encuestas"
     edit_title: "Modificar encuesta"
     new_title: "Agregar encuesta"
@@ -1073,8 +1073,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "La encuesta ha sido agregada correctamente."
     correctly_updated: "La encuesta ha sido guardada correctamente."
     stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    must_answer_poll: Debe contestar la siguiente encuesta para poder ingresar
-      al sistema
+    must_answer_poll: "Debe contestar la siguiente encuesta para poder ingresar
+      al sistema"
+    not_found: "No se encontró la encuesta"
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"
@@ -1098,6 +1099,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "El cuestionario ha sido actualizado correctamente."
     stale_object_error: "El cuestionario no fue actualizado, intente nuevamente."
     add_question: "Agregar cuestión"
+    not_found: "No se encontró el cuestionario"
   report:
     index_title: "Listado de reportes"
 
