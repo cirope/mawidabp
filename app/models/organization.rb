@@ -55,6 +55,7 @@ class Organization < ActiveRecord::Base
   has_many :resource_classes, :dependent => :destroy
   has_many :detracts, :dependent => :destroy
   has_many :polls, :dependent => :destroy
+  has_many :questionnaires, :dependent => :destroy
   has_many :users, :through => :organization_roles, :uniq => true,
     :readonly => true
 

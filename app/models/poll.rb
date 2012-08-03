@@ -3,7 +3,7 @@ class Poll < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
   # Validaciones
-  validates :questionnaire_id, :user_id, :presence => true
+  validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones
@@ -21,10 +21,19 @@ class Poll < ActiveRecord::Base
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
-  scope :by_questionnaire, lambda { |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
-    :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id
-    )
+  scope :by_questionnaire, lambda {
+    |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
+      :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
   }
+  scope :by_organization, lambda {
+    |org_id, poll_id| where('id = :poll_id AND organization_id = :org_id', :org_id => org_id, :poll_id => poll_id)
+  }
+  scope :by_user, lambda {
+    |user_id, org_id, id| where('id = :id AND organization_id = :org_id AND user_id = :user_id',
+      :org_id => org_id, :id => id, :user_id => user_id
+      )
+  }
+
   accepts_nested_attributes_for :answers
 
   def initialize(attributes = nil, options = {})

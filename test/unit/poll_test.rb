@@ -59,12 +59,15 @@ class PollTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @poll.user = nil
     @poll.questionnaire = nil
+    @poll.organization = nil
     assert @poll.invalid?
-    assert_equal 2, @poll.errors.count
+    assert_equal 3, @poll.errors.count
     assert_equal [error_message_from_model(@poll, :questionnaire_id, :blank)],
       @poll.errors[:questionnaire_id]
     assert_equal [error_message_from_model(@poll, :user_id, :blank)],
       @poll.errors[:user_id]
+    assert_equal [error_message_from_model(@poll, :organization_id, :blank)],
+      @poll.errors[:organization_id]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

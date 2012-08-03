@@ -5,7 +5,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires.json
   def index
     @title = t 'questionnaire.index_title'
-    @questionnaires = Questionnaire.paginate(
+    @questionnaires = Questionnaire.list.paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
@@ -19,7 +19,11 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1.json
   def show
     @title = t 'questionnaire.show_title'
-    @questionnaire = Questionnaire.find(params[:id])
+    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
+
+    if @questionnaire.nil?
+      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -42,7 +46,11 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1/edit
   def edit
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.find(params[:id])
+    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
+
+    if @questionnaire.nil?
+      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+    end
   end
 
   # POST /questionnaires
@@ -50,7 +58,8 @@ class QuestionnairesController < ApplicationController
   def create
     @title = t 'questionnaire.new_title'
     @questionnaire = Questionnaire.new(params[:questionnaire])
-    
+    @questionnaire.organization = @auth_organization
+
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice?
         Question::ANSWER_OPTIONS.each do |option|
@@ -60,7 +69,7 @@ class QuestionnairesController < ApplicationController
         end
       end
     end
-    
+
     respond_to do |format|
       if @questionnaire.save
         format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_created') }
@@ -76,7 +85,12 @@ class QuestionnairesController < ApplicationController
   # PUT /questionnaires/1.json
   def update
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.find(params[:id])
+    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
+
+    if @questionnaire.nil?
+      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+    end
+
     @questionnaire.assign_attributes(params[:questionnaire])
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice? && question.answer_options.empty?
@@ -86,10 +100,10 @@ class QuestionnairesController < ApplicationController
           question.answer_options << ao
         end
       elsif question.answer_written?
-        question.answer_options.clear 
+        question.answer_options.clear
       end
     end
-     
+
     respond_to do |format|
       if @questionnaire.update_attributes(params[:questionnaire])
         format.html { redirect_to questionnaires_url, :notice => (t 'questionnaire.correctly_updated') }
