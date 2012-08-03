@@ -34,6 +34,10 @@ class PollsController < ApplicationController
     @title = t 'poll.show_title'
     @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
 
+    if @poll.nil?
+      redirect_to polls_url, :alert => (t 'poll.not_found')
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @poll }
