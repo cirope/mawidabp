@@ -97,7 +97,7 @@ es:
     follow_up_title: "SEGUIMIENTO"
     follow_up:
       pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas"
+      complete_findings: "Observaciones y Oportunidades solucionadas o reiteradas"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
