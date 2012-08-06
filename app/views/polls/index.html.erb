@@ -4,7 +4,6 @@
       <th><%= User.human_attribute_name :user %></th>
       <th></th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
 
@@ -13,7 +12,6 @@
       <tr class="<%= cycle('even', 'odd') %>">
         <td><%= "#{poll.user.name} #{poll.user.last_name}"  %></td>
         <td><%= link_to_show poll %></td>
-        <td><%= link_to_edit edit_poll_path(poll) %></td>
         <td><%= button_to_destroy poll %></td>
       </tr>
     <% end %>
