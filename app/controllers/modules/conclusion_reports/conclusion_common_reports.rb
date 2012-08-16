@@ -16,7 +16,7 @@ module ConclusionCommonReports
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
-        
+
         unless audit_type.last.empty?
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
@@ -74,7 +74,7 @@ module ConclusionCommonReports
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
-        
+
         unless audit_type.last.empty?
           pdf.move_pointer PDF_FONT_SIZE * 2
 
@@ -145,7 +145,7 @@ module ConclusionCommonReports
         weaknesses_count = {}
         weaknesses_count_by_risk = {}
         audit_type_symbol = audit_type.first
-        
+
         unless audit_type.last.empty?
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
@@ -207,11 +207,11 @@ module ConclusionCommonReports
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
-      
+
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.kind_of?(Symbol) ?
           audit_type : audit_type.first
-        
+
         unless audit_type.last.empty?
 
           pdf.move_pointer PDF_FONT_SIZE * 2
@@ -385,7 +385,7 @@ module ConclusionCommonReports
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
-      
+
       @audit_types.each do |type|
         pdf.move_pointer PDF_FONT_SIZE * 2
 
@@ -499,7 +499,7 @@ module ConclusionCommonReports
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
   end
-  
+
   def control_objective_stats
     @title = t('conclusion_committee_report.control_objective_stats_title')
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
@@ -520,7 +520,7 @@ module ConclusionCommonReports
     @reviews_score_data = {}
     reviews_score_data = {}
     control_objectives = []
-    
+
     if params[:control_objective_stats]
       if params[:control_objective_stats][:business_unit_type].present?
         @selected_business_unit = BusinessUnitType.find(
@@ -543,7 +543,7 @@ module ConclusionCommonReports
             "\"#{params[:control_objective_stats][:business_unit].strip}\""
         end
       end
-      
+
       if params[:control_objective_stats][:control_objective].present?
         control_objectives =
           params[:control_objective_stats][:control_objective].split(
@@ -558,50 +558,50 @@ module ConclusionCommonReports
         end
       end
     end
-    
+
     @periods.each do |period|
       reviews_score_data[period] ||= []
       process_controls = {}
-      
+
       conclusion_reviews.for_period(period).each do |c_r|
         c_r.review.control_objective_items.not_excluded_from_score.with_names(*control_objectives).each do |coi|
           process_controls[coi.process_control.name] ||= {}
           coi_data = process_controls[coi.process_control.name][coi.control_objective] || {}
           coi_data[:weaknesses_ids] ||= {}
           weaknesses_count = {}
-          
-          coi.final_weaknesses.each do |w|
+
+          coi.final_weaknesses.not_revoked.each do |w|
             @risk_levels |= parameter_in(
               @auth_organization.id,
               :admin_finding_risk_levels, w.created_at
             ).sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
-            
+
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
             coi_data[:weaknesses_ids][w.risk_text] ||= []
             coi_data[:weaknesses_ids][w.risk_text] << w.id
           end
-          
+
           coi_data[:weaknesses] ||= {}
           coi_data[:effectiveness] ||= []
           coi_data[:effectiveness] << coi.effectiveness
-          
+
           weaknesses_count.each do |r, c|
             coi_data[:weaknesses][r] ||= 0
             coi_data[:weaknesses][r] += c
           end
-          
+
           process_controls[coi.process_control.name][coi.control_objective] = coi_data
         end
-        
+
         reviews_score_data[period] << c_r.review.score
       end
-      
+
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
         (reviews_score_data[period].sum.to_f / reviews_score_data[period].size).round : 100
-      
+
       @process_control_data[period] ||= []
-      
+
       process_controls.each do |pc, cos|
         cos.each do |co, coi_data|
           @control_objectives_data[co.name] ||= {}
@@ -609,23 +609,23 @@ module ConclusionCommonReports
           effectiveness = reviews_count > 0 ?
             coi_data[:effectiveness].sum / reviews_count : 100
           weaknesses_count = coi_data[:weaknesses]
-          
+
           if weaknesses_count.values.sum == 0
             weaknesses_count_text = t(
               'conclusion_committee_report.control_objective_stats.without_weaknesses'
             )
           else
             weaknesses_count_text = []
-            
+
             @risk_levels.each do |risk|
               text = "#{risk}: #{weaknesses_count[risk] || 0}"
-              
+
               @control_objectives_data[co.name][text] = coi_data[:weaknesses_ids][risk]
-              
+
               weaknesses_count_text << text
             end
           end
-          
+
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
@@ -637,16 +637,16 @@ module ConclusionCommonReports
           }
         end
       end
-      
+
       @process_control_data[period].sort! do |pc_data_1, pc_data_2|
         ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
         ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-        
+
         ef1 <=> ef2
       end
     end
   end
-  
+
   def create_control_objective_stats
     self.control_objective_stats
 
@@ -674,7 +674,7 @@ module ConclusionCommonReports
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       pdf.move_pointer PDF_FONT_SIZE
-      
+
       column_data = []
       columns = {}
 
@@ -718,7 +718,7 @@ module ConclusionCommonReports
         pdf.text(
           t('conclusion_committee_report.control_objective_stats.without_audits_in_the_period'))
       end
-      
+
       pdf.move_pointer PDF_FONT_SIZE
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
@@ -743,7 +743,7 @@ module ConclusionCommonReports
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
   end
-  
+
   def process_control_stats
     @title = t('conclusion_committee_report.process_control_stats_title')
     @from_date, @to_date = *make_date_range(params[:process_control_stats])
@@ -762,7 +762,7 @@ module ConclusionCommonReports
     @process_control_ids_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
-    
+
     if params[:process_control_stats]
       unless params[:process_control_stats][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
@@ -790,62 +790,62 @@ module ConclusionCommonReports
     @periods.each do |period|
       process_controls = {}
       reviews_score_data[period] ||= []
-      
+
       conclusion_reviews.for_period(period).each do |c_r|
         c_r.review.control_objective_items_for_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
           pc_data[:reviews] ||= 0
           weaknesses_count = {}
-          
+
           coi.final_weaknesses.each do |w|
             @risk_levels |= parameter_in(
               @auth_organization.id,
               :admin_finding_risk_levels, w.created_at
             ).sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-            
+
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
             pc_data[:weaknesses_ids][w.risk_text] ||= []
             pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
-          
+
           pc_data[:reviews] += 1 if coi.final_weaknesses.size > 0
-          
+
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
           pc_data[:effectiveness] << coi.effectiveness
-          
+
           weaknesses_count.each do |r, c|
             pc_data[:weaknesses][r] ||= 0
             pc_data[:weaknesses][r] += c
           end
-          
+
           process_controls[coi.process_control.name] = pc_data
         end
-        
+
         reviews_score_data[period] << c_r.review.score
       end
-      
+
       @reviews_score_data[period] = reviews_score_data[period].size > 0 ?
         (reviews_score_data[period].sum.to_f / reviews_score_data[period].size).round : 100
-      
+
       @process_control_data[period] ||= []
-      
+
       process_controls.each do |pc, pc_data|
         @process_control_ids_data[pc] ||= {}
         reviews_count = pc_data[:effectiveness].size
         effectiveness = reviews_count > 0 ?
           pc_data[:effectiveness].sum.to_f / reviews_count : 100
         weaknesses_count = pc_data[:weaknesses]
-        
+
         if weaknesses_count.values.sum == 0
           weaknesses_count_text = t(
             'conclusion_committee_report.process_control_stats.without_weaknesses'
           )
         else
           weaknesses_count_text = []
-            
+
           @risk_levels.each do |risk|
             text = "#{risk}: #{weaknesses_count[risk] || 0}"
 
@@ -854,7 +854,7 @@ module ConclusionCommonReports
             weaknesses_count_text << text
           end
         end
-        
+
         weaknesses_count_text = weaknesses_count.values.sum == 0 ?
           t('conclusion_committee_report.process_control_stats.without_weaknesses') :
           @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
@@ -869,16 +869,16 @@ module ConclusionCommonReports
           'weaknesses_count' => weaknesses_count_text
         }
       end
-      
+
       @process_control_data[period].sort! do |pc_data_1, pc_data_2|
         ef1 = pc_data_1['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
         ef2 = pc_data_2['effectiveness'].match(/\d+.?\d+/)[0].to_f rescue 0.0
-        
+
         ef1 <=> ef2
       end
     end
   end
-  
+
   def create_process_control_stats
     self.process_control_stats
 
@@ -906,7 +906,7 @@ module ConclusionCommonReports
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       pdf.move_pointer PDF_FONT_SIZE
-      
+
       column_data = []
       columns = {}
 
@@ -950,7 +950,7 @@ module ConclusionCommonReports
         pdf.text(
           t('conclusion_committee_report.process_control_stats.without_audits_in_the_period'))
       end
-      
+
       pdf.move_pointer PDF_FONT_SIZE
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
