@@ -102,7 +102,7 @@
             <td><%=h wp.code %></td>
             <td><%=h wp.number_of_pages %></td>
             <td><%= simple_format h(wp.description) %></td>
-            <td><%= wp.file_model ?
+            <td><%= wp.file_model.try(:file?) ?
               link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>

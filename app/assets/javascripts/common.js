@@ -459,18 +459,28 @@ var Observer = {
   },
   
   attachToInputFile: function(span) {
+    var imageAttrs = {
+      src: '/assets/new_document.gif',
+      width: 22,
+      height: 20
+    }
+    var e, imageTag;
+
+    if((e = span.find('input[type=hidden]')) && e.val() && !e.val().match(/^\s*$/)) {
+      imageTag = $(
+        '<img />', Util.merge(imageAttrs, { alt: e.attr('title'), title: e.attr('title') })
+      );
+
+      e.parents('span.file_container:visible').hide().after(imageTag);
+    }
+
     span.find('input[type=file]:not(data-observed)').one('change', function() {
-      var e = $(this);
+      e = $(this);
+      imageTag = $(
+        '<img />', Util.merge(imageAttrs, { alt: e.val(), title: e.val() })
+      );
 
       if(e.hasClass('file') && !e.val().match(/^\s*$/)) {
-        var imageTag = $('<img />', {
-          src: '/assets/new_document.gif',
-          width: 22,
-          height: 20,
-          alt: e.val(),
-          title: e.val()
-        });
-        
         e.parents('span.file_container:visible').hide().after(imageTag);
       }
     });

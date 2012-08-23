@@ -90,9 +90,9 @@ module PDF
       font_height_size = self.font_height(font_size)
 
       if organization.try(:image_model) &&
-          File.exists?(organization.image_model.image.path(:thumb))
+          File.exists?(organization.image_model.image.thumb.path)
         self.add_image_from_file(
-          organization.image_model.image.path(:thumb),
+          organization.image_model.image.thumb.path,
           self.left_margin, self.absolute_top_margin + font_height_size,
           organization.image_model.image_geometry(:pdf_thumb)[:width],
           organization.image_model.image_geometry(:pdf_thumb)[:height])

@@ -89,7 +89,7 @@ module ReviewsHelper
     ).html_safe
     link_for_download_attachment = link_to(
       t('review.survey.download_attachment'), review.file_model.file.url
-    ).html_safe if review.file_model
+    ).html_safe if review.file_model.try(:file?)
     
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
     

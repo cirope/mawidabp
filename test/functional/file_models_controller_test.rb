@@ -19,7 +19,7 @@ class FileModelsControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = []
     private_actions = [
-      [:get, :download, {:path => @file_model.file.url(:original, false).gsub(/^\/private/, "")}]
+      [:get, :download, {:path => @file_model.file.url.gsub(/^\/private/, "")}]
     ]
 
     private_actions.each do |action|
@@ -36,8 +36,7 @@ class FileModelsControllerTest < ActionController::TestCase
 
   test 'download file' do
     perform_auth
-    get :download,
-      {:path => @file_model.file.url(:original, false).gsub(/^\/private/, "")}
+    get :download, { :path => @file_model.file.url.gsub(/^\/private/, "") }
     assert_response :success
     assert_equal 'some test text', @response.body
   end
@@ -45,8 +44,7 @@ class FileModelsControllerTest < ActionController::TestCase
   test 'download unauthorized file' do
     perform_auth(users(:administrator_second_user),
       organizations(:second_organization))
-    get :download,
-      {:path => @file_model.file.url(:original, false).gsub(/^\/private/, "")}
+    get :download, { :path => @file_model.file.url.gsub(/^\/private/, "") }
     assert_redirected_to :controller => :welcome, :action => :index
   end
 end

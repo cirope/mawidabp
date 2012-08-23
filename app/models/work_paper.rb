@@ -79,7 +79,7 @@ class WorkPaper < ActiveRecord::Base
     other.kind_of?(WorkPaper) && other.id &&
       (self.id == other.id || (self <=> other) == 0)
   end
-  
+
   def check_code_prefix
     unless @__ccp_first_access
       @check_code_prefix = true
@@ -100,7 +100,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def check_for_modifications
-    @zip_must_be_created = self.file_model.try(:new_record?) ||
+    @zip_must_be_created = self.file_model.try(:file?) ||
       self.file_model.try(:changed?)
     @cover_must_be_created = self.changed?
 
@@ -108,10 +108,9 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def create_cover_and_zip
-    self.create_pdf_cover if @cover_must_be_created && self.file_model
-
-    if @zip_must_be_created || (@cover_must_be_created && self.file_model)
-      self.create_zip
+    self.file_model.try(:file?).tap do |file|
+      self.create_pdf_cover if @cover_must_be_created && file
+      self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
     end
     
     true
@@ -164,8 +163,8 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil)
-    if self.file_model
-      filename ||= self.file_model.file_file_name.sanitized_for_filename
+    if self.file_model.try(:file?)
+      filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.sub(
         /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
     end
@@ -175,7 +174,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def absolute_cover_path(filename = nil)
-    if self.file_model
+    if self.file_model.try(:file?)
       File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
       "#{TEMP_PATH}#{self.pdf_cover_name(filename || self.object_id.abs)}"
@@ -183,7 +182,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def filename_with_prefix
-    filename = self.file_model.file_file_name.sub /^(zip-)*/i, ''
+    filename = self.file_model.identifier.sub /^(zip-)*/i, ''
     filename = filename.sanitized_for_filename
     code_suffix = File.extname(filename) == '.zip' ? '-zip' : ''
 
@@ -213,18 +212,20 @@ class WorkPaper < ActiveRecord::Base
       FileUtils.rm pdf_filename if File.exists?(pdf_filename)
       FileUtils.rm original_filename if File.exists?(original_filename)
 
-      self.file_model.update_attributes(
-        :file_file_name => File.basename(zip_filename),
-        :file_content_type => 'application/zip',
-        :file_file_size => File.size(zip_filename)
-      )
+
+      self.file_model.file_content_type = 'application/zip'
+      self.file_model.file_file_size  = File.size(zip_filename)
+
+      if self.file_model.save!
+        self.file_model.update_column :file_file_name, File.basename(zip_filename)
+      end
     end
 
     FileUtils.chmod 0640, zip_filename if File.exist?(zip_filename)
   end
 
   def unzip_if_necesary
-    file_name = self.file_model.try(:file_file_name) || ''
+    file_name = self.file_model.try(:identifier) || ''
     
     if File.extname(file_name) == '.zip' &&
         file_name.start_with?(self.sanitized_code) &&
@@ -242,16 +243,17 @@ class WorkPaper < ActiveRecord::Base
           end
 
           if File.basename(filename) != self.pdf_cover_name
-            self.file_model.file_file_name = File.basename(filename)
+            self.file_model.update_column :file_file_name, File.basename(filename)
             self.file_model.file_content_type = Mime::Type.lookup_by_extension ext
             self.file_model.file_file_size = File.size(filename)
+            self.file_model.save!
           end
         end
       end
 
       # Pregunta para evitar eliminar el archivo si es un zip con el mismo
       # nombre
-      unless File.basename(zip_path) == self.file_model.file_file_name
+      unless File.basename(zip_path) == self.file_model.identifier
         FileUtils.rm zip_path
       end
     end

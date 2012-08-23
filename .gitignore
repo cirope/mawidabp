@@ -1,10 +1,10 @@
-.DS_Store
+*.swp
 config/app_config.yml
 doc/
 log/
-nbproject/private/
 private/
 public/error_files/
+uploads/
 [#]*
 [.#]*
 # Descomentar cuando esté estable la ayuda

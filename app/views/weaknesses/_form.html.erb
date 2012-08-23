@@ -285,7 +285,7 @@
             <td><%= h finding_answer.user.full_name %></td>
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
-              <%= finding_answer.file_model ?
+              <%= finding_answer.file_model.try(:file?) ?
                 link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
