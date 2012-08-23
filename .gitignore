@@ -6,7 +6,6 @@ private/
 public/error_files/
 uploads/
 [#]*
-[.#]*
 # Descomentar cuando esté estable la ayuda
 public/images/help
 tmp/
