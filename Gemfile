@@ -41,6 +41,7 @@ group :development do
 end
 
 group :test do
+  gem 'rake' # Travis CI need this
   gem 'minitest', :require => false
   gem 'turn'
 end
