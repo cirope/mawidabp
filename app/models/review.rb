@@ -1179,7 +1179,7 @@ class Review < ActiveRecord::Base
   end
 
   def add_work_paper_to_zip(wp, dir, zipfile, prefix = nil)
-    if wp.file_model.try(:file?)
+    if wp.file_model.try(:file?) && File.exist?(wp.file_model.file.path)
       self.add_file_to_zip(wp.file_model.file.path,
         wp.file_model.identifier, dir, zipfile)
     else
