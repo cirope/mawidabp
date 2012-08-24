@@ -1868,6 +1868,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         total_resources_cost: "Costo total"
       poll:
         comments: "Comentarios encuesta"
+        date: "Fecha"
         answered: "Contestada"
         questionnaire_id: "Cuestionario"
         user_id: "Usuario"

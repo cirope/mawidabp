@@ -17,7 +17,18 @@ class PollsController < ApplicationController
       @polls = Poll.by_questionnaire(params[:id]).paginate(
         :page => params[:page], :per_page => APP_LINES_PER_PAGE)
     else
-      @polls = Poll.list.paginate(
+      default_conditions = {
+        Poll.table_name => {:organization_id => @auth_organization.id}
+      }
+
+      build_search_conditions Poll, default_conditions
+
+      @polls = Poll.includes(
+        :questionnaire,
+        :user
+      ).where(@conditions).order(
+        "#{Poll.table_name}.updated_at DESC"
+      ).paginate(
         :page => params[:page], :per_page => APP_LINES_PER_PAGE
       )
     end

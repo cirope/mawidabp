@@ -2,6 +2,22 @@ class Poll < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
+  # Constantes
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
+    :name => {
+      :column => "LOWER(#{User.table_name}.name)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :last_name => {
+      :column => "LOWER(#{User.table_name}.last_name)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :questionnaire_name => {
+      :column => "LOWER(#{Questionnaire.table_name}.name)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    }
+  )
+
   # Validaciones
   validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,

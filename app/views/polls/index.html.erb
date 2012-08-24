@@ -1,16 +1,24 @@
+<%= render :partial => 'shared/search', :locals => {
+  :options => {},
+  :columns => @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
 <table class="list">
-  <thead>
+  <thead id="column_headers">
     <tr>
-      <th><%= User.human_attribute_name :user %></th>
-      <th></th>
-      <th></th>
+      <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'user_name', 'last_name' %>
+      <%= make_filterable_column Poll.human_attribute_name(:questionnaire_id), nil, 'questionnaire_name' %>
+      <%= make_not_available_column Poll.human_attribute_name(:date) %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %>
     </tr>
   </thead>
 
   <tbody>
     <% @polls.each do |poll| %>
       <tr class="<%= cycle('even', 'odd') %>">
-        <td><%= "#{poll.user.name} #{poll.user.last_name}"  %></td>
+        <td><%= poll.user.informal_name  %></td>
+        <td><%= poll.questionnaire.name %></td>
+        <td><%= l poll.updated_at.to_date, :format => :long %></td>
         <td><%= link_to_show poll %></td>
         <td><%= button_to_destroy poll %></td>
       </tr>
