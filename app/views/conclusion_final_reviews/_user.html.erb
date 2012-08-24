@@ -24,8 +24,12 @@
       <% end %>
     </div>
     <div class="item_field" style="width: 30%;">
-      <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id, 
+      <% if user.can_act_as_audited? %>
+        <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id,
           :name, :prompt => t('label.no') %>
+      <% else %>
+        &nbsp;
+      <% end %>
     </div>
     <div class="item_field item_controls" style="width: 10%;">
       <%= remove_item_link nil, 'user' %>
