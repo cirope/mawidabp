@@ -55,7 +55,8 @@ class WorkPaper < ActiveRecord::Base
   belongs_to :file_model, :dependent => :destroy
   belongs_to :owner, :polymorphic => true
 
-  accepts_nested_attributes_for :file_model, :allow_destroy => true
+  accepts_nested_attributes_for :file_model, :allow_destroy => true,
+    :reject_if => lambda { |attributes| attributes['file'].blank? }
   
   def initialize(attributes = nil, options = {})
     super(attributes, options)

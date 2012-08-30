@@ -59,7 +59,8 @@ class Organization < ActiveRecord::Base
   has_many :users, :through => :organization_roles, :uniq => true,
     :readonly => true
 
-  accepts_nested_attributes_for :image_model, :allow_destroy => true
+  accepts_nested_attributes_for :image_model, :allow_destroy => true,
+    :reject_if => lambda { |attributes| attributes['file'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
