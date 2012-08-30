@@ -24,19 +24,27 @@ class ImageModelTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ImageModel.count' do
       @image_model = ImageModel.create(
-        :image_file_name => 'new_file.jpg',
-        :image_content_type => 'image/gif',
-        :image_file_size => 2000
+        :image => Rack::Test::UploadedFile.new(
+          "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+        )
       )
     end
+
+    assert_equal 'image/gif', @image_model.reload.image_content_type
+    assert_equal File.size(@image_model.image.path), @image_model.image_file_size
   end
 
   # Prueba de actualización de un modelo de archivo
   test 'update' do
-    assert @image_model.update_attributes(:image_file_name => 'updated_name'),
-      @image_model.errors.full_messages.join('; ')
-    @image_model.reload
-    assert_equal 'updated_name', @image_model.image_file_name
+    assert_not_equal 'image/gif', @image_model.image_content_type
+
+    assert @image_model.update_attributes(
+      :image => Rack::Test::UploadedFile.new(
+        "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
+      )
+    ), @image_model.errors.full_messages.join('; ')
+
+    assert_equal 'image/gif', @image_model.reload.image_content_type
   end
 
   # Prueba de eliminación de un modelo de archivo

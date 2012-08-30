@@ -4,6 +4,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
 
   storage :file
+  process :convert => 'png'
 
   def store_dir
     id = ('%08d' % model.id).scan(/\d{4}/).join('/')
@@ -26,5 +27,9 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   def extension_white_list
     %w(jpg jpeg gif png)
+  end
+
+  def filename
+    "#{super.chomp(File.extname(super))}.png"
   end
 end

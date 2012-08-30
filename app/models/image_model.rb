@@ -7,6 +7,9 @@ class ImageModel < ActiveRecord::Base
 
   mount_uploader :image, ImageUploader, :mount_on => :image_file_name
 
+  # Callbacks
+  before_save :update_image_attributes
+
   # Restricciones
   validates :image_file_name, :image_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
@@ -33,8 +36,8 @@ class ImageModel < ActiveRecord::Base
 
   def update_image_attributes
     if image.present? && image_file_name_changed?
-      self.image_content_type = image.image.content_type
-      self.image_file_size = image.image.size
+      self.image_content_type = image.file.content_type
+      self.image_file_size = image.file.size
     end
   end
 end

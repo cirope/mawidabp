@@ -1,9 +1,9 @@
 image_one:
   image_file_name: image_one.jpg
-  image_content_type: "image/gif"
+  image_content_type: "image/jpeg"
   image_file_size: 100
 
 image_two:
   image_file_name: image_two.jpg
-  image_content_type: "image/gif"
+  image_content_type: "image/jpeg"
   image_file_size: 10000
