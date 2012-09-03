@@ -1,5 +1,5 @@
 # Dirección del correo electrónico de soporte
-SUPPORT_EMAIL = 'soporte@mawida.com.ar'.freeze
+SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte
 SUPPORT_PHONE = '(0261) 449-8885 (9 a 13 hs.)'.freeze
 # Dirección principal de soporte
@@ -39,7 +39,7 @@ FINDING_STALE_UNCONFIRMED_DAYS = 1
 LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las
 # notificaciones a esta cuenta)
-NOTIFICATIONS_EMAIL = 'notificaciones@mawida.com.ar'.freeze
+NOTIFICATIONS_EMAIL = 'notificaciones@mawidabp.com'.freeze
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Ruta hasta donde se almacenan los archivos de errores
