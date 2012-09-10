@@ -10,13 +10,13 @@ es:
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
-    optional: Opcional
+    optional: "Opcional"
     cancel: "Cancelar"
     close: "Cerrar"
     create: "Crear"
     day:
-      one: 1 dia
-      other: %{count} dias
+      one: "1 dia"
+      other: "%{count} dias"
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"
@@ -678,6 +678,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"

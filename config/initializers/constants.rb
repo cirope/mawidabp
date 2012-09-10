@@ -3,7 +3,7 @@ SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte
 SUPPORT_PHONE = '(0261) 449-8885 (9 a 13 hs.)'.freeze
 # Dirección principal de soporte
-SUPPORT_URL = 'https://soporte.mawida.com.ar/'.freeze
+SUPPORT_URL = 'https://soporte.mawidabp.com/'.freeze
 # Ruta hasta el directorio de configuración
 CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público
@@ -67,7 +67,7 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawida.com.ar').freeze
+URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawidabp.com').freeze
 # Protocolo a utilizar para formar los links absolutos
 URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador

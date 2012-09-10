@@ -16,9 +16,9 @@ set :branch, 'master'
 
 set :bundle_without, [:test]
 
-role :web, 'mawida.com.ar'
-role :app, 'mawida.com.ar'
-role :db,  'mawida.com.ar', :primary => true
+role :web, 'mawidabp.com'
+role :app, 'mawidabp.com'
+role :db,  'mawidabp.com', :primary => true
 
 before 'deploy:finalize_update', 'deploy:create_shared_symlinks'
 
