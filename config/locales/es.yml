@@ -65,7 +65,10 @@ es:
       parameters: "Parámetros"
       e_mails: "Correos"
       detracts: "Detractores"
-      questionnaires: "Cuestionarios"
+      questionnaires_title: "Cuestionarios"
+      questionnaires:
+        definition: "Definición"
+        polls: "Encuestas"
     planning_title: "PLANIFICACIÓN"
     planning:
       periods: "Periodos"
@@ -460,7 +463,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
     without_detract: "No tiene ningún detractor asignado al momento"
     user_without_detracts: "No tiene ningún detractor asignado al momento"
-    
+
   email:
     index_title: "Listado de correos"
     show_title: "Detalles del correo"
@@ -509,7 +512,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
-  
+
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
     show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
@@ -898,6 +901,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
+    pending_poll_email:
+      title: "%{name}, tiene una encuesta pendiente"
+      answer_poll: 'Contestar encuesta'
+      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'Mawida Buenas Prácticas'"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
@@ -1056,9 +1063,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-  
-  poll:  
-    answer_poll: ¿Contestar encuesta?
+
+  poll:
+    answer_poll: "¿Contestar encuesta?"
     index_title: "Listado de encuestas"
     edit_title: "Modificar encuesta"
     new_title: "Agregar encuesta"
@@ -1066,8 +1073,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "La encuesta ha sido agregada correctamente."
     correctly_updated: "La encuesta ha sido guardada correctamente."
     stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    must_answer_poll: Debe contestar la siguiente encuesta para poder ingresar 
-      al sistema
+    must_answer_poll: "Debe contestar la siguiente encuesta para poder ingresar
+      al sistema"
+    not_found: "No se encontró la encuesta"
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"
@@ -1081,7 +1089,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_procedure_control_subitem: "Agregar procedimiento de control"
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
-  
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1091,6 +1099,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_updated: "El cuestionario ha sido actualizado correctamente."
     stale_object_error: "El cuestionario no fue actualizado, intente nuevamente."
     add_question: "Agregar cuestión"
+    not_found: "No se encontró el cuestionario"
   report:
     index_title: "Listado de reportes"
 
@@ -1154,6 +1163,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
     weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
     weaknesses_count: "Cantidad de Observaciones"
+    weaknesses_count_by_state: "Cantidad de Observaciones (Pendientes/Solucionadas-Reiteradas)"
     oportunities_count: "Cantidad de Oportunidades de Mejora"
     control_objectives_work_papers: "Objetivos de control"
     show_control_objective: "Ver detalles del objetivo de control"
@@ -1304,7 +1314,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     column_old_value: "Valor anterior"
     without_changes: "Sin cambios"
     pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
-  
+
   weakness:
     index_title: "Listado de observaciones"
     show_title: "Detalles de la observación"
@@ -1859,8 +1869,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
       poll:
         comments: "Comentarios encuesta"
-        answered: Contestada
-        questionnaire: "Cuestionario"
+        date: "Fecha"
+        answered: "Contestada"
+        questionnaire_id: "Cuestionario"
+        user_id: "Usuario"
+        answers:
+          answer: "Respuesta"
+          answer_option: "Opción"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -2051,7 +2066,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           other: "No se realizaron cambios porque se encontraron %{count} errores"
         # The variable :count is also available
         body: "Los siguientes problemas deben solucionarse:"
-        
+
       messages:
         inclusion: "no está incluido en la lista"
         exclusion: "está reservado"
@@ -2180,7 +2195,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
             end:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
               item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-              
+
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"
@@ -2261,13 +2276,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       words_connector: ", "
       two_words_connector: " y "
       last_word_connector: " y "
-      
+
   validates_timeliness:
     error_value_formats:
       date: '%d/%m/%Y'
       time: '%H:%M:%S'
       datetime: '%d/%m/%Y %H:%M:%S'
-      
+
   will_paginate:
     previous_label: "&laquo; Anterior"
     next_label: "Siguiente &raquo;"
