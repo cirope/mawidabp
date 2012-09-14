@@ -214,7 +214,7 @@ class User < ActiveRecord::Base
   def as_json(options = nil)
     default_options = {
       :only => [:id],
-      :methods => [:label, :informal]
+      :methods => [:label, :informal, :can_act_as_audited?]
     }
 
     super(default_options.merge(options || {}))
