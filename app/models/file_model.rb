@@ -5,36 +5,48 @@ class FileModel < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  has_attached_file :file,
-    :path => ':rails_root/private/:organization_id/:class/:id/:basename.:extension',
-    :url => '/private/:organization_id/:class/:id/:basename.:extension'
+  mount_uploader :file, FileUploader, :mount_on => :file_file_name
   
   # Atributos no persistentes
   attr_accessor :delete_file
   
   # Callbacks
-  before_save :destroy_file?
+  before_save :destroy_file?, :update_file_attributes
 
   # Restricciones
-  validates_attachment_size :file, :less_than => 20.megabytes,
-    :message => lambda {
-      I18n.t('activerecord.errors.messages.less_than', :count => 20.megabytes)
-    }
-  validates :file_file_name, :file_content_type, :length => {:maximum => 255},
+  validates :file_file_name, :file_content_type, :length => { :maximum => 255 },
     :allow_nil => true, :allow_blank => true
-  validates_each :file_file_name do |record, attr, value|
-    record.errors.add attr, :without_extension if File.extname(value.to_s).blank?
+  validates_each :file do |record, attr, value|
+    if record.identifier && File.extname(record.identifier).blank?
+      record.errors.add attr, :without_extension
+    end
   end
-  
+
   def delete_file?
     self.delete_file == '1' || self.delete_file == true
   end
   
-  def changed?
-    self.delete_file? || super
-  end
-  
   def destroy_file?
-    self.file.clear if self.delete_file?
+    self.remove_file! if self.delete_file?
+  end
+
+  alias_method :_changed_original?, :changed?
+
+  def changed?
+    self.file.cached?.present? || self.delete_file? || _changed_original?
+  end
+
+  def identifier
+    self.file.identifier || self.file_identifier
+  end
+
+  private
+  
+  def update_file_attributes
+    if file.present? && file_file_name_changed?
+      self.file_content_type = file.file.content_type
+      self.file_file_size = file.file.size
+      self.file_updated_at = Time.now
+    end
   end
 end

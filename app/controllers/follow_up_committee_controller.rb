@@ -345,13 +345,12 @@ class FollowUpCommitteeController < ApplicationController
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
     
-    today = Date.today
     days = total = 0
     # Medium risk weakenesses being implemented
     conclusion_reviews.each do |cr|
-      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', today) 
+      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', Date.today) 
       weaknesses.each do |w|
-        days+= (today - w.follow_up_date).abs.round
+        days+= (Date.today - w.follow_up_date).abs.round
         total+= 1
       end
     end
@@ -368,7 +367,21 @@ class FollowUpCommitteeController < ApplicationController
       ]
       
       # Ancient mediun risk weaknesses rate
-      indicators[:ancient_medium_risk_weaknesses] = total > 0 ? (days/total).round : nil
+      days = total = 0
+
+      cfrs.each do |cr|
+        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where(
+          'follow_up_date < ?', Date.today
+        )
+
+        weaknesses.each do |w|
+          days += (Date.today - w.follow_up_date).abs.round
+          total += 1
+        end
+      end
+
+      indicators[:ancient_medium_risk_weaknesses] = total > 0 ?
+                                                    (days / total).round : nil
       
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -406,13 +419,13 @@ class FollowUpCommitteeController < ApplicationController
       
       # Production level
       reviews_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
-        ).select { |pi| pi.review.try(:has_final_review?) }.size
+        pt + p.plan_items.joins(
+          :review => :conclusion_final_review
+        ).with_business_unit.between(params[:start], params[:end]).count
       end
       plan_items_count = period.plans.inject(0.0) do |pt, p|
-        pt + p.plan_items.where(
-          'plan_items.start >= :start AND plan_items.end <= :end', params
+        pt + p.plan_items.with_business_unit.between(
+          params[:start], params[:end]
         ).count
       end
       
@@ -420,18 +433,20 @@ class FollowUpCommitteeController < ApplicationController
         (reviews_count / plan_items_count.to_f) * 100 : nil
       
       # Reviews score average
-      internal_cfrs = cfrs.internal_audit
+      internal_cfrs = cfrs.internal_audit.includes(:review)
       indicators[:score_average] = internal_cfrs.size > 0 ?
-        (internal_cfrs.inject(0.0) {|t, cr| t + cr.review.score.to_f} / internal_cfrs.size.to_f).round : nil
+        (internal_cfrs.inject(0.0) { |t, cr| t + cr.review.score.to_f } / internal_cfrs.size.to_f).round : nil
       
       # Work papers digitalization
-      wps = WorkPaper.where(
+      wps = WorkPaper.includes(:owner, :file_model).where(
         'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
         params.merge(:organization_id => GlobalModelConfig.current_organization_id)
-      )
+      ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
+      
+      wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }
       
       indicators[:digitalized] = wps.size > 0 ?
-        (wps.select {|wp| wp.file_model.try(:file?)}.size.to_f / wps.size) * 100 : nil
+        (wps_with_files.size.to_f / wps.size) * 100 : nil
       
       @indicators[period] ||= []
       @indicators[period] << {

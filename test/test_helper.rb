@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -29,7 +30,12 @@ class ActiveSupport::TestCase
     post :create_session, {
       :user => { :user => user.user, :password => password }
     }, {}
-    assert_redirected_to :controller => :welcome, :action => :index
+
+    if user == users(:poll_user)
+      assert_redirected_to edit_poll_url(polls(:poll_one).id)
+    else
+      assert_redirected_to :controller => :welcome, :action => :index
+    end
     assert_not_nil session[:user_id]
     auth_user = User.find(session[:user_id])
     assert_not_nil auth_user
@@ -53,7 +59,7 @@ class ActiveSupport::TestCase
       FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"
     end
   end
-  
+
   def restore_file(file_name)
     if File.exists?("#{TEMP_PATH}#{File.basename(file_name)}")
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name

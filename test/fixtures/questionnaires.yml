@@ -1,5 +1,7 @@
 questionnaire_one:
   name: Encuesta al personal de auditoría
-  
+  organization: default_organization
+
 questionnaire_two:
   name: Encuesta de fin de año
+  organization: default_organization

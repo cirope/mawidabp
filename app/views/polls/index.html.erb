@@ -1,21 +1,18 @@
 <table class="list">
   <thead>
     <tr>
-      <th></th>
       <th><%= User.human_attribute_name :user %></th>
-      <th colspan="4"></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @polls.each do |poll| %>
       <tr class="<%= cycle('even', 'odd') %>">
-        <td></td>
         <td><%= "#{poll.user.name} #{poll.user.last_name}"  %></td>
         <td><%= link_to_show poll %></td>
-        <td><%= link_to_edit edit_poll_path(poll) %></td>
         <td><%= button_to_destroy poll %></td>
-        <td></td>
       </tr>
     <% end %>
   </tbody>

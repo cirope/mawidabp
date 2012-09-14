@@ -3,6 +3,20 @@ require 'test_helper'
 class NotifierTest < ActionMailer::TestCase
   fixtures :users, :findings, :organizations, :groups
 
+  test 'pending poll email' do
+    poll = Poll.find(polls(:poll_one).id)
+
+    assert ActionMailer::Base.deliveries.empty?
+
+    response = Notifier.pending_poll_email(poll).deliver
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal [poll.user.email], response.to
+    assert response.subject.include?(
+      I18n.t('notifier.pending_poll_email.title', :name => poll.user.informal_name)
+    )
+  end
+
   test 'group welcome email' do
     group = Group.find(groups(:main_group).id)
 
@@ -162,7 +176,7 @@ class NotifierTest < ActionMailer::TestCase
       response.body.decoded
     assert_equal user.email, response.to.first
   end
-  
+
   test 'restore password notification' do
     user = User.find(users(:blank_password_user).id)
     organization = Organization.find(organizations(:default_organization).id)

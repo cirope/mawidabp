@@ -10,13 +10,13 @@ es:
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
-    optional: Opcional
+    optional: "Opcional"
     cancel: "Cancelar"
     close: "Cerrar"
     create: "Crear"
     day:
-      one: 1 dia
-      other: %{count} dias
+      one: "1 dia"
+      other: "%{count} dias"
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"
@@ -97,7 +97,7 @@ es:
     follow_up_title: "SEGUIMIENTO"
     follow_up:
       pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas"
+      complete_findings: "Observaciones y Oportunidades solucionadas o reiteradas"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
@@ -678,6 +678,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
       without_weaknesses: 'Sin observaciones'
+      without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
       pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
@@ -1658,6 +1659,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
         size: "Archivo (tamaño)"
+        file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo de control"
         description: "Observación / Oportunidad"
@@ -1719,6 +1721,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
             file_file_name: "Papel de trabajo (nombre de archivo)"
             file_content_type: "Papel de trabajo (tipo de archivo)"
             file_file_size: "Papel de trabajo (tamaño de archivo)"
+            file: "Papel de trabajo (nombre de archivo)"
       finding_answer:
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
@@ -2117,7 +2120,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
               without_draft: "no tiene borrador"
         file_model:
           attributes:
-            file_file_name:
+            file:
               without_extension: 'debe tener extensión'
         finding:
           attributes:

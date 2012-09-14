@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120528181002) do
+ActiveRecord::Schema.define(:version => 20120802141803) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -508,8 +508,10 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
     t.string   "pollable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
+  add_index "polls", ["organization_id"], :name => "index_polls_on_organization_id"
   add_index "polls", ["questionnaire_id"], :name => "index_polls_on_questionnaire_id"
 
   create_table "privileges", :force => true do |t|
@@ -574,12 +576,14 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
 
   create_table "questionnaires", :force => true do |t|
     t.string   "name"
-    t.integer  "lock_version", :default => 0
+    t.integer  "lock_version",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   add_index "questionnaires", ["name"], :name => "index_questionnaires_on_name"
+  add_index "questionnaires", ["organization_id"], :name => "index_questionnaires_on_organization_id"
 
   create_table "questions", :force => true do |t|
     t.integer  "sort_order"

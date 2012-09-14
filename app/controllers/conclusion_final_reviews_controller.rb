@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de informes definitivos
 #
 # Lista, muestra, crea, modifica y elimina informes definitivos
@@ -16,9 +17,9 @@ class ConclusionFinalReviewsController < ApplicationController
     default_conditions = {
       "#{Period.table_name}.organization_id" => @auth_organization.id
     }
-    
+
     build_search_conditions ConclusionFinalReview, default_conditions
-    
+
     order = @order_by || "issue_date DESC"
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
@@ -85,7 +86,7 @@ class ConclusionFinalReviewsController < ApplicationController
     else
       conclusion_final_review = ConclusionFinalReview.where(
         :review_id => params[:review]).first
-      
+
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
     end
   end
@@ -150,7 +151,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
     @conclusion_final_review = find_with_organization(params[:id])
-    
+
     @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
 
     respond_to do |format|
@@ -165,7 +166,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def score_sheet
     @conclusion_final_review = find_with_organization(params[:id])
     review = @conclusion_final_review.review
-    
+
     if params[:global].blank?
       review.score_sheet(@auth_organization)
 
@@ -252,21 +253,22 @@ class ConclusionFinalReviewsController < ApplicationController
         :include_score_sheet => include_score_sheet,
         :include_global_score_sheet => include_global_score_sheet
       }
-      
+
         if user && !users.include?(user)
           @conclusion_final_review.send_by_email_to(user, send_options)
 
           users << user
         end
-        
+
         if user && user_data[:questionnaire_id].present?
           @conclusion_final_review.polls.create!(
             :questionnaire_id => user_data[:questionnaire_id],
-            :user_id => user.id
+            :user_id => user.id,
+            :organization_id => @auth_organization.id
           )
         end
       end
-    
+
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
 
@@ -395,7 +397,7 @@ class ConclusionFinalReviewsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end

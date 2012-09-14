@@ -795,7 +795,7 @@ module FollowUpCommonReports
           coi_data[:weaknesses_ids] ||= {}
           weaknesses_count = {}
 
-          coi.weaknesses.each do |w|
+          coi.weaknesses.not_revoked.each do |w|
             @risk_levels |= parameter_in(
               @auth_organization.id,
               :admin_finding_risk_levels, w.created_at
@@ -932,10 +932,10 @@ module FollowUpCommonReports
         row.each do |column_name, column_content|
           if column_content.kind_of?(Hash)
             list = ""
-            column_content.each_key do |risk|
+            @risk_levels.each do |risk|
               co = row["control_objective"]
-              incompletes = @control_objectives_data[co][risk.to_s][:incomplete].count
-              completes = @control_objectives_data[co][risk.to_s][:complete].count
+              incompletes = @control_objectives_data[co][risk][:incomplete].count
+              completes = @control_objectives_data[co][risk][:complete].count
 
               list += "  <C:bullet /> #{risk}: #{incompletes} / #{completes} \n"
             end

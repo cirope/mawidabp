@@ -27,7 +27,7 @@ module MawidaApp
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'Buenos Aires'
+    config.time_zone = ENV['TRAVIS'] ? 'UTC' : 'Buenos Aires'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -42,10 +42,9 @@ module MawidaApp
     # Enable the asset pipeline
     config.assets.enabled = true
     
-    config.active_record.lock_optimistically = true
-    
-    config.cache_store = :mem_cache_store, 'localhost',
-      { :namespace => "mawidabp_#{Rails.env}".downcase }
+    config.cache_store = :mem_cache_store, 'localhost', {
+      :namespace => "mawidabp_#{Rails.env}".downcase
+    }
 
     # En caso de no tener memcached se pueden user archivos:
     #  config.cache_store = :file_store, File.join(Rails.root, 'tmp', 'cache_files')

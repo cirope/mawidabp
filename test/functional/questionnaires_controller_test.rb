@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class QuestionnairesControllerTest < ActionController::TestCase
-    
+
   test 'public and private actions' do
     id_param = {:id => questionnaires(:questionnaire_one).to_param}
     public_actions = []
@@ -20,7 +20,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
       assert_redirected_to :controller => :users, :action => :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
-    
+
     public_actions.each do |action|
       send *action
       assert_response :success
@@ -44,7 +44,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'questionnaires/show'
   end
-  
+
   test 'new questionnaire' do
     perform_auth
     get :new
@@ -62,6 +62,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
           post :create, {
             :questionnaire => {
               :name => "Nuevo cuestionario",
+              :organization_id => organizations(:default_organization),
               :questions_attributes => {
                 '1' => {
                   :question => "Cuestion multi choice",
@@ -109,7 +110,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to questionnaires_url
     assert_not_nil assigns(:questionnaire)
     assert_equal 'Cuestionario actualizado', assigns(:questionnaire).name

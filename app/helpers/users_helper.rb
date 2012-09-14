@@ -51,14 +51,14 @@ module UsersHelper
 
     g.write image_path
 
-    img = Magick::ImageList.new image_path
+    img = ::Magick::ImageList.new image_path
     img.resize! 0.5
     img.write image_path
 
-    size = Paperclip::Geometry.from_file(image_path)
+    size = "#{img.columns}x#{img.rows}"
 
     image_tag("/private/#{path_without_root.join('/')}/#{image_name}",
-      :size => size.to_s, :alt => image_label)
+      :size => size, :alt => image_label)
   end
   
   def user_weaknesses_links(user)

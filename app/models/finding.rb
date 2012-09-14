@@ -624,7 +624,7 @@ class Finding < ActiveRecord::Base
     text << "\n<b>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</b>: "
     text << self.control_objective_item.to_s
   end
-  
+
   def review_text
     self.control_objective_item.try(:review).try(:to_s)
   end
@@ -1611,9 +1611,9 @@ class Finding < ActiveRecord::Base
       y_top = pdf.page_height - (pdf.top_margin / 2)
 
       if organization.try(:image_model) &&
-          File.exists?(organization.image_model.image.path(:thumb))
+          File.exists?(organization.image_model.image.thumb.path)
         pdf.add_image_from_file(
-          organization.image_model.image.path(:thumb),
+          organization.image_model.image.thumb.path,
           pdf.left_margin, pdf.absolute_top_margin + font_height_size,
           organization.image_model.image_geometry(:pdf_thumb)[:width],
           organization.image_model.image_geometry(:pdf_thumb)[:height])

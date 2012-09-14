@@ -11,13 +11,14 @@
         <%= finding_answer.answer %>
       <% end %>
     </td>
-    <% if !finding_answer.file_model || finding_answer.file_model.new_record? %>
+    <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
       <td>
         <% if finding_answer.new_record? %>
-          <% finding_answer.build_file_model %>
+          <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
           <%= f.fields_for :file_model do |fm_f| %>
             <span class="file_container">
               <%= fm_f.file_field :file, :class => 'inline_item file' %>
+              <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
             </span>
           <% end %>
         <% else %>
@@ -26,7 +27,7 @@
       </td>
     <% else %>
       <td>
-        <%= link_to_download finding_answer.file_model.file.url %>
+        <%= link_to_download finding_answer.file_model.file.url if finding_answer.file_model.file? %>
       </td>
     <% end %>
     <td>
