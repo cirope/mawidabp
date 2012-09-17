@@ -3,6 +3,12 @@
     <b><%= Questionnaire.human_attribute_name :name %>:</b>
     <%= @questionnaire.name %>
   </p>
+  <% if @questionnaire.pollable_type? %>
+    <p>
+      <b><%= Questionnaire.human_attribute_name :pollable_type %>:</b>
+      <%= @questionnaire.pollable_type %>
+    </p>
+  <% end %>
   <p>
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
@@ -12,7 +18,7 @@
         <b><%= question.question %></b>
         <% if question.answer_type # Si es multi choice %>
           <ul class="raw_list">
-            <% question.answer_options.each do |ao| %> 
+            <% question.answer_options.each do |ao| %>
               <li><%= t "activerecord.attributes.answer_option.options.#{ao.option}" %></li>
             <% end %>
           </ul>

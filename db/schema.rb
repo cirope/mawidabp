@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802141803) do
+ActiveRecord::Schema.define(:version => 20120917120149) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -580,6 +580,7 @@ ActiveRecord::Schema.define(:version => 20120802141803) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
+    t.string   "pollable_type"
   end
 
   add_index "questionnaires", ["name"], :name => "index_questionnaires_on_name"

@@ -22,7 +22,7 @@
 
 
       <div id="questionnaire_<%= id %>" style="opacity: 0;">
-        <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id,
+        <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
           :name, :prompt => t('label.no') %>
       </div>
     </div>
@@ -37,7 +37,7 @@
     <div class="item_field" style="width: 30%;">
       <% if user.can_act_as_audited? %>
         <div class="questionnaire">
-          <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id,
+          <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
             :name, :prompt => t('label.no') %>
         </div>
       <% else %>

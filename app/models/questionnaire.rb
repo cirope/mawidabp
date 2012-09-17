@@ -13,6 +13,9 @@ class Questionnaire < ActiveRecord::Base
   has_many :questions, :dependent => :destroy,
     :order => "#{Question.table_name}.sort_order ASC"
   # Named scopes
+  scope :by_pollable_type, lambda { |type|
+    where(:pollable_type => type)
+  }
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
