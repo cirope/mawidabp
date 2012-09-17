@@ -154,13 +154,14 @@ class FindingsController < ApplicationController
   #
   # * GET /findings/export_to_pdf
   def export_to_pdf
+    selected_user = User.find(params[:user_id]) if params[:user_id]
     detailed = !params[:include_details].blank?
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}
     }
 
-    if @auth_user.committee?
+    if @auth_user.committee? || selected_user
       if params[:user_id]
         default_conditions[User.table_name] = {:id => params[:user_id]}
       end

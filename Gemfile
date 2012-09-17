@@ -1,21 +1,20 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.1.6'
+gem 'rails', '3.1.8'
 
 gem 'pg'
 gem 'foreigner'
 gem 'ya2yaml'
 gem 'memcache-client'
 gem 'jquery-rails'
-gem 'mini_magick'
 gem 'uuidtools'
 gem 'newrelic_rpm'
-gem 'validates_timeliness', '3.0.8'
+gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'whenever', :require => false
 gem 'will_paginate'
 gem 'paper_trail'
-gem 'paperclip', '3.0.0'
+gem 'carrierwave'
 gem 'rmagick'
 gem 'gruff'
 gem 'dynamic_form'
@@ -41,6 +40,7 @@ group :development do
 end
 
 group :test do
+  gem 'rake' # Travis CI need this
   gem 'minitest', :require => false
   gem 'turn'
 end

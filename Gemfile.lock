@@ -2,12 +2,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.2.9)
-    actionmailer (3.1.6)
-      actionpack (= 3.1.6)
+    actionmailer (3.1.8)
+      actionpack (= 3.1.8)
       mail (~> 2.3.3)
-    actionpack (3.1.6)
-      activemodel (= 3.1.6)
-      activesupport (= 3.1.6)
+    actionpack (3.1.8)
+      activemodel (= 3.1.8)
+      activesupport (= 3.1.8)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       i18n (~> 0.6)
@@ -16,31 +16,32 @@ GEM
       rack-mount (~> 0.8.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.0.4)
-    activemodel (3.1.6)
-      activesupport (= 3.1.6)
+    activemodel (3.1.8)
+      activesupport (= 3.1.8)
       builder (~> 3.0.0)
       i18n (~> 0.6)
-    activerecord (3.1.6)
-      activemodel (= 3.1.6)
-      activesupport (= 3.1.6)
+    activerecord (3.1.8)
+      activemodel (= 3.1.8)
+      activesupport (= 3.1.8)
       arel (~> 2.2.3)
       tzinfo (~> 0.3.29)
-    activeresource (3.1.6)
-      activemodel (= 3.1.6)
-      activesupport (= 3.1.6)
-    activesupport (3.1.6)
+    activeresource (3.1.8)
+      activemodel (= 3.1.8)
+      activesupport (= 3.1.8)
+    activesupport (3.1.8)
       multi_json (>= 1.0, < 1.3)
     ansi (1.4.3)
     arel (2.2.3)
-    builder (3.0.0)
-    capistrano (2.12.0)
+    builder (3.0.3)
+    capistrano (2.13.3)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    carrierwave (0.5.8)
+      activesupport (~> 3.0)
     chronic (0.6.7)
-    cocaine (0.2.1)
     coffee-rails (3.1.1)
       coffee-script (>= 2.2.0)
       railties (~> 3.1.0)
@@ -54,16 +55,16 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    foreigner (1.2.0)
+    foreigner (1.2.1)
       activerecord (>= 3.0.0)
     gruff (0.3.6)
-    highline (1.6.13)
+    highline (1.6.14)
     hike (1.2.1)
-    i18n (0.6.0)
-    jquery-rails (1.0.19)
-      railties (~> 3.0)
+    i18n (0.6.1)
+    jquery-rails (2.1.2)
+      railties (>= 3.1.0, < 5.0)
       thor (~> 0.14)
-    json (1.7.3)
+    json (1.7.5)
     libv8 (3.3.10.4)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
@@ -73,9 +74,7 @@ GEM
       treetop (~> 1.4.8)
     memcache-client (1.8.5)
     mime-types (1.19)
-    mini_magick (3.4)
-      subexec (~> 0.2.1)
-    minitest (3.2.0)
+    minitest (3.4.0)
     multi_json (1.2.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -84,22 +83,16 @@ GEM
     net-ssh (2.5.2)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
-    newrelic_rpm (3.4.0.1)
+    newrelic_rpm (3.4.2)
     paper_trail (2.6.3)
       activerecord (~> 3.0)
       railties (~> 3.0)
-    paperclip (3.0.0)
-      activemodel (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (>= 0.0.2)
-      mime-types
     pdf-writer (1.1.8)
       color (>= 1.4.0)
       transaction-simple (~> 1.3)
-    pg (0.14.0)
+    pg (0.14.1)
     polyglot (0.3.3)
-    puma (1.5.0)
+    puma (1.6.3)
       rack (~> 1.2)
     rack (1.3.6)
     rack-cache (1.2)
@@ -110,17 +103,17 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
-    rails (3.1.6)
-      actionmailer (= 3.1.6)
-      actionpack (= 3.1.6)
-      activerecord (= 3.1.6)
-      activeresource (= 3.1.6)
-      activesupport (= 3.1.6)
+    rails (3.1.8)
+      actionmailer (= 3.1.8)
+      actionpack (= 3.1.8)
+      activerecord (= 3.1.8)
+      activeresource (= 3.1.8)
+      activesupport (= 3.1.8)
       bundler (~> 1.0)
-      railties (= 3.1.6)
-    railties (3.1.6)
-      actionpack (= 3.1.6)
-      activesupport (= 3.1.6)
+      railties (= 3.1.8)
+    railties (3.1.8)
+      actionpack (= 3.1.8)
+      activesupport (= 3.1.8)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -136,7 +129,7 @@ GEM
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
     rubyzip (0.9.9)
-    sass (3.1.20)
+    sass (3.2.1)
     sass-rails (3.1.6)
       actionpack (~> 3.1.0)
       railties (~> 3.1.0)
@@ -146,8 +139,7 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    subexec (0.2.2)
-    therubyracer (0.10.1)
+    therubyracer (0.10.2)
       libv8 (~> 3.3.10)
     thor (0.14.6)
     tilt (1.3.3)
@@ -159,13 +151,13 @@ GEM
     turn (0.9.6)
       ansi
     tzinfo (0.3.33)
-    uglifier (1.2.4)
+    uglifier (1.3.0)
       execjs (>= 0.3.0)
-      multi_json (>= 1.0.2)
-    unicode (0.4.2)
+      multi_json (~> 1.0, >= 1.0.2)
+    unicode (0.4.3)
     uuidtools (2.1.3)
-    validates_timeliness (3.0.8)
-      timeliness (~> 0.3.4)
+    validates_timeliness (3.0.14)
+      timeliness (~> 0.3.6)
     whenever (0.7.3)
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
@@ -178,6 +170,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   capistrano
+  carrierwave
   coffee-rails
   color
   dynamic_form
@@ -185,15 +178,14 @@ DEPENDENCIES
   gruff
   jquery-rails
   memcache-client
-  mini_magick
   minitest
   newrelic_rpm
   paper_trail
-  paperclip (= 3.0.0)
   pdf-writer
   pg
   puma
-  rails (= 3.1.6)
+  rails (= 3.1.8)
+  rake
   rmagick
   ruby-debug
   rubyzip
@@ -204,7 +196,7 @@ DEPENDENCIES
   uglifier
   unicode
   uuidtools
-  validates_timeliness (= 3.0.8)
+  validates_timeliness
   whenever
   will_paginate
   ya2yaml

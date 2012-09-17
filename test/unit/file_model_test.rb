@@ -45,41 +45,19 @@ class FileModelTest < ActiveSupport::TestCase
     end
   end
   
-  test 'delete file when delete_file is one' do
+  test 'delete file when remove_file is one' do
     assert_difference 'FileModel.count' do
-      @file_model = FileModel.create(
-        :file => Rack::Test::UploadedFile.new(make_file(1), 'text/plain')
+      file = Rack::Test::UploadedFile.new(
+        "#{self.class.fixture_path}/files/test.txt", 'text/plain'
       )
+
+      @file_model = FileModel.create(:file => file)
     end
     
     assert @file_model.file?
-    assert @file_model.update_attributes(:delete_file => '1')
+    assert @file_model.update_attributes(:remove_file => '1')
     assert !@file_model.file?
     
-    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validation' do
-    @file_model = FileModel.new(
-      :file => Rack::Test::UploadedFile.new(make_file(1), 'text/plain')
-    )
-
-    assert @file_model.valid?, @file_model.errors.full_messages.join(' ;')
-
-    FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
-
-    @file_model = FileModel.new(
-      :file => Rack::Test::UploadedFile.new(make_file(21), 'text/plain')
-    )
-
-    assert @file_model.invalid?
-    assert_equal [
-      error_message_from_model(
-        @file_model, :file_file_size, :less_than, :count => 20.megabytes
-      )
-    ], @file_model.errors[:file_file_size]
-
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
   end
 
@@ -97,25 +75,14 @@ class FileModelTest < ActiveSupport::TestCase
   
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates file must have an extension' do
-    @file_model.file_file_name = 'abc'
+    @file_model.file = Rack::Test::UploadedFile.new(
+      "#{self.class.fixture_path}/files/test", 'text/plain'
+    )
+    
     assert @file_model.invalid?
     assert_equal 1, @file_model.errors.count
     assert_equal [
-      error_message_from_model(@file_model, :file_file_name, :without_extension)
-    ], @file_model.errors[:file_file_name]
-  end
-
-  private
-
-  def make_file(file_file_size_in_mb)
-    file_path = File.join "#{TEMP_PATH}file_model_test", "test#{rand(1000)}.txt"
-
-    FileUtils.makedirs "#{TEMP_PATH}file_model_test"
-
-    File.open file_path, 'w' do |out|
-      (file_file_size_in_mb * 1024).times { out.write "#{'x' * 1023}\n" }
-    end
-
-    file_path
+      error_message_from_model(@file_model, :file, :without_extension)
+    ], @file_model.errors[:file]
   end
 end

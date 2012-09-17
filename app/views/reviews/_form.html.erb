@@ -84,6 +84,7 @@
         <% unless readonly %>
           <span class="file_container">
             <%= fm_f.file_field :file, :class => 'inline_item file' %>
+            <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
           </span>
         <% end %>
 

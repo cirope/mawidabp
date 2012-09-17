@@ -18,42 +18,51 @@ module FollowUpCommitteeHelper
     all_risks.each do |risk_model|
       risk_model.value.each do |risk|
         cleaned_risk = [risk[0], risk[1].to_i]
-        
+
         risks << cleaned_risk unless risks.include?(cleaned_risk)
       end
     end
 
     risks
   end
-  
+
   def show_control_objective_weaknesses_report_links(data)
-    if data['weaknesses_count'].kind_of?(Array)
+    if data['weaknesses_count'].kind_of?(Hash)
       new_data = []
-      
-      data['weaknesses_count'].each do |label|
-        ids = @control_objectives_data[data['control_objective']][label] || []
-        url = findings_path('incomplete', :ids => ids)
-        
-        new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
+      @risk_levels.each do |risk|
+        ids_complete = @control_objectives_data[data['control_objective']][risk][:complete]
+        ids_incomplete = @control_objectives_data[data['control_objective']][risk][:incomplete]
+        url_complete = findings_path(:complete, :ids => ids_complete)
+        url_incomplete = findings_path(:incomplete, :ids => ids_incomplete)
+
+        if ids_incomplete.blank? && ids_complete.blank?
+          new_data << "#{risk}: 0 / 0"
+        elsif ids_incomplete.present? && ids_complete.blank?
+          new_data <<  "\"#{risk}: #{ids_incomplete.count}\":#{url_incomplete} / 0"
+        elsif ids_incomplete.blank? && ids_complete.present?
+          new_data << "[\"#{risk}: 0 / #{ids_complete.count}\":#{url_complete}]"
+        elsif ids_incomplete.present? & ids_complete.present?
+          new_data << "#{risk}: \"#{ids_incomplete.count}\":#{url_incomplete} / \"#{ids_complete.count}\":#{url_complete}"
+        end
       end
-      
+
       array_to_ul(new_data, :class => :raw_list)
     else
       data['weaknesses_count']
     end
   end
-  
+
   def show_process_control_weaknesses_report_links(data)
     if data['weaknesses_count'].kind_of?(Array)
       new_data = []
-      
+
       data['weaknesses_count'].each do |label|
         ids = @process_control_ids_data[data['process_control']][label]
         url = findings_path('incomplete', :ids => ids)
-        
+
         new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
       end
-      
+
       array_to_ul(new_data, :class => :raw_list)
     else
       data['weaknesses_count']
