@@ -717,7 +717,7 @@ module ConclusionCommonReports
             end
             new_row[column_name] = list
           else
-            new_row[column_name] = column_content
+            new_row[column_name] = column_content.to_iso
           end
         end
 

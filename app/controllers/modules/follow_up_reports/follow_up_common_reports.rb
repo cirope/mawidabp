@@ -941,11 +941,12 @@ module FollowUpCommonReports
             end
             new_row[column_name] = list
           else
-            new_row[column_name] = column_content
+            new_row[column_name] = column_content.to_iso
           end
         end
 
         column_data << new_row
+
       end
 
       unless column_data.blank?
