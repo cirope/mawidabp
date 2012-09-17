@@ -79,4 +79,7 @@ class PollTest < ActiveSupport::TestCase
       :count => 255)], @poll.errors[:comments]
   end
 
+  test 'validates pollable_type attribute' do
+    assert_equal @poll.pollable_type, @poll.questionnaire.pollable_type
+  end
 end

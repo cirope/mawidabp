@@ -1,6 +1,7 @@
 questionnaire_one:
   name: Encuesta al personal de auditoría
   organization: default_organization
+  pollable_type: ConclusionReview
 
 questionnaire_two:
   name: Encuesta de fin de año
