@@ -262,11 +262,12 @@ class ConclusionFinalReviewsController < ApplicationController
         end
 
         if user && user_data[:questionnaire_id].present?
+          questionnaire = Questionnaire.find user_data[:questionnaire_id]
           @conclusion_final_review.polls.create!(
             :questionnaire_id => user_data[:questionnaire_id],
             :user_id => user.id,
             :organization_id => @auth_organization.id,
-            :pollable_type => @conclusion_final_review.pollable_type
+            :pollable_type => questionnaire.pollable_type
           )
         end
       end
