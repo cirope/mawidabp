@@ -5,9 +5,11 @@ class Notifier < ActionMailer::Base
     :date => proc { Time.now }
 
   def pending_poll_email(poll)
+    @poll = poll
     @user = poll.user
     @hash = @user.change_password_hash
     @organization = poll.organization
+    @token = poll.access_token
 
     mail(
       :to => @user.email,

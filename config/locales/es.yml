@@ -1077,6 +1077,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     must_answer_poll: "Debe contestar la siguiente encuesta para poder ingresar
       al sistema"
     not_found: "No se encontró la encuesta"
+    access_denied: "La encuesta ya ha sido contestada o el link no corresponde con la misma"
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"

@@ -1,4 +1,6 @@
 class Poll < ActiveRecord::Base
+  before_create :generate_access_token
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -64,6 +66,14 @@ class Poll < ActiveRecord::Base
 
   def send_poll_email
     Notifier.pending_poll_email(self).deliver
+  end
+
+  private
+
+  def generate_access_token
+    begin
+      self.access_token = SecureRandom.hex
+    end while self.class.exists?(:access_token => access_token)
   end
 
 end
