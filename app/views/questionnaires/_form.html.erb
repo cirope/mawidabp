@@ -10,7 +10,11 @@
     </p>
     <p>
       <%= qe_f.label :pollable_type %>
-      <%= qe_f.text_field :pollable_type, :maxlength => 255 %>
+      <%= qe_f.select :pollable_type, Questionnaire::POLLABLE_TYPES.map{ |type|
+            [type.constantize.model_name.human, type]
+          }, { :include_blank => true }
+
+ %>
     </p>
   </div>
 

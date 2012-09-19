@@ -2,6 +2,11 @@ class Questionnaire < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
+  # Constantes
+  POLLABLE_TYPES = [
+    'ConclusionReview'
+  ]
+
   # Validaciones
   validates :name, :organization_id, :presence => true
   validates_uniqueness_of :name, :allow_nil => true, :allow_blank => true
