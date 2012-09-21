@@ -21,7 +21,7 @@ class Poll < ActiveRecord::Base
   )
 
   # Validaciones
-  validates :organization_id, :questionnaire_id, :user_id, :presence => true
+  validates :organization_id, :access_token, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones

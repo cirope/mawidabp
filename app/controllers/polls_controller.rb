@@ -89,7 +89,7 @@ class PollsController < ApplicationController
     @poll.organization = @auth_organization
 
     respond_to do |format|
-      if @poll.sae
+      if @poll.save
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
         format.json { render :json => @poll, :status => :created, :location => @poll }
       else
