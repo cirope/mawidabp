@@ -2,15 +2,18 @@ require 'test_helper'
 
 class PollsControllerTest < ActionController::TestCase
   test 'public and private actions' do
-    id_param = {:id => polls(:poll_one).to_param}
-    public_actions = []
+    poll = polls(:poll_one)
+    id_token = { :id => poll.to_param, :token => poll.access_token }
+    id_param = {:id => poll.to_param}
+    public_actions = [
+      [:get, :edit, id_token],
+      [:put, :update, id_param],
+    ]
     private_actions = [
       [:get, :index],
       [:get, :show, id_param],
       [:get, :new],
-      [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -22,7 +25,11 @@ class PollsControllerTest < ActionController::TestCase
 
     public_actions.each do |action|
       send *action
-      assert_response :success
+      if action.include? :update
+        assert_response :redirect
+      else
+        assert_response :success
+      end
     end
   end
 
@@ -61,7 +68,8 @@ class PollsControllerTest < ActionController::TestCase
           :poll => {
             :user_id => users(:poll_user).id,
             :questionnaire_id => questionnaires(:questionnaire_one).id,
-            :organization_id => organizations(:default_organization).id
+            :organization_id => organizations(:default_organization).id,
+            :access_token => SecureRandom.hex
           }
         }
       end
@@ -70,8 +78,8 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'edit poll' do
-    perform_auth users(:poll_user)
-    get :edit, :id => polls(:poll_one).id
+    poll = polls(:poll_one)
+    get :edit, :id => poll.id, :token => poll.access_token
     assert_response :success
     assert_not_nil assigns(:poll)
     assert_select '#error_body', false
@@ -79,7 +87,6 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test "update poll" do
-    perform_auth users(:poll_user)
     assert_no_difference ['Poll.count'] do
       put :update, {
         :id => polls(:poll_one).id,
@@ -88,7 +95,7 @@ class PollsControllerTest < ActionController::TestCase
         }
       }
     end
-    assert_redirected_to welcome_url
+    assert_redirected_to login_users_url
     assert_not_nil assigns(:poll)
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
     assert_equal true, assigns(:poll).answered
