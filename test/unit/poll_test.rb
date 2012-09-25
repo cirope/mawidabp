@@ -27,7 +27,6 @@ class PollTest < ActiveSupport::TestCase
         :questionnaire_id => questionnaires(:questionnaire_one).id,
         :organization_id => organizations(:default_organization).id,
         :user_id => users(:poll_user).id,
-        :access_token => SecureRandom.hex,
         :answers_attributes => {
           '1' => {
             :answer => 'Answer'
@@ -58,14 +57,11 @@ class PollTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
-    @poll.access_token = nil
     @poll.user = nil
     @poll.questionnaire = nil
     @poll.organization = nil
     assert @poll.invalid?
-    assert_equal 4, @poll.errors.count
-    assert_equal [error_message_from_model(@poll, :access_token, :blank)],
-      @poll.errors[:access_token]
+    assert_equal 3, @poll.errors.count
     assert_equal [error_message_from_model(@poll, :questionnaire_id, :blank)],
       @poll.errors[:questionnaire_id]
     assert_equal [error_message_from_model(@poll, :user_id, :blank)],

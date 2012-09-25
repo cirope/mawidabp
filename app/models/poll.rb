@@ -1,5 +1,5 @@
 class Poll < ActiveRecord::Base
-  before_create :generate_access_token
+  before_save :generate_access_token, :on => :create
 
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
@@ -21,7 +21,7 @@ class Poll < ActiveRecord::Base
   )
 
   # Validaciones
-  validates :organization_id, :access_token, :questionnaire_id, :user_id, :presence => true
+  validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   # Relaciones
@@ -74,6 +74,8 @@ class Poll < ActiveRecord::Base
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(:access_token => access_token)
+
+    Rails.logger.debug "ACCESS TOKEN: #{self.access_token}"
   end
 
 end
