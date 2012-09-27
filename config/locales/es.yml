@@ -107,6 +107,7 @@ es:
     help_title: "AYUDA"
 
   message:
+    change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la operación"

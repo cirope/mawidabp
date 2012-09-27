@@ -92,7 +92,7 @@
           :finding_status_change_history) : '')), :class => :inline %>
       <%= finding_status_field(f_f) %>
     </p>
-    
+
     <% if show_history_changes %>
       <%= render :partial => 'history_changes',
         :locals => { :finding => @finding } %>
@@ -164,7 +164,7 @@
     <div class="column_headers">
       <div class="item_column" style="width: 35%;">
         <h3><%= User.model_name.human %></h3>
-      </div>  
+      </div>
       <div class="item_column" style="width: 15%;">
         <h3><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
         show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></h3>
@@ -212,7 +212,7 @@
       <% end %>
     </ul>
   <% end %>
-    
+
   <h1>
     <%= t('finding.finding_relations') %>
     <%= show_inline_help_for(:finding_relations) %>
@@ -242,13 +242,13 @@
       'data-event' => 'addNestedItem',
       'data-container' => '#finding_relations' %>
   </p>
-  
+
   <% unless @finding.inverse_finding_relations.blank? %>
     <h1>
       <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h1>
-    
+
     <table class="summary_table">
       <thead>
         <tr>
@@ -272,7 +272,7 @@
       <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
     </h1>
-    
+
     <table class="summary_table" id="finding_answers">
       <thead>
         <tr>
@@ -307,7 +307,7 @@
 
   <div style="margin-top: 2em;">
     <h1><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
-    
+
     <div class="column_headers">
       <div class="item_column" style="width: 20%;">
         <h3><%= WorkPaper.human_attribute_name :name %></h3>
@@ -404,7 +404,7 @@
   <div style="display:none">
     <%= f_f.hidden_field :lock_version %>
   </div>
-  
+
   <p>
     <span class="button"><%= f_f.submit %></span>
   </p>
@@ -421,5 +421,8 @@
     } else {
       userField.val('').removeClass('autocomplete_id');
     }
+  });
+  $(document).on('change', '#finding_risk', function() {
+  alert('<%= I18n.t 'message.change_weakness_risk' %>');
   });
 </script>
