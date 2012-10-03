@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de observaciones y oportunidades
@@ -39,13 +40,22 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
-  
+
   test 'list findings in xml' do
     perform_auth
     get :index, :completed => 'incomplete', :format => :xml
     assert_response :success
     assert_not_nil assigns(:findings)
     assert @response.headers['Content-Type'].start_with?('application/xml')
+  end
+
+  test 'list findings in csv' do
+    perform_auth
+    findings = Finding.limit 3
+
+    assert_nothing_raised(Exception) do
+      get :export_to_csv, :completed => 'incomplete', :findings => findings.to_a, :format => :csv
+    end
   end
 
   test 'list findings for follow_up_committee' do
@@ -80,7 +90,7 @@ class FindingsControllerTest < ActionController::TestCase
       :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
       :columns => ['review', 'issue_date']
     }
-    
+
     assert_response :success
     assert_not_nil assigns(:findings)
     assert_equal 5, assigns(:findings).size
@@ -100,7 +110,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
-  
+
   test 'list findings for responsible auditor' do
     perform_auth
     user = User.find(users(:first_time_user).id)
@@ -112,14 +122,14 @@ class FindingsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'findings/index'
   end
-  
+
   test 'list findings for specific ids' do
     perform_auth
     ids = [
       findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id,
       findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
     ]
-    
+
     get :index, :completed => 'incomplete', :ids => ids
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -135,7 +145,7 @@ class FindingsControllerTest < ActionController::TestCase
       :query => '1 2 4 y 1w',
       :columns => ['description', 'review']
     }
-    
+
     assert_redirected_to finding_url('incomplete',
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:findings)
@@ -191,12 +201,12 @@ class FindingsControllerTest < ActionController::TestCase
     # No está autorizado el usuario a ver la observación
     assert_redirected_to findings_url('complete')
   end
-  
+
   test 'unauthorized edit incomplete finding' do
     perform_auth users(:audited_user)
     get :edit, :completed => 'incomplete',
       :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
-    
+
     # No está autorizado el usuario a ver la observación por estar incompleta
     assert_redirected_to findings_url('incomplete')
   end
@@ -308,7 +318,7 @@ class FindingsControllerTest < ActionController::TestCase
         end
       end
     end
-    
+
     assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
@@ -555,25 +565,25 @@ class FindingsControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :completed => 'incomplete', :q => 'adm', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
     assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
 
     get :auto_complete_for_user, { :completed => 'incomplete', :q => 'bare', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Bare
     assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
 
     get :auto_complete_for_user, { :completed => 'incomplete', :q => 'x_nobody', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size # Sin resultados
   end
 
@@ -590,9 +600,9 @@ class FindingsControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -607,9 +617,9 @@ class FindingsControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -621,9 +631,9 @@ class FindingsControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
@@ -635,9 +645,9 @@ class FindingsControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, findings.size # Sin resultados
   end
 end
