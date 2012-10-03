@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "Finding"
@@ -158,11 +159,11 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, @finding.errors.count
     assert_equal [error_message_from_model(@finding, :solution_date, :blank)],
       @finding.errors[:solution_date]
-    
+
     @finding = Finding.find(
       findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
     )
-    
+
     @finding.state = Finding::STATUS[:revoked]
     @finding.audit_comments = '  '
     assert @finding.invalid?
@@ -289,9 +290,9 @@ class FindingTest < ActiveSupport::TestCase
       :comment => 'Test comment',
       :user => users(:administrator_user)
     )
-    
+
     assert finding.valid?
-    
+
     finding.state = Finding::STATUS[:revoked]
     assert finding.invalid?
 
@@ -360,7 +361,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !@finding.stale?
 
     @finding.follow_up_date = 2.days.ago.to_date
-    
+
     assert @finding.stale?
   end
 
@@ -413,7 +414,7 @@ class FindingTest < ActiveSupport::TestCase
       finding.notifications.detect { |n| n.user.can_act_as_audited? }.user_who_confirm.id
     assert finding.save
   end
-  
+
   test 'unconfirmed with empty audited response must not change' do
     finding = Finding.find(findings(
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
@@ -528,7 +529,7 @@ class FindingTest < ActiveSupport::TestCase
 
     # Fecha de notificación y de cambio de estado a Sin Respuesta
     assert_equal 2, finding.important_dates.size
-    
+
     finding = Finding.find findings(
       :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id
 
@@ -580,7 +581,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.update_attributes(:description => 'Updated description')
     end
-    
+
     @finding.finding_user_assignments.each do |fua|
       fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
     end
@@ -621,7 +622,7 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_user_assignments.each do |fua|
       fua.mark_for_destruction if fua.user_id == users(:administrator_user).id
-    end    
+    end
     finding.finding_user_assignments.build(:user => new_user)
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
@@ -769,21 +770,21 @@ class FindingTest < ActiveSupport::TestCase
       finding.update_attributes(:repeated_of_id => repeated_of.id)
     end
   end
-  
+
   test 'undo reiteration' do
     finding = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     repeated_of_original_state = repeated_of.state
-    
+
     assert !repeated_of.repeated?
     assert finding.update_attributes(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
-    
+
     finding.undo_reiteration
-    
+
     assert !repeated_of.reload.repeated?
     assert_nil finding.reload.repeated_of
     assert_equal repeated_of_original_state, repeated_of.state
@@ -828,6 +829,24 @@ class FindingTest < ActiveSupport::TestCase
     FileUtils.rm @finding.absolute_pdf_path
   end
 
+  test 'to csv' do
+    detailed = true
+    header = Finding.to_csv(detailed, 'incomplete')
+    row = @finding.to_csv(detailed, 'incomplete')
+
+    assert_equal header[7], 'Fecha de implementación'
+    assert_equal header.count, 10
+    assert_equal row.count, 10
+
+    detailed = false
+    header = Finding.to_csv(detailed, 'complete')
+    row = @finding.to_csv(detailed, 'complete')
+
+    assert_equal header[7], 'Fecha de solución'
+    assert_equal header.count, 8
+    assert_equal row.count, 8
+  end
+
   test 'notify users if they are selected for notification' do
     @finding.users_for_notification = [users(:administrator_user).id]
 
@@ -838,7 +857,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_difference 'ActionMailer::Base.deliveries.size' do
       assert @finding.save
     end
-    
+
     response = ActionMailer::Base.deliveries.first
 
     assert response.subject.include?(
@@ -860,7 +879,7 @@ class FindingTest < ActiveSupport::TestCase
       )
     )
     assert finding.save
-    
+
     finding.users_for_notification = [users(:administrator_user).id]
 
     ActionMailer::Base.delivery_method = :test
@@ -1051,7 +1070,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
-    
+
     users_by_level_for_notification = {1 => [], 2 => [], 3 => [], 4 => []}
     finding_ids = []
 
@@ -1059,7 +1078,7 @@ class FindingTest < ActiveSupport::TestCase
 
     until (findings = Finding.unanswered_and_stale(n += 1)).empty?
       assert_equal 1, findings.size
-      
+
       finding = findings.first
 
       assert !finding.users_for_scaffold_notification(n).empty?
