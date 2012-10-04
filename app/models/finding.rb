@@ -1606,7 +1606,9 @@ class Finding < ActiveRecord::Base
   def to_csv(detailed = false, completed = 'incomplete')
     date = completed == 'incomplete' ? self.follow_up_date :
       self.solution_date
+    origination_date = self.origination_date
     date_text = I18n.l(date, :format => :minimal).to_iso if date
+    origination_date_text = I18n.l(origination_date, :format => :minimal).to_iso if origination_date
     being_implemented = self.kind_of?(Weakness) && self.being_implemented?
     rescheduled_text = being_implemented && !self.rescheduled? ?
       t('label.no') : ''
@@ -1638,6 +1640,7 @@ class Finding < ActiveRecord::Base
       audited.join('; '),
       self.description,
       rescheduled_text.to_iso,
+      origination_date_text,
       date_text
     ]
 
@@ -1687,6 +1690,7 @@ class Finding < ActiveRecord::Base
       I18n.t('finding.audited', :count => 0),
       Weakness.human_attribute_name(:description),
       I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})",
+      Finding.human_attribute_name(:origination_date),
       Finding.human_attribute_name((completed == 'incomplete') ?
         :follow_up_date : :solution_date)
     ]

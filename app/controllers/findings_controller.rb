@@ -7,6 +7,7 @@ class FindingsController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :find_with_organization, :prepare_parameters
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+
   autoload :CSV, 'csv'
   respond_to :csv
 
@@ -162,9 +163,9 @@ class FindingsController < ApplicationController
     completed = params[:completed]
 
     if detailed
-      columns = 10
+      columns = 11
     else
-      columns = 8
+      columns = 9
     end
 
     buffer = ''
