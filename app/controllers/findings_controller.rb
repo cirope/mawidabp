@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de debilidades y oportunidades de mejora
 #
 # Lista, muestra, modifica y elimina debilidades (#Weakness) y oportunidades de
@@ -25,7 +26,7 @@ class FindingsController < ApplicationController
     if @auth_user.committee? || @selected_user
       if @selected_user
           default_conditions[User.table_name] = {:id => params[:user_id]}
-          
+
           if @is_responsible
             default_conditions[FindingUserAssignment.table_name] = {
               :responsible_auditor => true
@@ -40,7 +41,7 @@ class FindingsController < ApplicationController
           @selected_user.id : self_and_descendants_ids
       }
     end
-    
+
     if params[:ids]
       default_conditions[:id] = params[:ids]
     else
@@ -48,7 +49,7 @@ class FindingsController < ApplicationController
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
         Finding::STATUS.values - Finding::PENDING_STATUS - [Finding::STATUS[:revoked]]
     end
-    
+
     build_search_conditions Finding, default_conditions
 
     @findings = Finding.includes(
@@ -70,12 +71,13 @@ class FindingsController < ApplicationController
         @findings = @findings.paginate(
           :page => params[:page], :per_page => APP_LINES_PER_PAGE
         )
-        
+
         if @findings.size == 1 && !@query.blank? && !params[:page]
           redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb
       format.xml  {
+        headers['Cache-Control'] = "max-age=1"
         headers['Content-disposition'] = "attachment; filename=#{@title.underscore.sanitized_for_filename}.xml"
         render :xml => @findings
       }
@@ -118,17 +120,17 @@ class FindingsController < ApplicationController
   def update
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])
-    
+
     if @finding.nil? ||
         (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
       raise 'Finding can not be updated'
     end
-    
+
     # Los auditados no pueden modificar desde observaciones las asociaciones
     if @auth_user.can_act_as_audited?
       params[:finding].delete :finding_user_assignments_attributes
     end
-    
+
     prepare_parameters
 
     respond_to do |format|
@@ -256,7 +258,7 @@ class FindingsController < ApplicationController
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
-    
+
     findings.limit(FINDING_MAX_PDF_ROWS).each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
@@ -279,13 +281,13 @@ class FindingsController < ApplicationController
 
         rescheduled_text << dates.join("\n")
       end
-      
+
       audited = finding.reload.users.select(&:audited?).map do |u|
         finding.process_owners.include?(u) ?
           "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
           u.full_name
       end
-      
+
       finding_data = [
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
@@ -294,17 +296,17 @@ class FindingsController < ApplicationController
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
       ].compact.join("\n")
-      
+
       unless (relations = finding.finding_relations).blank?
         finding_data << "\n<b>#{t('finding.finding_relations')}</b>: "
         finding_data << relations.map(&:to_s).join(' | ')
       end
-      
+
       unless (repeated_ancestors = finding.repeated_ancestors).blank?
         finding_data << "\n<b>#{t('finding.repeated_ancestors')}</b>: "
         finding_data << repeated_ancestors.map(&:to_s).join(' | ')
       end
-      
+
       unless (repeated_children = finding.repeated_children).blank?
         finding_data << "\n<b>#{t('finding.repeated_children')}</b>: "
         finding_data << repeated_children.map(&:to_s).join(' | ')
@@ -339,7 +341,7 @@ class FindingsController < ApplicationController
         table.render_on pdf
       end
     end
-    
+
     if findings.count > FINDING_MAX_PDF_ROWS
       pdf.move_pointer PDF_FONT_SIZE
       pdf.text "<b>#{t('finding.pdf.size_warning', :count => FINDING_MAX_PDF_ROWS)}</b>"
@@ -388,7 +390,7 @@ class FindingsController < ApplicationController
         "#{User.table_name}.name ASC"
       ]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -432,7 +434,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
-    
+
     respond_to do |format|
       format.json { render :json => @findings }
     end
@@ -460,7 +462,7 @@ class FindingsController < ApplicationController
           @auth_user.related_users_and_descendants.map(&:id) + [@auth_user.id]
       }
     end
-    
+
     conditions[:state] = params[:completed] == 'incomplete' ?
       Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
       Finding::STATUS.values - Finding::PENDING_STATUS
