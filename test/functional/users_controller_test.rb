@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de usuarios
@@ -81,6 +82,25 @@ class UsersControllerTest < ActionController::TestCase
       assert_select '#alert p', I18n.t('message.invalid_user_or_password')
     end
   end
+
+  # Prueba que no pueda autenticarse un usuario que está dado de baja
+  test 'login hidden user' do
+    user = users(:administrator_user)
+    user.hidden = true
+    assert user.save
+
+    assert_difference 'ErrorRecord.count' do
+      post :create_session,
+        :user => {
+          :user => user.user,
+          :password => PLAIN_PASSWORDS[user.user]
+        }
+      assert_response :success
+      # en div#alert se leen los mensajes de flash[]
+      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+    end
+  end
+
 
   test 'invalid user and password attempt in admin mode' do
     @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
@@ -242,7 +262,7 @@ class UsersControllerTest < ActionController::TestCase
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
-    
+
     assert_redirected_to :controller => :welcome, :action => :index
     login_record = LoginRecord.where(
       :user_id => users(:administrator_user).id,
@@ -250,19 +270,19 @@ class UsersControllerTest < ActionController::TestCase
     ).first
     assert_kind_of LoginRecord, login_record
   end
-  
+
   test 'login with polls' do
-    
+
     user = users(:poll_user)
-    
+
     post :create_session,
       :user => {
         :user => user.user,
         :password => PLAIN_PASSWORDS[user.user]
       }
-      
+
     assert_redirected_to edit_poll_url(user.first_pending_poll)
-    
+
     login_record = LoginRecord.where(
       :user_id => user.id,
       :organization_id => organizations(:default_organization).id
@@ -335,7 +355,7 @@ class UsersControllerTest < ActionController::TestCase
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
-      
+
     assert_redirected_to edit_password_user_url(user)
 
     # Cualquier petición redirecciona nuevamente al cambio de contraseña
@@ -379,7 +399,7 @@ class UsersControllerTest < ActionController::TestCase
         :user => users(:administrator_user).user,
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
-    
+
     assert_redirected_to :controller => :welcome, :action => :index
 
     post :create_session, {:user => {
@@ -604,7 +624,7 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
-    
+
     assert_no_difference 'User.count', 'OrganizationRole.count' do
       assert_difference 'ActionMailer::Base.deliveries.size' do
         assert_difference 'user.children.count', -1 do
@@ -684,33 +704,33 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
-    
+
     assert_difference 'ActionMailer::Base.deliveries.size' do
       put :blank_password, :id => users(:administrator_user).user
     end
-    
+
     assert_redirected_to users_url
     user = User.find(users(:administrator_user).id)
     assert_not_nil user.change_password_hash
   end
-  
+
   test 'reset password' do
     get :reset_password
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/reset_password'
   end
-  
+
   test 'send password reset' do
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
     original_hash = users(:blank_password_user).change_password_hash
-    
+
     assert_difference 'ActionMailer::Base.deliveries.size' do
       post :send_password_reset, :email => users(:blank_password_user).email
     end
-    
+
     assert_redirected_to login_users_url
     user = User.find(users(:blank_password_user).id)
     assert_not_nil user.change_password_hash
@@ -749,7 +769,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/edit_password'
-    
+
     assert_difference 'OldPassword.count' do
       put :update_password, {
         :id => users(:blank_password_user).to_param,
@@ -857,7 +877,7 @@ class UsersControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to :controller => :users, :action => :login
     assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
@@ -903,7 +923,7 @@ class UsersControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_response :success
     assert_not_nil assigns(:auth_user)
     assert_equal 'Updated Name', assigns(:auth_user).name
@@ -1158,25 +1178,25 @@ class UsersControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Administrator
     assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
     get :auto_complete_for_user, { :q => 'blank', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, users.size # Blank and Expired blank
     assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
     post :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size
   end
 end

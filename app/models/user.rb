@@ -45,6 +45,9 @@ class User < ActiveRecord::Base
   # Alias de atributos
   alias_attribute :informal, :user
 
+  # Default scope
+  default_scope where('hidden = false')
+
   # Named scopes
   scope :list, lambda {
     includes(:organizations).where(

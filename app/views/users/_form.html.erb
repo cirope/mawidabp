@@ -53,6 +53,10 @@
       <%= u_f.check_box :enable, :class => :inline_item %>
     </p>
     <p class="form_item">
+      <%= u_f.label :hidden, nil, :class => :inline %>
+      <%= u_f.check_box :hidden, :class => :inline_item %>
+    </p>
+    <p class="form_item">
       <%= u_f.label :send_notification_email, nil, :class => :inline %>
       <%= u_f.check_box :send_notification_email, {:class => :inline_item}, '1', '' %>
     </p>
@@ -109,7 +113,7 @@
         'data-event' => 'addNestedItem', 'data-container' => '#children' %>
     </p>
   <% end %>
-    
+
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 50%;">
@@ -133,7 +137,7 @@
       'data-event' => 'addNestedItem',
       'data-container' => '#related_user_relations' %>
   </p>
-  
+
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 40%;">

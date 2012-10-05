@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918151559) do
+ActiveRecord::Schema.define(:version => 20121004175435) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -712,11 +712,13 @@ ActiveRecord::Schema.define(:version => 20120918151559) do
     t.boolean  "group_admin",                         :default => false
     t.text     "notes"
     t.datetime "hash_changed"
+    t.boolean  "hidden",                              :default => false
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["group_admin"], :name => "index_users_on_group_admin"
+  add_index "users", ["hidden"], :name => "index_users_on_hidden"
   add_index "users", ["manager_id"], :name => "index_users_on_manager_id"
   add_index "users", ["resource_id"], :name => "index_users_on_resource_id"
   add_index "users", ["user"], :name => "index_users_on_user", :unique => true

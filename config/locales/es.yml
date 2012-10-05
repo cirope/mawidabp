@@ -1996,6 +1996,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         notes: "Notas"
         failed_attempts: "Intentos fallidos"
         enable: "Habilitado"
+        hidden: "Oculto"
         last_access: "Último acceso"
         logged_in: "Conectado"
         organization_roles: "Perfiles"
