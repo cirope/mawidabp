@@ -179,7 +179,7 @@ class FindingsController < ApplicationController
     end
 
     rows.each do |row|
-      parsed_cells = CSV.generate_row(row, columns, buffer)
+      parsed_cells = CSV.generate_row(row, columns, buffer, ?;)
     end
 
     filename = t 'finding.csv_name'
