@@ -8,6 +8,7 @@
     <tr>
       <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'user_name', 'last_name' %>
       <%= make_filterable_column Poll.human_attribute_name(:questionnaire_id), nil, 'questionnaire_name' %>
+      <%= make_not_available_column Poll.human_attribute_name(:answered) %>
       <%= make_not_available_column Poll.human_attribute_name(:date) %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %>
     </tr>
@@ -18,6 +19,7 @@
       <tr class="<%= cycle('even', 'odd') %>">
         <td><%= poll.user.informal_name  %></td>
         <td><%= poll.questionnaire.name %></td>
+        <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
         <td><%= l poll.updated_at.to_date, :format => :long %></td>
         <td><%= link_to_show poll %></td>
         <td><%= button_to_destroy poll %></td>
