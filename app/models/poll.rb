@@ -7,15 +7,15 @@ class Poll < ActiveRecord::Base
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     :name => {
-      :column => "LOWER(#{User.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{User.table_name}.name)", :operator => 'ILIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :last_name => {
-      :column => "LOWER(#{User.table_name}.last_name)", :operator => 'LIKE',
+      :column => "LOWER(#{User.table_name}.last_name)", :operator => 'ILIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :questionnaire_name => {
-      :column => "LOWER(#{Questionnaire.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{Questionnaire.table_name}.name)", :operator => 'ILIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   )
