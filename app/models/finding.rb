@@ -1637,9 +1637,9 @@ class Finding < ActiveRecord::Base
       self.review_code,
       self.state_text,
       self.kind_of?(Weakness) ? self.risk_text.to_iso : '',
-      audited.join('; '),
-      self.description,
-      rescheduled_text.to_iso,
+      audited.join('; ').to_iso,
+      self.description.try(:to_iso),
+      rescheduled_text.try(:to_iso),
       origination_date_text,
       date_text
     ]
@@ -1684,20 +1684,20 @@ class Finding < ActiveRecord::Base
     column_data = []
     column_headers = [
       "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
-      Weakness.human_attribute_name(:review_code),
+      Weakness.human_attribute_name(:review_code).to_iso,
       Weakness.human_attribute_name(:state),
       Weakness.human_attribute_name(:risk),
       I18n.t('finding.audited', :count => 0),
-      Weakness.human_attribute_name(:description),
-      I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})",
+      Weakness.human_attribute_name(:description).to_iso,
+      (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})").to_iso,
       Finding.human_attribute_name(:origination_date),
-      Finding.human_attribute_name((completed == 'incomplete') ?
-        :follow_up_date : :solution_date)
+      (Finding.human_attribute_name((completed == 'incomplete') ?
+        :follow_up_date : :solution_date)).to_iso
     ]
 
     if detailed
-      column_headers << Finding.human_attribute_name(:audit_comments)
-      column_headers << Finding.human_attribute_name(:answer)
+      column_headers << Finding.human_attribute_name(:audit_comments).to_iso
+      column_headers << Finding.human_attribute_name(:answer).to_iso
     end
 
     column_headers
