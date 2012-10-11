@@ -8,6 +8,9 @@ class FindingsController < ApplicationController
   hide_action :load_privileges, :find_with_organization, :prepare_parameters
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
+  autoload :CSV, 'csv'
+  respond_to :csv
+
   # Lista las debilidades y oportunidades
   #
   # * GET /findings
@@ -154,10 +157,45 @@ class FindingsController < ApplicationController
 
   # Lista las observaciones / oportunidades de mejora
   #
+  # * GET /findings/export_to_csv
+  def export_to_csv
+    findings = Finding.find params[:findings]
+    detailed = params[:include_details].present?
+    completed = params[:completed]
+
+    if detailed
+      columns = 11
+    else
+      columns = 9
+    end
+
+    buffer = ''
+    rows = []
+
+    header = Finding.to_csv(detailed, completed)
+    rows << header
+
+    findings.each do |finding|
+      rows << finding.to_csv(detailed, completed)
+    end
+
+    rows.each do |row|
+      parsed_cells = CSV.generate_row(row, columns, buffer, ?;)
+    end
+
+    filename = t 'finding.csv_name'
+
+    respond_with findings do |format|
+      format.csv { render :csv => buffer, :filename => filename }
+    end
+  end
+
+  # Lista las observaciones / oportunidades de mejora
+  #
   # * GET /findings/export_to_pdf
   def export_to_pdf
     selected_user = User.find(params[:user_id]) if params[:user_id]
-    detailed = !params[:include_details].blank?
+    detailed = params[:include_details].present?
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}

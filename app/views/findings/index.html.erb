@@ -90,6 +90,10 @@
   <%= link_to t('finding.download_xml'),
     findings_path(
       request.query_parameters.merge(:_ts => Time.now.to_i, :format => :xml)
+    ) %> |
+  <%= link_to t('finding.download_csv'),
+    export_to_csv_findings_path(
+      request.query_parameters.merge(:findings => @findings.to_a, :format => :csv)
     ) %>
   <div class="clear"></div>
 </div>
@@ -98,7 +102,7 @@
   $('#user_id_select').change(function() {
     if($(this).val()) {
       var url = '<%= findings_path(params[:completed]) %>';
-      
+
       BrowserManipulation.changeLocation(url, jQuery.parseJSON($(this).val()));
     }
   });
