@@ -111,7 +111,7 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       if @poll.update_attributes(params[:poll])
-        format.html { redirect_to poll_path(@poll), :layout => :application_clean, :notice => (t 'poll.correctly_updated') }
+        format.html { redirect_to login_users_url, :notice => (t 'poll.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }

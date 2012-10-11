@@ -834,7 +834,7 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'incomplete')
     row = @finding.to_csv(detailed, 'incomplete')
 
-    assert_equal header[8], 'Fecha de implementación'
+    assert_equal header[8], 'Fecha de implementación'.to_iso
     assert_equal header.count, 11
     assert_equal row.count, 11
 
@@ -842,7 +842,7 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'complete')
     row = @finding.to_csv(detailed, 'complete')
 
-    assert_equal header[8], 'Fecha de solución'
+    assert_equal header[8], 'Fecha de solución'.to_iso
     assert_equal header.count, 9
     assert_equal row.count, 9
   end
