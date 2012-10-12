@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class FindingAnswer < ActiveRecord::Base
   include ParameterSelector
 
@@ -24,10 +25,10 @@ class FindingAnswer < ActiveRecord::Base
     fa.user.try(:can_act_as_audited?) && fa.finding.try(:pending?) &&
       fa.finding.commitment_date.blank?
   }
-  
+
   # Relaciones
   belongs_to :finding
-  belongs_to :user
+  belongs_to :user, :conditions => {  "#{User.table_name}.hidden" => [true,false] }
   belongs_to :file_model, :dependent => :destroy
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
