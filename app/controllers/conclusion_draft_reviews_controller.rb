@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de informes borradores
 #
 # Lista, muestra, crea, modifica y elimina informes borradores
@@ -267,7 +268,10 @@ class ConclusionDraftReviewsController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ['organizations.id = :organization_id']
+    conditions = [
+      'organizations.id = :organization_id',
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -284,7 +288,7 @@ class ConclusionDraftReviewsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -296,7 +300,7 @@ class ConclusionDraftReviewsController < ApplicationController
         :id => params[:id],
         "#{Period.table_name}.organization_id" => @auth_organization.id
       ).first
-      
+
       response = {
         :approved => review.is_approved?,
         :can_be_approved_by_force => review.can_be_approved_by_force,
@@ -305,7 +309,7 @@ class ConclusionDraftReviewsController < ApplicationController
     else
       response = {}
     end
-    
+
     respond_to do |format|
       format.json { render :json => response }
     end

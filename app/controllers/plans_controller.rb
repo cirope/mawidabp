@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'pdf/simpletable'
 
 # =Controlador de planes de trabajo
@@ -102,7 +103,7 @@ class PlansController < ApplicationController
   def update
     @title = t 'plan.edit_title'
     @plan = find_with_organization(params[:id], true)
-    
+
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
         format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
@@ -136,7 +137,7 @@ class PlansController < ApplicationController
   end
 
   # Exporta el plan de trabajo en formato PDF
-  # 
+  #
   # * GET /plans/export_to_pdf/1
   def export_to_pdf
     @plan = find_with_organization(params[:id], true)
@@ -178,7 +179,7 @@ class PlansController < ApplicationController
         "#{BusinessUnitType.table_name}.name ASC"
       ]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @business_units }
     end
@@ -188,7 +189,10 @@ class PlansController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
+    conditions = [
+      "#{Organization.table_name}.id = :organization_id",
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -205,7 +209,7 @@ class PlansController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json {
         render :json => @users.to_json(
@@ -245,7 +249,7 @@ class PlansController < ApplicationController
         ]
       }
     ] : [:period]
-    
+
     Plan.includes(*include).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)

@@ -45,8 +45,7 @@ class User < ActiveRecord::Base
   # Alias de atributos
   alias_attribute :informal, :user
 
-  # Default scope
-  default_scope where('hidden = false')
+
 
   # Named scopes
   scope :list, lambda {
@@ -70,6 +69,9 @@ class User < ActiveRecord::Base
   ).where(
     :findings => {:state => Finding::STATUS[:notify], :final => false}
   ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
+  scope :not_hidden, where(
+    'hidden = false'
+  )
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?

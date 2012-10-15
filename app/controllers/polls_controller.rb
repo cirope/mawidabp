@@ -139,7 +139,10 @@ class PollsController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
+    conditions = [
+      "#{Organization.table_name}.id = :organization_id",
+      "#{User.table_name}.hidden = false"
+    ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
       :organization_id => @auth_organization.id,

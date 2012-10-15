@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de informes
 #
 # Lista, muestra, crea, modifica y elimina informes (#Review) y sus objetivos
@@ -87,7 +88,7 @@ class ReviewsController < ApplicationController
   def create
     @title = t 'review.new_title'
     @review = Review.new(params[:review])
-    
+
     respond_to do |format|
       if @review.save
         flash.notice = t 'review.correctly_created'
@@ -178,9 +179,9 @@ class ReviewsController < ApplicationController
     plan_item = PlanItem.find_by_id(params[:id])
     business_unit = plan_item.try(:business_unit)
     name = business_unit.try(:name)
-    
+
     type = business_unit.business_unit_type.name if business_unit
-    
+
     render :json => {
       :business_unit_name => name,
       :business_unit_type => type,
@@ -251,7 +252,10 @@ class ReviewsController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
+    conditions = [
+      "#{Organization.table_name}.id = :organization_id",
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -269,7 +273,7 @@ class ReviewsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -312,7 +316,7 @@ class ReviewsController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
-    
+
     respond_to do |format|
       format.json { render :json => @findings }
     end
@@ -328,7 +332,7 @@ class ReviewsController < ApplicationController
     ]
     parameters = {:organization_id => @auth_organization.id}
     parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
-    
+
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{ProcedureControlSubitem.table_name}.control_objective_text) LIKE :procedure_control_subitem_data_#{i}",
@@ -350,7 +354,7 @@ class ReviewsController < ApplicationController
         "#{ControlObjective.table_name}.name ASC"
       ]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @procedure_control_subitems }
     end
