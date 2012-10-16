@@ -159,7 +159,7 @@ class FindingsController < ApplicationController
   #
   # * GET /findings/export_to_csv
   def export_to_csv
-    findings = Finding.find params[:findings]
+    findings = Finding.find params[:findings] if params[:findings].present?
     detailed = params[:include_details].present?
     completed = params[:completed]
 
@@ -175,7 +175,7 @@ class FindingsController < ApplicationController
     header = Finding.to_csv(detailed, completed)
     rows << header
 
-    findings.each do |finding|
+    findings.try(:each) do |finding|
       rows << finding.to_csv(detailed, completed)
     end
 
@@ -533,6 +533,7 @@ class FindingsController < ApplicationController
 
   def load_privileges #:nodoc:
     @action_privileges.update(
+      :export_to_csv => :read,
       :export_to_pdf => :read,
       :follow_up_pdf => :read,
       :auto_complete_for_user => :read,
