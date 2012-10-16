@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'modules/follow_up_reports/follow_up_common_reports'
 require 'modules/follow_up_reports/follow_up_high_risk_reports'
 
@@ -88,7 +89,7 @@ class FollowUpCommitteeController < ApplicationController
           if c_r.review.business_unit.business_unit_type_id == but.id
             process_controls = {}
             weaknesses_count = {}
-            
+
             c_r.review.control_objective_items_for_score.each do |coi|
               process_controls[coi.process_control.name] ||= []
               process_controls[coi.process_control.name] << coi
@@ -112,7 +113,7 @@ class FollowUpCommitteeController < ApplicationController
                 sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
               weaknesses_count[w.risk_text] ||= 0
-              
+
               if w.repeated?
                 repeated_count += 1
               else
@@ -191,7 +192,12 @@ class FollowUpCommitteeController < ApplicationController
       unless @selected_business_unit
         unless @audits_by_business_unit[period].blank?
           count = 0
-          total = @audits_by_business_unit[period].inject(0) do |sum, data|
+
+          internal_audits_by_business_unit = @audits_by_business_unit[period].reject do |but|
+            but[:external]
+          end
+
+          total = internal_audits_by_business_unit.inject(0) do |sum, data|
             scores = data[:review_scores]
 
             if scores.blank?
@@ -294,7 +300,7 @@ class FollowUpCommitteeController < ApplicationController
           pdf.move_pointer PDF_FONT_SIZE
 
           pdf.text text, :font_size => PDF_FONT_SIZE
-          
+
           if data[:repeated_count] > 0
             pdf.text(t('follow_up_committee.synthesis_report.repeated_count',
                 :count => data[:repeated_count]), :font_size => PDF_FONT_SIZE)
@@ -326,7 +332,7 @@ class FollowUpCommitteeController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
   end
-  
+
   # Crea un PDF con un resumen de indicadores de calidad para un determinado
   # rango de fechas
   #
@@ -344,17 +350,17 @@ class FollowUpCommitteeController < ApplicationController
     )
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
-    
+
     days = total = 0
     # Medium risk weakenesses being implemented
     conclusion_reviews.each do |cr|
-      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', Date.today) 
+      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', Date.today)
       weaknesses.each do |w|
         days+= (Date.today - w.follow_up_date).abs.round
         total+= 1
       end
     end
-          
+
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period)
@@ -365,7 +371,7 @@ class FollowUpCommitteeController < ApplicationController
         ['%.1f%', :production_level],
         ['%d', :ancient_medium_risk_weaknesses]
       ]
-      
+
       # Ancient mediun risk weaknesses rate
       days = total = 0
 
@@ -382,7 +388,7 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:ancient_medium_risk_weaknesses] = total > 0 ?
                                                     (days / total).round : nil
-      
+
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
         ct + cr.review.weaknesses.with_highest_risk.where(
@@ -398,7 +404,7 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
         (resolved_highest_risk / pending_highest_risk.to_f) * 100 : nil
-      
+
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
         ct + cr.review.weaknesses.where(
@@ -416,7 +422,7 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
         (resolved_medium_risk / pending_medium_risk.to_f) * 100 : nil
-      
+
       # Production level
       reviews_count = period.plans.inject(0.0) do |pt, p|
         pt + p.plan_items.joins(
@@ -428,26 +434,26 @@ class FollowUpCommitteeController < ApplicationController
           params[:start], params[:end]
         ).count
       end
-      
+
       indicators[:production_level] = plan_items_count > 0 ?
         (reviews_count / plan_items_count.to_f) * 100 : nil
-      
+
       # Reviews score average
       internal_cfrs = cfrs.internal_audit.includes(:review)
       indicators[:score_average] = internal_cfrs.size > 0 ?
         (internal_cfrs.inject(0.0) { |t, cr| t + cr.review.score.to_f } / internal_cfrs.size.to_f).round : nil
-      
+
       # Work papers digitalization
       wps = WorkPaper.includes(:owner, :file_model).where(
         'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
         params.merge(:organization_id => GlobalModelConfig.current_organization_id)
       ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
-      
+
       wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }
-      
+
       indicators[:digitalized] = wps.size > 0 ?
         (wps_with_files.size.to_f / wps.size) * 100 : nil
-      
+
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
@@ -466,7 +472,7 @@ class FollowUpCommitteeController < ApplicationController
       }
     end
   end
- 
+
   # Crea un PDF con un resumen de indicadores de calidad para un determinado
   # rango de fechas
   #
@@ -497,7 +503,7 @@ class FollowUpCommitteeController < ApplicationController
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       pdf.move_pointer PDF_FONT_SIZE
-      
+
       @indicators[period].each do |data|
         columns = {}
         column_data = []
@@ -508,7 +514,7 @@ class FollowUpCommitteeController < ApplicationController
             column.width = pdf.percent_width 50
           end
         end
-        
+
         data[:column_data].each do |row|
           new_row = {}
 
