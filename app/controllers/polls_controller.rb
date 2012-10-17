@@ -1,14 +1,9 @@
 class PollsController < ApplicationController
-  before_filter :load_privileges, :auth, :except => [:edit, :update]
-  before_filter :check_privileges, :except => [:edit, :update]
+  before_filter :load_privileges, :auth, :except => [:edit, :update, :show]
+  before_filter :check_privileges, :except => [:edit, :update, :show]
 
-  layout proc { |controller|
-    use_clean = [
-      'edit'
-    ].include?(controller.action_name)
+  layout 'application'
 
-    controller.request.xhr? ? false : (use_clean ? 'application_clean' : 'application')
-  }
   # GET /polls
   # GET /polls.json
   def index
@@ -43,15 +38,21 @@ class PollsController < ApplicationController
   # GET /polls/1.json
   def show
     @title = t 'poll.show_title'
-    @poll = Poll.by_organization(@auth_organization.id, params[:id]).first
+    @poll = Poll.find params[:id]
 
-    if @poll.nil?
-      redirect_to polls_url, :alert => (t 'poll.not_found')
+    if params[:layout]
+      @layout = params[:layout]
+    else
+      @layout = 'application'
     end
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @poll }
+      if @poll.present?
+        format.html { render :layout => @layout } # show.html.erb
+        format.json { render :json => @poll }
+      else
+        format.html { redirect_to polls_url, :alert => (t 'poll.not_found') }
+      end
     end
   end
 
@@ -72,12 +73,10 @@ class PollsController < ApplicationController
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])
 
-    if params[:token] != @poll.access_token || @poll.answered?
-      redirect_to login_users_url, :alert => (t 'poll.access_denied')
-    else
-      if @poll.nil?
-        redirect_to login_users_url, :alert => (t 'poll.not_found')
-      end
+    if @poll.nil? || params[:token] != @poll.access_token
+      redirect_to login_users_url, :alert => (t 'poll.not_found')
+    elsif @poll.answered?
+      redirect_to poll_path(@poll, :layout => 'application_clean'), :alert => (t 'poll.access_denied')
     end
   end
 
@@ -93,7 +92,7 @@ class PollsController < ApplicationController
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
         format.json { render :json => @poll, :status => :created, :location => @poll }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => 'new' }
         format.json { render :json => @poll.errors, :status => :unprocessable_entity }
       end
     end
@@ -105,16 +104,18 @@ class PollsController < ApplicationController
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])
 
-    if @poll.nil?
-      redirect_to login_users_url, :alert => (t 'poll.not_found')
-    end
-
     respond_to do |format|
-      if @poll.update_attributes(params[:poll])
-        format.html { redirect_to login_users_url, :notice => (t 'poll.correctly_updated') }
+      if @poll.nil?
+        format.html { redirect_to login_users_url, :alert => (t 'poll.not_found') }
+      elsif @poll.update_attributes(params[:poll])
+        if @auth_user
+          format.html { redirect_to login_users_url, :notice => (t 'poll.correctly_updated') }
+        else
+          format.html { redirect_to poll_url(@poll, :layout => 'application_clean'), :notice => (t 'poll.correctly_updated') }
+        end
         format.json { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render :action => 'edit' }
         format.json { render :json => @poll.errors, :status => :unprocessable_entity }
       end
     end
@@ -177,5 +178,4 @@ class PollsController < ApplicationController
       )
     end
   end
-
 end

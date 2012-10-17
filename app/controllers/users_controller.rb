@@ -294,7 +294,7 @@ class UsersController < ApplicationController
             session[:organization_id] = @organization.id
             if poll = auth_user.first_pending_poll
               flash.notice = t 'poll.must_answer_poll'
-              go_to = edit_poll_url(poll)
+              go_to = edit_poll_url(poll, :token => poll.access_token, :layout => 'application_clean')
             else
               go_to = session[:go_to] || { :controller => :welcome }
             end
@@ -377,7 +377,6 @@ class UsersController < ApplicationController
 
     if @user && !@user.hidden
       @user.reset_password!(@auth_organization)
-
       redirect_to_login t('user.password_reset_sended')
     else
       redirect_to reset_password_users_url, :notice => t('user.unknown_email')

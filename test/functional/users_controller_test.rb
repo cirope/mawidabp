@@ -281,7 +281,8 @@ class UsersControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[user.user]
       }
 
-    assert_redirected_to edit_poll_url(user.first_pending_poll)
+    poll = user.first_pending_poll
+    assert_redirected_to edit_poll_url(poll, :layout => 'application_clean', :token => poll.access_token)
 
     login_record = LoginRecord.where(
       :user_id => user.id,

@@ -7,11 +7,11 @@ class PollsControllerTest < ActionController::TestCase
     id_param = {:id => poll.to_param}
     public_actions = [
       [:get, :edit, id_token],
+      [:get, :show, id_param],
       [:put, :update, id_param],
     ]
     private_actions = [
       [:get, :index],
-      [:get, :show, id_param],
       [:get, :new],
       [:post, :create],
       [:delete, :destroy, id_param]
@@ -95,7 +95,7 @@ class PollsControllerTest < ActionController::TestCase
         }
       }
     end
-    assert_redirected_to login_users_url
+    assert_redirected_to poll_url(polls(:poll_one), :layout => 'application_clean')
     assert_not_nil assigns(:poll)
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
     assert_equal true, assigns(:poll).answered
