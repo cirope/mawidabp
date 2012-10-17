@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'pdf/simpletable'
 
 # =Controlador de usuarios
@@ -20,7 +21,7 @@ class UsersController < ApplicationController
     use_clean = [
       'login', 'create_session', 'reset_password', 'send_password_reset'
     ].include?(controller.action_name)
-    
+
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
   hide_action :find_with_organization, :load_privileges
@@ -47,7 +48,7 @@ class UsersController < ApplicationController
     @users = User.includes(:organizations).where(@conditions).order(
       "#{User.table_name}.user ASC"
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
-    
+
     respond_to do |format|
       format.html {
         if @users.size == 1 && !@query.blank? && !params[:page]
@@ -102,7 +103,7 @@ class UsersController < ApplicationController
     @title = t 'user.new_title'
     @user = User.new(params[:user])
     @user.roles.each {|r| r.inject_auth_privileges(@auth_privileges)}
-    
+
     respond_to do |format|
       if @user.save
         @user.send_welcome_email
@@ -155,7 +156,7 @@ class UsersController < ApplicationController
   # * DELETE /users/1.xml
   def destroy
     @user = find_with_organization(params[:id])
-    
+
     unless @user.disable!
       flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else
@@ -234,7 +235,7 @@ class UsersController < ApplicationController
     if @organization || @group_admin_mode
       conditions = ["LOWER(#{User.table_name}.user) = :user"]
       parameters = {:user => @user.user.downcase}
-      
+
       if @group_admin_mode
         conditions << "#{User.table_name}.group_admin = :true"
         parameters[:true] = true
@@ -293,12 +294,12 @@ class UsersController < ApplicationController
             session[:organization_id] = @organization.id
             if poll = auth_user.first_pending_poll
               flash.notice = t 'poll.must_answer_poll'
-              go_to = edit_poll_url(poll)
+              go_to = edit_poll_url(poll, :token => poll.access_token, :layout => 'application_clean')
             else
               go_to = session[:go_to] || { :controller => :welcome }
             end
             session[:go_to], session[:record_id] = nil, record.id
-            
+
             redirect_to go_to
           end
         end
@@ -356,7 +357,7 @@ class UsersController < ApplicationController
       redirect_to_index t('user.password_reseted', :user => @user.user)
     end
   end
-  
+
   # Formulario para restablecer contraseña
   #
   # * GET /users/reset_password
@@ -364,7 +365,7 @@ class UsersController < ApplicationController
   def reset_password
     @title = t 'user.reset_password_title'
   end
-  
+
   # Envio de correo para restablecer contraseña
   #
   # * POST /users/send_password_reset
@@ -373,7 +374,7 @@ class UsersController < ApplicationController
     @title = t 'user.reset_password_title'
     @auth_organization = Organization.find_by_prefix(request.subdomains.first)
     @user = find_with_organization(params[:email], :email)
-    
+
     if @user
       @user.reset_password!(@auth_organization)
 
@@ -412,7 +413,7 @@ class UsersController < ApplicationController
   # * PUT /users/update_password/1.xml
   def update_password
     @title = t 'user.change_password_title'
-    
+
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
         params[:confirmation_hash]).first
@@ -420,7 +421,7 @@ class UsersController < ApplicationController
     else
       login_check
     end
-    
+
     if @auth_user
       @auth_user.password = params[:user][:password]
       @auth_user.password_confirmation = params[:user][:password_confirmation]
@@ -438,7 +439,7 @@ class UsersController < ApplicationController
             :failed_attempts => 0,
             :last_access => session[:last_access] || Time.now
           )
-          
+
           restart_session
           redirect_to_login t('user.password_correctly_updated')
         end
@@ -466,7 +467,7 @@ class UsersController < ApplicationController
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       @user = User.new
-      
+
       render :layout => 'application_clean'
     else
       restart_session
@@ -634,7 +635,7 @@ class UsersController < ApplicationController
     end
 
     @auth_user.logout! if @auth_user
-    
+
     restart_session
     redirect_to_login t('message.session_closed_correctly')
   end
@@ -648,7 +649,7 @@ class UsersController < ApplicationController
     }
 
     build_search_conditions User, default_conditions
-    
+
     users = User.includes(:organizations).where(@conditions).order(
       "#{User.table_name}.user ASC"
     )
@@ -755,7 +756,7 @@ class UsersController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -772,7 +773,7 @@ class UsersController < ApplicationController
     id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
     id_field = field == :id ?
       "#{User.table_name}.#{field}" : "LOWER(#{User.table_name}.#{field})"
-    
+
     User.includes(:organizations).where(
       [
         "#{id_field} = :id",
