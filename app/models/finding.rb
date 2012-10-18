@@ -1611,7 +1611,7 @@ class Finding < ActiveRecord::Base
     origination_date_text = I18n.l(origination_date, :format => :minimal).to_iso if origination_date
     being_implemented = self.kind_of?(Weakness) && self.being_implemented?
     rescheduled_text = being_implemented && !self.rescheduled? ?
-      t('label.no') : ''
+      I18n.t('label.no') : ''
 
     if being_implemented && self.rescheduled?
       dates = []
@@ -1621,7 +1621,7 @@ class Finding < ActiveRecord::Base
         follow_up_dates.slice(-1)
       end
 
-      follow_up_dates.each { |fud| dates << l(fud, :format => :minimal) }
+      follow_up_dates.each { |fud| dates << I18n.l(fud, :format => :minimal) }
 
       rescheduled_text << dates.join("\n")
     end
@@ -1632,13 +1632,26 @@ class Finding < ActiveRecord::Base
         u.full_name
     end
 
+    description = self.description.try(:to_iso) || ''
+
+    unless (repeated_ancestors = self.repeated_ancestors).blank?
+      description << "\n#{I18n.t('finding.repeated_ancestors')}: "
+      description << repeated_ancestors.map(&:to_s).join(' | ').try(:to_iso)
+    end
+
+    unless (repeated_children = self.repeated_children).blank?
+      description << "\n#{I18n.t('finding.repeated_children')}: "
+      description << repeated_children.map(&:to_s).join(' | ').try(:to_iso)
+    end
+
+
     column_data = [
       self.review.to_s,
       self.review_code,
       self.state_text,
       self.kind_of?(Weakness) ? self.risk_text.to_iso : '',
       audited.join('; ').to_iso,
-      self.description.try(:to_iso),
+      description,
       rescheduled_text.try(:to_iso),
       origination_date_text,
       date_text

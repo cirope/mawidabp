@@ -158,9 +158,50 @@ class FindingsController < ApplicationController
   #
   # * GET /findings/export_to_csv
   def export_to_csv
-    findings = Finding.find params[:findings]
     detailed = params[:include_details].present?
     completed = params[:completed]
+    selected_user = User.find(params[:user_id]) if params[:user_id]
+    default_conditions = {
+      :final => false,
+      Period.table_name => {:organization_id => @auth_organization.id}
+    }
+
+    if @auth_user.committee? || selected_user
+      if params[:user_id]
+        default_conditions[User.table_name] = {:id => params[:user_id]}
+      end
+    else
+      self_and_descendants = @auth_user.descendants + [@auth_user]
+      self_and_descendants_ids = self_and_descendants.map(&:id)
+      default_conditions[User.table_name] = {
+        :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
+          params[:user_id] : self_and_descendants_ids
+      }
+    end
+
+    if params[:ids]
+      default_conditions[:id] = params[:ids]
+    else
+      default_conditions[:state] = completed == 'incomplete' ?
+        Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
+        Finding::STATUS.values - Finding::PENDING_STATUS
+    end
+
+    build_search_conditions Finding, default_conditions
+
+    findings = Finding.includes(
+      {
+        :control_objective_item => {
+          :review => [:conclusion_final_review, :period, :plan_item]
+        }
+      }, :users
+    ).order(
+      @order_by || [
+        "#{Review.table_name}.created_at DESC",
+        "#{Finding.table_name}.state ASC",
+        "#{Finding.table_name}.review_code ASC"
+      ]
+    ).where(@conditions)
 
     if detailed
       columns = 11
