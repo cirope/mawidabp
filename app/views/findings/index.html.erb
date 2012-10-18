@@ -93,7 +93,7 @@
     ) %> |
   <%= link_to t('finding.download_csv'),
     export_to_csv_findings_path(
-      request.query_parameters.merge(:findings => @findings.to_a, :format => :csv)
+      request.query_parameters.merge(:format => :csv, :include_details => 1)
     ) %>
   <div class="clear"></div>
 </div>
