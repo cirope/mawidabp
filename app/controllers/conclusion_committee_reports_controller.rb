@@ -107,7 +107,7 @@ class ConclusionCommitteeReportsController < ApplicationController
                 (total / coi_count.to_f).round : 100
             end
 
-            c_r.review.final_weaknesses.each do |w|
+            c_r.review.final_weaknesses.not_revoked.each do |w|
               @risk_levels |= parameter_in(@auth_organization.id,
                 :admin_finding_risk_levels, w.created_at).
                 sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
