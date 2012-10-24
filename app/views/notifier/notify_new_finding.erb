@@ -1,12 +1,11 @@
 <% organization = @finding.review.period.organization %>
-
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2 style="margin-bottom: 1em;"><%=h organization.name %></h2>
+  <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
   <h3 style="text-decoration: underline;">
     <%= t('notifier.notify_new_finding.title') %>
   </h3>
 
-  <%= render :partial => 'finding', :locals => {:finding => @finding} %><br />
+  <%= render :partial => 'finding', :locals => {:finding => @finding} %>
 
   <p>
     <%= link_to t('notifier.notification.confirm'),
