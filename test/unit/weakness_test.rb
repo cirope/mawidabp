@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "Weakness"
@@ -133,10 +134,12 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @weakness.control_objective_item_id = nil
     @weakness.review_code = '   '
+    @weakness.state = Finding::STATUS[:notify]
+    @weakness.audit_recommendations = '  '
     @weakness.risk = nil
     @weakness.priority = nil
     assert @weakness.invalid?
-    assert_equal 5, @weakness.errors.count
+    assert_equal 7, @weakness.errors.count
     assert_equal [error_message_from_model(@weakness,
       :control_objective_item_id, :blank)],
       @weakness.errors[:control_objective_item_id]
@@ -147,6 +150,10 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.errors[:risk]
     assert_equal [error_message_from_model(@weakness, :priority, :blank)],
       @weakness.errors[:priority]
+    assert_equal [error_message_from_model(@weakness, :audit_recommendations, :blank)],
+      @weakness.errors[:audit_recommendations]
+    assert_equal [error_message_from_model(@weakness, :state, :inclusion)],
+      @weakness.errors[:state]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -387,7 +394,7 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.all_follow_up_dates.blank?
     assert !@weakness.rescheduled?
     assert_not_nil @weakness.follow_up_date
-    
+
     old_date = @weakness.follow_up_date.clone
 
     assert @weakness.update_attribute(:follow_up_date, 10.days.from_now.to_date)

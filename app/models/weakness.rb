@@ -20,6 +20,7 @@ class Weakness < Finding
 
   # Restricciones
   validates :risk, :priority, :presence => true
+  validates :audit_recommendations, :presence => true, :if => :notify?
   validates_each :review_code do |record, attr, value|
     prefix = record.get_parameter(:admin_code_prefix_for_weaknesses, false,
       record.control_objective_item.try(:review).try(:organization).try(:id))
@@ -56,7 +57,7 @@ class Weakness < Finding
       organization_id)
     self.highest_risk = risks.map(&:last).max
   end
-  
+
   def risk_text
     risks = self.get_parameter(:admin_finding_risk_levels)
     risk = risks.detect { |r| r.last == self.risk }
@@ -102,7 +103,7 @@ class Weakness < Finding
 
   def must_be_approved?
     return true if self.revoked?
-    
+
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?
@@ -119,7 +120,7 @@ class Weakness < Finding
       if self.answer.blank?
         errors << I18n.t('weakness.errors.without_answer')
       end
-      
+
       if self.solution_date?
         errors << I18n.t('weakness.errors.with_solution_date')
       end
