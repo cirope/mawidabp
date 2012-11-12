@@ -22,7 +22,7 @@
         <td><%= poll.questionnaire.name %></td>
         <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
         <td><%= l poll.created_at.to_date, :format => :long %></td>
-        <td><%= l poll.updated_at.to_date, :format => :long %></td>
+        <td><%= l(poll.updated_at.to_date, :format => :long) if poll.answered %></td>
         <td><%= link_to_show poll %></td>
         <td><%= button_to_destroy poll %></td>
       </tr>
