@@ -21,6 +21,9 @@ class Questionnaire < ActiveRecord::Base
   scope :by_pollable_type, lambda { |type|
     where(:pollable_type => type)
   }
+  scope :pollable, lambda {
+    where('pollable_type IS NOT NULL')
+  }
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
@@ -29,4 +32,51 @@ class Questionnaire < ActiveRecord::Base
   }
 
   accepts_nested_attributes_for :questions, :allow_destroy => true
+
+  def total_polls(answered = true)
+    total = 0
+    self.polls.each do |poll|
+      total += 1 if poll.answered == answered
+    end
+
+    total
+  end
+
+  def answer_rates(polls)
+    rates = {}
+    self.questions.each do |question|
+      rates[question.question] ||= []
+      Question::ANSWER_OPTIONS.each do
+        rates[question.question] << 0
+      end
+    end
+
+    answered = 0
+    unanswered = 0
+    polls.each do |poll|
+      if poll.answered
+        answered += 1
+        poll.answers.each do |answer|
+          option = Question::ANSWER_OPTIONS.rindex answer.answer_option.option.to_sym
+          rates[answer.question.question][option] += 1
+        end
+      else
+        unanswered +=1
+      end
+    end
+
+    Rails.logger.debug rates.inspect
+    self.questions.each do |question|
+      question = question.question
+      Question::ANSWER_OPTIONS.each_index do |i|
+        unless answered == 0
+          rates[question][i] = ((rates[question][i] / answered.to_f) * 100).round 2
+        else
+          rates[question][i] = 0
+        end
+      end
+    end
+
+    return rates, answered, unanswered
+  end
 end

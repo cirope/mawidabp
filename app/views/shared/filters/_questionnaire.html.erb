@@ -1,0 +1,23 @@
+<div id="business_unit_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div>
+    <table class="generic_filter">
+      <tbody>
+        <tr>
+          <td>
+            <p class="form_item" style="margin: 0em;">
+              <% selected = params[action] ?
+                params[action][:questionnaire] : nil %>
+              <%= f.label :questionnaire, Questionnaire.model_name.human,
+                :class => :inline %>
+              <%= f.select :questionnaire, @questionnaires,
+                {:prompt => true, :selected => selected},
+                {:class => :inline_item} %>
+            </p>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

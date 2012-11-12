@@ -4,6 +4,11 @@ MawidaApp::Application.routes.draw do
   resources :polls do
     collection do
       get :auto_complete_for_user
+      get :reports
+      get :summary_by_questionnaire
+      get :summary_by_business_unit
+      post :create_summary_by_questionnaire
+      get :create_summary_by_business_unit
     end
   end
 

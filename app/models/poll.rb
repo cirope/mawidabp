@@ -39,6 +39,10 @@ class Poll < ActiveRecord::Base
   scope :list, lambda {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
+  scope :between_dates, lambda {
+    |from, to| where('created_at BETWEEN :from AND :to AND organization_id = :o_id',
+      :from => from, :to => to, :o_id => GlobalModelConfig.current_organization_id)
+  }
   scope :by_questionnaire, lambda {
     |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
       :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)

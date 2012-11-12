@@ -171,10 +171,139 @@ class PollsController < ApplicationController
     end
   end
 
+  def reports
+    @title = t 'poll.reports_title'
+  end
+
+  def summary_by_questionnaire
+    @title = t 'poll.reports_title'
+    @from_date, @to_date = *make_date_range(params[:summary_by_questionnaire])
+    @questionnaires = Questionnaire.list.map { |q| [q.name, q.id.to_s] }
+    @questionnaire = Questionnaire.find(params[:summary_by_questionnaire][:questionnaire]) if params[:summary_by_questionnaire]
+
+    if @questionnaire
+      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(@questionnaire)
+      @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
+    end
+  end
+
+  def create_summary_by_questionnaire
+    self.summary_by_questionnaire
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t('conclusion_committee_report.period.title'),
+      t('conclusion_committee_report.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    if @polls.present?
+      pdf.add_description_item(
+        Questionnaire.model_name.human,
+        @questionnaire.name)
+
+      pdf.move_pointer PDF_FONT_SIZE * 2
+
+      column_data = []
+      columns = {}
+      @columns = [
+        ['question', Question.model_name.human, 40]
+      ]
+      Question::ANSWER_OPTIONS.each do |option|
+        @columns << [option, t("activerecord.attributes.answer_option.options.#{option}"), 12]
+      end
+
+      @columns.each do |col_name, col_title, col_width|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+          column.heading = col_title
+          column.width = pdf.percent_width col_width
+        end
+      end
+
+      @rates.each do |question, answers|
+        new_row = {}
+        new_row['question'] = question.to_iso
+
+        Question::ANSWER_OPTIONS.each_with_index do |option, i|
+          new_row[option] = "#{answers[i]} %"
+        end
+
+        column_data << new_row
+      end
+
+      PDF::SimpleTable.new do |table|
+        table.width = pdf.page_usable_width
+        table.columns = columns
+        table.data = column_data
+        table.column_order = @columns.map(&:first)
+        table.split_rows = true
+        table.row_gap = PDF_FONT_SIZE
+        table.font_size = (PDF_FONT_SIZE * 0.75).round
+        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+        table.heading_font_size = PDF_FONT_SIZE
+        table.shade_headings = true
+        table.position = :left
+        table.orientation = :right
+        table.render_on pdf
+      end
+      pdf.move_pointer PDF_FONT_SIZE
+
+      pdf.text "#{t('poll.total_answered')}: #{@answered}"
+      pdf.text "#{t('poll.total_unanswered')}: #{@unanswered}"
+    else
+      pdf.text t('poll.without_data')
+    end
+
+    pdf.custom_save_as(t('poll.summary_pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
+
+    redirect_to PDF::Writer.relative_path(t('poll.summary_pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
+
+  end
+
+  def summary_by_business_unit
+    @title = t 'poll.reports_title'
+    @from_date, @to_date = *make_date_range(params[:summary_by_business_unit])
+    @questionnaires = Questionnaire.pollable.map { |q| [q.name, q.id.to_s] }
+    @selected_business_unit = params[:summary_by_business_unit][:business_unit_type] if params[:summary_by_business_unit]
+    questionnaire = params[:summary_by_business_unit][:questionnaire] if params[:summary_by_business_unit]
+    if questionnaire && @selected_business_unit
+      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(questionnaire)
+      @polls.select { |p| p.pollable.review.plan_item.business_unit_id == @selected_business_unit}
+    elsif questionnaire
+      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(questionnaire)
+    end
+  end
+
+  def create_summary_by_business_unit
+  end
+
   def load_privileges #:nodoc:
     if @action_privileges
       @action_privileges.update(
-        :auto_complete_for_user => :read
+        :auto_complete_for_user => :read,
+        :reports => :read,
+        :summary_by_business_unit => :read,
+        :create_summary_by_business_unit => :read,
+        :summary_by_questionnaire => :read,
+        :create_summary_by_questionnaire => :read
       )
     end
   end

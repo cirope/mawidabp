@@ -154,6 +154,12 @@ APP_AUDITOR_MENU_ITEMS = [
             :order => 2,
             :controllers => :polls,
             :url => {:controller => :polls}
+          ),
+          MenuItem.new(
+            :reports,
+            :order => 3,
+            :controllers => :polls,
+            :url => {:controller => :polls, :action => :reports}
           )
         ]
       )
