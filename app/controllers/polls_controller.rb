@@ -182,7 +182,7 @@ class PollsController < ApplicationController
     @questionnaire = Questionnaire.find(params[:summary_by_questionnaire][:questionnaire]) if params[:summary_by_questionnaire]
 
     if @questionnaire
-      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(@questionnaire)
+      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).by_questionnaire(@questionnaire)
       @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
     end
   end
