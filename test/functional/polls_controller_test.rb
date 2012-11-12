@@ -42,6 +42,15 @@ class PollsControllerTest < ActionController::TestCase
     assert_template 'polls/index'
   end
 
+  test 'list reports' do
+    perform_auth
+    get :reports
+    assert_response :success
+    assert_not_nil assigns(:title)
+    assert_select '#error_body', false
+    assert_template 'polls/reports'
+  end
+
   test 'show poll' do
     perform_auth
     get :show, :id => polls(:poll_one).id
@@ -110,5 +119,60 @@ class PollsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to polls_url
+  end
+
+  test 'summary by questionnaire' do
+    perform_auth
+
+    get :summary_by_questionnaire
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_questionnaire'
+
+    assert_nothing_raised(Exception) do
+      get :summary_by_questionnaire, :summary_by_questionnaire => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :questionnaire => questionnaires(:questionnaire_one).id
+      }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_questionnaire'
+  end
+
+  test 'filtered questionnaire report' do
+    perform_auth
+    get :summary_by_questionnaire, :summary_by_questionnaire => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_not_nil assigns(:questionnaire)
+    assert_not_nil assigns(:polls)
+    assert_not_nil assigns(:answered)
+    assert_not_nil assigns(:unanswered)
+    assert_not_nil assigns(:rates)
+    assert_template 'polls/summary_by_questionnaire'
+  end
+
+  test 'create summary by questionnaire' do
+    perform_auth
+
+    post :create_summary_by_questionnaire, :summary_by_questionnaire => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id
+    },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(I18n.t('poll.summary_pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
   end
 end
