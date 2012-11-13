@@ -228,6 +228,7 @@ class FindingsController < ApplicationController
     filename = t 'finding.csv_name'
 
     respond_with findings do |format|
+      headers['Cache-Control'] = "max-age=1"
       format.csv { render :csv => buffer, :filename => filename }
     end
   end
