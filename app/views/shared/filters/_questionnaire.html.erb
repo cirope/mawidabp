@@ -10,8 +10,7 @@
               <%= f.label :questionnaire, Questionnaire.model_name.human,
                 :class => :inline %>
               <%= f.select :questionnaire, @questionnaires,
-                {:prompt => true, :selected => selected},
-                {:class => :inline_item} %>
+                {:selected => selected}, {:class => :inline_item} %>
             </p>
           </td>
           <td>
