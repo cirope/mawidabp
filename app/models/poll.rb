@@ -55,6 +55,9 @@ class Poll < ActiveRecord::Base
       :org_id => org_id, :id => id, :user_id => user_id
       )
   }
+  scope :pollables, lambda {
+    where('pollable_id IS NOT NULL')
+  }
 
   accepts_nested_attributes_for :answers
 

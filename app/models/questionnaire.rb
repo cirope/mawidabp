@@ -65,7 +65,6 @@ class Questionnaire < ActiveRecord::Base
       end
     end
 
-    Rails.logger.debug rates.inspect
     self.questions.each do |question|
       question = question.question
       Question::ANSWER_OPTIONS.each_index do |i|
