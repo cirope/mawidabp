@@ -182,7 +182,8 @@ class PollsController < ApplicationController
     @questionnaire = Questionnaire.find(params[:summary_by_questionnaire][:questionnaire]) if params[:summary_by_questionnaire]
 
     if @questionnaire
-      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).by_questionnaire(@questionnaire)
+      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
+                 ).by_questionnaire(@questionnaire)
       @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
     end
   end
@@ -282,13 +283,63 @@ class PollsController < ApplicationController
     @title = t 'poll.reports_title'
     @from_date, @to_date = *make_date_range(params[:summary_by_business_unit])
     @questionnaires = Questionnaire.pollable.map { |q| [q.name, q.id.to_s] }
-    @selected_business_unit = params[:summary_by_business_unit][:business_unit_type] if params[:summary_by_business_unit]
-    questionnaire = params[:summary_by_business_unit][:questionnaire] if params[:summary_by_business_unit]
-    if questionnaire && @selected_business_unit
-      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(questionnaire)
-      @polls.select { |p| p.pollable.review.plan_item.business_unit_id == @selected_business_unit}
-    elsif questionnaire
-      @polls = Poll.between_dates(@from_date, @to_date).by_questionnaire(questionnaire)
+    conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date.months_ago(3),
+      @to_date)
+    @business_unit_polls = {}
+
+    if params[:summary_by_business_unit]
+      questionnaire_id = params[:summary_by_business_unit][:questionnaire]
+      @questionnaire = Questionnaire.find(questionnaire_id) if questionnaire_id
+      polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
+                 ).by_questionnaire(@questionnaire).pollables
+
+      unless params[:summary_by_business_unit][:business_unit_type].blank?
+         @selected_business_unit = BusinessUnitType.find(
+          params[:summary_by_business_unit][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(@selected_business_unit.id)
+      end
+
+      unless params[:summary_by_business_unit][:business_unit].blank?
+        business_units = params[:summary_by_business_unit][:business_unit].split(
+          SPLIT_AND_TERMS_REGEXP
+        ).uniq.map(&:strip)
+
+        unless business_units.empty?
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
+        end
+      end
+
+      if conclusion_reviews.present?
+        filtered_polls = polls.select { |poll| conclusion_reviews.include? poll.pollable }
+
+        if @selected_business_unit
+          but_polls =  filtered_polls.select { |poll|
+            poll.pollable.review.plan_item.business_unit.business_unit_type == @selected_business_unit
+          }
+
+          if but_polls.present?
+            @business_unit_polls[@selected_business_unit.name] = {}
+            rates, answered, unanswered = @questionnaire.answer_rates(polls)
+            @business_unit_polls[@selected_business_unit.name][:rates] = rates
+            @business_unit_polls[@selected_business_unit.name][:answered] = answered
+            @business_unit_polls[@selected_business_unit.name][:unanswered] = unanswered
+          end
+
+        else
+          BusinessUnitType.list.each do |but|
+            but_polls =  polls.select { |poll|
+              poll.pollable.review.plan_item.business_unit.business_unit_type == but
+            }
+            if but_polls.present?
+              @business_unit_polls[but.name] = {}
+              rates, answered, unanswered = @questionnaire.answer_rates(but_polls)
+              @business_unit_polls[but.name][:rates] = rates
+              @business_unit_polls[but.name][:answered] = answered
+              @business_unit_polls[but.name][:unanswered] = unanswered
+            end
+          end
+        end
+      end
     end
   end
 

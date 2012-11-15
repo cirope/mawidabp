@@ -1,3 +1,39 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :summary_by_business_unit, :extra_params => {},
   :forms => {:poll_date_range => true, :business_unit => true, :questionnaire => true}} %>
+
+<% if @business_unit_polls.present? %>
+  <% @business_unit_polls.each_key do |but| %>
+    <br /><h2 style="margin: 0em 1em;"><%= but %>:</h2><br />
+    <table class="summary_table" style="margin: 0em 1em;">
+      <thead>
+        <tr>
+          <th><%= Question.model_name.human %></th>
+          <% Question::ANSWER_OPTIONS.each do |col_name| %>
+            <th><%= t "activerecord.attributes.answer_option.options.#{col_name}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @questionnaire.questions.each do |question| %>
+          <tr>
+            <td><%= question.question %></td>
+            <% Question::ANSWER_OPTIONS.each_index do |i| %>
+              <td><%= @business_unit_polls[but][:rates][question.question][i] %> %</td>
+            <% end%>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p style="margin: 1em; font-size: 1.1em;">
+      <%= "#{t('poll.total_answered')}: #{@business_unit_polls[but][:answered]}" %><br />
+      <%= "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}" %>
+    </p>
+
+  <% end %>
+
+<% else %>
+  <p style="margin: 1em;">
+    <em><%= t('poll.without_data') %></em>
+  </p>
+<% end %>
