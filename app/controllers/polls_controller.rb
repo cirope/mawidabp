@@ -204,8 +204,8 @@ class PollsController < ApplicationController
     pdf.move_pointer PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t('conclusion_committee_report.period.title'),
-      t('conclusion_committee_report.period.range',
+      t('activerecord.attributes.poll.send_date'),
+        t('conclusion_committee_report.period.range',
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -344,6 +344,98 @@ class PollsController < ApplicationController
   end
 
   def create_summary_by_business_unit
+    self.summary_by_business_unit
+
+    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+    pdf.move_pointer PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t('activerecord.attributes.poll.send_date'),
+      t('conclusion_committee_report.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    pdf.move_pointer PDF_FONT_SIZE
+
+    if @business_unit_polls.present?
+      pdf.add_description_item(Questionnaire.model_name.human, @questionnaire.name)
+
+      pdf.move_pointer PDF_FONT_SIZE * 2
+
+      columns = {}
+      @columns = [
+        ['question', Question.model_name.human, 40]
+      ]
+      Question::ANSWER_OPTIONS.each do |option|
+        @columns << [option, t("activerecord.attributes.answer_option.options.#{option}"), 12]
+      end
+
+      @columns.each do |col_name, col_title, col_width|
+        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
+          column.heading = col_title
+          column.width = pdf.percent_width col_width
+        end
+      end
+
+      @business_unit_polls.each_key do |but|
+        pdf.text but, :font_size => PDF_FONT_SIZE * 1.3
+        pdf.move_pointer PDF_FONT_SIZE * 2
+        column_data = []
+
+        @business_unit_polls[but][:rates].each do |question, answers|
+          new_row = {}
+          new_row['question'] = question.to_iso
+
+          Question::ANSWER_OPTIONS.each_with_index do |option, i|
+            new_row[option] = "#{answers[i]} %"
+          end
+
+          column_data << new_row
+        end
+
+        PDF::SimpleTable.new do |table|
+          table.width = pdf.page_usable_width
+          table.columns = columns
+          table.data = column_data
+          table.column_order = @columns.map(&:first)
+          table.split_rows = true
+          table.row_gap = PDF_FONT_SIZE
+          table.font_size = (PDF_FONT_SIZE * 0.75).round
+          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
+          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
+          table.heading_font_size = PDF_FONT_SIZE
+          table.shade_headings = true
+          table.position = :left
+          table.orientation = :right
+          table.render_on pdf
+        end
+        pdf.move_pointer PDF_FONT_SIZE
+
+        pdf.text "#{t('poll.total_answered')}: #{@business_unit_polls[but][:answered]}"
+        pdf.text "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}"
+        pdf.move_pointer PDF_FONT_SIZE * 2
+      end
+    else
+      pdf.text t('poll.without_data')
+    end
+
+    pdf.custom_save_as(t('poll.summary_pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+
+    redirect_to PDF::Writer.relative_path(t('poll.summary_pdf_name',
+        :from_date => @from_date.to_formatted_s(:db),
+        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+
   end
 
   def load_privileges #:nodoc:

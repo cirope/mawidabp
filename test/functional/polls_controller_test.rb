@@ -175,4 +175,63 @@ class PollsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
   end
+
+  test 'summary by business_unit' do
+    perform_auth
+
+    get :summary_by_business_unit
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_business_unit'
+
+    assert_nothing_raised(Exception) do
+      get :summary_by_business_unit, :summary_by_business_unit => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :questionnaire => questionnaires(:questionnaire_one).id,
+        :business_unit_type => business_unit_types(:cycle).id
+      }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_business_unit'
+  end
+
+  test 'filtered business unit report' do
+    perform_auth
+    get :summary_by_business_unit, :summary_by_business_unit => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id,
+      :business_unit_type => business_unit_types(:cycle).id
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_not_nil assigns(:questionnaire)
+    assert_not_nil assigns(:questionnaires)
+    assert_not_nil assigns(:from_date)
+    assert_not_nil assigns(:to_date)
+    assert_not_nil assigns(:business_unit_polls)
+    assert_not_nil assigns(:selected_business_unit)
+    assert_template 'polls/summary_by_business_unit'
+  end
+
+  test 'create summary by business unit' do
+    perform_auth
+
+    post :create_summary_by_business_unit, :summary_by_business_unit => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id,
+      :business_unit_type => business_unit_types(:cycle).id
+    },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to PDF::Writer.relative_path(I18n.t('poll.summary_pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+  end
 end

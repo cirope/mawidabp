@@ -8,7 +8,7 @@ MawidaApp::Application.routes.draw do
       get :summary_by_questionnaire
       get :summary_by_business_unit
       post :create_summary_by_questionnaire
-      get :create_summary_by_business_unit
+      post :create_summary_by_business_unit
     end
   end
 
