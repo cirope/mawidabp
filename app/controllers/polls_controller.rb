@@ -319,7 +319,7 @@ class PollsController < ApplicationController
 
           if but_polls.present?
             @business_unit_polls[@selected_business_unit.name] = {}
-            rates, answered, unanswered = @questionnaire.answer_rates(polls)
+            rates, answered, unanswered = @questionnaire.answer_rates(but_polls)
             @business_unit_polls[@selected_business_unit.name][:rates] = rates
             @business_unit_polls[@selected_business_unit.name][:answered] = answered
             @business_unit_polls[@selected_business_unit.name][:unanswered] = unanswered
