@@ -43,7 +43,7 @@ class Questionnaire < ActiveRecord::Base
   end
 
   def answer_rates(polls)
-    rates = {}
+    rates = ActiveSupport::OrderedHash.new
     self.questions.each do |question|
       rates[question.question] ||= []
       Question::ANSWER_OPTIONS.each do
