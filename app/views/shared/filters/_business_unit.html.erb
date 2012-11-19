@@ -11,7 +11,7 @@
                 :class => :inline %>
               <%= f.select :business_unit_type,
                 BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
-                {:prompt => true, :selected => selected},
+                {:include_blank => t('helpers.select.prompt'), :selected => selected},
                 {:class => :inline_item} %>
             </p>
           </td>
