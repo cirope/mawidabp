@@ -22,7 +22,7 @@ class PollsController < ApplicationController
         :questionnaire,
         :user
       ).where(@conditions).order(
-        "#{Poll.table_name}.created_at"
+        "#{Poll.table_name}.created_at DESC"
       ).paginate(
         :page => params[:page], :per_page => APP_LINES_PER_PAGE
       )
