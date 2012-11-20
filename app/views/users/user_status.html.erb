@@ -7,8 +7,7 @@
         :count => filtered_weaknesses.with_highest_risk.count)) %>
   </h2>
   <div class="image_frame">
-    <%= draw_user_weaknesses_graph(@user, filtered_weaknesses.with_highest_risk,
-      t('user.high_risk_weaknesses.image_label')) %>
+    <%= content_tag :div, '', :id => 'high_risk_weaknesses_graph', :data => {:weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses.with_highest_risk)} %>
   </div>
 </div>
 
@@ -17,8 +16,7 @@
     <%= user_weaknesses_links(@user) %>
   </h2>
   <div class="image_frame">
-    <%= draw_user_weaknesses_graph(@user, filtered_weaknesses,
-      t('user.weaknesses.image_label')) %>
+    <%= content_tag :div, '', :id => 'status_weaknesses_graph', :data => {:weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses)} %>
   </div>
 </div>
 
