@@ -4,10 +4,13 @@
 <div class="float_image">
   <h2 style="font-weight: normal;">
     <%= textilize_without_paragraph(t('user.high_risk_weaknesses',
-        :count => filtered_weaknesses.with_highest_risk.count)) %>
+                                      :count => filtered_weaknesses.with_highest_risk.count)) %>
   </h2>
   <div class="image_frame">
-    <%= content_tag :div, '', :id => 'high_risk_weaknesses_graph', :data => {:weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses.with_highest_risk)} %>
+    <%= content_tag :div, '', :id => 'high_risk_weaknesses_graph', :data => {
+          :weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses.with_highest_risk),
+          :total => filtered_weaknesses.with_highest_risk.count
+        } %>
   </div>
 </div>
 
@@ -16,7 +19,10 @@
     <%= user_weaknesses_links(@user) %>
   </h2>
   <div class="image_frame">
-    <%= content_tag :div, '', :id => 'status_weaknesses_graph', :data => {:weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses)} %>
+    <%= content_tag :div, '', :id => 'status_weaknesses_graph', :data => {
+          :weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses),
+          :total => filtered_weaknesses.count
+        } %>
   </div>
 </div>
 
