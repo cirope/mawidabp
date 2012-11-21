@@ -19,4 +19,5 @@
 //= require validation
 //= require raphael
 //= require morris
+//= require users
 //= require ui

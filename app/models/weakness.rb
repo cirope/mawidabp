@@ -172,4 +172,15 @@ class Weakness < Finding
 
     @all_follow_up_dates.compact
   end
+
+  def self.weaknesses_for_graph(weaknesses)
+    data = []
+    grouped_weaknesses = weaknesses.group_by(&:state)
+
+    grouped_weaknesses.each do |status, weaknesses|
+      data << { :label => weaknesses.first.state_text, :value => weaknesses.size }
+    end
+
+    data
+  end
 end
