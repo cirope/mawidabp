@@ -1276,6 +1276,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     user_release_completed: "Liberación de responsabilidades finalizada correctamente"
     new_user_label: "Nuevo responsable"
     old_user_label: "Responsable anterior"
+    pending_weaknesses_detailed:
+      one: "*Una* observación *pendiente*"
+      other: "*%{count}* observaciones *pendientes*"
     reassign_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
     reassign_with_reviews: "¿Incluir informes en ejecución?"
     release_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
