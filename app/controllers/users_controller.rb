@@ -177,6 +177,7 @@ class UsersController < ApplicationController
     @title = t 'user.status_title'
     @user = @auth_user.audited? ?
       @auth_user : find_with_organization(params[:id])
+    @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
 
     respond_to do |format|
       format.html # show.html.erb

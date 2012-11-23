@@ -1,15 +1,14 @@
-<% filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete %>
 <h1 class="title"><%= @user.informal_name %></h1>
 
 <div class="float_image">
   <h2 style="font-weight: normal;">
     <%= textilize_without_paragraph(t('user.high_risk_weaknesses',
-                                      :count => filtered_weaknesses.with_highest_risk.count)) %>
+                                      :count => @filtered_weaknesses.with_highest_risk.count)) %>
   </h2>
   <div class="image_frame">
     <%= content_tag :div, '', :id => 'high_risk_weaknesses_graph', :data => {
-          :weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses.with_highest_risk),
-          :total => filtered_weaknesses.with_highest_risk.count
+          :weaknesses => Weakness.weaknesses_for_graph(@filtered_weaknesses.with_highest_risk),
+          :total => @filtered_weaknesses.with_highest_risk.count
         } %>
   </div>
 </div>
@@ -20,20 +19,21 @@
   </h2>
   <div class="image_frame">
     <%= content_tag :div, '', :id => 'status_weaknesses_graph', :data => {
-          :weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses),
-          :total => filtered_weaknesses.count
+          :weaknesses => Weakness.weaknesses_for_graph(@filtered_weaknesses),
+          :total => @filtered_weaknesses.count
         } %>
   </div>
 </div>
 
 <div class="float_image">
   <h2 style="font-weight: normal;">
-    <%= user_weaknesses_links(@user) %>
+    <br /><%= textilize_without_paragraph(t('user.pending_weaknesses_detailed',
+               :count => @filtered_weaknesses.with_pending_status.count)) %>
   </h2>
   <div class="image_frame">
     <%= content_tag :div, '', :id => 'pending_weaknesses_graph', :data => {
-          :weaknesses => Weakness.weaknesses_for_graph(filtered_weaknesses.with_pending_status),
-          :total => filtered_weaknesses.with_pending_status.count
+          :weaknesses => Weakness.pending_weaknesses_for_graph(@filtered_weaknesses),
+          :total => @filtered_weaknesses.with_pending_status.count
         } %>
   </div>
 </div>

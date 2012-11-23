@@ -1,5 +1,5 @@
 jQuery ->
-  colors = ['#585858', '#00FF00', '#0000FF', '#FFFF00', '#FF0000', '#BDBDBD', '#FF00FF', '#2EFEF7']
+  colors = ['#40FF00', '#0040FF', '#FFFF00', '#FE2E2E', '#FF00FF', '#2EFEF7', '#424242', '#5882FA']
 
   Morris.Donut
     element: 'high_risk_weaknesses_graph',
