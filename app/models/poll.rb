@@ -24,6 +24,7 @@ class Poll < ActiveRecord::Base
   validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
+
   # Relaciones
   belongs_to :questionnaire
   belongs_to :user
@@ -81,8 +82,5 @@ class Poll < ActiveRecord::Base
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(:access_token => access_token)
-
-    Rails.logger.debug "ACCESS TOKEN: #{self.access_token}"
   end
-
 end

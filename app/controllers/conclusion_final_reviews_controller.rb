@@ -227,6 +227,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review = find_with_organization(params[:id])
 
     users = []
+    users_without_poll = []
 
     if params[:conclusion_review]
       include_score_sheet =
@@ -262,19 +263,27 @@ class ConclusionFinalReviewsController < ApplicationController
         end
 
         if user && user_data[:questionnaire_id].present?
-          questionnaire = Questionnaire.find user_data[:questionnaire_id]
-          @conclusion_final_review.polls.create!(
-            :questionnaire_id => user_data[:questionnaire_id],
-            :user_id => user.id,
-            :organization_id => @auth_organization.id,
-            :pollable_type => questionnaire.pollable_type
-          )
+          polls = Poll.where(:user_id => user.id, :questionnaire_id => user_data[:questionnaire_id],
+                               :pollable_id => @conclusion_final_review)
+          if polls.empty?
+            questionnaire = Questionnaire.find user_data[:questionnaire_id]
+            @conclusion_final_review.polls.create!(
+              :questionnaire_id => user_data[:questionnaire_id],
+              :user_id => user.id,
+              :organization_id => @auth_organization.id,
+              :pollable_type => questionnaire.pollable_type
+            )
+          else
+            users_without_poll << user.informal_name
+          end
         end
       end
 
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
-
+      unless users_without_poll.empty?
+        flash.notice <<  "<br /> #{t('poll.already_exists')} #{users_without_poll.join(', ').inspect}"
+      end
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
       render :action => :compose_email
