@@ -376,12 +376,10 @@ class FollowUpCommitteeController < ApplicationController
       days = total = 0
 
       cfrs.each do |cr|
-        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where(
-          'follow_up_date < ?', Date.today
-        )
+        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented
 
         weaknesses.each do |w|
-          days += (Date.today - w.follow_up_date).abs.round
+          days += (Date.today - w.origination_date).abs.round
           total += 1
         end
       end
