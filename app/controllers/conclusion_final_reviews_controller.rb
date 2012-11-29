@@ -263,7 +263,7 @@ class ConclusionFinalReviewsController < ApplicationController
         end
 
         if user && user_data[:questionnaire_id].present?
-          polls = Poll.where(:user_id => user.id, :questionnaire_id => user_data[:questionnaire_id],
+          polls = Poll.list.where(:user_id => user.id, :questionnaire_id => user_data[:questionnaire_id],
                                :pollable_id => @conclusion_final_review)
           if polls.empty?
             questionnaire = Questionnaire.find user_data[:questionnaire_id]

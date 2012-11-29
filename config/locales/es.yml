@@ -1079,7 +1079,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "La encuesta ha sido agregada correctamente."
     correctly_updated: "La encuesta ha sido guardada correctamente. ¡Muchas gracias!"
     stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    already_exists: "La encuesta ya existe para el informe y usuario"
+    already_exists: "La encuesta ya existe y no fue enviada al usuario"
     must_answer_poll: "Tiene una encuesta pendiente por responder."
     not_found: "No se encontró la encuesta."
     access_denied: "La encuesta ya ha sido contestada."
