@@ -86,9 +86,15 @@ class PollsController < ApplicationController
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
     @poll.organization = @auth_organization
+    polls = Poll.list.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
+              :questionnaire_id => @poll.questionnaire.id,
+              :user_id => @poll.user.id
+            )
 
     respond_to do |format|
-      if @poll.save
+      if !polls.empty?
+        format.html { redirect_to new_poll_path, :alert => (t 'poll.already_exists') }
+      elsif @poll.save
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
         format.json { render :json => @poll, :status => :created, :location => @poll }
       else
