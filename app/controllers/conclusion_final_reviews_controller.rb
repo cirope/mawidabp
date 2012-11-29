@@ -216,7 +216,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def compose_email
     @title = t 'conclusion_final_review.send_by_email'
     @conclusion_final_review = find_with_organization(params[:id])
-    @questionnaires = Questionnaire.by_pollable_type 'ConclusionReview'
+    @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
   end
 
   # Envia por correo el informe a los usuarios indicados
