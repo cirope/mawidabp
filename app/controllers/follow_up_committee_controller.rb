@@ -438,8 +438,23 @@ class FollowUpCommitteeController < ApplicationController
 
       # Reviews score average
       internal_cfrs = cfrs.internal_audit.includes(:review)
-      indicators[:score_average] = internal_cfrs.size > 0 ?
-        (internal_cfrs.inject(0.0) { |t, cr| t + cr.review.score.to_f } / internal_cfrs.size.to_f).round : nil
+      scores = []
+
+      BusinessUnitType.list.each do |but|
+        score = 0
+        total = 0
+        internal_cfrs.each do |cfrs|
+          if cfrs.review.business_unit.business_unit_type_id == but.id
+            score += cfrs.review.score.to_f
+            total += 1
+          end
+        end
+
+        scores << (score / total) unless total == 0
+      end
+
+      scores.size == 0 ? indicators[:score_average] = 0 :
+        indicators[:score_average] = (scores.inject(0) { |i, score | i + score  } / scores.size).round
 
       # Work papers digitalization
       wps = WorkPaper.includes(:owner, :file_model).where(
