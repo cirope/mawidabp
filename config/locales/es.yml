@@ -1117,6 +1117,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_question: "Agregar pregunta"
     not_found: "No se encontró el cuestionario"
     monthly_committee: "Comité mensual"
+    general: "General"
   report:
     index_title: "Listado de reportes"
 

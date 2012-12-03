@@ -75,7 +75,7 @@ class Poll < ActiveRecord::Base
     elsif self.questionnaire.id == 4 # Comité
       "#{self.questionnaire.name} (#{I18n.t 'questionnaire.monthly_committee'})"
     else
-      self.questionnaire.name
+      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.general'})"
     end
   end
 
