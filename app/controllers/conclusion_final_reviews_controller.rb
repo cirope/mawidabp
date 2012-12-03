@@ -262,7 +262,7 @@ class ConclusionFinalReviewsController < ApplicationController
           users << user
         end
 
-        if user && user_data[:questionnaire_id].present?
+        if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
           polls = Poll.list.where(:user_id => user.id, :questionnaire_id => user_data[:questionnaire_id],
                                :pollable_id => @conclusion_final_review)
           if polls.empty?

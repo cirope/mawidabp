@@ -86,7 +86,7 @@ class PollsController < ApplicationController
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
     @poll.organization = @auth_organization
-    polls = Poll.list.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
+    polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
               :questionnaire_id => @poll.questionnaire.id,
               :user_id => @poll.user.id
             )
