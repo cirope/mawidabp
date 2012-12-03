@@ -17,7 +17,4 @@
 //= require form_modification
 //= require mobile_style
 //= require validation
-//= require raphael
-//= require morris
-//= require users
 //= require ui

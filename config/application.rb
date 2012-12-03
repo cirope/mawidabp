@@ -41,7 +41,7 @@ module MawidaApp
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    
+
     config.cache_store = :mem_cache_store, 'localhost', {
       :namespace => "mawidabp_#{Rails.env}".downcase
     }
