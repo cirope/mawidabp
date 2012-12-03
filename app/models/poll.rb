@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Poll < ActiveRecord::Base
   before_save :generate_access_token, :on => :create
 
@@ -66,6 +67,16 @@ class Poll < ActiveRecord::Base
 
   def send_poll_email
     Notifier.pending_poll_email(self).deliver
+  end
+
+  def name
+    if self.pollable_id.present?
+      "#{self.questionnaire.name} (#{self.pollable_type.constantize.model_name.human})"
+    elsif self.questionnaire.id == 4 # Comité
+      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.monthly_committee'})"
+    else
+      self.questionnaire.name
+    end
   end
 
   private
