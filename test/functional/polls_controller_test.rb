@@ -75,7 +75,7 @@ class PollsControllerTest < ActionController::TestCase
       assert_difference 'Answer.count', 2 do
         post :create, {
           :poll => {
-            :user_id => users(:poll_user).id,
+            :user_id => users(:administrator_user).id,
             :questionnaire_id => questionnaires(:questionnaire_one).id,
             :organization_id => organizations(:default_organization).id,
             :access_token => SecureRandom.hex
