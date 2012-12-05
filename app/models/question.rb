@@ -7,6 +7,7 @@ class Question < ActiveRecord::Base
     :written => 0,
     :multi_choice => 1
   }
+
   ANSWER_OPTIONS = [
     :strongly_agree,
     :agree,
@@ -14,6 +15,14 @@ class Question < ActiveRecord::Base
     :disagree,
     :strongly_disagree
   ]
+
+  ANSWER_OPTION_VALUES = {
+    :strongly_agree => 100,
+    :agree => 75,
+    :neither_agree_nor_disagree => 50,
+    :disagree => 25,
+    :strongly_disagree => 0
+  }
 
   # Validaciones
   validates :sort_order, :question, :answer_type, :presence => true
