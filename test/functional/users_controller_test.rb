@@ -272,9 +272,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'login with polls' do
-
     user = users(:poll_user)
-
     post :create_session,
       :user => {
         :user => user.user,
@@ -288,9 +286,9 @@ class UsersControllerTest < ActionController::TestCase
       :user_id => user.id,
       :organization_id => organizations(:default_organization).id
     ).first
+
     assert_kind_of LoginRecord, login_record
   end
-
 
   test 'login sucesfully in admin mode' do
     @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
@@ -1173,6 +1171,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user)
     assert_select '#error_body', false
     assert_template 'users/user_status'
+  end
+
+  test 'show user status without graph' do
+    perform_auth
+    get :user_status_without_graph, :id => users(:administrator_user).user
+    assert_response :success
+    assert_not_nil assigns(:user)
+    assert_select '#error_body', false
+    assert_template 'users/user_status_without_graph'
   end
 
   test 'auto complete for user' do

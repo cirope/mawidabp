@@ -1240,6 +1240,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     login_title: "Autenticación de usuarios"
     show_title: "Detalle usuario"
     new_title: "Nuevo usuario"
+    graph_mode: "Modo gráfico"
+    table_mode: "Modo tabla"
     edit_title: "Modificar usuario"
     profiles_label: "Perfiles"
     organizations_label: "Organizaciones"

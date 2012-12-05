@@ -333,6 +333,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :user_status
+      get :user_status_without_graph
       get :logout
       get :edit_password
       put :update_password
