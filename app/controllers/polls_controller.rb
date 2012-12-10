@@ -7,6 +7,7 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
+    @current_module = "administration_questionnaires_polls"
     @title = t 'poll.index_title'
     if params[:id]
       @polls = Poll.by_questionnaire(params[:id]).paginate(
