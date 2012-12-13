@@ -60,7 +60,7 @@ class Organization < ActiveRecord::Base
     :readonly => true
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true,
-    :reject_if => lambda { |attributes| attributes['file'].blank? }
+    :reject_if => lambda { |attributes| attributes['image'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
