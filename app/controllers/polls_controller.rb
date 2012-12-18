@@ -304,7 +304,7 @@ class PollsController < ApplicationController
   def summary_by_business_unit
     @title = t 'poll.reports_title'
     @from_date, @to_date = *make_date_range(params[:summary_by_business_unit])
-    @questionnaires = Questionnaire.pollable.map { |q| [q.name, q.id.to_s] }
+    @questionnaires = Questionnaire.list.pollable.map { |q| [q.name, q.id.to_s] }
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date.months_ago(3),
       @to_date)
     @business_unit_polls = {}
