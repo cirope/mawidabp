@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte
@@ -26,6 +27,9 @@ AVAILABLE_LOCALES = [:es].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
+# Cantidad de dias anteriores al cierre de un informe definitivo en los que el
+# sistema notificará su proximidad
+CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
 EMAIL_REGEXP = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
 # Cantidad máxima de observaciones por PDF

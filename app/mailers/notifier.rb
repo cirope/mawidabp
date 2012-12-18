@@ -230,4 +230,12 @@ class Notifier < ActionMailer::Base
       )
     )
   end
+
+  def conclusion_final_review_expiration_warning(user, cfr)
+    @cfr = cfr
+    mail(
+      :to => [user.email],
+         :subject => "[#{@cfr.review.organization.prefix.upcase}] #{t('notifier.conclusion_final_review_expiration_warning.title')}"
+    )
+  end
 end

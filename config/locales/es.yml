@@ -862,6 +862,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion_review_notification:
       title: "Informe de auditoría %{review}"
       body_title: "Se adjuntan los siguientes documentos: %{elements}"
+    conclusion_final_review_expiration_warning:
+      title: "Notificación de informe cercano al cierre"
+      body_title: "El siguiente informe está próximo al cierre"
     findings_expiration_warning:
       title: "Notificación de observaciones cercanas al vencimiento"
       body_title:
