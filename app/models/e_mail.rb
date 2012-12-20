@@ -1,18 +1,25 @@
 class EMail < ActiveRecord::Base
   has_paper_trail
-  
+
   attr_accessible :to, :subject, :body, :attachments, :organization_id
-  
-  # Scopes
-  scope :ordered_list, lambda {
-    where(
-      :organization_id => GlobalModelConfig.current_organization_id
-    ).order('created_at DESC')
-  }
-  
+
+  # Constantes
+  COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
+    :to => {
+      :column => "LOWER(#{EMail.table_name}.to)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :subject => {
+      :column => "LOWER(#{EMail.table_name}.subject)", :operator => 'LIKE',
+      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    }
+  )
+  # Default scope
+  default_scope order('created_at DESC')
+
   # Restricciones
   validates :to, :subject, :presence => true
-  
+
   # Relaciones
   belongs_to :organization
 end
