@@ -689,6 +689,7 @@ class Finding < ActiveRecord::Base
       )
       self.undoing_reiteration = true
       self.update_attribute :repeated_of_id, nil
+      self.update_attribute :origination_date, nil
     else
       raise 'Unknown previous repeated state'
     end
