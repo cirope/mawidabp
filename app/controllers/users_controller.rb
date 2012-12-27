@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   ]
   before_filter :load_privileges
   before_filter :check_privileges, :except => [
-    :login, :create_session, :logout, :user_status, :edit_password,
+    :login, :create_session, :logout, :user_status, :edit_password, :user_status_without_graph,
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
