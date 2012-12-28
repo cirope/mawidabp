@@ -206,9 +206,9 @@ class FindingsController < ApplicationController
     ).where(@conditions)
 
     if detailed
-      columns = 11
+      columns = 12
     else
-      columns = 9
+      columns = 10
     end
 
     buffer = ''
