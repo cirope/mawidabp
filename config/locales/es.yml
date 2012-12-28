@@ -729,6 +729,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
         score_average: "Calificación de informes"
         digitalized: "Digitalización"
+        oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"

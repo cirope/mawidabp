@@ -366,6 +366,7 @@ class FollowUpCommitteeController < ApplicationController
       cfrs = conclusion_reviews.for_period(period)
       row_order = [
         ['%.1f%', :highest_solution_rate],
+        ['%.1f%', :oportunities_solution_rate],
         ['%.1f%', :digitalized],
         ['%d%', :score_average],
         ['%.1f%', :production_level],
@@ -402,6 +403,22 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
         (resolved_highest_risk / pending_highest_risk.to_f) * 100 : nil
+
+      # Oportunities solution rate
+      pending_oportunities = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.oportunities.where(
+          :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values
+        ).count
+      end
+
+      resolved_oportunities = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.oportunities.where(
+          :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values - Oportunity::PENDING_STATUS
+        ).count
+      end
+
+      indicators[:oportunities_solution_rate] = pending_oportunities > 0 ?
+        (resolved_oportunities / pending_oportunities.to_f) * 100 : nil
 
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
