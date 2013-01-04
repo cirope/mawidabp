@@ -453,7 +453,7 @@ class Finding < ActiveRecord::Base
     users = value.reject(&:marked_for_destruction?).map(&:user)
 
     unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
-        users.any?(&:supervisor?) && users.any?(&:manager?)
+        users.any?(&:supervisor?)
       record.errors.add attr, :invalid
     end
   end
