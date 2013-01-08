@@ -7,6 +7,7 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
+    @current_module = "administration_questionnaires_polls"
     @title = t 'poll.index_title'
     if params[:id]
       @polls = Poll.by_questionnaire(params[:id]).paginate(
@@ -86,9 +87,15 @@ class PollsController < ApplicationController
     @title = t 'poll.new_title'
     @poll = Poll.new(params[:poll])
     @poll.organization = @auth_organization
+    polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
+              :questionnaire_id => @poll.questionnaire.id,
+              :user_id => @poll.user.id
+            )
 
     respond_to do |format|
-      if @poll.save
+      if !polls.empty?
+        format.html { redirect_to new_poll_path, :alert => (t 'poll.already_exists') }
+      elsif @poll.save
         format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
         format.json { render :json => @poll, :status => :created, :location => @poll }
       else
@@ -185,6 +192,19 @@ class PollsController < ApplicationController
       @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
                  ).by_questionnaire(@questionnaire)
       @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
+      count = 0
+      total = 0
+      @polls.each do |poll|
+        if poll.answered?
+          poll.answers.each do |answer|
+            if answer.answer_option.present?
+              count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+              total += 1
+            end
+          end
+        end
+      end
+      total == 0 ? @calification = 0 : @calification = (count / total).round
     end
   end
 
@@ -265,6 +285,8 @@ class PollsController < ApplicationController
 
       pdf.text "#{t('poll.total_answered')}: #{@answered}"
       pdf.text "#{t('poll.total_unanswered')}: #{@unanswered}"
+      pdf.move_pointer PDF_FONT_SIZE
+      pdf.text "#{t('poll.score')}: #{@calification}%"
     else
       pdf.text t('poll.without_data')
     end
@@ -282,7 +304,7 @@ class PollsController < ApplicationController
   def summary_by_business_unit
     @title = t 'poll.reports_title'
     @from_date, @to_date = *make_date_range(params[:summary_by_business_unit])
-    @questionnaires = Questionnaire.pollable.map { |q| [q.name, q.id.to_s] }
+    @questionnaires = Questionnaire.list.pollable.map { |q| [q.name, q.id.to_s] }
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date.months_ago(3),
       @to_date)
     @business_unit_polls = {}
@@ -323,8 +345,21 @@ class PollsController < ApplicationController
             @business_unit_polls[@selected_business_unit.name][:rates] = rates
             @business_unit_polls[@selected_business_unit.name][:answered] = answered
             @business_unit_polls[@selected_business_unit.name][:unanswered] = unanswered
+            count = 0
+            total = 0
+            but_polls.each do |poll|
+              if poll.answered?
+                poll.answers.each do |answer|
+                  if answer.answer_option.present?
+                    count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+                    total += 1
+                  end
+                end
+              end
+            end
+            total == 0 ? calification = 0 : calification = (count / total).round
+            @business_unit_polls[@selected_business_unit.name][:calification] = calification
           end
-
         else
           BusinessUnitType.list.each do |but|
             but_polls =  polls.select { |poll|
@@ -336,6 +371,20 @@ class PollsController < ApplicationController
               @business_unit_polls[but.name][:rates] = rates
               @business_unit_polls[but.name][:answered] = answered
               @business_unit_polls[but.name][:unanswered] = unanswered
+              count = 0
+              total = 0
+              but_polls.each do |poll|
+                if poll.answered?
+                  poll.answers.each do |answer|
+                    if answer.answer_option.present?
+                      count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+                      total += 1
+                    end
+                  end
+                end
+              end
+              total == 0 ? calification = 0 : calification = (count / total).round
+              @business_unit_polls[but.name][:calification] = calification
             end
           end
         end
@@ -422,6 +471,8 @@ class PollsController < ApplicationController
 
         pdf.text "#{t('poll.total_answered')}: #{@business_unit_polls[but][:answered]}"
         pdf.text "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}"
+        pdf.move_pointer PDF_FONT_SIZE
+        pdf.text "#{t('poll.score')}: #{@business_unit_polls[but][:calification]}%"
         pdf.move_pointer PDF_FONT_SIZE * 2
       end
     else

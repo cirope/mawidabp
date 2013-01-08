@@ -366,6 +366,7 @@ class FollowUpCommitteeController < ApplicationController
       cfrs = conclusion_reviews.for_period(period)
       row_order = [
         ['%.1f%', :highest_solution_rate],
+        ['%.1f%', :oportunities_solution_rate],
         ['%.1f%', :digitalized],
         ['%d%', :score_average],
         ['%.1f%', :production_level],
@@ -376,12 +377,10 @@ class FollowUpCommitteeController < ApplicationController
       days = total = 0
 
       cfrs.each do |cr|
-        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where(
-          'follow_up_date < ?', Date.today
-        )
+        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented
 
         weaknesses.each do |w|
-          days += (Date.today - w.follow_up_date).abs.round
+          days += (Date.today - w.origination_date).abs.round
           total += 1
         end
       end
@@ -404,6 +403,22 @@ class FollowUpCommitteeController < ApplicationController
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
         (resolved_highest_risk / pending_highest_risk.to_f) * 100 : nil
+
+      # Oportunities solution rate
+      pending_oportunities = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.oportunities.where(
+          :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values
+        ).count
+      end
+
+      resolved_oportunities = cfrs.inject(0.0) do |ct, cr|
+        ct + cr.review.oportunities.where(
+          :state => Oportunity::STATUS.except(Oportunity::EXCLUDE_FROM_REPORTS_STATUS).values - Oportunity::PENDING_STATUS
+        ).count
+      end
+
+      indicators[:oportunities_solution_rate] = pending_oportunities > 0 ?
+        (resolved_oportunities / pending_oportunities.to_f) * 100 : nil
 
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
@@ -440,8 +455,23 @@ class FollowUpCommitteeController < ApplicationController
 
       # Reviews score average
       internal_cfrs = cfrs.internal_audit.includes(:review)
-      indicators[:score_average] = internal_cfrs.size > 0 ?
-        (internal_cfrs.inject(0.0) { |t, cr| t + cr.review.score.to_f } / internal_cfrs.size.to_f).round : nil
+      scores = []
+
+      BusinessUnitType.list.each do |but|
+        score = 0
+        total = 0
+        internal_cfrs.each do |cfrs|
+          if cfrs.review.business_unit.business_unit_type_id == but.id
+            score += cfrs.review.score.to_f
+            total += 1
+          end
+        end
+
+        scores << (score / total) unless total == 0
+      end
+
+      scores.size == 0 ? indicators[:score_average] = 0 :
+        indicators[:score_average] = (scores.inject(0) { |i, score | i + score  } / scores.size).round
 
       # Work papers digitalization
       wps = WorkPaper.includes(:owner, :file_model).where(

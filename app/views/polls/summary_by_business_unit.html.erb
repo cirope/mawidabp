@@ -28,7 +28,8 @@
     </table>
     <p style="margin: 1em; font-size: 1.1em;">
       <%= "#{t('poll.total_answered')}: #{@business_unit_polls[but][:answered]}" %><br />
-      <%= "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}" %>
+      <%= "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}" %><br />
+      <br /><strong><%= "#{t('poll.score')}: #{@business_unit_polls[but][:calification]}%" %></strong>
     </p>
 
   <% end %>

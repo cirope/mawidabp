@@ -206,9 +206,9 @@ class FindingsController < ApplicationController
     ).where(@conditions)
 
     if detailed
-      columns = 11
+      columns = 12
     else
-      columns = 9
+      columns = 10
     end
 
     buffer = ''
@@ -374,6 +374,7 @@ class FindingsController < ApplicationController
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
         "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
         ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
+        ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text.to_iso}" if finding.kind_of?(Weakness)),
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
       ].compact.join("\n")

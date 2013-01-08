@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Poll < ActiveRecord::Base
   before_save :generate_access_token, :on => :create
 
@@ -24,6 +25,7 @@ class Poll < ActiveRecord::Base
   validates :organization_id, :questionnaire_id, :user_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
+
   # Relaciones
   belongs_to :questionnaire
   belongs_to :user
@@ -47,14 +49,6 @@ class Poll < ActiveRecord::Base
     |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
       :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
   }
-  scope :by_organization, lambda {
-    |org_id, poll_id| where('id = :poll_id AND organization_id = :org_id', :org_id => org_id, :poll_id => poll_id)
-  }
-  scope :by_user, lambda {
-    |user_id, org_id, id| where('id = :id AND organization_id = :org_id AND user_id = :user_id',
-      :org_id => org_id, :id => id, :user_id => user_id
-      )
-  }
   scope :pollables, lambda {
     where('pollable_id IS NOT NULL')
   }
@@ -75,14 +69,21 @@ class Poll < ActiveRecord::Base
     Notifier.pending_poll_email(self).deliver
   end
 
+  def name
+    if self.pollable_id.present?
+      "#{self.questionnaire.name} (#{self.pollable_type.constantize.model_name.human})"
+    elsif self.questionnaire.id == 4 # Comité
+      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.monthly_committee'})"
+    else
+      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.general'})"
+    end
+  end
+
   private
 
   def generate_access_token
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(:access_token => access_token)
-
-    Rails.logger.debug "ACCESS TOKEN: #{self.access_token}"
   end
-
 end

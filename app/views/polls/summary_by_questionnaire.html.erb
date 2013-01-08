@@ -26,7 +26,8 @@
   </table>
   <p style="margin: 1em; font-size: 1.1em;">
     <%= "#{t('poll.total_answered')}: #{@answered}" %><br />
-    <%= "#{t('poll.total_unanswered')}: #{@unanswered}" %>
+    <%= "#{t('poll.total_unanswered')}: #{@unanswered}" %><br />
+    <br /><strong><%= "#{t('poll.score')}: #{@calification}%" %></strong>
   </p>
 
 <% else %>

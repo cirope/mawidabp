@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   ]
   before_filter :load_privileges
   before_filter :check_privileges, :except => [
-    :login, :create_session, :logout, :user_status, :edit_password,
+    :login, :create_session, :logout, :user_status, :edit_password, :user_status_without_graph,
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
@@ -177,6 +177,19 @@ class UsersController < ApplicationController
     @title = t 'user.status_title'
     @user = @auth_user.audited? ?
       @auth_user : find_with_organization(params[:id])
+    @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @user }
+    end
+  end
+
+  def user_status_without_graph
+    @title = t 'user.status_title'
+    @user = @auth_user.audited? ?
+      @auth_user : find_with_organization(params[:id])
+    @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
 
     respond_to do |format|
       format.html # show.html.erb

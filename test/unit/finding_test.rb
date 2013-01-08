@@ -345,15 +345,6 @@ class FindingTest < ActiveSupport::TestCase
         :invalid)], @finding.errors[:finding_user_assignments]
   end
 
-  test 'validates manager users' do
-    @finding.finding_user_assignments.delete_if { |fua| fua.user.manager? }
-
-    assert @finding.invalid?
-    assert_equal 1, @finding.errors.size
-    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
-        :invalid)], @finding.errors[:finding_user_assignments]
-  end
-
   test 'stale function' do
     @finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
@@ -834,17 +825,17 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'incomplete')
     row = @finding.to_csv(detailed, 'incomplete')
 
-    assert_equal header[8], 'Fecha de implementación'.to_iso
-    assert_equal header.count, 11
-    assert_equal row.count, 11
+    assert_equal header[9], 'Fecha de implementación'.to_iso
+    assert_equal header.count, 12
+    assert_equal row.count, 12
 
     detailed = false
     header = Finding.to_csv(detailed, 'complete')
     row = @finding.to_csv(detailed, 'complete')
 
-    assert_equal header[8], 'Fecha de solución'.to_iso
-    assert_equal header.count, 9
-    assert_equal row.count, 9
+    assert_equal header[9], 'Fecha de solución'.to_iso
+    assert_equal header.count, 10
+    assert_equal row.count, 10
   end
 
   test 'notify users if they are selected for notification' do

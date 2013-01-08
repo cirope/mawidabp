@@ -453,7 +453,7 @@ class Finding < ActiveRecord::Base
     users = value.reject(&:marked_for_destruction?).map(&:user)
 
     unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
-        users.any?(&:supervisor?) && users.any?(&:manager?)
+        users.any?(&:supervisor?)
       record.errors.add attr, :invalid
     end
   end
@@ -520,16 +520,18 @@ class Finding < ActiveRecord::Base
   def self.columns_for_sort
     HashWithIndifferentAccess.new(
       :risk_asc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.ascendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.ascendant')})",
         :field => [
           "#{Finding.table_name}.risk ASC",
+          "#{Finding.table_name}.priority ASC",
           "#{Finding.table_name}.state ASC"
         ]
       },
       :risk_desc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.descendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.descendant')})",
         :field => [
           "#{Finding.table_name}.risk DESC",
+          "#{Finding.table_name}.priority DESC",
           "#{Finding.table_name}.state ASC"
         ]
       },
@@ -687,6 +689,7 @@ class Finding < ActiveRecord::Base
       )
       self.undoing_reiteration = true
       self.update_attribute :repeated_of_id, nil
+      self.update_attribute :origination_date, nil
     else
       raise 'Unknown previous repeated state'
     end
@@ -1650,6 +1653,7 @@ class Finding < ActiveRecord::Base
       self.review_code,
       self.state_text,
       self.kind_of?(Weakness) ? self.risk_text.to_iso : '',
+      self.kind_of?(Weakness) ? self.priority_text.to_iso : '',
       audited.join('; ').to_iso,
       description,
       rescheduled_text.try(:to_iso),
@@ -1700,6 +1704,7 @@ class Finding < ActiveRecord::Base
       Weakness.human_attribute_name(:review_code).to_iso,
       Weakness.human_attribute_name(:state),
       Weakness.human_attribute_name(:risk),
+      Weakness.human_attribute_name(:priority),
       I18n.t('finding.audited', :count => 0),
       Weakness.human_attribute_name(:description).to_iso,
       (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})").to_iso,
