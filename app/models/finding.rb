@@ -1005,7 +1005,7 @@ class Finding < ActiveRecord::Base
     level_overflow = false
 
     level.times do
-      highest_users = highest_users.map(&:parent).compact.uniq
+      highest_users = users.map(&:parent).compact.uniq
       organization_highest_users = highest_users.select {|u| u.organizations.include? self.review.organization}
       users |= organization_highest_users
       level_overflow ||= organization_highest_users.empty?
