@@ -1002,7 +1002,8 @@ class Finding < ActiveRecord::Base
   def users_for_scaffold_notification(level = 1)
     users = self.finding_user_assignments.map(&:user).select(
       &:can_act_as_audited?)
-    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
+    organization_users = users.select {|u| u.organizations.include? self.review.organization}
+    highest_users = organization_users.reject {|u| u.ancestors.any? {|p| organization_users.include?(p)}}
     level_overflow = false
 
     level.times do
