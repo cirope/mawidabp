@@ -1075,10 +1075,10 @@ class FindingTest < ActiveSupport::TestCase
       unless n == 4
         assert !finding.users_for_scaffold_notification(n).empty?
 
-      finding_ids << finding.id
+        finding_ids << finding.id
 
-      users_by_level_for_notification[n] |= finding.users |
-      finding.users_for_scaffold_notification(n)
+        users_by_level_for_notification[n] |= finding.users |
+        finding.users_for_scaffold_notification(n)
       end
     end
 
