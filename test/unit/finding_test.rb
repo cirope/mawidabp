@@ -345,15 +345,6 @@ class FindingTest < ActiveSupport::TestCase
         :invalid)], @finding.errors[:finding_user_assignments]
   end
 
-  test 'validates manager users' do
-    @finding.finding_user_assignments.delete_if { |fua| fua.user.manager? }
-
-    assert @finding.invalid?
-    assert_equal 1, @finding.errors.size
-    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
-        :invalid)], @finding.errors[:finding_user_assignments]
-  end
-
   test 'stale function' do
     @finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)

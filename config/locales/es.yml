@@ -1087,7 +1087,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     must_answer_poll: "Tiene una encuesta pendiente por responder."
     not_found: "No se encontró la encuesta."
     access_denied: "La encuesta ya ha sido contestada."
-    score: "Calificación general"
+    score: "Nivel de satisfacción promedio"
     summary_by_questionnaire: "Resumen por tipo de cuestionario"
     summary_by_business_unit_subtitle: "RESUMEN POR UNIDAD DE NEGOCIO"
     summary_by_questionnaire_subtitle: "RESUMEN POR TIPO DE CUESTIONARIO"

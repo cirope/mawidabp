@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ReviewUserAssignment < ActiveRecord::Base
   include ParameterSelector
   include Comparable
@@ -18,7 +19,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   before_validation :can_be_modified?
   before_destroy :can_be_modified?, :delete_user_in_all_review_findings
   before_save :check_user_modification
-  
+
   # Restricciones
   validates :assignment_type, :user_id, :presence => true
   validates :assignment_type, :user_id, :review_id,
@@ -39,7 +40,7 @@ class ReviewUserAssignment < ActiveRecord::Base
 
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
-          (record.manager? && !user.manager?) ||
+          (record.manager? && !user.supervisor?) ||
           (record.audited? && !user.can_act_as_audited?)
         record.errors.add attr, :invalid
       end
@@ -49,7 +50,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   # Relaciones
   belongs_to :review, :inverse_of => :review_user_assignments
   belongs_to :user, :inverse_of => :review_user_assignments
-  
+
   def <=>(other)
     if self.review_id == other.review_id
       self.user_id <=> other.user_id
@@ -62,19 +63,19 @@ class ReviewUserAssignment < ActiveRecord::Base
     other.kind_of?(ReviewUserAssignment) && other.id &&
       (self.id == other.id || (self <=> other) == 0)
   end
-  
+
   def notify_by_email
     unless @__nbe_first_access
       @notify_by_email = true
       @__nbe_first_access = true
     end
-    
+
     @notify_by_email
   end
-  
+
   def notify_by_email=(notify_by_email)
     @__nbe_first_access = true
-    
+
     @notify_by_email = notify_by_email
   end
 
@@ -156,14 +157,14 @@ class ReviewUserAssignment < ActiveRecord::Base
 
   def delete_user_in_all_review_findings
     all_valid = false
-    
+
     Finding.transaction do
       findings = self.user.findings.all_for_reallocation_with_review self.review
       all_valid = findings.all? do |finding|
         finding.users.delete self.user
         finding.valid?
       end
-      
+
       unless all_valid
         self.errors.add(:base,
           I18n.t('review_user_assignment.cannot_be_destroyed'))
