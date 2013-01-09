@@ -669,9 +669,9 @@ class FindingTest < ActiveSupport::TestCase
         users(:coordinator_manager_user)].sort,
       3 => [users(:audited_user), users(:plain_manager_user),
         users(:coordinator_manager_user), users(:general_manager_user)].sort,
+      # No escala al presidente ya que pertenece a una organización diferente a la de la observación
       4 => [users(:audited_user), users(:plain_manager_user),
-        users(:coordinator_manager_user), users(:general_manager_user),
-        users(:president_user)].sort
+        users(:coordinator_manager_user), users(:general_manager_user)].sort
     }
 
     n = 0
@@ -1071,16 +1071,19 @@ class FindingTest < ActiveSupport::TestCase
       assert_equal 1, findings.size
 
       finding = findings.first
-
-      assert !finding.users_for_scaffold_notification(n).empty?
+      # No debe escalar al presidente (4to nivel)  ya que no pertenece a la organización de la observación
+      unless n == 4
+        assert !finding.users_for_scaffold_notification(n).empty?
 
       finding_ids << finding.id
 
       users_by_level_for_notification[n] |= finding.users |
       finding.users_for_scaffold_notification(n)
+      end
     end
 
-    assert_difference 'ActionMailer::Base.deliveries.size', 4 do
+    # No escala al nivel 4
+    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
       level_counts = {}
 
       finding_ids.each do |f_id|

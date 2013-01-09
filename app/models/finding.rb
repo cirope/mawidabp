@@ -1002,13 +1002,17 @@ class Finding < ActiveRecord::Base
   def users_for_scaffold_notification(level = 1)
     users = self.finding_user_assignments.map(&:user).select(
       &:can_act_as_audited?)
+    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
     level_overflow = false
 
     level.times do
-      highest_users = users.map(&:parent).compact.uniq
-      organization_highest_users = highest_users.select {|u| u.organizations.include? self.review.organization}
-      users |= organization_highest_users
-      level_overflow ||= organization_highest_users.empty?
+
+      users |= (highest_users = highest_users.map(&:parent).compact.uniq.select {|u| u.organizations.include? self.review.organization})
+
+#      organization_highest_users = highest_users.select {|u| u.organizations.include? self.review.organization}
+#      users |= organization_highest_users
+ #     level_overflow ||= organization_highest_users.empty?
+       level_overflow ||= highest_users.empty?
     end
 
     level_overflow ? [] : users.uniq
@@ -1021,7 +1025,7 @@ class Finding < ActiveRecord::Base
 
     level.times { highest_users = highest_users.map(&:parent).compact.uniq }
 
-    highest_users.reject { |u| self.users.include?(u) }
+    highest_users.reject { |u| self.users.include?(u) || !(u.organizations.include? self.review.organization) }
   end
 
   def notification_date_for_level(level = 1)
