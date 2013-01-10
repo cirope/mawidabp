@@ -671,7 +671,7 @@ class FindingTest < ActiveSupport::TestCase
         users(:coordinator_manager_user), users(:general_manager_user)].sort,
       # No escala al presidente ya que pertenece a una organización diferente a la de la observación
       4 => [users(:audited_user), users(:plain_manager_user),
-        users(:coordinator_manager_user), users(:general_manager_user)].sort
+       users(:coordinator_manager_user), users(:general_manager_user)].sort
     }
 
     n = 0
@@ -679,6 +679,22 @@ class FindingTest < ActiveSupport::TestCase
     until (users = finding.users_for_scaffold_notification(n += 1)).empty?
       assert_equal user_for_levels[n].map(&:to_s).sort, users.map(&:to_s).sort
     end
+
+    # Agrego al presidente a la organización
+    OrganizationRole.create({
+      :user => users(:president_user),
+      :organization => finding.review.organization,
+      :role => roles(:executive_manager_role)
+    })
+
+    # Ahora debe notificarlo
+    user_for_levels[4] << users(:president_user)
+    n = 0
+
+    until (users = finding.users_for_scaffold_notification(n += 1)).empty?
+      assert_equal user_for_levels[n].map(&:to_s).sort, users.map(&:to_s).sort
+    end
+
   end
 
   test 'manager users for level' do
