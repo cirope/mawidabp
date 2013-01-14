@@ -31,7 +31,6 @@ gem 'transaction-simple', :require => false
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
-  gem 'therubyracer', :require => false
   gem 'uglifier'
 end
 
