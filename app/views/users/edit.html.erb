@@ -8,7 +8,7 @@
     <div class="button">
       <%= button_to t('user.reset_password'),
           { :action => :blank_password, :id => @user },
-          :confirm => t('message.confirmation_question'),
+          :data => { :confirm => t('message.confirmation_question') },
           :method => :put, :class => :shadowed_button,
           :title => t('user.reset_password') %>
     </div>
