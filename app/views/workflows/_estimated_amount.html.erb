@@ -1,6 +1,6 @@
 <% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <% unless plan_item.try(:resource_utilizations).blank? %>
-  <%= link_to_function currency_mask % plan_item.cost,
+  <%= link_to currency_mask % plan_item.cost, '#', :onclick =>
     "$('#estimated_cost_details').slideToggle()" %>
   <div id="estimated_cost_details" style="display: none;">
     <div>

@@ -32,7 +32,7 @@
       <%= Plan.human_attribute_name :estimated_amount %>:
       <b><%= t('number.currency.format.unit') %><span id="estimated_amount"><%= '%.2f' % @plan.estimated_amount(params[:business_unit_type]) %></span></b>
       <% unless params[:business_unit_type].blank? %>
-        <%= link_to_function t('plan.calculate_estimated_amount'),
+        <%= link_to t('plan.calculate_estimated_amount'), '#', :onclick =>
           "calculateEstimatedAmount()", :style => 'margin-left: .5em;' %>
       <% end %>
     </p>

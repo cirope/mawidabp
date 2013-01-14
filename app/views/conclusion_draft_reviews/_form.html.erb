@@ -70,7 +70,7 @@
         <%= t('conclusion_draft_review.not_approved') %>
       </p>
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
-      <%= link_to_function t('error.show_details'), 'showOrHideErrors()',
+      <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors()',
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
     </div>
     <div>

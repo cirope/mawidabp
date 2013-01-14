@@ -58,7 +58,7 @@
       <tr style="vertical-align: text-top;">
         <td><b><%= t('workflow.row_cost') %></b></td>
         <td><%= t('number.currency.format.unit') %><span id="workflow_cost"><%= '%.2f' %  @workflow.cost %></span>
-          <%= link_to_function t('workflow.calculate_estimated_amount'),
+          <%= link_to t('workflow.calculate_estimated_amount'), '#', :onclick =>
             "calculateCost()", :style => 'margin-left: .5em;' %></td>
         <td>
           <div id="estimated_amount">

@@ -10,7 +10,7 @@ module FindingsHelper
       {:class => (:inline_item if inline),
       :disabled => (disabled || finding.unconfirmed?)}
   end
-  
+
   def finding_repeated_of_label(form, readonly)
     if !form.object.new_record? && form.object.repeated_of && !readonly
       link = content_tag(:span,
@@ -20,7 +20,7 @@ module FindingsHelper
         :title => t('finding.undo_reiteration'),
         :style => 'color: #666666;'
       )
-      
+
       form.label :repeated_of_id, raw(
         Finding.human_attribute_name('repeated_of_id') + ' ' +
         content_tag(:span, raw(link), :class => 'popup_link_container')
@@ -39,7 +39,7 @@ module FindingsHelper
         fra.finding.repeated?
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
-      
+
       form.select :repeated_of_id, findings, {:prompt => true},
         {:disabled => readonly}
     end
@@ -67,11 +67,11 @@ module FindingsHelper
       ''
     end
   end
-  
+
   def finding_updated_at_text(finding)
     label = Finding.human_attribute_name('updated_at')
     date = I18n.l(finding.updated_at, :format => :minimal) if finding.updated_at
-    
+
     show_info "#{label}: #{date}"
   end
 
@@ -104,17 +104,17 @@ module FindingsHelper
 
   def finding_show_status_change_history(dom_id)
     content_tag(:span,
-      link_to_function(
+      link_to(
         image_tag(
           'clock.gif', :size => '11x11',
           :alt => t('finding.show_status_change_history'),
           :title => t('finding.show_status_change_history')
         ),
-        "$('##{dom_id}').slideToggle()", :class => :image_link
+        '#', :onclick => "$('##{dom_id}').slideToggle()", :class => :image_link
       ), :style => 'margin-left: .25em;'
     )
   end
-  
+
   def finding_responsibles_list(finding)
     users = finding.users.map do |u|
       if finding.process_owners.include?(u)
@@ -124,10 +124,10 @@ module FindingsHelper
         u.full_name_with_function(finding.created_at)
       end
     end
-    
+
     array_to_ul users, :class => :raw_list
   end
-  
+
   def show_finding_answers_count(finding)
     finding_answers_count = finding.finding_answers.count
     user_answers = finding.finding_answers.where(:user_id => @auth_user.id).count
@@ -137,18 +137,18 @@ module FindingsHelper
       :title => t('finding.user_finding_answers_count'),
       :class => klass
     )
-    
+
     raw "#{finding_answers_count} / #{user_count}"
   end
-  
+
   def show_finding_related_users
     users = []
-    
+
     (@self_and_descendants + @related_users).each do |u|
       users << [
         u.full_name_with_function, {:user_id => u.id}.to_json
       ]
-      
+
       unless u.can_act_as_audited?
         users << [
           "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.responsible_auditor')}",
@@ -156,9 +156,9 @@ module FindingsHelper
         ]
       end
     end
-    
+
     select nil, :user_id, sort_options_array(users), {:prompt => true},
-      {:name => :user_id, :id => :user_id_select, :class => :inline_item} 
+      {:name => :user_id, :id => :user_id_select, :class => :inline_item}
   end
-  
+
 end

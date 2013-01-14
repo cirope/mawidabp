@@ -50,11 +50,11 @@
 </div>
 
 <% unless Rails.env.production? %>
-  <%= link_to_function t('error.show_details'),
+  <%= link_to t('error.show_details'), '#', :onclick =>
     "$('#error_details').show(); $(this).hide()", :id => 'show_link' %>
   <div style="display: none; margin: 2em 0em;" id="error_details">
     <div>
-      <%= link_to_function t('error.hide_details'),
+      <%= link_to t('error.hide_details'), '#', :onclick =>
         "$('#error_details').hide(); $('#show_link').show()" %>
       <!-- Final -->
       <h2 style="margin: 1em 0em;"><%=h error.message %></h2>

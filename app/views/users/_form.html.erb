@@ -84,7 +84,7 @@
         </div>
       </div>
       <div class="item_field" style="width: 10%;">
-        <%= link_to_function t('user.unlink_manager'),
+        <%= link_to t('user.unlink_manager'), '#', :onclick =>
           "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val('')" %>
       </div>
     </div>

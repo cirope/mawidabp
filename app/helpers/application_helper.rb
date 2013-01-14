@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Helper de la aplicación
 #
 # Helper del que heredan los demás helpers de la aplicación.
@@ -19,20 +20,20 @@ module ApplicationHelper
 
   def textilize_without_paragraph(text)
     textiled = textilize(text)
-    
+
     if textiled[0..2] == '<p>' then textiled = textiled[3..-1] end
     if textiled[-4..-1] == '</p>' then textiled = textiled[0..-5] end
-    
+
     textiled.html_safe
   end
-  
+
   def calendar_text_field(form, attribute, time = false, value = nil, options = {})
     value ||= form.object.send(attribute)
     default_options = { :class => "#{options.delete(:class)} calendar" }
-    
+
     default_options[:value] = l(value, :format => time ? :minimal : :default) if value
     default_options['data-time'] = true if time
-    
+
     form.text_field attribute, default_options.merge(options)
   end
 
@@ -104,7 +105,7 @@ module ApplicationHelper
 
   # Convierte un arreglo (con cualquier cantidad de arreglos en su interior) en
   # una lista sin ordernar (HTML ul)
-  # 
+  #
   # * _array_:: El arreglo que se quiere convertir a HTML
   # * _options_:: Opciones HTML de la lista principal
   def array_to_ul(array, options = {})
@@ -187,12 +188,12 @@ module ApplicationHelper
     }.merge(args.last.kind_of?(Hash) ? args.pop : {})
 
     html_options = {
-      :confirm => t('message.confirmation_question'),
+      :data => { :confirm => t('message.confirmation_question') },
       :method => :delete,
       :title => t('label.delete'),
       :src => path_to_image('delete.gif')
     }.merge(args.last.kind_of?(Hash) ? args.pop : {})
-    
+
     image_button_to(options.delete(:label), *(args << html_options))
   end
 
@@ -232,7 +233,7 @@ module ApplicationHelper
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
-    search_link = link_to_function t('label.search'), 'Search.show()',
+    search_link = link_to t('label.search'), '#', :onclick => 'Search.show()',
       :id => :show_search_link, :title => t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
@@ -287,22 +288,22 @@ module ApplicationHelper
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
   def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
     out = content_tag(:div,
-      link_to_function(
+      link_to(
         image_tag(
           'grayarrow.gif', :size => '11x11', :alt => '>', :title => show_text
         ),
-        "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
       ),
       :id => "show_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? 'display: none' : nil)
     )
     out << content_tag(:div,
-      link_to_function(
+      link_to(
         image_tag(
           'grayarrowdown.gif', :size => '11x11', :alt => '>',
           :title => hide_text
         ),
-        "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
       ),
       :id => "hide_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? nil : 'display: none'))
@@ -386,7 +387,7 @@ module ApplicationHelper
         :alt => options[:label], :title => options.delete(:label)),
       *(args << html_options))
   end
-  
+
   def link_to_delete_attachment(form, name, *args)
     options = args.extract_options!
     out = form.hidden_field(
@@ -399,7 +400,7 @@ module ApplicationHelper
         :title => t('label.delete_file'), 'data-event' => 'removeAttachment'
       }.merge(options)
     )
-    
+
     raw out
   end
 
@@ -413,7 +414,7 @@ module ApplicationHelper
       'data-event' => 'insertRecordItem'
     }.merge(user_options)
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
-    
+
     link_to(
       image_tag('insert.gif', :size => '19x13', :alt => options[:label],
         :title => options.delete(:label), :class => options[:class]), "#",
@@ -501,9 +502,9 @@ module ApplicationHelper
       if selected
         options[:class] = "#{options[:class]} selected_menu"
       end
-      
+
       args << options
-      
+
       link_to(name, *args)
     else
       content_tag(:span, name, :class => :menu_disabled)

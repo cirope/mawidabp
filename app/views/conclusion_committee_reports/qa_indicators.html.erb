@@ -37,7 +37,7 @@
 
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to_function t('label.download'),
+  <%= link_to t('label.download'), '#', :onclick =>
     "Helper.showItem('#customize_report_form')" %>
 </div>
 <div id="customize_report_form" style="display: none;">
