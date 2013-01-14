@@ -19,6 +19,7 @@ gem 'paperclip', '3.0.0'
 gem 'rmagick'
 gem 'gruff'
 gem 'dynamic_form'
+gem "acts_as_tree_rails3", "~> 0.1.0"
 gem 'unicode'
 gem 'capistrano'
 gem 'rubyzip', :require => 'zip/zip'
