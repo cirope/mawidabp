@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de observaciones
 #
 # Lista, muestra, crea, modifica y elimina observaciones (#Weakness)
@@ -36,7 +37,7 @@ class WeaknessesController < ApplicationController
         ":control_objective_id"
       parameters[:control_objective_id] = params[:control_objective].to_i
     end
-    
+
     if params[:ids]
       default_conditions << "#{Weakness.table_name}.id IN(:ids)"
       parameters[:ids] = params[:ids]
@@ -163,14 +164,14 @@ class WeaknessesController < ApplicationController
 
     redirect_to weakness.relative_follow_up_pdf_path
   end
-  
+
   # Deshace la reiteración de la observación
   #
   # * PUT /weaknesses/undo_reiteration/1
   def undo_reiteration
     @weakness = find_with_organization(params[:id])
     @weakness.undo_reiteration
-    
+
     respond_to do |format|
       format.html { redirect_to(edit_weakness_url(@weakness)) }
       format.xml  { head :ok }
@@ -181,7 +182,10 @@ class WeaknessesController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ['organizations.id = :organization_id']
+    conditions = [
+      'organizations.id = :organization_id',
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -202,7 +206,7 @@ class WeaknessesController < ApplicationController
         "#{User.table_name}.name ASC"
       ]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -246,7 +250,7 @@ class WeaknessesController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
-    
+
     respond_to do |format|
       format.json { render :json => @findings }
     end
@@ -280,7 +284,7 @@ class WeaknessesController < ApplicationController
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order("#{Review.table_name}.identification ASC").limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @control_objective_items }
     end

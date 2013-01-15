@@ -4,11 +4,26 @@ class Notifier < ActionMailer::Base
     :charset => 'UTF-8', :content_type => 'text/html',
     :date => proc { Time.now }
 
+  def pending_poll_email(poll)
+    @poll = poll
+    @user = poll.user
+    @hash = @user.change_password_hash
+    @organization = poll.organization
+    @token = poll.access_token
+
+    mail(
+      :to => @user.email,
+      :subject => "[#{@organization.prefix.upcase}] " + t(
+        'notifier.pending_poll_email.title', :name => @user.informal_name
+      )
+    )
+  end
+
   def group_welcome_email(group)
     @group, @hash = group, group.admin_hash
     prefixes = group.organizations.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
-    
+
     mail(
       :to => [group.admin_email],
       :subject => prefixes.upcase + t(
@@ -21,7 +36,7 @@ class Notifier < ActionMailer::Base
     @user, @hash = user, user.change_password_hash
     prefixes = user.organizations.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
-    
+
     mail(
       :to => [user.email],
       :subject => prefixes.upcase + t(
@@ -32,7 +47,7 @@ class Notifier < ActionMailer::Base
 
   def notify_new_findings(user)
     findings = user.findings.for_notification
-    
+
     @user = user
     @grouped_findings = findings.group_by(&:organization)
     @notification = Notification.create(:user => user, :findings => findings)
@@ -49,7 +64,7 @@ class Notifier < ActionMailer::Base
     @user, @finding = user, finding
     @notification = Notification.create(:user => user, :findings => [finding])
     prefix = "[#{finding.organization.prefix}] "
-    
+
     mail(
       :to => [user.email],
       :subject => prefix.upcase + t('notifier.notify_new_finding.title')
@@ -129,7 +144,7 @@ class Notifier < ActionMailer::Base
       )
     )
   end
-  
+
   def restore_password(user, organization)
     @user, @hash = user, user.change_password_hash
     @organization = organization
@@ -178,7 +193,7 @@ class Notifier < ActionMailer::Base
 
     body_title = I18n.t('notifier.conclusion_review_notification.body_title',
       :elements => elements.to_sentence)
-    
+
     @conclusion_review = conclusion_review
     @body_title = body_title
     @note = options[:note]
@@ -213,6 +228,14 @@ class Notifier < ActionMailer::Base
       :subject => prefixes.upcase + t(
         'notifier.findings_expiration_warning.title'
       )
+    )
+  end
+
+  def conclusion_final_review_expiration_warning(user, cfr)
+    @cfr = cfr
+    mail(
+      :to => [user.email],
+         :subject => "[#{@cfr.review.organization.prefix.upcase}] #{t('notifier.conclusion_final_review_expiration_warning.title')}"
     )
   end
 end

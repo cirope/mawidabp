@@ -16,17 +16,37 @@
           <%= hidden_field_tag "user[#{id}][id]", user.id,
             :class => :autocomplete_id %>
         </div>
-      <% else %>
+    </div>
+
+    <div class="item_field" style="width: 30%;">
+
+
+      <div id="questionnaire_<%= id %>" style="opacity: 0;">
+        <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
+          :name, :prompt => t('label.no') %>
+      </div>
+    </div>
+
+   <% else %>
         <%= hidden_field_tag "user[#{id}][id]", user.id %>
         <%= text_field_tag "user[#{id}][data]",
           user.new_record? ? nil : user.full_name_with_function,
           :readonly => true %>
+  </div>
+
+    <div class="item_field" style="width: 30%;">
+      <% if user.can_act_as_audited? %>
+        <div class="questionnaire">
+          <%= collection_select "user[#{id}]", :questionnaire_id, @questionnaires, :id,
+            :name, :prompt => t('label.no') %>
+        </div>
+      <% else %>
+        &nbsp;
       <% end %>
     </div>
-    <div class="item_field" style="width: 30%;">
-      <%= collection_select "user[#{id}]", :questionnaire_id, Questionnaire.all, :id, 
-          :name, :prompt => t('label.no') %>
-    </div>
+
+<% end %>
+
     <div class="item_field item_controls" style="width: 10%;">
       <%= remove_item_link nil, 'user' %>
     </div>
@@ -37,5 +57,10 @@
   <script type="text/javascript">
     Helper.showItem('#user_<%= id %>');
     AutoComplete.observeAll();
+    $('#user_<%= id %>_data').on('autocomplete:update', function() {
+      if ($(this).data('item')['can_act_as_audited?']) {
+        $('#questionnaire_<%= id %>').animate({opacity: 1});
+      }
+    });
   </script>
 <% end %>

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'modules/conclusion_reports/conclusion_common_reports'
 require 'modules/conclusion_reports/conclusion_high_risk_reports'
 
@@ -7,14 +8,14 @@ require 'modules/conclusion_reports/conclusion_high_risk_reports'
 class ConclusionCommitteeReportsController < ApplicationController
   include ConclusionCommonReports
   include ConclusionHighRiskReports
-  
+
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :add_weaknesses_synthesis_table,
     :get_weaknesses_synthesis_table_data, :make_date_range,
     :weaknesses_by_state, :create_weaknesses_by_state, :weaknesses_by_risk,
     :create_weaknesses_by_risk, :weaknesses_by_audit_type,
     :create_weaknesses_by_audit_type
-  
+
   # Muestra una lista con los reportes disponibles
   #
   # * GET /conclusion_committee_reports
@@ -88,7 +89,7 @@ class ConclusionCommitteeReportsController < ApplicationController
           if c_r.review.business_unit.business_unit_type_id == but.id
             process_controls = {}
             weaknesses_count = {}
-            
+
             c_r.review.control_objective_items_for_score.each do |coi|
               process_controls[coi.process_control.name] ||= []
               process_controls[coi.process_control.name] << coi
@@ -106,7 +107,7 @@ class ConclusionCommitteeReportsController < ApplicationController
                 (total / coi_count.to_f).round : 100
             end
 
-            c_r.review.final_weaknesses.each do |w|
+            c_r.review.final_weaknesses.not_revoked.each do |w|
               @risk_levels |= parameter_in(@auth_organization.id,
                 :admin_finding_risk_levels, w.created_at).
                 sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
@@ -180,11 +181,16 @@ class ConclusionCommitteeReportsController < ApplicationController
       pdf.move_pointer PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
-      
+
       unless @selected_business_unit
         unless @audits_by_business_unit[period].blank?
           count = 0
-          total = @audits_by_business_unit[period].inject(0) do |sum, data|
+
+          internal_audits_by_business_unit = @audits_by_business_unit[period].reject do |but|
+            but[:external]
+          end
+
+          total = internal_audits_by_business_unit.inject(0) do |sum, data|
             scores = data[:review_scores]
 
             if scores.blank?
@@ -315,7 +321,7 @@ class ConclusionCommitteeReportsController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
   end
-  
+
   # Crea un PDF con un resumen de indicadores de calidad para un determinado
   # rango de fechas
   #
@@ -337,7 +343,7 @@ class ConclusionCommitteeReportsController < ApplicationController
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period)
-           
+
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
         ct + cr.review.final_weaknesses.with_highest_risk.where(
@@ -353,7 +359,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
       indicators[:highest_solution_rate] = pending_highest_risk > 0 ?
         (resolved_highest_risk / pending_highest_risk.to_f) * 100 : 100
-      
+
       # Medium risk weaknesses solution rate
       pending_medium_risk = cfrs.inject(0.0) do |ct, cr|
         ct + cr.review.final_weaknesses.where(
@@ -371,7 +377,7 @@ class ConclusionCommitteeReportsController < ApplicationController
 
       indicators[:medium_solution_rate] = pending_medium_risk > 0 ?
         (resolved_medium_risk / pending_medium_risk.to_f) * 100 : 100
-          
+
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |i|
@@ -380,7 +386,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             'value' => "#{'%.1f' % indicators[i]}%"
           }
         end
-      }      
+      }
     end
   end
 
@@ -414,7 +420,7 @@ class ConclusionCommitteeReportsController < ApplicationController
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
       pdf.move_pointer PDF_FONT_SIZE
-      
+
       @indicators[period].each do |data|
         columns = {}
         column_data = []
@@ -425,7 +431,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             column.width = pdf.percent_width 50
           end
         end
-        
+
         data[:column_data].each do |row|
           new_row = {}
 

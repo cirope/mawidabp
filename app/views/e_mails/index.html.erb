@@ -1,10 +1,15 @@
+<%= render :partial => 'shared/search', :locals => {
+  :options => {},
+  :columns => @query.blank? ? EMail::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
 <table class="list">
-  <thead>
+  <thead id="column_headers">
     <tr>
-      <th><%= EMail.human_attribute_name 'created_at' %></th>
-      <th><%= EMail.human_attribute_name 'to' %></th>
-      <th><%= EMail.human_attribute_name 'subject' %></th>
-      <th></th>
+      <%= make_not_available_column EMail.human_attribute_name(:created_at) %>
+      <%= make_filterable_column EMail.human_attribute_name(:to), nil, 'to' %>
+      <%= make_filterable_column EMail.human_attribute_name(:subject), nil, 'subject' %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
 
@@ -15,6 +20,7 @@
         <td><%= super_truncate email.to %></td>
         <td><%= super_truncate email.subject %></td>
         <td><%= link_to_show email %></td>
+        <td></td>
       </tr>
     <% end %>
   </tbody>

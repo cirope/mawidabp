@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Menú del auditado
 APP_AUDITED_MENU_ITEMS = [
   # ADMINISTRACIÓN
@@ -139,8 +140,28 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :questionnaires,
         :order => 7,
-        :controllers => :questionnaires,
-        :url => {:controller => :questionnaires}
+        :url => '#menu_administration_questionnaires',
+        :class => :menu_item_2,
+        :children => [
+          MenuItem.new(
+            :definition,
+            :order => 1,
+            :controllers => :questionnaires,
+            :url => {:controller => :questionnaires}
+          ),
+          MenuItem.new(
+            :polls,
+            :order => 2,
+            :controllers => :polls,
+            :url => {:controller => :polls}
+          ),
+          MenuItem.new(
+            :reports,
+            :order => 3,
+            :controllers => :polls,
+            :url => {:controller => :polls, :action => :reports}
+          )
+        ]
       )
     ]
   ),

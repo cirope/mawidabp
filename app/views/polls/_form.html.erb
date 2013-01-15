@@ -1,26 +1,52 @@
 <%= form_for(@poll) do |p_f| %>
   <%= p_f.error_messages %>
-  <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
-  
-  <%= p_f.fields_for :answers do |a_f| %>    
-    <%= render :partial => 'answer', :locals => {:f => a_f} %>
+  <% unless @poll.new_record? %>
+    <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
+
+    <%= p_f.fields_for :answers do |a_f| %>    
+      <%= render :partial => 'answer', :locals => {:f => a_f} %>
+    <% end %>
+
+    <hr />
   <% end %>
   
-  <hr />
-  
   <div class="form_column_left">
-    <p class="form_item">
-      <br />
-      <%= p_f.label(
-        "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})",
-        :id => 'poll_comments_label', :for => 'poll_comments'
-      ) %>
-      <%= p_f.text_area :comments %>
-    </p>
+    <% if @poll.new_record? %>
+      <div>
+	<br />        
+	<% field_classes = [:search, :autocomplete_field] %>
+        <%= p_f.label :user_id, :for => "user_id_#{@poll.id}" %>
+        <div class="search">
+          <%= p_f.text_field :user_id,
+            :id => "user_id_#{@poll.id}",
+            :class => field_classes.join(' '),
+            :value => '',
+            :title => t('label.search'),
+            :autocomplete => :off,
+            'data-autocomplete-params' => ("{user_id: #{@poll.id}}" unless @poll.new_record?),
+            'data-autocomplete-url' => auto_complete_for_user_polls_path %>
+          <%= p_f.hidden_field :user_id, :class => :autocomplete_id %>
+        </div>
+      </div>
+      <div>
+        <br />
+        <%= p_f.label :questionnaire_id %>
+        <%= p_f.select :questionnaire_id, Questionnaire.all.map{|q| [q.name, q.id] }, 
+          :prompt => true %>
+      </div> 
+    <% else %>
+      <p class="form_item">
+        <br />
+        <%= p_f.label(
+          "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})",
+          :id => 'poll_comments_label', :for => 'poll_comments'
+        ) %>
+        <%= p_f.text_area :comments %>
+      </p>
+    <% end %>
   </div>
   
   <%= hidden_lock_version(p_f) %>
-  <%= p_f.hidden_field :questionnaire_id %>
   
   <p>
     <span class="button"><%= p_f.submit %></span>

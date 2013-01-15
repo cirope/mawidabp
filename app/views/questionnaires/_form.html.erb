@@ -8,8 +8,16 @@
       <%= qe_f.label :name %>
       <%= qe_f.text_field :name, :maxlength => 255, :autofocus => true %>
     </p>
+    <p>
+      <%= qe_f.label :pollable_type %>
+      <%= qe_f.select :pollable_type, Questionnaire::POLLABLE_TYPES.map{ |type|
+            [type.constantize.model_name.human, type]
+          }, { :prompt => t('helpers.select.prompt') }
+
+ %>
+    </p>
   </div>
-  
+
   <div class="items">
     <div class="column_headers">
       <div class="item_column" style="width: 50%;">
@@ -21,16 +29,16 @@
       <div class="item_column" style="width: 10%;"></div>
       <div class="clear"></div>
     </div>
-        
-    <div id="questions">    
+
+    <div id="questions">
       <% @questionnaire.questions.build if @questionnaire.questions.empty? %>
       <%= qe_f.fields_for :questions do |qn_f| %>
         <%= render :partial => 'question', :locals => {
           :f => qn_f, :is_dynamic => false
         } %>
       <% end %>
-    </div>  
-                 
+    </div>
+
     <p class="add_item">
       <%= link_to t('questionnaire.add_question'), '#',
         'data-template' => 'question', 'data-event' => 'addNestedItem',

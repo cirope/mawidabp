@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 # Dirección del correo electrónico de soporte
-SUPPORT_EMAIL = 'soporte@mawida.com.ar'.freeze
+SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte
 SUPPORT_PHONE = '(0261) 449-8885 (9 a 13 hs.)'.freeze
 # Dirección principal de soporte
-SUPPORT_URL = 'https://soporte.mawida.com.ar/'.freeze
+SUPPORT_URL = 'https://soporte.mawidabp.com/'.freeze
 # Ruta hasta el directorio de configuración
 CONFIG_PATH = File.join(Rails.root, 'config', File::SEPARATOR).freeze
 # Ruta hasta el directorio público
@@ -26,6 +27,9 @@ AVAILABLE_LOCALES = [:es].freeze
 # Cantidad de días en los que es posible cambiar la contraseña luego de un
 # blanqueo
 BLANK_PASSWORD_STALE_DAYS = 3
+# Cantidad de dias anteriores al cierre de un informe definitivo en los que el
+# sistema notificará su proximidad
+CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS = 7
 # Expresión regular para validar direcciones de correo
 EMAIL_REGEXP = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
 # Cantidad máxima de observaciones por PDF
@@ -39,7 +43,7 @@ FINDING_STALE_UNCONFIRMED_DAYS = 1
 LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las
 # notificaciones a esta cuenta)
-NOTIFICATIONS_EMAIL = 'notificaciones@mawida.com.ar'.freeze
+NOTIFICATIONS_EMAIL = 'notificaciones@mawidabp.com'.freeze
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Ruta hasta donde se almacenan los archivos de errores
@@ -67,7 +71,7 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 # Ruta a un archivo para realizar las pruebas (ruta completa)
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
-URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawida.com.ar').freeze
+URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawidabp.com').freeze
 # Protocolo a utilizar para formar los links absolutos
 URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador

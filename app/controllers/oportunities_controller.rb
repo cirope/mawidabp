@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de oportunidades de mejora
 #
 # Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)
@@ -27,7 +28,7 @@ class OportunitiesController < ApplicationController
     ]
     parameters = {:organization_id => @auth_organization.id,
       :boolean_true => true, :boolean_false => false}
-    
+
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
         ":control_objective_id"
@@ -144,7 +145,7 @@ class OportunitiesController < ApplicationController
         end
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'oportunity.stale_object_error'
     redirect_to :action => :edit
@@ -160,14 +161,14 @@ class OportunitiesController < ApplicationController
 
     redirect_to oportunity.relative_follow_up_pdf_path
   end
-  
+
   # Deshace la reiteración de la oportunidad
   #
   # * PUT /oportunities/undo_reiteration/1
   def undo_reiteration
     @oportunity = find_with_organization(params[:id])
     @oportunity.undo_reiteration
-    
+
     respond_to do |format|
       format.html { redirect_to(edit_oportunity_url(@oportunity)) }
       format.xml  { head :ok }
@@ -178,7 +179,10 @@ class OportunitiesController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
+    conditions = [
+      "#{Organization.table_name}.id = :organization_id",
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -199,7 +203,7 @@ class OportunitiesController < ApplicationController
         "#{User.table_name}.name ASC"
       ]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @users }
     end
@@ -245,7 +249,7 @@ class OportunitiesController < ApplicationController
         "#{Finding.table_name}.review_code ASC"
       ]
     ).limit(5)
-    
+
     respond_to do |format|
       format.json { render :json => @findings }
     end
@@ -279,7 +283,7 @@ class OportunitiesController < ApplicationController
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order("#{Review.table_name}.identification ASC").limit(10)
-    
+
     respond_to do |format|
       format.json { render :json => @control_objective_items }
     end

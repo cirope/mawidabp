@@ -3,6 +3,20 @@ require 'test_helper'
 class NotifierTest < ActionMailer::TestCase
   fixtures :users, :findings, :organizations, :groups
 
+  test 'pending poll email' do
+    poll = Poll.find(polls(:poll_one).id)
+
+    assert ActionMailer::Base.deliveries.empty?
+
+    response = Notifier.pending_poll_email(poll).deliver
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert_equal [poll.user.email], response.to
+    assert response.subject.include?(
+      I18n.t('notifier.pending_poll_email.title', :name => poll.user.informal_name)
+    )
+  end
+
   test 'group welcome email' do
     group = Group.find(groups(:main_group).id)
 
@@ -162,7 +176,7 @@ class NotifierTest < ActionMailer::TestCase
       response.body.decoded
     assert_equal user.email, response.to.first
   end
-  
+
   test 'restore password notification' do
     user = User.find(users(:blank_password_user).id)
     organization = Organization.find(organizations(:default_organization).id)
@@ -306,6 +320,23 @@ class NotifierTest < ActionMailer::TestCase
     )
     assert_match Regexp.new(I18n.t('notifier.findings_expiration_warning.body_title',
         :count => user.findings.size)), response.body.decoded
+    assert_equal user.email, response.to.first
+  end
+
+    test 'deliver conclusion final review expiration warning' do
+    user = User.find(users(:administrator_user).id)
+    cfr = ConclusionReview.find(conclusion_reviews(:conclusion_current_final_review).id)
+
+    assert ActionMailer::Base.deliveries.empty?
+
+    response = Notifier.conclusion_final_review_expiration_warning(user, cfr).deliver
+
+    assert !ActionMailer::Base.deliveries.empty?
+    assert response.subject.include?(
+      I18n.t('notifier.conclusion_final_review_expiration_warning.title')
+    )
+    assert_match Regexp.new(I18n.t('notifier.conclusion_final_review_expiration_warning.body_title')),
+      response.body.decoded
     assert_equal user.email, response.to.first
   end
 end

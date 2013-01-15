@@ -13,3 +13,6 @@ MawidaApp::Application.config.action_mailer.smtp_settings = {
   :authentication => :plain,
   :enable_starttls_auto => true
 }
+
+ActionMailer::Base.register_observer(MailObserver)
+

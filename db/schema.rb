@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120528181002) do
+ActiveRecord::Schema.define(:version => 20121004175435) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -508,8 +508,11 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
     t.string   "pollable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
+    t.string   "access_token"
   end
 
+  add_index "polls", ["organization_id"], :name => "index_polls_on_organization_id"
   add_index "polls", ["questionnaire_id"], :name => "index_polls_on_questionnaire_id"
 
   create_table "privileges", :force => true do |t|
@@ -574,12 +577,15 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
 
   create_table "questionnaires", :force => true do |t|
     t.string   "name"
-    t.integer  "lock_version", :default => 0
+    t.integer  "lock_version",    :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
+    t.string   "pollable_type"
   end
 
   add_index "questionnaires", ["name"], :name => "index_questionnaires_on_name"
+  add_index "questionnaires", ["organization_id"], :name => "index_questionnaires_on_organization_id"
 
   create_table "questions", :force => true do |t|
     t.integer  "sort_order"
@@ -706,11 +712,13 @@ ActiveRecord::Schema.define(:version => 20120528181002) do
     t.boolean  "group_admin",                         :default => false
     t.text     "notes"
     t.datetime "hash_changed"
+    t.boolean  "hidden",                              :default => false
   end
 
   add_index "users", ["change_password_hash"], :name => "index_users_on_change_password_hash", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["group_admin"], :name => "index_users_on_group_admin"
+  add_index "users", ["hidden"], :name => "index_users_on_hidden"
   add_index "users", ["manager_id"], :name => "index_users_on_manager_id"
   add_index "users", ["resource_id"], :name => "index_users_on_resource_id"
   add_index "users", ["user"], :name => "index_users_on_user", :unique => true

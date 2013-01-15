@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 class Organization < ActiveRecord::Base
   include ParameterSelector
   include Trimmer
   include Comparable
 
   trimmed_fields :name, :prefix
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -17,7 +18,7 @@ class Organization < ActiveRecord::Base
   after_create :create_initial_data
   after_save :restore_current_organization_id
   before_destroy :can_be_destroyed?
-  
+
   # Named scopes
   scope :list, order('name ASC')
   scope :list_for_group, lambda { |group| where(:group_id => group.id) }
@@ -27,7 +28,7 @@ class Organization < ActiveRecord::Base
 
   # Atributos no persistentes
   attr_accessor :must_create_parameters, :must_create_roles
-  
+
   # Restricciones
   validates :prefix, :format => {:with => /\A[A-Za-z][A-Za-z0-9\-]+\z/},
     :allow_nil => true, :allow_blank => true
@@ -38,7 +39,7 @@ class Organization < ActiveRecord::Base
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :group_id}
   validates :prefix, :exclusion => {:in => INVALID_PREFIXES}
-  
+
   # Relaciones
   belongs_to :group
   belongs_to :image_model, :dependent => :destroy
@@ -53,10 +54,13 @@ class Organization < ActiveRecord::Base
   has_many :periods, :dependent => :destroy
   has_many :resource_classes, :dependent => :destroy
   has_many :detracts, :dependent => :destroy
+  has_many :polls, :dependent => :destroy
+  has_many :questionnaires, :dependent => :destroy
   has_many :users, :through => :organization_roles, :uniq => true,
     :readonly => true
 
-  accepts_nested_attributes_for :image_model, :allow_destroy => true
+  accepts_nested_attributes_for :image_model, :allow_destroy => true,
+    :reject_if => lambda { |attributes| attributes['image'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
@@ -71,7 +75,7 @@ class Organization < ActiveRecord::Base
   def <=>(other)
     self.prefix <=> other.prefix
   end
-  
+
   # Crea la configuración inicial de la organización
   def create_initial_data
     create_initial_parameters if must_create_parameters
@@ -112,7 +116,7 @@ class Organization < ActiveRecord::Base
   end
 
   private
-  
+
   def create_initial_parameters
     DEFAULT_PARAMETERS.each do |name, value|
       self.parameters.build(

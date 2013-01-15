@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ConclusionFinalReview < ConclusionReview
   # Constantes
   COLUMNS_FOR_SEARCH = {
@@ -90,6 +91,14 @@ class ConclusionFinalReview < ConclusionReview
     :review => {:plan_item => {:business_unit => :business_unit_type}}
   ).where("#{BusinessUnitType.table_name}.external" => true)
 
+  scope :next_to_expire, lambda {
+    where(
+      'close_date = :warning_date',
+      :warning_date =>
+        CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date
+    )
+  }
+
   # Callbacks
   before_save :check_for_approval
   before_create :duplicate_review_findings
@@ -156,7 +165,7 @@ class ConclusionFinalReview < ConclusionReview
     findings = self.review.weaknesses.not_revoked +
       self.review.oportunities.not_revoked
     all_created = false
-    
+
     begin
       findings.all? do |f|
         finding = f.dup
@@ -164,7 +173,7 @@ class ConclusionFinalReview < ConclusionReview
         finding.final = true
         finding.parent = f
         finding.origination_date ||= f.origination_date ||= self.issue_date
-        
+
         f.finding_user_assignments.each do |fua|
           finding.finding_user_assignments.build(
             fua.attributes.dup.merge('id' => nil, 'finding_id' => nil)
@@ -176,11 +185,11 @@ class ConclusionFinalReview < ConclusionReview
             wp.attributes.dup.merge('id' => nil)
           ).check_code_prefix = false
         end
-        
+
         finding.save!
         f.save!
       end
-      
+
       revoked_findings = self.review.weaknesses.revoked +
         self.review.oportunities.revoked
       revoked_findings.each { |rf| rf.final = true; rf.save! }
@@ -201,5 +210,36 @@ class ConclusionFinalReview < ConclusionReview
 
   def is_frozen?
     self.close_date && Date.today > self.close_date
+  end
+
+  def self.warning_auditors_about_close_date
+    wday = Date.today.wday
+
+    # Sólo si no es sábado o domingo (porque no tiene sentido)
+    unless [0, 6].include? wday
+      # Si es viernes notifico también los que cierran el fin de semana
+      if wday == 5
+        cfrs = ConclusionFinalReview.where(
+                 'close_date BETWEEN :from AND :to',
+                 :from => CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS.days.from_now_in_business.to_date,
+                 :to => (CONCLUSION_FINAL_REVIEW_EXPIRE_DAYS + 2).days.from_now_in_business.to_date
+               )
+      else
+        cfrs = ConclusionFinalReview.next_to_expire
+      end
+
+      if cfrs.present?
+        cfrs.each do |cfr|
+          ruas = cfr.review.review_user_assignments
+          ruas.each do |rua|
+            # si no es gerente o auditado
+            unless rua.assignment_type == 2 || rua.assignment_type == -1
+              Notifier.conclusion_final_review_expiration_warning(rua.user,
+                cfr).deliver
+            end
+          end
+        end
+      end
+    end
   end
 end

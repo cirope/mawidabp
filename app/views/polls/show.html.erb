@@ -1,13 +1,13 @@
 <div id="showed_data">
-  <p>  
-    <b><%= User.human_attribute_name :user %>: </b>
+  <p>
+    <b><%= Poll.human_attribute_name :user_id %>: </b>
       <%= "#{@poll.user.last_name}, #{@poll.user.name}"  %>
-  </p>  
-  <p>  
+  </p>
+  <p>
     <b><%= Poll.human_attribute_name :answered %>: </b>
       <%= @poll.answered ? t('label.yes') : t('label.no')  %>
-  </p>  
-  <p>  
+  </p>
+  <p>
     <b><%= Questionnaire.human_attribute_name :questions %>:</b>
   </p>
   <ol>
@@ -29,7 +29,7 @@
       <% end %>
     <% end %>
   </ol>
-  
+
   <% if @poll.comments.present? %>
     <p>
       <b><%= Poll.human_attribute_name :comments %>: </b>
@@ -38,8 +38,9 @@
   <% end %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_poll_path(@poll) %> |
-  <%= link_to t('label.list'), polls_path %> |
-  <%= link_to_back %>
-</div>
+<% if @layout.eql? 'application' %>
+  <div id="links">
+    <%= link_to t('label.list'), polls_path %> |
+    <%= link_to_back %>
+  </div>
+<% end %>

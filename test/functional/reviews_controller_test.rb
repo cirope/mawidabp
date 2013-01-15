@@ -138,7 +138,7 @@ class ReviewsControllerTest < ActionController::TestCase
                     },
                     :new_3 => {
                       :assignment_type => ReviewUserAssignment::TYPES[:manager],
-                      :user_id => users(:manager_user).id
+                      :user_id => users(:supervisor_second_user).id
                     },
                     :new_4 => {
                       :assignment_type => ReviewUserAssignment::TYPES[:audited],

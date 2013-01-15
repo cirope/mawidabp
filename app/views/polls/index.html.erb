@@ -1,21 +1,30 @@
+<%= render :partial => 'shared/search', :locals => {
+  :options => {},
+  :columns => @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
+} %>
+
 <table class="list">
-  <thead>
+  <thead id="column_headers">
     <tr>
-      <th></th>
-      <th><%= User.human_attribute_name :user %></th>
-      <th colspan="4"></th>
+      <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'user_name', 'last_name' %>
+      <%= make_filterable_column Poll.human_attribute_name(:questionnaire_id), nil, 'questionnaire_name' %>
+      <%= make_not_available_column Poll.human_attribute_name(:answered) %>
+      <%= make_not_available_column Poll.human_attribute_name(:send_date) %>
+      <%= make_not_available_column Poll.human_attribute_name(:answer_date) %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @polls.each do |poll| %>
       <tr class="<%= cycle('even', 'odd') %>">
-        <td></td>
-        <td><%= "#{poll.user.name} #{poll.user.last_name}"  %></td>
+        <td><%= poll.user.informal_name  %></td>
+        <td><%= poll.name %></td>
+        <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
+        <td><%= l poll.created_at.to_date, :format => :long %></td>
+        <td><%= l(poll.updated_at.to_date, :format => :long) if poll.answered %></td>
         <td><%= link_to_show poll %></td>
-        <td><%= link_to_edit edit_poll_path(poll) %></td>
         <td><%= button_to_destroy poll %></td>
-        <td></td>
       </tr>
     <% end %>
   </tbody>

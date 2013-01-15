@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'pdf/simpletable'
 
 # =Controlador de programas de trabajo
@@ -117,7 +118,7 @@ class WorkflowsController < ApplicationController
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number <=> wfi_b.order_number
     end
-    
+
     respond_to do |format|
       if @workflow.update_attributes(params[:workflow])
         flash.notice = t 'workflow.correctly_updated'
@@ -165,7 +166,10 @@ class WorkflowsController < ApplicationController
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
+    conditions = [
+      "#{Organization.table_name}.id = :organization_id",
+      "#{User.table_name}.hidden = false"
+    ]
     parameters = {:organization_id => @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -182,7 +186,7 @@ class WorkflowsController < ApplicationController
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
     ).limit(10)
-    
+
     respond_to do |format|
       format.json {
         render :json => @users.to_json(

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Finding < ActiveRecord::Base
   include Comparable
   include ParameterSelector
@@ -419,7 +420,7 @@ class Finding < ActiveRecord::Base
 
     record.errors.add attr, :must_have_a_comment if record.must_have_a_comment?
     record.errors.add attr, :can_not_be_revoked if record.can_not_be_revoked?
-    
+
     if record.implemented_audited? && record.work_papers.empty?
       record.errors.add attr, :must_have_a_work_paper
     end
@@ -428,7 +429,7 @@ class Finding < ActiveRecord::Base
     if value && record.state_changed? && record.repeated?
       record.errors.add attr, :invalid unless record.is_in_a_final_review?
     end
-    
+
     if record.revoked? && record.is_in_a_final_review?
       record.errors.add attr, :invalid
     end
@@ -452,7 +453,7 @@ class Finding < ActiveRecord::Base
     users = value.reject(&:marked_for_destruction?).map(&:user)
 
     unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
-        users.any?(&:supervisor?) && users.any?(&:manager?)
+        users.any?(&:supervisor?)
       record.errors.add attr, :invalid
     end
   end
@@ -488,7 +489,7 @@ class Finding < ActiveRecord::Base
     :inverse_of => :finding
   has_many :users, :through => :finding_user_assignments,
     :order => 'last_name ASC'
-  
+
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
     :reject_if => lambda { |attributes| attributes['answer'].blank? }
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
@@ -519,16 +520,18 @@ class Finding < ActiveRecord::Base
   def self.columns_for_sort
     HashWithIndifferentAccess.new(
       :risk_asc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.ascendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.ascendant')})",
         :field => [
           "#{Finding.table_name}.risk ASC",
+          "#{Finding.table_name}.priority ASC",
           "#{Finding.table_name}.state ASC"
         ]
       },
       :risk_desc => {
-        :name => "#{Finding.human_attribute_name(:risk)} (#{I18n.t('label.descendant')})",
+        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.descendant')})",
         :field => [
           "#{Finding.table_name}.risk DESC",
+          "#{Finding.table_name}.priority DESC",
           "#{Finding.table_name}.state ASC"
         ]
       },
@@ -566,12 +569,12 @@ class Finding < ActiveRecord::Base
   def to_s
     "#{self.review_code} - #{self.control_objective_item.try(:review)}"
   end
-  
+
   alias_method :label, :to_s
-  
+
   def to_xml(options = {})
     default_options = { :skip_types => true, :only => [:solution_date] }
-    
+
     super(default_options.merge(options)) do |xml|
       # Para mantener siempre el mismo orden (ocurrencias ajenas)
       xml.tag! 'origination-date', self.origination_date
@@ -583,7 +586,7 @@ class Finding < ActiveRecord::Base
       xml.tag! 'risk-text', (self.risk_text if self.respond_to?(:risk_text))
       xml.tag! 'state-text', self.state_text
       xml.tag! 'review-text', self.review_text
-      
+
       if self.finding_user_assignments.empty?
         xml.tag! 'users' # empty tag
       else
@@ -598,20 +601,20 @@ class Finding < ActiveRecord::Base
           end
         end
       end
-      
+
       yield(xml) if block_given?
     end
   end
-  
+
   def as_json(options = nil)
     default_options = {
       :only => [:id],
       :methods => [:label, :informal]
     }
-    
+
     super(default_options.merge(options || {}))
   end
-  
+
   def informal
     text = "<b>#{Finding.human_attribute_name(:description)}</b>: "
     text << self.description
@@ -624,7 +627,7 @@ class Finding < ActiveRecord::Base
     text << "\n<b>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</b>: "
     text << self.control_objective_item.to_s
   end
-  
+
   def review_text
     self.control_objective_item.try(:review).try(:to_s)
   end
@@ -644,7 +647,7 @@ class Finding < ActiveRecord::Base
 
   def check_for_valid_relation(finding_relation)
     related_finding = finding_relation.related_finding
-    
+
     if related_finding && (related_finding.final? ||
           (!related_finding.is_in_a_final_review? &&
             related_finding.review.id != self.control_objective_item.try(:review_id)))
@@ -665,7 +668,7 @@ class Finding < ActiveRecord::Base
         if self.repeated_of.repeated? && !self.final
           raise 'Original can not be repeated'
         end
-        
+
         self.repeated_of.state = STATUS[:repeated]
         self.origination_date = self.repeated_of.origination_date
       else
@@ -673,19 +676,20 @@ class Finding < ActiveRecord::Base
       end
     end
   end
-  
+
   def undo_reiteration
     versions  = self.repeated_of.versions.select do |v|
       finding = v.reify(:has_one => false)
       finding.try(:state) && !finding.repeated?
     end
-    
+
     if !versions.blank?
       self.repeated_of.update_attribute(
         :state, versions.last.reify(:has_one => false).state
       )
       self.undoing_reiteration = true
       self.update_attribute :repeated_of_id, nil
+      self.update_attribute :origination_date, nil
     else
       raise 'Unknown previous repeated state'
     end
@@ -705,7 +709,7 @@ class Finding < ActiveRecord::Base
         finding_answer.user.try(:can_act_as_audited?)
       self.confirmed! finding_answer.user
     end
-    
+
     self.updated_at = Time.now
   end
 
@@ -756,7 +760,7 @@ class Finding < ActiveRecord::Base
       false
     end
   end
-  
+
   def allow_destruction!
     @allow_destruction = true
   end
@@ -772,7 +776,7 @@ class Finding < ActiveRecord::Base
   def check_users_for_notification
     if !self.incomplete? &&
         !(self.users_for_notification || []).reject(&:blank?).empty?
-      
+
       self.users_for_notification.reject(&:blank?).uniq.each do |user_id|
         finding_user_assignment = self.finding_user_assignments.detect do |fua|
           fua.user_id == user_id.to_i
@@ -781,7 +785,7 @@ class Finding < ActiveRecord::Base
         if finding_user_assignment
           user = self.users.detect {|u| u.id == user_id.to_i} ||
             User.find(user_id)
-          
+
           Notifier.notify_new_finding(user, self).deliver
         end
       end
@@ -792,7 +796,7 @@ class Finding < ActiveRecord::Base
     self.being_implemented? && self.was_implemented? &&
       !self.comments.detect { |c| c.new_record? && c.valid? }
   end
-  
+
   def can_not_be_revoked?
     self.revoked? && self.state_changed? &&
       (self.repeated_of || self.is_in_a_final_review?)
@@ -874,7 +878,7 @@ class Finding < ActiveRecord::Base
   def state_text
     self.state ? I18n.t("finding.status_#{STATUS.invert[self.state]}") : '-'
   end
-  
+
   def stale?
     self.being_implemented? && self.follow_up_date &&
       self.follow_up_date < Date.today
@@ -951,7 +955,7 @@ class Finding < ActiveRecord::Base
 
     STATUS.reject {|k,| !allowed_keys.include?(k.to_sym)}
   end
-  
+
   def versions_between(start_date = nil, end_date = nil)
     conditions = []
     conditions << 'created_at >= :filter_start' if start_date
@@ -985,7 +989,7 @@ class Finding < ActiveRecord::Base
         if version.previous.try(:whodunnit)
           finding.user_who_make_it = User.find(version.previous.whodunnit)
         end
-        
+
         findings_with_status_changed << finding
       end
     end
@@ -1002,7 +1006,10 @@ class Finding < ActiveRecord::Base
     level_overflow = false
 
     level.times do
-      users |= (highest_users = highest_users.map(&:parent).compact.uniq)
+      users |= (highest_users = highest_users.map(&:parent).compact.uniq.select {|u|
+                  u.organizations.include? self.review.organization
+                })
+
       level_overflow ||= highest_users.empty?
     end
 
@@ -1016,7 +1023,7 @@ class Finding < ActiveRecord::Base
 
     level.times { highest_users = highest_users.map(&:parent).compact.uniq }
 
-    highest_users.reject { |u| self.users.include?(u) }
+    highest_users.reject { |u| self.users.include?(u) || !(u.organizations.include? self.review.organization) }
   end
 
   def notification_date_for_level(level = 1)
@@ -1040,7 +1047,7 @@ class Finding < ActiveRecord::Base
   def process_owners
     self.finding_user_assignments.owners.map(&:user)
   end
-  
+
   def responsible_auditors
     self.finding_user_assignments.responsibles.map(&:user)
   end
@@ -1118,7 +1125,7 @@ class Finding < ActiveRecord::Base
         (I18n.l(self.solution_date, :format => :long) if self.solution_date), 0,
         false)
     end
-    
+
     unless self.origination_date.blank?
       pdf.add_description_item(self.class.human_attribute_name('origination_date'),
         I18n.l(self.origination_date, :format => :long), 0, false)
@@ -1176,7 +1183,7 @@ class Finding < ActiveRecord::Base
       I18n.t('finding.without_conclusion_final_review')
 
     add_finding_follow_up_header pdf, organization
-    
+
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
         '.title'), (PDF_FONT_SIZE * 1.25).round, :center
 
@@ -1191,7 +1198,7 @@ class Finding < ActiveRecord::Base
       "#{self.review.long_identification} (#{issue_date})", 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
-    
+
     pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)
     pdf.add_description_item(
@@ -1212,7 +1219,7 @@ class Finding < ActiveRecord::Base
       pdf.add_description_item(Finding.human_attribute_name(
           :audit_recommendations), self.audit_recommendations, 0, false)
     end
-    
+
     pdf.add_description_item(Finding.human_attribute_name(:answer),
       self.answer, 0, false)
 
@@ -1238,7 +1245,7 @@ class Finding < ActiveRecord::Base
     pdf.add_title I18n.t('finding.responsibles', :count => audited.size),
       PDF_FONT_SIZE, :left
     pdf.add_list audited.map(&:full_name), PDF_FONT_SIZE * 2
-    
+
     important_attributes = [:state, :risk, :priority, :follow_up_date]
     important_changed_versions = [Version.new]
     previous_version = self.versions.first
@@ -1304,7 +1311,7 @@ class Finding < ActiveRecord::Base
 
         unless column_data.blank?
           pdf.move_pointer PDF_FONT_SIZE
-          
+
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
@@ -1468,10 +1475,10 @@ class Finding < ActiveRecord::Base
       end
 
       pdf.move_pointer PDF_FONT_SIZE
-      
+
       pdf.add_title I18n.t('finding.follow_up_report.follow_up_comments'),
         (PDF_FONT_SIZE * 1.25).round, :full
-      
+
       pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
@@ -1602,6 +1609,69 @@ class Finding < ActiveRecord::Base
     end
   end
 
+  def to_csv(detailed = false, completed = 'incomplete')
+    date = completed == 'incomplete' ? self.follow_up_date :
+      self.solution_date
+    origination_date = self.origination_date
+    date_text = I18n.l(date, :format => :minimal).to_iso if date
+    origination_date_text = I18n.l(origination_date, :format => :minimal).to_iso if origination_date
+    being_implemented = self.kind_of?(Weakness) && self.being_implemented?
+    rescheduled_text = being_implemented && !self.rescheduled? ?
+      I18n.t('label.no') : ''
+
+    if being_implemented && self.rescheduled?
+      dates = []
+      follow_up_dates = self.all_follow_up_dates
+
+      if follow_up_dates.last == self.follow_up_date
+        follow_up_dates.slice(-1)
+      end
+
+      follow_up_dates.each { |fud| dates << I18n.l(fud, :format => :minimal) }
+
+      rescheduled_text << dates.join("\n")
+    end
+
+    audited = self.reload.users.select(&:audited?).map do |u|
+      self.process_owners.include?(u) ?
+        "#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
+        u.full_name
+    end
+
+    description = self.description.try(:to_iso) || ''
+
+    unless (repeated_ancestors = self.repeated_ancestors).blank?
+      description << "\n#{I18n.t('finding.repeated_ancestors')}: "
+      description << repeated_ancestors.map(&:to_s).join(' | ').try(:to_iso)
+    end
+
+    unless (repeated_children = self.repeated_children).blank?
+      description << "\n#{I18n.t('finding.repeated_children')}: "
+      description << repeated_children.map(&:to_s).join(' | ').try(:to_iso)
+    end
+
+
+    column_data = [
+      self.review.to_s,
+      self.review_code,
+      self.state_text,
+      self.kind_of?(Weakness) ? self.risk_text.to_iso : '',
+      self.kind_of?(Weakness) ? self.priority_text.to_iso : '',
+      audited.join('; ').to_iso,
+      description,
+      rescheduled_text.try(:to_iso),
+      origination_date_text,
+      date_text
+    ]
+
+    if detailed
+      column_data << self.audit_comments.try(:to_iso)
+      column_data << self.answer.try(:to_iso)
+    end
+
+    column_data
+  end
+
   private
 
   def add_finding_follow_up_header(pdf, organization, date = Date.today)
@@ -1611,9 +1681,9 @@ class Finding < ActiveRecord::Base
       y_top = pdf.page_height - (pdf.top_margin / 2)
 
       if organization.try(:image_model) &&
-          File.exists?(organization.image_model.image.path(:thumb))
+          File.exists?(organization.image_model.image.thumb.path)
         pdf.add_image_from_file(
-          organization.image_model.image.path(:thumb),
+          organization.image_model.image.thumb.path,
           pdf.left_margin, pdf.absolute_top_margin + font_height_size,
           organization.image_model.image_geometry(:pdf_thumb)[:width],
           organization.image_model.image_geometry(:pdf_thumb)[:height])
@@ -1627,5 +1697,30 @@ class Finding < ActiveRecord::Base
       pdf.close_object
       pdf.add_object(heading, :all_pages)
     end
+  end
+
+  def self.to_csv(detailed = false, completed = 'incomplete')
+    rows = []
+    column_data = []
+    column_headers = [
+      "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
+      Weakness.human_attribute_name(:review_code).to_iso,
+      Weakness.human_attribute_name(:state),
+      Weakness.human_attribute_name(:risk),
+      Weakness.human_attribute_name(:priority),
+      I18n.t('finding.audited', :count => 0),
+      Weakness.human_attribute_name(:description).to_iso,
+      (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})").to_iso,
+      Finding.human_attribute_name(:origination_date),
+      (Finding.human_attribute_name((completed == 'incomplete') ?
+        :follow_up_date : :solution_date)).to_iso
+    ]
+
+    if detailed
+      column_headers << Finding.human_attribute_name(:audit_comments).to_iso
+      column_headers << Finding.human_attribute_name(:answer).to_iso
+    end
+
+    column_headers
   end
 end

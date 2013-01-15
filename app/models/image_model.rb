@@ -5,16 +5,12 @@ class ImageModel < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
-  has_attached_file :image,
-    :path => ':rails_root/private/:organization_id/:class/:id/:basename_:style.:extension',
-    :url => '/private/:organization_id/:class/:id/:basename_:style.:extension',
-    :styles => { :thumb => ['300x75>', :png], :pdf_thumb => ['200x40>', :png] }
+  mount_uploader :image, ImageUploader, :mount_on => :image_file_name
+
+  # Callbacks
+  before_save :update_image_attributes
 
   # Restricciones
-  validates_attachment_content_type :image, :content_type => /\Aimage/i,
-    :message => lambda { I18n.t(:invalid, :scope => [:activerecord, :errors, :models, :image_model, :attributes, :image_content_type]) }
-  validates_attachment_size :image, :less_than => 20.megabytes,
-    :message => lambda { I18n.t('activerecord.errors.messages.less_than', :count => 20.megabytes) }
   validates :image_file_name, :image_content_type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
 
@@ -27,13 +23,21 @@ class ImageModel < ActiveRecord::Base
   def image_geometry(style_name = :original)
     @_image_dimensions ||= {}
     
-    if File.exists?(self.image.path(style_name))
-      @_image_dimensions[style_name] ||= Paperclip::Geometry.from_file(
-        File.new(self.image.path(style_name), 'r'))
+    if File.exists?(self.image.send(style_name).path)
+      ::Magick::Image::read(self.image.send(style_name).path).first.tap do |img|
+        @_image_dimensions[style_name] ||= {
+          :width => img.columns, :height => img.rows
+        }
+      end 
     end
 
-    dimensions = @_image_dimensions[style_name]
+    @_image_dimensions[style_name] || {}
+  end
 
-    {:width => dimensions.try(:width), :height => dimensions.try(:height)}
+  def update_image_attributes
+    if image.present? && image_file_name_changed?
+      self.image_content_type = image.file.content_type
+      self.image_file_size = image.file.size
+    end
   end
 end

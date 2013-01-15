@@ -166,7 +166,7 @@
             <td><%= h finding_answer.user.full_name %></td>
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
-              <%= finding_answer.file_model ?
+              <%= finding_answer.file_model.try(:file?) ?
                 link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
@@ -221,7 +221,7 @@
             <td><%= h work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format h(work_paper.description) %></td>
-            <td><%= work_paper.file_model ?
+            <td><%= work_paper.file_model.try(:file?) ?
               link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>

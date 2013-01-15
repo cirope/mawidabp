@@ -5,7 +5,11 @@ module ReviewsHelper
       t('review.review_data.close_date', :date => l(close_date, :format => :long)) :
       t('review.review_data.without_close_date')
 
-    content_tag(:abbr, h(review.identification), :title => review_data)
+    content_tag(:abbr, review.identification, :title => review_data)
+  end
+
+  def show_review_identification_with_score_as_abbr(review)
+    content_tag :abbr, review.identification, :title => review.score_text
   end
 
   def review_plan_item_field(form, readonly)
@@ -85,7 +89,7 @@ module ReviewsHelper
     ).html_safe
     link_for_download_attachment = link_to(
       t('review.survey.download_attachment'), review.file_model.file.url
-    ).html_safe if review.file_model
+    ).html_safe if review.file_model.try(:file?)
     
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
     

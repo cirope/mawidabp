@@ -1,7 +1,16 @@
 MawidaApp::Application.routes.draw do
   resources :questionnaires
-  
-  resources :polls
+
+  resources :polls do
+    collection do
+      get :auto_complete_for_user
+      get :reports
+      get :summary_by_questionnaire
+      get :summary_by_business_unit
+      post :create_summary_by_questionnaire
+      post :create_summary_by_business_unit
+    end
+  end
 
   resources :e_mails, :only => [:index, :show]
 
@@ -100,7 +109,7 @@ MawidaApp::Application.routes.draw do
       :as => "#{action}_follow_up_committee",
       :to => "follow_up_committee##{action}"
   end
-  
+
   [
     'high_risk_weaknesses_report', 'create_high_risk_weaknesses_report',
     'fixed_weaknesses_report', 'create_fixed_weaknesses_report'
@@ -147,6 +156,7 @@ MawidaApp::Application.routes.draw do
 
       collection do
         get :export_to_pdf
+        get :export_to_csv
         get :auto_complete_for_user
         get :auto_complete_for_finding_relation
       end
@@ -323,6 +333,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :user_status
+      get :user_status_without_graph
       get :logout
       get :edit_password
       put :update_password
@@ -395,7 +406,7 @@ MawidaApp::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
-  
+
   # Any invalid route goes to the welcome page
   match '*a' => redirect('/welcome')
 end
