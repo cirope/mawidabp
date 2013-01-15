@@ -5,12 +5,11 @@ MawidaApp::Application.config.action_mailer.raise_delivery_errors =
   !Rails.env.production?
 MawidaApp::Application.config.action_mailer.delivery_method = :smtp
 MawidaApp::Application.config.action_mailer.smtp_settings = {
-  :address => 'mawida.com.ar',
-  :domain => 'mawida.com.ar',
-  :port => 25,
-  :user_name => 'soporte@mawida.com.ar',
+  :address => 'smtp.gmail.com',
+  :domain => 'mawidabp.com',
+  :port => 587,
+  :user_name => 'soporte@mawidabp.com',
   :password => APP_CONFIG['smtp_password'],
-  :authentication => :plain
+  :authentication => :plain,
+  :enable_starttls_auto => true
 }
-
-ActionMailer::Base.register_observer(MailObserver)
