@@ -624,9 +624,9 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_no_difference 'User.count', 'OrganizationRole.count' do
+    assert_no_difference ['User.count', 'user.children.count'] do
       assert_difference 'ActionMailer::Base.deliveries.size' do
-        assert_difference 'user.children.count', -1 do
+        assert_difference 'OrganizationRole.count' do
           put :update, {
             :id => users(:administrator_user).user,
             :user => {
@@ -641,10 +641,9 @@ class UsersControllerTest < ActionController::TestCase
               :enable => true,
               :send_notification_email => true,
               :organization_roles_attributes => {
-                organization_roles(:admin_role_for_administrator_user_in_default_organization).id => {
-                  :id => organization_roles(:admin_role_for_administrator_user_in_default_organization).id,
+                :new_role => {
                   :organization_id => organizations(:default_organization).id,
-                  :role_id => roles(:admin_role).id
+                  :role_id => roles(:admin_second_role).id
                 }
               },
               :child_ids => [
@@ -656,9 +655,9 @@ class UsersControllerTest < ActionController::TestCase
                 users(:blank_password_user).id,
                 users(:expired_blank_password_user).id,
                 users(:supervisor_user).id,
-                users(:supervisor_second_user).id
+                users(:supervisor_second_user).id,
                 # El siguiente se elimina
-                #users(:committee_user).id
+                users(:committee_user).id
               ]
             }
           }

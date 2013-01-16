@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "ConclusionDraftReview"
@@ -92,10 +93,9 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   test 'validates well formated attributes' do
     @conclusion_review.issue_date = '13/13/13'
     assert @conclusion_review.invalid?
-    assert_equal 2, @conclusion_review.errors.count
+    assert_equal 1, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
-      :blank), error_message_from_model(@conclusion_review, :issue_date,
-      :invalid_date)].sort, @conclusion_review.errors[:issue_date].sort
+      :blank)], @conclusion_review.errors[:issue_date]
   end
 
   test 'validates unique attributes' do

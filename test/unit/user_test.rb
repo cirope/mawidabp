@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "User"
@@ -286,16 +287,17 @@ class UserTest < ActiveSupport::TestCase
 
   test 'validates parent is not child' do
     user = User.find(users(:bare_user).id)
-    
+
     assert user.parent.valid?
     assert user.valid?
     assert !user.update_attributes(
       :child_ids => [users(:first_time_user).id],
       :manager_id => users(:first_time_user).id
     )
-    assert_equal 1, user.errors.size
-    assert_equal [error_message_from_model(user, :manager_id, :invalid)],
-      user.errors[:manager_id]
+    # El otro error lo añade la gema (acts_as_tree)
+    assert_equal 2, user.errors.size
+    assert_equal error_message_from_model(user, :manager_id, :invalid),
+      user.errors[:manager_id].last
   end
 
   test 'validates password changed too soon' do
@@ -389,10 +391,10 @@ class UserTest < ActiveSupport::TestCase
     assert_no_match /New function/, name_from_a_minute_ago
     assert_equal old_name_with_function, name_from_a_minute_ago
   end
-  
+
   test 'reset password' do
     assert_nil @user.change_password_hash
-    
+
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
@@ -438,7 +440,7 @@ class UserTest < ActiveSupport::TestCase
       {:with_reviews => true, :with_findings => true})
 
     assert auditor_user.reload.findings.all_for_reallocation.empty?
-    
+
     auditor_user.organization_roles.each {|o_r| o_r.role = roles(:audited_role)}
 
     assert auditor_user.save
@@ -576,7 +578,7 @@ class UserTest < ActiveSupport::TestCase
           fua.attributes.dup.merge('finding_id' => nil)
         end
       )
-      
+
       assert new_finding.save, new_finding.errors.full_messages.join('; ')
     end
 

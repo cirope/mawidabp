@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "ConclusionFinalReview"
@@ -120,13 +121,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
       @conclusion_review.destroy
     end
   end
-  
+
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
     review = Review.find reviews(:review_with_conclusion).id
     weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
     assert weakness.update_attribute :state, 7
-    
+
     @conclusion_review = ConclusionFinalReview.new({
           :review => review,
           :issue_date => Date.today,
@@ -134,13 +135,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
         }, {}, false)
-    
+
     assert @conclusion_review.save
-    
+
     assert weakness.reload.final
-  
+
   end
-  
+
 
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -176,16 +177,15 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'validates well formated attributes' do
     @conclusion_review.issue_date = '13/13/13'
     assert @conclusion_review.invalid?
-    assert_equal 2, @conclusion_review.errors.count
+    assert_equal 1, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
-      :blank), error_message_from_model(@conclusion_review, :issue_date,
-      :invalid_date)].sort, @conclusion_review.errors[:issue_date].sort
+      :blank)], @conclusion_review.errors[:issue_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates approved review' do
     @conclusion_review.review.conclusion_draft_review.approved = false
-    
+
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :review_id,
@@ -195,7 +195,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   test 'validates force approved review' do
     assert @conclusion_review.reload.check_for_approval
     assert @conclusion_review.approved?
-    
+
     conclusion_draft_review = @conclusion_review.conclusion_draft_review
 
     assert conclusion_draft_review.approved?

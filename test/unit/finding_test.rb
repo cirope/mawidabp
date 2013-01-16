@@ -229,18 +229,10 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.invalid?
 
-    assert_equal 5, @finding.errors.count
+    assert_equal 1, @finding.errors.count
     assert_equal [error_message_from_model(@finding,
       :control_objective_item_id, :not_a_number)],
       @finding.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@finding, :first_notification_date,
-      :invalid_date)], @finding.errors[:first_notification_date]
-    assert_equal [error_message_from_model(@finding, :follow_up_date,
-      :invalid_date)], @finding.errors[:follow_up_date]
-    assert_equal [error_message_from_model(@finding, :solution_date,
-      :invalid_date)], @finding.errors[:solution_date]
-    assert_equal [error_message_from_model(@finding, :origination_date,
-      :invalid_date)], @finding.errors[:origination_date]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

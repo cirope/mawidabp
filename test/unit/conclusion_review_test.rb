@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "ConclusionReview"
@@ -99,12 +100,11 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
       }, {}, false)
-    
+
     assert @conclusion_review.invalid?
-    assert_equal 4, @conclusion_review.errors.count
+    assert_equal 3, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
-      :blank), error_message_from_model(@conclusion_review, :issue_date,
-      :invalid_date)].sort, @conclusion_review.errors[:issue_date].sort
+      :blank)], @conclusion_review.errors[:issue_date]
     assert_equal [error_message_from_model(@conclusion_review, :close_date,
       :blank), error_message_from_model(@conclusion_review, :close_date,
       :invalid_date)].sort, @conclusion_review.errors[:close_date].sort
@@ -118,7 +118,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
         :applied_procedures => 'New applied procedures',
         :conclusion => 'New conclusion'
       }, {}, false)
-    
+
     assert @conclusion_review.invalid?
     assert_equal 1, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :close_date,
@@ -145,7 +145,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
 
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (size = File.size(@conclusion_review.absolute_pdf_path)) > 0
-    
+
     FileUtils.rm @conclusion_review.absolute_pdf_path
 
     assert_nothing_raised(Exception) do
@@ -157,7 +157,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     assert File.exist?(@conclusion_review.absolute_pdf_path)
     assert (new_size = File.size(@conclusion_review.absolute_pdf_path)) > 0
     assert_not_equal size, new_size
-    
+
     assert_nothing_raised(Exception) do
       @conclusion_review.to_pdf(
         organizations(:default_organization),
@@ -174,7 +174,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
     if File.exist?(@conclusion_review.absolute_bundle_zip_path)
       FileUtils.rm @conclusion_review.absolute_bundle_zip_path
     end
-    
+
     assert !File.exist?(@conclusion_review.absolute_bundle_zip_path)
 
     assert_nothing_raised(Exception) do

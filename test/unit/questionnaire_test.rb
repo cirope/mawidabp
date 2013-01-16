@@ -17,7 +17,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
     assert_difference ['Questionnaire.count', 'Question.count'] do
       Questionnaire.create(
         :name => 'Cuestionario de prueba',
-        :organization_id => organizations(:default_organization),
+        :organization_id => organizations(:default_organization).id,
         :questions_attributes => {
           '1' => {
             :question => "Cuestion multi choice",
