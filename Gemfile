@@ -23,11 +23,7 @@ gem 'acts_as_tree_rails3', '~> 0.1.0'
 gem 'unicode'
 gem 'capistrano'
 gem 'rubyzip', :require => 'zip/zip'
-gem 'pdf-writer', :require => 'pdf/writer'
-# Sólo para pdf-writer
-gem 'color', :require => false
-# Sólo para pdf-writer
-gem 'transaction-simple', :require => false
+gem 'prawn'
 
 group :assets do
   gem 'sass-rails'
