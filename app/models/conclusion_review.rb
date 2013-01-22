@@ -1,8 +1,6 @@
-require 'pdf/simpletable'
-
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => lambda { GlobalModelConfig.current_organization_id }
   }
@@ -90,7 +88,7 @@ class ConclusionReview < ActiveRecord::Base
   # Restricciones de los atributos
   attr_protected :approved
   attr_readonly :review_id
-  
+
   # Restricciones
   validates :review_id, :presence => true
   validates :issue_date, :applied_procedures, :conclusion, :presence => true
@@ -256,13 +254,13 @@ class ConclusionReview < ActiveRecord::Base
             weaknesses = (
               use_finals ? coi.final_weaknesses : coi.weaknesses
             ).not_revoked.order('review_code ASC')
-            
+
             weaknesses.each do |w|
               w_data = coi.pdf_data(w)
-              
+
               unless w_data[:column].blank?
                 pdf.move_pointer PDF_FONT_SIZE
-                
+
                 PDF::SimpleTable.new do |table|
                   table.width = pdf.page_usable_width
                   table.columns = columns
@@ -318,10 +316,10 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
               o_data = coi.pdf_data(o)
-              
+
               unless o_data[:column].blank?
                 pdf.move_pointer PDF_FONT_SIZE
-                
+
                 PDF::SimpleTable.new do |table|
                   table.width = pdf.page_usable_width
                   table.columns = columns
@@ -504,7 +502,7 @@ class ConclusionReview < ActiveRecord::Base
     pdf.custom_save_as self.bundle_index_pdf_name, ConclusionReview.table_name,
       self.id
   end
-  
+
   def absolute_bundle_index_pdf_path
     PDF::Writer.absolute_path self.bundle_index_pdf_name,
       ConclusionReview.table_name, self.id
@@ -635,7 +633,7 @@ class ConclusionReview < ActiveRecord::Base
               o.work_papers.each do |wp|
                 pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10
               end
-              
+
               pdf.move_pointer PDF_FONT_SIZE
             end
           end
@@ -780,7 +778,7 @@ class ConclusionReview < ActiveRecord::Base
           I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
             :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
       end
-      
+
       column_data = []
 
       unless oportunities.blank?

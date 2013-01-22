@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-require 'pdf/simpletable'
-
 # =Controlador de usuarios
 #
 # Lista, muestra, crea, modifica y elimina usuarios (#User). Además controla el

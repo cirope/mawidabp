@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-require 'pdf/simpletable'
-
 # =Controlador de planes de trabajo
 #
 # Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems

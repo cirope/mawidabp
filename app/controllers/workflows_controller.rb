@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-require 'pdf/simpletable'
-
 # =Controlador de programas de trabajo
 #
 # Lista, muestra, crea, modifica y elimina programas de trabajo (#Workflow) y

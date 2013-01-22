@@ -1,5 +1,4 @@
-require 'pdf/simpletable'
-
+# -*- coding: utf-8 -*-
 # =Controlador de procedimientos y pruebas de control
 #
 # Lista, muestra, crea, modifica y elimina procedimientos y pruebas de control
@@ -64,7 +63,7 @@ class ProcedureControlsController < ApplicationController
             'control_attributes' => pcs.control.attributes.merge('id' => nil)
           )
         end
-        
+
         attributes = pci.attributes.merge(
           'id' => nil,
           'procedure_control_subitems_attributes' => pcs_attributes
@@ -130,7 +129,7 @@ class ProcedureControlsController < ApplicationController
         format.xml  { render :xml => @procedure_control.errors, :status => :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'procedure_control.stale_object_error'
     redirect_to :action => :edit
@@ -174,7 +173,7 @@ class ProcedureControlsController < ApplicationController
     columns = {}
     procedure_control_columns = {}
     column_data = []
-    
+
     column_order.each_with_index do |c_name, i|
       columns[c_name] = PDF::SimpleTable::Column.new(c_name) do |column|
         column.heading = [0, 5].include?(i) ?
@@ -207,7 +206,7 @@ class ProcedureControlsController < ApplicationController
         'frequency' => ('<i><b>' + help.name_for_option_value(frequencies,
             pci.frequency) + '</b></i>').to_iso
       }]
-    
+
       pdf.move_pointer PDF_FONT_SIZE
 
       unless column_data.blank?
@@ -345,7 +344,7 @@ class ProcedureControlsController < ApplicationController
         ]
       }
     ] : [:period]
-    
+
     ProcedureControl.includes(*include).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)
