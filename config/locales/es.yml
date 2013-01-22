@@ -1001,9 +1001,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   pdf:
     export: "Exportar"
-    page_pattern: "Página <PAGENUM> de <TOTALPAGENUM>"
-    period_description: "Periodo"
-    review_identification: "Número de informe"
+    page_pattern: "Página {{page}} de {{total}}"
+    period_description: "Periodo {{period}}"
+    review_identification: "Número de informe {{review}}"
     draft: "Borrador"
 
   period:

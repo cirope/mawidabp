@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Importar Builder si no fue importado previamente
 require 'active_support/builder' unless defined?(Builder)
 # Configuración del modelo con la configuración de la aplicación
@@ -77,7 +78,7 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
         first_whitespace = html_tag =~ /\s/
         html_tag[first_whitespace] = " class=\"#{error_class}\" "
     end
-    
+
     html_tag
 end
 
@@ -87,21 +88,11 @@ require 'iconv'
 CONVERTER_TO_ISO = Iconv.new 'ISO-8859-15//IGNORE//TRANSLIT', 'UTF-8'
 CONVERTER_TO_UTF8 = Iconv.new 'UTF-8//IGNORE//TRANSLIT', 'ISO-8859-15'
 
-class PDF::Writer
-  include PDF::PDFExtension
+module Prawn
+  class Document
+    include Prawn::Mawida::Extension
 
-  alias :text_old :text
-
-  def text(utf_text, options = {})
-    text_old utf_text.to_iso, options
-  end
-
-  alias :save_as_old :save_as
-
-  def save_as(name)
-    FileUtils.rm name if File.exist?(name)
-
-    save_as_old name
+    alias :save_as :render_file
   end
 end
 
@@ -130,11 +121,11 @@ class String
         line.scan(/.{1,2048}/) do |chunk|
           result << CONVERTER_TO_ISO.iconv(chunk)
         end
-        
+
         result << "\n" if line.match(/\n/)
       end
     end
-    
+
     result
   end
 
@@ -150,7 +141,7 @@ class String
         line.scan(/.{1,2048}/) do |chunk|
           result << CONVERTER_TO_UTF8.iconv(chunk)
         end
-        
+
         result << "\n" if line.match(/\n/)
       end
     end
@@ -160,7 +151,7 @@ class String
 
   # Convierte un cadena en un entero que representa el tiempo en segundos
   # Por ejemplo:
-  # 
+  #
   # * '1:15'.fetch_time               # => 4500
   # * '1h15m'.fetch_time              # => 4500
   # * '1 hora 15 minutos'.fetch_time  # => 4500
