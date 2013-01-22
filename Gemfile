@@ -15,7 +15,6 @@ gem 'RedCloth'
 gem 'whenever', :require => false
 gem 'will_paginate'
 gem 'paper_trail'
-gem 'paperclip'
 gem 'carrierwave'
 gem 'rmagick'
 gem 'gruff'
