@@ -211,17 +211,17 @@ class PollsController < ApplicationController
   def create_summary_by_questionnaire
     self.summary_by_questionnaire
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
       t('activerecord.attributes.poll.send_date'),
@@ -229,63 +229,56 @@ class PollsController < ApplicationController
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     if @polls.present?
       pdf.add_description_item(
         Questionnaire.model_name.human,
         @questionnaire.name)
 
-      pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE * 2
 
-      column_data = []
-      columns = {}
+      column_data, column_headers, column_widths = [], [], []
+
       @columns = [
-        ['question', Question.model_name.human, 40]
+        [Question.model_name.human, 40]
       ]
       Question::ANSWER_OPTIONS.each do |option|
-        @columns << [option, t("activerecord.attributes.answer_option.options.#{option}"), 12]
+        @columns << [t("activerecord.attributes.answer_option.options.#{option}"), 12]
       end
 
-      @columns.each do |col_name, col_title, col_width|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = col_title
-          column.width = pdf.percent_width col_width
-        end
+      @columns.each do |col_title, col_width|
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
       end
 
       @rates.each do |question, answers|
-        new_row = {}
-        new_row['question'] = question.to_iso
+        new_row = []
+        new_row << question
 
         Question::ANSWER_OPTIONS.each_with_index do |option, i|
-          new_row[option] = "#{answers[i]} %"
+          new_row << "#{answers[i]} %"
         end
 
         column_data << new_row
       end
 
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = @columns.map(&:first)
-        table.split_rows = true
-        table.row_gap = PDF_FONT_SIZE
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
-      pdf.move_pointer PDF_FONT_SIZE
+
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.text "#{t('poll.total_answered')}: #{@answered}"
       pdf.text "#{t('poll.total_unanswered')}: #{@unanswered}"
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text "#{t('poll.score')}: #{@calification}%"
     else
       pdf.text t('poll.without_data')
@@ -295,7 +288,7 @@ class PollsController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
-    redirect_to PDF::Writer.relative_path(t('poll.summary_pdf_name',
+    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
@@ -395,17 +388,17 @@ class PollsController < ApplicationController
   def create_summary_by_business_unit
     self.summary_by_business_unit
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
       t('activerecord.attributes.poll.send_date'),
@@ -413,67 +406,61 @@ class PollsController < ApplicationController
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     if @business_unit_polls.present?
       pdf.add_description_item(Questionnaire.model_name.human, @questionnaire.name)
 
-      pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE * 2
 
-      columns = {}
       @columns = [
-        ['question', Question.model_name.human, 40]
+        [Question.model_name.human, 40]
       ]
       Question::ANSWER_OPTIONS.each do |option|
-        @columns << [option, t("activerecord.attributes.answer_option.options.#{option}"), 12]
+        @columns << [t("activerecord.attributes.answer_option.options.#{option}"), 12]
       end
 
-      @columns.each do |col_name, col_title, col_width|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = col_title
-          column.width = pdf.percent_width col_width
-        end
+      column_headers, column_widths = [], []
+
+      @columns.each do |col_title, col_width|
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
       end
 
       @business_unit_polls.each_key do |but|
-        pdf.text but, :font_size => PDF_FONT_SIZE * 1.3
-        pdf.move_pointer PDF_FONT_SIZE * 2
+        pdf.text "<b>#{but}</b>", :font_size => PDF_FONT_SIZE * 1.3, :inline_format => true
+        pdf.move_down PDF_FONT_SIZE * 2
         column_data = []
 
         @business_unit_polls[but][:rates].each do |question, answers|
-          new_row = {}
-          new_row['question'] = question.to_iso
+          new_row = []
+          new_row << question
 
           Question::ANSWER_OPTIONS.each_with_index do |option, i|
-            new_row[option] = "#{answers[i]} %"
+            new_row << "#{answers[i]} %"
           end
 
           column_data << new_row
         end
 
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = @columns.map(&:first)
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
-        pdf.move_pointer PDF_FONT_SIZE
+
+        pdf.move_down PDF_FONT_SIZE
 
         pdf.text "#{t('poll.total_answered')}: #{@business_unit_polls[but][:answered]}"
         pdf.text "#{t('poll.total_unanswered')}: #{@business_unit_polls[but][:unanswered]}"
-        pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_down PDF_FONT_SIZE
         pdf.text "#{t('poll.score')}: #{@business_unit_polls[but][:calification]}%"
-        pdf.move_pointer PDF_FONT_SIZE * 2
+        pdf.move_down PDF_FONT_SIZE * 2
       end
     else
       pdf.text t('poll.without_data')
@@ -483,7 +470,7 @@ class PollsController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
-    redirect_to PDF::Writer.relative_path(t('poll.summary_pdf_name',
+    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
