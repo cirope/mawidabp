@@ -53,13 +53,13 @@ module ConclusionCommonReports
   def create_weaknesses_by_state
     self.weaknesses_by_state
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -68,15 +68,15 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :left
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.first
 
         unless audit_type.last.empty?
-          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.move_down PDF_FONT_SIZE * 2
 
           pdf.add_title t("conclusion_committee_report.findings_type_#{audit_type_symbol}"),
             (PDF_FONT_SIZE * 1.25).round, :center
@@ -84,9 +84,9 @@ module ConclusionCommonReports
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
 
-            pdf.move_pointer PDF_FONT_SIZE
-            pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
-            pdf.move_pointer PDF_FONT_SIZE
+            pdf.move_down PDF_FONT_SIZE
+            pdf.add_title audit_types.first, PDF_FONT_SIZE, :left
+            pdf.move_down PDF_FONT_SIZE
 
             weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
             oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
@@ -97,12 +97,12 @@ module ConclusionCommonReports
         end
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
         t('conclusion_committee_report.weaknesses_by_state.period_summary',
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       weaknesses_count = @weaknesses_counts[period]['total_weaknesses']
       oportunities_count = @weaknesses_counts[period]['total_oportunities']
@@ -116,7 +116,7 @@ module ConclusionCommonReports
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_state', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
@@ -189,13 +189,13 @@ module ConclusionCommonReports
   def create_weaknesses_by_risk
     self.weaknesses_by_risk
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down((PDF_FONT_SIZE * 2).pt)
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -204,9 +204,9 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :left
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.kind_of?(Symbol) ?
@@ -214,7 +214,7 @@ module ConclusionCommonReports
 
         unless audit_type.last.empty?
 
-          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.move_down PDF_FONT_SIZE * 2
 
           pdf.add_title t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}"),
             (PDF_FONT_SIZE * 1.25).round, :center
@@ -222,21 +222,21 @@ module ConclusionCommonReports
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
 
-            pdf.move_pointer PDF_FONT_SIZE
-            pdf.add_title audit_types.first, PDF_FONT_SIZE, :justify
-            pdf.move_pointer PDF_FONT_SIZE
+            pdf.move_down PDF_FONT_SIZE
+            pdf.add_title audit_types.first, PDF_FONT_SIZE, :left
+            pdf.move_down PDF_FONT_SIZE
 
             add_weaknesses_synthesis_table(pdf, @tables_data[period][key])
           end
         end
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
         t('conclusion_committee_report.weaknesses_by_risk.period_summary',
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       add_weaknesses_synthesis_table(pdf, @tables_data[period]['total'])
     end
@@ -247,7 +247,7 @@ module ConclusionCommonReports
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_risk', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
@@ -367,13 +367,13 @@ module ConclusionCommonReports
   def create_weaknesses_by_audit_type
     self.weaknesses_by_audit_type
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down((PDF_FONT_SIZE * 2).pt)
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -382,32 +382,33 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :right
 
       @audit_types.each do |type|
-        pdf.move_pointer PDF_FONT_SIZE * 2
+        pdf.move_down PDF_FONT_SIZE * 2
 
         pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_down(PDF_FONT_SIZE.pt)
 
         unless @data[period][type].blank?
           @data[period][type].each do |data_item|
-            pdf.move_pointer PDF_FONT_SIZE
+            pdf.move_down(PDF_FONT_SIZE.pt)
             pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
             data_item[:business_units].each do |bu, bu_data|
-              pdf.move_pointer PDF_FONT_SIZE
+              pdf.move_down(PDF_FONT_SIZE.pt)
 
               pdf.add_description_item(
                 bu.business_unit_type.business_unit_label, bu.name)
-              pdf.move_pointer PDF_FONT_SIZE
+              pdf.move_down(PDF_FONT_SIZE.pt)
 
-              pdf.text "<b>#{t('actioncontroller.reviews')}</b>"
-              pdf.move_pointer PDF_FONT_SIZE
+              pdf.text "<b>#{t('actioncontroller.reviews')}</b>",
+                :inline_format => true
+              pdf.move_down(PDF_FONT_SIZE.pt)
 
               bu_data[:conclusion_reviews].each do |cr|
                 findings_count = cr.review.final_weaknesses.size +
@@ -420,69 +421,61 @@ module ConclusionCommonReports
                   text << " (#{t('conclusion_committee_report.weaknesses_by_audit_type.without_weaknesses')})"
                 end
 
-                pdf.text text, :left => PDF_FONT_SIZE * 2
+                pdf.text text, :left => PDF_FONT_SIZE * 2, :inline_format => true
               end
 
-              pdf.move_pointer PDF_FONT_SIZE
+              pdf.move_down(PDF_FONT_SIZE.pt)
 
               pdf.add_title(
                 t('conclusion_committee_report.weaknesses_by_audit_type.weaknesses'),
                 PDF_FONT_SIZE)
 
-              pdf.move_pointer PDF_FONT_SIZE
+              pdf.move_down(PDF_FONT_SIZE.pt)
 
               add_weaknesses_synthesis_table(pdf,
                 bu_data[:weaknesses_table_data], 10)
 
               if type == :internal
-                pdf.move_pointer PDF_FONT_SIZE
+                pdf.move_down(PDF_FONT_SIZE.pt)
 
                 pdf.add_title(
                   t('conclusion_committee_report.weaknesses_by_audit_type.oportunities'),
                   PDF_FONT_SIZE)
 
-                pdf.move_pointer PDF_FONT_SIZE
+                pdf.move_down(PDF_FONT_SIZE.pt)
 
                 unless bu_data[:oportunities_table_data].blank?
-                  columns = {
-                    'state' => [Oportunity.human_attribute_name('state'), 30],
-                    'count' => [Oportunity.human_attribute_name('count'), 70]
-                  }
+                  column_widths, column_headers = [], []
+                  column_order = [
+                    [Oportunity.human_attribute_name('state'), 30],
+                    [Oportunity.human_attribute_name('count'), 70]
+                  ]
 
-                  columns.each do |col_name, col_data|
-                    columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-                      column.heading = col_data.first
-                      column.width = pdf.percent_width col_data.last
+                  column_order.each do |col_name, col_width|
+                    column_headers << "<b>#{col_name}</b>"
+                    column_widths << pdf.percent_width(col_width)
+                  end
+
+                  pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+                    table_options = pdf.default_table_options(column_widths)
+
+                    pdf.table(bu_data[:oportunities_table_data].insert(0, column_headers), table_options) do
+                      row(0).style(
+                        :background_color => 'cccccc',
+                        :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                      )
                     end
                   end
-
-                  PDF::SimpleTable.new do |table|
-                    table.width = pdf.page_usable_width
-                    table.columns = columns
-                    table.data = bu_data[:oportunities_table_data]
-                    table.column_order = ['state', 'count']
-                    table.split_rows = true
-                    table.font_size = (PDF_FONT_SIZE * 0.75).round
-                    table.row_gap = (PDF_FONT_SIZE * 0.5).round
-                    table.shade_rows = :none
-                    table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-                    table.heading_font_size = PDF_FONT_SIZE
-                    table.shade_headings = true
-                    table.bold_headings = true
-                    table.position = :left
-                    table.orientation = :right
-                    table.show_lines = :all
-                    table.render_on pdf
-                  end
                 else
-                  pdf.text t('follow_up_committee.without_oportunities')
+                  pdf.text(
+                    "<i>#{t(:'follow_up_committee.without_oportunities')}</i>",
+                    :inline_format => true)
                 end
               end
             end
           end
         else
-          pdf.text t('follow_up_committee.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE
+          pdf.text t(:'follow_up_committee.without_weaknesses')
         end
       end
     end
@@ -493,7 +486,7 @@ module ConclusionCommonReports
         :to_date => @to_date.to_formatted_s(:db)),
       'conclusion_weaknesses_by_audit_type', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
@@ -667,17 +660,17 @@ module ConclusionCommonReports
   def create_control_objective_stats
     self.control_objective_stats
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down(PDF_FONT_SIZE.pt)
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down(PDF_FONT_SIZE.pt)
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -686,20 +679,19 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down(PDF_FONT_SIZE.pt)
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :left
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down(PDF_FONT_SIZE.pt)
 
       column_data = []
       columns = {}
+      column_headers, column_widths = [], []
 
       @columns.each do |col_name, col_title, col_width|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = col_title
-          column.width = pdf.percent_width col_width
-        end
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
       end
 
       @process_control_data[period].each do |row|
@@ -725,28 +717,22 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = @columns.map(&:first)
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       else
         pdf.text(
           t('conclusion_committee_report.control_objective_stats.without_audits_in_the_period'))
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
         :score => @reviews_score_data[period]
@@ -754,7 +740,7 @@ module ConclusionCommonReports
     end
 
     unless @filters.empty?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
@@ -765,7 +751,7 @@ module ConclusionCommonReports
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
@@ -909,17 +895,17 @@ module ConclusionCommonReports
   def create_process_control_stats
     self.process_control_stats
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -928,20 +914,19 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :left
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       column_data = []
       columns = {}
+      column_widths, column_headers = [], []
 
       @columns.each do |col_name, col_title, col_width|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = col_title
-          column.width = pdf.percent_width col_width
-        end
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
       end
 
       @process_control_data[period].each do |row|
@@ -957,28 +942,22 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = @columns.map(&:first)
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       else
         pdf.text(
           t('conclusion_committee_report.process_control_stats.without_audits_in_the_period'))
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
         :score => @reviews_score_data[period]
@@ -986,7 +965,7 @@ module ConclusionCommonReports
     end
 
     unless @filters.empty?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
@@ -997,7 +976,7 @@ module ConclusionCommonReports
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'process_control_stats', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_committee_report.process_control_stats.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'process_control_stats', 0)
@@ -1024,55 +1003,81 @@ module ConclusionCommonReports
     total_count = weaknesses_count_by_risk.sum(&:second)
 
     unless total_count == 0
-      risk_level_values = risk_levels.map { |rl| rl[0] }.reverse
       statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
-      column_order = ['state', risk_level_values, 'count'].flatten
       column_data = []
-      columns = {
-        'state' => [Weakness.human_attribute_name('state'), 30],
-        'count' => [Weakness.human_attribute_name('count'), 15]
-      }
+      column_headers = [[Weakness.human_attribute_name(:state), 30]]
 
-      risk_levels.each {|rl| columns[rl[0]] = [rl[0], (55 / risk_levels.size)]}
+      risk_levels.each do |rl|
+        column_headers << [rl[0], (55.0 / risk_levels.size)]
+      end
+
+      column_headers << [Weakness.human_attribute_name(:count), 15]
 
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].inject(0) {|t, c| t + c[1]}
         percentage_total = 0
-        column_row = {'state' => "<b>#{t("finding.status_#{state.first}")}</b>"}
+        column_row = ["<b>#{t(:"finding.status_#{state.first}")}</b>"]
 
         risk_levels.each do |rl|
           count = weaknesses_count[state.last][rl.last]
           percentage = sub_total_count > 0 ?
             (count * 100.0 / sub_total_count).round(2) : 0.0
 
-          column_row[rl.first] = count > 0 ?
-            "#{count} (#{'%.2f' % percentage}%)" : '-'
+          column_row << (count > 0 ? "#{count} (#{'%.2f' % percentage}%)" : '-')
+
           percentage_total += percentage
         end
 
-        column_row['count'] = sub_total_count > 0 ?
-          "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-'
+        column_row << (sub_total_count > 0 ?
+            "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-')
 
         column_data << column_row
       end
 
       sub_total_count = weaknesses_count_by_risk.sum(&:second)
 
-      column_row = {
-        'state' => "<b>#{t('conclusion_committee_report.weaknesses_by_risk.total')}</b>",
-        'count' => "<b>#{total_count}</b>"
-      }
+      column_row = [
+        "<b>#{t(:'conclusion_committee_report.weaknesses_by_risk.total')}</b>"
+      ]
 
-      weaknesses_count_by_risk.each do |risk, count|
-        column_row[risk] = "<b>#{count}</b>"
+      risk_levels.each do |rl|
+        column_row << "<b>#{weaknesses_count_by_risk[rl.first]}</b>"
       end
+
+      column_row << "<b>#{total_count}</b>"
 
       column_data << column_row
 
-      {:order => column_order, :data => column_data, :columns => columns}
+      {:data => column_data, :columns => column_headers}
     else
-      t('follow_up_committee.without_weaknesses')
+      t(:'follow_up_committee.without_weaknesses')
+    end
+  end
+
+  def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
+    if data.kind_of?(Hash)
+      column_widths, column_headers, column_data = [], [], data[:data]
+
+      data[:columns].each do |col_name, col_title, col_width|
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
+      end
+
+      unless column_data.blank?
+        pdf.font_size(font_size.pt) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
+        end
+      end
+    else
+      pdf.text "<i>#{data}</i>", :inline_format => true
     end
   end
 
@@ -1082,24 +1087,23 @@ module ConclusionCommonReports
     total_oportunities = oportunities_count.values.sum
 
     if (total_weaknesses + total_oportunities) > 0
-      columns = {
-        'state' => [Finding.human_attribute_name(:state), 30],
-        'weaknesses_count' => [
-          t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
+      columns = [
+        [Finding.human_attribute_name(:state), 30],
+        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
           audit_type_symbol == :internal ? 35 : 70]
-      }
+      ]
       column_data = []
 
       if audit_type_symbol == :internal
-        columns['oportunities_count'] = [
+        columns << [
           t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
       end
 
-      columns.each do |col_name, col_data|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-          column.heading = col_data.first
-          column.width = pdf.percent_width col_data.last
-        end
+      column_headers, column_widths = [], []
+
+      columns.each do |col_data|
+        column_headers << "<b>#{col_data.first}</b>"
+        column_widths << pdf.percent_width(col_data.last)
       end
 
       @status.each do |state|
@@ -1110,42 +1114,29 @@ module ConclusionCommonReports
         oportunities_percentage = total_oportunities > 0 ?
           o_count.to_f / total_oportunities * 100 : 0.0
 
-        column_data << {
-          'state' => t("finding.status_#{state.first}").to_iso,
-          'weaknesses_count' =>
-            "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-          'oportunities_count' =>
-            "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
-        }
+        column_data << [
+          t("finding.status_#{state.first}"),
+          "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
+          "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+        ]
       end
 
-      column_data << {
-        'state' =>
-          "<b>#{t('conclusion_committee_report.weaknesses_by_state.total')}</b>".to_iso,
-        'weaknesses_count' => "<b>#{total_weaknesses}</b>",
-        'oportunities_count' => "<b>#{total_oportunities}</b>"
-      }
+      column_data << [
+        "<b>#{t('conclusion_committee_report.weaknesses_by_state.total')}</b>",
+        "<b>#{total_weaknesses}</b>",
+        "<b>#{total_oportunities}</b>"
+      ]
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = audit_type_symbol == :internal ?
-            ['state', 'weaknesses_count', 'oportunities_count'] :
-            ['state', 'weaknesses_count']
-          table.split_rows = true
-          table.font_size = PDF_FONT_SIZE
-          table.row_gap = (PDF_FONT_SIZE * 0.5).round
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.bold_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.render_on pdf
+        pdf.font_size(PDF_FONT_SIZE.pt) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     else
@@ -1159,11 +1150,11 @@ module ConclusionCommonReports
       columns = {}
       column_data = []
 
-      data[:columns].each do |col_name, col_data|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = col_data.first
-          c.width = pdf.percent_width col_data.last
-        end
+      column_headers, column_widths = [], []
+
+      data[:columns].each do |col_name, col_title, col_data|
+        column_headers << "<b>#{col_title}</b>"
+        column_widths << pdf.percent_width(col_width)
       end
 
       data[:data].each do |row|
@@ -1175,23 +1166,15 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = data[:order]
-          table.split_rows = true
-          table.font_size = font_size
-          table.row_gap = (font_size * 0.5).round
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = font_size
-          table.shade_headings = true
-          table.bold_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.render_on pdf
+        pdf.font_size(font_size.pt) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     else
