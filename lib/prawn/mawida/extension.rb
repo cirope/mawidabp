@@ -95,18 +95,13 @@ module Prawn
       def add_organization_image(organization, font_size = 10)
         organization_image = organization.try(:image_model).try(:image).try(
           :thumb).try(:path)
-        Rails.logger.debug "PATH: #{organization_image}"
         if organization_image && File.exists?(organization_image)
           image_geometry = organization.image_model.image_geometry(:pdf_thumb)
-          Rails.logger.debug "GEOMETRY: #{image_geometry}"
           self.image organization_image,
             :at => [0, self.bounds.top + (font_size.pt * 2) + image_geometry[:height]],
             :width => image_geometry[:width], :height => image_geometry[:height]
-        else
-          Rails.logger.debug "NO ENTRA el muy puto"
         end
       end
-
 
       def add_planning_header(organization, period)
         self.repeat :all do

@@ -195,7 +195,7 @@ module ConclusionCommonReports
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_down((PDF_FONT_SIZE * 2).pt)
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -468,7 +468,7 @@ module ConclusionCommonReports
                   end
                 else
                   pdf.text(
-                    "<i>#{t(:'follow_up_committee.without_oportunities')}</i>",
+                    t(:'follow_up_committee.without_oportunities'), :style => :italic,
                     :inline_format => true)
                 end
               end
@@ -1002,82 +1002,58 @@ module ConclusionCommonReports
       weaknesses_count_by_risk, risk_levels)
     total_count = weaknesses_count_by_risk.sum(&:second)
 
+    total_count = weaknesses_count_by_risk.sum(&:second)
+
     unless total_count == 0
+      risk_level_values = risk_levels.map { |rl| rl[0] }.reverse
       statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
+      column_order = ['state', risk_level_values, 'count'].flatten
       column_data = []
-      column_headers = [[Weakness.human_attribute_name(:state), 30]]
+      columns = {
+        'state' => [Weakness.human_attribute_name('state'), 30],
+        'count' => [Weakness.human_attribute_name('count'), 15]
+      }
 
-      risk_levels.each do |rl|
-        column_headers << [rl[0], (55.0 / risk_levels.size)]
-      end
-
-      column_headers << [Weakness.human_attribute_name(:count), 15]
+      risk_levels.each {|rl| columns[rl[0]] = [rl[0], (55 / risk_levels.size)]}
 
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].inject(0) {|t, c| t + c[1]}
         percentage_total = 0
-        column_row = ["<b>#{t(:"finding.status_#{state.first}")}</b>"]
+        column_row = {'state' => "<b>#{t("finding.status_#{state.first}")}</b>"}
 
         risk_levels.each do |rl|
           count = weaknesses_count[state.last][rl.last]
           percentage = sub_total_count > 0 ?
             (count * 100.0 / sub_total_count).round(2) : 0.0
 
-          column_row << (count > 0 ? "#{count} (#{'%.2f' % percentage}%)" : '-')
-
+          column_row[rl.first] = count > 0 ?
+            "#{count} (#{'%.2f' % percentage}%)" : '-'
           percentage_total += percentage
         end
 
-        column_row << (sub_total_count > 0 ?
-            "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-')
+        column_row['count'] = sub_total_count > 0 ?
+          "<b>#{sub_total_count} (#{'%.1f' % percentage_total}%)</b>" : '-'
 
         column_data << column_row
       end
 
       sub_total_count = weaknesses_count_by_risk.sum(&:second)
 
-      column_row = [
-        "<b>#{t(:'conclusion_committee_report.weaknesses_by_risk.total')}</b>"
-      ]
+      column_row = {
+        'state' => "<b>#{t('conclusion_committee_report.weaknesses_by_risk.total')}</b>",
+        'count' => "<b>#{total_count}</b>"
+      }
 
-      risk_levels.each do |rl|
-        column_row << "<b>#{weaknesses_count_by_risk[rl.first]}</b>"
+      weaknesses_count_by_risk.each do |risk, count|
+        column_row[risk] = "<b>#{count}</b>"
       end
-
-      column_row << "<b>#{total_count}</b>"
 
       column_data << column_row
 
-      {:data => column_data, :columns => column_headers}
+      {:order => column_order, :data => column_data, :columns => columns}
     else
       t(:'follow_up_committee.without_weaknesses')
-    end
-  end
-
-  def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
-    if data.kind_of?(Hash)
-      column_widths, column_headers, column_data = [], [], data[:data]
-
-      data[:columns].each do |col_name, col_title, col_width|
-        column_headers << "<b>#{col_title}</b>"
-        column_widths << pdf.percent_width(col_width)
-      end
-
-      unless column_data.blank?
-        pdf.font_size(font_size.pt) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
-      end
-    else
-      pdf.text "<i>#{data}</i>", :inline_format => true
     end
   end
 
@@ -1151,22 +1127,21 @@ module ConclusionCommonReports
       column_data = []
 
       column_headers, column_widths = [], []
-
-      data[:columns].each do |col_name, col_title, col_data|
-        column_headers << "<b>#{col_title}</b>"
-        column_widths << pdf.percent_width(col_width)
+      data[:order].each do |column|
+        col_data = data[:columns][column]
+        column_headers << "<b>#{col_data.first}</b>"
+        column_widths << pdf.percent_width(col_data.last)
       end
 
       data[:data].each do |row|
-        new_row = {}
-
-        row.each {|column, content| new_row[column] = content.to_iso}
+        new_row = []
+        data[:order].each { |column| new_row << row[column] }
 
         column_data << new_row
       end
 
       unless column_data.blank?
-        pdf.font_size(font_size.pt) do
+        pdf.font_size(PDF_FONT_SIZE) do
           table_options = pdf.default_table_options(column_widths)
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
@@ -1178,7 +1153,7 @@ module ConclusionCommonReports
         end
       end
     else
-      pdf.text "<i>#{data}</i>", :font_size => PDF_FONT_SIZE
+      pdf.text data, :style => :italic, :font_size => PDF_FONT_SIZE
     end
   end
 end
