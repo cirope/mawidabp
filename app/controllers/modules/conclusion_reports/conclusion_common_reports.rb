@@ -455,7 +455,7 @@ module ConclusionCommonReports
                     column_widths << pdf.percent_width(col_width)
                   end
 
-                  pdf.font_size PDF_FONT_SIZE do
+                  pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
                     table_options = pdf.default_table_options(column_widths)
 
                     pdf.table(bu_data[:oportunities_table_data].insert(0, column_headers), table_options) do
@@ -663,11 +663,11 @@ module ConclusionCommonReports
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_down(PDF_FONT_SIZE.pt)
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_down(PDF_FONT_SIZE.pt)
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -676,11 +676,11 @@ module ConclusionCommonReports
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_down(PDF_FONT_SIZE.pt)
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :left
 
-      pdf.move_down(PDF_FONT_SIZE.pt)
+      pdf.move_down PDF_FONT_SIZE
 
       column_data = []
       columns = {}
@@ -692,21 +692,20 @@ module ConclusionCommonReports
       end
 
       @process_control_data[period].each do |row|
-        new_row = {}
-
-        row.each do |column_name, column_content|
-          if column_content.kind_of?(Hash)
+        new_row = []
+        @columns.each do |col_name, _|
+          if row[col_name].kind_of?(Hash)
             list = ""
             @risk_levels.each do |risk|
               co = row["control_objective"]
               incompletes = @control_objectives_data[co][risk][:incomplete].count
               completes = @control_objectives_data[co][risk][:complete].count
 
-              list += "  <C:bullet /> #{risk}: #{incompletes} / #{completes} \n"
+              list += "  • #{risk}: #{incompletes} / #{completes} \n"
             end
-            new_row[column_name] = list
+            new_row << list
           else
-            new_row[column_name] = column_content.to_iso
+            new_row << row[col_name]
           end
         end
 
@@ -714,7 +713,7 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = pdf.default_table_options(column_widths)
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
@@ -733,14 +732,15 @@ module ConclusionCommonReports
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
         :score => @reviews_score_data[period]
-      )
+      ), :inline_format => true
     end
 
     unless @filters.empty?
       pdf.move_down PDF_FONT_SIZE
       pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true
     end
 
     pdf.custom_save_as(
@@ -939,7 +939,7 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = pdf.default_table_options(column_widths)
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
@@ -1101,7 +1101,7 @@ module ConclusionCommonReports
       ]
 
       unless column_data.blank?
-        pdf.font_size(PDF_FONT_SIZE.pt) do
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = pdf.default_table_options(column_widths)
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
@@ -1138,7 +1138,7 @@ module ConclusionCommonReports
       end
 
       unless column_data.blank?
-        pdf.font_size(PDF_FONT_SIZE) do
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = pdf.default_table_options(column_widths)
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
