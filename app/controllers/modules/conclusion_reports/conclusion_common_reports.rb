@@ -927,12 +927,11 @@ module ConclusionCommonReports
       end
 
       @process_control_data[period].each do |row|
-        new_row = {}
-
-        row.each do |column_name, column_content|
-          new_row[column_name] = column_content.kind_of?(Array) ?
-            column_content.map {|l| "  <C:bullet /> #{l}"}.join("\n").to_iso :
-            column_content.to_iso
+        new_row = []
+        @columns.each do |col_name, _|
+          new_row << (row[col_name].kind_of?(Array) ?
+            row[col_name].map {|l| "  • #{l}"}.join("\n") :
+            row[col_name])
         end
 
         column_data << new_row
@@ -958,14 +957,15 @@ module ConclusionCommonReports
       pdf.text t(
         'conclusion_committee_report.control_objective_stats.review_score_average',
         :score => @reviews_score_data[period]
-      )
+      ), :inline_format => true
     end
 
     unless @filters.empty?
       pdf.move_down PDF_FONT_SIZE
       pdf.text t('conclusion_committee_report.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true
     end
 
     pdf.custom_save_as(
