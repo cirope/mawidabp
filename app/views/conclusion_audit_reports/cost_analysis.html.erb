@@ -22,8 +22,8 @@
         <tbody>
           <% @total_cost_data[period].each do |total_data| %>
             <tr>
-              <% @column_order.map(&:first).each do |col_name| %>
-                <td><%= raw total_data[col_name].to_utf8 %></td>
+              <% total_data.each do |col_data| %>
+                <td><%= raw col_data %></td>
               <% end %>
             </tr>
           <% end %>
@@ -52,7 +52,7 @@
             <% detailed_data[:data].each do |data| %>
               <tr>
                 <% @detailed_column_order.map(&:first).each do |col_name| %>
-                  <td><%= raw data[col_name].to_utf8 %></td>
+                  <td><%= raw data[col_name] %></td>
                 <% end %>
               </tr>
             <% end %>

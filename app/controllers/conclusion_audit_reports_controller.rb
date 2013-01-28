@@ -4,7 +4,7 @@ require 'modules/conclusion_reports/conclusion_high_risk_reports'
 class ConclusionAuditReportsController < ApplicationController
   include ConclusionCommonReports
   include ConclusionHighRiskReports
-  
+
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :add_weaknesses_synthesis_table,
     :get_weaknesses_synthesis_table_data, :make_date_range
@@ -19,7 +19,7 @@ class ConclusionAuditReportsController < ApplicationController
       format.html
     end
   end
-  
+
   def cost_analysis
     @title = t(params[:include_details].blank? ?
       'conclusion_audit_report.cost_analysis_title' :
@@ -39,7 +39,7 @@ class ConclusionAuditReportsController < ApplicationController
     @periods.each do |period|
       total_estimated_amount = 0
       total_real_amount = 0
-      
+
       conclusion_reviews.for_period(period).each do |cr|
         estimated_amount = cr.review.plan_item.cost
         real_amount = cr.review.workflow.try(:cost) || 0
@@ -52,13 +52,13 @@ class ConclusionAuditReportsController < ApplicationController
         total_real_amount += real_amount
 
         @total_cost_data[period] ||= []
-        @total_cost_data[period] << {
-          'business_unit' => cr.review.business_unit.name.to_iso,
-          'review' => cr.review.to_s.to_iso,
-          'estimated_amount' => currency_mask % estimated_amount,
-          'real_amount' => currency_mask % real_amount,
-          'deviation' => deviation_text
-        }
+        @total_cost_data[period] << [
+          cr.review.business_unit.name,
+          cr.review.to_s,
+          currency_mask % estimated_amount,
+          currency_mask % real_amount,
+          deviation_text
+       ]
 
         unless params[:include_details].blank?
           detailed_data = {:review => cr.review, :data => []}
@@ -78,23 +78,23 @@ class ConclusionAuditReportsController < ApplicationController
             deviation_text =
               "%.2f%% (#{currency_mask % amount_difference.abs})" % deviation
 
-            detailed_data[:data] << {
-              'resource' => resource.resource_name.to_iso,
-              'estimated_amount' => currency_mask % estimated_amount,
-              'real_amount' => currency_mask % real_amount,
-              'deviation' => deviation_text
-            }
+            detailed_data[:data] << [
+              resource.resource_name.to_iso,
+              currency_mask % estimated_amount,
+              currency_mask % real_amount,
+              deviation_text
+            ]
           end
 
           real_resources.each do |resource, real_utilizations|
             real_amount = real_utilizations.sum(&:cost)
 
-            detailed_data[:data] << {
-              'resource' => resource.resource_name.to_iso,
-              'estimated_amount' => currency_mask % 0,
-              'real_amount' => currency_mask % real_amount,
-              'deviation' => "-100.00% (#{currency_mask % real_amount})"
-            }
+            detailed_data[:data] << [
+              resource.resource_name.to_iso,
+              (currency_mask % 0),
+              (currency_mask % real_amount),
+              "-100.00% (#{currency_mask % real_amount})"
+            ]
           end
 
           @detailed_data[period] ||= []
@@ -113,27 +113,27 @@ class ConclusionAuditReportsController < ApplicationController
         "%.2f%% (#{currency_mask % total_difference_amount.abs})"
 
       @total_cost_data[period] ||= []
-      @total_cost_data[period] << {
-        'business_unit' => '',
-        'review' => '',
-        'estimated_amount' => "<b>#{currency_mask % total_estimated_amount}</b>",
-        'real_amount' => "<b>#{currency_mask % total_real_amount}</b>",
-        'deviation' => "<b>#{total_deviation_mask % total_deviation}</b>"
-      }
+      @total_cost_data[period] << [
+        '',
+        '',
+        "<b>#{currency_mask % total_estimated_amount}</b>",
+        "<b>#{currency_mask % total_real_amount}</b>",
+        "<b>#{total_deviation_mask % total_deviation}</b>"
+      ]
     end
   end
 
   def create_cost_analysis
     self.cost_analysis
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
     columns = {}
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -142,36 +142,30 @@ class ConclusionAuditReportsController < ApplicationController
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
-      
+        (PDF_FONT_SIZE * 1.25).round, :left
+
+      column_headers, column_widths = [], []
+
       unless @total_cost_data[period].blank?
-        @column_order.each do |col_name, col_width|
-          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading =
-              t "conclusion_audit_report.cost_analysis.general_column_#{col_name}"
-            column.width = pdf.percent_width col_width
-          end
+        @column_order.each do |column|
+          column_headers <<
+              t("conclusion_audit_report.cost_analysis.general_column_#{column.first}")
+          column_widths << pdf.percent_width(column.last)
         end
 
-        pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_down PDF_FONT_SIZE
 
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = @total_cost_data[period]
-          table.column_order = @column_order.map(&:first)
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(@total_cost_data[period].insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       else
         pdf.text(
@@ -181,33 +175,25 @@ class ConclusionAuditReportsController < ApplicationController
 
       unless @detailed_data[period].blank?
         detailed_columns = {}
-
+        column_headers, column_widths = [], []
         @detailed_column_order.each do |col_name, col_width|
-          detailed_columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading =
-              t "conclusion_audit_report.cost_analysis.detailed_column_#{col_name}"
-            column.width = pdf.percent_width col_width
-          end
+            column_headers << t("conclusion_audit_report.cost_analysis.detailed_column_#{col_name}")
+            column_widths << pdf.percent_width(col_width)
         end
 
         @detailed_data[period].each do |detailed_data|
           pdf.text "\n<b>#{detailed_data[:review]}</b>\n\n",
-            :font_size => PDF_FONT_SIZE
+            :font_size => PDF_FONT_SIZE, :inline_format => true
 
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = detailed_columns
-            table.data = detailed_data[:data]
-            table.column_order = @detailed_column_order.map(&:first)
-            table.split_rows = true
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.render_on pdf
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(detailed_data[:data].insert(0, column_headers), table_options) do
+              row(0).style(
+                :background_color => 'cccccc',
+                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
+            end
           end
         end
       end
@@ -218,7 +204,7 @@ class ConclusionAuditReportsController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
