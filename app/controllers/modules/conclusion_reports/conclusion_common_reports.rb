@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module ConclusionCommonReports
   def weaknesses_by_state
     @title = t('conclusion_committee_report.weaknesses_by_state_title')
@@ -314,18 +315,16 @@ module ConclusionCommonReports
                   oportunities_percentage = total_oportunities > 0 ?
                     o_count.to_f / total_oportunities * 100 : 0.0
 
-                  oportunities_table_data << {
-                    'state' => "<b>#{t("finding.status_#{s[0]}")}</b>".to_iso,
-                    'count' =>
-                      "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-                  }
+                  oportunities_table_data << [
+                    "<b>#{t("finding.status_#{s[0]}")}</b>",
+                    "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+                  ]
                 end
 
-                oportunities_table_data << {
-                  'state' =>
-                    "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
-                  'count' => "<b>#{total_oportunities}</b>"
-                }
+                oportunities_table_data << [
+                  "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>",
+                  "<b>#{total_oportunities}</b>"
+                ]
               end
 
               risk_levels.each do |rl|
@@ -373,7 +372,7 @@ module ConclusionCommonReports
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_down((PDF_FONT_SIZE * 2).pt)
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
       t('conclusion_committee_report.period.title'),
@@ -384,7 +383,7 @@ module ConclusionCommonReports
     @periods.each do |period|
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :right
+        (PDF_FONT_SIZE * 1.25).round, :left
 
       @audit_types.each do |type|
         pdf.move_down PDF_FONT_SIZE * 2
@@ -392,29 +391,29 @@ module ConclusionCommonReports
         pdf.add_title t("conclusion_committee_report.findings_type_#{type}"),
           (PDF_FONT_SIZE * 1.25).round, :center
 
-        pdf.move_down(PDF_FONT_SIZE.pt)
+        pdf.move_down PDF_FONT_SIZE
 
         unless @data[period][type].blank?
           @data[period][type].each do |data_item|
-            pdf.move_down(PDF_FONT_SIZE.pt)
+            pdf.move_down PDF_FONT_SIZE
             pdf.add_title data_item[:title], PDF_FONT_SIZE, :center
 
             data_item[:business_units].each do |bu, bu_data|
-              pdf.move_down(PDF_FONT_SIZE.pt)
+              pdf.move_down PDF_FONT_SIZE
 
               pdf.add_description_item(
                 bu.business_unit_type.business_unit_label, bu.name)
-              pdf.move_down(PDF_FONT_SIZE.pt)
+              pdf.move_down PDF_FONT_SIZE
 
               pdf.text "<b>#{t('actioncontroller.reviews')}</b>",
                 :inline_format => true
-              pdf.move_down(PDF_FONT_SIZE.pt)
+              pdf.move_down PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
                 findings_count = cr.review.final_weaknesses.size +
                   cr.review.final_oportunities.size
 
-                text = "<C:bullet /> <b>#{cr.review}</b>: " +
+                text = "• <b>#{cr.review}</b>: " +
                   cr.review.reload.score_text
 
                 if findings_count == 0
@@ -424,25 +423,25 @@ module ConclusionCommonReports
                 pdf.text text, :left => PDF_FONT_SIZE * 2, :inline_format => true
               end
 
-              pdf.move_down(PDF_FONT_SIZE.pt)
+              pdf.move_down PDF_FONT_SIZE
 
               pdf.add_title(
                 t('conclusion_committee_report.weaknesses_by_audit_type.weaknesses'),
                 PDF_FONT_SIZE)
 
-              pdf.move_down(PDF_FONT_SIZE.pt)
+              pdf.move_down PDF_FONT_SIZE
 
               add_weaknesses_synthesis_table(pdf,
                 bu_data[:weaknesses_table_data], 10)
 
               if type == :internal
-                pdf.move_down(PDF_FONT_SIZE.pt)
+                pdf.move_down PDF_FONT_SIZE
 
                 pdf.add_title(
                   t('conclusion_committee_report.weaknesses_by_audit_type.oportunities'),
                   PDF_FONT_SIZE)
 
-                pdf.move_down(PDF_FONT_SIZE.pt)
+                pdf.move_down PDF_FONT_SIZE
 
                 unless bu_data[:oportunities_table_data].blank?
                   column_widths, column_headers = [], []
@@ -456,7 +455,7 @@ module ConclusionCommonReports
                     column_widths << pdf.percent_width(col_width)
                   end
 
-                  pdf.font_size(((PDF_FONT_SIZE * 0.75).round).pt) do
+                  pdf.font_size PDF_FONT_SIZE do
                     table_options = pdf.default_table_options(column_widths)
 
                     pdf.table(bu_data[:oportunities_table_data].insert(0, column_headers), table_options) do
@@ -467,15 +466,13 @@ module ConclusionCommonReports
                     end
                   end
                 else
-                  pdf.text(
-                    t(:'follow_up_committee.without_oportunities'), :style => :italic,
-                    :inline_format => true)
+                  pdf.text t(:'follow_up_committee.without_oportunities'), :style => :italic
                 end
               end
             end
           end
         else
-          pdf.text t(:'follow_up_committee.without_weaknesses')
+          pdf.text t(:'follow_up_committee.without_weaknesses'), :style => :italic
         end
       end
     end
