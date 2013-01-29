@@ -34,10 +34,10 @@
           <tbody>
             <% data[:column_data].each do |row| %>
               <tr>
-                <% @column_order.each do |col_name| %>
-                  <td><%= row[col_name].kind_of?(Array) ?
-                    array_to_ul(row[col_name], :class => :raw_list) :
-                    row[col_name] %></td>
+                <% @column_order.each_with_index do |col_name, i| %>
+                  <td><%= row[i].kind_of?(Array) ?
+                    array_to_ul(row[i], :class => :raw_list) :
+                    row[i] %></td>
                 <% end %>
               </tr>
             <% end %>
