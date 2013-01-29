@@ -136,11 +136,10 @@ module ConclusionHighRiskReports
 
         @notorious_reviews[period].each do |data|
           columns = data[:columns]
-          column_data, column_headers, column_widths = [], [], []
+          column_data, column_headers = [], []
 
           @column_order.each do |order|
             column_headers << columns[order].first
-            column_widths << columns[order].last
           end
           if !data[:external] && !@internal_title_showed
             title = t('conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses')
@@ -157,10 +156,9 @@ module ConclusionHighRiskReports
 
           pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
-          column_data = data[:column_data]
-          unless column_data.blank?
+          unless data[:column_data].blank?
             pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-              column_data.each do |col_data|
+              data[:column_data].each do |col_data|
                 column_headers.each_with_index do |header, i|
                   data = col_data[i].kind_of?(Array) ? "\n\n #{col_data[i]}" : col_data[i]
                   pdf.text "<b>#{header.upcase}</b>: #{data}", :inline_format => true
@@ -276,11 +274,11 @@ module ConclusionHighRiskReports
           end
 
           unless fixed_weaknesses.blank?
-            column_data << {
-              'business_unit_report_name' => c_r.review.business_unit.name,
-              'score' => c_r.review.reload.score_text,
-              'fixed_weaknesses' => fixed_weaknesses
-            }
+            column_data << [
+              c_r.review.business_unit.name,
+              c_r.review.reload.score_text,
+              fixed_weaknesses
+            ]
           end
         end
 
@@ -332,11 +330,10 @@ module ConclusionHighRiskReports
 
         @reviews[period].each do |data|
           columns = data[:columns]
-          column_data, column_headers, column_widths = [], [], []
+          column_data, column_headers = [], []
 
-          @column_order.each do |col_name|
-            column_headers = col_name.first
-            column_widths = pdf.percent_width col_name.last
+          @column_order.each do |column|
+            column_headers << columns[column].first
           end
 
           if !data[:external] && !@internal_title_showed
@@ -354,32 +351,20 @@ module ConclusionHighRiskReports
 
           pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
-          data[:column_data].each do |row|
-            new_row = []
-
-            row.each do |column_name, column_content|
-              new_row << column_content.kind_of?(Array) ?
-                column_content.join("\n\n") :
-                column_content
-            end
-
-            column_data << new_row
-          end
-
-          unless column_data.blank?
+          unless data[:column_data].blank?
             pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-              table_options = pdf.default_table_options(column_widths)
-
-              pdf.table(column_data.insert(0, column_headers), table_options) do
-                row(0).style(
-                  :background_color => 'cccccc',
-                  :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-                )
+              data[:column_data].each do |col_data|
+                column_headers.each_with_index do |header, i|
+                  data = col_data[i].kind_of?(Array) ? "\n\n #{col_data[i]}" : col_data[i]
+                  pdf.text "<b>#{header.upcase}</b>: #{data}", :inline_format => true
+                  pdf.move_down PDF_FONT_SIZE
+                end
               end
             end
           else
             pdf.text(
-              t('conclusion_committee_report.fixed_weaknesses_report.without_audits_in_the_period'))
+              t('conclusion_committee_report.fixed_weaknesses_report.without_audits_in_the_period'),
+              :style => :italic)
           end
         end
       end
