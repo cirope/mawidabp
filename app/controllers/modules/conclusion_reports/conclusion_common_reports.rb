@@ -693,6 +693,7 @@ module ConclusionCommonReports
 
       @process_control_data[period].each do |row|
         new_row = []
+
         @columns.each do |col_name, _|
           if row[col_name].kind_of?(Hash)
             list = ""
@@ -928,6 +929,7 @@ module ConclusionCommonReports
 
       @process_control_data[period].each do |row|
         new_row = []
+
         @columns.each do |col_name, _|
           new_row << (row[col_name].kind_of?(Array) ?
             row[col_name].map {|l| "  • #{l}"}.join("\n") :
@@ -997,8 +999,6 @@ module ConclusionCommonReports
 
   def get_weaknesses_synthesis_table_data(weaknesses_count,
       weaknesses_count_by_risk, risk_levels)
-    total_count = weaknesses_count_by_risk.sum(&:second)
-
     total_count = weaknesses_count_by_risk.sum(&:second)
 
     unless total_count == 0
@@ -1114,16 +1114,14 @@ module ConclusionCommonReports
       end
     else
       pdf.text t('follow_up_committee.without_weaknesses'),
-        :font_size => PDF_FONT_SIZE
+        :font_size => PDF_FONT_SIZE, :style => :italic
     end
   end
 
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
       columns = {}
-      column_data = []
-
-      column_headers, column_widths = [], []
+      column_data, column_headers, column_widths = [], [], []
       data[:order].each do |column|
         col_data = data[:columns][column]
         column_headers << "<b>#{col_data.first}</b>"
@@ -1132,6 +1130,7 @@ module ConclusionCommonReports
 
       data[:data].each do |row|
         new_row = []
+
         data[:order].each { |column| new_row << row[column] }
 
         column_data << new_row
