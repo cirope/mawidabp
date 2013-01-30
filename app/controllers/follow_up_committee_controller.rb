@@ -133,16 +133,16 @@ class FollowUpCommitteeController < ApplicationController
             repeated_count += c_r.review.oportunities.repeated.count
 
             review_scores << c_r.review.score
-            column_data << {
-              'business_unit_report_name' => c_r.review.business_unit.name,
-              'review' => c_r.review.to_s,
-              'score' => c_r.review.reload.score_text,
-              'process_control' => process_control_text,
-              'weaknesses_count' => @risk_levels.blank? ?
+            column_data << [
+              c_r.review.business_unit.name,
+              c_r.review.to_s,
+              c_r.review.reload.score_text,
+              process_control_text,
+              @risk_levels.blank? ?
                 t('follow_up_committee.synthesis_report.without_weaknesses') :
                 weaknesses_count_text,
-              'oportunities_count' => oportunities_count_text
-            }
+              oportunities_count_text
+            ]
           end
         end
 
@@ -166,17 +166,17 @@ class FollowUpCommitteeController < ApplicationController
   def create_synthesis_report
     self.synthesis_report
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('follow_up_committee.period.title'),
@@ -185,7 +185,7 @@ class FollowUpCommitteeController < ApplicationController
         :to_date => I18n.l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
@@ -211,13 +211,13 @@ class FollowUpCommitteeController < ApplicationController
           average_score = count > 0 ? (total.to_f / count).round : 100
         end
 
-        pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_down PDF_FONT_SIZE
 
         pdf.add_title(
           t('follow_up_committee.synthesis_report.organization_score',
             :score => average_score || 100), (PDF_FONT_SIZE * 1.5).round)
 
-        pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
+        pdf.move_down((PDF_FONT_SIZE * 0.75).round)
 
         pdf.text(
           t('follow_up_committee.synthesis_report.organization_score_note',
@@ -230,13 +230,11 @@ class FollowUpCommitteeController < ApplicationController
 
       @audits_by_business_unit[period].each do |data|
         columns = data[:columns]
-        column_data = []
+        column_data, column_headers, column_widths = [], [], []
 
         @column_order.each do |col_name|
-          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading = columns[col_name].first
-            column.width = pdf.percent_width columns[col_name].last
-          end
+          column_headers << columns[col_name].first
+          column_widths << pdf.percent_width(columns[col_name].last)
         end
 
         if !data[:external] && !@internal_title_showed
@@ -248,43 +246,34 @@ class FollowUpCommitteeController < ApplicationController
         end
 
         if title
-          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.move_down PDF_FONT_SIZE * 2
           pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
         end
 
         pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
         data[:column_data].each do |row|
-          new_row = {}
+          new_row = []
 
-          row.each do |column_name, column_content|
-            new_row[column_name] = column_content.kind_of?(Array) ?
-              column_content.map {|l| "  <C:bullet /> #{l}"}.join("\n").to_iso :
-              column_content.to_iso
+          row.each do |column|
+            new_row << (column.kind_of?(Array) ?
+              column.map {|l| "  • #{l}"}.join("\n") :
+              column)
           end
 
           column_data << new_row
         end
 
         unless column_data.blank?
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data.sort do |row1, row2|
-              row1['score'].match(/(\d+)%/)[0].to_i <=>
-                row2['score'].match(/(\d+)%/)[0].to_i
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(column_data.insert(0, column_headers), table_options) do
+              row(0).style(
+                :background_color => 'cccccc',
+                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
             end
-            table.column_order = @column_order
-            table.split_rows = true
-            table.row_gap = (PDF_FONT_SIZE * 1.25).round
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.render_on pdf
           end
 
           scores = data[:review_scores]
@@ -297,28 +286,29 @@ class FollowUpCommitteeController < ApplicationController
             text = t('conclusion_committee_report.synthesis_report.without_audits_in_the_period')
           end
 
-          pdf.move_pointer PDF_FONT_SIZE
+          pdf.move_down PDF_FONT_SIZE
 
-          pdf.text text, :font_size => PDF_FONT_SIZE
+          pdf.text text, :font_size => PDF_FONT_SIZE, :inline_format => true
 
           if data[:repeated_count] > 0
             pdf.text(t('follow_up_committee.synthesis_report.repeated_count',
                 :count => data[:repeated_count]), :font_size => PDF_FONT_SIZE)
           end
         else
-          pdf.text t('follow_up_committee.synthesis_report.without_audits_in_the_period')
+          pdf.text t('follow_up_committee.synthesis_report.without_audits_in_the_period'),
+            :style => :italic
         end
       end
     end
 
     unless @filters.empty?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t('follow_up_committee.applied_filters',
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
     pdf.text t('follow_up_committee.synthesis_report.references',
       :risk_types => @risk_levels.to_sentence),
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
@@ -327,7 +317,7 @@ class FollowUpCommitteeController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('follow_up_committee.synthesis_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'synthesis_report', 0)
@@ -510,17 +500,17 @@ class FollowUpCommitteeController < ApplicationController
   def create_qa_indicators
     self.qa_indicators
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('follow_up_committee.period.title'),
@@ -529,53 +519,46 @@ class FollowUpCommitteeController < ApplicationController
         :to_date => l(@to_date, :format => :long)))
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
-      pdf.move_pointer PDF_FONT_SIZE
+        (PDF_FONT_SIZE * 1.25).round, :left
+      pdf.move_down PDF_FONT_SIZE
 
       @indicators[period].each do |data|
         columns = {}
-        column_data = []
+        column_data, column_headers, column_widths = [], [], []
 
         @columns.each do |col_name|
-          columns[col_name.first] = PDF::SimpleTable::Column.new(col_name.first) do |column|
-            column.heading = col_name.last
-            column.width = pdf.percent_width 50
-          end
+          column_headers << col_name.last
+          column_widths << pdf.percent_width(50)
         end
 
         data[:column_data].each do |row|
-          new_row = {}
+          new_row = []
 
           row.each do |column_name, column_content|
-            new_row[column_name] = column_content.present? ? column_content.to_iso :
-              (t'follow_up_committee.qa_indicators.without_data')
+            new_row << (column_content.present? ? column_content :
+              (t'follow_up_committee.qa_indicators.without_data'))
           end
 
           column_data << new_row
         end
 
         unless column_data.blank?
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data
-            table.column_order = @columns.map(&:first)
-            table.split_rows = true
-            table.row_gap = PDF_FONT_SIZE
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.render_on pdf
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+            end
           end
         else
           pdf.text(
-            t('follow_up_committee.qa_indicators.without_audits_in_the_period'))
+            t('follow_up_committee.qa_indicators.without_audits_in_the_period'),
+            :style => :italic)
         end
       end
     end
@@ -585,7 +568,7 @@ class FollowUpCommitteeController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('follow_up_committee.qa_indicators.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
