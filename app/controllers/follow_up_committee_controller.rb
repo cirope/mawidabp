@@ -529,7 +529,7 @@ class FollowUpCommitteeController < ApplicationController
         column_data, column_headers, column_widths = [], [], []
 
         @columns.each do |col_name|
-          column_headers << col_name.last
+          column_headers << "<b>#{col_name.last}</b>"
           column_widths << pdf.percent_width(50)
         end
 
