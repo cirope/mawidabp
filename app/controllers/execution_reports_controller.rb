@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 class ExecutionReportsController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges
-  
+
   # Muestra una lista con los reportes disponibles
   #
   # * GET /execution_reports
@@ -72,15 +73,15 @@ class ExecutionReportsController < ApplicationController
               r.oportunities.count.to_s :
               t('execution_reports.detailed_management_report.without_oportunities')
 
-            column_data << {
-              'business_unit_report_name' => r.business_unit.name,
-              'review' => r.to_s,
-              'process_control' => process_controls,
-              'weaknesses_count' => @risk_levels.blank? ?
+            column_data << [
+              r.business_unit.name,
+              r.to_s,
+              process_controls,
+              @risk_levels.blank? ?
                 t('execution_reports.detailed_management_report.without_weaknesses') :
                 weaknesses_count_text,
-              'oportunities_count' => oportunities_count_text
-            }
+              oportunities_count_text
+            ]
           end
         end
 
@@ -101,24 +102,24 @@ class ExecutionReportsController < ApplicationController
 
   def create_detailed_management_report
     self.detailed_management_report
-    
-    pdf = PDF::Writer.create_generic_pdf :landscape
+
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.detailed_management_report.clarification'),
-      :font_size => PDF_FONT_SIZE
+      :font_size => PDF_FONT_SIZE, :inline_format => true
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(t('execution_reports.period.title'),
       t('execution_reports.period.range',
@@ -126,19 +127,17 @@ class ExecutionReportsController < ApplicationController
         :to_date => l(@to_date, :format => :long)))
 
     @audits_by_period.each do |audit_by_period|
-      pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title "#{Period.model_name.human}: #{audit_by_period[:period].inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round, :left
 
       audit_by_period[:audits_by_business_unit].each do |data|
         columns = data[:columns]
-        column_data = []
+        column_data, column_headers, column_widths = [], [], []
 
         @column_order.each do |col_name|
-          columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-            column.heading = columns[col_name].first
-            column.width = pdf.percent_width columns[col_name].last
-          end
+          column_headers << "<b>#{columns[col_name].first}</b>"
+          column_widths << pdf.percent_width(columns[col_name].last)
         end
 
         if !data[:external] && !@internal_title_showed
@@ -150,54 +149,50 @@ class ExecutionReportsController < ApplicationController
         end
 
         if title
-          pdf.move_pointer PDF_FONT_SIZE * 2
+          pdf.move_down PDF_FONT_SIZE * 2
           pdf.add_title title, (PDF_FONT_SIZE * 1.25).round, :center
         end
 
         pdf.add_subtitle data[:name], PDF_FONT_SIZE, PDF_FONT_SIZE
 
         data[:column_data].each do |row|
-          new_row = {}
+          new_row = []
 
-          row.each do |column_name, column_content|
-            new_row[column_name] = column_content.kind_of?(Array) ?
-              column_content.map {|l| "  <C:bullet /> #{l}"}.join("\n").to_iso :
-              column_content.to_iso
+          row.each do |column_content|
+            new_row << (column_content.kind_of?(Array) ?
+              column_content.map {|l| "  • #{l}"}.join("\n") :
+              column_content)
           end
 
           column_data << new_row
         end
 
         unless column_data.blank?
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data
-            table.column_order = @column_order
-            table.split_rows = true
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = PDF_FONT_SIZE
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.render_on pdf
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(column_data.insert(0, column_headers), table_options) do
+              row(0).style(
+                :background_color => 'cccccc',
+                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
+            end
           end
         else
           pdf.text(
-            t('execution_reports.detailed_management_report.without_audits_in_the_period'))
+            t('execution_reports.detailed_management_report.without_audits_in_the_period'),
+            :style => :italic)
         end
       end
     end
 
     if @audits_by_period.empty?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text(
         t('execution_reports.detailed_management_report.without_audits_in_the_interval'))
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
     pdf.text t('execution_reports.detailed_management_report.references',
       :risk_types => @risk_levels.to_sentence),
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
@@ -208,7 +203,7 @@ class ExecutionReportsController < ApplicationController
         :to_date => @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('execution_reports.detailed_management_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
@@ -246,19 +241,19 @@ class ExecutionReportsController < ApplicationController
   def create_weaknesses_by_state
     self.weaknesses_by_state
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.weaknesses_by_state.clarification'),
-        :font_size => PDF_FONT_SIZE
+        :font_size => PDF_FONT_SIZE, :inline_format => true
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('execution_reports.period.title'),
@@ -267,12 +262,12 @@ class ExecutionReportsController < ApplicationController
         :to_date => l(@to_date, :format => :long)))
 
     @counts.each do |count_data|
-      pdf.move_pointer PDF_FONT_SIZE * 2
+      pdf.move_down PDF_FONT_SIZE * 2
       pdf.add_title "#{Period.model_name.human}: #{count_data[:period].inspect}",
         (PDF_FONT_SIZE * 1.25).round, :justify
 
       @audit_types.each do |type|
-        pdf.move_pointer PDF_FONT_SIZE * 2
+        pdf.move_down PDF_FONT_SIZE * 2
 
         pdf.add_title t("execution_reports.findings_type_#{type}"),
           (PDF_FONT_SIZE * 1.25).round, :center
@@ -285,28 +280,26 @@ class ExecutionReportsController < ApplicationController
             total_oportunities = oportunities_count.values.sum
 
             pdf.text "\n<b>#{Review.model_name.human}</b>: #{review}\n\n",
-              :font_size => PDF_FONT_SIZE
+              :font_size => PDF_FONT_SIZE, :inline_format => true
 
             unless (total_weaknesses + total_oportunities) == 0
-              columns = {
-                'state' => [Finding.human_attribute_name('state'), 30],
-                'weaknesses_count' => [
+              columns = [
+                [Finding.human_attribute_name('state'), 30],
+                [
                   t('execution_reports.weaknesses_by_state.weaknesses_column'),
                   type == :internal ? 35 : 70]
-              }
-              column_data = []
+              ]
+              column_data, column_headers, column_widths = [], [], []
 
               if type == :internal
-                columns['oportunities_count'] = [
+                columns << [
                   t('execution_reports.weaknesses_by_state.oportunities_column'),
                   35]
               end
 
-              columns.each do |col_name, col_data|
-                columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-                  c.heading = col_data.first
-                  c.width = pdf.percent_width col_data.last
-                end
+              columns.each do |col_data|
+                column_headers << "<b>#{col_data.first}</b>"
+                column_widths << pdf.percent_width(col_data.last)
               end
 
               @status.each do |state|
@@ -317,59 +310,46 @@ class ExecutionReportsController < ApplicationController
                 oportunities_percentage = total_oportunities > 0 ?
                   o_count.to_f / total_oportunities * 100 : 0.0
 
-                column_data << {
-                  'state' => t("finding.status_#{state.first}").to_iso,
-                  'weaknesses_count' =>
-                    "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-                  'oportunities_count' =>
-                    "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
-                }
+                column_data << [
+                  t("finding.status_#{state.first}"),
+                  "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
+                  "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+                ]
               end
 
-              column_data << {
-                'state' =>
-                  "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>".to_iso,
-                'weaknesses_count' => "<b>#{total_weaknesses}</b>",
-                'oportunities_count' => "<b>#{total_oportunities}</b>"
-              }
+              column_data << [
+                "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>".to_iso,
+                "<b>#{total_weaknesses}</b>",
+                "<b>#{total_oportunities}</b>"
+              ]
 
               unless column_data.blank?
-                PDF::SimpleTable.new do |table|
-                  table.width = pdf.page_usable_width
-                  table.columns = columns
-                  table.data = column_data
-                  table.column_order = type == :internal ?
-                    ['state', 'weaknesses_count', 'oportunities_count'] :
-                    ['state', 'weaknesses_count']
-                  table.split_rows = true
-                  table.font_size = PDF_FONT_SIZE
-                  table.row_gap = (PDF_FONT_SIZE * 0.5).round
-                  table.shade_rows = :none
-                  table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-                  table.heading_font_size = PDF_FONT_SIZE
-                  table.shade_headings = true
-                  table.bold_headings = true
-                  table.position = :left
-                  table.orientation = :right
-                  table.show_lines = :all
-                  table.render_on pdf
+                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                  table_options = pdf.default_table_options(column_widths)
+
+                  pdf.table(column_data.insert(0, column_headers), table_options) do
+                    row(0).style(
+                      :background_color => 'cccccc',
+                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                    )
+                  end
                 end
               end
             else
               pdf.text t('execution_reports.without_findings'),
-                :font_size => PDF_FONT_SIZE
-              pdf.move_pointer PDF_FONT_SIZE
+                :font_size => PDF_FONT_SIZE, :style => :italic
+              pdf.move_down PDF_FONT_SIZE
             end
           end
         else
           pdf.text t('execution_reports.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE
+            :font_size => PDF_FONT_SIZE, :style => :italic
         end
       end
     end
 
     if @counts.empty?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.text t('execution_reports.without_weaknesses_in_the_interval'),
         :font_size => PDF_FONT_SIZE
     end
@@ -380,7 +360,7 @@ class ExecutionReportsController < ApplicationController
         :to_date => @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('execution_reports.weaknesses_by_state.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
