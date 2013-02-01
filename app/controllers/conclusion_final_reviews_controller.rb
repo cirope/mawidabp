@@ -304,7 +304,7 @@ class ConclusionFinalReviewsController < ApplicationController
       :review => [:period, { :plan_item => :business_unit }]
     ).where(@conditions).order(@order_by || 'issue_date DESC')
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title t('conclusion_final_review.index_title')
@@ -317,29 +317,28 @@ class ConclusionFinalReviewsController < ApplicationController
       ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
     ]
-    columns = {}
-    column_data = []
 
-    column_order.each do |col_name, col_title, col_with|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = col_title
-        c.width = pdf.percent_width col_with
-      end
+    columns = {}
+    column_data, column_headers, column_widths = [], [], []
+
+    column_order.each do |col_data|
+      column_headers << col_data[1]
+      column_widths << pdf.percent_width(col_data[2])
     end
 
     conclusion_final_reviews.each do |cfr|
-      column_data << {
-        'period' => cfr.review.period.number.to_s.to_iso,
-        'identification' => cfr.review.identification.to_iso,
-        'business_unit' => cfr.review.plan_item.business_unit.name.to_iso,
-        'project' => cfr.review.plan_item.project.to_iso,
-        'issue_date' => "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>".to_iso,
-        'close_date' => (cfr.close_date ? l(cfr.close_date, :format => :minimal) : '').to_iso,
-      }
+      column_data << [
+        cfr.review.period.number.to_s,
+        cfr.review.identification,
+        cfr.review.plan_item.business_unit.name,
+        cfr.review.plan_item.project,
+        "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>",
+        (cfr.close_date ? l(cfr.close_date, :format => :minimal) : ''),
+      ]
     end
 
     unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pointer_moved = true
       filter_columns = @columns.map do |c|
         column_name = column_order.detect { |co| co[0] == c }
@@ -349,33 +348,28 @@ class ConclusionFinalReviewsController < ApplicationController
       pdf.text t('conclusion_final_review.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
     end
 
     unless @order_by_column_name.blank?
-      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
+      pdf.move_down PDF_FONT_SIZE unless pointer_moved
       pdf.text t('conclusion_final_review.pdf.sorted_by',
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
@@ -383,7 +377,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     pdf.custom_save_as(pdf_name, ConclusionFinalReview.table_name)
 
-    redirect_to PDF::Writer.relative_path(pdf_name, ConclusionFinalReview.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, ConclusionFinalReview.table_name)
   end
 
   # Método para el autocompletado de usuarios
