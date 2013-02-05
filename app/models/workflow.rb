@@ -1,6 +1,6 @@
 class Workflow < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -90,12 +90,13 @@ class Workflow < ActiveRecord::Base
   end
 
   def to_pdf(organization = nil, include_details = true)
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
     currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
-    column_order = ['order_number', 'task', 'start', 'end', 'predecessors',
-      'resources']
-    columns = {}
-    column_data = []
+    column_order = [
+      ['order_number', 10], ['task', 50], ['start', 10], ['end', 10], ['predecessors', 10],
+      ['resources', 10]
+    ]
+    column_data, column_headers, column_widths = [], [], []
 
     pdf.add_generic_report_header organization
 
@@ -111,53 +112,45 @@ class Workflow < ActiveRecord::Base
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
     column_order.each do |col_name|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-        column.heading = WorkflowItem.human_attribute_name(col_name)
-      end
+      column_headers << WorkflowItem.human_attribute_name(col_name.first)
+      column_widths << pdf.percent_width(col_name.last)
     end
+
+    column_data[0] = column_headers
 
     self.workflow_items.each do |workflow_item|
       resource_text = currency_mask % workflow_item.cost
-      column_data << {
-        'order_number' => workflow_item.order_number,
-        'task' => workflow_item.task.to_iso,
-        'start' => I18n.l(workflow_item.start, :format => :default),
-        'end' => I18n.l(workflow_item.end, :format => :default),
-        'predecessors' => workflow_item.predecessors.to_a.to_sentence,
-        'resources' => workflow_item.cost > 0 && include_details ?
-          ("<c:ilink dest='workflow_cost_detail_#{workflow_item.id}'>" +
-            "#{resource_text}</c:ilink>") : resource_text
-      }
+      column_data[workflow_item.order_number] = [
+        workflow_item.order_number,
+        workflow_item.task,
+        I18n.l(workflow_item.start, :format => :default),
+        I18n.l(workflow_item.end, :format => :default),
+        workflow_item.predecessors.to_a.to_sentence,
+        resource_text
+      ]
     end
 
-    column_data << {
-      'order_number' => '', 'task' => '', 'start' => '', 'end' => '',
-      'predecessors' => '', 'resources' => "<b>#{currency_mask % self.cost}</b>"
-    }
+    column_data << [
+      '', '', '', '', '', "<b>#{currency_mask % self.cost}</b>"
+    ]
 
     unless column_data.blank?
-      pdf.move_pointer PDF_FONT_SIZE
-      
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_width - pdf.right_margin - pdf.left_margin
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.move_down PDF_FONT_SIZE
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data, table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
     if include_details &&
         !self.workflow_items.all? { |wi| wi.resource_utilizations.blank? }
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title I18n.t('workflow.pdf.resources_utilization'),
         (PDF_FONT_SIZE * 1.25).round
@@ -170,14 +163,14 @@ class Workflow < ActiveRecord::Base
     end
 
     if include_details && !self.review.plan_item.resource_utilizations.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title I18n.t('workflow.pdf.planned_resources_utilization'),
         (PDF_FONT_SIZE * 1.25).round
-      
+
       self.review.plan_item.add_resource_data(pdf, false)
 
-      pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+      pdf.move_down((PDF_FONT_SIZE * 0.5).round)
 
       pdf.text I18n.t('workflow.pdf.planned_resources_utilization_explanation'),
         :font_size => (PDF_FONT_SIZE * 0.75).round
@@ -187,11 +180,11 @@ class Workflow < ActiveRecord::Base
   end
 
   def absolute_pdf_path
-    PDF::Writer.absolute_path(self.pdf_name, Workflow.table_name, self.id)
+    Prawn::Document.absolute_path(self.pdf_name, Workflow.table_name, self.id)
   end
 
   def relative_pdf_path
-    PDF::Writer.relative_path(self.pdf_name, Workflow.table_name, self.id)
+    Prawn::Document.relative_path(self.pdf_name, Workflow.table_name, self.id)
   end
 
   def pdf_name
