@@ -1071,24 +1071,24 @@ class Finding < ActiveRecord::Base
   end
 
   def to_pdf(organization = nil)
-    pdf = PDF::Writer.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
 
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
 
-    pdf.move_pointer PDF_FONT_SIZE * 3
+    pdf.move_down PDF_FONT_SIZE * 3
 
     pdf.add_title self.class.model_name.human, (PDF_FONT_SIZE * 1.5).round, :center,
       false
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_title "<b>#{self.class.human_attribute_name(:review_code)}</b>: " +
       self.review_code, PDF_FONT_SIZE, :center, false
 
     pdf.start_new_page
 
-    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
+    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(
       self.class.human_attribute_name('control_objective_item_id'),
@@ -1098,7 +1098,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('description'),
       self.description, 0, false)
 
-    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
+    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
     if self.kind_of?(Weakness)
       pdf.add_description_item(Weakness.human_attribute_name('risk'),
@@ -1144,14 +1144,14 @@ class Finding < ActiveRecord::Base
 
     unless self.work_papers.blank?
       pdf.start_new_page
-      pdf.move_pointer PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 3
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
       pdf.add_title("#{self.class.model_name.human} #{self.review_code}",
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
-      pdf.move_pointer PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
         pdf.text wp.inspect, :justification => :center,
@@ -1165,11 +1165,11 @@ class Finding < ActiveRecord::Base
   end
 
   def absolute_pdf_path
-    PDF::Writer.absolute_path(self.pdf_name, self.class.table_name, self.id)
+    Prawn::Document.absolute_path(self.pdf_name, self.class.table_name, self.id)
   end
 
   def relative_pdf_path
-    PDF::Writer.relative_path(self.pdf_name, self.class.table_name, self.id)
+    Prawn::Document.relative_path(self.pdf_name, self.class.table_name, self.id)
   end
 
   def pdf_name

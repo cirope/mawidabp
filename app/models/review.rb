@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 class Review < ActiveRecord::Base
   include ParameterSelector
   include Trimmer
 
   trimmed_fields :identification
-  
+
   has_paper_trail :meta => {
     :organization_id => lambda { GlobalModelConfig.current_organization_id }
   }
@@ -38,7 +39,7 @@ class Review < ActiveRecord::Base
   attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
   attr_readonly :plan_item_id
   attr_protected :score, :top_scale, :achieved_scale
-  
+
   # Named scopes
   scope :list, lambda {
     includes(:period).where(
@@ -320,7 +321,7 @@ class Review < ActiveRecord::Base
 
     "#{score.first} (#{score.last}%)"
   end
-  
+
   def control_objective_items_for_score
     self.control_objective_items.reject &:exclude_from_score
   end
@@ -361,14 +362,14 @@ class Review < ActiveRecord::Base
           ]
         end
       end
-      
+
       coi.weaknesses.select(&:unconfirmed?).each do |w|
         errors << [
           "#{Weakness.model_name.human} #{w.review_code}",
           [I18n.t('weakness.errors.is_unconfirmed')]
         ]
       end
-      
+
       coi.oportunities.each do |o|
         unless o.must_be_approved?
           errors << [
@@ -384,7 +385,7 @@ class Review < ActiveRecord::Base
         ]
       end
     end
-    
+
     self.finding_review_assignments.each do |fra|
       if !fra.finding.repeated? && !fra.finding.implemented_audited?
         errors << [
@@ -393,7 +394,7 @@ class Review < ActiveRecord::Base
         ]
       end
     end
-    
+
     if self.survey.blank?
       review_errors << I18n.t('review.errors.without_survey')
     end
@@ -481,41 +482,41 @@ class Review < ActiveRecord::Base
 
     work_papers
   end
-  
+
   def grouped_control_objective_items(options = {})
     grouped_control_objective_items = {}
     control_objective_items = options[:hide_excluded_from_score] ?
       self.control_objective_items.reject(&:exclude_from_score) :
       self.control_objective_items
-    
+
     control_objective_items.each do |coi|
       grouped_control_objective_items[coi.process_control] ||= []
-      
+
       unless grouped_control_objective_items[coi.process_control].include?(coi)
         grouped_control_objective_items[coi.process_control] << coi
       end
     end
-    
+
     grouped_control_objective_items.to_a.sort do |gcoi1, gcoi2|
       pc1 = gcoi1.last.map(&:order_number).compact.min || -1
       pc2 = gcoi2.last.map(&:order_number).compact.min || -1
-      
+
       pc1 <=> pc2
     end
   end
 
   def survey_pdf(organization = nil)
-    pdf = PDF::Writer.create_generic_pdf(:portrait)
+    pdf = Prawn::Document.create_generic_pdf(:portrait)
 
     pdf.add_review_header organization, self.identification.strip,
       self.plan_item.project.strip
     pdf.add_title Review.human_attribute_name 'survey'
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.text self.survey, :font_size => PDF_FONT_SIZE, :justification => :full
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     note_text = self.file_model.try(:file?) ?
       I18n.t('review.survey.with_attachment') :
@@ -527,11 +528,11 @@ class Review < ActiveRecord::Base
   end
 
   def absolute_survey_pdf_path
-    PDF::Writer.absolute_path self.survey_pdf_name, 'review_surveys', self.id
+    Prawn::Document.absolute_path self.survey_pdf_name, 'review_surveys', self.id
   end
 
   def relative_survey_pdf_path
-    PDF::Writer.relative_path self.survey_pdf_name, 'review_surveys', self.id
+    Prawn::Document.relative_path self.survey_pdf_name, 'review_surveys', self.id
   end
 
   def survey_pdf_name
@@ -544,28 +545,19 @@ class Review < ActiveRecord::Base
   def score_sheet(organization = nil, draft = false)
     pdf = self.score_sheet_common_header organization, false, draft
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
-    columns, column_data = {}, []
+    column_headers, column_widths, column_data = [], [], []
     process_controls = {}
 
-    columns['name'] = PDF::SimpleTable::Column.new('name') do |c|
-      c.heading = ''
-      c.justification = :left
-      c.width = pdf.percent_width(70)
-    end
+    column_headers << ''
+    column_widths << pdf.percent_width(70)
 
-    columns['relevance'] = PDF::SimpleTable::Column.new('relevance') do |c|
-      c.heading = I18n.t('review.control_objectives_relevance')
-      c.justification = :center
-      c.width = pdf.percent_width(15)
-    end
+    column_headers << I18n.t('review.control_objectives_relevance')
+    column_widths << pdf.percent_width(15)
 
-    columns['effectiveness'] = PDF::SimpleTable::Column.new('effectiveness') do |c|
-      c.heading = I18n.t('review.control_objectives_effectiveness')
-      c.justification = :center
-      c.width = pdf.percent_width(15)
-    end
+    column_headers << I18n.t('review.control_objectives_effectiveness')
+    column_widths << pdf.percent_width(15)
 
     self.control_objective_items.each do |coi|
       process_controls[coi.process_control.name] ||= []
@@ -574,11 +566,11 @@ class Review < ActiveRecord::Base
       ]
     end
 
-    column_data << {
-      'name' => "<b>#{Review.model_name.human}</b> ".to_iso,
-      'relevance' => '',
-      'effectiveness' => "<b>#{self.score}%</b>*".to_iso
-    }
+    column_data << [
+      "<b>#{Review.model_name.human}</b> ",
+      '',
+      "<b>#{self.score}%</b>*"
+    ]
 
     process_controls.each do |process_control, coi_data|
       coi_relevance_count = coi_data.inject(0) do |t, e|
@@ -589,53 +581,47 @@ class Review < ActiveRecord::Base
       end
       exclude_from_score = coi_data.all? { |e| e[3] }
 
-      column_data << {
-        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
-        'relevance' => '',
-        'effectiveness' =>
-          exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
-      }
+      column_data << [
+        "#{ProcessControl.model_name.human}: #{process_control}",
+        '',
+        exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
+      ]
 
       coi_data.each do |coi|
-        column_data << {
-          'name' =>
-            "        <C:bullet /> <i>#{ControlObjectiveItem.model_name.human}: " +
-            "#{coi[0]}</i>".to_iso,
-          'relevance' => coi[3] ? '-' : "<i>#{coi[2]}</i>".to_iso,
-          'effectiveness' => coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
-        }
+        column_data << [
+          "        • <i>#{ControlObjectiveItem.model_name.human}: " +
+            "#{coi[0]}</i>",
+          coi[3] ? '-' : "<i>#{coi[2]}</i>",
+          coi[3] ? '-' : "<i>#{coi[1].round}%</i>"
+        ]
       end
     end
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = ['name', 'relevance', 'effectiveness']
-        table.row_gap = PDF_FONT_SIZE
-        table.split_rows = true
-        table.font_size = PDF_FONT_SIZE
-        table.shade_color = Color::RGB::White
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
-    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
-
-    pdf.text "<c:uline><b>#{I18n.t('review.notes')}</b></c:uline>:",
-      :font_size => (PDF_FONT_SIZE * 0.75).round
-    pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
-    pdf.text(
-      "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
-
+    pdf.move_down((PDF_FONT_SIZE * 0.75).round)
+    pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
+      pdf.text "<b>#{I18n.t('review.notes')}</b>:",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
+      pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true
+      pdf.text(
+        "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true)
+    end
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
@@ -645,46 +631,35 @@ class Review < ActiveRecord::Base
       pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      columns, column_data = {}, []
+      column_headers, column_widths, column_data = [], [], []
       column_names = {'description' => 60, 'risk' => 15, 'state' => 25}
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = Weakness.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << Weakness.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
       end
 
       weaknesses.each do |weakness|
         description = "<b>#{Weakness.human_attribute_name('review_code')}</b>: "
         description << "#{weakness.review_code}\n#{weakness.description}"
 
-        column_data << {
-          'description' => description.to_iso,
-          'risk' => weakness.risk_text.to_iso,
-          'state' => weakness.state_text.to_iso
-        }
+        column_data << [
+          description,
+          weakness.risk_text,
+          weakness.state_text
+        ]
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['description', 'risk', 'state']
-          table.split_rows = true
-          table.row_gap = (PDF_FONT_SIZE * 1.5).round
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
+       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+          end
         end
       end
     end
@@ -695,50 +670,39 @@ class Review < ActiveRecord::Base
       pdf.add_subtitle I18n.t('review.oportunities_summary'), PDF_FONT_SIZE,
         PDF_FONT_SIZE
 
-      columns, column_data = {}, []
+      column_headers, column_widths, column_data = [], [], []
       column_names = {'description' => 75, 'state' => 25}
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = Oportunity.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << Oportunity.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
       end
 
       oportunities.each do |oportunity|
         description = "<b>#{Oportunity.human_attribute_name('review_code')}</b>"
         description << ": #{oportunity.review_code}\n#{oportunity.description}"
 
-        column_data << {
-          'description' => description.to_iso,
-          'state' => oportunity.state_text.to_iso
-        }
+        column_data << [
+          description,
+          oportunity.state_text
+        ]
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['description', 'state']
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
-        end
+       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
       end
     end
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_review_auditors_table(
       self.review_user_assignments.reject { |rua| rua.audited? })
@@ -749,23 +713,17 @@ class Review < ActiveRecord::Base
   def global_score_sheet(organization = nil, draft = false)
     pdf = self.score_sheet_common_header organization, true, draft
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
-    columns, column_data = {}, []
+    column_headers, column_widths, column_data = [], [], []
     process_controls = {}
 
-    columns['name'] = PDF::SimpleTable::Column.new('name') do |c|
-      c.heading = ''
-      c.justification = :left
-      c.width = pdf.percent_width(70)
-    end
+    column_headers << ''
+    column_widths << pdf.percent_width(70)
 
-    columns['effectiveness'] = PDF::SimpleTable::Column.new('effectiveness') do |c|
-      c.heading = I18n.t('review.control_objectives_effectiveness')
-      c.justification = :center
-      c.width = pdf.percent_width(30)
-    end
-    
+    column_headers << I18n.t('review.control_objectives_effectiveness')
+    column_widths << pdf.percent_width(30)
+
     self.control_objective_items.each do |coi|
       process_controls[coi.process_control.name] ||= []
       process_controls[coi.process_control.name] << [
@@ -773,10 +731,10 @@ class Review < ActiveRecord::Base
       ]
     end
 
-    column_data << {
-      'name' => "<b>#{Review.model_name.human}</b>".to_iso,
-      'effectiveness' => "<b>#{self.score}%</b>*".to_iso
-    }
+    column_data << [
+      "<b>#{Review.model_name.human}</b>",
+      "<b>#{self.score}%</b>*"
+    ]
 
     process_controls.each do |process_control, coi_data|
       coi_relevance_count = coi_data.inject(0) do |t, e|
@@ -787,41 +745,38 @@ class Review < ActiveRecord::Base
       end
       exclude_from_score = coi_data.all? { |e| e[3] }
 
-      column_data << {
-        'name' => "#{ProcessControl.model_name.human}: #{process_control}".to_iso,
-        'effectiveness' =>
-          exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
-      }
+      column_data << [
+        "#{ProcessControl.model_name.human}: #{process_control}",
+        exclude_from_score ? '-' : "#{effectiveness_average.round}%**"
+      ]
     end
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = ['name', 'effectiveness']
-        table.row_gap = PDF_FONT_SIZE
-        table.split_rows = true
-        table.font_size = PDF_FONT_SIZE
-        table.shade_color = Color::RGB::White
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
-    pdf.move_pointer((PDF_FONT_SIZE * 0.75).round)
+    pdf.move_down((PDF_FONT_SIZE * 0.75).round)
 
-    pdf.text "<c:uline><b>#{I18n.t('review.notes')}</b></c:uline>:",
-      :font_size => (PDF_FONT_SIZE * 0.75).round
-    pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
-    pdf.text(
-      "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full)
+    pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
+      pdf.text "<b>#{I18n.t('review.notes')}</b>:",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
+      pdf.text "<i>* #{I18n.t('review.review_qualification_explanation')}</i>",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true
+      pdf.text(
+        "<i>** #{I18n.t('review.process_control_qualification_explanation')}</i>",
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+        :inline_format => true)
+    end
 
     weaknesses = self.final_weaknesses.all_for_report
 
@@ -832,21 +787,18 @@ class Review < ActiveRecord::Base
       pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      columns, column_data = {}, []
-      column_names = {
-        'count' => I18n.t('review.weaknesses_count'),
-        'risk' => Weakness.human_attribute_name(:risk),
-        'state' => Weakness.human_attribute_name(:state)
-      }
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [
+        I18n.t('review.weaknesses_count'),
+        Weakness.human_attribute_name(:risk),
+        Weakness.human_attribute_name(:state)
+      ]
 
-      column_names.each do |col_name, col_text|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = col_text
-          c.justification = :full
-          c.width = pdf.percent_width(100.0 / column_names.size)
-        end
+      column_names.each do |col_name|
+        column_headers << col_name
+        column_widths << pdf.percent_width(100.0 / column_names.size)
       end
-      
+
       weakness = weaknesses.first
       risk_text, state_text = weakness.risk_text, weakness.state_text
       count = 0
@@ -855,11 +807,11 @@ class Review < ActiveRecord::Base
         if risk_text == w.risk_text && state_text == w.state_text
           count += 1
         else
-          column_data << {
-            'count' => count,
-            'risk' => risk_text.to_iso,
-            'state' => state_text.to_iso
-          }
+          column_data << [
+            count,
+            risk_text,
+            state_text
+          ]
 
           risk_text, state_text = w.risk_text, w.state_text
           count = 1
@@ -867,32 +819,24 @@ class Review < ActiveRecord::Base
       end
 
       if count > 0
-        column_data << {
-          'count' => count,
-          'risk' => risk_text.to_iso,
-          'state' => state_text.to_iso
-        }
+        column_data << [
+          count,
+          risk_text,
+          state_text
+        ]
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['count', 'risk', 'state']
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
-        end
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
       end
     end
 
@@ -905,18 +849,15 @@ class Review < ActiveRecord::Base
       pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 
-      columns, column_data = {}, []
-      column_names = {
-        'count' => Oportunity.human_attribute_name(:count),
-        'state' => Oportunity.human_attribute_name(:state)
-      }
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [
+        Oportunity.human_attribute_name(:count),
+        Oportunity.human_attribute_name(:state)
+      ]
 
-      column_names.each do |col_name, col_text|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = col_text
-          c.justification = :full
-          c.width = pdf.percent_width(100.0 / column_names.size)
-        end
+      column_names.each do |col_name|
+        column_headers << col_name
+        column_widths << pdf.percent_width(100.0 / column_names.size)
       end
 
       oportunity = oportunities.first
@@ -927,10 +868,10 @@ class Review < ActiveRecord::Base
         if state_text == o.state_text
           count += 1
         else
-          column_data << {
-            'count' => count,
-            'state' => state_text.to_iso
-          }
+          column_data << [
+            count,
+            state_text
+          ]
 
           state_text = o.state_text
           count = 1
@@ -938,35 +879,27 @@ class Review < ActiveRecord::Base
       end
 
       if count > 0
-        column_data << {
-          'count' => count,
-          'state' => state_text.to_iso
-        }
+        column_data << [
+          count,
+          state_text
+        ]
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['count', 'state']
-          table.split_rows = true
-          table.row_gap = PDF_FONT_SIZE
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
-        end
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
       end
     end
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_review_auditors_table(
       self.review_user_assignments.select { |rua| !rua.audited? })
@@ -977,7 +910,7 @@ class Review < ActiveRecord::Base
 
   def score_sheet_common_header(organization = nil, global = false,
       draft = false)
-    pdf = PDF::Writer.create_generic_pdf(:portrait)
+    pdf = Prawn::Document.create_generic_pdf(:portrait)
 
     pdf.add_review_header organization, self.identification,
       self.plan_item.project
@@ -986,7 +919,7 @@ class Review < ActiveRecord::Base
 
     pdf.add_watermark(I18n.t('pdf.draft')) if draft
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       self.business_unit.business_unit_type.business_unit_label,
@@ -1005,7 +938,7 @@ class Review < ActiveRecord::Base
         :end => I18n.l(self.plan_item.end, :format => :long)
       )
     )
-    
+
     users = self.review_user_assignments.reject { |rua| rua.audited? }
     pdf.add_description_item(I18n.t('review.auditors'),
       users.map { |rua| rua.user.full_name }.join('; '))
@@ -1021,7 +954,8 @@ class Review < ActiveRecord::Base
     scores = self.get_parameter(:admin_review_scores)
     review_score = self.score_array.first
     columns = {}
-    column_data = {}
+    column_data = []
+    column_headers, column_widths = [], []
 
     scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
 
@@ -1030,46 +964,35 @@ class Review < ActiveRecord::Base
       max_percentage = i > 0 && scores[i - 1] ? scores[i - 1][1] - 1 : 100
       column_text = "#{score[0]}"
 
-      columns[score[1]] = PDF::SimpleTable::Column.new(score[1]) do |c|
-        heading = PDF::SimpleTable::Column::Heading.new(
-          score[0] != review_score ? column_text.to_iso :
-            "<b>#{column_text.upcase} (#{self.score}%)</b>".to_iso
+      column_headers << (score[0] != review_score ? column_text :
+            "<b>#{column_text.upcase} (#{self.score}%)</b>"
         )
-        heading.justification = :center
-        c.heading = heading
-        c.justification = :center
-        c.width = pdf.percent_width(100.0 / scores.size)
-      end
 
-      column_data[score[1]] = "#{max_percentage}% - #{min_percentage}%"
+      column_widths << pdf.percent_width(100.0 / scores.size)
+
+      column_data << "#{max_percentage}% - #{min_percentage}%"
     end
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = [column_data]
-        table.column_order = scores.map { |s| s[1] }
-        table.header_gap = (PDF_FONT_SIZE * 1.25).round
-        table.row_gap = (PDF_FONT_SIZE * 0.25).round
-        table.protect_rows = 2
-        table.heading_font_size = (PDF_FONT_SIZE * 1.25).round
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_rows = :none
-        table.position = :left
-        table.orientation = :right
-        table.inner_line_style = PDF::Writer::StrokeStyle.new(0.01)
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table([column_data].insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
   end
 
   def absolute_score_sheet_path
-    PDF::Writer.absolute_path(self.score_sheet_name, 'score_sheets', self.id)
+    Prawn::Document.absolute_path(self.score_sheet_name, 'score_sheets', self.id)
   end
 
   def relative_score_sheet_path
-    PDF::Writer.relative_path(self.score_sheet_name, 'score_sheets', self.id)
+    Prawn::Document.relative_path(self.score_sheet_name, 'score_sheets', self.id)
   end
 
   def score_sheet_name
@@ -1079,12 +1002,12 @@ class Review < ActiveRecord::Base
   end
 
   def absolute_global_score_sheet_path
-    PDF::Writer.absolute_path(self.global_score_sheet_name,
+    Prawn::Document.absolute_path(self.global_score_sheet_name,
       'global_score_sheets', self.id)
   end
 
   def relative_global_score_sheet_path
-    PDF::Writer.relative_path(self.global_score_sheet_name,
+    Prawn::Document.relative_path(self.global_score_sheet_name,
       'global_score_sheets', self.id)
   end
 
@@ -1118,7 +1041,7 @@ class Review < ActiveRecord::Base
           self.add_work_paper_to_zip pa_wp, dirs[:control_objectives], zipfile
         end
       end
-      
+
       if self.has_final_review?
         weaknesses = self.final_weaknesses
         oportunities = self.final_oportunities
@@ -1195,7 +1118,7 @@ class Review < ActiveRecord::Base
 
   def add_file_to_zip(file_path, zip_filename, zip_dir, zipfile)
     zip_filename = File.join zip_dir, zip_filename.sanitized_for_filename
-    
+
     zipfile.add(zip_filename, file_path) { true } if File.exist?(file_path)
   end
 
@@ -1216,7 +1139,7 @@ class Review < ActiveRecord::Base
     last_number = (last_review_code || '0').match(/\d+\Z/)[0].to_i || 0
 
     raise 'A review can not have more than 999 findings' if last_number > 999
-    
+
     "#{prefix}#{'%.3d' % last_number.next}".strip
   end
 end

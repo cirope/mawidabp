@@ -87,7 +87,7 @@ module Prawn
 
         self.move_down margin
 
-        self.text string, :indent_paragraphs => left.pt
+        self.text string, :indent_paragraphs => left.pt, :inline_format => true
 
         self.move_down margin
       end

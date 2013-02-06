@@ -82,7 +82,7 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
 end
 
-# Agrega una conversión de UTF-8 a ISO a la funcion text de PDF::Writer
+# Agrega una conversión de UTF-8 a ISO a la funcion text de Prawn::Document
 require 'iconv'
 
 CONVERTER_TO_ISO = Iconv.new 'ISO-8859-15//IGNORE//TRANSLIT', 'UTF-8'
