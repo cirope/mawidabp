@@ -281,7 +281,7 @@ class FindingsController < ApplicationController
       ]
     ).where(@conditions)
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title t('finding.index_title')
@@ -298,8 +298,8 @@ class FindingsController < ApplicationController
       ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
             :follow_up_date : :solution_date), 10]
     ]
-    columns = {}
-    column_data = []
+
+    column_data, column_headers, column_widths = [], [], []
 
     if detailed
       column_order << [
@@ -310,17 +310,12 @@ class FindingsController < ApplicationController
       ]
     end
 
-    column_order.each do |col_id, col_name, col_with|
-      if col_with > 0
-        columns[col_id] = PDF::SimpleTable::Column.new(col_id) do |c|
-          c.heading = col_name
-          c.width = pdf.percent_width col_with
-        end
-      end
+    column_order.each do |column, col_name, col_width|
+      column_headers << col_name if col_width > 0
     end
 
     unless (@columns - ['issue_date']).blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pointer_moved = true
       filter_columns = (@columns - ['issue_date']).map do |c|
         "<b>#{column_order.detect { |co| co[0] == c }[1]}</b>"
@@ -330,11 +325,12 @@ class FindingsController < ApplicationController
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence,
         :count => (@columns - ['issue_date']).size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        :font_size => (PDF_FONT_SIZE * 0.75).round,
+        :inline_format => true
     end
 
     unless @order_by_column_name.blank?
-      pdf.move_pointer PDF_FONT_SIZE unless pointer_moved
+      pdf.move_down PDF_FONT_SIZE unless pointer_moved
       pdf.text t('finding.pdf.sorted_by',
         :column => "<b>#{@order_by_column_name}</b>"),
         :font_size => (PDF_FONT_SIZE * 0.75).round
@@ -360,7 +356,7 @@ class FindingsController < ApplicationController
 
         follow_up_dates.each { |fud| dates << l(fud, :format => :minimal) }
 
-        rescheduled_text << dates.join("\n")
+        rescheduled_text << dates.join("\n\n")
       end
 
       audited = finding.reload.users.select(&:audited?).map do |u|
@@ -376,7 +372,7 @@ class FindingsController < ApplicationController
         ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
         ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text.to_iso}" if finding.kind_of?(Weakness)),
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
-        "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description}"
+        "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}"
       ].compact.join("\n")
 
       unless (relations = finding.finding_relations).blank?
@@ -394,46 +390,37 @@ class FindingsController < ApplicationController
         finding_data << repeated_children.map(&:to_s).join(' | ')
       end
 
-      column_data << {
-        'description' => finding_data.to_iso,
-        'rescheduled' => rescheduled_text.to_iso,
-        'date' => stale ? "<b>#{date_text}</b>" : date_text,
-        'audit_comments' => (finding.audit_comments.try(:to_iso) if detailed),
-        'answer' => (finding.answer.try(:to_iso) if detailed)
-      }
+      column_data << [
+        finding_data,
+        rescheduled_text,
+        stale ? "<b>#{date_text}</b>" : date_text,
+        (finding.audit_comments if detailed),
+        (finding.answer if detailed)
+      ]
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.reject{|co| co.last == 0}.map(&:first)
-        table.row_gap = (PDF_FONT_SIZE * 1.25).round
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      column_data.each do |data|
+        column_headers.each_with_index do |header, i|
+          header = (header == column_headers.first) ? "\n<b>#{header}</b>:\n\n" : "<b>#{header}</b>: "
+          pdf.text "#{header} #{data[i]}", :inline_format => true
+        end
       end
     end
 
     if findings.count > FINDING_MAX_PDF_ROWS
-      pdf.move_pointer PDF_FONT_SIZE
-      pdf.text "<b>#{t('finding.pdf.size_warning', :count => FINDING_MAX_PDF_ROWS)}</b>"
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text "<b>#{t('finding.pdf.size_warning', :count => FINDING_MAX_PDF_ROWS)}</b>",
+        :inline_format => true
     end
 
     pdf_name = t 'finding.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, Finding.table_name)
 
-    redirect_to PDF::Writer.relative_path(pdf_name, Finding.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, Finding.table_name)
   end
 
   # Crea el documento de seguimiento de la oportunidad
