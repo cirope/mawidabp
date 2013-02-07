@@ -1178,21 +1178,21 @@ class Finding < ActiveRecord::Base
   end
 
   def follow_up_pdf(organization = nil)
-    pdf = PDF::Writer.create_generic_pdf(:portrait)
+    pdf = Prawn::Document.create_generic_pdf(:portrait)
     issue_date = self.issue_date ? I18n.l(self.issue_date, :format => :long) :
       I18n.t('finding.without_conclusion_final_review')
 
-    add_finding_follow_up_header pdf, organization
+    pdf.add_generic_report_header organization
 
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
         '.title'), (PDF_FONT_SIZE * 1.25).round, :center
 
-    pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
+    pdf.move_down((PDF_FONT_SIZE * 1.25).round)
 
     pdf.add_title I18n.t("finding.follow_up_report.#{self.class.name.downcase}"+
         '.subtitle'), (PDF_FONT_SIZE * 1.25).round, :left
 
-    pdf.move_pointer((PDF_FONT_SIZE * 1.25).round)
+    pdf.move_down((PDF_FONT_SIZE * 1.25).round)
 
     pdf.add_description_item(Review.model_name.human,
       "#{self.review.long_identification} (#{issue_date})", 0, false)
@@ -1271,20 +1271,17 @@ class Finding < ActiveRecord::Base
     end
 
     pdf.add_title I18n.t('finding.change_history'),
-      (PDF_FONT_SIZE * 1.25).round, :full
+      (PDF_FONT_SIZE * 1.25).round
 
     if important_changed_versions.size > 1
       last_checked_version = self.versions.first
-      column_names = {'attribute' => 30, 'old_value' => 35, 'new_value' => 35}
-      columns, column_data = {}, []
+      column_names = [['attribute', 30 ], ['old_value', 35], ['new_value', 35]]
+      column_headers, column_widths, column_data = [], [], []
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = col_name == 'attribute' ?
-            '' : I18n.t("version.column_#{col_name}")
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << (col_name == 'attribute' ?
+          '' : I18n.t("version.column_#{col_name}"))
+        column_widths << pdf.percent_width(col_size)
       end
 
       previous_version = important_changed_versions.shift
@@ -1300,45 +1297,37 @@ class Finding < ActiveRecord::Base
           version_method_name = version_finding.respond_to?(
            "#{attribute}_text") ? "#{attribute}_text".to_sym : attribute
 
-          column_data << {
-            'attribute' => Finding.human_attribute_name(attribute).to_iso,
-            'old_value' => previous_finding.try(:send, previous_method_name).
-              to_translated_string.to_iso,
-            'new_value' => version_finding.try(:send, version_method_name).
-              to_translated_string.to_iso
-          }
+          column_data << [
+            Finding.human_attribute_name(attribute),
+            previous_finding.try(:send, previous_method_name).
+              to_translated_string,
+            version_finding.try(:send, version_method_name).
+              to_translated_string
+          ]
         end
 
         unless column_data.blank?
-          pdf.move_pointer PDF_FONT_SIZE
+          pdf.move_down PDF_FONT_SIZE
 
           pdf.add_description_item(Version.human_attribute_name(:created_at),
             I18n.l(version.created_at || version_finding.updated_at,
               :format => :long))
           pdf.add_description_item(User.model_name.human,
             version.previous.try(:whodunnit) ?
-              User.find(version.previous.whodunnit).try(:full_name) : nil
+              User.find(version.previous.whodunnit).try(:full_name) : '--'
           )
 
-          pdf.move_pointer PDF_FONT_SIZE
+          pdf.move_down PDF_FONT_SIZE
 
-          PDF::SimpleTable.new do |table|
-            table.width = pdf.page_usable_width
-            table.columns = columns
-            table.data = column_data
-            table.column_order = ['attribute', 'old_value', 'new_value']
-            table.split_rows = true
-            table.row_gap = (PDF_FONT_SIZE * 0.75).round
-            table.font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_rows = :none
-            table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-            table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-            table.shade_headings = true
-            table.position = :left
-            table.orientation = :right
-            table.show_lines = :all
-            table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-            table.render_on pdf
+          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+            table_options = pdf.default_table_options(column_widths)
+
+            pdf.table(column_data.insert(0, column_headers), table_options) do
+              row(0).style(
+                :background_color => 'cccccc',
+                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              )
+            end
           end
         end
 
@@ -1352,153 +1341,118 @@ class Finding < ActiveRecord::Base
     end
 
     unless self.comments.blank?
-      column_names = {'comment' => 50, 'user_id' => 30, 'created_at' => 20}
-      columns, column_data = {}, []
+      column_names = [['comment', 50], ['user_id', 30], ['created_at', 20]]
+      column_headers, column_widths, column_data = [], [], []
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = Comment.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << Comment.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
       end
 
       self.comments.each do |comment|
-        column_data << {
-          'comment' => comment.comment.try(:to_iso),
-          'user_id' => comment.user.try(:full_name).try(:to_iso),
-          'created_at' => I18n.l(comment.created_at,
-            :format => :validation).to_iso
-        }
+        column_data << [
+          comment.comment,
+          comment.user.try(:full_name),
+          I18n.l(comment.created_at,
+            :format => :validation)
+        ]
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
-      pdf.add_title I18n.t('finding.comments'), (PDF_FONT_SIZE * 1.25).round,
-        :full
+      pdf.add_title I18n.t('finding.comments'), (PDF_FONT_SIZE * 1.25).round
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['user_id', 'comment', 'created_at']
-          table.split_rows = true
-          table.row_gap = (PDF_FONT_SIZE * 0.75).round
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     end
 
     unless self.work_papers.blank?
-      column_names = {'name' => 20, 'code' => 20, 'number_of_pages' => 20,
-        'description' => 40}
-      columns, column_data = {}, []
+      column_names = [['name', 20], ['code', 20], ['number_of_pages', 20],
+        ['description', 40]]
+      column_headers, column_widths, column_data = [], [], []
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = WorkPaper.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << WorkPaper.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
       end
 
       self.work_papers.each do |work_paper|
-        column_data << {
-          'name' => work_paper.name.try(:to_iso),
-          'code' => work_paper.code.try(:to_iso),
-          'number_of_pages' => work_paper.number_of_pages || '-',
-          'description' => work_paper.description.try(:to_iso)
-        }
+        column_data << [
+          work_paper.name,
+          work_paper.code,
+          work_paper.number_of_pages || '-',
+          work_paper.description
+        ]
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title I18n.t('finding.follow_up_report.work_papers'),
-        (PDF_FONT_SIZE * 1.25).round, :full
+        (PDF_FONT_SIZE * 1.25).round
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['name', 'code', 'number_of_pages',
-            'description']
-          table.split_rows = true
-          table.row_gap = (PDF_FONT_SIZE * 0.75).round
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     end
 
     unless self.finding_answers.blank?
-      column_names = {'answer' => 50, 'user_id' => 30, 'created_at' => 20}
-      columns, column_data = {}, []
+      column_names = [['answer', 50], ['user_id', 30], ['created_at', 20]]
+      column_headers, column_widths, column_data = [], [], []
 
       column_names.each do |col_name, col_size|
-        columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-          c.heading = FindingAnswer.human_attribute_name col_name
-          c.justification = :full
-          c.width = pdf.percent_width(col_size)
-        end
+        column_headers << FindingAnswer.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
       end
 
       self.finding_answers.each do |finding_answer|
-        column_data << {
-          'answer' => finding_answer.answer.try(:to_iso),
-          'user_id' => finding_answer.user.try(:full_name).try(:to_iso),
-          'created_at' => I18n.l(finding_answer.created_at,
-            :format => :validation).to_iso
-        }
+        column_data << [
+          finding_answer.answer,
+          finding_answer.user.try(:full_name),
+          I18n.l(finding_answer.created_at,
+            :format => :validation)
+        ]
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title I18n.t('finding.follow_up_report.follow_up_comments'),
-        (PDF_FONT_SIZE * 1.25).round, :full
+        (PDF_FONT_SIZE * 1.25).round
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = ['user_id', 'answer', 'created_at']
-          table.split_rows = true
-          table.row_gap = (PDF_FONT_SIZE * 0.75).round
-          table.font_size = PDF_FONT_SIZE
-          table.shade_rows = :none
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.show_lines = :all
-          table.inner_line_style = PDF::Writer::StrokeStyle.new(0.5)
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
     end
@@ -1507,12 +1461,12 @@ class Finding < ActiveRecord::Base
   end
 
   def absolute_follow_up_pdf_path
-    PDF::Writer.absolute_path self.follow_up_pdf_name, Finding.table_name,
+    Prawn::Document.absolute_path self.follow_up_pdf_name, Finding.table_name,
       self.id
   end
 
   def relative_follow_up_pdf_path
-    PDF::Writer.relative_path self.follow_up_pdf_name, Finding.table_name,
+    Prawn::Document.relative_path self.follow_up_pdf_name, Finding.table_name,
       self.id
   end
 
@@ -1650,7 +1604,6 @@ class Finding < ActiveRecord::Base
       description << repeated_children.map(&:to_s).join(' | ').try(:to_iso)
     end
 
-
     column_data = [
       self.review.to_s,
       self.review_code,
@@ -1673,31 +1626,6 @@ class Finding < ActiveRecord::Base
   end
 
   private
-
-  def add_finding_follow_up_header(pdf, organization, date = Date.today)
-    pdf.open_object do |heading|
-      font_size = PDF_FONT_SIZE
-      font_height_size = pdf.font_height(font_size)
-      y_top = pdf.page_height - (pdf.top_margin / 2)
-
-      if organization.try(:image_model) &&
-          File.exists?(organization.image_model.image.thumb.path)
-        pdf.add_image_from_file(
-          organization.image_model.image.thumb.path,
-          pdf.left_margin, pdf.absolute_top_margin + font_height_size,
-          organization.image_model.image_geometry(:pdf_thumb)[:width],
-          organization.image_model.image_geometry(:pdf_thumb)[:height])
-      end
-
-      date_text = I18n.l(date, :format => :long) if date
-      text = I18n.t 'finding.follow_up_report.print_date', :date => date_text
-      x_start = pdf.absolute_right_margin - pdf.text_width(text, font_size)
-      pdf.add_text(x_start, y_top, text.to_iso, font_size)
-
-      pdf.close_object
-      pdf.add_object(heading, :all_pages)
-    end
-  end
 
   def self.to_csv(detailed = false, completed = 'incomplete')
     rows = []
