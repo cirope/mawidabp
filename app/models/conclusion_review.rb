@@ -768,8 +768,8 @@ class ConclusionReview < ActiveRecord::Base
 
       unless oportunities.blank?
         pdf.move_down PDF_FONT_SIZE * 2
-        column_order.delete_at 1
-        columns.delete_at 1
+        column_headers.delete_at 1
+        column_widths.delete_at 1
       end
 
       oportunities.each do |oportunity|
