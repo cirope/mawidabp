@@ -1135,7 +1135,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_nothing_raised(Exception) { get :export_to_pdf }
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('user.pdf.pdf_name'), User.table_name)
   end
 
@@ -1149,7 +1149,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('user.pdf.pdf_name'), User.table_name)
   end
 

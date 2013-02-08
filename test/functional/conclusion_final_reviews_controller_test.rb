@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de informes finales
@@ -179,7 +180,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   test 'export conclusion final review' do
     perform_auth
-    
+
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
@@ -189,10 +190,10 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to conclusion_review.relative_pdf_path
   end
-  
+
   test 'export conclusion draft review without control objectives excluded from score' do
     perform_auth
-    
+
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
@@ -383,7 +384,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_nothing_raised(Exception) { get :export_list_to_pdf }
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
   end
@@ -398,7 +399,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
       ConclusionFinalReview.table_name)
   end
@@ -407,25 +408,25 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Administrator
     assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
     get :auto_complete_for_user, { :q => 'blank', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, users.size # Blank and Expired blank
     assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
     get :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size # None
   end
 end

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de procedimientos de control
@@ -195,8 +196,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :export_to_pdf, :id => procedure_control.id
     end
-    
-    assert_redirected_to PDF::Writer.relative_path('procedure_control.pdf',
+
+    assert_redirected_to Prawn::Document.relative_path('procedure_control.pdf',
       'procedure_controls', procedure_control.id)
   end
 

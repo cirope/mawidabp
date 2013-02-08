@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de versiones
@@ -55,7 +56,7 @@ class VersionsControllerTest < ActionController::TestCase
         :range => {:from_date => from_date, :to_date => to_date}
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('version.pdf_list_name',
         :from_date => from_date.to_formatted_s(:db),
         :to_date => to_date.to_formatted_s(:db)), Version.table_name)
