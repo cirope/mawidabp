@@ -79,7 +79,7 @@ class ConclusionAuditReportsController < ApplicationController
               "%.2f%% (#{currency_mask % amount_difference.abs})" % deviation
 
             detailed_data[:data] << [
-              resource.resource_name.to_iso,
+              resource.resource_name,
               currency_mask % estimated_amount,
               currency_mask % real_amount,
               deviation_text
@@ -90,7 +90,7 @@ class ConclusionAuditReportsController < ApplicationController
             real_amount = real_utilizations.sum(&:cost)
 
             detailed_data[:data] << [
-              resource.resource_name.to_iso,
+              resource.resource_name,
               (currency_mask % 0),
               (currency_mask % real_amount),
               "-100.00% (#{currency_mask % real_amount})"

@@ -20,11 +20,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <% @weaknesses_data[period].each do |column| %>
-              <td><%= raw column.to_utf8 %></td>
-            <% end %>
-          </tr>
+          <% @weaknesses_data[period].each do |columns| %>
+            <tr>
+              <% columns.each do |column| %>
+                <td><%= raw column %></td>
+              <% end %>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     <% else %>
@@ -46,13 +48,13 @@
           </tr>
         </thead>
         <tbody>
-
+          <% @oportunities_data[period].each do |columns| %>
             <tr>
-              <% @oportunities_data[period].each do |column| %>
-                <td><%= raw column.to_utf8 %></td>
+              <% columns.each do |column| %>
+                <td><%= raw column %></td>
               <% end %>
             </tr>
-
+          <% end %>
         </tbody>
       </table>
     <% else %>

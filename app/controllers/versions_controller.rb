@@ -74,52 +74,44 @@ class VersionsController < ApplicationController
       }
     ).order('created_at DESC')
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title @title
 
     column_order = [['created_at', 12], ['whodunnit', 28], ['item', 50],
       ['event', 10]]
-    columns = {}
-    column_data = []
+    column_data, column_headers, column_widths = [], [], []
 
-    column_order.each do |col_name, col_with|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = Version.human_attribute_name col_name
-        c.width = pdf.percent_width col_with
-      end
+    column_order.each do |col_name, col_width|
+      column_headers << Version.human_attribute_name(col_name)
+      column_widths << pdf.percent_width(col_width)
     end
 
     versions.each do |version|
-      column_data << {
-        'created_at' => l(version.created_at, :format => :minimal).to_iso,
-        'whodunnit' => version.whodunnit ?
-          User.find(version.whodunnit).full_name_with_user.to_iso : '-',
-        'item' => version.item ?
-          "#{version.item.class.model_name.human} (#{version.item})".to_iso :
+      column_data << [
+        l(version.created_at, :format => :minimal),
+        version.whodunnit ?
+          User.find(version.whodunnit).full_name_with_user : '-',
+        version.item ?
+          "#{version.item.class.model_name.human} (#{version.item})" :
           '-',
-        'event' => t("version.event_#{version.event}").to_iso
-      }
+        t("version.event_#{version.event}")
+      ]
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
@@ -129,7 +121,7 @@ class VersionsController < ApplicationController
 
     pdf.custom_save_as(pdf_name, Version.table_name)
 
-    redirect_to PDF::Writer.relative_path(pdf_name, Version.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, Version.table_name)
   end
 
   def load_privileges #:nodoc:

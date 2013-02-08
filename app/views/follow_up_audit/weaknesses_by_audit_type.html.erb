@@ -52,8 +52,8 @@
                     <tbody>
                       <% bu_data[:oportunities_table_data].each do |data| %>
                         <tr>
-                          <td><strong><%= raw data['state'].to_utf8 %></strong></td>
-                          <td><%= raw data['count'] %></td>
+                          <td><strong><%= raw data.first %></strong></td>
+                          <td><%= raw data.last %></td>
                         </tr>
                       <% end %>
                     </tbody>

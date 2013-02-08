@@ -80,12 +80,12 @@ class ErrorRecordsController < ApplicationController
       ]
     ).order('created_at DESC')
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title t('error_record.index_title')
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(t('error_record.period.title'),
       t('error_record.period.range',
@@ -94,45 +94,37 @@ class ErrorRecordsController < ApplicationController
 
     column_order = [['user_id', 20], ['created_at', 15], ['error', 15],
       ['data', 50]]
-    columns = {}
-    column_data = []
+    column_data, column_headers, column_widths = [], [], []
 
     column_order.each do |col_name, col_with|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = ErrorRecord.human_attribute_name col_name
-        c.width = pdf.percent_width col_with
-      end
+      column_headers << ErrorRecord.human_attribute_name(col_name)
+      column_widths << pdf.percent_width(col_with)
     end
 
     error_records.each do |error_record|
       user_name = error_record.user.try(:user) || t('error_record.void_user')
-      
-      column_data << {
-        'user_id' => "<b>#{user_name}</b>".to_iso,
-        'created_at' => error_record.created_at ?
-          l(error_record.created_at, :format => :minimal).to_iso : '-',
-        'error' => error_record.error_text.to_iso,
-        'data' => error_record.data.to_iso
-      }
+
+      column_data << [
+        "<b>#{user_name}</b>",
+        error_record.created_at ?
+          l(error_record.created_at, :format => :minimal) : '-',
+        error_record.error_text,
+        error_record.data
+      ]
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = PDF_FONT_SIZE
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
@@ -142,7 +134,7 @@ class ErrorRecordsController < ApplicationController
 
     pdf.custom_save_as(pdf_name, ErrorRecord.table_name)
 
-    redirect_to PDF::Writer.relative_path(pdf_name, ErrorRecord.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, ErrorRecord.table_name)
   end
 
   private

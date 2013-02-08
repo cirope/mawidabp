@@ -51,8 +51,8 @@
           <tbody>
             <% detailed_data[:data].each do |data| %>
               <tr>
-                <% @detailed_column_order.map(&:first).each do |col_name| %>
-                  <td><%= raw data[col_name] %></td>
+                <% data.each do |col_data| %>
+                  <td><%= raw col_data.to_utf8 %></td>
                 <% end %>
               </tr>
             <% end %>

@@ -478,18 +478,16 @@ module FollowUpCommonReports
                   oportunities_percentage = total_oportunities > 0 ?
                     o_count.to_f / total_oportunities * 100 : 0.0
 
-                  oportunities_table_data << {
-                    'state' => "<b>#{t(:"finding.status_#{s[0]}")}</b>".to_iso,
-                    'count' =>
-                      "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
-                  }
+                  oportunities_table_data << [
+                    "<b>#{t(:"finding.status_#{s[0]}")}</b>",
+                    "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+                  ]
                 end
 
-                oportunities_table_data << {
-                  'state' =>
-                    "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>".to_iso,
-                  'count' => "<b>#{total_oportunities}</b>"
-                }
+                oportunities_table_data << [
+                  "<b>#{t('conclusion_committee_report.weaknesses_by_audit_type.total')}</b>",
+                  "<b>#{total_oportunities}</b>"
+                ]
               end
 
               risk_levels.each do |rl|
@@ -595,7 +593,7 @@ module FollowUpCommonReports
     @periods.each do |period|
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
+        (PDF_FONT_SIZE * 1.25).round
 
       @audit_types.each do |type|
         pdf.move_down PDF_FONT_SIZE * 2
@@ -665,7 +663,7 @@ module FollowUpCommonReports
                   }
 
                   column_headers, column_widths = [], []
-                  columns.each do |col_name, col_data|
+                  columns.each_value do |col_data|
                     column_headers << col_data.first
                     column_widths << pdf.percent_width(col_data.last)
                   end
