@@ -151,7 +151,7 @@ class ConclusionAuditReportsController < ApplicationController
       unless @total_cost_data[period].blank?
         @column_order.each do |column|
           column_headers <<
-              t("conclusion_audit_report.cost_analysis.general_column_#{column.first}")
+            "<b>#{t("conclusion_audit_report.cost_analysis.general_column_#{column.first}")}</b>"
           column_widths << pdf.percent_width(column.last)
         end
 
@@ -177,7 +177,8 @@ class ConclusionAuditReportsController < ApplicationController
         detailed_columns = {}
         column_headers, column_widths = [], []
         @detailed_column_order.each do |col_name, col_width|
-            column_headers << t("conclusion_audit_report.cost_analysis.detailed_column_#{col_name}")
+            column_headers <<
+              "<b>#{t("conclusion_audit_report.cost_analysis.detailed_column_#{col_name}")}</b>"
             column_widths << pdf.percent_width(col_width)
         end
 

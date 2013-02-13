@@ -52,7 +52,7 @@
             <% detailed_data[:data].each do |data| %>
               <tr>
                 <% data.each do |col_data| %>
-                  <td><%= raw col_data.to_utf8 %></td>
+                  <td><%= raw col_data %></td>
                 <% end %>
               </tr>
             <% end %>

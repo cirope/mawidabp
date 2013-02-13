@@ -114,7 +114,7 @@ class FollowUpAuditController < ApplicationController
 
     @column_order.each do |column|
       column_headers <<
-          t("follow_up_audit.cost_analysis.column_#{column.first}")
+        "<b>#{t("follow_up_audit.cost_analysis.column_#{column.first}")}</b>"
       column_widths << pdf.percent_width(column.last)
     end
 

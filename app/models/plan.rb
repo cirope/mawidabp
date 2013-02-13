@@ -148,7 +148,7 @@ class Plan < ActiveRecord::Base
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
     column_order.each do |col_name, col_with|
-      column_headers << PlanItem.human_attribute_name(col_name)
+      column_headers << "<b>#{PlanItem.human_attribute_name(col_name)}</b>"
       column_widths << pdf.percent_width(col_with)
     end
 

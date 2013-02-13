@@ -664,7 +664,7 @@ module FollowUpCommonReports
 
                   column_headers, column_widths = [], []
                   columns.each_value do |col_data|
-                    column_headers << col_data.first
+                    column_headers << "<b>#{col_data.first}</b>"
                     column_widths << pdf.percent_width(col_data.last)
                   end
 
@@ -1233,7 +1233,7 @@ module FollowUpCommonReports
 
       data[:order].each do |column|
         col_data = data[:columns][column]
-        column_headers << col_data.first
+        column_headers << "<b>#{col_data.first}</b>"
         column_widths << pdf.percent_width(col_data.last)
       end
 
