@@ -632,7 +632,7 @@ class Review < ActiveRecord::Base
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
       column_headers, column_widths, column_data = [], [], []
-      column_names = {'description' => 60, 'risk' => 15, 'state' => 25}
+      column_names = [['description', 60], ['risk', 15], ['state', 25]]
 
       column_names.each do |col_name, col_size|
         column_headers << Weakness.human_attribute_name(col_name)
@@ -671,7 +671,7 @@ class Review < ActiveRecord::Base
         PDF_FONT_SIZE
 
       column_headers, column_widths, column_data = [], [], []
-      column_names = {'description' => 75, 'state' => 25}
+      column_names = [['description', 75], ['state', 25]]
 
       column_names.each do |col_name, col_size|
         column_headers << Oportunity.human_attribute_name(col_name)
