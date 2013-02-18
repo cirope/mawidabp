@@ -52,8 +52,8 @@ ERROR_FILES_PATH = File.join(PUBLIC_PATH, 'error_files', File::SEPARATOR).freeze
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Tipos de parámetros
 APP_PARAMETER_TYPES = ['admin', 'security'].freeze
-# Márgenes a dejar en los reportes generados en PDF (T, L, B, R)
-PDF_MARGINS = [25, 25, 20, 20].freeze
+# Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
+PDF_MARGINS = [25, 20, 20, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
 PDF_PAPER = 'A4'.freeze
 # Logo para el pié de página de los PDFs
@@ -62,6 +62,8 @@ PDF_LOGO = File.join(Rails.root, 'app', 'assets', 'images', 'logo_pdf.png').free
 PDF_LOGO_SIZE = [352, 90].map { |size| (size / 6.0).round }
 # Tamaño de fuente en los PDF
 PDF_FONT_SIZE = 11
+# Tamaño de fuente de lo escrito en la cabecera
+PDF_HEADER_FONT_SIZE = 10
 # Prefijo para los archivos que no se pueden acceder sin estar autenticado
 PRIVATE_FILES_PREFIX = 'private'.freeze
 # Expresión regular para dividir términos en una búsqueda

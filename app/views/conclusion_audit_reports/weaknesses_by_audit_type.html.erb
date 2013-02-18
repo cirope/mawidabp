@@ -48,8 +48,8 @@
                     <tbody>
                       <% bu_data[:oportunities_table_data].each do |data| %>
                         <tr>
-                          <td><strong><%= raw data['state'].to_utf8 %></strong></td>
-                          <td><%= raw data['count'] %></td>
+                          <td><strong><%= raw data.first %></strong></td>
+                          <td><%= raw data.last %></td>
                         </tr>
                       <% end %>
                     </tbody>
@@ -75,7 +75,7 @@
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form')" %>
+    "Helper.showItem('#customize_report_form'); return false;" %>
 </div>
 <div id="customize_report_form" style="display: none;">
   <div>

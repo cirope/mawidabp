@@ -41,15 +41,15 @@
     <% end %>
   <% end %>
 <% else %>
-  <h1 class="simple_title with_border_bottom">
-    <%= t 'follow_up_committee.qa_indicators.without_data' %>
-  </h1>
+  <p style="margin: 1em;">
+    <em><%= t 'follow_up_committee.qa_indicators.without_data' %></em>
+  </p>
 <% end %>
 
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form')" %>
+    "Helper.showItem('#customize_report_form'); return false;" %>
 </div>
 <div id="customize_report_form" style="display: none;">
   <div>

@@ -22,8 +22,8 @@
         <tbody>
           <% @total_cost_data[period].each do |total_data| %>
             <tr>
-              <% @column_order.map(&:first).each do |col_name| %>
-                <td><%= raw total_data[col_name].to_utf8 %></td>
+              <% total_data.each do |col_data| %>
+                <td><%= raw col_data %></td>
               <% end %>
             </tr>
           <% end %>
@@ -51,8 +51,8 @@
           <tbody>
             <% detailed_data[:data].each do |data| %>
               <tr>
-                <% @detailed_column_order.map(&:first).each do |col_name| %>
-                  <td><%= raw data[col_name].to_utf8 %></td>
+                <% data.each do |col_data| %>
+                  <td><%= raw col_data %></td>
                 <% end %>
               </tr>
             <% end %>
@@ -66,7 +66,7 @@
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form')" %>
+    "Helper.showItem('#customize_report_form'); return false;" %>
 </div>
 <div id="customize_report_form" style="display: none;">
   <div>

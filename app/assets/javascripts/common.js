@@ -222,6 +222,7 @@ var Helper = {
         ).focus();
 
         if(jQuery.isFunction(callback)) {callback();}
+	
       });
     }
   },

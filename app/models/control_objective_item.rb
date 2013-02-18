@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
-  
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :review => {
@@ -41,7 +42,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Atributos no persistentes
   attr_reader :approval_errors
   # Alias de atributos
-  alias_attribute :label, :control_objective_text 
+  alias_attribute :label, :control_objective_text
 
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?,
@@ -66,7 +67,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
   validates_each :control_objective_id do |record, attr, value|
     review = record.review
-    
+
     is_duplicated = review && review.control_objective_items.any? do |coi|
       another_record = (!record.new_record? && coi.id != record.id) ||
         (record.new_record? && coi.object_id != record.object_id)
@@ -87,7 +88,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     :if => :finished
   validates :auditor_comment, :presence => true, :if => :exclude_from_score
   validate :score_completion
-  
+
   # Relaciones
   belongs_to :control_objective, :inverse_of => :control_objective_items
   belongs_to :review, :inverse_of => :control_objective_items
@@ -120,24 +121,24 @@ class ControlObjectiveItem < ActiveRecord::Base
     self.finished ||= false
     self.build_control unless self.control
   end
-  
+
   def to_s
     if self.exclude_from_score
       post_fix = " (#{I18n.t('control_objective_item.not_applicable')})"
     end
-    
+
     "#{self.control_objective_text.chomp}#{post_fix}"
   end
-  
+
   def as_json(options = nil)
     default_options = {
       :only => [:id],
       :methods => [:label, :informal]
     }
-    
+
     super(default_options.merge(options || {}))
   end
-  
+
   def informal
     self.review.try(:to_s)
   end
@@ -156,7 +157,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   def set_proper_parent
     self.work_papers.each { |wp| wp.owner = self }
   end
-  
+
   def <=>(other)
     if other.kind_of?(ControlObjectiveItem)
       if self.id == other.id
@@ -170,7 +171,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       -1
     end
   end
-  
+
   def ==(other)
     if other.kind_of?(ControlObjectiveItem)
       if self.new_record? && other.new_record?
@@ -195,7 +196,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def effectiveness
     return 0 if self.exclude_from_score
-    
+
     organization_id = GlobalModelConfig.current_organization_id ||
       self.review.try(:period).try(:organization_id)
     parameter_qualifications = self.get_parameter(
@@ -207,7 +208,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       self.compliance_score,
       self.sustantive_score
     ].compact
-    
+
     if highest_qualification > 0 && scores.size > 0
       average = scores.sum { |s| s * 100.0 / highest_qualification } /
         scores.size
@@ -356,19 +357,19 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def to_pdf(organization = nil)
-    pdf = PDF::Writer.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
 
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
 
-    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
+    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(ProcessControl.model_name.human,
       self.process_control.try(:name), 0, false, (PDF_FONT_SIZE * 1.25).round)
     pdf.add_description_item(ControlObjectiveItem.model_name.human, self.to_s, 0,
       false, (PDF_FONT_SIZE * 1.25).round)
 
-    pdf.move_pointer((PDF_FONT_SIZE * 2.5).round)
+    pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :relevance), self.relevance_text(true), 0, false)
@@ -391,12 +392,12 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     unless self.work_papers.blank?
       pdf.start_new_page
-      pdf.move_pointer PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 3
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name(:work_papers),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
-      pdf.move_pointer PDF_FONT_SIZE * 3
+      pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
         pdf.text wp.inspect, :justification => :center,
@@ -411,12 +412,12 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def absolute_pdf_path
-    PDF::Writer.absolute_path(self.pdf_name, ControlObjectiveItem.table_name,
+    Prawn::Document.absolute_path(self.pdf_name, ControlObjectiveItem.table_name,
       self.id)
   end
 
   def relative_pdf_path
-    PDF::Writer.relative_path(self.pdf_name, ControlObjectiveItem.table_name,
+    Prawn::Document.relative_path(self.pdf_name, ControlObjectiveItem.table_name,
       self.id)
   end
 
@@ -426,7 +427,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def pdf_data(finding)
     weakness = finding.kind_of?(Weakness)
-    head = ''
+    head = []
     body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
 
     unless finding.review_code.blank?
@@ -473,7 +474,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
-    
+
     unless finding.origination_date.blank?
       body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
         "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
@@ -501,6 +502,6 @@ class ControlObjectiveItem < ActiveRecord::Base
         finding.state_text.chomp
     end
 
-    { :column => head.to_iso, :text => body }
+    { :column => head, :text => body }
   end
 end

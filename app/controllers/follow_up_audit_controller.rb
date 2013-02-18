@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'modules/follow_up_reports/follow_up_common_reports'
 require 'modules/follow_up_reports/follow_up_high_risk_reports'
 
@@ -21,7 +22,7 @@ class FollowUpAuditController < ApplicationController
       format.html
     end
   end
-  
+
   # Crea un PDF con un análisis de costos para un determinado rango de fechas
   #
   # * GET /follow_up_committee/cost_analysis
@@ -57,20 +58,20 @@ class FollowUpAuditController < ApplicationController
 
           total_weaknesses_audit_cost += audit_cost
           total_weaknesses_audited_cost += audited_cost
-          @weaknesses_data[period] << {
-            'business_unit' => review.plan_item.business_unit.name.to_iso,
-            'project' => review.plan_item.project.to_iso,
-            'review' => review.identification.to_iso,
-            'audit_cost' => audit_cost.to_s,
-            'audited_cost' => audited_cost.to_s
-          }
+          @weaknesses_data[period] << [
+            review.plan_item.business_unit.name,
+            review.plan_item.project,
+            review.identification,
+            audit_cost.to_s,
+            audited_cost.to_s
+          ]
         end
 
-        @weaknesses_data[period] << {
-          'business_unit' => '', 'project' => '', 'review' => '',
-          'audit_cost' => "<b>#{total_weaknesses_audit_cost}</b>",
-          'audited_cost' => "<b>#{total_weaknesses_audited_cost}</b>"
-        }
+        @weaknesses_data[period] << [
+          '', '', '',
+          "<b>#{total_weaknesses_audit_cost}</b>",
+          "<b>#{total_weaknesses_audited_cost}</b>"
+        ]
       end
 
       unless oportunities_by_review.blank?
@@ -84,20 +85,20 @@ class FollowUpAuditController < ApplicationController
 
           total_oportunities_audit_cost += audit_cost
           total_oportunities_audited_cost += audited_cost
-          @oportunities_data[period] << {
-            'business_unit' => review.plan_item.business_unit.name.to_iso,
-            'project' => review.plan_item.project.to_iso,
-            'review' => review.identification.to_iso,
-            'audit_cost' => audit_cost.to_s,
-            'audited_cost' => audited_cost.to_s
-          }
+          @oportunities_data[period] << [
+            review.plan_item.business_unit.name,
+            review.plan_item.project,
+            review.identification,
+            audit_cost.to_s,
+            audited_cost.to_s
+          ]
         end
 
-        @oportunities_data[period] << {
-          'business_unit' => '', 'project' => '', 'review' => '',
-          'audit_cost' => "<b>#{total_oportunities_audit_cost}</b>",
-          'audited_cost' => "<b>#{total_oportunities_audited_cost}</b>"
-        }
+        @oportunities_data[period] << [
+          '', '', '',
+          "<b>#{total_oportunities_audit_cost}</b>",
+          "<b>#{total_oportunities_audited_cost}</b>"
+        ]
       end
     end
   end
@@ -108,21 +109,19 @@ class FollowUpAuditController < ApplicationController
   def create_cost_analysis
     self.cost_analysis
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
-    columns = {}
+    pdf = Prawn::Document.create_generic_pdf :landscape
+    column_headers, column_widths = [], []
 
-    @column_order.each do |col_name, col_width|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |column|
-        column.heading =
-          t("follow_up_audit.cost_analysis.column_#{col_name}")
-        column.width = pdf.percent_width col_width
-      end
+    @column_order.each do |column|
+      column_headers <<
+        "<b>#{t("follow_up_audit.cost_analysis.column_#{column.first}")}</b>"
+      column_widths << pdf.percent_width(column.last)
     end
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('follow_up_committee.period.title'),
@@ -130,58 +129,48 @@ class FollowUpAuditController < ApplicationController
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     @periods.each do |period|
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :justify
-      pdf.move_pointer PDF_FONT_SIZE
+        (PDF_FONT_SIZE * 1.25).round, :left
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title "#{t('follow_up_audit.cost_analysis.weaknesses')}\n",
         PDF_FONT_SIZE, :center
 
       unless @weaknesses_data[period].blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = @weaknesses_data[period]
-          table.column_order = @column_order.map(&:first)
-          table.split_rows = true
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(@weaknesses_data[period].insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       else
         pdf.text t('follow_up_audit.cost_analysis.without_weaknesses'),
           :font_size => PDF_FONT_SIZE
       end
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_title "#{t('follow_up_audit.cost_analysis.oportunities')}\n",
         PDF_FONT_SIZE, :center
 
       unless @oportunities_data[period].blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = @oportunities_data[period]
-          table.column_order = @column_order.map(&:first)
-          table.split_rows = true
-          table.font_size = (PDF_FONT_SIZE * 0.75)
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(@oportunities_data[period].insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       else
         pdf.text t('follow_up_audit.cost_analysis.without_oportunities'),
@@ -195,7 +184,7 @@ class FollowUpAuditController < ApplicationController
         :to_date => @to_date.to_formatted_s(:db)), 'follow_up_cost_analysis',
       0)
 
-    redirect_to PDF::Writer.relative_path(
+    redirect_to Prawn::Document.relative_path(
       t('follow_up_audit.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'follow_up_cost_analysis',

@@ -46,10 +46,10 @@
         <tbody>
           <% data[:column_data].each do |row| %>
             <tr>
-              <% @column_order.each do |col_name| %>
-                <td><%= row[col_name].kind_of?(Array) ?
-                  array_to_ul(row[col_name], :class => :raw_list) :
-                  row[col_name] %></td>
+              <% @column_order.each_index do |i| %>
+                <td><%= row[i].kind_of?(Array) ?
+                  array_to_ul(row[i], :class => :raw_list) :
+                  row[i] %></td>
               <% end %>
             </tr>
           <% end %>
@@ -85,7 +85,7 @@
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form')" %>
+    "Helper.showItem('#customize_report_form'); return false;" %>
 </div>
 <div id="customize_report_form" style="display: none;">
   <div>

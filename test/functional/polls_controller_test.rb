@@ -171,7 +171,7 @@ class PollsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(I18n.t('poll.summary_pdf_name',
+    assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
   end
@@ -230,7 +230,7 @@ class PollsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(I18n.t('poll.summary_pdf_name',
+    assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
   end

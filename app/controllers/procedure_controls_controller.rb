@@ -1,5 +1,4 @@
-require 'pdf/simpletable'
-
+# -*- coding: utf-8 -*-
 # =Controlador de procedimientos y pruebas de control
 #
 # Lista, muestra, crea, modifica y elimina procedimientos y pruebas de control
@@ -64,7 +63,7 @@ class ProcedureControlsController < ApplicationController
             'control_attributes' => pcs.control.attributes.merge('id' => nil)
           )
         end
-        
+
         attributes = pci.attributes.merge(
           'id' => nil,
           'procedure_control_subitems_attributes' => pcs_attributes
@@ -130,7 +129,7 @@ class ProcedureControlsController < ApplicationController
         format.xml  { render :xml => @procedure_control.errors, :status => :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'procedure_control.stale_object_error'
     redirect_to :action => :edit
@@ -155,10 +154,8 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/export_to_pdf/1
   def export_to_pdf
     @procedure_control = find_with_organization(params[:id], true)
-    pdf = PDF::Writer.create_generic_pdf :landscape, false
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.start_page_numbering pdf.absolute_x_middle, (pdf.bottom_margin / 2.0),
-      10, :center, t('pdf.page_pattern').to_iso, 1
     pdf.add_planning_header @auth_organization, @procedure_control.period
     pdf.add_title ProcedureControl.model_name.human
 
@@ -166,31 +163,17 @@ class ProcedureControlsController < ApplicationController
       'compliance_tests', 'sustantive_tests', 'effects', 'relevance']
     procedure_control_column_order = ['process_control_id', 'aproach',
       'frequency']
-    column_width = {'control_objective_text' => 15, 'control' => 35,
-      'compliance_tests' => 18, 'sustantive_tests' => 17, 'effects' => 8,
-      'relevance' => 7}
-    procedure_control_column_width = {'process_control_id' => 70,
-      'aproach' => 15, 'frequency' => 15}
-    columns = {}
-    procedure_control_columns = {}
-    column_data = []
-    
+    procedure_control_column_data = []
+    column_data, column_headers, procedure_control_headers = [], [], []
+
     column_order.each_with_index do |c_name, i|
-      columns[c_name] = PDF::SimpleTable::Column.new(c_name) do |column|
-        column.heading = [0, 5].include?(i) ?
+      column_headers << ([0, 5].include?(i) ?
           ProcedureControlSubitem.human_attribute_name(c_name) :
-          Control.human_attribute_name(c_name)
-        column.justification = :full
-        column.width = pdf.percent_width(column_width[c_name])
-      end
+          Control.human_attribute_name(c_name))
     end
 
     procedure_control_column_order.each do |c_name|
-      procedure_control_columns[c_name] = PDF::SimpleTable::Column.new(c_name) do |column|
-        column.heading = ProcedureControlItem.human_attribute_name(c_name)
-        column.justification = :full
-        column.width = pdf.percent_width(procedure_control_column_width[c_name])
-      end
+      procedure_control_headers << ProcedureControlItem.human_attribute_name(c_name)
     end
 
     @procedure_control.procedure_control_items.each do |pci|
@@ -199,69 +182,38 @@ class ProcedureControlsController < ApplicationController
         pci.created_at)
       frequencies = parameter_in(@auth_organization.id, :admin_frequency_types,
         pci.created_at)
-      procedure_control_column_data = [{
-        'process_control_id' =>
-          "<i><b>#{pci.process_control.name}</b></i>".to_iso,
-        'aproach' => ('<i><b>' + help.name_for_option_value(aproachs,
-            pci.aproach) + '</b></i>').to_iso,
-        'frequency' => ('<i><b>' + help.name_for_option_value(frequencies,
-            pci.frequency) + '</b></i>').to_iso
-      }]
-    
-      pdf.move_pointer PDF_FONT_SIZE
+      procedure_control_column_data << [
+        "<i><b>#{pci.process_control.name}</b></i>",
+        ('<i><b>' + help.name_for_option_value(aproachs,
+            pci.aproach) + '</b></i>'),
+        ('<i><b>' + help.name_for_option_value(frequencies,
+            pci.frequency) + '</b></i>')
+      ]
 
-      unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = procedure_control_columns
-          table.data = procedure_control_column_data
-          table.column_order = procedure_control_column_order
-          table.split_rows = true
-          table.font_size = PDF_FONT_SIZE
-          table.row_gap = (PDF_FONT_SIZE * 0.5).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.bold_headings = true
-          table.shade_headings = true
-          table.outer_line_style = PDF::Writer::StrokeStyle.new(1.5,
-            :cap => :butt, :join => :miter)
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
-        end
-      end
+      pdf.move_down PDF_FONT_SIZE
 
-      pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+      pdf.move_down((PDF_FONT_SIZE * 0.5).round)
 
       pci.procedure_control_subitems.each do |pcs|
-        column_data << {
-          'control_objective_text' => pcs.control_objective_text.to_iso,
-          'control' => pcs.control.control.to_iso,
-          'compliance_tests' => pcs.control.compliance_tests.to_iso,
-          'sustantive_tests' => pcs.control.sustantive_tests.to_iso,
-          'effects' => pcs.control.effects.to_iso,
-          'relevance' => pcs.relevance_text.to_iso
-        }
+        column_data << [
+          pcs.control_objective_text,
+          pcs.control.control,
+          pcs.control.compliance_tests,
+          pcs.control.sustantive_tests,
+          pcs.control.effects,
+          pcs.relevance_text
+        ]
       end
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = column_order
-          table.font_size = (PDF_FONT_SIZE * 0.75)
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = PDF_FONT_SIZE
-          table.row_gap = PDF_FONT_SIZE
-          table.split_rows = true
-          table.bold_headings = true
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        column_data.each do |data|
+          column_headers.each_with_index do |header, i|
+            data[i] = '--' if data[i].blank?
+            if column_headers.last == header
+              data[i] = "#{data[i]}\n\n"
+            end
+            pdf.text "<b>#{header.upcase}</b>: #{data[i]}", :inline_format => true
+          end
         end
       end
     end
@@ -270,7 +222,7 @@ class ProcedureControlsController < ApplicationController
       @procedure_control.id)
 
     respond_to do |format|
-      format.html { redirect_to(PDF::Writer.relative_path(
+      format.html { redirect_to(Prawn::Document.relative_path(
             'procedure_control.pdf', 'procedure_controls',
             @procedure_control.id)) }
       format.xml  { head :ok }
@@ -345,7 +297,7 @@ class ProcedureControlsController < ApplicationController
         ]
       }
     ] : [:period]
-    
+
     ProcedureControl.includes(*include).where(
       :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
     ).first(:readonly => false)

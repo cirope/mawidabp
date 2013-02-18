@@ -1,6 +1,6 @@
 class Plan < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -26,7 +26,7 @@ class Plan < ActiveRecord::Base
       record.errors.add attr, :locked
     end
   end
-  
+
   # Relaciones
   belongs_to :period
   has_one :organization, :through => :period
@@ -72,7 +72,7 @@ class Plan < ActiveRecord::Base
     items = business_unit_type ?
       self.plan_items.for_business_unit_type(business_unit_type) :
       self.plan_items
-    
+
     items.inject(0.0) do |sum, plan_item|
       sum + plan_item.resource_utilizations.to_a.sum(&:cost)
     end
@@ -129,16 +129,16 @@ class Plan < ActiveRecord::Base
   end
 
   def to_pdf(organization = nil, include_details = true)
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
     currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
     column_order = [['order_number', 6], ['status', 6],
       ['business_unit_id', 16], ['project', 27], ['start', 7.5], ['end', 7.5],
       ['human_resources_cost', 10], ['material_resources_cost', 10],
       ['total_resources_cost', 10]]
-    columns = {}
+    column_headers, column_widths = [], []
 
     pdf.add_generic_report_header organization
-    
+
     pdf.add_title "#{I18n.t('plan.pdf.title')}\n", (PDF_FONT_SIZE * 1.5).round,
       :center
 
@@ -148,10 +148,8 @@ class Plan < ActiveRecord::Base
         :to_date => I18n.l(self.period.end, :format => :long)), 0, false)
 
     column_order.each do |col_name, col_with|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = PlanItem.human_attribute_name(col_name)
-        c.width = pdf.percent_width(col_with)
-      end
+      column_headers << "<b>#{PlanItem.human_attribute_name(col_name)}</b>"
+      column_widths << pdf.percent_width(col_with)
     end
 
     grouped_plan_items = self.grouped_plan_items
@@ -161,53 +159,43 @@ class Plan < ActiveRecord::Base
       column_data = []
       total_cost = 0.0
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       pdf.add_title but.try(:name) || I18n.t('plan.without_business_unit_type')
 
       items.each do |plan_item|
         total_resource_text = currency_mask % plan_item.cost
         total_cost += plan_item.cost
 
-        column_data << {
-          'order_number' => plan_item.order_number,
-          'status' => plan_item.status_text(false).try(:to_iso),
-          'business_unit_id' => plan_item.business_unit ?
-            plan_item.business_unit.name.to_iso : '',
-          'project' => plan_item.project.to_iso,
-          'start' => I18n.l(plan_item.start, :format => :default),
-          'end' => I18n.l(plan_item.end, :format => :default),
-          'human_resources_cost' => currency_mask % plan_item.human_cost,
-          'material_resources_cost' => currency_mask % plan_item.material_cost,
-          'total_resources_cost' => plan_item.cost > 0 && include_details ?
-            ("<c:ilink dest='plan_cost_detail_#{plan_item.id}'>" +
-              "#{total_resource_text}</c:ilink>") : total_resource_text
-        }
+        column_data << [
+          plan_item.order_number,
+          plan_item.status_text(false),
+          plan_item.business_unit ?
+            plan_item.business_unit.name : '',
+          plan_item.project,
+          I18n.l(plan_item.start, :format => :default),
+          I18n.l(plan_item.end, :format => :default),
+          currency_mask % plan_item.human_cost,
+          currency_mask % plan_item.material_cost,
+          total_resource_text
+        ]
       end
 
-      column_data << {
-        'order_number' => '', 'status' => '', 'business_unit_id' => '',
-        'project' => '', 'start' => '', 'end' => '', 'human_resources_cost' => '',
-        'material_resources_cost' => '',
-        'total_resources_cost' => "<b>#{currency_mask % total_cost}</b>"
-      }
+      column_data << [
+        '', '', '', '', '', '', '', '', "<b>#{currency_mask % total_cost}</b>"
+      ]
 
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       unless column_data.blank?
-        PDF::SimpleTable.new do |table|
-          table.width = pdf.page_usable_width
-          table.columns = columns
-          table.data = column_data
-          table.column_order = column_order.map(&:first)
-          table.split_rows = true
-          table.font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-          table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-          table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-          table.shade_headings = true
-          table.position = :left
-          table.orientation = :right
-          table.render_on pdf
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+          table_options = pdf.default_table_options(column_widths)
+
+          pdf.table(column_data.insert(0, column_headers), table_options) do
+            row(0).style(
+              :background_color => 'cccccc',
+              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            )
+          end
         end
       end
 
@@ -216,7 +204,7 @@ class Plan < ActiveRecord::Base
 
       if include_details &&
           !items.all? { |pi| pi.resource_utilizations.blank? }
-        pdf.move_pointer PDF_FONT_SIZE
+        pdf.move_down PDF_FONT_SIZE
 
         pdf.add_title I18n.t('plan.pdf.resource_utilization'),
           (PDF_FONT_SIZE * 1.25).round
@@ -233,11 +221,11 @@ class Plan < ActiveRecord::Base
   end
 
   def absolute_pdf_path
-    PDF::Writer.absolute_path(self.pdf_name, Plan.table_name, self.id)
+    Prawn::Document.absolute_path(self.pdf_name, Plan.table_name, self.id)
   end
 
   def relative_pdf_path
-    PDF::Writer.relative_path(self.pdf_name, Plan.table_name, self.id)
+    Prawn::Document.relative_path(self.pdf_name, Plan.table_name, self.id)
   end
 
   def pdf_name

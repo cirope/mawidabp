@@ -1,11 +1,11 @@
 class WorkPaper < ActiveRecord::Base
   include ParameterSelector
   include Comparable
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
-  
+
   # Named scopes
   scope :sorted_by_code, order('code ASC')
   scope :with_prefix, lambda { |prefix|
@@ -20,7 +20,7 @@ class WorkPaper < ActiveRecord::Base
   # Callbacks
   before_save :check_for_modifications
   after_save :create_cover_and_zip
-  
+
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true
   validates :number_of_pages, :numericality =>
@@ -49,7 +49,7 @@ class WorkPaper < ActiveRecord::Base
       end
     end
   end
-  
+
   # Relaciones
   belongs_to :organization
   belongs_to :file_model, :dependent => :destroy
@@ -57,10 +57,10 @@ class WorkPaper < ActiveRecord::Base
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     :reject_if => lambda { |attributes| attributes['file'].blank? }
-  
+
   def initialize(attributes = nil, options = {})
     super(attributes, options)
-    
+
     self.organization_id = GlobalModelConfig.current_organization_id
   end
 
@@ -86,13 +86,13 @@ class WorkPaper < ActiveRecord::Base
       @check_code_prefix = true
       @__ccp_first_access = true
     end
-    
+
     @check_code_prefix
   end
-  
+
   def check_code_prefix=(check_code_prefix)
     @__ccp_first_access = true
-    
+
     @check_code_prefix = check_code_prefix
   end
 
@@ -113,7 +113,7 @@ class WorkPaper < ActiveRecord::Base
       self.create_pdf_cover if @cover_must_be_created && file
       self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
     end
-    
+
     true
   end
 
@@ -121,40 +121,40 @@ class WorkPaper < ActiveRecord::Base
     review ||= self.owner.kind_of?(ControlObjectiveItem) ? self.owner.review :
       (self.owner.kind_of?(Finding) ?
         self.owner.try(:control_objective_item).try(:review) : nil)
-    pdf = PDF::Writer.create_generic_pdf(:portrait, false)
+    pdf = Prawn::Document.create_generic_pdf(:portrait, false)
 
     pdf.add_review_header review.try(:organization),
       review.try(:identification), review.try(:plan_item).try(:project)
 
-    pdf.move_pointer PDF_FONT_SIZE * 2
+    pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2, :full, true
+    pdf.add_title WorkPaper.model_name.human, PDF_FONT_SIZE * 2
 
-    pdf.move_pointer PDF_FONT_SIZE * 4
+    pdf.move_down PDF_FONT_SIZE * 4
 
     unless self.name.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:name),
         self.name, 0, false
     end
 
     unless self.description.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:description),
         self.description, 0, false
     end
 
     unless self.code.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(:code),
         self.code, 0, false
     end
 
     unless self.number_of_pages.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
       pdf.add_description_item WorkPaper.human_attribute_name(
         :number_of_pages), self.number_of_pages.to_s, 0, false
@@ -169,7 +169,7 @@ class WorkPaper < ActiveRecord::Base
       filename = filename.sanitized_for_filename.sub(
         /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
     end
-    
+
     I18n.t 'work_paper.cover_name', :prefix => "#{self.sanitized_code}-",
       :filename => File.basename(filename, File.extname(filename))
   end
@@ -227,7 +227,7 @@ class WorkPaper < ActiveRecord::Base
 
   def unzip_if_necesary
     file_name = self.file_model.try(:identifier) || ''
-    
+
     if File.extname(file_name) == '.zip' &&
         file_name.start_with?(self.sanitized_code) &&
         !file_name.start_with?("#{self.sanitized_code}-zip")

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class PlanItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
@@ -35,7 +36,7 @@ class PlanItem < ActiveRecord::Base
     elsif !business_unit_type.blank?
       condition = "#{BusinessUnit.table_name}.business_unit_type_id IS NULL"
     end
-    
+
     includes(:business_unit).where(
       condition, :but_id => business_unit_type.to_i
     ).order('order_number ASC')
@@ -46,7 +47,7 @@ class PlanItem < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   serialize :predecessors, Array
-  
+
   # Restricciones
   validates :project, :order_number, :presence => true
   validates :project, :predecessors, :length => {:maximum => 255},
@@ -241,59 +242,48 @@ class PlanItem < ActiveRecord::Base
   end
 
   def add_resource_data(pdf, show_description = true)
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     if show_description
       pdf.text "<b>(#{self.order_number})</b> #{self.project}" +
         (self.business_unit ? " (#{self.business_unit.name})" : ''),
-        :font_size => PDF_FONT_SIZE
-      pdf.move_pointer((PDF_FONT_SIZE * 0.5).round)
+        :font_size => PDF_FONT_SIZE, :inline_format => true
+      pdf.move_down((PDF_FONT_SIZE * 0.5).round)
     end
-
-    pdf.add_destination "plan_cost_detail_#{self.id}", 'XYZ', 0, pdf.y
 
     column_order = [['resource_id', 40], ['units', 20], ['cost_per_unit', 20],
       ['cost', 20]]
-    columns = {}
-    column_data = []
+    column_data, column_headers, column_widths = [], [], []
     currency_mask = "#{I18n.t('number.currency.format.unit')}%.2f"
 
     column_order.each do |col_name, col_width|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = ResourceUtilization.human_attribute_name col_name
-        c.width = pdf.percent_width(col_width)
-      end
+      column_headers << ResourceUtilization.human_attribute_name(col_name)
+      column_widths << pdf.percent_width(col_width)
     end
 
     self.resource_utilizations.each do |resource_utilization|
-      column_data << {
-        'resource_id' => resource_utilization.resource.resource_name.to_iso,
-        'units' => resource_utilization.units,
-        'cost_per_unit' => currency_mask % resource_utilization.cost_per_unit,
-        'cost' => currency_mask % resource_utilization.cost
-      }
+      column_data << [
+        resource_utilization.resource.resource_name,
+        resource_utilization.units,
+        currency_mask % resource_utilization.cost_per_unit,
+        currency_mask % resource_utilization.cost
+      ]
     end
 
-    column_data << {
-      'resource_id' => '', 'units' => '', 'cost_per_unit' => '',
-      'cost' => "<b>#{currency_mask % self.cost}</b>"
-    }
+    column_data << [
+      '', '', '', "<b>#{currency_mask % self.cost}</b>"
+    ]
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
   end

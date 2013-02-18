@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.0.2)
     RedCloth (4.2.9)
     actionmailer (3.2.11)
       actionpack (= 3.2.11)
@@ -30,11 +31,12 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     acts_as_tree_rails3 (0.1.0)
+    afm (0.2.0)
     ansi (1.4.3)
     archive-tar-minitar (0.5.2)
     arel (3.0.2)
     builder (3.0.4)
-    capistrano (2.14.1)
+    capistrano (2.14.2)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -44,7 +46,6 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
     chronic (0.9.0)
-    cocaine (0.4.2)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -52,7 +53,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
-    color (1.4.1)
     columnize (0.3.6)
     daemons (1.1.9)
     dynamic_form (1.1.4)
@@ -63,14 +63,15 @@ GEM
     foreigner (1.3.0)
       activerecord (>= 3.0.0)
     gruff (0.3.7)
+    hashery (2.1.0)
     highline (1.6.15)
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
-    jquery-rails (2.2.0)
+    jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    json (1.7.6)
+    json (1.7.7)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
     mail (2.4.4)
@@ -78,37 +79,37 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     memcache-client (1.8.5)
-    mime-types (1.19)
-    mini_magick (3.4)
+    mime-types (1.21)
+    mini_magick (3.5.0)
       subexec (~> 0.2.1)
-    minitest (4.4.0)
-    multi_json (1.5.0)
-    net-scp (1.0.4)
-      net-ssh (>= 1.99.1)
-    net-sftp (2.0.5)
-      net-ssh (>= 2.0.9)
-    net-ssh (2.6.3)
-    net-ssh-gateway (1.1.0)
-      net-ssh (>= 1.99.1)
-    newrelic_rpm (3.5.5.38)
-    paper_trail (2.7.0)
+    minitest (4.6.1)
+    multi_json (1.6.1)
+    net-scp (1.1.0)
+      net-ssh (>= 2.6.5)
+    net-sftp (2.1.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.6.5)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
+    newrelic_rpm (3.5.6.55)
+    paper_trail (2.7.1)
       activerecord (~> 3.0)
       railties (~> 3.0)
-    paperclip (3.4.0)
-      activemodel (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (~> 0.4.0)
-      mime-types
-    pdf-writer (1.1.8)
-      color (>= 1.4.0)
-      transaction-simple (~> 1.3)
+    pdf-reader (1.3.1)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.0)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (0.14.1)
     polyglot (0.3.3)
-    rack (1.4.4)
+    prawn (0.12.0)
+      pdf-reader (>= 0.9.0)
+      ttfunk (~> 1.0.2)
+    rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-ssl (1.3.2)
+    rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -128,9 +129,9 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.0.3)
-    rdoc (3.12)
+    rdoc (3.12.1)
       json (~> 1.4)
-    rmagick (2.13.1)
+    rmagick (2.13.2)
     ruby-debug-base19 (0.11.25)
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
@@ -139,6 +140,7 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby-debug-base19 (>= 0.11.19)
+    ruby-rc4 (0.1.5)
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.9)
@@ -157,20 +159,20 @@ GEM
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
-    thor (0.16.0)
+    thor (0.17.0)
     tilt (1.3.3)
     timeliness (0.3.7)
-    transaction-simple (1.4.0.2)
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    ttfunk (1.0.3)
     turn (0.9.6)
       ansi
     tzinfo (0.3.35)
     uglifier (1.3.0)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    unicode (0.4.3.1)
+    unicode (0.4.4)
     uuidtools (2.1.3)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
@@ -189,7 +191,6 @@ DEPENDENCIES
   capistrano
   carrierwave
   coffee-rails
-  color
   dynamic_form
   foreigner
   gruff
@@ -199,9 +200,8 @@ DEPENDENCIES
   minitest
   newrelic_rpm
   paper_trail
-  paperclip
-  pdf-writer
   pg
+  prawn
   rails (= 3.2.11)
   rake
   rmagick
@@ -209,7 +209,6 @@ DEPENDENCIES
   rubyzip
   sass-rails
   thin
-  transaction-simple
   turn
   uglifier
   unicode

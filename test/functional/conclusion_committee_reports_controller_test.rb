@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de reportes de conclusión
@@ -78,48 +79,11 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'synthesis_report', 0)
-  end
-  
-  test 'qa indicators' do
-    perform_auth
-
-    get :qa_indicators
-    assert_response :success
-    assert_select '#error_body', false
-    assert_template 'conclusion_committee_reports/qa_indicators'
-
-    assert_nothing_raised(Exception) do
-      get :qa_indicators, :qa_indicators => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
-        }
-    end
-
-    assert_response :success
-    assert_select '#error_body', false
-    assert_template 'conclusion_committee_reports/qa_indicators'
-  end
-
-  test 'create qa indicators' do
-    perform_auth
-
-    post :create_qa_indicators, :qa_indicators => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
-
-    assert_redirected_to PDF::Writer.relative_path(
-      I18n.t('conclusion_committee_report.qa_indicators.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'qa_indicators', 0)
   end
 
   test 'high risk weaknesses report' do
@@ -141,7 +105,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
   end
-  
+
   test 'filtered high risk weaknesses report' do
     perform_auth
 
@@ -167,7 +131,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
@@ -193,10 +157,10 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
   end
-  
+
   test 'filtered fixed weaknesses report' do
     perform_auth
-    
+
     get :fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
@@ -219,13 +183,13 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
   end
-  
+
   test 'control objective stats report' do
     perform_auth
 
@@ -245,10 +209,10 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/control_objective_stats'
   end
-  
+
   test 'filtered control objective stats report' do
     perform_auth
-    
+
     get :control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
@@ -272,13 +236,13 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'control_objective_stats', 0)
   end
-  
+
   test 'process control stats report' do
     perform_auth
 
@@ -298,10 +262,10 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/process_control_stats'
   end
-  
+
   test 'filtered process control stats report' do
     perform_auth
-    
+
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
@@ -324,7 +288,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.process_control_stats.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),

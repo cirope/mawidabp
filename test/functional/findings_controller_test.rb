@@ -503,7 +503,7 @@ class FindingsControllerTest < ActionController::TestCase
       get :export_to_pdf, :completed => 'incomplete'
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
@@ -514,7 +514,7 @@ class FindingsControllerTest < ActionController::TestCase
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
@@ -529,7 +529,7 @@ class FindingsControllerTest < ActionController::TestCase
     }
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 
@@ -545,7 +545,7 @@ class FindingsControllerTest < ActionController::TestCase
         }
     end
 
-    assert_redirected_to PDF::Writer.relative_path(
+    assert_redirected_to Prawn::Document.relative_path(
       I18n.t('finding.pdf.pdf_name'), Finding.table_name)
   end
 

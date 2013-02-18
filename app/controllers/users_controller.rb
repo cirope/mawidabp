@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-require 'pdf/simpletable'
-
 # =Controlador de usuarios
 #
 # Lista, muestra, crea, modifica y elimina usuarios (#User). Además controla el
@@ -666,7 +664,7 @@ class UsersController < ApplicationController
       "#{User.table_name}.user ASC"
     )
 
-    pdf = PDF::Writer.create_generic_pdf :landscape
+    pdf = Prawn::Document.create_generic_pdf :landscape
 
     pdf.add_generic_report_header @auth_organization
     pdf.add_title t('user.index_title')
@@ -674,34 +672,31 @@ class UsersController < ApplicationController
     column_order = [['user', 10], ['name', 10], ['last_name', 10],
       ['email', 17], ['function', 14], ['roles', 10], ['enable', 8],
       ['password_changed', 10], ['last_access', 11]]
-    columns = {}
-    column_data = []
+    column_data, column_headers, column_widths = [], [], []
 
-    column_order.each do |col_name, col_with|
-      columns[col_name] = PDF::SimpleTable::Column.new(col_name) do |c|
-        c.heading = User.human_attribute_name col_name
-        c.width = pdf.percent_width col_with
-      end
+    column_order.each do |col_name, col_width|
+      column_headers << User.human_attribute_name(col_name)
+      column_widths << pdf.percent_width(col_width)
     end
 
     users.each do |user|
-      column_data << {
-        'user' => "<b>#{user.user}</b>".to_iso,
-        'name' => user.name.to_iso,
-        'last_name' => user.last_name.to_iso,
-        'email' => user.email.try(:to_iso),
-        'function' => user.function.try(:to_iso),
-        'roles' => user.roles.map(&:name).join('; ').to_iso,
-        'enable' => t(user.enable? ? 'label.yes' : 'label.no').to_iso,
-        'password_changed' => user.password_changed ?
-          l(user.password_changed, :format => :minimal).to_iso : '-',
-        'last_access' => user.last_access ?
-          l(user.last_access, :format => :minimal).to_iso : '-'
-      }
+      column_data << [
+        "<b>#{user.user}</b>",
+        user.name,
+        user.last_name,
+        user.email,
+        user.function,
+        user.roles.map(&:name).join('; '),
+        t(user.enable? ? 'label.yes' : 'label.no'),
+        user.password_changed ?
+          l(user.password_changed, :format => :minimal) : '-',
+        user.last_access ?
+          l(user.last_access, :format => :minimal) : '-'
+      ]
     end
 
     unless @columns.blank? || @query.blank?
-      pdf.move_pointer PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
       filter_columns = @columns.map do |c|
         "<b>#{User.human_attribute_name(c)}</b>"
       end
@@ -709,37 +704,33 @@ class UsersController < ApplicationController
       pdf.text t('user.pdf.filtered_by',
         :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
         :columns => filter_columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        :font_size => (PDF_FONT_SIZE * 0.75).round,
+        :inline_format => true
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      PDF::SimpleTable.new do |table|
-        table.width = pdf.page_usable_width
-        table.columns = columns
-        table.data = column_data
-        table.column_order = column_order.map(&:first)
-        table.split_rows = true
-        table.font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_color = Color::RGB.from_percentage(95, 95, 95)
-        table.shade_heading_color = Color::RGB.from_percentage(85, 85, 85)
-        table.heading_font_size = (PDF_FONT_SIZE * 0.75).round
-        table.shade_headings = true
-        table.position = :left
-        table.orientation = :right
-        table.render_on pdf
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(column_widths)
+
+        pdf.table(column_data.insert(0, column_headers), table_options) do
+          row(0).style(
+            :background_color => 'cccccc',
+            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+          )
+        end
       end
     end
 
-    pdf.move_pointer PDF_FONT_SIZE
+    pdf.move_down PDF_FONT_SIZE
     pdf.text t('user.pdf.users_count', :count => users.size)
 
     pdf_name = t 'user.pdf.pdf_name'
 
     pdf.custom_save_as(pdf_name, User.table_name)
 
-    redirect_to PDF::Writer.relative_path(pdf_name, User.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, User.table_name)
   end
 
   # * GET /users/auto_complete_for_user

@@ -35,7 +35,7 @@
       </tbody>
     </table>
   <% end %>
-  
+
   <p style="margin: 1em; font-size: 1.1em;">
     <%= raw t(
       'conclusion_committee_report.process_control_stats.review_score_average',
@@ -47,7 +47,7 @@
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form')" %>
+    "Helper.showItem('#customize_report_form'); return false;" %>
 </div>
 <div id="customize_report_form" style="display: none;">
   <div>
