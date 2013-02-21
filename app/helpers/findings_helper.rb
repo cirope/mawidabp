@@ -118,10 +118,10 @@ module FindingsHelper
   def finding_responsibles_list(finding)
     users = finding.users.map do |u|
       if finding.process_owners.include?(u)
-        content_tag(:b, u.full_name_with_function(finding.created_at) +
+        content_tag(:b, u.full_name_with_function +
             " | #{FindingUserAssignment.human_attribute_name(:process_owner)}")
       else
-        u.full_name_with_function(finding.created_at)
+        u.full_name_with_function
       end
     end
 

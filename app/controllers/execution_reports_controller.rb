@@ -318,7 +318,7 @@ class ExecutionReportsController < ApplicationController
               end
 
               column_data << [
-                "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>".to_iso,
+                "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>",
                 "<b>#{total_weaknesses}</b>",
                 "<b>#{total_oportunities}</b>"
               ]

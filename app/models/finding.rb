@@ -1567,8 +1567,8 @@ class Finding < ActiveRecord::Base
     date = completed == 'incomplete' ? self.follow_up_date :
       self.solution_date
     origination_date = self.origination_date
-    date_text = I18n.l(date, :format => :minimal).to_iso if date
-    origination_date_text = I18n.l(origination_date, :format => :minimal).to_iso if origination_date
+    date_text = I18n.l(date, :format => :minimal) if date
+    origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
     being_implemented = self.kind_of?(Weakness) && self.being_implemented?
     rescheduled_text = being_implemented && !self.rescheduled? ?
       I18n.t('label.no') : ''
@@ -1592,34 +1592,34 @@ class Finding < ActiveRecord::Base
         u.full_name
     end
 
-    description = self.description.try(:to_iso) || ''
+    description = self.description || ''
 
     unless (repeated_ancestors = self.repeated_ancestors).blank?
       description << "\n#{I18n.t('finding.repeated_ancestors')}: "
-      description << repeated_ancestors.map(&:to_s).join(' | ').try(:to_iso)
+      description << repeated_ancestors.map(&:to_s).join(' | ')
     end
 
     unless (repeated_children = self.repeated_children).blank?
       description << "\n#{I18n.t('finding.repeated_children')}: "
-      description << repeated_children.map(&:to_s).join(' | ').try(:to_iso)
+      description << repeated_children.map(&:to_s).join(' | ')
     end
 
     column_data = [
       self.review.to_s,
       self.review_code,
       self.state_text,
-      self.kind_of?(Weakness) ? self.risk_text.to_iso : '',
-      self.kind_of?(Weakness) ? self.priority_text.to_iso : '',
-      audited.join('; ').to_iso,
+      self.kind_of?(Weakness) ? self.risk_text : '',
+      self.kind_of?(Weakness) ? self.priority_text : '',
+      audited.join('; '),
       description,
-      rescheduled_text.try(:to_iso),
+      rescheduled_text,
       origination_date_text,
       date_text
     ]
 
     if detailed
-      column_data << self.audit_comments.try(:to_iso)
-      column_data << self.answer.try(:to_iso)
+      column_data << self.audit_comments
+      column_data << self.answer
     end
 
     column_data
@@ -1628,25 +1628,23 @@ class Finding < ActiveRecord::Base
   private
 
   def self.to_csv(detailed = false, completed = 'incomplete')
-    rows = []
-    column_data = []
     column_headers = [
       "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
-      Weakness.human_attribute_name(:review_code).to_iso,
+      Weakness.human_attribute_name(:review_code),
       Weakness.human_attribute_name(:state),
       Weakness.human_attribute_name(:risk),
       Weakness.human_attribute_name(:priority),
       I18n.t('finding.audited', :count => 0),
-      Weakness.human_attribute_name(:description).to_iso,
-      (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})").to_iso,
+      Weakness.human_attribute_name(:description),
+      (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
       Finding.human_attribute_name(:origination_date),
       (Finding.human_attribute_name((completed == 'incomplete') ?
-        :follow_up_date : :solution_date)).to_iso
+        :follow_up_date : :solution_date))
     ]
 
     if detailed
-      column_headers << Finding.human_attribute_name(:audit_comments).to_iso
-      column_headers << Finding.human_attribute_name(:answer).to_iso
+      column_headers << Finding.human_attribute_name(:audit_comments)
+      column_headers << Finding.human_attribute_name(:answer)
     end
 
     column_headers
