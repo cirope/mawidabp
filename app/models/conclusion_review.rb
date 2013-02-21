@@ -246,7 +246,7 @@ class ConclusionReview < ActiveRecord::Base
 
         if has_observations
           pc_id = process_control.id.to_s
-          column_headers, column_widths, column_data = [], [], []
+          column_headers, column_widths = [], []
 
           column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
@@ -258,6 +258,7 @@ class ConclusionReview < ActiveRecord::Base
             ).not_revoked.order('review_code ASC')
 
             weaknesses.each do |w|
+              column_data = []
               w_data = coi.pdf_data(w)
 
               unless w_data[:column].blank?
@@ -303,7 +304,7 @@ class ConclusionReview < ActiveRecord::Base
 
         if has_oportunities
           pc_id = process_control.id.to_s
-          column_headers, column_widths, column_data = [], [], []
+          column_headers, column_widths = [], []
 
           column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
@@ -312,6 +313,8 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
               o_data = coi.pdf_data(o)
+
+              column_data = []
 
               unless o_data[:column].blank?
                 column_data << column_headers
