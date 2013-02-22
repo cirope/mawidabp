@@ -3,5 +3,5 @@ parameter_<%= name %>:
   name: <%= name %>
   description: Parameter <%= name %>
   organization: default_organization
-  value: "<%= value.kind_of?(Array) ? value.to_yaml.gsub(/\n/,"\\n").gsub(/"/, '\\"') : value %>"
+  value: <%= value.kind_of?(Array) ? value.inspect : value %>
 <% end %>
