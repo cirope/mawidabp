@@ -4,7 +4,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   include Comparable
 
   has_paper_trail :meta => {
-    :organization_id => lambda { GlobalModelConfig.current_organization_id }
+    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id }
   }
 
   # Constantes
@@ -14,7 +14,7 @@ class ReviewUserAssignment < ActiveRecord::Base
     :supervisor => 1,
     :manager => 2
   }
-  
+
   # Callbacks
   before_validation :can_be_modified?
   before_destroy :can_be_modified?, :delete_user_in_all_review_findings

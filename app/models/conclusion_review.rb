@@ -3,7 +3,7 @@ class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
 
   has_paper_trail :meta => {
-    :organization_id => lambda { GlobalModelConfig.current_organization_id }
+    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id }
   }
 
   # Constantes
