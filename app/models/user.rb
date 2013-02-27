@@ -602,7 +602,7 @@ class User < ActiveRecord::Base
 
     Finding.transaction do
       if options[:with_findings]
-        self.findings.all_for_reallocation.each do |f|
+        self.findings.for_current_organization.all_for_reallocation.each do |f|
           description = "#{f.class.model_name.human} *#{f.review_code.strip}* " +
             "(#{Review.model_name.human} *#{f.review.identification.strip}*)"
           f.avoid_changes_notification = true
@@ -665,7 +665,7 @@ class User < ActiveRecord::Base
     unless other == self
       Finding.transaction do
         if options[:with_findings]
-          self.findings.all_for_reallocation.each do |f|
+          self.findings.for_current_organization.all_for_reallocation.each do |f|
             old_fua = f.finding_user_assignments.detect {|fua| fua.user == self}
             f.avoid_changes_notification = true
 
