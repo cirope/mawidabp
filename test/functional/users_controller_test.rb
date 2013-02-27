@@ -949,8 +949,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user finding reassignment update' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth users(:administrator_user),
+      organizations(:default_organization)
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
