@@ -219,7 +219,7 @@ module Prawn
 
         self.repeat :all do
           self.canvas do
-            fill_color, self.fill_color = self.fill_color, '333333'
+            fill_color, self.fill_color = self.fill_color, '707070'
 
             self.transparent 0.5, 0.75 do
               self.text_box text, :align => :center, :valign => :center,
