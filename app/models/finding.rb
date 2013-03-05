@@ -1570,8 +1570,7 @@ class Finding < ActiveRecord::Base
     date_text = I18n.l(date, :format => :minimal) if date
     origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
     being_implemented = self.kind_of?(Weakness) && self.being_implemented?
-    rescheduled_text = being_implemented && !self.rescheduled? ?
-      I18n.t('label.no') : ''
+    rescheduled_text = ''
 
     if being_implemented && self.rescheduled?
       dates = []
@@ -1604,6 +1603,8 @@ class Finding < ActiveRecord::Base
       description << repeated_children.map(&:to_s).join(' | ')
     end
 
+    rescheduled_text = I18n.t('label.no') if rescheduled_text.blank?
+
     column_data = [
       self.review.to_s,
       self.review_code,
@@ -1612,6 +1613,7 @@ class Finding < ActiveRecord::Base
       self.kind_of?(Weakness) ? self.priority_text : '',
       audited.join('; '),
       description,
+      self.control_objective_item.control_objective_text,
       rescheduled_text,
       origination_date_text,
       date_text
@@ -1636,6 +1638,7 @@ class Finding < ActiveRecord::Base
       Weakness.human_attribute_name(:priority),
       I18n.t('finding.audited', :count => 0),
       Weakness.human_attribute_name(:description),
+      ControlObjectiveItem.human_attribute_name(:control_objective_text),
       (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
       Finding.human_attribute_name(:origination_date),
       (Finding.human_attribute_name((completed == 'incomplete') ?

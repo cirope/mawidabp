@@ -216,14 +216,16 @@ class FindingsController < ApplicationController
 
     parsed_cells = []
 
-    parsed_cells = CSV.generate(:col_sep => ?;) do |csv|
+    parsed_cells = CSV.generate(:col_sep => ?;, :encoding => 'UTF-8') do |csv|
       rows.each do |row|
         csv << row
       end
     end
 
+
     respond_with findings do |format|
       headers['Cache-Control'] = "max-age=1"
+
       format.csv { render :csv => parsed_cells, :filename => t('finding.csv_name') }
     end
   end
