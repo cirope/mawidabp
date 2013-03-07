@@ -387,7 +387,8 @@ class FindingTest < ActiveSupport::TestCase
 
     finding.finding_answers.build(
       :answer => 'New audited answer',
-      :user => users(:audited_user)
+      :user => users(:audited_user),
+      :commitment_date => Date.today
     )
 
     assert finding.confirmed?
@@ -833,17 +834,17 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'incomplete')
     row = @finding.to_csv(detailed, 'incomplete')
 
-    assert_equal header[9], 'Fecha de implementación'.to_iso
-    assert_equal header.count, 12
-    assert_equal row.count, 12
+    assert_equal header[10], 'Fecha de implementación'
+    assert_equal header.count, 13
+    assert_equal row.count, 13
 
     detailed = false
     header = Finding.to_csv(detailed, 'complete')
     row = @finding.to_csv(detailed, 'complete')
 
-    assert_equal header[9], 'Fecha de solución'.to_iso
-    assert_equal header.count, 10
-    assert_equal row.count, 10
+    assert_equal header[10], 'Fecha de solución'
+    assert_equal header.count, 11
+    assert_equal row.count, 11
   end
 
   test 'notify users if they are selected for notification' do

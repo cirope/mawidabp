@@ -34,9 +34,7 @@ module PlansHelper
       list << label % show_plan_group_link(but, grouped_plan_items[but])
     end
 
-    list << label % show_plan_group_link(nil, grouped_plan_items[nil])
-
-    content_tag(:ul, raw(list.map { |li| content_tag(:li, raw(li)) }),
+    content_tag(:ul, raw((list.map { |li| content_tag(:li, raw(li)) }).join('')),
       :class => :raw_list, :style => 'font-size: 1.2em;')
   end
 

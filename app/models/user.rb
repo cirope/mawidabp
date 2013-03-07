@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   )
 
   has_paper_trail :ignore => [:last_access, :logged_in], :meta => {
-    :organization_id => lambda { GlobalModelConfig.current_organization_id },
+    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id },
     :important => lambda { |user| user.is_an_important_change }
   }
   acts_as_tree :foreign_key => 'manager_id', :readonly => true,
@@ -305,7 +305,9 @@ class User < ActiveRecord::Base
   def full_name(from = nil)
     version = self.version_of from
 
-    [version.last_name.try(:strip), version.name.try(:strip)].compact.join(', ')
+    [version.last_name.try(:strip), version.name.try(:strip)].compact.join(', ').encode(
+      'utf-8', :invalid => :replace, :undef => :replace
+    )
   end
 
   alias_method :resource_name, :full_name
@@ -320,9 +322,9 @@ class User < ActiveRecord::Base
   def full_name_with_function(from = nil)
     version = self.version_of from
 
-
     "#{version.full_name}#{version.string_to_append_if_function}".concat(
-      version.string_to_append_if_disable.to_s)
+       version.string_to_append_if_disable.to_s
+     )
   end
 
   alias_method :label, :full_name_with_function
@@ -336,17 +338,19 @@ class User < ActiveRecord::Base
 
   def string_to_append_if_disable
     unless self.enable? || self.full_name.blank?
-      " - (#{I18n.t('user.disabled')})"
+      " - (#{I18n.t('user.disabled')})".encode('utf-8', :invalid => :replace, :undef => :replace)
     end
   end
 
   def string_to_append_if_function
-    " (#{self.function})" unless self.function.blank? || self.full_name.blank?
+    unless self.function.blank? || self.full_name.blank?
+      " (#{self.function})".encode('utf-8', :invalid => :replace, :undef => :replace)
+    end
   end
 
   def string_to_append_if_resource
     unless self.resource.blank? || self.full_name.blank?
-      " (#{self.resource.name})"
+      " (#{self.resource.name})".encode('utf-8', :invalid => :replace, :undef => :replace)
     end
   end
 

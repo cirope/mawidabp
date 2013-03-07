@@ -82,12 +82,6 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
 end
 
-# Agrega una conversión de UTF-8 a ISO a la funcion text de Prawn::Document
-require 'iconv'
-
-CONVERTER_TO_ISO = Iconv.new 'ISO-8859-15//IGNORE//TRANSLIT', 'UTF-8'
-CONVERTER_TO_UTF8 = Iconv.new 'UTF-8//IGNORE//TRANSLIT', 'ISO-8859-15'
-
 module Prawn
   class Document
     include Prawn::Mawida::Extension
@@ -109,46 +103,6 @@ end
 
 # Extensión de la clase String
 class String
-  def to_iso
-    result = String.new
-
-    # Por línea para evitar un desborde en la función iconv cuando el string es
-    # muy grande
-    self.each_line do |line|
-      if line.length < 2048
-        result << CONVERTER_TO_ISO.iconv(line)
-      else
-        line.scan(/.{1,2048}/) do |chunk|
-          result << CONVERTER_TO_ISO.iconv(chunk)
-        end
-
-        result << "\n" if line.match(/\n/)
-      end
-    end
-
-    result
-  end
-
-  def to_utf8
-    result = String.new
-
-    # Por línea para evitar un desborde en la función iconv cuando el string es
-    # muy grande
-    self.each_line do |line|
-      if line.length < 2048
-        result << CONVERTER_TO_UTF8.iconv(line)
-      else
-        line.scan(/.{1,2048}/) do |chunk|
-          result << CONVERTER_TO_UTF8.iconv(chunk)
-        end
-
-        result << "\n" if line.match(/\n/)
-      end
-    end
-
-    result
-  end
-
   # Convierte un cadena en un entero que representa el tiempo en segundos
   # Por ejemplo:
   #

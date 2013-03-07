@@ -33,7 +33,6 @@ end
 
 group :development do
   gem 'thin'
-  gem 'ruby-debug'
 end
 
 group :test do
