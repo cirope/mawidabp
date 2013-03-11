@@ -578,6 +578,8 @@ class FollowUpCommitteeController < ApplicationController
 
   def load_privileges #:nodoc:
     @action_privileges.update(
+      :qa_indicators => :read,
+      :create_qa_indicators => :read,
       :synthesis_report => :read,
       :create_synthesis_report => :read,
       :high_risk_weaknesses_report => :read,
