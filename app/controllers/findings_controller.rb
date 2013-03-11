@@ -205,13 +205,6 @@ class FindingsController < ApplicationController
       ]
     ).where(@conditions)
 
-    if detailed
-      columns = 12
-    else
-      columns = 10
-    end
-
-    buffer = ''
     rows = []
 
     header = Finding.to_csv(detailed, completed)
@@ -221,15 +214,19 @@ class FindingsController < ApplicationController
       rows << finding.to_csv(detailed, completed)
     end
 
-    rows.each do |row|
-      parsed_cells = CSV.generate_row(row, columns, buffer, ?;)
+    parsed_cells = []
+
+    parsed_cells = CSV.generate(:col_sep => ?;, :encoding => 'UTF-8') do |csv|
+      rows.each do |row|
+        csv << row
+      end
     end
 
-    filename = t 'finding.csv_name'
 
     respond_with findings do |format|
       headers['Cache-Control'] = "max-age=1"
-      format.csv { render :csv => buffer, :filename => filename }
+
+      format.csv { render :csv => parsed_cells, :filename => t('finding.csv_name') }
     end
   end
 
@@ -339,7 +336,7 @@ class FindingsController < ApplicationController
     findings.limit(FINDING_MAX_PDF_ROWS).each do |finding|
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
-      date_text = l(date, :format => :minimal).to_iso if date
+      date_text = l(date, :format => :minimal) if date
       stale = finding.kind_of?(Weakness) && finding.being_implemented? &&
         finding.follow_up_date < Date.today
       being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
@@ -369,8 +366,8 @@ class FindingsController < ApplicationController
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
         "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
-        ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text.to_iso}" if finding.kind_of?(Weakness)),
-        ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text.to_iso}" if finding.kind_of?(Weakness)),
+        ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text}" if finding.kind_of?(Weakness)),
+        ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text}" if finding.kind_of?(Weakness)),
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
         "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}"
       ].compact.join("\n")

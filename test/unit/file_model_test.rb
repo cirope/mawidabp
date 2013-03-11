@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "FileModel"
@@ -22,6 +23,7 @@ class FileModelTest < ActiveSupport::TestCase
     assert_difference 'FileModel.count' do
       @file_model = FileModel.new
 
+      @file_model.id = rand 1000
       @file_model.file_file_name = 'new_file.jpg'
       @file_model.file_content_type = 'image/jpeg'
       @file_model.file_file_size = 2000
@@ -44,7 +46,7 @@ class FileModelTest < ActiveSupport::TestCase
       @file_model.destroy
     end
   end
-  
+
   test 'delete file when remove_file is one' do
     assert_difference 'FileModel.count' do
       file = Rack::Test::UploadedFile.new(
@@ -53,11 +55,11 @@ class FileModelTest < ActiveSupport::TestCase
 
       @file_model = FileModel.create(:file => file)
     end
-    
+
     assert @file_model.file?
     assert @file_model.update_attributes(:remove_file => '1')
     assert !@file_model.file?
-    
+
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true
   end
 
@@ -72,13 +74,13 @@ class FileModelTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@file_model, :file_content_type, :too_long,
       :count => 255)], @file_model.errors[:file_content_type]
   end
-  
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates file must have an extension' do
     @file_model.file = Rack::Test::UploadedFile.new(
       "#{self.class.fixture_path}/files/test", 'text/plain'
     )
-    
+
     assert @file_model.invalid?
     assert_equal 1, @file_model.errors.count
     assert_equal [

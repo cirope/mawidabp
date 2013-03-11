@@ -10,13 +10,13 @@
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
     back: "Volver"
-    optional: Opcional
+    optional: "Opcional"
     cancel: "Cancelar"
     close: "Cerrar"
     create: "Crear"
     day:
-      one: 1 dia
-      other: %{count} dias
+      one: "1 dia"
+      other: "%{count} dias"
     delete: "Baja"
     delete_file: "Eliminar archivo"
     descendant: "Descendente"
@@ -460,7 +460,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
     without_detract: "No tiene ningún detractor asignado al momento"
     user_without_detracts: "No tiene ningún detractor asignado al momento"
-    
+
   email:
     index_title: "Listado de correos"
     show_title: "Detalles del correo"
@@ -509,7 +509,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_weaknesses: "Sin observaciones en el periodo"
     without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
     without_findings: "Sin Observaciones / Oportunidades de Mejora"
-  
+
   finding:
     index_title: "Listado de observaciones / oportunidades de mejora"
     show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
@@ -1056,9 +1056,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
-  
-  poll:  
-    answer_poll: ¿Contestar encuesta?
+
+  poll:
+    answer_poll: "¿Contestar encuesta?"
     index_title: "Listado de encuestas"
     edit_title: "Modificar encuesta"
     new_title: "Agregar encuesta"
@@ -1066,8 +1066,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "La encuesta ha sido agregada correctamente."
     correctly_updated: "La encuesta ha sido guardada correctamente."
     stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    must_answer_poll: Debe contestar la siguiente encuesta para poder ingresar 
-      al sistema
+    must_answer_poll: "Debe contestar la siguiente encuesta para poder ingresar
+      al sistema"
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"
@@ -1081,7 +1081,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_procedure_control_subitem: "Agregar procedimiento de control"
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
-  
+
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -1304,7 +1304,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     column_old_value: "Valor anterior"
     without_changes: "Sin cambios"
     pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
-  
+
   weakness:
     index_title: "Listado de observaciones"
     show_title: "Detalles de la observación"
@@ -1372,7 +1372,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       resources_utilization: "Recursos utilizados"
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del programa de trabajo"
-      
+
   attributes:
     created_at: "Creación"
     updated_at: "Última actualización"
@@ -1712,7 +1712,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        #image_model: "Isologotipo"
       organization/image_model:
         one: "Isologotipo"
         image_file_name: "Isologotipo (nombre de archivo)"
@@ -1767,7 +1766,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
       poll:
         comments: "Comentarios encuesta"
-        answered: Contestada
+        answered: "Contestada"
         questionnaire: "Cuestionario"
       privilege:
         module: "Módulo"
@@ -1951,7 +1950,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-        
+
     errors:
       template:
         header:
@@ -2056,7 +2055,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
             end:
               resource_overload: "se superpone con otro ítem que ocupa el mismo recurso"
               item_overload: "debe ser igual o posterior al fin de la/s tarea/s predecesora/s"
-              
+
   actioncontroller:
     best_practices: "Buenas prácticas"
     business_unit_types: "Unidades de negocio"

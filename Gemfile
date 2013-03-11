@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 
 gem 'pg'
 gem 'foreigner'
@@ -22,7 +22,7 @@ gem 'dynamic_form'
 gem 'acts_as_tree_rails3', '~> 0.1.0'
 gem 'unicode'
 gem 'capistrano'
-gem 'rubyzip', :require => 'zip/zip'
+gem 'rubyzip', require: 'zip/zip'
 gem 'prawn'
 
 group :assets do
@@ -33,11 +33,10 @@ end
 
 group :development do
   gem 'thin'
-  gem 'ruby-debug'
 end
 
 group :test do
   gem 'rake' # Travis CI need this
-  gem 'minitest', :require => false
+  gem 'minitest', require: false
   gem 'turn'
 end
