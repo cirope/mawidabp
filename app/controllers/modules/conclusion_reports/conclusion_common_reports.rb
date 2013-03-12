@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 module ConclusionCommonReports
   def weaknesses_by_state
     @title = t('conclusion_committee_report.weaknesses_by_state_title')

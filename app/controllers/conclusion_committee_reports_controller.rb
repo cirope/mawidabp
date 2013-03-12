@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 require 'modules/conclusion_reports/conclusion_common_reports'
 require 'modules/conclusion_reports/conclusion_high_risk_reports'
 

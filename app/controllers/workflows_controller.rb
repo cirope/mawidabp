@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de programas de trabajo
 #
 # Lista, muestra, crea, modifica y elimina programas de trabajo (#Workflow) y

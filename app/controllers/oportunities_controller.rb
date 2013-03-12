@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de oportunidades de mejora
 #
 # Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)

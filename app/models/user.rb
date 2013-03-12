@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
@@ -297,17 +297,13 @@ class User < ActiveRecord::Base
   def informal_name(from = nil)
     version = self.version_of from
 
-    [version.name.try(:strip), version.last_name.try(:strip)].compact.join(' ').encode(
-      'utf-8', :invalid => :replace, :undef => :replace
-    )
+    [version.name.try(:strip), version.last_name.try(:strip)].compact.join(' ')
   end
 
   def full_name(from = nil)
     version = self.version_of from
 
-    [version.last_name.try(:strip), version.name.try(:strip)].compact.join(', ').encode(
-      'utf-8', :invalid => :replace, :undef => :replace
-    )
+    "#{version.last_name}, #{version.name}"
   end
 
   alias_method :resource_name, :full_name
@@ -315,18 +311,13 @@ class User < ActiveRecord::Base
   def full_name_with_user(from = nil)
     version = self.version_of from
 
-    "#{version.full_name} (#{version.user}) #{version.string_to_append_if_disable}".encode(
-      'utf-8', :invalid => :replace, :undef => :replace
-    )
+    "#{version.full_name} (#{version.user}) #{version.string_to_append_if_disable}"
   end
 
   def full_name_with_function(from = nil)
     version = self.version_of from
 
-    "#{version.full_name}#{version.string_to_append_if_function}".concat(
-      version.string_to_append_if_disable.to_s).encode(
-        'utf-8', :invalid => :replace, :undef => :replace
-      )
+    "#{version.full_name}#{version.string_to_append_if_function}#{version.string_to_append_if_disable}"
   end
 
   alias_method :label, :full_name_with_function
@@ -335,26 +326,24 @@ class User < ActiveRecord::Base
     version = self.version_of from
 
     "#{version.full_name}#{version.string_to_append_if_resource}".concat(
-      version.string_to_append_if_disable.to_s).encode(
-      'utf-8', :invalid => :replace, :undef => :replace
-    )
+      version.string_to_append_if_disable.to_s)
   end
 
   def string_to_append_if_disable
     unless self.enable? || self.full_name.blank?
-      " - (#{I18n.t('user.disabled')})".encode('utf-8', :invalid => :replace, :undef => :replace)
+      " - (#{I18n.t('user.disabled')})"
     end
   end
 
   def string_to_append_if_function
     unless self.function.blank? || self.full_name.blank?
-      " (#{self.function})".encode('utf-8', :invalid => :replace, :undef => :replace)
+      " (#{self.function})"
     end
   end
 
   def string_to_append_if_resource
     unless self.resource.blank? || self.full_name.blank?
-      " (#{self.resource.name})".encode('utf-8', :invalid => :replace, :undef => :replace)
+      " (#{self.resource.name})"
     end
   end
 

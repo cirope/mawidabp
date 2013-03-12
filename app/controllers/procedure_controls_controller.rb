@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de procedimientos y pruebas de control
 #
 # Lista, muestra, crea, modifica y elimina procedimientos y pruebas de control

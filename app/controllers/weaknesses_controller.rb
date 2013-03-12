@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de observaciones
 #
 # Lista, muestra, crea, modifica y elimina observaciones (#Weakness)

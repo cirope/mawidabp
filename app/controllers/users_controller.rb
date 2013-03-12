@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de usuarios
 #
 # Lista, muestra, crea, modifica y elimina usuarios (#User). Además controla el

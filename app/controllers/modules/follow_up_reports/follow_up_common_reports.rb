@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 module FollowUpCommonReports
   def weaknesses_by_state
     @title = t 'follow_up_committee.weaknesses_by_state_title'

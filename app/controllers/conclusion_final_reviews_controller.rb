@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de informes definitivos
 #
 # Lista, muestra, crea, modifica y elimina informes definitivos

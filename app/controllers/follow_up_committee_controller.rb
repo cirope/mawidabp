@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 require 'modules/follow_up_reports/follow_up_common_reports'
 require 'modules/follow_up_reports/follow_up_high_risk_reports'
 

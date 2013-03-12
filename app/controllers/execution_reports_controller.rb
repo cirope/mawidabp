@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 class ExecutionReportsController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges

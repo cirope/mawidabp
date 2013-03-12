@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de registros de ingreso
 #
 # Lista y muestra registros de ingreso (#LoginRecord)

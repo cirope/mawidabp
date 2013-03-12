@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 # =Controlador de planes de trabajo
 #
 # Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
