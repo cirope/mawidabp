@@ -196,15 +196,9 @@ class UserTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    @user.name = '?nil'
-    @user.last_name = '?123'
     @user.email = 'incorrect@format'
     assert @user.invalid?
-    assert_equal 3, @user.errors.count
-    assert_equal [error_message_from_model(@user, :name, :invalid)],
-      @user.errors[:name]
-    assert_equal [error_message_from_model(@user, :last_name, :invalid)],
-      @user.errors[:last_name]
+    assert_equal 1, @user.errors.count
     assert_equal [error_message_from_model(@user, :email, :invalid)],
       @user.errors[:email]
   end

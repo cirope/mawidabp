@@ -81,8 +81,6 @@ class User < ActiveRecord::Base
   after_save :reset_to_important_change
 
   # Restricciones
-  validates :name, :last_name, :format => {:with => /\A\w[\w\s]*\z/},
-    :allow_nil => true, :allow_blank => true
   validates :name, :last_name, :language, :email, :presence => true
   validates :user, :email, :uniqueness => {:case_sensitive => false}
   validates :name, :uniqueness =>
@@ -299,7 +297,9 @@ class User < ActiveRecord::Base
   def informal_name(from = nil)
     version = self.version_of from
 
-    [version.name.try(:strip), version.last_name.try(:strip)].compact.join(' ')
+    [version.name.try(:strip), version.last_name.try(:strip)].compact.join(' ').encode(
+      'utf-8', :invalid => :replace, :undef => :replace
+    )
   end
 
   def full_name(from = nil)
@@ -315,16 +315,18 @@ class User < ActiveRecord::Base
   def full_name_with_user(from = nil)
     version = self.version_of from
 
-    "#{version.full_name} (#{version.user})".concat(
-      version.string_to_append_if_disable.to_s)
+    "#{version.full_name} (#{version.user}) #{version.string_to_append_if_disable}".encode(
+      'utf-8', :invalid => :replace, :undef => :replace
+    )
   end
 
   def full_name_with_function(from = nil)
     version = self.version_of from
 
     "#{version.full_name}#{version.string_to_append_if_function}".concat(
-       version.string_to_append_if_disable.to_s
-     )
+      version.string_to_append_if_disable.to_s).encode(
+        'utf-8', :invalid => :replace, :undef => :replace
+      )
   end
 
   alias_method :label, :full_name_with_function
@@ -333,7 +335,9 @@ class User < ActiveRecord::Base
     version = self.version_of from
 
     "#{version.full_name}#{version.string_to_append_if_resource}".concat(
-      version.string_to_append_if_disable.to_s)
+      version.string_to_append_if_disable.to_s).encode(
+      'utf-8', :invalid => :replace, :undef => :replace
+    )
   end
 
   def string_to_append_if_disable
