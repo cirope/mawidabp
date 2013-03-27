@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "Review"
@@ -65,9 +66,9 @@ class ReviewTest < ActiveSupport::TestCase
   # Prueba de eliminación de un reporte
   test 'destroy' do
     assert_no_difference('Review.count') { @review.destroy }
-    
+
     review = reviews(:review_without_conclusion_and_without_findings)
-    
+
     assert_difference('Review.count', -1) { review.destroy }
   end
 
@@ -183,7 +184,7 @@ class ReviewTest < ActiveSupport::TestCase
     total = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.effectiveness * coi.relevance
     end
-    
+
     average = (total / cois_count.to_f).round
 
     scores = get_test_parameter(:admin_review_scores)
@@ -198,27 +199,27 @@ class ReviewTest < ActiveSupport::TestCase
     assert_equal count, @review.achieved_scale
     assert scores.size > 0
     assert_equal scores.size, @review.top_scale
-    
+
     assert_difference '@review.control_objective_items_for_score.size', -1 do
       @review.control_objective_items.first.exclude_from_score = true
     end
-    
+
     assert !@review.control_objective_items_for_score.empty?
-    
+
     cois_count = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.relevance
     end
     total = @review.control_objective_items_for_score.inject(0) do |acc, coi|
       acc + coi.effectiveness * coi.relevance
     end
-    
+
     new_average = (total / cois_count.to_f).round
     assert_not_equal average, new_average
   end
 
   test 'must be approved function' do
     @review = reviews(:review_approved_with_conclusion)
-    
+
     assert @review.must_be_approved?
     assert @review.approval_errors.blank?
 
@@ -282,7 +283,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
     assert finding.allow_destruction!
     assert finding.destroy
-    
+
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:unconfirmed],
       'follow_up_date' => nil,
@@ -333,20 +334,20 @@ class ReviewTest < ActiveSupport::TestCase
       :finished => false
     ).first.update_attribute(:finished, true)
     assert @review.reload.must_be_approved?
-    
+
     assert @review.finding_review_assignments.build(
       :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
     )
     assert !@review.must_be_approved?
     assert @review.approval_errors.flatten.include?(
       I18n.t('review.errors.related_finding_incomplete'))
-    
+
     assert @review.reload.must_be_approved?
 
     review = reviews(:review_without_conclusion_and_without_findings)
-    
+
     review.control_objective_items.clear
-    
+
     assert !review.must_be_approved?
     assert review.approval_errors.flatten.include?(
       I18n.t('review.errors.without_control_objectives')
@@ -355,7 +356,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'can be sended' do
     @review = reviews(:review_approved_with_conclusion)
-    
+
     assert @review.can_be_sended?
 
     review_weakness = @review.control_objective_items.first.weaknesses.first
@@ -383,14 +384,17 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
-  test 'has manager function' do
-    assert @review.has_manager?
+  test 'has manager or supervisor function' do
+    assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    managers = @review.review_user_assignments.select { |a| a.manager? }
+    managers = @review.review_user_assignments.select { |a| a.manager? || a.supervisor? }
     @review.review_user_assignments.delete managers
 
-    assert !@review.has_manager?
+    supervisors = @review.review_user_assignments.select {|a| a.supervisor?}
+    @review.review_user_assignments.delete supervisors
+
+    assert !@review.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
   end
 
@@ -402,17 +406,6 @@ class ReviewTest < ActiveSupport::TestCase
     @review.review_user_assignments.delete auditors
 
     assert !@review.has_auditor?
-    assert @review.invalid?
-  end
-
-  test 'has supervisor function' do
-    assert @review.has_supervisor?
-    assert @review.valid?
-
-    supervisors = @review.review_user_assignments.select {|a| a.supervisor?}
-    @review.review_user_assignments.delete supervisors
-
-    assert !@review.has_supervisor?
     assert @review.invalid?
   end
 
@@ -483,7 +476,7 @@ class ReviewTest < ActiveSupport::TestCase
     generated_code = @review.last_weakness_work_paper_code('pre')
 
     assert_match /\Apre\s\d+\Z/, generated_code
-    
+
     assert_equal 'New prefix 00',
       @review.reload.last_weakness_work_paper_code('New prefix')
   end
@@ -571,7 +564,7 @@ class ReviewTest < ActiveSupport::TestCase
       new_review.review_user_assignments.map { |a| [a.assignment_type, a.user_id] }
     )
   end
-  
+
   private
 
   def clone_finding_user_assignments(finding)

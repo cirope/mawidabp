@@ -900,6 +900,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
       valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
       clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
+    being_implemented_and_stale_finding_to_manager:
+      title: "Notificación de observaciones en proceso de implementación vencidas"
+      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
       the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
@@ -2203,7 +2206,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente, un supervisor y un auditado"
+              invalid: "debe tener al menos un auditor, un gerente y un auditado o
+                un auditor, un supervisor y un auditado"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
         review_user_assignment:

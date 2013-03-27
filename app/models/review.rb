@@ -155,10 +155,7 @@ class Review < ActiveRecord::Base
     record.errors.add attr, :taken if reviews.count > 0
   end
   validates_each :review_user_assignments do |record, attr, value|
-    unless record.has_audited? && record.has_auditor? &&
-        record.has_supervisor? && record.has_manager?
-      record.errors.add attr, :invalid
-    end
+    record.errors.add attr, :invalid unless Review.check_user_roles(record)
   end
   validates_each :plan_item do |record, attr, value|
     record.errors.add attr, :invalid if value && !value.business_unit
@@ -206,6 +203,12 @@ class Review < ActiveRecord::Base
 
   def set_proper_parent
     self.review_user_assignments.each { |rua| rua.review = self }
+  end
+
+  def self.check_user_roles(record)
+    record.has_audited? && record.has_auditor? && record.has_supervisor? && record.has_manager? ||
+    record.has_audited? && record.has_auditor? && record.has_manager? ||
+    record.has_audited? && record.has_auditor? && record.has_supervisor?
   end
 
   def can_be_modified?
