@@ -1,7 +1,4 @@
-es:
-  app_name: "Mawida Buenas Prácticas"
-  app_copyright: "Copyright © 2008-%{year} Mawida Buenas Prácticas. Todos los derechos reservados."
-
+'es':
   label:
     "yes": "Si"
     "no": "No"
@@ -875,7 +872,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
       warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
-      title: "Correo enviado por el sistema 'Mawida Buenas Prácticas'. Cualquier inquietud comunicarse al área de soporte:"
+      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
     notification:
       pending: "Notificaciones pendientes"
@@ -916,17 +913,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     pending_poll_email:
       title: "%{name}, tiene una encuesta pendiente"
       answer_poll: 'Contestar encuesta'
-      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'Mawida Buenas Prácticas'"
+      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
-      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawida Buenas Prácticas'"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'MawidaBP'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawida Buenas Prácticas' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'MawidaBP' del área de Auditoría Interna."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
