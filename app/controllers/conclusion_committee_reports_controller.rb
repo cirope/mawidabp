@@ -85,7 +85,10 @@ class ConclusionCommitteeReportsController < ApplicationController
         review_scores = []
         name = but.name
 
-        conclusion_reviews.for_period(period).each do |c_r|
+        c_r_for_period = conclusion_reviews.for_period(period)
+        c_r_for_period.sort_by { |c_r| c_r[:score] }
+
+        c_r_for_period.each do |c_r|
           if c_r.review.business_unit.business_unit_type_id == but.id
             process_controls = {}
             weaknesses_count = {}

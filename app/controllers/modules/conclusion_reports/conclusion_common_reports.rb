@@ -506,10 +506,14 @@ module ConclusionCommonReports
       @from_date, @to_date
     )
     @process_control_data = {}
-    @control_objectives_data = {}
     @reviews_score_data = {}
     reviews_score_data = {}
     control_objectives = []
+    @control_objectives_data = {}
+
+    @periods.each do |period|
+      @control_objectives_data[period] = {}
+    end
 
     if params[:control_objective_stats]
       if params[:control_objective_stats][:business_unit_type].present?
@@ -569,6 +573,7 @@ module ConclusionCommonReports
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
+
             weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
 
             coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
@@ -603,8 +608,11 @@ module ConclusionCommonReports
       @process_control_data[period] ||= []
 
       process_controls.each do |pc, cos|
+        @control_objectives_data[period][pc] ||= {}
+
         cos.each do |co, coi_data|
-          @control_objectives_data[co.name] ||= {}
+          @control_objectives_data[period][pc][co.name] ||= {}
+
           reviews_count = coi_data[:effectiveness].size
           effectiveness = reviews_count > 0 ?
             coi_data[:effectiveness].sum / reviews_count : 100
@@ -620,16 +628,19 @@ module ConclusionCommonReports
 
             @risk_levels.each do |risk|
               text[risk] ||= { :complete => 0, :incomplete => 0 }
+
               if weaknesses_status_count[risk]
                 text[risk][:incomplete] = weaknesses_status_count[risk][:incomplete]
                 text[risk][:complete] = weaknesses_status_count[risk][:complete]
               end
 
-              @control_objectives_data[co.name][risk] ||= { :complete => [], :incomplete => [] }
+#              weaknesses_status_count = {}
+              @control_objectives_data[period][pc][co.name][risk] ||= { :complete => [], :incomplete => [] }
               coi_data[:weaknesses_ids][risk] ||= { :complete => [], :incomplete => [] }
-              @control_objectives_data[co.name][risk][:complete].concat coi_data[:weaknesses_ids][risk][:complete]
-              @control_objectives_data[co.name][risk][:incomplete].concat coi_data[:weaknesses_ids][risk][:incomplete]
+              @control_objectives_data[period][pc][co.name][risk][:complete].concat coi_data[:weaknesses_ids][risk][:complete]
+              @control_objectives_data[period][pc][co.name][risk][:incomplete].concat coi_data[:weaknesses_ids][risk][:incomplete]
               weaknesses_count_text[risk.to_sym] = text[risk]
+
             end
           end
 
@@ -699,8 +710,10 @@ module ConclusionCommonReports
             list = ""
             @risk_levels.each do |risk|
               co = row["control_objective"]
-              incompletes = @control_objectives_data[co][risk][:incomplete].count
-              completes = @control_objectives_data[co][risk][:complete].count
+              pc = row["process_control"]
+
+              incompletes = @control_objectives_data[period][pc][co][risk][:incomplete].count
+              completes = @control_objectives_data[period][pc][co][risk][:complete].count
 
               list += "  • #{risk}: #{incompletes} / #{completes} \n"
             end
