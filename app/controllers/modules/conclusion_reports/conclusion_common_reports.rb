@@ -634,7 +634,6 @@ module ConclusionCommonReports
                 text[risk][:complete] = weaknesses_status_count[risk][:complete]
               end
 
-#              weaknesses_status_count = {}
               @control_objectives_data[period][pc][co.name][risk] ||= { :complete => [], :incomplete => [] }
               coi_data[:weaknesses_ids][risk] ||= { :complete => [], :incomplete => [] }
               @control_objectives_data[period][pc][co.name][risk][:complete].concat coi_data[:weaknesses_ids][risk][:complete]

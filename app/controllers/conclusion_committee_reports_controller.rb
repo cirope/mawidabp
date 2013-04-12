@@ -133,7 +133,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             column_data << [
               c_r.review.business_unit.name,
               c_r.review.to_s,
-              c_r.review.reload.score_text,
+              c_r.review.reload,
               process_control_text,
               @risk_levels.blank? ?
                 t('conclusion_committee_report.synthesis_report.without_weaknesses') :
@@ -141,6 +141,14 @@ class ConclusionCommitteeReportsController < ApplicationController
               oportunities_count_text
             ]
           end
+        end
+
+        column_data.sort! do |cd_1, cd_2|
+          cd_1[2].score <=> cd_2[2].score
+        end
+
+        column_data.each do |data|
+          data[2] = data[2].score_text
         end
 
         @audits_by_business_unit[period] ||= []
