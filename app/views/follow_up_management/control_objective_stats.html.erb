@@ -32,7 +32,7 @@
               <% col_data = data[col_name] %>
               <td>
                 <%= col_name == 'weaknesses_count' ?
-                  show_control_objective_weaknesses_report_links(data) : col_data %>
+                  show_control_objective_weaknesses_report_links(data, period) : col_data %>
               </td>
             <% end %>
           </tr>
@@ -40,7 +40,7 @@
       </tbody>
     </table>
   <% end %>
-  
+
   <p style="margin: 1em; font-size: 1.1em;">
     <%= raw t(
       'follow_up_committee.control_objective_stats.review_score_average',

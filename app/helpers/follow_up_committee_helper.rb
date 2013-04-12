@@ -26,12 +26,15 @@ module FollowUpCommitteeHelper
     risks
   end
 
-  def show_control_objective_weaknesses_report_links(data)
+  def show_control_objective_weaknesses_report_links(data, period)
     if data['weaknesses_count'].kind_of?(Hash)
       new_data = []
+      pc = data['process_control']
+      co = data['control_objective']
+
       @risk_levels.each do |risk|
-        ids_complete = @control_objectives_data[data['control_objective']][risk][:complete]
-        ids_incomplete = @control_objectives_data[data['control_objective']][risk][:incomplete]
+        ids_complete = @control_objectives_data[period][pc][co][risk][:complete]
+        ids_incomplete = @control_objectives_data[period][pc][co][risk][:incomplete]
         url_complete = findings_path(:complete, :ids => ids_complete)
         url_incomplete = findings_path(:incomplete, :ids => ids_incomplete)
 

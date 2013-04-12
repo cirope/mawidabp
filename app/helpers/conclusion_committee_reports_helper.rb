@@ -37,13 +37,12 @@ module ConclusionCommitteeReportsHelper
   def show_control_objective_final_weaknesses_report_links(data, period)
     if data['weaknesses_count'].kind_of?(Hash)
       new_data = []
+      pc = data['process_control']
+      co = data['control_objective']
 
       @risk_levels.each do |risk|
-        ids_complete =
-          @control_objectives_data[period][data['process_control']][data['control_objective']][risk][:complete]
-        ids_incomplete =
-          @control_objectives_data[period][data['process_control']][data['control_objective']][risk][:incomplete]
-
+        ids_complete = @control_objectives_data[period][pc][co][risk][:complete]
+        ids_incomplete = @control_objectives_data[period][pc][co][risk][:incomplete]
         url_complete = weaknesses_path(:ids => ids_complete)
         url_incomplete = weaknesses_path(:ids => ids_incomplete)
 
