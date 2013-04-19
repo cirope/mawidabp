@@ -1,7 +1,12 @@
 <div id="showed_data">
   <p>
-    <b><%= Poll.human_attribute_name :user_id %>: </b>
-      <%= "#{@poll.user.last_name}, #{@poll.user.name}"  %>
+    <% if @poll.user.present? %>
+      <b><%= Poll.human_attribute_name :user_id %>: </b>
+        <%= @poll.user.informal_name  %>
+    <% elsif @poll.customer_email.present? %>
+      <b><%= Poll.human_attribute_name :customer_email %>: </b>
+        <%= @poll.customer_email  %>
+    <% end %>
   </p>
   <p>
     <b><%= Poll.human_attribute_name :answered %>: </b>

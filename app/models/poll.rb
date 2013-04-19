@@ -22,9 +22,12 @@ class Poll < ActiveRecord::Base
   )
 
   # Validaciones
-  validates :organization_id, :questionnaire_id, :user_id, :presence => true
+  validates :organization_id, :questionnaire_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
+  validates_format_of :customer_email, :with => EMAIL_REGEXP, :allow_nil => true,
+    :allow_blank => true
+  validate :user_id_xor_customer_email
 
   # Relaciones
   belongs_to :questionnaire
@@ -80,6 +83,12 @@ class Poll < ActiveRecord::Base
   end
 
   private
+
+  def user_id_xor_customer_email
+    unless self.user_id.present? ^ self.customer_email.present?
+      errors.add(:base, :invalid)
+    end
+  end
 
   def generate_access_token
     begin

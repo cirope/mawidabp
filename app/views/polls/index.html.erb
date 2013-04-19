@@ -18,7 +18,7 @@
   <tbody>
     <% @polls.each do |poll| %>
       <tr class="<%= cycle('even', 'odd') %>">
-        <td><%= poll.user.informal_name  %></td>
+        <td><%= poll.user ? poll.user.informal_name : poll.customer_email %></td>
         <td><%= poll.name %></td>
         <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
         <td><%= l poll.created_at.to_date, :format => :long %></td>
@@ -32,6 +32,7 @@
 
 <div id="links">
   <%= pagination_links @polls %>
-  <%= link_to t('label.new'), new_poll_path %>
+  <%= link_to t('label.new'), new_poll_path %> |
+  <%= link_to t('poll.import_csv_customers_title'), import_csv_customers_polls_path %>
   <div class="clear"></div>
 </div>

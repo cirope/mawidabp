@@ -1,7 +1,8 @@
 'es':
   label:
-    "yes": "Si"
-    "no": "No"
+    attach_csv: "Importar CSV"
+    yes: "Si"
+    no: "No"
     add: "Agregar"
     add_item: "Agregar ítem"
     apply_filter: "Aplicar filtro"
@@ -1075,6 +1076,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   poll:
     answer_poll: "¿Contestar encuesta?"
+    import_csv_customers_title: "Importar clientes CSV"
+    error_csv_file_extension: "Debe seleccionar un archivo CSV"
+    customer_polls_sended: "Se enviaron satisfactoriamente %{count} encuestas"
     index_title: "Listado de encuestas"
     edit_title: "Modificar encuesta"
     new_title: "Agregar encuesta"
@@ -1900,6 +1904,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
       poll:
         comments: "Comentarios encuesta"
+        customer_email: "Email cliente"
         send_date: "Fecha envío"
         answer_date: "Fecha contestación"
         answered: "Contestada"
@@ -2180,6 +2185,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             role_id:
               invalid: "deben ser sólo del tipo auditado o de otro tipo pero no ambos"
+        poll:
+          attributes:
+            base:
+              invalid: "debe tener un usuario asociado o un email de cliente"
         plan:
           attributes:
             plan_items:

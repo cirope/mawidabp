@@ -3,6 +3,7 @@ class PollsController < ApplicationController
   before_filter :check_privileges, :except => [:edit, :update, :show]
 
   layout 'application'
+  require 'csv'
 
   # GET /polls
   # GET /polls.json
@@ -474,6 +475,49 @@ class PollsController < ApplicationController
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
+  end
+
+  def import_csv_customers
+    @title = t('poll.import_csv_customers_title')
+  end
+
+  def send_csv_polls
+    if params[:dump_emails] && File.extname(params[:dump_emails][:file].original_filename).downcase == '.csv'
+      uploaded_file = params[:dump_emails][:file]
+      file_name = uploaded_file.tempfile.to_path.to_s
+      questionnaire_id = params[:dump_emails][:questionnaire_id].to_i
+      text = File.read(
+        file_name,
+        { :encoding => 'UTF-8',
+          :delimiter => ';'
+        }
+      )
+
+      @parsed_file = CSV.parse(text, :col_sep => ';')
+
+      n = 0
+      Poll.transaction do
+        @parsed_file.each  do |row|
+          poll = Poll.new(
+            :questionnaire_id => questionnaire_id,
+            :organization_id => @auth_organization.id
+          )
+          poll.customer_email = row[0]
+
+          if poll.save
+            n+=1
+          end
+        end
+      end
+
+      flash[:notice] = t('poll.customer_polls_sended', :count => n)
+    else
+      flash[:alert] = t('poll.error_csv_file_extension')
+    end
+
+    respond_to do |format|
+      format.html { redirect_to polls_path }
+    end
   end
 
   def load_privileges #:nodoc:

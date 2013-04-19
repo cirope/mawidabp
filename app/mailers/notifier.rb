@@ -5,16 +5,24 @@ class Notifier < ActionMailer::Base
     :date => proc { Time.now }
 
   def pending_poll_email(poll)
+
+    if poll.user.present?
+      email = poll.user.email
+      @name = poll.user.informal_name
+    else
+      email = poll.customer_email
+      @name = poll.customer_email
+    end
+
     @poll = poll
-    @user = poll.user
-    @hash = @user.change_password_hash
+    @hash = poll.user.change_password_hash if poll.user
     @organization = poll.organization
     @token = poll.access_token
 
     mail(
-      :to => @user.email,
+      :to => email,
       :subject => "[#{@organization.prefix.upcase}] " + t(
-        'notifier.pending_poll_email.title', :name => @user.informal_name
+        'notifier.pending_poll_email.title', :name => @name
       )
     )
   end

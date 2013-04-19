@@ -1,5 +1,5 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.pending_poll_email.title', :name => @user.informal_name %></h2>
+  <h2><%= t('notifier.pending_poll_email.title', :name => @name) %></h2>
   <p>
     <%= link_to t('notifier.pending_poll_email.answer_poll'),
       edit_poll_url(
