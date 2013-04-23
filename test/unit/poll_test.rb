@@ -64,10 +64,28 @@ class PollTest < ActiveSupport::TestCase
     assert_equal 3, @poll.errors.count
     assert_equal [error_message_from_model(@poll, :questionnaire_id, :blank)],
       @poll.errors[:questionnaire_id]
-    assert_equal [error_message_from_model(@poll, :user_id, :blank)],
-      @poll.errors[:user_id]
     assert_equal [error_message_from_model(@poll, :organization_id, :blank)],
       @poll.errors[:organization_id]
+    assert_equal [error_message_from_model(@poll, :base, :invalid)],
+      @poll.errors[:base]
+
+    # Validación customer_email xor user
+    @poll.customer_email = 'customer@email.com'
+    @poll.user = users(:poll_user)
+    assert @poll.invalid?
+    assert_equal [error_message_from_model(@poll, :base, :invalid)],
+      @poll.errors[:base]
+    assert_equal 3, @poll.errors.count
+
+    @poll.customer_email = 'customer@email.com'
+    @poll.user = nil
+    assert @poll.invalid?
+    assert_equal 2, @poll.errors.count
+
+    @poll.customer_email = nil
+    @poll.user = users(:poll_user)
+    assert @poll.invalid?
+    assert_equal 2, @poll.errors.count
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

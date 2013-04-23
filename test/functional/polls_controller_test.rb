@@ -13,6 +13,12 @@ class PollsControllerTest < ActionController::TestCase
     private_actions = [
       [:get, :index],
       [:get, :new],
+      [:get, :import_csv_customers],
+      [:get, :summary_by_questionnaire],
+      [:get, :summary_by_business_unit],
+      [:get, :create_summary_by_questionnaire],
+      [:get, :create_summary_by_business_unit],
+      [:post, :send_csv_polls],
       [:post, :create],
       [:delete, :destroy, id_param]
     ]
@@ -71,14 +77,16 @@ class PollsControllerTest < ActionController::TestCase
 
   test "create poll" do
     perform_auth
-    assert_difference 'Poll.count', ActionMailer::Base.deliveries.count do
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.deliveries = []
+
+    assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'] do
       assert_difference 'Answer.count', 2 do
         post :create, {
           :poll => {
             :user_id => users(:administrator_user).id,
-            :questionnaire_id => questionnaires(:questionnaire_one).id,
-            :organization_id => organizations(:default_organization).id,
-            :access_token => SecureRandom.hex
+            :questionnaire_id => questionnaires(:questionnaire_one).id
           }
         }
       end
@@ -233,5 +241,41 @@ class PollsControllerTest < ActionController::TestCase
     assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+  end
+
+  test 'send csv polls' do
+    perform_auth
+
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.deliveries = []
+
+    assert_difference ['Poll.count', 'ActionMailer::Base.deliveries.count'], 2 do
+      assert_difference 'Answer.count', 4 do
+        post :send_csv_polls, :dump_emails => {
+          :file => fixture_file_upload('files/customer_emails.csv', 'text/csv'),
+          :questionnaire_id => questionnaires(:questionnaire_one).id
+        }
+      end
+    end
+
+    assert_redirected_to polls_path
+    assert_equal I18n.t('poll.customer_polls_sended', :count => 2), flash[:notice]
+
+    assert_no_difference 'Poll.count' do
+      post :send_csv_polls, :dump_emails => {}
+
+      assert_response :success
+    end
+
+    # Prueba adjuntar un archivo que no sea csv
+    assert_no_difference('Poll.count') do
+      post :send_csv_polls, :dump_emails => {
+        :file => fixture_file_upload('files/customer_emails.txt', 'text/csv')
+      }
+    end
+
+    assert_redirected_to polls_path
+    assert_equal I18n.t('poll.error_csv_file_extension'), flash[:alert]
+
   end
 end

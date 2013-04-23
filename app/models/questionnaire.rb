@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Questionnaire < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
@@ -57,8 +58,11 @@ class Questionnaire < ActiveRecord::Base
       if poll.answered
         answered += 1
         poll.answers.each do |answer|
-          option = Question::ANSWER_OPTIONS.rindex answer.answer_option.option.to_sym
-          rates[answer.question.question][option] += 1
+          # Si es múltiple opción
+          if answer.answer_option
+            option = Question::ANSWER_OPTIONS.rindex answer.answer_option.option.to_sym
+            rates[answer.question.question][option] += 1
+          end
         end
       else
         unanswered +=1

@@ -483,9 +483,11 @@ class PollsController < ApplicationController
 
   def send_csv_polls
     if params[:dump_emails] && File.extname(params[:dump_emails][:file].original_filename).downcase == '.csv'
+
       uploaded_file = params[:dump_emails][:file]
-      file_name = uploaded_file.tempfile.to_path.to_s
+      file_name = uploaded_file.path
       questionnaire_id = params[:dump_emails][:questionnaire_id].to_i
+
       text = File.read(
         file_name,
         { :encoding => 'UTF-8',
@@ -493,9 +495,9 @@ class PollsController < ApplicationController
         }
       )
 
-      @parsed_file = CSV.parse(text, :col_sep => ';')
-
+      @parsed_file = CSV.parse(text)
       n = 0
+
       Poll.transaction do
         @parsed_file.each  do |row|
           poll = Poll.new(
@@ -504,7 +506,7 @@ class PollsController < ApplicationController
           )
           poll.customer_email = row[0]
 
-          if poll.save
+          if poll.save!
             n+=1
           end
         end
