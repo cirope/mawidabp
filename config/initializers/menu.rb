@@ -153,12 +153,16 @@ APP_AUDITOR_MENU_ITEMS = [
             :polls,
             :order => 2,
             :controllers => :polls,
+            :extra_conditions => "params[:action] == 'index' || params[:action] == 'new' ||
+              params[:action] == 'import_csv_customers'",
             :url => {:controller => :polls}
           ),
           MenuItem.new(
             :reports,
             :order => 3,
             :controllers => :polls,
+            :extra_conditions => "params[:action] == 'reports' ||
+              params[:action] == 'summary_by_questionnaire' || params[:action] == 'summary_by_business_unit'",
             :url => {:controller => :polls, :action => :reports}
           )
         ]

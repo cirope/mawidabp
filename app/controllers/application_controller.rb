@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # =Controlador de la aplicación
 #
 # Controlador del que heredan los demás controladores de la aplicación.
@@ -9,7 +10,7 @@ class ApplicationController < ActionController::Base
   # utilizarse
   include ParameterSelector
   include GlobalModelConfig
-  
+
   protect_from_forgery
 
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
@@ -69,7 +70,7 @@ class ApplicationController < ActionController::Base
   def login_check #:doc:
     load_organization
     load_user
-    
+
     !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&
       @auth_user.logged_in?
   end
@@ -108,7 +109,7 @@ class ApplicationController < ActionController::Base
         :update => :modify,
         :destroy => :erase
       )
-      
+
       @auth_privileges = @auth_organization ?
         @auth_user.try(:privileges, @auth_organization) : {}
     else
@@ -126,7 +127,7 @@ class ApplicationController < ActionController::Base
     session_expire = @auth_organization ? parameter_in(@auth_organization.id,
       :security_session_expire_time).to_i : 30
     last_access = session[:last_access]
-    
+
     if session_expire == 0 || last_access >= session_expire.minutes.ago
       session[:last_access] = Time.now
 
@@ -168,20 +169,19 @@ class ApplicationController < ActionController::Base
   end
 
   def module_name_for(controller_name)
-    selected_module = nil
     modules = @auth_user.audited? ?
       APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
     top_level_menu = true
 
     until modules.blank?
+      selected_module = nil
       modules.each do |mod|
         if mod.controllers.include?(controller_name) && (top_level_menu ||
-              mod.conditions(controller_name).blank? ||
-              eval(mod.conditions(controller_name)) ||
-              eval(mod.conditions(controller_name, false)))
-
-          selected_module = mod
-          top_level_menu = false
+          mod.conditions(controller_name).blank? ||
+          eval(mod.conditions(controller_name)) ||
+          eval(mod.conditions(controller_name, false)))
+            selected_module = mod
+            top_level_menu = false
         end
       end
 
@@ -246,7 +246,7 @@ class ApplicationController < ActionController::Base
         out << "#{exception.class}: #{exception.message}\n\n"
 
         exception.backtrace.each { |l| out << "#{l}\n" }
-        
+
         out << "\nENV\n\n"
       end
     end
@@ -278,7 +278,7 @@ class ApplicationController < ActionController::Base
       @order_by_column_name =
         model.columns_for_sort[params[:search][:order]][:name]
     end
-    
+
     if params[:search] && !params[:search][:query].blank?
       raw_query = Unicode::downcase(params[:search][:query] || '')
       and_query = raw_query.split(SEARCH_AND_REGEXP).reject { |q| q.blank? }
@@ -289,7 +289,7 @@ class ApplicationController < ActionController::Base
       search_string = []
       filters = {:boolean_false => false}
 
-      
+
       @query.each_with_index do |or_queries, i|
         or_search_string = []
 
