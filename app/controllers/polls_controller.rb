@@ -530,7 +530,9 @@ class PollsController < ApplicationController
         :summary_by_business_unit => :read,
         :create_summary_by_business_unit => :read,
         :summary_by_questionnaire => :read,
-        :create_summary_by_questionnaire => :read
+        :create_summary_by_questionnaire => :read,
+        :auto_complete_for_user => :read,
+        :import_csv_customers => :read
       )
     end
   end
