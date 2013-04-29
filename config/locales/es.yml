@@ -1903,7 +1903,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
       poll:
-        comments: "Comentarios encuesta"
+        comments: "Comentarios generales de la encuesta"
         customer_email: "Email cliente"
         send_date: "Fecha envío"
         answer_date: "Fecha contestación"
