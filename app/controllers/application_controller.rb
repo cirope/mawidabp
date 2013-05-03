@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     if login_check
-      I18n.locale = @auth_user.language
+      I18n.locale = @auth_organization.public ? :public_es : :es
       check_access_time
       response.headers['Cache-Control'] = 'no-cache, no-store'
 

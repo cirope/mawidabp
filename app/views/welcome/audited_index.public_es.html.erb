@@ -1,0 +1,50 @@
+<div class="static_content">
+  <div style="text-align: center; margin-bottom: 2em;">
+    <%= image_tag 'logo.gif', :size => '250x65', :alt => 'Mawida Buenas Prácticas' %>
+  </div>
+  
+  <h2>SEGUIMIENTO</h2>
+  
+  <h3>Observaciones y oportunidades pendientes</h3>
+  
+  <p>
+    Aquí podrá consultar sus observaciones pendientes de solución. Para
+    contestar alguna observación, deberá seleccionar <b>Editar</b>
+    (Lápiz).
+  </p>
+  <p>
+    Dentro del detalle de la observación podrá contestar y comunicarse con
+    todas las personas relacionadas a la misma. El objetivo es colaborar
+    para encontrar una solución.
+  </p>
+    
+  <h3>Observaciones y oportunidades solucionadas</h3>
+  
+  <p>
+    Podrá consultar sus observaciones solucionadas o reiteradas.
+  </p>
+
+  <h2>AYUDA</h2>
+  
+  <p>
+    Si tiene alguna duda sobre alguna funcionalidad o proceso, este es el mejor
+    lugar para despejarla.
+  </p>
+
+  <div style="margin-top: 2em; padding-top: 1em; border-top: 1px dotted #525252;">
+    <p>
+      Cualquier inquietud comunicarse al área de soporte:
+    </p>
+    <ul class="raw_list">
+      <li>
+        <b>Correo (preferentemente)</b>:
+        <a href="mailto:<%= SUPPORT_EMAIL %>"><%= SUPPORT_EMAIL %></a>
+      </li>
+      <li><b>Teléfono</b>: <%= SUPPORT_PHONE %></li>
+    </ul>
+  </div>
+
+  <p>
+    Versión: <strong><%= MW_VERSION %></strong>
+  </p>
+</div>

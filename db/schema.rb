@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417184631) do
+ActiveRecord::Schema.define(:version => 20130430130451) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -438,6 +438,7 @@ ActiveRecord::Schema.define(:version => 20130417184631) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_id"
+    t.boolean  "public",         :default => false
   end
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"

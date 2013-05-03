@@ -17,6 +17,10 @@
     <%= o_f.label :description %>
     <%= o_f.text_area :description %>
   </p>
+  <p>
+    <%= o_f.label :public %>
+    <%= o_f.check_box :public %>
+  </p>
   <% unless @organization.new_record? %>
     <p class="form_item">
       <% @organization.build_image_model unless @organization.image_model %>

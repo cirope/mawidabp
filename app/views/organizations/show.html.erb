@@ -1,17 +1,22 @@
 <div id="showed_data">
 <p>
   <b><%= Organization.human_attribute_name 'name' %>:</b>
-  <%= h @organization.name %>
+  <%= @organization.name %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'prefix' %>:</b>
-  <%= h @organization.prefix %>
+  <%= @organization.prefix %>
+</p>
+
+<p>
+  <b><%= Organization.human_attribute_name 'public' %>:</b>
+  <%= @organization.public ? t('label.yes') : t('label.no') %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'description' %>:</b>
-  <%= h @organization.description %>
+  <%= @organization.description %>
 </p>
 
 <p>

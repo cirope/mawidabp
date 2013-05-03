@@ -551,7 +551,6 @@ class UsersController < ApplicationController
     @auth_user.is_an_important_change = false
 
     if @auth_user.update_attributes(attributes)
-      I18n.locale = @auth_user.language
       flash.notice = t 'user.correctly_updated'
     end
 
