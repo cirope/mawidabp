@@ -498,22 +498,21 @@ class PollsController < ApplicationController
       @parsed_file = CSV.parse(text)
       n = 0
 
-      Poll.transaction do
-        @parsed_file.each  do |row|
-          poll = Poll.new(
-            :questionnaire_id => questionnaire_id,
-            :organization_id => @auth_organization.id
-          )
-          poll.customer_email = row[0]
+      @parsed_file.each  do |row|
+        poll = Poll.new(
+          :questionnaire_id => questionnaire_id,
+          :organization_id => @auth_organization.id
+        )
+        poll.customer_email = row[0]
 
-          if poll.save!
-            n+=1
-          end
+        if poll.save
+          n+=1
         end
       end
 
       flash[:notice] = t('poll.customer_polls_sended', :count => n)
     else
+
       flash[:alert] = t('poll.error_csv_file_extension')
     end
 

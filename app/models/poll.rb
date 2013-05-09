@@ -69,7 +69,11 @@ class Poll < ActiveRecord::Base
   end
 
   def send_poll_email
-    Notifier.pending_poll_email(self).deliver
+    begin
+      Notifier.pending_poll_email(self).deliver
+    rescue Exception
+      self.destroy
+    end
   end
 
   def name
