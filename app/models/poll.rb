@@ -70,7 +70,11 @@ class Poll < ActiveRecord::Base
 
   def send_poll_email
     begin
-      Notifier.pending_poll_email(self).deliver
+      if self.customer_email.present?
+        Notifier.client_pending_poll(self).deliver
+      else
+        Notifier.pending_poll_email(self).deliver
+      end
     rescue Exception
       self.destroy
     end
