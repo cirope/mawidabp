@@ -869,6 +869,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       body_title:
         one: "La siguiente observación / oportunidad de mejora está próxima a vencer"
         other: "Las siguientes observaciones / oportunidades de mejora están próximas a vencer"
+    client_footer:
+      email_label: "Correo"
+      warning: "Por favor, *no contestar* el presente correo."
+      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
@@ -913,6 +918,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     pending_poll_email:
       title: "%{name}, tiene una encuesta pendiente"
+      answer_poll: 'Contestar encuesta'
+      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
+    client_pending_poll:
+      title: "%{name}, Banco Supervielle S.A. ha generado una encuesta para conocer su satisfacción respecto a la gestión y resolución de su reclamo realizado a la entidad."
       answer_poll: 'Contestar encuesta'
       clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     group_welcome_email:
