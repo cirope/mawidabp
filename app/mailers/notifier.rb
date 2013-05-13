@@ -20,17 +20,15 @@ class Notifier < ActionMailer::Base
   end
 
   def client_pending_poll(poll)
-    email = poll.customer_email
     @name = poll.customer_email
-
     @poll = poll
     @organization = poll.organization
     @token = poll.access_token
 
     mail(
-      :to => email,
+      :to => poll.customer_email,
       :subject => "[#{@organization.prefix.upcase}] " + t(
-        'notifier.pending_poll_email.title', :name => @name
+        'notifier.client_pending_poll.subject'
       )
     )
   end

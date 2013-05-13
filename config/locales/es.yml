@@ -921,6 +921,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       answer_poll: 'Contestar encuesta'
       clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     client_pending_poll:
+      subject: "Tiene una encuesta de Banco Supervielle S.A."
       title: "%{name}, Banco Supervielle S.A. ha generado una encuesta para conocer su satisfacción respecto a la gestión y resolución de su reclamo realizado a la entidad."
       answer_poll: 'Contestar encuesta'
       clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
