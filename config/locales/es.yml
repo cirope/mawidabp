@@ -3,6 +3,7 @@
     attach_csv: "Importar CSV"
     yes: "Si"
     no: "No"
+    total: "Total"
     add: "Agregar"
     add_item: "Agregar ítem"
     apply_filter: "Aplicar filtro"
@@ -83,6 +84,9 @@
       control_objectives: "Objetivos de control"
       weaknesses: "Observaciones"
       oportunities: "Oportunidades de mejora"
+      fortresses: "Fortalezas"
+      nonconformities: "No conformidades"
+      potential_nonconformities: "No conformidades potenciales"
       reports: "Reportes"
     conclusion_title: "CONCLUSIÓN"
     conclusion:
@@ -424,6 +428,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
     view_all_weaknesses: "Ver listado de observaciones"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
+    view_all_fortresses: "Ver listado de fortalezas"
+    view_all_nonconformities: "Ver listado de no conformidades"
+    view_all_potential_nonconformities: "Ver listado de no conformidades potenciales"
+    add_fortress: "Agregar nueva fortaleza"
+    add_nonconformity: "Agregar nueva no conformidad"
+    add_potential_nonconformity: "Agregar nueva no conformidad potencial"
     add_oportunity: "Agregar nueva oportunidad de mejora"
     add_weakness: "Agregar nueva observación"
     add_work_paper: "Agregar papel de trabajo"
@@ -773,6 +783,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
     weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
 
+  fortress:
+    index_title: "Listado de fortalezas"
+    show_title: "Detalles de la fortaleza"
+    new_title: "Agregar fortaleza"
+    edit_title: "Modificar fortaleza"
+    correctly_created: "Fortaleza agregada correctamente."
+    correctly_updated: "Fortaleza actualizada correctamente."
+    stale_object_error: "La fortaleza no fue actualizada, intente nuevamente."
+    edit_control_objective: "Editar objetivo de control"
+    show_follow_up: 'Ver en seguimiento'
+    edit_follow_up: 'Editar en seguimiento'
+
   group:
     index_title: "Listado de grupos"
     show_title: "Detalles del grupo"
@@ -826,6 +848,31 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
+
+  nonconformity:
+    index_title: "Listado de no conformidades"
+    show_title: "Detalles de la no conformidad"
+    new_title: "Agregar no conformidad"
+    edit_title: "Modificar no conformidad"
+    correctly_created: "No conformidad agregada correctamente."
+    correctly_updated: "No conformidad actualizada correctamente."
+    stale_object_error: "La no conformidad no fue actualizada, intente nuevamente."
+    edit_control_objective: "Editar objetivo de control"
+    show_follow_up: 'Ver en seguimiento'
+    edit_follow_up: 'Editar en seguimiento'
+    errors:
+      is_unconfirmed: "está en estado 'No confirmada'"
+      not_valid_state: "tiene un estado no permitido"
+      with_solution_date: "tiene fecha de solución (y no debería)"
+      without_answer: "no tiene respuesta"
+      without_audited: "no tiene auditado"
+      without_auditor: "no tiene auditor"
+      without_solution_date: "no tiene fecha de solución"
+      without_audit_comments: "no tiene comentarios de auditoría"
+      without_correction: "no tiene corrección/acción inmediata"
+      without_correction_date: "no tiene fecha de corrección/acción inmediata"
+      without_cause_analysis: "no tiene análisis de causa"
+      without_cause_analysis_date: "no tiene fecha de análisis de causa"
 
   notification:
     index_title: "Listado de notificaciones"
@@ -950,6 +997,27 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
 
+  potential_nonconformity:
+    index_title: "Listado de no conformidades potenciales"
+    show_title: "Detalles de la no conformidad potencial"
+    new_title: "Agregar no conformidad potencial"
+    edit_title: "Modificar no conformidad potencial"
+    correctly_created: "No conformidad potencial agregada correctamente."
+    correctly_updated: "No conformidad potencial actualizada correctamente."
+    stale_object_error: "La no conformidad potencial no fue actualizada, intente nuevamente."
+    edit_control_objective: "Editar objetivo de control"
+    show_follow_up: 'Ver en seguimiento'
+    edit_follow_up: 'Editar en seguimiento'
+    errors:
+      is_unconfirmed: "está en estado 'No confirmada'"
+      not_valid_state: "tiene un estado no permitido"
+      with_solution_date: "tiene fecha de solución (y no debería)"
+      without_answer: "no tiene respuesta"
+      without_audited: "no tiene auditado"
+      without_auditor: "no tiene auditor"
+      without_solution_date: "no tiene fecha de solución"
+      without_audit_comments: "no tiene comentarios de auditoría"
+
   organization:
     index_title: "Listado de organizaciones"
     show_title: "Detalles de la organización"
@@ -972,10 +1040,16 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     admin_aproach_types: "Tipos de enfoque"
     admin_blank_password_stale_days: "Días para caducidad del blanqueo de contraseña"
     admin_code_prefix_for_oportunities: "Prefijo de los códigos de oportunidades"
+    admin_code_prefix_for_fortresses: "Prefijo de los códigos de fortalezas"
+    admin_code_prefix_for_nonconformities: "Prefijo de los códigos de no conformidades"
+    admin_code_prefix_for_potential_nonconformities: "Prefijo de los códigos de no conformidades potenciales"
     admin_code_prefix_for_weaknesses: "Prefijo de los códigos de observaciones"
     admin_code_prefix_for_work_papers_in_control_objectives: "Prefijo de los códigos de papeles de trabajo en objetivos de control"
     admin_code_prefix_for_work_papers_in_oportunities: "Prefijo de los códigos de papeles de trabajo en oportunidades"
     admin_code_prefix_for_work_papers_in_weaknesses: "Prefijo de los códigos de papeles de trabajo en observaciones"
+    admin_code_prefix_for_work_papers_in_fortresses: "Prefijo de los códigos de papeles de trabajo en fortalezas"
+    admin_code_prefix_for_work_papers_in_nonconformities: "Prefijo de los códigos de papeles de trabajo en no conformidades"
+    admin_code_prefix_for_work_papers_in_potential_nonconformities: "Prefijo de los códigos de papeles de trabajo en no conformidades potenciales"
     admin_code_prefix_for_work_papers_in_weaknesses_follow_up: "Prefijo de los códigos de papeles de trabajo en observaciones (seguimiento)"
     admin_control_objective_importances: "Importancias de los objetivos de control"
     admin_control_objective_qualifications: "Calificaciones de los objetivos de control"
@@ -1372,6 +1446,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
+      without_correction: "no tiene corrección/acción inmediata"
+      without_correction_date: "no tiene fecha de corrección/acción inmediata"
+      without_cause_analysis: "no tiene análisis de causa"
+      without_cause_analysis_date: "no tiene fecha de análisis de causa"
 
   welcome:
     index_title: "Bienvenido"
@@ -1535,11 +1613,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding: "Observación / Oportunidad"
       finding_answer: "Respuesta a observación"
       finding_review_assignment: "Asignación de observación a informe"
+      fortress: "Fortaleza"
       group: "Grupo"
       help_content: "Contenido de ayuda"
       help_item: "Registro de ayuda"
       inline_help: "Registro de ayuda en línea"
       login_record: "Registro de ingreso"
+      nonconformity: "No conformidad"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
@@ -1549,6 +1629,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
       poll: "Encuesta"
+      potential_nonconformity: "No conformidad potencial"
       privilege: "Privilegio"
       procedure_control: "Procedimientos y pruebas de control"
       procedure_control_item: "Registro del procedimiento de control"
@@ -1647,6 +1728,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         effectiveness: "Efectividad de control"
         weaknesses: "Observaciones"
         oportunities: "Oportunidades de mejora"
+        fortresses: "Fortalezas"
+        nonconformities: "No conformidades"
+        potential_nonconformities: "No conformidades potenciales"
         control:
           order: "Objetivo de control (orden)"
           control: "Objetivo de control (controles)"
@@ -1778,6 +1862,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user: 'Usuario'
         process_owner: 'Dueño del proceso'
         responsible_auditor: 'Auditor referente'
+      fortress:
+        control_objective_item_id: "Objetivo de control"
+        description: "Fortaleza"
+        review_code: "Código en el informe"
+        user_ids: "Responsable"
+        finding_user_assignments: "Responsables"
+        work_papers: "Papeles de trabajo"
+        origination_date: "Fecha de origen"
       group:
         name: "Nombre"
         description: "Descripción"
@@ -1819,6 +1911,26 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         start: "Inicio"
         end: "Fin"
         data: "Datos"
+      nonconformity:
+        control_objective_item_id: "Objetivo de control"
+        description: "No conformidad"
+        review_code: "Código en el informe"
+        audit_recommendations: "Recomendaciones de auditoría"
+        answer: "Acción correctiva"
+        correction: "Corrección / Acción inmediata"
+        correction_date: "Fecha Corrección / Acción inmediata"
+        cause_analysis: "Análisis de causa"
+        cause_analysis_date: "Fecha Análisis de causa"
+        effect: "Efecto"
+        risk: "Riesgo"
+        priority: "Prioridad"
+        user_ids: "Responsable"
+        finding_user_assignments: "Responsables"
+        origination_date: "Fecha de origen"
+        follow_up_date: "Fecha de implementación"
+        state: "Estado"
+        solution_date: "Fecha de solución"
+        work_papers: "Papeles de trabajo"
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"
@@ -1849,7 +1961,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        #image_model: "Isologotipo"
         image_model:
           one: "Isologotipo"
           image_file_name: "Isologotipo (nombre de archivo)"
@@ -1913,6 +2024,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         answers:
           answer: "Respuesta"
           answer_option: "Opción"
+      potential_nonconformity:
+        control_objective_item_id: "Objetivo de control"
+        description: "No conformidad potencial"
+        review_code: "Código en el informe"
+        answer: "Acción preventiva"
+        user_ids: "Responsable"
+        finding_user_assignments: "Responsables"
+        work_papers: "Papeles de trabajo"
+        state: "Estado"
+        origination_date: "Fecha de origen"
+        solution_date: "Fecha de solución"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -2047,6 +2169,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
         answer: "Respuesta"
+        correction: "Corrección / Acción inmediata"
+        correction_date: "Fecha Corrección / Acción inmediata"
+        cause_analysis: "Análisis de causa"
+        cause_analysis_date: "Fecha Análisis de causa"
         effect: "Efecto"
         risk: "Riesgo"
         priority: "Prioridad"
