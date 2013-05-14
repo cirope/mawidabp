@@ -175,7 +175,13 @@ class Review < ActiveRecord::Base
     :order => 'order_number ASC'
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
+  has_many :fortresses, :through => :control_objective_items
+  has_many :nonconformities, :through => :control_objective_items
+  has_many :potential_nonconformities, :through => :control_objective_items
   has_many :final_weaknesses, :through => :control_objective_items
+  has_many :final_fortresses, :through => :control_objective_items
+  has_many :final_nonconformities, :through => :control_objective_items
+  has_many :final_potential_nonconformities, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
   has_many :review_user_assignments, :dependent => :destroy, :include => :user,
     :order => 'assignment_type DESC', :inverse_of => :review
@@ -373,10 +379,34 @@ class Review < ActiveRecord::Base
         ]
       end
 
+      coi.nonconformities.each do |nc|
+        unless nc.must_be_approved?
+          self.can_be_approved_by_force = false
+          errors << [
+            "#{Nonconformity.model_name.human} #{nc.review_code}", nc.approval_errors
+          ]
+        end
+      end
+
+      coi.nonconformities.select(&:unconfirmed?).each do |nc|
+        errors << [
+          "#{Nonconformity.model_name.human} #{nc.review_code}",
+          [I18n.t('nonconformity.errors.is_unconfirmed')]
+        ]
+      end
+
       coi.oportunities.each do |o|
         unless o.must_be_approved?
           errors << [
             "#{Oportunity.model_name.human} #{o.review_code}", o.approval_errors
+          ]
+        end
+      end
+
+      coi.potential_nonconformities.each do |p_nc|
+        unless p_nc.must_be_approved?
+          errors << [
+            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code}", p_nc.approval_errors
           ]
         end
       end
@@ -454,6 +484,36 @@ class Review < ActiveRecord::Base
     last_work_paper_code(prefix, work_papers)
   end
 
+  def last_fortress_work_paper_code(prefix = nil)
+    work_papers = []
+
+    (self.fortresses + self.final_fortresses).each do |w|
+      work_papers.concat(w.work_papers.with_prefix(prefix))
+    end
+
+    last_work_paper_code(prefix, work_papers)
+  end
+
+  def last_nonconformity_work_paper_code(prefix = nil)
+    work_papers = []
+
+    (self.nonconformities + self.final_nonconformities).each do |w|
+      work_papers.concat(w.work_papers.with_prefix(prefix))
+    end
+
+    last_work_paper_code(prefix, work_papers)
+  end
+
+  def last_potential_nonconformity_work_paper_code(prefix = nil)
+    work_papers = []
+
+    (self.potential_nonconformities + self.final_potential_nonconformities).each do |w|
+      work_papers.concat(w.work_papers.with_prefix(prefix))
+    end
+
+    last_work_paper_code(prefix, work_papers)
+  end
+
   def last_oportunity_work_paper_code(prefix = nil)
     work_papers = []
 
@@ -466,6 +526,18 @@ class Review < ActiveRecord::Base
 
   def next_weakness_code(prefix = nil)
     next_finding_code prefix, self.weaknesses.with_prefix(prefix)
+  end
+
+  def next_fortress_code(prefix = nil)
+    next_finding_code prefix, self.fortresses.with_prefix(prefix)
+  end
+
+  def next_nonconformity_code(prefix = nil)
+    next_finding_code prefix, self.nonconformities.with_prefix(prefix)
+  end
+
+  def next_potential_nonconformity_code(prefix = nil)
+    next_finding_code prefix, self.potential_nonconformities.with_prefix(prefix)
   end
 
   def next_oportunity_code(prefix = nil)
