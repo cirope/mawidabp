@@ -121,6 +121,24 @@ class Weakness < Finding
         errors << I18n.t('weakness.errors.without_answer')
       end
 
+      if @auth_organization.system_quality_management
+        if self.correction.blank?
+          errors << I18n.t('weakness.errors.without_correction')
+        end
+
+        if self.correction_date?
+          errors << I18n.t('weakness.errors.without_correction_date')
+        end
+
+        if self.cause_analysis.blank?
+          errors << I18n.t('weakness.errors.without_cause_analysis')
+        end
+
+        if self.cause_analysis_date.blank?
+          errors << I18n.t('weakness.errors.without_cause_analysis_date')
+        end
+      end
+
       if self.solution_date?
         errors << I18n.t('weakness.errors.with_solution_date')
       end
