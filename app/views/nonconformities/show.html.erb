@@ -1,0 +1,222 @@
+<div id="showed_data">
+  <div class="show_item">
+    <b><%= Review.model_name.human %>:</b>
+    <%= @nonconformity.review.try(:identification) %>
+  </div>
+
+  <div class="show_item">
+    <b><%= ControlObjective.model_name.human %>:</b>
+    <%= simple_format @nonconformity.control_objective_item.try(:to_s) %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :review_code %>:</b>
+    <%= @nonconformity.review_code %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :description %>:</b>
+    <%= simple_format @nonconformity.description %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :audit_recommendations %>:</b>
+    <%= simple_format @nonconformity.audit_recommendations %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :answer %>:</b>
+    <%= simple_format @nonconformity.answer %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :effect %>:</b>
+    <%= simple_format @nonconformity.effect %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :risk %>:</b>
+    <%= @nonconformity.risk_text %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :priority %>:</b>
+    <%= nonconformity_priority_text @nonconformity %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :audit_comments %>:</b>
+    <%= simple_format @nonconformity.audit_comments %>
+  </div>
+
+  <div class="show_item">
+    <b><%= raw(Nonconformity.human_attribute_name(:state) +
+      show_inline_help_for(:finding_state)) %>:</b>
+    <%= @nonconformity.state_text %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :origination_date %>:</b>
+    <%=l @nonconformity.origination_date, :format => :long if @nonconformity.origination_date %>
+  </div>
+
+  <div class="show_item">
+    <b><%= raw(Nonconformity.human_attribute_name(:follow_up_date) +
+      show_inline_help_for(:finding_follow_up_date)) %>:</b>
+    <%=l @nonconformity.follow_up_date, :format => :long if @nonconformity.follow_up_date %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Nonconformity.human_attribute_name :solution_date %>:</b>
+    <%=l @nonconformity.solution_date, :format => :long if @nonconformity.solution_date %>
+  </div>
+
+  <h3><%= raw(t('finding.responsibles', :count => @nonconformity.users.size) +
+    show_inline_help_for(:finding_responsibles)) %></h3>
+  <%= finding_responsibles_list(@nonconformity) %>
+
+  <% unless (repeated_ancestors = @nonconformity.repeated_ancestors).blank? %>
+    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <ul class="raw_list">
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless (repeated_children = @nonconformity.repeated_children).blank? %>
+    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <ul class="raw_list">
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless @nonconformity.finding_relations.blank? %>
+    <h3>
+      <%= t('finding.finding_relations') %>
+      <%= show_inline_help_for(:finding_relations) %>
+    </h3>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :related_finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.finding_relations.each do |fr| %>
+          <tr>
+            <td><%= fr.related_finding %></td>
+            <td><%= fr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% unless @nonconformity.inverse_finding_relations.blank? %>
+    <h3>
+      <%= t('finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h3>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% unless @nonconformity.finding_answers.blank? %>
+    <h3>
+      <%= t('finding.finding_answers') %>
+      <%= show_inline_help_for(:finding_comments) %>
+    </h3>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :created_at %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.finding_answers.each do |finding_answer| %>
+          <tr>
+            <td><%=  finding_answer.user.full_name %></td>
+            <td><%= simple_format h(finding_answer.answer) %></td>
+            <td>
+              <%= finding_answer.file_model.try(:file?) ?
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+            </td>
+            <td>
+              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+              <% if finding_answer.commitment_date %>
+                <br />
+                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% unless @nonconformity.work_papers.empty? %>
+    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.work_papers.each do |wp| %>
+          <tr>
+            <td><%= wp.name %></td>
+            <td><%= wp.code %></td>
+            <td><%= wp.number_of_pages %></td>
+            <td><%= simple_format h(wp.description) %></td>
+            <td><%= wp.file_model.try(:file?) ?
+              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div id="links">
+  <%= link_to t('label.edit'), edit_nonconformity_path(@nonconformity) %> |
+  <%= link_to t('label.list'), nonconformities_path %> |
+  <% if !@nonconformity.is_in_a_final_review? && @nonconformity.pending? && !@nonconformity.incomplete? %>
+    <%= link_to t('nonconformity.show_follow_up'), finding_path('incomplete', @nonconformity) %> |
+  <% end %>
+  <%= link_to_back %>
+</div>

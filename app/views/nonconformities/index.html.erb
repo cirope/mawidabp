@@ -1,0 +1,52 @@
+<% if params[:control_objective].blank? %>
+  <%= render :partial => 'shared/search', :locals => {
+    :options => {:columns_for_sort => Weakness.columns_for_sort},
+    :columns => @query.blank? ? Nonconformity::COLUMNS_FOR_SEARCH.keys : @columns
+  } %>
+<% end %>
+<table class="list">
+  <thead id="column_headers">
+    <tr>
+      <th></th>
+      <%= make_filterable_column Review.model_name.human, nil, 'review' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_filterable_column Nonconformity.human_attribute_name(:code), nil, 'review_code' %>
+      <%= make_filterable_column Nonconformity.human_attribute_name(:description), {:expendable => true}, 'description' %>
+      <%= make_not_available_column raw(Nonconformity.human_attribute_name(:state) + show_inline_help_for(:finding_state)), :expendable => true %>
+      <%= make_not_available_column raw(Nonconformity.human_attribute_name(:follow_up_date) + show_inline_help_for(:finding_follow_up_date)), :expendable => true %>
+      <%= make_not_available_column Nonconformity.human_attribute_name(:risk), :expendable => true %>
+      <%= make_not_available_column Nonconformity.human_attribute_name(:priority), :expendable => true %>
+      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
+      <th colspan="2" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nonconformities.each do |nonconformity| %>
+      <tr class="<%= cycle('even', 'odd') %> <%= nonconformity.is_in_a_final_review? ? :readonly_item : :writable_item %>">
+        <td><%= finding_updated_at_text nonconformity %></td>
+        <td class="nowrap"><%= show_review_with_close_date_as_abbr nonconformity.review %></td>
+        <td class="expendable"><%= super_truncate nonconformity.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(nonconformity) %></td>
+        <td class="expendable"><%= super_truncate nonconformity.description, 20 %></td>
+        <td class="expendable"><%= nonconformity.state_text %></td>
+        <td class="expendable"><%= l nonconformity.follow_up_date, :format => :short if nonconformity.follow_up_date %></td>
+        <td class="expendable"><%= nonconformity.risk_text %></td>
+        <td class="expendable"><%= nonconformity.priority_text %></td>
+        <td class="expendable"><%= t nonconformity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td><%= link_to_show nonconformity %></td>
+        <td><%= link_to_edit edit_nonconformity_path(nonconformity) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+<%= pagination_links @nonconformities %>
+<% if params[:control_objective].to_i > 0 %>
+  <%= link_to t('label.new'), new_nonconformity_path(
+    :control_objective_item => params[:control_objective]) %>
+  | <%= link_to t('nonconformity.see_all'), nonconformities_path, :class => 'red bold' %>
+<% end %>
+<div class="clear"></div>
+</div>
