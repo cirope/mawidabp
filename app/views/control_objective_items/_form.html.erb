@@ -152,7 +152,10 @@
     </p>
   </div>
 
+  <%= render :partial => 'fortresses_summary', :locals => {:readonly => readonly} %>
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
+  <%= render :partial => 'nonconformities_summary', :locals => {:readonly => readonly} %>
+  <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => readonly} %>
   <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly} %>
 
   <h1>
@@ -217,7 +220,7 @@
       var maxValue = 0;
       var total = 0;
       var count = 0;
-      
+
       $.each(designElement.get(0).options, function(i, e) {
         if(parseInt(e.value) > maxValue) { maxValue = parseInt(e.value) }
       });
@@ -225,7 +228,7 @@
       selectedValues.push(parseInt(designElement.val()));
       selectedValues.push(parseInt(complianceElement.val()));
       selectedValues.push(parseInt(sustantiveElement.val()));
-      
+
       $.each(selectedValues, function(i, e) {
         if(e) {
           total += e;

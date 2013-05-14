@@ -96,10 +96,25 @@ class ControlObjectiveItem < ActiveRecord::Base
     :conditions => {:final => false}
   has_many :oportunities, :dependent => :destroy, :order => 'review_code ASC',
     :conditions => {:final => false}
+  has_many :fortresses, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :nonconformities, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :potential_nonconformities, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
   has_many :final_weaknesses, :dependent => :destroy, :class_name => 'Weakness',
     :order => 'review_code ASC', :conditions => {:final => true}
   has_many :final_oportunities, :dependent => :destroy,
     :order => 'review_code ASC', :class_name => 'Oportunity',
+    :conditions => {:final => true}
+  has_many :final_fortresses, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'Fortress',
+    :conditions => {:final => true}
+  has_many :final_nonconformities, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'Nonconformity',
+    :conditions => {:final => true}
+  has_many :final_potential_nonconformities, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'PotentialNonconformity',
     :conditions => {:final => true}
   has_many :work_papers, :as => :owner, :dependent => :destroy,
     :order => 'code ASC',
