@@ -80,6 +80,18 @@
       <%= f.text_area :audit_recommendations, :style => 'height: 4em;',
         :readonly => readonly %>
     </p>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :correction %>
+        <%= f.text_area :correction, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+      <p>
+        <%= f.label :cause_analysis %>
+        <%= f.text_area :cause_analysis, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+    <% end %>
   </div>
   <div class="form_column_right">
     <p class="form_item">
@@ -148,6 +160,22 @@
       <%= calendar_text_field f, :solution_date, false, nil,
         :disabled => readonly %>
     </p>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :correction_date,
+          raw(Finding.human_attribute_name(:correction_date) +
+          show_inline_help_for(:finding_correction_date)) %>
+        <%= calendar_text_field f, :correction_date, false, nil,
+          :disabled => readonly %>
+      </p>
+      <p>
+        <%= f.label :cause_analysis_date,
+          raw(Finding.human_attribute_name(:cause_analysis_date) +
+          show_inline_help_for(:finding_cause_analysis_date)) %>
+        <%= calendar_text_field f, :cause_analysis_date, false, nil,
+          :disabled => readonly %>
+      </p>
+    <% end %>
   </div>
 
   <div style="clear: both; margin-top: 2em;">
