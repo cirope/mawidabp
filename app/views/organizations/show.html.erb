@@ -1,22 +1,28 @@
 <div id="showed_data">
 <p>
   <b><%= Organization.human_attribute_name 'name' %>:</b>
-  <%= h @organization.name %>
+  <%= @organization.name %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'prefix' %>:</b>
-  <%= h @organization.prefix %>
+  <%= @organization.prefix %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'description' %>:</b>
-  <%= h @organization.description %>
+  <%= @organization.description %>
+</p>
+
+<p>
+  <b><%= Organization.human_attribute_name 'system_quality_management' %>:</b>
+  <%= @organization.system_quality_management? ? t('label.yes') : t('label.no') %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'image_model' %>:</b>
 </p>
+
 <% if @organization.image_model %>
   <div style="margin-top: 1em;"><%= organization_image_tag %></div>
 <% end %>

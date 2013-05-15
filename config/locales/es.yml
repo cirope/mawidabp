@@ -1961,6 +1961,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
+        system_quality_management: "Sistema de Gestión de la Calidad"
         image_model:
           one: "Isologotipo"
           image_file_name: "Isologotipo (nombre de archivo)"
