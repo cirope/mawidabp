@@ -20,8 +20,12 @@
       </tr>
     </thead>
     <tbody>
-      <% menu_items = @role.audited? ?
-        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% if @auth_organization.system_quality_managemen? %>
+        <% menu_items = @role.audited? ? APP_AUDITED_SQM_MENU_ITEMS : APP_AUDITOR_SQM_MENU_ITEMS %>
+      <% else %>
+        <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% end %>
+
       <% menu_items.each do |menu_item| %>
         <%= render :partial => 'menu_item_show', :locals => {
           :menu_item => menu_item} %>

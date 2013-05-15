@@ -1,0 +1,53 @@
+<% controller_name = controller.controller_name.to_sym %>
+<% submenu_items_1_content = '' %>
+<% submenu_items_2_content = '' %>
+<div id="menu" <%= raw 'style="border-top: 12px solid #F7AC07;"' if Rails.env.development? %>>
+  <div id="session">
+    <div id="user">[ <%= link_to user.user, edit_personal_data_user_path(user),
+      {:title => t('user.change_personal_data')} %> ]</div>
+    <%= link_to t('menu.exit'), logout_user_path(user) %>
+  </div>
+  <ul class="menu_level_0" data-level="0" id="main_menu">
+    <% APP_AUDITOR_SQM_MENU_ITEMS.each do |menu_item| %>
+      <% selected = menu_item.submenu_names.include?(@current_module) %>
+      <li <%= raw('class="selected"') if selected %>>
+        <%= link_to(menu_item.to_s, url_for(menu_item.url),
+          :id => "link_#{menu_item.name}", :class => :menu_item_1) %>
+      </li>
+
+      <% unless menu_item.children.blank? %>
+        <% submenu_items_1_content << render(:partial => 'shared/submenu',
+            :locals => {
+              :menu_item => menu_item,
+              :controller_name => controller_name,
+              :display => selected,
+              :level => 1,
+              :include_dynamic => true
+            })
+        %>
+      <% end %>
+
+      <% menu_item.children.each do |submenu_item| %>
+        <% selected = submenu_item.submenu_names.include?(@current_module) %>
+        <% unless submenu_item.children.blank? %>
+          <% submenu_items_2_content << render(:partial => 'shared/submenu',
+              :locals => {
+                :menu_item => submenu_item,
+                :controller_name => controller_name,
+                :display => selected,
+                :level => 2,
+                :include_dynamic => true
+              })
+          %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
+
+<div id="menu_level_1"><%= raw submenu_items_1_content %>&nbsp;</div>
+<div id="menu_level_2"><%= raw submenu_items_2_content %>&nbsp;</div>
+
+<%= javascript_tag do %>
+  <%= yield :javascript_menu %>
+<% end %>

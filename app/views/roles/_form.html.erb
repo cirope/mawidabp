@@ -26,8 +26,11 @@
       </tr>
     </thead>
     <tbody>
-      <% menu_items = @role.audited? ?
-        APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% if @auth_organization.system_quality_management? %>
+        <% menu_items = @role.audited? ? APP_AUDITED_SQM_MENU_ITEMS : APP_AUDITOR_SQM_MENU_ITEMS %>
+      <% else %>
+        <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+      <% end %>
       <% menu_items.each do |menu_item| %>
         <%= render :partial => 'menu_item', :locals => {
           :menu_item => menu_item, :role_form => r_f} %>
@@ -48,32 +51,32 @@ var Privileges = {
     var parent = element.parents('.menu_item').attr('id');
     var type = element.data('type');
     var children = $('*[data-parent="' + parent + '"] :checkbox[data-type="' + type + '"]');
-    
+
     children.attr('checked', checked).trigger('click').attr('checked', checked);
   },
   markSiblings: function(element, type, checked) {
     var siblings = element.parents('.menu_item').find(
       '[data-type="' + type + '"]'
     );
-    
+
     siblings.attr('checked', checked);
   }
 };
 
 jQuery(function() {
   $('#role_role_type').data('resetValue', $('#role_role_type').val());
-  
+
   $(':checkbox').click(function() {
     var element = $(this);
     var checked = element.is(':checked');
     var type = element.data('type');
-    
+
     switch(type) {
       case 'approval':
         if(checked) {
           Privileges.markSiblings(element, 'read', checked);
         }
-        
+
         Privileges.markChildren(element, checked);
         break;
       case 'erase':
@@ -83,7 +86,7 @@ jQuery(function() {
           Privileges.markSiblings(element, 'modify', checked);
           Privileges.markSiblings(element, 'read', checked);
         }
-        
+
         Privileges.markChildren(element, checked);
         break;
       case 'modify':
@@ -93,7 +96,7 @@ jQuery(function() {
           Privileges.markSiblings(element, 'erase', checked);
           Privileges.markSiblings(element, 'approval', checked);
         }
-        
+
         Privileges.markChildren(element, checked);
         break;
       case 'read':
@@ -102,12 +105,12 @@ jQuery(function() {
           Privileges.markSiblings(element, 'erase', checked);
           Privileges.markSiblings(element, 'approval', checked);
         }
-        
+
         Privileges.markChildren(element, checked);
         break;
     }
   });
-  
+
   $('#role_role_type').change(function() {
     var selectedType = $(this).val();
     var url = '<%= @role.new_record? ? new_role_path : edit_role_path(@role) %>';

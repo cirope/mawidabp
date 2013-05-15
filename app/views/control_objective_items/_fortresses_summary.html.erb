@@ -11,7 +11,7 @@
 <p style="margin-bottom: 1.2em;">
   <%= link_to_unless @control_objective_item.fortresses.blank?,
     t('control_objective_item.view_all_fortresses'),
-    oportunities_path(:control_objective => @control_objective_item) %> |
+    fortresses_path(:control_objective => @control_objective_item) %> |
   <%= link_to_unless readonly, t('control_objective_item.add_fortress'),
     new_fortress_path(:control_objective_item => @control_objective_item) %>
 </p>

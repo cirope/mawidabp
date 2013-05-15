@@ -541,8 +541,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_menu
-    self.audited? ? 'audited_menu' : 'auditor_menu'
+  def get_menu(sqm = false)
+    if sqm
+      self.audited? ? 'audited_sqm_menu' : 'auditor_sqm_menu'
+    else
+      self.audited? ? 'audited_menu' : 'auditor_menu'
+    end
   end
 
   def get_type
