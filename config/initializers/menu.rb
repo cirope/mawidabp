@@ -600,38 +600,46 @@ APP_AUDITOR_SQM_MENU_ITEMS = [
         :url => {:controller => :control_objective_items}
       ),
       MenuItem.new(
-        :nonconformities,
-        :order => 5,
-        :controllers => :nonconformities,
-        :url => {:controller => :nonconformities}
-      ),
-      MenuItem.new(
-        :weaknesses,
+        :findings,
         :order => 4,
-        :controllers => :weaknesses,
-        :url => {:controller => :weaknesses}
-      ),
-      MenuItem.new(
-        :oportunities,
-        :order => 5,
-        :controllers => :oportunities,
-        :url => {:controller => :oportunities}
-      ),
-      MenuItem.new(
-        :potential_nonconformities,
-        :order => 5,
-        :controllers => :potential_nonconformities,
-        :url => {:controller => :potential_nonconformities}
-      ),
-      MenuItem.new(
-        :fortresses,
-        :order => 5,
-        :controllers => :fortresses,
-        :url => {:controller => :fortresses}
+        :url => '#menu_execution_findings',
+        :class => :menu_item_2,
+        :children => [
+          MenuItem.new(
+            :nonconformities,
+            :order => 5,
+            :controllers => :nonconformities,
+            :url => {:controller => :nonconformities}
+          ),
+          MenuItem.new(
+            :weaknesses,
+            :order => 4,
+            :controllers => :weaknesses,
+            :url => {:controller => :weaknesses}
+          ),
+          MenuItem.new(
+            :oportunities,
+            :order => 5,
+            :controllers => :oportunities,
+            :url => {:controller => :oportunities}
+          ),
+          MenuItem.new(
+            :potential_nonconformities,
+            :order => 5,
+            :controllers => :potential_nonconformities,
+            :url => {:controller => :potential_nonconformities}
+          ),
+          MenuItem.new(
+            :fortresses,
+            :order => 5,
+            :controllers => :fortresses,
+            :url => {:controller => :fortresses}
+            ),
+        ]
       ),
       MenuItem.new(
         :reports,
-        :order => 6,
+        :order => 5,
         :controllers => :execution_reports,
         :url => {:controller => :execution_reports}
       )
@@ -764,7 +772,7 @@ APP_AUDITED_SQM_MODULES = APP_AUDITED_SQM_MENU_ITEMS.map do |menu_item|
 end.flatten.freeze
 
 APP_MODULES = (
-  APP_AUDITOR_MODULES | APP_AUDITED_MODULES | APP_AUDITOR_MODULES | APP_AUDITED_MODULES
+  APP_AUDITOR_MODULES | APP_AUDITED_MODULES | APP_AUDITOR_SQM_MODULES | APP_AUDITED_SQM_MODULES
 ).freeze
 
 ALLOWED_MODULES_BY_TYPE = {

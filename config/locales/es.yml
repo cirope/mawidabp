@@ -79,14 +79,16 @@
         procedure_controls: "Procedimientos y pruebas de control"
     execution_title: "EJECUCIÓN"
     execution:
+      findings_title: "Hallazgos"
       reviews: "Informes"
       workflows: "Programa de trabajo"
       control_objectives: "Objetivos de control"
-      weaknesses: "Observaciones"
-      oportunities: "Oportunidades de mejora"
-      fortresses: "Fortalezas"
-      nonconformities: "No conformidades"
-      potential_nonconformities: "No conformidades potenciales"
+      findings:
+        weaknesses: "Observaciones"
+        oportunities: "Oportunidades de mejora"
+        fortresses: "Fortalezas"
+        nonconformities: "No conformidades"
+        potential_nonconformities: "No conformidades potenciales"
       reports: "Reportes"
     conclusion_title: "CONCLUSIÓN"
     conclusion:
@@ -99,8 +101,8 @@
         management: "Reportes de la gerencia"
     follow_up_title: "SEGUIMIENTO"
     follow_up:
-      pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas o reiteradas"
+      pending_findings: "Hallazgos pendientes"
+      complete_findings: "Hallazgos solucionados o reiterados"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
@@ -205,9 +207,9 @@
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     cost_analysis:
@@ -234,10 +236,10 @@
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
+    findings_type_internal: "Hallazgos Auditoría Interna"
     findings_type_external: "Observaciones Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
@@ -305,7 +307,7 @@
         digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
@@ -365,9 +367,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   conclusion_review:
     include_global_score_sheet: "¿Incluir planilla de calificación?"
@@ -383,7 +385,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion: "CONCLUSIÓN"
     findings: "OBSERVACIONES"
     oportunities: "OPORTUNIDADES DE MEJORA"
-    finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
+    finding_review_assignments: "HALLAZGOS REVISADOS"
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
@@ -394,14 +396,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE HALLAZGOS"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
       title: "Observaciones - Papeles de trabajo"
       pdf_name: "%{prefix}_caratula_de_observaciones_y_papeles_de_trabajo.pdf"
     findings_follow_up:
-      title: "SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
+      title: "SEGUIMIENTO DE HALLAZGOS"
       weakness_title_in_singular: "SEGUIMIENTO DE OBSERVACIÓN"
       oportunity_title_in_singular: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
       index_clarification: "* Al momento de emitir el informe definitivo"
@@ -494,11 +496,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   execution_reports:
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
+      external_audit_weaknesses: "Hallazgos de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
-      clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      clarification: "Nota: los hallazgos mostrados en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
@@ -506,29 +508,29 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
-    findings_type_external: "Observaciones Auditorías Externas"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+    findings_type_external: "Hallazgos Auditorías Externas"
+    findings_type_internal: "Hallazgos Auditoría Interna"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por informe y estado"
+    weaknesses_by_state_title: "Hallazgos totales por informe y estado"
     weaknesses_by_state:
       pdf_name: "observaciones_en_ejecucion_por_estado_%{from_date}_al_%{to_date}.pdf"
-      title: "INFORME GERENCIAL DETALLADO\nOBSERVACIONES/OPORTUNIDADES DE MEJORA EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
-      clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      title: "INFORME GERENCIAL DETALLADO\nHALLAZGOS EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
+      clarification: "Nota: los hallazgos mostrados en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       weaknesses_column: "Observaciones"
       oportunities_column: "Oportunidades de Mejora"
       total: "TOTAL"
-    without_weaknesses: "Sin observaciones en el periodo"
-    without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
-    without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    without_weaknesses: "Sin hallazgos en el periodo"
+    without_weaknesses_in_the_interval: "Sin hallazgos en el intervalo"
+    without_findings: "Sin Hallazgos"
 
   finding:
-    index_title: "Listado de observaciones / oportunidades de mejora"
-    show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
-    edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
-    correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
-    stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
+    index_title: "Listado de hallazgos"
+    show_title: "Detalles de la respuesta al hallazgo"
+    edit_title: "Modificar respuesta a un hallazgo"
+    correctly_updated: "Respuesta a hallazgo actualizada correctamente."
+    stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
     download: "Descargar listado general"
     download_detailed: "Descargar listado detallado"
     download_xml: "Descargar listado en XML"
@@ -582,14 +584,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_repeated: "Reiterada"
     status_revoked: "Anulada"
     view_completed: "Ver implementadas"
-    view_cost_details: "Listado de actividades anteriores relacionadas a la observación / oportunidad de mejora"
+    view_cost_details: "Listado de actividades anteriores relacionadas al hallazgo"
     view_pending: "Ver pendientes"
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     pdf:
       pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} observaciones / oportunidades de mejora."
+      size_warning: "El listado es demasiado grande, se ha truncado a %{count} hallazgos."
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
@@ -621,9 +623,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   follow_up_audit:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     cost_analysis:
@@ -632,7 +634,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
-      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
+      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE HALLAZGOS\nPOR INFORME DE AUDITORIA INTERNA"
       weaknesses: "OBSERVACIONES"
       oportunities: "OPORTUNIDADES DE MEJORA"
       without_weaknesses: "Sin Observaciones en el periodo"
@@ -664,14 +666,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_being_implemented_stale_rescheduled:
       one: "Reprogramada vencida"
       other: "Reprogramadas vencidas"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     without_oportunities: "Sin oportunidades en el periodo"
     without_weaknesses: "Sin observaciones en el periodo"
     repeated_count:
-      one: "Una observación / oportunidad de mejora reiterada"
-      other: "%{count} observaciones / oportunidades de mejora reiteradas"
+      one: "Un hallazgo reiterado"
+      other: "%{count} hallazgos reiterados"
     expired: "Vencida"
     not_expired: "No vencida"
     from_date: "Desde"
@@ -741,7 +743,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+      internal_audit_weaknesses: "Hallazgos Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
@@ -755,8 +757,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
       repeated_count:
-        one: "Una observación / oportunidad de mejora reiterada"
-        other: "%{count} observaciones / oportunidades de mejora reiteradas"
+        one: "Un hallazgo reiterado"
+        other: "%{count} hallazgos reiterados"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:
@@ -779,9 +781,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   follow_up_management:
     index_title: "Reportes de la gerencia"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Hallazgos totales por estado"
+    weaknesses_by_risk_title: "Hallazgos totales por riesgo"
+    weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
 
   fortress:
     index_title: "Listado de fortalezas"
@@ -891,17 +893,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   notifier:
     notify_new_finding:
-      title: "Tiene una nueva observación / oportunidad de mejora"
-      created_title: "Nueva observación / oportunidad de mejora"
+      title: "Tiene un nuevo hallazgo"
+      created_title: "Nuevo hallazgo"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
-      finding_link: "Ver observación / oportunidad de mejora"
+      finding_data: "Se ha agregado un comentario al hallazgo *%{finding_code}* del informe *%{review}*"
+      finding_link: "Ver hallazgo"
     notify_new_findings:
-      title: "Notificación de observaciones / oportunidades de mejora"
+      title: "Notificación de hallazgos"
       created_title:
-        one: "Nueva observación / oportunidad de mejora"
-        other: "Nuevas observaciones / oportunidades de mejora"
+        one: "Nuevo hallazgo"
+        other: "Nuevos hallazgos"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -912,10 +914,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "Notificación de informe cercano al cierre"
       body_title: "El siguiente informe está próximo al cierre"
     findings_expiration_warning:
-      title: "Notificación de observaciones cercanas al vencimiento"
+      title: "Notificación de hallazgos cercanos al vencimiento"
       body_title:
-        one: "La siguiente observación / oportunidad de mejora está próxima a vencer"
-        other: "Las siguientes observaciones / oportunidades de mejora están próximas a vencer"
+        one: "El siguiente hallazgo está próximo a vencer"
+        other: "Los siguientes hallazgos están próximos a vencer"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
@@ -926,7 +928,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
       confirm: "Confirmar notificación"
-      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación"
+      the_following_findings_are_still_unconfirmed: "Los siguientes hallazgos han sido notificados pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
         one: "Responsable actual: %{responsible}"
@@ -935,11 +937,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "Responsable anterior: %{responsible}"
         other: "Responsables anteriores: %{responsible}"
       the_following_findings_are_now_reassigned:
-        one: "La siguiente observación / oportunidad de mejora ha sido reasignada"
-        other: "Las siguientes observaciones / oportunidades de mejora han sido reasignadas"
+        one: "El siguiente hallazgo ha sido reasignado"
+        other: "Los siguientes hallazgos han sido reasignados"
       title:
-        one: "Observación / Oportunidad de mejora reasignada"
-        other: "Observaciones / Oportunidades de mejora reasignadas"
+        one: "Hallazgo reasignado"
+        other: "Hallazgos reasignados"
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
@@ -950,13 +952,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
-      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente hallazgo"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables del hallazgo o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
-        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        one: "El siguiente hallazgo ha cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        other: "Los siguientes hallazgos han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     pending_poll_email:
       title: "%{name}, tiene una encuesta pendiente"
@@ -1231,11 +1233,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     bundle: "Legajo"
     copy: "Copiar"
     view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
-    findings_label: "Observaciones / Oportunidades de mejora pendientes"
-    add_finding_assignment: "Agregar observación / oportunidad de mejora pendiente"
+    findings_label: "Hallazgos pendientes"
+    add_finding_assignment: "Agregar hallazgo pendiente"
     add_user_assignment: "Agregar usuario relacionado"
-    suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
-    without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
+    suggest_findings: 'Sugerir hallazgos pendientes'
+    without_suggested_findings: 'Sin hallazgos pendientes'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1347,7 +1349,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_title: "Estado"
     unknown_email: "Dirección de correo no encontrada"
     send: "Enviar"
-    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
+    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha hallazgos pendientes, deberá reasignarlas primero"
     add_child: "Agregar nueva persona a cargo"
     add_organization_role: "Agregar un nuevo perfil dentro de una organización"
     add_related_user_relations: "Agregar usuario relacionado"
@@ -1610,8 +1612,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
-      finding: "Observación / Oportunidad"
-      finding_answer: "Respuesta a observación"
+      finding: "Hallazgo"
+      finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
       fortress: "Fortaleza"
       group: "Grupo"
@@ -1777,7 +1779,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo de control"
-        description: "Observación / Oportunidad"
+        description: "Hallazgo"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
         review_code: "Código en el informe"
@@ -1806,7 +1808,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_relations:
           one: "Relación"
           other: "Relaciones"
-          related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
+          related_finding_id: "Relación (Hallazgo relacionado)"
           description: "Relación (descripción)"
         finding_user_assignments:
           one: "Usuario relacionado"
@@ -1842,22 +1844,22 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
-        finding_id: "Observación / Oportunidad"
+        finding_id: "Hallazgo"
         user_id: "Usuario"
         file_model: "Anexo"
         notify_users: "Enviar notificación"
         created_at: "Fecha del comentario"
       finding_relation:
-        finding_id: 'Observación / Oportunidad de mejora'
-        related_finding_id: 'Observación / Oportunidad de mejora relacionada'
+        finding_id: 'Hallazgo'
+        related_finding_id: 'Hallazgo relacionado'
         description: 'Descripción'
       finding_review_assignment:
-        finding_id: 'Observación / Oportunidad de mejora'
-        finding: 'Observación / Oportunidad de mejora'
+        finding_id: 'Hallazgo'
+        finding: 'Hallazgo'
         review_id: 'Informe'
         review: 'Informe'
       finding_user_assignment:
-        finding_id: 'Observación / Oportunidad de mejora'
+        finding_id: 'Hallazgo'
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Dueño del proceso'
@@ -2119,10 +2121,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           file_content_type: "Anexo (tipo de archivo)"
           file_file_size: "Anexo (tamaño de archivo)"
         finding_review_assignments:
-          one: "Observación / Oportunidad de mejora pendiente"
-          other: "Observaciones / Oportunidades de mejora pendientes"
-          finding: "Observación / Oportunidad de mejora pendiente"
-          finding_id: "Observación / Oportunidad de mejora pendiente"
+          one: "Hallazgo pendiente"
+          other: "Hallazgos pendientes"
+          finding: "Hallazgo pendiente"
+          finding_id: "Hallazgo pendiente"
         review_user_assignments:
           one: "Integrante"
           other: "Integrantes"
