@@ -163,14 +163,14 @@
     <% if @auth_organization.system_quality_management %>
       <p>
         <%= f.label :correction_date,
-          raw(Finding.human_attribute_name(:correction_date) +
+          raw(Nonconformity.human_attribute_name(:correction_date) +
           show_inline_help_for(:finding_correction_date)) %>
         <%= calendar_text_field f, :correction_date, false, nil,
           :disabled => readonly %>
       </p>
       <p>
         <%= f.label :cause_analysis_date,
-          raw(Finding.human_attribute_name(:cause_analysis_date) +
+          raw(Nonconformity.human_attribute_name(:cause_analysis_date) +
           show_inline_help_for(:finding_cause_analysis_date)) %>
         <%= calendar_text_field f, :cause_analysis_date, false, nil,
           :disabled => readonly %>
