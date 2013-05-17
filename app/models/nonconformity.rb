@@ -99,6 +99,8 @@ class Nonconformity < Finding
   def must_be_approved?
     return true if self.revoked?
 
+    system_quality_management =
+      self.control_objective_item.review.period.organization.system_quality_management
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?
@@ -124,12 +126,12 @@ class Nonconformity < Finding
         errors << I18n.t('nonconformity.errors.without_follow_up_date')
       end
 
-      if @auth_organization.system_quality_management
+      if system_quality_management
         if self.correction.blank?
           errors << I18n.t('nonconformity.errors.without_correction')
         end
 
-        if self.correction_date?
+        if self.correction_date.blank?
           errors << I18n.t('nonconformity.errors.without_correction_date')
         end
 

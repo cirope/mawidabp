@@ -392,8 +392,8 @@ class Finding < ActiveRecord::Base
   validates_each :follow_up_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
   } do |record, attr, value|
-    check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
-        record.implemented? || record.implemented_audited?)
+    check_for_blank = (record.kind_of?(Weakness) || record.kind_of?(Nonconformity)) &&
+      (record.being_implemented? || record.implemented? || record.implemented_audited?)
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
     record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
