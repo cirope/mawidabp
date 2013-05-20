@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417184631) do
+ActiveRecord::Schema.define(:version => 20130513153532) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -293,6 +293,10 @@ ActiveRecord::Schema.define(:version => 20130417184631) do
     t.date     "origination_date"
     t.integer  "repeated_of_id"
     t.integer  "highest_risk"
+    t.string   "correction"
+    t.date     "correction_date"
+    t.string   "cause_analysis"
+    t.date     "cause_analysis_date"
   end
 
   add_index "findings", ["control_objective_item_id"], :name => "index_findings_on_control_objective_item_id"
@@ -434,10 +438,12 @@ ActiveRecord::Schema.define(:version => 20130417184631) do
     t.string   "prefix"
     t.text     "description"
     t.integer  "image_model_id"
-    t.integer  "lock_version",   :default => 0
+    t.integer  "lock_version",              :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_id"
+    t.boolean  "public",                    :default => false
+    t.boolean  "system_quality_management"
   end
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"
