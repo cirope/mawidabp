@@ -895,7 +895,7 @@ class FindingTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    assert_equal 2, Finding.unconfirmed_for_notification.size
+    assert_equal 4, Finding.unconfirmed_for_notification.size
 
     review_codes_by_user = {}
 
@@ -931,7 +931,6 @@ class FindingTest < ActiveSupport::TestCase
         finding.first_notification_date -=
           FINDING_STALE_UNCONFIRMED_DAYS.next.day
       end while [0, 6].include?(finding.first_notification_date.wday)
-
       assert finding.save
     end
 
@@ -942,7 +941,7 @@ class FindingTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    assert_equal 1, Finding.next_to_expire.size
+    assert_equal 2, Finding.next_to_expire.size
     before_expire = (FINDING_WARNING_EXPIRE_DAYS - 1).days.from_now_in_business.
       to_date
     expire = FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date
@@ -1037,7 +1036,7 @@ class FindingTest < ActiveSupport::TestCase
     unanswered_findings = Finding.where(
       :state => Finding::STATUS[:unanswered]
     ).count
-    assert_equal 1, Finding.confirmed_and_stale.size
+    assert_equal 2, Finding.confirmed_and_stale.size
 
     Finding.confirmed_and_stale.each do |finding|
       finding.finding_answers.create(
@@ -1077,22 +1076,29 @@ class FindingTest < ActiveSupport::TestCase
     n = 0
 
     until (findings = Finding.unanswered_and_stale(n += 1)).empty?
-      assert_equal 1, findings.size
+      assert_equal 2, findings.size
 
-      finding = findings.first
+      findings.each do |finding|
       # No debe escalar al presidente (4to nivel)  ya que no pertenece a la organización de la observación
-      unless n == 4
-        assert !finding.users_for_scaffold_notification(n).empty?
+        unless n == 4
+          users = finding.users_for_scaffold_notification(n)
+          has_audited_comments = finding.finding_answers.reload.any? do |fa|
+            fa.user.can_act_as_audited?
+          end
 
-        finding_ids << finding.id
+          assert users.present?
 
-        users_by_level_for_notification[n] |= finding.users |
-        finding.users_for_scaffold_notification(n)
+          if users.present? && !has_audited_comments
+            finding_ids << finding.id
+            users_by_level_for_notification[n] |= finding.users |
+            finding.users_for_scaffold_notification(n)
+          end
+        end
       end
     end
 
     # No escala al nivel 4
-    assert_difference 'ActionMailer::Base.deliveries.size', 3 do
+    assert_difference 'ActionMailer::Base.deliveries.size', 6 do
       level_counts = {}
 
       finding_ids.each do |f_id|
@@ -1107,9 +1113,20 @@ class FindingTest < ActiveSupport::TestCase
       end
     end
 
-    ActionMailer::Base.deliveries.each_with_index do |mail, i|
-      assert_equal users_by_level_for_notification[i + 1].map(&:email).sort,
-        mail.to.sort
+    mails_by_level = mails = []
+
+    ActionMailer::Base.deliveries.each_with_index do |mail,i|
+      mails_by_level << mail.to.sort
+    end
+
+    index = 0
+
+    users_by_level_for_notification.each do |i, users|
+      mails = (mails_by_level[index] | mails_by_level[index + 1]) || []
+
+      assert_equal users.map(&:email).sort, mails.sort
+
+      index += 2
     end
   end
 

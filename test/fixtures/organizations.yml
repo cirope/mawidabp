@@ -4,6 +4,8 @@ default_organization:
   description: The default organization
   image_model: image_one
   group: main_group
+  system_quality_management: false
+  public: false
 
 second_organization:
   name: Second Organization
@@ -11,3 +13,5 @@ second_organization:
   description: The second organization
   image_model: image_two
   group: second_group
+  system_quality_management: false
+  public: false

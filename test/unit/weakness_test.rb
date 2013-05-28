@@ -241,6 +241,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert weakness.update_attributes(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+
     assert_equal 'PTO 06', weakness.work_papers.first.code
   end
 

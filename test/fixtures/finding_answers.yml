@@ -4,4 +4,12 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity_auditor_answer:
   commitment_date: <%= Date.today.to_s(:db) %>
   finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
   user: administrator_user
-  file_model: 
+  file_model:
+
+bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity_auditor_answer:
+  answer: Auditor text
+  auditor_comments: Auditor comments
+  commitment_date: <%= Date.today.to_s(:db) %>
+  finding: bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity
+  user: administrator_user
+  file_model:

@@ -32,7 +32,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe final
   test 'create' do
     review = Review.find reviews(:review_with_conclusion).id
-    findings_count = (review.weaknesses + review.oportunities).size
+    findings_count = (review.weaknesses + review.oportunities + review.nonconformities +
+                        review.potential_nonconformities + review.fortresses).size
 
     assert findings_count > 0
 
@@ -53,7 +54,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
 
     final_findings_count =
-      (review.final_weaknesses + review.final_oportunities).size
+      (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
+         review.final_potential_nonconformities + review.final_fortresses).size
 
     assert_equal findings_count, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
@@ -63,7 +65,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe final con observaciones reiteradas
   test 'create with repeated findings' do
     review = Review.find reviews(:review_with_conclusion).id
-    findings = review.weaknesses + review.oportunities
+    findings = (review.weaknesses + review.oportunities + review.nonconformities +
+                  review.potential_nonconformities + review.fortresses)
     repeated_id = findings(
       :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
 
@@ -97,7 +100,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     end
 
     final_findings_count =
-      (review.final_weaknesses + review.final_oportunities).size
+      (review.final_weaknesses + review.final_oportunities + review.final_nonconformities +
+         review.final_potential_nonconformities + review.final_fortresses).size
 
     assert_equal findings.size, final_findings_count
     assert_not_equal 0, Finding.finals(true).count
