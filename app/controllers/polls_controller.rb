@@ -15,7 +15,7 @@ class PollsController < ApplicationController
         :page => params[:page], :per_page => APP_LINES_PER_PAGE)
     else
       default_conditions = {
-        Poll.table_name => {:organization_id => @auth_organization.id}
+        :organization_id => @auth_organization.id
       }
 
       build_search_conditions Poll, default_conditions
@@ -32,13 +32,9 @@ class PollsController < ApplicationController
       else
         # Solo busca por columna contestada
         if params[:search][:query].downcase == 'si'
-          default_conditions = {
-            Poll.table_name => { :answered => true }
-          }
+          default_conditions[:answered] = true
         elsif params[:search][:query].downcase == 'no'
-          default_conditions = {
-            Poll.table_name => { :answered => false }
-          }
+          default_conditions[:answered] = false
         end
 
         @polls = Poll.includes(
