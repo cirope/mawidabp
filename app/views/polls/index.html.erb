@@ -6,9 +6,9 @@
 <table class="list">
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'user_name', 'last_name' %>
+      <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'name', 'last_name' %>
       <%= make_filterable_column Poll.human_attribute_name(:questionnaire_id), nil, 'questionnaire_name' %>
-      <%= make_not_available_column Poll.human_attribute_name(:answered) %>
+      <%= make_filterable_column Poll.human_attribute_name(:answered), nil, 'answered' %>
       <%= make_not_available_column Poll.human_attribute_name(:send_date) %>
       <%= make_not_available_column Poll.human_attribute_name(:answer_date) %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>

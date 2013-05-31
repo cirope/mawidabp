@@ -20,14 +20,36 @@ class PollsController < ApplicationController
 
       build_search_conditions Poll, default_conditions
 
-      @polls = Poll.includes(
-        :questionnaire,
-        :user
-      ).where(@conditions).order(
-        "#{Poll.table_name}.created_at DESC"
-      ).paginate(
-        :page => params[:page], :per_page => APP_LINES_PER_PAGE
-      )
+      unless @columns.first == 'answered' && @columns.size == 1
+        @polls = Poll.includes(
+          :questionnaire,
+          :user
+        ).where(@conditions).order(
+          "#{Poll.table_name}.created_at DESC"
+        ).paginate(
+          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+        )
+      else
+        # Solo busca por columna contestada
+        if params[:search][:query].downcase == 'si'
+          default_conditions = {
+            Poll.table_name => { :answered => true }
+          }
+        elsif params[:search][:query].downcase == 'no'
+          default_conditions = {
+            Poll.table_name => { :answered => false }
+          }
+        end
+
+        @polls = Poll.includes(
+          :questionnaire,
+          :user
+        ).where(default_conditions).order(
+          "#{Poll.table_name}.created_at DESC"
+        ).paginate(
+          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+        )
+      end
     end
 
     respond_to do |format|

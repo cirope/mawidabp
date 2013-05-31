@@ -18,6 +18,18 @@ class Poll < ActiveRecord::Base
     :questionnaire_name => {
       :column => "LOWER(#{Questionnaire.table_name}.name)", :operator => 'ILIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :answered => {
+      :column => "#{Poll.table_name}.answered", :operator => '=',
+      :conversion_method => lambda { |value|
+        if value.downcase == 'si'
+          true
+        elsif value.downcase == 'no'
+          false
+        else
+          nil
+        end
+      }
     }
   )
 
