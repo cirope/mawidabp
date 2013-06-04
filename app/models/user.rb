@@ -596,7 +596,6 @@ class User < ActiveRecord::Base
 
   def release_for_all_pending_findings(options = {})
     options.assert_valid_keys(:with_reviews, :with_findings)
-
     all_released = true
     items_for_notification = []
     self.reallocation_errors ||= []
@@ -617,7 +616,6 @@ class User < ActiveRecord::Base
           end
         end
       end
-
 
       if options[:with_reviews]
         self.review_user_assignments.each do |rua|
@@ -657,7 +655,6 @@ class User < ActiveRecord::Base
 
   def reassign_to(other, options = {})
     options.assert_valid_keys(:with_reviews, :with_findings)
-
     unconfirmed_findings = []
     reassigned_reviews = []
     all_reassigned = true
@@ -695,7 +692,8 @@ class User < ActiveRecord::Base
           self.review_user_assignments.each do |rua|
             unless rua.review.has_final_review?
               rua.notify_by_email = false
-              findings = rua.review.weaknesses + rua.review.oportunities
+              findings = rua.review.weaknesses + rua.review.oportunities +
+                rua.review.nonconformities + rua.review.potential_nonconformities
               unconfirmed_findings_in_review = findings.select do |f|
                 f.unconfirmed? && !unconfirmed_findings.include?(f)
               end
@@ -703,7 +701,6 @@ class User < ActiveRecord::Base
               unconfirmed_findings.concat(unconfirmed_findings_in_review)
 
               reassigned_reviews << "*#{rua.review.identification}*"
-
               unless rua.update_attribute :user, other
                 all_reassigned = false
                 description = "#{Review.model_name.human}: " +
@@ -717,7 +714,6 @@ class User < ActiveRecord::Base
             end
           end
         end
-
         if all_reassigned
           reviews = other.findings.all_for_reallocation.map do |f|
             "*#{f.review.identification}*"
@@ -746,6 +742,7 @@ class User < ActiveRecord::Base
           unless unconfirmed_findings.blank?
             title = I18n.t('user.unconfirmed_findings')
             content = ''
+
             notification = Notification.create(
               :findings => unconfirmed_findings, :user => other)
 
@@ -758,16 +755,13 @@ class User < ActiveRecord::Base
                 content << "_#{f.review_code}_"
                 content << "\n** #{model.human_attribute_name('description')}: "
                 content << "_#{f.description}_"
-
                 if f.respond_to?(:risk_text)
                   content << "\n** #{model.human_attribute_name('risk')}: "
                   content << "_#{f.risk_text}_"
                 end
               end
-
               content << "\n\n"
             end
-
             Notifier.changes_notification(other, :title => title,
               :content => content, :notification => notification).deliver
           end

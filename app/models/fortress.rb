@@ -39,10 +39,10 @@ class Fortress < Finding
   def last_work_paper_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_fortress, review.try(:created_at))
+      :admin_code_prefix_for_work_papers_in_fortresses, review.try(:created_at))
 
     code_from_review = review ?
-      review.last_weakness_work_paper_code(code_prefix) :
+      review.last_fortress_work_paper_code(code_prefix) :
       "#{code_prefix} 0".strip
 
     code_from_fortress = self.work_papers.reject(

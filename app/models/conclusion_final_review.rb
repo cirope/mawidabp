@@ -162,14 +162,14 @@ class ConclusionFinalReview < ConclusionReview
   end
 
   def duplicate_review_findings
-    findings = self.review.weaknesses.not_revoked +
-      self.review.oportunities.not_revoked
+    findings = self.review.weaknesses.not_revoked + self.review.oportunities.not_revoked +
+      self.review.nonconformities.not_revoked + self.review.potential_nonconformities.not_revoked +
+      self.review.fortresses
     all_created = false
 
     begin
       findings.all? do |f|
         finding = f.dup
-
         finding.final = true
         finding.parent = f
         finding.origination_date ||= f.origination_date ||= self.issue_date
@@ -190,8 +190,9 @@ class ConclusionFinalReview < ConclusionReview
         f.save!
       end
 
-      revoked_findings = self.review.weaknesses.revoked +
-        self.review.oportunities.revoked
+      revoked_findings = self.review.weaknesses.revoked + self.review.oportunities.revoked +
+        self.review.nonconformities.revoked + self.review.potential_nonconformities.revoked
+
       revoked_findings.each { |rf| rf.final = true; rf.save! }
 
       all_created = true

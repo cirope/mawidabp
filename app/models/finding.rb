@@ -438,7 +438,8 @@ class Finding < ActiveRecord::Base
     review = record.control_objective_item.try(:review)
 
     if review
-      (review.weaknesses | review.oportunities).each do |finding|
+      (review.weaknesses | review.oportunities | review.fortresses | review.nonconformities |
+       review.potential_nonconformities).each do |finding|
         another_record = (!record.new_record? && finding.id != record.id) ||
           (record.new_record? && finding.object_id != record.object_id)
 
@@ -854,8 +855,8 @@ class Finding < ActiveRecord::Base
         if new_coi.review.try(:is_frozen?)
           raise 'Can not change to a frozen review!'
         end
-
         # Cambio al anterior para que no lo tome en cuenta en el código
+
         self.control_objective_item = old_coi
         self.review_code = self.next_code(new_coi.review)
 
@@ -866,6 +867,7 @@ class Finding < ActiveRecord::Base
         end
 
         self.control_objective_item = new_coi
+
       end
     end
   end
