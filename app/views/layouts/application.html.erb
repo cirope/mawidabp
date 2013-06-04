@@ -30,10 +30,10 @@
         <%= link_to t('menu.show_menu'), '#', :onclick => 'Menu.show()', :id => :show_menu %>
         <%= link_to t('menu.hide_menu'), '#', :onclick => 'Menu.hide()', :id => :hide_menu, :style => 'display: none;' %>
       </div>
-      <% if @auth_user && @auth_user.password %>
+      <% if @auth_user && @auth_user.password && @auth_organization %>
         <div id="menu_container">
           <%= render :partial =>
-            "shared/#{@auth_user.get_menu(@auth_organization.system_quality_management) if @auth_user}",
+            "shared/#{@auth_user.get_menu(@auth_organization.system_quality_management)}",
             :locals => {:user => @auth_user, :organization => @auth_organization} %>
         </div>
       <% else %>

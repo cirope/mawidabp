@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <% if @auth_organization.system_quality_managemen? %>
+      <% if @auth_organization.system_quality_management? %>
         <% menu_items = @role.audited? ? APP_AUDITED_SQM_MENU_ITEMS : APP_AUDITOR_SQM_MENU_ITEMS %>
       <% else %>
         <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>

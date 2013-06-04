@@ -56,22 +56,22 @@
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:correction) %>:</b>
+    <b><%= Nonconformity.human_attribute_name :correction %>:</b>
     <%= @nonconformity.correction if @nonconformity.correction %>
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:cause_analysis) %>:</b>
+    <b><%= Nonconformity.human_attribute_name :cause_analysis %>:</b>
     <%= @nonconformity.cause_analysis if @nonconformity.cause_analysis %>
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:correction_date) %>:</b>
+    <b><%= Nonconformity.human_attribute_name :correction_date %>:</b>
     <%=l @nonconformity.correction_date, :format => :long if @nonconformity.correction_date %>
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:cause_analysis_date) %>:</b>
+    <b><%= Nonconformity.human_attribute_name :cause_analysis_date %>:</b>
     <%=l @nonconformity.cause_analysis_date, :format => :long if @nonconformity.cause_analysis_date %>
   </div>
 
