@@ -178,6 +178,6 @@ class FortressTest < ActiveSupport::TestCase
     assert fortress.update_attributes(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
 
-    assert_equal 'PTF 01', fortress.work_papers.first.code
+    assert_equal 'PTF 04', fortress.work_papers.first.code
   end
 end

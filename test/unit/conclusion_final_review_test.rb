@@ -31,7 +31,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final
   test 'create' do
-    review = Review.find reviews(:review_with_conclusion).id
+    review = Review.find reviews(:review_approved_with_conclusion).id
     findings_count = (review.weaknesses + review.oportunities + review.nonconformities +
                         review.potential_nonconformities + review.fortresses).size
 
@@ -64,7 +64,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la creación de un informe final con observaciones reiteradas
   test 'create with repeated findings' do
-    review = Review.find reviews(:review_with_conclusion).id
+    review = Review.find reviews(:review_approved_with_conclusion).id
     findings = (review.weaknesses + review.oportunities + review.nonconformities +
                   review.potential_nonconformities + review.fortresses)
     repeated_id = findings(
@@ -128,8 +128,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba la inclusión de observaciones anuladas en ejecución
   test 'revoked weaknesses' do
-    review = Review.find reviews(:review_with_conclusion).id
-    weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
+    review = Review.find reviews(:review_approved_with_conclusion).id
+    weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness).id
     assert weakness.update_attribute :state, 7
 
     @conclusion_review = ConclusionFinalReview.new({
@@ -230,9 +230,13 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   end
 
   test 'duplicate review findings' do
-    review = Review.find reviews(:review_with_conclusion).id
-    findings = review.weaknesses + review.oportunities
-    final_findings = review.final_weaknesses + review.final_oportunities
+    review = Review.find reviews(:review_approved_with_conclusion).id
+    review = review.reload
+    findings = review.weaknesses + review.oportunities + review.fortresses + review.nonconformities +
+      review.potential_nonconformities
+
+    final_findings = review.final_weaknesses + review.final_oportunities + review.final_fortresses +
+      review.final_nonconformities + review.final_potential_nonconformities
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size
@@ -250,13 +254,18 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :conclusion => 'New conclusion'
       }, {}, false)
 
+      p @conclusion_review.save!
+      p @conclusion_review.valid?
+      p review.valid?
       assert @conclusion_review.save,
         @conclusion_review.errors.full_messages.join('; ')
     end
 
-    findings = review.weaknesses(true) + review.oportunities(true)
+    findings = review.weaknesses(true) + review.oportunities(true) + review.potential_nonconformities(true) +
+      review.potential_nonconformities(true) + review.fortresses(true) + review.nonconformities(true)
     work_papers_count = findings.inject(0) { |acc, f| acc + f.work_papers.size }
-    final_findings = review.reload.final_weaknesses(true) +
+    final_findings = review.reload.final_weaknesses(true) + review.reload.final_fortresses(true) +
+      review.reload.final_nonconformities(true) + review.reload.final_potential_nonconformities(true) +
       review.reload.final_oportunities(true)
     final_work_papers_count = final_findings.inject(0) do |acc, f|
       acc + f.work_papers.size

@@ -33,7 +33,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'ConclusionReview.count' do
       @conclusion_review = ConclusionFinalReview.new({
-        :review => reviews(:review_with_conclusion),
+        :review => reviews(:review_approved_with_conclusion),
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,
         :applied_procedures => 'New applied procedures',

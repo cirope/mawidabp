@@ -941,7 +941,8 @@ class FindingTest < ActiveSupport::TestCase
     GlobalModelConfig.current_organization_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
-    assert_equal 2, Finding.next_to_expire.size
+    assert_equal 3, Finding.next_to_expire.size
+
     before_expire = (FINDING_WARNING_EXPIRE_DAYS - 1).days.from_now_in_business.
       to_date
     expire = FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date

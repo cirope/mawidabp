@@ -138,9 +138,9 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_difference 'ConclusionFinalReview.count' do
       post :create, {
         :conclusion_final_review => {
-          :review_id => reviews(:review_with_conclusion).id,
+          :review_id => reviews(:review_approved_with_conclusion).id,
           :issue_date => Date.today,
-          :close_date => 2.days.from_now.to_date,
+          :close_date => Date.tomorrow,
           :applied_procedures => 'New applied procedures',
           :conclusion => 'New conclusion'
         }

@@ -117,3 +117,13 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_fortress:
   organization: default_organization
   owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_fortress) %>
   owner_type: Finding
+
+text_work_paper_bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
+  name: Text WP
+  code: PTNC 01
+  number_of_pages: 11
+  description: Text Work Paper Description
+  file_model:
+  organization: default_organization
+  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity) %>
+  owner_type: Finding
