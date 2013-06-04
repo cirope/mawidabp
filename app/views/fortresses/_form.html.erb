@@ -76,6 +76,7 @@
       <%= render :partial => 'findings/history_changes',
         :locals => { :finding => @fortress } %>
     <% end %>
+    </p>
     <p>
       <%= f.label :origination_date,
         raw(Fortress.human_attribute_name(:origination_date) +

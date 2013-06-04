@@ -1,13 +1,13 @@
 <h1 style="clear: both; margin-bottom: 0em;">
   <%= ControlObjectiveItem.human_attribute_name('fortresses') %>
 </h1>
-</br>
+<br>
 <h4>
   <%= t('label.total') %>:
     <%= @control_objective_item.is_in_a_final_review? ? @control_objective_item.final_fortresses.count :
         @control_objective_item.fortresses.count %>
 </h4>
-</br>
+<br>
 <p style="margin-bottom: 1.2em;">
   <%= link_to_unless @control_objective_item.fortresses.blank?,
     t('control_objective_item.view_all_fortresses'),
