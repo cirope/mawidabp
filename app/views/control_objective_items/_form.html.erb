@@ -152,11 +152,13 @@
     </p>
   </div>
 
-  <%= render :partial => 'fortresses_summary', :locals => {:readonly => readonly} %>
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
-  <%= render :partial => 'nonconformities_summary', :locals => {:readonly => readonly} %>
-  <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => readonly} %>
   <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly} %>
+  <% if @auth_organization.system_quality_management? %>
+    <%= render :partial => 'fortresses_summary', :locals => {:readonly => readonly} %>
+    <%= render :partial => 'nonconformities_summary', :locals => {:readonly => readonly} %>
+    <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => readonly} %>
+  <% end %>
 
   <h1>
     <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
