@@ -79,7 +79,11 @@
     <%=t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
   </div>
 
+  <%= render :partial => 'fortresses_summary', :locals => {:readonly => true} %>
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
 
   <% unless @control_objective_item.work_papers.empty? %>
     <h1 class="clear"><%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
