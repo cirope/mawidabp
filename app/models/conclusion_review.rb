@@ -229,6 +229,122 @@ class ConclusionReview < ActiveRecord::Base
         :font_size => PDF_FONT_SIZE
     end
 
+    review_has_fortresses = grouped_control_objectives.any? do |_, cois|
+      cois.any? do |coi|
+        !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+      end
+    end
+
+    if review_has_fortresses
+      pdf.add_subtitle(
+        I18n.t('conclusion_review.fortresses'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+
+      grouped_control_objectives.each do |process_control, cois|
+        has_fortresses = cois.any? do |coi|
+          !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+        end
+
+        if has_fortresses
+          pc_id = process_control.id.to_s
+          column_headers, column_widths = [], []
+
+          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
+              "#{process_control.name}</i></b>"
+          column_widths << pdf.percent_width(100)
+
+          cois.each do |coi|
+            fortresses = (
+              use_finals ? coi.final_fortresses : coi.fortresses
+            ).not_revoked.order('review_code ASC')
+
+            fortresses.each do |f|
+              column_data = []
+              f_data = coi.pdf_data(f)
+
+              if f_data[:column].present?
+                column_data << column_headers
+                column_data << f_data[:column]
+
+                pdf.move_down PDF_FONT_SIZE
+
+                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                  table_options = pdf.default_table_options(column_widths)
+
+                  pdf.table(column_data, table_options) do
+                    row(0).style(
+                      :background_color => 'cccccc',
+                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                    )
+                  end
+                end
+              end
+
+              pdf.move_down PDF_FONT_SIZE
+              pdf.text f_data[:text], :justification => :full, :inline_format => true
+            end
+          end
+        end
+      end
+    end
+
+    review_has_nonconformities = grouped_control_objectives.any? do |_, cois|
+      cois.any? do |coi|
+        !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
+      end
+    end
+
+    if review_has_nonconformities
+      pdf.add_subtitle(
+        I18n.t('conclusion_review.nonconformities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+
+      grouped_control_objectives.each do |process_control, cois|
+        has_nonconformities = cois.any? do |coi|
+          !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
+        end
+
+        if has_nonconformities
+          pc_id = process_control.id.to_s
+          column_headers, column_widths = [], []
+
+          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
+              "#{process_control.name}</i></b>"
+          column_widths << pdf.percent_width(100)
+
+          cois.each do |coi|
+            nonconformities = (
+              use_finals ? coi.final_nonconformities : coi.nonconformities
+            ).not_revoked.order('review_code ASC')
+
+            nonconformities.each do |nc|
+              column_data = []
+              nc_data = coi.pdf_data(nc)
+
+              if nc_data[:column].present?
+                column_data << column_headers
+                column_data << nc_data[:column]
+
+                pdf.move_down PDF_FONT_SIZE
+
+                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                  table_options = pdf.default_table_options(column_widths)
+
+                  pdf.table(column_data, table_options) do
+                    row(0).style(
+                      :background_color => 'cccccc',
+                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                    )
+                  end
+                end
+              end
+
+              pdf.move_down PDF_FONT_SIZE
+              pdf.text nc_data[:text], :justification => :full, :inline_format => true
+            end
+          end
+        end
+      end
+    end
+
     review_has_observations = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
         !(use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.blank?
@@ -281,6 +397,61 @@ class ConclusionReview < ActiveRecord::Base
 
               pdf.move_down PDF_FONT_SIZE
               pdf.text w_data[:text], :justification => :full, :inline_format => true
+            end
+          end
+        end
+      end
+    end
+
+    review_has_potential_nonconformities = grouped_control_objectives.any? do |_, cois|
+      cois.any? do |coi|
+        !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
+      end
+    end
+
+    if review_has_potential_nonconformities
+      pdf.add_subtitle(
+        I18n.t('conclusion_review.potential_nonconformities'), PDF_FONT_SIZE, PDF_FONT_SIZE)
+
+      grouped_control_objectives.each do |process_control, cois|
+        has_potential_nonconformities = cois.any? do |coi|
+          !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
+        end
+
+        if has_potential_nonconformities
+          pc_id = process_control.id.to_s
+          column_headers, column_widths = [], []
+
+          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
+              "#{process_control.name}</i></b>"
+          column_widths << pdf.percent_width(100)
+
+          cois.each do |coi|
+            (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.each do |pnc|
+              pnc_data = coi.pdf_data(pnc)
+
+              column_data = []
+
+              unless pnc_data[:column].blank?
+                column_data << column_headers
+                column_data << pnc_data[:column]
+
+                pdf.move_down PDF_FONT_SIZE
+
+                pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+                  table_options = pdf.default_table_options(column_widths)
+
+                  pdf.table(column_data, table_options) do
+                    row(0).style(
+                      :background_color => 'cccccc',
+                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                    )
+                  end
+                end
+              end
+
+              pdf.move_down PDF_FONT_SIZE
+              pdf.text pnc_data[:text], :justification => :full, :inline_format => true
             end
           end
         end
