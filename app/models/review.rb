@@ -1098,10 +1098,14 @@ class Review < ActiveRecord::Base
 
   def zip_all_work_papers(organization = nil)
     filename = self.absolute_work_papers_zip_path
-    weaknesses, oportunities, findings = [], [], []
+    weaknesses, oportunities, nonconformities, potential_nonconformities,
+      fortresses, findings = [], [], [], [], [], []
     dirs = {
       :control_objectives => I18n.t('review.control_objectives_work_papers').sanitized_for_filename,
+      :fortresses => I18n.t('review.fortresses_work_papers').sanitized_for_filename,
+      :nonconformities => I18n.t('review.nonconformities_work_papers').sanitized_for_filename,
       :weaknesses => I18n.t('review.weaknesses_work_papers').sanitized_for_filename,
+      :potential_nonconformities => I18n.t('review.potential_nonconformities_work_papers').sanitized_for_filename,
       :oportunities => I18n.t('review.oportunities_work_papers').sanitized_for_filename,
       :follow_up => I18n.t('review.follow_up_work_papers').sanitized_for_filename,
       :survey => Review.human_attribute_name(:survey).sanitized_for_filename
@@ -1120,11 +1124,36 @@ class Review < ActiveRecord::Base
       if self.has_final_review?
         weaknesses = self.final_weaknesses
         oportunities = self.final_oportunities
-        findings = self.weaknesses + self.oportunities
+        fortresses = self.final_fortresses
+        nonconformities = self.final_nonconformities
+        potential_nonconformities = self.final_potential_nonconformities
+        findings = self.weaknesses + self.oportunities + self.fortresses + self.nonconformities +
+          self.potential_nonconformities
       else
         weaknesses = self.weaknesses
         oportunities = self.oportunities
+        fortresses = self.fortresses
+        nonconformities = self.nonconformities
+        potential_nonconformities = self.potential_nonconformities
         findings = []
+      end
+
+      fortresses.each do |f|
+        f.work_papers.each do |f_wp|
+          self.add_work_paper_to_zip f_wp, dirs[:fortresses], zipfile, 'E_'
+        end
+      end
+
+      nonconformities.each do |nc|
+        nc.work_papers.each do |nc_wp|
+          self.add_work_paper_to_zip nc_wp, dirs[:nonconformities], zipfile, 'E_'
+        end
+      end
+
+      potential_nonconformities.each do |pnc|
+        pnc.work_papers.each do |pnc_wp|
+          self.add_work_paper_to_zip pnc_wp, dirs[:potential_nonconformities], zipfile, 'E_'
+        end
       end
 
       weaknesses.each do |w|
