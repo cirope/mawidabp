@@ -150,7 +150,7 @@ module ConclusionFinalReviewsHelper
 
       cois.each do |coi|
         (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.each do |f|
-          body << finding_row_data(coi, o, cycle(:odd, :even))
+          body << finding_row_data(coi, f, cycle(:odd, :even))
         end
       end
 
@@ -179,17 +179,17 @@ module ConclusionFinalReviewsHelper
       :description)}:</b> #{h(finding.description)}"
     end
 
-    if weakness && !finding.risk_text.blank?
+    if weakness && finding.risk_text.present?
       body_rows << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
         "#{h(finding.risk_text)}"
     end
 
-    if weakness && !finding.effect.blank?
+    if weakness && finding.effect.present?
       body_rows << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
         "#{h(finding.effect)}"
     end
 
-    if weakness && !finding.audit_recommendations.blank?
+    if weakness && finding.audit_recommendations.present?
       body_rows << "<b>#{Weakness.human_attribute_name(
       :audit_recommendations)}: </b>#{h(finding.audit_recommendations)}"
     end
@@ -204,15 +204,15 @@ module ConclusionFinalReviewsHelper
       :correction)}: </b>#{finding.correction}"
     end
 
-    if weakness && finding.cause_analysis.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
-      :cause_analysis)}: </b>#{finding.cause_analysis}"
-    end
-
     if weakness && finding.correction_date.present?
       body_rows << "<b>#{Weakness.human_attribute_name(
       :correction_date)}: </b> #{I18n.l(finding.correction_date,
         :format => :long)}"
+    end
+
+    if weakness && finding.cause_analysis.present?
+      body_rows << "<b>#{Weakness.human_attribute_name(
+      :cause_analysis)}: </b>#{finding.cause_analysis}"
     end
 
     if weakness && finding.cause_analysis_date.present?
@@ -250,7 +250,7 @@ module ConclusionFinalReviewsHelper
       :audit_comments)}: </b> #{h(finding.audit_comments)}"
     end
 
-    if finding.state_text.present?
+    if finding.state_text.present? && (weakness || oportunity)
       body_rows << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
         h(finding.state_text)
     end
