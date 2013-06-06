@@ -75,9 +75,8 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
-    @conclusion_review.conclusion = '   '
     assert @conclusion_review.invalid?
-    assert_equal 4, @conclusion_review.errors.count
+    assert_equal 3, @conclusion_review.errors.count
     assert_equal [error_message_from_model(@conclusion_review, :issue_date,
       :blank)], @conclusion_review.errors[:issue_date]
     assert_equal [error_message_from_model(@conclusion_review, :review_id,
@@ -85,8 +84,6 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@conclusion_review,
       :applied_procedures, :blank)],
       @conclusion_review.errors[:applied_procedures]
-    assert_equal [error_message_from_model(@conclusion_review, :conclusion,
-      :blank)], @conclusion_review.errors[:conclusion]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
