@@ -22,6 +22,7 @@ class Fortress < Finding
     super(attributes, options, import_users)
 
     self.review_code ||= self.next_code
+    self.state = nil
   end
 
   def self.columns_for_sort
