@@ -50,7 +50,7 @@ class FindingsController < ApplicationController
     else
       default_conditions[:state] = params[:completed] == 'incomplete' ?
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-        Finding::STATUS.values - Finding::PENDING_STATUS - [Finding::STATUS[:revoked]]
+        Finding::STATUS.values - Finding::PENDING_STATUS - [Finding::STATUS[:revoked]] + [nil]
     end
 
     build_search_conditions Finding, default_conditions
@@ -534,7 +534,7 @@ class FindingsController < ApplicationController
 
     conditions[:state] = params[:completed] == 'incomplete' ?
       Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-      Finding::STATUS.values - Finding::PENDING_STATUS
+      Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
 
     finding = Finding.includes(includes).where(conditions).first(
       :readonly => false
