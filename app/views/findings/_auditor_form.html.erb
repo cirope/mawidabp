@@ -14,7 +14,7 @@
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
         :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
-    <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness) ?
+    <%= raw "var lastWorkPaperCode = '#{@finding.kind_of?(Weakness || Nonconformity) ?
         next_weakness_work_paper_code(@finding, true) :
         next_oportunity_work_paper_code(@finding)}';" %>
     <%= raw "var finding_user_assignment='#{generate_template(f_f,
@@ -62,7 +62,7 @@
       <%= f_f.label :description %>
       <%= f_f.text_area :description, :readonly => true, :style => 'height: 18.5em;' %>
     </p>
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p>
         <%= f_f.label :audit_recommendations %>
         <%= f_f.text_area :audit_recommendations, :size => nil,
@@ -71,7 +71,7 @@
     <% end %>
   </div>
   <div class="form_column_right">
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p class="form_item">
         <%= f_f.label :risk, nil, :class => :inline %>
         <%= f_f.select :risk, parameter_in(@auth_organization.id,
@@ -85,14 +85,15 @@
           {:prompt => true}, {:class => :inline_item} %>
       </p>
     <% end %>
-    <p class="form_item">
-      <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
-        show_inline_help_for(:finding_state) +
-        (show_history_changes ? finding_show_status_change_history(
-          :finding_status_change_history) : '')), :class => :inline %>
-      <%= finding_status_field(f_f) %>
-    </p>
-
+    <% unless @finding.kind_of? Fortress %>
+      <p class="form_item">
+        <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
+          show_inline_help_for(:finding_state) +
+          (show_history_changes ? finding_show_status_change_history(
+            :finding_status_change_history) : '')), :class => :inline %>
+        <%= finding_status_field(f_f) %>
+      </p>
+    <% end %>
     <% if show_history_changes %>
       <%= render :partial => 'history_changes',
         :locals => { :finding => @finding } %>
@@ -114,7 +115,7 @@
         show_inline_help_for(:finding_origination_date)) %>
       <%= calendar_text_field f_f, :origination_date %>
     </p>
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p>
         <%= f_f.label :follow_up_date,
           raw(Finding.human_attribute_name(:follow_up_date) +

@@ -1102,7 +1102,7 @@ class Finding < ActiveRecord::Base
 
     pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
-    if self.kind_of?(Weakness)
+    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
       pdf.add_description_item(Weakness.human_attribute_name('risk'),
         self.risk_text, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name('priority'),
@@ -1116,7 +1116,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('answer'),
       self.answer, 0, false) unless self.unanswered?
 
-    if self.kind_of?(Weakness) && (self.implemented? || self.being_implemented?)
+    if (self.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && (self.implemented? || self.being_implemented?)
       pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
         (I18n.l(self.follow_up_date, :format => :long) if self.follow_up_date),
         0, false)
@@ -1141,8 +1141,10 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
       self.audit_comments, 0, false)
 
-    pdf.add_description_item(self.class.human_attribute_name('state'),
-      self.state_text, 0, false)
+    unless self.kind_of? Fortress
+      pdf.add_description_item(self.class.human_attribute_name('state'),
+        self.state_text, 0, false)
+    end
 
     unless self.work_papers.blank?
       pdf.start_new_page
@@ -1209,9 +1211,9 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name(:description),
       self.description, 0, false)
     pdf.add_description_item(self.class.human_attribute_name(:state),
-      self.state_text, 0, false)
+      self.state_text, 0, false) unless self.kind_of?(Fortress)
 
-    if self.kind_of?(Weakness)
+    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
       pdf.add_description_item(self.class.human_attribute_name(:risk),
         self.risk_text, 0, false)
       pdf.add_description_item(self.class.human_attribute_name(:priority),
@@ -1571,7 +1573,7 @@ class Finding < ActiveRecord::Base
     origination_date = self.origination_date
     date_text = I18n.l(date, :format => :minimal) if date
     origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
-    being_implemented = self.kind_of?(Weakness) && self.being_implemented?
+    being_implemented = self.kind_of?(Weakness || Nonconformity) && self.being_implemented?
     rescheduled_text = ''
 
     if being_implemented && self.rescheduled?
@@ -1610,9 +1612,9 @@ class Finding < ActiveRecord::Base
     column_data = [
       self.review.to_s,
       self.review_code,
-      self.state_text,
-      self.kind_of?(Weakness) ? self.risk_text : '',
-      self.kind_of?(Weakness) ? self.priority_text : '',
+      self.kind_of?(Fortress) ? '' : self.state_text,
+      self.respond_to?(:risk_text) ? self.risk_text : '',
+      self.respond_to?(:risk_text) ? self.priority_text : '',
       audited.join('; '),
       description,
       self.control_objective_item.control_objective_text,
@@ -1639,7 +1641,7 @@ class Finding < ActiveRecord::Base
       Weakness.human_attribute_name(:risk),
       Weakness.human_attribute_name(:priority),
       I18n.t('finding.audited', :count => 0),
-      Weakness.human_attribute_name(:description),
+      Finding.human_attribute_name(:description),
       ControlObjectiveItem.human_attribute_name(:control_objective_text),
       (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
       Finding.human_attribute_name(:origination_date),

@@ -48,7 +48,7 @@
       <%= f_f.label :description %>
       <%= f_f.text_area :description, :readonly => true, :style => 'height: 17em;' %>
     </p>
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p>
         <%= f_f.label :audit_recommendations %>
         <%= f_f.text_area :audit_recommendations, :size => nil, :readonly => true %>
@@ -56,7 +56,7 @@
     <% end %>
   </div>
   <div class="form_column_right">
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p class="form_item">
         <%= f_f.label :risk, nil, :class => :inline %>
         <%= f_f.select :risk, parameter_in(@auth_organization.id,
@@ -72,11 +72,13 @@
           {:class => :inline_item, :disabled => true} %>
       </p>
     <% end %>
-    <p class="form_item">
-      <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
-        show_inline_help_for(:finding_state)), :class => :inline %>
-      <%= finding_status_field(f_f, true, true) %>
-    </p>
+    <% unless @finding.kind_of? Fortress %>
+      <p class="form_item">
+        <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
+          show_inline_help_for(:finding_state)), :class => :inline %>
+        <%= finding_status_field(f_f, true, true) %>
+      </p>
+    <% end %>
     <p>
       <%= f_f.label :origination_date,
         raw(Finding.human_attribute_name(:origination_date) +
@@ -85,7 +87,7 @@
         (l @finding.origination_date, :format => :short if @finding.origination_date),
         :readonly => true %>
     </p>
-    <% if @finding.kind_of? Weakness %>
+    <% if @finding.kind_of?(Weakness || Nonconformity) %>
       <p>
         <%= f_f.label :follow_up_date,
           raw(Finding.human_attribute_name(:follow_up_date) +
@@ -183,7 +185,7 @@
     <%= t('finding.finding_answers') %>
     <%= show_inline_help_for(:finding_comments) %>
   </h1>
-    
+
   <table class="summary_table" id="finding_answers">
     <thead>
       <tr>

@@ -240,7 +240,7 @@
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     findings_type_internal: "Hallazgos Auditoría Interna"
-    findings_type_external: "Observaciones Auditorías Externas"
+    findings_type_external: "Hallazgos Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
     high_risk_weaknesses: "Observaciones de riesgo alto"
@@ -593,7 +593,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     pdf:
-      pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
+      pdf_name: "listado_de_hallazgos.pdf"
       size_warning: "El listado es demasiado grande, se ha truncado a %{count} hallazgos."
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
@@ -2314,7 +2314,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
               must_be_blank: "debe estar en blanco para el estado seleccionado"
             state:
               must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
+              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que el hallazgo ya se encuentra en un informe definitivo"
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"

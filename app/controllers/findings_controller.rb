@@ -186,7 +186,7 @@ class FindingsController < ApplicationController
     else
       default_conditions[:state] = completed == 'incomplete' ?
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-        Finding::STATUS.values - Finding::PENDING_STATUS
+        Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
     end
 
     build_search_conditions Finding, default_conditions
@@ -259,7 +259,7 @@ class FindingsController < ApplicationController
     else
       default_conditions[:state] = params[:completed] == 'incomplete' ?
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-        Finding::STATUS.values - Finding::PENDING_STATUS
+        Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
     end
 
     build_search_conditions Finding, default_conditions
@@ -337,11 +337,10 @@ class FindingsController < ApplicationController
       date = params[:completed] == 'incomplete' ? finding.follow_up_date :
         finding.solution_date
       date_text = l(date, :format => :minimal) if date
-      stale = finding.kind_of?(Weakness) && finding.being_implemented? &&
+      stale = (finding.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && finding.being_implemented? &&
         finding.follow_up_date < Date.today
-      being_implemented = finding.kind_of?(Weakness) && finding.being_implemented?
-      rescheduled_text = being_implemented && !finding.rescheduled? ?
-        t('label.no') : ''
+      being_implemented = (finding.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && finding.being_implemented?
+      rescheduled_text = ''
 
       if being_implemented && finding.rescheduled?
         dates = []
@@ -356,6 +355,8 @@ class FindingsController < ApplicationController
         rescheduled_text << dates.join("\n\n")
       end
 
+      rescheduled_text = I18n.t('label.no') if rescheduled_text.blank?
+
       audited = finding.reload.users.select(&:audited?).map do |u|
         finding.process_owners.include?(u) ?
           "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
@@ -365,11 +366,11 @@ class FindingsController < ApplicationController
       finding_data = [
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
-        "<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}",
-        ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text}" if finding.kind_of?(Weakness)),
-        ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text}" if finding.kind_of?(Weakness)),
+        ("<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}" unless finding.kind_of?(Fortress)),
+        ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text}" if finding.respond_to?(:risk_text)),
+        ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text}" if finding.respond_to?(:priority_text)),
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
-        "<b>#{Weakness.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}"
+        "<b>#{Finding.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}"
       ].compact.join("\n")
 
       unless (relations = finding.finding_relations).blank?
