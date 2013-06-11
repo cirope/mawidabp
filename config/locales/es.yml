@@ -1947,7 +1947,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_ids: "Responsable"
         finding_user_assignments: "Responsables"
         origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
+        follow_up_date: "Fecha de implementación/Acción correctiva"
         state: "Estado"
         solution_date: "Fecha de solución"
         work_papers: "Papeles de trabajo"
@@ -1976,6 +1976,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         work_papers: "Papeles de trabajo"
         state: "Estado"
         origination_date: "Fecha de origen"
+        follow_up_date: "Fecha de implementación/Acción de mejora"
         solution_date: "Fecha de solución"
       organization:
         name: "Nombre"
@@ -2054,6 +2055,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_user_assignments: "Responsables"
         work_papers: "Papeles de trabajo"
         state: "Estado"
+        follow_up_date: "Fecha de implementación/Acción preventiva"
         origination_date: "Fecha de origen"
         solution_date: "Fecha de solución"
       privilege:
@@ -2200,7 +2202,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_ids: "Responsable"
         finding_user_assignments: "Responsables"
         origination_date: "Fecha de origen"
-        follow_up_date: "Fecha de implementación"
+        follow_up_date: "Fecha de implementación/Acción correctiva"
         state: "Estado"
         solution_date: "Fecha de solución"
         work_papers: "Papeles de trabajo"
