@@ -88,17 +88,24 @@
         :locals => { :finding => @potential_nonconformity } %>
     <% end %>
     <p>
+      <%= f.label :origination_date,
+        raw(PotentialNonconformity.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)) %>
+      <%= calendar_text_field f, :origination_date, false, nil, :disabled => readonly %>
+    </p>
+    <p>
+      <%= f.label :follow_up_date,
+        raw(PotentialNonconformity.human_attribute_name(:follow_up_date) +
+        show_inline_help_for(:finding_follow_up_date)) %>
+      <%= calendar_text_field f, :follow_up_date, false, nil,
+        :disabled => readonly %>
+    </p>
+    <p>
       <%= f.label :solution_date,
         raw(Finding.human_attribute_name(:solution_date) +
         show_inline_help_for(:finding_solution_date)) %>
       <%= calendar_text_field f, :solution_date, false, nil,
         :disabled => readonly %>
-    </p>
-    <p>
-      <%= f.label :origination_date,
-        raw(PotentialNonconformity.human_attribute_name(:origination_date) +
-          show_inline_help_for(:finding_origination_date)) %>
-      <%= calendar_text_field f, :origination_date, false, nil, :disabled => readonly %>
     </p>
 
     <% if @potential_nonconformity.must_have_a_comment? %>

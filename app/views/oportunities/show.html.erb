@@ -41,6 +41,11 @@
   </div>
 
   <div class="show_item">
+    <b><%= Oportunity.human_attribute_name :follow_up_date %>:</b>
+    <%=l @oportunity.follow_up_date, :format => :long if @oportunity.follow_up_date %>
+  </div>
+
+  <div class="show_item">
     <b><%= Oportunity.human_attribute_name :solution_date %>:</b>
     <%=l @oportunity.solution_date, :format => :long if @oportunity.solution_date %>
   </div>

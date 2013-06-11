@@ -41,6 +41,11 @@
   </div>
 
   <div class="show_item">
+    <b><%= PotentialNonconformity.human_attribute_name :follow_up_date %>:</b>
+    <%=l @potential_nonconformity.follow_up_date, :format => :long if @potential_nonconformity.follow_up_date %>
+  </div>
+
+  <div class="show_item">
     <b><%= PotentialNonconformity.human_attribute_name :solution_date %>:</b>
     <%=l @potential_nonconformity.solution_date, :format => :long if @potential_nonconformity.solution_date %>
   </div>
