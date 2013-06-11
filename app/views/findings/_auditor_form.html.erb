@@ -62,16 +62,19 @@
       <%= f_f.label :description %>
       <%= f_f.text_area :description, :readonly => true, :style => 'height: 18.5em;' %>
     </p>
-    <% if @finding.kind_of?(Weakness || Nonconformity) %>
+    <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
+      <p>
+        <%= f_f.label :effect %>
+        <%= f_f.text_area :effect, :size => nil, :readonly => true %>
+      </p>
       <p>
         <%= f_f.label :audit_recommendations %>
-        <%= f_f.text_area :audit_recommendations, :size => nil,
-          :readonly => true %>
+        <%= f_f.text_area :audit_recommendations, :size => nil, :readonly => true %>
       </p>
     <% end %>
   </div>
   <div class="form_column_right">
-    <% if @finding.kind_of?(Weakness || Nonconformity) %>
+    <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
       <p class="form_item">
         <%= f_f.label :risk, nil, :class => :inline %>
         <%= f_f.select :risk, parameter_in(@auth_organization.id,
@@ -115,29 +118,46 @@
         show_inline_help_for(:finding_origination_date)) %>
       <%= calendar_text_field f_f, :origination_date %>
     </p>
-    <% if @finding.kind_of?(Weakness || Nonconformity) %>
+    <% if @auth_organization.system_quality_management &&
+      (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
       <p>
-        <%= f_f.label :follow_up_date,
-          raw(Finding.human_attribute_name(:follow_up_date) +
-          show_inline_help_for(:finding_follow_up_date)) %>
-        <%= calendar_text_field f_f, :follow_up_date %>
+        <%= f_f.label :correction %>
+        <%= f_f.text_area :correction, :style => 'height: 4em;',
+          :readonly => true %>
       </p>
-      <%= show_weakness_previous_follow_up_dates @finding %>
+      <p>
+        <%= f_f.label :correction_date %>
+        <%= calendar_text_field f_f, :correction_date, false, nil,
+          :readonly => true %>
+      </p>
+      <p>
+        <%= f_f.label :cause_analysis %>
+        <%= f_f.text_area :cause_analysis, :style => 'height: 4em;',
+          :readonly => true %>
+      </p>
+      <p>
+        <%= f_f.label :cause_analysis_date %>
+        <%= calendar_text_field f_f, :cause_analysis_date, false, nil,
+          :readonly => true %>
+      </p>
     <% end %>
+    <p>
+      <%= f_f.label :answer %>
+      <%= f_f.text_area :answer %>
+    </p>
+    <p>
+      <%= f_f.label :follow_up_date,
+        raw(@finding.class.human_attribute_name(:follow_up_date) +
+        show_inline_help_for(:finding_follow_up_date)) %>
+      <%= calendar_text_field f_f, :follow_up_date %>
+    </p>
+    <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
     <p>
       <%= f_f.label :solution_date,
         raw(Finding.human_attribute_name(:solution_date) +
         show_inline_help_for(:finding_solution_date)) %>
       <%= calendar_text_field f_f, :solution_date %>
       <%= f_f.hidden_field :id %>
-    </p>
-    <p>
-      <%= f_f.label :effect %>
-      <%= f_f.text_area :effect, :readonly => true %>
-    </p>
-    <p>
-      <%= f_f.label :answer %>
-      <%= f_f.text_area :answer %>
     </p>
     <p>
       <%= f_f.label :audit_comments %>

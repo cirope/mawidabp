@@ -446,6 +446,11 @@ class ControlObjectiveItem < ActiveRecord::Base
     head = []
     body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
 
+    if finding.description.present?
+      body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
+        "#{finding.description.chomp}\n"
+    end
+
     if finding.review_code.present?
       head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
         "#{finding.review_code.chomp}\n"
@@ -454,11 +459,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     if finding.repeated_ancestors.present?
       body << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
         " #{finding.repeated_ancestors.join(' | ')}\n"
-    end
-
-    if finding.description.present?
-      body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
-        "#{finding.description.chomp}\n"
     end
 
     if weakness && finding.risk_text.present?
@@ -476,9 +476,9 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b>#{finding.audit_recommendations}\n"
     end
 
-    if finding.answer.present?
-      body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
-        "#{finding.answer.chomp}\n"
+    if finding.origination_date.present?
+      body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
+        "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
     end
 
     if weakness && finding.correction.present?
@@ -503,19 +503,19 @@ class ControlObjectiveItem < ActiveRecord::Base
         :format => :long)}\n"
     end
 
-    if weakness && !finding.implemented_audited?
-      if finding.follow_up_date.present?
-        body << "<b>#{Weakness.human_attribute_name(:follow_up_date)}:</b> " +
-          "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
-      end
-    elsif finding.solution_date.present?
-      body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
-        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
+    if finding.answer.present?
+      body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
+        "#{finding.answer.chomp}\n"
     end
 
-    if finding.origination_date.present?
-      body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
-        "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
+    if finding.follow_up_date.present?
+      body << "<b>#{finding.class.human_attribute_name(:follow_up_date)}:</b> " +
+        "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
+    end
+
+    if finding.solution_date.present?
+      body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
+        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
     end
 
     audited_users = finding.users.select(&:can_act_as_audited?)
@@ -530,14 +530,14 @@ class ControlObjectiveItem < ActiveRecord::Base
         "#{users.join('; ')}\n"
     end
 
+    if finding.state_text.present? && (weakness || oportunity)
+      body << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
+        "#{finding.state_text.chomp}\n"
+    end
+
     if finding.audit_comments.present?
       body << "<b>#{finding.class.human_attribute_name(:audit_comments)}:" +
         "</b> #{finding.audit_comments.chomp}\n"
-    end
-
-    if finding.state_text.present? && (weakness || oportunity)
-      body << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
-        finding.state_text.chomp
     end
 
     { :column => head, :text => body }

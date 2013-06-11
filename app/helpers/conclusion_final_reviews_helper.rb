@@ -164,6 +164,11 @@ module ConclusionFinalReviewsHelper
 
     body_rows = ["<b>#{ControlObjective.model_name.human}:</b> #{h(coi.to_s)}"]
 
+    if finding.description.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :description)}:</b> #{h(finding.description)}"
+    end
+
     if finding.review_code.present?
       body_rows << "<b>#{finding.class.human_attribute_name(
       :review_code)}:</b> #{h(finding.review_code)}"
@@ -174,24 +179,46 @@ module ConclusionFinalReviewsHelper
       :repeated_of_id)}:</b> #{h(finding.repeated_ancestors.join(' | '))}"
     end
 
-    if finding.description.present?
-      body_rows << "<b>#{finding.class.human_attribute_name(
-      :description)}:</b> #{h(finding.description)}"
-    end
-
     if weakness && finding.risk_text.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
+      body_rows << "<b>#{finding.class.human_attribute_name(:risk)}:</b> " +
         "#{h(finding.risk_text)}"
     end
 
     if weakness && finding.effect.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
+      body_rows << "<b>#{finding.class.human_attribute_name(:effect)}:</b> " +
         "#{h(finding.effect)}"
     end
 
     if weakness && finding.audit_recommendations.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
+      body_rows << "<b>#{finding.class.human_attribute_name(
       :audit_recommendations)}: </b>#{h(finding.audit_recommendations)}"
+    end
+
+    if finding.origination_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(:origination_date)}:</b> " +
+        "#{I18n.l(finding.origination_date, :format => :long)}"
+    end
+
+    if weakness && finding.correction.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :correction)}: </b>#{finding.correction}"
+    end
+
+    if weakness && finding.correction_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :correction_date)}: </b> #{I18n.l(finding.correction_date,
+        :format => :long)}"
+    end
+
+    if weakness && finding.cause_analysis.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :cause_analysis)}: </b>#{finding.cause_analysis}"
+    end
+
+    if weakness && finding.cause_analysis_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
+        :format => :long)}"
     end
 
     if finding.answer.present?
@@ -199,35 +226,13 @@ module ConclusionFinalReviewsHelper
         "#{h(finding.answer)}"
     end
 
-    if weakness && finding.correction.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
-      :correction)}: </b>#{finding.correction}"
-    end
-
-    if weakness && finding.correction_date.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
-      :correction_date)}: </b> #{I18n.l(finding.correction_date,
-        :format => :long)}"
-    end
-
-    if weakness && finding.cause_analysis.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
-      :cause_analysis)}: </b>#{finding.cause_analysis}"
-    end
-
-    if weakness && finding.cause_analysis_date.present?
-      body_rows << "<b>#{Weakness.human_attribute_name(
-      :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
-        :format => :long)}"
-    end
-
-    if weakness && !finding.implemented_audited?
-      if finding.follow_up_date.present?
-        body_rows << "<b>#{Weakness.human_attribute_name(
+    if finding.follow_up_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
         :follow_up_date)}:</b> #{I18n.l(finding.follow_up_date,
         :format => :long)}"
-      end
-    elsif finding.solution_date.present?
+    end
+
+    if finding.solution_date.present?
       body_rows << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}"
     end
@@ -245,14 +250,14 @@ module ConclusionFinalReviewsHelper
       :user_ids)}:</b> #{h(users.join('; '))}"
     end
 
-    if finding.audit_comments.present?
-      body_rows << "<b>#{finding.class.human_attribute_name(
-      :audit_comments)}: </b> #{h(finding.audit_comments)}"
-    end
-
     if finding.state_text.present? && (weakness || oportunity)
       body_rows << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
         h(finding.state_text)
+    end
+
+    if finding.audit_comments.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :audit_comments)}: </b> #{h(finding.audit_comments)}"
     end
 
     content_tag(:tr, content_tag(:td,
