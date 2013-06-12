@@ -40,12 +40,14 @@ class ApplicationController < ActionController::Base
 
   def current_user
     load_user
+    Finding.current_user = @auth_user
 
     @auth_user.try(:id)
   end
 
   def current_organization
     load_organization
+    Finding.current_organization = @auth_organization
 
     @auth_organization.try(:id)
   end

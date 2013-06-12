@@ -143,6 +143,7 @@ class FindingsController < ApplicationController
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
           format.xml  { head :ok }
         else
+          flash.alert = t 'finding.stale_object_error'
           format.html { render :action => :edit }
           format.xml  { render :xml => @finding.errors, :status => :unprocessable_entity }
           raise ActiveRecord::Rollback
@@ -555,7 +556,8 @@ class FindingsController < ApplicationController
   def prepare_parameters
     if @auth_user.can_act_as_audited?
       params[:finding].delete_if do |k,|
-        ![:finding_answers_attributes, :costs_attributes].include?(k.to_sym)
+        ![:finding_answers_attributes, :costs_attributes, :cause_analysis,
+          :cause_analysis_date, :correction, :correction_date].include?(k.to_sym)
       end
     end
   end

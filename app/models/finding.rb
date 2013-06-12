@@ -3,6 +3,8 @@ class Finding < ActiveRecord::Base
   include Comparable
   include ParameterSelector
 
+  cattr_accessor :current_user, :current_organization
+
   # Constantes
   COLUMNS_FOR_SEARCH = {
     :issue_date => {
@@ -386,9 +388,11 @@ class Finding < ActiveRecord::Base
     :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates :audit_comments, :presence => true, :if => :revoked?
+  validates :correction, :correction_date, :cause_analysis, :cause_analysis_date,
+    :presence => true, :if => :audited_and_system_quality_management?
   validates_date :first_notification_date, :allow_nil => true
-  validates_date :follow_up_date, :solution_date, :origination_date,
-    :allow_nil => true, :allow_blank => true
+  validates_date :follow_up_date, :solution_date, :origination_date, :correction_date,
+    :cause_analysis_date, :allow_nil => true, :allow_blank => true
   validates_each :follow_up_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
   } do |record, attr, value|
@@ -801,6 +805,10 @@ class Finding < ActiveRecord::Base
   def can_not_be_revoked?
     self.revoked? && self.state_changed? &&
       (self.repeated_of || self.is_in_a_final_review?)
+  end
+
+  def audited_and_system_quality_management?
+    current_user.can_act_as_audited? && current_organization.system_quality_management?
   end
 
   def mark_as_unconfirmed!

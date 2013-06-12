@@ -104,8 +104,6 @@ class Weakness < Finding
   def must_be_approved?
     return true if self.revoked?
 
-    system_quality_management =
-      self.control_objective_item.review.period.organization.system_quality_management
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?
@@ -121,24 +119,6 @@ class Weakness < Finding
     elsif self.being_implemented?
       if self.answer.blank?
         errors << I18n.t('weakness.errors.without_answer')
-      end
-
-      if system_quality_management
-        if self.correction.blank?
-          errors << I18n.t('weakness.errors.without_correction')
-        end
-
-        if self.correction_date.blank?
-          errors << I18n.t('weakness.errors.without_correction_date')
-        end
-
-        if self.cause_analysis.blank?
-          errors << I18n.t('weakness.errors.without_cause_analysis')
-        end
-
-        if self.cause_analysis_date.blank?
-          errors << I18n.t('weakness.errors.without_cause_analysis_date')
-        end
       end
 
       if self.solution_date?

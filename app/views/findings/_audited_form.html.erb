@@ -95,23 +95,19 @@
        (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
       <p>
         <%= f_f.label :correction %>
-        <%= f_f.text_area :correction, :style => 'height: 4em;',
-          :readonly => true %>
+        <%= f_f.text_area :correction, :style => 'height: 4em;' %>
       </p>
       <p>
         <%= f_f.label :correction_date %>
-        <%= calendar_text_field f_f, :correction_date, false, nil,
-          :readonly => true %>
+        <%= calendar_text_field f_f, :correction_date, false, nil %>
       </p>
       <p>
         <%= f_f.label :cause_analysis %>
-        <%= f_f.text_area :cause_analysis, :style => 'height: 4em;',
-          :readonly => true %>
+        <%= f_f.text_area :cause_analysis, :style => 'height: 4em;' %>
       </p>
       <p>
         <%= f_f.label :cause_analysis_date %>
-        <%= calendar_text_field f_f, :cause_analysis_date, false, nil,
-          :readonly => true %>
+        <%= calendar_text_field f_f, :cause_analysis_date, false, nil %>
       </p>
     <% end %>
     <p>
