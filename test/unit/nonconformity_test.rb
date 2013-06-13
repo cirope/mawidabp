@@ -195,6 +195,31 @@ class NonconformityTest < ActiveSupport::TestCase
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates date attributes' do
+    @nonconformity.correction_date = 'xxx'
+    @nonconformity.cause_analysis_date = 'xxx'
+
+    assert @nonconformity.invalid?
+    assert_equal 4, @nonconformity.errors.count
+    assert_equal error_message_from_model(@nonconformity, :correction_date, :invalid_date),
+      @nonconformity.errors[:correction_date].first
+    assert_equal error_message_from_model(@nonconformity, :cause_analysis_date, :invalid_date),
+      @nonconformity.errors[:cause_analysis_date].first
+
+    assert @nonconformity.update_attribute(:state, 0)
+    @nonconformity.correction_date = '25/05/2013'
+    @nonconformity.cause_analysis_date = '24/05/2013'
+    @nonconformity.follow_up_date = '23/05/2013'
+    assert @nonconformity.invalid?
+
+    assert_equal 2, @nonconformity.errors.count
+    assert_equal [I18n.t('finding.errors.correction_date_on_or_before')],
+      @nonconformity.errors[:correction_date]
+    assert_equal [I18n.t('finding.errors.cause_analysis_date_on_or_before')],
+      @nonconformity.errors[:cause_analysis_date]
+  end
+
+  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @nonconformity.control_objective_item_id = '?nil'
     @nonconformity.review_code = 'BAD_PREFIX_2'

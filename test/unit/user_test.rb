@@ -429,6 +429,7 @@ class UserTest < ActiveSupport::TestCase
         :invalid)], auditor_user.errors[:organization_roles]
 
     auditor_user.reload
+    bare = User.find(users(:bare_user).id)
 
     assert auditor_user.reassign_to(User.find(users(:bare_user).id),
       {:with_reviews => true, :with_findings => true})

@@ -14,9 +14,9 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   correction: Correction
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
@@ -176,9 +176,9 @@ bcra_A4609_security_management_responsible_dependency_nonconformity_being_implem
   audit_recommendations: Proposed action 1nc
   effect: Effect 1nc
   correction: Correction 1nc
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis 1nc
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
@@ -295,9 +295,9 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   audit_recommendations: Proposed action 3nc
   effect: Effect 3nc
   correction: Correction 3nc
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis 3nc
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
@@ -316,10 +316,10 @@ bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   solution_date:
   audit_recommendations: Proposed action 2nc
   effect: Effect 2nc
-  correction: Correction 2nc
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
-  cause_analysis: Cause analysis 2nc
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
   follow_up_date:
@@ -339,9 +339,9 @@ bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   audit_recommendations: Proposed action 1nc
   effect: Effect 1nc
   correction: Correction
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
@@ -362,9 +362,9 @@ iso_27000_security_policy_3_1_item_nonconformity:
   audit_recommendations: Proposed action 1nc
   effect: Effect 1nc
   correction: Correction 1nc
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis 1nc
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
@@ -384,9 +384,9 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   audit_recommendations: Proposed action 1nc
   effect: Effect 1nc
   correction: Correction 1nc
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis 1nc
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
@@ -539,9 +539,9 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   origination_date:
   solution_date:
   correction: Correction
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 3w
   effect: Effect 3w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -640,9 +640,9 @@ iso_27000_security_policy_3_1_item_weakness:
   origination_date:
   solution_date:
   correction: Correction
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -663,9 +663,9 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   origination_date:
   solution_date:
   correction: Correction
-  correction_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
   cause_analysis: Cause analysis
-  cause_analysis_date: <%= 5.days.from_now.to_date.to_s(:db) %>
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>

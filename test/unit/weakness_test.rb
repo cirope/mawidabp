@@ -173,6 +173,31 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
+    # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates date attributes' do
+    @weakness.correction_date = 'xxx'
+    @weakness.cause_analysis_date = 'xxx'
+
+    assert @weakness.invalid?
+    assert_equal 4, @weakness.errors.count
+    assert_equal error_message_from_model(@weakness, :correction_date, :invalid_date),
+      @weakness.errors[:correction_date].first
+    assert_equal error_message_from_model(@weakness, :cause_analysis_date, :invalid_date),
+      @weakness.errors[:cause_analysis_date].first
+
+    assert @weakness.update_attribute(:state, 0)
+    @weakness.correction_date = '25/05/2013'
+    @weakness.cause_analysis_date = '24/05/2013'
+    @weakness.follow_up_date = '23/05/2013'
+    assert @weakness.invalid?
+
+    assert_equal 2, @weakness.errors.count
+    assert_equal [I18n.t('finding.errors.correction_date_on_or_before')],
+      @weakness.errors[:correction_date]
+    assert_equal [I18n.t('finding.errors.cause_analysis_date_on_or_before')],
+      @weakness.errors[:cause_analysis_date]
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @weakness.review_code = 'abcdd' * 52
@@ -297,13 +322,9 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.state = Finding::STATUS[:being_implemented]
     @weakness.answer = ' '
     assert !@weakness.must_be_approved?
-    assert_equal 7, @weakness.approval_errors.size
+    assert_equal 3, @weakness.approval_errors.size
     assert_equal [I18n.t('weakness.errors.without_answer'),
       I18n.t('weakness.errors.with_solution_date'),
-      I18n.t('weakness.errors.without_correction'),
-      I18n.t('weakness.errors.without_correction_date'),
-      I18n.t('weakness.errors.without_cause_analysis'),
-      I18n.t('weakness.errors.without_cause_analysis_date'),
       I18n.t('weakness.errors.without_follow_up_date')].sort,
       @weakness.approval_errors.sort
 
