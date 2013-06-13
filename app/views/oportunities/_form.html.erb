@@ -94,6 +94,10 @@
       <%= calendar_text_field f, :origination_date, false, nil, :disabled => readonly %>
     </p>
     <p>
+      <%= f.label :answer %>
+      <%= f.text_area :answer, :readonly => readonly %>
+    </p>
+    <p>
       <%= f.label :follow_up_date,
         raw(Oportunity.human_attribute_name(:follow_up_date) +
         show_inline_help_for(:finding_follow_up_date)) %>
@@ -118,10 +122,6 @@
         </p>
       <% end %>
     <% end %>
-    <p>
-      <%= f.label :answer %>
-      <%= f.text_area :answer, :readonly => readonly %>
-    </p>
     <p>
       <%= f.label :audit_comments %>
       <%= f.text_area :audit_comments, :readonly => readonly %>

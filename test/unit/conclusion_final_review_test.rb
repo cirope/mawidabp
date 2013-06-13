@@ -254,9 +254,6 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
         :conclusion => 'New conclusion'
       }, {}, false)
 
-      p @conclusion_review.save!
-      p @conclusion_review.valid?
-      p review.valid?
       assert @conclusion_review.save,
         @conclusion_review.errors.full_messages.join('; ')
     end
