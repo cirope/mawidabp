@@ -393,6 +393,10 @@ class Finding < ActiveRecord::Base
   validates_date :first_notification_date, :allow_nil => true
   validates_date :follow_up_date, :solution_date, :origination_date, :correction_date,
     :cause_analysis_date, :allow_nil => true, :allow_blank => true
+  validates_date :correction_date, :on_or_before => :cause_analysis_date,
+    :on_or_before_message => I18n.t('finding.errors.correction_date_on_or_before')
+  validates_date :cause_analysis_date, :on_or_before => :follow_up_date,
+    :on_or_before_message => I18n.t('finding.errors.cause_analysis_date_on_or_before')
   validates_each :follow_up_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
   } do |record, attr, value|

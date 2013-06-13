@@ -592,6 +592,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
+    errors:
+      correction_date_on_or_before: "La fecha de corrección/acción inmediata debe ser anterior a la fecha de análisis de causa"
+      cause_analysis_date_on_or_before: "La fecha de análisis de causa debe ser anterior a la fecha de implementación"
     pdf:
       pdf_name: "listado_de_hallazgos.pdf"
       size_warning: "El listado es demasiado grande, se ha truncado a %{count} hallazgos."
