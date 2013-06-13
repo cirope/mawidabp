@@ -98,7 +98,7 @@
           raw(Nonconformity.human_attribute_name(:correction_date) +
           show_inline_help_for(:finding_correction_date)) %>
         <%= calendar_text_field f, :correction_date, false, nil,
-          :readonly => readonly %>
+          :disabled => readonly %>
       </p>
     <% end %>
   </div>
@@ -163,7 +163,7 @@
       <%= f.label :follow_up_date, raw(Nonconformity.human_attribute_name(:follow_up_date) +
           show_inline_help_for(:finding_follow_up_date)) %>
       <%= calendar_text_field f, :follow_up_date, false, nil,
-        :readonly => readonly %>
+        :disabled => readonly %>
     </p>
     <p>
       <%= f.label :solution_date,
