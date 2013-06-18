@@ -913,6 +913,10 @@ class Finding < ActiveRecord::Base
     end
   end
 
+  def rescheduled?
+    self.all_follow_up_dates.size > 0
+  end
+
   def cost
     self.costs.reject(&:new_record?).sum(&:cost)
   end

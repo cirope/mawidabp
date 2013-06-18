@@ -83,10 +83,6 @@ class Weakness < Finding
     priority.try(:first) || ''
   end
 
-  def rescheduled?
-    self.all_follow_up_dates.size > 0
-  end
-
   def next_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
     code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,

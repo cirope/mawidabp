@@ -49,11 +49,11 @@ module FindingsHelper
     html_classes = []
 
     if finding.being_implemented?
-      if finding.kind_of?(Weakness) && finding.stale?
+      if finding.stale?
         html_classes << 'strike'
       end
 
-      if finding.kind_of?(Weakness) && finding.rescheduled?
+      if finding.rescheduled?
         html_classes << 'yellow'
       end
 
