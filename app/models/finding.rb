@@ -1579,7 +1579,7 @@ class Finding < ActiveRecord::Base
     origination_date = self.origination_date
     date_text = I18n.l(date, :format => :minimal) if date
     origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
-    being_implemented = self.kind_of?(Weakness || Nonconformity) && self.being_implemented?
+    being_implemented = self.kind_of?(Weakness) || self.kind_of?(Nonconformity) && self.being_implemented?
     rescheduled_text = ''
 
     if being_implemented && self.rescheduled?
