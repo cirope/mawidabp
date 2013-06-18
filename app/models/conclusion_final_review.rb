@@ -107,7 +107,7 @@ class ConclusionFinalReview < ConclusionReview
   attr_readonly :issue_date, :close_date, :conclusion, :applied_procedures
 
   # Restricciones
-  validates :close_date, :presence => true
+  validates :close_date, :conclusion, :presence => true
   validates :review_id, :uniqueness => true, :allow_blank => true,
     :allow_nil => true
   validates_date :close_date, :allow_nil => true, :allow_blank => true,

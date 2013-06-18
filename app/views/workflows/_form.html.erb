@@ -142,9 +142,8 @@ function calculateCost() {
   var estimatedCost = 0;
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-    var unitsString = $(e).parents('.item').find('input[name$="[units]"]').val();
+    var unitsString = $(e).closest('.item').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
-
     estimatedCost += (parseFloat($(e).val()) || 0) * units;
   });
 
@@ -152,7 +151,7 @@ function calculateCost() {
     estimatedCost.toFixed(2)
   ).stop(true, true).effect('highlight', {}, 2000);
 }
-  
+
 jQuery(function() {
   $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
     var item = $(this).data('item');
@@ -163,15 +162,15 @@ jQuery(function() {
       );
     }
   });
-  
+
   $('#workflow_period_id').change(function() {
     var element = $(this);
 
     if(parseInt($(this).val()) > 0) {
       var url = '<%= reviews_for_period_workflows_path %>';
-      
+
       Helper.showLoading(element);
-      
+
       $.get(url, { period: $(this).val(), format: 'json' }, function(data) {
         HTMLUtil.updateOptions(
           $('#workflow_review_id'), HTMLUtil.optionsFromArray(data)
@@ -184,13 +183,13 @@ jQuery(function() {
       element.val('').attr('disabled', true);
     }
   });
-  
+
   $('#workflow_review_id').change(function() {
     var url = '<%= estimated_amount_workflows_path %>';
     var element = $(this);
-    
+
     Helper.showLoading(element);
-    
+
     $.get(url, { id: $(this).val() }, function(data) {
       $('#estimated_amount').html(data).stop(true, true).effect(
         'highlight', {}, 2000

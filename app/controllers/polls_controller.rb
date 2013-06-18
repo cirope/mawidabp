@@ -15,19 +15,37 @@ class PollsController < ApplicationController
         :page => params[:page], :per_page => APP_LINES_PER_PAGE)
     else
       default_conditions = {
-        Poll.table_name => {:organization_id => @auth_organization.id}
+        :organization_id => @auth_organization.id
       }
 
       build_search_conditions Poll, default_conditions
 
-      @polls = Poll.includes(
-        :questionnaire,
-        :user
-      ).where(@conditions).order(
-        "#{Poll.table_name}.created_at DESC"
-      ).paginate(
-        :page => params[:page], :per_page => APP_LINES_PER_PAGE
-      )
+      unless @columns.first == 'answered' && @columns.size == 1
+        @polls = Poll.includes(
+          :questionnaire,
+          :user
+        ).where(@conditions).order(
+          "#{Poll.table_name}.created_at DESC"
+        ).paginate(
+          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+        )
+      else
+        # Solo busca por columna contestada
+        if params[:search][:query].downcase == 'si'
+          default_conditions[:answered] = true
+        elsif params[:search][:query].downcase == 'no'
+          default_conditions[:answered] = false
+        end
+
+        @polls = Poll.includes(
+          :questionnaire,
+          :user
+        ).where(default_conditions).order(
+          "#{Poll.table_name}.created_at DESC"
+        ).paginate(
+          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+        )
+      end
     end
 
     respond_to do |format|
@@ -498,22 +516,21 @@ class PollsController < ApplicationController
       @parsed_file = CSV.parse(text)
       n = 0
 
-      Poll.transaction do
-        @parsed_file.each  do |row|
-          poll = Poll.new(
-            :questionnaire_id => questionnaire_id,
-            :organization_id => @auth_organization.id
-          )
-          poll.customer_email = row[0]
+      @parsed_file.each  do |row|
+        poll = Poll.new(
+          :questionnaire_id => questionnaire_id,
+          :organization_id => @auth_organization.id
+        )
+        poll.customer_email = row[0]
 
-          if poll.save!
-            n+=1
-          end
+        if poll.save
+          n+=1
         end
       end
 
       flash[:notice] = t('poll.customer_polls_sended', :count => n)
     else
+
       flash[:alert] = t('poll.error_csv_file_extension')
     end
 

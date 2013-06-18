@@ -1,7 +1,7 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.pending_poll_email.title', :name => @user.informal_name %></h2>
+  <h4><%= t('notifier.client_pending_poll.title', :name => @name) %></h4>
   <p>
-    <%= link_to t('notifier.pending_poll_email.answer_poll'),
+    <%= link_to t('notifier.client_pending_poll.answer_poll'),
       edit_poll_url(
         @poll,
         :layout => 'application_clean',
@@ -9,6 +9,6 @@
         :host => "#{@organization.prefix}.#{URL_HOST}",
         :protocol => URL_PROTOCOL) %>
   </p>
-  <p><%= t('notifier.pending_poll_email.clarification') %></p>
-  <%= render :partial => 'footer' %>
+  <p><%= t('notifier.client_pending_poll.clarification') %></p>
+  <%= render :partial => 'client_footer' %>
 </div>

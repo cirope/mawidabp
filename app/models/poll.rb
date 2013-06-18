@@ -18,6 +18,18 @@ class Poll < ActiveRecord::Base
     :questionnaire_name => {
       :column => "LOWER(#{Questionnaire.table_name}.name)", :operator => 'ILIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    },
+    :answered => {
+      :column => "#{Poll.table_name}.answered", :operator => '=',
+      :conversion_method => lambda { |value|
+        if value.downcase == 'si'
+          true
+        elsif value.downcase == 'no'
+          false
+        else
+          nil
+        end
+      }
     }
   )
 
@@ -69,7 +81,15 @@ class Poll < ActiveRecord::Base
   end
 
   def send_poll_email
-    Notifier.pending_poll_email(self).deliver
+    begin
+      if self.customer_email.present?
+        Notifier.client_pending_poll(self).deliver
+      else
+        Notifier.pending_poll_email(self).deliver
+      end
+    rescue Exception
+      self.destroy
+    end
   end
 
   def name

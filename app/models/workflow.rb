@@ -30,11 +30,10 @@ class Workflow < ActiveRecord::Base
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, :dependent => :destroy,
-    :order => [
-      "#{WorkflowItem.table_name}.order_number ASC",
+    :order => ["#{WorkflowItem.table_name}.order_number ASC",
       "#{WorkflowItem.table_name}.start ASC",
       "#{WorkflowItem.table_name}.end ASC"
-    ]
+    ].join(', ')
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true
@@ -118,7 +117,7 @@ class Workflow < ActiveRecord::Base
 
     column_data[0] = column_headers
 
-    self.workflow_items.each do |workflow_item|
+    self.workflow_items.sort_by(&:order_number).each do |workflow_item|
       resource_text = currency_mask % workflow_item.cost
       column_data[workflow_item.order_number] = [
         workflow_item.order_number,
@@ -155,7 +154,7 @@ class Workflow < ActiveRecord::Base
       pdf.add_title I18n.t('workflow.pdf.resources_utilization'),
         (PDF_FONT_SIZE * 1.25).round
 
-      self.workflow_items.each do |workflow_item|
+      self.workflow_items.sort_by(&:order_number).each do |workflow_item|
         unless workflow_item.resource_utilizations.blank?
           workflow_item.add_resource_data(pdf)
         end

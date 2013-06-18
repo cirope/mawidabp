@@ -92,7 +92,7 @@ class ConclusionReview < ActiveRecord::Base
 
   # Restricciones
   validates :review_id, :presence => true
-  validates :issue_date, :applied_procedures, :conclusion, :presence => true
+  validates :issue_date, :applied_procedures, :presence => true
   validates_length_of :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
   validates_date :issue_date, :allow_nil => true, :allow_blank => true
