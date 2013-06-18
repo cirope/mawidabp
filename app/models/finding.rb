@@ -394,11 +394,16 @@ class Finding < ActiveRecord::Base
   validates_each :follow_up_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
   } do |record, attr, value|
-    check_for_blank = (record.kind_of?(Weakness) || record.kind_of?(Nonconformity)) &&
-      (record.being_implemented? || record.implemented? || record.implemented_audited?)
 
-    record.errors.add attr, :blank if check_for_blank && value.blank?
-    record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
+    weakness_or_nonconformity = record.kind_of?(Weakness) || record.kind_of?(Nonconformity)
+
+    if weakness_or_nonconformity
+      check_for_blank = weakness_or_nonconformity &&
+        (record.being_implemented? || record.implemented? || record.implemented_audited?)
+
+      record.errors.add attr, :blank if check_for_blank && value.blank?
+      record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
+    end
   end
   validates_each :solution_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
@@ -1076,6 +1081,26 @@ class Finding < ActiveRecord::Base
     node, nodes = self, []
     nodes << node = node.repeated_in while node.repeated_in
     nodes
+  end
+
+  def all_follow_up_dates(end_date = nil, reload = false)
+    @all_follow_up_dates = reload ? [] : (@all_follow_up_dates || [])
+
+    if @all_follow_up_dates.empty?
+      last_date = self.follow_up_date
+      dates = self.versions_after_final_review(end_date).map do |v|
+        v.reify(:has_one => false).try(:follow_up_date)
+      end
+
+      dates.each do |d|
+        unless d.blank? || d == last_date
+          @all_follow_up_dates << d
+          last_date = d
+        end
+      end
+    end
+
+    @all_follow_up_dates.compact
   end
 
   def to_pdf(organization = nil)
