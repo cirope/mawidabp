@@ -1,0 +1,24 @@
+<h1 style="clear: both; margin-bottom: 0em;">
+  <%= ControlObjectiveItem.human_attribute_name('potential_nonconformities') %>
+</h1>
+
+<table class="summary_table">
+  <thead>
+    <tr>
+      <%= raw control_objective_potential_nonconformities_summary_headers %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <%= raw control_objective_potential_nonconformities_summary_row(@control_objective_item) %>
+    </tr>
+  </tbody>
+</table>
+
+<p style="margin-bottom: 1.2em;">
+  <%= link_to_unless @control_objective_item.potential_nonconformities.blank?,
+    t('control_objective_item.view_all_potential_nonconformities'),
+    potential_nonconformities_path(:control_objective => @control_objective_item) %> |
+  <%= link_to_unless readonly, t('control_objective_item.add_potential_nonconformity'),
+    new_potential_nonconformity_path(:control_objective_item => @control_objective_item) %>
+</p>

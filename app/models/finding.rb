@@ -3,6 +3,8 @@ class Finding < ActiveRecord::Base
   include Comparable
   include ParameterSelector
 
+  cattr_accessor :current_user, :current_organization
+
   # Constantes
   COLUMNS_FOR_SEARCH = {
     :issue_date => {
@@ -392,8 +394,8 @@ class Finding < ActiveRecord::Base
   validates_each :follow_up_date, :if => proc { |f|
     !f.incomplete? && !f.revoked? && !f.repeated?
   } do |record, attr, value|
-    check_for_blank = record.kind_of?(Weakness) && (record.being_implemented? ||
-        record.implemented? || record.implemented_audited?)
+    check_for_blank = (record.kind_of?(Weakness) || record.kind_of?(Nonconformity)) &&
+      (record.being_implemented? || record.implemented? || record.implemented_audited?)
 
     record.errors.add attr, :blank if check_for_blank && value.blank?
     record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
@@ -438,7 +440,8 @@ class Finding < ActiveRecord::Base
     review = record.control_objective_item.try(:review)
 
     if review
-      (review.weaknesses | review.oportunities).each do |finding|
+      (review.weaknesses | review.oportunities | review.fortresses | review.nonconformities |
+       review.potential_nonconformities).each do |finding|
         another_record = (!record.new_record? && finding.id != record.id) ||
           (record.new_record? && finding.object_id != record.object_id)
 
@@ -802,6 +805,10 @@ class Finding < ActiveRecord::Base
       (self.repeated_of || self.is_in_a_final_review?)
   end
 
+  def audited_and_system_quality_management?
+    current_user.try(:can_act_as_audited?) && current_organization.try(:system_quality_management?)
+  end
+
   def mark_as_unconfirmed!
     self.first_notification_date = Date.today unless self.unconfirmed?
     self.state = STATUS[:unconfirmed] if self.notify?
@@ -854,8 +861,8 @@ class Finding < ActiveRecord::Base
         if new_coi.review.try(:is_frozen?)
           raise 'Can not change to a frozen review!'
         end
-
         # Cambio al anterior para que no lo tome en cuenta en el código
+
         self.control_objective_item = old_coi
         self.review_code = self.next_code(new_coi.review)
 
@@ -866,6 +873,7 @@ class Finding < ActiveRecord::Base
         end
 
         self.control_objective_item = new_coi
+
       end
     end
   end
@@ -1100,7 +1108,7 @@ class Finding < ActiveRecord::Base
 
     pdf.move_down((PDF_FONT_SIZE * 2.5).round)
 
-    if self.kind_of?(Weakness)
+    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
       pdf.add_description_item(Weakness.human_attribute_name('risk'),
         self.risk_text, 0, false)
       pdf.add_description_item(Weakness.human_attribute_name('priority'),
@@ -1114,7 +1122,7 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('answer'),
       self.answer, 0, false) unless self.unanswered?
 
-    if self.kind_of?(Weakness) && (self.implemented? || self.being_implemented?)
+    if (self.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && (self.implemented? || self.being_implemented?)
       pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
         (I18n.l(self.follow_up_date, :format => :long) if self.follow_up_date),
         0, false)
@@ -1139,8 +1147,10 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
       self.audit_comments, 0, false)
 
-    pdf.add_description_item(self.class.human_attribute_name('state'),
-      self.state_text, 0, false)
+    unless self.kind_of? Fortress
+      pdf.add_description_item(self.class.human_attribute_name('state'),
+        self.state_text, 0, false)
+    end
 
     unless self.work_papers.blank?
       pdf.start_new_page
@@ -1207,9 +1217,9 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name(:description),
       self.description, 0, false)
     pdf.add_description_item(self.class.human_attribute_name(:state),
-      self.state_text, 0, false)
+      self.state_text, 0, false) unless self.kind_of?(Fortress)
 
-    if self.kind_of?(Weakness)
+    if self.kind_of?(Weakness) || self.kind_of?(Nonconformity)
       pdf.add_description_item(self.class.human_attribute_name(:risk),
         self.risk_text, 0, false)
       pdf.add_description_item(self.class.human_attribute_name(:priority),
@@ -1569,7 +1579,7 @@ class Finding < ActiveRecord::Base
     origination_date = self.origination_date
     date_text = I18n.l(date, :format => :minimal) if date
     origination_date_text = I18n.l(origination_date, :format => :minimal) if origination_date
-    being_implemented = self.kind_of?(Weakness) && self.being_implemented?
+    being_implemented = self.kind_of?(Weakness) || self.kind_of?(Nonconformity) && self.being_implemented?
     rescheduled_text = ''
 
     if being_implemented && self.rescheduled?
@@ -1608,9 +1618,9 @@ class Finding < ActiveRecord::Base
     column_data = [
       self.review.to_s,
       self.review_code,
-      self.state_text,
-      self.kind_of?(Weakness) ? self.risk_text : '',
-      self.kind_of?(Weakness) ? self.priority_text : '',
+      self.kind_of?(Fortress) ? '' : self.state_text,
+      self.respond_to?(:risk_text) ? self.risk_text : '',
+      self.respond_to?(:risk_text) ? self.priority_text : '',
       audited.join('; '),
       description,
       self.control_objective_item.control_objective_text,
@@ -1637,7 +1647,7 @@ class Finding < ActiveRecord::Base
       Weakness.human_attribute_name(:risk),
       Weakness.human_attribute_name(:priority),
       I18n.t('finding.audited', :count => 0),
-      Weakness.human_attribute_name(:description),
+      Finding.human_attribute_name(:description),
       ControlObjectiveItem.human_attribute_name(:control_objective_text),
       (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
       Finding.human_attribute_name(:origination_date),

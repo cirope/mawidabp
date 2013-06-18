@@ -40,12 +40,14 @@ class ApplicationController < ActionController::Base
 
   def current_user
     load_user
+    Finding.current_user = @auth_user
 
     @auth_user.try(:id)
   end
 
   def current_organization
     load_organization
+    Finding.current_organization = @auth_organization
 
     @auth_organization.try(:id)
   end
@@ -169,8 +171,12 @@ class ApplicationController < ActionController::Base
   end
 
   def module_name_for(controller_name)
-    modules = @auth_user.audited? ?
-      APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
+    if @auth_organization.system_quality_management?
+      modules =  @auth_user.audited? ? APP_AUDITED_SQM_MENU_ITEMS : APP_AUDITOR_SQM_MENU_ITEMS
+    else
+      modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
+    end
+
     top_level_menu = true
 
     until modules.blank?

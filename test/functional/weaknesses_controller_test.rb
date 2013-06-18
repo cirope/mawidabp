@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de debilidades
@@ -59,14 +60,14 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
-  
+
   test 'list weaknesses for specific ids' do
     perform_auth
     ids = [
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
     ]
-    
+
     get :index, :ids => ids
     assert_response :success
     assert_not_nil assigns(:weaknesses)
@@ -264,7 +265,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_redirected_to edit_weakness_url(assigns(:weakness))
     assert_equal 'O020', assigns(:weakness).review_code
   end
-  
+
   test 'follow up pdf' do
     perform_auth
     weakness = Weakness.find(findings(
@@ -276,7 +277,7 @@ class WeaknessesControllerTest < ActionController::TestCase
 
     assert_redirected_to weakness.relative_follow_up_pdf_path
   end
-  
+
   test 'undo reiteration' do
     perform_auth
     weakness = Finding.find(findings(
@@ -284,15 +285,15 @@ class WeaknessesControllerTest < ActionController::TestCase
     repeated_of = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     repeated_of_original_state = repeated_of.state
-    
+
     assert !repeated_of.repeated?
     assert weakness.update_attributes(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert weakness.reload.repeated_of
-    
+
     put :undo_reiteration, :id => weakness.to_param
     assert_redirected_to edit_weakness_url(weakness)
-    
+
     assert !repeated_of.reload.repeated?
     assert_nil weakness.reload.repeated_of
     assert_equal repeated_of_original_state, repeated_of.state
@@ -302,25 +303,25 @@ class WeaknessesControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
     assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
 
     get :auto_complete_for_user, { :q => 'bare', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Bare
     assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
 
     get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size # Sin resultados
   end
 
@@ -336,9 +337,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -352,9 +353,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -366,9 +367,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
@@ -379,9 +380,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, findings.size # Sin resultados
   end
 
@@ -393,9 +394,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     cois = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable
     assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
     assert_equal(
@@ -409,9 +410,9 @@ class WeaknessesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     cois = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, cois.size # Sin resultados
   end
 end

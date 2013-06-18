@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "FindingReviewAssignment"

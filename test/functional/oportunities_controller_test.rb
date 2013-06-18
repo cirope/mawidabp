@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Pruebas para el controlador de oportunidades
@@ -46,7 +47,7 @@ class OportunitiesControllerTest < ActionController::TestCase
       :columns => ['description', 'review'],
       :order => 'review'
     }
-    
+
     assert_response :success
     assert_not_nil assigns(:oportunities)
     assert_equal 2, assigns(:oportunities).size
@@ -249,31 +250,31 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     assert_redirected_to oportunity.relative_follow_up_pdf_path
   end
-  
+
   test 'undo reiteration' do
     perform_auth
     review = Review.find(reviews(:review_with_conclusion).id)
-    
+
     assert_difference 'review.finding_review_assignments.count' do
       review.finding_review_assignments.create(
         :finding_id => findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
       )
     end
-    
+
     oportunity = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
     repeated_of = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     repeated_of_original_state = repeated_of.state
-    
+
     assert !repeated_of.repeated?
     assert oportunity.update_attributes(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert oportunity.reload.repeated_of
-    
+
     put :undo_reiteration, :id => oportunity.to_param
     assert_redirected_to edit_oportunity_url(oportunity)
-    
+
     assert !repeated_of.reload.repeated?
     assert_nil oportunity.reload.repeated_of
     assert_equal repeated_of_original_state, repeated_of.state
@@ -283,25 +284,25 @@ class OportunitiesControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
     assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
 
     get :auto_complete_for_user, { :q => 'bare', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Sólo Bare
     assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
 
     get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size # Sin resultados
   end
 
@@ -317,9 +318,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 3, findings.size
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -333,9 +334,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
@@ -347,9 +348,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
@@ -360,9 +361,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, findings.size # Sin resultados
   end
 
@@ -374,9 +375,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     cois = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, cois.size # bcra_A4609_security_management_responsible_dependency_item_editable
     assert cois.all? { |f| (f['label'] + f['informal']).match /dependencia/i }
     assert_equal(
@@ -390,9 +391,9 @@ class OportunitiesControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     cois = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, cois.size # Sin resultados
   end
 end

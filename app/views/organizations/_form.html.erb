@@ -21,6 +21,13 @@
     <%= o_f.label :public %>
     <%= o_f.check_box :public %>
   </p>
+  <br>
+  <p>
+    <%= o_f.label :system_quality_management %>
+    <%= o_f.check_box :system_quality_management %>
+  </p>
+  <br>
+
   <% unless @organization.new_record? %>
     <p class="form_item">
       <% @organization.build_image_model unless @organization.image_model %>

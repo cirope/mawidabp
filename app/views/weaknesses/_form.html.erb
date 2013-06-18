@@ -80,6 +80,27 @@
       <%= f.text_area :audit_recommendations, :style => 'height: 4em;',
         :readonly => readonly %>
     </p>
+    <p>
+      <%= f.label :origination_date,
+        raw(Weakness.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)) %>
+      <%= calendar_text_field f, :origination_date, false, nil,
+        :disabled => readonly %>
+    </p>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :correction %>
+        <%= f.text_area :correction, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+      <p>
+        <%= f.label :correction_date,
+          raw(Weakness.human_attribute_name(:correction_date) +
+          show_inline_help_for(:finding_correction_date)) %>
+        <%= calendar_text_field f, :correction_date, false, nil,
+          :disabled => readonly %>
+      </p>
+    <% end %>
   </div>
   <div class="form_column_right">
     <p class="form_item">
@@ -120,20 +141,23 @@
         </p>
       <% end %>
     <% end %>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :cause_analysis %>
+        <%= f.text_area :cause_analysis, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+      <p>
+        <%= f.label :cause_analysis_date,
+          raw(Weakness.human_attribute_name(:cause_analysis_date) +
+          show_inline_help_for(:finding_cause_analysis_date)) %>
+        <%= calendar_text_field f, :cause_analysis_date, false, nil,
+          :disabled => readonly %>
+      </p>
+    <% end %>
     <p>
       <%= f.label :answer %>
       <%= f.text_area :answer, :readonly => readonly %>
-    </p>
-    <p>
-      <%= f.label :audit_comments %>
-      <%= f.text_area :audit_comments, :readonly => readonly %>
-    </p>
-    <p>
-      <%= f.label :origination_date,
-        raw(Weakness.human_attribute_name(:origination_date) +
-          show_inline_help_for(:finding_origination_date)) %>
-      <%= calendar_text_field f, :origination_date, false, nil,
-        :disabled => readonly %>
     </p>
     <p>
       <%= f.label :follow_up_date, raw(Weakness.human_attribute_name(:follow_up_date) +
@@ -147,6 +171,10 @@
         show_inline_help_for(:finding_solution_date)) %>
       <%= calendar_text_field f, :solution_date, false, nil,
         :disabled => readonly %>
+    </p>
+    <p>
+      <%= f.label :audit_comments %>
+      <%= f.text_area :audit_comments, :readonly => readonly %>
     </p>
   </div>
 

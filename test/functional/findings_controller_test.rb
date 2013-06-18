@@ -93,7 +93,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 5, assigns(:findings).size
+    assert_equal 10, assigns(:findings).size
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
     assert_select '#error_body', false
     assert_template 'findings/index'
@@ -344,6 +344,10 @@ class FindingsControllerTest < ActionController::TestCase
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
             :state => Finding::STATUS[:unconfirmed],
+            :correction => 'Correction',
+            :correction_date => Date.yesterday,
+            :cause_analysis => 'Cause analysis',
+            :cause_analysis_date => Date.today,
             :origination_date => 35.day.ago.to_date.to_s(:db),
             :solution_date => 31.days.from_now.to_date,
             :audit_recommendations => 'Updated proposed action',

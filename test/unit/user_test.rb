@@ -102,7 +102,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal I18n.t('user.will_be_orphan_findings'),
       audited.errors.full_messages.join
 
-    audited.findings.delete audited.findings.all_for_reallocation
+    audited.findings.delete (audited.findings.all_for_reallocation | audited.findings)
 
     assert_difference('User.count', -1) { audited.reload.destroy }
   end
@@ -429,6 +429,7 @@ class UserTest < ActiveSupport::TestCase
         :invalid)], auditor_user.errors[:organization_roles]
 
     auditor_user.reload
+    bare = User.find(users(:bare_user).id)
 
     assert auditor_user.reassign_to(User.find(users(:bare_user).id),
       {:with_reviews => true, :with_findings => true})
@@ -537,9 +538,9 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    assert_difference 'ActionMailer::Base.deliveries.size', notifications * 2 do
-      assert_difference 'Notification.count', notifications do
-        old_user.reassign_to(user, :with_reviews => true)
+    assert_difference 'ActionMailer::Base.deliveries.size', notifications do
+      assert_difference 'Notification.count' do
+         old_user.reassign_to(user, :with_reviews => true)
       end
     end
 

@@ -56,6 +56,26 @@
   </div>
 
   <div class="show_item">
+    <b><%= Weakness.human_attribute_name :correction %>:</b>
+    <%= @weakness.correction if @weakness.correction %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :cause_analysis %>:</b>
+    <%= @weakness.cause_analysis if @weakness.cause_analysis %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :correction_date %>:</b>
+    <%=l @weakness.correction_date, :format => :long if @weakness.correction_date %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Weakness.human_attribute_name :cause_analysis_date %>:</b>
+    <%=l @weakness.cause_analysis_date, :format => :long if @weakness.cause_analysis_date %>
+  </div>
+
+  <div class="show_item">
     <b><%= Weakness.human_attribute_name :origination_date %>:</b>
     <%=l @weakness.origination_date, :format => :long if @weakness.origination_date %>
   </div>
@@ -92,13 +112,13 @@
       <% end %>
     </ul>
   <% end %>
-  
+
   <% unless @weakness.finding_relations.blank? %>
     <h3>
       <%= t('finding.finding_relations') %>
       <%= show_inline_help_for(:finding_relations) %>
     </h3>
-    
+
     <table class="summary_table">
       <thead>
         <tr>
@@ -116,13 +136,13 @@
       </tbody>
     </table>
   <% end %>
-  
+
   <% unless @weakness.inverse_finding_relations.blank? %>
     <h3>
       <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
     </h3>
-    
+
     <table class="summary_table">
       <thead>
         <tr>
@@ -140,7 +160,7 @@
       </tbody>
     </table>
   <% end %>
-    
+
   <% unless @weakness.finding_answers.blank? %>
     <h3>
       <%= t('finding.finding_answers') %>

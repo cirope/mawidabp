@@ -18,6 +18,15 @@ MawidaApp::Application.routes.draw do
 
   resources :business_unit_types
 
+  resources :fortresses do
+    resources :costs
+
+    collection do
+      get :auto_complete_for_user
+      get :auto_complete_for_control_objective_item
+    end
+  end
+
   resources :groups
 
   resources :detracts, :only => [:index, :show, :new, :create] do
@@ -247,6 +256,21 @@ MawidaApp::Application.routes.draw do
     end
   end
 
+  resources :nonconformities, :except => [:destroy] do
+    resources :costs
+
+    collection do
+      get :auto_complete_for_user
+      get :auto_complete_for_finding_relation
+      get :auto_complete_for_control_objective_item
+    end
+
+    member do
+      get :follow_up_pdf
+      put :undo_reiteration
+    end
+  end
+
   resources :control_objective_items do
     member do
       get :suggest_next_work_paper_code
@@ -284,6 +308,21 @@ MawidaApp::Application.routes.draw do
   resources :periods
 
   resources :oportunities, :except => [:destroy] do
+    resources :costs
+
+    member do
+      get :follow_up_pdf
+      put :undo_reiteration
+    end
+
+    collection do
+      get :auto_complete_for_user
+      get :auto_complete_for_finding_relation
+      get :auto_complete_for_control_objective_item
+    end
+  end
+
+  resources :potential_nonconformities, :except => [:destroy] do
     resources :costs
 
     member do

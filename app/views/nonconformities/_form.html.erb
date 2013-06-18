@@ -1,0 +1,393 @@
+<% readonly = @nonconformity.final? %>
+<% review = @nonconformity.review || @nonconformity.control_objective_item.try(:review) %>
+<% frozen = review.try(:is_frozen?) || @nonconformity.repeated? %>
+<% show_history_changes = @nonconformity.status_change_history.size > 1 %>
+<!--[form:nonconformity]-->
+<%= form_for @nonconformity, :html => {:multipart => true} do |f| %>
+  <% content_for :js_extra do %>
+    <% unless readonly %>
+      <%= raw "var finding_user_assignment='#{generate_template(f,
+        :finding_user_assignments, :locals => {:readonly => readonly})}';" %>
+    <% end %>
+    <% unless frozen %>
+    <%= raw "var lastWorkPaperCode = '#{next_nonconformity_work_paper_code(
+        @nonconformity)}';" %>
+    <%= raw "var finding_relation='#{generate_template(f, :finding_relations,
+        :object => FindingRelation.new(:finding_id => @nonconformity.id))}';" %>
+    <%= raw "var work_paper='#{generate_template(f, :work_papers,
+        {:form_builder_local => :wp_f,
+        :partial => 'work_papers/work_paper',
+        :locals => {:child_index => 'NEW_RECORD', :frozen => false},
+        :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
+    <% end %>
+  <% end %>
+  <%= f.error_messages %>
+
+  <div class="form_column_left">
+    <p class="form_item">
+      <%= content_tag :label, Review.model_name.human, :class => :inline %>
+      <%= text_field_tag :review, review.try(:identification),
+        :class => :inline_item, :readonly => true %>
+    </p>
+    <p class="form_item">
+      <%= f.label :review_code, nil, :class => :inline %>
+      <%= f.text_field :review_code, :class => :inline_item, :maxlength => 255,
+        :size => 10, :readonly => true %>
+    </p>
+    <div>
+      <label for="weakness_control_objective_item">
+        <%= raw(ControlObjective.model_name.human +
+          show_inline_help_for(:finding_control_objective_item)) %>
+      </label>
+      <% if !readonly && !@nonconformity.new_record? %>
+        <div class="search">
+          <% field_classes = [:search, :autocomplete_field] %>
+          <% field_classes << :error_field unless (@nonconformity.errors[:control_objective_item_id] | @nonconformity.errors[:control_objective_item]).blank? %>
+          <%= text_field_tag 'nonconformity[auto_control_objective_item]',
+            @nonconformity.control_objective_item.try(:control_objective_text),
+            :id => 'nonconformity_control_objective_item',
+            :class => field_classes.join(' '),
+            :title => t('label.search'),
+            :autocomplete => :off,
+            :autofocus => true,
+            'data-autocomplete-params' => ("{review_id: #{@nonconformity.review.id}}" if @nonconformity.review),
+            'data-autocomplete-url' => auto_complete_for_control_objective_item_nonconformities_path(:format => :json) %>
+          <%= f.hidden_field :control_objective_item_id,
+            :class => :autocomplete_id %>
+        </div>
+      <% else %>
+        <%= text_field nil, :control_objective_name, :size => nil,
+          :id => :nonconformity_control_objective_item,
+          :value => "#{@nonconformity.control_objective_item.control_objective_text} (#{@nonconformity.control_objective_item.process_control.name})",
+          :readonly => true %>
+        <%= f.hidden_field :control_objective_item_id %>
+      <% end %>
+    </div>
+    <p>
+      <%= finding_repeated_of_label(f, readonly) %>
+      <%= finding_repeated_of_if_field(f, readonly) %>
+    </p>
+    <p>
+      <%= f.label :description %>
+      <%= f.text_area :description, :readonly => readonly, :autofocus => true %>
+    </p>
+    <p>
+      <%= f.label :effect %>
+      <%= f.text_area :effect, :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :audit_recommendations %>
+      <%= f.text_area :audit_recommendations, :style => 'height: 4em;',
+        :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :origination_date,
+        raw(Nonconformity.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)) %>
+      <%= calendar_text_field f, :origination_date, false, nil,
+        :disabled => readonly %>
+    </p>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :correction %>
+        <%= f.text_area :correction, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+      <p>
+        <%= f.label :correction_date,
+          raw(Nonconformity.human_attribute_name(:correction_date) +
+          show_inline_help_for(:finding_correction_date)) %>
+        <%= calendar_text_field f, :correction_date, false, nil,
+          :disabled => readonly %>
+      </p>
+    <% end %>
+  </div>
+  <div class="form_column_right">
+    <p class="form_item">
+      <%= f.label :risk, nil, :class => :inline %>
+      <%= f.select :risk, parameter_in(@auth_organization.id,
+        :admin_finding_risk_levels, @nonconformity.created_at, true),
+        {:prompt => true},
+        {:class => :inline_item, :disabled => true} %>
+    </p>
+    <p class="form_item">
+      <%= f.label :priority, nil, :class => :inline %>
+      <%= f.select :priority, parameter_in(@auth_organization.id,
+        :admin_priorities, @nonconformity.created_at, true),
+        {:prompt => true},
+        {:class => :inline_item, :disabled => readonly} %>
+    </p>
+    <p class="form_item">
+      <%= f.label :state, raw(Nonconformity.human_attribute_name(:state) +
+          show_inline_help_for(:finding_state) +
+          (show_history_changes ? finding_show_status_change_history(
+            :finding_status_change_history) : '')),
+        :class => :inline %>
+      <%= finding_status_field(f, true, readonly) %>
+    </p>
+
+    <% if show_history_changes %>
+      <%= render :partial => 'findings/history_changes',
+        :locals => { :finding => @nonconformity } %>
+    <% end %>
+
+    <% if @nonconformity.must_have_a_comment? %>
+      <%= f.fields_for :comments,
+        @nonconformity.comments.build(:user => @auth_user) do |c_f| %>
+        <p>
+          <%= c_f.label :comment, nil, :class => :error_field %>
+          <%= c_f.text_area :comment, :class => :error_field %>
+          <%= c_f.hidden_field :user_id %>
+        </p>
+      <% end %>
+    <% end %>
+    <% if @auth_organization.system_quality_management %>
+      <p>
+        <%= f.label :cause_analysis %>
+        <%= f.text_area :cause_analysis, :style => 'height: 4em;',
+          :readonly => readonly %>
+      </p>
+      <p>
+        <%= f.label :cause_analysis_date,
+          raw(Nonconformity.human_attribute_name(:cause_analysis_date) +
+          show_inline_help_for(:finding_cause_analysis_date)) %>
+        <%= calendar_text_field f, :cause_analysis_date, false, nil,
+          :disabled => readonly %>
+      </p>
+    <% end %>
+    <p>
+      <%= f.label :answer %>
+      <%= f.text_area :answer, :readonly => readonly %>
+    </p>
+    <p>
+      <%= f.label :follow_up_date, raw(Nonconformity.human_attribute_name(:follow_up_date) +
+          show_inline_help_for(:finding_follow_up_date)) %>
+      <%= calendar_text_field f, :follow_up_date, false, nil,
+        :disabled => readonly %>
+    </p>
+    <p>
+      <%= f.label :solution_date,
+        raw(Finding.human_attribute_name(:solution_date) +
+        show_inline_help_for(:finding_solution_date)) %>
+      <%= calendar_text_field f, :solution_date, false, nil,
+        :disabled => readonly %>
+    </p>
+    <p>
+      <%= f.label :audit_comments %>
+      <%= f.text_area :audit_comments, :readonly => readonly %>
+    </p>
+  </div>
+
+  <div style="clear: both; margin-top: 2em;">
+    <h1>
+      <%= t('finding.responsibles', :count => @nonconformity.users.size) %>
+      <%= show_inline_help_for(:finding_responsibles) %>
+    </h1>
+  </div>
+
+  <div class="column_headers">
+    <div class="item_column" style="width: 60%;">
+      <h3><%= User.model_name.human %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
+        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
+        show_inline_help_for(:finding_user_assignment_process_owner)) %></h3>
+    </div>
+    <div class="item_column" style="width: 5%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="finding_user_assignments">
+    <%= f.fields_for :finding_user_assignments do |fua_f| %>
+      <%= render :partial => 'finding_user_assignment', :locals =>
+        {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to_unless readonly, t('finding.add_user'), '#',
+      'data-template' => :finding_user_assignment,
+      'data-event' => 'addNestedItem',
+      'data-container' => '#finding_user_assignments' %>
+  </p>
+
+  <% unless (repeated_ancestors = @nonconformity.repeated_ancestors).blank? %>
+    <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
+    <ul class="raw_list">
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% unless (repeated_children = @nonconformity.repeated_children).blank? %>
+    <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
+    <ul class="raw_list">
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+
+  <h1>
+    <%= t('finding.finding_relations') %>
+    <%= show_inline_help_for(:finding_relations) %>
+  </h1>
+
+  <div class="column_headers">
+    <div class="item_column" style="width: 60%;">
+      <h3><%= FindingRelation.human_attribute_name :related_finding_id %></h3>
+    </div>
+    <div class="item_column" style="width: 30%;">
+      <h3><%= FindingRelation.human_attribute_name :description %></h3>
+    </div>
+    <div class="item_column" style="width: 5%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="finding_relations">
+    <%= f.fields_for :finding_relations do |fr_f| %>
+      <%= render :partial => 'finding_relation', :locals =>
+        {:f => fr_f, :is_dynamic => false} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to_unless frozen, t('finding.add_finding_relation'), '#',
+      'data-template' => :finding_relation, 'data-event' => 'addNestedItem',
+      'data-container' => '#finding_relations' %>
+  </p>
+
+  <% unless @nonconformity.inverse_finding_relations.blank? %>
+    <h1>
+      <%= t('finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h1>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% unless @nonconformity.finding_answers.blank? %>
+    <h1>
+      <%= t('finding.finding_answers') %>
+      <%= show_inline_help_for(:finding_comments) %>
+    </h1>
+
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :created_at %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @nonconformity.finding_answers.each do |finding_answer| %>
+          <tr>
+            <td><%= h finding_answer.user.full_name %></td>
+            <td><%= simple_format h(finding_answer.answer) %></td>
+            <td>
+              <%= finding_answer.file_model.try(:file?) ?
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+            </td>
+            <td>
+              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+              <% if finding_answer.commitment_date %>
+                <br />
+                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <h1>
+    <%= t('finding.work_papers') %>
+    <%= show_inline_help_for(:finding_work_papers) %>
+  </h1>
+
+  <div class="column_headers">
+    <div class="item_column" style="width: 20%;">
+      <h3><%= WorkPaper.human_attribute_name :name %></h3>
+    </div>
+    <div class="item_column" style="width: 20%;">
+      <h3><%= WorkPaper.human_attribute_name :code %></h3>
+    </div>
+    <div class="item_column" style="width: 15%;">
+      <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
+    </div>
+    <div class="item_column" style="width: 25%;">
+      <h3><%= WorkPaper.human_attribute_name :description %></h3>
+    </div>
+    <div class="item_column" style="width: 10%;">
+      <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
+    </div>
+    <div class="item_column" style="width: 10%;"></div>
+    <div class="clear"></div>
+  </div>
+
+  <div id="work_papers">
+    <%= f.fields_for :work_papers do |wp_f| %>
+      <%= render :partial => 'work_papers/work_paper', :locals =>
+        {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
+        :child_index => 'NEW_RECORD'} %>
+    <% end %>
+  </div>
+
+  <p class="add_item">
+    <%= link_to_unless frozen, t('finding.add_work_paper'), '#',
+      'data-template' => :work_paper, 'data-event' => 'addNestedItem',
+      'data-container' => '#work_papers' %>
+  </p>
+
+  <%= hidden_lock_version(f) %>
+
+  <p>
+    <span class="button"><%= f.submit nil, :disabled => frozen %></span>
+  </p>
+<% end %>
+<!--[eoform:nonconformity] -->
+
+<% if !@nonconformity.new_record? && @nonconformity.repeated_of && !readonly %>
+  <% content_for :extra_html_bottom do %>
+    <div id="inline_undo_reiteration" class="popup" style="display: none;">
+      <%= button_to t('finding.undo_reiteration'),
+        undo_reiteration_nonconformity_path(@nonconformity), :method => :put %>
+    </div>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+  $(document).on('change', '#nonconformity_risk', function() {
+    alert('<%= I18n.t 'message.change_nonconformity_risk' %>');
+  });
+</script>

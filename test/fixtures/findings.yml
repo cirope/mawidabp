@@ -7,12 +7,16 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   answer: Answer 1w
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  correction: Correction
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
@@ -22,17 +26,21 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
   review_code: O002
-  description: Description 2w
+  description: Description 2w iso
   answer: Answer 2w
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 2w
   effect: Effect 2w
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
-  follow_up_date: 
+  follow_up_date:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
@@ -47,10 +55,14 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   answer: Answer <%= level %>w
   audit_comments: Audit comments <%= level %>w
   state: <%= Finding::STATUS[:unanswered] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect <%= level %>w
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date:
@@ -69,10 +81,14 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   answer: Answer incomplete_w
   audit_comments: Audit comments incomplete_w
   state: <%= Finding::STATUS[:incomplete] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 3w
   effect: Effect incomplete_w
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
   follow_up_date:
@@ -85,18 +101,391 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
   review_code: O003
-  description: Description 3w
+  description: Description 3w iso
   answer: Answer 3w
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:unconfirmed] %>
   origination_date:
-  solution_date: 
+  solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
   priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
-  follow_up_date: 
+  follow_up_date:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_fortress:
+  type: Fortress
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: F001
+  description: Description 1f
+  answer:
+  audit_comments:
+  state:
+  solution_date:
+  audit_recommendations:
+  effect:
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk:
+  priority:
+  follow_up_date:
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level:
+
+bcra_A4609_security_management_responsible_dependency_fortress_2:
+  type: Fortress
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: F002
+  description: Description 2f
+  answer:
+  audit_comments:
+  state:
+  solution_date:
+  audit_recommendations:
+  effect:
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk:
+  priority:
+  follow_up_date:
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level:
+
+bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented:
+  type: Nonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: NC001
+  description: Description 1nc bcra
+  answer: Answer 1nc
+  audit_comments: Audit comments 1nc
+  state: <%= Finding::STATUS[:being_implemented] %>
+  solution_date:
+  audit_recommendations: Proposed action 1nc
+  effect: Effect 1nc
+  correction: Correction 1nc
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis 1nc
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
+  type: Nonconformity
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: NC002
+  description: Description 2nc
+  answer: Answer 2nc
+  audit_comments: Audit comments 2nc
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  solution_date:
+  audit_recommendations: Proposed action 2nc
+  effect:
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date:
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+<% (1..4).each do |level| %>
+
+iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_<%= level %>_notification:
+  type: Nonconformity
+  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  review_code: <%= "NC00#{level}" %>
+  description: Description <%= level %>nc iso 2700
+  answer: Answer <%= level %>nc
+  audit_comments: Audit comments <%= level %>nc
+  state: <%= Finding::STATUS[:unanswered] %>
+  solution_date:
+  audit_recommendations: Proposed action 3nc
+  effect: Effect <%= level %>nc
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date:
+  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: <%= level - 1 %>
+
+<% end %>
+
+iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
+  type: Nonconformity
+  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  review_code: NC005
+  description: Description incomplete_nc
+  answer: Answer incomplete_nc
+  audit_comments: Audit comments incomplete_nc
+  state: <%= Finding::STATUS[:incomplete] %>
+  solution_date:
+  audit_recommendations: Proposed action 3nc
+  effect: Effect incomplete_nc
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date:
+  origination_date: <%= 1.year.ago.to_date.to_s(:db) %>
+  first_notification_date: <%= Date.today.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
+  type: Nonconformity
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: NC003
+  description: Description 3nc iso
+  answer: Answer 3nc
+  audit_comments: Audit comments 3nc
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
+  solution_date:
+  audit_recommendations: Proposed action 1nc
+  effect: Effect 1nc
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].last[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].last[1] %>
+  follow_up_date:
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity:
+  type: Nonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: NC003
+  description: Description 3nc bcra
+  answer: Answer 3nc
+  audit_comments: Audit comments 3nc
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 3nc
+  effect: Effect 3nc
+  correction: Correction 3nc
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis 3nc
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_data_proccessing_impact_analisys_nonconformity:
+  type: Nonconformity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  review_code: NC002
+  description: Description 2nc bcra
+  answer: Answer 2nc
+  audit_comments: Audit comments 2nc
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 2nc
+  effect: Effect 2nc
+  correction:
+  correction_date:
+  cause_analysis:
+  cause_analysis_date:
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date:
+  final: false
+  notification_level: 0
+
+bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
+  type: Nonconformity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  review_code: NC001
+  description: Description 1nc
+  answer: Answer 1nc
+  audit_comments: Audit comments 1nc
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 1nc
+  effect: Effect 1nc
+  correction: Correction
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+iso_27000_security_policy_3_1_item_nonconformity:
+  type: Nonconformity
+  control_objective_item: iso_27000_security_policy_3_1_item
+  review_code: NC001
+  description: Description 1nc iso
+  answer: Answer 1nc
+  audit_comments: Audit comment 1nc
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 1nc
+  effect: Effect 1nc
+  correction: Correction 1nc
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis 1nc
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
+  type: Nonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
+  review_code: NC001
+  description: Description 1nc bi
+  answer: Answer 1nc
+  audit_comments: Audit comments 1nc
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  audit_recommendations: Proposed action 1nc
+  effect: Effect 1nc
+  correction: Correction 1nc
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis 1nc
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
+  priority: <%= DEFAULT_PARAMETERS[:admin_priorities].first[1] %>
+  follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: NCP005
+  description: Description 5ncp
+  answer: Answer 5ncp
+  audit_comments: Audit comments 5ncp
+  state: <%= Finding::STATUS[:notify] %>
+  origination_date:
+  solution_date:
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity_2:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item
+  review_code: NCP004
+  description: Description 4ncp
+  answer: Answer 4ncp
+  audit_comments: Audit comments 4ncp
+  state: <%= Finding::STATUS[:notify] %>
+  origination_date:
+  solution_date:
+  final: false
+  notification_level: 0
+
+bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
+  review_code: NCP001
+  description: Description 1ncp
+  answer: Answer 1ncp
+  audit_comments: Audit comments 1ncp
+  state: <%= Finding::STATUS[:being_implemented] %>
+  origination_date:
+  solution_date:
+  final: false
+  notification_level: 0
+
+bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
+  review_code: NCP003
+  description: Description 3ncp
+  answer: Answer 3ncp
+  audit_comments: Audit comments 3ncp
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
+  first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: iso_27000_security_organization_4_2_item_editable
+  review_code: NCP001
+  description: Description ncp
+  answer: Answer ncp
+  audit_comments: Audit comments ncp
+  state: <%= Finding::STATUS[:confirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= Date.today.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  review_code: NCP001
+  description: Description ncp
+  answer: Answer ncp
+  audit_comments: Audit comments ncp
+  state: <%= Finding::STATUS[:unconfirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= Date.today.to_s(:db) %>
+  final: false
+  notification_level: 0
+
+bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
+  type: PotentialNonconformity
+  control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
+  review_code: NCP006
+  description: Description ncp006
+  answer: Answer 5ncp
+  audit_comments: Audit comments 6ncp
+  state: <%= Finding::STATUS[:confirmed] %>
+  origination_date:
+  solution_date:
+  confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
 
@@ -109,7 +498,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:notify] %>
   origination_date:
-  solution_date: 
+  solution_date:
   final: false
   notification_level: 0
 
@@ -117,9 +506,9 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
   review_code: OM003
-  description: Description 2o
-  answer: Answer 2o
-  audit_comments: Audit comments 2o
+  description: Description 3o
+  answer: Answer 3o
+  audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:notify] %>
   origination_date:
   solution_date:
@@ -134,8 +523,8 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   answer: Answer 1o
   audit_comments: Audit comments 1o
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   final: false
   notification_level: 0
 
@@ -143,12 +532,16 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
   review_code: O003
-  description: Description 3w
+  description: Description 3w bcra
   answer: Answer 3w
   audit_comments: Audit comments 3w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
+  correction: Correction
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 3w
   effect: Effect 3w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -161,12 +554,12 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
   review_code: O002
-  description: Description 2w
+  description: Description 2w bcra
   answer: Answer 2w
   audit_comments: Audit comments 2w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 2w
   effect: Effect 2w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -179,12 +572,12 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
   review_code: O001
-  description: Description 1w
+  description: Description 1w bi
   answer: Answer 1w
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:unconfirmed] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -201,8 +594,8 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   answer: Answer 3o
   audit_comments: Audit comments 3o
   state: <%= Finding::STATUS[:unconfirmed] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
@@ -230,8 +623,8 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   answer: Answer 2o
   audit_comments: Audit comments 2o
   state: <%= Finding::STATUS[:confirmed] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
@@ -244,8 +637,12 @@ iso_27000_security_policy_3_1_item_weakness:
   answer: Answer 1w
   audit_comments: Audit comment 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
+  correction: Correction
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>
@@ -253,8 +650,8 @@ iso_27000_security_policy_3_1_item_weakness:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-  
-  
+
+
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
@@ -263,8 +660,12 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   answer: Answer 1w
   audit_comments: Audit comments 1w
   state: <%= Finding::STATUS[:being_implemented] %>
-  origination_date: 
-  solution_date: 
+  origination_date:
+  solution_date:
+  correction: Correction
+  correction_date: <%= 5.days.ago.to_date.to_s(:db) %>
+  cause_analysis: Cause analysis
+  cause_analysis_date: <%= 5.days.ago.to_date.to_s(:db) %>
   audit_recommendations: Proposed action 1w
   effect: Effect 1w
   risk: <%= DEFAULT_PARAMETERS[:admin_finding_risk_levels].first[1] %>

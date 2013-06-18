@@ -63,6 +63,22 @@
     <p><%= @conclusion_final_review.conclusion %></p>
   <% end %>
 
+  <% review_has_fortresses = grouped_control_objectives.any? do |_, cois|
+    cois.any? { |coi| !coi.final_fortresses.blank? }
+  end %>
+
+  <% if review_has_fortresses %>
+    <h2 style="margin: 1em 0em; text-decoration: underline;">
+      <%= t('conclusion_review.fortresses') %>
+    </h2>
+
+    <table class="summary_table">
+      <% grouped_control_objectives.each do |process_control, cois| %>
+        <%= conclusion_review_process_control_fortress_details_table(process_control, cois, true) %>
+      <% end %>
+    </table>
+  <% end %>
+
   <% review_has_observations = grouped_control_objectives.any? do |_, cois|
     cois.any? { |coi| !coi.final_weaknesses.not_revoked.blank? }
   end %>
@@ -79,6 +95,22 @@
     </table>
   <% end %>
 
+  <% review_has_nonconformities = grouped_control_objectives.any? do |_, cois|
+    cois.any? { |coi| !coi.final_nonconformities.not_revoked.blank? }
+  end %>
+
+  <% if review_has_nonconformities %>
+    <h2 style="margin: 1em 0em; text-decoration: underline;">
+      <%= t('conclusion_review.nonconformities') %>
+    </h2>
+
+    <table class="summary_table">
+      <% grouped_control_objectives.each do |process_control, cois| %>
+        <%= conclusion_review_process_control_nonconformity_details_table(process_control, cois, true) %>
+      <% end %>
+    </table>
+  <% end %>
+
   <% review_has_oportunities = grouped_control_objectives.any? do |_, cois|
     cois.any? { |coi| !coi.final_oportunities.not_revoked.blank? }
   end %>
@@ -91,6 +123,22 @@
     <table class="summary_table">
       <% grouped_control_objectives.each do |process_control, cois| %>
         <%= conclusion_review_process_control_oportunity_details_table(process_control, cois, true) %>
+      <% end %>
+    </table>
+  <% end %>
+
+  <% review_has_potential_nonconformities = grouped_control_objectives.any? do |_, cois|
+    cois.any? { |coi| !coi.final_potential_nonconformities.not_revoked.blank? }
+  end %>
+
+  <% if review_has_potential_nonconformities %>
+    <h2 style="margin: 1em 0em; text-decoration: underline;">
+      <%= t('conclusion_review.potential_nonconformities') %>
+    </h2>
+
+    <table class="summary_table">
+      <% grouped_control_objectives.each do |process_control, cois| %>
+        <%= conclusion_review_process_control_potential_nonconformity_details_table(process_control, cois, true) %>
       <% end %>
     </table>
   <% end %>

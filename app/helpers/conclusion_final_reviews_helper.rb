@@ -50,7 +50,33 @@ module ConclusionFinalReviewsHelper
 
       cois.each do |coi|
         (use_finals ? coi.final_weaknesses : coi.weaknesses).not_revoked.each do |w|
-          body << weakness_row_data(coi, w, cycle(:odd, :even, :name => :wc))
+          body << finding_row_data(coi, w, cycle(:odd, :even, :name => :wc))
+        end
+      end
+
+      reset_cycle :wc
+
+      header + body
+    end
+  end
+
+  def conclusion_review_process_control_nonconformity_details_table(process_control,
+      cois, use_finals = false)
+    has_nonconformities = cois.any? do |coi|
+      !(use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.blank?
+    end
+
+    if has_nonconformities
+      header = String.new.html_safe
+      body = String.new.html_safe
+
+      header = content_tag :tr, content_tag(:td,
+        "#{ProcessControl.model_name.human}: #{process_control.name}",
+        :class => :header)
+
+      cois.each do |coi|
+        (use_finals ? coi.final_nonconformities : coi.nonconformities).not_revoked.each do |nc|
+          body << finding_row_data(coi, nc, cycle(:odd, :even, :name => :wc))
         end
       end
 
@@ -76,7 +102,7 @@ module ConclusionFinalReviewsHelper
 
       cois.each do |coi|
         (use_finals ? coi.final_oportunities : coi.oportunities).not_revoked.each do |o|
-          body << weakness_row_data(coi, o, cycle(:odd, :even))
+          body << finding_row_data(coi, o, cycle(:odd, :even))
         end
       end
 
@@ -84,59 +110,136 @@ module ConclusionFinalReviewsHelper
     end
   end
 
-  def weakness_row_data(coi, finding, html_class = nil)
-    weakness = finding.kind_of?(Weakness)
+  def conclusion_review_process_control_potential_nonconformity_details_table(
+      process_control, cois, use_finals = false)
+    has_potential_nonconformities = cois.any? do |coi|
+      !(use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.blank?
+    end
+
+    if has_potential_nonconformities
+      header = String.new.html_safe
+      body = String.new.html_safe
+
+      header = content_tag :tr, content_tag(:td,
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
+        :class => :header)
+
+      cois.each do |coi|
+        (use_finals ? coi.final_potential_nonconformities : coi.potential_nonconformities).not_revoked.each do |p_nc|
+          body << finding_row_data(coi, p_nc, cycle(:odd, :even))
+        end
+      end
+
+      header + body
+    end
+  end
+
+  def conclusion_review_process_control_fortress_details_table(
+      process_control, cois, use_finals = false)
+    has_fortresses = cois.any? do |coi|
+      !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+    end
+
+    if has_fortresses
+      header = String.new.html_safe
+      body = String.new.html_safe
+
+      header = content_tag :tr, content_tag(:td,
+        "#{ProcessControl.model_name.human}: #{h(process_control.name)}",
+        :class => :header)
+
+      cois.each do |coi|
+        (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.each do |f|
+          body << finding_row_data(coi, f, cycle(:odd, :even))
+        end
+      end
+
+      header + body
+    end
+  end
+
+  def finding_row_data(coi, finding, html_class = nil)
+    weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
+    oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
+
     body_rows = ["<b>#{ControlObjective.model_name.human}:</b> #{h(coi.to_s)}"]
 
-    unless finding.review_code.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name(
-      :review_code)}:</b> #{h(finding.review_code)}"
-    end
-
-    unless finding.repeated_ancestors.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name(
-      :repeated_of_id)}:</b> #{h(finding.repeated_ancestors.join(' | '))}"
-    end
-
-    unless finding.description.blank?
+    if finding.description.present?
       body_rows << "<b>#{finding.class.human_attribute_name(
       :description)}:</b> #{h(finding.description)}"
     end
 
-    if weakness && !finding.risk_text.blank?
-      body_rows << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
+    if finding.review_code.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :review_code)}:</b> #{h(finding.review_code)}"
+    end
+
+    if finding.repeated_ancestors.present? && (weakness || oportunity)
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :repeated_of_id)}:</b> #{h(finding.repeated_ancestors.join(' | '))}"
+    end
+
+    if weakness && finding.risk_text.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(:risk)}:</b> " +
         "#{h(finding.risk_text)}"
     end
 
-    if weakness && !finding.effect.blank?
-      body_rows << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
+    if weakness && finding.effect.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(:effect)}:</b> " +
         "#{h(finding.effect)}"
     end
 
-    if weakness && !finding.audit_recommendations.blank?
-      body_rows << "<b>#{Weakness.human_attribute_name(
+    if weakness && finding.audit_recommendations.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
       :audit_recommendations)}: </b>#{h(finding.audit_recommendations)}"
     end
 
-    unless finding.answer.blank?
+    if finding.origination_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(:origination_date)}:</b> " +
+        "#{I18n.l(finding.origination_date, :format => :long)}"
+    end
+
+    if weakness && finding.correction.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :correction)}: </b>#{finding.correction}"
+    end
+
+    if weakness && finding.correction_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :correction_date)}: </b> #{I18n.l(finding.correction_date,
+        :format => :long)}"
+    end
+
+    if weakness && finding.cause_analysis.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :cause_analysis)}: </b>#{finding.cause_analysis}"
+    end
+
+    if weakness && finding.cause_analysis_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
+        :format => :long)}"
+    end
+
+    if finding.answer.present?
       body_rows << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
         "#{h(finding.answer)}"
     end
 
-    if weakness && !finding.implemented_audited?
-      unless finding.follow_up_date.blank?
-        body_rows << "<b>#{Weakness.human_attribute_name(
+    if finding.follow_up_date.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
         :follow_up_date)}:</b> #{I18n.l(finding.follow_up_date,
         :format => :long)}"
-      end
-    elsif !finding.solution_date.blank?
+    end
+
+    if finding.solution_date.present?
       body_rows << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
         "</b> #{I18n.l(finding.solution_date, :format => :long)}"
     end
 
     audited_users = finding.users.select(&:can_act_as_audited?)
 
-    unless audited_users.blank?
+    if audited_users.present?
       process_owners = finding.process_owners
       users = audited_users.map do |u|
         u.full_name + (process_owners.include?(u) ?
@@ -147,14 +250,14 @@ module ConclusionFinalReviewsHelper
       :user_ids)}:</b> #{h(users.join('; '))}"
     end
 
-    unless finding.audit_comments.blank?
-      body_rows << "<b>#{finding.class.human_attribute_name(
-      :audit_comments)}: </b> #{h(finding.audit_comments)}"
-    end
-
-    unless finding.state_text.blank?
+    if finding.state_text.present? && (weakness || oportunity)
       body_rows << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
         h(finding.state_text)
+    end
+
+    if finding.audit_comments.present?
+      body_rows << "<b>#{finding.class.human_attribute_name(
+      :audit_comments)}: </b> #{h(finding.audit_comments)}"
     end
 
     content_tag(:tr, content_tag(:td,

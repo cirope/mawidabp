@@ -1,0 +1,12 @@
+<%= render :partial => 'form' %>
+
+<div id="links">
+  <%= link_to t('label.show'), @fortress %> |
+  <%= link_to t('label.list'), fortress_path %> |
+  <%= link_to t('fortress.edit_control_objective'),
+    edit_control_objective_item_path(@fortress.control_objective_item) %> |
+  <% if !@fortress.is_in_a_final_review? %>
+    <%= link_to t('fortress.edit_follow_up'), edit_finding_path('incomplete', @fortress) %> |
+  <% end %>
+  <%= link_to_back %>
+</div>

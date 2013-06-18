@@ -1,0 +1,66 @@
+<div id="showed_data">
+  <div class="show_item">
+    <b><%= Review.model_name.human %>:</b>
+    <%= @fortress.review.try(:identification) %>
+  </div>
+
+  <div class="show_item">
+    <b><%= ControlObjective.model_name.human %>:</b>
+    <%= simple_format @fortress.control_objective_item.try(:to_s) %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Fortress.human_attribute_name :review_code %>:</b>
+    <%= @fortress.review_code %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Fortress.human_attribute_name :description %>:</b>
+    <%= simple_format @fortress.description %>
+  </div>
+
+  <div class="show_item">
+    <b><%= Fortress.human_attribute_name :origination_date %>:</b>
+    <%=l @fortress.origination_date, :format => :long if @fortress.origination_date %>
+  </div>
+
+  <h3><%= raw(t('finding.responsibles', :count => @fortress.users.size) +
+      show_inline_help_for(:finding_responsibles)) %></h3>
+  <%= finding_responsibles_list(@fortress) %>
+
+  <% unless @fortress.work_papers.empty? %>
+    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+    <table class="summary_table">
+      <thead>
+        <tr>
+          <th><%= WorkPaper.human_attribute_name :name %></th>
+          <th><%= WorkPaper.human_attribute_name :code %></th>
+          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
+          <th><%= WorkPaper.human_attribute_name :description %></th>
+          <th><%= WorkPaper.human_attribute_name :file_model %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @fortress.work_papers.each do |wp| %>
+          <tr>
+            <td><%= wp.name %></td>
+            <td><%= wp.code %></td>
+            <td><%= wp.number_of_pages %></td>
+            <td><%= simple_format h(wp.description) %></td>
+            <td><%= wp.file_model.try(:file?) ?
+              link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div id="links">
+  <%= link_to t('label.edit'), edit_fortress_path(@fortress) %> |
+  <%= link_to t('label.list'), fortresses_path %> |
+  <% if !@fortress.is_in_a_final_review? %>
+    <%= link_to t('fortress.show_follow_up'), finding_path('incomplete', @fortress) %> |
+  <% end %>
+  <%= link_to_back %>
+</div>

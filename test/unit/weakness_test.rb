@@ -173,6 +173,31 @@ class WeaknessTest < ActiveSupport::TestCase
     assert @weakness.valid?
   end
 
+    # Prueba que las validaciones del modelo se cumplan como es esperado
+  test 'validates date attributes' do
+    @weakness.correction_date = 'xxx'
+    @weakness.cause_analysis_date = 'xxx'
+
+    assert @weakness.invalid?
+    assert_equal 4, @weakness.errors.count
+    assert_equal error_message_from_model(@weakness, :correction_date, :invalid_date),
+      @weakness.errors[:correction_date].first
+    assert_equal error_message_from_model(@weakness, :cause_analysis_date, :invalid_date),
+      @weakness.errors[:cause_analysis_date].first
+
+    assert @weakness.update_attribute(:state, 0)
+    @weakness.correction_date = '25/05/2013'
+    @weakness.cause_analysis_date = '24/05/2013'
+    @weakness.follow_up_date = '23/05/2013'
+    assert @weakness.invalid?
+
+    assert_equal 2, @weakness.errors.count
+    assert_equal [I18n.t('finding.errors.correction_date_on_or_before')],
+      @weakness.errors[:correction_date]
+    assert_equal [I18n.t('finding.errors.cause_analysis_date_on_or_before')],
+      @weakness.errors[:cause_analysis_date]
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @weakness.review_code = 'abcdd' * 52
@@ -241,6 +266,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert weakness.update_attributes(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
+
     assert_equal 'PTO 06', weakness.work_papers.first.code
   end
 

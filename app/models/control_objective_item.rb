@@ -96,10 +96,25 @@ class ControlObjectiveItem < ActiveRecord::Base
     :conditions => {:final => false}
   has_many :oportunities, :dependent => :destroy, :order => 'review_code ASC',
     :conditions => {:final => false}
+  has_many :fortresses, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :nonconformities, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
+  has_many :potential_nonconformities, :dependent => :destroy, :order => 'review_code ASC',
+    :conditions => {:final => false}
   has_many :final_weaknesses, :dependent => :destroy, :class_name => 'Weakness',
     :order => 'review_code ASC', :conditions => {:final => true}
   has_many :final_oportunities, :dependent => :destroy,
     :order => 'review_code ASC', :class_name => 'Oportunity',
+    :conditions => {:final => true}
+  has_many :final_fortresses, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'Fortress',
+    :conditions => {:final => true}
+  has_many :final_nonconformities, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'Nonconformity',
+    :conditions => {:final => true}
+  has_many :final_potential_nonconformities, :dependent => :destroy,
+    :order => 'review_code ASC', :class_name => 'PotentialNonconformity',
     :conditions => {:final => true}
   has_many :work_papers, :as => :owner, :dependent => :destroy,
     :order => 'code ASC',
@@ -426,63 +441,86 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def pdf_data(finding)
-    weakness = finding.kind_of?(Weakness)
+    weakness = finding.kind_of?(Weakness) || finding.kind_of?(Nonconformity)
+    oportunity = finding.kind_of?(Oportunity) || finding.kind_of?(PotentialNonconformity)
     head = []
     body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
 
-    unless finding.review_code.blank?
-      head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
-        "#{finding.review_code.chomp}\n"
-    end
-
-    unless finding.repeated_ancestors.blank?
-      body << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
-        " #{finding.repeated_ancestors.join(' | ')}\n"
-    end
-
-    unless finding.description.blank?
+    if finding.description.present?
       body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         "#{finding.description.chomp}\n"
     end
 
-    if weakness && !finding.risk_text.blank?
+    if finding.review_code.present?
+      head << "<b>#{finding.class.human_attribute_name(:review_code)}:</b> " +
+        "#{finding.review_code.chomp}\n"
+    end
+
+    if finding.repeated_ancestors.present?
+      body << "<b>#{finding.class.human_attribute_name(:repeated_of_id)}:</b>" +
+        " #{finding.repeated_ancestors.join(' | ')}\n"
+    end
+
+    if weakness && finding.risk_text.present?
       body << "<b>#{Weakness.human_attribute_name(:risk)}:</b> " +
         "#{finding.risk_text.chomp}\n"
     end
 
-    if weakness && !finding.effect.blank?
+    if weakness && finding.effect.present?
       body << "<b>#{Weakness.human_attribute_name(:effect)}:</b> " +
         "#{finding.effect.chomp}\n"
     end
 
-    if weakness && !finding.audit_recommendations.blank?
+    if weakness && finding.audit_recommendations.present?
       body << "<b>#{Weakness.human_attribute_name(:audit_recommendations)}: " +
         "</b>#{finding.audit_recommendations}\n"
     end
 
-    unless finding.answer.blank?
-      body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
-        "#{finding.answer.chomp}\n"
-    end
-
-    if weakness && !finding.implemented_audited?
-      unless finding.follow_up_date.blank?
-        body << "<b>#{Weakness.human_attribute_name(:follow_up_date)}:</b> " +
-          "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
-      end
-    elsif !finding.solution_date.blank?
-      body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
-        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
-    end
-
-    unless finding.origination_date.blank?
+    if finding.origination_date.present?
       body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
         "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
     end
 
+    if weakness && finding.correction.present?
+      body << "<b>#{Weakness.human_attribute_name(
+      :correction)}: </b>#{finding.correction}\n"
+    end
+
+    if weakness && finding.correction_date.present?
+      body << "<b>#{Weakness.human_attribute_name(
+      :correction_date)}: </b> #{I18n.l(finding.correction_date,
+        :format => :long)}\n"
+    end
+
+    if weakness && finding.cause_analysis.present?
+      body << "<b>#{Weakness.human_attribute_name(
+      :cause_analysis)}: </b>#{finding.cause_analysis}\n"
+    end
+
+    if weakness && finding.cause_analysis_date.present?
+      body << "<b>#{Weakness.human_attribute_name(
+      :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
+        :format => :long)}\n"
+    end
+
+    if finding.answer.present?
+      body << "<b>#{finding.class.human_attribute_name(:answer)}:</b> " +
+        "#{finding.answer.chomp}\n"
+    end
+
+    if finding.follow_up_date.present?
+      body << "<b>#{finding.class.human_attribute_name(:follow_up_date)}:</b> " +
+        "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
+    end
+
+    if finding.solution_date.present?
+      body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
+        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
+    end
+
     audited_users = finding.users.select(&:can_act_as_audited?)
 
-    unless audited_users.blank?
+    if audited_users.present?
       process_owners = finding.process_owners
       users = audited_users.map do |u|
         u.full_name + (process_owners.include?(u) ?
@@ -492,14 +530,14 @@ class ControlObjectiveItem < ActiveRecord::Base
         "#{users.join('; ')}\n"
     end
 
-    unless finding.audit_comments.blank?
-      body << "<b>#{finding.class.human_attribute_name(:audit_comments)}:" +
-        "</b> #{finding.audit_comments.chomp}\n"
+    if finding.state_text.present? && (weakness || oportunity)
+      body << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
+        "#{finding.state_text.chomp}\n"
     end
 
-    unless finding.state_text.blank?
-      body << "<b>#{finding.class.human_attribute_name(:state)}:</b> " +
-        finding.state_text.chomp
+    if finding.audit_comments.present?
+      body << "<b>#{finding.class.human_attribute_name(:audit_comments)}:" +
+        "</b> #{finding.audit_comments.chomp}\n"
     end
 
     { :column => head, :text => body }

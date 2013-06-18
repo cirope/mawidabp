@@ -80,6 +80,12 @@
   </div>
 
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>
+  <%= render :partial => 'oportunities_summary', :locals => {:readonly => true} %>
+  <% if @auth_organization.system_quality_management? %>
+    <%= render :partial => 'fortresses_summary', :locals => {:readonly => true} %>
+    <%= render :partial => 'nonconformities_summary', :locals => {:readonly => true} %>
+    <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => true} %>
+  <% end %>
 
   <% unless @control_objective_item.work_papers.empty? %>
     <h1 class="clear"><%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
