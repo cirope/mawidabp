@@ -64,6 +64,9 @@ class Poll < ActiveRecord::Base
     |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
       :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
   }
+  scope :answered, lambda {
+    |answered| where('answered = :answered', :answered => answered)
+  }
   scope :pollables, lambda {
     where('pollable_id IS NOT NULL')
   }

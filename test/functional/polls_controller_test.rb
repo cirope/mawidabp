@@ -15,9 +15,11 @@ class PollsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :import_csv_customers],
       [:get, :summary_by_questionnaire],
+      [:get, :summary_by_answers],
       [:get, :summary_by_business_unit],
       [:get, :create_summary_by_questionnaire],
       [:get, :create_summary_by_business_unit],
+      [:get, :create_summary_by_answers],
       [:post, :send_csv_polls],
       [:post, :create],
       [:delete, :destroy, id_param]
@@ -241,6 +243,64 @@ class PollsControllerTest < ActionController::TestCase
     assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+  end
+
+
+  test 'summary by answers' do
+    perform_auth
+
+    get :summary_by_answers
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_answers'
+
+    assert_nothing_raised(Exception) do
+      get :summary_by_answers, :summary_by_answers => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :questionnaire => questionnaires(:questionnaire_one).id,
+        :answered => 'true'
+      }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'polls/summary_by_answers'
+  end
+
+  test 'filtered answers report' do
+    perform_auth
+    get :summary_by_answers, :summary_by_answers => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id,
+      :answered => nil
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_not_nil assigns(:questionnaire)
+    assert_not_nil assigns(:polls)
+    assert_not_nil assigns(:answered)
+    assert_not_nil assigns(:unanswered)
+    assert_template 'polls/summary_by_answers'
+  end
+
+  test 'create summary by answers' do
+    perform_auth
+
+    post :create_summary_by_answers, :summary_by_answers => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :questionnaire => questionnaires(:questionnaire_one).id,
+      :answered => 'false'
+    },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
   end
 
   test 'send csv polls' do

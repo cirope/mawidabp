@@ -8,8 +8,10 @@ MawidaApp::Application.routes.draw do
       post :send_csv_polls
       get :reports
       get :summary_by_questionnaire
+      get :summary_by_answers
       get :summary_by_business_unit
       post :create_summary_by_questionnaire
+      post :create_summary_by_answers
       post :create_summary_by_business_unit
     end
   end

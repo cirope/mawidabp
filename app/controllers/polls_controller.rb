@@ -313,6 +313,131 @@ class PollsController < ApplicationController
 
   end
 
+  def summary_by_answers
+    parameters = params[:summary_by_answers]
+    @title = t 'poll.reports_title'
+    @answered = nil
+    @from_date, @to_date = *make_date_range(parameters)
+    @questionnaires = Questionnaire.list.map { |q| [q.name, q.id.to_s] }
+
+    if parameters
+      @questionnaire = Questionnaire.find(parameters[:questionnaire])
+      @answered = parameters[:answered] == 'true' if parameters[:answered].present?
+    end
+
+    if @questionnaire
+      @polls = @answered.nil? ?
+        Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
+          ).by_questionnaire(@questionnaire) :
+        Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
+          ).by_questionnaire(@questionnaire).answered(@answered)
+      @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
+      count = 0
+      total = 0
+      @polls.each do |poll|
+        if poll.answered?
+          poll.answers.each do |answer|
+            if answer.answer_option.present?
+              count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+              total += 1
+            end
+          end
+        end
+      end
+      total == 0 ? @calification = 0 : @calification = (count / total).round
+    end
+  end
+
+  def create_summary_by_answers
+    self.summary_by_answers
+
+    pdf = Prawn::Document.create_generic_pdf :portrait
+
+    pdf.add_generic_report_header @auth_organization
+
+    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+    pdf.move_down PDF_FONT_SIZE
+
+    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+    pdf.move_down PDF_FONT_SIZE * 2
+
+    pdf.add_description_item(
+      t('activerecord.attributes.poll.send_date'),
+        t('conclusion_committee_report.period.range',
+        :from_date => l(@from_date, :format => :long),
+        :to_date => l(@to_date, :format => :long)))
+
+    pdf.move_down PDF_FONT_SIZE
+
+    if @polls.present?
+      pdf.add_description_item(
+        Questionnaire.model_name.human,
+        @questionnaire.name)
+
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        @polls.each do |poll|
+          if poll.user.present?
+            pdf.text "#{Poll.human_attribute_name :user_id}: #{poll.user.informal_name}", :style => :bold
+          elsif poll.customer_email.present?
+            pdf.text "#{Poll.human_attribute_name :customer_email}: #{poll.customer_email}", :style => :bold
+          end
+
+          pdf.text "#{Poll.human_attribute_name :answered}: #{poll.answered ? t('label.yes') : t('label.no')}"
+
+          pdf.text "#{Poll.human_attribute_name(:send_date)}: #{l poll.created_at.to_date, :format => :long}}"
+
+          pdf.text "#{Poll.human_attribute_name(:answer_date)}: #{l poll.updated_at.to_date, :format => :long}}" if poll.answered?
+
+          pdf.text "#{Questionnaire.human_attribute_name :questions}:"
+
+          poll.answers.each do |answer|
+            ans = ''
+            if poll.answered?
+              if answer.question.answer_multi_choice?
+                ans = "#{t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
+              elsif answer.question.answer_written?
+                ans = answer.answer
+              end
+            end
+
+            pdf.text "#{answer.question.question} #{ans}"
+
+            if answer.comments.present?
+              pdf.text "#{Answer.human_attribute_name :comments}: #{answer.comments}"
+            end
+          end
+
+          if poll.comments.present?
+            pdf.text "#{Poll.human_attribute_name :comments}: #{poll.comments}"
+          end
+
+          pdf.move_down PDF_FONT_SIZE
+        end
+      end
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.text "#{t('poll.total_answered')}: #{@answered}"
+      pdf.text "#{t('poll.total_unanswered')}: #{@unanswered}"
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text "#{t('poll.score')}: #{@calification}%"
+    else
+      pdf.text t('poll.without_data')
+    end
+
+    pdf.custom_save_as(t('poll.summary_pdf_name',
+      :from_date => @from_date.to_formatted_s(:db),
+      :to_date => @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
+    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
+      :from_date => @from_date.to_formatted_s(:db),
+      :to_date => @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
+
+  end
+
   def summary_by_business_unit
     @title = t 'poll.reports_title'
     @from_date, @to_date = *make_date_range(params[:summary_by_business_unit])
@@ -544,6 +669,8 @@ class PollsController < ApplicationController
       @action_privileges.update(
         :auto_complete_for_user => :read,
         :reports => :read,
+        :summary_by_answers => :read,
+        :create_summary_by_answers => :read,
         :summary_by_business_unit => :read,
         :create_summary_by_business_unit => :read,
         :summary_by_questionnaire => :read,
@@ -554,3 +681,5 @@ class PollsController < ApplicationController
     end
   end
 end
+
+
