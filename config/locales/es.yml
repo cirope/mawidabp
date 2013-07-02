@@ -985,13 +985,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     pending_poll_email:
       title: "%{name}, tiene una encuesta pendiente"
-      answer_poll: 'Contestar encuesta'
+      answer_poll: "Contestar encuesta"
       clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     client_pending_poll:
-      subject: "Tiene una encuesta de Banco Supervielle S.A."
-      title: "%{name}, Banco Supervielle S.A. ha generado una encuesta para conocer su satisfacción respecto a la gestión y resolución de su reclamo realizado a la entidad."
-      answer_poll: 'Contestar encuesta'
-      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
+      subject: "Conocé la encuesta que Banco Supervielle tiene para vos"
+      title: "%{name}, Banco Supervielle generó una encuesta para conocer tu satisfacción respecto a la gestión y resolución de tu reclamo realizado a la entidad."
+      answer_poll: "Ingresá aquí y comenzá tu encuesta"
+      clarification: "Desde la Gerencia de Calidad de Banco Supervielle agradecemos tu colaboración para continuar mejorando nuestra Atención al Cliente."
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
