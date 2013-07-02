@@ -388,9 +388,11 @@ class PollsController < ApplicationController
 
           pdf.text "#{Poll.human_attribute_name :answered}: #{poll.answered ? t('label.yes') : t('label.no')}"
 
-          pdf.text "#{Poll.human_attribute_name(:send_date)}: #{l poll.created_at.to_date, :format => :long}}"
+          pdf.text "#{Poll.human_attribute_name(:send_date)}: #{l poll.created_at.to_date, :format => :long}"
 
-          pdf.text "#{Poll.human_attribute_name(:answer_date)}: #{l poll.updated_at.to_date, :format => :long}}" if poll.answered?
+          if poll.answered?
+            pdf.text "#{Poll.human_attribute_name(:answer_date)}: #{l poll.updated_at.to_date, :format => :long}"
+          end
 
           pdf.text "#{Questionnaire.human_attribute_name :questions}:"
 
