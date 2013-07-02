@@ -43,7 +43,7 @@
               <% end %>
             <% end %>
             <br>
-	    <% if answer.comments.present? %>
+            <% if answer.comments.present? %>
               <%= Answer.human_attribute_name :comments %>:
               <%= answer.comments %>
             <% end %>
@@ -59,12 +59,12 @@
       <% end %>
       <br>
   <% end %>
-</div>
   <hr>
   <p style="margin: 1em; font-size: 1.1em;">
-    <%= "#{t('poll.total_answered')}: #{@answered}" %><br />
-    <%= "#{t('poll.total_unanswered')}: #{@unanswered}" %><br />
-    <br /><strong><%= "#{t('poll.score')}: #{@calification}%" %></strong>
+    <%= "#{t('poll.total_answered')}: #{@answered}" %><br>
+    <%= "#{t('poll.total_unanswered')}: #{@unanswered}" %><br>
+    <br>
+    <b><%= "#{t('poll.score')}: #{@calification}%" %></b>
   </p>
 
 <% else %>
@@ -72,6 +72,7 @@
     <em><%= t('poll.without_data') %></em>
   </p>
 <% end %>
+</div>
 
 <div id="links">
   <%= link_to t('label.back'), :action => :index %> |
