@@ -231,7 +231,7 @@ class ConclusionReview < ActiveRecord::Base
 
     review_has_fortresses = grouped_control_objectives.any? do |_, cois|
       cois.any? do |coi|
-        !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+        !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
       end
     end
 

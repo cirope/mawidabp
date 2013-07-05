@@ -137,7 +137,7 @@ module ConclusionFinalReviewsHelper
   def conclusion_review_process_control_fortress_details_table(
       process_control, cois, use_finals = false)
     has_fortresses = cois.any? do |coi|
-      !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+      !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
     end
 
     if has_fortresses
@@ -149,7 +149,7 @@ module ConclusionFinalReviewsHelper
         :class => :header)
 
       cois.each do |coi|
-        (use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.each do |f|
+        (use_finals ? coi.final_fortresses : coi.fortresses).each do |f|
           body << finding_row_data(coi, f, cycle(:odd, :even))
         end
       end
