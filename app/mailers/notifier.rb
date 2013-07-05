@@ -27,7 +27,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => poll.customer_email,
-      :subject => "[#{@organization.prefix.upcase}] " + t(
+      :subject => t(
         'notifier.client_pending_poll.subject'
       )
     )
