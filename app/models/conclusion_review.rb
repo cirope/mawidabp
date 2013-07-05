@@ -241,7 +241,7 @@ class ConclusionReview < ActiveRecord::Base
 
       grouped_control_objectives.each do |process_control, cois|
         has_fortresses = cois.any? do |coi|
-          !(use_finals ? coi.final_fortresses : coi.fortresses).not_revoked.blank?
+          !(use_finals ? coi.final_fortresses : coi.fortresses).blank?
         end
 
         if has_fortresses
@@ -255,7 +255,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             fortresses = (
               use_finals ? coi.final_fortresses : coi.fortresses
-            ).not_revoked.order('review_code ASC')
+            ).order('review_code ASC')
 
             fortresses.each do |f|
               column_data = []

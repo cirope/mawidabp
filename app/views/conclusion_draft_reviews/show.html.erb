@@ -64,7 +64,7 @@
   <% end %>
 
   <% review_has_fortresses = grouped_control_objectives.any? do |_, cois|
-    cois.any? { |coi| !coi.fortresses.not_revoked.blank? }
+    cois.any? { |coi| !coi.fortresses.blank? }
   end %>
 
   <% if review_has_fortresses %>
