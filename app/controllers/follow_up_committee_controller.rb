@@ -349,19 +349,9 @@ class FollowUpCommitteeController < ApplicationController
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
 
-    days = total = 0
-    # Medium risk weakenesses being implemented
-    conclusion_reviews.each do |cr|
-      weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented.where('follow_up_date < ?', Date.today)
-      weaknesses.each do |w|
-        days+= (Date.today - w.follow_up_date).abs.round
-        total+= 1
-      end
-    end
-
     @periods.each do |period|
       indicators = {}
-      cfrs = conclusion_reviews.for_period(period)
+      cfrs = conclusion_reviews.for_period(period).list_all_by_date(@from_date, @to_date)
       row_order = [
         ['%.1f%', :highest_solution_rate],
         ['%.1f%', :oportunities_solution_rate],
