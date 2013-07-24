@@ -290,11 +290,7 @@ class FindingsController < ApplicationController
       ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 0],
       ['description', Finding.human_attribute_name(:description),
-        detailed ? 48 : 80],
-      ['rescheduled', t('weakness.previous_follow_up_dates') +
-          " (#{Finding.human_attribute_name(:rescheduled)})", 10],
-      ['date', Finding.human_attribute_name(params[:completed] == 'incomplete' ?
-            :follow_up_date : :solution_date), 10]
+        detailed ? 48 : 80]
     ]
 
     column_data, column_headers, column_widths = [], [], []
@@ -303,9 +299,9 @@ class FindingsController < ApplicationController
       column_order << [
         'audit_comments', Finding.human_attribute_name(:audit_comments), 15
       ]
-      column_order << [
-        'answer', Finding.human_attribute_name(:answer), 17
-      ]
+#      column_order << [
+#        'answer', Finding.human_attribute_name(:answer), 17
+#      ]
     end
 
     column_order.each do |column, col_name, col_width|
@@ -335,15 +331,12 @@ class FindingsController < ApplicationController
     end
 
     findings.limit(FINDING_MAX_PDF_ROWS).each do |finding|
-      date = params[:completed] == 'incomplete' ? finding.follow_up_date :
-        finding.solution_date
-      date_text = l(date, :format => :minimal) if date
-      stale = (finding.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && finding.being_implemented? &&
-        finding.follow_up_date < Date.today
-      being_implemented = (finding.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && finding.being_implemented?
+      weakness_or_nonconformity = finding.kind_of?(Nonconformity) || finding.kind_of?(Weakness)
+      is_fortress = finding.kind_of? Fortress
+      finding_data = []
       rescheduled_text = ''
 
-      if being_implemented && finding.rescheduled?
+      if finding.rescheduled?
         dates = []
         follow_up_dates = finding.all_follow_up_dates
 
@@ -364,15 +357,28 @@ class FindingsController < ApplicationController
           u.full_name
       end
 
-      finding_data = [
+      finding_data =
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
-        ("<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}" unless finding.kind_of?(Fortress)),
+        "<b>#{finding.class.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}",
+        ("<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}" unless is_fortress),
+        ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l finding.origination_date, :format => :long}" if finding.origination_date),
         ("<b>#{Weakness.human_attribute_name(:risk)}</b>: #{finding.risk_text}" if finding.respond_to?(:risk_text)),
         ("<b>#{Weakness.human_attribute_name(:priority)}</b>: #{finding.priority_text}" if finding.respond_to?(:priority_text)),
-        "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
-        "<b>#{Finding.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}"
-      ].compact.join("\n")
+        ("<b>#{finding.class.human_attribute_name(:correction)}</b>: #{finding.correction}" if weakness_or_nonconformity && finding.correction),
+        ("<b>#{finding.class.human_attribute_name(:correction_date)}</b>: #{l finding.correction_date, :format => :long}" if weakness_or_nonconformity && finding.correction_date),
+        ("<b>#{finding.class.human_attribute_name(:cause_analysis)}</b>: #{finding.cause_analysis}" if weakness_or_nonconformity && finding.cause_analysis),
+        ("<b>#{finding.class.human_attribute_name(:cause_analysis_date)}</b>: #{l finding.cause_analysis_date, :format => :long}" if weakness_or_nonconformity && finding.cause_analysis_date),
+        ("<b>#{finding.class.human_attribute_name(:answer)}</b>: #{finding.answer}" unless is_fortress),
+        ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{finding.follow_up_date}" if finding.follow_up_date),
+        ("<b>#{Weakness.class.human_attribute_name(:solution_date)}</b>: #{finding.solution_date}" if finding.solution_date),
+        "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}"
+
+
+      if detailed
+        finding_data << "<b>#{Finding.human_attribute_name(:audit_comments)}</b>: #{finding.audit_comments}" if finding.audit_comments
+        finding_data << "<b>#{t('weakness.previous_follow_up_dates')} (#{Finding.human_attribute_name(:rescheduled)}): #{rescheduled_text}" unless is_fortress
+      end
 
       unless (relations = finding.finding_relations).blank?
         finding_data << "\n<b>#{t('finding.finding_relations')}</b>: "
@@ -389,23 +395,17 @@ class FindingsController < ApplicationController
         finding_data << repeated_children.map(&:to_s).join(' | ')
       end
 
-      column_data << [
-        finding_data,
-        rescheduled_text,
-        stale ? "<b>#{date_text}</b>" : date_text,
-        (finding.audit_comments if detailed),
-        (finding.answer if detailed)
-      ]
+      column_data << finding_data.compact
     end
 
     pdf.move_down PDF_FONT_SIZE
 
     unless column_data.blank?
-      column_data.each do |data|
-        column_headers.each_with_index do |header, i|
-          header = (header == column_headers.first) ? "\n<b>#{header}</b>:\n\n" : "<b>#{header}</b>: "
-          pdf.text "#{header} #{data[i]}", :inline_format => true
+      column_data.each do |finding_row|
+        finding_row.each do |data|
+          pdf.text data, :inline_format => true if data.present?
         end
+        pdf.move_down PDF_FONT_SIZE * 1.5
       end
     end
 
