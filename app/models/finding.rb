@@ -309,6 +309,19 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :being_implemented, where(:state => STATUS[:being_implemented])
+  scope :being_implemented_by_organization,
+    includes(
+      :control_objective_item => { :review => :period }
+    ).where(
+      [
+        "#{Period.table_name}.organization_id = :organization_id",
+        'state = :being_implemented'
+      ].join(' AND '),
+      {
+        :organization_id => GlobalModelConfig.current_organization_id,
+        :being_implemented => STATUS[:being_implemented]
+      }
+    )
   scope :not_incomplete, where("state <> ?", Finding::STATUS[:incomplete])
   scope :list_all_by_date, lambda { |from_date, to_date, order|
     includes(
@@ -1148,8 +1161,10 @@ class Finding < ActiveRecord::Base
           'audit_recommendations'), self.audit_recommendations, 0, false)
     end
 
-    pdf.add_description_item(self.class.human_attribute_name('answer'),
-      self.answer, 0, false) unless self.unanswered?
+    unless self.kind_of? Fortress
+      pdf.add_description_item(self.class.human_attribute_name('answer'),
+        self.answer, 0, false) unless self.unanswered?
+    end
 
     if (self.kind_of?(Weakness) || self.kind_of?(Nonconformity)) && (self.implemented? || self.being_implemented?)
       pdf.add_description_item(Weakness.human_attribute_name('follow_up_date'),
@@ -1157,7 +1172,7 @@ class Finding < ActiveRecord::Base
         0, false)
     end
 
-    if self.implemented_audited?
+    if !self.kind_of?(Fortress) && self.implemented_audited?
       pdf.add_description_item(self.class.human_attribute_name('solution_date'),
         (I18n.l(self.solution_date, :format => :long) if self.solution_date), 0,
         false)
@@ -1173,12 +1188,28 @@ class Finding < ActiveRecord::Base
     pdf.add_description_item(self.class.human_attribute_name('user_ids'),
       audited.join('; '), 0, false)
 
-    pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
-      self.audit_comments, 0, false)
-
     unless self.kind_of? Fortress
+      pdf.add_description_item(self.class.human_attribute_name('audit_comments'),
+        self.audit_comments, 0, false)
+
       pdf.add_description_item(self.class.human_attribute_name('state'),
         self.state_text, 0, false)
+    end
+
+    if self.correction && self.correction_date
+      pdf.add_description_item(self.class.human_attribute_name('correction'),
+        self.correction, 0, false)
+
+      pdf.add_description_item(self.class.human_attribute_name('correction_date'),
+        I18n.l(self.correction_date, :format => :long), 0,false)
+    end
+
+    if self.cause_analysis && self.cause_analysis_date
+      pdf.add_description_item(self.class.human_attribute_name('cause_analysis'),
+        self.cause_analysis, 0, false)
+
+      pdf.add_description_item(self.class.human_attribute_name('cause_analysis_date'),
+        I18n.l(self.cause_analysis_date, :format => :long), 0,false)
     end
 
     unless self.work_papers.blank?

@@ -142,7 +142,7 @@
       <%= f_f.text_area :answer %>
     </p>
     <p>
-      <%= f_f.label :follow_up_date,
+      <%= f_f.label :follow_date,
         raw(@finding.class.human_attribute_name(:follow_up_date) +
         show_inline_help_for(:finding_follow_up_date)) %>
       <%= calendar_text_field f_f, :follow_up_date %>

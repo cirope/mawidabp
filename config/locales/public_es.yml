@@ -7,6 +7,8 @@
     yes: "Si"
     no: "No"
     add: "Agregar"
+    total: "Total"
+    by: "por"
     add_item: "Agregar ítem"
     apply_filter: "Aplicar filtro"
     ascendant: "Ascendente"
@@ -25,6 +27,7 @@
     disable: "Deshabilitar"
     download: "Descargar"
     edit: "Editar"
+    greater_or_equal_than: "Mayor o igual a"
     import: "Importar"
     insert_item: "Insertar ítem"
     insert_record_item: "Insertar nuevo"
@@ -246,7 +249,7 @@
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
     applied_filters:
-      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
+      one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -641,6 +644,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    rescheduled_being_implemented_weaknesses_report_title: "Observaciones en trámite reprogramadas"
+    detailed_report: "Reporte detallado"
+    rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     high_risk_weaknesses: "Observaciones de riesgo alto"
@@ -672,7 +678,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     invalid_dates: "Verifique el rango de fechas, no es válido."
     print_date: "Fecha de impresión: %{date}"
     applied_filters:
-      one: "En este reporte se ha aplicado el siguientes filtro: %{filters}"
+      one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     control_objective_stats:
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
@@ -732,6 +738,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         digitalized: "Digitalización"
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
+    rescheduled_being_implemented_weaknesses_report:
+      without_data: "Sin datos para el rango de fechas ingresado"
+      title: "INFORME DE OBSERVACIONES EN TRÁMITE REPROGRAMADAS"
+      pdf_name: "observaciones_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"

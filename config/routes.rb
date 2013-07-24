@@ -113,7 +113,8 @@ MawidaApp::Application.routes.draw do
     'qa_indicators', 'create_qa_indicators',
     'synthesis_report', 'create_synthesis_report',
     'control_objective_stats', 'create_control_objective_stats',
-    'process_control_stats', 'create_process_control_stats'
+    'process_control_stats', 'create_process_control_stats',
+     'rescheduled_being_implemented_weaknesses_report', 'create_rescheduled_being_implemented_weaknesses_report'
   ].each do |action|
     match "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",
