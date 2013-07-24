@@ -370,7 +370,7 @@ class FindingsController < ApplicationController
         ("<b>#{finding.class.human_attribute_name(:cause_analysis)}</b>: #{finding.cause_analysis}" if weakness_or_nonconformity && finding.cause_analysis),
         ("<b>#{finding.class.human_attribute_name(:cause_analysis_date)}</b>: #{l finding.cause_analysis_date, :format => :long}" if weakness_or_nonconformity && finding.cause_analysis_date),
         ("<b>#{finding.class.human_attribute_name(:answer)}</b>: #{finding.answer}" unless is_fortress),
-        ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{finding.follow_up_date}" if finding.follow_up_date),
+        ("<b>#{finding.class.human_attribute_name(:follow_up_date)}</b>: #{finding.follow_up_date}" if finding.follow_up_date),
         ("<b>#{Weakness.class.human_attribute_name(:solution_date)}</b>: #{finding.solution_date}" if finding.solution_date),
         "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}"
 
