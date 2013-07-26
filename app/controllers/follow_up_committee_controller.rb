@@ -358,23 +358,35 @@ class FollowUpCommitteeController < ApplicationController
         ['%.1f%', :digitalized],
         ['%d%', :score_average],
         ['%.1f%', :production_level],
-        ['%d', :ancient_medium_risk_weaknesses]
+        ['%d', :ancient_medium_risk_weaknesses],
+        ['%d', :ancient_highest_risk_weaknesses]
       ]
 
-      # Ancient mediun risk weaknesses rate
-      days = total = 0
+      # Ancient weaknesses rate
+      medium_risk_days = medium_risk_total = 0
+      highest_risk_days = highest_risk_total = 0
 
-      cfrs.each do |cr|
-        weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented
+      # Tomo todos los informes de conclusión sin tener en cuenta el filtro de fechas
+      ConclusionFinalReview.for_period(period).each do |cr|
+        medium_risk_weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented
+        highest_risk_weaknesses = cr.review.weaknesses.with_highest_risk.being_implemented
 
-        weaknesses.each do |w|
-          days += (Date.today - w.origination_date).abs.round
-          total += 1
+        medium_risk_weaknesses.each do |w|
+          medium_risk_days += (Date.today - w.origination_date).abs.round
+          medium_risk_total += 1
+        end
+
+        highest_risk_weaknesses.each do |w|
+          highest_risk_days += (Date.today - w.origination_date).abs.round
+          highest_risk_total += 1
         end
       end
 
-      indicators[:ancient_medium_risk_weaknesses] = total > 0 ?
-                                                    (days / total).round : nil
+      indicators[:ancient_medium_risk_weaknesses] = medium_risk_total > 0 ?
+                                                    (medium_risk_days / medium_risk_total).round : nil
+
+      indicators[:ancient_highest_risk_weaknesses] = highest_risk_total > 0 ?
+                                                    (highest_risk_days / highest_risk_total).round : nil
 
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -475,9 +487,9 @@ class FollowUpCommitteeController < ApplicationController
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
-          if i == :ancient_medium_risk_weaknesses && indicators[i]
+          if (i == :ancient_medium_risk_weaknesses || i == :ancient_highest_risk_weaknesses) && indicators[i]
           {
-            'indicator' => t(:'follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses'),
+            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
             'value' => t('label.day', :count => indicators[i])
           }
           else

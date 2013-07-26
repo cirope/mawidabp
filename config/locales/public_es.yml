@@ -738,6 +738,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         digitalized: "Digitalización"
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
+        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
     rescheduled_being_implemented_weaknesses_report:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "INFORME DE OBSERVACIONES EN TRÁMITE REPROGRAMADAS"
