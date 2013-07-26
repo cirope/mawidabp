@@ -349,7 +349,7 @@ class Review < ActiveRecord::Base
   def issue_date(include_draft = false)
     self.conclusion_final_review.try(:issue_date) ||
       (self.conclusion_draft_review.try(:issue_date) if include_draft) ||
-      self.created_at.to_date
+      self.plan_item.start
   end
 
   def must_be_approved?
