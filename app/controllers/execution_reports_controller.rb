@@ -359,11 +359,14 @@ class ExecutionReportsController < ApplicationController
 
               column_data << [
                 "<b>#{t('execution_reports.weaknesses_by_state.total')}</b>",
-                "<b>#{total_weaknesses}</b>",
-                "<b>#{total_oportunities}</b>"
+                "<b>#{total_weaknesses}</b>"
               ]
 
-              if @sqm
+              if type == :internal && !@sqm
+                column_data.last << "<b>#{total_oportunities}</b>"
+
+              elsif type == :internal && @sqm
+                column_data.last << "<b>#{total_oportunities}</b>"
                 column_data.last << "<b>#{total_nonconformities}</b>"
                 column_data.last << "<b>#{total_potential_nonconformities}</b>"
               end
