@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :rescheduled_being_implemented_weaknesses_report, :extra_params => {},
-  :forms => {:date_range => true, :rescheduling => true}} %>
+  :forms => {:date_range => {:avoid_inline_help => true}, :rescheduling => true}} %>
 
 <% if @weaknesses_data.present? %>
   <h1 class="center_title">

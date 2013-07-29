@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {:action => :weaknesses_by_state, :extra_params => {},
-  :forms => {:date_range => true}} %>
+  :forms => {:date_range => {:avoid_inline_help => true}}} %>
 
 <%  @counts.each do |count_data| %>
   <h1 class="simple_title with_border_bottom">
