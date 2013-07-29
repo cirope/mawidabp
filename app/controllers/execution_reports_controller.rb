@@ -338,11 +338,15 @@ class ExecutionReportsController < ApplicationController
 
                 column_data << [
                   t("finding.status_#{state.first}"),
-                  "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-                  "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+                  "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
                 ]
 
-                if @sqm
+                if type == :internal && !@sqm
+                  column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+
+                elsif type == :internal && @sqm
+                  column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+
                   nc_count = nonconformities_count[state.last] || 0
                   pnc_count = potential_nonconformities_count[state.last] || 0
                   nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
