@@ -309,19 +309,6 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :being_implemented, where(:state => STATUS[:being_implemented])
-  scope :being_implemented_by_organization,
-    includes(
-      :control_objective_item => { :review => :period }
-    ).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        'state = :being_implemented'
-      ].join(' AND '),
-      {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :being_implemented => STATUS[:being_implemented]
-      }
-    )
   scope :not_incomplete, where("state <> ?", Finding::STATUS[:incomplete])
   scope :list_all_by_date, lambda { |from_date, to_date, order|
     includes(

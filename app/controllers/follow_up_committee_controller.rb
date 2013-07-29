@@ -600,7 +600,7 @@ class FollowUpCommitteeController < ApplicationController
     end
 
     if parameters
-      Weakness.being_implemented_by_organization.each do |w|
+      Weakness.being_implemented.for_current_organization.each do |w|
         follow_up_date_modifications = []
         rescheduled_being_implemented_weaknesses = []
         last_version = w.versions.size - 1
