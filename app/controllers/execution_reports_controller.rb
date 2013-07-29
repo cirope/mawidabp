@@ -214,6 +214,7 @@ class ExecutionReportsController < ApplicationController
     @title = t 'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @audit_types = [:internal, :external]
+    @sqm = @auth_organization.system_quality_management
     @counts = []
     @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
       s1.last <=> s2.last
@@ -231,6 +232,12 @@ class ExecutionReportsController < ApplicationController
             review.weaknesses.count(:group => :state)
           count_for_period[audit_type][review][:oportunities] =
             review.oportunities.count(:group => :state)
+          if @sqm
+            count_for_period[audit_type][review][:nonconformities] =
+              review.nonconformities.count(:group => :state)
+            count_for_period[audit_type][review][:potential_nonconformities] =
+              review.potential_nonconformities.count(:group => :state)
+          end
         end
       end
 
@@ -278,23 +285,42 @@ class ExecutionReportsController < ApplicationController
             oportunities_count = counts[:oportunities]
             total_weaknesses = weaknesses_count.values.sum
             total_oportunities = oportunities_count.values.sum
+            if @sqm
+              nonconformities_count = counts[:nonconformities]
+              potential_nonconformities_count = counts[:potential_nonconformities]
+              total_nonconformities = nonconformities_count.values.sum
+              total_potential_nonconformities = potential_nonconformities_count.values.sum
+            end
 
             pdf.text "\n<b>#{Review.model_name.human}</b>: #{review}\n\n",
               :font_size => PDF_FONT_SIZE, :inline_format => true
 
-            unless (total_weaknesses + total_oportunities) == 0
+            totals = total_weaknesses + total_oportunities
+            totals+= (total_nonconformities + total_potential_nonconformities) if @sqm
+
+            unless totals == 0
               columns = [
-                [Finding.human_attribute_name('state'), 30],
+                [Finding.human_attribute_name('state'), 20],
                 [
                   t('execution_reports.weaknesses_by_state.weaknesses_column'),
-                  type == :internal ? 35 : 70]
+                  20]
               ]
               column_data, column_headers, column_widths = [], [], []
 
-              if type == :internal
+              if type == :internal && !@sqm
                 columns << [
                   t('execution_reports.weaknesses_by_state.oportunities_column'),
-                  35]
+                  20]
+              elsif type == :internal && @sqm
+                columns << [
+                  t('execution_reports.weaknesses_by_state.oportunities_column'),
+                  20]
+                columns << [
+                  t('execution_reports.weaknesses_by_state.nonconformities_column'),
+                  20]
+                columns << [
+                  t('execution_reports.weaknesses_by_state.potential_nonconformities_column'),
+                  20]
               end
 
               columns.each do |col_data|
@@ -313,8 +339,18 @@ class ExecutionReportsController < ApplicationController
                 column_data << [
                   t("finding.status_#{state.first}"),
                   "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-                  "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+                  "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
                 ]
+
+                if @sqm
+                  nc_count = nonconformities_count[state.last] || 0
+                  pnc_count = potential_nonconformities_count[state.last] || 0
+                  nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
+                  potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0
+
+                  column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
+                  column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
+                end
               end
 
               column_data << [
@@ -322,6 +358,11 @@ class ExecutionReportsController < ApplicationController
                 "<b>#{total_weaknesses}</b>",
                 "<b>#{total_oportunities}</b>"
               ]
+
+              if @sqm
+                column_data.last << "<b>#{total_nonconformities}</b>"
+                column_data.last << "<b>#{total_potential_nonconformities}</b>"
+              end
 
               unless column_data.blank?
                 pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
