@@ -13,6 +13,12 @@ class ConclusionFinalReview < ConclusionReview
   }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
 
   # Named scopes
+  scope :list, includes(
+    :review => :period
+    ).where(
+      "#{Period.table_name}.organization_id = :organization_id",
+      :organization_id => GlobalModelConfig.current_organization_id
+  )
   scope :list_all_by_date, lambda { |from_date, to_date|
     includes(
       :review => [
