@@ -349,6 +349,41 @@ class FollowUpCommitteeController < ApplicationController
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
 
+    ancient_order = [
+      ['%d', :ancient_medium_risk_weaknesses],
+      ['%d', :ancient_highest_risk_weaknesses]
+    ]
+
+    # Ancient weaknesses rate
+    medium_risk_days = medium_risk_total = 0
+    highest_risk_days = highest_risk_total = 0
+
+    # Tomo todos los informes de definitivos sin tener en cuenta el filtro de fechas
+    ConclusionFinalReview.list.each do |cfr|
+      medium_risk_weaknesses = cfr.review.weaknesses.with_medium_risk.being_implemented
+      highest_risk_weaknesses = cfr.review.weaknesses.with_highest_risk.being_implemented
+
+      medium_risk_weaknesses.each do |w|
+        medium_risk_days += (Date.today - w.origination_date).abs.round
+        medium_risk_total += 1
+      end
+
+      highest_risk_weaknesses.each do |w|
+        highest_risk_days += (Date.today - w.origination_date).abs.round
+        highest_risk_total += 1
+      end
+    end
+
+    ancient_medium_risk_weaknesses = medium_risk_total > 0 ?
+                                                  (medium_risk_days / medium_risk_total).round : nil
+
+    ancient_highest_risk_weaknesses = highest_risk_total > 0 ?
+                                                  (highest_risk_days / highest_risk_total).round : nil
+
+    @ancient_medium_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses')}: #{t('label.day', :count => ancient_medium_risk_weaknesses)}"
+
+    @ancient_highest_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_highest_risk_weaknesses')}: #{t('label.day', :count => ancient_highest_risk_weaknesses)}"
+
     @periods.each do |period|
       indicators = {}
       cfrs = conclusion_reviews.for_period(period).list_all_by_date(@from_date, @to_date)
@@ -357,36 +392,8 @@ class FollowUpCommitteeController < ApplicationController
         ['%.1f%', :oportunities_solution_rate],
         ['%.1f%', :digitalized],
         ['%d%', :score_average],
-        ['%.1f%', :production_level],
-        ['%d', :ancient_medium_risk_weaknesses],
-        ['%d', :ancient_highest_risk_weaknesses]
+        ['%.1f%', :production_level]
       ]
-
-      # Ancient weaknesses rate
-      medium_risk_days = medium_risk_total = 0
-      highest_risk_days = highest_risk_total = 0
-
-      # Tomo todos los informes de conclusión sin tener en cuenta el filtro de fechas
-      ConclusionFinalReview.for_period(period).each do |cr|
-        medium_risk_weaknesses = cr.review.weaknesses.with_medium_risk.being_implemented
-        highest_risk_weaknesses = cr.review.weaknesses.with_highest_risk.being_implemented
-
-        medium_risk_weaknesses.each do |w|
-          medium_risk_days += (Date.today - w.origination_date).abs.round
-          medium_risk_total += 1
-        end
-
-        highest_risk_weaknesses.each do |w|
-          highest_risk_days += (Date.today - w.origination_date).abs.round
-          highest_risk_total += 1
-        end
-      end
-
-      indicators[:ancient_medium_risk_weaknesses] = medium_risk_total > 0 ?
-                                                    (medium_risk_days / medium_risk_total).round : nil
-
-      indicators[:ancient_highest_risk_weaknesses] = highest_risk_total > 0 ?
-                                                    (highest_risk_days / highest_risk_total).round : nil
 
       # Highest risk weaknesses solution rate
       pending_highest_risk = cfrs.inject(0.0) do |ct, cr|
@@ -571,6 +578,10 @@ class FollowUpCommitteeController < ApplicationController
             :style => :italic)
         end
       end
+
+      pdf.move_down PDF_FONT_SIZE
+      pdf.text @ancient_medium_risk_label
+      pdf.text @ancient_highest_risk_label
     end
 
     pdf.custom_save_as(
