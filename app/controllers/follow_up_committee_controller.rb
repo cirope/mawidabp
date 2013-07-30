@@ -349,11 +349,6 @@ class FollowUpCommitteeController < ApplicationController
     params = { :start => @from_date, :end => @to_date }
     @indicators = {}
 
-    ancient_order = [
-      ['%d', :ancient_medium_risk_weaknesses],
-      ['%d', :ancient_highest_risk_weaknesses]
-    ]
-
     # Ancient weaknesses rate
     medium_risk_days = medium_risk_total = 0
     highest_risk_days = highest_risk_total = 0
@@ -380,9 +375,10 @@ class FollowUpCommitteeController < ApplicationController
     ancient_highest_risk_weaknesses = highest_risk_total > 0 ?
                                                   (highest_risk_days / highest_risk_total).round : nil
 
-    @ancient_medium_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses')}: #{t('label.day', :count => ancient_medium_risk_weaknesses)}"
 
-    @ancient_highest_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_highest_risk_weaknesses')}: #{t('label.day', :count => ancient_highest_risk_weaknesses)}"
+    @ancient_medium_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses')}: #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
+
+    @ancient_highest_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_highest_risk_weaknesses')}: #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
 
     @periods.each do |period|
       indicators = {}
@@ -494,17 +490,10 @@ class FollowUpCommitteeController < ApplicationController
       @indicators[period] ||= []
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
-          if (i == :ancient_medium_risk_weaknesses || i == :ancient_highest_risk_weaknesses) && indicators[i]
-          {
-            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
-            'value' => t('label.day', :count => indicators[i])
-          }
-          else
           {
             'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
             'value' => (mask % indicators[i] if indicators[i])
           }
-          end
         end
       }
     end
@@ -580,8 +569,8 @@ class FollowUpCommitteeController < ApplicationController
       end
 
       pdf.move_down PDF_FONT_SIZE
-      pdf.text @ancient_medium_risk_label
-      pdf.text @ancient_highest_risk_label
+      pdf.text @ancient_medium_risk_label if @ancient_medium_risk_label
+      pdf.text @ancient_highest_risk_label if @ancient_highest_risk_label
     end
 
     pdf.custom_save_as(

@@ -41,9 +41,13 @@
     <% end %>
   <% end %>
 
-  <h2 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h4>
-  <h2 class="simple_title with_border_bottom"><%= @ancient_highest_risk_label %></h4>
-  <br>
+  <% if @ancient_medium_risk_label %>
+    <h2 class="simple_title with_border_bottom"><%= @ancient_medium_risk_label %></h4>
+  <% end %>
+    <% if @ancient_highest_risk_label %>
+    <h2 class="simple_title with_border_bottom"><%= @ancient_highest_risk_label %></h4>
+    <br>
+  <% end %>
 <% else %>
   <p style="margin: 1em;">
     <em><%= t 'follow_up_committee.qa_indicators.without_data' %></em>
