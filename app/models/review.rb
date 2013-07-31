@@ -739,6 +739,44 @@ class Review < ActiveRecord::Base
       end
     end
 
+    nonconformities = self.final_nonconformities.all_for_report
+
+    unless nonconformities.blank?
+      pdf.add_subtitle I18n.t('review.nonconformities_summary'), PDF_FONT_SIZE, PDF_FONT_SIZE
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [['description', 60], ['risk', 15], ['state', 25]]
+
+      column_names.each do |col_name, col_size|
+        column_headers << Nonconformity.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
+      end
+
+      nonconformities.each do |nonconformity|
+        description = "<b>#{Nonconformity.human_attribute_name('review_code')}</b>: "
+        description << "#{nonconformity.review_code}\n#{nonconformity.description}"
+
+        column_data << [
+          description,
+          nonconformity.risk_text,
+          nonconformity.state_text
+        ]
+      end
+
+      unless column_data.blank?
+       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+          end
+        end
+      end
+    end
+
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
@@ -760,6 +798,81 @@ class Review < ActiveRecord::Base
         column_data << [
           description,
           oportunity.state_text
+        ]
+      end
+
+      unless column_data.blank?
+       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
+      end
+    end
+
+    potential_nonconformities = self.final_potential_nonconformities.all_for_report
+
+    unless potential_nonconformities.blank?
+      pdf.add_subtitle I18n.t('review.potential_nonconformities_summary'), PDF_FONT_SIZE,
+        PDF_FONT_SIZE
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [['description', 75], ['state', 25]]
+
+      column_names.each do |col_name, col_size|
+        column_headers << PotentialNonconformity.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
+      end
+
+      potential_nonconformities.each do |potential_nonconformity|
+        description = "<b>#{PotentialNonconformity.human_attribute_name('review_code')}</b>"
+        description << ": #{potential_nonconformity.review_code}\n#{potential_nonconformity.description}"
+
+        column_data << [
+          description,
+          potential_nonconformity.state_text
+        ]
+      end
+
+      unless column_data.blank?
+       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
+      end
+    end
+
+    fortresses = self.final_fortresses.all_for_report
+
+    unless fortresses.blank?
+      pdf.add_subtitle I18n.t('review.fortresses_summary'), PDF_FONT_SIZE,
+        PDF_FONT_SIZE
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [['description', 75]]
+
+      column_names.each do |col_name, col_size|
+        column_headers << Fortress.human_attribute_name(col_name)
+        column_widths << pdf.percent_width(col_size)
+      end
+
+      fortresses.each do |fortress|
+        description = "<b>#{Fortress.human_attribute_name('review_code')}</b>"
+        description << ": #{fortress.review_code}\n#{fortress.description}"
+
+        column_data << [
+          description
         ]
       end
 
