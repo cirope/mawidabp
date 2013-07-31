@@ -1028,6 +1028,66 @@ class Review < ActiveRecord::Base
       end
     end
 
+    pdf.move_down PDF_FONT_SIZE
+
+    nonconformities = self.final_nonconformities.all_for_report
+
+    unless nonconformities.blank?
+      pdf.add_subtitle I18n.t('review.nonconformities_count_summary', PDF_FONT_SIZE, PDF_FONT_SIZE)
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [
+        I18n.t('review.nonconformities_count'),
+        Nonconformity.human_attribute_name(:risk),
+        Nonconformity.human_attribute_name(:state)
+      ]
+
+      column_names.each do |col_name|
+        column_headers << col_name
+        column_widths << pdf.percent_width(100.0 / column_names.size)
+      end
+
+      nonconformity = nonconformities.first
+      risk_text, state_text = nonconformity.risk_text, nonconformity.state_text
+      count = 0
+
+      nonconformities.each do |nc|
+        if risk_text == nc.risk_text && state_text == nc.state_text
+          count += 1
+        else
+          column_data << [
+            count,
+            risk_text,
+            state_text
+          ]
+
+          risk_text, state_text = nc.risk_text, nc.state_text
+          count = 1
+        end
+      end
+
+      if count > 0
+        column_data << [
+          count,
+          risk_text,
+          state_text
+        ]
+      end
+
+      unless column_data.blank?
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
+      end
+    end
+
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
@@ -1070,6 +1130,114 @@ class Review < ActiveRecord::Base
         column_data << [
           count,
           state_text
+        ]
+      end
+
+      unless column_data.blank?
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
+      end
+    end
+
+    potential_nonconformities = self.final_potential_nonconformities.all_for_report
+
+    unless potential_nonconformities.blank?
+      pdf.add_subtitle I18n.t('review.potential_nonconformities_count_summary'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [
+        PotentialNonconformity.human_attribute_name(:count),
+        PotentialNonconformity.human_attribute_name(:state)
+      ]
+
+      column_names.each do |col_name|
+        column_headers << col_name
+        column_widths << pdf.percent_width(100.0 / column_names.size)
+      end
+
+      potential_nonconformity = potential_nonconformities.first
+      state_text = potential_nonconformity.state_text
+      count = 0
+
+      potential_nonconformities.each do |pnc|
+        if state_text == pnc.state_text
+          count += 1
+        else
+          column_data << [
+            count,
+            state_text
+          ]
+
+          state_text = pnc.state_text
+          count = 1
+        end
+      end
+
+      if count > 0
+        column_data << [
+          count,
+          state_text
+        ]
+      end
+
+      unless column_data.blank?
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+         table_options = pdf.default_table_options(column_widths)
+
+         pdf.table(column_data.insert(0, column_headers), table_options) do
+           row(0).style(
+             :background_color => 'cccccc',
+             :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+           )
+         end
+       end
+      end
+    end
+
+    fortresses = self.final_fortresses.all_for_report
+
+    unless fortresses.blank?
+      pdf.add_subtitle I18n.t('review.fortresses_count_summary'),
+        PDF_FONT_SIZE, PDF_FONT_SIZE
+
+      column_headers, column_widths, column_data = [], [], []
+      column_names = [
+        Fortress.human_attribute_name(:count)
+      ]
+
+      column_names.each do |col_name|
+        column_headers << col_name
+        column_widths << pdf.percent_width(100.0 / column_names.size)
+      end
+
+      fortress = fortresses.first
+      state_text = fortress.state_text
+      count = 0
+
+      fortresses.each do |f|
+        if state_text == f.state_text
+          count += 1
+        else
+          column_data << [
+            count
+          ]
+
+          count = 1
+        end
+      end
+
+      if count > 0
+        column_data << [
+          count
         ]
       end
 
