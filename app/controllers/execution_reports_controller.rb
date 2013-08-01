@@ -21,11 +21,14 @@ class ExecutionReportsController < ApplicationController
   def detailed_management_report
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
+    @sqm = @auth_organization.system_quality_management
     @column_order = ['business_unit_report_name', 'review', 'process_control',
-      'weaknesses_count', 'oportunities_count']
+      'weaknesses_count']
+    @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
     @risk_levels = []
     @audits_by_period = []
     audits_by_business_unit = []
+
     raw_reviews = Review.includes(
       {:control_objective_items => :control_objective},
       {:plan_item => :business_unit}
@@ -40,9 +43,14 @@ class ExecutionReportsController < ApplicationController
           'review' => [Review.model_name.human, 16],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
-          'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12],
-          'oportunities_count' => ["#{t('review.oportunities_count')} (2)", 12]
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12]
         }
+        if @sqm
+          columns['nonconformities_count'] = ["#{t('review.nonconformities_count')} (2)", 12]
+        else
+          columns['oportunities_count'] = ["#{t('review.oportunities_count')} (2)", 12]
+        end
+
         column_data = []
         name = but.name
 
@@ -69,10 +77,15 @@ class ExecutionReportsController < ApplicationController
             weaknesses_count_text = weaknesses_count.values.sum == 0 ?
               t('execution_reports.detailed_management_report.without_weaknesses') :
               @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
-            oportunities_count_text = r.oportunities.count > 0 ?
-              r.oportunities.count.to_s :
-              t('execution_reports.detailed_management_report.without_oportunities')
-
+            if @sqm
+              nonconformities_count_text = r.nonconformities.count > 0 ?
+                r.nonconformities.count.to_s :
+                t('execution_reports.detailed_management_report.without_nonconformities')
+            else
+              oportunities_count_text = r.oportunities.count > 0 ?
+                r.oportunities.count.to_s :
+                t('execution_reports.detailed_management_report.without_oportunities')
+            end
             column_data << [
               r.business_unit.name,
               r.to_s,
@@ -80,7 +93,7 @@ class ExecutionReportsController < ApplicationController
               @risk_levels.blank? ?
                 t('execution_reports.detailed_management_report.without_weaknesses') :
                 weaknesses_count_text,
-              oportunities_count_text
+              @sqm ? nonconformities_count_text : oportunities_count_text
             ]
           end
         end
@@ -193,10 +206,14 @@ class ExecutionReportsController < ApplicationController
     end
 
     pdf.move_down PDF_FONT_SIZE
-    pdf.text t('execution_reports.detailed_management_report.references',
-      :risk_types => @risk_levels.to_sentence),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
-
+    if @sqm
+      pdf.text t('execution_reports.detailed_management_report.sqm_references'),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+    else
+      pdf.text t('execution_reports.detailed_management_report.references',
+        :risk_types => @risk_levels.to_sentence),
+        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+    end
     pdf.custom_save_as(
       t('execution_reports.detailed_management_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
