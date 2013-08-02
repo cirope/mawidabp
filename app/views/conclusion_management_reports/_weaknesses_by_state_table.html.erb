@@ -1,22 +1,44 @@
 <% total_weaknesses = weaknesses_count.values.sum %>
 <% total_oportunities = oportunities_count.values.sum %>
 
-<% if (total_oportunities + total_weaknesses) > 0 %>
+<% if @sqm %>
+  <% total_nonconformities = nonconformities_count.values.sum %>
+  <% total_potential_nonconformities = potential_nonconformities_count.values.sum %>
+  <% totals = total_weaknesses + total_oportunities + total_nonconformities +
+       total_potential_nonconformities %>
+<% else %>
+  <% totals = total_oportunities + total_weaknesses %>
+<% end %>
+
+<% if totals > 0 %>
   <table class="summary_table" style="margin: 1em;">
     <thead>
       <tr>
-        <th style="width: 30%;">
+        <th style="width: 20%;">
           <%= Finding.human_attribute_name(:state) %>
         </th>
-        <% if audit_type_symbol == :internal %>
-          <th style="width: 35%;">
+        <% if audit_type_symbol == :internal && !@sqm %>
+          <th style="width: 40%;">
             <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
           </th>
-          <th style="width: 35%;">
+          <th style="width: 40%;">
             <%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
           </th>
+        <% elsif audit_type_symbol == :internal && @sqm %>
+          <th style="width: 20%;">
+            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
+          </th>
+          <th style="width: 20%;">
+            <%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
+          </th>
+          <th style="width: 20%;">
+            <%= t('conclusion_committee_report.weaknesses_by_state.nonconformities_column') %>
+          </th>
+          <th style="width: 20%;">
+            <%= t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column') %>
+          </th>
         <% else %>
-          <th style="width: 70%;">
+          <th style="width: 80%;">
             <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
           </th>
         <% end %>
@@ -28,11 +50,21 @@
         <% o_count = oportunities_count[state.last] || 0 %>
         <% weaknesses_percentage = total_weaknesses > 0 ? w_count.to_f / total_weaknesses * 100 : 0.0 %>
         <% oportunities_percentage = total_oportunities > 0 ? o_count.to_f / total_oportunities * 100 : 0.0 %>
+       <% if @sqm %>
+          <% nc_count = nonconformities_count[state.last] || 0 %>
+          <% pnc_count = potential_nonconformities_count[state.last] || 0 %>
+          <% nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0 %>
+          <% potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0 %>
+        <% end %>
         <tr>
           <td><strong><%= t(:"finding.status_#{state.first}") %></strong></td>
           <td><%= "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)" %></td>
-          <% if audit_type_symbol == :internal %>
+          <% if audit_type_symbol == :internal && !@sqm %>
             <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
+          <% elsif audit_type_symbol == :internal && @sqm %>
+            <td><%= "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)" %></td>
+            <td><%= "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)" %></td>
+            <td><%= "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)" %></td>
           <% end %>
         </tr>
       <% end %>
@@ -41,8 +73,12 @@
           <strong><%= t('conclusion_committee_report.weaknesses_by_state.total') %></strong>
         </td>
         <td><strong><%= total_weaknesses %></strong></td>
-        <% if audit_type_symbol == :internal %>
+        <% if audit_type_symbol == :internal && !@sqm %>
           <td><strong><%= total_oportunities %></strong></td>
+        <% elsif audit_type_symbol == :internal && @sqm %>
+          <td><strong><%= total_oportunities %></strong></td>
+          <td><strong><%= total_nonconformities %></strong></td>
+          <td><strong><%= total_potential_nonconformities %></strong></td>
         <% end %>
       </tr>
     </tbody>
