@@ -4,6 +4,7 @@ module ConclusionCommonReports
     @title = t('conclusion_committee_report.weaknesses_by_state_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
+    @sqm = @auth_organization.system_quality_management
     @audit_types = [
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
@@ -24,7 +25,6 @@ module ConclusionCommonReports
             conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
             @weaknesses_counts[period]['total_weaknesses'] ||= {}
             @weaknesses_counts[period]['total_oportunities'] ||= {}
-
             @weaknesses_counts[period]["#{key}_weaknesses"] =
               Weakness.list_all_by_date(@from_date, @to_date, false).
                 with_status_for_report.send("#{audit_type_symbol}_audit").
@@ -35,6 +35,31 @@ module ConclusionCommonReports
               with_status_for_report.send("#{audit_type_symbol}_audit").
               for_period(period).finals(true).where(conditions).group(
               :state).count
+            if @sqm
+              @weaknesses_counts[period]['total_nonconformities'] ||= {}
+              @weaknesses_counts[period]['total_potential_nonconformities'] ||= {}
+
+              @weaknesses_counts[period]["#{key}_nonconformities"] =
+                Nonconformity.list_all_by_date(@from_date, @to_date, false).
+                with_status_for_report.send("#{audit_type_symbol}_audit").
+                for_period(period).finals(true).where(conditions).group(
+                :state).count
+              @weaknesses_counts[period]["#{key}_potential_nonconformities"] =
+                PotentialNonconformity.list_all_by_date(@from_date, @to_date, false).
+                with_status_for_report.send("#{audit_type_symbol}_audit").
+                for_period(period).finals(true).where(conditions).group(
+                :state).count
+
+              @weaknesses_counts[period]["#{key}_nonconformities"].each do |state, count|
+                @weaknesses_counts[period]['total_nonconformities'][state] ||= 0
+                @weaknesses_counts[period]['total_nonconformities'][state] += count
+              end
+
+              @weaknesses_counts[period]["#{key}_potential_nonconformities"].each do |state, count|
+                @weaknesses_counts[period]['total_potential_nonconformities'][state] ||= 0
+                @weaknesses_counts[period]['total_potential_nonconformities'][state] += count
+              end
+            end
 
             @weaknesses_counts[period]["#{key}_weaknesses"].each do |state, count|
               @weaknesses_counts[period]['total_weaknesses'][state] ||= 0
@@ -92,8 +117,16 @@ module ConclusionCommonReports
             weaknesses_count = @weaknesses_counts[period]["#{key}_weaknesses"]
             oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
 
-            add_weaknesses_by_state_table pdf, weaknesses_count,
-              oportunities_count, audit_type_symbol
+            if @sqm
+              nonconformities_count = @weaknesses_counts[period]["#{key}_nonconformities"]
+              potential_nonconformities_count = @weaknesses_counts[period]["#{key}_potential_nonconformities"]
+
+              add_weaknesses_by_state_table pdf, weaknesses_count, oportunities_count,
+                audit_type_symbol, nonconformities_count, potential_nonconformities_count, @sqm
+            else
+              add_weaknesses_by_state_table pdf, weaknesses_count, oportunities_count,
+                audit_type_symbol
+            end
           end
         end
       end
@@ -1066,22 +1099,37 @@ module ConclusionCommonReports
     end
   end
 
-  def add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
-      audit_type_symbol = :internal)
+  def add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count, audit_type_symbol = :internal,
+    nonconformities_count = nil, potential_nonconformities_count = nil, sqm = false)
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
+    if sqm
+      total_nonconformities = nonconformities_count.values.sum
+      total_potential_nonconformities = potential_nonconformities_count.values.sum
+      totals = total_weaknesses + total_oportunities + total_nonconformities +
+        total_potential_nonconformities
+    else
+      totals = total_weaknesses + total_oportunities
+    end
 
-    if (total_weaknesses + total_oportunities) > 0
+    if totals > 0
       columns = [
-        [Finding.human_attribute_name(:state), 30],
+        [Finding.human_attribute_name(:state), 20],
         [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-          audit_type_symbol == :internal ? 35 : 70]
+          audit_type_symbol == :internal ? 20 : 80]
       ]
       column_data = []
 
-      if audit_type_symbol == :internal
+      if audit_type_symbol == :internal && !sqm
         columns << [
-          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
+      elsif audit_type_symbol == :internal && sqm
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.nonconformities_column'), 20]
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column'), 20]
       end
 
       column_headers, column_widths = [], []
@@ -1104,6 +1152,15 @@ module ConclusionCommonReports
           "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
           "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
         ]
+        if sqm
+          nc_count = nonconformities_count[state.last] || 0
+          pnc_count = potential_nonconformities_count[state.last] || 0
+          nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
+          potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0
+
+          column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
+          column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
+        end
       end
 
       column_data << [
@@ -1111,6 +1168,11 @@ module ConclusionCommonReports
         "<b>#{total_weaknesses}</b>",
         "<b>#{total_oportunities}</b>"
       ]
+
+      if sqm
+        column_data.last << "<b>#{total_nonconformities}</b>"
+        column_data.last << "<b>#{total_potential_nonconformities}</b>"
+      end
 
       unless column_data.blank?
         pdf.font_size((PDF_FONT_SIZE * 0.75).round) do

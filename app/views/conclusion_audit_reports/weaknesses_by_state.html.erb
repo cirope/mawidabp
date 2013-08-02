@@ -16,11 +16,18 @@
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
         <h2 class="simple_title"><%= audit_types.first %></h2>
-        <%= render :partial => 'weaknesses_by_state_table', :locals => {
-          :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
-          :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
-          :audit_type_symbol => audit_type_symbol
-        } %>
+        <% locals = {
+             :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
+             :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
+             :audit_type_symbol => audit_type_symbol
+           }
+           if @sqm
+             locals.merge!(
+               :nonconformities_count => @weaknesses_counts[period]["#{key}_nonconformities"],
+               :potential_nonconformities_count => @weaknesses_counts[period]["#{key}_potential_nonconformities"]
+             )
+           end %>
+        <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
       <% end %>
     <% end %>
   <% end %>
@@ -31,11 +38,19 @@
         :period => period.inspect) %>
     </strong>
   </h1>
-  <%= render :partial => 'weaknesses_by_state_table', :locals => {
-    :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
-    :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
-    :audit_type_symbol => :internal
-  } %>
+  <% locals = {
+       :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
+       :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
+       :audit_type_symbol => :internal
+     }
+     if @sqm
+       locals.merge!(
+         :nonconformities_count => @weaknesses_counts[period]['total_nonconformities'],
+         :potential_nonconformities_count => @weaknesses_counts[period]['total_potential_nonconformities']
+       )
+     end
+  %>
+  <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
 <% end %>
 
 <div id="links">
