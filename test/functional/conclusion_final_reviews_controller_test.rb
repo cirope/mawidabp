@@ -171,8 +171,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
         }
       }
     end
-
-    assert_redirected_to conclusion_final_reviews_url
+    assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
     assert_equal 'Updated conclusion',
       assigns(:conclusion_final_review).conclusion

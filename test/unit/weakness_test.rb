@@ -301,7 +301,7 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'must be approved' do
     assert @weakness.must_be_approved?
     assert @weakness.approval_errors.blank?
-    assert @weakness.unconfirmed?
+    assert @weakness.unanswered?
 
     @weakness.state = Finding::STATUS[:implemented_audited]
     @weakness.solution_date = nil

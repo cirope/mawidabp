@@ -197,7 +197,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
-            :state => Finding::STATUS[:unconfirmed],
+            :state => Finding::STATUS[:unanswered],
             :origination_date => 1.day.ago.to_date.to_s(:db),
             :solution_date => '',
             :audit_recommendations => 'Updated proposed action',

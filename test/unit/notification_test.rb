@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "Notification"
@@ -113,7 +114,7 @@ class NotificationTest < ActiveSupport::TestCase
     confirmed = @notification.findings.select(&:confirmed?)
 
     assert confirmed.empty?
-    assert !pendings.empty?
+    assert pendings.empty?
     assert_nil @notification.confirmation_date
     assert !@notification.user.can_act_as_audited?
     assert @notification.notify!
@@ -123,7 +124,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     # No se confirma porque no es un auditado (es bare_user)
     assert confirmed.empty?
-    assert !pendings.empty?
+    assert pendings.empty?
     assert @notification.confirmed?
     assert_not_nil @notification.confirmation_date
 
@@ -138,7 +139,7 @@ class NotificationTest < ActiveSupport::TestCase
     end.flatten.compact.uniq
 
     assert confirmed.empty?
-    assert pendings.size > 1
+    assert !pendings.empty?
     assert !notifications_for_not_audit_users.empty?
     assert @notification.user.can_act_as_audited?
     assert_nil @notification.confirmation_date

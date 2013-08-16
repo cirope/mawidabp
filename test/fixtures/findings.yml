@@ -557,7 +557,7 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   description: Description 2w bcra
   answer: Answer 2w
   audit_comments: Audit comments 2w
-  state: <%= Finding::STATUS[:unconfirmed] %>
+  state: <%= Finding::STATUS[:unanswered] %>
   origination_date:
   solution_date:
   audit_recommendations: Proposed action 2w

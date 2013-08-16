@@ -296,8 +296,8 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save, finding.errors.full_messages.join('; ')
 
     assert !@review.reload.must_be_approved?
-    assert_equal 1, @review.approval_errors.size
-    assert @review.can_be_approved_by_force
+    assert_equal 2, @review.approval_errors.size
+    assert !@review.can_be_approved_by_force
     assert finding.allow_destruction!
     assert finding.destroy
 

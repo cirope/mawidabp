@@ -243,7 +243,7 @@ class FindingTest < ActiveSupport::TestCase
       s == @finding.state
     end.sort.last.next
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.count
+    assert_equal 2, @finding.errors.count
     assert_equal [error_message_from_model(@finding, :state, :inclusion)],
       @finding.errors[:state]
   end
@@ -450,13 +450,13 @@ class FindingTest < ActiveSupport::TestCase
 
     # Funciones was_status?
     @finding.reload
-    assert @finding.unconfirmed?
+    assert @finding.unanswered?
 
     @finding.state = Finding::STATUS[:confirmed]
 
     assert !@finding.unconfirmed?
     assert @finding.confirmed?
-    assert @finding.was_unconfirmed?
+    assert @finding.was_unanswered?
     assert !@finding.was_confirmed?
   end
 
@@ -493,7 +493,8 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, @finding.status_change_history.size
     assert @finding.update_attributes(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.status_change_history.size
-    assert @finding.update_attributes(:state => Finding::STATUS[:confirmed])
+    assert @finding.update_attributes(:state => Finding::STATUS[:assumed_risk],
+      :solution_date => Date.today)
     assert_equal 2, @finding.status_change_history.size
   end
 
