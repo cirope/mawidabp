@@ -163,6 +163,7 @@ class FindingsController < ApplicationController
     findings = Finding.find params[:findings] if params[:findings].present?
     detailed = params[:include_details].present?
     completed = params[:completed]
+    related_users = @auth_user.related_users_and_descendants
     selected_user = User.find(params[:user_id]) if params[:user_id]
     default_conditions = {
       :final => false,
@@ -175,7 +176,8 @@ class FindingsController < ApplicationController
       end
     else
       self_and_descendants = @auth_user.descendants + [@auth_user]
-      self_and_descendants_ids = self_and_descendants.map(&:id)
+      self_and_descendants_ids = self_and_descendants.map(&:id) +
+        related_users.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
           params[:user_id] : self_and_descendants_ids
@@ -237,6 +239,7 @@ class FindingsController < ApplicationController
   def export_to_pdf
     selected_user = User.find(params[:user_id]) if params[:user_id]
     detailed = params[:include_details].present?
+    related_users = @auth_user.related_users_and_descendants
     default_conditions = {
       :final => false,
       Period.table_name => {:organization_id => @auth_organization.id}
@@ -248,7 +251,8 @@ class FindingsController < ApplicationController
       end
     else
       self_and_descendants = @auth_user.descendants + [@auth_user]
-      self_and_descendants_ids = self_and_descendants.map(&:id)
+      self_and_descendants_ids = self_and_descendants.map(&:id) +
+        related_users.map(&:id)
       default_conditions[User.table_name] = {
         :id => self_and_descendants_ids.include?(params[:user_id].to_i) ?
           params[:user_id] : self_and_descendants_ids
