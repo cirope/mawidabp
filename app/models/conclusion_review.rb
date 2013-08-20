@@ -193,8 +193,11 @@ class ConclusionReview < ActiveRecord::Base
     )
 
     grouped_control_objectives.each do |process_control, cois|
-      pdf.text "<b>#{ProcessControl.model_name.human}: " +
-          "<i>#{process_control.name}</i></b>", :justification => :full,
+      auth_organization = Organization.find GlobalModelConfig.current_organization_id
+      process_control_text = "<b>#{ProcessControl.model_name.human}: " +
+          "<i>#{process_control.name}</i></b>"
+      process_control_text += " (#{process_control.best_practice.name})" if auth_organization.public
+      pdf.text process_control_text, :justification => :full,
           :inline_format => true
 
       cois.sort.each do |coi|
