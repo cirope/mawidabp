@@ -33,7 +33,7 @@
       <% if @auth_user && @auth_user.password && @auth_organization %>
         <div id="menu_container">
           <%= render :partial =>
-            "shared/#{@auth_user.get_menu(@auth_organization.system_quality_management)}",
+            "shared/#{@auth_user.get_menu(@auth_organization.type)}",
             :locals => {:user => @auth_user, :organization => @auth_organization} %>
         </div>
       <% else %>

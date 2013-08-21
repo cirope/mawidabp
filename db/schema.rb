@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130513153532) do
+ActiveRecord::Schema.define(:version => 20130821132537) do
 
   create_table "answer_options", :force => true do |t|
     t.text     "option"
@@ -438,12 +438,11 @@ ActiveRecord::Schema.define(:version => 20130513153532) do
     t.string   "prefix"
     t.text     "description"
     t.integer  "image_model_id"
-    t.integer  "lock_version",              :default => 0
+    t.integer  "lock_version",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_id"
-    t.boolean  "public",                    :default => false
-    t.boolean  "system_quality_management"
+    t.text     "type"
   end
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"

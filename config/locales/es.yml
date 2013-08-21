@@ -2022,8 +2022,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        public: "Pública"
-        system_quality_management: "Sistema de Gestión de la Calidad"
+        type: "Tipo de organización"
+        type_options:
+          quality_management: "Gestión de calidad"
+          public: "Pública"
+          private: "Privada"
+          management_control: "Control de gestión"
         image_model:
           one: "Isologotipo"
           image_file_name: "Isologotipo (nombre de archivo)"

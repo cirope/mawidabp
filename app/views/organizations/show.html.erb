@@ -10,18 +10,13 @@
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'public' %>:</b>
-  <%= @organization.public ? t('label.yes') : t('label.no') %>
+  <b><%= Organization.human_attribute_name 'type' %>:</b>
+  <%= t "activerecord.attibutes.organization.type_options.#{@organization.type}" %>
 </p>
 
 <p>
   <b><%= Organization.human_attribute_name 'description' %>:</b>
   <%= @organization.description %>
-</p>
-
-<p>
-  <b><%= Organization.human_attribute_name 'system_quality_management' %>:</b>
-  <%= @organization.system_quality_management? ? t('label.yes') : t('label.no') %>
 </p>
 
 <p>

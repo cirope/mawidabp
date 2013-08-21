@@ -365,8 +365,8 @@ APP_AUDITOR_MENU_ITEMS = [
   )
 ].freeze
 
-# Menú del auditado Sistema de Gestión de la Calidad
-APP_AUDITED_SQM_MENU_ITEMS = [
+# Menú del auditado para organizaciones de Gestión de la Calidad
+APP_AUDITED_QM_MENU_ITEMS = [
   # ADMINISTRACIÓN
   MenuItem.new(
     :administration,
@@ -417,8 +417,8 @@ APP_AUDITED_SQM_MENU_ITEMS = [
   )
 ].freeze
 
-# Menú del auditor Sistema de Gestión de la Calidad
-APP_AUDITOR_SQM_MENU_ITEMS = [
+# Menú del auditor para organizaciones de Gestión de la Calidad
+APP_AUDITOR_QM_MENU_ITEMS = [
   # ADMINISTRACIÓN
   MenuItem.new(
     :administration,
@@ -763,25 +763,25 @@ APP_AUDITED_MODULES = APP_AUDITED_MENU_ITEMS.map do |menu_item|
   menu_item.submenu_names
 end.flatten.freeze
 
-APP_AUDITOR_SQM_MODULES = APP_AUDITOR_SQM_MENU_ITEMS.map do |menu_item|
+APP_AUDITOR_QM_MODULES = APP_AUDITOR_QM_MENU_ITEMS.map do |menu_item|
   menu_item.submenu_names
 end.flatten.freeze
 
-APP_AUDITED_SQM_MODULES = APP_AUDITED_SQM_MENU_ITEMS.map do |menu_item|
+APP_AUDITED_QM_MODULES = APP_AUDITED_QM_MENU_ITEMS.map do |menu_item|
   menu_item.submenu_names
 end.flatten.freeze
 
 APP_MODULES = (
-  APP_AUDITOR_MODULES | APP_AUDITED_MODULES | APP_AUDITOR_SQM_MODULES | APP_AUDITED_SQM_MODULES
+  APP_AUDITOR_MODULES | APP_AUDITED_MODULES | APP_AUDITOR_QM_MODULES | APP_AUDITED_QM_MODULES
 ).freeze
 
 ALLOWED_MODULES_BY_TYPE = {
-  :admin => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :manager => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :supervisor => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :auditor_senior => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :auditor_junior => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :committee => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES),
-  :audited => (APP_AUDITED_MODULES | APP_AUDITED_SQM_MODULES),
-  :executive_manager => (APP_AUDITOR_MODULES | APP_AUDITOR_SQM_MODULES)
+  :admin => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :manager => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :supervisor => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :auditor_senior => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :auditor_junior => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :committee => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  :audited => (APP_AUDITED_MODULES | APP_AUDITED_QM_MODULES),
+  :executive_manager => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES)
 }

@@ -52,6 +52,8 @@ ERROR_FILES_PATH = File.join(PUBLIC_PATH, 'error_files', File::SEPARATOR).freeze
 APP_ENUM_SEPARATOR = ' / '.freeze
 # Tipos de parámetros
 APP_PARAMETER_TYPES = ['admin', 'security'].freeze
+# Tipos de organizaciones
+ORGANIZATION_TYPES = ['private', 'public', 'quality_management', 'management_control'].freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
 PDF_MARGINS = [25, 20, 20, 25].freeze
 # Tamaño de la página a usar en los reportes generados en PDF
