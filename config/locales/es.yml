@@ -2022,8 +2022,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Nombre"
         prefix: "Prefijo"
         description: "Descripción"
-        type: "Tipo de organización"
-        type_options:
+        kind: "Tipo de organización"
+        kind_options:
           quality_management: "Gestión de calidad"
           public: "Pública"
           private: "Privada"

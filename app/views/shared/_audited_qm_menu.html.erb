@@ -8,7 +8,7 @@
     <%= link_to t('menu.exit'), logout_user_path(user) %>
   </div>
   <ul class="menu_level_0" data-level="0" id="main_menu">
-    <% APP_AUDITED_SQM_MENU_ITEMS.each do |menu_item| %>
+    <% APP_AUDITED_QM_MENU_ITEMS.each do |menu_item| %>
       <% selected = menu_item.controllers.include?(controller_name) &&
         (menu_item.conditions(controller_name, false).blank? ||
           eval(menu_item.conditions(controller_name, false))) %>

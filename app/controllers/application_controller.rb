@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     if login_check
-      I18n.locale = (@auth_organization.type == 'public') ? :public_es : :es
+      I18n.locale = (@auth_organization.kind.eql? 'public') ? :public_es : :es
       check_access_time
       response.headers['Cache-Control'] = 'no-cache, no-store'
 
@@ -171,7 +171,7 @@ class ApplicationController < ActionController::Base
   end
 
   def module_name_for(controller_name)
-    if @auth_organization.type == 'quality_management'
+    if @auth_organization.kind == 'quality_management'
       modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
     else
       modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS

@@ -91,7 +91,7 @@
         (l @finding.origination_date, :format => :short if @finding.origination_date),
         :readonly => true %>
     </p>
-    <% if @auth_organization.system_quality_management &&
+    <% if @auth_organization.kind.eql?('quality_management') &&
        (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
       <p>
         <%= f_f.label :correction %>

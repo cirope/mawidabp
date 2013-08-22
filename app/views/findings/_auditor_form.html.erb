@@ -118,7 +118,7 @@
         show_inline_help_for(:finding_origination_date)) %>
       <%= calendar_text_field f_f, :origination_date %>
     </p>
-    <% if @auth_organization.system_quality_management &&
+    <% if @auth_organization.kind.eql?('quality_management') &&
       (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
       <p>
         <%= f_f.label :correction %>

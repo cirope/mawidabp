@@ -196,7 +196,7 @@ class ConclusionReview < ActiveRecord::Base
       auth_organization = Organization.find GlobalModelConfig.current_organization_id
       process_control_text = "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>"
-      process_control_text += " (#{process_control.best_practice.name})" if auth_organization.public
+      process_control_text += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
       pdf.text process_control_text, :justification => :full,
           :inline_format => true
 

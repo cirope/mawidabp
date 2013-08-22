@@ -4,7 +4,7 @@ module ConclusionCommonReports
     @title = t('conclusion_committee_report.weaknesses_by_state_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
-    @sqm = @auth_organization.system_quality_management
+    @sqm = @auth_organization.kind.eql? 'quality_management'
     @audit_types = [
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]

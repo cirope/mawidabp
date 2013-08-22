@@ -1,4 +1,4 @@
-<% help_root = HelpContent.find_by_language @auth_organization.public ? :public_es : :es %>
+<% help_root = HelpContent.find_by_language (@auth_organization.kind.eql? 'public') ? :public_es : :es %>
 <% can_edit = @auth_user.admin? %>
 <table id="help_table">
   <tbody>

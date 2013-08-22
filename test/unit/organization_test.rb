@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "Organization"
@@ -33,6 +34,7 @@ class OrganizationTest < ActiveSupport::TestCase
           @organization = Organization.create(
             :name => 'new3 organization',
             :prefix => 'newww-test-prefix',
+            :kind => 'public',
             :must_create_parameters => true,
             :must_create_roles => true
           )
@@ -50,7 +52,8 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_no_difference ['Parameter.count', 'Role.count'] do
         @organization = Organization.create(
           :name => 'new3 organization',
-          :prefix => 'newww-test-prefix'
+          :prefix => 'newww-test-prefix',
+          :kind => 'management_control'
         )
       end
     end
@@ -67,6 +70,7 @@ class OrganizationTest < ActiveSupport::TestCase
           @organization = Organization.create(
             :name => 'new3 organization',
             :prefix => 'newww-test-prefix',
+            :kind => 'quality_management',
             :group_id => groups(:second_group).id,
             :must_create_parameters => true,
             :must_create_roles => true
@@ -99,13 +103,16 @@ class OrganizationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @organization.name = nil
     @organization.prefix = nil
+    @organization.kind = nil
 
     assert @organization.invalid?
-    assert_equal 2, @organization.errors.count
+    assert_equal 3, @organization.errors.count
     assert_equal [error_message_from_model(@organization, :name, :blank)],
       @organization.errors[:name]
     assert_equal [error_message_from_model(@organization, :prefix, :blank)],
       @organization.errors[:prefix]
+    assert_equal [error_message_from_model(@organization, :kind, :blank)],
+      @organization.errors[:kind]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -166,5 +173,14 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_equal 1, @organization.errors.count
     assert_equal [error_message_from_model(@organization, :prefix, :exclusion)],
       @organization.errors[:prefix]
+  end
+
+  test 'validates included attributes' do
+    @organization.kind = 'another_kind'
+
+    assert @organization.invalid?
+    assert_equal 1, @organization.errors.count
+    assert_equal [error_message_from_model(@organization, :kind, :inclusion)],
+      @organization.errors[:kind]
   end
 end

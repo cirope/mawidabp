@@ -18,15 +18,10 @@
     <%= o_f.text_area :description %>
   </p>
   <p>
-    <%= o_f.label :type %>
-    <% ORGANIZATION_TYPES.each do |type| %>
-      <% type_id = :"#{type}_organization_type" %>
-        <label for="<%= type_id %>">
-          <%= t "activerecord.attributes.organization.type_options.#{type}" %>
-        </label>
-        <%= radio_button_tag 'organization[type]', type, @organization.type.eql?(type),
-            :id => type_id %>
-    <% end %>
+    <%= o_f.label :kind %>
+    <%= o_f.select :kind, ORGANIZATION_KINDS.collect { |kind|
+          [t("activerecord.attributes.organization.kind_options.#{kind}"), kind] },
+        {:selected => @organization.kind} %>
   </p>
   <br>
 

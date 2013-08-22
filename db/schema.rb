@@ -442,7 +442,7 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_id"
-    t.text     "type"
+    t.text     "kind",           :default => "private"
   end
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"

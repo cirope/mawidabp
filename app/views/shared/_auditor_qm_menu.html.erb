@@ -8,7 +8,7 @@
     <%= link_to t('menu.exit'), logout_user_path(user) %>
   </div>
   <ul class="menu_level_0" data-level="0" id="main_menu">
-    <% APP_AUDITOR_SQM_MENU_ITEMS.each do |menu_item| %>
+    <% APP_AUDITOR_QM_MENU_ITEMS.each do |menu_item| %>
       <% selected = menu_item.submenu_names.include?(@current_module) %>
       <li <%= raw('class="selected"') if selected %>>
         <%= link_to(menu_item.to_s, url_for(menu_item.url),

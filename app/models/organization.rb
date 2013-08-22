@@ -32,13 +32,15 @@ class Organization < ActiveRecord::Base
   # Restricciones
   validates :prefix, :format => {:with => /\A[A-Za-z][A-Za-z0-9\-]+\z/},
     :allow_nil => true, :allow_blank => true
-  validates :name, :prefix, :presence => true
+  validates :name, :prefix, :kind, :presence => true
   validates :name, :prefix, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
   validates :prefix, :uniqueness => {:case_sensitive => false}
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :group_id}
   validates :prefix, :exclusion => {:in => INVALID_PREFIXES}
+  validates :kind, :inclusion => {:in => ORGANIZATION_KINDS}, :allow_nil => true,
+    :allow_blank => true
 
   # Relaciones
   belongs_to :group
