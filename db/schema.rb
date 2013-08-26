@@ -102,6 +102,8 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.date     "close_date"
   end
 
+  add_index "conclusion_reviews", ["close_date"], :name => "index_conclusion_reviews_on_close_date"
+  add_index "conclusion_reviews", ["issue_date"], :name => "index_conclusion_reviews_on_issue_date"
   add_index "conclusion_reviews", ["review_id"], :name => "index_conclusion_reviews_on_review_id"
   add_index "conclusion_reviews", ["type"], :name => "index_conclusion_reviews_on_type"
 
@@ -119,6 +121,7 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.datetime "updated_at"
     t.boolean  "finished"
     t.integer  "sustantive_score"
+    t.integer  "order_number"
     t.boolean  "exclude_from_score",     :default => false, :null => false
   end
 
@@ -257,11 +260,13 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner",       :default => false
+    t.boolean  "process_owner",                      :default => false
+    t.string   "finding_type",        :limit => nil
     t.boolean  "responsible_auditor"
   end
 
-  add_index "finding_user_assignments", ["finding_id", "user_id"], :name => "index_finding_user_assignments_on_finding_id_and_user_id"
+  add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], :name => "index_finding_user_assignments_on_finding_id_finding_type_and_u"
+  add_index "finding_user_assignments", ["finding_id", "finding_type"], :name => "index_finding_user_assignments_on_finding_id_and_finding_type"
 
   create_table "findings", :force => true do |t|
     t.string   "type"
@@ -287,6 +292,7 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.integer  "notification_level",        :default => 0
     t.date     "origination_date"
     t.integer  "repeated_of_id"
+    t.integer  "highest_risk"
     t.string   "correction"
     t.date     "correction_date"
     t.string   "cause_analysis"
@@ -432,13 +438,11 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.string   "prefix"
     t.text     "description"
     t.integer  "image_model_id"
-    t.integer  "lock_version",              :default => 0
+    t.integer  "lock_version",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_id"
-    t.boolean  "public",                    :default => false
-    t.boolean  "system_quality_management"
-    t.text     "kind",                      :default => "private"
+    t.text     "kind",           :default => "private"
   end
 
   add_index "organizations", ["group_id"], :name => "index_organizations_on_group_id"
@@ -472,6 +476,7 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
   end
 
   add_index "periods", ["end"], :name => "index_periods_on_end"
+  add_index "periods", ["number"], :name => "index_periods_on_number"
   add_index "periods", ["organization_id"], :name => "index_periods_on_organization_id"
   add_index "periods", ["start"], :name => "index_periods_on_start"
 
@@ -670,6 +675,9 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.datetime "updated_at"
     t.integer  "file_model_id"
     t.text     "survey"
+    t.integer  "score"
+    t.integer  "top_scale"
+    t.integer  "achieved_scale"
   end
 
   add_index "reviews", ["file_model_id"], :name => "index_reviews_on_file_model_id"
@@ -710,6 +718,7 @@ ActiveRecord::Schema.define(:version => 20130821132537) do
     t.integer  "resource_id"
     t.integer  "manager_id"
     t.boolean  "group_admin",                         :default => false
+    t.text     "notes"
     t.datetime "hash_changed"
     t.boolean  "hidden",                              :default => false
   end
