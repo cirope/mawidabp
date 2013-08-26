@@ -1,4 +1,4 @@
-'public_es':
+'management_control_es':
   app_name: "MawidaBP"
   app_copyright: "Copyright © 2008-%{year} MawidaBP. Todos los derechos reservados."
 
@@ -78,7 +78,7 @@
     planning:
       periods: "Periodos"
       resources: "Recursos"
-      audit_title: "Plan de auditoría"
+      audit_title: "Plan por periodo"
       audit:
         plans: "Plan de trabajo"
         procedure_controls: "Procedimientos y pruebas de control"
@@ -86,8 +86,8 @@
     execution:
       reviews: "Informes"
       workflows: "Programa de trabajo"
-      control_objectives: "Objetivos de control"
-      weaknesses: "Observaciones"
+      control_objectives: "Objetivos/Metas"
+      weaknesses: "Desvíos"
       oportunities: "Oportunidades de mejora"
       reports: "Reportes"
     conclusion_title: "CONCLUSIÓN"
@@ -101,8 +101,8 @@
         management: "Reportes de la gerencia"
     follow_up_title: "SEGUIMIENTO"
     follow_up:
-      pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas o reiteradas"
+      pending_findings: "Desvíos y Oportunidades pendientes"
+      complete_findings: "Desvíos y Oportunidades solucionadas o reiteradas"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
@@ -112,7 +112,7 @@
     help_title: "AYUDA"
 
   message:
-    change_weakness_risk: "El riesgo de la observación ha cambiado"
+    change_weakness_risk: "El riesgo del desvío ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la operación"
@@ -175,11 +175,11 @@
     correctly_updated: "Buenas prácticas actualizadas correctamente."
     stale_object_error: "Las buenas prácticas no fueron actualizadas, intente nuevamente."
     add_process_control: "Agregar proceso"
-    add_control_objective: "Agregar objetivo de control"
-    show_control_objectives: "Ver objetivos de control"
-    hide_control_objectives: "Ocultar objetivos de control"
+    add_control_objective: "Agregar objetivo/meta"
+    show_control_objectives: "Ver objetivos/metas"
+    hide_control_objectives: "Ocultar objetivos/metas"
     errors:
-      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes"
+      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos/metas ya utilizados en informes"
 
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
@@ -207,11 +207,11 @@
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
     detailed_cost_analysis_title: "Análisis de costos detallado"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
+    high_risk_weaknesses_report_title: "Desvíos de riesgo alto"
+    fixed_weaknesses_report_title: "Desvíos de riesgo alto solucionadas"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -230,21 +230,21 @@
 
   conclusion_committee_report:
     index_title: "Reportes de conclusión"
-    control_objective_stats_title: "Observaciones por objetivo de control"
-    process_control_stats_title: "Observaciones por proceso"
+    control_objective_stats_title: "Desvíos por objetivo/meta"
+    process_control_stats_title: "Desvíos por proceso"
     synthesis_report_title: "Informe de síntesis al directorio"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    high_risk_weaknesses_report_title: "Desvíos de riesgo alto"
+    fixed_weaknesses_report_title: "Desvíos de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-    findings_type_external: "Observaciones Auditorías Externas"
-    weaknesses_type_internal: "Observaciones Auditoría Interna"
-    weaknesses_type_external: "Observaciones Auditorías Externas"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
+    findings_type_internal: "Desvíos / Oportunidades de Mejora Auditoría Interna"
+    findings_type_external: "Desvíos Auditorías Externas"
+    weaknesses_type_internal: "Desvíos Auditoría Interna"
+    weaknesses_type_external: "Desvíos Auditorías Externas"
+    high_risk_weaknesses: "Desvíos de riesgo alto"
+    fixed_weaknesses: "Desvíos de riesgo alto solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -252,46 +252,46 @@
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     control_objective_stats:
-      pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
+      pdf_name: 'desvios_por_objetivo_%{from_date}_al_%{to_date}.pdf'
+      title: "DESVÍOS AGRUPADAS POR OBJETIVO/META"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
+      without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      pdf_name: "desvios_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Desvíos Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
+      subtitle: "DESVÍOS SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      pdf_name: "desvíos_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Desvíos Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
+      subtitle: "DESVÍOS DE RIESGO ALTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: "observaciones_por_proceso_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO"
+      pdf_name: "desvíos_por_proceso_%{from_date}_al_%{to_date}.pdf"
+      title: "DESVÍOS AGRUPADAS POR PROCESO"
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
+        one: '%{effectiveness} con desvíos en un informe'
+        other: '%{effectiveness} con desvíos en %{count} informes'
+      without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     qa_indicators:
@@ -302,44 +302,44 @@
       pdf_name: "indicadores_de_calidad_%{from_date}_al_%{to_date}.pdf"
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Desvíos de Riesgo Alto"
+        medium_solution_rate: "Solución de Desvíos de Riesgo Medio"
         digitalized: "Digitalización"
     synthesis_report:
       pdf_name: "informe_de_sintesis_informes_definitivos_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Desvíos / Oportunidades de Mejora Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
+      subtitle: "DESVÍOS/OPORTUNIDADES DE MEJORA\nDE INFORMES DEFINITIVOS"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (Procesos
 Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
       without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos: los procesos aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (eficiencia ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos/metas multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos: los procesos aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Desvíos: muestra la cantidad de desvíos obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener desvíos, aparece la leyenda \"Sin desvíos\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
     weaknesses_by_state:
-      pdf_name: "observaciones_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
-      weaknesses_column: "Observaciones"
+      pdf_name: "desvíos_informes_definitivos_por_estado_%{from_date}_al_%{to_date}.pdf"
+      title: "DESVÍOS/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR ESTADO"
+      weaknesses_column: "Desvíos"
       oportunities_column: "Oportunidades de Mejora"
       period_summary: "Resumen del periodo %{period}"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "desvios_informes_definitivos_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "OBSERVACIONES DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
+      title: "DESVÍOS DE INFORMES DEFINITIVOS\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_audit_type:
-      weaknesses: "Observaciones"
+      weaknesses: "Desvíos"
       oportunities: "Oportunidades"
-      without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
+      without_weaknesses: "Sin desvíos"
+      pdf_name: "desvíos_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      title: "DESVÍOS/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
   conclusion_final_review:
@@ -356,8 +356,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     download_work_papers: "Descargar papeles de trabajo"
     create_bundle: "Generar legajo"
     send_by_email: "Enviar por correo electrónico"
-    download_without_control_objectives_excluded_from_score: "Descargar sin objetivos de control no calificados"
-    hide_control_objectives_excluded_from_score: "Ocultar objetivos de control no calificados"
+    download_without_control_objectives_excluded_from_score: "Descargar sin objetivos/metas no calificados"
+    hide_control_objectives_excluded_from_score: "Ocultar objetivos/metas no calificados"
     pdf:
       pdf_name: "listado_de_informes_definitivos.pdf"
       filtered_by:
@@ -367,9 +367,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   conclusion_management_report:
     index_title: "Reportes de la gerencia"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
 
   conclusion_review:
     include_global_score_sheet: "¿Incluir planilla de calificación?"
@@ -380,60 +380,60 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     issue_date_title: "FECHA"
     audit_period: "%{start} al %{end}"
     audit_period_title: "PERIODO DE LA AUDITORÍA"
-    objectives_and_scopes: "OBJETIVOS Y ALCANCE DEL TRABAJO"
+    objectives_and_scopes: "DEFINICIÓN DE OBJETIVOS Y METAS POR PROCESO"
     applied_procedures: "PROCEDIMIENTOS APLICADOS"
     conclusion: "CONCLUSIÓN"
-    findings: "OBSERVACIONES"
+    findings: "DESVÍOS"
     oportunities: "OPORTUNIDADES DE MEJORA"
-    finding_review_assignments: "OBSERVACIONES / OPORTUNIDADES DE MEJORA REVISADAS"
+    finding_review_assignments: "DESVÍOS / OPORTUNIDADES DE MEJORA REVISADAS"
     add_recipient: "Agregar nuevo destinatario"
     review_sended: "El informe fue enviado a todos los destinatarios indicados"
     review_not_approved: "El informe no fue enviado, debe estar aprobado"
     bundle:
       zip_name: "legajo_%{identification}.zip"
-      control_objectives_dir: "%{prefix}_objetivos_de_control"
-      findings_dir: "%{prefix}_observaciones_y_oportunidades"
+      control_objectives_dir: "%{prefix}_objetivos_metas"
+      findings_dir: "%{prefix}_desvios_y_oportunidades"
       create: "Generar"
     bundle_index:
       title: "ÍNDICE"
-      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
+      default_items: "PLANILLA DE CALIFICACIÓN GLOBAL\nPLANILLA DE CALIFICACIÓN DETALLADA\nINFORME DEFINITIVO\nRELEVAMIENTO\nDOCUMENTACIÓN DEL TRABAJO REALIZADO\nSEGUIMIENTO DE DESVÍOS / OPORTUNIDADES DE MEJORA"
       items_label: "Entradas en el índice"
       pdf_name: "00_indice_legajo.pdf"
     findings_sheet:
-      title: "Observaciones - Papeles de trabajo"
-      pdf_name: "%{prefix}_caratula_de_observaciones_y_papeles_de_trabajo.pdf"
+      title: "Desvíos - Papeles de trabajo"
+      pdf_name: "%{prefix}_caratula_de_desvios_y_papeles_de_trabajo.pdf"
     findings_follow_up:
-      title: "SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA"
-      weakness_title_in_singular: "SEGUIMIENTO DE OBSERVACIÓN"
+      title: "SEGUIMIENTO DE DESVÍOS / OPORTUNIDADES DE MEJORA"
+      weakness_title_in_singular: "SEGUIMIENTO DE DESVÍO"
       oportunity_title_in_singular: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
       index_clarification: "* Al momento de emitir el informe definitivo"
-      pdf_name: "%{prefix}_seguimiento_de_observaciones_oportunidades_de_mejora.pdf"
+      pdf_name: "%{prefix}_seguimiento_de_desvíos_oportunidades_de_mejora.pdf"
     workflow:
       title: "Documentación del trabajo realizado"
       pdf_name: "documentacion_del_trabajo_realizado.pdf"
-      control_objective_work_papers: "Papeles de trabajo del objetivo de control"
-      control_objective_weaknesses: "Observaciones"
+      control_objective_work_papers: "Papeles de trabajo del objetivo/meta"
+      control_objective_weaknesses: "Desvíos"
       control_objective_oportunities: "Oportunidades"
       oportunity_work_papers: "Papeles de trabajo de la oportunidad"
-      weakness_work_papers: "Papeles de trabajo de la observación"
+      weakness_work_papers: "Papeles de trabajo de el desvío"
 
   control_objective:
     errors:
-      related: "El objetivo de control no puede ser eliminado, se encuentra relacionado en al menos un procedimiento y prueba de control"
+      related: "El objetivo/meta no puede ser eliminado, se encuentra relacionado en al menos un procedimiento y prueba de control"
 
   control_objective_item:
-    index_title: "Listado de objetivos de control"
-    show_title: "Detalle objetivo de control"
-    edit_title: "Modificar objetivo de control"
-    correctly_created: "Objetivo de control agregado correctamente."
-    correctly_updated: "Objetivo de control actualizado correctamente."
-    stale_object_error: "El objetivo de control no fue actualizado, intente nuevamente."
-    view_all_weaknesses: "Ver listado de observaciones"
+    index_title: "Listado de objetivos/metas"
+    show_title: "Detalle objetivo/meta"
+    edit_title: "Modificar objetivo/meta"
+    correctly_created: "Objetivo/Meta agregado correctamente."
+    correctly_updated: "Objetivo/Meta actualizado correctamente."
+    stale_object_error: "El objetivo/meta no fue actualizado, intente nuevamente."
+    view_all_weaknesses: "Ver listado de desvíos"
     view_all_oportunities: "Ver listado de oportunidades de mejora"
     add_oportunity: "Agregar nueva oportunidad de mejora"
-    add_weakness: "Agregar nueva observación"
+    add_weakness: "Agregar nuevo desvío"
     add_work_paper: "Agregar papel de trabajo"
-    readonly: "El objetivo de control no puede ser modificado, ya se emitió el informe definitivo"
+    readonly: "El objetivo/meta no puede ser modificado, ya se emitió el informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     has_work_papers: "Papeles de trabajo"
     not_rated: "No evaluado"
@@ -445,11 +445,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_relevance: "sin importancia"
       without_audit_date: "sin fecha de auditoría"
       without_effects: "sin efectos"
-      without_controls: "sin controles"
+      without_controls: "sin descripción de metas"
       without_design_tests: "sin evaluación de diseño"
       without_compliance_tests: "sin pruebas de cumplimiento"
-      without_sustantive_tests: "sin pruebas sustantivas"
-      without_auditor_comment: "sin conclusiones del auditor"
+      without_sustantive_tests: "sin detalle del proceso"
+      without_auditor_comment: "sin conclusiones"
     review:
       edit: 'Editar informe'
       show: 'Ver informe'
@@ -490,43 +490,43 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   execution_reports:
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Desvíos / Oportunidades de Mejora Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "RESUMEN GERENCIAL\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
-      clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      subtitle: "DESVÍOS/OPORTUNIDADES DE MEJORA\nDE INFORMES EN EJECUCIÓN"
+      clarification: "Nota: los desvíos / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
       without_nonconformities: "Sin no conformidades"
       without_oportunities: "Sin oportunidades de mejora"
-      references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
-      sqm_references: "Referencias:\n\n(1) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (medio y bajo). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(2) Cantidad de No Conformidades: muestra la cantidad de no conformidades obtenidas en el informe (no son las definitivas). Su nivel de riesgo es Alto. En caso de no tener no conformidades, aparece la leyenda \"Sin no conformidades\"."
+      references: "Referencias:\n\n(1) Cantidad de Desvíos: muestra la cantidad de desvíos obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener desvíos, aparece la leyenda \"Sin desvíos\".\n(2) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe (no son las definitivas). En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      sqm_references: "Referencias:\n\n(1) Cantidad de Desvíos: muestra la cantidad de desvíos obtenidas en el informe (no son las definitivas), ordenadas según nivel de riesgo (medio y bajo). En caso de no tener desvíos, aparece la leyenda \"Sin desvíos\".\n(2) Cantidad de No Conformidades: muestra la cantidad de no conformidades obtenidas en el informe (no son las definitivas). Su nivel de riesgo es Alto. En caso de no tener no conformidades, aparece la leyenda \"Sin no conformidades\"."
     detailed_management_report_title: "Resumen gerencial"
     index_title: "Reportes de ejecución"
-    findings_type_external: "Observaciones Auditorías Externas"
-    findings_type_internal: "Observaciones / Oportunidades de Mejora Auditoría Interna"
+    findings_type_external: "Desvíos Auditorías Externas"
+    findings_type_internal: "Desvíos / Oportunidades de Mejora Auditoría Interna"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por informe y estado"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por informe y estado"
     weaknesses_by_state:
-      pdf_name: "observaciones_en_ejecucion_por_estado_%{from_date}_al_%{to_date}.pdf"
-      title: "INFORME GERENCIAL DETALLADO\nOBSERVACIONES/OPORTUNIDADES DE MEJORA EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
-      clarification: "Nota: las Observaciones / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
-      weaknesses_column: "Observaciones"
+      pdf_name: "desvíos_en_ejecucion_por_estado_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME GERENCIAL DETALLADO\nDESVÍOS/OPORTUNIDADES DE MEJORA EN EJECUCIÓN\nTOTALES POR INFORME Y ESTADO"
+      clarification: "Nota: los desvíos / Oportunidades de Mejora mostradas en el presente reporte no son las definitivas (los informes se encuentran en la etapa de Ejecución)"
+      weaknesses_column: "Desvíos"
       oportunities_column: "Oportunidades de Mejora"
       total: "TOTAL"
-    without_weaknesses: "Sin observaciones en el periodo"
-    without_weaknesses_in_the_interval: "Sin observaciones en el intervalo"
-    without_findings: "Sin Observaciones / Oportunidades de Mejora"
+    without_weaknesses: "Sin desvíos en el periodo"
+    without_weaknesses_in_the_interval: "Sin desvíos en el intervalo"
+    without_findings: "Sin Desvíos / Oportunidades de Mejora"
 
   finding:
-    index_title: "Listado de observaciones / oportunidades de mejora"
-    show_title: "Detalles de la respuesta a la observación / oportunidad de mejora"
-    edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
-    correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
-    stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
+    index_title: "Listado de desvíos / oportunidades de mejora"
+    show_title: "Detalles de la respuesta al desvío / oportunidad de mejora"
+    edit_title: "Modificar respuesta a desvío / oportunidad de mejora"
+    correctly_updated: "Respuesta a desvío / oportunidad de mejora actualizada correctamente."
+    stale_object_error: "La respuesta al desvío / oportunidad de mejora no fue actualizada, intente nuevamente."
     download: "Descargar listado general"
     download_detailed: "Descargar listado detallado"
     download_xml: "Descargar listado en XML"
@@ -536,8 +536,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     inverse_finding_relations: "Relacionada en"
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
-    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_observaciones-oportunidades_de_mejora"
+    costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de el desvío"
+    csv_name: "listado_de_desvíos-oportunidades_de_mejora"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -557,7 +557,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     audited:
       one: "Auditado"
       other: "Auditados"
-    readonly: "La observación no puede ser creada ni modificada, ya se emitió el informe definitivo"
+    readonly: "el desvío no puede ser creada ni modificada, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
       other: "Responsables"
@@ -580,14 +580,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_repeated: "Reiterada"
     status_revoked: "Anulada"
     view_completed: "Ver implementadas"
-    view_cost_details: "Listado de actividades anteriores relacionadas a la observación / oportunidad de mejora"
+    view_cost_details: "Listado de actividades anteriores relacionadas al desvío / oportunidad de mejora"
     view_pending: "Ver pendientes"
     without_conclusion_final_review: "Sin informe definitivo"
     without_work_papers: "Sin papeles de trabajo"
     responsibility_removed: "Ha sido desafectado de la %{class_name} %{review_code} del informe %{review}"
     pdf:
-      pdf_name: "listado_de_observaciones_y_oportunidades_de_mejora.pdf"
-      size_warning: "El listado es demasiado grande, se ha truncado a %{count} observaciones / oportunidades de mejora."
+      pdf_name: "listado_de_desvíos_y_oportunidades_de_mejora.pdf"
+      size_warning: "El listado es demasiado grande, se ha truncado a %{count} desvíos / oportunidades de mejora."
       filtered_by:
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
@@ -599,8 +599,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       confirmation_date: "Su notificación fue confirmada el día *%{date}*"
     follow_up_report:
       weakness:
-        title: "SEGUIMIENTO DE OBSERVACIÓN"
-        subtitle: "Datos de la observación"
+        title: "SEGUIMIENTO DE DESVÍO"
+        subtitle: "Datos de el desvío"
       oportunity:
         title: "SEGUIMIENTO DE OPORTUNIDAD DE MEJORA"
         subtitle: "Datos de la oportunidad de mejora"
@@ -609,7 +609,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       follow_up_comments: "Comentarios de seguimiento"
       without_important_changes: "Sin cambios importantes hasta la fecha"
       work_papers: "Papeles de trabajo"
-      pdf_name: "seguimiento_de_observacion_%{code}.pdf"
+      pdf_name: "seguimiento_de_desvio_%{code}.pdf"
 
   finding_relation:
     types:
@@ -619,40 +619,40 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
   follow_up_audit:
     index_title: "Reportes de auditoría"
     cost_analysis_title: "Análisis de costos"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
+    high_risk_weaknesses_report_title: "Desvíos de riesgo alto"
+    fixed_weaknesses_report_title: "Desvíos de riesgo alto solucionadas"
     cost_analysis:
       column_business_unit: "Unidad organizativa"
       column_project: "Proyecto"
       column_review: "Informe"
       column_audit_cost: "Cantidad de horas utilizadas (suma de las horas de seguimiento por auditores)"
       column_audited_cost: "Cantidad de horas dedicas a la solución (suma de las horas de seguimiento de los auditados)"
-      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE OBSERVACIONES / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
-      weaknesses: "OBSERVACIONES"
+      title: "ANALISIS DE COSTOS\nDE SEGUIMIENTO DE DESVÍOS / OPORTUNIDADES DE MEJORA\nPOR INFORME DE AUDITORIA INTERNA"
+      weaknesses: "DESVÍOS"
       oportunities: "OPORTUNIDADES DE MEJORA"
-      without_weaknesses: "Sin Observaciones en el periodo"
+      without_weaknesses: "Sin Desvíos en el periodo"
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
   follow_up_committee:
     index_title: "Reportes de comité"
-    control_objective_stats_title: "Observaciones por objetivo de control"
-    process_control_stats_title: "Observaciones por proceso"
-    control_effectiveness: "Efectividad del control"
-    pending_findings: "Seguimiento de observaciones pendientes"
+    control_objective_stats_title: "Desvíos por objetivo/meta"
+    process_control_stats_title: "Desvíos por proceso"
+    control_effectiveness: "Eficiencia"
+    pending_findings: "Seguimiento de desvíos pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
-    rescheduled_being_implemented_weaknesses_report_title: "Observaciones en trámite reprogramadas"
+    high_risk_weaknesses_report_title: "Desvíos de riesgo alto"
+    fixed_weaknesses_report_title: "Desvíos de riesgo alto solucionadas"
+    rescheduled_being_implemented_weaknesses_report_title: "Desvíos en trámite reprogramadas"
     detailed_report: "Reporte detallado"
     rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
-    weakness_summary: "Resumen de observaciones"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
-    fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
+    weakness_summary: "Resumen de desvíos"
+    high_risk_weaknesses: "Desvíos de riesgo alto"
+    fixed_weaknesses: "Desvíos de riesgo alto solucionadas"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -665,14 +665,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_being_implemented_stale_rescheduled:
       one: "Reprogramada vencida"
       other: "Reprogramadas vencidas"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
     without_oportunities: "Sin oportunidades en el periodo"
-    without_weaknesses: "Sin observaciones en el periodo"
+    without_weaknesses: "Sin desvíos en el periodo"
     repeated_count:
-      one: "Una observación / oportunidad de mejora reiterada"
-      other: "%{count} observaciones / oportunidades de mejora reiteradas"
+      one: "Un desvío / oportunidad de mejora reiterada"
+      other: "%{count} desvíos / oportunidades de mejora reiteradas"
     expired: "Vencida"
     not_expired: "No vencida"
     from_date: "Desde"
@@ -683,46 +683,46 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       one: "En este reporte se ha aplicado el siguiente filtro: %{filters}"
       other: "En este reporte se han aplicado los siguientes filtros: %{filters}"
     control_objective_stats:
-      pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
-      title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
+      pdf_name: 'desvíos_por_objetivo_%{from_date}_al_%{to_date}.pdf'
+      title: "DESVÍOS AGRUPADAS POR OBJETIVO/META"
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
         one: '%{effectiveness} en un informe'
         other: '%{effectiveness} en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
+      without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      pdf_name: "desvíos_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Desvíos Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
+      subtitle: "DESVÍOS SOLUCIONADAS - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
     high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      pdf_name: "desvíos_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_weaknesses: "Desvíos Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
+      subtitle: "SEGUIMIENTO DE DESVÍOS DE RIESGO ALTO - INFORMES DEFINITIVOS"
       without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: "observaciones_por_proceso_%{from_date}_al_%{to_date}.pdf"
-      title: "OBSERVACIONES AGRUPADAS POR PROCESO"
+      pdf_name: "desvíos_por_proceso_%{from_date}_al_%{to_date}.pdf"
+      title: "DESVÍOS AGRUPADAS POR PROCESO"
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
+        one: '%{effectiveness} con desvíos en un informe'
+        other: '%{effectiveness} con desvíos en %{count} informes'
+      without_weaknesses: 'Sin desvíos'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
@@ -734,60 +734,60 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       indicators:
         production_level: "Nivel de Producción"
-        highest_solution_rate: "Solución de Observaciones de Riesgo Alto"
-        medium_solution_rate: "Solución de Observaciones de Riesgo Medio"
+        highest_solution_rate: "Solución de Desvíos de Riesgo Alto"
+        medium_solution_rate: "Solución de Desvíos de Riesgo Medio"
         score_average: "Calificación de informes"
         digitalized: "Digitalización"
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
-        ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
-        ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
+        ancient_medium_risk_weaknesses: "Anticuación de Desvíos de Riesgo Medio"
+        ancient_highest_risk_weaknesses: "Anticuación de Desvíos de Riesgo Alto"
     rescheduled_being_implemented_weaknesses_report:
       without_data: "Sin datos para el rango de fechas ingresado"
-      title: "INFORME DE OBSERVACIONES EN TRÁMITE REPROGRAMADAS"
-      pdf_name: "observaciones_reprogramadas_%{from_date}_al_%{to_date}.pdf"
+      title: "INFORME DE DESVÍOS EN TRÁMITE REPROGRAMADAS"
+      pdf_name: "desvíos_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
-      internal_audit_weaknesses: "Observaciones / Oportunidades de Mejora Auditoría Interna"
-      external_audit_weaknesses: "Observaciones de Auditorías Externas"
+      internal_audit_weaknesses: "Desvíos / Oportunidades de Mejora Auditoría Interna"
+      external_audit_weaknesses: "Desvíos de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA"
+      subtitle: "SEGUIMIENTO DE DESVÍOS/OPORTUNIDADES DE MEJORA"
       organization_score: "Calificación de la organización: %{score}% (*)"
       organization_score_note: "(*) La calificación de la organización se obtiene como un promedio de las calificaciones obtenidas en los tipos de auditoría (%{audit_types})"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin desvíos"
       without_oportunities: "Sin oportunidades de mejora"
       generic_score_average:
         one: 'Promedio de las calificaciones de %{audit_type} en un informe'
         other: 'Promedio de las calificaciones de %{audit_type} en %{count} informes'
       repeated_count:
-        one: "Una observación / oportunidad de mejora reiterada"
-        other: "%{count} observaciones / oportunidades de mejora reiteradas"
+        one: "Un desvío / oportunidad de mejora reiterada"
+        other: "%{count} desvíos / oportunidades de mejora reiteradas"
       total_score_average: "Total promedio de las calificaciones (%{reference })"
-      references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos: los procesos aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
+      references: "Referencias:\n\n(1) Calificación: la calificación (eficiencia ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos/metas multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos: los procesos aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Desvíos: muestra la cantidad de desvíos obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener desvíos, aparece la leyenda \"Sin desvíos\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
     weaknesses_by_state:
-      pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "desvíos_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
+      title: "SEGUIMIENTO DE DESVÍOS/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
-      pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "desvíos_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
-      title: "SEGUIMIENTO DE OBSERVACIONES\nTOTALES POR NIVEL DE RIESGO"
+      title: "SEGUIMIENTO DE DESVÍOS\nTOTALES POR NIVEL DE RIESGO"
       total: "TOTAL"
     weaknesses_by_audit_type:
-      weaknesses: "Observaciones"
+      weaknesses: "Desvíos"
       oportunities: "Oportunidades"
-      without_weaknesses: "Sin observaciones"
-      pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
-      title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
+      without_weaknesses: "Sin desvíos"
+      pdf_name: "desvíos_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
+      title: "SEGUIMIENTO DE DESVÍOS/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
 
   follow_up_management:
     index_title: "Reportes de la gerencia"
-    weaknesses_by_state_title: "Observaciones / Oportunidades de Mejora totales por estado"
-    weaknesses_by_risk_title: "Observaciones / Oportunidades de Mejora totales por riesgo"
-    weaknesses_by_audit_type_title: "Observaciones / Oportunidades de Mejora totales por tipo de auditoría"
+    weaknesses_by_state_title: "Desvíos / Oportunidades de Mejora totales por estado"
+    weaknesses_by_risk_title: "Desvíos / Oportunidades de Mejora totales por riesgo"
+    weaknesses_by_audit_type_title: "Desvíos / Oportunidades de Mejora totales por tipo de auditoría"
 
   group:
     index_title: "Listado de grupos"
@@ -860,17 +860,17 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   notifier:
     notify_new_finding:
-      title: "Tiene una nueva observación / oportunidad de mejora"
-      created_title: "Nueva observación / oportunidad de mejora"
+      title: "Tiene un nuevo desvío / oportunidad de mejora"
+      created_title: "Nuevo desvío / oportunidad de mejora"
     notify_new_finding_answer:
       title: "Nuevo comentario en el informe %{review}"
-      finding_data: "Se ha agregado un comentario a la observación / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
-      finding_link: "Ver observación / oportunidad de mejora"
+      finding_data: "Se ha agregado un comentario al desvío / oportunidad de mejora *%{finding_code}* del informe *%{review}*"
+      finding_link: "Ver desvío / oportunidad de mejora"
     notify_new_findings:
-      title: "Notificación de observaciones / oportunidades de mejora"
+      title: "Notificación de desvíos / oportunidades de mejora"
       created_title:
-        one: "Nueva observación / oportunidad de mejora"
-        other: "Nuevas observaciones / oportunidades de mejora"
+        one: "Nuevo desvío / oportunidad de mejora"
+        other: "Nuevos desvíos / oportunidades de mejora"
     change_password: "Cambiar contraseña"
     changes_notification:
       title: "Notificación de cambios"
@@ -881,10 +881,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "Notificación de informe cercano al cierre"
       body_title: "El siguiente informe está próximo al cierre"
     findings_expiration_warning:
-      title: "Notificación de observaciones cercanas al vencimiento"
+      title: "Notificación de desvíos cercanas al vencimiento"
       body_title:
-        one: "La siguiente observación / oportunidad de mejora está próxima a vencer"
-        other: "Las siguientes observaciones / oportunidades de mejora están próximas a vencer"
+        one: "El siguiente desvío / oportunidad de mejora está próxima a vencer"
+        other: "Los siguientes desvíos / oportunidades de mejora están próximas a vencer"
     footer:
       email_label: "Correo (preferentemente)"
       phone_label: "Teléfono"
@@ -895,7 +895,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
       confirm: "Confirmar notificación"
-      the_following_findings_are_still_unconfirmed: "Las siguientes observaciones / oportunidades han sido notificadas pero no han recibido una confirmación"
+      the_following_findings_are_still_unconfirmed: "Las siguientes desvíos / oportunidades han sido notificadas pero no han recibido una confirmación"
     reassigned_findings:
       new_responsibles:
         one: "Responsable actual: %{responsible}"
@@ -904,28 +904,28 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "Responsable anterior: %{responsible}"
         other: "Responsables anteriores: %{responsible}"
       the_following_findings_are_now_reassigned:
-        one: "La siguiente observación / oportunidad de mejora ha sido reasignada"
-        other: "Las siguientes observaciones / oportunidades de mejora han sido reasignadas"
+        one: "El siguiente desvío / oportunidad de mejora ha sido reasignada"
+        other: "Los siguientes desvíos / oportunidades de mejora han sido reasignadas"
       title:
-        one: "Observación / Oportunidad de mejora reasignada"
-        other: "Observaciones / Oportunidades de mejora reasignadas"
+        one: "Desvío / Oportunidad de mejora reasignada"
+        other: "Desvíos / Oportunidades de mejora reasignadas"
     restore_password:
       title: "Restablecer contraseña"
       body_title: "%{user_name}, para restablecer la contraseña de su usuario (%{user}) utilice el siguiente enlace:"
       valid_until: "%{link} (Usted podrá utilizar este enlace hasta el día *%{date}* inclusive)"
       clarification: "Si usted *no pidió* el restablecimiento *no haga nada*, su usuario y contraseña siguen vigentes"
     being_implemented_and_stale_finding_to_manager:
-      title: "Notificación de observaciones en proceso de implementación vencidas"
-      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación de la siguiente observación ha vencido y todavía se encuentra en proceso de implementación"
+      title: "Notificación de desvíos en proceso de implementación vencidas"
+      the_following_finding_is_being_implemented_and_stale: "La fecha de implementación del siguiente desvío ha vencido y todavía se encuentra en proceso de implementación"
     unanswered_finding_to_manager:
       title: "Notificación por inactividad"
-      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables de la siguiente observación / oportunidad de mejora"
-      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de la observación / oportunidad de mejora o si se altera el organigrama"
+      the_following_finding_is_stale_and_unanswered: "No se ha recibido ninguna respuesta por parte de los responsables del siguiente desvío / oportunidad de mejora"
+      managers_clarification: "Los usuarios pueden cambiar si se modifican los responsables de el desvío / oportunidad de mejora o si se altera el organigrama"
     unanswered_findings:
       title: "Notificación de cambios"
       the_following_findings_are_now_unanswered:
-        one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
-        other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        one: "El siguiente desvío / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
+        other: "Las siguientes desvíos / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
     pending_poll_email:
       title: "%{name}, tiene una encuesta pendiente"
@@ -953,7 +953,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "Oportunidad agregada correctamente."
     correctly_updated: "Oportunidad actualizada correctamente."
     stale_object_error: "La oportunidad no fue actualizada, intente nuevamente."
-    edit_control_objective: "Editar objetivo de control"
+    edit_control_objective: "Editar objetivo/meta"
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
     errors:
@@ -964,7 +964,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios"
 
   organization:
     index_title: "Listado de organizaciones"
@@ -988,23 +988,23 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     admin_aproach_types: "Tipos de enfoque"
     admin_blank_password_stale_days: "Días para caducidad del blanqueo de contraseña"
     admin_code_prefix_for_oportunities: "Prefijo de los códigos de oportunidades"
-    admin_code_prefix_for_weaknesses: "Prefijo de los códigos de observaciones"
-    admin_code_prefix_for_work_papers_in_control_objectives: "Prefijo de los códigos de papeles de trabajo en objetivos de control"
+    admin_code_prefix_for_weaknesses: "Prefijo de los códigos de desvíos"
+    admin_code_prefix_for_work_papers_in_control_objectives: "Prefijo de los códigos de papeles de trabajo en objetivos/metas"
     admin_code_prefix_for_work_papers_in_oportunities: "Prefijo de los códigos de papeles de trabajo en oportunidades"
-    admin_code_prefix_for_work_papers_in_weaknesses: "Prefijo de los códigos de papeles de trabajo en observaciones"
-    admin_code_prefix_for_work_papers_in_weaknesses_follow_up: "Prefijo de los códigos de papeles de trabajo en observaciones (seguimiento)"
-    admin_control_objective_importances: "Importancias de los objetivos de control"
-    admin_control_objective_qualifications: "Calificaciones de los objetivos de control"
-    admin_control_objective_risk_levels: "Niveles de riesgo de los objetivos de control"
-    admin_finding_risk_levels: "Niveles de riesgo de las observaciones"
-    admin_finding_stale_confirmed_days: "Cantidad de días que deben pasar para que una observación sin responder se considere desatendida"
+    admin_code_prefix_for_work_papers_in_weaknesses: "Prefijo de los códigos de papeles de trabajo en desvíos"
+    admin_code_prefix_for_work_papers_in_weaknesses_follow_up: "Prefijo de los códigos de papeles de trabajo en desvíos (seguimiento)"
+    admin_control_objective_importances: "Importancias de los objetivos/metas"
+    admin_control_objective_qualifications: "Calificaciones de los objetivos/metas"
+    admin_control_objective_risk_levels: "Niveles de riesgo de los objetivos/metas"
+    admin_finding_risk_levels: "Niveles de riesgo de los desvíos"
+    admin_finding_stale_confirmed_days: "Cantidad de días que deben pasar para que un desvío sin responder se considere desatendida"
     admin_frequency_types: "Tipos de frecuencia"
     admin_improvement_oportunities_states: "Estados de las oportunidades de mejora"
     admin_priorities: "Prioridades"
     admin_resource_units: "Unidades de los recursos"
     admin_review_scores: "Calificaciones ponderadas de los informes"
     admin_review_code_expresion: "Formato del código de identificación de informes"
-    admin_weaknesses_states: "Estados de las observaciones y oportunidades de mejora"
+    admin_weaknesses_states: "Estados de los desvíos y oportunidades de mejora"
     security_acount_expire_time: "Días para la eliminación de cuentas inactivas"
     security_allow_concurrent_sessions: "Permitir sesiones simultáneas para el mismo usuario"
     security_attempts_count: "Cantidad de intentos fallidos de conexión"
@@ -1061,8 +1061,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     add_material_resource_utilization: "Agregar recurso material"
     show_resource_utilization: "Mostrar recursos"
     hide_resource_utilization: "Ocultar recursos"
-    download_global_plan: "Descargar plan de auditoria global"
-    download_detailed_plan: "Descargar plan de auditoria detallado"
+    download_global_plan: "Descargar plan por periodo global"
+    download_detailed_plan: "Descargar plan por periodo detallado"
     without_business_unit_type: "Sin unidad organizativa"
     show_all: "Ver todos"
     item_status:
@@ -1083,7 +1083,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "Periodo (%{number})"
       range: "desde el %{from_date} al %{to_date}"
     pdf:
-      title: "Plan de auditoría"
+      title: "Plan por periodo"
       pdf_name: "plan_periodo_%{period}.pdf"
       resource_utilization: "Recursos utilizados"
     errors:
@@ -1168,18 +1168,18 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     correctly_created: "Informe agregado correctamente."
     correctly_updated: "Informe actualizado correctamente."
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
-    control_objective_items_label: "Objetivos de control"
-    add_control_objective: "Agregar un nuevo objetivo de control"
+    control_objective_items_label: "Objetivos/Metas"
+    add_control_objective: "Agregar un nuevo objetivo/meta"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
     copy: "Copiar"
     view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
-    findings_label: "Observaciones / Oportunidades de mejora pendientes"
-    add_finding_assignment: "Agregar observación / oportunidad de mejora pendiente"
+    findings_label: "Desvíos / Oportunidades de mejora pendientes"
+    add_finding_assignment: "Agregar desvío / oportunidad de mejora pendiente"
     add_user_assignment: "Agregar usuario relacionado"
-    suggest_findings: 'Sugerir observaciones / oportunidades de mejora pendientes'
-    without_suggested_findings: 'Sin observaciones / oportunidades de mejora pendientes'
+    suggest_findings: 'Sugerir desvíos / oportunidades de mejora pendientes'
+    without_suggested_findings: 'Sin desvíos / oportunidades de mejora pendientes'
     readonly: "El informe no puede ser modificado, ya se emitió el informe definitivo"
     with_final_review: "Con informe definitivo"
     without_final_review: "Sin informe definitivo"
@@ -1201,7 +1201,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     audit_period_title: "PERIODO DE LA AUDITORÍA"
     auditors: "AUDITORES"
     score: "CALIFICACIÓN"
-    control_objectives_effectiveness: "Efectividad de control"
+    control_objectives_effectiveness: "Eficiencia"
     control_objectives_relevance: "Peso"
     oportunities_summary: "Resumen de oportunidades de mejora ordenadas por estado"
     oportunities_count_summary: "Cantidad de oportunidades de mejora ordenadas por estado"
@@ -1211,29 +1211,29 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     potential_nonconformities_count_summary: "Cantidad de no conformidades potenciales ordenadas por estado"
     nonconformities_summary: "Resumen de no conformidades que sustentan la calificación otorgada ordenadas por estado"
     nonconformities_count_summary: "Cantidad de no conformidades que sustentan la calificación otorgada ordenadas por estado"
-    weaknesses_summary: "Resumen de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count_summary: "Cantidad de observaciones que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de la observación)"
-    weaknesses_count: "Cantidad de Observaciones"
-    weaknesses_count_by_state: "Cantidad de Observaciones (Pendientes/Solucionadas-Reiteradas)"
+    weaknesses_summary: "Resumen de desvíos que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de el desvío)"
+    weaknesses_count_summary: "Cantidad de desvíos que sustentan la calificación otorgada (ordenadas por importancia del riesgo (%{risks}) y luego por estado de el desvío)"
+    weaknesses_count: "Cantidad de Desvíos"
+    weaknesses_count_by_state: "Cantidad de Desvíos (Pendientes/Solucionadas-Reiteradas)"
     oportunities_count: "Cantidad de Oportunidades de Mejora"
     nonconformities_count: "Cantidad de No Conformidades"
     potential_nonconformities_count: "Cantidad de No Conformidades Potenciales"
     fortresses_count: "Cantidad de fortalezas"
-    control_objectives_work_papers: "Objetivos de control"
-    show_control_objective: "Ver detalles del objetivo de control"
-    hide_control_objective: "Ocultar detalles del objetivo de control"
-    weaknesses_work_papers: "Observaciones"
+    control_objectives_work_papers: "Objetivos/Metas"
+    show_control_objective: "Ver detalles del objetivo/meta"
+    hide_control_objective: "Ocultar detalles del objetivo/meta"
+    weaknesses_work_papers: "Desvíos"
     oportunities_work_papers: "Oportunidades"
-    follow_up_work_papers: "Seguimiento de observaciones"
+    follow_up_work_papers: "Seguimiento de desvíos"
     download_work_papers: "Descargar papeles de trabajo"
     notes: "Notas"
     estimated_amount: "Costo estimado en plan de trabajo"
-    review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
-    process_control_qualification_explanation: "La calificación del proceso se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos."
+    review_qualification_explanation: "La calificación del informe se calcula como un promedio ponderado. Se suman las efectividades de los objetivos/metas multiplicadas por su peso y el resultado se divide por la suma de los pesos."
+    process_control_qualification_explanation: "La calificación del proceso se calcula como un promedio ponderado. Se suman las efectividades de los objetivos/metas multiplicadas por su peso y el resultado se divide por la suma de los pesos."
     errors:
       can_not_be_destroyed: "El informe no puede ser eliminado"
       without_survey: "no tiene relevamiento"
-      without_control_objectives: "no tiene objetivos de control"
+      without_control_objectives: "no tiene objetivos/metas"
       related_finding_incomplete: "está pendiente y no se ha marcado como reiterada o solucionada"
     survey:
       with_attachment: "Con un archivo adjunto"
@@ -1250,8 +1250,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_responsible: "Responsable anterior: %{responsible}"
       new_responsible: "Responsable actual: %{responsible}"
     responsibility_removed: "Ha sido desafectado del informe %{review}"
-    cannot_be_reassigned: "El usuario no puede ser reasignado, tiene observaciones que dependen de el"
-    cannot_be_destroyed: "El usuario no puede ser eliminado, tiene observaciones que dependen de el"
+    cannot_be_reassigned: "El usuario no puede ser reasignado, tiene desvíos que dependen de el"
+    cannot_be_destroyed: "El usuario no puede ser eliminado, tiene desvíos que dependen de el"
 
   role:
     index_title: "Listado de perfiles"
@@ -1300,7 +1300,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_title: "Estado"
     unknown_email: "Dirección de correo no encontrada"
     send: "Enviar"
-    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
+    will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha desvíos / oportunidades pendientes, deberá reasignarlas primero"
     add_child: "Agregar nueva persona a cargo"
     add_organization_role: "Agregar un nuevo perfil dentro de una organización"
     add_related_user_relations: "Agregar usuario relacionado"
@@ -1318,26 +1318,26 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     new_user_label: "Nuevo responsable"
     old_user_label: "Responsable anterior"
     pending_weaknesses_detailed:
-      one: "*Una* observación *pendiente*"
-      other: "*%{count}* observaciones *pendientes*"
-    reassign_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+      one: "*Un* desvío *pendiente*"
+      other: "*%{count}* desvíos *pendientes*"
+    reassign_with_findings: "¿Incluir desvíos y oportunidades pendientes?"
     reassign_with_reviews: "¿Incluir informes en ejecución?"
-    release_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+    release_with_findings: "¿Incluir desvíos y oportunidades pendientes?"
     release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
     high_risk_weaknesses:
-      one: '*Una* observación de *riesgo alto*'
-      other: '*%{count}* observaciones de *riesgo alto*'
-      image_label: 'Observaciones de riesgo alto'
+      one: '*Un* desvío  de *riesgo alto*'
+      other: '*%{count}* desvíos de *riesgo alto*'
+      image_label: 'Desvíos de riesgo alto'
     weaknesses:
       pending:
-        one: '*Una* observación pendiente'
-        other: '*%{count}* observaciones pendientes'
+        one: '*Un* desvío pendiente'
+        other: '*%{count}* desvíos pendientes'
       complete:
-        one: '*Una* observación solucionada'
-        other: '*%{count}* observaciones solucionadas'
-      image_label: 'Observaciones'
+        one: '*Un* desvío solucionado'
+        other: '*%{count}* desvíos solucionados'
+      image_label: 'Desvíos'
     responsibility_modification:
       title: "Modificación de responsabilidades"
       old_responsible: "Responsable anterior: %{responsible}"
@@ -1346,11 +1346,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las observaciones y oportunidades de mejora pendientes del informe %{reviews}"
-        other: "Se han reasignado las observaciones y oportunidades de mejora pendientes de los informes %{reviews}"
+        one: "Se han reasignado los desvíos y oportunidades de mejora pendientes del informe %{reviews}"
+        other: "Se han reasignado los desvíos y oportunidades de mejora pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
-    unconfirmed_findings: "Observaciones sin confirmar a la fecha"
+    unconfirmed_findings: "Desvíos sin confirmar a la fecha"
     errors:
       must_select_a_user: "Debe seleccionar un usuario"
     pdf:
@@ -1375,15 +1375,15 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
 
   weakness:
-    index_title: "Listado de observaciones"
-    show_title: "Detalles de la observación"
-    new_title: "Agregar observación"
-    edit_title: "Modificar observación"
-    correctly_created: "Observación agregada correctamente."
-    correctly_updated: "Observación actualizada correctamente."
-    stale_object_error: "La observación no fue actualizada, intente nuevamente."
+    index_title: "Listado de desvíos"
+    show_title: "Detalles de el desvío"
+    new_title: "Agregar desvío"
+    edit_title: "Modificar desvío"
+    correctly_created: "Desvío agregada correctamente."
+    correctly_updated: "Desvío actualizada correctamente."
+    stale_object_error: "el desvío no fue actualizada, intente nuevamente."
     see_all: "Ver todas"
-    edit_control_objective: "Editar objetivo de control"
+    edit_control_objective: "Editar objetivo/meta"
     previous_follow_up_dates: "Fechas de implementación anteriores"
     show_follow_up: 'Ver en seguimiento'
     edit_follow_up: 'Editar en seguimiento'
@@ -1398,7 +1398,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
       without_solution_date: "no tiene fecha de solución"
-      without_audit_comments: "no tiene comentarios de auditoría"
+      without_audit_comments: "no tiene comentarios"
 
   welcome:
     index_title: "Bienvenido"
@@ -1552,16 +1552,16 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       conclusion_review: "Informe"
       conclusion_final_review: "Informe definitivo"
       conclusion_draft_review: "Informe borrador"
-      control: "Control"
-      control_objective: "Objetivo de control"
-      control_objective_item: "Objetivo de control"
+      control: "Descripción de metas"
+      control_objective: "Objetivo/Meta"
+      control_objective_item: "Objetivo/Meta"
       cost: "Costo"
       detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
-      finding: "Observación / Oportunidad"
-      finding_answer: "Respuesta a observación"
-      finding_review_assignment: "Asignación de observación a informe"
+      finding: "Desvío / Oportunidad"
+      finding_answer: "Respuesta a desvío"
+      finding_review_assignment: "Asignación de desvío a informe"
       group: "Grupo"
       help_content: "Contenido de ayuda"
       help_item: "Registro de ayuda"
@@ -1589,7 +1589,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       resource_class: "Clase de recurso"
       role: "Perfil"
       user: "Usuario"
-      weakness: "Observación"
+      weakness: "Desvío"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
       work_paper: "Papel de trabajo"
@@ -1616,11 +1616,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           name: "Proceso"
           order: "Proceso (orden)"
           control_objectives:
-            one: "Objetivo de control"
-            other: "Objetivos de control"
-            name: "Objetivo de control"
-            relevance: "Objetivo de control (importancia)"
-            risk: "Objetivo de control (riesgo)"
+            one: "Objetivo/Meta"
+            other: "Objetivos/Metas"
+            name: "Objetivo/Meta"
+            relevance: "Objetivo/Meta (importancia)"
+            risk: "Objetivo/Meta (riesgo)"
       business_unit:
         name: "Nombre"
       business_unit_type:
@@ -1650,37 +1650,37 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         approved: "Aprobado"
       control:
         order: "Orden"
-        control: "Controles"
+        control: "Descripción de metas"
         effects: "Efectos"
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento"
-        sustantive_tests: "Pruebas sustantivas"
+        sustantive_tests: "Detalle del proceso"
       control_objective:
-        name: "Objetivo de control"
+        name: "Objetivo/Meta"
         relevance: "Importancia"
         risk: "Riesgo"
       control_objective_item:
-        control_objective_id: "Objetivo de control"
-        control_objective_text: "Objetivo de control"
+        control_objective_id: "Objetivo/Meta"
+        control_objective_text: "Objetivo/Meta"
         relevance: "Importancia"
         design_score: "Calificación evaluación de diseño"
         compliance_score: "Calificación pruebas de cumplimiento"
-        sustantive_score: "Calificación pruebas sustantivas"
+        sustantive_score: "Calificación del cumplimiento del objetivo"
         audit_date: "Fecha de auditoría"
-        auditor_comment: "Conclusiones del auditor"
+        auditor_comment: "Conclusiones"
         finished: "Terminado"
         exclude_from_score: "No calificar"
         process_control_id: "Proceso"
-        effectiveness: "Efectividad de control"
-        weaknesses: "Observaciones"
+        effectiveness: "Eficiencia"
+        weaknesses: "Desvíos"
         oportunities: "Oportunidades de mejora"
         control:
-          order: "Objetivo de control (orden)"
-          control: "Objetivo de control (controles)"
-          effects: "Objetivo de control (efectos)"
-          design_tests: "Objetivo de control (evaluación de diseño)"
-          compliance_tests: "Objetivo de control (pruebas de cumplimiento)"
-          sustantive_tests: "Objetivo de control (pruebas sustantivas)"
+          order: "Objetivo/Meta (orden)"
+          control: "Objetivo/Meta (descripción)"
+          effects: "Objetivo/Meta (efectos)"
+          design_tests: "Objetivo/Meta (evaluación de diseño)"
+          compliance_tests: "Objetivo/Meta (pruebas de cumplimiento)"
+          sustantive_tests: "Objetivo/Meta (cumplimiento del objetivo)"
         work_papers:
           one: "Papel de trabajo"
           other: "Papeles de trabajo"
@@ -1703,7 +1703,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         organization_id: "Organización"
         user_id: "Usuario"
         value: "Valor"
-        observations: "Observaciones"
+        observations: "Desvíos"
       e_mail:
         to: "Para"
         subject: "Asunto"
@@ -1719,8 +1719,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         size: "Archivo (tamaño)"
         file: "Archivo"
       finding:
-        control_objective_item_id: "Objetivo de control"
-        description: "Observación / Oportunidad"
+        control_objective_item_id: "Objetivo/Meta"
+        description: "Desvío / Oportunidad"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
         review_code: "Código en el informe"
@@ -1734,7 +1734,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_user_assignments: "Responsables"
         origination_date: "Fecha de origen"
         follow_up_date: "Fecha de implementación"
-        audit_comments: "Comentarios de auditoría"
+        audit_comments: "Comentarios"
         state: "Estado"
         count: "Cantidad"
         solution_date: "Fecha de solución"
@@ -1749,7 +1749,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         finding_relations:
           one: "Relación"
           other: "Relaciones"
-          related_finding_id: "Relación (Observación / Oportunidad de mejora relacionada)"
+          related_finding_id: "Relación (Desvío / Oportunidad de mejora relacionada)"
           description: "Relación (descripción)"
         finding_user_assignments:
           one: "Usuario relacionado"
@@ -1785,22 +1785,22 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         answer: "Comentario"
         auditor_comments: "Comentarios del auditor"
         commitment_date: "Fecha de compromiso"
-        finding_id: "Observación / Oportunidad"
+        finding_id: "Desvío / Oportunidad"
         user_id: "Usuario"
         file_model: "Anexo"
         notify_users: "Enviar notificación"
         created_at: "Fecha del comentario"
       finding_relation:
-        finding_id: 'Observación / Oportunidad de mejora'
-        related_finding_id: 'Observación / Oportunidad de mejora relacionada'
+        finding_id: 'Desvío / Oportunidad de mejora'
+        related_finding_id: 'Desvío / Oportunidad de mejora relacionada'
         description: 'Descripción'
       finding_review_assignment:
-        finding_id: 'Observación / Oportunidad de mejora'
-        finding: 'Observación / Oportunidad de mejora'
+        finding_id: 'Desvío / Oportunidad de mejora'
+        finding: 'Desvío / Oportunidad de mejora'
         review_id: 'Informe'
         review: 'Informe'
       finding_user_assignment:
-        finding_id: 'Observación / Oportunidad de mejora'
+        finding_id: 'Desvío / Oportunidad de mejora'
         user_id: 'Usuario'
         user: 'Usuario'
         process_owner: 'Dueño del proceso'
@@ -1850,7 +1850,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"
         notes: "Notas"
-        findings: "Observaciones"
+        findings: "Desvíos"
         conclusion_reviews: "Informes"
         user_who_confirm: "Confirmada por"
         created_at: "Fecha de envío"
@@ -1862,7 +1862,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       old_password:
         password: "Contraseña"
       oportunity:
-        control_objective_item_id: "Objetivo de control"
+        control_objective_item_id: "Objetivo/Meta"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta"
@@ -1962,21 +1962,21 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           procedure_control_subitems:
             one: "Procedimiento de control"
             other: "Procedimientos de control"
-            control_objective_text: "Procedimiento de control (objetivo de control)"
+            control_objective_text: "Procedimiento de control (objetivo/meta)"
             relevance: "Procedimiento de control (importancia)"
-            control_objective_id: "Procedimiento de control (objetivo de control)"
+            control_objective_id: "Procedimiento de control (objetivo/meta)"
       procedure_control_item:
         aproach: "Enfoque"
         frequency: "Frecuencia"
         process_control_id: "Proceso"
       procedure_control_subitem:
-        control_objective_text: "Objetivo de control"
+        control_objective_text: "Objetivo/Meta"
         relevance: "Importancia"
-        control_objective_id: "Objetivo de control"
+        control_objective_id: "Objetivo/Meta"
       process_control:
         name: "Proceso"
         order: "Orden"
-        control_objectives: "Objetivos de control"
+        control_objectives: "Objetivos/Metas"
       question:
         sort_order: "Orden"
         question: "Pregunta"
@@ -2028,10 +2028,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           file_content_type: "Anexo (tipo de archivo)"
           file_file_size: "Anexo (tamaño de archivo)"
         finding_review_assignments:
-          one: "Observación / Oportunidad de mejora pendiente"
-          other: "Observaciones / Oportunidades de mejora pendientes"
-          finding: "Observación / Oportunidad de mejora pendiente"
-          finding_id: "Observación / Oportunidad de mejora pendiente"
+          one: "Desvío / Oportunidad de mejora pendiente"
+          other: "Desvíos / Oportunidades de mejora pendientes"
+          finding: "Desvío / Oportunidad de mejora pendiente"
+          finding_id: "Desvío / Oportunidad de mejora pendiente"
         review_user_assignments:
           one: "Integrante"
           other: "Integrantes"
@@ -2074,8 +2074,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         whodunnit: "Ejecutor"
         created_at: "Fecha"
       weakness:
-        control_objective_item_id: "Objetivo de control"
-        description: "Observación"
+        control_objective_item_id: "Objetivo/Meta"
+        description: "Desvío"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones de auditoría"
         answer: "Respuesta"
@@ -2199,7 +2199,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
               must_be_blank: "debe estar en blanco para el estado seleccionado"
             state:
               must_have_a_comment: "debe tener adjunto un comentario para esta transición"
-              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que la observación ya se encuentra en un informe definitivo"
+              can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que el desvío ya se encuentra en un informe definitivo"
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
@@ -2256,7 +2256,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           attributes:
             organization_roles:
               blank: "debe tener al menos uno"
-              invalid: "no se puede modificar, el usuario tiene observaciones pendientes (debe reasignarlas o desasociarlas)"
+              invalid: "no se puede modificar, el usuario tiene desvíos pendientes (debe reasignarlas o desasociarlas)"
             password:
               invalid: "debe cumplir las restricciones impuestas por el administrador"
               already_used: "ya fue utilizada con anterioridad"
@@ -2284,11 +2284,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion_draft_reviews: "Informe borrador"
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
-    control_objective_items: "Objetivos de control"
+    control_objective_items: "Objetivos/Metas"
     detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
-    findings: "Seguimiento de observaciones"
+    findings: "Seguimiento de desvíos"
     groups: "Grupos"
     help_contents: "Contenidos de ayuda"
     help_items: "Registros de ayuda"
@@ -2306,7 +2306,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     roles: "Perfiles"
     users: "Usuarios"
     versions: "Versiones"
-    weaknesses: "Observaciones"
+    weaknesses: "Desvíos"
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
 
