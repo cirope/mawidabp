@@ -13,7 +13,7 @@ class ConclusionAuditReportsController < ApplicationController
   #
   # * GET /conclusion_audit_reports
   def index
-    @title = t('conclusion_audit_reports.index_title')
+    @title = t('conclusion_audit_report.index_title')
 
     respond_to do |format|
       format.html
