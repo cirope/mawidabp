@@ -160,8 +160,13 @@ module ConclusionHighRiskReports
             pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
               data[:column_data].each do |col_data|
                 column_headers.each_with_index do |header, i|
-                  data = col_data[i].kind_of?(Array) ? "\n\n #{col_data[i]}" : col_data[i]
-                  pdf.text "<b>#{header.upcase}</b>: #{data}", :inline_format => true
+                  if col_data[i].kind_of? Array
+                    col_data[i].each do |data|
+                      pdf.text data, :inline_format => true
+                    end
+                  else
+                    pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", :inline_format => true
+                  end
                   pdf.move_down PDF_FONT_SIZE
                 end
               end
@@ -355,8 +360,13 @@ module ConclusionHighRiskReports
             pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
               data[:column_data].each do |col_data|
                 column_headers.each_with_index do |header, i|
-                  data = col_data[i].kind_of?(Array) ? "\n\n #{col_data[i]}" : col_data[i]
-                  pdf.text "<b>#{header.upcase}</b>: #{data}", :inline_format => true
+                  if col_data[i].kind_of? Array
+                    col_data[i].each do |data|
+                      pdf.text data, :inline_format => true
+                    end
+                  else
+                    pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", :inline_format => true
+                  end
                   pdf.move_down PDF_FONT_SIZE
                 end
               end
