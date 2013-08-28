@@ -126,7 +126,8 @@ MawidaApp::Application.routes.draw do
 
   [
     'high_risk_weaknesses_report', 'create_high_risk_weaknesses_report',
-    'fixed_weaknesses_report', 'create_fixed_weaknesses_report'
+    'fixed_weaknesses_report', 'create_fixed_weaknesses_report',
+    'nonconformities_report', 'create_nonconformities_report'
   ].each do |action|
     match "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",

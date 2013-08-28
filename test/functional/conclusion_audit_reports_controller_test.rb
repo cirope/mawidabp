@@ -11,7 +11,8 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     public_actions = []
     private_actions = [:index, :weaknesses_by_state, :weaknesses_by_risk,
       :weaknesses_by_audit_type, :weaknesses_by_audit_type, :cost_analysis,
-      :high_risk_weaknesses_report, :fixed_weaknesses_report]
+      :high_risk_weaknesses_report, :fixed_weaknesses_report,
+      :nonconformities_report]
 
     private_actions.each do |action|
       get action
@@ -428,5 +429,57 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'process_control_stats', 0)
+  end
+
+  test 'nonconformities report' do
+    perform_auth
+
+    get :nonconformities_report
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_audit_reports/nonconformities_report'
+
+    assert_nothing_raised(Exception) do
+      get :nonconformities_report, :nonconformities_report => {
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
+        }
+    end
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_audit_reports/nonconformities_report'
+  end
+
+  test 'filtered nonconformities report' do
+    perform_auth
+
+    get :nonconformities_report, :nonconformities_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date,
+      :business_unit_type => business_unit_types(:cycle).id,
+      :business_unit => 'one'
+    }
+
+    assert_response :success
+    assert_select '#error_body', false
+    assert_template 'conclusion_audit_reports/nonconformities_report'
+  end
+
+  test 'create nonconformities report' do
+    perform_auth
+
+    get :create_nonconformities_report, :nonconformities_report => {
+      :from_date => 10.years.ago.to_date,
+      :to_date => 10.years.from_now.to_date
+      },
+      :report_title => 'New title',
+      :report_subtitle => 'New subtitle'
+
+    assert_redirected_to Prawn::Document.relative_path(
+      I18n.t('conclusion_committee_report.nonconformities_report.pdf_name',
+        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
+        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+      'nonconformities_report', 0)
   end
 end

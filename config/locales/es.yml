@@ -214,6 +214,7 @@
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    nonconformities_report_title: "No conformidades"
     cost_analysis:
       detailed_column_resource: "Recurso"
       detailed_column_estimated_amount: "Costo estimado (planificado)"
@@ -236,6 +237,7 @@
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    nonconformities_report_title: "No conformidades"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
@@ -282,6 +284,14 @@
       without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+    nonconformities_report:
+      pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_nonconformities: "No conformidades Auditoría Interna"
+      external_audit_nonconformities: "No conformidades de Auditorías Externas"
+      title: "NO CONFORMIDADES - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_nonconformities: "Sin no conformidades"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"

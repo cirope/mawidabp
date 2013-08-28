@@ -14,6 +14,7 @@ class ConclusionAuditReportsController < ApplicationController
   # * GET /conclusion_audit_reports
   def index
     @title = t('conclusion_audit_report.index_title')
+    @quality_management = @auth_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html
