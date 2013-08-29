@@ -66,7 +66,7 @@ module ConclusionHighRiskReports
             end
 
             high_risk_weaknesses << [
-              "<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
+              "\n<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
@@ -167,7 +167,6 @@ module ConclusionHighRiskReports
                   else
                     pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", :inline_format => true
                   end
-                  pdf.move_down PDF_FONT_SIZE
                 end
               end
             end
@@ -265,7 +264,7 @@ module ConclusionHighRiskReports
             end
 
             fixed_weaknesses << [
-              "<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
+              "\n<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
@@ -367,7 +366,6 @@ module ConclusionHighRiskReports
                   else
                     pdf.text "<b>#{header.upcase}</b>: #{col_data[i]}", :inline_format => true
                   end
-                  pdf.move_down PDF_FONT_SIZE
                 end
               end
             end
