@@ -35,8 +35,10 @@ class ConclusionCommitteeReportsController < ApplicationController
     @title = t('conclusion_committee_report.synthesis_report_title')
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
+    @sqm = @auth_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'score',
-        'process_control', 'weaknesses_count', 'oportunities_count']
+        'process_control', 'weaknesses_count']
+    @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
     @filters = []
     @risk_levels = []
     @audits_by_business_unit = {}
@@ -78,9 +80,14 @@ class ConclusionCommitteeReportsController < ApplicationController
           'score' => ["#{Review.human_attribute_name(:score)} (1)", 15],
           'process_control' =>
             ["#{BestPractice.human_attribute_name(:process_controls)} (2)", 30],
-          'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12],
-          'oportunities_count' => ["#{t('review.oportunities_count')} (4)", 12]
+          'weaknesses_count' => ["#{t('review.weaknesses_count')} (3)", 12]
         }
+        if @sqm
+          columns['nonconformities_count'] = ["#{t('review.nonconformities_count')} (4)", 12]
+        else
+          columns['oportunities_count'] = ["#{t('review.oportunities_count')} (4)", 12]
+        end
+
         column_data = []
         review_scores = []
         name = but.name
@@ -125,10 +132,15 @@ class ConclusionCommitteeReportsController < ApplicationController
             process_control_text = process_controls.sort do |pc1, pc2|
               pc1[1] <=> pc2[1]
             end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
-            oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
-              c_r.review.final_oportunities.count.to_s :
-              t('conclusion_committee_report.synthesis_report.without_oportunities')
-
+            if @sqm
+              nonconformities_count_text = c_r.review.final_nonconformities.count > 0 ?
+                c_r.review.final_nonconformities.count.to_s :
+                t('conclusion_committee_report.synthesis_report.without_nonconformities')
+            else
+              oportunities_count_text = c_r.review.final_oportunities.count > 0 ?
+                c_r.review.final_oportunities.count.to_s :
+                t('conclusion_committee_report.synthesis_report.without_oportunities')
+            end
             review_scores << c_r.review.score
             column_data << [
               c_r.review.business_unit.name,
@@ -138,7 +150,7 @@ class ConclusionCommitteeReportsController < ApplicationController
               @risk_levels.blank? ?
                 t('conclusion_committee_report.synthesis_report.without_weaknesses') :
                 weaknesses_count_text,
-              oportunities_count_text
+              @sqm ? nonconformities_count_text : oportunities_count_text
             ]
           end
         end
@@ -308,8 +320,10 @@ class ConclusionCommitteeReportsController < ApplicationController
     end
 
     pdf.move_down PDF_FONT_SIZE
-    pdf.text t('conclusion_committee_report.synthesis_report.references',
-      :risk_types => @risk_levels.to_sentence),
+    references = @sqm ? t('conclusion_committee_report.synthesis_report.sqm_references',
+      :risk_types => @risk_levels.to_sentence) :
+      t('conclusion_committee_report.synthesis_report.references', :risk_types => @risk_levels.to_sentence)
+    pdf.text references,
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
 
     pdf.custom_save_as(
