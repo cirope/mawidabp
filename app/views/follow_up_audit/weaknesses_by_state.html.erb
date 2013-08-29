@@ -16,13 +16,21 @@
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
         <h2 class="simple_title"><%= audit_types.first %></h2>
-        <%= render :partial => 'weaknesses_by_state_table', :locals => {
-          :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
-          :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
-          :repeated_count => @weaknesses_counts[period]["#{key}_repeated"],
-          :being_implemented_resume => @being_implemented_resumes[period][key],
-          :audit_type_symbol => audit_type_symbol
-        } %>
+        <% locals = {
+            :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
+            :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
+            :repeated_count => @weaknesses_counts[period]["#{key}_repeated"],
+            :being_implemented_resume => @being_implemented_resumes[period][key],
+            :audit_type_symbol => audit_type_symbol
+          }
+          if @sqm
+            locals.merge!(
+              :nonconformities_count => @weaknesses_counts[period]["#{key}_nonconformities"],
+              :potential_nonconformities_count => @weaknesses_counts[period]["#{key}_potential_nonconformities"]
+            )
+          end
+        %>
+        <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
       <% end %>
     <% end %>
   <% end %>
@@ -33,13 +41,21 @@
         :period => period.inspect) %>
     </strong>
   </h1>
-  <%= render :partial => 'weaknesses_by_state_table', :locals => {
-    :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
-    :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
-    :repeated_count => @weaknesses_counts[period]['total_repeated'],
-    :being_implemented_resume => @being_implemented_resumes[period]['total'],
-    :audit_type_symbol => :internal
-  } %>
+  <% locals = {
+       :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
+       :oportunities_count => @weaknesses_counts[period]['total_oportunities'],
+       :repeated_count => @weaknesses_counts[period]['total_repeated'],
+       :being_implemented_resume => @being_implemented_resumes[period]['total'],
+       :audit_type_symbol => :internal
+     }
+     if @sqm
+       locals.merge!(
+         :nonconformities_count => @weaknesses_counts[period]['total_nonconformities'],
+         :potential_nonconformities_count => @weaknesses_counts[period]['total_potential_nonconformities']
+       )
+     end
+  %>
+  <%= render :partial => 'weaknesses_by_state_table', :locals => locals %>
 <% end %>
 
 <div id="links">
@@ -59,7 +75,8 @@
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.weaknesses_by_state.title')
+          :value => @sqm ? t('follow_up_committee.weaknesses_by_state.sqm_title'):
+            t('follow_up_committee.weaknesses_by_state.title')
         }
       ]
     }

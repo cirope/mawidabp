@@ -1115,8 +1115,7 @@ module ConclusionCommonReports
     if totals > 0
       columns = [
         [Finding.human_attribute_name(:state), 20],
-        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-          audit_type_symbol == :internal ? 20 : 80]
+        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),20]
       ]
       column_data = []
 
@@ -1149,15 +1148,18 @@ module ConclusionCommonReports
 
         column_data << [
           t("finding.status_#{state.first}"),
-          "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-          "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+          "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
-        if sqm
+
+        if audit_type_symbol == :internal && !sqm
+          column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+        elsif audit_type_symbol == :internal && sqm
           nc_count = nonconformities_count[state.last] || 0
           pnc_count = potential_nonconformities_count[state.last] || 0
           nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
           potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0
 
+          column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
           column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
           column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
         end
@@ -1165,11 +1167,13 @@ module ConclusionCommonReports
 
       column_data << [
         "<b>#{t('conclusion_committee_report.weaknesses_by_state.total')}</b>",
-        "<b>#{total_weaknesses}</b>",
-        "<b>#{total_oportunities}</b>"
+        "<b>#{total_weaknesses}</b>"
       ]
 
-      if sqm
+      if audit_type_symbol == :internal && !sqm
+        column_data.last << "<b>#{total_oportunities}</b>"
+      elsif audit_type_symbol == :internal && sqm
+        column_data.last << "<b>#{total_oportunities}</b>"
         column_data.last << "<b>#{total_nonconformities}</b>"
         column_data.last << "<b>#{total_potential_nonconformities}</b>"
       end

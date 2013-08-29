@@ -4,6 +4,7 @@ module FollowUpCommonReports
     @title = t 'follow_up_committee.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
+    @sqm = @auth_organization.kind.eql? 'quality_management'
     @audit_types = [
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
@@ -42,6 +43,31 @@ module FollowUpCommonReports
               Finding.list_all_by_date(@from_date, @to_date, false).send(
               "#{audit_type_symbol}_audit").finals(false).for_period(
               period).repeated.where(conditions).count
+            if @sqm
+              @weaknesses_counts[period]['total_nonconformities'] ||= {}
+              @weaknesses_counts[period]['total_potential_nonconformities'] ||= {}
+
+              @weaknesses_counts[period]["#{key}_nonconformities"] =
+                Nonconformity.list_all_by_date(@from_date, @to_date, false).
+                with_status_for_report.send("#{audit_type_symbol}_audit").
+                for_period(period).finals(false).where(conditions).group(
+                :state).count
+              @weaknesses_counts[period]["#{key}_potential_nonconformities"] =
+                PotentialNonconformity.list_all_by_date(@from_date, @to_date, false).
+                with_status_for_report.send("#{audit_type_symbol}_audit").
+                for_period(period).finals(false).where(conditions).group(
+                :state).count
+
+              @weaknesses_counts[period]["#{key}_nonconformities"].each do |state, count|
+                @weaknesses_counts[period]['total_nonconformities'][state] ||= 0
+                @weaknesses_counts[period]['total_nonconformities'][state] += count
+              end
+
+              @weaknesses_counts[period]["#{key}_potential_nonconformities"].each do |state, count|
+                @weaknesses_counts[period]['total_potential_nonconformities'][state] ||= 0
+                @weaknesses_counts[period]['total_potential_nonconformities'][state] += count
+              end
+            end
             being_implemented_counts = {:current => 0, :stale => 0,
               :current_rescheduled => 0, :stale_rescheduled => 0}
 
@@ -142,9 +168,18 @@ module FollowUpCommonReports
             oportunities_count = @weaknesses_counts[period]["#{key}_oportunities"]
             repeated_count = @weaknesses_counts[period]["#{key}_repeated"]
 
-            add_weaknesses_by_state_table(pdf, weaknesses_count,
-              oportunities_count, repeated_count,
-              @being_implemented_resumes[period][key], audit_type_symbol)
+            if @sqm
+              nonconformities_count = @weaknesses_counts[period]["#{key}_nonconformities"]
+              potential_nonconformities_count = @weaknesses_counts[period]["#{key}_potential_nonconformities"]
+
+              add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
+                repeated_count, @being_implemented_resumes[period][key], audit_type_symbol,
+                nonconformities_count, potential_nonconformities_count, @sqm)
+            else
+              add_weaknesses_by_state_table(pdf, weaknesses_count,
+                oportunities_count, repeated_count,
+                @being_implemented_resumes[period][key], audit_type_symbol)
+            end
           end
         end
       end
@@ -1339,22 +1374,37 @@ module FollowUpCommonReports
   end
 
   def add_weaknesses_by_state_table(pdf, weaknesses_count, oportunities_count,
-      repeated_count, being_implemented_resume, audit_type_symbol = :internal)
+      repeated_count, being_implemented_resume, audit_type_symbol = :internal, nonconformities_count = nil,
+      potential_nonconformities_count = nil, sqm = false)
+
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
+    if sqm
+      total_nonconformities = nonconformities_count.values.sum
+      total_potential_nonconformities = potential_nonconformities_count.values.sum
+      totals = total_weaknesses + total_oportunities + total_nonconformities +
+        total_potential_nonconformities
+    else
+      totals = total_weaknesses + total_oportunities
+    end
 
-    if (total_weaknesses + total_oportunities + repeated_count) > 0
+    if totals > 0
       columns = [
-        [Finding.human_attribute_name(:state), 30],
-        [
-          t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'),
-          audit_type_symbol == :internal ? 35 : 70]
+        [Finding.human_attribute_name(:state), 20],
+        [t('conclusion_committee_report.weaknesses_by_state.weaknesses_column'), 20]
       ]
       column_data = []
 
-      if audit_type_symbol == :internal
+      if audit_type_symbol == :internal && !sqm
         columns << [
-          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 35]
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
+      elsif audit_type_symbol == :internal && sqm
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.oportunities_column'), 20]
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.nonconformities_column'), 20]
+        columns << [
+          t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column'), 20]
       end
 
       column_headers, column_widths = [], []
@@ -1374,9 +1424,21 @@ module FollowUpCommonReports
 
         column_data << [
           "<b>#{t("finding.status_#{state.first}")}</b>",
-          "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)",
-          "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)",
+          "#{w_count} (#{'%.2f' % weaknesses_percentage.round(2)}%)"
         ]
+
+        if audit_type_symbol == :internal && !sqm
+          column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+        elsif audit_type_symbol == :internal && sqm
+          nc_count = nonconformities_count[state.last] || 0
+          pnc_count = potential_nonconformities_count[state.last] || 0
+          nonconformities_percentage = total_nonconformities > 0 ? nc_count.to_f / total_nonconformities * 100 : 0.0
+          potential_nonconformities_percentage = total_potential_nonconformities > 0 ? pnc_count.to_f / total_potential_nonconformities * 100 : 0.0
+
+          column_data.last << "#{o_count} (#{'%.2f' % oportunities_percentage.round(2)}%)"
+          column_data.last << "#{nc_count} (#{'%.2f' % nonconformities_percentage.round(2)}%)"
+          column_data.last << "#{pnc_count} (#{'%.2f' % potential_nonconformities_percentage.round(2)}%)"
+        end
 
         if state.first.to_s == 'being_implemented'
           if column_data.last[1] != '0'
@@ -1387,9 +1449,16 @@ module FollowUpCommonReports
 
       column_data << [
         "<b>#{t('follow_up_committee.weaknesses_by_state.total')}</b>",
-        "<b>#{total_weaknesses}</b>",
-        "<b>#{total_oportunities}</b>"
+        "<b>#{total_weaknesses}</b>"
       ]
+
+      if audit_type_symbol == :internal && !sqm
+        column_data.last << "<b>#{total_oportunities}</b>"
+      elsif audit_type_symbol == :internal && sqm
+        column_data.last << "<b>#{total_oportunities}</b>"
+        column_data.last << "<b>#{total_nonconformities}</b>"
+        column_data.last << "<b>#{total_potential_nonconformities}</b>"
+      end
 
       unless column_data.blank?
         pdf.font_size((PDF_FONT_SIZE * 0.75).round) do

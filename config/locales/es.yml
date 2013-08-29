@@ -819,6 +819,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
       pdf_name: "observaciones_seguimiento_por_estado_%{from_date}_al_%{to_date}.pdf"
       period_summary: "Resumen del periodo %{period}"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR ESTADO"
+      sqm_title: "SEGUIMIENTO DE HALLAZGOS TOTALES POR ESTADO"
       total: "TOTAL"
     weaknesses_by_risk:
       pdf_name: "observaciones_seguimiento_por_riesgo_%{from_date}_al_%{to_date}.pdf"
