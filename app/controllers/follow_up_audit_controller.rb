@@ -17,6 +17,7 @@ class FollowUpAuditController < ApplicationController
   # * GET /follow_up_audit
   def index
     @title = t 'follow_up_audit.index_title'
+    @quality_management = @auth_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html

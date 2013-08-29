@@ -661,6 +661,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    nonconformities_report_title: "No conformidades"
     cost_analysis:
       column_business_unit: "Unidad de negocio"
       column_project: "Proyecto"
@@ -690,6 +691,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weakness_summary: "Resumen de observaciones"
     high_risk_weaknesses: "Observaciones de riesgo alto"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
+    nonconformities_report_title: "No conformidades"
     weaknesses_being_implemented_current:
       one: "Vigente"
       other: "Vigentes"
@@ -748,6 +750,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
+    nonconformities_report:
+      pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
+      internal_audit_nonconformities: "No conformidades Auditoría Interna"
+      external_audit_nonconformities: "No conformidades de Auditorías Externas"
+      title: "NO CONFORMIDADES - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
+      without_nonconformities: "Sin no conformidades"
     period:
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"

@@ -15,6 +15,10 @@
       :action => :high_risk_weaknesses_report %></li>
   <li><%= link_to t('follow_up_audit.fixed_weaknesses_report_title'),
       :action => :fixed_weaknesses_report %></li>
+  <% if @quality_management %>
+    <li><%= link_to t('follow_up_audit.nonconformities_report_title'),
+        :action => :nonconformities_report %></li>
+  <% end %>
 </ul>
 
 <div class="clear"></div>
