@@ -147,6 +147,8 @@ class ConclusionReview < ActiveRecord::Base
     cover_bottom_text = "#{self.review.plan_item.business_unit.name}\n"
     cover_bottom_text << I18n.l(self.issue_date, :format => :long)
 
+    auth_organization = Organization.find GlobalModelConfig.current_organization_id
+
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
 
@@ -193,7 +195,6 @@ class ConclusionReview < ActiveRecord::Base
     )
 
     grouped_control_objectives.each do |process_control, cois|
-      auth_organization = Organization.find GlobalModelConfig.current_organization_id
       process_control_text = "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>"
       process_control_text += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
@@ -366,9 +367,10 @@ class ConclusionReview < ActiveRecord::Base
         if has_observations
           pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-
-          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
+          header = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
+          header += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
+          column_headers << header
           column_widths << pdf.percent_width(100)
 
           cois.each do |coi|
@@ -479,9 +481,11 @@ class ConclusionReview < ActiveRecord::Base
         if has_oportunities
           pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-
-          column_headers << "<b><i>#{ProcessControl.model_name.human}: " +
+          header = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
+          header += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
+
+          column_headers << header
           column_widths << pdf.percent_width(100)
 
           cois.each do |coi|
