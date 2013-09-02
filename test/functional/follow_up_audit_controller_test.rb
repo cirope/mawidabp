@@ -393,7 +393,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     get :nonconformities_report
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'follow_up_audit_reports/nonconformities_report'
+    assert_template 'follow_up_audit/nonconformities_report'
 
     assert_nothing_raised(Exception) do
       get :nonconformities_report, :nonconformities_report => {
@@ -404,7 +404,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'follow_up_audit_reports/nonconformities_report'
+    assert_template 'follow_up_audit/nonconformities_report'
   end
 
   test 'filtered nonconformities report' do
@@ -419,7 +419,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'follow_up_audit_reports/nonconformities_report'
+    assert_template 'follow_up_audit/nonconformities_report'
   end
 
   test 'create nonconformities report' do
@@ -433,7 +433,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_audit_report.nonconformities_report.pdf_name',
+      I18n.t('conclusion_committee_report.nonconformities_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'nonconformities_report', 0)
