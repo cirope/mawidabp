@@ -459,7 +459,7 @@ module FollowUpHighRiskReports
               "<b>#{Nonconformity.human_attribute_name(:review_code)}</b>: #{nc.review_code}",
               "<b>#{Nonconformity.human_attribute_name(:state)}</b>: #{nc.state_text}",
               "<b>#{Nonconformity.human_attribute_name(:risk)}</b>: #{nc.risk_text}",
-              "<b>#{Nonconformity.human_attribute_name(:follow_up_date)}</b>: #{l(nc.follow_up_date, :format => :long)}",
+              ("<b>#{Nonconformity.human_attribute_name(:follow_up_date)}</b>: #{l(nc.follow_up_date, :format => :long)}" if nc.follow_up_date),
               ("<b>#{Nonconformity.human_attribute_name(:origination_date)}</b>: #{l(nc.origination_date, :format => :long)}" if nc.origination_date),
               "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Nonconformity.human_attribute_name(:description)}</b>: #{nc.description}",
