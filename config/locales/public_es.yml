@@ -959,11 +959,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     errors:
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
-      with_solution_date: "tiene fecha de solución (y no debería)"
+      with_solution_date: "tiene fecha de solución/cierre (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
-      without_solution_date: "no tiene fecha de solución"
+      without_solution_date: "no tiene fecha de solución/cierre"
       without_audit_comments: "no tiene comentarios de auditoría"
 
   organization:
@@ -1391,13 +1391,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       is_unconfirmed: "está en estado 'No confirmada'"
       not_valid_state: "tiene un estado no permitido"
       with_follow_up_date: "tiene fecha de implementación (y no debería)"
-      with_solution_date: "tiene fecha de solución (y no debería)"
+      with_solution_date: "tiene fecha de solución/cierre (y no debería)"
       without_answer: "no tiene respuesta"
       without_audited: "no tiene auditado"
       without_auditor: "no tiene auditor"
       without_effect: "no tiene efecto"
       without_follow_up_date: "no tiene fecha de implementación"
-      without_solution_date: "no tiene fecha de solución"
+      without_solution_date: "no tiene fecha de solución/cierre"
       without_audit_comments: "no tiene comentarios de auditoría"
 
   welcome:
@@ -1737,7 +1737,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         audit_comments: "Comentarios de auditoría"
         state: "Estado"
         count: "Cantidad"
-        solution_date: "Fecha de solución"
+        solution_date: "fecha de solución/cierre"
         users: "Responsables"
         work_papers: "Papeles de trabajo"
         finding_answers: "Respuestas"
@@ -1871,7 +1871,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         work_papers: "Papeles de trabajo"
         state: "Estado"
         origination_date: "Fecha de origen"
-        solution_date: "Fecha de solución"
+        solution_date: "fecha de solución/cierre"
       organization:
         name: "Nombre"
         prefix: "Prefijo"
@@ -2087,7 +2087,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         origination_date: "Fecha de origen"
         follow_up_date: "Fecha de implementación"
         state: "Estado"
-        solution_date: "Fecha de solución"
+        solution_date: "fecha de solución/cierre"
         work_papers: "Papeles de trabajo"
       work_paper:
         name: "Nombre"
