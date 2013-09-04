@@ -9,7 +9,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :synthesis_report, :high_risk_weaknesses_report,
+    private_actions = [:index, :synthesis_report, :weaknesses_by_risk_report,
       :fixed_weaknesses_report]
 
     private_actions.each do |action|
@@ -86,16 +86,16 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       'synthesis_report', 0)
   end
 
-  test 'high risk weaknesses report' do
+  test 'weaknesses by risk report' do
     perform_auth
 
-    get :high_risk_weaknesses_report
+    get :weaknesses_by_risk_report
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
+    assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
 
     assert_nothing_raised(Exception) do
-      get :high_risk_weaknesses_report, :high_risk_weaknesses_report => {
+      get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -103,13 +103,13 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
+    assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
   end
 
-  test 'filtered high risk weaknesses report' do
+  test 'filtered weaknesses by risk report' do
     perform_auth
 
-    get :high_risk_weaknesses_report, :high_risk_weaknesses_report => {
+    get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
@@ -118,13 +118,13 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'conclusion_committee_reports/high_risk_weaknesses_report'
+    assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
   end
 
-  test 'create high risk weaknesses report' do
+  test 'create weaknesses by risk report' do
     perform_auth
 
-    get :create_high_risk_weaknesses_report, :high_risk_weaknesses_report => {
+    get :create_weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
       },
@@ -132,10 +132,10 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'high_risk_weaknesses_report', 0)
+      'weaknesses_by_risk_report', 0)
   end
 
   test 'fixed weaknesses report' do

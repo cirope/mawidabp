@@ -125,7 +125,7 @@ MawidaApp::Application.routes.draw do
   end
 
   [
-    'high_risk_weaknesses_report', 'create_high_risk_weaknesses_report',
+    'weaknesses_by_risk_report', 'create_weaknesses_by_risk_report',
     'fixed_weaknesses_report', 'create_fixed_weaknesses_report',
     'nonconformities_report', 'create_nonconformities_report'
   ].each do |action|

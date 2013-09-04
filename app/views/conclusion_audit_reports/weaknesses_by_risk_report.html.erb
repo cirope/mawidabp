@@ -1,6 +1,6 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :high_risk_weaknesses_report, :extra_params => {},
-  :forms => {:date_range => true, :business_unit => true}} %>
+  :locals => {:action => :weaknesses_by_risk_report, :extra_params => {},
+  :forms => {:date_range => true, :business_unit => true, :risk_levels => true}} %>
 
 <% @periods.each do |period| %>
   <% unless @notorious_reviews[period].blank? %>
@@ -11,12 +11,12 @@
     <% @notorious_reviews[period].each do |data| %>
       <% if !data[:external] && !@internal_title_showed %>
         <h1 class="center_title">
-          <%= t 'follow_up_committee.high_risk_weaknesses_report.internal_audit_weaknesses' %>
+          <%= t 'conclusion_committee_report.weaknesses_by_risk_report.internal_audit_weaknesses' %>
         </h1>
         <% @internal_title_showed = true %>
       <% elsif data[:external] && !@external_title_showed %>
         <h1 class="center_title">
-          <%= t 'follow_up_committee.high_risk_weaknesses_report.external_audit_weaknesses' %>
+          <%= t 'conclusion_committee_report.weaknesses_by_risk_report.external_audit_weaknesses' %>
         </h1>
         <% @external_title_showed = true %>
       <% end %>
@@ -45,7 +45,7 @@
         </table>
       <% else %>
         <p style="margin: 1em;">
-          <em><%= t 'follow_up_committee.high_risk_weaknesses_report.without_audits_in_the_period' %></em>
+          <em><%= t 'conclusion_committee_report.weaknesses_by_risk_report.without_audits_in_the_period' %></em>
         </p>
       <% end %>
     <% end %>
@@ -63,18 +63,18 @@
     :options => {
       :form_name => 'report',
       :url => request.query_parameters.merge(
-        {:action => :create_high_risk_weaknesses_report, :_ts => Time.now.to_i}
+        {:action => :create_weaknesses_by_risk_report, :_ts => Time.now.to_i}
       ),
       :fields => [
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.high_risk_weaknesses_report.title')
+          :value => t('conclusion_committee_report.weaknesses_by_risk_report.title')
         },
         {
           :name => :report_subtitle,
           :label => t('customize_report_form.subtitle'),
-          :value => t('follow_up_committee.high_risk_weaknesses_report.subtitle')
+          :value => t('conclusion_committee_report.weaknesses_by_risk_report.subtitle')
         }
       ]
     }

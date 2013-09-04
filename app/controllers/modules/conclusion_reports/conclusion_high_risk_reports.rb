@@ -1,33 +1,35 @@
 module ConclusionHighRiskReports
-  # Crea un PDF con las observaciones de riesgo alto para un determinado rango
+  # Crea un PDF con las observaciones por riesgo para un determinado rango
   # de fechas
   #
-  # * GET /conclusion_committee_reports/high_risk_weaknesses_report
-  def high_risk_weaknesses_report
-    @title = t('conclusion_committee_report.high_risk_weaknesses_report_title')
-    @from_date, @to_date = *make_date_range(params[:high_risk_weaknesses_report])
+  # * GET /conclusion_committee_reports/weaknesses_by_risk_report
+  def weaknesses_by_risk_report
+    @title = t('conclusion_committee_report.weaknesses_by_risk_report_title')
+    @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score',
-      'high_risk_weaknesses']
+      'weaknesses_by_risk']
     @filters = []
     @notorious_reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     ).notorious(true)
 
-    if params[:high_risk_weaknesses_report]
-      unless params[:high_risk_weaknesses_report][:business_unit_type].blank?
+    if params[:weaknesses_by_risk_report]
+      risk = params[:weaknesses_by_risk_report][:risk]
+
+      unless params[:weaknesses_by_risk_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
-          params[:high_risk_weaknesses_report][:business_unit_type])
+          params[:weaknesses_by_risk_report][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(
           @selected_business_unit.id)
         @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
           "\"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:high_risk_weaknesses_report][:business_unit].blank?
+      unless params[:weaknesses_by_risk_report][:business_unit].blank?
         business_units =
-          params[:high_risk_weaknesses_report][:business_unit].split(
+          params[:weaknesses_by_risk_report][:business_unit].split(
             SPLIT_AND_TERMS_REGEXP
           ).uniq.map(&:strip)
 
@@ -35,7 +37,7 @@ module ConclusionHighRiskReports
           conclusion_reviews = conclusion_reviews.by_business_unit_names(
             *business_units)
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-            "\"#{params[:high_risk_weaknesses_report][:business_unit].strip}\""
+            "\"#{params[:weaknesses_by_risk_report][:business_unit].strip}\""
         end
       end
     end
@@ -45,8 +47,8 @@ module ConclusionHighRiskReports
         columns = {
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
-          'high_risk_weaknesses' =>
-            [t('conclusion_committee_report.high_risk_weaknesses'), 70]
+          'weaknesses_by_risk' =>
+            [t('conclusion_committee_report.weaknesses_by_risk_report_title'), 70]
         }
         column_data = []
         name = but.name
@@ -54,8 +56,8 @@ module ConclusionHighRiskReports
           conclusion_reviews.for_period(period).with_business_unit_type(but.id)
 
         conclusion_review_per_unit_type.each do |c_r|
-          high_risk_weaknesses = []
-          weaknesses = c_r.review.final_weaknesses.with_highest_risk.
+          weaknesses_by_risk = []
+          weaknesses = c_r.review.final_weaknesses.by_risk(risk).
             with_pending_status_for_report
 
           weaknesses.each do |w|
@@ -65,7 +67,7 @@ module ConclusionHighRiskReports
                 u.full_name
             end
 
-            high_risk_weaknesses << [
+            weaknesses_by_risk << [
               "\n<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
@@ -79,11 +81,11 @@ module ConclusionHighRiskReports
             ].compact.join("\n")
           end
 
-          unless high_risk_weaknesses.blank?
+          unless weaknesses_by_risk.blank?
             column_data << [
               c_r.review.business_unit.name,
               c_r.review.reload.score_text,
-              high_risk_weaknesses
+              weaknesses_by_risk
             ]
           end
         end
@@ -101,12 +103,12 @@ module ConclusionHighRiskReports
     end
   end
 
-  # Crea un PDF con las observaciones de riesgo alto para un determinado rango
+  # Crea un PDF con las observaciones por riesgo para un determinado rango
   # de fechas
   #
-  # * POST /conclusion_committee_reports/create_high_risk_weaknesses_report
-  def create_high_risk_weaknesses_report
-    self.high_risk_weaknesses_report
+  # * POST /conclusion_committee_reports/create_weaknesses_by_risk_report
+  def create_weaknesses_by_risk_report
+    self.weaknesses_by_risk_report
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
@@ -142,10 +144,10 @@ module ConclusionHighRiskReports
             column_headers << columns[order].first
           end
           if !data[:external] && !@internal_title_showed
-            title = t('conclusion_committee_report.high_risk_weaknesses_report.internal_audit_weaknesses')
+            title = t('conclusion_committee_report.weaknesses_by_risk_report.internal_audit_weaknesses')
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t('conclusion_committee_report.high_risk_weaknesses_report.external_audit_weaknesses')
+            title = t('conclusion_committee_report.weaknesses_by_risk_report.external_audit_weaknesses')
             @external_title_showed = true
           end
 
@@ -172,7 +174,7 @@ module ConclusionHighRiskReports
             end
           else
             pdf.text(
-              t('conclusion_committee_report.high_risk_weaknesses_report.without_audits_in_the_period'),
+              t('conclusion_committee_report.weaknesses_by_risk_report.without_audits_in_the_period'),
               :style => :italic
             )
           end
@@ -189,14 +191,14 @@ module ConclusionHighRiskReports
     end
 
     pdf.custom_save_as(
-      t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk_report', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t('conclusion_committee_report.high_risk_weaknesses_report.pdf_name',
+      t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'high_risk_weaknesses_report', 0)
+        :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk_report', 0)
   end
 
   # Crea un PDF con las observaciones solucionadas para un determinado rango de

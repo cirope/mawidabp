@@ -212,7 +212,7 @@
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     nonconformities_report_title: "No conformidades"
     cost_analysis:
@@ -236,7 +236,7 @@
     control_objective_stats_title: 'Observaciones por objetivo de control'
     process_control_stats_title: 'Observaciones por proceso de negocio'
     synthesis_report_title: "Informe de síntesis al directorio"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    weaknesses_by_risk_report_title: "Observaciones por riesgo"
     nonconformities_report_title: "No conformidades"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     qa_indicators_title: "Indicadores de calidad"
@@ -247,7 +247,7 @@
     findings_type_external: "Hallazgos Auditorías Externas"
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
+    weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
@@ -275,14 +275,14 @@
       without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-    high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+    weaknesses_by_risk_report:
+      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     nonconformities_report:
       pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
@@ -662,7 +662,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     nonconformities_report_title: "No conformidades"
     cost_analysis:
@@ -685,14 +685,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     control_effectiveness: "Efectividad del control"
     pending_findings: "Seguimiento de observaciones pendientes"
     synthesis_report_title: "Informe de síntesis al directorio"
-    high_risk_weaknesses_report_title: "Observaciones de riesgo alto"
+    weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
     detailed_report: "Reporte detallado"
     rescheduled_being_implemented_weaknesses_report_title: "Observaciones en proceso reprogramadas"
     rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
-    high_risk_weaknesses: "Observaciones de riesgo alto"
+    weaknesses_by_risk: "Observaciones por riesgo"
     fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
     nonconformities_report_title: "No conformidades"
     weaknesses_being_implemented_current:
@@ -744,14 +744,14 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
       without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
-    high_risk_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_%{from_date}_al_%{to_date}.pdf"
+    weaknesses_by_risk_report:
+      pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
-      subtitle: "SEGUIMIENTO DE OBSERVACIONES DE RIESGO ALTO - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto en el intervalo seleccionado"
+      subtitle: "SEGUIMIENTO DE OBSERVACIONES POR RIESGO - INFORMES DEFINITIVOS"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     nonconformities_report:
       pdf_name: "no_conformidades_%{from_date}_al_%{to_date}.pdf"
