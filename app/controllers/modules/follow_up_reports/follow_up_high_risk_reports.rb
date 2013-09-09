@@ -215,6 +215,8 @@ module FollowUpHighRiskReports
     )
 
     if params[:fixed_weaknesses_report]
+      risk = params[:fixed_weaknesses_report][:risk]
+
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
           params[:fixed_weaknesses_report][:business_unit_type])
@@ -254,7 +256,7 @@ module FollowUpHighRiskReports
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []
           weaknesses = c_r.review.weaknesses.with_solution_date_between(
-            @from_date, @to_date).with_highest_risk
+            @from_date, @to_date).by_risk(risk)
 
           weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
@@ -268,7 +270,7 @@ module FollowUpHighRiskReports
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
-              "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",
+              ("<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}" if w.solution_date),
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
               "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
