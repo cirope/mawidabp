@@ -213,7 +213,7 @@
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
     weaknesses_by_audit_type_title: "Hallazgos totales por tipo de auditoría"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     nonconformities_report_title: "No conformidades"
     cost_analysis:
       detailed_column_resource: "Recurso"
@@ -238,7 +238,7 @@
     synthesis_report_title: "Informe de síntesis al directorio"
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     nonconformities_report_title: "No conformidades"
-    fixed_weaknesses_report_title: "Observaciones de riesgo alto solucionadas"
+    fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     qa_indicators_title: "Indicadores de calidad"
     weaknesses_by_state_title: "Hallazgos totales por estado"
     weaknesses_by_risk_title: "Hallazgos totales por riesgo"
@@ -248,7 +248,7 @@
     weaknesses_type_internal: "Observaciones Auditoría Interna"
     weaknesses_type_external: "Observaciones Auditorías Externas"
     weaknesses_by_risk: "Observaciones por riesgo"
-    fixed_weaknesses: "Observaciones de riesgo alto solucionadas"
+    fixed_weaknesses: "Observaciones por riesgo solucionadas"
     from_date: "Desde"
     to_date: "Hasta"
     invalid_dates: "Verifique el rango de fechas, no es válido."
@@ -267,13 +267,13 @@
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     fixed_weaknesses_report:
-      pdf_name: "observaciones_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
+      pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
       external_audit_weaknesses: "Observaciones de Auditorías Externas"
       title: "INFORME DE SINTESIS AL DIRECTORIO\nEVALUACIÓN DEL SISTEMA DE\nCONTROL INTERNO COM. \"A\" 5042"
       subtitle: "OBSERVACIONES SOLUCIONADAS - INFORMES DEFINITIVOS"
-      without_audits_in_the_period: "Sin auditorías de riesgo alto solucionadas en el periodo"
-      without_audits_in_the_interval: "Sin auditorías de riesgo alto solucionadas en el intervalo seleccionado"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
       without_weaknesses: "Sin observaciones"
     weaknesses_by_risk_report:
       pdf_name: "observaciones_por_riesgo_%{from_date}_al_%{to_date}.pdf"

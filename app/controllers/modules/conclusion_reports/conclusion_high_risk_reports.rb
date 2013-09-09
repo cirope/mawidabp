@@ -217,6 +217,8 @@ module ConclusionHighRiskReports
     )
 
     if params[:fixed_weaknesses_report]
+      risk = params[:fixed_weaknesses_report][:risk]
+
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
           params[:fixed_weaknesses_report][:business_unit_type])
@@ -256,7 +258,7 @@ module ConclusionHighRiskReports
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []
           weaknesses = c_r.review.final_weaknesses.with_solution_date_between(
-            @from_date, @to_date).with_highest_risk
+            @from_date, @to_date).by_risk(risk)
 
           weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
