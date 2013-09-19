@@ -39,15 +39,9 @@ module ApplicationHelper
 
   def super_truncate(text, length = 30)
     unless text.blank?
-      omission = content_tag(:abbr, '...', :title => h(text))
-      text_length = text.mb_chars.length
+      omission = content_tag(:abbr, '...', :title => text)
 
-      truncate(h(text_length > length ?
-            text.dup.concat('.' * omission.mb_chars.length) : text),
-        :length => text_length > length ?
-          (length + omission.mb_chars.length) : length,
-        :omission => omission
-      ).html_safe
+      truncate(text, :length => length, :omission => '%s') % omission
     end
   end
 

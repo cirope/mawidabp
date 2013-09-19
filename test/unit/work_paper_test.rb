@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'test_helper'
 
 # Clase para probar el modelo "WorkPaper"
@@ -151,7 +152,7 @@ class WorkPaperTest < ActiveSupport::TestCase
     zip_filename = '/tmp/test.zip'
     FileUtils.rm zip_filename if File.exists?(zip_filename)
 
-    Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+    Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
     end
 
@@ -160,7 +161,6 @@ class WorkPaperTest < ActiveSupport::TestCase
         :file => Rack::Test::UploadedFile.new(zip_filename)
       }
     )
-
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
     assert_nothing_raised { @work_paper.unzip_if_necesary }
     assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
@@ -172,7 +172,7 @@ class WorkPaperTest < ActiveSupport::TestCase
     zip_filename = '/tmp/test.zip'
     FileUtils.rm zip_filename if File.exists?(zip_filename)
 
-    Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+    Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
     end
 
@@ -192,12 +192,12 @@ class WorkPaperTest < ActiveSupport::TestCase
     count = 0
 
     assert_difference 'count' do
-      Zip::ZipFile.foreach(@work_paper.file_model.file.path) do |entry|
+      Zip::File.foreach(@work_paper.file_model.file.path) do |entry|
         count += 1
       end
     end
 
-    assert Zip::ZipFile.open(@work_paper.file_model.file.path).find_entry(
+    assert Zip::File.open(@work_paper.file_model.file.path).find_entry(
       'test.txt')
 
     FileUtils.rm zip_filename
