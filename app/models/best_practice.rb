@@ -1,6 +1,6 @@
 class BestPractice < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -9,7 +9,7 @@ class BestPractice < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     where(
       :organization_id => GlobalModelConfig.current_organization_id
     ).order('name ASC')
@@ -28,13 +28,13 @@ class BestPractice < ActiveRecord::Base
       record.errors.add attr, :locked
     end
   end
-  
+
   # Relaciones
   belongs_to :organization
-  has_many :process_controls, :dependent => :destroy,
-    :after_add => :assign_best_practice,
-    :order => "#{ProcessControl.table_name}.order ASC"
-  
+  has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC")},
+    :dependent => :destroy,
+    :after_add => :assign_best_practice
+
   accepts_nested_attributes_for :process_controls, :allow_destroy => true
 
   def initialize(attributes = nil, options = {})
@@ -52,7 +52,7 @@ class BestPractice < ActiveRecord::Base
       errors = self.process_controls.map do |pc|
         pc.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
-      
+
       self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 

@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 class ResourceClass < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
@@ -10,15 +11,15 @@ class ResourceClass < ActiveRecord::Base
     :human => 0,
     :material => 1
   }
-  
+
   # Named scopes
-  scope :human_resources, lambda {
+  scope :human_resources, -> {
     where(
       :organization_id => GlobalModelConfig.current_organization_id,
       :resource_class_type => TYPES[:human]
     ).order('name ASC')
   }
-  scope :material_resources, lambda {
+  scope :material_resources, -> {
     where(
       :organization_id => GlobalModelConfig.current_organization_id,
       :resource_class_type => TYPES[:material]
@@ -43,7 +44,7 @@ class ResourceClass < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :resources, :dependent => :destroy, :order => 'name ASC'
+  has_many :resources, -> { order('name ASC') }, :dependent => :destroy
 
   accepts_nested_attributes_for :resources, :allow_destroy => true
 

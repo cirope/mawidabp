@@ -41,13 +41,13 @@ class Review < ActiveRecord::Base
   attr_protected :score, :top_scale, :achieved_scale
 
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     includes(:period).where(
       "#{Period.table_name}.organization_id" =>
         GlobalModelConfig.current_organization_id
     ).order('identification ASC')
   }
-  scope :list_with_approved_draft, lambda {
+  scope :list_with_approved_draft, -> {
     includes(:period, :conclusion_draft_review).where(
       ConclusionReview.table_name => {:approved => true},
       Period.table_name => {
@@ -55,7 +55,7 @@ class Review < ActiveRecord::Base
       }
     ).order('identification ASC')
   }
-  scope :list_with_final_review, lambda {
+  scope :list_with_final_review, -> {
     includes(:period, :conclusion_final_review).where(
       [
         "#{Period.table_name}.organization_id = :organization_id",
@@ -64,7 +64,7 @@ class Review < ActiveRecord::Base
       { :organization_id => GlobalModelConfig.current_organization_id }
     ).order('identification ASC')
   }
-  scope :list_without_final_review, lambda {
+  scope :list_without_final_review, -> {
     includes(:period, :conclusion_final_review).where(
       [
         "#{Period.table_name}.organization_id = :organization_id",
@@ -73,7 +73,7 @@ class Review < ActiveRecord::Base
       { :organization_id => GlobalModelConfig.current_organization_id }
     ).order('identification ASC')
   }
-  scope :list_without_draft_review, lambda {
+  scope :list_without_draft_review, -> {
     includes(:period, :conclusion_draft_review).where(
       [
         "#{Period.table_name}.organization_id = :organization_id",
@@ -82,7 +82,7 @@ class Review < ActiveRecord::Base
       { :organization_id => GlobalModelConfig.current_organization_id }
     ).order('identification ASC')
   }
-  scope :list_all_without_final_review_by_date, lambda { |from_date, to_date|
+  scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
     includes(
       :period, :conclusion_final_review, {
         :plan_item => {:business_unit => :business_unit_type}
@@ -107,7 +107,7 @@ class Review < ActiveRecord::Base
       ]
     )
   }
-  scope :list_all_without_workflow, lambda { |period_id|
+  scope :list_all_without_workflow, ->(period_id) {
     includes(:period, :workflow).where(
       [
         "#{Period.table_name}.organization_id = :organization_id",
@@ -120,12 +120,14 @@ class Review < ActiveRecord::Base
       }
     ).order("#{table_name}.identification ASC")
   }
-  scope :internal_audit, includes(
+  scope :internal_audit, -> { includes(
     :plan_item => {:business_unit => :business_unit_type}
-  ).where("#{BusinessUnitType.table_name}.external" => false)
-  scope :external_audit, includes(
+    ).where("#{BusinessUnitType.table_name}.external" => false)
+  }
+  scope :external_audit, -> { includes(
     :plan_item => {:business_unit => :business_unit_type}
-  ).where("#{BusinessUnitType.table_name}.external" => true)
+    ).where("#{BusinessUnitType.table_name}.external" => true)
+  }
 
   # Restricciones
   validates :identification, :format => {:with => /\A\w[\w\s]*\z/},
@@ -170,9 +172,8 @@ class Review < ActiveRecord::Base
   has_one :conclusion_final_review
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
-  has_many :control_objective_items, :inverse_of => :review,
-    :dependent => :destroy, :after_add => :assign_review,
-    :order => 'order_number ASC'
+  has_many :control_objective_items, -> { order('order_number ASC') },
+    :inverse_of => :review, :dependent => :destroy, :after_add => :assign_review
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
   has_many :fortresses, :through => :control_objective_items
@@ -183,8 +184,8 @@ class Review < ActiveRecord::Base
   has_many :final_nonconformities, :through => :control_objective_items
   has_many :final_potential_nonconformities, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
-  has_many :review_user_assignments, :dependent => :destroy, :include => :user,
-    :order => 'assignment_type DESC', :inverse_of => :review
+  has_many :review_user_assignments, -> { includes(:user).order('assignment_type DESC') },
+    :dependent => :destroy, :inverse_of => :review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
   has_many :users, :through => :review_user_assignments
@@ -1395,7 +1396,7 @@ class Review < ActiveRecord::Base
     FileUtils.rm filename if File.exists?(filename)
     FileUtils.makedirs File.dirname(filename)
 
-    Zip::ZipFile.open(filename, Zip::ZipFile::CREATE) do |zipfile|
+    Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
       self.control_objective_items.each do |coi|
         coi.work_papers.each do |pa_wp|
           self.add_work_paper_to_zip pa_wp, dirs[:control_objectives], zipfile

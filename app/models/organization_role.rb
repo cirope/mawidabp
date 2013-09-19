@@ -3,9 +3,9 @@ class OrganizationRole < ActiveRecord::Base
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id },
     :important => true
   }
-  
+
   # Named scopes
-  scope :for_group, lambda { |group_id|
+  scope :for_group, ->(group_id) {
     includes(:organization).where(
       "#{Organization.table_name}.group_id" => group_id
     )
@@ -43,9 +43,9 @@ class OrganizationRole < ActiveRecord::Base
   end
 
   # Relaciones
-  belongs_to :user, :readonly => true
-  belongs_to :organization, :readonly => true
-  belongs_to :role, :readonly => true
+  belongs_to :user, -> { readonly }
+  belongs_to :organization, -> { readonly }
+  belongs_to :role, -> { readonly }
 
   def to_s
     "#{self.role.name} (#{self.organization.name})"

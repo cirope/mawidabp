@@ -11,7 +11,7 @@ class PlanItem < ActiveRecord::Base
   attr_accessor :business_unit_data, :overloaded
 
   # Named scopes
-  scope :list_unused, lambda { |period_id|
+  scope :list_unused, ->(period_id) {
     includes(:review, {:plan => :period}).where(
       [
         "#{Plan.table_name}.period_id = :period_id",

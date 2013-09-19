@@ -10,8 +10,10 @@ class ProcessControl < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, order(['best_practice_id ASC', "#{table_name}.order ASC"])
-  scope :list_for_period, lambda { |period_id|
+  scope :list, -> {
+    order(['best_practice_id ASC', "#{table_name}.order ASC"])
+  }
+  scope :list_for_period, ->(period_id) {
     select(connection.distinct('process_controls.id, name', 'name')).includes(
       :procedure_control_items => [:procedure_control]
     ).where(
@@ -20,8 +22,8 @@ class ProcessControl < ActiveRecord::Base
       }
     ).order("#{table_name}.order ASC")
   }
-  scope :list_for_log, lambda { |id| where(:id => id)  }
-  
+  scope :list_for_log, ->(id) { where(:id => id)  }
+
   # Restricciones
   validates :name, :order, :presence => true
   validates :name, :length => {:maximum => 255}, :allow_nil => true,
@@ -45,12 +47,12 @@ class ProcessControl < ActiveRecord::Base
       record.errors.add attr, :locked
     end
   end
-  
+
   # Relaciones
   belongs_to :best_practice
   has_many :procedure_control_items, :dependent => :destroy
-  has_many :control_objectives, :dependent => :destroy,
-    :order => "#{ControlObjective.table_name}.order ASC"
+  has_many :control_objectives, -> { order("#{ControlObjective.table_name}.order ASC") },
+    :dependent => :destroy
 
   accepts_nested_attributes_for :control_objectives, :allow_destroy => true
 
@@ -71,7 +73,7 @@ class ProcessControl < ActiveRecord::Base
       errors = self.control_objectives.map do |co|
         co.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
-      
+
       self.errors.add :base, errors.reject { |e| e.blank? }.join(
         APP_ENUM_SEPARATOR)
 

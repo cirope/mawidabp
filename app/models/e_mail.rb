@@ -15,7 +15,7 @@ class EMail < ActiveRecord::Base
     }
   )
   # Default scope
-  default_scope order('created_at DESC')
+  default_scope { order('created_at DESC') }
 
   # Restricciones
   validates :to, :subject, :presence => true

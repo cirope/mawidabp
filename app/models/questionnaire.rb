@@ -16,20 +16,21 @@ class Questionnaire < ActiveRecord::Base
   # Relaciones
   belongs_to :organization
   has_many :polls, :dependent => :destroy
-  has_many :questions, :dependent => :destroy,
-    :order => "#{Question.table_name}.sort_order ASC"
+  has_many :questions, -> { order("#{Question.table_name}.sort_order ASC") },
+    :dependent => :destroy
+
   # Named scopes
-  scope :by_pollable_type, lambda { |type|
+  scope :by_pollable_type, ->(type) {
     where(:pollable_type => type)
   }
-  scope :pollable, lambda {
+  scope :pollable, -> {
     where('pollable_type IS NOT NULL')
   }
-  scope :list, lambda {
+  scope :list, -> {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
-  scope :by_organization, lambda {
-    |org_id, id| where('id = :id AND organization_id = :org_id', :org_id => org_id, :id => id)
+  scope :by_organization, ->(org_id, id) {
+    where('id = :id AND organization_id = :org_id', :org_id => org_id, :id => id)
   }
 
   accepts_nested_attributes_for :questions, :allow_destroy => true

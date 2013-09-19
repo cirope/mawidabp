@@ -7,8 +7,8 @@ class WorkPaper < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :sorted_by_code, order('code ASC')
-  scope :with_prefix, lambda { |prefix|
+  scope :sorted_by_code, -> { order('code ASC') }
+  scope :with_prefix, ->(prefix) {
     where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
   }
 
@@ -205,7 +205,7 @@ class WorkPaper < ActiveRecord::Base
     self.create_pdf_cover
 
     if File.file?(original_filename) && File.file?(pdf_filename)
-      Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+      Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
         zipfile.add(self.filename_with_prefix, original_filename) { true }
         zipfile.add(File.basename(pdf_filename), pdf_filename) { true }
       end
@@ -234,7 +234,7 @@ class WorkPaper < ActiveRecord::Base
       zip_path = self.file_model.file.path
       base_dir = File.dirname self.file_model.file.path
 
-      Zip::ZipFile.foreach(zip_path) do |entry|
+      Zip::File.foreach(zip_path) do |entry|
         if entry.file?
           filename = File.join base_dir, entry.name
           ext = File.extname(filename)[1..-1]

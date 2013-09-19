@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Role < ActiveRecord::Base
   include Comparable
   include ParameterSelector
@@ -19,13 +20,13 @@ class Role < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :list, lambda { |organization_id|
+  scope :list, ->(organization_id) {
     where(
       :organization_id =>
         organization_id || GlobalModelConfig.current_organization_id
     ).order('name ASC')
   }
-  scope :list_by_organization_and_group, lambda { |organization, group|
+  scope :list_by_organization_and_group, ->(organization, group) {
     includes(:organization).where(
       "#{table_name}.organization_id" => organization.id,
       "#{Organization.table_name}.group_id" => group.id
@@ -48,12 +49,12 @@ class Role < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :organization_id}
-  
+
   # Relaciones
   belongs_to :organization
   has_many :organization_roles, :dependent => :destroy
   has_many :privileges, :after_add => :assign_role, :dependent => :destroy
-  has_many :users, :through => :organization_roles, :readonly => true
+  has_many :users, -> { readonly }, :through => :organization_roles
 
   accepts_nested_attributes_for :privileges, :allow_destroy => true
 
@@ -106,7 +107,7 @@ class Role < ActiveRecord::Base
 
   def auth_privileges_for(module_name)
     module_name = '_' if module_name.blank?
-    
+
     @auth_privileges[module_name] || @auth_privileges[module_name.to_sym] || {}
   end
 

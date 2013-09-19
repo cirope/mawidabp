@@ -1,9 +1,9 @@
 class Oportunity < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
-  
+
   # Named scopes
-  scope :all_for_report, lambda {
+  scope :all_for_report, -> {
     where(
       :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
       :final => true
@@ -18,7 +18,7 @@ class Oportunity < Finding
 
     record.errors.add attr, :invalid unless value =~ regex
   end
-  
+
   def initialize(attributes = nil, options = {}, import_users = false)
     super(attributes, options, import_users)
 
@@ -66,10 +66,10 @@ class Oportunity < Finding
 
     [code_from_review, code_from_oportunity].compact.max
   end
-  
+
   def must_be_approved?
     return true if self.revoked?
-    
+
     errors = []
 
     if self.implemented_audited? && self.solution_date.blank?
@@ -82,7 +82,7 @@ class Oportunity < Finding
       if self.answer.blank?
         errors << I18n.t('oportunity.errors.without_answer')
       end
-      
+
       if self.solution_date?
         errors << I18n.t('oportunity.errors.with_solution_date')
       end

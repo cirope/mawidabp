@@ -1,12 +1,12 @@
 class Detract < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   # Named scopes
-  scope :for_organization, lambda { |organization|
+  scope :for_organization, ->(organization) {
     where(:organization_id => organization.id)
   }
 

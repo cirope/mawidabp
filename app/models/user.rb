@@ -48,12 +48,12 @@ class User < ActiveRecord::Base
 
 
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     includes(:organizations).where(
       :organizations => { :id => GlobalModelConfig.current_organization_id }
     )
   }
-  scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
+  scope :with_valid_confirmation_hash, ->(confirmation_hash) {
     where(
       [
         'change_password_hash = :confirmation_hash', 'hash_changed > :time'
@@ -64,14 +64,16 @@ class User < ActiveRecord::Base
       }
     ).limit(1)
   }
-  scope :all_with_findings_for_notification, includes(
+  scope :all_with_findings_for_notification, -> { includes(
     :finding_user_assignments => :raw_finding
-  ).where(
+    ).where(
     :findings => {:state => Finding::STATUS[:notify], :final => false}
-  ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
-  scope :not_hidden, where(
+    ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
+  }
+  scope :not_hidden, -> { where(
     'hidden = false'
-  )
+    )
+  }
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?
@@ -153,8 +155,8 @@ class User < ActiveRecord::Base
       record.errors.add attr, :already_used if repeated
     end
   end
-  validates_format_of :email, :with => EMAIL_REGEXP, :allow_nil => true,
-    :allow_blank => true
+  validates_format_of :email, :with => EMAIL_REGEXP, :multiline => true,
+    :allow_nil => true, :allow_blank => true
 
   # Relaciones
   belongs_to :resource
@@ -163,25 +165,25 @@ class User < ActiveRecord::Base
   has_many :login_records, :dependent => :destroy
   has_many :error_records, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
-  has_many :detracts, :dependent => :destroy,
-    :order => "#{Detract.table_name}.created_at ASC"
+  has_many :detracts, -> { order("#{Detract.table_name}.created_at ASC") },
+    :dependent => :destroy
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
-  has_many :review_user_assignments, :dependent => :destroy,
-    :include => :review, :order => 'assignment_type DESC', :inverse_of => :user
-  has_many :reviews, :through => :review_user_assignments, :uniq => true
-  has_many :organization_roles, :dependent => :destroy,
-    :order => 'organization_id ASC', :after_add => :mark_roles_as_changed,
+  has_many :review_user_assignments, -> { includes(:review).order('assignment_type DESC') },
+    :dependent => :destroy, :inverse_of => :user
+  has_many :reviews, -> { uniq }, :through => :review_user_assignments
+  has_many :organization_roles, -> { order('organization_id ASC') },
+    :dependent => :destroy, :after_add => :mark_roles_as_changed,
     :after_remove => :mark_roles_as_changed
-  has_many :organizations, :through => :organization_roles, :uniq => true
+  has_many :organizations, -> { uniq }, :through => :organization_roles
   has_many :finding_user_assignments
   has_many :related_user_relations, :dependent => :destroy
   has_many :related_users, :through => :related_user_relations
-  has_many :findings, :through => :finding_user_assignments,
-    :source => :raw_finding, :class_name => 'Finding', :uniq => true
-  has_many :weaknesses, :through => :finding_user_assignments,
-    :source_type => 'Weakness', :source => :finding, :uniq => true
-  has_many :oportunities, :through => :finding_user_assignments,
-    :source_type => 'Oportunity', :source => :finding, :uniq => true
+  has_many :findings, -> { uniq }, :through => :finding_user_assignments,
+    :source => :raw_finding, :class_name => 'Finding'
+  has_many :weaknesses, -> { uniq }, :through => :finding_user_assignments,
+    :source_type => 'Weakness', :source => :finding
+  has_many :oportunities, -> { uniq }, :through => :finding_user_assignments,
+    :source_type => 'Oportunity', :source => :finding
 
   accepts_nested_attributes_for :organization_roles, :allow_destroy => true,
     :reject_if => proc { |attributes|

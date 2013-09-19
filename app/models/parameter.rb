@@ -1,6 +1,6 @@
 class Parameter < ActiveRecord::Base
   include ParameterSelector
-  
+
   has_paper_trail :meta => {
     :organization_id => Proc.new {GlobalModelConfig.current_organization_id},
     :important => Proc.new {|parameter| parameter.name.starts_with?('security')}
@@ -10,7 +10,7 @@ class Parameter < ActiveRecord::Base
 
   # Named scopes
   # Deprecated
-  scope :all_parameters, lambda { |name|
+  scope :all_parameters, ->(name) {
     where(
       :organization_id => GlobalModelConfig.current_organization_id,
       :name => name.to_s
@@ -19,7 +19,7 @@ class Parameter < ActiveRecord::Base
 
   # Restricciones de los atributos
   attr_readonly :name
-  
+
   # Restricciones
   validates :name, :format => {:with => /\A\w+\z/},
     :allow_nil => true, :allow_blank => true

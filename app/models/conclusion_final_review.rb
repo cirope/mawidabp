@@ -13,7 +13,7 @@ class ConclusionFinalReview < ConclusionReview
   }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
 
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     includes(
       :review => :period
     ).where(
@@ -21,7 +21,7 @@ class ConclusionFinalReview < ConclusionReview
       :organization_id => GlobalModelConfig.current_organization_id
     )
   }
-  scope :list_all_by_date, lambda { |from_date, to_date|
+  scope :list_all_by_date, ->(from_date, to_date) {
     includes(
       :review => [
         :period,
@@ -44,7 +44,7 @@ class ConclusionFinalReview < ConclusionReview
       ]
     )
   }
-  scope :list_all_by_solution_date, lambda { |from_date, to_date|
+  scope :list_all_by_solution_date, ->(from_date, to_date) {
     includes(
       :review => [
         :period,
@@ -68,7 +68,7 @@ class ConclusionFinalReview < ConclusionReview
       ]
     )
   }
-  scope :list_all_by_final_solution_date, lambda { |from_date, to_date|
+  scope :list_all_by_final_solution_date, ->(from_date, to_date) {
     includes(
       :review => [
         :period,
@@ -92,14 +92,17 @@ class ConclusionFinalReview < ConclusionReview
       ]
     )
   }
-  scope :internal_audit, includes(
-    :review => {:plan_item => {:business_unit => :business_unit_type}}
-  ).where("#{BusinessUnitType.table_name}.external" => false)
-  scope :external_audit, includes(
-    :review => {:plan_item => {:business_unit => :business_unit_type}}
-  ).where("#{BusinessUnitType.table_name}.external" => true)
-
-  scope :next_to_expire, lambda {
+  scope :internal_audit, -> {
+    includes(
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    ).where("#{BusinessUnitType.table_name}.external" => false)
+  }
+  scope :external_audit, -> {
+    includes(
+      :review => {:plan_item => {:business_unit => :business_unit_type}}
+    ).where("#{BusinessUnitType.table_name}.external" => true)
+  }
+  scope :next_to_expire, -> {
     where(
       'close_date = :warning_date',
       :warning_date =>

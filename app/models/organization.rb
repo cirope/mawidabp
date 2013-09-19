@@ -20,8 +20,8 @@ class Organization < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, order('name ASC')
-  scope :list_for_group, lambda { |group| where(:group_id => group.id) }
+  scope :list, -> { order('name ASC') }
+  scope :list_for_group, ->(group) { where(:group_id => group.id) }
 
   # Atributos de solo lectura
   attr_readonly :group_id
@@ -45,7 +45,8 @@ class Organization < ActiveRecord::Base
   # Relaciones
   belongs_to :group
   belongs_to :image_model, :dependent => :destroy
-  has_many :business_unit_types, :dependent => :destroy, :order => 'name ASC'
+  has_many :business_unit_types, -> { order('name ASC') },
+    :dependent => :destroy
   has_many :parameters, :dependent => :destroy
   has_many :roles, :dependent => :destroy
   has_many :organization_roles, :dependent => :destroy
@@ -58,8 +59,7 @@ class Organization < ActiveRecord::Base
   has_many :detracts, :dependent => :destroy
   has_many :polls, :dependent => :destroy
   has_many :questionnaires, :dependent => :destroy
-  has_many :users, :through => :organization_roles, :uniq => true,
-    :readonly => true
+  has_many :users, -> { readonly.uniq }, :through => :organization_roles
 
   accepts_nested_attributes_for :image_model, :allow_destroy => true,
     :reject_if => lambda { |attributes| attributes['image'].blank? }

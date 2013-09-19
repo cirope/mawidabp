@@ -8,14 +8,14 @@ class Period < ActiveRecord::Base
 
   # Callbacks
   before_destroy :can_be_destroyed?
-  
+
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     where(:organization_id => GlobalModelConfig.current_organization_id).order(
       'number DESC'
     )
   }
-  scope :list_by_date, lambda { |from_date, to_date|
+  scope :list_by_date, ->(from_date, to_date) {
     where(
       [
         "#{table_name}.organization_id = :organization_id",
@@ -31,7 +31,7 @@ class Period < ActiveRecord::Base
       }
     ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
-  scope :currents, lambda {
+  scope :currents, -> {
     where(
       [
         'organization_id = :organization_id',
@@ -44,7 +44,7 @@ class Period < ActiveRecord::Base
       }
     ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
-  scope :list_all_without_plans, lambda {
+  scope :list_all_without_plans, -> {
     includes(:plans).where(
       [
         "#{table_name}.organization_id = :organization_id",
@@ -53,7 +53,7 @@ class Period < ActiveRecord::Base
       {:organization_id => GlobalModelConfig.current_organization_id}
     ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
-  scope :list_all_without_procedure_controls, lambda {
+  scope :list_all_without_procedure_controls, -> {
     includes(:procedure_controls).where(
       [
         "#{table_name}.organization_id = :organization_id",
@@ -63,7 +63,7 @@ class Period < ActiveRecord::Base
     ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
 
-  
+
   # Restricciones
   validates :number, :numericality => {:only_integer => true},
     :allow_nil => true
@@ -73,7 +73,7 @@ class Period < ActiveRecord::Base
   validates_date :start, :allow_nil => true, :allow_blank => true
   validates_date :end, :allow_nil => true, :allow_blank => true,
     :after => :start
-  
+
   # Relaciones
   belongs_to :organization
   has_many :reviews

@@ -22,8 +22,10 @@ class ControlObjectiveItem < ActiveRecord::Base
     }
   })
 
-  scope :not_excluded_from_score, where(:exclude_from_score => false)
-  scope :with_names, lambda { |*control_objective_names|
+  scope :not_excluded_from_score, -> {
+    where(:exclude_from_score => false)
+  }
+  scope :with_names, ->(*control_objective_names) {
     conditions = []
     parameters = {}
 
@@ -92,36 +94,31 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Relaciones
   belongs_to :control_objective, :inverse_of => :control_objective_items
   belongs_to :review, :inverse_of => :control_objective_items
-  has_many :weaknesses, :dependent => :destroy, :order => 'review_code ASC',
+  has_many :weaknesses, :dependent => :destroy,
     :conditions => {:final => false}
-  has_many :oportunities, :dependent => :destroy, :order => 'review_code ASC',
-    :conditions => {:final => false}
-  has_many :fortresses, :dependent => :destroy, :order => 'review_code ASC',
-    :conditions => {:final => false}
-  has_many :nonconformities, :dependent => :destroy, :order => 'review_code ASC',
-    :conditions => {:final => false}
-  has_many :potential_nonconformities, :dependent => :destroy, :order => 'review_code ASC',
-    :conditions => {:final => false}
-  has_many :final_weaknesses, :dependent => :destroy, :class_name => 'Weakness',
-    :order => 'review_code ASC', :conditions => {:final => true}
-  has_many :final_oportunities, :dependent => :destroy,
-    :order => 'review_code ASC', :class_name => 'Oportunity',
-    :conditions => {:final => true}
-  has_many :final_fortresses, :dependent => :destroy,
-    :order => 'review_code ASC', :class_name => 'Fortress',
-    :conditions => {:final => true}
-  has_many :final_nonconformities, :dependent => :destroy,
-    :order => 'review_code ASC', :class_name => 'Nonconformity',
-    :conditions => {:final => true}
-  has_many :final_potential_nonconformities, :dependent => :destroy,
-    :order => 'review_code ASC', :class_name => 'PotentialNonconformity',
-    :conditions => {:final => true}
-  has_many :work_papers, :as => :owner, :dependent => :destroy,
-    :order => 'code ASC',
+  has_many :oportunities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy
+  has_many :fortresses, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy
+  has_many :nonconformities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy
+  has_many :potential_nonconformities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy
+  has_many :final_weaknesses, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy, :class_name => 'Weakness'
+  has_many :final_oportunities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy, :class_name => 'Oportunity'
+  has_many :final_fortresses, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy, :class_name => 'Fortress'
+  has_many :final_nonconformities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy, :class_name => 'Nonconformity'
+  has_many :final_potential_nonconformities, -> { where(final: false).order('review_code ASC') },
+    :dependent => :destroy, :class_name => 'PotentialNonconformity'
+  has_many :work_papers, -> { order('code ASC') }, :as => :owner, :dependent => :destroy,
     :before_add => [:check_for_final_review, :prepare_work_paper],
     :before_remove => :check_for_final_review
-  has_one :control, :as => :controllable, :dependent => :destroy,
-    :order => "#{Control.table_name}.order ASC"
+  has_one :control, -> { order("#{Control.table_name}.order ASC") }, :as => :controllable,
+    :dependent => :destroy
 
   accepts_nested_attributes_for :control, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true

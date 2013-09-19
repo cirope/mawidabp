@@ -7,10 +7,11 @@ class Nonconformity < Finding
   before_save :assign_highest_risk
 
   # Named scopes
-  scope :all_for_report, where(
+  scope :all_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true
-  ).order(['risk DESC', 'state ASC'])
+    ).order(['risk DESC', 'state ASC'])
+  }
 
   # Restricciones
   validates :risk, :priority, :presence => true

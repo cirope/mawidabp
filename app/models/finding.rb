@@ -135,40 +135,42 @@ class Finding < ActiveRecord::Base
   ]
 
   # Named scopes
-  scope :with_prefix, lambda { |prefix|
+  scope :with_prefix, ->(prefix) {
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
-  scope :repeated, where(:state => STATUS[:repeated])
-  scope :not_repeated, where('state <> ?', STATUS[:repeated])
-  scope :revoked, where(:state => STATUS[:revoked])
-  scope :not_revoked, where('state <> ?', STATUS[:revoked])
-  scope :with_pending_status_for_report, where(
+  scope :repeated, -> { where(:state => STATUS[:repeated]) }
+  scope :not_repeated, -> { where('state <> ?', STATUS[:repeated]) }
+  scope :revoked, -> { where(:state => STATUS[:revoked]) }
+  scope :not_revoked, -> { where('state <> ?', STATUS[:revoked]) }
+  scope :with_pending_status_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
-  )
-  scope :with_pending_status, where(
+    )
+  }
+  scope :with_pending_status, -> { where(
     :state => PENDING_STATUS - [STATUS[:incomplete]]
-  )
-  scope :all_for_reallocation_with_review, lambda { |review|
+    )
+  }
+  scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).where(
       :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false
     )
   }
-  scope :all_for_reallocation, where(:state => PENDING_STATUS, :final => false)
-  scope :for_notification, where(:state => STATUS[:notify], :final => false)
-  scope :finals, lambda { |use_finals| where(:final => use_finals) }
-  scope :sort_by_code, order('review_code ASC')
-  scope :for_current_organization, lambda {
+  scope :all_for_reallocation, -> { where(:state => PENDING_STATUS, :final => false) }
+  scope :for_notification, -> { where(:state => STATUS[:notify], :final => false) }
+  scope :finals, ->(use_finals) { where(:final => use_finals) }
+  scope :sort_by_code, -> { order('review_code ASC') }
+  scope :for_current_organization, -> {
     includes(:control_objective_item => {:review => :period}).where(
       "#{Period.table_name}.organization_id = :organization_id",
       :organization_id => GlobalModelConfig.current_organization_id
     )
   }
-  scope :for_period, lambda { |period|
+  scope :for_period, ->(period) {
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
     )
   }
-  scope :next_to_expire, lambda {
+  scope :next_to_expire, -> {
     where(
       [
         'follow_up_date = :warning_date',
@@ -183,7 +185,7 @@ class Finding < ActiveRecord::Base
       }
     )
   }
-  scope :unconfirmed_for_notification, lambda {
+  scope :unconfirmed_for_notification, -> {
     where(
       [
         'first_notification_date >= :stale_unconfirmed_date',
@@ -198,7 +200,7 @@ class Finding < ActiveRecord::Base
       }
     )
   }
-  scope :unanswered_and_stale, lambda { |factor|
+  scope :unanswered_and_stale, ->(factor) {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -233,7 +235,7 @@ class Finding < ActiveRecord::Base
       parameters
     )
   }
-  scope :unconfirmed_and_stale, lambda {
+  scope :unconfirmed_and_stale, -> {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -266,7 +268,7 @@ class Finding < ActiveRecord::Base
       parameters
     )
   }
-  scope :confirmed_and_stale, lambda {
+  scope :confirmed_and_stale, -> {
     stale_parameters = Organization.all_parameters(
       :admin_finding_stale_confirmed_days)
     pre_conditions = []
@@ -308,9 +310,9 @@ class Finding < ActiveRecord::Base
       parameters
     )
   }
-  scope :being_implemented, where(:state => STATUS[:being_implemented])
-  scope :not_incomplete, where("state <> ?", Finding::STATUS[:incomplete])
-  scope :list_all_by_date, lambda { |from_date, to_date, order|
+  scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
+  scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
+  scope :list_all_by_date, ->(from_date, to_date, order) {
     includes(
       :control_objective_item => {:review =>
           [:period, :conclusion_final_review, {:plan_item => :business_unit}]}
@@ -328,10 +330,11 @@ class Finding < ActiveRecord::Base
         ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
     )
   }
-  scope :with_status_for_report, where(
+  scope :with_status_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
-  )
-  scope :list_all_in_execution_by_date, lambda { |from_date, to_date|
+    )
+  }
+  scope :list_all_in_execution_by_date, ->(from_date, to_date) {
     includes(
       :control_objective_item => {:review => [:period, :conclusion_final_review]}
     ).where(
@@ -346,17 +349,19 @@ class Finding < ActiveRecord::Base
       }
     )
   }
-  scope :internal_audit, includes(
+  scope :internal_audit, -> { includes(
     :control_objective_item => {
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     }
-  ).where("#{BusinessUnitType.table_name}.external" => false)
-  scope :external_audit, includes(
+    ).where("#{BusinessUnitType.table_name}.external" => false)
+  }
+  scope :external_audit, -> { includes(
     :control_objective_item => {
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     }
-  ).where("#{BusinessUnitType.table_name}.external" => true)
-  scope :with_solution_date_between, lambda { |from_date, to_date|
+    ).where("#{BusinessUnitType.table_name}.external" => true)
+  }
+  scope :with_solution_date_between, ->(from_date, to_date) {
     where(
       "#{table_name}.solution_date BETWEEN :from_date AND :to_date",
       :from_date => from_date, :to_date => to_date
@@ -475,28 +480,27 @@ class Finding < ActiveRecord::Base
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
-  has_many :finding_answers, :dependent => :destroy,
-    :after_add => :answer_added, :order => 'created_at ASC'
+  has_many :finding_answers, -> { order('created_at ASC') }, :dependent => :destroy,
+    :after_add => :answer_added
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :finding_relations, :dependent => :destroy,
     :before_add => :check_for_valid_relation
-  has_many :inverse_finding_relations, :readonly => true,
+  has_many :inverse_finding_relations, -> { readonly },
     :foreign_key => :related_finding_id, :class_name => 'FindingRelation'
-  has_many :notifications, :through => :notification_relations, :uniq => true,
-    :order => 'created_at'
+  has_many :notifications, -> { order('created_at').uniq },
+    :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
-  has_many :work_papers, :as => :owner, :dependent => :destroy,
-    :before_add => [:prepare_work_paper, :check_for_final_review],
-    :before_remove => :check_for_final_review, :order => 'code ASC'
-  has_many :comments, :as => :commentable, :dependent => :destroy,
-    :order => 'created_at ASC'
-  has_many :finding_user_assignments, :dependent => :destroy, :include => :user,
+  has_many :work_papers, -> { order('code ASC') }, :as => :owner,
+    :dependent => :destroy, :before_add => [:prepare_work_paper, :check_for_final_review],
+    :before_remove => :check_for_final_review
+  has_many :comments, -> { order('created_at ASC') }, :as => :commentable,
+    :dependent => :destroy
+  has_many :finding_user_assignments, -> { includes(:user) }, :dependent => :destroy,
     :inverse_of => :finding, :before_add => :check_for_final_review,
     :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :users, :through => :finding_user_assignments,
-    :order => 'last_name ASC'
+  has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
 
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
     :reject_if => lambda { |attributes| attributes['answer'].blank? }
