@@ -1,4 +1,6 @@
 class HelpItem < ActiveRecord::Base
+  include ActsAsTree
+
   acts_as_tree :order => 'order_number ASC'
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }

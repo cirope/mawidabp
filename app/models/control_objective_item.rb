@@ -94,8 +94,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Relaciones
   belongs_to :control_objective, :inverse_of => :control_objective_items
   belongs_to :review, :inverse_of => :control_objective_items
-  has_many :weaknesses, :dependent => :destroy,
-    :conditions => {:final => false}
+  has_many :weaknesses, -> { where(final: false) }, :dependent => :destroy
   has_many :oportunities, -> { where(final: false).order('review_code ASC') },
     :dependent => :destroy
   has_many :fortresses, -> { where(final: false).order('review_code ASC') },

@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Finding < ActiveRecord::Base
+  include ActsAsTree
   include Comparable
   include ParameterSelector
 
@@ -34,7 +35,6 @@ class Finding < ActiveRecord::Base
     }
   }.with_indifferent_access
 
-  acts_as_tree
   has_paper_trail :meta => {
     :organization_id => proc { GlobalModelConfig.current_organization_id }
   }
@@ -151,7 +151,7 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :all_for_reallocation_with_review, ->(review) {
-    includes(:control_objective_item => :review).where(
+    includes(:control_objective_item => :review).references(:reviews).where(
       :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false
     )
   }
@@ -163,12 +163,12 @@ class Finding < ActiveRecord::Base
     includes(:control_objective_item => {:review => :period}).where(
       "#{Period.table_name}.organization_id = :organization_id",
       :organization_id => GlobalModelConfig.current_organization_id
-    )
+    ).references(:periods)
   }
   scope :for_period, ->(period) {
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
-    )
+    ).references(:periods)
   }
   scope :next_to_expire, -> {
     where(
@@ -233,7 +233,7 @@ class Finding < ActiveRecord::Base
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
       parameters
-    )
+    ).references(:periods)
   }
   scope :unconfirmed_and_stale, -> {
     stale_parameters = Organization.all_parameters(
@@ -266,7 +266,7 @@ class Finding < ActiveRecord::Base
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
       parameters
-    )
+    ).references(:periods)
   }
   scope :confirmed_and_stale, -> {
     stale_parameters = Organization.all_parameters(
@@ -308,7 +308,7 @@ class Finding < ActiveRecord::Base
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
       parameters
-    )
+    ).references(:periods)
   }
   scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
   scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
@@ -325,7 +325,7 @@ class Finding < ActiveRecord::Base
         :begin => from_date, :end => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:conslusion_reviews, :periods).order(
       order ?
         ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
     )
@@ -347,19 +347,25 @@ class Finding < ActiveRecord::Base
         :begin => from_date, :end => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
+    ).references(:reviews, :periods, :conclusion_reviews)
+  }
+  scope :internal_audit, -> {
+    includes(
+      :control_objective_item => {
+        :review => {:plan_item => {:business_unit => :business_unit_type}}
+      }
+    ).where("#{BusinessUnitType.table_name}.external" => false).refereces(
+      :business_unit_types
     )
   }
-  scope :internal_audit, -> { includes(
-    :control_objective_item => {
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    }
-    ).where("#{BusinessUnitType.table_name}.external" => false)
-  }
-  scope :external_audit, -> { includes(
-    :control_objective_item => {
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    }
-    ).where("#{BusinessUnitType.table_name}.external" => true)
+  scope :external_audit, -> {
+    includes(
+      :control_objective_item => {
+        :review => {:plan_item => {:business_unit => :business_unit_type}}
+      }
+    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+      :business_unit_types
+    )
   }
   scope :with_solution_date_between, ->(from_date, to_date) {
     where(
