@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    includes(:organizations).where(
+    includes(:organizations).references(:organizations).where(
       :organizations => { :id => GlobalModelConfig.current_organization_id }
     )
   }
@@ -65,10 +65,11 @@ class User < ActiveRecord::Base
       }
     ).limit(1)
   }
-  scope :all_with_findings_for_notification, -> { includes(
-    :finding_user_assignments => :raw_finding
-    ).where(
-    :findings => {:state => Finding::STATUS[:notify], :final => false}
+  scope :all_with_findings_for_notification, -> {
+    includes(
+      :finding_user_assignments => :raw_finding
+    ).references(:findings).where(
+      :findings => { :state => Finding::STATUS[:notify], :final => false }
     ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
   }
   scope :not_hidden, -> { where(
