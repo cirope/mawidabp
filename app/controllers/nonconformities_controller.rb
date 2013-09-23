@@ -135,7 +135,7 @@ class NonconformitiesController < ApplicationController
 
     respond_to do |format|
       Nonconformity.transaction do
-        if @nonconformity.update_attributes(params[:nonconformity])
+        if @nonconformity.update(params[:nonconformity])
           flash.notice = t 'nonconformity.correctly_updated'
           format.html { redirect_to(edit_nonconformity_url(@nonconformity)) }
           format.xml  { head :ok }

@@ -36,7 +36,7 @@ class HelpItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un item de ayuda
   test 'update' do
-    assert @help_item.update_attributes(:name => 'Updated name'),
+    assert @help_item.update(:name => 'Updated name'),
       @help_item.errors.full_messages.join('; ')
     @help_item.reload
     assert_equal 'Updated name', @help_item.name

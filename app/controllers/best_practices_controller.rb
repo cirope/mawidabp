@@ -97,7 +97,7 @@ class BestPracticesController < ApplicationController
     params[:best_practice][:organization_id] = @best_practice.organization_id
 
     respond_to do |format|
-      if @best_practice.update_attributes(params[:best_practice])
+      if @best_practice.update(params[:best_practice])
         flash.notice = t 'best_practice.correctly_updated'
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { head :ok }

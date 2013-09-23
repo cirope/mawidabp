@@ -92,7 +92,7 @@ class BusinessUnitTypesController < ApplicationController
     @business_unit_type = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @business_unit_type.update_attributes(params[:business_unit_type])
+      if @business_unit_type.update(params[:business_unit_type])
         flash.notice = t 'business_unit_type.correctly_updated'
         format.html { redirect_to(business_unit_types_url) }
         format.xml  { head :ok }

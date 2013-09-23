@@ -391,7 +391,7 @@ class UsersControllerTest < ActionController::TestCase
       :name => 'security_allow_concurrent_sessions'
     ).first
 
-    assert parameter.update_attributes(:value => 0)
+    assert parameter.update(:value => 0)
 
     post :create_session,
       :user => {

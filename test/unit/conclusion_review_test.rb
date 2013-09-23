@@ -48,7 +48,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   test 'update' do
     @conclusion_review = ConclusionReview.find(
       conclusion_reviews(:conclusion_past_draft_review).id)
-    assert @conclusion_review.update_attributes(
+    assert @conclusion_review.update(
       :applied_procedures => 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload

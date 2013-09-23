@@ -71,7 +71,7 @@ class ParametersController < ApplicationController
     end
 
     respond_to do |format|
-      if @parameter.update_attributes(clean_parameters(params[:parameter]))
+      if @parameter.update(clean_parameters(params[:parameter]))
         flash.notice = t 'parameter.correctly_updated'
         format.html { redirect_to(parameters_url(:type => @type)) }
         format.xml  { head :ok }
@@ -101,7 +101,7 @@ class ParametersController < ApplicationController
   end
 
   # Elimina los atributos que comienzan con key_ o value_ para que puedan ser
-  # utilizados directamente en los métodos new, update_attributes, etc.
+  # utilizados directamente en los métodos new, update, etc.
   def clean_parameters(parameters) #:doc:
     parameters.reject { |k,| k =~ /\Akey_.*\Z|\Avalue_.*\Z/ }
   end

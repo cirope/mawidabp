@@ -43,7 +43,7 @@ class PlanItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un item de plan
   test 'update' do
-    assert @plan_item.update_attributes(:project => 'Updated project'),
+    assert @plan_item.update(:project => 'Updated project'),
       @plan_item.errors.full_messages.join('; ')
     @plan_item.reload
     assert_equal 'Updated project', @plan_item.project

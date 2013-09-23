@@ -138,7 +138,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       Finding.transaction do
-        if @finding.update_attributes(params[:finding])
+        if @finding.update(params[:finding])
           flash.notice = t 'finding.correctly_updated'
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
           format.xml  { head :ok }

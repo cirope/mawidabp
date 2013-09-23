@@ -131,7 +131,7 @@ class PotentialNonconformitiesController < ApplicationController
 
     respond_to do |format|
       PotentialNonconformity.transaction do
-        if @potential_nonconformity.update_attributes(params[:potential_nonconformity])
+        if @potential_nonconformity.update(params[:potential_nonconformity])
           flash.notice = t 'potential_nonconformity.correctly_updated'
           format.html { redirect_to(edit_potential_nonconformity_url(@potential_nonconformity)) }
           format.xml  { head :ok }

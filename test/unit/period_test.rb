@@ -33,7 +33,7 @@ class PeriodTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un periodo
   test 'update' do
-    assert @period.update_attributes(:description => 'Updated period'),
+    assert @period.update(:description => 'Updated period'),
       @period.errors.full_messages.join('; ')
     @period.reload
     assert_equal 'Updated period', @period.description

@@ -276,7 +276,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert nonconformity.update_attributes(:repeated_of_id => repeated_of.id)
+    assert nonconformity.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert nonconformity.reload.repeated_of
 

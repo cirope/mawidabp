@@ -137,7 +137,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       Weakness.transaction do
-        if @weakness.update_attributes(params[:weakness])
+        if @weakness.update(params[:weakness])
           flash.notice = t 'weakness.correctly_updated'
           format.html { redirect_to(edit_weakness_url(@weakness)) }
           format.xml  { head :ok }

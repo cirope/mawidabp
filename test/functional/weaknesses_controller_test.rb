@@ -287,7 +287,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert weakness.update_attributes(:repeated_of_id => repeated_of.id)
+    assert weakness.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert weakness.reload.repeated_of
 

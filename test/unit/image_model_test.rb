@@ -38,7 +38,7 @@ class ImageModelTest < ActiveSupport::TestCase
   test 'update' do
     assert_not_equal 'image/gif', @image_model.image_content_type
 
-    assert @image_model.update_attributes(
+    assert @image_model.update(
       :image => Rack::Test::UploadedFile.new(
         "#{Rails.root}/test/fixtures/files/test.gif", 'image/gif', true
       )

@@ -32,7 +32,7 @@ class InlineHelpTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un contenido de ayuda en línea
   test 'update' do
-    assert @inline_help.update_attributes(:content => 'Updated content'),
+    assert @inline_help.update(:content => 'Updated content'),
       @inline_help.errors.full_messages.join('; ')
     @inline_help.reload
     assert_equal 'Updated content', @inline_help.content

@@ -42,7 +42,7 @@ class NotificationTest < ActiveSupport::TestCase
   test 'update' do
     new_confirmation_hash = UUIDTools::UUID.random_create.to_s
 
-    assert @notification.update_attributes(
+    assert @notification.update(
       :confirmation_hash => new_confirmation_hash, :notes => 'Updated notes'),
       @notification.errors.full_messages.join('; ')
     assert_equal new_confirmation_hash, @notification.confirmation_hash

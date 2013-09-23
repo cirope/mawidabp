@@ -28,7 +28,7 @@ class ProcedureControlTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un procedimiento de control
   test 'update' do
-    assert @procedure_control.update_attributes(
+    assert @procedure_control.update(
       :period_id => periods(:third_period).id),
       @procedure_control.errors.full_messages.join('; ')
 

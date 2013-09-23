@@ -86,7 +86,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una organización
   test 'update' do
-    assert @organization.update_attributes(:name => 'New name'),
+    assert @organization.update(:name => 'New name'),
       @organization.errors.full_messages.join('; ')
     @organization.reload
     assert_equal 'New name', @organization.name

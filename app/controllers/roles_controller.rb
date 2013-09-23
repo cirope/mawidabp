@@ -89,7 +89,7 @@ class RolesController < ApplicationController
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
-      if @role.update_attributes(params[:role].merge(
+      if @role.update(params[:role].merge(
             :organization_id => @auth_organization.id))
         flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }

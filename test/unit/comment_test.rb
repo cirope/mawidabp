@@ -36,7 +36,7 @@ class CommentTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un comentario
   test 'update' do
-    assert @comment.update_attributes(:comment => 'Updated comment'),
+    assert @comment.update(:comment => 'Updated comment'),
       @comment.errors.full_messages.join('; ')
     @comment.reload
     assert_equal 'Updated comment', @comment.comment

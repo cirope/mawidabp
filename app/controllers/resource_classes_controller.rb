@@ -93,7 +93,7 @@ class ResourceClassesController < ApplicationController
     @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @resource_class.update_attributes(params[:resource_class])
+      if @resource_class.update(params[:resource_class])
         flash.notice = t 'resource_class.correctly_updated'
         format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }

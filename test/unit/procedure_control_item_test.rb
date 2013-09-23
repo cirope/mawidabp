@@ -40,7 +40,7 @@ class ProcedureControlItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un ítem de procedimiento de control
   test 'update' do
-    assert @procedure_control_item.update_attributes(:order => 10),
+    assert @procedure_control_item.update(:order => 10),
       @procedure_control_item.errors.full_messages.join('; ')
 
     @procedure_control_item.reload

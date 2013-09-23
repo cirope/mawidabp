@@ -73,12 +73,12 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert findings.size > 0
 
     assert_difference 'Finding.repeated.count' do
-      assert review.update_attributes(
+      assert review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {:finding_id => repeated_id}
         }
       )
-      assert findings.detect(&:being_implemented?).update_attributes(
+      assert findings.detect(&:being_implemented?).update(
         :repeated_of_id => repeated_id
       )
     end
@@ -110,7 +110,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un informe final
   test 'update' do
-    assert @conclusion_review.update_attributes(
+    assert @conclusion_review.update(
       :applied_procedures => 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload

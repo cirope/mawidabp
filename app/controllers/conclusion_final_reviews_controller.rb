@@ -130,7 +130,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @conclusion_final_review.update_attributes(
+      if @conclusion_final_review.update(
           params[:conclusion_final_review])
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }

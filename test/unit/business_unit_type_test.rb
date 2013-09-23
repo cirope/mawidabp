@@ -33,7 +33,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un grupo
   test 'update' do
-    assert @business_unit_type.update_attributes(:name => 'Updated name'),
+    assert @business_unit_type.update(:name => 'Updated name'),
       @business_unit_type.errors.full_messages.join('; ')
     @business_unit_type.reload
     assert_equal 'Updated name', @business_unit_type.name

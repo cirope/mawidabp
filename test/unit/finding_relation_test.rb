@@ -34,7 +34,7 @@ class FindingRelationTest < ActiveSupport::TestCase
   # Prueba de actualización de un perfil
   test 'update' do
     assert_equal 'Duplicated', @finding_relation.description
-    assert @finding_relation.update_attributes(:description => 'Related'),
+    assert @finding_relation.update(:description => 'Related'),
       @finding_relation.errors.full_messages.join('; ')
     @finding_relation.reload
     assert_equal 'Related', @finding_relation.description

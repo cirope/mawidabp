@@ -133,7 +133,7 @@ class PollsController < ApplicationController
     respond_to do |format|
       if @poll.nil?
         format.html { redirect_to login_users_url, :alert => (t 'poll.not_found') }
-      elsif @poll.update_attributes(params[:poll])
+      elsif @poll.update(params[:poll])
         if @auth_user
           format.html { redirect_to login_users_url, :notice => (t 'poll.correctly_updated') }
         else

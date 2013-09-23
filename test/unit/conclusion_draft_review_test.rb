@@ -45,7 +45,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un informe borrador
   test 'update' do
-    assert @conclusion_review.update_attributes(
+    assert @conclusion_review.update(
       :applied_procedures => 'Updated applied procedures'),
       @conclusion_review.errors.full_messages.join('; ')
     @conclusion_review.reload

@@ -39,7 +39,7 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
   # Prueba de actualización de una utilización de recursos
   test 'update' do
     assert_in_delta 20, @resource_utilization.units, 0.01
-    assert @resource_utilization.update_attributes(:units => '22'),
+    assert @resource_utilization.update(:units => '22'),
       @resource_utilization.errors.full_messages.join('; ')
     @resource_utilization.reload
     assert_in_delta 22, @resource_utilization.units, 0.01

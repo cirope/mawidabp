@@ -107,7 +107,7 @@ class NonconformityTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una no conformidad
   test 'update' do
-    assert @nonconformity.update_attributes(:description => 'Updated description'),
+    assert @nonconformity.update(:description => 'Updated description'),
       @nonconformity.errors.full_messages.join('; ')
     @nonconformity.reload
     assert_equal 'Updated description', @nonconformity.description
@@ -244,7 +244,7 @@ class NonconformityTest < ActiveSupport::TestCase
     nonconformity = Nonconformity.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id)
 
-    assert nonconformity.update_attributes(:control_objective_item_id =>
+    assert nonconformity.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
     assert_equal 'NC006', nonconformity.review_code
   end
@@ -254,7 +254,7 @@ class NonconformityTest < ActiveSupport::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id)
 
     assert_raise RuntimeError do
-      nonconformity.update_attributes(:control_objective_item_id =>
+      nonconformity.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_policy_3_1_item).id)
     end
   end
@@ -263,7 +263,7 @@ class NonconformityTest < ActiveSupport::TestCase
     nonconformity = Nonconformity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification).id)
 
-    assert nonconformity.update_attributes(:control_objective_item_id =>
+    assert nonconformity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
 
     assert_equal 'PTNC 01', nonconformity.work_papers.first.code
@@ -368,7 +368,7 @@ class NonconformityTest < ActiveSupport::TestCase
 
     assert_no_difference 'Nonconformity.count' do
       assert_difference 'WorkPaper.count' do
-        uneditable_nonconformity.update_attributes({
+        uneditable_nonconformity.update({
         :work_papers_attributes => {
             'new' => {
               :name => 'New post_workpaper name',
@@ -394,7 +394,7 @@ class NonconformityTest < ActiveSupport::TestCase
 
     assert_no_difference ['Nonconformity.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
-        uneditable_nonconformity.update_attributes({
+        uneditable_nonconformity.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New post_workpaper name',

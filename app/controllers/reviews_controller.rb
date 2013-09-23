@@ -112,7 +112,7 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @review.update_attributes(params[:review])
+      if @review.update(params[:review])
         flash.notice = t 'review.correctly_updated'
         format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { head :ok }

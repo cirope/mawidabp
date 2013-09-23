@@ -77,7 +77,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un subitem del procedimiento de control
   test 'update' do
-    assert @procedure_control_subitem.update_attributes(
+    assert @procedure_control_subitem.update(
       :control_objective_text => 'Updated control objective text'),
       @procedure_control_subitem.errors.full_messages.join('; ')
 

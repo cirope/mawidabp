@@ -57,7 +57,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un reporte
   test 'update' do
-    assert @review.update_attributes(:description => 'New description'),
+    assert @review.update(:description => 'New description'),
       @review.errors.full_messages.join('; ')
     @review.reload
     assert_equal 'New description', @review.description
@@ -424,7 +424,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'add a related finding from a final review' do
     assert_difference '@review.finding_review_assignments.count' do
-      assert @review.update_attributes(
+      assert @review.update(
         :finding_review_assignments_attributes => {
           :new_1 => {
             :finding_id =>
@@ -438,7 +438,7 @@ class ReviewTest < ActiveSupport::TestCase
   test 'can not add a related finding without a final review' do
     assert_no_difference '@review.finding_review_assignments.count' do
       assert_raise RuntimeError do
-        @review.update_attributes(
+        @review.update(
           :finding_review_assignments_attributes => {
             :new_1 => {
               :finding_id =>

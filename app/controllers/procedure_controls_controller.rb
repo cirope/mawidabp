@@ -120,7 +120,7 @@ class ProcedureControlsController < ApplicationController
     @procedure_control = find_with_organization(params[:id], true)
 
     respond_to do |format|
-      if @procedure_control.update_attributes(params[:procedure_control])
+      if @procedure_control.update(params[:procedure_control])
         flash.notice = t 'procedure_control.correctly_updated'
         format.html { redirect_to(edit_procedure_control_url(@procedure_control)) }
         format.xml  { head :ok }

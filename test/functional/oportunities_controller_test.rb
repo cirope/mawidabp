@@ -268,7 +268,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert oportunity.update_attributes(:repeated_of_id => repeated_of.id)
+    assert oportunity.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert oportunity.reload.repeated_of
 

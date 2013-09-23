@@ -39,7 +39,7 @@ class OrganizationRoleTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un rol dentro de la organización
   test 'update' do
-    assert @organization_role.update_attributes(
+    assert @organization_role.update(
       :role => roles(:empty_admin_role)),
       @organization_role.errors.full_messages.join('; ')
     @organization_role.reload

@@ -89,7 +89,7 @@ class PeriodsController < ApplicationController
     @period = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @period.update_attributes(params[:period])
+      if @period.update(params[:period])
         flash.notice = t 'period.correctly_updated'
         format.html { redirect_to(periods_url) }
         format.xml  { head :ok }

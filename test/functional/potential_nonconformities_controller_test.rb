@@ -252,7 +252,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert potential_nonconformity.update_attributes(:repeated_of_id => repeated_of.id)
+    assert potential_nonconformity.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert potential_nonconformity.reload.repeated_of
 

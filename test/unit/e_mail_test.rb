@@ -32,7 +32,7 @@ class EMailTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una contraseña antigua
   test 'update' do
-    assert @email.update_attributes(:to => 'other@mawida.com'),
+    assert @email.update(:to => 'other@mawida.com'),
       @email.errors.full_messages.join('; ')
     
     assert_equal 'other@mawida.com', @email.reload.to

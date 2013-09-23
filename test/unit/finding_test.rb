@@ -101,7 +101,7 @@ class FindingTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una debilidad
   test 'update' do
-    assert @finding.update_attributes(:description => 'Updated description'),
+    assert @finding.update(:description => 'Updated description'),
       @finding.errors.full_messages.join('; ')
     @finding.reload
     assert_equal 'Updated description', @finding.description
@@ -151,7 +151,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal [error_message_from_model(@finding, :answer, :blank)],
       @finding.errors[:answer]
 
-    assert @finding.reload.update_attributes(
+    assert @finding.reload.update(
       :state => Finding::STATUS[:implemented_audited],
       :solution_date => 1.month.from_now)
     @finding.solution_date = nil
@@ -364,8 +364,8 @@ class FindingTest < ActiveSupport::TestCase
         :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id)
     finding.state = Finding::STATUS[:implemented]
 
-    assert !finding.update_attributes(:state => Finding::STATUS[:implemented])
-    assert finding.update_attributes(:state => Finding::STATUS[:confirmed])
+    assert !finding.update(:state => Finding::STATUS[:implemented])
+    assert finding.update(:state => Finding::STATUS[:confirmed])
   end
 
   test 'unconfirmed to confirmed after audited response' do
@@ -462,7 +462,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'versions between' do
     assert_equal 0, @finding.versions_between(1.year.ago, 1.year.from_now).size
-    assert @finding.update_attributes(:audit_comments => 'Updated comments')
+    assert @finding.update(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.versions_between.size
     assert_equal 1, @finding.versions_between(1.year.ago, 1.year.from_now).size
     assert_equal 0, @finding.versions_between(1.minute.from_now,
@@ -475,12 +475,12 @@ class FindingTest < ActiveSupport::TestCase
   test 'versions since final review' do
     assert_equal 0, @finding.versions_after_final_review.size
     updated_at = @finding.updated_at.dup
-    assert @finding.update_attributes(:audit_comments => 'Updated comments')
+    assert @finding.update(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.versions_after_final_review.size
     assert_equal 0, @finding.versions_after_final_review(updated_at).size
     updated_at = @finding.reload.updated_at.dup
 
-    assert @finding.update_attributes(:audit_comments => 'New updated comments')
+    assert @finding.update(:audit_comments => 'New updated comments')
     assert_equal 2, @finding.versions_after_final_review.size
     assert_equal 2, @finding.versions_after_final_review(updated_at + 1).size
     assert @finding.versions_after_final_review.first.update_attribute(
@@ -491,9 +491,9 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'status change history' do
     assert_equal 1, @finding.status_change_history.size
-    assert @finding.update_attributes(:audit_comments => 'Updated comments')
+    assert @finding.update(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.status_change_history.size
-    assert @finding.update_attributes(:state => Finding::STATUS[:assumed_risk],
+    assert @finding.update(:state => Finding::STATUS[:assumed_risk],
       :solution_date => Date.today)
     assert_equal 2, @finding.status_change_history.size
   end
@@ -540,7 +540,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      assert @finding.update_attributes(:description => 'Updated description')
+      assert @finding.update(:description => 'Updated description')
     end
 
     @finding.finding_user_assignments.each do |fua|
@@ -564,7 +564,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      assert @finding.update_attributes(:description => 'Updated description')
+      assert @finding.update(:description => 'Updated description')
     end
 
     @finding.finding_user_assignments.each do |fua|
@@ -602,7 +602,7 @@ class FindingTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      assert finding.update_attributes(:description => 'Updated description')
+      assert finding.update(:description => 'Updated description')
     end
 
     finding.finding_user_assignments.each do |fua|
@@ -750,7 +750,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 0, repeated_of.repeated_children.size
     assert_not_equal repeated_of.origination_date, finding.origination_date
     assert !repeated_of.repeated?
-    assert finding.update_attributes(:repeated_of_id => repeated_of.id)
+    assert finding.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
     assert_equal repeated_of.origination_date, finding.origination_date
@@ -768,7 +768,7 @@ class FindingTest < ActiveSupport::TestCase
       findings(:iso_27000_security_policy_3_1_item_weakness).id)
 
     assert_raise RuntimeError do
-      finding.update_attributes(:repeated_of_id => repeated_of.id)
+      finding.update(:repeated_of_id => repeated_of.id)
     end
   end
 
@@ -780,7 +780,7 @@ class FindingTest < ActiveSupport::TestCase
     repeated_of_original_state = repeated_of.state
 
     assert !repeated_of.repeated?
-    assert finding.update_attributes(:repeated_of_id => repeated_of.id)
+    assert finding.update(:repeated_of_id => repeated_of.id)
     assert repeated_of.reload.repeated?
     assert finding.reload.repeated_of
 
@@ -800,7 +800,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.review.finding_review_assignments.clear
 
     assert_raise RuntimeError do
-      finding.update_attributes(:repeated_of_id => repeated_of.id)
+      finding.update(:repeated_of_id => repeated_of.id)
     end
   end
 
@@ -1138,7 +1138,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_no_difference 'Finding.count' do
       assert_difference 'WorkPaper.count' do
-        uneditable_finding.update_attributes({
+        uneditable_finding.update({
             :work_papers_attributes => {
               '1_new' => {
                 :name => 'New post_workpaper name',
@@ -1164,7 +1164,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert_no_difference ['Finding.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
-        uneditable_finding.update_attributes({
+        uneditable_finding.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New post_workpaper name',

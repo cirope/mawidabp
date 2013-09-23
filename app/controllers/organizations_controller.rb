@@ -109,7 +109,7 @@ class OrganizationsController < ApplicationController
     params[:organization].delete :business_units_attributes
 
     respond_to do |format|
-      if @organization.update_attributes(params[:organization])
+      if @organization.update(params[:organization])
         flash.notice = t 'organization.correctly_updated'
         format.html { redirect_to(organizations_url) }
         format.xml  { head :ok }

@@ -118,7 +118,7 @@ class WorkflowsController < ApplicationController
     end
 
     respond_to do |format|
-      if @workflow.update_attributes(params[:workflow])
+      if @workflow.update(params[:workflow])
         flash.notice = t 'workflow.correctly_updated'
         format.html { redirect_to(workflows_url) }
         format.xml  { head :ok }

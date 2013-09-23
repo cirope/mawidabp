@@ -24,7 +24,7 @@ class HelpContentTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un contenido de ayuda
   test 'update' do
-    assert @help_content.update_attributes(:language => 'jp'),
+    assert @help_content.update(:language => 'jp'),
       @help_content.errors.full_messages.join('; ')
     @help_content.reload
     assert_equal 'jp', @help_content.language

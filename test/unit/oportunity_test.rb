@@ -88,7 +88,7 @@ class OportunityTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una oportunidad
   test 'update' do
-    assert @oportunity.update_attributes(
+    assert @oportunity.update(
       :review_code => 'OM20', :description => 'Updated description'),
       @oportunity.errors.full_messages.join('; ')
     @oportunity.reload
@@ -180,7 +180,7 @@ class OportunityTest < ActiveSupport::TestCase
     oportunity = Oportunity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_oportunity).id)
 
-    assert oportunity.update_attributes(:control_objective_item_id =>
+    assert oportunity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'OM004', oportunity.review_code
   end
@@ -190,7 +190,7 @@ class OportunityTest < ActiveSupport::TestCase
         :iso_27000_security_organization_4_2_item_editable_oportunity).id)
 
     assert_raise RuntimeError do
-      oportunity.update_attributes(:control_objective_item_id =>
+      oportunity.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_policy_3_1_item).id)
     end
   end
@@ -199,7 +199,7 @@ class OportunityTest < ActiveSupport::TestCase
     oportunity = Oportunity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_oportunity).id)
 
-    assert oportunity.update_attributes(:control_objective_item_id =>
+    assert oportunity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'PTOM 04', oportunity.work_papers.first.code
   end

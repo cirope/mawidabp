@@ -85,7 +85,7 @@ class HelpItemsController < ApplicationController
     @help_item = HelpItem.find(params[:id])
 
     respond_to do |format|
-      if @help_item.update_attributes(params[:help_item])
+      if @help_item.update(params[:help_item])
         flash.notice = t 'help_item.correctly_updated'
         format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { head :ok }

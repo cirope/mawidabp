@@ -31,7 +31,7 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un perfil
   test 'update' do
-    assert @related_user_relation.update_attributes(
+    assert @related_user_relation.update(
       :related_user => users(:manager_user)
     ), @related_user_relation.errors.full_messages.join('; ')
     

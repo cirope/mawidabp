@@ -39,7 +39,7 @@ class PollTest < ActiveSupport::TestCase
   # Prueba de actualización de una encuesta
   test 'update' do
     assert_equal @poll.answered, false
-    assert @poll.update_attributes(:comments => 'Updated comments'),
+    assert @poll.update(:comments => 'Updated comments'),
       @poll.errors.full_messages.join('; ')
     @poll.reload
     assert_equal 'Updated comments', @poll.comments

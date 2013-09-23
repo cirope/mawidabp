@@ -108,7 +108,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una debilidad
   test 'update' do
-    assert @weakness.update_attributes(:description => 'Updated description'),
+    assert @weakness.update(:description => 'Updated description'),
       @weakness.errors.full_messages.join('; ')
     @weakness.reload
     assert_equal 'Updated description', @weakness.description
@@ -245,7 +245,7 @@ class WeaknessTest < ActiveSupport::TestCase
     weakness = Weakness.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
-    assert weakness.update_attributes(:control_objective_item_id =>
+    assert weakness.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_organization_4_2_item_editable).id)
     assert_equal 'O006', weakness.review_code
   end
@@ -255,7 +255,7 @@ class WeaknessTest < ActiveSupport::TestCase
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
     assert_raise RuntimeError do
-      weakness.update_attributes(:control_objective_item_id =>
+      weakness.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_policy_3_1_item).id)
     end
   end
@@ -264,7 +264,7 @@ class WeaknessTest < ActiveSupport::TestCase
     weakness = Weakness.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
 
-    assert weakness.update_attributes(:control_objective_item_id =>
+    assert weakness.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
 
     assert_equal 'PTO 06', weakness.work_papers.first.code
@@ -369,7 +369,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert_no_difference 'Weakness.count' do
       assert_difference 'WorkPaper.count' do
-        uneditable_weakness.update_attributes({
+        uneditable_weakness.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New post_workpaper name',
@@ -395,7 +395,7 @@ class WeaknessTest < ActiveSupport::TestCase
 
     assert_no_difference ['Weakness.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
-        uneditable_weakness.update_attributes({
+        uneditable_weakness.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New post_workpaper name',

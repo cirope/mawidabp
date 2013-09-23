@@ -74,7 +74,7 @@ class UserTest < ActiveSupport::TestCase
   # Prueba de actualización de un usuario
   test 'update' do
     assert_no_difference 'User.count' do
-      assert @user.update_attributes(
+      assert @user.update(
         :name => 'Updated name',
         :last_name => 'Updated last name',
         :group_admin => true
@@ -284,7 +284,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert user.parent.valid?
     assert user.valid?
-    assert !user.update_attributes(
+    assert !user.update(
       :child_ids => [users(:first_time_user).id],
       :manager_id => users(:first_time_user).id
     )
@@ -296,7 +296,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'validates password changed too soon' do
     assert_difference 'OldPassword.count' do
-      assert @user.update_attributes(
+      assert @user.update(
         {
           :password => "new_password_1230",
           :password_confirmation => "new_password_1230",
@@ -306,7 +306,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert_no_difference 'OldPassword.count' do
-      assert !@user.update_attributes(
+      assert !@user.update(
         {
           :password => "new_password_1232",
           :password_confirmation => "new_password_1232",
@@ -329,7 +329,7 @@ class UserTest < ActiveSupport::TestCase
     assert password_count > 0
 
     assert_difference 'OldPassword.count' do
-      assert @user.update_attributes(
+      assert @user.update(
         {
           :password => "new_password_1230",
           :password_confirmation => "new_password_1230"
@@ -339,7 +339,7 @@ class UserTest < ActiveSupport::TestCase
 
     (1..password_count).each do |c|
       assert_difference 'OldPassword.count' do
-        assert @user.update_attributes(
+        assert @user.update(
           {
             :password => "new_password_123#{c}",
             :password_confirmation => "new_password_123#{c}"
@@ -363,7 +363,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert_difference 'OldPassword.count' do
-      assert @user.update_attributes(
+      assert @user.update(
         {
           :password => "new_password_1230",
           :password_confirmation => "new_password_1230"
@@ -376,7 +376,7 @@ class UserTest < ActiveSupport::TestCase
     old_name_with_function = @user.full_name_with_function
 
     assert_no_match /New function/, old_name_with_function
-    assert @user.update_attributes(:function => 'New function')
+    assert @user.update(:function => 'New function')
 
     new_name_with_function = @user.full_name_with_function
     assert_match /New function/, new_name_with_function

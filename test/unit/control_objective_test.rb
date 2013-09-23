@@ -46,7 +46,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una buena práctica
   test 'update' do
-    assert @control_objective.update_attributes(:name => 'Updated name'),
+    assert @control_objective.update(:name => 'Updated name'),
       @control_objective.errors.full_messages.join('; ')
     @control_objective.reload
     assert_equal 'Updated name', @control_objective.name

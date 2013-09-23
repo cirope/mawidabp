@@ -32,7 +32,7 @@ class ResourceTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un recurso
   test 'update' do
-    assert @resource.update_attributes(:description => 'Updated resource'),
+    assert @resource.update(:description => 'Updated resource'),
       @resource.errors.full_messages.join('; ')
     @resource.reload
     assert_equal 'Updated resource', @resource.description

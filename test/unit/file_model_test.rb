@@ -57,7 +57,7 @@ class FileModelTest < ActiveSupport::TestCase
     end
 
     assert @file_model.file?
-    assert @file_model.update_attributes(:remove_file => '1')
+    assert @file_model.update(:remove_file => '1')
     assert !@file_model.file?
 
     FileUtils.rm_rf File.join("#{TEMP_PATH}file_model_test"), :secure => true

@@ -32,7 +32,7 @@ class BusinessUnitTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una unidad de negocio
   test 'update' do
-    assert @business_unit.update_attributes(:name => 'Updated name'),
+    assert @business_unit.update(:name => 'Updated name'),
       @business_unit.errors.full_messages.join('; ')
     @business_unit.reload
     assert_equal 'Updated name', @business_unit.name

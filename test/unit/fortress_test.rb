@@ -78,7 +78,7 @@ class FortressTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una fortaleza
   test 'update' do
-    assert @fortress.update_attributes(
+    assert @fortress.update(
       :review_code => 'F20', :description => 'Updated description'),
       @fortress.errors.full_messages.join('; ')
     @fortress.reload
@@ -158,7 +158,7 @@ class FortressTest < ActiveSupport::TestCase
   test 'review code is updated when control objective is changed' do
     fortress = Fortress.find(findings(:bcra_A4609_security_management_responsible_dependency_fortress).id)
 
-    assert fortress.update_attributes(:control_objective_item_id =>
+    assert fortress.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'F001', fortress.review_code
   end
@@ -167,7 +167,7 @@ class FortressTest < ActiveSupport::TestCase
     fortress = Fortress.find(findings(:bcra_A4609_security_management_responsible_dependency_fortress).id)
 
     assert_raise RuntimeError do
-      fortress.update_attributes(:control_objective_item_id =>
+      fortress.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_policy_3_1_item).id)
     end
   end
@@ -175,7 +175,7 @@ class FortressTest < ActiveSupport::TestCase
   test 'work paper codes are updated when control objective is changed' do
     fortress = Fortress.find(findings(:bcra_A4609_security_management_responsible_dependency_fortress).id)
 
-    assert fortress.update_attributes(:control_objective_item_id =>
+    assert fortress.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
 
     assert_equal 'PTF 04', fortress.work_papers.first.code

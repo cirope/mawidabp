@@ -30,7 +30,7 @@ class OldPasswordTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una contraseña antigua
   test 'update' do
-    assert @old_password.update_attributes(:password => 'Updated Old Password'),
+    assert @old_password.update(:password => 'Updated Old Password'),
       @old_password.errors.full_messages.join('; ')
     @old_password.reload
     assert_equal 'Updated Old Password', @old_password.password

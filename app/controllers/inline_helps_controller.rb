@@ -80,7 +80,7 @@ class InlineHelpsController < ApplicationController
     @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
-      if @inline_help.update_attributes(params[:inline_help])
+      if @inline_help.update(params[:inline_help])
         flash.notice = t 'inline_help.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || inline_helps_url) }

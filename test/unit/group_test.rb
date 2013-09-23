@@ -30,7 +30,7 @@ class GroupTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un grupo
   test 'update' do
-    assert @group.update_attributes(:name => 'Updated name'),
+    assert @group.update(:name => 'Updated name'),
       @group.errors.full_messages.join('; ')
     @group.reload
     assert_equal 'Updated name', @group.name

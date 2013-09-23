@@ -30,7 +30,7 @@ class ResourceClassTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una clase de recurso
   test 'update' do
-    assert @resource_class.update_attributes(:name => 'Updated resource_class'),
+    assert @resource_class.update(:name => 'Updated resource_class'),
       @resource_class.errors.full_messages.join('; ')
     @resource_class.reload
     assert_equal 'Updated resource_class', @resource_class.name

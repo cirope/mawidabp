@@ -31,7 +31,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un cuestionario
   test 'update' do
-    assert @questionnaire.update_attributes(:name => 'Updated name'),
+    assert @questionnaire.update(:name => 'Updated name'),
     @questionnaire.errors.full_messages.join('; ')
     @questionnaire.reload
     assert_equal 'Updated name', @questionnaire.name

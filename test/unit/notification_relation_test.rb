@@ -41,7 +41,7 @@ class NotificationRelationTest < ActiveSupport::TestCase
   test 'update' do
     fixture_finding = findings(
       :iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification)
-    assert @notification_relation.update_attributes(
+    assert @notification_relation.update(
       :model => Weakness.find(fixture_finding.id)),
       @notification_relation.errors.full_messages.join('; ')
     @notification_relation.reload

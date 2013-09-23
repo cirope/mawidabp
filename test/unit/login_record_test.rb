@@ -40,7 +40,7 @@ class LoginRecordTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un registro de ingreso
   test 'update' do
-    assert @login_record.update_attributes(:data => 'New data'),
+    assert @login_record.update(:data => 'New data'),
       @login_record.errors.full_messages.join('; ')
     @login_record.reload
     assert_equal 'New data', @login_record.data

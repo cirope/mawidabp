@@ -34,7 +34,7 @@ class RoleTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un perfil
   test 'update' do
-    assert @role.update_attributes(:name => 'Updated name'),
+    assert @role.update(:name => 'Updated name'),
       @role.errors.full_messages.join('; ')
     @role.reload
     assert_equal 'Updated name', @role.name
@@ -140,7 +140,7 @@ class RoleTest < ActiveSupport::TestCase
     assert @role.privileges.size > 2
     # Para asegurar un negativo
     assert Privilege.find(privileges(:admin_administration_parameters).id).
-      update_attributes(:read => false, :modify => false, :erase => false,
+      update(:read => false, :modify => false, :erase => false,
       :approval => false)
 
     @role.privileges(true).each do |p|
@@ -163,7 +163,7 @@ class RoleTest < ActiveSupport::TestCase
   test 'is touched when a privilege is updated' do
     updated_at = @role.updated_at
 
-    assert @role.update_attributes(
+    assert @role.update(
       :privileges_attributes => {
         privileges(:admin_administration_parameters).id => {
           :id => privileges(:admin_administration_parameters).id,

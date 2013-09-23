@@ -134,7 +134,7 @@ class OportunitiesController < ApplicationController
 
     respond_to do |format|
       Oportunity.transaction do
-        if @oportunity.update_attributes(params[:oportunity])
+        if @oportunity.update(params[:oportunity])
           flash.notice = t 'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_url(@oportunity)) }
           format.xml  { head :ok }

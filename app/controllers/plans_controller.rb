@@ -103,7 +103,7 @@ class PlansController < ApplicationController
     @plan = find_with_organization(params[:id], true)
 
     respond_to do |format|
-      if @plan.update_attributes(params[:plan])
+      if @plan.update(params[:plan])
         format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
         format.xml  { head :ok }
       else

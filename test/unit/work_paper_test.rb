@@ -49,7 +49,7 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un papel de trabajo
   test 'update' do
-    assert @work_paper.update_attributes(:name => 'New name'),
+    assert @work_paper.update(:name => 'New name'),
       @work_paper.errors.full_messages.join('; ')
     @work_paper.reload
     # Todos los atributos son de solo lectura
@@ -137,7 +137,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   end
 
   test 'unzip if necesary' do
-    assert @work_paper.update_attributes(
+    assert @work_paper.update(
       :file_model_attributes => {
         :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH)
       }
@@ -156,7 +156,7 @@ class WorkPaperTest < ActiveSupport::TestCase
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
     end
 
-    assert @work_paper.update_attributes(
+    assert @work_paper.update(
       :file_model_attributes => {
         :file => Rack::Test::UploadedFile.new(zip_filename)
       }
@@ -176,15 +176,15 @@ class WorkPaperTest < ActiveSupport::TestCase
       zipfile.get_output_stream('test.txt') { |f| f << 'test file' }
     end
 
-    assert @work_paper.update_attributes(
+    assert @work_paper.update(
       :file_model_attributes => {
         :file => Rack::Test::UploadedFile.new(zip_filename)
       }
     )
 
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
-    assert @work_paper.update_attributes(:number_of_pages => 1234)
-    assert @work_paper.update_attributes(:name => 'Updated test name')
+    assert @work_paper.update(:number_of_pages => 1234)
+    assert @work_paper.update(:name => 'Updated test name')
     assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
     assert_nothing_raised { @work_paper.unzip_if_necesary }
     assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
@@ -207,7 +207,7 @@ class WorkPaperTest < ActiveSupport::TestCase
     other_work_paper = WorkPaper.find work_papers(:text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id
 
     assert_no_difference 'WorkPaper.count' do
-      assert !other_work_paper.owner.update_attributes(
+      assert !other_work_paper.owner.update(
         :work_papers_attributes => {
           :new_1 => {
             :name => 'New name',

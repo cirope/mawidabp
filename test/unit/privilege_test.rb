@@ -46,7 +46,7 @@ class PrivilegeTest < ActiveSupport::TestCase
   # Prueba de actualización de un privilegio
   test 'update' do
     assert @privilege.erase
-    assert @privilege.update_attributes(:erase => false),
+    assert @privilege.update(:erase => false),
       @privilege.errors.full_messages.join('; ')
     @privilege.reload
     assert_equal false, @privilege.erase

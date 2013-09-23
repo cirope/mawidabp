@@ -83,7 +83,7 @@ class ControlObjectiveItemsController < ApplicationController
     review = @control_objective_item.review
 
     respond_to do |format|
-      updated = review.update_attributes(
+      updated = review.update(
         :control_objective_items_attributes => {
           @control_objective_item.id => params[:control_objective_item].merge(
             :id => @control_objective_item.id

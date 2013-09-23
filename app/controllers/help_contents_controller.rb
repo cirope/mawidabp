@@ -87,7 +87,7 @@ class HelpContentsController < ApplicationController
     @help_content = HelpContent.find(params[:id])
 
     respond_to do |format|
-      if @help_content.update_attributes(params[:help_content])
+      if @help_content.update(params[:help_content])
         flash.notice = t 'help_content.correctly_updated'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?

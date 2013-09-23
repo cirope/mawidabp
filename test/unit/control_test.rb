@@ -43,7 +43,7 @@ class ControlTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un control
   test 'update' do
-    assert @control.update_attributes(:control => 'Updated control'),
+    assert @control.update(:control => 'Updated control'),
       @control.errors.full_messages.join('; ')
     @control.reload
     assert_equal 'Updated control', @control.control

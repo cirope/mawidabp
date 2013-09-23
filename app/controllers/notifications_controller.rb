@@ -53,7 +53,7 @@ class NotificationsController < ApplicationController
     ).first
 
     respond_to do |format|
-      if @notification.update_attributes(params[:notification])
+      if @notification.update(params[:notification])
         flash.notice = t 'notification.correctly_updated'
         format.html { redirect_to(notifications_url) }
         format.xml  { head :ok }

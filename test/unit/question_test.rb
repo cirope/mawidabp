@@ -28,7 +28,7 @@ class QuestionTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una cuestión
   test 'update' do
-    assert @question.update_attributes(:question => 'Updated question'),
+    assert @question.update(:question => 'Updated question'),
       @question.errors.full_messages.join('; ')
     @question.reload
     assert_equal 'Updated question', @question.question

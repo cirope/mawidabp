@@ -31,7 +31,7 @@ class ProcessControlTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un proceso de control
   test 'update' do
-    assert @process_control.update_attributes(:name => 'Updated name'),
+    assert @process_control.update(:name => 'Updated name'),
       @process_control.errors.full_messages.join('; ')
     @process_control.reload
     assert_equal 'Updated name', @process_control.name

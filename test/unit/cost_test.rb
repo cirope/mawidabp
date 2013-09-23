@@ -38,7 +38,7 @@ class CostTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un costo
   test 'update' do
-    assert @cost.update_attributes(:description => 'Updated description'),
+    assert @cost.update(:description => 'Updated description'),
       @cost.errors.full_messages.join('; ')
     @cost.reload
     assert_equal 'Updated description', @cost.description

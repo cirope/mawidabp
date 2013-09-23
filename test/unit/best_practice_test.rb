@@ -34,7 +34,7 @@ class BestPracticeTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una buena práctica
   test 'update' do
-    assert @best_practice.update_attributes(:name => 'Updated name'),
+    assert @best_practice.update(:name => 'Updated name'),
       @best_practice.errors.full_messages.join('; ')
     @best_practice.reload
     assert_equal 'Updated name', @best_practice.name

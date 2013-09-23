@@ -108,7 +108,7 @@ class FindingAnswerTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una respuesta a una observación
   test 'update' do
-    assert @finding_answer.update_attributes(:answer => 'New answer'),
+    assert @finding_answer.update(:answer => 'New answer'),
       @finding_answer.errors.full_messages.join('; ')
     @finding_answer.reload
     # No se puede cambiar una respuesta

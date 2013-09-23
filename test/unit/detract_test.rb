@@ -39,7 +39,7 @@ class DetractTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un detracto
   test 'update' do
-    assert @detract.update_attributes(:observations => 'Updated observations'),
+    assert @detract.update(:observations => 'Updated observations'),
       @detract.errors.full_messages.join('; ')
     @detract.reload
     assert_equal 'Updated observations', @detract.observations

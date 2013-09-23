@@ -34,7 +34,7 @@ class ParameterTest < ActiveSupport::TestCase
   # Prueba de actualización de un parámetro
   test 'update' do
     assert_no_difference 'Parameter.count' do
-      assert @parameter.update_attributes(:value => 'new_value'),
+      assert @parameter.update(:value => 'new_value'),
         @parameter.errors.full_messages.join('; ')
       @parameter.reload
     end

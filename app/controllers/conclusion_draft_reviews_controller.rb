@@ -113,7 +113,7 @@ class ConclusionDraftReviewsController < ApplicationController
     @conclusion_draft_review = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @conclusion_draft_review.update_attributes(
+      if @conclusion_draft_review.update(
           params[:conclusion_draft_review])
         flash.notice = t 'conclusion_draft_review.correctly_updated'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }

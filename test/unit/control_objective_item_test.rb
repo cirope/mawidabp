@@ -62,7 +62,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un item de objetivo de control
   test 'update' do
-    assert @control_objective_item.update_attributes(
+    assert @control_objective_item.update(
       :control_objective_text => 'Updated text'),
       @control_objective_item.errors.full_messages.join('; ')
     
@@ -168,7 +168,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     assert_not_equal min_qualification_value,
       @control_objective_item.compliance_score
-    assert review.update_attributes(
+    assert review.update(
       :control_objective_items_attributes => {
         @control_objective_item.id => {
           :id => @control_objective_item.id,
@@ -397,7 +397,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     assert_no_difference 'ControlObjectiveItem.count' do
       assert_difference 'WorkPaper.count' do
-        uneditable_control_objective_item.update_attributes({
+        uneditable_control_objective_item.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New workpaper name',
@@ -421,7 +421,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     assert_no_difference ['ControlObjectiveItem.count', 'WorkPaper.count'] do
       assert_raise(RuntimeError) do
-        uneditable_control_objective_item.update_attributes({
+        uneditable_control_objective_item.update({
         :work_papers_attributes => {
             '1_new' => {
               :name => 'New workpaper name',

@@ -132,7 +132,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if @user.update(params[:user])
         @user.send_notification_if_necesary
         flash.notice = t 'user.correctly_updated'
         format.html { redirect_to(users_url) }
@@ -440,7 +440,7 @@ class UsersController < ApplicationController
         @auth_user.encrypt_password
         PaperTrail.whodunnit ||= @auth_user.id
 
-        if @auth_user.update_attributes(
+        if @auth_user.update(
             :password => @auth_user.password,
             :password_confirmation => @auth_user.password,
             :password_changed => Date.today,
@@ -550,7 +550,7 @@ class UsersController < ApplicationController
 
     @auth_user.is_an_important_change = false
 
-    if @auth_user.update_attributes(attributes)
+    if @auth_user.update(attributes)
       flash.notice = t 'user.correctly_updated'
     end
 

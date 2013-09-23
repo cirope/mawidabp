@@ -131,7 +131,7 @@ class FortressesController < ApplicationController
 
     respond_to do |format|
       Fortress.transaction do
-        if @fortress.update_attributes(params[:fortress])
+        if @fortress.update(params[:fortress])
           flash.notice = t 'fortress.correctly_updated'
           format.html { redirect_to(edit_fortress_url(@fortress)) }
           format.xml  { head :ok }

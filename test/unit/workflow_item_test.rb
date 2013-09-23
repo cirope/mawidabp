@@ -45,7 +45,7 @@ class WorkflowItemTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un item de plan de trabajo
   test 'update' do
-    assert @workflow_item.update_attributes(:task => 'Updated task'),
+    assert @workflow_item.update(:task => 'Updated task'),
       @workflow_item.errors.full_messages.join('; ')
     @workflow_item.reload
     assert_equal 'Updated task', @workflow_item.task

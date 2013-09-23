@@ -840,7 +840,7 @@ class Finding < ActiveRecord::Base
       if user
         self.notifications.not_confirmed.each do |notification|
           if notification.user.can_act_as_audited?
-            notification.update_attributes!(
+            notification.update!(
               :status => Notification::STATUS[:confirmed],
               :confirmation_date => notification.confirmation_date || Time.now,
               :user_who_confirm => user

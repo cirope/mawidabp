@@ -79,7 +79,7 @@ class Notification < ActiveRecord::Base
   def notify!(confirmed = true)
     Notification.transaction do
       begin
-        self.update_attributes(
+        self.update(
           :status => confirmed ? STATUS[:confirmed] : STATUS[:rejected],
           :user_who_confirm => self.user,
           :confirmation_date => Time.now
@@ -94,7 +94,7 @@ class Notification < ActiveRecord::Base
               !notification.user.can_act_as_audited?
 
             if restrictions
-              notification.update_attributes!(
+              notification.update!(
                 :status => confirmed ?
                   STATUS[:confirmed] : STATUS[:rejected],
                 :user_who_confirm => self.user

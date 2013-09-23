@@ -25,7 +25,7 @@ class AnswerOptionTest < ActiveSupport::TestCase
   
   # Prueba de actualización de una opción de respuesta
   test 'update' do
-    assert @answer_option.update_attributes(:option => 'Updated option'),
+    assert @answer_option.update(:option => 'Updated option'),
       @answer_option.errors.full_messages.join('; ')
     @answer_option.reload
     assert_equal 'Updated option', @answer_option.option

@@ -34,7 +34,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
 
   # Prueba de actualización de un registro de error
   test 'update' do
-    assert @error_record.update_attributes(:data => 'New data'),
+    assert @error_record.update(:data => 'New data'),
       @error_record.errors.full_messages.join('; ')
     @error_record.reload
     assert_equal 'New data', @error_record.data

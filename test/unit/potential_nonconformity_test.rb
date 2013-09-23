@@ -88,7 +88,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una no conformidad potencial
   test 'update' do
-    assert @potential_nonconformity.update_attributes(
+    assert @potential_nonconformity.update(
       :review_code => 'NCP20', :description => 'Updated description'),
       @potential_nonconformity.errors.full_messages.join('; ')
     @potential_nonconformity.reload
@@ -180,7 +180,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
     potential_nonconformity = PotentialNonconformity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_potential_nonconformity).id)
 
-    assert potential_nonconformity.update_attributes(:control_objective_item_id =>
+    assert potential_nonconformity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
     assert_equal 'NCP004', potential_nonconformity.review_code
   end
@@ -190,7 +190,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
         :iso_27000_security_organization_4_2_item_editable_potential_nonconformity).id)
 
     assert_raise RuntimeError do
-      potential_nonconformity.update_attributes(:control_objective_item_id =>
+      potential_nonconformity.update(:control_objective_item_id =>
         control_objective_items(:iso_27000_security_policy_3_1_item).id)
     end
   end
@@ -199,7 +199,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
     potential_nonconformity = PotentialNonconformity.find(findings(
         :iso_27000_security_organization_4_2_item_editable_potential_nonconformity).id)
 
-    assert potential_nonconformity.update_attributes(:control_objective_item_id =>
+    assert potential_nonconformity.update(:control_objective_item_id =>
         control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable).id)
 
     assert_equal 'PTNCP 01', potential_nonconformity.work_papers.first.code
