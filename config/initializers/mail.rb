@@ -1,10 +1,10 @@
-MawidaApp::Application.config.action_mailer.default_url_options = {
+MawidaBP::Application.config.action_mailer.default_url_options = {
   :host => URL_HOST
 }
-MawidaApp::Application.config.action_mailer.raise_delivery_errors =
+MawidaBP::Application.config.action_mailer.raise_delivery_errors =
   !Rails.env.production?
-MawidaApp::Application.config.action_mailer.delivery_method = :smtp
-MawidaApp::Application.config.action_mailer.smtp_settings = {
+MawidaBP::Application.config.action_mailer.delivery_method = :smtp
+MawidaBP::Application.config.action_mailer.smtp_settings = {
   :address => 'smtp.gmail.com',
   :domain => 'mawidabp.com',
   :port => 587,

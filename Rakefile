@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-MawidaApp::Application.load_tasks
+MawidaBP::Application.load_tasks
