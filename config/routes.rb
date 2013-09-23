@@ -31,7 +31,7 @@ MawidaApp::Application.routes.draw do
 
   resources :groups
 
-  resources :detracts, :only => [:index, :show, :new, :create] do
+  resources :detracts, only: [:index, :show, :new, :create] do
     member do
       get :show_last_detracts
     end
@@ -39,28 +39,24 @@ MawidaApp::Application.routes.draw do
 
   resources :inline_helps
 
-  get 'welcome', :as => 'welcome', :to => 'welcome#index'
-
-  get 'execution_reports', :as => 'execution_reports',
-    :to => 'execution_reports#index'
+  get 'welcome', as: 'welcome', to: 'welcome#index'
+  get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 
   [
     'weaknesses_by_state',
     'detailed_management_report'
   ].each do |action|
-    get "execution_reports/#{action}", :to => "execution_reports##{action}",
-      :as => action
+    get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
   [
     'create_weaknesses_by_state',
     'create_detailed_management_report'
   ].each do |action|
-    post "execution_reports/#{action}", :to => "execution_reports##{action}",
-      :as => action
+    post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
-  resources :versions, :only => [:show] do
+  resources :versions, only: [:show] do
     collection do
       get :security_changes_report
     end
@@ -78,24 +74,21 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :notifications, :only => [:index, :show, :edit, :update] do
+  resources :notifications, only: [:index, :show, :edit, :update] do
     member do
       get :confirm
     end
   end
 
-  get 'conclusion_audit_reports', :as => 'conclusion_audit_reports',
-    :to => 'conclusion_audit_reports#index'
-  get 'conclusion_committee_reports', :as => 'conclusion_committee_reports',
-    :to => 'conclusion_committee_reports#index'
-  get 'conclusion_management_reports', :as => 'conclusion_management_reports',
-    :to => 'conclusion_management_reports#index'
-  get 'follow_up_audit', :as => 'follow_up_audit',
-    :to => 'follow_up_audit#index'
-  get 'follow_up_committee', :as => 'follow_up_committee',
-    :to => 'follow_up_committee#index'
-  get 'follow_up_management', :as => 'follow_up_management',
-    :to => 'follow_up_management#index'
+  get 'conclusion_audit_reports', as: 'conclusion_audit_reports',
+    to: 'conclusion_audit_reports#index'
+  get 'conclusion_committee_reports', as: 'conclusion_committee_reports',
+    to: 'conclusion_committee_reports#index'
+  get 'conclusion_management_reports', as: 'conclusion_management_reports',
+    to: 'conclusion_management_reports#index'
+  get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
+  get 'follow_up_committee', as: 'follow_up_committee', to: 'follow_up_committee#index'
+  get 'follow_up_management', as: 'follow_up_management', to: 'follow_up_management#index'
 
   [
     'weaknesses_by_state',
@@ -105,16 +98,16 @@ MawidaApp::Application.routes.draw do
     'process_control_stats'
   ].each do |action|
     get "conclusion_management_reports/#{action}",
-      :as => "#{action}_conclusion_management_reports",
-      :to => "conclusion_management_reports##{action}"
+      as: "#{action}_conclusion_management_reports",
+      to: "conclusion_management_reports##{action}"
     get "conclusion_audit_reports/#{action}",
-      :as => "#{action}_conclusion_audit_reports",
-      :to => "conclusion_audit_reports##{action}"
+      as: "#{action}_conclusion_audit_reports",
+      to: "conclusion_audit_reports##{action}"
     get "follow_up_management/#{action}",
-      :as => "#{action}_follow_up_management",
-      :to => "follow_up_management##{action}"
-    get "follow_up_audit/#{action}", :as => "#{action}_follow_up_audit",
-      :to => "follow_up_audit##{action}"
+      as: "#{action}_follow_up_management",
+      to: "follow_up_management##{action}"
+    get "follow_up_audit/#{action}", as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
   end
 
   [
