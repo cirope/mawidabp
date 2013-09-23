@@ -21,7 +21,7 @@ gem 'dynamic_form'
 gem 'acts_as_tree'
 gem 'unicode'
 gem 'capistrano'
-gem 'rubyzip'
+gem 'rubyzip', require: 'zip'
 gem 'prawn'
 
 gem 'dalli'
