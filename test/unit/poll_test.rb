@@ -22,7 +22,7 @@ class PollTest < ActiveSupport::TestCase
       Poll.create(
         :comments => 'New comments',
         :answered => false,
-        :pollable_id => ActiveRecord::Fixtures.identify(:conclusion_current_final_review),
+        :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
         :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
         :organization_id => organizations(:default_organization).id,
