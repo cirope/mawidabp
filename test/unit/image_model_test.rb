@@ -51,10 +51,9 @@ class ImageModelTest < ActiveSupport::TestCase
   test 'delete' do
     assert_difference('ImageModel.count', -1) do
       # Elimina la dependencia para evitar problemas con la clave foránea
-      Organization.update_all(
-        {:image_model_id => nil},
-        {:image_model_id => @image_model.id}
-      )
+      Organization.where(
+        :image_model_id => @image_model.id
+      ).update_all(:image_model_id => nil) 
 
       @image_model.destroy
     end

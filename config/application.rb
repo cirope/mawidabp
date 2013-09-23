@@ -30,12 +30,6 @@ module MawidaBP
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :es
 
-    config.cache_store = :mem_cache_store, 'localhost', {
-      namespace: "mawidabp_#{Rails.env}".downcase
-    }
-
-    # En caso de no tener memcached se pueden user archivos:
-    #  config.cache_store = :file_store, File.join(Rails.root, 'tmp', 'cache_files')
     config.active_record.whitelist_attributes = false
   end
 end
