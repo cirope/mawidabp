@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Importar Builder si no fue importado previamente
 require 'active_support/builder' unless defined?(Builder)
 # Configuración del modelo con la configuración de la aplicación

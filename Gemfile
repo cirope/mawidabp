@@ -32,7 +32,8 @@ gem 'coffee-rails'
 gem 'uglifier'
 
 group :development do
-  gem 'thin'
+  gem 'unicorn'
+  gem 'unicorn-rails'
 end
 
 group :test do
