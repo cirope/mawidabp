@@ -19,7 +19,7 @@ class ConclusionFinalReview < ConclusionReview
     ).where(
       "#{Period.table_name}.organization_id = :organization_id",
       :organization_id => GlobalModelConfig.current_organization_id
-    )
+    ).references(:periods)
   }
   scope :list_all_by_date, ->(from_date, to_date) {
     includes(
@@ -36,7 +36,7 @@ class ConclusionFinalReview < ConclusionReview
         :from_date => from_date, :to_date => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:periods, :business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
@@ -60,7 +60,7 @@ class ConclusionFinalReview < ConclusionReview
         :from_date => from_date, :to_date => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:periods, :findings, :business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
@@ -84,7 +84,7 @@ class ConclusionFinalReview < ConclusionReview
         :from_date => from_date, :to_date => to_date,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:periods, :findings, :business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
@@ -95,12 +95,16 @@ class ConclusionFinalReview < ConclusionReview
   scope :internal_audit, -> {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => false)
+    ).where("#{BusinessUnitType.table_name}.external" => false).references(
+      :business_unit_types
+    )
   }
   scope :external_audit, -> {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => true)
+    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+      :business_unit_types
+    )
   }
   scope :next_to_expire, -> {
     where(

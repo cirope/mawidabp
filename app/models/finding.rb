@@ -152,7 +152,7 @@ class Finding < ActiveRecord::Base
   }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
-      :reviews => {:id => review.id}, :state => PENDING_STATUS, :final => false
+      :reviews => { :id => review.id }, :state => PENDING_STATUS, :final => false
     )
   }
   scope :all_for_reallocation, -> { where(:state => PENDING_STATUS, :final => false) }
@@ -236,32 +236,32 @@ class Finding < ActiveRecord::Base
     ).references(:periods)
   }
   scope :unconfirmed_and_stale, -> {
-    stale_parameters = Organization.all_parameters(
-      :admin_finding_stale_confirmed_days)
-    pre_conditions = []
-    parameters = {
-      :state => STATUS[:unconfirmed],
-      :boolean_false => false
-    }
+  stale_parameters = Organization.all_parameters(
+    :admin_finding_stale_confirmed_days)
+  pre_conditions = []
+  parameters = {
+    :state => STATUS[:unconfirmed],
+    :boolean_false => false
+  }
 
-    stale_parameters.each_with_index do |stale_parameter, i|
-      stale_days = stale_parameter[:parameter].to_i
-      parameters[:"stale_unconfirmed_date_#{i}"] =
-        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
-      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+  stale_parameters.each_with_index do |stale_parameter, i|
+    stale_days = stale_parameter[:parameter].to_i
+    parameters[:"stale_unconfirmed_date_#{i}"] =
+      (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
+    parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
 
-      pre_conditions << [
-        "first_notification_date < :stale_unconfirmed_date_#{i}",
-        "#{Period.table_name}.organization_id = :organization_id_#{i}",
-      ].join(' AND ')
-    end
-
-    fix_conditions = [
-      'state = :state',
-      'final = :boolean_false'
+    pre_conditions << [
+      "first_notification_date < :stale_unconfirmed_date_#{i}",
+      "#{Period.table_name}.organization_id = :organization_id_#{i}",
     ].join(' AND ')
+  end
 
-    includes(:control_objective_item => { :review => :period }).where(
+  fix_conditions = [
+    'state = :state',
+    'final = :boolean_false'
+  ].join(' AND ')
+
+  includes(:control_objective_item => { :review => :period }).where(
       [
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
@@ -314,8 +314,9 @@ class Finding < ActiveRecord::Base
   scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
   scope :list_all_by_date, ->(from_date, to_date, order) {
     includes(
-      :control_objective_item => {:review =>
-          [:period, :conclusion_final_review, {:plan_item => :business_unit}]}
+      :control_objective_item => {
+        :review => [:period, :conclusion_final_review, {:plan_item => :business_unit}]
+      }
     ).where(
       [
         "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",

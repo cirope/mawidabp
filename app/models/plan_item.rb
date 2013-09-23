@@ -23,7 +23,7 @@ class PlanItem < ActiveRecord::Base
         :period_id => period_id,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:plans, :periods, :reviews, :plan_items).order(
       [
         "#{PlanItem.table_name}.order_number ASC",
         "#{PlanItem.table_name}.project ASC"
@@ -39,7 +39,7 @@ class PlanItem < ActiveRecord::Base
 
     includes(:business_unit).where(
       condition, :but_id => business_unit_type.to_i
-    ).order('order_number ASC')
+    ).order('order_number ASC').references(:business_units)
   }
   scope :with_business_unit, -> { where("#{table_name}.business_unit_id IS NOT NULL") }
 

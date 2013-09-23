@@ -8,10 +8,9 @@ class ProcedureControl < ActiveRecord::Base
   # Named scope
   scope :list_by_period, ->(period_id) {
     includes(:period).where(
-      "#{Period.table_name}.organization_id" =>
-        GlobalModelConfig.current_organization_id,
+      "#{Period.table_name}.organization_id" => GlobalModelConfig.current_organization_id,
       "#{table_name}.period_id" => period_id
-    ).order('number DESC')
+    ).order('number DESC').references(:periods)
   }
 
   # Restricciones

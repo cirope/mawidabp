@@ -46,8 +46,9 @@ class Poll < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
   belongs_to :pollable, :polymorphic => true
-  has_many :answers, -> { includes(:question).order("#{Question.table_name}.sort_order ASC") },
-    :dependent => :destroy
+  has_many :answers, -> {
+    includes(:question).order("#{Question.table_name}.sort_order ASC").references(:questions)
+  }, :dependent => :destroy
 
   # Callbacks
   after_create :send_poll_email

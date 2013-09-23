@@ -8,7 +8,7 @@ class OrganizationRole < ActiveRecord::Base
   scope :for_group, ->(group_id) {
     includes(:organization).where(
       "#{Organization.table_name}.group_id" => group_id
-    )
+    ).references(:organizations)
   }
 
   # Restricciones

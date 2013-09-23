@@ -30,7 +30,7 @@ class Role < ActiveRecord::Base
     includes(:organization).where(
       "#{table_name}.organization_id" => organization.id,
       "#{Organization.table_name}.group_id" => group.id
-    )
+    ).references(:organizations)
   }
 
   # Callbacks

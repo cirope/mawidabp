@@ -34,7 +34,9 @@ class ControlObjectiveItem < ActiveRecord::Base
       parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
     end
 
-    includes(:control_objective).where(conditions.join(' OR '), parameters)
+    includes(:control_objective).where(
+      conditions.join(' OR '), parameters
+    ).references(:control_objectives)
   }
 
   has_paper_trail :meta => {

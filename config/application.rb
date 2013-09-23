@@ -31,7 +31,7 @@ module MawidaApp
     config.i18n.default_locale = :es
 
     config.cache_store = :mem_cache_store, 'localhost', {
-      :namespace => "mawidabp_#{Rails.env}".downcase
+      namespace: "mawidabp_#{Rails.env}".downcase
     }
 
     # En caso de no tener memcached se pueden user archivos:

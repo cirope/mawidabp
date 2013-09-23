@@ -43,9 +43,8 @@ class Review < ActiveRecord::Base
   # Named scopes
   scope :list, -> {
     includes(:period).where(
-      "#{Period.table_name}.organization_id" =>
-        GlobalModelConfig.current_organization_id
-    ).order('identification ASC')
+      "#{Period.table_name}.organization_id" => GlobalModelConfig.current_organization_id
+    ).order('identification ASC').references(:periods)
   }
   scope :list_with_approved_draft, -> {
     includes(:period, :conclusion_draft_review).where(
@@ -53,7 +52,7 @@ class Review < ActiveRecord::Base
       Period.table_name => {
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order('identification ASC')
+    ).order('identification ASC').references(:periods, :conclusion_reviews)
   }
   scope :list_with_final_review, -> {
     includes(:period, :conclusion_final_review).where(
@@ -62,7 +61,7 @@ class Review < ActiveRecord::Base
         "#{ConclusionReview.table_name}.review_id IS NOT NULL"
       ].join(' AND '),
       { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC')
+    ).order('identification ASC').references(:periods, :conclusion_reviews)
   }
   scope :list_without_final_review, -> {
     includes(:period, :conclusion_final_review).where(
@@ -71,7 +70,7 @@ class Review < ActiveRecord::Base
         "#{ConclusionReview.table_name}.review_id IS NULL"
       ].join(' AND '),
       { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC')
+    ).order('identification ASC').references(:periods, :conclusion_reviews)
   }
   scope :list_without_draft_review, -> {
     includes(:period, :conclusion_draft_review).where(
@@ -80,7 +79,7 @@ class Review < ActiveRecord::Base
         "#{ConclusionReview.table_name}.review_id IS NULL"
       ].join(' AND '),
       { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC')
+    ).order('identification ASC').references(:periods, :conclusion_reviews)
   }
   scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
     includes(
@@ -105,7 +104,7 @@ class Review < ActiveRecord::Base
         "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
       ]
-    )
+    ).references(:periods, :conclusion_reviews, :business_unit_types)
   }
   scope :list_all_without_workflow, ->(period_id) {
     includes(:period, :workflow).where(
@@ -118,15 +117,23 @@ class Review < ActiveRecord::Base
         :organization_id => GlobalModelConfig.current_organization_id,
         :period_id => period_id
       }
-    ).order("#{table_name}.identification ASC")
+    ).order("#{table_name}.identification ASC").references(
+      :periods, :workflows
+    )
   }
-  scope :internal_audit, -> { includes(
-    :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => false)
+  scope :internal_audit, -> {
+    includes(
+      :plan_item => {:business_unit => :business_unit_type}
+    ).where("#{BusinessUnitType.table_name}.external" => false).references(
+      :business_unit_types
+    )
   }
-  scope :external_audit, -> { includes(
-    :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => true)
+  scope :external_audit, -> {
+    includes(
+      :plan_item => {:business_unit => :business_unit_type}
+    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+      :business_unit_types
+    )
   }
 
   # Restricciones
@@ -152,7 +159,7 @@ class Review < ActiveRecord::Base
         :identification => value,
         :id => record.id
       }
-    )
+    ).references(:periods)
 
     record.errors.add attr, :taken if reviews.count > 0
   end

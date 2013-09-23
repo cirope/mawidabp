@@ -20,7 +20,7 @@ class ProcessControl < ActiveRecord::Base
       :procedure_control_items => {
         :procedure_controls => {:period_id => period_id}
       }
-    ).order("#{table_name}.order ASC")
+    ).order("#{table_name}.order ASC").references(:process_controls, :procedure_controls)
   }
   scope :list_for_log, ->(id) { where(:id => id)  }
 

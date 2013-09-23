@@ -37,12 +37,16 @@ class ConclusionReview < ActiveRecord::Base
 
   # Named scopes
   scope :for_period, ->(period) {
-    includes(:review =>:period).where("#{Period.table_name}.id" => period.id)
+    includes(:review =>:period).where(
+      "#{Period.table_name}.id" => period.id
+    ).references(:periods)
   }
   scope :by_business_unit_type, ->(business_unit_type) {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.id" => business_unit_type)
+    ).where(
+      "#{BusinessUnitType.table_name}.id" => business_unit_type
+    ).references(:bussiness_unit_types)
   }
   scope :by_business_unit_names, ->(*business_unit_names) {
     conditions = []
@@ -55,7 +59,7 @@ class ConclusionReview < ActiveRecord::Base
 
     includes(:plan_item => :business_unit).where(
       conditions.join(' OR '), parameters
-    )
+    ).references(:bussiness_unit_types)
   }
   scope :by_control_objective_names, ->(*control_objective_names) {
     conditions = []
@@ -68,19 +72,19 @@ class ConclusionReview < ActiveRecord::Base
 
     includes(:review => {:control_objective_items => :control_objective}).where(
       conditions.join(' OR '), parameters
-    )
+    ).references(:control_objectives)
   }
   scope :notorious, ->(final) {
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
      ).where(
        "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
-    )
+    ).references(:findings)
   }
   scope :with_business_unit_type, ->(but_id) {
     includes(:review => :business_unit).where(
       "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
-    )
+    ).references(:business_units)
   }
 
   # Callbacks

@@ -51,7 +51,9 @@ class Period < ActiveRecord::Base
         "#{Plan.table_name}.period_id IS NULL"
       ].join(' AND '),
       {:organization_id => GlobalModelConfig.current_organization_id}
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"]).references(
+      :plans
+    )
   }
   scope :list_all_without_procedure_controls, -> {
     includes(:procedure_controls).where(
@@ -60,7 +62,9 @@ class Period < ActiveRecord::Base
         "#{ProcedureControl.table_name}.period_id IS NULL"
       ].join(' AND '),
       {:organization_id => GlobalModelConfig.current_organization_id}
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
+    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"]).references(
+      :procedure_controls
+    )
   }
 
 
