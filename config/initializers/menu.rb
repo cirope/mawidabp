@@ -1,6 +1,3 @@
-# encoding: utf-8
-
-
 # Menú del auditado
 APP_AUDITED_MENU_ITEMS = [
   # ADMINISTRACIÓN

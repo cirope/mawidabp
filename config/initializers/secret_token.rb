@@ -4,5 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-MawidaApp::Application.config.secret_token = '19ec1ea2af88c3e51924ba72be71ab9718933c0bdddc5d8904403c2aa0679df840fd50bae1bcbb76e5bcaed5f2f5da70f1802f905fe502a4ac08a1d6dca5c101'
-MawidaApp::Application.config.key_base = '53ec5ea2af88c3e51924ba72be71ab9718933c0bdddc5d8904403c2aa0679df840fd50bae1bcbb76e5bcaed5f2f5da70f1802f905fe502a4ac08a1d6dca5c101'
+MawidaApp::Application.config.secret_key_base = 'f82af0da28fa6852c16c561510b597ca0999d3c4965e1cdc6ebb1f8a07b430c292deb062354a831b908fd39f2e6b4f872ebd9e1d6aac50ed64d710ea8149bfbb'
