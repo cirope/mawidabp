@@ -1,4 +1,4 @@
-MawidaApp::Application.routes.draw do
+MawidaBP::Application.routes.draw do
   resources :questionnaires
 
   resources :polls do
