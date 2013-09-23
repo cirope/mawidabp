@@ -3,7 +3,7 @@ poll_one:
   user: poll_user
   answered: false
   comments: Encuesta al administrador
-  pollable_id: <%= ActiveRecord::Fixtures.identify(:conclusion_current_final_review) %>
+  pollable_id: <%= ActiveRecord::FixtureSet.identify(:conclusion_current_final_review) %>
   pollable_type: ConclusionReview
   organization: default_organization
   access_token: <%= SecureRandom.hex %>

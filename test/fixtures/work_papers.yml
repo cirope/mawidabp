@@ -5,7 +5,7 @@ image_work_paper:
   description: Image Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item_editable) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable) %>
   owner_type: ControlObjectiveItem
 
 text_work_paper_bcra_A4609_security_management_responsible_dependency_item:
@@ -15,7 +15,7 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item:
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item) %>
   owner_type: ControlObjectiveItem
 
 text_work_paper_bcra_A4609_security_management_responsible_dependency_item_editable:
@@ -25,7 +25,7 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item_edita
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item_editable) %>
   owner_type: ControlObjectiveItem
 
 text_work_paper_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
@@ -35,7 +35,7 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_weakness_b
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented) %>
   owner_type: Finding
 
 text_work_paper_bcra_A4609_data_proccessing_impact_analisys_nonconformity:
@@ -45,7 +45,7 @@ text_work_paper_bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_nonconformity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_nonconformity) %>
   owner_type: Finding
 
 text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
@@ -55,7 +55,7 @@ text2_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   description: Text2 Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness) %>
   owner_type: Finding
 
 text_work_paper_iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification:
@@ -65,7 +65,7 @@ text_work_paper_iso_27000_security_organization_4_2_item_editable_weakness_unans
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification) %>
   owner_type: Finding
 
 text_work_paper_iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification:
@@ -75,7 +75,7 @@ text_work_paper_iso_27000_security_organization_4_2_item_editable_nonconformity_
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification) %>
   owner_type: Finding
 
 text_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
@@ -85,7 +85,7 @@ text_work_paper_bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_oportunity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_data_proccessing_impact_analisys_editable_oportunity) %>
   owner_type: Finding
 
 text_work_paper_iso_27000_security_organization_4_2_item_editable_oportunity:
@@ -95,7 +95,7 @@ text_work_paper_iso_27000_security_organization_4_2_item_editable_oportunity:
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item_editable_oportunity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_oportunity) %>
   owner_type: Finding
 
 text_work_paper_iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
@@ -105,7 +105,7 @@ text_work_paper_iso_27000_security_organization_4_2_item_editable_potential_nonc
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:iso_27000_security_organization_4_2_item_editable_potential_nonconformity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable_potential_nonconformity) %>
   owner_type: Finding
 
 text_work_paper_bcra_A4609_security_management_responsible_dependency_fortress:
@@ -115,7 +115,7 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_fortress:
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_fortress) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_fortress) %>
   owner_type: Finding
 
 text_work_paper_bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
@@ -125,5 +125,5 @@ text_work_paper_bcra_A4609_security_management_responsible_dependency_item_appro
   description: Text Work Paper Description
   file_model:
   organization: default_organization
-  owner_id: <%= ActiveRecord::Fixtures.identify(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity) %>
+  owner_id: <%= ActiveRecord::FixtureSet.identify(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity) %>
   owner_type: Finding
