@@ -2,6 +2,7 @@
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
+  include ActsAsTree
   include ParameterSelector
   include Comparable
   include Trimmer

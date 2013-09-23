@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Finding < ActiveRecord::Base
+  include ActsAsTree
   include Comparable
   include ParameterSelector
 
@@ -34,7 +35,6 @@ class Finding < ActiveRecord::Base
     }
   }.with_indifferent_access
 
-  acts_as_tree
   has_paper_trail :meta => {
     :organization_id => proc { GlobalModelConfig.current_organization_id }
   }
