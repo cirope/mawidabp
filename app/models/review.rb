@@ -191,8 +191,7 @@ class Review < ActiveRecord::Base
   has_many :final_nonconformities, :through => :control_objective_items
   has_many :final_potential_nonconformities, :through => :control_objective_items
   has_many :final_oportunities, :through => :control_objective_items
-  has_many :review_user_assignments, -> { includes(:user).order('assignment_type DESC') },
-    :dependent => :destroy, :inverse_of => :review
+  has_many :review_user_assignments, :dependent => :destroy
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :review, :after_add => :check_if_is_in_a_final_review
   has_many :users, :through => :review_user_assignments

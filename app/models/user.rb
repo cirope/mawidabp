@@ -45,8 +45,6 @@ class User < ActiveRecord::Base
   # Alias de atributos
   alias_attribute :informal, :user
 
-
-
   # Named scopes
   scope :list, -> {
     includes(:organizations).references(:organizations).where(
@@ -169,11 +167,10 @@ class User < ActiveRecord::Base
   has_many :detracts, -> { order("#{Detract.table_name}.created_at ASC") },
     :dependent => :destroy
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
-  has_many :review_user_assignments, -> { includes(:review).order('assignment_type DESC') },
-    :dependent => :destroy, :inverse_of => :user
+  has_many :review_user_assignments, :dependent => :destroy
   has_many :reviews, -> { uniq }, :through => :review_user_assignments
-  has_many :organization_roles, -> { order('organization_id ASC') },
-    :dependent => :destroy, :after_add => :mark_roles_as_changed,
+  has_many :organization_roles, :dependent => :destroy,
+    :after_add => :mark_roles_as_changed,
     :after_remove => :mark_roles_as_changed
   has_many :organizations, -> { uniq }, :through => :organization_roles
   has_many :finding_user_assignments
@@ -717,6 +714,7 @@ class User < ActiveRecord::Base
             end
           end
         end
+
         if all_reassigned
           reviews = other.findings.all_for_reallocation.map do |f|
             "*#{f.review.identification}*"

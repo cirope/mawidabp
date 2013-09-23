@@ -225,8 +225,9 @@ class UserTest < ActiveSupport::TestCase
     @user.password_confirmation = 'admin125'
     assert @user.invalid?
     assert_equal 1, @user.errors.count
-    assert_equal [error_message_from_model(@user, :password, :confirmation)],
-      @user.errors[:password]
+    assert_equal [
+      error_message_from_model(@user, :password_confirmation, :confirmation)
+    ], @user.errors[:password_confirmation]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -288,8 +289,7 @@ class UserTest < ActiveSupport::TestCase
       :child_ids => [users(:first_time_user).id],
       :manager_id => users(:first_time_user).id
     )
-    # El otro error lo añade la gema (acts_as_tree)
-    assert_equal 2, user.errors.size
+    assert_equal 1, user.errors.size
     assert_equal error_message_from_model(user, :manager_id, :invalid),
       user.errors[:manager_id].last
   end
@@ -532,7 +532,7 @@ class UserTest < ActiveSupport::TestCase
     notifications = reviews_to_reassign.size
 
     assert !reviews_to_reassign.empty?
-    assert !reviews_to_reassign.all? {|r| r.users.include?(user) }
+    assert !reviews_to_reassign.all? { |r| r.users.include?(user) }
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -545,7 +545,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert old_user.reload.reviews.reject { |r| r.has_final_review? }.empty?
-    assert reviews_to_reassign.all? {|r| r.users.include?(user) }
+    assert reviews_to_reassign.all? { |r| r.reload.users.include?(user) }
   end
 
   test 'notify finding changes function' do
