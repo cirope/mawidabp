@@ -15,7 +15,7 @@ gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'whenever', require: false
 gem 'will_paginate'
-gem 'paper_trail', github: 'airblade/paper_trail', branch: 'rails4'
+gem 'paper_trail', '3.0.0.beta1'
 gem 'carrierwave'
 gem 'rmagick'
 gem 'gruff'
@@ -34,7 +34,8 @@ gem 'coffee-rails'
 gem 'uglifier'
 
 group :development do
-  gem 'thin'
+  gem 'unicorn'
+  gem 'unicorn-rails'
 end
 
 group :test do
