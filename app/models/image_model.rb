@@ -20,18 +20,23 @@ class ImageModel < ActiveRecord::Base
     "#{image_geometry[:width]}x#{image_geometry[:height]}"
   end
 
-  def image_geometry(style_name = :original)
-    @_image_dimensions ||= {}
-    
-    if File.exists?(self.image.send(style_name).path)
-      ::Magick::Image::read(self.image.send(style_name).path).first.tap do |img|
-        @_image_dimensions[style_name] ||= {
-          :width => img.columns, :height => img.rows
-        }
-      end 
+  def image_geometry version = nil
+    dimensions = {}
+    path = get_version(version).path
+
+    if File.exists?(path)
+      MiniMagick::Image.open(path)['dimensions'].tap do |dimension|
+        dimensions.merge!(
+          :width => dimension.first, :height => dimension.last
+        )
+      end
     end
 
-    @_image_dimensions[style_name] || {}
+    dimensions
+  end
+
+  def get_version(version = nil)
+    version ? self.image.send(version) : self.image
   end
 
   def update_image_attributes
