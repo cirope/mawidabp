@@ -1,11 +1,10 @@
 class Answer < ActiveRecord::Base
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: -> { GlobalModelConfig.current_organization_id }
   }
 
   # Validaciones
-  validates_length_of :comments, :maximum => 255, :allow_nil => true,
-    :allow_blank => true
+  validates_length_of :comments, maximum: 255, allow_nil: true, allow_blank: true
 
   # Relaciones
   belongs_to :question
@@ -22,7 +21,7 @@ class Answer < ActiveRecord::Base
 
       klass = question.answer_multi_choice? ? AnswerMultiChoice : AnswerWritten
 
-      klass.new attributes.merge(:question_id => question.id), options
+      klass.new attributes.merge(question_id: question.id), options
     end
   end
 end

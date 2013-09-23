@@ -19,19 +19,19 @@ class AnswerTest < ActiveSupport::TestCase
   test 'create' do
     assert_difference 'Answer.count' do
       Answer.create(
-        :answer => 'Nueva respuesta',
-        :type => AnswerWritten.name,
-        :question_id => questions(:question_written).id,
-        :poll_id => polls(:poll_one).id
+        answer: 'Nueva respuesta',
+        type: AnswerWritten.name,
+        question_id: questions(:question_written).id,
+        poll_id: polls(:poll_one).id
       )
     end
   end
 
   # Prueba de actualización de una respuesta
   test 'update' do
-    assert @answer.update_attributes(:answer => 'Updated answer'),
+    assert @answer.update(answer: 'Updated answer'),
       @answer.errors.full_messages.join('; ')
-    @answer.reload
+
     assert_equal 'Updated answer', @answer.answer
   end
 
@@ -69,6 +69,6 @@ class AnswerTest < ActiveSupport::TestCase
     assert @answer.invalid?
     assert_equal 1, @answer.errors.count
     assert_equal [error_message_from_model(@answer, :answer, :too_long,
-      :count => 255)], @answer.errors[:answer]
+      count: 255)], @answer.errors[:answer]
   end
 end
