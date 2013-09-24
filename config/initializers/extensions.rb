@@ -8,14 +8,9 @@ Date.send :include, ActiveSupport::CoreExtensions::Date::BusinessTime
 ActionView::Base.send :include, ActionView::Helpers::DateHelper::CustomExtension
 
 class ActiveRecord::Base
-  # Devuelve siempre una versión correcta para la fecha
   def version_of(date = nil)
-    if date && date.to_time <= Time.now && self.respond_to?(:versions)
-      # Tiene que ser posterior ya que se guarda el estado _anterior_ en las
-      # versiones
-      self.versions.order('created_at ASC').where(
-        'created_at > :from', :from => date.to_time
-      ).first.try(:reify, :has_one => false) || self
+    if date && date.to_time <= Time.now && respond_to?(:versions)
+      versions.where('created_at > ?', date.to_time).first.try(:reify) || self
     else
       self
     end
@@ -85,7 +80,7 @@ end
 class Object
   def to_translated_string
     if self.respond_to?(:strftime)
-      I18n.l(self, :format => :long)
+      I18n.l(self, format: :long)
     else
       self.to_s
     end
@@ -128,8 +123,8 @@ end
 class Version
   def changes_until(other)
     changes = []
-    old_attributes = self.reify(:has_one => false).try(:attributes) || {}
-    new_attributes = (other.try(:reify, :has_one => false) ||
+    old_attributes = self.reify(has_one: false).try(:attributes) || {}
+    new_attributes = (other.try(:reify, has_one: false) ||
         self.item.try(:reload)).try(:attributes) || {}
     item_class = self.try(:class) || self.item.try(:class)
 
@@ -138,25 +133,25 @@ class Version
 
       if old_value != new_value && !(old_value.blank? && new_value.blank?)
         changes << HashWithIndifferentAccess.new({
-          :attribute => item_class.human_attribute_name(attribute),
-          :old_value => old_value.to_translated_string.split_if_no_space_in(50),
-          :new_value => new_value.to_translated_string.split_if_no_space_in(50)
+          attribute: item_class.human_attribute_name(attribute),
+          old_value: old_value.to_translated_string.split_if_no_space_in(50),
+          new_value: new_value.to_translated_string.split_if_no_space_in(50)
         })
       end
     end
 
     new_attributes.each do |attribute, new_value|
-      changes << HashWithIndifferentAccess.new({
-        :attribute => item_class.human_attribute_name(attribute),
-        :old_value => '-',
-        :new_value => new_value
-      })
+      changes << HashWithIndifferentAccess.new(
+        attribute: item_class.human_attribute_name(attribute),
+        old_value: '-',
+        new_value: new_value
+      )
     end
 
     changes
   end
 
   def changes_from_next
-    self.changes_until(self.next)
+    changes_until(self.next)
   end
 end
