@@ -308,9 +308,10 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates audited users' do
-    @finding.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    @finding.finding_user_assignments =
+      @finding.finding_user_assignments.delete_if do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert @finding.invalid?
     assert_equal 1, @finding.errors.size
@@ -319,7 +320,8 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates auditor users' do
-    @finding.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    @finding.finding_user_assignments =
+      @finding.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
 
     assert @finding.invalid?
     assert_equal 1, @finding.errors.size
@@ -328,9 +330,11 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'validates supervisor users' do
-    @finding.finding_user_assignments.delete_if { |fua| fua.user.supervisor? }
+    @finding.finding_user_assignments =
+      @finding.finding_user_assignments.delete_if { |fua| fua.user.supervisor? }
 
     assert @finding.invalid?
+
     assert_equal 1, @finding.errors.size
     assert_equal [error_message_from_model(@finding, :finding_user_assignments,
         :invalid)], @finding.errors[:finding_user_assignments]
@@ -639,15 +643,17 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.has_auditor?
     assert @finding.has_audited?
-
-    @finding.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    
+    @finding.finding_user_assignments = 
+      @finding.finding_user_assignments.delete_if do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert @finding.has_auditor?
     assert !@finding.has_audited?
 
-    @finding.reload.finding_user_assignments.delete_if {|fua| fua.user.auditor?}
+    @finding.finding_user_assignments =
+      @finding.reload.finding_user_assignments.delete_if {|fua| fua.user.auditor?}
 
     assert !@finding.has_auditor?
     assert @finding.has_audited?
