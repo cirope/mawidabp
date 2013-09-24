@@ -18,7 +18,6 @@ class LoginRecord < ActiveRecord::Base
   }
 
   attr_accessor :request
-  attr_accessible :user, :organization
 
   # Restricciones
   validates :user_id, :organization_id, :start, :presence => true

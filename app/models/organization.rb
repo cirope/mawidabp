@@ -1,4 +1,3 @@
-# encoding: utf-8
 class Organization < ActiveRecord::Base
   include ParameterSelector
   include Trimmer
