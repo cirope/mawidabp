@@ -309,7 +309,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validates audited users' do
     @finding.finding_user_assignments =
-      @finding.finding_user_assignments.delete_if do |fua|
+      @finding.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
       end
 
@@ -321,7 +321,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validates auditor users' do
     @finding.finding_user_assignments =
-      @finding.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+      @finding.finding_user_assignments.reject { |fua| fua.user.auditor? }
 
     assert @finding.invalid?
     assert_equal 1, @finding.errors.size
@@ -331,7 +331,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'validates supervisor users' do
     @finding.finding_user_assignments =
-      @finding.finding_user_assignments.delete_if { |fua| fua.user.supervisor? }
+      @finding.finding_user_assignments.reject { |fua| fua.user.supervisor? }
 
     assert @finding.invalid?
 
@@ -645,7 +645,7 @@ class FindingTest < ActiveSupport::TestCase
     assert @finding.has_audited?
     
     @finding.finding_user_assignments = 
-      @finding.finding_user_assignments.delete_if do |fua|
+      @finding.finding_user_assignments.reject do |fua|
         fua.user.can_act_as_audited?
       end
 
@@ -653,7 +653,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !@finding.has_audited?
 
     @finding.finding_user_assignments =
-      @finding.reload.finding_user_assignments.delete_if {|fua| fua.user.auditor?}
+      @finding.reload.finding_user_assignments.reject {|fua| fua.user.auditor?}
 
     assert !@finding.has_auditor?
     assert @finding.has_audited?
