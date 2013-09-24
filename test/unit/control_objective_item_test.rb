@@ -263,8 +263,8 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
     assert !@control_objective_item.valid?
     assert_equal 6, @control_objective_item.errors.count
-    assert_blank @control_objective_item.errors[:compliance_score]
-    assert_blank @control_objective_item.errors[:sustantive_score]
+    assert @control_objective_item.errors[:compliance_score].blank?
+    assert @control_objective_item.errors[:sustantive_score].blank?
     assert_equal [error_message_from_model(@control_objective_item.control,
       :design_tests, :blank)], @control_objective_item.control.errors[
       :design_tests]

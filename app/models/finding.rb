@@ -1,8 +1,9 @@
-# encoding: utf-8
 class Finding < ActiveRecord::Base
   include ActsAsTree
   include Comparable
   include ParameterSelector
+
+  acts_as_tree
 
   cattr_accessor :current_user, :current_organization
 
@@ -11,9 +12,7 @@ class Finding < ActiveRecord::Base
     :issue_date => {
       :column => "#{ConclusionReview.table_name}.issue_date",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
-      :conversion_method => lambda { |value|
-        Timeliness.parse(value, :date).to_s(:db)
-      },
+      conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
       :regexp => SEARCH_DATE_REGEXP
     },
     :review => {
@@ -35,8 +34,8 @@ class Finding < ActiveRecord::Base
     }
   }.with_indifferent_access
 
-  has_paper_trail :meta => {
-    :organization_id => proc { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   STATUS = {
@@ -510,7 +509,7 @@ class Finding < ActiveRecord::Base
   has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
 
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
-    :reject_if => lambda { |attributes| attributes['answer'].blank? }
+    reject_if: ->(attributes) { attributes['answer'].blank? }
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
