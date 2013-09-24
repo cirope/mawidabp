@@ -16,7 +16,7 @@ module FollowUpHighRiskReports
     ).notorious(false)
 
     if params[:weaknesses_by_risk_report]
-      risk = params[:weaknesses_by_risk_report][:risk] || 1
+      risk = params[:weaknesses_by_risk_report][:risk]
 
       unless params[:weaknesses_by_risk_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
@@ -41,6 +41,8 @@ module FollowUpHighRiskReports
         end
       end
     end
+    
+    risk ||= 1
 
     @periods.each do |period|
       BusinessUnitType.list.each do |but|
@@ -215,7 +217,7 @@ module FollowUpHighRiskReports
     )
 
     if params[:fixed_weaknesses_report]
-      risk = params[:fixed_weaknesses_report][:risk] || 1
+      risk = params[:fixed_weaknesses_report][:risk]
 
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
@@ -239,6 +241,8 @@ module FollowUpHighRiskReports
         end
       end
     end
+
+    risk ||= 1
 
     @periods.each do |period|
       BusinessUnitType.list.each do |but|
