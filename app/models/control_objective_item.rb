@@ -107,13 +107,13 @@ class ControlObjectiveItem < ActiveRecord::Base
     :dependent => :destroy
   has_many :final_weaknesses, -> { where(final: false).order('review_code ASC') },
     :dependent => :destroy, :class_name => 'Weakness'
-  has_many :final_oportunities, -> { where(final: false).order('review_code ASC') },
+  has_many :final_oportunities, -> { where(final: true).order('review_code ASC') },
     :dependent => :destroy, :class_name => 'Oportunity'
-  has_many :final_fortresses, -> { where(final: false).order('review_code ASC') },
+  has_many :final_fortresses, -> { where(final: true).order('review_code ASC') },
     :dependent => :destroy, :class_name => 'Fortress'
-  has_many :final_nonconformities, -> { where(final: false).order('review_code ASC') },
+  has_many :final_nonconformities, -> { where(final: true).order('review_code ASC') },
     :dependent => :destroy, :class_name => 'Nonconformity'
-  has_many :final_potential_nonconformities, -> { where(final: false).order('review_code ASC') },
+  has_many :final_potential_nonconformities, -> { where(final: true).order('review_code ASC') },
     :dependent => :destroy, :class_name => 'PotentialNonconformity'
   has_many :work_papers, -> { order('code ASC') }, :as => :owner, :dependent => :destroy,
     :before_add => [:check_for_final_review, :prepare_work_paper],
