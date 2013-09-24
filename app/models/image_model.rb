@@ -1,18 +1,18 @@
 class ImageModel < ActiveRecord::Base
   include ParameterSelector
   
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(image) { GlobalModelConfig.current_organization_id }
   }
 
-  mount_uploader :image, ImageUploader, :mount_on => :image_file_name
+  mount_uploader :image, ImageUploader, mount_on: :image_file_name
 
   # Callbacks
   before_save :update_image_attributes
 
   # Restricciones
-  validates :image_file_name, :image_content_type, :length => {:maximum => 255},
-    :allow_nil => true, :allow_blank => true
+  validates :image_file_name, :image_content_type, length: { maximum: 255 },
+    allow_nil: true, allow_blank: true
 
   def image_size(style_name = :original)
     image_geometry = image_geometry(style_name)
@@ -26,9 +26,7 @@ class ImageModel < ActiveRecord::Base
 
     if File.exists?(path)
       MiniMagick::Image.open(path)['dimensions'].tap do |dimension|
-        dimensions.merge!(
-          :width => dimension.first, :height => dimension.last
-        )
+        dimensions.merge!(width: dimension.first, height: dimension.last)
       end
     end
 
@@ -36,7 +34,7 @@ class ImageModel < ActiveRecord::Base
   end
 
   def get_version(version = nil)
-    version ? self.image.send(version) : self.image
+    version ? image.send(version) : image
   end
 
   def update_image_attributes

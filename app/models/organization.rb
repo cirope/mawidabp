@@ -17,6 +17,7 @@ class Organization < ActiveRecord::Base
   after_create :create_initial_data
   after_save :restore_current_organization_id
   before_destroy :can_be_destroyed?
+  after_destroy :destroy_image_model # TODO: delete when Rails fix gets in stable
 
   # Named scopes
   scope :list, -> { order('name ASC') }
@@ -43,7 +44,7 @@ class Organization < ActiveRecord::Base
 
   # Relaciones
   belongs_to :group
-  belongs_to :image_model, :dependent => :destroy
+  belongs_to :image_model
   has_many :business_unit_types, -> { order('name ASC') },
     :dependent => :destroy
   has_many :parameters, :dependent => :destroy
@@ -102,18 +103,21 @@ class Organization < ActiveRecord::Base
   end
 
   def can_be_destroyed?
-    unless self.best_practices.all? { |bp| bp.can_be_destroyed? }
-      errors = self.best_practices.map do |bp|
+    unless best_practices.all?(&:can_be_destroyed?)
+      _errors = best_practices.map do |bp|
         bp.errors.full_messages.join(APP_ENUM_SEPARATOR)
       end
 
-      self.errors.add :base, errors.reject { |e| e.blank? }.join(
-        APP_ENUM_SEPARATOR)
+      errors.add :base, _errors.reject(&:blank?).join(APP_ENUM_SEPARATOR)
 
       false
     else
       true
     end
+  end
+
+  def destroy_image_model
+    image_model.destroy!
   end
 
   private

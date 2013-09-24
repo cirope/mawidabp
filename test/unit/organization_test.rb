@@ -96,7 +96,9 @@ class OrganizationTest < ActiveSupport::TestCase
   test 'delete' do
     organization = Organization.find organizations(:second_organization).id
 
-    assert_difference('Organization.count', -1) { organization.destroy }
+    assert_difference ['ImageModel.count', 'Organization.count'], -1 do
+      organization.destroy
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
