@@ -45,22 +45,22 @@ class UserTest < ActiveSupport::TestCase
       role.inject_auth_privileges(Hash.new(true))
 
       @user = User.new(
-        :name => 'New name',
-        :last_name => 'New lastname',
-        :language => 'es',
-        :email => 'emailxx@emailxx.ccc',
-        :function => 'New function',
-        :user => 'new_user',
-        :enable => true,
-        :failed_attempts => 0,
-        :logged_in => false,
-        :notes => 'Some user notes',
-        :resource_id => resources(:auditor_resource).id,
-        :manager_id => users(:administrator_user).id,
-        :organization_roles_attributes => {
-          :new_1 => {
-            :organization_id => organizations(:default_organization).id,
-            :role_id => role.id
+        name: 'New name',
+        last_name: 'New lastname',
+        language: 'es',
+        email: 'emailxx@emailxx.ccc',
+        function: 'New function',
+        user: 'new_user',
+        enable: true,
+        failed_attempts: 0,
+        logged_in: false,
+        notes: 'Some user notes',
+        resource_id: resources(:auditor_resource).id,
+        manager_id: users(:administrator_user).id,
+        organization_roles_attributes: {
+          new_1: {
+            organization_id: organizations(:default_organization).id,
+            role_id: role.id
           }
         }
       )
@@ -75,9 +75,9 @@ class UserTest < ActiveSupport::TestCase
   test 'update' do
     assert_no_difference 'User.count' do
       assert @user.update(
-        :name => 'Updated name',
-        :last_name => 'Updated last name',
-        :group_admin => true
+        name: 'Updated name',
+        last_name: 'Updated last name',
+        group_admin: true
       ), @user.errors.full_messages.join('; ')
     end
 
@@ -161,8 +161,8 @@ class UserTest < ActiveSupport::TestCase
     assert_difference 'user.reviews.count', -1 do
       user.errors.clear
 
-      assert user.reassign_to(new_user, :with_findings => true,
-        :with_reviews => true)
+      assert user.reassign_to(new_user, with_findings: true,
+        with_reviews: true)
 
       assert user.reload.disable!
     end
@@ -236,7 +236,7 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 1, @user.errors.count
     assert_equal [error_message_from_model(@user, :user, :too_short,
-        :count => 5)], @user.errors[:user]
+        count: 5)], @user.errors[:user]
 
     @user.user = 'abcd' * 10
     @user.name = 'abcde' * 21
@@ -250,23 +250,23 @@ class UserTest < ActiveSupport::TestCase
     assert @user.invalid?
     assert_equal 9, @user.errors.count
     assert_equal [error_message_from_model(@user, :user, :too_long,
-        :count => 30)], @user.errors[:user]
+        count: 30)], @user.errors[:user]
     assert_equal [error_message_from_model(@user, :name, :too_long,
-        :count => 100)], @user.errors[:name]
+        count: 100)], @user.errors[:name]
     assert_equal [error_message_from_model(@user, :last_name, :too_long,
-        :count => 100)], @user.errors[:last_name]
+        count: 100)], @user.errors[:last_name]
     assert_equal [error_message_from_model(@user, :email, :too_long,
-        :count => 100)], @user.errors[:email]
+        count: 100)], @user.errors[:email]
     assert_equal [error_message_from_model(@user, :language, :too_long,
-        :count => 10)], @user.errors[:language]
+        count: 10)], @user.errors[:language]
     assert_equal [error_message_from_model(@user, :password, :too_long,
-        :count => 128)], @user.errors[:password]
+        count: 128)], @user.errors[:password]
     assert_equal [error_message_from_model(@user, :function, :too_long,
-        :count => 255)], @user.errors[:function]
+        count: 255)], @user.errors[:function]
     assert_equal [error_message_from_model(@user, :salt, :too_long,
-        :count => 255)], @user.errors[:salt]
+        count: 255)], @user.errors[:salt]
     assert_equal [error_message_from_model(@user, :change_password_hash,
-        :too_long, :count => 255)], @user.errors[:change_password_hash]
+        :too_long, count: 255)], @user.errors[:change_password_hash]
   end
 
   test 'validates parent is in the same organization' do
@@ -286,8 +286,8 @@ class UserTest < ActiveSupport::TestCase
     assert user.parent.valid?
     assert user.valid?
     assert !user.update(
-      :child_ids => [users(:first_time_user).id],
-      :manager_id => users(:first_time_user).id
+      child_ids: [users(:first_time_user).id],
+      manager_id: users(:first_time_user).id
     )
     assert_equal 1, user.errors.size
     assert_equal error_message_from_model(user, :manager_id, :invalid),
@@ -298,9 +298,9 @@ class UserTest < ActiveSupport::TestCase
     assert_difference 'OldPassword.count' do
       assert @user.update(
         {
-          :password => "new_password_1230",
-          :password_confirmation => "new_password_1230",
-          :password_changed => Date.today
+          password: "new_password_1230",
+          password_confirmation: "new_password_1230",
+          password_changed: Date.today
         }
       ), @user.errors.full_messages.join('; ')
     end
@@ -308,9 +308,9 @@ class UserTest < ActiveSupport::TestCase
     assert_no_difference 'OldPassword.count' do
       assert !@user.update(
         {
-          :password => "new_password_1232",
-          :password_confirmation => "new_password_1232",
-          :password_changed => Date.today
+          password: "new_password_1232",
+          password_confirmation: "new_password_1232",
+          password_changed: Date.today
         }
       )
     end
@@ -318,7 +318,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1, @user.errors.count
     assert_equal [error_message_from_model(@user, :password,
         :too_soon,
-        :count => get_test_parameter(:security_password_minimum_time).to_i)],
+        count: get_test_parameter(:security_password_minimum_time).to_i)],
       @user.errors[:password]
   end
 
@@ -331,8 +331,8 @@ class UserTest < ActiveSupport::TestCase
     assert_difference 'OldPassword.count' do
       assert @user.update(
         {
-          :password => "new_password_1230",
-          :password_confirmation => "new_password_1230"
+          password: "new_password_1230",
+          password_confirmation: "new_password_1230"
         }
       ), @user.errors.full_messages.join('; ')
     end
@@ -341,8 +341,8 @@ class UserTest < ActiveSupport::TestCase
       assert_difference 'OldPassword.count' do
         assert @user.update(
           {
-            :password => "new_password_123#{c}",
-            :password_confirmation => "new_password_123#{c}"
+            password: "new_password_123#{c}",
+            password_confirmation: "new_password_123#{c}"
           }
         )
       end
@@ -365,8 +365,8 @@ class UserTest < ActiveSupport::TestCase
     assert_difference 'OldPassword.count' do
       assert @user.update(
         {
-          :password => "new_password_1230",
-          :password_confirmation => "new_password_1230"
+          password: "new_password_1230",
+          password_confirmation: "new_password_1230"
         }
       )
     end
@@ -376,12 +376,12 @@ class UserTest < ActiveSupport::TestCase
     old_name_with_function = @user.full_name_with_function
 
     assert_no_match /New function/, old_name_with_function
-    assert @user.update(:function => 'New function')
+    assert @user.update(function: 'New function')
 
     new_name_with_function = @user.full_name_with_function
     assert_match /New function/, new_name_with_function
 
-    name_from_a_minute_ago = @user.full_name_with_function(1.minute.ago)
+    name_from_a_minute_ago = @user.reload.full_name_with_function(1.minute.ago)
     assert_no_match /New function/, name_from_a_minute_ago
     assert_equal old_name_with_function, name_from_a_minute_ago
   end
@@ -432,7 +432,7 @@ class UserTest < ActiveSupport::TestCase
     bare = User.find(users(:bare_user).id)
 
     assert auditor_user.reassign_to(User.find(users(:bare_user).id),
-      {:with_reviews => true, :with_findings => true})
+      {with_reviews: true, with_findings: true})
 
     assert auditor_user.reload.findings.all_for_reallocation.empty?
 
@@ -449,7 +449,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_nothing_raised do
       assert auditor_user.release_for_all_pending_findings(
-        :with_reviews => true, :with_findings => true)
+        with_reviews: true, with_findings: true)
     end
 
     assert auditor_user.findings(true).all_for_reallocation.empty?
@@ -466,7 +466,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_nothing_raised do
       assert !audited_user.release_for_all_pending_findings(
-        :with_reviews => true, :with_findings => true)
+        with_reviews: true, with_findings: true)
     end
 
     assert !audited_user.findings(true).all_for_reallocation.empty?
@@ -515,7 +515,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        old_user.reassign_to(user, :with_findings => true)
+        old_user.reassign_to(user, with_findings: true)
       end
     end
 
@@ -540,7 +540,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', notifications do
       assert_difference 'Notification.count' do
-         old_user.reassign_to(user, :with_reviews => true)
+         old_user.reassign_to(user, with_reviews: true)
       end
     end
 
