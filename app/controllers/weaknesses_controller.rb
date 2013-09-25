@@ -1,11 +1,10 @@
-# encoding: utf-8
 # =Controlador de observaciones
 #
 # Lista, muestra, crea, modifica y elimina observaciones (#Weakness)
 class WeaknessesController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :load_privileges
-  layout proc{ |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista las observaciones
   #
@@ -27,9 +26,9 @@ class WeaknessesController < ApplicationController
       ].map { |condition| "(#{condition})" }.join(' OR ')
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
-      :boolean_true => true,
-      :boolean_false => false
+      organization_id: @auth_organization.id,
+      boolean_true: true,
+      boolean_false: false
     }
 
     if params[:control_objective].to_i > 0
@@ -48,15 +47,17 @@ class WeaknessesController < ApplicationController
 
     @weaknesses = Weakness.includes(
       :work_papers,
-      :control_objective_item => {
-        :review => [:period, :plan_item, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :plan_item, :conclusion_final_review]
       }
     ).where(@conditions, parameters).order(
       @order_by || [
         "#{Review.table_name}.identification DESC",
         "#{Weakness.table_name}.review_code ASC"
       ]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:periods, :conclusion_reviews).paginate(
+      page: params[:page], per_page: APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -64,7 +65,7 @@ class WeaknessesController < ApplicationController
           redirect_to weakness_url(@weaknesses.first)
         end
       } # index.html.erb
-      format.xml  { render :xml => @weaknesses }
+      format.xml  { render xml: @weaknesses }
     end
   end
 
@@ -78,7 +79,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @weakness }
+      format.xml  { render xml: @weakness }
     end
   end
 
@@ -89,12 +90,12 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      {:control_objective_item_id => params[:control_objective_item]}, {}, true
+      {control_objective_item_id: params[:control_objective_item]}, {}, true
     )
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @weakness }
+      format.xml  { render xml: @weakness }
     end
   end
 
@@ -118,10 +119,10 @@ class WeaknessesController < ApplicationController
       if @weakness.save
         flash.notice = t 'weakness.correctly_created'
         format.html { redirect_to(edit_weakness_url(@weakness)) }
-        format.xml  { render :xml => @weakness, :status => :created, :location => @weakness }
+        format.xml  { render xml: @weakness, status: :created, location: @weakness }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @weakness.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @weakness.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -142,8 +143,8 @@ class WeaknessesController < ApplicationController
           format.html { redirect_to(edit_weakness_url(@weakness)) }
           format.xml  { head :ok }
         else
-          format.html { render :action => :edit }
-          format.xml  { render :xml => @weakness.errors, :status => :unprocessable_entity }
+          format.html { render action: :edit }
+          format.xml  { render xml: @weakness.errors, status: :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end
@@ -151,7 +152,7 @@ class WeaknessesController < ApplicationController
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'weakness.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Crea el documento de seguimiento de la observación
@@ -186,7 +187,7 @@ class WeaknessesController < ApplicationController
       'organizations.id = :organization_id',
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {organization_id: @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -199,16 +200,16 @@ class WeaknessesController < ApplicationController
     end
 
     @users = User.includes(:organizations).where(
-      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
       [
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
-      format.json { render :json => @users }
+      format.json { render json: @users }
     end
   end
 
@@ -226,10 +227,10 @@ class WeaknessesController < ApplicationController
       ].compact.join(' OR ')
     ].compact
     parameters = {
-      :boolean_false => false,
-      :finding_id => params[:finding_id],
-      :organization_id => @auth_organization.id,
-      :review_id => params[:review_id]
+      boolean_false: false,
+      finding_id: params[:finding_id],
+      organization_id: @auth_organization.id,
+      review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -243,16 +244,16 @@ class WeaknessesController < ApplicationController
     end
 
     @findings = Finding.includes(
-      :control_objective_item => {:review => [:period, :conclusion_final_review]}
+      control_objective_item: {review: [:period, :conclusion_final_review]}
     ).where(conditions.map {|c| "(#{c})"}.join(' AND '), parameters).order(
       [
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-    ).limit(5)
+    ).references(:control_objective_items, :reviews, :periods).limit(5)
 
     respond_to do |format|
-      format.json { render :json => @findings }
+      format.json { render json: @findings }
     end
   end
 
@@ -266,8 +267,8 @@ class WeaknessesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
-      :review_id => params[:review_id].to_i
+      organization_id: @auth_organization.id,
+      review_id: params[:review_id].to_i
     }
 
     @tokens.each_with_index do |t, i|
@@ -280,13 +281,15 @@ class WeaknessesController < ApplicationController
     end
 
     @control_objective_items = ControlObjectiveItem.includes(
-      :review => [:period, :conclusion_final_review]
+      review: [:period, :conclusion_final_review]
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
-    ).order("#{Review.table_name}.identification ASC").limit(10)
+    ).order("#{Review.table_name}.identification ASC").references(
+      :periods, :conclusion_reviews, :control_objective_items
+    ).limit(10)
 
     respond_to do |format|
-      format.json { render :json => @control_objective_items }
+      format.json { render json: @control_objective_items }
     end
   end
 
@@ -301,20 +304,20 @@ class WeaknessesController < ApplicationController
     Weakness.includes(
       :finding_relations,
       :work_papers,
-      {:finding_user_assignments => :user},
-      {:control_objective_item => {:review => :period}}
+      {finding_user_assignments: :user},
+      {control_objective_item: {review: :period}}
     ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
+      id: id, Period.table_name => {organization_id: @auth_organization.id}
+    ).references(:periods).first
   end
 
   def load_privileges #:nodoc:
     @action_privileges.update(
-      :follow_up_pdf => :read,
-      :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read,
-      :undo_reiteration => :modify
+      follow_up_pdf: :read,
+      auto_complete_for_user: :read,
+      auto_complete_for_finding_relation: :read,
+      auto_complete_for_control_objective_item: :read,
+      undo_reiteration: :modify
     )
   end
 end
