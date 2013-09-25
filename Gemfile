@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.0'
+gem 'rails', github: 'rails/rails', branch: '4-0-stable'
 
 gem 'pg'
 gem 'foreigner'
@@ -25,7 +25,7 @@ gem 'rubyzip', require: 'zip'
 gem 'prawn'
 
 gem 'dalli'
-gem 'protected_attributes'
+gem 'protected_attributes', github: 'rails/protected_attributes'
 
 gem 'sass-rails'
 gem 'coffee-rails'
