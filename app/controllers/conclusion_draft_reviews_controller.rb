@@ -21,17 +21,19 @@ class ConclusionDraftReviewsController < ApplicationController
     build_search_conditions ConclusionDraftReview, default_conditions
 
     @conclusion_draft_reviews = ConclusionDraftReview.includes(
-      :review => [
+      review: [
         :period,
         :conclusion_final_review,
-        {:plan_item => :business_unit}
+        {plan_item: :business_unit}
       ]
-    ).where(@conditions).order(
+    ).where(@conditions).references(
+      :periods, :reviews, :business_units
+    ).order(
       [
         "#{ConclusionDraftReview.table_name}.issue_date DESC",
         "#{ConclusionFinalReview.table_name}.created_at DESC"
       ].join(', ')
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -42,7 +44,7 @@ class ConclusionDraftReviewsController < ApplicationController
           )
         end
       }
-      format.xml  { render :xml => @conclusion_draft_reviews }
+      format.xml  { render xml: @conclusion_draft_reviews }
     end
   end
 
@@ -56,7 +58,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @conclusion_draft_review }
+      format.xml  { render xml: @conclusion_draft_review }
     end
   end
 
@@ -70,7 +72,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @conclusion_draft_review }
+      format.xml  { render xml: @conclusion_draft_review }
     end
   end
 
@@ -95,10 +97,10 @@ class ConclusionDraftReviewsController < ApplicationController
       if @conclusion_draft_review.save
         flash.notice = t 'conclusion_draft_review.correctly_created'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
-        format.xml  { render :xml => @conclusion_draft_review, :status => :created, :location => @conclusion_draft_review }
+        format.xml  { render xml: @conclusion_draft_review, status: :created, location: @conclusion_draft_review }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @conclusion_draft_review.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @conclusion_draft_review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -119,8 +121,8 @@ class ConclusionDraftReviewsController < ApplicationController
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @conclusion_draft_review.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @conclusion_draft_review.errors, status: :unprocessable_entity }
       end
     end
 
@@ -234,9 +236,9 @@ class ConclusionDraftReviewsController < ApplicationController
       (params[:user].try(:values) || []).each do |user_data|
         user = User.find(user_data[:id]) if user_data[:id]
         send_options = {
-          :note => note,
-          :include_score_sheet => include_score_sheet,
-          :include_global_score_sheet => include_global_score_sheet
+          note: note,
+          include_score_sheet: include_score_sheet,
+          include_global_score_sheet: include_global_score_sheet
         }
 
         if user && !users.include?(user)
@@ -252,11 +254,11 @@ class ConclusionDraftReviewsController < ApplicationController
         redirect_to edit_conclusion_draft_review_url(
           @conclusion_draft_review)
       else
-        render :action => :compose_email
+        render action: :compose_email
       end
     elsif @conclusion_draft_review.try(:review)
       flash.alert = t('conclusion_review.review_not_approved')
-      render :action => :compose_email
+      render action: :compose_email
     else
       redirect_to conclusion_draft_reviews_url
     end
@@ -269,10 +271,10 @@ class ConclusionDraftReviewsController < ApplicationController
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      'organizations.id = :organization_id',
+      "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {organization_id: @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(users.name) LIKE :user_data_#{i}",
@@ -287,31 +289,31 @@ class ConclusionDraftReviewsController < ApplicationController
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
-      format.json { render :json => @users }
+      format.json { render json: @users }
     end
   end
 
   def check_for_approval
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
-        :id => params[:id],
+        id: params[:id],
         "#{Period.table_name}.organization_id" => @auth_organization.id
-      ).first
+      ).references(:periods).first
 
       response = {
-        :approved => review.is_approved?,
-        :can_be_approved_by_force => review.can_be_approved_by_force,
-        :errors => review.approval_errors
+        approved: review.is_approved?,
+        can_be_approved_by_force: review.can_be_approved_by_force,
+        errors: review.approval_errors
       }
     else
       response = {}
     end
 
     respond_to do |format|
-      format.json { render :json => response }
+      format.json { render json: response }
     end
   end
 
@@ -324,11 +326,11 @@ class ConclusionDraftReviewsController < ApplicationController
   # _id_::  ID del informe borrador que se quiere recuperar
   def find_with_organization(id) #:doc:
     conclusion_draft_review = ConclusionDraftReview.includes(
-      :review => [
+      review: [
         :period,
         :conclusion_final_review,
         :plan_item,
-        {:control_objective_items => [:control, :weaknesses, :oportunities]}
+        {control_objective_items: [:control, :weaknesses, :oportunities]}
       ]
     ).where(
       [
@@ -336,24 +338,24 @@ class ConclusionDraftReviewsController < ApplicationController
           "#{ConclusionDraftReview.table_name}.id = :id",
           "#{Period.table_name}.organization_id = :organization_id"
         ].join(' AND '),
-        {:id => id, :organization_id => @auth_organization.id}
+        {id: id, organization_id: @auth_organization.id}
       ]
-    ).first(:readonly => false)
+    ).references(:periods).first
 
     conclusion_draft_review.has_final_review? ? nil : conclusion_draft_review
   end
 
   def load_privileges #:nodoc:
     @action_privileges.update(
-      :export_to_pdf => :read,
-      :score_sheet => :read,
-      :download_work_papers => :read,
-      :bundle => :read,
-      :create_bundle => :read,
-      :auto_complete_for_user => :read,
-      :check_for_approval => :read,
-      :compose_email => :modify,
-      :send_by_email => :modify
+      export_to_pdf: :read,
+      score_sheet: :read,
+      download_work_papers: :read,
+      bundle: :read,
+      create_bundle: :read,
+      auto_complete_for_user: :read,
+      check_for_approval: :read,
+      compose_email: :modify,
+      send_by_email: :modify
     )
   end
 end
