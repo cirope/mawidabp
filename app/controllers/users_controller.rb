@@ -45,7 +45,9 @@ class UsersController < ApplicationController
 
     @users = User.includes(:organizations).where(@conditions).not_hidden.order(
       "#{User.table_name}.user ASC"
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+    ).references(:organizations).paginate(
+      page: params[:page], per_page: APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -514,7 +516,7 @@ class UsersController < ApplicationController
     group = Group.find_by_admin_hash(params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
-      roles = Role.find_all_by_organization_id params[:id]
+      roles = Role.where organization_id: params[:id]
 
       respond_to do |format|
         format.json { render json: roles.map { |r| [r.name, r.id] } }
@@ -661,7 +663,7 @@ class UsersController < ApplicationController
 
     users = User.includes(:organizations).where(@conditions).order(
       "#{User.table_name}.user ASC"
-    )
+    ).references(:organizations)
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
@@ -757,10 +759,10 @@ class UsersController < ApplicationController
     end
 
     @users = User.includes(:organizations).where(
-      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
+      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
       format.json { render json: @users }
@@ -787,10 +789,10 @@ class UsersController < ApplicationController
           "#{Organization.table_name}.id IS NULL"
         ].join(' OR ')
       ].map {|c| "(#{c})"}.join(' AND '),
-      {id: id, organization_id: @auth_organization.id}
-    ).first(
-      readonly: false
-    ) || (find_with_organization(id, :id) unless field == :id)
+      { id: id, organization_id: @auth_organization.id }
+    ).references(
+      :organizations
+    ).first || (find_with_organization(id, :id) unless field == :id)
   end
 
   def load_privileges #:nodoc:
