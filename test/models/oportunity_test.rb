@@ -244,9 +244,10 @@ class OportunityTest < ActiveSupport::TestCase
       @oportunity.approval_errors.first
 
     @oportunity.reload
-    @oportunity.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    @oportunity.finding_user_assignments =
+      @oportunity.finding_user_assignments.reject do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert !@oportunity.must_be_approved?
     assert_equal 1, @oportunity.approval_errors.size
@@ -254,18 +255,19 @@ class OportunityTest < ActiveSupport::TestCase
       @oportunity.approval_errors.first
 
     @oportunity.reload
-    @oportunity.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    @oportunity.finding_user_assignments =
+      @oportunity.finding_user_assignments.reject { |fua| fua.user.auditor? }
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal 2, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.without_auditor'),
-      @oportunity.approval_errors.first
+      @oportunity.approval_errors.last
 
     @oportunity.reload
     @oportunity.audit_comments = '  '
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
+    assert_equal 3, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.without_audit_comments'),
-      @oportunity.approval_errors.first
+      @oportunity.approval_errors.last
   end
 
   test 'dynamic functions' do
