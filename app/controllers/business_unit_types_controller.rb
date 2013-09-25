@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina tipos de unidades de negocio
 # (#BusinessUnitType) y unidades de negocio (#BusinessUnit)
 class BusinessUnitTypesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
 
   # Lista los tipos de unidades de negocio
   #
@@ -125,15 +125,12 @@ class BusinessUnitTypesController < ApplicationController
   end
 
   private
-
-  # Busca el tipo de unidad de negocio indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un tipo
-  # de unidad de negocio con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    BusinessUnitType.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    # Busca el tipo de unidad de negocio indicado siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe un tipo
+    # de unidad de negocio con ese ID o que no pertenece a la organización con la
+    # que se autenticó el usuario) devuelve nil.
+    # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      BusinessUnitType.find_by(id: id, organization_id: @auth_organization.id)
+    end
 end

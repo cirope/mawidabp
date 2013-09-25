@@ -1,4 +1,3 @@
-# encoding: utf-8
 module ConclusionCommonReports
   def weaknesses_by_state
     @title = t('conclusion_committee_report.weaknesses_by_state_title')
@@ -1039,7 +1038,7 @@ module ConclusionCommonReports
         :to_date => @to_date,
         :organization_id => @auth_organization.id
       }
-    )
+    ).references(:reviews)
   end
 
   def get_weaknesses_synthesis_table_data(weaknesses_count,
