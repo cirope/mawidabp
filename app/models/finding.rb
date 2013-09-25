@@ -899,12 +899,11 @@ class Finding < ActiveRecord::Base
   end
 
   def state_text
-    self.state ? I18n.t("finding.status_#{STATUS.invert[self.state]}") : '-'
+    state ? I18n.t("finding.status_#{STATUS.invert[state]}") : '-'
   end
 
   def stale?
-    self.being_implemented? && self.follow_up_date &&
-      self.follow_up_date < Date.today
+    being_implemented? && follow_up_date && follow_up_date < Date.today
   end
 
   def pending?
@@ -912,40 +911,40 @@ class Finding < ActiveRecord::Base
   end
 
   def has_audited?
-    self.finding_user_assignments.any? do |fua|
+    finding_user_assignments.any? do |fua|
       !fua.marked_for_destruction? && fua.user.can_act_as_audited?
     end
   end
 
   def has_auditor?
-    self.finding_user_assignments.any? do |fua|
+    finding_user_assignments.any? do |fua|
       !fua.marked_for_destruction? && fua.user.auditor?
     end
   end
 
   def rescheduled?
-    self.all_follow_up_dates.size > 0
+    all_follow_up_dates.size > 0
   end
 
   def cost
-    self.costs.reject(&:new_record?).sum(&:cost)
+    costs.reject(&:new_record?).sum(&:cost)
   end
 
   def issue_date
-    self.review.try(:conclusion_final_review).try(:issue_date)
+    review.try(:conclusion_final_review).try(:issue_date)
   end
 
   def important_dates
     important_dates = []
 
-    if self.first_notification_date
+    if first_notification_date
       important_dates << I18n.t('finding.important_dates.notification_date',
         :date => I18n.l(self.first_notification_date, :format => :long).strip)
     end
 
-    if self.confirmation_date
+    if confirmation_date
       important_dates << I18n.t('finding.important_dates.confirmation_date',
-        :date => I18n.l(self.confirmation_date, :format => :long).strip)
+        :date => I18n.l(confirmation_date, :format => :long).strip)
     end
 
     if self.confirmed? || self.unconfirmed?

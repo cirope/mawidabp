@@ -633,10 +633,12 @@ class FindingTest < ActiveSupport::TestCase
     end
   end
 
-  test 'has auditor and has audited' do
-    assert(@finding.finding_user_assignments.any? do |fua|
+  test 'has audited' do
+    assert(
+      @finding.finding_user_assignments.any? do |fua|
         fua.user.can_act_as_audited?
-      end)
+      end
+    )
 
     assert @finding.finding_user_assignments.any? { |fua| fua.user.auditor? }
 
@@ -650,9 +652,22 @@ class FindingTest < ActiveSupport::TestCase
 
     assert @finding.has_auditor?
     assert !@finding.has_audited?
+  end
 
+  test 'has auditor' do
+    assert(
+      @finding.finding_user_assignments.any? do |fua|
+        fua.user.can_act_as_audited?
+      end
+    )
+
+    assert @finding.finding_user_assignments.any? { |fua| fua.user.auditor? }
+
+    assert @finding.has_auditor?
+    assert @finding.has_audited?
+    
     @finding.finding_user_assignments =
-      @finding.reload.finding_user_assignments.reject { |fua| fua.user.auditor? }
+      @finding.finding_user_assignments.reject { |fua| fua.user.auditor? }
 
     assert !@finding.has_auditor?
     assert @finding.has_audited?
