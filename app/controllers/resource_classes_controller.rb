@@ -13,14 +13,14 @@ class ResourceClassesController < ApplicationController
   def index
     @title = t 'resource_class.index_title'
     @resource_classes = ResourceClass.where(
-      :organization_id => @auth_organization.id
+      organization_id: @auth_organization.id
     ).order('name ASC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+      page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @resource_classes }
+      format.xml  { render xml: @resource_classes }
     end
   end
 
@@ -34,7 +34,7 @@ class ResourceClassesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @resource_class }
+      format.xml  { render xml: @resource_class }
     end
   end
 
@@ -49,7 +49,7 @@ class ResourceClassesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @resource_class }
+      format.xml  { render xml: @resource_class }
     end
   end
 
@@ -69,16 +69,16 @@ class ResourceClassesController < ApplicationController
   def create
     @title = t 'resource_class.new_title'
     @resource_class = ResourceClass.new(params[:resource_class].merge(
-        :organization_id => @auth_organization.id))
+        organization_id: @auth_organization.id))
 
     respond_to do |format|
       if @resource_class.save
         flash.notice = t 'resource_class.correctly_created'
         format.html { redirect_to(resource_classes_url) }
-        format.xml  { render :xml => @resource_class, :status => :created, :location => @resource_class }
+        format.xml  { render xml: @resource_class, status: :created, location: @resource_class }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @resource_class.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @resource_class.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -98,14 +98,14 @@ class ResourceClassesController < ApplicationController
         format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @resource_class.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @resource_class.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'resource_class.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina una clase de recursos
@@ -130,8 +130,6 @@ class ResourceClassesController < ApplicationController
   # usuario) devuelve nil.
   # _id_::  ID de la clase de recurso que se quiere recuperar
   def find_with_organization(id) #:doc:
-    ResourceClass.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
+    ResourceClass.where(id: id, organization_id: @auth_organization.id).first
   end
 end
