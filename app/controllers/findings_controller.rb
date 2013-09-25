@@ -67,7 +67,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-    )
+   ).references(:control_objective_items)
 
     respond_to do |format|
       format.html {
@@ -542,9 +542,7 @@ class FindingsController < ApplicationController
       Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
       Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
 
-    finding = Finding.includes(includes).where(conditions).first(
-      :readonly => false
-    )
+    finding = Finding.includes(includes).where(conditions).first
 
     # TODO: eliminar cuando se corrija el problema que hace que include solo
     # traiga el primer usuario
