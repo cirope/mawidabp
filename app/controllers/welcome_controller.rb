@@ -4,7 +4,6 @@ class WelcomeController < ApplicationController
   def index
     @title = t 'welcome.index_title'
 
-    render :template =>
-      "welcome/#{@auth_user.audited? ? 'audited' : 'auditor'}_index"
+    render template: "welcome/#{@auth_user.audited? ? 'audited' : 'auditor'}_index"
   end
 end
