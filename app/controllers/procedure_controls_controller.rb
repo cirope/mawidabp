@@ -5,7 +5,7 @@
 # (#ProcedureControl) y sus ítems (#ProcedureControlItem y
 # #ProcedureControlSubitem)
 class ProcedureControlsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :update_auth_user_id, :load_privileges
 
   # Lista los procedimientos y pruebas de control

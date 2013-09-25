@@ -1,5 +1,5 @@
 class VersionsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :download_security_changes_report, :load_privileges
 
   # Muestra el detalle de un cambio en un modelo

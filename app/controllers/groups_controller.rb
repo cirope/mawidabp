@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina grupos (#Group)
 class GroupsController < ApplicationController
   layout 'application_clean'
-  before_filter :auth, :check_group_admin
+  before_action :auth, :check_group_admin
 
   # Lista los grupos
   #

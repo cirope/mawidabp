@@ -2,7 +2,7 @@
 #
 # Lista y muestra registros de errores (#ErrorRecord)
 class ErrorRecordsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges
 
   # Lista los registros de error

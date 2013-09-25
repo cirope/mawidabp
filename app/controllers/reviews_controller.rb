@@ -4,7 +4,7 @@
 # Lista, muestra, crea, modifica y elimina informes (#Review) y sus objetivos
 # de control (#ControlObjectiveItem)
 class ReviewsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :update_auth_user_id, :load_privileges,
     :control_objective_items_for_period, :sort_control_objective_items!
   layout proc { |controller| controller.request.xhr? ? false : 'application' }

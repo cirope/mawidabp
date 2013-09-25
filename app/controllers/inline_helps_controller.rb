@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina contenido de la ayuda en línea
 # (#InlineHelp)
 class InlineHelpsController < ApplicationController
-  before_filter :auth, :load_current_module
+  before_action :auth, :load_current_module
   
   # * GET /inline_helps
   # * GET /inline_helps.xml

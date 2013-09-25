@@ -2,7 +2,7 @@
 #
 # Lista, muestra, modifica y elimina parámetros (#Parameter)
 class ParametersController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   hide_action :form_keys_to_array, :clean_parameters, :find_with_organization
 
   # Lista los parámetros

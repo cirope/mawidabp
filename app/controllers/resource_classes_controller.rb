@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina clases de recursos (#ResourceClass) y
 # sus recursos (#Resource)
 class ResourceClassesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   hide_action :find_with_organization, :update_auth_user_id
 
   # Lista las clases de recursos

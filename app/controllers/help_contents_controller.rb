@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina contenido de la ayuda (#HelpContent)
 class HelpContentsController < ApplicationController
-  before_filter :auth, :load_current_module
+  before_action :auth, :load_current_module
 
   # Lista de los contenidos de ayuda
   #

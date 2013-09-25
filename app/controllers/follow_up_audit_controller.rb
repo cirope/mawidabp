@@ -6,7 +6,7 @@ class FollowUpAuditController < ApplicationController
   include FollowUpCommonReports
   include FollowUpHighRiskReports
 
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :get_organization,
     :add_weaknesses_synthesis_table, :being_implemented_resume_from_counts,
     :add_being_implemented_resume, :make_date_range,

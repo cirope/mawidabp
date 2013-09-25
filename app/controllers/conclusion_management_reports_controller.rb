@@ -3,7 +3,7 @@ require 'modules/conclusion_reports/conclusion_common_reports'
 class ConclusionManagementReportsController < ApplicationController
   include ConclusionCommonReports
 
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :add_weaknesses_synthesis_table,
     :get_weaknesses_synthesis_table_data, :make_date_range
 
