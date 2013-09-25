@@ -3,7 +3,7 @@
 # Lista, muestra, modifica y elimina objetivos de control
 # (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
   hide_action :find_with_organization
 
@@ -130,17 +130,16 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
-
-  # Busca el objetivo de control indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # objetivo de control con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del objetivo de control que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ControlObjectiveItem.includes(
-      :control, :weaknesses, :work_papers, {:review => :period}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    # Busca el objetivo de control indicado siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe un
+    # objetivo de control con ese ID o que no pertenece a la organización con la
+    # que se autenticó el usuario) devuelve nil.
+    # _id_::  ID del objetivo de control que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      ControlObjectiveItem.includes(
+        :control, :weaknesses, :work_papers, {:review => :period}
+      ).find_by(
+        id: id, Period.table_name => { :organization_id => @auth_organization.id }
+      )
+    end
 end
