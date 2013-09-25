@@ -131,6 +131,6 @@ class BusinessUnitTypesController < ApplicationController
     # que se autenticó el usuario) devuelve nil.
     # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
     def find_with_organization(id) #:doc:
-      BusinessUnitType.find_by(id: id, organization_id: @auth_organization.id)
+      BusinessUnitType.where(id: id, organization_id: @auth_organization.id).first
     end
 end

@@ -228,7 +228,7 @@ class UsersController < ApplicationController
       organization_prefix = request.subdomains.first
       @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
-      @organization = Organization.find_by_prefix(organization_prefix)
+      @organization = Organization.find_by(prefix: organization_prefix)
     end
   end
 
@@ -241,7 +241,7 @@ class UsersController < ApplicationController
     organization_prefix = request.subdomains.first
     @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
-    @organization = Organization.find_by_prefix(organization_prefix)
+    @organization = Organization.find_by(prefix: organization_prefix)
 
     GlobalModelConfig.current_organization_id = @organization.try :id
 
@@ -324,7 +324,7 @@ class UsersController < ApplicationController
 
         redirect_to controller: :groups, action: :index
       else
-        if (user = User.find_by_user(@user.user))
+        if (user = User.find_by(user: @user.user))
           ErrorRecord.create(user: user, organization: @organization,
             request: request, error_type: :on_login)
 
@@ -385,7 +385,7 @@ class UsersController < ApplicationController
   # * POST /users/send_password_reset.xml
   def send_password_reset
     @title = t 'user.reset_password_title'
-    @auth_organization = Organization.find_by_prefix(request.subdomains.first)
+    @auth_organization = Organization.find_by(prefix: request.subdomains.first)
     @user = find_with_organization(params[:email], :email)
 
     if @user && !@user.hidden
@@ -475,7 +475,7 @@ class UsersController < ApplicationController
   #
   # * GET /users/new_initial/hash=xxxx
   def new_initial
-    group = Group.find_by_admin_hash(params[:hash])
+    group = Group.find_by(admin_hash: params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       @user = User.new
@@ -491,7 +491,7 @@ class UsersController < ApplicationController
   #
   # * POST /users/create_initial
   def create_initial
-    group = Group.find_by_admin_hash(params[:hash])
+    group = Group.find_by(admin_hash: params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       @user = User.new(params[:user])
@@ -513,7 +513,7 @@ class UsersController < ApplicationController
   #
   # * GET /users/initial_roles/1.json
   def initial_roles
-    group = Group.find_by_admin_hash(params[:hash])
+    group = Group.find_by(admin_hash: params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       roles = Role.where organization_id: params[:id]
