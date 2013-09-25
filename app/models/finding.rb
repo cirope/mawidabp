@@ -375,7 +375,7 @@ class Finding < ActiveRecord::Base
   }
 
   # Restricciones sobre los atributos
-  attr_protected :first_notification_date, :final, :force_modification
+  # attr_protected :first_notification_date, :final, :force_modification
   # Atributos no persistente
   attr_accessor :nested_user, :auto_control_objective_item, :finding_prefix,
     :avoid_changes_notification, :users_for_notification, :user_who_make_it,

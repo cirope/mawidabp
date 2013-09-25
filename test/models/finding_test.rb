@@ -35,7 +35,7 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba la creación de una debilidad
   test 'create' do
     assert_difference 'Finding.count' do
-      @finding = Finding.new(
+      @finding = @finding.class.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
@@ -584,16 +584,15 @@ class FindingTest < ActiveSupport::TestCase
   test 'avoid notify changes to users if incomplete' do
     new_user = User.find(users(:administrator_second_user).id)
     fuas = @finding.finding_user_assignments.map do |fua|
-      fua.attributes.merge('id' => nil)
+      fua.attributes.reject { |k,v| k == 'id' }
     end
-    finding = Finding.new(@finding.attributes.merge(
-        'id' => nil,
+    finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
-      )
+      ).reject { |k,v| k == 'id' || k == 'type' }
     )
 
     assert finding.save
@@ -653,7 +652,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !@finding.has_audited?
 
     @finding.finding_user_assignments =
-      @finding.reload.finding_user_assignments.reject {|fua| fua.user.auditor?}
+      @finding.reload.finding_user_assignments.reject { |fua| fua.user.auditor? }
 
     assert !@finding.has_auditor?
     assert @finding.has_audited?
@@ -873,16 +872,15 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'not notify users if is incomplete' do
     fuas = @finding.finding_user_assignments.map do |fua|
-      fua.attributes.merge('id' => nil)
+      fua.attributes.reject { |k,v| k == 'id' }
     end
-    finding = Finding.new(@finding.attributes.merge(
-        'id' => nil,
+    finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
-      )
+      ).reject { |k,v| k == 'id' || k == 'type' }
     )
     assert finding.save
 
