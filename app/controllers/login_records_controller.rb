@@ -1,4 +1,3 @@
-# encoding: utf-8
 # =Controlador de registros de ingreso
 #
 # Lista y muestra registros de ingreso (#LoginRecord)
@@ -46,7 +45,7 @@ class LoginRecordsController < ApplicationController
       @conditions || default_conditions
     ).order(
       "#{LoginRecord.table_name}.start DESC"
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:users).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
