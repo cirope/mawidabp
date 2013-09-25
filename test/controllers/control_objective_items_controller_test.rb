@@ -60,6 +60,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       :query => 'dependencia y responsable',
       :columns => ['control_objective_text', 'review']
     }
+
     assert_redirected_to control_objective_item_url(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item))
     assert_not_nil assigns(:control_objectives)
