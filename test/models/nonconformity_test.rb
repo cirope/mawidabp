@@ -335,30 +335,33 @@ class NonconformityTest < ActiveSupport::TestCase
       @nonconformity.approval_errors.first
 
     @nonconformity.reload
-    @nonconformity.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    @nonconformity.finding_user_assignments =
+      @nonconformity.finding_user_assignments.reject do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert !@nonconformity.must_be_approved?
     assert_equal 1, @nonconformity.approval_errors.size
-    assert_equal I18n.t('nonconformity.errors.without_audited'),
-      @nonconformity.approval_errors.first
+    approval_errors = [I18n.t('nonconformity.errors.without_audited')]
+    assert_equal approval_errors,
+      @nonconformity.approval_errors
 
     @nonconformity.reload
-    @nonconformity.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    @nonconformity.finding_user_assignments =
+      @nonconformity.finding_user_assignments.reject { |fua| fua.user.auditor? }
     assert !@nonconformity.must_be_approved?
-    assert_equal 1, @nonconformity.approval_errors.size
-    assert_equal I18n.t('nonconformity.errors.without_auditor'),
-      @nonconformity.approval_errors.first
-
+    assert_equal 2, @nonconformity.approval_errors.size
+    approval_errors << I18n.t('nonconformity.errors.without_auditor')
+    assert_equal approval_errors, @nonconformity.approval_errors
+  
     @nonconformity.reload
     @nonconformity.effect = ' '
     @nonconformity.audit_comments = '  '
     assert !@nonconformity.must_be_approved?
-    assert_equal 2, @nonconformity.approval_errors.size
-    assert_equal [I18n.t('nonconformity.errors.without_effect'),
-      I18n.t('nonconformity.errors.without_audit_comments')].sort,
-      @nonconformity.approval_errors.sort
+    assert_equal 4, @nonconformity.approval_errors.size
+    approval_errors << I18n.t('nonconformity.errors.without_effect')
+    approval_errors << I18n.t('nonconformity.errors.without_audit_comments')
+    assert_equal approval_errors.sort, @nonconformity.approval_errors.sort
   end
 
   test 'work papers can be added to uneditable nonconformityes' do
