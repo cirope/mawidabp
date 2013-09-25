@@ -354,7 +354,7 @@ class Finding < ActiveRecord::Base
       :control_objective_item => {
         :review => {:plan_item => {:business_unit => :business_unit_type}}
       }
-    ).where("#{BusinessUnitType.table_name}.external" => false).refereces(
+    ).where("#{BusinessUnitType.table_name}.external" => false).references(
       :business_unit_types
     )
   }
