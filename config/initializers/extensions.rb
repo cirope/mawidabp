@@ -68,6 +68,14 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
 end
 
+module ActsAsTree
+  module InstanceMethods
+    def descendants
+      (children.to_a + children.map(&:descendants)).flatten
+    end
+  end
+end
+
 module Prawn
   class Document
     include Prawn::Mawida::Extension
