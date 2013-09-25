@@ -14,15 +14,15 @@ class BestPracticesController < ApplicationController
   def index
     @title = t 'best_practice.index_title'
     @best_practices = BestPractice.where(
-      :organization_id => @auth_organization.id
+      organization_id: @auth_organization.id
     ).order('created_at DESC').paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE
+      page: params[:page],
+      per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @best_practices }
+      format.xml  { render xml: @best_practices }
     end
   end
 
@@ -36,7 +36,7 @@ class BestPracticesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @best_practice }
+      format.xml  { render xml: @best_practice }
     end
   end
 
@@ -51,7 +51,7 @@ class BestPracticesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @best_practice }
+      format.xml  { render xml: @best_practice }
     end
   end
 
@@ -77,10 +77,10 @@ class BestPracticesController < ApplicationController
       if @best_practice.save
         flash.notice = t 'best_practice.correctly_created'
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
-        format.xml  { render :xml => @best_practice, :status => :created, :location => @best_practice }
+        format.xml  { render xml: @best_practice, status: :created, location: @best_practice }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @best_practice.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @best_practice.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -102,14 +102,14 @@ class BestPracticesController < ApplicationController
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @best_practice.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @best_practice.errors, status: :unprocessable_entity }
       end
     end
     
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'best_practice.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina una buena práctica
@@ -138,8 +138,6 @@ class BestPracticesController < ApplicationController
   # usuario) devuelve nil.
   # _id_::  ID de la buena práctica que se quiere recuperar
   def find_with_organization(id) #:doc:
-    BestPractice.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
+    BestPractice.where(id: id, organization_id: @auth_organization.id).first
   end
 end
