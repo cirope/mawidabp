@@ -123,6 +123,6 @@ class HelpContentsController < ApplicationController
     @title = t 'help_content.help_title'
     @help_item = params[:id] && HelpItem.exists?(params[:id]) ?
       HelpItem.find(params[:id]) :
-      HelpContent.find_by_language(I18n.locale.to_s).try(:help_items).try(:first)
+      HelpContent.find_by(language: I18n.locale.to_s).try(:help_items).try(:first)
   end
 end

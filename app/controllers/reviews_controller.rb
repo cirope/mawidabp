@@ -175,7 +175,7 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/plan_item_data/1
   def plan_item_data
-    plan_item = PlanItem.find_by_id(params[:id])
+    plan_item = PlanItem.find_by(id: params[:id])
     business_unit = plan_item.try(:business_unit)
     name = business_unit.try(:name)
 
