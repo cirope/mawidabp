@@ -1,6 +1,6 @@
 class PollsController < ApplicationController
-  before_filter :load_privileges, :auth, :except => [:edit, :update, :show]
-  before_filter :check_privileges, :except => [:edit, :update, :show]
+  before_action :load_privileges, :auth, :except => [:edit, :update, :show]
+  before_action :check_privileges, :except => [:edit, :update, :show]
 
   layout 'application'
   require 'csv'

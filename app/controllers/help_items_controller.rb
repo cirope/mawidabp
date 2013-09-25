@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina items de ayuda (#HelpItem)
 class HelpItemsController < ApplicationController
-  before_filter :auth, :load_current_module
+  before_action :auth, :load_current_module
 
   # Lista de los items ayuda
   #

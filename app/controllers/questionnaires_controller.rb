@@ -1,5 +1,5 @@
 class QuestionnairesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
 
   # GET /questionnaires
   # GET /questionnaires.json

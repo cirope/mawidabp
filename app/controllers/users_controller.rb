@@ -5,12 +5,12 @@
 # ingreso al sistema, permite blanquear la contraseña, cambiarla, etc. y
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
-  before_filter :auth, except: [
+  before_action :auth, except: [
     :login, :create_session, :edit_password, :update_password, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
-  before_filter :load_privileges
-  before_filter :check_privileges, except: [
+  before_action :load_privileges
+  before_action :check_privileges, except: [
     :login, :create_session, :logout, :user_status, :edit_password, :user_status_without_graph,
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset

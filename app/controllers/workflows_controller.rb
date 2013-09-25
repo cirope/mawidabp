@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina programas de trabajo (#Workflow) y
 # sus ítems (#WorkflowItem)
 class WorkflowsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :update_auth_user_id, :exists?,
     :load_privileges
   layout ->(controller) { controller.request.xhr? ? false : 'application' }

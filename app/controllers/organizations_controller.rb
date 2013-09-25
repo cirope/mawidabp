@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina organizaciones (#Organization) y
 # unidades de negocio (#BusinessUnit)
 class OrganizationsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
   hide_action :update_auth_user_id
 

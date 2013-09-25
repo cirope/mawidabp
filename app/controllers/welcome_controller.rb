@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  before_filter :auth
+  before_action :auth
 
   def index
     @title = t 'welcome.index_title'
