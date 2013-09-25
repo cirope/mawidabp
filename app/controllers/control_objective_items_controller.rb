@@ -3,7 +3,7 @@
 # Lista, muestra, modifica y elimina objetivos de control
 # (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
   hide_action :find_with_organization
 
@@ -14,7 +14,7 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
     default_conditions = {
-      Period.table_name => {:organization_id => @auth_organization.id}
+      Period.table_name => {organization_id: @auth_organization.id}
     }
 
     build_search_conditions ControlObjectiveItem, default_conditions
@@ -22,11 +22,11 @@ class ControlObjectiveItemsController < ApplicationController
     @control_objectives = ControlObjectiveItem.includes(
         :weaknesses,
         :work_papers,
-        {:review => :period},
-        {:control_objective => :process_control}
+        {review: :period},
+        {control_objective: :process_control}
     ).where(@conditions).order(
       "#{Review.table_name}.identification DESC"
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -34,7 +34,7 @@ class ControlObjectiveItemsController < ApplicationController
           redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb
-      format.xml  { render :xml => @control_objective_items }
+      format.xml  { render xml: @control_objective_items }
     end
   end
 
@@ -48,7 +48,7 @@ class ControlObjectiveItemsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @control_objective_item }
+      format.xml  { render xml: @control_objective_item }
     end
   end
 
@@ -60,9 +60,9 @@ class ControlObjectiveItemsController < ApplicationController
     
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.includes(:review).where(
-        :control_objective_id => params[:control_objective],
-        :review_id => params[:review],
-        Review.table_name => {:organization_id => @auth_organization.id}
+        control_objective_id: params[:control_objective],
+        review_id: params[:review],
+        Review.table_name => {organization_id: @auth_organization.id}
       ).order('created_at DESC').first
       session[:back_to] = edit_review_url(params[:review].to_i)
     else
@@ -84,9 +84,9 @@ class ControlObjectiveItemsController < ApplicationController
 
     respond_to do |format|
       updated = review.update(
-        :control_objective_items_attributes => {
+        control_objective_items_attributes: {
           @control_objective_item.id => params[:control_objective_item].merge(
-            :id => @control_objective_item.id
+            id: @control_objective_item.id
           )
         }
       )
@@ -103,14 +103,14 @@ class ControlObjectiveItemsController < ApplicationController
         }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @control_objective_item.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @control_objective_item.errors, status: :unprocessable_entity }
       end
     end
 
     rescue ActiveRecord::StaleObjectError
       flash.alert = t 'control_objective_item.stale_object_error'
-      redirect_to :action => :edit
+      redirect_to action: :edit
   end
 
   # Elimina un objetivo de control
@@ -130,17 +130,16 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
-
-  # Busca el objetivo de control indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # objetivo de control con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del objetivo de control que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ControlObjectiveItem.includes(
-      :control, :weaknesses, :work_papers, {:review => :period}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    # Busca el objetivo de control indicado siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe un
+    # objetivo de control con ese ID o que no pertenece a la organización con la
+    # que se autenticó el usuario) devuelve nil.
+    # _id_::  ID del objetivo de control que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      ControlObjectiveItem.includes(
+        :control, :weaknesses, :work_papers, {review: :period}
+      ).where(
+        id: id, Period.table_name => { organization_id: @auth_organization.id }
+      ).first
+    end
 end

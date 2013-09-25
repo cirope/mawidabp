@@ -608,6 +608,6 @@ module FollowUpHighRiskReports
         :to_date => @to_date,
         :organization_id => @auth_organization.id
       }
-    )
+    ).references(:reviews)
   end
 end

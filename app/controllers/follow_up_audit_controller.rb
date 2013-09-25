@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'modules/follow_up_reports/follow_up_common_reports'
 require 'modules/follow_up_reports/follow_up_high_risk_reports'
 
@@ -6,7 +5,7 @@ class FollowUpAuditController < ApplicationController
   include FollowUpCommonReports
   include FollowUpHighRiskReports
 
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :get_organization,
     :add_weaknesses_synthesis_table, :being_implemented_resume_from_counts,
     :add_being_implemented_resume, :make_date_range,
@@ -193,25 +192,24 @@ class FollowUpAuditController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :weaknesses_by_state => :read,
-      :create_weaknesses_by_state => :read,
-      :weaknesses_by_risk => :read,
-      :create_weaknesses_by_risk => :read,
-      :weaknesses_by_audit_type => :read,
-      :create_weaknesses_by_audit_type => :read,
-      :cost_analysis => :read,
-      :create_cost_analysis => :read,
-      :high_risk_weaknesses_report => :read,
-      :create_high_risk_weaknesses_report => :read,
-      :fixed_weaknesses_report => :read,
-      :create_fixed_weaknesses_report => :read,
-      :control_objective_stats => :read,
-      :create_control_objective_stats => :read,
-      :process_control_stats => :read,
-      :create_process_control_stats => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :weaknesses_by_state => :read,
+        :create_weaknesses_by_state => :read,
+        :weaknesses_by_risk => :read,
+        :create_weaknesses_by_risk => :read,
+        :weaknesses_by_audit_type => :read,
+        :create_weaknesses_by_audit_type => :read,
+        :cost_analysis => :read,
+        :create_cost_analysis => :read,
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read,
+        :control_objective_stats => :read,
+        :create_control_objective_stats => :read,
+        :process_control_stats => :read,
+        :create_process_control_stats => :read
+      )
+    end
 end

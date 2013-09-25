@@ -1,9 +1,8 @@
-# encoding: utf-8
 # =Controlador de registros de ingreso
 #
 # Lista y muestra registros de ingreso (#LoginRecord)
 class LoginRecordsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges
 
   # Muestra un menú con los distintos listados disponibles (registros de ingreso
@@ -46,7 +45,7 @@ class LoginRecordsController < ApplicationController
       @conditions || default_conditions
     ).order(
       "#{LoginRecord.table_name}.start DESC"
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:users).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {

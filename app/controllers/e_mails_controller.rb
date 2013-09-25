@@ -1,5 +1,5 @@
 class EMailsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
 
   # GET /emails
   # GET /emails.json

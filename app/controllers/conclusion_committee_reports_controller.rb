@@ -9,7 +9,7 @@ class ConclusionCommitteeReportsController < ApplicationController
   include ConclusionCommonReports
   include ConclusionHighRiskReports
 
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :add_weaknesses_synthesis_table,
     :get_weaknesses_synthesis_table_data, :make_date_range,
     :weaknesses_by_state, :create_weaknesses_by_state, :weaknesses_by_risk,

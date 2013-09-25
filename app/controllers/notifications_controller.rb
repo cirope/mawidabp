@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
-  before_filter :auth, :check_privileges, :except => :confirm
+  before_action :auth, :check_privileges, :except => :confirm
 
   # * GET /notifications
   # * GET /notifications.xml

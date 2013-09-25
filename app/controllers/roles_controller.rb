@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina perfiles (#Role)
 class RolesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
 
   # Lista los perfiles
   #
@@ -11,12 +11,12 @@ class RolesController < ApplicationController
   def index
     @title = t 'role.index_title'
     @roles = Role.list(@auth_organization.id).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+      page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @roles }
+      format.xml  { render xml: @roles }
     end
   end
 
@@ -30,7 +30,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @role }
+      format.xml  { render xml: @role }
     end
   end
 
@@ -44,7 +44,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @role }
+      format.xml  { render xml: @role }
     end
   end
 
@@ -64,17 +64,17 @@ class RolesController < ApplicationController
   def create
     @title = t 'role.new_title'
     @role = Role.new(params[:role].merge(
-        :organization_id => @auth_organization.id))
+        organization_id: @auth_organization.id))
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
       if @role.save
         flash.notice = t 'role.correctly_created'
         format.html { redirect_to(roles_url) }
-        format.xml  { render :xml => @role, :status => :created, :location => @role }
+        format.xml  { render xml: @role, status: :created, location: @role }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -90,19 +90,19 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @role.update(params[:role].merge(
-            :organization_id => @auth_organization.id))
+            organization_id: @auth_organization.id))
         flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'role.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina un perfil
@@ -128,8 +128,6 @@ class RolesController < ApplicationController
   # 
   # _id_::  ID del informe que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Role.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
+    Role.where(id: id, organization_id: @auth_organization.id).first
   end
 end

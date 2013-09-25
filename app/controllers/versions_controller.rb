@@ -1,5 +1,5 @@
 class VersionsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :download_security_changes_report, :load_privileges
 
   # Muestra el detalle de un cambio en un modelo
@@ -9,14 +9,14 @@ class VersionsController < ApplicationController
   def show
     @title = t 'version.show_title'
     @version = Version.where(
-      :id => params[:id],
-      :organization_id => @auth_organization.id,
-      :important => true
+      id: params[:id],
+      organization_id: @auth_organization.id,
+      important: true
     ).first
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @version }
+      format.xml  { render xml: @version }
     end
   end
 
@@ -36,19 +36,19 @@ class VersionsController < ApplicationController
           'important = :boolean_true'
         ].join(' AND '),
         {
-          :from_date => @from_date,
-          :to_date => @to_date.to_time.end_of_day,
-          :organization_id => @auth_organization.id,
-          :types => ['User', 'Parameter'],
-          :boolean_true => true
+          from_date: @from_date,
+          to_date: @to_date.to_time.end_of_day,
+          organization_id: @auth_organization.id,
+          types: ['User', 'Parameter'],
+          boolean_true: true
         }
       ).order('created_at DESC').paginate(
-        :page => params[:page],:per_page => APP_LINES_PER_PAGE
+        page: params[:page], per_page: APP_LINES_PER_PAGE
       )
 
       respond_to do |format|
         format.html # index.html.erb
-        format.xml  { render :xml => @versions }
+        format.xml  { render xml: @versions }
       end
     else
       download_security_changes_report
@@ -66,11 +66,11 @@ class VersionsController < ApplicationController
         'important = :boolean_true'
       ].join(' AND '),
       {
-        :from_date => @from_date,
-        :to_date => @to_date.to_time.end_of_day,
-        :organization_id => @auth_organization.id,
-        :types => ['User', 'Parameter'],
-        :boolean_true => true
+        from_date: @from_date,
+        to_date: @to_date.to_time.end_of_day,
+        organization_id: @auth_organization.id,
+        types: ['User', 'Parameter'],
+        boolean_true: true
       }
     ).order('created_at DESC')
 
@@ -90,7 +90,7 @@ class VersionsController < ApplicationController
 
     versions.each do |version|
       column_data << [
-        l(version.created_at, :format => :minimal),
+        l(version.created_at, format: :minimal),
         version.whodunnit ?
           User.find(version.whodunnit).full_name_with_user : '-',
         version.item ?
@@ -108,16 +108,16 @@ class VersionsController < ApplicationController
 
         pdf.table(column_data.insert(0, column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
     end
 
     pdf_name = t('version.pdf_list_name',
-      :from_date => @from_date.to_formatted_s(:db),
-      :to_date => @to_date.to_formatted_s(:db))
+      from_date: @from_date.to_formatted_s(:db),
+      to_date: @to_date.to_formatted_s(:db))
 
     pdf.custom_save_as(pdf_name, Version.table_name)
 
@@ -125,8 +125,6 @@ class VersionsController < ApplicationController
   end
 
   def load_privileges #:nodoc:
-    @action_privileges.update(
-      :security_changes_report => :read
-    )
+    @action_privileges.update(security_changes_report: :read)
   end
 end

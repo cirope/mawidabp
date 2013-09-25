@@ -1,4 +1,3 @@
-# encoding: utf-8
 module FollowUpCommonReports
   def weaknesses_by_state
     @title = t 'follow_up_committee.weaknesses_by_state_title'
@@ -1260,7 +1259,7 @@ module FollowUpCommonReports
         :to_date => @to_date,
         :organization_id => @auth_organization.id
       }
-    )
+    ).references(:reviews)
   end
 
   # Devuelve el ID de la organización seleccionada, sólo si el usuario está

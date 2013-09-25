@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina periodos (#Period)
 class PeriodsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   hide_action :find_with_organization
 
   # Lista las periodos

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 class PotentialNonconformitiesController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :load_privileges
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 

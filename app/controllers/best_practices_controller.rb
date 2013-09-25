@@ -4,7 +4,7 @@
 # procesos de negocio (#ProcessControl) y objetivos de control
 # (#ControlObjective)
 class BestPracticesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
   hide_action :find_with_organization
 
   # Lista las buenas prácticas

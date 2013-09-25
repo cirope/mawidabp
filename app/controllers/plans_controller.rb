@@ -4,7 +4,7 @@
 # Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
 # (#PlanItem)
 class PlansController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges,
+  before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
   hide_action :find_with_organization, :update_auth_user_id, :exists?,

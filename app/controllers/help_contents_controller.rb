@@ -2,7 +2,7 @@
 #
 # Lista, muestra, crea, modifica y elimina contenido de la ayuda (#HelpContent)
 class HelpContentsController < ApplicationController
-  before_filter :auth, :load_current_module
+  before_action :auth, :load_current_module
 
   # Lista de los contenidos de ayuda
   #
@@ -123,6 +123,6 @@ class HelpContentsController < ApplicationController
     @title = t 'help_content.help_title'
     @help_item = params[:id] && HelpItem.exists?(params[:id]) ?
       HelpItem.find(params[:id]) :
-      HelpContent.find_by_language(I18n.locale.to_s).try(:help_items).try(:first)
+      HelpContent.find_by(language: I18n.locale.to_s).try(:help_items).try(:first)
   end
 end

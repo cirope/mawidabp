@@ -4,7 +4,7 @@
 # Lista, muestra, modifica y elimina debilidades (#Weakness) y oportunidades de
 # mejora (#Oportunity) y sus respuestas (#FindingAnswer)
 class FindingsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :find_with_organization, :prepare_parameters
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 

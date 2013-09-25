@@ -1,5 +1,5 @@
 class ExecutionReportsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges
 
   # Muestra una lista con los reportes disponibles
