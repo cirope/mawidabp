@@ -337,9 +337,10 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    @weakness.finding_user_assignments = 
+      @weakness.finding_user_assignments.reject do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert !@weakness.must_be_approved?
     assert_equal 1, @weakness.approval_errors.size
@@ -347,19 +348,23 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness.approval_errors.first
 
     @weakness.reload
-    @weakness.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    @weakness.finding_user_assignments =
+      @weakness.finding_user_assignments.reject { |fua| fua.user.auditor? }
     assert !@weakness.must_be_approved?
-    assert_equal 1, @weakness.approval_errors.size
-    assert_equal I18n.t('weakness.errors.without_auditor'),
-      @weakness.approval_errors.first
+    assert_equal 2, @weakness.approval_errors.size
+    error_messages = [I18n.t('weakness.errors.without_audited'),
+      I18n.t('weakness.errors.without_auditor')]
+    assert_equal error_messages,
+      @weakness.approval_errors
 
     @weakness.reload
     @weakness.effect = ' '
     @weakness.audit_comments = '  '
     assert !@weakness.must_be_approved?
-    assert_equal 2, @weakness.approval_errors.size
-    assert_equal [I18n.t('weakness.errors.without_effect'),
-      I18n.t('weakness.errors.without_audit_comments')].sort,
+    assert_equal 4, @weakness.approval_errors.size
+    error_messages << I18n.t('weakness.errors.without_effect')
+    error_messages << I18n.t('weakness.errors.without_audit_comments')
+    assert_equal error_messages.sort,
       @weakness.approval_errors.sort
   end
 
