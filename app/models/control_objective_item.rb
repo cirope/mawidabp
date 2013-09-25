@@ -4,25 +4,25 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
-    :review => {
-      :column => "LOWER(#{Review.table_name}.identification)",
-      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
-      :regexp => /.*/
+    review: {
+      column: "LOWER(#{Review.table_name}.identification)",
+      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
+      regexp: /.*/
     },
-    :process_control => {
-      :column => "LOWER(#{ProcessControl.table_name}.name)",
-      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
-      :regexp => /.*/
+    process_control: {
+      column: "LOWER(#{ProcessControl.table_name}.name)",
+      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
+      regexp: /.*/
     },
-    :control_objective_text => {
-      :column => "LOWER(#{table_name}.control_objective_text)",
-      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
-      :regexp => /.*/
+    control_objective_text: {
+      column: "LOWER(#{table_name}.control_objective_text)",
+      operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
+      regexp: /.*/
     }
   })
 
   scope :not_excluded_from_score, -> {
-    where(:exclude_from_score => false)
+    where(exclude_from_score: false)
   }
   scope :with_names, ->(*control_objective_names) {
     conditions = []
@@ -38,8 +38,8 @@ class ControlObjectiveItem < ActiveRecord::Base
     ).references(:control_objectives)
   }
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
   }
 
   # Atributos no persistentes
@@ -51,16 +51,16 @@ class ControlObjectiveItem < ActiveRecord::Base
   before_validation :set_proper_parent, :can_be_modified?,
     :enable_control_validations
   before_destroy :can_be_destroyed?
-  before_validation(:on => :create) { fill_control_objective_text }
+  before_validation(on: :create) { fill_control_objective_text }
 
   # Validaciones
-  validates :control_objective_text, :control_objective_id, :presence => true
+  validates :control_objective_text, :control_objective_id, presence: true
   validates :control_objective_id, :review_id,
-    :numericality => {:only_integer => true}, :allow_nil => true
-  validates :relevance, :numericality =>
-    {:only_integer => true, :greater_than_or_equal_to => 0},
-    :allow_blank => true, :allow_nil => true
-  validates_date :audit_date, :allow_nil => true, :allow_blank => true
+    numericality: {only_integer: true}, allow_nil: true
+  validates :relevance, numericality:
+    {only_integer: true, greater_than_or_equal_to: 0},
+    allow_blank: true, allow_nil: true
+  validates_date :audit_date, allow_nil: true, allow_blank: true
   validates_each :audit_date do |record, attr, value|
     period = record.review.period if record.review
 
@@ -87,41 +87,38 @@ class ControlObjectiveItem < ActiveRecord::Base
     record.errors.add attr, :blank unless active_control
   end
   # Validaciones sólo ejecutadas cuando el objetivo es marcado como terminado
-  validates :audit_date, :relevance, :auditor_comment, :presence => true,
-    :if => :finished
-  validates :auditor_comment, :presence => true, :if => :exclude_from_score
+  validates :audit_date, :relevance, :auditor_comment, presence: true,
+    if: :finished
+  validates :auditor_comment, presence: true, if: :exclude_from_score
   validate :score_completion
 
   # Relaciones
-  belongs_to :control_objective, :inverse_of => :control_objective_items
-  belongs_to :review, :inverse_of => :control_objective_items
-  has_many :weaknesses, -> { where(final: false) }, :dependent => :destroy
-  has_many :oportunities, -> { where(final: false).order('review_code ASC') },
-    :dependent => :destroy
-  has_many :fortresses, -> { where(final: false).order('review_code ASC') },
-    :dependent => :destroy
-  has_many :nonconformities, -> { where(final: false).order('review_code ASC') },
-    :dependent => :destroy
-  has_many :potential_nonconformities, -> { where(final: false).order('review_code ASC') },
-    :dependent => :destroy
-  has_many :final_weaknesses, -> { where(final: false).order('review_code ASC') },
-    :dependent => :destroy, :class_name => 'Weakness'
-  has_many :final_oportunities, -> { where(final: true).order('review_code ASC') },
-    :dependent => :destroy, :class_name => 'Oportunity'
-  has_many :final_fortresses, -> { where(final: true).order('review_code ASC') },
-    :dependent => :destroy, :class_name => 'Fortress'
-  has_many :final_nonconformities, -> { where(final: true).order('review_code ASC') },
-    :dependent => :destroy, :class_name => 'Nonconformity'
-  has_many :final_potential_nonconformities, -> { where(final: true).order('review_code ASC') },
-    :dependent => :destroy, :class_name => 'PotentialNonconformity'
-  has_many :work_papers, -> { order('code ASC') }, :as => :owner, :dependent => :destroy,
-    :before_add => [:check_for_final_review, :prepare_work_paper],
-    :before_remove => :check_for_final_review
-  has_one :control, -> { order("#{Control.table_name}.order ASC") }, :as => :controllable,
-    :dependent => :destroy
+  belongs_to :control_objective, inverse_of: :control_objective_items
+  belongs_to :review, inverse_of: :control_objective_items
+  has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
+  has_many :oportunities, -> { where(final: false) }, dependent: :destroy
+  has_many :fortresses, -> { where(final: false) }, dependent: :destroy
+  has_many :nonconformities, -> { where(final: false) }, dependent: :destroy
+  has_many :potential_nonconformities, -> { where(final: false) },
+    dependent: :destroy
+  has_many :final_weaknesses, -> { where(final: false) }, dependent: :destroy,
+    class_name: 'Weakness'
+  has_many :final_oportunities, -> { where(final: true) }, dependent: :destroy,
+    class_name: 'Oportunity'
+  has_many :final_fortresses, -> { where(final: true) }, dependent: :destroy,
+    class_name: 'Fortress'
+  has_many :final_nonconformities, -> { where(final: true) },
+    dependent: :destroy, class_name: 'Nonconformity'
+  has_many :final_potential_nonconformities, -> { where(final: true) },
+    dependent: :destroy, class_name: 'PotentialNonconformity'
+  has_many :work_papers, -> { order('code ASC') }, as: :owner, dependent: :destroy,
+    before_add: [:check_for_final_review, :prepare_work_paper],
+    before_remove: :check_for_final_review
+  has_one :control, -> { order("#{Control.table_name}.order ASC") }, as: :controllable,
+    dependent: :destroy
 
-  accepts_nested_attributes_for :control, :allow_destroy => true
-  accepts_nested_attributes_for :work_papers, :allow_destroy => true
+  accepts_nested_attributes_for :control, allow_destroy: true
+  accepts_nested_attributes_for :work_papers, allow_destroy: true
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
@@ -144,8 +141,8 @@ class ControlObjectiveItem < ActiveRecord::Base
 
   def as_json(options = nil)
     default_options = {
-      :only => [:id],
-      :methods => [:label, :informal]
+      only: [:id],
+      methods: [:label, :informal]
     }
 
     super(default_options.merge(options || {}))
@@ -387,7 +384,7 @@ class ControlObjectiveItem < ActiveRecord::Base
         :relevance), self.relevance_text(true), 0, false)
     pdf.add_description_item(ControlObjectiveItem.human_attribute_name(
         :audit_date),
-      (I18n.l(self.audit_date, :format => :long) if self.audit_date), 0, false)
+      (I18n.l(self.audit_date, format: :long) if self.audit_date), 0, false)
     pdf.add_description_item(Control.human_attribute_name(:effects),
       self.control.effects, 0, false)
     pdf.add_description_item(Control.human_attribute_name(:control),
@@ -412,8 +409,8 @@ class ControlObjectiveItem < ActiveRecord::Base
       pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, :justification => :center,
-          :font_size => PDF_FONT_SIZE
+        pdf.text wp.inspect, justification: :center,
+          font_size: PDF_FONT_SIZE
       end
     else
       pdf.add_footnote I18n.t('control_objective_item.without_work_papers')
@@ -475,7 +472,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     if finding.origination_date.present?
       body << "<b>#{finding.class.human_attribute_name(:origination_date)}:"+
-        "</b> #{I18n.l(finding.origination_date, :format => :long)}\n"
+        "</b> #{I18n.l(finding.origination_date, format: :long)}\n"
     end
 
     if weakness && finding.correction.present?
@@ -486,7 +483,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     if weakness && finding.correction_date.present?
       body << "<b>#{Weakness.human_attribute_name(
       :correction_date)}: </b> #{I18n.l(finding.correction_date,
-        :format => :long)}\n"
+        format: :long)}\n"
     end
 
     if weakness && finding.cause_analysis.present?
@@ -497,7 +494,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     if weakness && finding.cause_analysis_date.present?
       body << "<b>#{Weakness.human_attribute_name(
       :cause_analysis_date)}: </b> #{I18n.l(finding.cause_analysis_date,
-        :format => :long)}\n"
+        format: :long)}\n"
     end
 
     if finding.answer.present?
@@ -507,12 +504,12 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     if finding.follow_up_date.present?
       body << "<b>#{finding.class.human_attribute_name(:follow_up_date)}:</b> " +
-        "#{I18n.l(finding.follow_up_date, :format => :long)}\n"
+        "#{I18n.l(finding.follow_up_date, format: :long)}\n"
     end
 
     if finding.solution_date.present?
       body << "<b>#{finding.class.human_attribute_name(:solution_date)}:"+
-        "</b> #{I18n.l(finding.solution_date, :format => :long)}\n"
+        "</b> #{I18n.l(finding.solution_date, format: :long)}\n"
     end
 
     audited_users = finding.users.select(&:can_act_as_audited?)
@@ -537,6 +534,6 @@ class ControlObjectiveItem < ActiveRecord::Base
         "</b> #{finding.audit_comments.chomp}\n"
     end
 
-    { :column => head, :text => body }
+    { column: head, text: body }
   end
 end

@@ -15,29 +15,6 @@ class ApplicationController < ActionController::Base
 
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
-  rescue_from Exception do |exception|
-    begin
-      error = "#{exception.class}: #{exception.message}\n\n"
-      exception.backtrace.each { |l| error << "#{l}\n" }
-
-      logger.error(error)
-
-      @title = t 'error.title'
-      create_exception_file exception
-
-      if login_check && response.redirect_url.blank?
-        render :template => 'shared/error', :locals => { :error => exception }
-      end
-
-      # En caso que la presentación misma de la excepción no salga como se espera
-      rescue => ex
-        error = "#{ex.class}: #{ex.message}\n\n"
-        ex.backtrace.each { |l| error << "#{l}\n" }
-
-        logger.error(error)
-    end
-  end
-
   def current_user
     load_user
     Finding.current_user = @auth_user

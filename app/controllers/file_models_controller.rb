@@ -23,11 +23,11 @@ class FileModelsController < ApplicationController
       response.headers['Cache-Control'] = 'private, no-store'
       mime_type = Mime::Type.lookup_by_extension(File.extname(file_name)[1..-1])
 
-      send_file file_name, :url_based_filename => true,
-        :type => (mime_type || 'application/octet-stream')
+      send_file file_name, url_based_filename: true,
+        type: (mime_type || 'application/octet-stream')
       redirect = false
     end
 
-    redirect_to :controller => :welcome, :action => :index if redirect
+    redirect_to controller: :welcome, action: :index if redirect
   end
 end
