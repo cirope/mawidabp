@@ -2,7 +2,7 @@
 #
 # Lista, muestra y crea detractores (#Detract)
 class DetractsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges,
+  before_action :auth, :load_privileges, :check_privileges,
     :load_approval_privilege
   hide_action :load_privileges, :find_with_organization,
     :load_approval_privilege
@@ -29,7 +29,7 @@ class DetractsController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:organizations).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -86,7 +86,7 @@ class DetractsController < ApplicationController
       :user => :children
     ).where(conditions).order("#{Detract.table_name}.created_at DESC").limit(
       LAST_DETRACTORS_LIMIT
-    ).all(:readonly => false)
+    ).references(:user)
 
     respond_to do |format|
       format.html { render '_show_last_detracts' }
@@ -129,35 +129,32 @@ class DetractsController < ApplicationController
   end
 
   private
+    # Busca el detractor indicado siempre que pertenezca a la organización. En el
+    # caso que no se encuentre (ya sea que no existe un detractor con ese ID o que
+    # no pertenece a la organización con la que se autenticó el usuario) devuelve
+    # nil.
+    # _id_::  ID del periodo que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      conditions = {:id => id.to_i, :organization_id => @auth_organization.id}
 
-  # Busca el detractor indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un detractor con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID del periodo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    conditions = {:id => id.to_i, :organization_id => @auth_organization.id}
+      unless @has_approval
+        conditions["#{User.table_name}.id"] = @auth_user.id
+      end
 
-    unless @has_approval
-      conditions["#{User.table_name}.id"] = @auth_user.id
+      Detract.includes(:user => :children).find_by(conditions)
     end
 
-    Detract.includes(:user => :children).where(conditions).first(
-      :readonly => false
-    )
-  end
-
-  def load_privileges #:nodoc:
-    if @action_privileges
-      @action_privileges.update({
-        :new => :approval,
-        :create => :approval,
-        :show_last_detracts => :read
-      })
+    def load_privileges #:nodoc:
+      if @action_privileges
+        @action_privileges.update({
+          :new => :approval,
+          :create => :approval,
+          :show_last_detracts => :read
+        })
+      end
     end
-  end
 
-  def load_approval_privilege
-    @has_approval = @auth_privileges[@current_module][:approval]
-  end
+    def load_approval_privilege
+      @has_approval = @auth_privileges[@current_module][:approval]
+    end
 end
