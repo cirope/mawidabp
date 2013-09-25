@@ -245,9 +245,10 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
       @potential_nonconformity.approval_errors.first
 
     @potential_nonconformity.reload
-    @potential_nonconformity.finding_user_assignments.delete_if do |fua|
-      fua.user.can_act_as_audited?
-    end
+    @potential_nonconformity.finding_user_assignments =
+      @potential_nonconformity.finding_user_assignments.reject do |fua|
+        fua.user.can_act_as_audited?
+      end
 
     assert !@potential_nonconformity.must_be_approved?
     assert_equal 1, @potential_nonconformity.approval_errors.size
@@ -255,18 +256,19 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
       @potential_nonconformity.approval_errors.first
 
     @potential_nonconformity.reload
-    @potential_nonconformity.finding_user_assignments.delete_if { |fua| fua.user.auditor? }
+    @potential_nonconformity.finding_user_assignments =
+      @potential_nonconformity.finding_user_assignments.reject { |fua| fua.user.auditor? }
     assert !@potential_nonconformity.must_be_approved?
-    assert_equal 1, @potential_nonconformity.approval_errors.size
+    assert_equal 2, @potential_nonconformity.approval_errors.size
     assert_equal I18n.t('potential_nonconformity.errors.without_auditor'),
-      @potential_nonconformity.approval_errors.first
+      @potential_nonconformity.approval_errors.last
 
     @potential_nonconformity.reload
     @potential_nonconformity.audit_comments = '  '
     assert !@potential_nonconformity.must_be_approved?
-    assert_equal 1, @potential_nonconformity.approval_errors.size
+    assert_equal 3, @potential_nonconformity.approval_errors.size
     assert_equal I18n.t('potential_nonconformity.errors.without_audit_comments'),
-      @potential_nonconformity.approval_errors.first
+      @potential_nonconformity.approval_errors.last
   end
 
   test 'dynamic functions' do
