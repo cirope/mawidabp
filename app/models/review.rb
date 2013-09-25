@@ -179,8 +179,7 @@ class Review < ActiveRecord::Base
   has_one :conclusion_final_review
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
-  has_many :control_objective_items, -> { order('order_number ASC') },
-    :inverse_of => :review, :dependent => :destroy, :after_add => :assign_review
+  has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review
   has_many :weaknesses, :through => :control_objective_items
   has_many :oportunities, :through => :control_objective_items
   has_many :fortresses, :through => :control_objective_items

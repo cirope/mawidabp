@@ -12,7 +12,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       get action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to controller: :users, action: :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -40,9 +40,9 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/detailed_management_report'
 
     assert_nothing_raised(Exception) do
-      get :detailed_management_report, :detailed_management_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :detailed_management_report, detailed_management_report: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
         }
     end
 
@@ -54,17 +54,17 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   test 'create detailed management report' do
     perform_auth
 
-    post :create_detailed_management_report, :detailed_management_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    post :create_detailed_management_report, detailed_management_report: {
+      from_date: 10.years.ago.to_date,
+      to_date: 10.years.from_now.to_date
       },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      report_title: 'New title',
+      report_subtitle: 'New subtitle'
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_reports.detailed_management_report.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
   end
 
@@ -77,9 +77,9 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     assert_template 'execution_reports/weaknesses_by_state'
 
     assert_nothing_raised(Exception) do
-      get :weaknesses_by_state, :weaknesses_by_state => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+      get :weaknesses_by_state, weaknesses_by_state: {
+        from_date: 10.years.ago.to_date,
+        to_date: 10.years.from_now.to_date
         }
     end
 
@@ -90,16 +90,16 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
   test 'create weaknesses by state report' do
     perform_auth
-    post :create_weaknesses_by_state, :weaknesses_by_state => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+    post :create_weaknesses_by_state, weaknesses_by_state: {
+      from_date: 10.years.ago.to_date,
+      to_date: 10.years.from_now.to_date
     },
-    :report_title => 'New title'
+    report_title: 'New title'
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('execution_reports.weaknesses_by_state.pdf_name',
-        :from_date => 10.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
+        from_date: 10.years.ago.to_date.to_formatted_s(:db),
+        to_date: 10.years.from_now.to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
   end
 end

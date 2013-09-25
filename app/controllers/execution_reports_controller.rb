@@ -1,4 +1,3 @@
-# encoding: utf-8
 class ExecutionReportsController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   hide_action :load_privileges
@@ -30,8 +29,8 @@ class ExecutionReportsController < ApplicationController
     audits_by_business_unit = []
 
     raw_reviews = Review.includes(
-      {:control_objective_items => :control_objective},
-      {:plan_item => :business_unit}
+      {control_objective_items: :control_objective},
+      {plan_item: :business_unit}
     ).list_all_without_final_review_by_date(@from_date, @to_date)
 
     raw_reviews.group_by(&:period).each do |period, reviews|
@@ -99,16 +98,16 @@ class ExecutionReportsController < ApplicationController
         end
 
         audits_by_business_unit << {
-          :name => name,
-          :external => but.external,
-          :columns => columns,
-          :column_data => column_data
+          name: name,
+          external: but.external,
+          columns: columns,
+          column_data: column_data
         }
       end
 
       @audits_by_period << {
-        :period => period,
-        :audits_by_business_unit => audits_by_business_unit
+        period: period,
+        audits_by_business_unit: audits_by_business_unit
       }
     end
   end
@@ -130,14 +129,14 @@ class ExecutionReportsController < ApplicationController
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.detailed_management_report.clarification'),
-      :font_size => PDF_FONT_SIZE, :inline_format => true
+      font_size: PDF_FONT_SIZE, inline_format: true
 
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(t('execution_reports.period.title'),
       t('execution_reports.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+        from_date: l(@from_date, format: :long),
+        to_date: l(@to_date, format: :long)))
 
     @audits_by_period.each do |audit_by_period|
       pdf.move_down PDF_FONT_SIZE * 2
@@ -186,15 +185,15 @@ class ExecutionReportsController < ApplicationController
 
             pdf.table(column_data.insert(0, column_headers), table_options) do
               row(0).style(
-                :background_color => 'cccccc',
-                :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                background_color: 'cccccc',
+                padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
               )
             end
           end
         else
           pdf.text(
             t('execution_reports.detailed_management_report.without_audits_in_the_period'),
-            :style => :italic)
+            style: :italic)
         end
       end
     end
@@ -208,22 +207,22 @@ class ExecutionReportsController < ApplicationController
     pdf.move_down PDF_FONT_SIZE
     if @sqm
       pdf.text t('execution_reports.detailed_management_report.sqm_references'),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
     else
       pdf.text t('execution_reports.detailed_management_report.references',
-        :risk_types => @risk_levels.to_sentence),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+        risk_types: @risk_levels.to_sentence),
+        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
     end
     pdf.custom_save_as(
       t('execution_reports.detailed_management_report.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
 
     redirect_to Prawn::Document.relative_path(
       t('execution_reports.detailed_management_report.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
   end
 
@@ -246,19 +245,19 @@ class ExecutionReportsController < ApplicationController
           count_for_period[audit_type] ||= {}
           count_for_period[audit_type][review] ||= {}
           count_for_period[audit_type][review][:weaknesses] =
-            review.weaknesses.count(:group => :state)
+            review.weaknesses.group(:state).count
           count_for_period[audit_type][review][:oportunities] =
-            review.oportunities.count(:group => :state)
+            review.oportunities.group(:state).count
           if @sqm
             count_for_period[audit_type][review][:nonconformities] =
-              review.nonconformities.count(:group => :state)
+              review.nonconformities.group(:state).count
             count_for_period[audit_type][review][:potential_nonconformities] =
-              review.potential_nonconformities.count(:group => :state)
+              review.potential_nonconformities.group(:state).count
           end
         end
       end
 
-      @counts << { :period => period, :counts => count_for_period }
+      @counts << { period: period, counts: count_for_period }
     end
   end
 
@@ -275,15 +274,15 @@ class ExecutionReportsController < ApplicationController
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.weaknesses_by_state.clarification'),
-        :font_size => PDF_FONT_SIZE, :inline_format => true
+        font_size: PDF_FONT_SIZE, inline_format: true
 
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
       t('execution_reports.period.title'),
       t('execution_reports.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+        from_date: l(@from_date, format: :long),
+        to_date: l(@to_date, format: :long)))
 
     @counts.each do |count_data|
       pdf.move_down PDF_FONT_SIZE * 2
@@ -310,7 +309,7 @@ class ExecutionReportsController < ApplicationController
             end
 
             pdf.text "\n<b>#{Review.model_name.human}</b>: #{review}\n\n",
-              :font_size => PDF_FONT_SIZE, :inline_format => true
+              font_size: PDF_FONT_SIZE, inline_format: true
 
             totals = total_weaknesses + total_oportunities
             totals+= (total_nonconformities + total_potential_nonconformities) if @sqm
@@ -394,21 +393,21 @@ class ExecutionReportsController < ApplicationController
 
                   pdf.table(column_data.insert(0, column_headers), table_options) do
                     row(0).style(
-                      :background_color => 'cccccc',
-                      :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+                      background_color: 'cccccc',
+                      padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
                     )
                   end
                 end
               end
             else
               pdf.text t('execution_reports.without_findings'),
-                :font_size => PDF_FONT_SIZE, :style => :italic
+                font_size: PDF_FONT_SIZE, style: :italic
               pdf.move_down PDF_FONT_SIZE
             end
           end
         else
           pdf.text t('execution_reports.without_weaknesses'),
-            :font_size => PDF_FONT_SIZE, :style => :italic
+            font_size: PDF_FONT_SIZE, style: :italic
         end
       end
     end
@@ -416,30 +415,30 @@ class ExecutionReportsController < ApplicationController
     if @counts.empty?
       pdf.move_down PDF_FONT_SIZE
       pdf.text t('execution_reports.without_weaknesses_in_the_interval'),
-        :font_size => PDF_FONT_SIZE
+        font_size: PDF_FONT_SIZE
     end
 
     pdf.custom_save_as(
       t('execution_reports.weaknesses_by_state.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
 
     redirect_to Prawn::Document.relative_path(
       t('execution_reports.weaknesses_by_state.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)),
       'execution_weaknesses_by_state', 0)
   end
 
   private
 
   def load_privileges #:nodoc:
-    @action_privileges.update({
-      :detailed_management_report => :read,
-      :create_detailed_management_report => :read,
-      :weaknesses_by_state => :read,
-      :create_weaknesses_by_state => :read
-    })
+    @action_privileges.update(
+      detailed_management_report: :read,
+      create_detailed_management_report: :read,
+      weaknesses_by_state: :read,
+      create_weaknesses_by_state: :read
+    )
   end
 end
