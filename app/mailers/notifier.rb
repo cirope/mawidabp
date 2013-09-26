@@ -141,7 +141,7 @@ class Notifier < ActionMailer::Base
 
   def reassigned_findings_notification(new_users, old_users, findings,
       notify = true)
-    findings_array = findings.kind_of?(Array) ? findings : [findings]
+    findings_array = findings.to_a
 
     @new_users, @old_users = [new_users].flatten, [old_users].flatten
     @grouped_findings = findings_array.group_by(&:organization)
