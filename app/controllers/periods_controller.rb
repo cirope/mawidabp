@@ -123,15 +123,14 @@ class PeriodsController < ApplicationController
   end
 
   private
-
-  # Busca el periodo indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un periodo con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID del periodo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Period.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    # Busca el periodo indicado siempre que pertenezca a la organización. En el
+    # caso que no se encuentre (ya sea que no existe un periodo con ese ID o que
+    # no pertenece a la organización con la que se autenticó el usuario) devuelve
+    # nil.
+    # _id_::  ID del periodo que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      Period.where(
+        :id => id, :organization_id => @auth_organization.id
+      ).first
+    end
 end
