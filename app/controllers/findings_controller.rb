@@ -67,7 +67,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-   ).references(:control_objective_items)
+   ).references(:control_objective_items, :reviews)
 
     respond_to do |format|
       format.html {
@@ -206,7 +206,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-    ).where(@conditions)
+    ).where(@conditions).references(:reviews)
 
     rows = []
 
@@ -281,7 +281,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-    ).where(@conditions)
+    ).where(@conditions).references(:reviews)
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
@@ -464,7 +464,7 @@ class FindingsController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).references(:organizations, :users).limit(10)
 
     respond_to do |format|
       format.json { render :json => @users }
@@ -508,7 +508,7 @@ class FindingsController < ApplicationController
         "#{Review.table_name}.identification ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-    ).limit(5)
+    ).references(:control_objective_items, :reviews).limit(5)
 
     respond_to do |format|
       format.json { render :json => @findings }
@@ -542,7 +542,7 @@ class FindingsController < ApplicationController
       Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
       Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
 
-    finding = Finding.includes(includes).where(conditions).first
+    finding = Finding.includes(includes).where(conditions).references(:periods, :organizations).first
 
     # TODO: eliminar cuando se corrija el problema que hace que include solo
     # traiga el primer usuario
