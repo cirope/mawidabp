@@ -1,4 +1,3 @@
-# encoding: utf-8
 # =Controlador de procedimientos y pruebas de control
 #
 # Lista, muestra, crea, modifica y elimina procedimientos y pruebas de control
@@ -282,44 +281,43 @@ class ProcedureControlsController < ApplicationController
   end
 
   private
+    # Busca el procedimiento de control indicado siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe un
+    # procedimiento de control con ese ID o que no pertenece a la organización
+    # con la que se autenticó el usuario) devuelve nil.
+    # _id_::  ID del procedimiento de control que se quiere recuperar
+    def find_with_organization(id, include_all = false) #:doc:
+      include = include_all ? [
+        :period, {
+          :procedure_control_items => [
+            {:process_control => :control_objectives},
+            {:procedure_control_subitems => :control}
+          ]
+        }
+      ] : [:period]
 
-  # Busca el procedimiento de control indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # procedimiento de control con ese ID o que no pertenece a la organización
-  # con la que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del procedimiento de control que se quiere recuperar
-  def find_with_organization(id, include_all = false) #:doc:
-    include = include_all ? [
-      :period, {
-        :procedure_control_items => [
-          {:process_control => :control_objectives},
-          {:procedure_control_subitems => :control}
-        ]
-      }
-    ] : [:period]
+      ProcedureControl.includes(*include).where(
+        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+      ).first
+    end
 
-    ProcedureControl.includes(*include).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    # Indica si existe el procedimiento de control indicado, siempre que
+    # pertenezca a la organización. En el caso que no se encuentre (ya sea que no
+    # existe un procedimiento de control con ese ID o que no pertenece a la
+    # organización con la que se autenticó el usuario) devuelve false.
+    # _id_::  ID del plan de trabajo que se quiere recuperar
+    def exists?(id) #:doc:
+      ProcedureControl.includes(:period).where(
+        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+      ).first
+    end
 
-  # Indica si existe el procedimiento de control indicado, siempre que
-  # pertenezca a la organización. En el caso que no se encuentre (ya sea que no
-  # existe un procedimiento de control con ese ID o que no pertenece a la
-  # organización con la que se autenticó el usuario) devuelve false.
-  # _id_::  ID del plan de trabajo que se quiere recuperar
-  def exists?(id) #:doc:
-    ProcedureControl.includes(:period).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first
-  end
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :export_to_pdf => :read,
-      :get_control_objectives => :read,
-      :get_process_controls => :read,
-      :get_control_objective => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :export_to_pdf => :read,
+        :get_control_objectives => :read,
+        :get_process_controls => :read,
+        :get_control_objective => :read
+      )
+    end
 end

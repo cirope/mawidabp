@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class PotentialNonconformitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :load_privileges
@@ -199,7 +198,7 @@ class PotentialNonconformitiesController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json { render :json => @users }
@@ -287,30 +286,29 @@ class PotentialNonconformitiesController < ApplicationController
   end
 
   private
+    # Busca la no conformidad potencial indicada siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe una
+    # oportunidad con ese ID o que no pertenece a la organización con la que se
+    # autenticó el usuario) devuelve nil.
+    # _id_::  ID de la oportunidad que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      PotentialNonconformity.includes(
+        :finding_relations,
+        :work_papers,
+        {:finding_user_assignments => :user},
+        {:control_objective_item => {:review => :period}}
+      ).where(
+        :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+      ).first
+    end
 
-  # Busca la no conformidad potencial indicada siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe una
-  # oportunidad con ese ID o que no pertenece a la organización con la que se
-  # autenticó el usuario) devuelve nil.
-  # _id_::  ID de la oportunidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    PotentialNonconformity.includes(
-      :finding_relations,
-      :work_papers,
-      {:finding_user_assignments => :user},
-      {:control_objective_item => {:review => :period}}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :follow_up_pdf => :read,
-      :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read,
-      :undo_reiteration => :modify
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :follow_up_pdf => :read,
+        :auto_complete_for_user => :read,
+        :auto_complete_for_finding_relation => :read,
+        :auto_complete_for_control_objective_item => :read,
+        :undo_reiteration => :modify
+      )
+    end
 end
