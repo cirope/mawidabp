@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
     order: 'last_name ASC, name ASC', dependent_children: :nullify
 
   # Atributos protegidos
-  attr_protected :group_admin
+  # attr_protected :group_admin
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
@@ -410,7 +410,7 @@ class User < ActiveRecord::Base
   end
 
   def is_group_admin?
-    self.group_admin == true && self.enable == true
+    self.group_admin && self.enable
   end
 
   def expired?

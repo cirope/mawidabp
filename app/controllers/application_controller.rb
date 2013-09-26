@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # =Controlador de la aplicación
 #
 # Controlador del que heredan los demás controladores de la aplicación.
@@ -235,7 +234,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_group_admin
-    unless @auth_user.group_admin == true
+    unless @auth_user.is_group_admin?
       flash.alert = t('message.insufficient_privileges')
       redirect_to :back
     end
