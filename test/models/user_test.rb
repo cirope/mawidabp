@@ -77,15 +77,12 @@ class UserTest < ActiveSupport::TestCase
       assert @user.update(
         name: 'Updated name',
         last_name: 'Updated last name',
-        group_admin: true
       ), @user.errors.full_messages.join('; ')
     end
 
     @user.reload
     assert_equal 'Updated name', @user.name
     assert_equal 'Updated last name', @user.last_name
-    # No puede habilitarse la administración por asignación masiva
-    assert_equal false, @user.group_admin
   end
 
   # Prueba de eliminación de usuarios
