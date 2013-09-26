@@ -5,7 +5,7 @@
 # (#ControlObjective)
 class BestPracticesController < ApplicationController
   before_action :auth, :check_privileges
-  hide_action :find_with_organization
+  before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
 
   # Lista las buenas prácticas
   #
@@ -32,7 +32,6 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices/1.xml
   def show
     @title = t 'best_practice.show_title'
-    @best_practice = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -60,7 +59,6 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices/1/edit
   def edit
     @title = t 'best_practice.edit_title'
-    @best_practice = find_with_organization(params[:id])
   end
 
   # Crea una nueva buena práctica siempre que cumpla con las validaciones.
@@ -71,7 +69,7 @@ class BestPracticesController < ApplicationController
   # * POST /best_practices.xml
   def create
     @title = t 'best_practice.new_title'
-    @best_practice = BestPractice.new(params[:best_practice])
+    @best_practice = BestPractice.new(best_practice_params)
 
     respond_to do |format|
       if @best_practice.save
@@ -93,11 +91,10 @@ class BestPracticesController < ApplicationController
   # * PUT /best_practices/1.xml
   def update
     @title = t 'best_practice.edit_title'
-    @best_practice = find_with_organization(params[:id])
     params[:best_practice][:organization_id] = @best_practice.organization_id
 
     respond_to do |format|
-      if @best_practice.update(params[:best_practice])
+      if @best_practice.update(best_practice_params)
         flash.notice = t 'best_practice.correctly_updated'
         format.html { redirect_to(edit_best_practice_url(@best_practice)) }
         format.xml  { head :ok }
@@ -117,8 +114,6 @@ class BestPracticesController < ApplicationController
   # * DELETE /best_practices/1
   # * DELETE /best_practices/1.xml
   def destroy
-    @best_practice = find_with_organization(params[:id])
-
     unless @best_practice.destroy
       flash.alert = @best_practice.errors.full_messages.join(
         APP_ENUM_SEPARATOR)
@@ -129,15 +124,15 @@ class BestPracticesController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
-  private
 
-  # Busca la buena práctica indicada siempre que pertenezca a la organización.
-  # En el caso que no se encuentre (ya sea que no existe una buena práctica con
-  # ese ID o que no pertenece a la organización con la que se autenticó el
-  # usuario) devuelve nil.
-  # _id_::  ID de la buena práctica que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    BestPractice.where(id: id, organization_id: @auth_organization.id).first
-  end
+  private
+    def set_best_practice
+      @best_practice = BestPractice.where(
+        id: params[:id], organization_id: current_organization.id
+      ).first
+    end
+
+    def best_practice_params
+      params.require(:best_practice).permit(:name, :description)
+    end
 end
