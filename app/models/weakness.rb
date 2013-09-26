@@ -1,7 +1,7 @@
 class Weakness < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
-  attr_protected :highest_risk
+  # attr_protected :highest_risk
 
   # Callbacks
   before_save :assign_highest_risk

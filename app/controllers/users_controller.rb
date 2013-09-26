@@ -21,6 +21,7 @@ class UsersController < ApplicationController
 
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
+  before_action :set_user, except: [:index, :create_session]
   hide_action :find_with_organization, :load_privileges
 
   # Lista los usuarios
@@ -64,7 +65,6 @@ class UsersController < ApplicationController
   # * GET /users/1.xml
   def show
     @title = t 'user.show_title'
-    @user = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -91,7 +91,6 @@ class UsersController < ApplicationController
   # * GET /users/1/edit
   def edit
     @title = t 'user.edit_title'
-    @user = find_with_organization(params[:id])
   end
 
   # Crea un nuevo usuario siempre que cumpla con las validaciones.
@@ -100,7 +99,7 @@ class UsersController < ApplicationController
   # * POST /users.xml
   def create
     @title = t 'user.new_title'
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     @user.roles.each {|r| r.inject_auth_privileges(@auth_privileges)}
 
     respond_to do |format|
@@ -124,7 +123,6 @@ class UsersController < ApplicationController
   # * PUT /users/1.xml
   def update
     @title = t 'user.edit_title'
-    @user = find_with_organization(params[:id])
     params[:user][:last_access] = nil if @user.expired?
     params[:user][:child_ids] ||= []
     # Para permitir al usuario actualmente autenticado modificar sus datos
@@ -133,7 +131,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      if @user.update(params[:user])
+      if @user.update(user_params)
         @user.send_notification_if_necesary
         flash.notice = t 'user.correctly_updated'
         format.html { redirect_to(users_url) }
@@ -154,8 +152,6 @@ class UsersController < ApplicationController
   # * DELETE /users/1
   # * DELETE /users/1.xml
   def destroy
-    @user = find_with_organization(params[:id])
-
     unless @user.disable!
       flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else
@@ -174,8 +170,7 @@ class UsersController < ApplicationController
   # * GET /users/1/user_status.xml
   def user_status
     @title = t 'user.status_title'
-    @user = @auth_user.audited? ?
-      @auth_user : find_with_organization(params[:id])
+    @user = @auth_user if @auth_user.audited?
     @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
 
     respond_to do |format|
@@ -186,8 +181,7 @@ class UsersController < ApplicationController
 
   def user_status_without_graph
     @title = t 'user.status_title'
-    @user = @auth_user.audited? ?
-      @auth_user : find_with_organization(params[:id])
+    @user = @auth_user if @auth_user.audited?
     @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
 
     respond_to do |format|
@@ -236,7 +230,7 @@ class UsersController < ApplicationController
   # * POST /users/create_session
   def create_session
     @title = t 'user.login_title'
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     organization_prefix = request.subdomains.first
     @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
@@ -361,11 +355,8 @@ class UsersController < ApplicationController
   # * PUT /users/blank_password/1
   # * PUT /users/blank_password/1.xml
   def blank_password
-    @user = find_with_organization(params[:id])
-
     if @user
       @user.reset_password!(@auth_organization)
-
       redirect_to_index t('user.password_reseted', user: @user.user)
     end
   end
@@ -385,7 +376,6 @@ class UsersController < ApplicationController
   def send_password_reset
     @title = t 'user.reset_password_title'
     @auth_organization = Organization.find_by(prefix: request.subdomains.first)
-    @user = find_with_organization(params[:email], :email)
 
     if @user && !@user.hidden
       @user.reset_password!(@auth_organization)
@@ -569,7 +559,6 @@ class UsersController < ApplicationController
   # * GET /users/reassignment_edit/1.xml
   def reassignment_edit
     @title = t 'user.user_reassignment'
-    @user = find_with_organization(params[:id])
   end
 
   # Reasigna usuarios en las relaciones que mantienen seguimiento y por lo tanto
@@ -579,7 +568,6 @@ class UsersController < ApplicationController
   # * PUT /users/reassignment_update/1.xml
   def reassignment_update
     @title = t 'user.user_reassignment'
-    @user = find_with_organization(params[:id])
 
     unless params[:user][:id].blank?
       @other = find_with_organization(params[:user][:id], :id)
@@ -609,7 +597,6 @@ class UsersController < ApplicationController
   # * GET /users/release_edit/1.xml
   def release_edit
     @title = t 'user.user_release'
-    @user = find_with_organization(params[:id])
   end
 
   # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
@@ -619,7 +606,6 @@ class UsersController < ApplicationController
   # * PUT /users/release_update/1.xml
   def release_update
     @title = t 'user.user_release'
-    @user = find_with_organization(params[:id])
 
     options = {
       with_findings: params[:user][:with_findings] == '1',
@@ -769,44 +755,54 @@ class UsersController < ApplicationController
   end
 
   private
+    # Busca el usuario indicado siempre que pertenezca a la organización. En el
+    # caso que no se encuentre (ya sea que no existe un usuario con ese ID o que
+    # no pertenece a la organización con la que se autenticó el usuario) devuelve
+    # nil.
+    # _id_:: ID (campo usuario) del usuario que se quiere recuperar
+    def find_with_organization(id, field = :user) #:doc:
+      id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
+      id_field = field == :id ?
+        "#{User.table_name}.#{field}" : "LOWER(#{User.table_name}.#{field})"
 
-  # Busca el usuario indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un usuario con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID (campo usuario) del usuario que se quiere recuperar
-  def find_with_organization(id, field = :user) #:doc:
-    id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
-    id_field = field == :id ?
-      "#{User.table_name}.#{field}" : "LOWER(#{User.table_name}.#{field})"
-
-    User.includes(:organizations).where(
-      [
-        "#{id_field} = :id",
+      User.includes(:organizations).where(
         [
-          "#{Organization.table_name}.id = :organization_id",
-          "#{Organization.table_name}.id IS NULL"
-        ].join(' OR ')
-      ].map {|c| "(#{c})"}.join(' AND '),
-      { id: id, organization_id: @auth_organization.id }
-    ).references(
-      :organizations
-    ).first || (find_with_organization(id, :id) unless field == :id)
-  end
+          "#{id_field} = :id",
+          [
+            "#{Organization.table_name}.id = :organization_id",
+            "#{Organization.table_name}.id IS NULL"
+          ].join(' OR ')
+        ].map {|c| "(#{c})"}.join(' AND '),
+        {:id => id, :organization_id => @auth_organization.id}
+      ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
+    end
 
-  def load_privileges #:nodoc:
-    if @action_privileges
-      @action_privileges.update(
-        auto_complete_for_user: :read,
-        roles: :read,
-        user_status: :read,
-        export_to_pdf: :read,
-        blank_password: :modify,
-        reassignment_edit: :modify,
-        reassignment_update: :modify,
-        release_edit: :modify,
-        release_update: :modify
+    def set_user
+      @user = User.includes(:organizations).where(
+        id: params[:id], "#{Organization.table_name}.id" => current_organization.id
+      ).references(:organizations).first if params[:id].present?
+    end
+
+    def user_params
+      params.require(:user).permit(
+        :user, :name, :last_name, :email, :language, :resource_id, :manager_id, :change_password_hash,
+        :enable, :send_notification_email, :password, :password_confirmation, :group_admin, :hidden, :notes
       )
     end
-  end
+
+    def load_privileges #:nodoc:
+      if @action_privileges
+        @action_privileges.update(
+          auto_complete_for_user: :read,
+          roles: :read,
+          user_status: :read,
+          export_to_pdf: :read,
+          blank_password: :modify,
+          reassignment_edit: :modify,
+          reassignment_update: :modify,
+          release_edit: :modify,
+          release_update: :modify
+        )
+      end
+    end
 end

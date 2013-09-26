@@ -15,7 +15,7 @@ class WorkPaper < ActiveRecord::Base
   # Restricciones de los atributos
   attr_accessor :code_prefix
   attr_readonly :organization_id
-  attr_protected :organization_id
+  # attr_protected :organization_id
 
   # Callbacks
   before_save :check_for_modifications
