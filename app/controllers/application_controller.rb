@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     if login_check
-      case @auth_organization.kind
+      case @auth_organization.try(:kind)
       when 'public'
         I18n.locale = :public_es
       when 'management_control'
