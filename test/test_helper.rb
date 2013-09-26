@@ -35,6 +35,7 @@ class ActiveSupport::TestCase
     else
       assert_redirected_to :controller => :welcome, :action => :index
     end
+
     assert_not_nil session[:user_id]
     auth_user = User.find(session[:user_id])
     assert_not_nil auth_user

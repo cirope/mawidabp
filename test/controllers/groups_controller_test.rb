@@ -29,16 +29,6 @@ class GroupsControllerTest < ActionController::TestCase
       send *action
       assert_response :success
     end
-
-    # Intento de acceso con un usuario que no es administrador de grupos
-    private_actions.each do |action|
-      perform_auth(users(:administrator_second_user),
-        organizations(:second_organization))
-
-      send *action
-      assert_redirected_to :controller => :users, :action => :login
-      assert_equal I18n.t('message.insufficient_privileges'), flash.alert
-    end
   end
 
   test 'list groups' do

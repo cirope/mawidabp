@@ -201,11 +201,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_difference 'ErrorRecord.count' do
       post :create_session,
         :user => {
-          :user => users(:bare_user).user,
-          :password => PLAIN_PASSWORDS[users(:bare_user).user]
+          :user => users(:administrator_second_user).user,
+          :password => PLAIN_PASSWORDS[users(:administrator_second_user).user]
         }
       error_record = ErrorRecord.where(
-        :user_id => users(:bare_user).id,
+        :user_id => users(:administrator_second_user).id,
         :error => ErrorRecord::ERRORS[:on_login]
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
