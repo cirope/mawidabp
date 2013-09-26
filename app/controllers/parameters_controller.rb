@@ -87,33 +87,32 @@ class ParametersController < ApplicationController
   end
 
   private
+    # Recorre todos los atributos  que vienen como llave_número => valor y los
+    # convierte en [[atributo, valor], ....]
+    def form_keys_to_array(parameters) #:doc:
+      result = []
 
-  # Recorre todos los atributos  que vienen como llave_número => valor y los
-  # convierte en [[atributo, valor], ....]
-  def form_keys_to_array(parameters) #:doc:
-    result = []
+      parameters.each do |key, value|
+        result << [value, parameters["value_#{$1}"]] if key =~ /\Akey_(.*)\Z/
+      end
 
-    parameters.each do |key, value|
-      result << [value, parameters["value_#{$1}"]] if key =~ /\Akey_(.*)\Z/
+      result.sort { |item_1, item_2| item_1[1] <=> item_2[1] }
     end
-    
-    result.sort { |item_1, item_2| item_1[1] <=> item_2[1] }
-  end
 
-  # Elimina los atributos que comienzan con key_ o value_ para que puedan ser
-  # utilizados directamente en los métodos new, update, etc.
-  def clean_parameters(parameters) #:doc:
-    parameters.reject { |k,| k =~ /\Akey_.*\Z|\Avalue_.*\Z/ }
-  end
+    # Elimina los atributos que comienzan con key_ o value_ para que puedan ser
+    # utilizados directamente en los métodos new, update, etc.
+    def clean_parameters(parameters) #:doc:
+      parameters.reject { |k,| k =~ /\Akey_.*\Z|\Avalue_.*\Z/ }
+    end
 
-  # Busca el parámetro indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un parámetro con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID del parámetro que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Parameter.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    # Busca el parámetro indicado siempre que pertenezca a la organización. En el
+    # caso que no se encuentre (ya sea que no existe un parámetro con ese ID o que
+    # no pertenece a la organización con la que se autenticó el usuario) devuelve
+    # nil.
+    # _id_::  ID del parámetro que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      Parameter.where(
+        :id => id, :organization_id => @auth_organization.id
+      ).first
+    end
 end
