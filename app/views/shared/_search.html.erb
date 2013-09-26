@@ -14,7 +14,7 @@
                 :maxlength => 100, :size => 10 %>
               <div id="search_column_names" style="display: none;">
                 <% columns.each do |column| %>
-                  <%= hidden_field_tag 'search[columns]', :value => column,
+                  <%= hidden_field_tag 'search[columns]', column,
                     :name => 'search[columns][]',
                     :id => "search_column_#{column}" %>
                 <% end %>
