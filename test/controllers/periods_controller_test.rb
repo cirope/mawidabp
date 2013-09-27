@@ -15,7 +15,7 @@ class PeriodsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -104,7 +104,7 @@ class PeriodsControllerTest < ActionController::TestCase
   test 'update period' do
     assert_no_difference 'Period.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => periods(:current_period).id,
         :period => {
             :number => '20',

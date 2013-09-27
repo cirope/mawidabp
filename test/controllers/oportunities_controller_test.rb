@@ -15,7 +15,7 @@ class OportunitiesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -164,7 +164,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     perform_auth
     assert_no_difference 'Oportunity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
-        put :update, {
+        patch :update, {
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id,
           :oportunity => {
@@ -271,7 +271,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert repeated_of.reload.repeated?
     assert oportunity.reload.repeated_of
 
-    put :undo_reiteration, :id => oportunity.to_param
+    patch :undo_reiteration, :id => oportunity.to_param
     assert_redirected_to edit_oportunity_url(oportunity)
 
     assert !repeated_of.reload.repeated?

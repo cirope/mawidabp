@@ -122,8 +122,8 @@ class ConclusionFinalReviewsController < ApplicationController
   # Actualiza el contenido de un informe definitivo siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /conclusion_final_reviews/1
-  # * PUT /conclusion_final_reviews/1.xml
+  # * PATCH /conclusion_final_reviews/1
+  # * PATCH /conclusion_final_reviews/1.xml
   def update
     @title = t 'conclusion_final_review.edit_title'
     @conclusion_final_review = find_with_organization(params[:id])

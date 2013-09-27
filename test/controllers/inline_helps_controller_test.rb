@@ -15,7 +15,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -85,7 +85,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   test 'update inline_help' do
     assert_no_difference 'InlineHelp.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => inline_helps(:es_review_identification).id,
         :inline_help => {
           :language => 'es',

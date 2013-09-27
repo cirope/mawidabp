@@ -101,8 +101,8 @@ class OrganizationsController < ApplicationController
   # validaciones. Además actualiza el contenido de las unidades de negocio que
   # la componen.
   #
-  # * PUT /organizations/1
-  # * PUT /organizations/1.xml
+  # * PATCH /organizations/1
+  # * PATCH /organizations/1.xml
   def update
     @title = t 'organization.edit_title'
     @organization = find_if_allowed(params[:id])

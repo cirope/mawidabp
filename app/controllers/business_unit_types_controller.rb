@@ -85,8 +85,8 @@ class BusinessUnitTypesController < ApplicationController
   # con las validaciones. Además actualiza el contenido de las unidades de
   # negocio que la componen.
   # 
-  # * PUT /business_unit_types/1
-  # * PUT /business_unit_types/1.xml
+  # * PATCH /business_unit_types/1
+  # * PATCH /business_unit_types/1.xml
   def update
     @title = t 'business_unit_type.edit_title'
     @business_unit_type = find_with_organization(params[:id])

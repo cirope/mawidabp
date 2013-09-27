@@ -122,8 +122,8 @@ class FortressesController < ApplicationController
   # Actualiza el contenido de una fortaleza siempre que cumpla con
   # las validaciones.
   #
-  # * PUT /fortresses/1
-  # * PUT /fortresses/1.xml
+  # * PATCH /fortresses/1
+  # * PATCH /fortresses/1.xml
   def update
     @title = t 'fortress.edit_title'
     @fortress = find_with_organization(params[:id])

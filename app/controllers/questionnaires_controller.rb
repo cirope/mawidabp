@@ -81,8 +81,8 @@ class QuestionnairesController < ApplicationController
     end
   end
 
-  # PUT /questionnaires/1
-  # PUT /questionnaires/1.json
+  # PATCH /questionnaires/1
+  # PATCH /questionnaires/1.json
   def update
     @title = t 'questionnaire.edit_title'
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first

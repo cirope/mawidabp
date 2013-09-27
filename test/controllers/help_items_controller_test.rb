@@ -15,7 +15,7 @@ class HelpItemsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -96,7 +96,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   test 'update help item' do
     assert_no_difference 'HelpItem.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => help_items(:help_item_1_es).id,
         :help_item => {
           :name => 'Updated name',

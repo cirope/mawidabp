@@ -80,8 +80,8 @@ class HelpContentsController < ApplicationController
 
   # Actualiza el contenido de ayuda siempre que cumpla con las validaciones
   #
-  # * PUT /help_contents/1
-  # * PUT /help_contents/1.xml
+  # * PATCH /help_contents/1
+  # * PATCH /help_contents/1.xml
   def update
     @title = t 'help_content.edit_title'
     @help_content = HelpContent.find(params[:id])

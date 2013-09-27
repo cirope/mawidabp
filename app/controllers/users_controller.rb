@@ -119,8 +119,8 @@ class UsersController < ApplicationController
   # Actualiza el contenido de un usuario siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /users/1
-  # * PUT /users/1.xml
+  # * PATCH /users/1
+  # * PATCH /users/1.xml
   def update
     @title = t 'user.edit_title'
     params[:user][:last_access] = nil if @user.expired?
@@ -352,8 +352,8 @@ class UsersController < ApplicationController
 
   # Blanquea la contraseña de un usuario
   #
-  # * PUT /users/blank_password/1
-  # * PUT /users/blank_password/1.xml
+  # * PATCH /users/blank_password/1
+  # * PATCH /users/blank_password/1.xml
   def blank_password
     if @user
       @user.reset_password!(@auth_organization)
@@ -410,8 +410,8 @@ class UsersController < ApplicationController
 
   # Cambia la contraseña del usuario actual
   #
-  # * PUT /users/update_password/1
-  # * PUT /users/update_password/1.xml
+  # * PATCH /users/update_password/1
+  # * PATCH /users/update_password/1.xml
   def update_password
     @title = t 'user.change_password_title'
 
@@ -526,8 +526,8 @@ class UsersController < ApplicationController
 
   # Cambia los datos del usuario actual
   #
-  # * PUT /users/update_personal_data/1
-  # * PUT /users/update_personal_data/1.xml
+  # * PATCH /users/update_personal_data/1
+  # * PATCH /users/update_personal_data/1.xml
   def update_personal_data
     @title = t 'user.change_personal_data'
 
@@ -564,8 +564,8 @@ class UsersController < ApplicationController
   # Reasigna usuarios en las relaciones que mantienen seguimiento y por lo tanto
   # el usuario es notificado de los eventos (como por ejemplo observaciones).
   #
-  # * PUT /users/reassignment_update/1
-  # * PUT /users/reassignment_update/1.xml
+  # * PATCH /users/reassignment_update/1
+  # * PATCH /users/reassignment_update/1.xml
   def reassignment_update
     @title = t 'user.user_reassignment'
 
@@ -602,8 +602,8 @@ class UsersController < ApplicationController
   # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
   # el usuario queda desligado de los eventos (como por ejemplo observaciones).
   #
-  # * PUT /users/release_update/1
-  # * PUT /users/release_update/1.xml
+  # * PATCH /users/release_update/1
+  # * PATCH /users/release_update/1.xml
   def release_update
     @title = t 'user.user_release'
 

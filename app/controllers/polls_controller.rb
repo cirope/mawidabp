@@ -124,8 +124,8 @@ class PollsController < ApplicationController
     end
   end
 
-  # PUT /polls/1
-  # PUT /polls/1.json
+  # PATCH /polls/1
+  # PATCH /polls/1.json
   def update
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])

@@ -2,7 +2,7 @@
 <% show_history_changes = @finding.status_change_history.size > 1 %>
 <!--[form:finding]-->
 <%= form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
-  {:method => :put, :class => :edit_finding, :multipart => true,
+  {:method => :patch, :class => :edit_finding, :multipart => true,
   :id => "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
     <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,

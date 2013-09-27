@@ -14,7 +14,7 @@ class FortressesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -151,7 +151,7 @@ class FortressesControllerTest < ActionController::TestCase
     perform_auth
     assert_no_difference 'Fortress.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
-        put :update, {
+        patch :update, {
           :id => findings(
             :bcra_A4609_security_management_responsible_dependency_fortress).id,
           :fortress => {

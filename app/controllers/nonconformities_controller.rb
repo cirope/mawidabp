@@ -126,8 +126,8 @@ class NonconformitiesController < ApplicationController
   # Actualiza el contenido de una no conformidad siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /nonconformities/1
-  # * PUT /nonconformities/1.xml
+  # * PATCH /nonconformities/1
+  # * PATCH /nonconformities/1.xml
   def update
     @title = t 'nonconformity.edit_title'
     @nonconformity = find_with_organization(params[:id])
@@ -164,7 +164,7 @@ class NonconformitiesController < ApplicationController
 
   # Deshace la reiteración de la no conformidad
   #
-  # * PUT /nonconformities/undo_reiteration/1
+  # * PATCH /nonconformities/undo_reiteration/1
   def undo_reiteration
     @nonconformity = find_with_organization(params[:id])
     @nonconformity.undo_reiteration

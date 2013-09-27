@@ -73,8 +73,8 @@ class InlineHelpsController < ApplicationController
     end
   end
 
-  # * PUT /inline_helps/1
-  # * PUT /inline_helps/1.xml
+  # * PATCH /inline_helps/1
+  # * PATCH /inline_helps/1.xml
   def update
     @title = t 'inline_help.edit_title'
     @inline_help = InlineHelp.find(params[:id])

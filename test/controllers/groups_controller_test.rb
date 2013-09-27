@@ -15,7 +15,7 @@ class GroupsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -132,7 +132,7 @@ class GroupsControllerTest < ActionController::TestCase
   test 'update group' do
     assert_no_difference ['Group.count', 'Organization.count'] do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => groups(:main_group).id,
         :group => {
           :name => 'Updated group',

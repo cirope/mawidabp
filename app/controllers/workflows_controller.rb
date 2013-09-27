@@ -107,8 +107,8 @@ class WorkflowsController < ApplicationController
   # del mismo) siempre que cumpla con las validaciones. Además actualiza el
   # contenido de los ítems que lo componen.
   #
-  # * PUT /workflows/1
-  # * PUT /workflows/1.xml
+  # * PATCH /workflows/1
+  # * PATCH /workflows/1.xml
   def update
     @title = t 'workflow.edit_title'
     @workflow = find_with_organization(params[:id])

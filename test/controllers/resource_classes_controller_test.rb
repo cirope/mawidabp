@@ -15,7 +15,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -92,7 +92,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
     assert_no_difference 'ResourceClass.count' do
       assert_difference 'Resource.count' do
         perform_auth
-        put :update, {
+        patch :update, {
           :id => resource_classes(:human_resources).id,
           :resource_class => {
             :name => 'Updated resource class',

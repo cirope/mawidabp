@@ -104,8 +104,8 @@ class ReviewsController < ApplicationController
   # validaciones. Además actualiza el contenido de los objetivos de control que
   # lo componen.
   #
-  # * PUT /reviews/1
-  # * PUT /reviews/1.xml
+  # * PATCH /reviews/1
+  # * PATCH /reviews/1.xml
   def update
     @title = t 'review.edit_title'
     @review = find_with_organization(params[:id])

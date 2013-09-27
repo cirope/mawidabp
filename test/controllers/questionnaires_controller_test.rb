@@ -11,7 +11,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -95,7 +95,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   test "update questionnaire" do
     perform_auth
     assert_no_difference ['Questionnaire.count', 'Question.count'] do
-      put :update, {
+      patch :update, {
         :id => questionnaires(:questionnaire_one).id,
         :questionnaire => {
           :name => 'Cuestionario actualizado',

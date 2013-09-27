@@ -81,8 +81,8 @@ class RolesController < ApplicationController
 
   # Actualiza el contenido de un perfil siempre que cumpla con las validaciones.
   #
-  # * PUT /roles/1
-  # * PUT /roles/1.xml
+  # * PATCH /roles/1
+  # * PATCH /roles/1.xml
   def update
     @title = t 'role.edit_title'
     @role = find_with_organization(params[:id])

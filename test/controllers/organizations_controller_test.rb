@@ -15,7 +15,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -114,7 +114,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'update organization' do
     perform_auth
-    put :update, {
+    patch :update, {
       :id => organizations(:default_organization).id,
       :organization => {
         :name => 'Updated organization',

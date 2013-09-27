@@ -44,8 +44,8 @@ class NotificationsController < ApplicationController
   # Actualiza el contenido de una notificación siempre que cumpla con las
   #  validaciones.
   #
-  # * PUT /notifications/1
-  # * PUT /notifications/1.xml
+  # * PATCH /notifications/1
+  # * PATCH /notifications/1.xml
   def update
     @title = t 'notification.edit_title'
     @notification = Notification.where(

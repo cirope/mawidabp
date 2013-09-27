@@ -1,6 +1,6 @@
 <!--[form:parameter]-->
 <%= form_for @parameter, :url => parameter_path(params[:type], @parameter),
-  :html => {:method => :put} do |f| %>
+  :html => {:method => :patch} do |f| %>
   <%= content_for :js_extra do %>
     <%= raw "var parameter_value = \"#{escape_javascript(
       render(:partial => 'parameter_value', :locals => {:id => 'NEW_RECORD', :item => ['', '']})

@@ -125,8 +125,8 @@ class OportunitiesController < ApplicationController
   # Actualiza el contenido de una oportunidad de mejora siempre que cumpla con
   # las validaciones.
   #
-  # * PUT /oportunities/1
-  # * PUT /oportunities/1.xml
+  # * PATCH /oportunities/1
+  # * PATCH /oportunities/1.xml
   def update
     @title = t 'oportunity.edit_title'
     @oportunity = find_with_organization(params[:id])
@@ -163,7 +163,7 @@ class OportunitiesController < ApplicationController
 
   # Deshace la reiteración de la oportunidad
   #
-  # * PUT /oportunities/undo_reiteration/1
+  # * PATCH /oportunities/undo_reiteration/1
   def undo_reiteration
     @oportunity = find_with_organization(params[:id])
     @oportunity.undo_reiteration

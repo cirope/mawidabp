@@ -130,8 +130,8 @@ class WeaknessesController < ApplicationController
   # Actualiza el contenido de una observación siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /weaknesses/1
-  # * PUT /weaknesses/1.xml
+  # * PATCH /weaknesses/1
+  # * PATCH /weaknesses/1.xml
   def update
     @title = t 'weakness.edit_title'
     @weakness = find_with_organization(params[:id])
@@ -168,7 +168,7 @@ class WeaknessesController < ApplicationController
 
   # Deshace la reiteración de la observación
   #
-  # * PUT /weaknesses/undo_reiteration/1
+  # * PATCH /weaknesses/undo_reiteration/1
   def undo_reiteration
     @weakness = find_with_organization(params[:id])
     @weakness.undo_reiteration

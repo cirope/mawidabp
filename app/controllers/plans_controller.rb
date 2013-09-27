@@ -95,8 +95,8 @@ class PlansController < ApplicationController
   # mismo) siempre que cumpla con las validaciones. Además actualiza el
   # contenido de los ítems que lo componen.
   #
-  # * PUT /plans/1
-  # * PUT /plans/1.xml
+  # * PATCH /plans/1
+  # * PATCH /plans/1.xml
   def update
     @title = t 'plan.edit_title'
     @plan = find_with_organization(params[:id], true)

@@ -75,8 +75,8 @@ class ControlObjectiveItemsController < ApplicationController
   # Actualiza el contenido de un objetivo de control siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /control_objective_items/1
-  # * PUT /control_objective_items/1.xml
+  # * PATCH /control_objective_items/1
+  # * PATCH /control_objective_items/1.xml
   def update
     @title = t 'control_objective_item.edit_title'
     @control_objective_item = find_with_organization(params[:id])

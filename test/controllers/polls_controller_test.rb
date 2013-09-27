@@ -8,7 +8,7 @@ class PollsControllerTest < ActionController::TestCase
     public_actions = [
       [:get, :edit, id_token],
       [:get, :show, id_param],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
     ]
     private_actions = [
       [:get, :index],
@@ -107,7 +107,7 @@ class PollsControllerTest < ActionController::TestCase
 
   test "update poll" do
     assert_no_difference ['Poll.count'] do
-      put :update, {
+      patch :update, {
         :id => polls(:poll_one).id,
         :poll => {
           :comments => 'Encuesta actualizada'

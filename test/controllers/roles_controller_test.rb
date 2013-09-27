@@ -15,7 +15,7 @@ class RolesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -94,7 +94,7 @@ class RolesControllerTest < ActionController::TestCase
 
     assert_no_difference ['Role.count', 'Privilege.count'] do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => roles(:admin_role).id,
         :role => {
           :name => 'Updated role',

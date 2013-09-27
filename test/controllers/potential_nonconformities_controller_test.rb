@@ -14,7 +14,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -163,7 +163,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     perform_auth
     assert_no_difference 'PotentialNonconformity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
-        put :update, {
+        patch :update, {
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity).id,
           :potential_nonconformity => {
@@ -255,7 +255,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     assert repeated_of.reload.repeated?
     assert potential_nonconformity.reload.repeated_of
 
-    put :undo_reiteration, :id => potential_nonconformity.to_param
+    patch :undo_reiteration, :id => potential_nonconformity.to_param
     assert_redirected_to edit_potential_nonconformity_url(potential_nonconformity)
 
     assert !repeated_of.reload.repeated?

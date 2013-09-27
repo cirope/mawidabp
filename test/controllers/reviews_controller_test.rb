@@ -15,7 +15,7 @@ class ReviewsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -246,7 +246,7 @@ class ReviewsControllerTest < ActionController::TestCase
       'ReviewUserAssignment.count', 'FileModel.count', 'Control.count']
     perform_auth
     assert_no_difference counts_array do
-      put :update, {
+      patch :update, {
         :id => reviews(:review_with_conclusion).id,
         :review => {
           :identification => 'Updated Identification',

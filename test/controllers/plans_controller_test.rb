@@ -15,7 +15,7 @@ class PlansControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -146,7 +146,7 @@ class PlansControllerTest < ActionController::TestCase
     assert_no_difference ['Plan.count', 'ResourceUtilization.count'] do
       assert_difference 'PlanItem.count', -1 do
         perform_auth
-        put :update, {
+        patch :update, {
           :id => plans(:past_plan).id,
           :plan => {
             :period_id => periods(:past_period).id,

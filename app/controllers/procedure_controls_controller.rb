@@ -112,8 +112,8 @@ class ProcedureControlsController < ApplicationController
   # Actualiza el contenido de un procedimiento de control siempre que cumpla con
   # las validaciones. Además actualiza los ítems que lo componen.
   #
-  # * PUT /procedure_controls/1
-  # * PUT /procedure_controls/1.xml
+  # * PATCH /procedure_controls/1
+  # * PATCH /procedure_controls/1.xml
   def update
     @title = t 'procedure_control.edit_title'
     @procedure_control = find_with_organization(params[:id], true)

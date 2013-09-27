@@ -15,7 +15,7 @@ class WorkflowsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -126,7 +126,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     assert_no_difference ['Workflow.count', 'ResourceUtilization.count'] do
       assert_difference 'WorkflowItem.count', -1 do
         perform_auth
-        put :update, {
+        patch :update, {
           :id => workflows(:with_conclusion_workflow).id,
           :workflow => {
             :period_id => periods(:current_period).id,

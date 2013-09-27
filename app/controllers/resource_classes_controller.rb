@@ -86,8 +86,8 @@ class ResourceClassesController < ApplicationController
   # Actualiza el contenido de una clase de recursos siempre que cumpla con las
   # validaciones. Además actualiza el contenido de los recursos que la componen.
   #
-  # * PUT /resource_classes/1
-  # * PUT /resource_classes/1.xml
+  # * PATCH /resource_classes/1
+  # * PATCH /resource_classes/1.xml
   def update
     @title = t 'resource_class.edit_title'
     @resource_class = find_with_organization(params[:id])

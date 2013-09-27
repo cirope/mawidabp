@@ -13,7 +13,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       [:get, :index],
       [:get, :show, id_param],
       [:get, :edit, id_param],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -90,7 +90,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
         perform_auth
-        put :update, {
+        patch :update, {
           :id => control_objective_items(
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
           :control_objective_item => {

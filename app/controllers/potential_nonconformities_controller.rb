@@ -122,8 +122,8 @@ class PotentialNonconformitiesController < ApplicationController
   # Actualiza el contenido de una no conformidad potencial siempre que cumpla con
   # las validaciones.
   #
-  # * PUT /potential_nonconformities/1
-  # * PUT /potential_nonconformities/1.xml
+  # * PATCH /potential_nonconformities/1
+  # * PATCH /potential_nonconformities/1.xml
   def update
     @title = t 'potential_nonconformity.edit_title'
     @potential_nonconformity = find_with_organization(params[:id])
@@ -160,7 +160,7 @@ class PotentialNonconformitiesController < ApplicationController
 
   # Deshace la reiteración de la oportunidad
   #
-  # * PUT /potential_nonconformities/undo_reiteration/1
+  # * PATCH /potential_nonconformities/undo_reiteration/1
   def undo_reiteration
     @potential_nonconformity = find_with_organization(params[:id])
     @potential_nonconformity.undo_reiteration

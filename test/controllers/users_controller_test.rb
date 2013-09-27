@@ -23,13 +23,13 @@ class UsersControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param],
-      [:put, :blank_password, id_param],
+      [:patch, :blank_password, id_param],
       [:get, :edit_password, id_param],
-      [:put, :update_password, id_param],
+      [:patch, :update_password, id_param],
       [:get, :edit_personal_data, id_param],
-      [:put, :update_personal_data, id_param],
+      [:patch, :update_personal_data, id_param],
       [:get, :logout, id_param],
       [:get, :new_initial],
       [:post, :create_initial],
@@ -573,7 +573,7 @@ class UsersControllerTest < ActionController::TestCase
       'ActionMailer::Base.deliveries.size', 'user.children.count']
 
     assert_no_difference counts_array do
-      put :update, {
+      patch :update, {
         :id => user.user,
         :user => {
           :user => 'updated_name',
@@ -626,7 +626,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_difference ['User.count', 'user.children.count'] do
       assert_difference 'ActionMailer::Base.deliveries.size' do
         assert_difference 'OrganizationRole.count' do
-          put :update, {
+          patch :update, {
             :id => users(:administrator_user).user,
             :user => {
               :user => 'updated_name_2',
@@ -703,7 +703,7 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :blank_password, :id => users(:administrator_user).user
+      patch :blank_password, :id => users(:administrator_user).user
     end
 
     assert_redirected_to users_url
@@ -746,7 +746,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'update password' do
     perform_auth
     assert_difference 'OldPassword.count' do
-      put :update_password, {
+      patch :update_password, {
         :id => users(:administrator_user).to_param,
         :user => {
           :password => 'new_password_123',
@@ -768,7 +768,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_template 'users/edit_password'
 
     assert_difference 'OldPassword.count' do
-      put :update_password, {
+      patch :update_password, {
         :id => users(:blank_password_user).to_param,
         :user => {
           :password => 'new_password_123',
@@ -791,7 +791,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'change expired blank password' do
-    put :update_password, {
+    patch :update_password, {
       :id => users(:expired_blank_password_user).to_param,
       :user => {
         :password => 'new_password_123',
@@ -910,7 +910,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'update personal data' do
     assert_no_difference 'User.count' do
       perform_auth
-      put :update_personal_data, {
+      patch :update_personal_data, {
         :id => users(:administrator_user).to_param,
         :user => {
           :name => 'Updated Name',
@@ -957,7 +957,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        put :reassignment_update, {
+        patch :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:audited_second_user).id,
@@ -993,7 +993,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
       assert_difference 'Notification.count' do
-        put :reassignment_update, {
+        patch :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:audited_second_user).id,
@@ -1029,7 +1029,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'Notification.count' do
-        put :reassignment_update, {
+        patch :reassignment_update, {
           :id => users(:audited_user).user,
           :user => {
             :id => users(:administrator_second_user).id
@@ -1061,7 +1061,7 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :release_update, {
+      patch :release_update, {
         :id => users(:auditor_user).user,
         :user => { :with_findings => '1' }
       }
@@ -1090,7 +1090,7 @@ class UsersControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :release_update, {
+      patch :release_update, {
         :id => users(:auditor_user).user,
         :user => { :with_reviews => '1' }
       }

@@ -117,8 +117,8 @@ class FindingsController < ApplicationController
   # las validaciones. Además actualiza el contenido de las respuestas que la
   # componen.
   #
-  # * PUT /findings/1
-  # * PUT /findings/1.xml
+  # * PATCH /findings/1
+  # * PATCH /findings/1.xml
   def update
     @title = t 'finding.edit_title'
     @finding = find_with_organization(params[:id])

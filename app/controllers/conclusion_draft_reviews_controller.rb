@@ -107,8 +107,8 @@ class ConclusionDraftReviewsController < ApplicationController
   # Actualiza el contenido de un informe borrador siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /conclusion_draft_reviews/1
-  # * PUT /conclusion_draft_reviews/1.xml
+  # * PATCH /conclusion_draft_reviews/1
+  # * PATCH /conclusion_draft_reviews/1.xml
   def update
     @title = t 'conclusion_draft_review.edit_title'
     @conclusion_draft_review = find_with_organization(params[:id])

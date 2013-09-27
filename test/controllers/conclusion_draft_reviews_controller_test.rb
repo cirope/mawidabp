@@ -21,7 +21,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -158,7 +158,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   test 'update conclusion_draft_review' do
     assert_no_difference 'ConclusionDraftReview.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id,
         :conclusion_draft_review => {
           :review_id => reviews(:review_with_conclusion).id,
@@ -299,7 +299,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
@@ -319,7 +319,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_equal 1, ActionMailer::Base.deliveries.last.attachments.size
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {
@@ -350,7 +350,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -374,7 +374,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, text_part
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_review.id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -409,7 +409,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_review.id,
         :user => {
           users(:administrator_user).id => {

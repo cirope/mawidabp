@@ -59,8 +59,8 @@ class ParametersController < ApplicationController
   # Actualiza el contenido de un parámetro siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /parameters/1
-  # * PUT /parameters/1.xml
+  # * PATCH /parameters/1
+  # * PATCH /parameters/1.xml
   def update
     @title = t 'parameter.edit_title'
     @type = APP_PARAMETER_TYPES.include?(params[:type]) ? params[:type] : :admin

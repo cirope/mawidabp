@@ -15,7 +15,7 @@ class BestPracticesControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -191,7 +191,7 @@ class BestPracticesControllerTest < ActionController::TestCase
     counts_array = ['BestPractice.count', 'ProcessControl.count',
       'ControlObjective.count', 'Control.count']
     assert_no_difference counts_array do
-      put :update, {
+      patch :update, {
         :id => best_practices(:iso_27001).id,
         :best_practice => {
           :name => 'updated_best_practice',

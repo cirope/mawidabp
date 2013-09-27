@@ -82,8 +82,8 @@ class PeriodsController < ApplicationController
   # Actualiza el contenido de un periodo siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /periods/1
-  # * PUT /periods/1.xml
+  # * PATCH /periods/1
+  # * PATCH /periods/1.xml
   def update
     @title = t 'period.edit_title'
     @period = find_with_organization(params[:id])

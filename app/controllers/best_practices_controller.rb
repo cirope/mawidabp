@@ -87,8 +87,8 @@ class BestPracticesController < ApplicationController
   # validaciones. Además actualiza el contenido de los procesos de negocio y de
   # los objetivos de control que la componen.
   #
-  # * PUT /best_practices/1
-  # * PUT /best_practices/1.xml
+  # * PATCH /best_practices/1
+  # * PATCH /best_practices/1.xml
   def update
     @title = t 'best_practice.edit_title'
     params[:best_practice][:organization_id] = @best_practice.organization_id

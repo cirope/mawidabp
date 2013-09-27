@@ -15,7 +15,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -130,7 +130,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
     assert_no_difference counts_array do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => procedure_controls(:procedure_control_iso_27001).id,
         :procedure_control => {
           :period_id => periods(:current_period).id,

@@ -79,8 +79,8 @@ class GroupsController < ApplicationController
 
   # Actualiza el contenido de un grupo siempre que cumpla con las validaciones
   #
-  # * PUT /groups/1
-  # * PUT /groups/1.xml
+  # * PATCH /groups/1
+  # * PATCH /groups/1.xml
   def update
     @title = t 'group.edit_title'
     @group = Group.find(params[:id])

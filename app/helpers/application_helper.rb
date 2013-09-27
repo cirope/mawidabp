@@ -534,7 +534,7 @@ module ApplicationHelper
     convert_boolean_attributes!(html_options, %w( disabled ))
 
     method_tag = ''
-    if (method = html_options.delete('method')) && %w{put delete}.include?(method.to_s)
+    if (method = html_options.delete('method')) && %w{patch delete}.include?(method.to_s)
       method_tag = tag('input', :type => 'hidden', :name => '_method', :value => method.to_s)
     end
 

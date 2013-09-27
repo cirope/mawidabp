@@ -16,7 +16,7 @@ class NotificationsControllerTest < ActionController::TestCase
       [:get, :index],
       [:get, :show, id_param],
       [:get, :edit, id_param],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
     ]
 
     private_actions.each do |action|
@@ -64,7 +64,7 @@ class NotificationsControllerTest < ActionController::TestCase
   test 'update notification' do
     assert_no_difference 'User.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => notifications(
           :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param,
         :notification => {

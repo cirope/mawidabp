@@ -16,7 +16,7 @@ class FindingsControllerTest < ActionController::TestCase
       [:get, :index, {:completed => 'incomplete'}],
       [:get, :show, id_param],
       [:get, :edit, id_param],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -223,7 +223,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_no_difference 'Finding.count' do
       assert_difference difference_counts do
         assert_difference 'FileModel.count', 2 do
-          put :update, {
+          patch :update, {
             :completed => 'incomplete',
             :id => findings(
               :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
@@ -331,7 +331,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_no_difference no_difference_count do
       assert_difference difference_count do
-        put :update, {
+        patch :update, {
           :completed => 'incomplete',
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
@@ -438,7 +438,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_no_difference 'Finding.count' do
       assert_difference 'ActionMailer::Base.deliveries.size' do
-        put :update, {
+        patch :update, {
           :completed => 'incomplete',
           :id => findings(
             :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,

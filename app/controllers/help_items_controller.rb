@@ -78,8 +78,8 @@ class HelpItemsController < ApplicationController
 
   # Actualiza el item de ayuda siempre que cumpla con las validaciones
   #
-  # * PUT /help_items/1
-  # * PUT /help_items/1.xml
+  # * PATCH /help_items/1
+  # * PATCH /help_items/1.xml
   def update
     @title = t 'help_item.edit_title'
     @help_item = HelpItem.find(params[:id])

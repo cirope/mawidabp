@@ -21,7 +21,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:get, :export_to_pdf, id_param]
     ]
 
@@ -159,7 +159,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'update conclusion final review' do
     assert_no_difference 'ConclusionFinalReview.count' do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => conclusion_reviews(:conclusion_past_final_review).id,
         :conclusion_final_review => {
           :review_id => reviews(:review_with_conclusion).id,
@@ -278,7 +278,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
           users(:administrator_user).id => {
@@ -299,7 +299,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       :conclusion_current_final_review).id
 
     assert_difference 'ActionMailer::Base.deliveries.size', 2 do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :user => {
           users(:administrator_user).id => {
@@ -328,7 +328,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
           :include_score_sheet => '1',
@@ -352,7 +352,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_match /textile/, text_part
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      put :send_by_email, {
+      patch :send_by_email, {
         :id => conclusion_reviews(:conclusion_current_final_review).id,
         :conclusion_review => {
           :include_score_sheet => '1',

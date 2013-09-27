@@ -15,7 +15,7 @@ class HelpContentsControllerTest < ActionController::TestCase
       [:get, :new],
       [:get, :edit, id_param],
       [:post, :create],
-      [:put, :update, id_param],
+      [:patch, :update, id_param],
       [:delete, :destroy, id_param]
     ]
 
@@ -110,7 +110,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   test 'update help_content' do
     assert_no_difference ['HelpContent.count', 'HelpItem.count'] do
       perform_auth
-      put :update, {
+      patch :update, {
         :id => help_contents(:help_es).id,
         :help_content => {
           :language => 'it',

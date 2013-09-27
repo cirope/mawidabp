@@ -9,7 +9,7 @@
       <%= button_to t('user.reset_password'),
           { :action => :blank_password, :id => @user },
           :data => { :confirm => t('message.confirmation_question') },
-          :method => :put, :class => :shadowed_button,
+          :method => :patch, :class => :shadowed_button,
           :title => t('user.reset_password') %>
     </div>
   </div>

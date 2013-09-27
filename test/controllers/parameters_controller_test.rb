@@ -14,7 +14,7 @@ class ParametersControllerTest < ActionController::TestCase
       [:get, :index, {:type => 'admin'}],
       [:get, :show, id_param],
       [:get, :edit, id_param],
-      [:put, :update, id_param]
+      [:patch, :update, id_param]
     ]
 
     private_actions.each do |action|
@@ -60,7 +60,7 @@ class ParametersControllerTest < ActionController::TestCase
 
   test 'update parameter' do
     perform_auth
-    put :update, {
+    patch :update, {
       :type => 'admin',
       :id => parameters(:parameter_security_password_count).id,
         :parameter => {
@@ -77,7 +77,7 @@ class ParametersControllerTest < ActionController::TestCase
 
   test 'update parameter with array value' do
     perform_auth
-    put :update, {
+    patch :update, {
       :type => 'admin',
       :id => parameters(:parameter_admin_control_objective_qualifications).id,
         :parameter => {
@@ -104,7 +104,7 @@ class ParametersControllerTest < ActionController::TestCase
     perform_auth
 
     assert_no_difference 'Parameter.count' do
-      put :update, {
+      patch :update, {
         :type => 'admin',
         :id => parameters(:parameter_security_password_count).id,
           :parameter => {
