@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class ResourceClass < ActiveRecord::Base
   include ParameterSelector
 

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # =Helper de la aplicación
 #
 # Helper del que heredan los demás helpers de la aplicación.

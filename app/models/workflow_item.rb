@@ -1,4 +1,3 @@
-# encoding: utf-8
 class WorkflowItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable

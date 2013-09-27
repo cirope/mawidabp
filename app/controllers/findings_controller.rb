@@ -1,4 +1,3 @@
-# encoding: utf-8
 # =Controlador de debilidades y oportunidades de mejora
 #
 # Lista, muestra, modifica y elimina debilidades (#Weakness) y oportunidades de
