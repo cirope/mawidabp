@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte

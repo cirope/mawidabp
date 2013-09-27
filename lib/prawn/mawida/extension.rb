@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'prawn/measurement_extensions'
 
 module Prawn

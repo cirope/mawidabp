@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Questionnaire < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }

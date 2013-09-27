@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class Role < ActiveRecord::Base
   include Comparable
   include ParameterSelector
