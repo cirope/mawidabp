@@ -133,6 +133,8 @@ class BestPracticesController < ApplicationController
     end
 
     def best_practice_params
-      params.require(:best_practice).permit(:name, :description)
+      params.require(:best_practice).permit(:name, :description, :lock_version, 
+        process_controls_attributes: [:name, :order]
+      )
     end
 end
