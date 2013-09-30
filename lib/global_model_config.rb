@@ -19,6 +19,8 @@ module GlobalModelConfig
 
   private
     def set_current_organization_id
-      GlobalModelConfig.config_store[:organization_id] = current_organization.try(:id)
+      GlobalModelConfig.config_store[:organization_id] = lambda {
+        self.respond_to?(:current_organization) ? self.current_organization : nil
+      }
     end
 end

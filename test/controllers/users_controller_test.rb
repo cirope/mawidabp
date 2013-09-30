@@ -761,21 +761,18 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'change blank password' do
-    get :edit_password, {:id => users(:blank_password_user).user,
-      :confirmation_hash => users(:blank_password_user).change_password_hash}
+    get :edit_password, id: users(:blank_password_user).user,
+      confirmation_hash: users(:blank_password_user).change_password_hash
+    
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/edit_password'
 
     assert_difference 'OldPassword.count' do
-      patch :update_password, {
-        :id => users(:blank_password_user).to_param,
-        :user => {
-          :password => 'new_password_123',
-          :password_confirmation => 'new_password_123'
-        },
-        :confirmation_hash => users(:blank_password_user).change_password_hash
-      }
+      patch :update_password, 
+        id: users(:blank_password_user).to_param, 
+        user: { password: 'new_password_123', password_confirmation: 'new_password_123' }, 
+        confirmation_hash: users(:blank_password_user).change_password_hash
     end
 
     user = User.find(users(:blank_password_user).id)
@@ -785,8 +782,8 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 0, user.failed_attempts
 
     # No se puede usar 2 veces el mismo hash
-    get :edit_password, {:id => users(:blank_password_user).to_param,
-      :confirmation_hash => users(:blank_password_user).change_password_hash}
+    get :edit_password, id: users(:blank_password_user).to_param,
+      confirmation_hash: users(:blank_password_user).change_password_hash
     assert_redirected_to :controller => :users, :action => :login
   end
 
@@ -1154,8 +1151,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'get roles' do
     perform_auth
-    xhr :get, :roles, {:id => organizations(:default_organization).id,
-      :format => 'json'}
+    xhr :get, :roles, id: organizations(:default_organization).id, format: 'json'
     assert_response :success
     roles = ActiveSupport::JSON.decode(@response.body)
     assert !roles.empty?

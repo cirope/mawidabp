@@ -21,8 +21,7 @@ class UsersController < ApplicationController
 
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
-  before_action :set_user, except: [:index, :create_session]
-  hide_action :find_with_organization, :load_privileges
+  before_action :set_user, except: [:roles, :initial_roles, :new_initial]
 
   # Lista los usuarios
   #
@@ -424,8 +423,8 @@ class UsersController < ApplicationController
     end
 
     if @auth_user
-      @auth_user.password = params[:user][:password]
-      @auth_user.password_confirmation = params[:user][:password_confirmation]
+      @auth_user.password = user_params[:password]
+      @auth_user.password_confirmation = user_params[:password_confirmation]
 
       if @auth_user.valid?
         @auth_user.encrypt_password
@@ -480,12 +479,12 @@ class UsersController < ApplicationController
   #
   # * POST /users/create_initial
   def create_initial
-    group = Group.find_by(admin_hash: params[:hash])
+    group = Group.find_by(admin_hash: user_params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
-      @user = User.new(params[:user])
+      @user = User.new(user_params)
 
-      if @user.save && group.update_attribute(:admin_hash, nil)
+      if @user.save && group.update(admin_hash: nil)
         @user.send_welcome_email
         restart_session
         redirect_to_login t('user.correctly_created')
@@ -779,14 +778,14 @@ class UsersController < ApplicationController
 
     def set_user
       @user = User.includes(:organizations).where(
-        id: params[:id], "#{Organization.table_name}.id" => current_organization.id
+        user: params[:id], "#{Organization.table_name}.id" => current_organization
       ).references(:organizations).first if params[:id].present?
     end
 
     def user_params
       params.require(:user).permit(
-        :user, :name, :last_name, :email, :language, :resource_id, :manager_id, :change_password_hash,
-        :enable, :send_notification_email, :password, :password_confirmation, :group_admin, :hidden, :notes
+        :user, :name, :last_name, :email, :language, :notes, :resource_id, :manager_id, :enable, :logged_in, :password,
+        :hidden, :function
       )
     end
 
