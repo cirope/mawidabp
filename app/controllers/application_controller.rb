@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-=begin
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
   rescue_from Exception do |exception|
@@ -37,7 +36,7 @@ class ApplicationController < ActionController::Base
         logger.error(error)
     end
   end
-=end
+
   def current_user
     load_user
     Finding.current_user = @auth_user
