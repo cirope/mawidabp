@@ -85,29 +85,28 @@ class WorkflowsControllerTest < ActionController::TestCase
         :workflow => {
           :period_id => periods(:current_period).id,
           :review_id => reviews(:review_without_conclusion).id,
-          :workflow_items_attributes => {
-            :new_1 => {
+          :workflow_items_attributes => [
+            {
               :task => 'New task',
               :start => Date.today,
               :end => 10.days.from_now.to_date,
               :plain_predecessors => '',
               :order_number => 1,
-              :resource_utilizations_attributes => {
-                :new_1 => {
+              :resource_utilizations_attributes => [
+                {
                   :resource_id => users(:manager_user).id,
                   :resource_type => 'User',
                   :units => '12.21',
                   :cost_per_unit => '8.75'
-                },
-                :new_2 => {
+                }, {
                   :resource_id => resources(:laptop_resource).id,
                   :resource_type => 'Resource',
                   :units => '2',
                   :cost_per_unit => '10.7'
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
     end
@@ -131,28 +130,27 @@ class WorkflowsControllerTest < ActionController::TestCase
           :workflow => {
             :period_id => periods(:current_period).id,
             :review_id => reviews(:review_with_conclusion).id,
-            :workflow_items_attributes => {
-              workflow_items(:with_conclusion_workflow_item_1).id => {
+            :workflow_items_attributes => [
+              {
                 :id => workflow_items(:with_conclusion_workflow_item_1).id,
                 :task => 'Updated task',
                 :start => 5.days.ago.to_date,
                 :end => 2.days.ago.to_date,
                 :plain_predecessors => '',
                 :order_number => 1,
-                :resource_utilizations_attributes => {
-                  resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id => {
+                :resource_utilizations_attributes => [
+                  {
                     :id => resource_utilizations(:auditor_for_20_units_with_conclusion_workflow_item_1).id,
                     :resource_id => users(:manager_user).id,
                     :units => '12.21',
                     :cost_per_unit => '8.75'
                   }
-                }
-              },
-              workflow_items(:with_conclusion_workflow_item_3).id => {
+                ]
+              }, {
                 :id => workflow_items(:with_conclusion_workflow_item_3).id,
                 :_destroy => 1
               }
-            }
+            ]
           }
         }
       end
@@ -173,38 +171,37 @@ class WorkflowsControllerTest < ActionController::TestCase
       :workflow => {
         :period_id => periods(:current_period).id,
         :review_id => reviews(:review_without_conclusion).id,
-        :workflow_items_attributes => {
-          :new_1 => {
+        :workflow_items_attributes => [
+          {
             :task => 'New task',
             :start => Date.today,
             :end => 5.days.from_now.to_date,
             :plain_predecessors => '',
             :order_number => 1,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:manager_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
-          },
-          :new_2 => {
+            ]
+          }, {
             :task => 'New task 2',
             :start => 4.days.from_now.to_date,
             :end => 10.days.from_now.to_date,
             :plain_predecessors => '1',
             :order_number => 2,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:manager_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
+            ]
           }
-        }
+        ]
       }
     }
 

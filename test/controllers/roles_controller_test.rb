@@ -7,7 +7,7 @@ class RolesControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => roles(:admin_role).to_param}
+    id_param = {id: roles(:admin_role).to_param}
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -21,7 +21,7 @@ class RolesControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to controller: :users, action: :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -42,7 +42,7 @@ class RolesControllerTest < ActionController::TestCase
 
   test 'show role' do
     perform_auth
-    get :show, :id => roles(:admin_role).id
+    get :show, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
     assert_select '#error_body', false
@@ -62,18 +62,18 @@ class RolesControllerTest < ActionController::TestCase
     assert_difference ['Role.count', 'Privilege.count'] do
       perform_auth
       post :create, {
-        :role => {
-          :name => 'New role',
-          :role_type => Role::TYPES[:admin],
-          :privileges_attributes => {
-            :new_1 => {
-              :module => ALLOWED_MODULES_BY_TYPE[:admin].first.to_s,
-              :approval => true,
-              :erase => true,
-              :modify => true,
-              :read => true
+        role: {
+          name: 'New role',
+          role_type: Role::TYPES[:admin],
+          privileges_attributes: [
+            {
+              module: ALLOWED_MODULES_BY_TYPE[:admin].first.to_s,
+              approval: true,
+              erase: true,
+              modify: true,
+              read: true
             }
-          }
+          ]
         }
       }
     end
@@ -81,7 +81,7 @@ class RolesControllerTest < ActionController::TestCase
 
   test 'edit role' do
     perform_auth
-    get :edit, :id => roles(:admin_role).id
+    get :edit, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
     assert_select '#error_body', false
@@ -95,20 +95,20 @@ class RolesControllerTest < ActionController::TestCase
     assert_no_difference ['Role.count', 'Privilege.count'] do
       perform_auth
       patch :update, {
-        :id => roles(:admin_role).id,
-        :role => {
-          :name => 'Updated role',
-          :role_type => Role::TYPES[:admin],
-          :privileges_attributes => {
-            privilege.id => {
-              :id => privilege.id,
-              :module => privilege.module,
-              :approval => false,
-              :erase => false,
-              :modify => false,
-              :read => false
+        id: roles(:admin_role).id,
+        role: {
+          name: 'Updated role',
+          role_type: Role::TYPES[:admin],
+          privileges_attributes: [
+            {
+              id: privilege.id,
+              module: privilege.module,
+              approval: false,
+              erase: false,
+              modify: false,
+              read: false
             }
-          }
+          ]
         }
       }
     end
@@ -122,7 +122,7 @@ class RolesControllerTest < ActionController::TestCase
   test 'destroy role' do
     perform_auth
     assert_difference 'Role.count', -1 do
-      delete :destroy, :id => roles(:auditor_senior_role).id
+      delete :destroy, id: roles(:auditor_senior_role).id
     end
 
     assert_redirected_to roles_url

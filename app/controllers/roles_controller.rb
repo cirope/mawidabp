@@ -63,8 +63,7 @@ class RolesController < ApplicationController
   # * POST /roles.xml
   def create
     @title = t 'role.new_title'
-    @role = Role.new(params[:role].merge(
-        organization_id: @auth_organization.id))
+    @role = Role.new(role_params.merge(organization_id: @auth_organization.id))
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
@@ -89,8 +88,7 @@ class RolesController < ApplicationController
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
-      if @role.update(params[:role].merge(
-            organization_id: @auth_organization.id))
+      if @role.update(role_params.merge(organization_id: @auth_organization.id))
         flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }
         format.xml  { head :ok }
@@ -120,6 +118,14 @@ class RolesController < ApplicationController
   end
 
   private
+
+  def role_params
+    params.require(:role).permit(
+      :name, :role_type, privileges_attributes: [
+        :id, :module, :approval, :erase, :modify, :read
+      ]
+    )
+  end
 
   # Busca el perfil indicado siempre que pertenezca a la organización. En el
   # caso que no se encuentre (ya sea que no existe un perfil con ese ID o que

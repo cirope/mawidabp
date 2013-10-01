@@ -67,12 +67,12 @@ class BestPracticesControllerTest < ActionController::TestCase
         :best_practice => {
           :name => 'new_best_practice 1',
           :description => 'New description 1',
-          :process_controls_attributes => {
-            :new_1 => {
+          :process_controls_attributes => [
+            {
               :name => 'new process control',
               :order => 1,
-              :control_objectives_attributes => {
-                :new_1 => {
+              :control_objectives_attributes => [
+                {
                   :name => 'new control objective 1 1',
                   :control_attributes => {
                     :control => 'new control 1 1',
@@ -87,7 +87,7 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 1
                 },
-                :new_2 => {
+                {
                   :name => 'new control objective 1 2',
                   :control_attributes => {
                     :control => 'new control 1 2',
@@ -102,13 +102,13 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 2
                 }
-              }
+              ]
             },
-            :new_2 => {
+            {
               :name => 'new process control 2',
               :order => 2,
-              :control_objectives_attributes => {
-                :new_1 => {
+              :control_objectives_attributes => [
+                {
                   :name => 'new control objective 2 1',
                   :control_attributes => {
                     :control => 'new control 2 1',
@@ -123,7 +123,7 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 1
                 },
-                :new_2 => {
+                {
                   :name => 'new control objective 2 2',
                   :control_attributes => {
                     :control => 'new control 2 2',
@@ -138,9 +138,9 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 2
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
 
@@ -148,16 +148,16 @@ class BestPracticesControllerTest < ActionController::TestCase
         :best_practice => {
           :name => 'new_best_practice 2',
           :description => 'New description 2',
-          :process_controls_attributes => {
-            :new_1 => {
+          :process_controls_attributes => [
+            {
               :name => 'new process control 3',
               :order => 1
             },
-            :new_2 => {
+            {
               :name => 'new process control 4',
               :order => 2
             }
-          }
+          ]
         }
       }
 
@@ -196,13 +196,13 @@ class BestPracticesControllerTest < ActionController::TestCase
         :best_practice => {
           :name => 'updated_best_practice',
           :description => 'Updated description 1',
-          :process_controls_attributes => {
-            process_controls(:iso_27000_security_policy).id => {
+          :process_controls_attributes => [
+            {
               :id => process_controls(:iso_27000_security_policy).id,
               :name => 'updated process control',
               :order => 1,
-              :control_objectives_attributes => {
-                control_objectives(:iso_27000_security_organization_4_1).id => {
+              :control_objectives_attributes => [
+                {
                   :id => control_objectives(
                     :iso_27000_security_organization_4_1).id,
                   :name => 'updated control objective 1 1',
@@ -220,7 +220,7 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 1
                 },
-                control_objectives(:iso_27000_security_organization_4_2).id => {
+                {
                   :id => control_objectives(
                     :iso_27000_security_organization_4_2).id,
                   :name => 'updated control objective 1 2',
@@ -238,9 +238,9 @@ class BestPracticesControllerTest < ActionController::TestCase
                     get_test_parameter(:admin_control_objective_risk_levels).first[1],
                   :order => 2
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
     end

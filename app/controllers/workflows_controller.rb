@@ -56,7 +56,7 @@ class WorkflowsController < ApplicationController
         attributes = wi.attributes.merge(
           'id' => nil,
           'resource_utilizations_attributes' =>
-            wi.resource_utilizations.map {|ru| ru.attributes.merge 'id' => nil}
+            wi.resource_utilizations.map { |ru| ru.attributes.merge 'id' => nil }
         )
 
         @workflow.workflow_items.build(attributes)
@@ -86,7 +86,7 @@ class WorkflowsController < ApplicationController
   # * POST /workflows.xml
   def create
     @title = t 'workflow.new_title'
-    @workflow = Workflow.new(params[:workflow])
+    @workflow = Workflow.new(workflow_params)
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number.to_i <=> wfi_b.order_number.to_i
     end
@@ -117,7 +117,7 @@ class WorkflowsController < ApplicationController
     end
 
     respond_to do |format|
-      if @workflow.update(params[:workflow])
+      if @workflow.update(workflow_params)
         flash.notice = t 'workflow.correctly_updated'
         format.html { redirect_to(workflows_url) }
         format.xml  { head :ok }
@@ -222,6 +222,17 @@ class WorkflowsController < ApplicationController
   end
 
   private
+
+  def workflow_params
+    params.require(:workflow).permit(
+      :period_id, :review_id, :allow_overload, workflow_items_attributes: [
+        :id, :task, :start, :end, :plain_predecessors, :order_number, :_destroy,
+        resource_utilizations_attributes: [
+          :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+        ]
+      ]
+    )
+  end
 
   # Busca el programa de trabajo indicado siempre que pertenezca a la
   # organización. En el caso que no se encuentre (ya sea que no existe un
