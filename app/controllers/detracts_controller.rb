@@ -4,8 +4,7 @@
 class DetractsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges,
     :load_approval_privilege
-  hide_action :load_privileges, :find_with_organization,
-    :load_approval_privilege
+  before_action :set_detract, only: [:show]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista los detractores
@@ -51,7 +50,6 @@ class DetractsController < ApplicationController
   # * GET /detracts/1.xml
   def show
     @title = t 'detract.show_title'
-    @detract = find_with_organization(params[:id])
     @user = @detract.try(:user) || (@auth_user unless @has_approval)
 
     if @user
@@ -100,7 +98,7 @@ class DetractsController < ApplicationController
   # * GET /detracts/new.xml
   def new
     @title = t 'detract.new_title'
-    @detract = Detract.new(params[:detract])
+    @detract = Detract.new(detract_params)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -114,7 +112,7 @@ class DetractsController < ApplicationController
   # POST /detracts.xml
   def create
     @title = t 'detract.new_title'
-    @detract = Detract.new(params[:detract])
+    @detract = Detract.new(detract_params)
 
     respond_to do |format|
       if @detract.save
@@ -129,19 +127,18 @@ class DetractsController < ApplicationController
   end
 
   private
-    # Busca el detractor indicado siempre que pertenezca a la organización. En el
-    # caso que no se encuentre (ya sea que no existe un detractor con ese ID o que
-    # no pertenece a la organización con la que se autenticó el usuario) devuelve
-    # nil.
-    # _id_::  ID del periodo que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      conditions = {id: id.to_i, organization_id: @auth_organization.id}
+    def set_detract
+      conditions = { id: params[:id], organization_id: @auth_organization.id }
 
       unless @has_approval
         conditions["#{User.table_name}.id"] = @auth_user.id
       end
 
-      Detract.includes(user: :children).where(conditions).first
+      @detract = Detract.includes(:user => :children).where(conditions).first
+    end
+
+    def detract_params
+      params.require(:detract).permit(:value, :observations, :user_id)
     end
 
     def load_privileges #:nodoc:
