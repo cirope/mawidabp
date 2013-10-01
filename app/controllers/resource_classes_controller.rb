@@ -68,8 +68,9 @@ class ResourceClassesController < ApplicationController
   # * POST /resource_classes.xml
   def create
     @title = t 'resource_class.new_title'
-    @resource_class = ResourceClass.new(params[:resource_class].merge(
-        organization_id: @auth_organization.id))
+    @resource_class = ResourceClass.new(
+      resource_class_params.merge(organization_id: @auth_organization.id)
+    )
 
     respond_to do |format|
       if @resource_class.save
@@ -93,7 +94,7 @@ class ResourceClassesController < ApplicationController
     @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @resource_class.update(params[:resource_class])
+      if @resource_class.update(resource_class_params)
         flash.notice = t 'resource_class.correctly_updated'
         format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }
@@ -123,6 +124,14 @@ class ResourceClassesController < ApplicationController
   end
 
   private
+
+  def resource_class_params
+    params.require(:resource_class).permit(
+      :name, :unit, :resource_class_type, resources_attributes: [
+        :id, :name, :description, :cost_per_unit, :_destroy
+      ]
+    )
+  end
 
   # Busca la clase de recurso indicada siempre que pertenezca a la organización.
   # En el caso que no se encuentre (ya sea que no existe una clase de recurso
