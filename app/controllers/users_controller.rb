@@ -21,7 +21,10 @@ class UsersController < ApplicationController
 
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
-  before_action :set_user, except: [:roles, :initial_roles, :new_initial]
+  before_action :set_user, only: [
+    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
+    :reassignment_edit, :reassignment_update, :release_edit, :release_update
+  ]
 
   # Lista los usuarios
   #
@@ -375,6 +378,7 @@ class UsersController < ApplicationController
   def send_password_reset
     @title = t 'user.reset_password_title'
     @auth_organization = Organization.find_by(prefix: request.subdomains.first)
+    @user = find_with_organization(params[:email], :email)
 
     if @user && !@user.hidden
       @user.reset_password!(@auth_organization)
@@ -479,7 +483,7 @@ class UsersController < ApplicationController
   #
   # * POST /users/create_initial
   def create_initial
-    group = Group.find_by(admin_hash: user_params[:hash])
+    group = Group.find_by(admin_hash: params[:hash])
 
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       @user = User.new(user_params)
@@ -784,8 +788,10 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :user, :name, :last_name, :email, :language, :notes, :resource_id, :manager_id, :enable, :logged_in, :password,
-        :hidden, :function
+        :user, :name, :last_name, :email, :language, :notes, :resource_id, :manager_id, :enable,
+        :logged_in, :password, :hidden, :function, :send_notification_email,
+        organization_roles_attributes: [:id, :organization_id, :role_id, :_destroy],
+        related_user_relations_attributes: [:id, :related_user_id, :_destroy]
       )
     end
 

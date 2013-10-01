@@ -23,7 +23,6 @@ gem 'unicode'
 gem 'capistrano'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
-
 gem 'dalli'
 
 gem 'sass-rails'
