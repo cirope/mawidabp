@@ -85,7 +85,7 @@ class ControlObjectiveItemsController < ApplicationController
     respond_to do |format|
       updated = review.update(
         control_objective_items_attributes: {
-          @control_objective_item.id => params[:control_objective_item].merge(
+          @control_objective_item.id => control_objective_item_params.merge(
             id: @control_objective_item.id
           )
         }
@@ -141,5 +141,18 @@ class ControlObjectiveItemsController < ApplicationController
       ).where(
         id: id, Period.table_name => { organization_id: @auth_organization.id }
       ).first
+    end
+
+    def control_objective_item_params
+      params.require(:control_objective_item).permit(
+        :control_objective_text, :relevance, :design_score, :compliance_score, :audit_date,
+	:auditor_comment, :control_objective_id, :review_id, control_attributes: [
+	  :id, :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
+	], work_papers_attributes: [
+	  :name, :code, :number_of_pages, :description, file_model_attributes: [
+	    :file
+	  ]
+	]
+      )
     end
 end
