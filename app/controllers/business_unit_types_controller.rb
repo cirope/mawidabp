@@ -67,7 +67,7 @@ class BusinessUnitTypesController < ApplicationController
   # * POST /business_unit_types.xml
   def create
     @title = t 'business_unit_type.new_title'
-    @business_unit_type = BusinessUnitType.new(params[:business_unit_type])
+    @business_unit_type = BusinessUnitType.new(business_unit_type_params)
 
     respond_to do |format|
       if @business_unit_type.save
@@ -92,7 +92,7 @@ class BusinessUnitTypesController < ApplicationController
     @business_unit_type = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @business_unit_type.update(params[:business_unit_type])
+      if @business_unit_type.update(business_unit_type_params)
         flash.notice = t 'business_unit_type.correctly_updated'
         format.html { redirect_to(business_unit_types_url) }
         format.xml  { head :ok }
@@ -132,5 +132,12 @@ class BusinessUnitTypesController < ApplicationController
     # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
     def find_with_organization(id) #:doc:
       BusinessUnitType.where(id: id, organization_id: @auth_organization.id).first
+    end
+
+    def business_unit_type_params
+      params.require(:business_unit_type).permit(
+	:name, :business_unit_label, :project_label, :external, business_units_attributes:
+	  [:id, :name]
+      )
     end
 end
