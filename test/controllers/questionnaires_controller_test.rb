@@ -3,7 +3,7 @@ require 'test_helper'
 class QuestionnairesControllerTest < ActionController::TestCase
 
   test 'public and private actions' do
-    id_param = {:id => questionnaires(:questionnaire_one).to_param}
+    id_param = {id: questionnaires(:questionnaire_one).to_param}
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -17,7 +17,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to controller: :users, action: :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -38,7 +38,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
   test 'show questionnaire' do
     perform_auth
-    get :show, :id => questionnaires(:questionnaire_one).id
+    get :show, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_select '#error_body', false
@@ -54,27 +54,25 @@ class QuestionnairesControllerTest < ActionController::TestCase
     assert_template 'questionnaires/new'
   end
 
-  test "create questionnaire" do
+  test 'create questionnaire' do
     perform_auth
     assert_difference 'Questionnaire.count' do
       assert_difference 'Question.count', 2 do
         assert_difference 'AnswerOption.count', 5 do
           post :create, {
-            :questionnaire => {
-              :name => "Nuevo cuestionario",
-              :organization_id => organizations(:default_organization),
-              :questions_attributes => {
-                '1' => {
-                  :question => "Cuestion multi choice",
-                  :sort_order => 1,
-                  :answer_type => 1
-                },
-                '2' => {
-                  :question => "Cuestion written",
-                  :sort_order => 2,
-                  :answer_type => 0
+            questionnaire: {
+              name: "Nuevo cuestionario",
+              questions_attributes: [
+                {
+                  question: "Cuestion multi choice",
+                  sort_order: 1,
+                  answer_type: 1
+                }, {
+                  question: "Cuestion written",
+                  sort_order: 2,
+                  answer_type: 0
                 }
-              }
+              ]
             }
           }
         end
@@ -85,7 +83,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
 
   test 'edit questionnaire' do
     perform_auth
-    get :edit, :id => questionnaires(:questionnaire_one).id
+    get :edit, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_select '#error_body', false
@@ -96,17 +94,17 @@ class QuestionnairesControllerTest < ActionController::TestCase
     perform_auth
     assert_no_difference ['Questionnaire.count', 'Question.count'] do
       patch :update, {
-        :id => questionnaires(:questionnaire_one).id,
-        :questionnaire => {
-          :name => 'Cuestionario actualizado',
-          :questions_attributes => {
-            '1' =>  {
-              :id => questions(:question_multi_choice).id,
-              :question => 'Cuestion updated',
-              :sort_order => 1,
-              :answer_type => 1,
+        id: questionnaires(:questionnaire_one).id,
+        questionnaire: {
+          name: 'Cuestionario actualizado',
+          questions_attributes: [
+            {
+              id: questions(:question_multi_choice).id,
+              question: 'Cuestion updated',
+              sort_order: 1,
+              answer_type: 1,
             }
-          }
+          ]
         }
       }
     end
@@ -123,7 +121,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     assert_difference ['Questionnaire.count'], -1 do
       assert_difference 'Question.count', -2 do
         assert_difference ['AnswerOption.count'], -5 do
-          delete :destroy, :id => questionnaires(:questionnaire_one).id
+          delete :destroy, id: questionnaires(:questionnaire_one).id
         end
       end
     end
