@@ -90,7 +90,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def create
     @title = t 'conclusion_draft_review.new_title'
     @conclusion_draft_review = ConclusionDraftReview.new(
-      params[:conclusion_draft_review])
+      conclusion_draft_review_params)
 
     respond_to do |format|
       if @conclusion_draft_review.save
@@ -115,7 +115,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     respond_to do |format|
       if @conclusion_draft_review.update(
-          params[:conclusion_draft_review])
+         conclusion_draft_review_params)
         flash.notice = t 'conclusion_draft_review.correctly_updated'
         format.html { redirect_to(edit_conclusion_draft_review_url(@conclusion_draft_review)) }
         format.xml  { head :ok }
@@ -342,6 +342,12 @@ class ConclusionDraftReviewsController < ApplicationController
     ).references(:periods).first
 
     conclusion_draft_review.has_final_review? ? nil : conclusion_draft_review
+  end
+
+  def conclusion_draft_review_params
+    params.require(:conclusion_draft_review).permit(
+      :review_id, :issue_date, :close_date, :applied_procedures, :conclusion
+    )	    
   end
 
   def load_privileges #:nodoc:

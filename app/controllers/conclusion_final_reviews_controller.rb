@@ -105,7 +105,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review = ConclusionFinalReview.new(
-      params[:conclusion_final_review], {}, false)
+      conclusion_final_review_params, {}, false)
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -130,7 +130,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     respond_to do |format|
       if @conclusion_final_review.update(
-          params[:conclusion_final_review])
+          conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
@@ -434,6 +434,11 @@ class ConclusionFinalReviewsController < ApplicationController
     ).where(
       id: id, Period.table_name => { organization_id: @auth_organization.id }
     ).references(:periods).first
+  end
+
+  def conclusion_final_review_params
+    params.require(:conclusion_final_review).permit(
+      :review_id, :issue_date, :close_date, :applied_procedures, :conclusion)
   end
 
   def load_privileges #:nodoc:

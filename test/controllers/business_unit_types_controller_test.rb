@@ -67,11 +67,11 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'New business unit label',
           :project_label => 'New project label',
           :external => '0',
-          :business_units_attributes => {
-            :new_1 => {
+          :business_units_attributes => [ 
+            {
               :name => 'New business unit'
             }
-          }
+          ]
         }
       }
     end
@@ -100,16 +100,16 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'Updated business unit label',
           :project_label => 'Updated project label',
           :external => '0',
-          :business_units_attributes => {
-            business_units(:business_unit_one).id => {
+          :business_units_attributes => [
+            {
               :id => business_units(:business_unit_one).id,
               :name => 'Updated business unit one'
             },
-            business_units(:business_unit_two).id => {
+            {
               :id => business_units(:business_unit_two).id,
               :name => 'Updated business unit two'
             }
-          }
+          ]
         }
       }
     end
