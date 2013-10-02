@@ -92,30 +92,30 @@ class PlansControllerTest < ActionController::TestCase
       post :create, {
         :plan => {
           :period_id => periods(:unused_period).id,
-          :plan_items_attributes => {
-            :new_1 => {
+          :plan_items_attributes => [
+            {
               :project => 'New project',
               :start => 71.days.from_now.to_date,
               :end => 80.days.from_now.to_date,
               :plain_predecessors => '',
               :order_number => 1,
               :business_unit_id => business_units(:business_unit_one).id,
-              :resource_utilizations_attributes => {
-                :new_1 => {
+              :resource_utilizations_attributes => [
+                {
                   :resource_id => users(:bare_user).id,
                   :resource_type => 'User',
                   :units => '12.21',
                   :cost_per_unit => '8.75'
                 },
-                :new_2 => {
+                {
                   :resource_id => resources(:laptop_resource).id,
                   :resource_type => 'Resource',
                   :units => '2',
                   :cost_per_unit => '10.7'
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
     end
@@ -151,8 +151,8 @@ class PlansControllerTest < ActionController::TestCase
           :plan => {
             :period_id => periods(:past_period).id,
             :new_version => '0',
-            :plan_items_attributes => {
-              plan_items(:past_plan_item_1).id => {
+            :plan_items_attributes => [
+              {
                 :id => plan_items(:past_plan_item_1).id,
                 :project => 'Updated project',
                 :start => 55.days.ago.to_date,
@@ -160,21 +160,21 @@ class PlansControllerTest < ActionController::TestCase
                 :plain_predecessors => '',
                 :order_number => 1,
                 :business_unit_id => business_units(:business_unit_one).id,
-                :resource_utilizations_attributes => {
-                  resource_utilizations(:auditor_for_20_units_past_plan_item_1).id => {
+                :resource_utilizations_attributes => [
+		  {
                     :id => resource_utilizations(:auditor_for_20_units_past_plan_item_1).id,
                     :resource_id => resources(:laptop_resource).id,
                     :resource_type => 'Resource',
                     :units => '12.21',
                     :cost_per_unit => '8.75'
                   }
-                }
+		]
               },
-              plan_items(:past_plan_item_3).id => {
+              {
                 :id => plan_items(:past_plan_item_3).id,
                 :_destroy => '1'
               }
-            }
+	    ]
           }
         }
       end
@@ -194,40 +194,40 @@ class PlansControllerTest < ActionController::TestCase
     values = {
       :plan => {
         :period_id => periods(:unused_period).id,
-        :plan_items_attributes => {
-          :new_1 => {
+        :plan_items_attributes => [
+          {
             :project => 'New project',
             :start => 71.days.from_now.to_date,
             :end => 80.days.from_now.to_date,
             :plain_predecessors => '',
             :order_number => 1,
             :business_unit_id => business_units(:business_unit_one).id,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
+    	    ]
           },
-          :new_2 => {
+          {
             :project => 'New project 2',
             :start => 79.days.from_now.to_date,
             :end => 90.days.from_now.to_date,
             :plain_predecessors => '1',
             :order_number => 2,
             :business_unit_id => business_units(:business_unit_one).id,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
+	    ]
           }
-        }
+        ]
       }
     }
 
@@ -248,40 +248,40 @@ class PlansControllerTest < ActionController::TestCase
     values = {
       :plan => {
         :period_id => periods(:unused_period).id,
-        :plan_items_attributes => {
-          :new_1 => {
+        :plan_items_attributes => [
+          {
             :project => 'New project',
             :start => 71.days.from_now.to_date,
             :end => 80.days.from_now.to_date,
             :plain_predecessors => '',
             :order_number => 1,
             :business_unit_id => business_units(:business_unit_one).id,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
+    	    ]
           },
-          :new_2 => {
+          {
             :project => 'New project',
             :start => 81.days.from_now.to_date,
             :end => 90.days.from_now.to_date,
             :plain_predecessors => '1',
             :order_number => 2,
             :business_unit_id => business_units(:business_unit_one).id,
-            :resource_utilizations_attributes => {
-              :new_1 => {
+            :resource_utilizations_attributes => [
+              {
                 :resource_id => users(:bare_user).id,
                 :resource_type => 'User',
                 :units => '12.21',
                 :cost_per_unit => '8.75'
               }
-            }
+	    ]
           }
-        }
+    	]
       }
     }
 

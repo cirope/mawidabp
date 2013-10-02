@@ -69,7 +69,7 @@ class OrganizationsController < ApplicationController
   def create
     @title = t 'organization.new_title'
     params[:organization].delete :business_units_attributes
-    @organization = Organization.new(params[:organization])
+    @organization = Organization.new(organization_params)
     @organization.must_create_parameters = true
     @organization.must_create_roles = true
 
@@ -109,7 +109,7 @@ class OrganizationsController < ApplicationController
     params[:organization].delete :business_units_attributes
 
     respond_to do |format|
-      if @organization.update(params[:organization])
+      if @organization.update(organization_params)
         flash.notice = t 'organization.correctly_updated'
         format.html { redirect_to(organizations_url) }
         format.xml  { head :ok }
@@ -140,6 +140,11 @@ class OrganizationsController < ApplicationController
 
   private
 
+  def organization_params
+    params.require(:organization).permit(
+      :name, :prefix, :description, :group_id, :image_model_id
+    )
+  end
   # Busca una organización sólo si está dentro de las que el usuario tiene
   # permitidas ver, si es así y existe la devuelve, caso contrario retorna nil
   #
