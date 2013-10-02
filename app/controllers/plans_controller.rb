@@ -74,7 +74,7 @@ class PlansController < ApplicationController
   # * POST /plans.xml
   def create
     @title = t 'plan.new_title'
-    @plan = Plan.new(params[:plan])
+    @plan = Plan.new(plan_params)
     clone_id = params[:clone_from].to_i
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
 
@@ -102,7 +102,7 @@ class PlansController < ApplicationController
     @plan = find_with_organization(params[:id], true)
 
     respond_to do |format|
-      if @plan.update(params[:plan])
+      if @plan.update(plan_params)
         format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
         format.xml  { head :ok }
       else
@@ -224,6 +224,19 @@ class PlansController < ApplicationController
   end
 
   private
+
+    def plan_params
+      params.require(:plan).permit(
+        :period_id, :allow_overload, :allow_duplication, :new_version, 
+	plan_items_attributes: [
+	  :id, :project, :start, :end, :plain_predecessors, :order_number, :business_unit_id,
+	  :_destroy, resource_utilizations_attributes: [
+            :id, :resource_id, :resource_type, :units, :cost_per_unit
+      	  ]
+	]
+      )
+    end
+
     def find_business_unit_type
       if params[:business_unit_type].to_i > 0
         @business_unit_type = BusinessUnitType.find params[:business_unit_type].to_i
