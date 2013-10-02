@@ -9,12 +9,12 @@
 
     <hr />
   <% end %>
-  
+
   <div class="form_column_left">
     <% if @poll.new_record? %>
       <div>
-	<br />        
-	<% field_classes = [:search, :autocomplete_field] %>
+        <br />
+        <% field_classes = [:search, :autocomplete_field] %>
         <%= p_f.label :user_id %>
         <div class="search">
           <%= p_f.text_field :user_id,

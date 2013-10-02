@@ -112,7 +112,7 @@ class InlineHelpsController < ApplicationController
 
   def inline_help_params
     params.require(:inline_help).permit(
-      :language, :name, :content
+      :language, :name, :content, :lock_version
     )
   end
 end

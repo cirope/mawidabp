@@ -284,7 +284,8 @@ class ProcedureControlsController < ApplicationController
 
     def procedure_control_params
       params.require(:procedure_control).permit(
-        :period_id, procedure_control_items_attributes: [
+        :period_id, :lock_version,
+        procedure_control_items_attributes: [
           :id, :aproach, :frequency, :process_control_id, :order, :_destroy,
           procedure_control_subitems_attributes: [
             :id, :control_objective_text, :relevance, :control_objective_id,

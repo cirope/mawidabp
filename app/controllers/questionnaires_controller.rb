@@ -134,7 +134,7 @@ class QuestionnairesController < ApplicationController
 
   def questionnaire_params
     params.require(:questionnaire).permit(
-      :name, questions_attributes: [
+      :name, :lock_version, questions_attributes: [
         :id, :question, :sort_order, :answer_type, :_destroy
       ]
     )

@@ -289,7 +289,7 @@ class PotentialNonconformitiesController < ApplicationController
     def potential_nonconformity_params
       params.require(:potential_nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :state, :organization_date, :solution_date,
+        :state, :organization_date, :solution_date, :lock_version,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :_destroy
         ],

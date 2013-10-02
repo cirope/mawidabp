@@ -19,14 +19,14 @@
         </thead>
         <tbody>
           <% data[:column_data].each do |row| %>
-	    <tr>
+            <tr>
               <% @columns.each do |col_name| %>
-		<% if col_name.first == 'value' && row[col_name.first] == '0.0%' %>
-		  <td><%= t'follow_up_committee.qa_indicators.without_data' %></td>
-		<% else %>
+                <% if col_name.first == 'value' && row[col_name.first] == '0.0%' %>
+                  <td><%= t'follow_up_committee.qa_indicators.without_data' %></td>
+                <% else %>
                   <td><%= row[col_name.first] %></td>
-		<% end %>
-	      <% end %>
+                <% end %>
+              <% end %>
             </tr>
           <% end %>
         </tbody>

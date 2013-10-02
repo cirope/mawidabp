@@ -291,20 +291,20 @@ class NonconformitiesController < ApplicationController
     def nonconformity_params
       params.require(:nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
-	:state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
-	:priority, :follow_up_date, 
-	finding_user_assignments_attributes: [
-	  :id, :user_id, :process_owner, :_destroy
+        :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
+        :priority, :follow_up_date, :lock_version,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :_destroy
         ], 
-	work_papers_attributes: [
-	    :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
         ], 
-	finding_answers_attributes: [
-	  :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
-	],
-	finding_relations_attributes: [
-	  :id, :description, :related_finding_id, :_destroy
-	]
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ]
       )
     end
 

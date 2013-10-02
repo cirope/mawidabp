@@ -118,7 +118,8 @@ class HelpItemsController < ApplicationController
 
     def help_item_params
       params.require(:help_item).permit(
-        :help_content_id, :name, :description, :order_number, children_attributes: [
+        :help_content_id, :name, :description, :order_number, :lock_version,
+        children_attributes: [
           :id, :name, :description, :order_number, :_destroy
         ]
       )
