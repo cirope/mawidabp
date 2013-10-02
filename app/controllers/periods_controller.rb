@@ -126,7 +126,7 @@ class PeriodsController < ApplicationController
 
     def period_params
       params.require(:period).permit(
-        :number, :description, :start, :end
+        :number, :description, :start, :end, :lock_version
       ).merge(organization_id: @auth_organization.id)
     end
 end

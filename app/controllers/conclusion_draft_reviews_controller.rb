@@ -330,7 +330,8 @@ class ConclusionDraftReviewsController < ApplicationController
 
     def conclusion_draft_review_params
       params.require(:conclusion_draft_review).permit(
-        :review_id, :issue_date, :close_date, :applied_procedures, :conclusion
+        :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
+        :lock_version
       )
     end
 

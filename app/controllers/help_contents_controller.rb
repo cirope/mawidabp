@@ -130,7 +130,7 @@ class HelpContentsController < ApplicationController
 
     def help_content_params
       params.require(:help_content).permit(
-        :language, help_items_attributes: [
+        :language, :lock_version, help_items_attributes: [
           :id, :name, :description, :order_number, :_destroy
         ]
       )

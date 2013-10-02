@@ -138,7 +138,7 @@ class DetractsController < ApplicationController
     end
 
     def detract_params
-      params.require(:detract).permit(:value, :observations, :user_id)
+      params.require(:detract).permit(:value, :observations, :user_id, :lock_version)
     end
 
     def load_privileges #:nodoc:

@@ -96,6 +96,6 @@ class NotificationsController < ApplicationController
     end
 
     def notification_params
-      params.require(:notification).permit(:notes)
+      params.require(:notification).permit(:notes, :lock_version)
     end
 end

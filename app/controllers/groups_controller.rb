@@ -119,9 +119,9 @@ class GroupsController < ApplicationController
   
   def group_params
     params.require(:group).permit(
-      :name, :description, :admin_email, :send_notification_email, organizations_attributes: [
-        :id, :name, :prefix, :description
-      ]
-    )	
+      :name, :description, :admin_email, :send_notification_email,
+      :lock_version,
+      organizations_attributes: [:id, :name, :prefix, :description]
+    )
   end
 end

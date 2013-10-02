@@ -142,7 +142,7 @@ class OrganizationsController < ApplicationController
 
   def organization_params
     params.require(:organization).permit(
-      :name, :prefix, :description, :group_id, :image_model_id
+      :name, :prefix, :description, :group_id, :image_model_id, :lock_version
     )
   end
   # Busca una organización sólo si está dentro de las que el usuario tiene

@@ -99,7 +99,9 @@ class ParametersController < ApplicationController
     end
 
     def parameter_params
-      whitelisted = params.require(:parameter).permit(:description, :value)
+      whitelisted = params.require(:parameter).permit(
+        :description, :value, :lock_version
+      )
       whitelisted[:value] ||= form_keys_to_array(params[:parameter])
 
       whitelisted
