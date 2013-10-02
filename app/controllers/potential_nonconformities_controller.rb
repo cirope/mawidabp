@@ -22,8 +22,8 @@ class PotentialNonconformitiesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {:organization_id => @auth_organization.id,
-      :boolean_true => true, :boolean_false => false}
+    parameters = {organization_id: @auth_organization.id,
+      boolean_true: true, boolean_false: false}
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
@@ -41,15 +41,15 @@ class PotentialNonconformitiesController < ApplicationController
 
     @potential_nonconformities = PotentialNonconformity.includes(
       :work_papers,
-      :control_objective_item => {
-        :review => [:period, :plan_item, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :plan_item, :conclusion_final_review]
       }
     ).where([@conditions, parameters]).order(
       @order_by || [
         "#{Review.table_name}.identification DESC",
         "#{PotentialNonconformity.table_name}.review_code ASC"
       ]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -57,7 +57,7 @@ class PotentialNonconformitiesController < ApplicationController
           redirect_to potential_nonconformity_url(@potential_nonconformities.first)
         end
       } # index.html.erb
-      format.xml  { render :xml => @potential_nonconformities }
+      format.xml  { render xml: @potential_nonconformities }
     end
   end
 
@@ -71,7 +71,7 @@ class PotentialNonconformitiesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @potential_nonconformity }
+      format.xml  { render xml: @potential_nonconformity }
     end
   end
 
@@ -82,12 +82,12 @@ class PotentialNonconformitiesController < ApplicationController
   def new
     @title = t 'potential_nonconformity.new_title'
     @potential_nonconformity = PotentialNonconformity.new(
-      {:control_objective_item_id => params[:control_objective_item]}, {}, true
+      {control_objective_item_id: params[:control_objective_item]}, {}, true
     )
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @potential_nonconformity }
+      format.xml  { render xml: @potential_nonconformity }
     end
   end
 
@@ -105,21 +105,21 @@ class PotentialNonconformitiesController < ApplicationController
   # * POST /potential_nonconformities.xml
   def create
     @title = t 'potential_nonconformity.new_title'
-    @potential_nonconformity = PotentialNonconformity.new(params[:potential_nonconformity])
+    @potential_nonconformity = PotentialNonconformity.new(potential_nonconformity_params)
 
     respond_to do |format|
       if @potential_nonconformity.save
         flash.notice = t 'potential_nonconformity.correctly_created'
         format.html { redirect_to(edit_potential_nonconformity_url(@potential_nonconformity)) }
-        format.xml  { render :xml => @potential_nonconformity, :status => :created, :location => @potential_nonconformity }
+        format.xml  { render xml: @potential_nonconformity, status: :created, location: @potential_nonconformity }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @potential_nonconformity.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @potential_nonconformity.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # Actualiza el contenido de una no conformidad potencial siempre que cumpla con
+  # Actualiza el contenido de una no conformidad potential siempre que cumpla con
   # las validaciones.
   #
   # * PATCH /potential_nonconformities/1
@@ -130,13 +130,13 @@ class PotentialNonconformitiesController < ApplicationController
 
     respond_to do |format|
       PotentialNonconformity.transaction do
-        if @potential_nonconformity.update(params[:potential_nonconformity])
+        if @potential_nonconformity.update(potential_nonconformity_params)
           flash.notice = t 'potential_nonconformity.correctly_updated'
           format.html { redirect_to(edit_potential_nonconformity_url(@potential_nonconformity)) }
           format.xml  { head :ok }
         else
-          format.html { render :action => :edit }
-          format.xml  { render :xml => @potential_nonconformity.errors, :status => :unprocessable_entity }
+          format.html { render action: :edit }
+          format.xml  { render xml: @potential_nonconformity.errors, status: :unprocessable_entity }
           raise ActiveRecord::Rollback
         end
       end
@@ -144,7 +144,7 @@ class PotentialNonconformitiesController < ApplicationController
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'potential_nonconformity.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Crea el documento de seguimiento de la oportunidad
@@ -179,7 +179,7 @@ class PotentialNonconformitiesController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {organization_id: @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -201,7 +201,7 @@ class PotentialNonconformitiesController < ApplicationController
     ).limit(10).references(:organizations)
 
     respond_to do |format|
-      format.json { render :json => @users }
+      format.json { render json: @users }
     end
   end
 
@@ -219,10 +219,10 @@ class PotentialNonconformitiesController < ApplicationController
       ].compact.join(' OR ')
     ].compact
     parameters = {
-      :boolean_false => false,
-      :finding_id => params[:finding_id],
-      :organization_id => @auth_organization.id,
-      :review_id => params[:review_id]
+      boolean_false: false,
+      finding_id: params[:finding_id],
+      organization_id: @auth_organization.id,
+      review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -236,8 +236,8 @@ class PotentialNonconformitiesController < ApplicationController
     end
 
     @findings = Finding.includes(
-      :control_objective_item => {
-        :review => [:period, :conclusion_final_review]
+      control_objective_item: {
+        review: [:period, :conclusion_final_review]
       }
     ).where([conditions.map {|c| "(#{c})"}.join(' AND '), parameters]).order(
       [
@@ -247,7 +247,7 @@ class PotentialNonconformitiesController < ApplicationController
     ).limit(5)
 
     respond_to do |format|
-      format.json { render :json => @findings }
+      format.json { render json: @findings }
     end
   end
 
@@ -261,8 +261,8 @@ class PotentialNonconformitiesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
-      :review_id => params[:review_id].to_i
+      organization_id: @auth_organization.id,
+      review_id: params[:review_id].to_i
     }
 
     @tokens.each_with_index do |t, i|
@@ -275,17 +275,33 @@ class PotentialNonconformitiesController < ApplicationController
     end
 
     @control_objective_items = ControlObjectiveItem.includes(
-      :review => [:period, :conclusion_final_review]
+      review: [:period, :conclusion_final_review]
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order("#{Review.table_name}.identification ASC").limit(10)
 
     respond_to do |format|
-      format.json { render :json => @control_objective_items }
+      format.json { render json: @control_objective_items }
     end
   end
 
   private
+    def potential_nonconformity_params
+      params.require(:potential_nonconformity).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
+        :state, :organization_date, :solution_date,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :_destroy
+        ],
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ]
+      )
+    end
+
     # Busca la no conformidad potencial indicada siempre que pertenezca a la
     # organización. En el caso que no se encuentre (ya sea que no existe una
     # oportunidad con ese ID o que no pertenece a la organización con la que se
@@ -295,20 +311,20 @@ class PotentialNonconformitiesController < ApplicationController
       PotentialNonconformity.includes(
         :finding_relations,
         :work_papers,
-        {:finding_user_assignments => :user},
-        {:control_objective_item => {:review => :period}}
+        {finding_user_assignments: :user},
+        {control_objective_item: {review: :period}}
       ).where(
-        :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+        id: id, Period.table_name => {organization_id: @auth_organization.id}
       ).first
     end
 
     def load_privileges #:nodoc:
       @action_privileges.update(
-        :follow_up_pdf => :read,
-        :auto_complete_for_user => :read,
-        :auto_complete_for_finding_relation => :read,
-        :auto_complete_for_control_objective_item => :read,
-        :undo_reiteration => :modify
+        follow_up_pdf: :read,
+        auto_complete_for_user: :read,
+        auto_complete_for_finding_relation: :read,
+        auto_complete_for_control_objective_item: :read,
+        undo_reiteration: :modify
       )
     end
 end
