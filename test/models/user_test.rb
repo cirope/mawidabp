@@ -561,7 +561,7 @@ class UserTest < ActiveSupport::TestCase
       new_finding.review_code = "O1#{rand(999999999999999)}"
       new_finding.finding_user_assignments.build(
         finding.finding_user_assignments.map do |fua|
-          fua.attributes.dup.merge('finding_id' => nil)
+          fua.dup.attributes.merge('finding_id' => nil)
         end
       )
 

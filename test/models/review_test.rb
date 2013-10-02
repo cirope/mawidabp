@@ -223,7 +223,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.approval_errors.blank?
 
     review_weakness = @review.weaknesses.first
-    finding = Weakness.new review_weakness.attributes.merge(
+    finding = Weakness.new review_weakness.dup.attributes.merge(
       'state' => Finding::STATUS[:implemented_audited],
       'review_code' => @review.next_weakness_code('O')
     )
@@ -359,7 +359,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.can_be_sended?
 
     review_weakness = @review.control_objective_items.first.weaknesses.first
-    finding = Weakness.new review_weakness.attributes.merge(
+    finding = Weakness.new review_weakness.dup.attributes.merge(
         'state' => Finding::STATUS[:implemented_audited],
         'review_code' => @review.next_weakness_code('O')
       )
@@ -568,7 +568,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   def clone_finding_user_assignments(finding)
     finding.finding_user_assignments.map do |fua|
-      fua.attributes.dup.merge('finding_id' => nil)
+      fua.dup.attributes.merge('finding_id' => nil)
     end
   end
 end
