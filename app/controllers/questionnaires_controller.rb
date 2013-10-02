@@ -57,7 +57,7 @@ class QuestionnairesController < ApplicationController
   # POST /questionnaires.json
   def create
     @title = t 'questionnaire.new_title'
-    @questionnaire = Questionnaire.new(params[:questionnaire])
+    @questionnaire = Questionnaire.new(questionnaire_params)
     @questionnaire.organization = @auth_organization
 
     @questionnaire.questions.each do |question|
@@ -91,7 +91,7 @@ class QuestionnairesController < ApplicationController
       redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
     end
 
-    @questionnaire.assign_attributes(params[:questionnaire])
+    @questionnaire.assign_attributes(questionnaire_params)
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice? && question.answer_options.empty?
         Question::ANSWER_OPTIONS.each do |option|
@@ -105,7 +105,7 @@ class QuestionnairesController < ApplicationController
     end
 
     respond_to do |format|
-      if @questionnaire.update(params[:questionnaire])
+      if @questionnaire.update(questionnaire_params)
         format.html { redirect_to questionnaires_url, :notice => (t 'questionnaire.correctly_updated') }
         format.json { head :ok }
       else
@@ -128,5 +128,15 @@ class QuestionnairesController < ApplicationController
       format.html { redirect_to questionnaires_url }
       format.json { head :ok }
     end
+  end
+
+  private
+
+  def questionnaire_params
+    params.require(:questionnaire).permit(
+      :name, questions_attributes: [
+        :id, :question, :sort_order, :answer_type, :_destroy
+      ]
+    )
   end
 end

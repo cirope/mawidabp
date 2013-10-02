@@ -20,7 +20,7 @@ class ReviewsController < ApplicationController
 
     build_search_conditions Review, default_conditions
 
-    @reviews = Review.includes(:period, {plan_item: :business_unit}).where(
+    @reviews = Review.includes(:period, { plan_item: :business_unit }).where(
       @conditions
     ).order('identification DESC').references(:periods).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
@@ -86,7 +86,7 @@ class ReviewsController < ApplicationController
   # * POST /reviews.xml
   def create
     @title = t 'review.new_title'
-    @review = Review.new(params[:review])
+    @review = Review.new(review_params)
 
     respond_to do |format|
       if @review.save
@@ -111,7 +111,7 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @review.update(params[:review])
+      if @review.update(review_params)
         flash.notice = t 'review.correctly_updated'
         format.html { redirect_to(edit_review_url(@review)) }
         format.xml  { head :ok }
@@ -150,12 +150,14 @@ class ReviewsController < ApplicationController
     @review = find_with_organization(params[:id])
 
     respond_to do |format|
-      format.json  { render json: @review.to_json(only: [],
+      format.json  { render json: @review.to_json(
+        only: [],
           methods: :score_text,
           include: {
-            business_unit: {only: :name},
-            plan_item: {only: :project}
-          })
+            business_unit: { only: :name },
+            plan_item: { only: :project }
+          }
+        )
       }
     end
   end
@@ -369,6 +371,23 @@ class ReviewsController < ApplicationController
   end
 
   private
+
+  def review_params
+    params.require(:review).permit(
+      :identification, :description, :survey, :period_id, :plan_item_id,
+      :procedure_control_subitem_ids,
+      file_model_attributes: [ :id, :file, :_destroy ],
+      finding_review_assignments_attributes: [
+        :id, :finding_id, :_destroy
+      ],
+      review_user_assignments_attributes: [
+        :id, :assignment_type, :user_id, :_destroy
+      ],
+      control_objective_items_attributes: [
+        :id, :order_number, :_destroy
+      ]
+    )
+  end
 
   # Busca el informe indicado siempre que pertenezca a la organización. En el
   # caso que no se encuentre (ya sea que no existe un informe con ese ID o que
