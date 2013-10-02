@@ -1,5 +1,6 @@
 class NotificationsController < ApplicationController
   before_action :auth, :check_privileges, :except => :confirm
+  before_action :set_notification, only: [:show, :edit, :update]
 
   # * GET /notifications
   # * GET /notifications.xml
@@ -19,9 +20,6 @@ class NotificationsController < ApplicationController
   # * GET /notifications/1.xml
   def show
     @title = t 'notification.show_title'
-    @notification = Notification.where(
-      :confirmation_hash => params[:id], :user_id => @auth_user.id
-    ).first
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,10 +32,6 @@ class NotificationsController < ApplicationController
   # * GET /notifications/1/edit
   def edit
     @title = t 'notification.edit_title'
-    @notification = Notification.where(
-      :confirmation_hash => params[:id], :user_id => @auth_user.id
-    ).first
-
     redirect_to notifications_url unless @notification
   end
 
@@ -48,12 +42,9 @@ class NotificationsController < ApplicationController
   # * PATCH /notifications/1.xml
   def update
     @title = t 'notification.edit_title'
-    @notification = Notification.where(
-      :confirmation_hash => params[:id], :user_id => @auth_user.id
-    ).first
 
     respond_to do |format|
-      if @notification.update(params[:notification])
+      if @notification.update(notification_params)
         flash.notice = t 'notification.correctly_updated'
         format.html { redirect_to(notifications_url) }
         format.xml  { head :ok }
@@ -96,4 +87,15 @@ class NotificationsController < ApplicationController
   rescue ActionController::RedirectBackError
     redirect_to notifications_url
   end
+
+  private
+    def set_notification
+      @notification = Notification.where(
+        :confirmation_hash => params[:id], :user_id => @auth_user.id
+      ).first
+    end
+
+    def notification_params
+      params.require(:notification).permit(:notes)
+    end
 end
