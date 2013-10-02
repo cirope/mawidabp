@@ -241,13 +241,12 @@ class UserTest < ActiveSupport::TestCase
     @user.name = 'abcde' * 21
     @user.last_name = 'abcde' * 21
     @user.email = "#{'abcde' * 21}@email.com"
-    @user.language = 'abcde' * 3
     @user.password = 'aB1d_' * 26
     @user.function = 'abcde' * 52
     @user.salt = 'abcde' * 52
     @user.change_password_hash = 'abcde' * 52
     assert @user.invalid?
-    assert_equal 9, @user.errors.count
+    assert_equal 8, @user.errors.count
     assert_equal [error_message_from_model(@user, :user, :too_long,
         :count => 30)], @user.errors[:user]
     assert_equal [error_message_from_model(@user, :name, :too_long,
@@ -256,8 +255,6 @@ class UserTest < ActiveSupport::TestCase
         :count => 100)], @user.errors[:last_name]
     assert_equal [error_message_from_model(@user, :email, :too_long,
         :count => 100)], @user.errors[:email]
-    assert_equal [error_message_from_model(@user, :language, :too_long,
-        :count => 10)], @user.errors[:language]
     assert_equal [error_message_from_model(@user, :password, :too_long,
         :count => 128)], @user.errors[:password]
     assert_equal [error_message_from_model(@user, :function, :too_long,

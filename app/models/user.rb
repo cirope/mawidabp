@@ -88,8 +88,6 @@ class User < ActiveRecord::Base
   validates :user, :length => {:in => 5..30}
   validates :name, :last_name, :email, :length => {:maximum => 100},
     :allow_nil => true, :allow_blank => true
-  validates :language, :length => {:maximum => 10}, :allow_nil => true,
-    :allow_blank => true
   validates :password, :length => {:maximum => 128}, :allow_nil => true,
     :allow_blank => true
   validates :function, :salt, :change_password_hash,
