@@ -9,7 +9,7 @@
         <% question.answer_options.each do |ao| %> 
           <% option = ao.option %>
           <%= f.radio_button :answer_option_id, ao.id, :id => "answer_option_id_#{ao.id}" %>
-          <%= f.label :answer_option_id, (t "activerecord.attributes.answer_option.options.#{option}"), :for => "answer_option_id_#{ao.id}", :class => 'plain_label' %> 
+          <%= f.label :answer_option_id, t("activerecord.attributes.answer_option.options.#{option}"), :for => "answer_option_id_#{ao.id}", :class => 'plain_label' %> 
           <br />
         <% end %>
         <%= f.hidden_field :type, :value => AnswerMultiChoice.name %>

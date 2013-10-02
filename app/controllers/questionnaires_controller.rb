@@ -22,7 +22,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
 
     respond_to do |format|
@@ -49,7 +49,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
   end
 
@@ -72,7 +72,7 @@ class QuestionnairesController < ApplicationController
 
     respond_to do |format|
       if @questionnaire.save
-        format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_created') }
+        format.html { redirect_to @questionnaire, :notice => t('questionnaire.correctly_created') }
         format.json { render :json => @questionnaire, :status => :created, :location => @questionnaire }
       else
         format.html { render :action => "new" }
@@ -88,7 +88,7 @@ class QuestionnairesController < ApplicationController
     @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
 
     @questionnaire.assign_attributes(questionnaire_params)
@@ -106,7 +106,7 @@ class QuestionnairesController < ApplicationController
 
     respond_to do |format|
       if @questionnaire.update(questionnaire_params)
-        format.html { redirect_to questionnaires_url, :notice => (t 'questionnaire.correctly_updated') }
+        format.html { redirect_to questionnaires_url, :notice => t('questionnaire.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }
