@@ -58,7 +58,7 @@ class InlineHelpsController < ApplicationController
   # * POST /inline_helps.xml
   def create
     @title = t 'inline_help.new_title'
-    @inline_help = InlineHelp.new(params[:inline_help])
+    @inline_help = InlineHelp.new(inline_help_params)
 
     respond_to do |format|
       if @inline_help.save
@@ -80,7 +80,7 @@ class InlineHelpsController < ApplicationController
     @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
-      if @inline_help.update(params[:inline_help])
+      if @inline_help.update(inline_help_params)
         flash.notice = t 'inline_help.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || inline_helps_url) }
@@ -106,5 +106,13 @@ class InlineHelpsController < ApplicationController
       format.html { redirect_to(inline_helps_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+
+  def inline_help_params
+    params.require(:inline_help).permit(
+      :language, :name, :content
+    )
   end
 end
