@@ -82,13 +82,13 @@ class HelpContentsControllerTest < ActionController::TestCase
       post :create, {
         :help_content => {
           :language => 'it',
-          :help_items_attributes => {
-            :new => {
+          :help_items_attributes => [
+            {
               :name => 'New name',
               :description => 'New description',
               :order_number => 1
             }
-          }
+          ]
         }
       }
     end
@@ -114,14 +114,14 @@ class HelpContentsControllerTest < ActionController::TestCase
         :id => help_contents(:help_es).id,
         :help_content => {
           :language => 'it',
-          :help_items_attributes => {
-            help_items(:help_item_1_es).id => {
+          :help_items_attributes => [
+            {
               :id => help_items(:help_item_1_es).id,
               :name => 'Updated name',
               :description => 'Updated description',
               :order_number => 1
             }
-          }
+          ]
         }
       }
     end

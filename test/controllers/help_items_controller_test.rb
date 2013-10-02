@@ -67,13 +67,13 @@ class HelpItemsControllerTest < ActionController::TestCase
           :name => 'New name',
           :description => 'New description',
           :order_number => 10,
-          :children_attributes => {
-            :new => {
+          :children_attributes => [
+            {
               :name => 'New child name',
               :description => 'New child description',
               :order_number => 1
             }
-          }
+          ]
         }
       }
     end
@@ -102,14 +102,14 @@ class HelpItemsControllerTest < ActionController::TestCase
           :name => 'Updated name',
           :description => 'Updated description',
           :order_number => 1,
-          :children_attributes => {
-            help_items(:help_item_1_1_es).id => {
+          :children_attributes => [
+            {
               :id => help_items(:help_item_1_1_es).id,
               :name => 'Updated child name',
               :description => 'Updated child description',
               :order_number => 1
             }
-          }
+          ]
         }
       }
     end
