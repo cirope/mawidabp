@@ -63,11 +63,11 @@ class ParametersControllerTest < ActionController::TestCase
     patch :update, {
       :type => 'admin',
       :id => parameters(:parameter_security_password_count).id,
-        :parameter => {
-          :value => 'New value',
-          :description => 'New description'
-        }
+      :parameter => {
+        :value => 'New value',
+        :description => 'New description'
       }
+    }
       
     assert_redirected_to parameters_url(:type => 'admin')
     assert_not_nil assigns(:parameter)
@@ -80,18 +80,18 @@ class ParametersControllerTest < ActionController::TestCase
     patch :update, {
       :type => 'admin',
       :id => parameters(:parameter_admin_control_objective_qualifications).id,
-        :parameter => {
-          :key_1 => 'New key 1',
-          :value_1 => '1',
-          :key_2 => 'New key 2',
-          :value_2 => '2',
-          :key_3 => 'New key 3',
-          :value_3 => '3',
-          :key_4 => 'New key 4',
-          :value_4 => '4',
-          :description => 'New description'
-        }
+      :parameter => {
+        :key_1 => 'New key 1',
+        :value_1 => '1',
+        :key_2 => 'New key 2',
+        :value_2 => '2',
+        :key_3 => 'New key 3',
+        :value_3 => '3',
+        :key_4 => 'New key 4',
+        :value_4 => '4',
+        :description => 'New description'
       }
+    }
       
     assert_redirected_to parameters_url(:type => 'admin')
     assert_not_nil assigns(:parameter)
@@ -107,11 +107,11 @@ class ParametersControllerTest < ActionController::TestCase
       patch :update, {
         :type => 'admin',
         :id => parameters(:parameter_security_password_count).id,
-          :parameter => {
-            :value => 'New value',
-            :description => 'New description'
-          }
+        :parameter => {
+          :value => 'New value',
+          :description => 'New description'
         }
+      }
 
       assert_redirected_to parameters_url(:type => 'admin')
       assert_not_nil assigns(:parameter)
