@@ -109,7 +109,7 @@ class NonconformitiesController < ApplicationController
   # * POST /nonconformities.xml
   def create
     @title = t 'nonconformity.new_title'
-    @nonconformity = Nonconformity.new(params[:nonconformity])
+    @nonconformity = Nonconformity.new(nonconformity_params)
 
     respond_to do |format|
       if @nonconformity.save
@@ -134,7 +134,7 @@ class NonconformitiesController < ApplicationController
 
     respond_to do |format|
       Nonconformity.transaction do
-        if @nonconformity.update(params[:nonconformity])
+        if @nonconformity.update(nonconformity_params)
           flash.notice = t 'nonconformity.correctly_updated'
           format.html { redirect_to(edit_nonconformity_url(@nonconformity)) }
           format.xml  { head :ok }
@@ -288,6 +288,26 @@ class NonconformitiesController < ApplicationController
   end
 
   private
+    def nonconformity_params
+      params.require(:nonconformity).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
+	:state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
+	:priority, :follow_up_date, 
+	finding_user_assignments_attributes: [
+	  :id, :user_id, :process_owner, :_destroy
+        ], 
+	work_papers_attributes: [
+	    :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+        ], 
+	finding_answers_attributes: [
+	  :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+	],
+	finding_relations_attributes: [
+	  :id, :description, :related_finding_id, :_destroy
+	]
+      )
+    end
+
     # Busca la debilidad indicada siempre que pertenezca a la organización. En el
     # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
     # que no pertenece a la organización con la que se autenticó el usuario)

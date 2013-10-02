@@ -128,28 +128,28 @@ class NonconformitiesControllerTest < ActionController::TestCase
           :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
           :priority => get_test_parameter(:admin_priorities).first[1],
           :follow_up_date => 2.days.from_now.to_date,
-          :finding_user_assignments_attributes => {
-            :new_1 => {
+          :finding_user_assignments_attributes => [
+            {
               :user_id => users(:bare_user).id, :process_owner => '0'
             },
-            :new_2 => {
+            {
               :user_id => users(:audited_user).id, :process_owner => '1'
             },
-            :new_3 => {
+            {
               :user_id => users(:auditor_user).id, :process_owner => '0'
             },
-            :new_4 => {
+            {
               :user_id => users(:manager_user).id, :process_owner => '0'
             },
-            :new_5 => {
+            {
               :user_id => users(:supervisor_user).id, :process_owner => '0'
             },
-            :new_6 => {
+            {
               :user_id => users(:administrator_user).id, :process_owner => '0'
             }
-          },
-          :work_papers_attributes => {
-            :new_1 => {
+          ],
+          :work_papers_attributes => [
+            {
               :name => 'New workpaper name',
               :code => 'PTNC 20',
               :number_of_pages => '10',
@@ -160,13 +160,13 @@ class NonconformitiesControllerTest < ActionController::TestCase
                   'text/plain')
               }
             }
-          },
-          :finding_relations_attributes => {
-            :new_1 => {
+	  ],
+          :finding_relations_attributes => [
+            {
               :description => 'Duplicated',
               :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
             }
-          }
+	  ]
         }
       }
     end
@@ -203,30 +203,30 @@ class NonconformitiesControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
-            :finding_user_assignments_attributes => {
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_bare_user).id => {
+            :finding_user_assignments_attributes => [
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_bare_user).id,
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_audited_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_auditor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_supervisor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_nonconformity_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
-            },
-            :work_papers_attributes => {
-              :new_1 => {
+	    ],
+            :work_papers_attributes => [
+              {
                 :name => 'New workpaper name',
                 :code => 'PTNC 20',
                 :number_of_pages => '10',
@@ -237,13 +237,13 @@ class NonconformitiesControllerTest < ActionController::TestCase
                     TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }
-            },
-            :finding_relations_attributes => {
-              :new_1 => {
+	    ],
+            :finding_relations_attributes => [
+              {
                 :description => 'Duplicated',
                 :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
               }
-            }
+	    ]
           }
         }
       end
