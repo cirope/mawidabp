@@ -3,6 +3,7 @@
 # Lista, muestra, crea, modifica y elimina contenido de la ayuda (#HelpContent)
 class HelpContentsController < ApplicationController
   before_action :auth, :load_current_module
+  before_action :set_help_content, only: [:show, :edit, :update, :destroy]
 
   # Lista de los contenidos de ayuda
   #
@@ -26,7 +27,6 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents/1.xml
   def show
     @title = t 'help_content.show_title'
-    @help_content = HelpContent.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -53,7 +53,6 @@ class HelpContentsController < ApplicationController
   # * GET /help_contents/1/edit
   def edit
     @title = t 'help_content.edit_title'
-    @help_content = HelpContent.find(params[:id])
   end
 
   # Crea un nuevo contenido de ayuda siempre que cumpla con las validaciones
@@ -62,7 +61,7 @@ class HelpContentsController < ApplicationController
   # * POST /help_contents.xml
   def create
     @title = t 'help_content.new_title'
-    @help_content = HelpContent.new(params[:help_content])
+    @help_content = HelpContent.new(help_content_params)
 
     respond_to do |format|
       if @help_content.save
@@ -84,10 +83,9 @@ class HelpContentsController < ApplicationController
   # * PATCH /help_contents/1.xml
   def update
     @title = t 'help_content.edit_title'
-    @help_content = HelpContent.find(params[:id])
 
     respond_to do |format|
-      if @help_content.update(params[:help_content])
+      if @help_content.update(help_content_params)
         flash.notice = t 'help_content.correctly_updated'
         help_item = @help_content.help_items.first
         format.html { redirect_to(help_item ?
@@ -109,7 +107,6 @@ class HelpContentsController < ApplicationController
   # * DELETE /help_contents/1
   # * DELETE /help_contents/1.xml
   def destroy
-    @help_content = HelpContent.find(params[:id])
     @help_content.destroy
 
     respond_to do |format|
@@ -125,4 +122,17 @@ class HelpContentsController < ApplicationController
       HelpItem.find(params[:id]) :
       HelpContent.find_by(language: I18n.locale.to_s).try(:help_items).try(:first)
   end
+
+  private
+    def set_help_content
+      @help_content = HelpContent.find(params[:id])
+    end
+
+    def help_content_params
+      params.require(:help_content).permit(
+        :language, help_items_attributes: [
+          :id, :name, :description, :order_number, :_destroy
+        ]
+      )
+    end
 end

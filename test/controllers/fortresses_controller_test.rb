@@ -103,35 +103,28 @@ class FortressesControllerTest < ActionController::TestCase
           :review_code => 'F020',
           :description => 'New description',
           :origination_date => 1.day.ago.to_date.to_s(:db),
-          :finding_user_assignments_attributes => {
-            :new_1 => {
-              :user_id => users(:audited_user).id, :process_owner => '1'
-            },
-            :new_2 => {
-              :user_id => users(:auditor_user).id, :process_owner => '0'
-            },
-            :new_3 => {
-              :user_id => users(:supervisor_user).id, :process_owner => '0'
-            },
-          },
-          :work_papers_attributes => {
-            :new_1 => {
+          :finding_user_assignments_attributes => [
+            { :user_id => users(:audited_user).id, :process_owner => '1' },
+            { :user_id => users(:auditor_user).id, :process_owner => '0' },
+            { :user_id => users(:supervisor_user).id, :process_owner => '0' },
+          ],
+          :work_papers_attributes => [
+            {
               :name => 'New workpaper name',
               :code => 'PTF 20',
               :number_of_pages => '10',
               :description => 'New workpaper description',
-              :organization_id => organizations(:default_organization).id,
               :file_model_attributes => {:file => Rack::Test::UploadedFile.new(
                   TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
-          },
-          :finding_relations_attributes => {
-            :new_1 => {
+          ],
+          :finding_relations_attributes => [
+            {
               :description => 'Duplicated',
               :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
             }
-          }
+          ]
         }
       }
     end
@@ -160,25 +153,25 @@ class FortressesControllerTest < ActionController::TestCase
             :review_code => 'F005',
             :description => 'Updated description',
             :origination_date => 1.day.ago.to_date.to_s(:db),
-            :finding_user_assignments_attributes => {
-              finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_audited_user).id => {
+            :finding_user_assignments_attributes => [
+              {
                 :id => finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
-              finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_auditor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_supervisor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_security_management_responsible_dependency_fortress_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               }
-            },
-            :work_papers_attributes => {
-              :new_1 => {
+            ],
+            :work_papers_attributes => [
+              {
                 :name => 'New workpaper name',
                 :code => 'PTF 20',
                 :number_of_pages => '10',
@@ -189,13 +182,13 @@ class FortressesControllerTest < ActionController::TestCase
                     TEST_FILE_FULL_PATH, 'text/plain')
                 }
               }
-            },
-            :finding_relations_attributes => {
-              :new_1 => {
+            ],
+            :finding_relations_attributes => [
+              {
                 :description => 'Duplicated',
                 :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
               }
-            }
+            ]
           }
         }
       end

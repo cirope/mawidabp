@@ -242,40 +242,40 @@ class FindingsControllerTest < ActionController::TestCase
               :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
               :priority => get_test_parameter(:admin_priorities).first[1],
               :follow_up_date => '',
-              :finding_user_assignments_attributes => {
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+              :finding_user_assignments_attributes => [
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
                   :user_id => users(:bare_user).id,
                   :process_owner => '0'
                 },
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
                   :user_id => users(:audited_user).id,
                   :process_owner => '1'
                 },
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
                   :user_id => users(:auditor_user).id,
                   :process_owner => '0'
                 },
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
                   :user_id => users(:manager_user).id,
                   :process_owner => '0'
                 },
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
                   :user_id => users(:supervisor_user).id,
                   :process_owner => '0'
                 },
-                finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+                {
                   :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
                   :user_id => users(:administrator_user).id,
                   :process_owner => '0'
                 }
-              },
-              :work_papers_attributes => {
-                :new_1 => {
+              ],
+              :work_papers_attributes => [
+                {
                   :name => 'New workpaper name',
                   :code => 'PTSO 20',
                   :number_of_pages => '10',
@@ -285,9 +285,9 @@ class FindingsControllerTest < ActionController::TestCase
                       'text/plain')
                   }
                 }
-              },
-              :finding_answers_attributes => {
-                :new_1 => {
+              ],
+              :finding_answers_attributes => [
+                {
                   :answer => 'New answer',
                   :auditor_comments => 'New auditor comments',
                   :user_id => users(:administrator_user).id,
@@ -297,21 +297,21 @@ class FindingsControllerTest < ActionController::TestCase
                       'text/plain')
                   }
                 }
-              },
-              :finding_relations_attributes => {
-                :new_1 => {
+              ],
+              :finding_relations_attributes => [
+                {
                   :description => 'Duplicated',
                   :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
                 }
-              },
-              :costs_attributes => {
-                :new_1 => {
+              ],
+              :costs_attributes => [
+                {
                   :cost => '12.5',
                   :cost_type => 'audit',
                   :description => 'New cost description',
                   :user_id => users(:administrator_user).id
                 }
-              }
+              ]
             }
           }
         end
@@ -354,34 +354,34 @@ class FindingsControllerTest < ActionController::TestCase
             :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => 3.days.from_now.to_date,
-            :finding_user_assignments_attributes => {
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+            :finding_user_assignments_attributes => [
+              {
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+              {
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+              {
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+              {
                 :user_id => users(:manager_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+              {
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+              {
                 :user_id => users(:administrator_user).id,
                 :process_owner => '0'
               }
-            },
-            :work_papers_attributes => {
-              :new_1 => {
+            ],
+            :work_papers_attributes => [
+              {
                 :name => 'New workpaper name',
                 :code => 'PTSO 20',
                 :number_of_pages => '10',
@@ -392,9 +392,9 @@ class FindingsControllerTest < ActionController::TestCase
                     'text/plain')
                 }
               }
-            },
-            :finding_answers_attributes => {
-              :new_1 => {
+            ],
+            :finding_answers_attributes => [
+              {
                 :answer => 'New answer',
                 :auditor_comments => 'New audited comments',
                 :commitment_date => I18n.l(Date.tomorrow),
@@ -404,21 +404,21 @@ class FindingsControllerTest < ActionController::TestCase
                     'text/plain')
                 }
               }
-            },
-            :finding_relations_attributes => {
-              :new_1 => {
+            ],
+            :finding_relations_attributes => [
+              {
                 :description => 'Duplicated',
                 :related_finding_id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
               }
-            },
-            :costs_attributes => {
-              :new_1 => {
+            ],
+            :costs_attributes => [
+              {
                 :cost => '12.5',
                 :cost_type => 'audit',
                 :description => 'New cost description',
                 :user_id => users(:administrator_user).id
               }
-            }
+            ]
           }
         }
       end
@@ -458,43 +458,43 @@ class FindingsControllerTest < ActionController::TestCase
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
             :users_for_notification => [users(:bare_user).id],
-            :finding_user_assignments_attributes => {
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id => {
+            :finding_user_assignments_attributes => [
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_bare_user).id,
                 :user_id => users(:bare_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_audited_user).id,
                 :user_id => users(:audited_user).id,
                 :process_owner => '1'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_auditor_user).id,
                 :user_id => users(:auditor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_manager_user).id,
                 :user_id => users(:manager_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_supervisor_user).id,
                 :user_id => users(:supervisor_user).id,
                 :process_owner => '0'
               },
-              finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id => {
+              {
                 :id => finding_user_assignments(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness_administrator_user).id,
                 :user_id => users(:administrator_user).id,
                 :process_owner => '0'
               }
-            }
+            ]
           }
         }
       end
     end
-
+    
     assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description

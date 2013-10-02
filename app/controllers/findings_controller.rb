@@ -4,7 +4,7 @@
 # mejora (#Oportunity) y sus respuestas (#FindingAnswer)
 class FindingsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :find_with_organization, :prepare_parameters
+  before_action :set_finding, only: [:show, :edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   autoload :CSV, 'csv'
@@ -92,7 +92,6 @@ class FindingsController < ApplicationController
   # * GET /findings/1.xml
   def show
     @title = t 'finding.show_title'
-    @finding = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -105,7 +104,6 @@ class FindingsController < ApplicationController
   # * GET /findings/1/edit
   def edit
     @title = t 'finding.edit_title'
-    @finding = find_with_organization(params[:id])
 
     if @finding.nil? ||
         (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
@@ -121,7 +119,6 @@ class FindingsController < ApplicationController
   # * PATCH /findings/1.xml
   def update
     @title = t 'finding.edit_title'
-    @finding = find_with_organization(params[:id])
 
     if @finding.nil? ||
         (@auth_user.can_act_as_audited? && !@finding.users.include?(@auth_user))
@@ -130,14 +127,14 @@ class FindingsController < ApplicationController
 
     # Los auditados no pueden modificar desde observaciones las asociaciones
     if @auth_user.can_act_as_audited?
-      params[:finding].delete :finding_user_assignments_attributes
+      finding_params.delete :finding_user_assignments_attributes
     end
 
     prepare_parameters
 
     respond_to do |format|
       Finding.transaction do
-        if @finding.update(params[:finding])
+        if @finding.update(finding_params)
           flash.notice = t 'finding.correctly_updated'
           format.html { redirect_to(edit_finding_url(params[:completed], @finding)) }
           format.xml  { head :ok }
@@ -429,7 +426,7 @@ class FindingsController < ApplicationController
   #
   # * GET /oportunities/follow_up_pdf/1
   def follow_up_pdf
-    finding = find_with_organization(params[:id])
+    finding = Finding.find_by(id: params[:id])
 
     finding.follow_up_pdf(@auth_organization)
 
@@ -515,61 +512,81 @@ class FindingsController < ApplicationController
   end
 
   private
-
-  # Busca la debilidad u oportunidad indicada siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe o que no
-  # pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    includes = [{:control_objective_item => {:review => :period}}]
-    conditions = {
-      :id => id,
-      :final => false,
-      Period.table_name => {:organization_id => @auth_organization.id}
-    }
-
-    if @auth_user.can_act_as_audited?
-      includes << :users
-      conditions[User.table_name] = {
-        :id => @auth_user.descendants.map(&:id) +
-          @auth_user.related_users_and_descendants.map(&:id) + [@auth_user.id]
+    # Busca la debilidad u oportunidad indicada siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe o que no
+    # pertenece a la organización con la que se autenticó el usuario) devuelve
+    # nil.
+    # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
+    def set_finding #:doc:
+      includes = [{:control_objective_item => {:review => :period}}]
+      conditions = {
+        :id => params[:id],
+        :final => false,
+        Period.table_name => {:organization_id => @auth_organization.id}
       }
+
+      if @auth_user.can_act_as_audited?
+        includes << :users
+        conditions[User.table_name] = {
+          :id => @auth_user.descendants.map(&:id) +
+            @auth_user.related_users_and_descendants.map(&:id) + [@auth_user.id]
+        }
+      end
+
+      conditions[:state] = params[:completed] == 'incomplete' ?
+        Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
+        Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
+
+      @finding = Finding.includes(includes).where(conditions).references(:periods, :organizations).first
+
+      # TODO: eliminar cuando se corrija el problema que hace que include solo
+      # traiga el primer usuario
+      @finding.try(:reload)
+
+      @finding.finding_prefix = true if @finding
     end
 
-    conditions[:state] = params[:completed] == 'incomplete' ?
-      Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-      Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
+    def finding_params
+      params.require(:finding).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
+        :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
+        :follow_up_date, :users_for_notification,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :_destroy
+        ],
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ],
+        costs_attributes: [
+          :id, :cost, :cost_type, :description, :user_id, :_destroy
+        ]
+      )
+    end
 
-    finding = Finding.includes(includes).where(conditions).references(:periods, :organizations).first
-
-    # TODO: eliminar cuando se corrija el problema que hace que include solo
-    # traiga el primer usuario
-    finding.try(:reload)
-
-    finding.finding_prefix = true if finding
-
-    finding
-  end
-
-  # Elimina los atributos que no pueden ser modificados por usuarios
-  # del tipo "Auditado".
-  def prepare_parameters
-    if @auth_user.can_act_as_audited?
-      params[:finding].delete_if do |k,|
-        ![:finding_answers_attributes, :costs_attributes, :cause_analysis,
-          :cause_analysis_date, :correction, :correction_date].include?(k.to_sym)
+    # Elimina los atributos que no pueden ser modificados por usuarios
+    # del tipo "Auditado".
+    def prepare_parameters
+      if @auth_user.can_act_as_audited?
+        finding_params.delete_if do |k,|
+          ![:finding_answers_attributes, :costs_attributes, :cause_analysis,
+            :cause_analysis_date, :correction, :correction_date].include?(k.to_sym)
+        end
       end
     end
-  end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :export_to_csv => :read,
-      :export_to_pdf => :read,
-      :follow_up_pdf => :read,
-      :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :export_to_csv => :read,
+        :export_to_pdf => :read,
+        :follow_up_pdf => :read,
+        :auto_complete_for_user => :read,
+        :auto_complete_for_finding_relation => :read
+      )
+    end
 end

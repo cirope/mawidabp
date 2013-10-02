@@ -1,6 +1,6 @@
 class FortressesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :set_fortress, only: [:show, :edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las fortalezas
@@ -67,7 +67,6 @@ class FortressesController < ApplicationController
   # * GET /fortresses/1.xml
   def show
     @title = t 'fortress.show_title'
-    @fortress = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -96,7 +95,6 @@ class FortressesController < ApplicationController
   # * GET /fortresses/1/edit
   def edit
     @title = t 'fortress.edit_title'
-    @fortress = find_with_organization(params[:id])
   end
 
   # Crea una fortaleza siempre que cumpla con las validaciones.
@@ -105,7 +103,7 @@ class FortressesController < ApplicationController
   # * POST /fortresses.xml
   def create
     @title = t 'fortress.new_title'
-    @fortress = Fortress.new(params[:fortress])
+    @fortress = Fortress.new(fortress_params)
 
     respond_to do |format|
       if @fortress.save
@@ -126,11 +124,10 @@ class FortressesController < ApplicationController
   # * PATCH /fortresses/1.xml
   def update
     @title = t 'fortress.edit_title'
-    @fortress = find_with_organization(params[:id])
 
     respond_to do |format|
       Fortress.transaction do
-        if @fortress.update(params[:fortress])
+        if @fortress.update(fortress_params)
           flash.notice = t 'fortress.correctly_updated'
           format.html { redirect_to(edit_fortress_url(@fortress)) }
           format.xml  { head :ok }
@@ -216,20 +213,24 @@ class FortressesController < ApplicationController
   end
 
   private
-    # Busca la fortaleza indicada siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe una
-    # oportunidad con ese ID o que no pertenece a la organización con la que se
-    # autenticó el usuario) devuelve nil.
-    # _id_::  ID de la oportunidad que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      Fortress.includes(
-        :finding_relations,
-        :work_papers,
+    def set_fortress
+      @fortress = Fortress.includes( :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
       ).where(
-        :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
       ).first
+    end
+
+    def fortress_params
+      params.require(:fortress).permit(
+        :control_objective_item_id, :review_code, :description, :origination_date,
+        finding_user_assignments_attributes: [:id, :user_id, :_destroy],
+        work_papers_attributes: [
+          :name, :code, :number_of_pages, :description, file_model_attributes: [:file]
+        ],
+        finding_relations_attributes: [:description, :related_finding_id]
+      )
     end
 
     def load_privileges #:nodoc:
