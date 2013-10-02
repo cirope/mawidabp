@@ -7,7 +7,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => procedure_controls(:procedure_control_iso_27001).to_param}
+    id_param = {id: procedure_controls(:procedure_control_iso_27001).to_param}
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -21,7 +21,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to controller: :users, action: :login
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -42,7 +42,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'show procedure control' do
     perform_auth
-    get :show, :id => procedure_controls(:procedure_control_iso_27001).id
+    get :show, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
     assert_select '#error_body', false
@@ -63,7 +63,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     procedure_control = ProcedureControl.find(
       procedure_controls(:procedure_control_iso_27001).id)
 
-    get :new, :clone_from => procedure_control.id
+    get :new, clone_from: procedure_control.id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
     assert procedure_control.procedure_control_items.size > 0
@@ -82,34 +82,34 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     perform_auth
     assert_difference counts_array do
       post :create, {
-        :procedure_control => {
-          :period_id => periods(:third_period).id,
-          :procedure_control_items_attributes => {
-            :new_1 => {
-              :aproach => get_test_parameter(:admin_aproach_types).first[1],
-              :frequency => get_test_parameter(:admin_frequency_types).first[1],
-              :process_control_id =>
+        procedure_control: {
+          period_id: periods(:third_period).id,
+          procedure_control_items_attributes: [
+            {
+              aproach: get_test_parameter(:admin_aproach_types).first[1],
+              frequency: get_test_parameter(:admin_frequency_types).first[1],
+              process_control_id:
                 process_controls(:iso_27000_assets_control).id,
-              :order => 1,
-              :procedure_control_subitems_attributes => {
-                :new_1 => {
-                  :control_objective_text => 'New control objective text',
-                  :control_attributes => {
-                    :control => 'New control',
-                    :design_tests => 'New design tests',
-                    :compliance_tests => 'New compliance tests',
-                    :sustantive_tests => 'New sustantive tests',
-                    :effects => 'New effects'
+              order: 1,
+              procedure_control_subitems_attributes: [
+                {
+                  control_objective_text: 'New control objective text',
+                  control_attributes: {
+                    control: 'New control',
+                    design_tests: 'New design tests',
+                    compliance_tests: 'New compliance tests',
+                    sustantive_tests: 'New sustantive tests',
+                    effects: 'New effects'
                   },
-                  :relevance =>
+                  relevance:
                     get_test_parameter(:admin_control_objective_importances).first[1],
-                  :control_objective_id =>
+                  control_objective_id:
                     control_objectives(:iso_27000_security_organization_4_1).id,
-                  :order => 1,
+                  order: 1,
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
     end
@@ -117,7 +117,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'edit procedure control' do
     perform_auth
-    get :edit, :id => procedure_controls(:procedure_control_iso_27001).id
+    get :edit, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
     assert_select '#error_body', false
@@ -131,38 +131,38 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert_no_difference counts_array do
       perform_auth
       patch :update, {
-        :id => procedure_controls(:procedure_control_iso_27001).id,
-        :procedure_control => {
-          :period_id => periods(:current_period).id,
-          :procedure_control_items_attributes => {
-            procedure_control_items(:procedure_control_item_iso_27001_2).id => {
-              :id =>
+        id: procedure_controls(:procedure_control_iso_27001).id,
+        procedure_control: {
+          period_id: periods(:current_period).id,
+          procedure_control_items_attributes: [
+            {
+              id:
                 procedure_control_items(:procedure_control_item_iso_27001_2).id,
-              :aproach => get_test_parameter(:admin_aproach_types).first[1],
-              :frequency => get_test_parameter(:admin_frequency_types).first[1],
-              :process_control_id =>
+              aproach: get_test_parameter(:admin_aproach_types).first[1],
+              frequency: get_test_parameter(:admin_frequency_types).first[1],
+              process_control_id:
                 process_controls(:iso_27000_assets_control).id,
-              :order => 1,
-              :procedure_control_subitems_attributes => {
-                procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id => {
-                  :id => procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id,
-                  :control_attributes => {
-                    :id => controls(:procedure_control_subitem_iso_27001_1_1_control_1).id,
-                    :control => 'Updated control',
-                    :design_tests => 'Updated design tests',
-                    :compliance_tests => 'Updated compliance tests',
-                    :sustantive_tests => 'Updated sustantive tests',
-                    :effects => 'Updated effects'
+              order: 1,
+              procedure_control_subitems_attributes: [
+                {
+                  id: procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id,
+                  control_attributes: {
+                    id: controls(:procedure_control_subitem_iso_27001_1_1_control_1).id,
+                    control: 'Updated control',
+                    design_tests: 'Updated design tests',
+                    compliance_tests: 'Updated compliance tests',
+                    sustantive_tests: 'Updated sustantive tests',
+                    effects: 'Updated effects'
                   },
-                  :relevance =>
+                  relevance:
                     get_test_parameter(:admin_control_objective_importances).first[1],
-                  :control_objective_id =>
+                  control_objective_id:
                     control_objectives(:iso_27000_security_organization_4_1).id,
-                  :order => 1,
+                  order: 1,
                 }
-              }
+              ]
             }
-          }
+          ]
         }
       }
     end
@@ -180,7 +180,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   test 'destroy procedure control' do
     perform_auth
     assert_difference 'ProcedureControl.count', -1 do
-      delete :destroy, :id => procedure_controls(:procedure_control_iso_27001).id
+      delete :destroy, id: procedure_controls(:procedure_control_iso_27001).id
     end
 
     assert_redirected_to procedure_controls_url
@@ -193,7 +193,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
       procedure_controls(:procedure_control_iso_27001).id)
 
     assert_nothing_raised(Exception) do
-      get :export_to_pdf, :id => procedure_control.id
+      get :export_to_pdf, id: procedure_control.id
     end
 
     assert_redirected_to Prawn::Document.relative_path('procedure_control.pdf',
@@ -202,8 +202,9 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'get control objectives' do
     perform_auth
-    xhr :get, :get_control_objectives, {:process_control =>
-        process_controls(:iso_27000_security_policy).id}
+    xhr :get, :get_control_objectives, {
+      process_control: process_controls(:iso_27000_security_policy).id
+    }
     assert_response :success
     process_controls = ActiveSupport::JSON.decode(@response.body)
     assert !process_controls.empty?
@@ -214,8 +215,9 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'get control objective' do
     perform_auth
-    xhr :get, :get_control_objective, {:control_objective =>
-        control_objectives(:iso_27000_security_policy_3_1).id}
+    xhr :get, :get_control_objective, {
+      control_objective: control_objectives(:iso_27000_security_policy_3_1).id
+    }
     assert_response :success
     control_objective = ActiveSupport::JSON.decode(@response.body)
     assert_equal control_objectives(:iso_27000_security_policy_3_1).name,
@@ -226,8 +228,9 @@ class ProcedureControlsControllerTest < ActionController::TestCase
 
   test 'get procedure controls' do
     perform_auth
-    xhr :get, :get_process_controls, {:best_practice =>
-        best_practices(:iso_27001).id}
+    xhr :get, :get_process_controls, {
+      best_practice: best_practices(:iso_27001).id
+    }
     assert_response :success
     process_controls = ActiveSupport::JSON.decode(@response.body)
     assert !process_controls.empty?
