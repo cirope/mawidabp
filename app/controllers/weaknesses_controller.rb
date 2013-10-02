@@ -113,7 +113,7 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses.xml
   def create
     @title = t 'weakness.new_title'
-    @weakness = Weakness.new(params[:weakness])
+    @weakness = Weakness.new(weakness_params)
 
     respond_to do |format|
       if @weakness.save
@@ -138,7 +138,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       Weakness.transaction do
-        if @weakness.update(params[:weakness])
+        if @weakness.update(weakness_params)
           flash.notice = t 'weakness.correctly_updated'
           format.html { redirect_to(edit_weakness_url(@weakness)) }
           format.xml  { head :ok }
@@ -295,29 +295,49 @@ class WeaknessesController < ApplicationController
 
   private
 
-  # Busca la debilidad indicada siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
-  # que no pertenece a la organización con la que se autenticó el usuario)
-  # devuelve nil.
-  # _id_::  ID de la debilidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Weakness.includes(
-      :finding_relations,
-      :work_papers,
-      {finding_user_assignments: :user},
-      {control_objective_item: {review: :period}}
-    ).where(
-      id: id, Period.table_name => {organization_id: @auth_organization.id}
-    ).references(:periods).first
-  end
+    def weakness_params
+      params.require(:weakness).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
+        :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
+        :follow_up_date, :users_for_notification,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :_destroy
+        ],
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ]
+      )
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      follow_up_pdf: :read,
-      auto_complete_for_user: :read,
-      auto_complete_for_finding_relation: :read,
-      auto_complete_for_control_objective_item: :read,
-      undo_reiteration: :modify
-    )
-  end
+    # Busca la debilidad indicada siempre que pertenezca a la organización. En el
+    # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
+    # que no pertenece a la organización con la que se autenticó el usuario)
+    # devuelve nil.
+    # _id_::  ID de la debilidad que se quiere recuperar
+    def find_with_organization(id) #:doc:
+      Weakness.includes(
+        :finding_relations,
+        :work_papers,
+        {finding_user_assignments: :user},
+        {control_objective_item: {review: :period}}
+      ).where(
+        id: id, Period.table_name => {organization_id: @auth_organization.id}
+      ).references(:periods).first
+    end
+
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        follow_up_pdf: :read,
+        auto_complete_for_user: :read,
+        auto_complete_for_finding_relation: :read,
+        auto_complete_for_control_objective_item: :read,
+        undo_reiteration: :modify
+      )
+    end
 end
