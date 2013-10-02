@@ -4,6 +4,7 @@
 # (#BusinessUnitType) y unidades de negocio (#BusinessUnit)
 class BusinessUnitTypesController < ApplicationController
   before_action :auth, :check_privileges
+  before_action :set_business_unit_type, only: [:show, :edit, :update, :destroy]
 
   # Lista los tipos de unidades de negocio
   #
@@ -30,7 +31,6 @@ class BusinessUnitTypesController < ApplicationController
   # * GET /business_unit_types/1.xml
   def show
     @title = t 'business_unit_type.show_title'
-    @business_unit_type = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -57,7 +57,6 @@ class BusinessUnitTypesController < ApplicationController
   # * GET /business_unit_types/1/edit
   def edit
     @title = t 'business_unit_type.edit_title'
-    @business_unit_type = find_with_organization(params[:id])
   end
 
   # Crea un nuevo tipo de unidad de negocio siempre que cumpla con las
@@ -89,7 +88,6 @@ class BusinessUnitTypesController < ApplicationController
   # * PATCH /business_unit_types/1.xml
   def update
     @title = t 'business_unit_type.edit_title'
-    @business_unit_type = find_with_organization(params[:id])
 
     respond_to do |format|
       if @business_unit_type.update(business_unit_type_params)
@@ -112,8 +110,6 @@ class BusinessUnitTypesController < ApplicationController
   # * DELETE /business_unit_types/1
   # * DELETE /business_unit_types/1.xml
   def destroy
-    @business_unit_type = find_with_organization(params[:id])
-
     unless @business_unit_type.destroy
       flash.alert = t 'business_unit_type.errors.can_not_be_destroyed'
     end
@@ -125,19 +121,16 @@ class BusinessUnitTypesController < ApplicationController
   end
 
   private
-    # Busca el tipo de unidad de negocio indicado siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe un tipo
-    # de unidad de negocio con ese ID o que no pertenece a la organización con la
-    # que se autenticó el usuario) devuelve nil.
-    # _id_::  ID del tipo de unidad de negocio que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      BusinessUnitType.where(id: id, organization_id: @auth_organization.id).first
+    def set_business_unit_type
+      @business_unit_type = BusinessUnitType.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
     end
 
     def business_unit_type_params
       params.require(:business_unit_type).permit(
-	:name, :business_unit_label, :project_label, :external, business_units_attributes:
-	  [:id, :name]
+        :name, :business_unit_label, :project_label, :external,
+        business_units_attributes: [:id, :name, :_destroy]
       )
     end
 end
