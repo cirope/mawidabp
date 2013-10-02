@@ -74,13 +74,13 @@ class GroupsControllerTest < ActionController::TestCase
           :description => 'New group description',
           :admin_email => 'new_group@test.com',
           :send_notification_email => '1',
-          :organizations_attributes => {
-            :new_1 => {
+          :organizations_attributes => [
+            {
               :name => 'New organization',
               :prefix => 'new-organization',
               :description => 'New organization description'
             }
-          }
+	  ]
         }
       }
     end
@@ -104,13 +104,13 @@ class GroupsControllerTest < ActionController::TestCase
             :description => 'New group description',
             :admin_email => 'new_group@test.com',
             :send_notification_email => '',
-            :organizations_attributes => {
-              :new_1 => {
+            :organizations_attributes => [
+              {
                 :name => 'New organization',
                 :prefix => 'new-organization',
                 :description => 'New organization description'
               }
-            }
+	    ]
           }
         }
       end
@@ -139,14 +139,14 @@ class GroupsControllerTest < ActionController::TestCase
           :description => 'Updated group description',
           :admin_email => 'updated_group@test.com',
           :send_notification_email => '',
-          :organizations_attributes => {
-            organizations(:default_organization).id => {
+          :organizations_attributes => [
+            {
               :id => organizations(:default_organization).id,
               :name => 'Updated default organization',
               :prefix => 'default-testing-organization',
               :description => 'Updated default organization description'
             }
-          }
+          ]
         }
       }
     end
