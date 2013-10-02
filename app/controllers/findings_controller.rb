@@ -127,7 +127,7 @@ class FindingsController < ApplicationController
 
     # Los auditados no pueden modificar desde observaciones las asociaciones
     if @auth_user.can_act_as_audited?
-      finding_params.delete :finding_user_assignments_attributes
+      params[:finding].delete :finding_user_assignments_attributes
     end
 
     prepare_parameters
@@ -550,7 +550,8 @@ class FindingsController < ApplicationController
       params.require(:finding).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
         :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :users_for_notification,
+        :follow_up_date, :correction, :correction_date, :cause_analysis, :cause_analysis_date,
+        users_for_notification: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :_destroy
         ],
@@ -558,7 +559,7 @@ class FindingsController < ApplicationController
           :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
         ],
         finding_answers_attributes: [
-          :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+          :id, :answer, :auditor_comments, :user_id, :commitment_date, :notify_users, :_destroy, file_model_attributes: [:file]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -573,7 +574,7 @@ class FindingsController < ApplicationController
     # del tipo "Auditado".
     def prepare_parameters
       if @auth_user.can_act_as_audited?
-        finding_params.delete_if do |k,|
+        params[:finding].delete_if do |k,|
           ![:finding_answers_attributes, :costs_attributes, :cause_analysis,
             :cause_analysis_date, :correction, :correction_date].include?(k.to_sym)
         end

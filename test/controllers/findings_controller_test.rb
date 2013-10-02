@@ -494,7 +494,7 @@ class FindingsControllerTest < ActionController::TestCase
         }
       end
     end
-    
+
     assert_redirected_to edit_finding_url('incomplete', assigns(:finding))
     assert_not_nil assigns(:finding)
     assert_equal 'Updated description', assigns(:finding).description
