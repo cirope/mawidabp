@@ -6,15 +6,15 @@ class FileModelTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @file_model = FileModel.find file_models(:image_file).id
+    @file_model = FileModel.find file_models(:text_file).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of FileModel, @file_model
-    assert_equal file_models(:image_file).file_file_name, @file_model.file_file_name
-    assert_equal file_models(:image_file).file_content_type, @file_model.file_content_type
-    assert_equal file_models(:image_file).file_file_size, @file_model.file_file_size
+    assert_equal file_models(:text_file).file_file_name, @file_model.file_file_name
+    assert_equal file_models(:text_file).file_content_type, @file_model.file_content_type
+    assert_equal file_models(:text_file).file_file_size, @file_model.file_file_size
   end
 
   # Prueba la creación de un modelo de archivo

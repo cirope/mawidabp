@@ -57,7 +57,9 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de papeles de trabajo
   test 'delete' do
-    assert_difference('WorkPaper.count', -1) { @work_paper.destroy }
+    assert_difference ['WorkPaper.count', 'FileModel.count'], -1 do
+      @work_paper.destroy
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

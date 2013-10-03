@@ -12,7 +12,6 @@ class Detract < ActiveRecord::Base
 
   # Restricciones sobre los atributos
   attr_readonly :organization_id
-  # attr_protected :organization_id
 
   # Restricciones
   validates :value, :user_id, :presence => true

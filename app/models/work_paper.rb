@@ -15,11 +15,11 @@ class WorkPaper < ActiveRecord::Base
   # Restricciones de los atributos
   attr_accessor :code_prefix
   attr_readonly :organization_id
-  # attr_protected :organization_id
 
   # Callbacks
   before_save :check_for_modifications
   after_save :create_cover_and_zip
+  after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
 
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true
@@ -52,7 +52,7 @@ class WorkPaper < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  belongs_to :file_model, :dependent => :destroy
+  belongs_to :file_model
   belongs_to :owner, :polymorphic => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
@@ -262,5 +262,11 @@ class WorkPaper < ActiveRecord::Base
 
   def sanitized_code
     self.code.sanitized_for_filename
+  end
+
+  private
+  
+  def destroy_file_model
+    file_model.try(:destroy!)
   end
 end

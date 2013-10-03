@@ -3,7 +3,7 @@ image_work_paper:
   code: PTOC 01
   number_of_pages: 1
   description: Image Work Paper Description
-  file_model:
+  file_model: image_file
   organization: default_organization
   owner_id: <%= ActiveRecord::FixtureSet.identify(:iso_27000_security_organization_4_2_item_editable) %>
   owner_type: ControlObjectiveItem

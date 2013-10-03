@@ -90,7 +90,6 @@ class ConclusionReview < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Restricciones de los atributos
-  # attr_protected :approved
   attr_readonly :review_id
 
   # Restricciones
