@@ -300,7 +300,8 @@ class OportunitiesController < ApplicationController
           :id, :user_id, :process_owner, :_destroy
         ],
         work_papers_attributes: [
-          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
