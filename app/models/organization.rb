@@ -117,7 +117,7 @@ class Organization < ActiveRecord::Base
   end
 
   def destroy_image_model
-    image_model.destroy!
+    image_model.try(:destroy!)
   end
 
   private
