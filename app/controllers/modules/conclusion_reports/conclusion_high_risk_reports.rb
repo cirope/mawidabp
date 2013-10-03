@@ -16,7 +16,7 @@ module ConclusionHighRiskReports
     ).notorious(true)
 
     if params[:weaknesses_by_risk_report]
-      risk = params[:weaknesses_by_risk_report][:risk]
+      risk = params[:weaknesses_by_risk_report][:risk] || 1
 
       unless params[:weaknesses_by_risk_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
@@ -217,7 +217,7 @@ module ConclusionHighRiskReports
     )
 
     if params[:fixed_weaknesses_report]
-      risk = params[:fixed_weaknesses_report][:risk]
+      risk = params[:fixed_weaknesses_report][:risk] || 1
 
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(

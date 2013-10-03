@@ -37,7 +37,6 @@ class Review < ActiveRecord::Base
   attr_reader :approval_errors, :procedure_control_subitem_ids
   attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
   attr_readonly :plan_item_id
-  # attr_protected :score, :top_scale, :achieved_scale
 
   # Named scopes
   scope :list, -> {
