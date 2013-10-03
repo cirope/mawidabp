@@ -1,6 +1,8 @@
 class NonconformitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :set_nonconformity, only: [
+    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las no conformidades
@@ -71,7 +73,6 @@ class NonconformitiesController < ApplicationController
   # * GET /nonconformities/1.xml
   def show
     @title = t 'nonconformity.show_title'
-    @nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -100,7 +101,6 @@ class NonconformitiesController < ApplicationController
   # * GET /nonconformities/1/edit
   def edit
     @title = t 'nonconformity.edit_title'
-    @nonconformity = find_with_organization(params[:id])
   end
 
   # Crea una no conformidad siempre que cumpla con las validaciones.
@@ -130,7 +130,6 @@ class NonconformitiesController < ApplicationController
   # * PATCH /nonconformities/1.xml
   def update
     @title = t 'nonconformity.edit_title'
-    @nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       Nonconformity.transaction do
@@ -155,18 +154,14 @@ class NonconformitiesController < ApplicationController
   #
   # * GET /nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    nonconformity = find_with_organization(params[:id])
-
-    nonconformity.follow_up_pdf(@auth_organization)
-
-    redirect_to nonconformity.relative_follow_up_pdf_path
+    @nonconformity.follow_up_pdf(@auth_organization)
+    redirect_to @nonconformity.relative_follow_up_pdf_path
   end
 
   # Deshace la reiteración de la no conformidad
   #
   # * PATCH /nonconformities/undo_reiteration/1
   def undo_reiteration
-    @nonconformity = find_with_organization(params[:id])
     @nonconformity.undo_reiteration
 
     respond_to do |format|
@@ -311,19 +306,14 @@ class NonconformitiesController < ApplicationController
       )
     end
 
-    # Busca la debilidad indicada siempre que pertenezca a la organización. En el
-    # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
-    # que no pertenece a la organización con la que se autenticó el usuario)
-    # devuelve nil.
-    # _id_::  ID de la debilidad que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      Nonconformity.includes(
+    def set_nonconformity
+      @nonconformity = Nonconformity.includes(
         :finding_relations,
         :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
       ).where(
-        :id => id, Period.table_name => {:organization_id => @auth_organization.id}
+        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
       ).first
     end
 
