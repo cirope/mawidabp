@@ -4,7 +4,10 @@
 # (#InlineHelp)
 class InlineHelpsController < ApplicationController
   before_action :auth, :load_current_module
-  
+  before_action :set_inline_help, only: [
+    :show, :edit, :update, :destroy
+  ]
+
   # * GET /inline_helps
   # * GET /inline_helps.xml
   def index
@@ -23,7 +26,6 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps/1.xml
   def show
     @title = t 'inline_help.show_title'
-    @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -50,7 +52,6 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps/1/edit
   def edit
     @title = t 'inline_help.edit_title'
-    @inline_help = InlineHelp.find(params[:id])
     session[:back_to] = params[:back_to]
   end
 
@@ -77,7 +78,6 @@ class InlineHelpsController < ApplicationController
   # * PATCH /inline_helps/1.xml
   def update
     @title = t 'inline_help.edit_title'
-    @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
       if @inline_help.update(inline_help_params)
@@ -99,7 +99,6 @@ class InlineHelpsController < ApplicationController
   # * DELETE /inline_helps/1
   # * DELETE /inline_helps/1.xml
   def destroy
-    @inline_help = InlineHelp.find(params[:id])
     @inline_help.destroy
 
     respond_to do |format|
@@ -109,10 +108,13 @@ class InlineHelpsController < ApplicationController
   end
 
   private
+    def set_inline_help
+      @inline_help = InlineHelp.find(params[:id])
+    end
 
-  def inline_help_params
-    params.require(:inline_help).permit(
-      :language, :name, :content, :lock_version
-    )
-  end
+    def inline_help_params
+      params.require(:inline_help).permit(
+        :language, :name, :content, :lock_version
+      )
+    end
 end
