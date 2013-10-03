@@ -201,7 +201,7 @@ MawidaBP::Application.routes.draw do
   get "conclusion_audit_reports/cost_analysis",
     :as => 'cost_analysis_conclusion_audit_reports',
     :to => 'conclusion_audit_reports#cost_analysis'
-  get "conclusion_audit_reports/create_cost_analysis",
+  post "conclusion_audit_reports/create_cost_analysis",
     :as => 'create_cost_analysis_conclusion_audit_reports',
     :to => 'conclusion_audit_reports#create_cost_analysis'
   get 'conclusion_audit_reports/cost_analysis/detailed',
@@ -212,7 +212,7 @@ MawidaBP::Application.routes.draw do
   get 'follow_up_audit/cost_analysis',
     :as => 'cost_analysis_follow_up_audit',
     :to => 'follow_up_audit#cost_analysis'
-  get 'follow_up_audit/create_cost_analysis',
+  post 'follow_up_audit/create_cost_analysis',
     :as => 'create_cost_analysis_follow_up_audit',
     :to => 'follow_up_audit#create_cost_analysis'
 
