@@ -297,7 +297,7 @@ class OportunitiesController < ApplicationController
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
         :state, :organization_date, :solution_date, :lock_version,
         finding_user_assignments_attributes: [
-          :id, :user_id, :process_owner, :_destroy
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,

@@ -226,7 +226,9 @@ class FortressesController < ApplicationController
       params.require(:fortress).permit(
         :control_objective_item_id, :review_code, :description, :origination_date,
         :lock_version,
-        finding_user_assignments_attributes: [:id, :user_id, :_destroy],
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
+        ],
         work_papers_attributes: [
           :name, :code, :number_of_pages, :description,
           file_model_attributes: [:file, :file_cache]
