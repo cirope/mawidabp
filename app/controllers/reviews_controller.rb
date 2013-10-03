@@ -376,16 +376,20 @@ class ReviewsController < ApplicationController
     params.require(:review).permit(
       :identification, :description, :survey, :period_id, :plan_item_id,
       :procedure_control_subitem_ids, :lock_version,
-      file_model_attributes: [ :id, :file, :_destroy ],
+      file_model_attributes: [:id, :file, :file_cache, :_destroy],
       finding_review_assignments_attributes: [
-        :id, :finding_id, :_destroy
+        :id, :finding_id, :_destroy, :lock_version
       ],
       review_user_assignments_attributes: [
         :id, :assignment_type, :user_id, :_destroy
       ],
       control_objective_items_attributes: [
-        :id, :order_number, :_destroy
-      ]
+        :id, :control_objective_id, :control_objective_text, :order_number, :_destroy, 
+        control_attributes: [
+          :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
+        ]
+      ],
+      procedure_control_subitem_ids: []
     )
   end
 
