@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   }
 
   acts_as_tree foreign_key: 'manager_id', readonly: true,
-    order: 'last_name ASC, name ASC', dependent_children: :nullify
+    order: 'last_name ASC, name ASC', dependent: :nullify
 
   # Atributos protegidos
   # attr_protected :group_admin

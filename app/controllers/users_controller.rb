@@ -790,7 +790,7 @@ class UsersController < ApplicationController
       params.require(:user).permit(
         :user, :name, :last_name, :email, :language, :notes, :resource_id,
         :manager_id, :enable, :logged_in, :password, :hidden, :function,
-        :send_notification_email, :lock_version,
+        :send_notification_email, :lock_version, child_ids: [],
         organization_roles_attributes: [
           :id, :organization_id, :role_id, :_destroy
         ],
