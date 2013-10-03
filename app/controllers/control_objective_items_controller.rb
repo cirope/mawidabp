@@ -145,14 +145,15 @@ class ControlObjectiveItemsController < ApplicationController
 
     def control_objective_item_params
       params.require(:control_objective_item).permit(
-        :control_objective_text, :relevance, :design_score, :compliance_score,
-        :audit_date, :auditor_comment, :control_objective_id, :review_id,
+        :control_objective_text, :relevance, :design_score, :compliance_score, :sustantive_score,
+        :audit_date, :auditor_comment, :control_objective_id, :review_id, :finished,
+        :exclude_from_score, :lock_version,
         :lock_version, control_attributes: [
           :id, :control, :effects, :design_tests, :compliance_tests,
           :sustantive_tests
         ], work_papers_attributes: [
-          :name, :code, :number_of_pages, :description,
-          file_model_attributes: [:file, :file_cache]
+          :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
+          file_model_attributes: [:id, :file, :file_cache]
         ]
       )
     end
