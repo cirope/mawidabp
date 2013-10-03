@@ -289,7 +289,7 @@ class NonconformitiesController < ApplicationController
         :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
         :priority, :follow_up_date, :lock_version,
         finding_user_assignments_attributes: [
-          :id, :user_id, :process_owner, :_destroy
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ], 
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,
