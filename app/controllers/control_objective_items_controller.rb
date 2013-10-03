@@ -152,7 +152,7 @@ class ControlObjectiveItemsController < ApplicationController
           :sustantive_tests
         ], work_papers_attributes: [
           :name, :code, :number_of_pages, :description,
-          file_model_attributes: [:file]
+          file_model_attributes: [:file, :file_cache]
         ]
       )
     end

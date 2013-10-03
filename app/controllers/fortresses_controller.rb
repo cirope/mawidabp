@@ -228,7 +228,8 @@ class FortressesController < ApplicationController
         :lock_version,
         finding_user_assignments_attributes: [:id, :user_id, :_destroy],
         work_papers_attributes: [
-          :name, :code, :number_of_pages, :description, file_model_attributes: [:file]
+          :name, :code, :number_of_pages, :description,
+          file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [:description, :related_finding_id]
       )

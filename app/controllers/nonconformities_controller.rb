@@ -297,10 +297,13 @@ class NonconformitiesController < ApplicationController
           :id, :user_id, :process_owner, :_destroy
         ], 
         work_papers_attributes: [
-          :id, :name, :code, :number_of_pages, :description, :_destroy, file_model_attributes: [:file]
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          file_model_attributes: [:file, :file_cache]
         ], 
         finding_answers_attributes: [
-          :id, :answer, :auditor_comments, :commitment_date, :user_id, :notify_users, :_destroy, file_model_attributes: [:file]
+          :id, :answer, :auditor_comments, :commitment_date, :user_id,
+          :notify_users, :_destroy,
+          file_model_attributes: [:file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
