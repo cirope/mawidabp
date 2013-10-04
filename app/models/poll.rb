@@ -1,4 +1,3 @@
-# encoding: utf-8
 class Poll < ActiveRecord::Base
   before_save :generate_access_token, :on => :create
 
@@ -37,8 +36,8 @@ class Poll < ActiveRecord::Base
   validates :organization_id, :questionnaire_id, :presence => true
   validates_length_of :comments, :maximum => 255, :allow_nil => true,
     :allow_blank => true
-  validates_format_of :customer_email, :with => EMAIL_REGEXP, :allow_nil => true,
-    :allow_blank => true
+  validates_format_of :customer_email, :with => EMAIL_REGEXP, :multiline => true,
+    :allow_nil => true, :allow_blank => true
   validate :user_id_xor_customer_email
 
   # Relaciones
@@ -46,28 +45,31 @@ class Poll < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
   belongs_to :pollable, :polymorphic => true
-  has_many :answers, :include => :question, :dependent => :destroy, :order => "#{Question.table_name}.sort_order ASC"
+  has_many :answers, -> {
+    includes(:question).order("#{Question.table_name}.sort_order ASC").references(:questions)
+  }, :dependent => :destroy
+
   # Callbacks
   after_create :send_poll_email
   before_validation(:on => :update) do
     self.answered = true
   end
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     where(:organization_id => GlobalModelConfig.current_organization_id)
   }
-  scope :between_dates, lambda {
-    |from, to| where('created_at BETWEEN :from AND :to AND organization_id = :o_id',
+  scope :between_dates, ->(from, to) {
+    where('created_at BETWEEN :from AND :to AND organization_id = :o_id',
       :from => from, :to => to, :o_id => GlobalModelConfig.current_organization_id)
   }
-  scope :by_questionnaire, lambda {
-    |questionnaire_id| where('questionnaire_id = :q_id AND organization_id = :o_id',
+  scope :by_questionnaire, ->(questionnaire_id) {
+    where('questionnaire_id = :q_id AND organization_id = :o_id',
       :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
   }
-  scope :answered, lambda {
-    |answered| where('answered = :answered', :answered => answered)
+  scope :answered, ->(answered) {
+    where('answered = :answered', :answered => answered)
   }
-  scope :pollables, lambda {
+  scope :pollables, -> {
     where('pollable_id IS NOT NULL')
   }
 

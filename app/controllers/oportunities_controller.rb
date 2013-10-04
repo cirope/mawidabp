@@ -1,10 +1,9 @@
-# encoding: utf-8
 # =Controlador de oportunidades de mejora
 #
 # Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)
 class OportunitiesController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_oportunity, only: [:show, :edit, :update, :follow_up_pdf, :undo_reiteration]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las oportunidades de mejora
@@ -71,7 +70,6 @@ class OportunitiesController < ApplicationController
   # * GET /oportunities/1.xml
   def show
     @title = t 'oportunity.show_title'
-    @oportunity = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -100,7 +98,6 @@ class OportunitiesController < ApplicationController
   # * GET /oportunities/1/edit
   def edit
     @title = t 'oportunity.edit_title'
-    @oportunity = find_with_organization(params[:id])
   end
 
   # Crea una oportunidad de mejora siempre que cumpla con las validaciones.
@@ -109,7 +106,7 @@ class OportunitiesController < ApplicationController
   # * POST /oportunities.xml
   def create
     @title = t 'oportunity.new_title'
-    @oportunity = Oportunity.new(params[:oportunity])
+    @oportunity = Oportunity.new(oportunity_params)
 
     respond_to do |format|
       if @oportunity.save
@@ -126,15 +123,14 @@ class OportunitiesController < ApplicationController
   # Actualiza el contenido de una oportunidad de mejora siempre que cumpla con
   # las validaciones.
   #
-  # * PUT /oportunities/1
-  # * PUT /oportunities/1.xml
+  # * PATCH /oportunities/1
+  # * PATCH /oportunities/1.xml
   def update
     @title = t 'oportunity.edit_title'
-    @oportunity = find_with_organization(params[:id])
 
     respond_to do |format|
       Oportunity.transaction do
-        if @oportunity.update_attributes(params[:oportunity])
+        if @oportunity.update(oportunity_params)
           flash.notice = t 'oportunity.correctly_updated'
           format.html { redirect_to(edit_oportunity_url(@oportunity)) }
           format.xml  { head :ok }
@@ -155,18 +151,15 @@ class OportunitiesController < ApplicationController
   #
   # * GET /oportunities/follow_up_pdf/1
   def follow_up_pdf
-    oportunity = find_with_organization(params[:id])
+    @oportunity.follow_up_pdf(@auth_organization)
 
-    oportunity.follow_up_pdf(@auth_organization)
-
-    redirect_to oportunity.relative_follow_up_pdf_path
+    redirect_to @oportunity.relative_follow_up_pdf_path
   end
 
   # Deshace la reiteración de la oportunidad
   #
-  # * PUT /oportunities/undo_reiteration/1
+  # * PATCH /oportunities/undo_reiteration/1
   def undo_reiteration
-    @oportunity = find_with_organization(params[:id])
     @oportunity.undo_reiteration
 
     respond_to do |format|
@@ -202,7 +195,7 @@ class OportunitiesController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json { render :json => @users }
@@ -290,30 +283,43 @@ class OportunitiesController < ApplicationController
   end
 
   private
+    def set_oportunity
+      @oportunity = Oportunity.includes( :finding_relations, :work_papers,
+        {:finding_user_assignments => :user},
+        {:control_objective_item => {:review => :period}}
+      ).where(
+        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
+      ).first
+    end
 
-  # Busca la oportunidad de mejora indicada siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe una
-  # oportunidad con ese ID o que no pertenece a la organización con la que se
-  # autenticó el usuario) devuelve nil.
-  # _id_::  ID de la oportunidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Oportunity.includes(
-      :finding_relations,
-      :work_papers,
-      {:finding_user_assignments => :user},
-      {:control_objective_item => {:review => :period}}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    def oportunity_params
+      params.require(:oportunity).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
+        :state, :organization_date, :solution_date, :lock_version,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
+        ],
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache]
+        ],
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id,
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ]
+      )
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :follow_up_pdf => :read,
-      :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read,
-      :undo_reiteration => :modify
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :follow_up_pdf => :read,
+        :auto_complete_for_user => :read,
+        :auto_complete_for_finding_relation => :read,
+        :auto_complete_for_control_objective_item => :read,
+        :undo_reiteration => :modify
+      )
+    end
 end

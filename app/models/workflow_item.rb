@@ -1,4 +1,3 @@
-# encoding: utf-8
 class WorkflowItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
@@ -102,7 +101,7 @@ class WorkflowItem < ActiveRecord::Base
   belongs_to :workflow
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy
-  has_many :resources, :through => :resource_utilizations, :uniq => true
+  has_many :resources, -> { uniq }, :through => :resource_utilizations
 
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
 

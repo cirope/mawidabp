@@ -2,8 +2,8 @@
 #
 # Lista, muestra, crea, modifica y elimina periodos (#Period)
 class PeriodsController < ApplicationController
-  before_filter :auth, :check_privileges
-  hide_action :find_with_organization
+  before_action :auth, :check_privileges
+  before_action :set_period, only: [:show, :edit, :update, :destroy]
 
   # Lista las periodos
   #
@@ -27,7 +27,6 @@ class PeriodsController < ApplicationController
   # * GET /periods/1.xml
   def show
     @title = t 'period.show_title'
-    @period = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -55,7 +54,6 @@ class PeriodsController < ApplicationController
   # * GET /periods/1/edit
   def edit
     @title = t 'period.edit_title'
-    @period = find_with_organization(params[:id])
   end
 
   # Crea un nuevo periodo siempre que cumpla con las validaciones.
@@ -64,7 +62,7 @@ class PeriodsController < ApplicationController
   # * POST /periods.xml
   def create
     @title = t 'period.new_title'
-    @period = Period.new(params[:period])
+    @period = Period.new(period_params)
 
     respond_to do |format|
       if @period.save
@@ -82,14 +80,13 @@ class PeriodsController < ApplicationController
   # Actualiza el contenido de un periodo siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /periods/1
-  # * PUT /periods/1.xml
+  # * PATCH /periods/1
+  # * PATCH /periods/1.xml
   def update
     @title = t 'period.edit_title'
-    @period = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @period.update_attributes(params[:period])
+      if @period.update(period_params)
         flash.notice = t 'period.correctly_updated'
         format.html { redirect_to(periods_url) }
         format.xml  { head :ok }
@@ -109,8 +106,6 @@ class PeriodsController < ApplicationController
   # * DELETE /periods/1
   # * DELETE /periods/1.xml
   def destroy
-    @period = find_with_organization(params[:id])
-
     unless @period.destroy
       flash.alert = ([t('period.errors.can_not_be_destroyed')] +
           @period.errors.full_messages).join(APP_ENUM_SEPARATOR)
@@ -123,15 +118,15 @@ class PeriodsController < ApplicationController
   end
 
   private
+    def set_period
+      @period = Period.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
+    end
 
-  # Busca el periodo indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un periodo con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID del periodo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Period.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    def period_params
+      params.require(:period).permit(
+        :number, :description, :start, :end, :lock_version
+      ).merge(organization_id: @auth_organization.id)
+    end
 end

@@ -2,8 +2,8 @@
 #
 # Lista, muestra, modifica y elimina parámetros (#Parameter)
 class ParametersController < ApplicationController
-  before_filter :auth, :check_privileges
-  hide_action :form_keys_to_array, :clean_parameters, :find_with_organization
+  before_action :auth, :check_privileges
+  before_action :set_parameter, only: [:show, :edit, :update]
 
   # Lista los parámetros
   #
@@ -39,7 +39,6 @@ class ParametersController < ApplicationController
   # * GET /parameters/1.xml
   def show
     @title = t 'parameter.show_title'
-    @parameter = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -53,25 +52,19 @@ class ParametersController < ApplicationController
   def edit
     @title = t 'parameter.edit_title'
     @type = params[:type]
-    @parameter = find_with_organization(params[:id])
   end
 
   # Actualiza el contenido de un parámetro siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /parameters/1
-  # * PUT /parameters/1.xml
+  # * PATCH /parameters/1
+  # * PATCH /parameters/1.xml
   def update
     @title = t 'parameter.edit_title'
     @type = APP_PARAMETER_TYPES.include?(params[:type]) ? params[:type] : :admin
-    @parameter = find_with_organization(params[:id])
-
-    unless params[:parameter][:value]
-      params[:parameter][:value] = form_keys_to_array(params[:parameter])
-    end
 
     respond_to do |format|
-      if @parameter.update_attributes(clean_parameters(params[:parameter]))
+      if @parameter.update(parameter_params)
         flash.notice = t 'parameter.correctly_updated'
         format.html { redirect_to(parameters_url(:type => @type)) }
         format.xml  { head :ok }
@@ -87,33 +80,30 @@ class ParametersController < ApplicationController
   end
 
   private
+    # Recorre todos los atributos  que vienen como llave_número => valor y los
+    # convierte en [[atributo, valor], ....]
+    def form_keys_to_array(parameters) #:doc:
+      result = []
 
-  # Recorre todos los atributos  que vienen como llave_número => valor y los
-  # convierte en [[atributo, valor], ....]
-  def form_keys_to_array(parameters) #:doc:
-    result = []
+      parameters.each do |key, value|
+        result << [value, parameters["value_#{$1}"]] if key =~ /\Akey_(.*)\Z/
+      end
 
-    parameters.each do |key, value|
-      result << [value, parameters["value_#{$1}"]] if key =~ /\Akey_(.*)\Z/
+      result.sort { |item_1, item_2| item_1[1] <=> item_2[1] }
     end
-    
-    result.sort { |item_1, item_2| item_1[1] <=> item_2[1] }
-  end
 
-  # Elimina los atributos que comienzan con key_ o value_ para que puedan ser
-  # utilizados directamente en los métodos new, update_attributes, etc.
-  def clean_parameters(parameters) #:doc:
-    parameters.reject { |k,| k =~ /\Akey_.*\Z|\Avalue_.*\Z/ }
-  end
+    def set_parameter
+      @parameter = Parameter.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
+    end
 
-  # Busca el parámetro indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un parámetro con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # _id_::  ID del parámetro que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Parameter.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    def parameter_params
+      whitelisted = params.require(:parameter).permit(
+        :description, :value, :lock_version
+      )
+      whitelisted[:value] ||= form_keys_to_array(params[:parameter])
+
+      whitelisted
+    end
 end

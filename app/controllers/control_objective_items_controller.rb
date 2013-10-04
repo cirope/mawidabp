@@ -3,9 +3,11 @@
 # Lista, muestra, modifica y elimina objetivos de control
 # (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
+  before_action :set_control_objective_item, only: [
+    :show, :edit, :update, :destroy
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :find_with_organization
 
   # Lista los objetivos de control
   #
@@ -14,7 +16,7 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
     default_conditions = {
-      Period.table_name => {:organization_id => @auth_organization.id}
+      Period.table_name => {organization_id: @auth_organization.id}
     }
 
     build_search_conditions ControlObjectiveItem, default_conditions
@@ -22,11 +24,11 @@ class ControlObjectiveItemsController < ApplicationController
     @control_objectives = ControlObjectiveItem.includes(
         :weaknesses,
         :work_papers,
-        {:review => :period},
-        {:control_objective => :process_control}
+        {review: :period},
+        {control_objective: :process_control}
     ).where(@conditions).order(
       "#{Review.table_name}.identification DESC"
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
 
     respond_to do |format|
       format.html {
@@ -34,7 +36,7 @@ class ControlObjectiveItemsController < ApplicationController
           redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb
-      format.xml  { render :xml => @control_objective_items }
+      format.xml  { render xml: @control_objective_items }
     end
   end
 
@@ -44,11 +46,10 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1.xml
   def show
     @title = t 'control_objective_item.show_title'
-    @control_objective_item = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @control_objective_item }
+      format.xml  { render xml: @control_objective_item }
     end
   end
 
@@ -60,13 +61,11 @@ class ControlObjectiveItemsController < ApplicationController
     
     if params[:control_objective] && params[:review]
       @control_objective_item = ControlObjectiveItem.includes(:review).where(
-        :control_objective_id => params[:control_objective],
-        :review_id => params[:review],
-        Review.table_name => {:organization_id => @auth_organization.id}
+        control_objective_id: params[:control_objective],
+        review_id: params[:review],
+        Review.table_name => {organization_id: @auth_organization.id}
       ).order('created_at DESC').first
       session[:back_to] = edit_review_url(params[:review].to_i)
-    else
-      @control_objective_item = find_with_organization(params[:id])
     end
 
     @review = @control_objective_item.review
@@ -75,18 +74,17 @@ class ControlObjectiveItemsController < ApplicationController
   # Actualiza el contenido de un objetivo de control siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /control_objective_items/1
-  # * PUT /control_objective_items/1.xml
+  # * PATCH /control_objective_items/1
+  # * PATCH /control_objective_items/1.xml
   def update
     @title = t 'control_objective_item.edit_title'
-    @control_objective_item = find_with_organization(params[:id])
     review = @control_objective_item.review
 
     respond_to do |format|
-      updated = review.update_attributes(
-        :control_objective_items_attributes => {
-          @control_objective_item.id => params[:control_objective_item].merge(
-            :id => @control_objective_item.id
+      updated = review.update(
+        control_objective_items_attributes: {
+          @control_objective_item.id => control_objective_item_params.merge(
+            id: @control_objective_item.id
           )
         }
       )
@@ -103,14 +101,14 @@ class ControlObjectiveItemsController < ApplicationController
         }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @control_objective_item.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @control_objective_item.errors, status: :unprocessable_entity }
       end
     end
 
     rescue ActiveRecord::StaleObjectError
       flash.alert = t 'control_objective_item.stale_object_error'
-      redirect_to :action => :edit
+      redirect_to action: :edit
   end
 
   # Elimina un objetivo de control
@@ -118,7 +116,6 @@ class ControlObjectiveItemsController < ApplicationController
   # * DELETE /control_objective_items/1
   # * DELETE /control_objective_items/1.xml
   def destroy
-    @control_objective_item = find_with_organization(params[:id])
     @control_objective_item.destroy
 
     respond_to do |format|
@@ -130,17 +127,26 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
+    def set_control_objective_item
+      @control_objective_item = ControlObjectiveItem.includes(
+        :control, :weaknesses, :work_papers, { review: :period }
+      ).where(
+        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
+      ).first
+    end
 
-  # Busca el objetivo de control indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # objetivo de control con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del objetivo de control que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ControlObjectiveItem.includes(
-      :control, :weaknesses, :work_papers, {:review => :period}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    def control_objective_item_params
+      params.require(:control_objective_item).permit(
+        :control_objective_text, :relevance, :design_score, :compliance_score, :sustantive_score,
+        :audit_date, :auditor_comment, :control_objective_id, :review_id, :finished,
+        :exclude_from_score, :lock_version,
+        :lock_version, control_attributes: [
+          :id, :control, :effects, :design_tests, :compliance_tests,
+          :sustantive_tests
+        ], work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
+          file_model_attributes: [:id, :file, :file_cache]
+        ]
+      )
+    end
 end

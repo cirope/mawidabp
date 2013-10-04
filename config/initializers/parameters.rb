@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # Pesonalizado para cargar las configuraciones
 
 DEFAULT_PARAMETERS = {

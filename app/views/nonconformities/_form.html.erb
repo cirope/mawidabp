@@ -381,7 +381,7 @@
   <% content_for :extra_html_bottom do %>
     <div id="inline_undo_reiteration" class="popup" style="display: none;">
       <%= button_to t('finding.undo_reiteration'),
-        undo_reiteration_nonconformity_path(@nonconformity), :method => :put %>
+        undo_reiteration_nonconformity_path(@nonconformity), :method => :patch %>
     </div>
   <% end %>
 <% end %>

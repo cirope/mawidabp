@@ -3,8 +3,8 @@
 # Lista, muestra, crea, modifica y elimina clases de recursos (#ResourceClass) y
 # sus recursos (#Resource)
 class ResourceClassesController < ApplicationController
-  before_filter :auth, :check_privileges
-  hide_action :find_with_organization, :update_auth_user_id
+  before_action :auth, :check_privileges
+  before_action :set_resource_class, only: [:show, :edit, :update, :destroy]
 
   # Lista las clases de recursos
   #
@@ -13,14 +13,14 @@ class ResourceClassesController < ApplicationController
   def index
     @title = t 'resource_class.index_title'
     @resource_classes = ResourceClass.where(
-      :organization_id => @auth_organization.id
+      organization_id: @auth_organization.id
     ).order('name ASC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+      page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @resource_classes }
+      format.xml  { render xml: @resource_classes }
     end
   end
 
@@ -30,11 +30,10 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/1.xml
   def show
     @title = t 'resource_class.show_title'
-    @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @resource_class }
+      format.xml  { render xml: @resource_class }
     end
   end
 
@@ -49,7 +48,7 @@ class ResourceClassesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @resource_class }
+      format.xml  { render xml: @resource_class }
     end
   end
 
@@ -58,7 +57,6 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/1/edit
   def edit
     @title = t 'resource_class.edit_title'
-    @resource_class = find_with_organization(params[:id])
   end
 
   # Crea una nueva clase de recursos siempre que cumpla con las validaciones.
@@ -68,17 +66,18 @@ class ResourceClassesController < ApplicationController
   # * POST /resource_classes.xml
   def create
     @title = t 'resource_class.new_title'
-    @resource_class = ResourceClass.new(params[:resource_class].merge(
-        :organization_id => @auth_organization.id))
+    @resource_class = ResourceClass.new(
+      resource_class_params.merge(organization_id: @auth_organization.id)
+    )
 
     respond_to do |format|
       if @resource_class.save
         flash.notice = t 'resource_class.correctly_created'
         format.html { redirect_to(resource_classes_url) }
-        format.xml  { render :xml => @resource_class, :status => :created, :location => @resource_class }
+        format.xml  { render xml: @resource_class, status: :created, location: @resource_class }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @resource_class.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @resource_class.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -86,26 +85,25 @@ class ResourceClassesController < ApplicationController
   # Actualiza el contenido de una clase de recursos siempre que cumpla con las
   # validaciones. Además actualiza el contenido de los recursos que la componen.
   #
-  # * PUT /resource_classes/1
-  # * PUT /resource_classes/1.xml
+  # * PATCH /resource_classes/1
+  # * PATCH /resource_classes/1.xml
   def update
     @title = t 'resource_class.edit_title'
-    @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @resource_class.update_attributes(params[:resource_class])
+      if @resource_class.update(resource_class_params)
         flash.notice = t 'resource_class.correctly_updated'
         format.html { redirect_to(resource_classes_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @resource_class.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @resource_class.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'resource_class.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina una clase de recursos
@@ -113,7 +111,6 @@ class ResourceClassesController < ApplicationController
   # * DELETE /resource_classes/1
   # * DELETE /resource_classes/1.xml
   def destroy
-    @resource_class = find_with_organization(params[:id])
     @resource_class.destroy
 
     respond_to do |format|
@@ -123,15 +120,18 @@ class ResourceClassesController < ApplicationController
   end
 
   private
+    def set_resource_class
+      @resource_class = ResourceClass.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
+    end
 
-  # Busca la clase de recurso indicada siempre que pertenezca a la organización.
-  # En el caso que no se encuentre (ya sea que no existe una clase de recurso
-  # con ese ID o que no pertenece a la organización con la que se autenticó el
-  # usuario) devuelve nil.
-  # _id_::  ID de la clase de recurso que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ResourceClass.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    def resource_class_params
+      params.require(:resource_class).permit(
+        :name, :unit, :resource_class_type, :lock_version,
+        resources_attributes: [
+          :id, :name, :description, :cost_per_unit, :_destroy
+        ]
+      )
+    end
 end

@@ -19,10 +19,10 @@
   </p>
   <p>
     <%= t 'notifier.welcome_email.organizations_sites',
-      :count => @user.organizations.all.size %>
+      :count => @user.organizations.count %>
   </p>
   <ul>
-    <% @user.organizations.all.each do |organization| %>
+    <% @user.organizations.each do |organization| %>
       <li><%= link_to "#{URL_PROTOCOL}://#{organization.prefix}.#{URL_HOST}/",
           "#{URL_PROTOCOL}://#{organization.prefix}.#{URL_HOST}/" %> (<%= organization.name %>)</li>
     <% end %>

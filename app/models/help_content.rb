@@ -2,7 +2,7 @@ class HelpContent < ActiveRecord::Base
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }
-  
+
   # Restricciones
   validates :language, :presence => true
   validates :language, :length => {:maximum => 10}, :allow_nil => true,
@@ -11,7 +11,7 @@ class HelpContent < ActiveRecord::Base
     :allow_blank => true, :allow_nil => true
 
   # Relaciones
-  has_many :help_items, :dependent => :destroy, :order => 'order_number ASC'
+  has_many :help_items, -> { order('order_number ASC') }, :dependent => :destroy
 
   accepts_nested_attributes_for :help_items, :allow_destroy => true
 end

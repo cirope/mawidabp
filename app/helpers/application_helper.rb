@@ -1,4 +1,3 @@
-# encoding: utf-8
 # =Helper de la aplicación
 #
 # Helper del que heredan los demás helpers de la aplicación.
@@ -39,15 +38,9 @@ module ApplicationHelper
 
   def super_truncate(text, length = 30)
     unless text.blank?
-      omission = content_tag(:abbr, '...', :title => h(text))
-      text_length = text.mb_chars.length
+      omission = content_tag(:abbr, '...', :title => text)
 
-      truncate(h(text_length > length ?
-            text.dup.concat('.' * omission.mb_chars.length) : text),
-        :length => text_length > length ?
-          (length + omission.mb_chars.length) : length,
-        :omission => omission
-      ).html_safe
+      truncate(text, :length => length, :omission => '%s') % omission
     end
   end
 
@@ -541,7 +534,7 @@ module ApplicationHelper
     convert_boolean_attributes!(html_options, %w( disabled ))
 
     method_tag = ''
-    if (method = html_options.delete('method')) && %w{put delete}.include?(method.to_s)
+    if (method = html_options.delete('method')) && %w{patch delete}.include?(method.to_s)
       method_tag = tag('input', :type => 'hidden', :name => '_method', :value => method.to_s)
     end
 

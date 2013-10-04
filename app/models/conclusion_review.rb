@@ -1,4 +1,3 @@
-# encoding: utf-8
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
 
@@ -36,15 +35,19 @@ class ConclusionReview < ActiveRecord::Base
   }.with_indifferent_access
 
   # Named scopes
-  scope :for_period, lambda { |period|
-    includes(:review =>:period).where("#{Period.table_name}.id" => period.id)
+  scope :for_period, ->(period) {
+    includes(:review =>:period).where(
+      "#{Period.table_name}.id" => period.id
+    ).references(:periods)
   }
-  scope :by_business_unit_type, lambda { |business_unit_type|
+  scope :by_business_unit_type, ->(business_unit_type) {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.id" => business_unit_type)
+    ).where(
+      "#{BusinessUnitType.table_name}.id" => business_unit_type
+    ).references(:bussiness_unit_types)
   }
-  scope :by_business_unit_names, lambda { |*business_unit_names|
+  scope :by_business_unit_names, ->(*business_unit_names) {
     conditions = []
     parameters = {}
 
@@ -55,9 +58,9 @@ class ConclusionReview < ActiveRecord::Base
 
     includes(:plan_item => :business_unit).where(
       conditions.join(' OR '), parameters
-    )
+    ).references(:bussiness_unit_types)
   }
-  scope :by_control_objective_names, lambda { |*control_objective_names|
+  scope :by_control_objective_names, ->(*control_objective_names) {
     conditions = []
     parameters = {}
 
@@ -68,26 +71,25 @@ class ConclusionReview < ActiveRecord::Base
 
     includes(:review => {:control_objective_items => :control_objective}).where(
       conditions.join(' OR '), parameters
-    )
+    ).references(:control_objectives)
   }
-  scope :notorious, lambda { |final|
+  scope :notorious, ->(final) {
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
      ).where(
        "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
-    )
+    ).references(:findings)
   }
-  scope :with_business_unit_type, lambda { |but_id|
+  scope :with_business_unit_type, ->(but_id) {
     includes(:review => :business_unit).where(
       "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
-    )
+    ).references(:business_units)
   }
 
   # Callbacks
   before_destroy :can_be_destroyed?
 
   # Restricciones de los atributos
-  attr_protected :approved
   attr_readonly :review_id
 
   # Restricciones
@@ -596,7 +598,7 @@ class ConclusionReview < ActiveRecord::Base
 
     FileUtils.rm zip_filename if File.exist?(zip_filename)
 
-    Zip::ZipFile.open(zip_filename, Zip::ZipFile::CREATE) do |zipfile|
+    Zip::File.open(zip_filename, Zip::File::CREATE) do |zipfile|
       cover_paths.each do |cover|
         zipfile.add(File.basename(cover), cover) { true } if File.exist?(cover)
       end

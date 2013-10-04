@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'modules/conclusion_reports/conclusion_common_reports'
 require 'modules/conclusion_reports/conclusion_high_risk_reports'
 
@@ -9,12 +8,7 @@ class ConclusionCommitteeReportsController < ApplicationController
   include ConclusionCommonReports
   include ConclusionHighRiskReports
 
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :add_weaknesses_synthesis_table,
-    :get_weaknesses_synthesis_table_data, :make_date_range,
-    :weaknesses_by_state, :create_weaknesses_by_state, :weaknesses_by_risk,
-    :create_weaknesses_by_risk, :weaknesses_by_audit_type,
-    :create_weaknesses_by_audit_type
+  before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles
   #

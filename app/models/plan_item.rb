@@ -1,4 +1,3 @@
-# encoding: utf-8
 class PlanItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
@@ -11,7 +10,7 @@ class PlanItem < ActiveRecord::Base
   attr_accessor :business_unit_data, :overloaded
 
   # Named scopes
-  scope :list_unused, lambda { |period_id|
+  scope :list_unused, ->(period_id) {
     includes(:review, {:plan => :period}).where(
       [
         "#{Plan.table_name}.period_id = :period_id",
@@ -23,14 +22,14 @@ class PlanItem < ActiveRecord::Base
         :period_id => period_id,
         :organization_id => GlobalModelConfig.current_organization_id
       }
-    ).order(
+    ).references(:plans, :periods, :reviews, :plan_items).order(
       [
         "#{PlanItem.table_name}.order_number ASC",
         "#{PlanItem.table_name}.project ASC"
       ]
     )
   }
-  scope :for_business_unit_type, lambda { |business_unit_type|
+  scope :for_business_unit_type, ->(business_unit_type) {
     if business_unit_type.to_i > 0
       condition = "#{BusinessUnit.table_name}.business_unit_type_id = :but_id"
     elsif !business_unit_type.blank?
@@ -39,9 +38,9 @@ class PlanItem < ActiveRecord::Base
 
     includes(:business_unit).where(
       condition, :but_id => business_unit_type.to_i
-    ).order('order_number ASC')
+    ).order('order_number ASC').references(:business_units)
   }
-  scope :with_business_unit, where("#{table_name}.business_unit_id IS NOT NULL")
+  scope :with_business_unit, -> { where("#{table_name}.business_unit_id IS NOT NULL") }
 
   # Callbacks
   before_destroy :can_be_destroyed?

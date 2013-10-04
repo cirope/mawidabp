@@ -1,8 +1,6 @@
 class EMail < ActiveRecord::Base
   has_paper_trail
 
-  attr_accessible :to, :subject, :body, :attachments, :organization_id
-
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     :to => {
@@ -15,7 +13,7 @@ class EMail < ActiveRecord::Base
     }
   )
   # Default scope
-  default_scope order('created_at DESC')
+  default_scope { order('created_at DESC') }
 
   # Restricciones
   validates :to, :subject, :presence => true

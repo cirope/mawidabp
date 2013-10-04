@@ -1,6 +1,6 @@
 class Notification < ActiveRecord::Base
   include Comparable
-  
+
   # Constantes
   STATUS = {
     :unconfirmed => 0,
@@ -9,8 +9,8 @@ class Notification < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :not_confirmed, where(:status => STATUS[:unconfirmed])
-  scope :confirmed_or_stale, lambda {
+  scope :not_confirmed, -> { where(:status => STATUS[:unconfirmed]) }
+  scope :confirmed_or_stale, -> {
     where(
       [
         'status = :status_confirmed',
@@ -26,7 +26,7 @@ class Notification < ActiveRecord::Base
       }
     )
   }
-  scope :rejected_or_new, lambda {
+  scope :rejected_or_new, -> {
     where(
       [
         'status = :status_rejected',
@@ -79,7 +79,7 @@ class Notification < ActiveRecord::Base
   def notify!(confirmed = true)
     Notification.transaction do
       begin
-        self.update_attributes(
+        self.update(
           :status => confirmed ? STATUS[:confirmed] : STATUS[:rejected],
           :user_who_confirm => self.user,
           :confirmation_date => Time.now
@@ -92,9 +92,9 @@ class Notification < ActiveRecord::Base
             restrictions = !notification.notified? && notification != self &&
               self.user.can_act_as_audited? &&
               !notification.user.can_act_as_audited?
-            
+
             if restrictions
-              notification.update_attributes!(
+              notification.update!(
                 :status => confirmed ?
                   STATUS[:confirmed] : STATUS[:rejected],
                 :user_who_confirm => self.user
@@ -102,7 +102,7 @@ class Notification < ActiveRecord::Base
             end
           end
         end
-        
+
         true
       rescue ActiveRecord::RecordInvalid
         raise ActiveRecord::Rollback

@@ -1,7 +1,7 @@
-# encoding: utf-8
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
+  include ActsAsTree
   include ParameterSelector
   include Comparable
   include Trimmer
@@ -10,33 +10,31 @@ class User < ActiveRecord::Base
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
-    :user => {
-      :column => "LOWER(#{table_name}.user)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    user: {
+      column: "LOWER(#{table_name}.user)", operator: 'LIKE',
+      mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
     },
-    :name => {
-      :column => "LOWER(#{table_name}.name)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    name: {
+      column: "LOWER(#{table_name}.name)", operator: 'LIKE',
+      mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
     },
-    :last_name => {
-      :column => "LOWER(#{table_name}.last_name)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    last_name: {
+      column: "LOWER(#{table_name}.last_name)", operator: 'LIKE',
+      mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
     },
-    :function => {
-      :column => "LOWER(#{table_name}.function)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
+    function: {
+      column: "LOWER(#{table_name}.function)", operator: 'LIKE',
+      mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
     }
   )
 
-  has_paper_trail :ignore => [:last_access, :logged_in], :meta => {
-    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id },
-    :important => lambda { |user| user.is_an_important_change }
+  has_paper_trail ignore: [:last_access, :logged_in], meta: {
+    organization_id: ->(user) { GlobalModelConfig.current_organization_id },
+    important: ->(user) { user.is_an_important_change }
   }
-  acts_as_tree :foreign_key => 'manager_id', :readonly => true,
-    :order => 'last_name ASC, name ASC', :dependent_children => :nullify
 
-  # Atributos protegidos
-  attr_protected :group_admin
+  acts_as_tree foreign_key: 'manager_id', readonly: true,
+    order: 'last_name ASC, name ASC', dependent: :nullify
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
@@ -45,33 +43,34 @@ class User < ActiveRecord::Base
   # Alias de atributos
   alias_attribute :informal, :user
 
-
-
   # Named scopes
-  scope :list, lambda {
-    includes(:organizations).where(
-      :organizations => { :id => GlobalModelConfig.current_organization_id }
+  scope :list, -> {
+    includes(:organizations).references(:organizations).where(
+      organizations: { id: GlobalModelConfig.current_organization_id }
     )
   }
-  scope :with_valid_confirmation_hash, lambda { |confirmation_hash|
+  scope :with_valid_confirmation_hash, ->(confirmation_hash) {
     where(
       [
         'change_password_hash = :confirmation_hash', 'hash_changed > :time'
       ].join(' AND '),
       {
-        :confirmation_hash => confirmation_hash,
-        :time => BLANK_PASSWORD_STALE_DAYS.days.ago,
+        confirmation_hash: confirmation_hash,
+        time: BLANK_PASSWORD_STALE_DAYS.days.ago,
       }
     ).limit(1)
   }
-  scope :all_with_findings_for_notification, includes(
-    :finding_user_assignments => :raw_finding
-  ).where(
-    :findings => {:state => Finding::STATUS[:notify], :final => false}
-  ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
-  scope :not_hidden, where(
+  scope :all_with_findings_for_notification, -> {
+    includes(
+      finding_user_assignments: :raw_finding
+    ).references(:findings).where(
+      findings: { state: Finding::STATUS[:notify], final: false }
+    ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
+  }
+  scope :not_hidden, -> { where(
     'hidden = false'
-  )
+    )
+  }
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?
@@ -91,8 +90,8 @@ class User < ActiveRecord::Base
   validates :password, :length => {:maximum => 128}, :allow_nil => true,
     :allow_blank => true
   validates :function, :salt, :change_password_hash,
-    :length => {:maximum => 255}, :allow_nil => true, :allow_blank => true
-  validates :password, :confirmation => true, :unless => :is_encrypted?
+    length: {maximum: 255}, allow_nil: true, allow_blank: true
+  validates :password, confirmation: true, unless: :is_encrypted?
   validates_each :manager_id do |record, attr, value|
     if value
       parent = User.find(value)
@@ -129,14 +128,14 @@ class User < ActiveRecord::Base
 
       # Longitud mínima
       if password_min_length != 0 && value && value.length < password_min_length
-        record.errors.add attr, :too_short, :count => password_min_length
+        record.errors.add attr, :too_short, count: password_min_length
       end
 
       # Intervalo mínimo
       if password_min_time != 0 && value != record.password_was &&
           record.password_changed_was > password_min_time.days.ago.to_date &&
           !record.first_login?
-        record.errors.add attr, :too_soon, :count => password_min_time
+        record.errors.add attr, :too_soon, count: password_min_time
       end
 
       # Repetición de contraseñas anteriores
@@ -151,51 +150,50 @@ class User < ActiveRecord::Base
       record.errors.add attr, :already_used if repeated
     end
   end
-  validates_format_of :email, :with => EMAIL_REGEXP, :allow_nil => true,
-    :allow_blank => true
+  validates_format_of :email, with: EMAIL_REGEXP, multiline: true,
+    allow_nil: true, allow_blank: true
 
   # Relaciones
   belongs_to :resource
-  has_many :polls, :dependent => :destroy
-  has_many :old_passwords, :dependent => :destroy
-  has_many :login_records, :dependent => :destroy
-  has_many :error_records, :dependent => :destroy
-  has_many :notifications, :dependent => :destroy
-  has_many :detracts, :dependent => :destroy,
-    :order => "#{Detract.table_name}.created_at ASC"
-  has_many :resource_utilizations, :as => :resource, :dependent => :destroy
-  has_many :review_user_assignments, :dependent => :destroy,
-    :include => :review, :order => 'assignment_type DESC', :inverse_of => :user
-  has_many :reviews, :through => :review_user_assignments, :uniq => true
-  has_many :organization_roles, :dependent => :destroy,
-    :order => 'organization_id ASC', :after_add => :mark_roles_as_changed,
-    :after_remove => :mark_roles_as_changed
-  has_many :organizations, :through => :organization_roles, :uniq => true
+  has_many :polls, dependent: :destroy
+  has_many :old_passwords, dependent: :destroy
+  has_many :login_records, dependent: :destroy
+  has_many :error_records, dependent: :destroy
+  has_many :notifications, dependent: :destroy
+  has_many :detracts, -> { order("#{Detract.table_name}.created_at ASC") },
+    dependent: :destroy
+  has_many :resource_utilizations, as: :resource, dependent: :destroy
+  has_many :review_user_assignments, dependent: :destroy
+  has_many :reviews, -> { uniq }, through: :review_user_assignments
+  has_many :organization_roles, dependent: :destroy,
+    after_add: :mark_roles_as_changed,
+    after_remove: :mark_roles_as_changed
+  has_many :organizations, -> { uniq }, through: :organization_roles
   has_many :finding_user_assignments
-  has_many :related_user_relations, :dependent => :destroy
-  has_many :related_users, :through => :related_user_relations
-  has_many :findings, :through => :finding_user_assignments,
-    :source => :raw_finding, :class_name => 'Finding', :uniq => true
-  has_many :weaknesses, :through => :finding_user_assignments,
-    :source_type => 'Weakness', :source => :finding, :uniq => true
-  has_many :oportunities, :through => :finding_user_assignments,
-    :source_type => 'Oportunity', :source => :finding, :uniq => true
+  has_many :related_user_relations, dependent: :destroy
+  has_many :related_users, through: :related_user_relations
+  has_many :findings, -> { uniq }, through: :finding_user_assignments,
+    source: :raw_finding, class_name: 'Finding'
+  has_many :weaknesses, -> { uniq }, through: :finding_user_assignments,
+    source_type: 'Weakness', source: :finding
+  has_many :oportunities, -> { uniq }, through: :finding_user_assignments,
+    source_type: 'Oportunity', source: :finding
 
-  accepts_nested_attributes_for :organization_roles, :allow_destroy => true,
-    :reject_if => proc { |attributes|
+  accepts_nested_attributes_for :organization_roles, allow_destroy: true,
+    reject_if: proc { |attributes|
       attributes['organization_id'].blank? || attributes['role_id'].blank?
     }
-  accepts_nested_attributes_for :related_user_relations, :allow_destroy => true,
-    :reject_if => proc { |attributes| attributes['related_user_id'].blank? }
+  accepts_nested_attributes_for :related_user_relations, allow_destroy: true,
+    reject_if: proc { |attributes| attributes['related_user_id'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
 
     self.enable ||= false
-    self.send_notification_email = true if self.send_notification_email.nil?
+    self.send_notification_email = true if send_notification_email.nil?
     self.password_changed = Time.now
 
-    if self.send_notification_email
+    if send_notification_email
       self.change_password_hash = UUIDTools::UUID.random_create.to_s
     end
   end
@@ -205,17 +203,17 @@ class User < ActiveRecord::Base
   end
 
   def to_s
-    self.user
+    user
   end
 
   def to_param
-    self.user_changed? ? self.user_was : self.user
+    user_changed? ? user_was : user
   end
 
   def as_json(options = nil)
     default_options = {
-      :only => [:id],
-      :methods => [:label, :informal, :can_act_as_audited?]
+      only: [:id],
+      methods: [:label, :informal, :can_act_as_audited?]
     }
 
     super(default_options.merge(options || {}))
@@ -252,7 +250,7 @@ class User < ActiveRecord::Base
   end
 
   def set_proper_parent
-    self.organization_roles.each { |o_r| o_r.user = self }
+    organization_roles.each { |o_r| o_r.user = self }
   end
 
   def mark_roles_as_changed(organization_role)
@@ -262,23 +260,23 @@ class User < ActiveRecord::Base
   end
 
   def first_pending_poll
-    self.polls.detect { |p|
+    polls.detect do |p|
       p.answered == false && p.organization.id == GlobalModelConfig.current_organization_id
-    }
+    end
   end
 
   def roles(organization_id = nil)
     @organization_roles_cache ||= {}
 
     unless organization_id
-      self.organization_roles.reject do |o_r|
+      organization_roles.reject do |o_r|
         o_r.marked_for_destruction?
       end.map(&:role).sort
     else
       if @organization_roles_cache[organization_id]
         @organization_roles_cache[organization_id]
       else
-        filtered_organization_roles = self.organization_roles.select do |o_r|
+        filtered_organization_roles = organization_roles.select do |o_r|
           o_r.organization_id == organization_id && !o_r.marked_for_destruction?
         end
 
@@ -293,13 +291,13 @@ class User < ActiveRecord::Base
   end
 
   def informal_name(from = nil)
-    version = self.version_of from
+    version = version_of from
 
     [version.name.try(:strip), version.last_name.try(:strip)].compact.join(' ')
   end
 
   def full_name(from = nil)
-    version = self.version_of from
+    version = version_of from
 
     "#{version.last_name}, #{version.name}"
   end
@@ -307,13 +305,13 @@ class User < ActiveRecord::Base
   alias_method :resource_name, :full_name
 
   def full_name_with_user(from = nil)
-    version = self.version_of from
+    version = version_of from
 
     "#{version.full_name} (#{version.user}) #{version.string_to_append_if_disable}"
   end
 
   def full_name_with_function(from = nil)
-    version = self.version_of from
+    version = version_of from
 
     "#{version.full_name}#{version.string_to_append_if_function}#{version.string_to_append_if_disable}"
   end
@@ -321,28 +319,22 @@ class User < ActiveRecord::Base
   alias_method :label, :full_name_with_function
 
   def full_name_with_resource(from = nil)
-    version = self.version_of from
+    version = version_of from
 
     "#{version.full_name}#{version.string_to_append_if_resource}".concat(
       version.string_to_append_if_disable.to_s)
   end
 
   def string_to_append_if_disable
-    unless self.enable? || self.full_name.blank?
-      " - (#{I18n.t('user.disabled')})"
-    end
+    " - (#{I18n.t('user.disabled')})" unless enable? || full_name.blank?
   end
 
   def string_to_append_if_function
-    unless self.function.blank? || self.full_name.blank?
-      " (#{self.function})"
-    end
+    " (#{function})" unless function.blank? || full_name.blank?
   end
 
   def string_to_append_if_resource
-    unless self.resource.blank? || self.full_name.blank?
-      " (#{self.resource.name})"
-    end
+    " (#{resource.name})" unless resource.blank? || full_name.blank?
   end
 
   def reset_to_important_change
@@ -350,39 +342,39 @@ class User < ActiveRecord::Base
   end
 
   def send_welcome_email
-    unless self.send_notification_email.blank?
+    unless send_notification_email.blank?
       Notifier.welcome_email(self).deliver
     end
   end
 
   def send_notification_if_necesary
-    unless self.send_notification_email.blank?
+    unless send_notification_email.blank?
       organization = Organization.find GlobalModelConfig.current_organization_id
 
-      self.reset_password!(organization, false)
+      reset_password!(organization, false)
 
       Notifier.welcome_email(self).deliver
     end
   end
 
   def log_password_change
-    self.encrypt_password if self.password
+    encrypt_password if password
 
-    if self.password && self.password_was != self.password
+    if password && password_was != password
       @last_passwords = nil
-      self.old_passwords.create(:password => self.password_was)
+      old_passwords.create(password: password_was)
     end
   end
 
   def check_roles_changes
-    if self.roles_changed || self.organization_roles.any? { |o_r| o_r.changed? }
+    if roles_changed || organization_roles.any? { |o_r| o_r.changed? }
       old_user = User.find(self.id)
 
-      if (old_user.auditor? && self.can_act_as_audited?) ||
-          (old_user.can_act_as_audited? && self.auditor?)
-        unless self.findings.all_for_reallocation.blank?
-          self.organization_roles(true)
-          self.errors.add :organization_roles, :invalid
+      if (old_user.auditor? && can_act_as_audited?) ||
+          (old_user.can_act_as_audited? && auditor?)
+        unless findings.all_for_reallocation.blank?
+          organization_roles(true)
+          errors.add :organization_roles, :invalid
 
           false
         end
@@ -396,12 +388,12 @@ class User < ActiveRecord::Base
 
     Notifier.restore_password(self, organization).deliver if notify
 
-    self.save!
+    save!
   end
 
   def disable!
-    if self.has_not_orphan_fingings?
-      self.update_attribute :enable, false
+    if has_not_orphan_fingings?
+      update_attribute :enable, false
     else
       false
     end
@@ -409,25 +401,25 @@ class User < ActiveRecord::Base
 
   # Método para determinar si el usuario está o no habilitado
   def is_enable?
-    self.enable? && GlobalModelConfig.current_organization_id && !self.expired?
+    enable? && GlobalModelConfig.current_organization_id && !expired?
   end
 
   def is_group_admin?
-    self.group_admin == true && self.enable == true
+    self.group_admin && self.enable
   end
 
   def expired?
-    self.last_access.present? && self.last_access <
-      self.get_parameter(:security_acount_expire_time).to_i.days.ago
+    last_access.present? && last_access <
+      get_parameter(:security_acount_expire_time).to_i.days.ago
   end
 
   def password_expired?
-    self.password_changed.to_time <
-      self.get_parameter(:security_password_expire_time).to_i.days.ago
+    password_changed.to_time <
+      get_parameter(:security_password_expire_time).to_i.days.ago
   end
 
   def first_login?
-    self.last_access.blank? || self.last_access_was.blank?
+    last_access.blank? || last_access_was.blank?
   end
 
   def must_change_the_password?
@@ -472,7 +464,7 @@ class User < ActiveRecord::Base
     self.logged_in = true
     self.last_access = time unless first_login?
 
-    self.save(:validate => false)
+    self.save(validate: false)
   end
 
   def logout!
@@ -644,8 +636,8 @@ class User < ActiveRecord::Base
     if all_released && !items_for_notification.empty?
       title = I18n.t('user.responsibility_release.title')
 
-      Notifier.changes_notification(self, :title => title,
-        :content => items_for_notification).deliver
+      Notifier.changes_notification(self, title: title,
+        content: items_for_notification).deliver
     end
 
     all_released
@@ -667,8 +659,8 @@ class User < ActiveRecord::Base
 
             unless f.users.include?(other)
               f.finding_user_assignments.create(
-                :user => other,
-                :process_owner => old_fua.process_owner
+                user: other,
+                process_owner: old_fua.process_owner
               )
             end
 
@@ -712,6 +704,7 @@ class User < ActiveRecord::Base
             end
           end
         end
+
         if all_reassigned
           reviews = other.findings.all_for_reallocation.map do |f|
             "*#{f.review.identification}*"
@@ -721,20 +714,20 @@ class User < ActiveRecord::Base
             title = I18n.t('user.responsibility_modification.title')
             body = (reviews.blank? ? '' : I18n.t(
                 'user.responsibility_modification.reassigned_to_findings_from_reviews',
-                :reviews => reviews.to_sentence, :count => reviews.size))
+                reviews: reviews.to_sentence, count: reviews.size))
             body << "\n\n" unless body.blank?
             body << (reassigned_reviews.sort!.blank? ? '' : I18n.t(
               'user.responsibility_modification.reassigned_to_reviews',
-              :reviews => reassigned_reviews.to_sentence,
-              :count => reassigned_reviews.size))
+              reviews: reassigned_reviews.to_sentence,
+              count: reassigned_reviews.size))
             content = [
               I18n.t('user.responsibility_modification.old_responsible',
-                :responsible => self.full_name_with_function),
+                responsible: self.full_name_with_function),
               I18n.t('user.responsibility_modification.new_responsible',
-                :responsible => other.full_name_with_function)]
+                responsible: other.full_name_with_function)]
 
-            Notifier.changes_notification([other, self], :title => title,
-              :body => body, :content => content).deliver
+            Notifier.changes_notification([other, self], title: title,
+              body: body, content: content).deliver
           end
 
           unless unconfirmed_findings.blank?
@@ -742,7 +735,7 @@ class User < ActiveRecord::Base
             content = ''
 
             notification = Notification.create(
-              :findings => unconfirmed_findings, :user => other)
+              findings: unconfirmed_findings, user: other)
 
             unconfirmed_findings.group_by(&:review).each do |r, findings|
               content << "*#{Review.model_name.human} #{r.identification}*"
@@ -760,8 +753,8 @@ class User < ActiveRecord::Base
               end
               content << "\n\n"
             end
-            Notifier.changes_notification(other, :title => title,
-              :content => content, :notification => notification).deliver
+            Notifier.changes_notification(other, title: title,
+              content: content, notification: notification).deliver
           end
         end
 

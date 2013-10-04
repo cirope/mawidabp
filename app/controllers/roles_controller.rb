@@ -2,7 +2,8 @@
 #
 # Lista, muestra, crea, modifica y elimina perfiles (#Role)
 class RolesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
+  before_action :set_role, only: [:show, :edit, :update, :destroy]
 
   # Lista los perfiles
   #
@@ -11,12 +12,12 @@ class RolesController < ApplicationController
   def index
     @title = t 'role.index_title'
     @roles = Role.list(@auth_organization.id).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+      page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @roles }
+      format.xml  { render xml: @roles }
     end
   end
 
@@ -26,11 +27,10 @@ class RolesController < ApplicationController
   # * GET /roles/1.xml
   def show
     @title = t 'role.show_title'
-    @role = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @role }
+      format.xml  { render xml: @role }
     end
   end
 
@@ -44,7 +44,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @role }
+      format.xml  { render xml: @role }
     end
   end
 
@@ -53,7 +53,6 @@ class RolesController < ApplicationController
   # * GET /roles/1/edit
   def edit
     @title = t 'role.edit_title'
-    @role = find_with_organization(params[:id])
     @role.role_type = params[:role][:role_type] if params[:role]
   end
 
@@ -63,46 +62,43 @@ class RolesController < ApplicationController
   # * POST /roles.xml
   def create
     @title = t 'role.new_title'
-    @role = Role.new(params[:role].merge(
-        :organization_id => @auth_organization.id))
+    @role = Role.new(role_params)
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
       if @role.save
         flash.notice = t 'role.correctly_created'
         format.html { redirect_to(roles_url) }
-        format.xml  { render :xml => @role, :status => :created, :location => @role }
+        format.xml  { render xml: @role, status: :created, location: @role }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # Actualiza el contenido de un perfil siempre que cumpla con las validaciones.
   #
-  # * PUT /roles/1
-  # * PUT /roles/1.xml
+  # * PATCH /roles/1
+  # * PATCH /roles/1.xml
   def update
     @title = t 'role.edit_title'
-    @role = find_with_organization(params[:id])
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
-      if @role.update_attributes(params[:role].merge(
-            :organization_id => @auth_organization.id))
+      if @role.update(role_params)
         flash.notice = t 'role.correctly_updated'
         format.html { redirect_to(roles_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @role.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'role.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina un perfil
@@ -110,7 +106,6 @@ class RolesController < ApplicationController
   # * DELETE /roles/1
   # * DELETE /roles/1.xml
   def destroy
-    @role = find_with_organization(params[:id])
     @role.destroy
 
     respond_to do |format|
@@ -120,16 +115,17 @@ class RolesController < ApplicationController
   end
 
   private
+    def set_role
+      @role = Role.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
+    end
 
-  # Busca el perfil indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un perfil con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  # 
-  # _id_::  ID del informe que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Role.where(
-      :id => id, :organization_id => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    def role_params
+      params.require(:role).permit(
+        :name, :role_type, :lock_version, privileges_attributes: [
+          :id, :module, :approval, :erase, :modify, :read
+        ]
+      ).merge(organization_id: @auth_organization.id)
+    end
 end

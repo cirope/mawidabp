@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 class FortressesController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_fortress, only: [:show, :edit, :update]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las fortalezas
@@ -68,7 +67,6 @@ class FortressesController < ApplicationController
   # * GET /fortresses/1.xml
   def show
     @title = t 'fortress.show_title'
-    @fortress = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -97,7 +95,6 @@ class FortressesController < ApplicationController
   # * GET /fortresses/1/edit
   def edit
     @title = t 'fortress.edit_title'
-    @fortress = find_with_organization(params[:id])
   end
 
   # Crea una fortaleza siempre que cumpla con las validaciones.
@@ -106,7 +103,7 @@ class FortressesController < ApplicationController
   # * POST /fortresses.xml
   def create
     @title = t 'fortress.new_title'
-    @fortress = Fortress.new(params[:fortress])
+    @fortress = Fortress.new(fortress_params)
 
     respond_to do |format|
       if @fortress.save
@@ -123,15 +120,14 @@ class FortressesController < ApplicationController
   # Actualiza el contenido de una fortaleza siempre que cumpla con
   # las validaciones.
   #
-  # * PUT /fortresses/1
-  # * PUT /fortresses/1.xml
+  # * PATCH /fortresses/1
+  # * PATCH /fortresses/1.xml
   def update
     @title = t 'fortress.edit_title'
-    @fortress = find_with_organization(params[:id])
 
     respond_to do |format|
       Fortress.transaction do
-        if @fortress.update_attributes(params[:fortress])
+        if @fortress.update(fortress_params)
           flash.notice = t 'fortress.correctly_updated'
           format.html { redirect_to(edit_fortress_url(@fortress)) }
           format.xml  { head :ok }
@@ -175,7 +171,7 @@ class FortressesController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json { render :json => @users }
@@ -209,7 +205,7 @@ class FortressesController < ApplicationController
       :review => [:period, :conclusion_final_review]
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
-    ).order("#{Review.table_name}.identification ASC").limit(10)
+    ).order("#{Review.table_name}.identification ASC").limit(10).references(:review)
 
     respond_to do |format|
       format.json { render :json => @control_objective_items }
@@ -217,27 +213,38 @@ class FortressesController < ApplicationController
   end
 
   private
+    def set_fortress
+      @fortress = Fortress.includes( :finding_relations, :work_papers,
+        {:finding_user_assignments => :user},
+        {:control_objective_item => {:review => :period}}
+      ).where(
+        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
+      ).first
+    end
 
-  # Busca la fortaleza indicada siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe una
-  # oportunidad con ese ID o que no pertenece a la organización con la que se
-  # autenticó el usuario) devuelve nil.
-  # _id_::  ID de la oportunidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Fortress.includes(
-      :finding_relations,
-      :work_papers,
-      {:finding_user_assignments => :user},
-      {:control_objective_item => {:review => :period}}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    def fortress_params
+      params.require(:fortress).permit(
+        :control_objective_item_id, :review_code, :description, :origination_date,
+        :lock_version,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
+        ],
+        work_papers_attributes: [
+          :name, :code, :number_of_pages, :description,
+          file_model_attributes: [:id, :file, :file_cache]
+        ],
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id,
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+        ],
+        finding_relations_attributes: [:description, :related_finding_id]
+      )
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :auto_complete_for_user => :read,
-      :auto_complete_for_control_objective_item => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :auto_complete_for_user => :read,
+        :auto_complete_for_control_objective_item => :read
+      )
+    end
 end

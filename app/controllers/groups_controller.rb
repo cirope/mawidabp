@@ -3,7 +3,7 @@
 # Lista, muestra, crea, modifica y elimina grupos (#Group)
 class GroupsController < ApplicationController
   layout 'application_clean'
-  before_filter :auth, :check_group_admin
+  before_action :auth, :check_group_admin
 
   # Lista los grupos
   #
@@ -63,7 +63,7 @@ class GroupsController < ApplicationController
   # * POST /groups.xml
   def create
     @title = t 'group.new_title'
-    @group = Group.new(params[:group])
+    @group = Group.new(group_params)
 
     respond_to do |format|
       if @group.save
@@ -79,14 +79,14 @@ class GroupsController < ApplicationController
 
   # Actualiza el contenido de un grupo siempre que cumpla con las validaciones
   #
-  # * PUT /groups/1
-  # * PUT /groups/1.xml
+  # * PATCH /groups/1
+  # * PATCH /groups/1.xml
   def update
     @title = t 'group.edit_title'
     @group = Group.find(params[:id])
 
     respond_to do |format|
-      if @group.update_attributes(params[:group])
+      if @group.update(group_params)
         flash.notice = t 'group.correctly_updated'
         format.html { redirect_to(groups_url) }
         format.xml  { head :ok }
@@ -113,5 +113,15 @@ class GroupsController < ApplicationController
       format.html { redirect_to(groups_url) }
       format.xml  { head :ok }
     end
+  end
+
+  private
+  
+  def group_params
+    params.require(:group).permit(
+      :name, :description, :admin_email, :send_notification_email,
+      :lock_version,
+      organizations_attributes: [:id, :name, :prefix, :description]
+    )
   end
 end

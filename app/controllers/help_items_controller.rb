@@ -2,7 +2,8 @@
 #
 # Lista, muestra, crea, modifica y elimina items de ayuda (#HelpItem)
 class HelpItemsController < ApplicationController
-  before_filter :auth, :load_current_module
+  before_action :auth, :load_current_module
+  before_action :set_help_item, only: [:show, :edit, :update, :destroy]
 
   # Lista de los items ayuda
   #
@@ -26,7 +27,6 @@ class HelpItemsController < ApplicationController
   # * GET /help_items/1.xml
   def show
     @title = t 'help_item.show_title'
-    @help_item = HelpItem.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -53,7 +53,6 @@ class HelpItemsController < ApplicationController
   # * GET /help_items/1/edit
   def edit
     @title = t 'help_item.edit_title'
-    @help_item = HelpItem.find(params[:id])
   end
 
   # Crea un nuevo item de ayuda siempre que cumpla con las validaciones
@@ -62,7 +61,7 @@ class HelpItemsController < ApplicationController
   # * POST /help_items.xml
   def create
     @title = t 'help_item.new_title'
-    @help_item = HelpItem.new(params[:help_item])
+    @help_item = HelpItem.new(help_item_params)
 
     respond_to do |format|
       if @help_item.save
@@ -78,14 +77,13 @@ class HelpItemsController < ApplicationController
 
   # Actualiza el item de ayuda siempre que cumpla con las validaciones
   #
-  # * PUT /help_items/1
-  # * PUT /help_items/1.xml
+  # * PATCH /help_items/1
+  # * PATCH /help_items/1.xml
   def update
     @title = t 'help_item.edit_title'
-    @help_item = HelpItem.find(params[:id])
 
     respond_to do |format|
-      if @help_item.update_attributes(params[:help_item])
+      if @help_item.update(help_item_params)
         flash.notice = t 'help_item.correctly_updated'
         format.html { redirect_to(show_content_help_content_url(@help_item)) }
         format.xml  { head :ok }
@@ -105,7 +103,6 @@ class HelpItemsController < ApplicationController
   # * DELETE /help_items/1
   # * DELETE /help_items/1.xml
   def destroy
-    @help_item = HelpItem.find(params[:id])
     @help_item.destroy
 
     respond_to do |format|
@@ -113,4 +110,18 @@ class HelpItemsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+    def set_help_item
+      @help_item = HelpItem.find(params[:id])
+    end
+
+    def help_item_params
+      params.require(:help_item).permit(
+        :help_content_id, :name, :description, :order_number, :lock_version,
+        children_attributes: [
+          :id, :name, :description, :order_number, :_destroy
+        ]
+      )
+    end
 end

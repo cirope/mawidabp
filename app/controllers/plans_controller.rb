@@ -1,14 +1,11 @@
-# encoding: utf-8
 # =Controlador de planes de trabajo
 #
 # Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
 # (#PlanItem)
 class PlansController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges,
+  before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :find_with_organization, :update_auth_user_id, :exists?,
-    :load_privileges
 
   # Lista los planes de trabajo
   #
@@ -75,7 +72,7 @@ class PlansController < ApplicationController
   # * POST /plans.xml
   def create
     @title = t 'plan.new_title'
-    @plan = Plan.new(params[:plan])
+    @plan = Plan.new(plan_params)
     clone_id = params[:clone_from].to_i
     clone_plan = find_with_organization(clone_id) if exists?(clone_id)
 
@@ -96,14 +93,14 @@ class PlansController < ApplicationController
   # mismo) siempre que cumpla con las validaciones. Además actualiza el
   # contenido de los ítems que lo componen.
   #
-  # * PUT /plans/1
-  # * PUT /plans/1.xml
+  # * PATCH /plans/1
+  # * PATCH /plans/1.xml
   def update
     @title = t 'plan.edit_title'
     @plan = find_with_organization(params[:id], true)
 
     respond_to do |format|
-      if @plan.update_attributes(params[:plan])
+      if @plan.update(plan_params)
         format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
         format.xml  { head :ok }
       else
@@ -206,7 +203,7 @@ class PlansController < ApplicationController
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json {
@@ -226,50 +223,63 @@ class PlansController < ApplicationController
 
   private
 
-  def find_business_unit_type
-    if params[:business_unit_type].to_i > 0
-      @business_unit_type = BusinessUnitType.find params[:business_unit_type].to_i
-    end
-  end
-
-  # Busca el plan de trabajo indicado siempre que pertenezca a la organización.
-  # En el caso que no se encuentre (ya sea que no existe un plan de trabajo con
-  # ese ID o que no pertenece a la organización con la que se autenticó el
-  # usuario) devuelve nil.
-  # _id_::  ID del plan de trabajo que se quiere recuperar
-  def find_with_organization(id, include_all = false) #:doc:
-    include = include_all ? [
-      :period, {
-        :plan_items => [
-          :resource_utilizations,
-          :business_unit,
-          {:review => :conclusion_final_review}
+    def plan_params
+      params.require(:plan).permit(
+        :period_id, :allow_overload, :allow_duplication, :new_version,
+        :lock_version, plan_items_attributes: [
+          :id, :project, :start, :end, :plain_predecessors, :order_number,
+          :business_unit_id, :_destroy,
+          resource_utilizations_attributes: [
+            :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+          ]
         ]
-      }
-    ] : [:period]
+      )
+    end
 
-    Plan.includes(*include).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first(:readonly => false)
-  end
+    def find_business_unit_type
+      if params[:business_unit_type].to_i > 0
+        @business_unit_type = BusinessUnitType.find params[:business_unit_type].to_i
+      end
+    end
 
-  # Indica si existe el plan de trabajo indicado, siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un plan
-  # de trabajo con ese ID o que no pertenece a la organización con la que se
-  # autenticó el usuario) devuelve false.
-  # _id_::  ID del plan de trabajo que se quiere recuperar
-  def exists?(id) #:doc:
-    Plan.includes(:period).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first
-  end
+    # Busca el plan de trabajo indicado siempre que pertenezca a la organización.
+    # En el caso que no se encuentre (ya sea que no existe un plan de trabajo con
+    # ese ID o que no pertenece a la organización con la que se autenticó el
+    # usuario) devuelve nil.
+    # _id_::  ID del plan de trabajo que se quiere recuperar
+    def find_with_organization(id, include_all = false) #:doc:
+      include = include_all ? [
+        :period, {
+          :plan_items => [
+            :resource_utilizations,
+            :business_unit,
+            {:review => :conclusion_final_review}
+          ]
+        }
+      ] : [:period]
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :export_to_pdf => :read,
-      :auto_complete_for_business_unit_business_unit_id => :read,
-      :auto_complete_for_user => :read,
-      :resource_data => :read
-    )
-  end
+      Plan.includes(*include).where(
+        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+      ).first
+    end
+
+    # Indica si existe el plan de trabajo indicado, siempre que pertenezca a la
+    # organización. En el caso que no se encuentre (ya sea que no existe un plan
+    # de trabajo con ese ID o que no pertenece a la organización con la que se
+    # autenticó el usuario) devuelve false.
+    # _id_::  ID del plan de trabajo que se quiere recuperar
+    def exists?(id) #:doc:
+      Plan.includes(:period).where(
+        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+      ).first
+    end
+
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :export_to_pdf => :read,
+        :auto_complete_for_business_unit_business_unit_id => :read,
+        :auto_complete_for_user => :read,
+        :resource_data => :read
+      )
+    end
 end

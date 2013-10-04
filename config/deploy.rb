@@ -4,21 +4,17 @@ set :whenever_command, 'bundle exec whenever'
 require 'whenever/capistrano'
 
 set :application, 'mawidabp'
-set :repository,  'https://github.com/francocatena/mawida_app.git'
 set :deploy_to, '/var/rails/mawidabp'
 set :user, 'deployer'
 set :group_writable, false
 set :shared_children, %w(log)
 set :use_sudo, false
 
-set :scm, :git
+set :repository,  'https://github.com/cirope/mawidabp.git'
 set :branch, 'master'
+set :scm, :git
 
-set :bundle_without, [:test]
-
-role :web, 'mawidabp.com'
-role :app, 'mawidabp.com'
-role :db,  'mawidabp.com', :primary => true
+server 'mawidabp.com', :web, :app, :db, primary: true
 
 before 'deploy:finalize_update', 'deploy:create_shared_symlinks'
 
@@ -29,12 +25,12 @@ namespace :deploy do
   task :stop do
   end
 
-  task :restart, :roles => :app, :except => {:no_release => true} do
-    run "touch #{File.join(current_path, 'tmp', 'restart.txt')}"
+  task :restart, roles: :app, except: { no_release: true } do
+    run "touch #{File.join current_path, 'tmp', 'restart.txt'}"
   end
 
   desc 'Creates the symlinks for the shared folders'
-  task :create_shared_symlinks, :roles => :app, :except => {:no_release => true} do
+  task :create_shared_symlinks, roles: :app, except: {no_release: true} do
     shared_paths = [
       ['public', 'error_files'],
       ['private'],

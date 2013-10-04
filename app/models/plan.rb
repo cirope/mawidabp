@@ -30,8 +30,8 @@ class Plan < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   has_one :organization, :through => :period
-  has_many :plan_items, :dependent => :destroy,
-    :order => "#{PlanItem.table_name}.order_number ASC"
+  has_many :plan_items, -> { order("#{PlanItem.table_name}.order_number ASC") },
+    :dependent => :destroy
 
   accepts_nested_attributes_for :plan_items, :allow_destroy => true
 

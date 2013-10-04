@@ -1,6 +1,6 @@
 class PollsController < ApplicationController
-  before_filter :load_privileges, :auth, :except => [:edit, :update, :show]
-  before_filter :check_privileges, :except => [:edit, :update, :show]
+  before_action :load_privileges, :auth, except: [:edit, :update, :show]
+  before_action :check_privileges, except: [:edit, :update, :show]
 
   layout 'application'
   require 'csv'
@@ -8,14 +8,15 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
-    @current_module = "administration_questionnaires_polls"
+    @current_module = 'administration_questionnaires_polls'
     @title = t 'poll.index_title'
     if params[:id]
       @polls = Poll.by_questionnaire(params[:id]).paginate(
-        :page => params[:page], :per_page => APP_LINES_PER_PAGE)
+        page: params[:page], per_page: APP_LINES_PER_PAGE
+      )
     else
       default_conditions = {
-        :organization_id => @auth_organization.id
+        organization_id: @auth_organization.id
       }
 
       build_search_conditions Poll, default_conditions
@@ -27,7 +28,7 @@ class PollsController < ApplicationController
         ).where(@conditions).order(
           "#{Poll.table_name}.created_at DESC"
         ).paginate(
-          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+          page: params[:page], per_page: APP_LINES_PER_PAGE
         )
       else
         # Solo busca por columna contestada
@@ -43,14 +44,14 @@ class PollsController < ApplicationController
         ).where(default_conditions).order(
           "#{Poll.table_name}.created_at DESC"
         ).paginate(
-          :page => params[:page], :per_page => APP_LINES_PER_PAGE
+          page: params[:page], per_page: APP_LINES_PER_PAGE
         )
       end
     end
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @polls }
+      format.json { render json: @polls }
     end
   end
 
@@ -68,10 +69,10 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       if @poll.present?
-        format.html { render :layout => @layout } # show.html.erb
-        format.json { render :json => @poll }
+        format.html { render layout: @layout } # show.html.erb
+        format.json { render json: @poll }
       else
-        format.html { redirect_to polls_url, :alert => (t 'poll.not_found') }
+        format.html { redirect_to polls_url, alert: t('poll.not_found') }
       end
     end
   end
@@ -84,7 +85,7 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @poll }
+      format.json { render json: @poll }
     end
   end
 
@@ -94,9 +95,9 @@ class PollsController < ApplicationController
     @poll = Poll.find(params[:id])
 
     if @poll.nil? || params[:token] != @poll.access_token
-      redirect_to login_users_url, :alert => (t 'poll.not_found')
+      redirect_to login_users_url, alert: t('poll.not_found')
     elsif @poll.answered?
-      redirect_to poll_path(@poll, :layout => 'application_clean'), :alert => (t 'poll.access_denied')
+      redirect_to poll_path(@poll, layout: 'application_clean'), alert: t('poll.access_denied')
     end
   end
 
@@ -104,50 +105,50 @@ class PollsController < ApplicationController
   # POST /polls.json
   def create
     @title = t 'poll.new_title'
-    @poll = Poll.new(params[:poll])
+    @poll = Poll.new(poll_params)
     @poll.organization = @auth_organization
     polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
-              :questionnaire_id => @poll.questionnaire.id,
-              :user_id => @poll.user.id
+              questionnaire_id: @poll.questionnaire.id,
+              user_id: @poll.user.id
             )
 
     respond_to do |format|
       if !polls.empty?
-        format.html { redirect_to new_poll_path, :alert => (t 'poll.already_exists') }
+        format.html { redirect_to new_poll_path, alert: t('poll.already_exists') }
       elsif @poll.save
-        format.html { redirect_to @poll, :notice => (t 'poll.correctly_created') }
-        format.json { render :json => @poll, :status => :created, :location => @poll }
+        format.html { redirect_to @poll, notice: t('poll.correctly_created') }
+        format.json { render json: @poll, status: :created, location: @poll }
       else
-        format.html { render :action => 'new' }
-        format.json { render :json => @poll.errors, :status => :unprocessable_entity }
+        format.html { render action: 'new' }
+        format.json { render json: @poll.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PUT /polls/1
-  # PUT /polls/1.json
+  # PATCH /polls/1
+  # PATCH /polls/1.json
   def update
     @title = t 'poll.edit_title'
     @poll = Poll.find(params[:id])
 
     respond_to do |format|
       if @poll.nil?
-        format.html { redirect_to login_users_url, :alert => (t 'poll.not_found') }
-      elsif @poll.update_attributes(params[:poll])
+        format.html { redirect_to login_users_url, alert: t('poll.not_found') }
+      elsif @poll.update(poll_params)
         if @auth_user
-          format.html { redirect_to login_users_url, :notice => (t 'poll.correctly_updated') }
+          format.html { redirect_to login_users_url, notice: t('poll.correctly_updated') }
         else
-          format.html { redirect_to poll_url(@poll, :layout => 'application_clean'), :notice => (t 'poll.correctly_updated') }
+          format.html { redirect_to poll_url(@poll, layout: 'application_clean'), notice: t('poll.correctly_updated') }
         end
         format.json { head :ok }
       else
-        format.html { render :action => 'edit' }
-        format.json { render :json => @poll.errors, :status => :unprocessable_entity }
+        format.html { render action: 'edit' }
+        format.json { render json: @poll.errors, status: :unprocessable_entity }
       end
     end
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'poll.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # DELETE /polls/1
@@ -172,8 +173,8 @@ class PollsController < ApplicationController
     ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
-      :organization_id => @auth_organization.id,
-      :self_id => params[:user_id]
+      organization_id: @auth_organization.id,
+      self_id: params[:user_id]
     }
     @tokens.each_with_index do |t, i|
       conditions << [
@@ -193,7 +194,7 @@ class PollsController < ApplicationController
     ).limit(10)
 
     respond_to do |format|
-      format.json { render :json => @users }
+      format.json { render json: @users }
     end
   end
 
@@ -245,8 +246,8 @@ class PollsController < ApplicationController
     pdf.add_description_item(
       t('activerecord.attributes.poll.send_date'),
         t('conclusion_committee_report.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+        from_date: l(@from_date, format: :long),
+        to_date: l(@to_date, format: :long)))
 
     pdf.move_down PDF_FONT_SIZE
 
@@ -287,8 +288,8 @@ class PollsController < ApplicationController
 
         pdf.table(column_data.insert(0, column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
@@ -304,12 +305,12 @@ class PollsController < ApplicationController
     end
 
     pdf.custom_save_as(t('poll.summary_pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
     redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
   end
 
@@ -366,8 +367,8 @@ class PollsController < ApplicationController
     pdf.add_description_item(
       t('activerecord.attributes.poll.send_date'),
         t('conclusion_committee_report.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+        from_date: l(@from_date, format: :long),
+        to_date: l(@to_date, format: :long)))
 
     pdf.move_down PDF_FONT_SIZE
 
@@ -381,17 +382,17 @@ class PollsController < ApplicationController
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         @polls.each do |poll|
           if poll.user.present?
-            pdf.text "#{Poll.human_attribute_name :user_id}: #{poll.user.informal_name}", :style => :bold
+            pdf.text "#{Poll.human_attribute_name :user_id}: #{poll.user.informal_name}", style: :bold
           elsif poll.customer_email.present?
-            pdf.text "#{Poll.human_attribute_name :customer_email}: #{poll.customer_email}", :style => :bold
+            pdf.text "#{Poll.human_attribute_name :customer_email}: #{poll.customer_email}", style: :bold
           end
 
           pdf.text "#{Poll.human_attribute_name :answered}: #{poll.answered ? t('label.yes') : t('label.no')}"
 
-          pdf.text "#{Poll.human_attribute_name(:send_date)}: #{l poll.created_at.to_date, :format => :long}"
+          pdf.text "#{Poll.human_attribute_name(:send_date)}: #{l poll.created_at.to_date, format: :long}"
 
           if poll.answered?
-            pdf.text "#{Poll.human_attribute_name(:answer_date)}: #{l poll.updated_at.to_date, :format => :long}"
+            pdf.text "#{Poll.human_attribute_name(:answer_date)}: #{l poll.updated_at.to_date, format: :long}"
           end
 
           pdf.text "#{Questionnaire.human_attribute_name :questions}:"
@@ -432,11 +433,11 @@ class PollsController < ApplicationController
     end
 
     pdf.custom_save_as(t('poll.summary_pdf_name',
-      :from_date => @from_date.to_formatted_s(:db),
-      :to_date => @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
+      from_date: @from_date.to_formatted_s(:db),
+      to_date: @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
     redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
-      :from_date => @from_date.to_formatted_s(:db),
-      :to_date => @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
+      from_date: @from_date.to_formatted_s(:db),
+      to_date: @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
 
   end
 
@@ -549,8 +550,8 @@ class PollsController < ApplicationController
     pdf.add_description_item(
       t('activerecord.attributes.poll.send_date'),
       t('conclusion_committee_report.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+        from_date: l(@from_date, format: :long),
+        to_date: l(@to_date, format: :long)))
 
     pdf.move_down PDF_FONT_SIZE
 
@@ -574,7 +575,7 @@ class PollsController < ApplicationController
       end
 
       @business_unit_polls.each_key do |but|
-        pdf.text "<b>#{but}</b>", :font_size => PDF_FONT_SIZE * 1.3, :inline_format => true
+        pdf.text "<b>#{but}</b>", font_size: PDF_FONT_SIZE * 1.3, inline_format: true
         pdf.move_down PDF_FONT_SIZE * 2
         column_data = []
 
@@ -594,8 +595,8 @@ class PollsController < ApplicationController
 
           pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+              background_color: 'cccccc',
+              padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
             )
           end
         end
@@ -613,12 +614,12 @@ class PollsController < ApplicationController
     end
 
     pdf.custom_save_as(t('poll.summary_pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
     redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
+        from_date: @from_date.to_formatted_s(:db),
+        to_date: @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
   end
 
@@ -635,8 +636,8 @@ class PollsController < ApplicationController
 
       text = File.read(
         file_name,
-        { :encoding => 'UTF-8',
-          :delimiter => ';'
+        { encoding: 'UTF-8',
+          delimiter: ';'
         }
       )
 
@@ -645,8 +646,8 @@ class PollsController < ApplicationController
 
       @parsed_file.each  do |row|
         poll = Poll.new(
-          :questionnaire_id => questionnaire_id,
-          :organization_id => @auth_organization.id
+          questionnaire_id: questionnaire_id,
+          organization_id: @auth_organization.id
         )
         poll.customer_email = row[0]
 
@@ -655,7 +656,7 @@ class PollsController < ApplicationController
         end
       end
 
-      flash[:notice] = t('poll.customer_polls_sended', :count => n)
+      flash[:notice] = t('poll.customer_polls_sended', count: n)
     else
 
       flash[:alert] = t('poll.error_csv_file_extension')
@@ -666,22 +667,31 @@ class PollsController < ApplicationController
     end
   end
 
+  private
+
+  def poll_params
+    params.require(:poll).permit(
+      :user_id, :questionnaire_id, :comments, :lock_version,
+      answers_attributes: [
+        :id, :answer, :comments, :answer_option_id, :type
+      ]
+    )
+  end
+
   def load_privileges #:nodoc:
     if @action_privileges
       @action_privileges.update(
-        :auto_complete_for_user => :read,
-        :reports => :read,
-        :summary_by_answers => :read,
-        :create_summary_by_answers => :read,
-        :summary_by_business_unit => :read,
-        :create_summary_by_business_unit => :read,
-        :summary_by_questionnaire => :read,
-        :create_summary_by_questionnaire => :read,
-        :auto_complete_for_user => :read,
-        :import_csv_customers => :read
+        auto_complete_for_user: :read,
+        reports: :read,
+        summary_by_answers: :read,
+        create_summary_by_answers: :read,
+        summary_by_business_unit: :read,
+        create_summary_by_business_unit: :read,
+        summary_by_questionnaire: :read,
+        create_summary_by_questionnaire: :read,
+        auto_complete_for_user: :read,
+        import_csv_customers: :read
       )
     end
   end
 end
-
-

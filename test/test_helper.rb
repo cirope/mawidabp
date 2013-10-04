@@ -1,4 +1,3 @@
-# encoding: utf-8
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
@@ -36,6 +35,7 @@ class ActiveSupport::TestCase
     else
       assert_redirected_to :controller => :welcome, :action => :index
     end
+
     assert_not_nil session[:user_id]
     auth_user = User.find(session[:user_id])
     assert_not_nil auth_user

@@ -3,8 +3,11 @@
 # Lista, muestra, crea, modifica y elimina contenido de la ayuda en línea
 # (#InlineHelp)
 class InlineHelpsController < ApplicationController
-  before_filter :auth, :load_current_module
-  
+  before_action :auth, :load_current_module
+  before_action :set_inline_help, only: [
+    :show, :edit, :update, :destroy
+  ]
+
   # * GET /inline_helps
   # * GET /inline_helps.xml
   def index
@@ -23,7 +26,6 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps/1.xml
   def show
     @title = t 'inline_help.show_title'
-    @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -50,7 +52,6 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps/1/edit
   def edit
     @title = t 'inline_help.edit_title'
-    @inline_help = InlineHelp.find(params[:id])
     session[:back_to] = params[:back_to]
   end
 
@@ -58,7 +59,7 @@ class InlineHelpsController < ApplicationController
   # * POST /inline_helps.xml
   def create
     @title = t 'inline_help.new_title'
-    @inline_help = InlineHelp.new(params[:inline_help])
+    @inline_help = InlineHelp.new(inline_help_params)
 
     respond_to do |format|
       if @inline_help.save
@@ -73,14 +74,13 @@ class InlineHelpsController < ApplicationController
     end
   end
 
-  # * PUT /inline_helps/1
-  # * PUT /inline_helps/1.xml
+  # * PATCH /inline_helps/1
+  # * PATCH /inline_helps/1.xml
   def update
     @title = t 'inline_help.edit_title'
-    @inline_help = InlineHelp.find(params[:id])
 
     respond_to do |format|
-      if @inline_help.update_attributes(params[:inline_help])
+      if @inline_help.update(inline_help_params)
         flash.notice = t 'inline_help.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
         format.html { redirect_to(back_to || inline_helps_url) }
@@ -99,7 +99,6 @@ class InlineHelpsController < ApplicationController
   # * DELETE /inline_helps/1
   # * DELETE /inline_helps/1.xml
   def destroy
-    @inline_help = InlineHelp.find(params[:id])
     @inline_help.destroy
 
     respond_to do |format|
@@ -107,4 +106,15 @@ class InlineHelpsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+    def set_inline_help
+      @inline_help = InlineHelp.find(params[:id])
+    end
+
+    def inline_help_params
+      params.require(:inline_help).permit(
+        :language, :name, :content, :lock_version
+      )
+    end
 end

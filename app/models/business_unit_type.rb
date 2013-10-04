@@ -8,24 +8,24 @@ class BusinessUnitType < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :list, lambda {
+  scope :list, -> {
     where(:organization_id => GlobalModelConfig.current_organization_id).order(
       ['external ASC', 'name ASC']
     )
   }
-  scope :internal_audit, lambda {
+  scope :internal_audit, -> {
     where(
       :organization_id => GlobalModelConfig.current_organization_id,
       :external => false
     )
   }
-  scope :external_audit, lambda {
+  scope :external_audit, -> {
     where(
       :organization_id => GlobalModelConfig.current_organization_id,
       :external => true
     )
   }
-  
+
   # Restricciones
   validates :name, :business_unit_label, :presence => true
   validates :name, :business_unit_label, :project_label,
@@ -47,8 +47,8 @@ class BusinessUnitType < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :business_units, :dependent => :destroy, :order => 'name ASC'
-  has_many :plan_items, :through => :business_units, :uniq => true
+  has_many :business_units, -> { order('name ASC') }, :dependent => :destroy
+  has_many :plan_items, -> { uniq }, :through => :business_units
 
   accepts_nested_attributes_for :business_units, :allow_destroy => true
 

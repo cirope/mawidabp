@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'modules/follow_up_reports/follow_up_common_reports'
 require 'modules/follow_up_reports/follow_up_high_risk_reports'
 
@@ -8,14 +7,7 @@ require 'modules/follow_up_reports/follow_up_high_risk_reports'
 class FollowUpCommitteeController < ApplicationController
   include FollowUpCommonReports
   include FollowUpHighRiskReports
-
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :get_organization, :add_weaknesses_synthesis_table,
-    :being_implemented_resume_from_counts, :add_being_implemented_resume,
-    :make_date_range, :get_weaknesses_synthesis_table_data,
-    :weaknesses_by_state, :create_weaknesses_by_state, :weaknesses_by_risk,
-    :create_weaknesses_by_risk, :weaknesses_by_audit_type,
-    :create_weaknesses_by_audit_type
+  before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles
   #
@@ -748,23 +740,22 @@ class FollowUpCommitteeController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :qa_indicators => :read,
-      :create_qa_indicators => :read,
-      :synthesis_report => :read,
-      :create_synthesis_report => :read,
-      :high_risk_weaknesses_report => :read,
-      :create_high_risk_weaknesses_report => :read,
-      :fixed_weaknesses_report => :read,
-      :create_fixed_weaknesses_report => :read,
-      :control_objective_stats => :read,
-      :create_control_objective_stats => :read,
-      :process_control_stats => :read,
-      :create_process_control_stats => :read,
-      :rescheduled_being_implemented_weaknesses_report => :read,
-      :create_rescheduled_being_implemented_weaknesses_report => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :qa_indicators => :read,
+        :create_qa_indicators => :read,
+        :synthesis_report => :read,
+        :create_synthesis_report => :read,
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read,
+        :control_objective_stats => :read,
+        :create_control_objective_stats => :read,
+        :process_control_stats => :read,
+        :create_process_control_stats => :read,
+        :rescheduled_being_implemented_weaknesses_report => :read,
+        :create_rescheduled_being_implemented_weaknesses_report => :read
+      )
+    end
 end

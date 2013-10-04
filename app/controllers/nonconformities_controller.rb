@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
 class NonconformitiesController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_nonconformity, only: [
+    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las no conformidades
@@ -72,7 +73,6 @@ class NonconformitiesController < ApplicationController
   # * GET /nonconformities/1.xml
   def show
     @title = t 'nonconformity.show_title'
-    @nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -101,7 +101,6 @@ class NonconformitiesController < ApplicationController
   # * GET /nonconformities/1/edit
   def edit
     @title = t 'nonconformity.edit_title'
-    @nonconformity = find_with_organization(params[:id])
   end
 
   # Crea una no conformidad siempre que cumpla con las validaciones.
@@ -110,7 +109,7 @@ class NonconformitiesController < ApplicationController
   # * POST /nonconformities.xml
   def create
     @title = t 'nonconformity.new_title'
-    @nonconformity = Nonconformity.new(params[:nonconformity])
+    @nonconformity = Nonconformity.new(nonconformity_params)
 
     respond_to do |format|
       if @nonconformity.save
@@ -127,15 +126,14 @@ class NonconformitiesController < ApplicationController
   # Actualiza el contenido de una no conformidad siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /nonconformities/1
-  # * PUT /nonconformities/1.xml
+  # * PATCH /nonconformities/1
+  # * PATCH /nonconformities/1.xml
   def update
     @title = t 'nonconformity.edit_title'
-    @nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       Nonconformity.transaction do
-        if @nonconformity.update_attributes(params[:nonconformity])
+        if @nonconformity.update(nonconformity_params)
           flash.notice = t 'nonconformity.correctly_updated'
           format.html { redirect_to(edit_nonconformity_url(@nonconformity)) }
           format.xml  { head :ok }
@@ -156,18 +154,14 @@ class NonconformitiesController < ApplicationController
   #
   # * GET /nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    nonconformity = find_with_organization(params[:id])
-
-    nonconformity.follow_up_pdf(@auth_organization)
-
-    redirect_to nonconformity.relative_follow_up_pdf_path
+    @nonconformity.follow_up_pdf(@auth_organization)
+    redirect_to @nonconformity.relative_follow_up_pdf_path
   end
 
   # Deshace la reiteración de la no conformidad
   #
-  # * PUT /nonconformities/undo_reiteration/1
+  # * PATCH /nonconformities/undo_reiteration/1
   def undo_reiteration
-    @nonconformity = find_with_organization(params[:id])
     @nonconformity.undo_reiteration
 
     respond_to do |format|
@@ -203,7 +197,7 @@ class NonconformitiesController < ApplicationController
         "#{User.table_name}.last_name ASC",
         "#{User.table_name}.name ASC"
       ]
-    ).limit(10)
+    ).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json { render :json => @users }
@@ -289,30 +283,47 @@ class NonconformitiesController < ApplicationController
   end
 
   private
+    def nonconformity_params
+      params.require(:nonconformity).permit(
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
+        :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
+        :priority, :follow_up_date, :lock_version,
+        finding_user_assignments_attributes: [
+          :id, :user_id, :process_owner, :responsible_auditor, :_destroy
+        ], 
+        work_papers_attributes: [
+          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache]
+        ], 
+        finding_answers_attributes: [
+          :id, :answer, :auditor_comments, :commitment_date, :user_id,
+          :notify_users, :_destroy,
+          file_model_attributes: [:id, :file, :file_cache]
+        ],
+        finding_relations_attributes: [
+          :id, :description, :related_finding_id, :_destroy
+        ]
+      )
+    end
 
-  # Busca la debilidad indicada siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
-  # que no pertenece a la organización con la que se autenticó el usuario)
-  # devuelve nil.
-  # _id_::  ID de la debilidad que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Nonconformity.includes(
-      :finding_relations,
-      :work_papers,
-      {:finding_user_assignments => :user},
-      {:control_objective_item => {:review => :period}}
-    ).where(
-      :id => id, Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    def set_nonconformity
+      @nonconformity = Nonconformity.includes(
+        :finding_relations,
+        :work_papers,
+        {:finding_user_assignments => :user},
+        {:control_objective_item => {:review => :period}}
+      ).where(
+        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
+      ).first
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :follow_up_pdf => :read,
-      :auto_complete_for_user => :read,
-      :auto_complete_for_finding_relation => :read,
-      :auto_complete_for_control_objective_item => :read,
-      :undo_reiteration => :modify
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :follow_up_pdf => :read,
+        :auto_complete_for_user => :read,
+        :auto_complete_for_finding_relation => :read,
+        :auto_complete_for_control_objective_item => :read,
+        :undo_reiteration => :modify
+      )
+    end
 end

@@ -1,5 +1,6 @@
 class QuestionnairesController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
+  before_action :set_questionnaire, only: [:show, :edit, :update, :destroy]
 
   # GET /questionnaires
   # GET /questionnaires.json
@@ -19,10 +20,9 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1.json
   def show
     @title = t 'questionnaire.show_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
 
     respond_to do |format|
@@ -46,10 +46,9 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1/edit
   def edit
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
   end
 
@@ -57,7 +56,7 @@ class QuestionnairesController < ApplicationController
   # POST /questionnaires.json
   def create
     @title = t 'questionnaire.new_title'
-    @questionnaire = Questionnaire.new(params[:questionnaire])
+    @questionnaire = Questionnaire.new(questionnaire_params)
     @questionnaire.organization = @auth_organization
 
     @questionnaire.questions.each do |question|
@@ -72,7 +71,7 @@ class QuestionnairesController < ApplicationController
 
     respond_to do |format|
       if @questionnaire.save
-        format.html { redirect_to @questionnaire, :notice => (t 'questionnaire.correctly_created') }
+        format.html { redirect_to @questionnaire, :notice => t('questionnaire.correctly_created') }
         format.json { render :json => @questionnaire, :status => :created, :location => @questionnaire }
       else
         format.html { render :action => "new" }
@@ -81,17 +80,16 @@ class QuestionnairesController < ApplicationController
     end
   end
 
-  # PUT /questionnaires/1
-  # PUT /questionnaires/1.json
+  # PATCH /questionnaires/1
+  # PATCH /questionnaires/1.json
   def update
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
-      redirect_to questionnaires_url, :alert => (t 'questionnaire.not_found')
+      redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
     end
 
-    @questionnaire.assign_attributes(params[:questionnaire])
+    @questionnaire.assign_attributes(questionnaire_params)
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice? && question.answer_options.empty?
         Question::ANSWER_OPTIONS.each do |option|
@@ -105,8 +103,8 @@ class QuestionnairesController < ApplicationController
     end
 
     respond_to do |format|
-      if @questionnaire.update_attributes(params[:questionnaire])
-        format.html { redirect_to questionnaires_url, :notice => (t 'questionnaire.correctly_updated') }
+      if @questionnaire.update(questionnaire_params)
+        format.html { redirect_to questionnaires_url, :notice => t('questionnaire.correctly_updated') }
         format.json { head :ok }
       else
         format.html { render :action => "edit" }
@@ -121,7 +119,6 @@ class QuestionnairesController < ApplicationController
   # DELETE /questionnaires/1
   # DELETE /questionnaires/1.json
   def destroy
-    @questionnaire = Questionnaire.find(params[:id])
     @questionnaire.destroy
 
     respond_to do |format|
@@ -129,4 +126,19 @@ class QuestionnairesController < ApplicationController
       format.json { head :ok }
     end
   end
+
+  private
+    def set_questionnaire
+      @questionnaire = Questionnaire.by_organization(
+        @auth_organization.id, params[:id]
+      ).first
+    end
+
+    def questionnaire_params
+      params.require(:questionnaire).permit(
+        :name, :lock_version, questions_attributes: [
+          :id, :question, :sort_order, :answer_type, :_destroy
+        ]
+      )
+    end
 end

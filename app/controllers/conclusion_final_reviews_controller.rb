@@ -1,11 +1,13 @@
-# encoding: utf-8
 # =Controlador de informes definitivos
 #
 # Lista, muestra, crea, modifica y elimina informes definitivos
 # (#ConclusionFinalReview)
 class ConclusionFinalReviewsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :auth, :load_privileges, :check_privileges
+  before_action :set_conclusion_final_review, only: [
+    :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
+    :bundle, :create_bundle, :compose_email, :send_by_email
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista los informes definitivos
@@ -24,10 +26,10 @@ class ConclusionFinalReviewsController < ApplicationController
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.includes(
-      :review => [:period, { :plan_item => :business_unit }]
+      review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).order(order).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+      page: params[:page], per_page: APP_LINES_PER_PAGE
+    ).references(:periods, :reviews, :business_units)
 
     respond_to do |format|
       format.html {
@@ -38,7 +40,7 @@ class ConclusionFinalReviewsController < ApplicationController
           )
         end
       }
-      format.xml  { render :xml => @conclusion_final_reviews }
+      format.xml  { render xml: @conclusion_final_reviews }
     end
   end
 
@@ -48,11 +50,10 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/1.xml
   def show
     @title = t 'conclusion_final_review.show_title'
-    @conclusion_final_review = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @conclusion_final_review }
+      format.xml  { render xml: @conclusion_final_review }
     end
   end
 
@@ -62,30 +63,30 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.xml
   # * GET /conclusion_final_reviews/new.json
   def new
-    unless ConclusionFinalReview.exists?(:review_id => params[:review])
+    unless ConclusionFinalReview.exists?(review_id: params[:review])
       @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review = ConclusionFinalReview.new(
-        :review_id => params[:review])
+        review_id: params[:review])
 
       respond_to do |format|
         format.html # new.html.erb
-        format.xml  { render :xml => @conclusion_final_review }
-        format.json { render :json => @conclusion_final_review.to_json(
-            :include => {:review => {
-                :only => [],
-                :methods => :score_text,
-                :include => {
-                  :business_unit => {:only => :name},
-                  :plan_item => {:only => :project}
+        format.xml  { render xml: @conclusion_final_review }
+        format.json { render json: @conclusion_final_review.to_json(
+            include: {review: {
+                only: [],
+                methods: :score_text,
+                include: {
+                  business_unit: {only: :name},
+                  plan_item: {only: :project}
                 },
               }
             },
-            :only => [:conclusion, :applied_procedures])
+            only: [:conclusion, :applied_procedures])
         }
       end
     else
       conclusion_final_review = ConclusionFinalReview.where(
-        :review_id => params[:review]).first
+        review_id: params[:review]).first
 
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
     end
@@ -96,7 +97,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/1/edit
   def edit
     @title = t 'conclusion_final_review.edit_title'
-    @conclusion_final_review = find_with_organization(params[:id])
   end
 
   # Crea un nuevo informe definitivo siempre que cumpla con las validaciones.
@@ -106,16 +106,16 @@ class ConclusionFinalReviewsController < ApplicationController
   def create
     @title = t 'conclusion_final_review.new_title'
     @conclusion_final_review = ConclusionFinalReview.new(
-      params[:conclusion_final_review], {}, false)
+      conclusion_final_review_params, {}, false)
 
     respond_to do |format|
       if @conclusion_final_review.save
         flash.notice = t 'conclusion_final_review.correctly_created'
         format.html { redirect_to(conclusion_final_reviews_url) }
-        format.xml  { render :xml => @conclusion_final_review, :status => :created, :location => @conclusion_final_review }
+        format.xml  { render xml: @conclusion_final_review, status: :created, location: @conclusion_final_review }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @conclusion_final_review.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -123,35 +123,32 @@ class ConclusionFinalReviewsController < ApplicationController
   # Actualiza el contenido de un informe definitivo siempre que cumpla con las
   # validaciones.
   #
-  # * PUT /conclusion_final_reviews/1
-  # * PUT /conclusion_final_reviews/1.xml
+  # * PATCH /conclusion_final_reviews/1
+  # * PATCH /conclusion_final_reviews/1.xml
   def update
     @title = t 'conclusion_final_review.edit_title'
-    @conclusion_final_review = find_with_organization(params[:id])
 
     respond_to do |format|
-      if @conclusion_final_review.update_attributes(
-          params[:conclusion_final_review])
+      if @conclusion_final_review.update(
+          conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @conclusion_final_review.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @conclusion_final_review.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'conclusion_final_review.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Exporta el informe en formato PDF
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_final_review = find_with_organization(params[:id])
-
     @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
 
     respond_to do |format|
@@ -164,7 +161,6 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/score_sheet/1
   def score_sheet
-    @conclusion_final_review = find_with_organization(params[:id])
     review = @conclusion_final_review.review
 
     if params[:global].blank?
@@ -182,9 +178,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/download_work_papers/1
   def download_work_papers
-    @conclusion_final_review = find_with_organization(params[:id])
     review = @conclusion_final_review.review
-
     review.zip_all_work_papers @auth_organization
 
     redirect_to review.relative_work_papers_zip_path
@@ -195,15 +189,12 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/bundle/1
   def bundle
     @title = t 'conclusion_final_review.bundle_title'
-    @conclusion_final_review = find_with_organization(params[:id])
   end
 
   # Crea el legajo completo del informe
   #
   # * POST /conclusion_final_reviews/create_bundle
   def create_bundle
-    @conclusion_final_review = find_with_organization(params[:id])
-
     @conclusion_final_review.create_bundle_zip @auth_organization,
       params[:index_items]
 
@@ -215,7 +206,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/compose_email/1
   def compose_email
     @title = t 'conclusion_final_review.send_by_email'
-    @conclusion_final_review = find_with_organization(params[:id])
     @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
   end
 
@@ -224,7 +214,6 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews/send_by_email/1
   def send_by_email
     @title = t 'conclusion_final_review.send_by_email'
-    @conclusion_final_review = find_with_organization(params[:id])
 
     users = []
     users_without_poll = []
@@ -251,9 +240,9 @@ class ConclusionFinalReviewsController < ApplicationController
     (params[:user].try(:values) || []).each do |user_data|
       user = User.find(user_data[:id]) if user_data[:id]
       send_options = {
-        :note => note,
-        :include_score_sheet => include_score_sheet,
-        :include_global_score_sheet => include_global_score_sheet
+        note: note,
+        include_score_sheet: include_score_sheet,
+        include_global_score_sheet: include_global_score_sheet
       }
 
         if user && !users.include?(user)
@@ -263,15 +252,15 @@ class ConclusionFinalReviewsController < ApplicationController
         end
 
         if user.try(:can_act_as_audited?) && user_data[:questionnaire_id].present?
-          polls = Poll.list.where(:user_id => user.id, :questionnaire_id => user_data[:questionnaire_id],
-                               :pollable_id => @conclusion_final_review)
+          polls = Poll.list.where(user_id: user.id, questionnaire_id: user_data[:questionnaire_id],
+                               pollable_id: @conclusion_final_review)
           if polls.empty?
             questionnaire = Questionnaire.find user_data[:questionnaire_id]
             @conclusion_final_review.polls.create!(
-              :questionnaire_id => user_data[:questionnaire_id],
-              :user_id => user.id,
-              :organization_id => @auth_organization.id,
-              :pollable_type => questionnaire.pollable_type
+              questionnaire_id: user_data[:questionnaire_id],
+              user_id: user.id,
+              organization_id: @auth_organization.id,
+              pollable_type: questionnaire.pollable_type
             )
           else
             users_without_poll << user.informal_name
@@ -286,7 +275,7 @@ class ConclusionFinalReviewsController < ApplicationController
       end
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
-      render :action => :compose_email
+      render action: :compose_email
     end
   end
 
@@ -301,8 +290,10 @@ class ConclusionFinalReviewsController < ApplicationController
     build_search_conditions ConclusionFinalReview, default_conditions
 
     conclusion_final_reviews = ConclusionFinalReview.includes(
-      :review => [:period, { :plan_item => :business_unit }]
-    ).where(@conditions).order(@order_by || 'issue_date DESC')
+      review: [:period, { plan_item: :business_unit }]
+    ).where(@conditions).references(:periods, :reviews, :business_units).order(
+      @order_by || 'issue_date DESC'
+    )
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
@@ -332,8 +323,8 @@ class ConclusionFinalReviewsController < ApplicationController
         cfr.review.identification,
         cfr.review.plan_item.business_unit.name,
         cfr.review.plan_item.project,
-        "<b>#{cfr.issue_date ? l(cfr.issue_date, :format => :minimal) : ''}</b>",
-        (cfr.close_date ? l(cfr.close_date, :format => :minimal) : ''),
+        "<b>#{cfr.issue_date ? l(cfr.issue_date, format: :minimal) : ''}</b>",
+        (cfr.close_date ? l(cfr.close_date, format: :minimal) : ''),
       ]
     end
 
@@ -346,16 +337,16 @@ class ConclusionFinalReviewsController < ApplicationController
       end
 
       pdf.text t('conclusion_final_review.pdf.filtered_by',
-        :query => @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        :columns => filter_columns.to_sentence, :count => @columns.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :inline_format => true
+        query: @query.map {|q| "<b>#{q}</b>"}.join(', '),
+        columns: filter_columns.to_sentence, count: @columns.size),
+        font_size: (PDF_FONT_SIZE * 0.75).round, inline_format: true
     end
 
     unless @order_by_column_name.blank?
       pdf.move_down PDF_FONT_SIZE unless pointer_moved
       pdf.text t('conclusion_final_review.pdf.sorted_by',
-        :column => "<b>#{@order_by_column_name}</b>"),
-        :font_size => (PDF_FONT_SIZE * 0.75).round
+        column: "<b>#{@order_by_column_name}</b>"),
+        font_size: (PDF_FONT_SIZE * 0.75).round
     end
 
     pdf.move_down PDF_FONT_SIZE
@@ -366,8 +357,8 @@ class ConclusionFinalReviewsController < ApplicationController
 
         pdf.table(column_data.insert(0, column_headers), table_options) do
           row(0).style(
-            :background_color => 'cccccc',
-            :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+            background_color: 'cccccc',
+            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
           )
         end
       end
@@ -387,10 +378,10 @@ class ConclusionFinalReviewsController < ApplicationController
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      'organizations.id = :organization_id',
+      "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {organization_id: @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(users.name) LIKE :user_data_#{i}",
@@ -405,48 +396,48 @@ class ConclusionFinalReviewsController < ApplicationController
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
-      format.json { render :json => @users }
+      format.json { render json: @users }
     end
   end
 
   private
+    def set_conclusion_final_review
+      @conclusion_final_review = ConclusionFinalReview.includes(
+        review: [
+          :period,
+          :plan_item,
+          {
+            control_objective_items: [
+              :control, :final_weaknesses, :final_oportunities
+            ]
+          }
+        ]
+      ).where(
+        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
+      ).references(:periods).first
+    end
 
-  # Busca el informe definitivo indicado siempre que pertenezca a la organización.
-  # En el caso que no se encuentre (ya sea que no existe un informe con ese ID o
-  # que no pertenece a la organización con la que se autenticó el usuario)
-  # devuelve nil.
-  # _id_::  ID del informe definitivo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ConclusionFinalReview.includes(
-      :review => [
-        :period,
-        :plan_item,
-        {
-          :control_objective_items => [
-            :control, :final_weaknesses, :final_oportunities
-          ]
-        }
-      ]
-    ).where(
-      :id => id,
-      Period.table_name => {:organization_id => @auth_organization.id}
-    ).first(:readonly => false)
-  end
+    def conclusion_final_review_params
+      params.require(:conclusion_final_review).permit(
+        :review_id, :issue_date, :close_date, :applied_procedures, :conclusion,
+        :lock_version
+      )
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update({
-        :export_to_pdf => :read,
-        :score_sheet => :read,
-        :download_work_papers => :read,
-        :bundle => :read,
-        :create_bundle => :read,
-        :export_list_to_pdf => :read,
-        :auto_complete_for_user => :read,
-        :compose_email => :modify,
-        :send_by_email => :modify
-      })
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update({
+          export_to_pdf: :read,
+          score_sheet: :read,
+          download_work_papers: :read,
+          bundle: :read,
+          create_bundle: :read,
+          export_list_to_pdf: :read,
+          auto_complete_for_user: :read,
+          compose_email: :modify,
+          send_by_email: :modify
+        })
+    end
 end

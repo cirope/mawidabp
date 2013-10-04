@@ -61,7 +61,7 @@ var AutoComplete = {
         open: function() { $('.ui-menu').css('width', input.outerWidth() - 4); }
       });
       
-      input.data('autocomplete')._renderItem = function(ul, item) {
+      input.data('ui-autocomplete')._renderItem = function(ul, item) {
         return $('<li></li>').data(
           'item.autocomplete', item
         ).append($('<a></a>').html(item.label)).appendTo(ul);

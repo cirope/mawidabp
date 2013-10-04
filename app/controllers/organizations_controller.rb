@@ -3,9 +3,9 @@
 # Lista, muestra, crea, modifica y elimina organizaciones (#Organization) y
 # unidades de negocio (#BusinessUnit)
 class OrganizationsController < ApplicationController
-  before_filter :auth, :check_privileges
+  before_action :auth, :check_privileges
+  before_action :set_organization, only: [:show, :edit, :update, :destroy]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :update_auth_user_id
 
   # Lista las organizaciones
   #
@@ -31,7 +31,6 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/1.xml
   def show
     @title = t 'organization.show_title'
-    @organization = find_if_allowed(params[:id])
 
     respond_to do |format|
       format.html # show.html.erbtype
@@ -58,7 +57,6 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/1/edit
   def edit
     @title = t 'organization.edit_title'
-    @organization = find_if_allowed(params[:id])
   end
 
   # Crea una nueva organización siempre que cumpla con las validaciones. Además
@@ -69,7 +67,7 @@ class OrganizationsController < ApplicationController
   def create
     @title = t 'organization.new_title'
     params[:organization].delete :business_units_attributes
-    @organization = Organization.new(params[:organization])
+    @organization = Organization.new(organization_params)
     @organization.must_create_parameters = true
     @organization.must_create_roles = true
 
@@ -101,15 +99,14 @@ class OrganizationsController < ApplicationController
   # validaciones. Además actualiza el contenido de las unidades de negocio que
   # la componen.
   #
-  # * PUT /organizations/1
-  # * PUT /organizations/1.xml
+  # * PATCH /organizations/1
+  # * PATCH /organizations/1.xml
   def update
     @title = t 'organization.edit_title'
-    @organization = find_if_allowed(params[:id])
     params[:organization].delete :business_units_attributes
 
     respond_to do |format|
-      if @organization.update_attributes(params[:organization])
+      if @organization.update(organization_params)
         flash.notice = t 'organization.correctly_updated'
         format.html { redirect_to(organizations_url) }
         format.xml  { head :ok }
@@ -129,7 +126,6 @@ class OrganizationsController < ApplicationController
   # * DELETE /organizations/1
   # * DELETE /organizations/1.xml
   def destroy
-    @organization = find_if_allowed(params[:id])
     @organization.destroy
 
     respond_to do |format|
@@ -139,12 +135,16 @@ class OrganizationsController < ApplicationController
   end
 
   private
+    def organization_params
+      params.require(:organization).permit(
+        :name, :prefix, :description, :group_id, :image_model_id, :lock_version,
+        image_model_attributes: [:id, :image, :image_cache]
+      )
+    end
 
-  # Busca una organización sólo si está dentro de las que el usuario tiene
-  # permitidas ver, si es así y existe la devuelve, caso contrario retorna nil
-  #
-  # _id_::  ID de la organización que se quiere buscar
-  def find_if_allowed(id) #:doc:
-    Organization.where(:group_id => @auth_organization.group_id, :id => id).first
-  end
+    def set_organization
+      @organization = Organization.where(
+        group_id: @auth_organization.group_id, id: params[:id]
+      ).first
+    end
 end

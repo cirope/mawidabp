@@ -29,11 +29,12 @@ class Workflow < ActiveRecord::Base
   has_one :organization, :through => :period
   has_one :plan_item, :through => :review
 
-  has_many :workflow_items, :dependent => :destroy,
-    :order => ["#{WorkflowItem.table_name}.order_number ASC",
-      "#{WorkflowItem.table_name}.start ASC",
-      "#{WorkflowItem.table_name}.end ASC"
-    ].join(', ')
+  has_many :workflow_items, -> {
+    order("#{WorkflowItem.table_name}.order_number ASC,
+      #{WorkflowItem.table_name}.start ASC,
+      #{WorkflowItem.table_name}.end ASC"
+    )
+  }, :dependent => :destroy
   has_many :resource_utilizations, :through => :workflow_items
 
   accepts_nested_attributes_for :workflow_items, :allow_destroy => true

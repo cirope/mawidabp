@@ -2,14 +2,11 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require *Rails.groups(:assets => %w(development test))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+# Require the gems listed in Gemfile, including any gems
+# # you've limited to :test, :development, or :production.
+Bundler.require(:default, Rails.env)
 
-module MawidaApp
+module MawidaBP
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -32,21 +29,5 @@ module MawidaApp
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :es
-
-    # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = 'utf-8'
-
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password, :password_confirmation]
-
-    # Enable the asset pipeline
-    config.assets.enabled = true
-
-    config.cache_store = :mem_cache_store, 'localhost', {
-      :namespace => "mawidabp_#{Rails.env}".downcase
-    }
-
-    # En caso de no tener memcached se pueden user archivos:
-    #  config.cache_store = :file_store, File.join(Rails.root, 'tmp', 'cache_files')
   end
 end

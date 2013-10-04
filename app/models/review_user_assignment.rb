@@ -1,4 +1,3 @@
-# encoding: utf-8
 class ReviewUserAssignment < ActiveRecord::Base
   include ParameterSelector
   include Comparable
@@ -48,8 +47,8 @@ class ReviewUserAssignment < ActiveRecord::Base
   end
 
   # Relaciones
-  belongs_to :review, :inverse_of => :review_user_assignments
-  belongs_to :user, :inverse_of => :review_user_assignments
+  belongs_to :review
+  belongs_to :user
 
   def <=>(other)
     if self.review_id == other.review_id

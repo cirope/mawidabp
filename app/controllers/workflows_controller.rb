@@ -1,13 +1,12 @@
-# encoding: utf-8
 # =Controlador de programas de trabajo
 #
 # Lista, muestra, crea, modifica y elimina programas de trabajo (#Workflow) y
 # sus ítems (#WorkflowItem)
 class WorkflowsController < ApplicationController
-  before_filter :auth, :load_privileges, :check_privileges
+  before_action :auth, :load_privileges, :check_privileges
   hide_action :find_with_organization, :update_auth_user_id, :exists?,
     :load_privileges
-  layout proc { |controller| controller.request.xhr? ? false : 'application' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los programas de trabajo
   #
@@ -18,12 +17,12 @@ class WorkflowsController < ApplicationController
     @workflows = Workflow.includes(:period, :review).where(
       "#{Period.table_name}.organization_id" => @auth_organization.id
     ).order("#{Review.table_name}.identification DESC").paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+      page: params[:page], per_page: APP_LINES_PER_PAGE
+    ).references(:periods, :reviews)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @workflows }
+      format.xml  { render xml: @workflows }
     end
   end
 
@@ -37,7 +36,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @workflow }
+      format.xml  { render xml: @workflow }
     end
   end
 
@@ -57,7 +56,7 @@ class WorkflowsController < ApplicationController
         attributes = wi.attributes.merge(
           'id' => nil,
           'resource_utilizations_attributes' =>
-            wi.resource_utilizations.map {|ru| ru.attributes.merge 'id' => nil}
+            wi.resource_utilizations.map { |ru| ru.attributes.merge 'id' => nil }
         )
 
         @workflow.workflow_items.build(attributes)
@@ -68,7 +67,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @workflow }
+      format.xml  { render xml: @workflow }
     end
   end
 
@@ -87,7 +86,7 @@ class WorkflowsController < ApplicationController
   # * POST /workflows.xml
   def create
     @title = t 'workflow.new_title'
-    @workflow = Workflow.new(params[:workflow])
+    @workflow = Workflow.new(workflow_params)
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number.to_i <=> wfi_b.order_number.to_i
     end
@@ -96,10 +95,10 @@ class WorkflowsController < ApplicationController
       if @workflow.save
         flash.notice = t 'workflow.correctly_created'
         format.html { redirect_to(workflows_url) }
-        format.xml  { render :xml => @workflow, :status => :created, :location => @workflow }
+        format.xml  { render xml: @workflow, status: :created, location: @workflow }
       else
-        format.html { render :action => :new }
-        format.xml  { render :xml => @workflow.errors, :status => :unprocessable_entity }
+        format.html { render action: :new }
+        format.xml  { render xml: @workflow.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -108,8 +107,8 @@ class WorkflowsController < ApplicationController
   # del mismo) siempre que cumpla con las validaciones. Además actualiza el
   # contenido de los ítems que lo componen.
   #
-  # * PUT /workflows/1
-  # * PUT /workflows/1.xml
+  # * PATCH /workflows/1
+  # * PATCH /workflows/1.xml
   def update
     @title = t 'workflow.edit_title'
     @workflow = find_with_organization(params[:id])
@@ -118,19 +117,19 @@ class WorkflowsController < ApplicationController
     end
 
     respond_to do |format|
-      if @workflow.update_attributes(params[:workflow])
+      if @workflow.update(workflow_params)
         flash.notice = t 'workflow.correctly_updated'
         format.html { redirect_to(workflows_url) }
         format.xml  { head :ok }
       else
-        format.html { render :action => :edit }
-        format.xml  { render :xml => @workflow.errors, :status => :unprocessable_entity }
+        format.html { render action: :edit }
+        format.xml  { render xml: @workflow.errors, status: :unprocessable_entity }
       end
     end
 
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'workflow.stale_object_error'
-    redirect_to :action => :edit
+    redirect_to action: :edit
   end
 
   # Elimina un programa de trabajo
@@ -168,7 +167,7 @@ class WorkflowsController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {organization_id: @auth_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -183,12 +182,12 @@ class WorkflowsController < ApplicationController
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
       format.json {
-        render :json => @users.to_json(
-          :methods => [:label, :informal, :cost_per_unit]
+        render json: @users.to_json(
+          methods: [:label, :informal, :cost_per_unit]
         )
       }
     end
@@ -204,25 +203,37 @@ class WorkflowsController < ApplicationController
 
     reviews.each { |r| options << [r.identification, r.id] }
 
-    render :json => options
+    render json: options
   end
 
   # * GET /workflows/resource_data/1
   def resource_data
     resource = Resource.find(params[:id])
 
-    render :json => resource.to_json(:only => :cost_per_unit)
+    render json: resource.to_json(only: :cost_per_unit)
   end
 
   # * GET /workflows/estimated_amount/1
   def estimated_amount
     review = Review.find(params[:id]) unless params[:id].blank?
 
-    render :partial => 'estimated_amount',
-      :locals => {:plan_item => review.try(:plan_item)}
+    render partial: 'estimated_amount',
+      locals: {plan_item: review.try(:plan_item)}
   end
 
   private
+
+  def workflow_params
+    params.require(:workflow).permit(
+      :period_id, :review_id, :allow_overload, :lock_version,
+      workflow_items_attributes: [
+        :id, :task, :start, :end, :plain_predecessors, :order_number, :_destroy,
+        resource_utilizations_attributes: [
+          :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+        ]
+      ]
+    )
+  end
 
   # Busca el programa de trabajo indicado siempre que pertenezca a la
   # organización. En el caso que no se encuentre (ya sea que no existe un
@@ -230,29 +241,19 @@ class WorkflowsController < ApplicationController
   # que se autenticó el usuario) devuelve nil.
   # _id_::  ID del programa de trabajo que se quiere recuperar
   def find_with_organization(id) #:doc:
-    Workflow.includes(:period, {:workflow_items => :resource_utilizations}).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first(:readonly => false)
+    Workflow.includes(:period, {workflow_items: :resource_utilizations}).where(
+      id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
+    ).references(:periods).first
   end
-
-  # Indica si existe el programa de trabajo indicado, siempre que pertenezca a
-  # la organización. En el caso que no se encuentre (ya sea que no existe un
-  # programa de trabajo con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve false.
-  # _id_::  ID del programa de trabajo que se quiere recuperar
-  def exists?(id) #:doc:
-    Workflow.includes(:period).where(
-      :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).first
-  end
+  alias :exists? :find_with_organization
 
   def load_privileges #:nodoc:
     @action_privileges.update(
-      :export_to_pdf => :read,
-      :auto_complete_for_user => :read,
-      :reviews_for_period => :read,
-      :resource_data => :read,
-      :estimated_amount => :read
+      export_to_pdf: :read,
+      auto_complete_for_user: :read,
+      reviews_for_period: :read,
+      resource_data: :read,
+      estimated_amount: :read
     )
   end
 end

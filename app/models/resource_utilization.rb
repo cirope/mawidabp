@@ -7,8 +7,8 @@ class ResourceUtilization < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :human, where(:resource_type => 'User')
-  scope :material, where(:resource_type => 'Resource')
+  scope :human, -> { where(:resource_type => 'User') }
+  scope :material, -> { where(:resource_type => 'Resource') }
 
   # Restricciones
   validates :units, :cost_per_unit, :resource_id, :resource_type,

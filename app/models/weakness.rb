@@ -1,23 +1,25 @@
 class Weakness < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
-  attr_protected :highest_risk
 
   # Callbacks
   before_save :assign_highest_risk
 
   # Named scopes
-  scope :all_for_report, where(
+  scope :all_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true
-  ).order(['risk DESC', 'state ASC'])
-  scope :with_highest_risk, where(
+    ).order(['risk DESC', 'state ASC'])
+  }
+  scope :with_highest_risk, -> { where(
     "#{table_name}.highest_risk = #{table_name}.risk"
-  )
-  scope :with_medium_risk, where(
+    )
+  }
+  scope :with_medium_risk, -> { where(
     "#{table_name}.risk = (#{table_name}.highest_risk - 1) "
-  )
-  scope :by_risk, lambda {|risk|
+    )
+  }
+  scope :by_risk, ->(risk) {
     where(
       "#{table_name}.risk = #{risk}"
     )

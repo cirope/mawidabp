@@ -3,7 +3,7 @@ class Fortress < Finding
   attr_reader :approval_errors
 
   # Named scopes
-  scope :all_for_report, lambda {
+  scope :all_for_report, -> {
     where(
       :final => true
     )

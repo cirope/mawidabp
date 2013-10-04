@@ -6,8 +6,8 @@ class FindingUserAssignment < ActiveRecord::Base
   }
 
   # Scopes
-  scope :owners, where(:process_owner => true)
-  scope :responsibles, where(:responsible_auditor => true)
+  scope :owners, -> { where(:process_owner => true) }
+  scope :responsibles, -> { where(:responsible_auditor => true) }
 
   # Callbacks
   before_save :can_be_modified?, :assign_finding_type
@@ -24,7 +24,7 @@ class FindingUserAssignment < ActiveRecord::Base
   validates_each :user_id do |record, attr, value|
     users = (record.finding || record.raw_finding).finding_user_assignments.
       reject(&:marked_for_destruction?).map(&:user_id)
-    
+
     record.errors.add attr, :taken if users.select { |u| u == value }.size > 1
   end
 

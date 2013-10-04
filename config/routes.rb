@@ -1,4 +1,4 @@
-MawidaApp::Application.routes.draw do
+MawidaBP::Application.routes.draw do
   resources :questionnaires
 
   resources :polls do
@@ -31,7 +31,7 @@ MawidaApp::Application.routes.draw do
 
   resources :groups
 
-  resources :detracts, :only => [:index, :show, :new, :create] do
+  resources :detracts, only: [:index, :show, :new, :create] do
     member do
       get :show_last_detracts
     end
@@ -39,20 +39,24 @@ MawidaApp::Application.routes.draw do
 
   resources :inline_helps
 
-  match 'welcome', :as => 'welcome', :to => 'welcome#index'
-
-  match 'execution_reports', :as => 'execution_reports',
-    :to => 'execution_reports#index'
+  get 'welcome', as: 'welcome', to: 'welcome#index'
+  get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 
   [
-    'weaknesses_by_state', 'create_weaknesses_by_state',
-    'detailed_management_report', 'create_detailed_management_report'
+    'weaknesses_by_state',
+    'detailed_management_report'
   ].each do |action|
-    match "execution_reports/#{action}", :to => "execution_reports##{action}",
-      :as => action
+    get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
-  resources :versions, :only => [:show] do
+  [
+    'create_weaknesses_by_state',
+    'create_detailed_management_report'
+  ].each do |action|
+    post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
+  end
+
+  resources :versions, only: [:show] do
     collection do
       get :security_changes_report
     end
@@ -70,94 +74,145 @@ MawidaApp::Application.routes.draw do
     end
   end
 
-  resources :notifications, :only => [:index, :show, :edit, :update] do
+  resources :notifications, only: [:index, :show, :edit, :update] do
     member do
       get :confirm
     end
   end
 
-  match 'conclusion_audit_reports', :as => 'conclusion_audit_reports',
-    :to => 'conclusion_audit_reports#index'
-  match 'conclusion_committee_reports', :as => 'conclusion_committee_reports',
-    :to => 'conclusion_committee_reports#index'
-  match 'conclusion_management_reports', :as => 'conclusion_management_reports',
-    :to => 'conclusion_management_reports#index'
-  match 'follow_up_audit', :as => 'follow_up_audit',
-    :to => 'follow_up_audit#index'
-  match 'follow_up_committee', :as => 'follow_up_committee',
-    :to => 'follow_up_committee#index'
-  match 'follow_up_management', :as => 'follow_up_management',
-    :to => 'follow_up_management#index'
+  get 'conclusion_audit_reports', as: 'conclusion_audit_reports',
+    to: 'conclusion_audit_reports#index'
+  get 'conclusion_committee_reports', as: 'conclusion_committee_reports',
+    to: 'conclusion_committee_reports#index'
+  get 'conclusion_management_reports', as: 'conclusion_management_reports',
+    to: 'conclusion_management_reports#index'
+  get 'follow_up_audit', as: 'follow_up_audit', to: 'follow_up_audit#index'
+  get 'follow_up_committee', as: 'follow_up_committee', to: 'follow_up_committee#index'
+  get 'follow_up_management', as: 'follow_up_management', to: 'follow_up_management#index'
 
   [
-    'weaknesses_by_state', 'create_weaknesses_by_state',
-    'weaknesses_by_risk', 'create_weaknesses_by_risk',
-    'weaknesses_by_audit_type', 'create_weaknesses_by_audit_type',
-    'control_objective_stats', 'create_control_objective_stats',
-    'process_control_stats', 'create_process_control_stats'
+    'weaknesses_by_state',
+    'weaknesses_by_risk',
+    'weaknesses_by_audit_type',
+    'control_objective_stats',
+    'process_control_stats'
   ].each do |action|
-    match "conclusion_management_reports/#{action}",
+    get "conclusion_management_reports/#{action}",
+      as: "#{action}_conclusion_management_reports",
+      to: "conclusion_management_reports##{action}"
+    get "conclusion_audit_reports/#{action}",
+      as: "#{action}_conclusion_audit_reports",
+      to: "conclusion_audit_reports##{action}"
+    get "follow_up_management/#{action}",
+      as: "#{action}_follow_up_management",
+      to: "follow_up_management##{action}"
+    get "follow_up_audit/#{action}", as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
+  end
+
+  [
+    'create_weaknesses_by_state',
+    'create_weaknesses_by_risk',
+    'create_weaknesses_by_audit_type',
+    'create_control_objective_stats',
+    'create_process_control_stats'
+  ].each do |action|
+    post "conclusion_management_reports/#{action}",
       :as => "#{action}_conclusion_management_reports",
       :to => "conclusion_management_reports##{action}"
-    match "conclusion_audit_reports/#{action}",
+    post "conclusion_audit_reports/#{action}",
       :as => "#{action}_conclusion_audit_reports",
       :to => "conclusion_audit_reports##{action}"
-    match "follow_up_management/#{action}",
+    post "follow_up_management/#{action}",
       :as => "#{action}_follow_up_management",
       :to => "follow_up_management##{action}"
-    match "follow_up_audit/#{action}", :as => "#{action}_follow_up_audit",
+    post "follow_up_audit/#{action}", :as => "#{action}_follow_up_audit",
       :to => "follow_up_audit##{action}"
   end
 
   [
-    'qa_indicators', 'create_qa_indicators',
-    'synthesis_report', 'create_synthesis_report',
-    'control_objective_stats', 'create_control_objective_stats',
-    'process_control_stats', 'create_process_control_stats',
-     'rescheduled_being_implemented_weaknesses_report', 'create_rescheduled_being_implemented_weaknesses_report'
+    'qa_indicators',
+    'synthesis_report',
+    'control_objective_stats',
+    'process_control_stats',
+    'rescheduled_being_implemented_weaknesses_report'
   ].each do |action|
-    match "conclusion_committee_reports/#{action}",
+    get "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",
       :to => "conclusion_committee_reports##{action}"
-    match "follow_up_committee/#{action}",
+    get "follow_up_committee/#{action}",
       :as => "#{action}_follow_up_committee",
       :to => "follow_up_committee##{action}"
   end
 
   [
-    'weaknesses_by_risk_report', 'create_weaknesses_by_risk_report',
-    'fixed_weaknesses_report', 'create_fixed_weaknesses_report',
-    'nonconformities_report', 'create_nonconformities_report'
+    'create_qa_indicators',
+    'create_synthesis_report',
+    'create_control_objective_stats',
+    'create_process_control_stats',
+    'create_rescheduled_being_implemented_weaknesses_report'
   ].each do |action|
-    match "conclusion_committee_reports/#{action}",
+    post "conclusion_committee_reports/#{action}",
       :as => "#{action}_conclusion_committee_reports",
       :to => "conclusion_committee_reports##{action}"
-    match "follow_up_committee/#{action}",
+    post "follow_up_committee/#{action}",
       :as => "#{action}_follow_up_committee",
       :to => "follow_up_committee##{action}"
-    match "conclusion_audit_reports/#{action}",
+  end
+
+  [
+    'weaknesses_by_risk_report',
+    'fixed_weaknesses_report',
+    'nonconformities_report',
+  ].each do |action|
+    get "conclusion_committee_reports/#{action}",
+      :as => "#{action}_conclusion_committee_reports",
+      :to => "conclusion_committee_reports##{action}"
+    get "follow_up_committee/#{action}",
+      :as => "#{action}_follow_up_committee",
+      :to => "follow_up_committee##{action}"
+    get "conclusion_audit_reports/#{action}",
       :as => "#{action}_conclusion_audit_reports",
       :to => "conclusion_audit_reports##{action}"
-    match "follow_up_audit/#{action}",
+    get "follow_up_audit/#{action}",
       :as => "#{action}_follow_up_audit",
       :to => "follow_up_audit##{action}"
   end
 
-  match "conclusion_audit_reports/cost_analysis",
+  [
+    'create_weaknesses_by_risk_report',
+    'create_fixed_weaknesses_report',
+    'create_nonconformities_report'
+  ].each do |action|
+    post "conclusion_committee_reports/#{action}",
+      :as => "#{action}_conclusion_committee_reports",
+      :to => "conclusion_committee_reports##{action}"
+    post "follow_up_committee/#{action}",
+      :as => "#{action}_follow_up_committee",
+      :to => "follow_up_committee##{action}"
+    post "conclusion_audit_reports/#{action}",
+      :as => "#{action}_conclusion_audit_reports",
+      :to => "conclusion_audit_reports##{action}"
+    post "follow_up_audit/#{action}",
+      :as => "#{action}_follow_up_audit",
+      :to => "follow_up_audit##{action}"
+  end
+
+  get "conclusion_audit_reports/cost_analysis",
     :as => 'cost_analysis_conclusion_audit_reports',
     :to => 'conclusion_audit_reports#cost_analysis'
-  match "conclusion_audit_reports/create_cost_analysis",
+  post "conclusion_audit_reports/create_cost_analysis",
     :as => 'create_cost_analysis_conclusion_audit_reports',
     :to => 'conclusion_audit_reports#create_cost_analysis'
-  match 'conclusion_audit_reports/cost_analysis/detailed',
+  get 'conclusion_audit_reports/cost_analysis/detailed',
     :as => 'detailed_cost_analysis_conclusion_audit_reports',
     :to => 'conclusion_audit_reports#cost_analysis',
     :include_details => 1
 
-  match 'follow_up_audit/cost_analysis',
+  get 'follow_up_audit/cost_analysis',
     :as => 'cost_analysis_follow_up_audit',
     :to => 'follow_up_audit#cost_analysis'
-  match 'follow_up_audit/create_cost_analysis',
+  post 'follow_up_audit/create_cost_analysis',
     :as => 'create_cost_analysis_follow_up_audit',
     :to => 'follow_up_audit#create_cost_analysis'
 
@@ -195,7 +250,7 @@ MawidaApp::Application.routes.draw do
     member do
       get :export_to_pdf
       get :compose_email
-      put :send_by_email
+      patch :send_by_email
       get :download_work_papers
       get :score_sheet
       get :bundle
@@ -212,7 +267,7 @@ MawidaApp::Application.routes.draw do
     member do
       get :export_to_pdf
       get :compose_email
-      put :send_by_email
+      patch :send_by_email
       get :download_work_papers
       get :score_sheet
       get :bundle
@@ -256,7 +311,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
-      put :undo_reiteration
+      patch :undo_reiteration
     end
   end
 
@@ -271,7 +326,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
-      put :undo_reiteration
+      patch :undo_reiteration
     end
   end
 
@@ -316,7 +371,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
-      put :undo_reiteration
+      patch :undo_reiteration
     end
 
     collection do
@@ -331,7 +386,7 @@ MawidaApp::Application.routes.draw do
 
     member do
       get :follow_up_pdf
-      put :undo_reiteration
+      patch :undo_reiteration
     end
 
     collection do
@@ -381,14 +436,14 @@ MawidaApp::Application.routes.draw do
       get :user_status_without_graph
       get :logout
       get :edit_password
-      put :update_password
+      patch :update_password
       get :edit_personal_data
-      put :update_personal_data
-      put :blank_password
+      patch :update_personal_data
+      patch :blank_password
       get :reassignment_edit
-      put :reassignment_update
+      patch :reassignment_update
       get :release_edit
-      put :release_update
+      patch :release_update
     end
   end
 
@@ -396,11 +451,11 @@ MawidaApp::Application.routes.draw do
   # first created -> highest priority.
 
   # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
+  #   get 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
 
   # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  #   get 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
@@ -443,15 +498,15 @@ MawidaApp::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'users#login'
 
-  match 'private/:path', :to => 'file_models#download',
+  get 'private/:path', :to => 'file_models#download',
     :constraints => { :path => /.+/ }
 
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+  # get ':controller(/:action(/:id(.:format)))'
 
   # Any invalid route goes to the welcome page
-  match '*a' => redirect('/welcome')
+  get '*a' => redirect('/welcome')
 end

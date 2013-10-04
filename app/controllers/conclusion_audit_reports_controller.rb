@@ -5,9 +5,7 @@ class ConclusionAuditReportsController < ApplicationController
   include ConclusionCommonReports
   include ConclusionHighRiskReports
 
-  before_filter :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :add_weaknesses_synthesis_table,
-    :get_weaknesses_synthesis_table_data, :make_date_range
+  before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles
   #
@@ -213,25 +211,24 @@ class ConclusionAuditReportsController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      :weaknesses_by_state => :read,
-      :create_weaknesses_by_state => :read,
-      :weaknesses_by_risk => :read,
-      :create_weaknesses_by_risk => :read,
-      :weaknesses_by_audit_type => :read,
-      :create_weaknesses_by_audit_type => :read,
-      :cost_analysis => :read,
-      :create_cost_analysis => :read,
-      :high_risk_weaknesses_report => :read,
-      :create_high_risk_weaknesses_report => :read,
-      :fixed_weaknesses_report => :read,
-      :create_fixed_weaknesses_report => :read,
-      :control_objective_stats => :read,
-      :create_control_objective_stats => :read,
-      :process_control_stats => :read,
-      :create_process_control_stats => :read
-    )
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        :weaknesses_by_state => :read,
+        :create_weaknesses_by_state => :read,
+        :weaknesses_by_risk => :read,
+        :create_weaknesses_by_risk => :read,
+        :weaknesses_by_audit_type => :read,
+        :create_weaknesses_by_audit_type => :read,
+        :cost_analysis => :read,
+        :create_cost_analysis => :read,
+        :high_risk_weaknesses_report => :read,
+        :create_high_risk_weaknesses_report => :read,
+        :fixed_weaknesses_report => :read,
+        :create_fixed_weaknesses_report => :read,
+        :control_objective_stats => :read,
+        :create_control_objective_stats => :read,
+        :process_control_stats => :read,
+        :create_process_control_stats => :read
+      )
+    end
 end
