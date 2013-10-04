@@ -1,5 +1,6 @@
 class QuestionnairesController < ApplicationController
   before_action :auth, :check_privileges
+  before_action :set_questionnaire, only: [:show, :edit, :update, :destroy]
 
   # GET /questionnaires
   # GET /questionnaires.json
@@ -19,7 +20,6 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1.json
   def show
     @title = t 'questionnaire.show_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
       redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
@@ -46,7 +46,6 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/1/edit
   def edit
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
       redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
@@ -85,7 +84,6 @@ class QuestionnairesController < ApplicationController
   # PATCH /questionnaires/1.json
   def update
     @title = t 'questionnaire.edit_title'
-    @questionnaire = Questionnaire.by_organization(@auth_organization.id, params[:id]).first
 
     if @questionnaire.nil?
       redirect_to questionnaires_url, :alert => t('questionnaire.not_found')
@@ -121,7 +119,6 @@ class QuestionnairesController < ApplicationController
   # DELETE /questionnaires/1
   # DELETE /questionnaires/1.json
   def destroy
-    @questionnaire = Questionnaire.find(params[:id])
     @questionnaire.destroy
 
     respond_to do |format|
@@ -131,12 +128,17 @@ class QuestionnairesController < ApplicationController
   end
 
   private
+    def set_questionnaire
+      @questionnaire = Questionnaire.by_organization(
+        @auth_organization.id, params[:id]
+      ).first
+    end
 
-  def questionnaire_params
-    params.require(:questionnaire).permit(
-      :name, :lock_version, questions_attributes: [
-        :id, :question, :sort_order, :answer_type, :_destroy
-      ]
-    )
-  end
+    def questionnaire_params
+      params.require(:questionnaire).permit(
+        :name, :lock_version, questions_attributes: [
+          :id, :question, :sort_order, :answer_type, :_destroy
+        ]
+      )
+    end
 end

@@ -3,7 +3,6 @@
 # Lista y muestra registros de ingreso (#LoginRecord)
 class LoginRecordsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges
 
   # Muestra un menú con los distintos listados disponibles (registros de ingreso
   # y registros de errores)
@@ -147,11 +146,7 @@ class LoginRecordsController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update({
-        :choose => :read,
-        :export_to_pdf => :read
-      })
-  end
+    def load_privileges #:nodoc:
+      @action_privileges.update(choose: :read, export_to_pdf: :read)
+    end
 end

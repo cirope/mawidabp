@@ -6,8 +6,6 @@ class PlansController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :find_with_organization, :update_auth_user_id, :exists?,
-    :load_privileges
 
   # Lista los planes de trabajo
   #

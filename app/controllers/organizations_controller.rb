@@ -4,8 +4,10 @@
 # unidades de negocio (#BusinessUnit)
 class OrganizationsController < ApplicationController
   before_action :auth, :check_privileges
+  before_action :set_organization, only: [
+    :show, :edit, :update, :destroy
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :update_auth_user_id
 
   # Lista las organizaciones
   #
@@ -31,7 +33,6 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/1.xml
   def show
     @title = t 'organization.show_title'
-    @organization = find_if_allowed(params[:id])
 
     respond_to do |format|
       format.html # show.html.erbtype
@@ -58,7 +59,6 @@ class OrganizationsController < ApplicationController
   # * GET /organizations/1/edit
   def edit
     @title = t 'organization.edit_title'
-    @organization = find_if_allowed(params[:id])
   end
 
   # Crea una nueva organización siempre que cumpla con las validaciones. Además
@@ -105,7 +105,6 @@ class OrganizationsController < ApplicationController
   # * PATCH /organizations/1.xml
   def update
     @title = t 'organization.edit_title'
-    @organization = find_if_allowed(params[:id])
     params[:organization].delete :business_units_attributes
 
     respond_to do |format|
@@ -129,7 +128,6 @@ class OrganizationsController < ApplicationController
   # * DELETE /organizations/1
   # * DELETE /organizations/1.xml
   def destroy
-    @organization = find_if_allowed(params[:id])
     @organization.destroy
 
     respond_to do |format|
@@ -139,18 +137,16 @@ class OrganizationsController < ApplicationController
   end
 
   private
+    def organization_params
+      params.require(:organization).permit(
+        :name, :prefix, :description, :group_id, :image_model_id, :lock_version,
+        image_model_attributes: [:image, :image_cache]
+      )
+    end
 
-  def organization_params
-    params.require(:organization).permit(
-      :name, :prefix, :description, :group_id, :image_model_id, :lock_version,
-      image_model_attributes: [:image, :image_cache]
-    )
-  end
-  # Busca una organización sólo si está dentro de las que el usuario tiene
-  # permitidas ver, si es así y existe la devuelve, caso contrario retorna nil
-  #
-  # _id_::  ID de la organización que se quiere buscar
-  def find_if_allowed(id) #:doc:
-    Organization.where(:group_id => @auth_organization.group_id, :id => id).first
-  end
+    def set_organization
+      @organization = Organization.where(
+        group_id: @auth_organization.group_id, id: params[:id]
+      ).first
+    end
 end

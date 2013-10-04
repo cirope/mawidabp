@@ -91,7 +91,7 @@ class NotificationsController < ApplicationController
   private
     def set_notification
       @notification = Notification.where(
-        :confirmation_hash => params[:id], :user_id => @auth_user.id
+        confirmation_hash: params[:id], user_id: @auth_user.id
       ).first
     end
 

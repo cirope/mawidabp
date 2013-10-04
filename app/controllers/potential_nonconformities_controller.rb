@@ -1,6 +1,8 @@
 class PotentialNonconformitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :set_potential_nonconformity, only: [
+    :show, :edit, :update, :destroy, :follow_up_pdf, :undo_reiteration
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las no conformidades potenciales
@@ -67,7 +69,6 @@ class PotentialNonconformitiesController < ApplicationController
   # * GET /potential_nonconformities/1.xml
   def show
     @title = t 'potential_nonconformity.show_title'
-    @potential_nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -96,7 +97,6 @@ class PotentialNonconformitiesController < ApplicationController
   # * GET /potential_nonconformities/1/edit
   def edit
     @title = t 'potential_nonconformity.edit_title'
-    @potential_nonconformity = find_with_organization(params[:id])
   end
 
   # Crea una no conformidad potencial siempre que cumpla con las validaciones.
@@ -126,7 +126,6 @@ class PotentialNonconformitiesController < ApplicationController
   # * PATCH /potential_nonconformities/1.xml
   def update
     @title = t 'potential_nonconformity.edit_title'
-    @potential_nonconformity = find_with_organization(params[:id])
 
     respond_to do |format|
       PotentialNonconformity.transaction do
@@ -151,18 +150,14 @@ class PotentialNonconformitiesController < ApplicationController
   #
   # * GET /potential_nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    potential_nonconformity = find_with_organization(params[:id])
-
-    potential_nonconformity.follow_up_pdf(@auth_organization)
-
-    redirect_to potential_nonconformity.relative_follow_up_pdf_path
+    @potential_nonconformity.follow_up_pdf(@auth_organization)
+    redirect_to @potential_nonconformity.relative_follow_up_pdf_path
   end
 
   # Deshace la reiteración de la oportunidad
   #
   # * PATCH /potential_nonconformities/undo_reiteration/1
   def undo_reiteration
-    @potential_nonconformity = find_with_organization(params[:id])
     @potential_nonconformity.undo_reiteration
 
     respond_to do |format|
@@ -307,19 +302,13 @@ class PotentialNonconformitiesController < ApplicationController
       )
     end
 
-    # Busca la no conformidad potencial indicada siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe una
-    # oportunidad con ese ID o que no pertenece a la organización con la que se
-    # autenticó el usuario) devuelve nil.
-    # _id_::  ID de la oportunidad que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      PotentialNonconformity.includes(
-        :finding_relations,
-        :work_papers,
-        {finding_user_assignments: :user},
-        {control_objective_item: {review: :period}}
+    def set_potential_nonconformity
+      @potential_nonconformity = PotentialNonconformity.includes(
+        :finding_relations, :work_papers,
+        { finding_user_assignments: :user },
+        { control_objective_item: { review: :period } }
       ).where(
-        id: id, Period.table_name => {organization_id: @auth_organization.id}
+        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
       ).first
     end
 

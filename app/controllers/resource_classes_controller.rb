@@ -4,7 +4,7 @@
 # sus recursos (#Resource)
 class ResourceClassesController < ApplicationController
   before_action :auth, :check_privileges
-  hide_action :find_with_organization, :update_auth_user_id
+  before_action :set_resource_class, only: [:show, :edit, :update, :destroy]
 
   # Lista las clases de recursos
   #
@@ -30,7 +30,6 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/1.xml
   def show
     @title = t 'resource_class.show_title'
-    @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -58,7 +57,6 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes/1/edit
   def edit
     @title = t 'resource_class.edit_title'
-    @resource_class = find_with_organization(params[:id])
   end
 
   # Crea una nueva clase de recursos siempre que cumpla con las validaciones.
@@ -91,7 +89,6 @@ class ResourceClassesController < ApplicationController
   # * PATCH /resource_classes/1.xml
   def update
     @title = t 'resource_class.edit_title'
-    @resource_class = find_with_organization(params[:id])
 
     respond_to do |format|
       if @resource_class.update(resource_class_params)
@@ -114,7 +111,6 @@ class ResourceClassesController < ApplicationController
   # * DELETE /resource_classes/1
   # * DELETE /resource_classes/1.xml
   def destroy
-    @resource_class = find_with_organization(params[:id])
     @resource_class.destroy
 
     respond_to do |format|
@@ -124,22 +120,18 @@ class ResourceClassesController < ApplicationController
   end
 
   private
+    def set_resource_class
+      @resource_class = ResourceClass.where(
+        id: params[:id], organization_id: @auth_organization.id
+      ).first
+    end
 
-  def resource_class_params
-    params.require(:resource_class).permit(
-      :name, :unit, :resource_class_type, :lock_version,
-      resources_attributes: [
-        :id, :name, :description, :cost_per_unit, :_destroy
-      ]
-    )
-  end
-
-  # Busca la clase de recurso indicada siempre que pertenezca a la organización.
-  # En el caso que no se encuentre (ya sea que no existe una clase de recurso
-  # con ese ID o que no pertenece a la organización con la que se autenticó el
-  # usuario) devuelve nil.
-  # _id_::  ID de la clase de recurso que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    ResourceClass.where(id: id, organization_id: @auth_organization.id).first
-  end
+    def resource_class_params
+      params.require(:resource_class).permit(
+        :name, :unit, :resource_class_type, :lock_version,
+        resources_attributes: [
+          :id, :name, :description, :cost_per_unit, :_destroy
+        ]
+      )
+    end
 end
