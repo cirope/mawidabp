@@ -3,7 +3,6 @@
 # Lista y muestra registros de errores (#ErrorRecord)
 class ErrorRecordsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges
 
   # Lista los registros de error
   #
@@ -138,8 +137,7 @@ class ErrorRecordsController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(export_to_pdf: :read)
-  end
+    def load_privileges
+      @action_privileges.update(export_to_pdf: :read)
+    end
 end

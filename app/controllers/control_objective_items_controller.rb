@@ -4,8 +4,10 @@
 # (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
   before_action :auth, :check_privileges
+  before_action :set_control_objective_item, only: [
+    :show, :edit, :update, :destroy
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
-  hide_action :find_with_organization
 
   # Lista los objetivos de control
   #
@@ -44,7 +46,6 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1.xml
   def show
     @title = t 'control_objective_item.show_title'
-    @control_objective_item = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -65,8 +66,6 @@ class ControlObjectiveItemsController < ApplicationController
         Review.table_name => {organization_id: @auth_organization.id}
       ).order('created_at DESC').first
       session[:back_to] = edit_review_url(params[:review].to_i)
-    else
-      @control_objective_item = find_with_organization(params[:id])
     end
 
     @review = @control_objective_item.review
@@ -79,7 +78,6 @@ class ControlObjectiveItemsController < ApplicationController
   # * PATCH /control_objective_items/1.xml
   def update
     @title = t 'control_objective_item.edit_title'
-    @control_objective_item = find_with_organization(params[:id])
     review = @control_objective_item.review
 
     respond_to do |format|
@@ -118,7 +116,6 @@ class ControlObjectiveItemsController < ApplicationController
   # * DELETE /control_objective_items/1
   # * DELETE /control_objective_items/1.xml
   def destroy
-    @control_objective_item = find_with_organization(params[:id])
     @control_objective_item.destroy
 
     respond_to do |format|
@@ -130,16 +127,11 @@ class ControlObjectiveItemsController < ApplicationController
   end
 
   private
-    # Busca el objetivo de control indicado siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe un
-    # objetivo de control con ese ID o que no pertenece a la organización con la
-    # que se autenticó el usuario) devuelve nil.
-    # _id_::  ID del objetivo de control que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      ControlObjectiveItem.includes(
-        :control, :weaknesses, :work_papers, {review: :period}
+    def set_control_objective_item
+      @control_objective_item = ControlObjectiveItem.includes(
+        :control, :weaknesses, :work_papers, { review: :period }
       ).where(
-        id: id, Period.table_name => { organization_id: @auth_organization.id }
+        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
       ).first
     end
 

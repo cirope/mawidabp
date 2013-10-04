@@ -1,6 +1,5 @@
 class ExecutionReportsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges
 
   # Muestra una lista con los reportes disponibles
   #
@@ -432,13 +431,12 @@ class ExecutionReportsController < ApplicationController
   end
 
   private
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      detailed_management_report: :read,
-      create_detailed_management_report: :read,
-      weaknesses_by_state: :read,
-      create_weaknesses_by_state: :read
-    )
-  end
+    def load_privileges
+      @action_privileges.update(
+        detailed_management_report: :read,
+        create_detailed_management_report: :read,
+        weaknesses_by_state: :read,
+        create_weaknesses_by_state: :read
+      )
+    end
 end
