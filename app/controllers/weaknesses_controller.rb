@@ -3,7 +3,9 @@
 # Lista, muestra, crea, modifica y elimina observaciones (#Weakness)
 class WeaknessesController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :load_privileges
+  before_action :set_weakness, only: [
+    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+  ]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista las observaciones
@@ -75,7 +77,6 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/1.xml
   def show
     @title = t 'weakness.show_title'
-    @weakness = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -104,7 +105,6 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses/1/edit
   def edit
     @title = t 'weakness.edit_title'
-    @weakness = find_with_organization(params[:id])
   end
 
   # Crea una observación siempre que cumpla con las validaciones.
@@ -134,7 +134,6 @@ class WeaknessesController < ApplicationController
   # * PATCH /weaknesses/1.xml
   def update
     @title = t 'weakness.edit_title'
-    @weakness = find_with_organization(params[:id])
 
     respond_to do |format|
       Weakness.transaction do
@@ -159,18 +158,14 @@ class WeaknessesController < ApplicationController
   #
   # * GET /weaknesses/follow_up_pdf/1
   def follow_up_pdf
-    weakness = find_with_organization(params[:id])
-
-    weakness.follow_up_pdf(@auth_organization)
-
-    redirect_to weakness.relative_follow_up_pdf_path
+    @weakness.follow_up_pdf(@auth_organization)
+    redirect_to @weakness.relative_follow_up_pdf_path
   end
 
   # Deshace la reiteración de la observación
   #
   # * PATCH /weaknesses/undo_reiteration/1
   def undo_reiteration
-    @weakness = find_with_organization(params[:id])
     @weakness.undo_reiteration
 
     respond_to do |format|
@@ -294,7 +289,6 @@ class WeaknessesController < ApplicationController
   end
 
   private
-
     def weakness_params
       params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :description, :answer,
@@ -318,19 +312,13 @@ class WeaknessesController < ApplicationController
       )
     end
 
-    # Busca la debilidad indicada siempre que pertenezca a la organización. En el
-    # caso que no se encuentre (ya sea que no existe una debilidad con ese ID o
-    # que no pertenece a la organización con la que se autenticó el usuario)
-    # devuelve nil.
-    # _id_::  ID de la debilidad que se quiere recuperar
-    def find_with_organization(id) #:doc:
-      Weakness.includes(
-        :finding_relations,
-        :work_papers,
-        {finding_user_assignments: :user},
-        {control_objective_item: {review: :period}}
+    def set_weakness
+      @weakness = Weakness.includes(
+        :finding_relations, :work_papers,
+        { finding_user_assignments: :user },
+        { control_objective_item: { review: :period } }
       ).where(
-        id: id, Period.table_name => {organization_id: @auth_organization.id}
+        id: params[:id], Period.table_name => {organization_id: @auth_organization.id}
       ).references(:periods).first
     end
 
