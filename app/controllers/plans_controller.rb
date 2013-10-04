@@ -230,7 +230,7 @@ class PlansController < ApplicationController
           :id, :project, :start, :end, :plain_predecessors, :order_number,
           :business_unit_id, :_destroy,
           resource_utilizations_attributes: [
-            :id, :resource_id, :resource_type, :units, :cost_per_unit
+            :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
           ]
         ]
       )

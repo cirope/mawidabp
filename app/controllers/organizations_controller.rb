@@ -140,7 +140,7 @@ class OrganizationsController < ApplicationController
     def organization_params
       params.require(:organization).permit(
         :name, :prefix, :description, :group_id, :image_model_id, :lock_version,
-        image_model_attributes: [:image, :image_cache]
+        image_model_attributes: [:id, :image, :image_cache]
       )
     end
 
