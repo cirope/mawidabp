@@ -6,9 +6,9 @@ require 'whenever/capistrano'
 default_run_options[:shell] = '/bin/bash --login'
 
 set :application, 'mawidabp'
+set :user, 'deployer'
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
-set :user, 'deployer'
 set :group_writable, false
 set :shared_children, %w(log)
 set :use_sudo, false
