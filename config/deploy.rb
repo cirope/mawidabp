@@ -3,14 +3,17 @@ require 'bundler/capistrano'
 set :whenever_command, 'bundle exec whenever'
 require 'whenever/capistrano'
 
+default_run_options[:shell] = '/bin/bash --login'
+
 set :application, 'mawidabp'
-set :deploy_to, '/var/rails/mawidabp'
+set :deploy_to, "/home/#{user}/apps/#{application}"
+set :deploy_via, :remote_cache
 set :user, 'deployer'
 set :group_writable, false
 set :shared_children, %w(log)
 set :use_sudo, false
 
-set :repository,  'https://github.com/cirope/mawidabp.git'
+set :repository,  'git://github.com/cirope/mawidabp.git'
 set :branch, 'master'
 set :scm, :git
 
