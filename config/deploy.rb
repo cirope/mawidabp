@@ -24,6 +24,7 @@ set :scm, :git
 server 'mawidabp.com', :web, :app, :db, primary: true
 
 before 'deploy:finalize_update', 'deploy:create_shared_symlinks'
+after 'deploy:restart', 'deploy:cleanup'
 
 namespace :deploy do
   task :start do
