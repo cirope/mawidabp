@@ -272,7 +272,7 @@
     <% unless @finding.costs.blank? %>
       <p style="margin-bottom: 1em;">
         <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-          "$('#cost_details').slideToggle()" %>
+          "$('#cost_details').slideToggle(); return false;" %>
       </p>
       <div id="cost_details" style="display: none;">
         <div>
