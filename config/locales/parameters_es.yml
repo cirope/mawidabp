@@ -1,0 +1,9 @@
+'es':
+  approach_types:
+    control: 'Control'
+    sustantive: 'Sustativo'
+    control_sustantive: 'Control/Sustantivo'
+  frequency_types:
+    monthly: 'Mensual'
+    biyearly: 'Semestral'
+    yearly: 'Anual'
