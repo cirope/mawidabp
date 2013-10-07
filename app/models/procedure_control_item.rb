@@ -1,5 +1,5 @@
 class ProcedureControlItem < ActiveRecord::Base
-  include ParameterSelector
+  include ProcedureControlItems::Parameters
   include Comparable
 
   has_paper_trail :meta => {

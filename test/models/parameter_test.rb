@@ -6,12 +6,12 @@ class ParameterTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @parameter = Parameter.find parameters(:parameter_admin_aproach_types).id
+    @parameter = Parameter.find parameters(:parameter_admin_review_scores).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    fixture_parameter = parameters(:parameter_admin_aproach_types)
+    fixture_parameter = parameters(:parameter_admin_review_scores)
     assert_kind_of Parameter, @parameter
     assert_equal fixture_parameter.name, @parameter.name
     assert_equal fixture_parameter.value, @parameter.value
@@ -86,7 +86,7 @@ class ParameterTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    admin_aproach_types = parameters(:parameter_admin_aproach_types)
+    admin_aproach_types = parameters(:parameter_admin_review_scores)
 
     parameter = Parameter.new(
       :name => admin_aproach_types.name,

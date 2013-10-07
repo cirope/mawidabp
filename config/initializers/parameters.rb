@@ -1,11 +1,6 @@
 # Pesonalizado para cargar las configuraciones
 
 DEFAULT_PARAMETERS = {
-  :admin_aproach_types => [
-    ['Control', 0],
-    ['Sustantivo', 1],
-    ['Control/Sustantivo', 2]
-  ],
   :admin_blank_password_stale_days => 3,
   :admin_code_prefix_for_oportunities => 'OM',
   :admin_code_prefix_for_nonconformities => 'NC',
@@ -50,11 +45,6 @@ DEFAULT_PARAMETERS = {
     ['Bajo', 0],
     ['Medio', 1],
     ['Alto', 2]
-  ],
-  :admin_frequency_types => [
-    ['Mensual', 0],
-    ['Semestral', 1],
-    ['Anual', 2]
   ],
   :admin_priorities => [
     ['Baja', 0],
