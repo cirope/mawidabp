@@ -5,6 +5,10 @@ require 'whenever/capistrano'
 
 default_run_options[:shell] = '/bin/bash --login'
 
+set :default_environment, {
+  'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
+}
+
 set :application, 'mawidabp'
 set :user, 'deployer'
 set :deploy_to, "/home/#{user}/apps/#{application}"
