@@ -6,7 +6,7 @@
     <!-- Ver el porqué de esto en: www.phpied.com/conditional-comments-block-downloads/ -->
     <!--[if IE]><![endif]-->
     <title><%= t(:app_name) %><%= raw " &lt;#{@auth_organization.name}&gt;" if @auth_organization %> | <%= @title %></title>
-    <%= favicon_link_tag %>
+    <%= favicon_link_tag '/favicon.ico' %>
     <%= stylesheet_link_tag 'application' %>
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
     <%= javascript_include_tag 'application' %>
