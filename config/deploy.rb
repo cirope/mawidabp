@@ -1,55 +1,38 @@
-require 'bundler/capistrano'
-
-set :whenever_command, 'bundle exec whenever'
-require 'whenever/capistrano'
-
-default_run_options[:shell] = '/bin/bash --login'
-
-set :default_environment, {
-  'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
-}
-
 set :application, 'mawidabp'
-set :user, 'deployer'
-set :deploy_to, "/home/#{user}/apps/#{application}"
-set :deploy_via, :remote_cache
-set :group_writable, false
-set :shared_children, %w(log)
-set :use_sudo, false
+set :repo_url, 'git://github.com/cirope/mawidabp.git'
 
-set :repository,  'git://github.com/cirope/mawidabp.git'
-set :branch, 'master'
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+
+set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
+set :deploy_via, :remote_cache
 set :scm, :git
 
-server 'mawidabp.com', :web, :app, :db, primary: true
+# set :format, :pretty
+# set :log_level, :debug
+# set :pty, true
 
-before 'deploy:finalize_update', 'deploy:create_shared_symlinks'
-after 'deploy:restart', 'deploy:cleanup'
+set :linked_files, %w{config/app_config.yml}
+set :linked_dirs, %w{log private public/error_files}
+
+set :default_env, { path: '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH' }
+set :keep_releases, 5
 
 namespace :deploy do
-  task :start do
-  end
-
-  task :stop do
-  end
-
-  task :restart, roles: :app, except: { no_release: true } do
-    run "touch #{File.join current_path, 'tmp', 'restart.txt'}"
-  end
-
-  desc 'Creates the symlinks for the shared folders'
-  task :create_shared_symlinks, roles: :app, except: {no_release: true} do
-    shared_paths = [
-      ['public', 'error_files'],
-      ['private'],
-      ['config', 'app_config.yml']
-    ]
-
-    shared_paths.each do |path|
-      shared_files_path = File.join(shared_path, *path)
-      release_files_path = File.join(release_path, *path)
-
-      run "ln -s #{shared_files_path} #{release_files_path}"
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      execute :touch, release_path.join('tmp/restart.txt')
     end
   end
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
+  end
+
+  after :finishing, 'deploy:cleanup'
 end

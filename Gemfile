@@ -20,7 +20,6 @@ gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
 gem 'unicode'
-gem 'capistrano'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'dalli'
@@ -30,6 +29,10 @@ gem 'coffee-rails'
 gem 'uglifier'
 
 group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
   gem 'unicorn'
   gem 'unicorn-rails'
 end
