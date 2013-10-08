@@ -14,19 +14,6 @@ DEFAULT_PARAMETERS = {
   :admin_code_prefix_for_work_papers_in_fortresses => 'PTF',
   :admin_code_prefix_for_work_papers_in_weaknesses_follow_up => 'PTSO',
   :admin_code_prefix_for_work_papers_in_nonconformities => 'PTNC',
-  :admin_control_objective_qualifications => [
-    ['Nulo', 0],
-    ['Muy bajo', 1],
-    ['Bajo', 2],
-    ['Medianamente bajo', 3],
-    ['Medio bajo', 4],
-    ['Medio', 5],
-    ['Medianamente alto', 6],
-    ['Medio alto', 7],
-    ['Alto', 8],
-    ['Muy alto', 9],
-    ['Óptimo', 10]
-  ],
   :admin_control_objective_risk_levels => [
     ['Bajo', 0],
     ['Medio', 1],

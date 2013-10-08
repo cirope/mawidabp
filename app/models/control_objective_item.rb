@@ -1,5 +1,6 @@
 class ControlObjectiveItem < ActiveRecord::Base
   include Parameters::Relevance
+  include Parameters::Qualification
   include ParameterSelector
   include Comparable
 
@@ -207,12 +208,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   def effectiveness
     return 0 if self.exclude_from_score
 
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.review.try(:period).try(:organization_id)
-    parameter_qualifications = self.get_parameter(
-      :admin_control_objective_qualifications, false, organization_id)
-    highest_qualification =
-      parameter_qualifications.map { |item| item[1].to_i }.max || 0
+    highest_qualification = self.class.qualifications_values.max
     scores = [
       self.design_score,
       self.compliance_score,
@@ -330,9 +326,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def design_score_text(show_value = false)
-    compliance_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    design_score = compliance_scores.detect do |r|
+    design_score = self.class.qualifications.detect do |r|
       r.last == self.design_score
     end
 
@@ -342,9 +336,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def compliance_score_text(show_value = false)
-    compliance_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    compliance_score = compliance_scores.detect do |r|
+    compliance_score = self.class.qualifications.detect do |r|
       r.last == self.compliance_score
     end
 
@@ -354,9 +346,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def sustantive_score_text(show_value = false)
-    sustantive_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    sustantive_score = sustantive_scores.detect do |r|
+    sustantive_score = self.class.qualifications.detect do |r|
       r.last == self.sustantive_score
     end
 

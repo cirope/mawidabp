@@ -104,10 +104,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
               :compliance_tests => 'Updated compliance tests',
               :sustantive_tests => 'Updated sustantive tests'
             },
-            :design_score =>
-              get_test_parameter(:admin_control_objective_qualifications).last[1],
-            :compliance_score =>
-              get_test_parameter(:admin_control_objective_qualifications).last[1],
+            :design_score => ControlObjectiveItem.qualifications_values.last,
+            :compliance_score => ControlObjectiveItem.qualifications_values.last,
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id =>

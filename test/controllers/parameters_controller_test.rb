@@ -79,7 +79,7 @@ class ParametersControllerTest < ActionController::TestCase
     perform_auth
     patch :update, {
       :type => 'admin',
-      :id => parameters(:parameter_admin_control_objective_qualifications).id,
+      :id => parameters(:parameter_admin_priorities).id,
       :parameter => {
         :key_1 => 'New key 1',
         :value_1 => '1',

@@ -37,12 +37,9 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
       @control_objective_item = ControlObjectiveItem.create(
         :control_objective_text => 'New text',
         :relevance => ControlObjectiveItem.relevances_values.last,
-        :design_score =>
-          get_test_parameter(:admin_control_objective_qualifications).last[1],
-        :compliance_score =>
-          get_test_parameter(:admin_control_objective_qualifications).last[1],
-        :sustantive_score =>
-          get_test_parameter(:admin_control_objective_qualifications).last[1],
+        :design_score => ControlObjectiveItem.qualifications_values.last,
+        :compliance_score => ControlObjectiveItem.qualifications_values.last,
+        :sustantive_score => ControlObjectiveItem.qualifications_values.last,
         :audit_date => 10.days.from_now.to_date,
         :auditor_comment => 'New comment',
         :control_objective_id =>
@@ -143,9 +140,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness with only compliance score' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+    high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = nil
     @control_objective_item.compliance_score = high_qualification_value - 1
@@ -156,9 +151,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'review effectiveness modification' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    min_qualification_value = qualifications.map { |item| item[1].to_i }.min
+    min_qualification_value = ControlObjectiveItem.qualifications_values.min
     review = @control_objective_item.review
 
     review.save!
@@ -180,9 +173,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness with only design score' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+    high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = high_qualification_value - 1
     @control_objective_item.compliance_score = nil
@@ -193,9 +184,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness with only sustantive score' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+    high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = nil
     @control_objective_item.compliance_score = nil
@@ -206,9 +195,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness with all scores' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+    high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = high_qualification_value
     @control_objective_item.compliance_score = high_qualification_value - 1
@@ -285,9 +272,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   end
 
   test 'effectiveness with design and compliance scores' do
-    qualifications = @control_objective_item.get_parameter(
-      :admin_control_objective_qualifications)
-    high_qualification_value = qualifications.map { |item| item[1].to_i }.max
+    high_qualification_value = ControlObjectiveItem.qualifications_values.max
 
     @control_objective_item.design_score = 0
     @control_objective_item.compliance_score = high_qualification_value - 1
