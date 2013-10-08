@@ -1,3 +1,3 @@
 set :stage, :production
-
-server 'mawidabp.com', user: 'deployer', roles: %w{web app db}
+role :all, %w{mawidabp.com}
+server 'mawidabp.com', user: 'deployer'
