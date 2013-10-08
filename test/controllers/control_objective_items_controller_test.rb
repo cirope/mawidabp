@@ -95,8 +95,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
-            :relevance =>
-              get_test_parameter(:admin_control_objective_importances).last[1],
+            :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
               :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
               :control => 'Updated control',

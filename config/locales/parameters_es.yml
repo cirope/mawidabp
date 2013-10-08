@@ -7,3 +7,10 @@
     monthly: 'Mensual'
     biyearly: 'Semestral'
     yearly: 'Anual'
+  relevance_types:
+    not_rated: 'Nulo'
+    low: 'Bajo'
+    moderate_low: 'Moderado/bajo'
+    moderate: 'Moderado'
+    high: 'Alto'
+    critical: 'Crítico'

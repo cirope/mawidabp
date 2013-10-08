@@ -1,4 +1,5 @@
 class ControlObjective < ActiveRecord::Base
+  include Parameters::Relevance
   include ParameterSelector
 
   has_paper_trail :meta => {

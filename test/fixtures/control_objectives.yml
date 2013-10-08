@@ -1,48 +1,48 @@
 bcra_A4609_security_management_responsible_dependency:
   name: Dependencia del área responsable
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 1
   process_control: bcra_A4609_security_management
 
 bcra_A4609_data_proccessing_impact_analisys:
   name: Análisis de impacto
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 2
   process_control: bcra_A4609_security_management
 
 iso_27000_security_policy_3_1:
   name: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 1
   process_control: iso_27000_security_policy
 
 iso_27000_security_organization_4_1:
   name: "4.1) Infraestructura de seguridad de la información."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 2
   process_control: iso_27000_security_policy
 
 iso_27000_security_organization_4_2:
   name: "4.2) Seguridad frente al acceso por parte de terceros."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 3
   process_control: iso_27000_security_policy
 
 iso_27000_security_organization_4_3:
   name: "4.3) Seguridad frente al acceso por parte de terceros."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 4
   process_control: iso_27000_security_policy
   
 iso_27000_security_organization_4_4:
   name: "4.4) Seguridad frente al acceso por parte de terceros."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= DEFAULT_PARAMETERS[:admin_control_objective_risk_levels].last[1] %>
   order: 5
   process_control: iso_27000_security_policy

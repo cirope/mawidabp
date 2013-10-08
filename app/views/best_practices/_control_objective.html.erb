@@ -26,9 +26,7 @@
     <% end %>
 
     <div class="item_field" style="width: 11%;">
-      <%= f.select :relevance, f.object.get_parameter(
-        :admin_control_objective_importances, true),
-        {:prompt => true} %>
+      <%= relevance_field(f, prompt: true) %>
     </div>
     <div class="item_field" style="width: 11%;">
       <%= f.select :risk, f.object.get_parameter(

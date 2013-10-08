@@ -39,11 +39,10 @@
         ControlObjectiveItem.human_attribute_name(:relevance) +
           show_inline_help_for(:control_objective_item_relevance)),
         :class => :inline %>
-      <%= co_f.select :relevance, parameter_in(@auth_organization.id,
-        :admin_control_objective_importances,
-        @control_objective_item.created_at, true),
-        {:include_blank => t('control_objective_item.not_rated')},
-        {:class => :inline_item, :disabled => readonly} %>
+      <%= relevance_field(co_f,
+        { include_blank: t('control_objective_item.not_rated') },
+        { class: :inline_item, disabled: readonly }
+      ) %>
     </p>
     <p class="form_item">
       <%= co_f.label :audit_date, nil, :class => :inline %>

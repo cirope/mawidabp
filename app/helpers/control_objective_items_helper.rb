@@ -1,9 +1,7 @@
 module ControlObjectiveItemsHelper
   def control_objective_relevance_text(control_objective_item)
     relevance = control_objective_item.relevance
-    text = name_for_option_value(parameter_in(@auth_organization.id,
-        :admin_control_objective_importances,
-        control_objective_item.created_at), relevance)
+    text = control_objective_item.relevance_label
 
     text.blank? || text == '-' ? text : "#{text} (#{relevance})"
   end

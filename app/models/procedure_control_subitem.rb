@@ -1,5 +1,5 @@
 class ProcedureControlSubitem < ActiveRecord::Base
-  include ParameterSelector
+  include Parameters::Relevance
 
   # Alias de atributos
   alias_attribute :label, :control_objective_text
@@ -79,8 +79,7 @@ class ProcedureControlSubitem < ActiveRecord::Base
   end
 
   def relevance_text(show_value = false)
-    relevances = self.get_parameter(:admin_control_objective_importances)
-    relevance = relevances.detect { |r| r.last == self.relevance }
+    relevance = self.class.relevances.detect { |r| r.last == self.relevance }
 
     relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
         relevance.first) : ''

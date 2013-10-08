@@ -36,8 +36,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_difference ['ControlObjectiveItem.count', 'Control.count'] do
       @control_objective_item = ControlObjectiveItem.create(
         :control_objective_text => 'New text',
-        :relevance =>
-          get_test_parameter(:admin_control_objective_importances).last[1],
+        :relevance => ControlObjectiveItem.relevances_values.last,
         :design_score =>
           get_test_parameter(:admin_control_objective_qualifications).last[1],
         :compliance_score =>

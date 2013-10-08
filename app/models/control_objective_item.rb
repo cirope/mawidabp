@@ -1,4 +1,5 @@
 class ControlObjectiveItem < ActiveRecord::Base
+  include Parameters::Relevance
   include ParameterSelector
   include Comparable
 
@@ -322,8 +323,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def relevance_text(show_value = false)
-    relevances = self.get_parameter(:admin_control_objective_importances)
-    relevance = relevances.detect { |r| r.last == self.relevance }
+    relevance = self.class.relevances.detect { |r| r.last == self.relevance }
 
     relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
         relevance.first) : ''

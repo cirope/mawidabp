@@ -1,7 +1,7 @@
 bcra_A4609_security_management_responsible_dependency_item:
   control_objective_text: Dependencia del área responsable
   order_number: 1
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -15,7 +15,7 @@ bcra_A4609_security_management_responsible_dependency_item:
 bcra_A4609_data_proccessing_impact_analisys_item:
   control_objective_text: Análisis de impacto
   order_number: 2
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -29,7 +29,7 @@ bcra_A4609_data_proccessing_impact_analisys_item:
 iso_27000_security_policy_3_1_item:
   control_objective_text: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
   order_number: 1
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -43,7 +43,7 @@ iso_27000_security_policy_3_1_item:
 iso_27000_security_organization_4_1_item:
   control_objective_text: "4.1) Infraestructura de seguridad de la información."
   order_number: 2
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -57,7 +57,7 @@ iso_27000_security_organization_4_1_item:
 iso_27000_security_organization_4_2_item:
   control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
   order_number: 3
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -70,7 +70,7 @@ iso_27000_security_organization_4_2_item:
 
 bcra_A4609_security_management_responsible_dependency_item_editable:
   control_objective_text: Dependencia del área responsible
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].first[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].first[1] %>
@@ -83,7 +83,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable:
 
 bcra_A4609_data_proccessing_impact_analisys_item_editable:
   control_objective_text: Análisis de impacto
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -96,7 +96,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_editable:
 
 iso_27000_security_organization_4_2_item_editable:
   control_objective_text: "4.2) Seguridad frente al acceso por parte de terceros."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -109,7 +109,7 @@ iso_27000_security_organization_4_2_item_editable:
   
 iso_27000_security_organization_4_3_item_editable_without_findings:
   control_objective_text: "4.3) Seguridad frente al acceso por parte de terceros."
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
@@ -122,7 +122,7 @@ iso_27000_security_organization_4_3_item_editable_without_findings:
   
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable:
   control_objective_text: Dependencia del área responsible
-  relevance: <%= DEFAULT_PARAMETERS[:admin_control_objective_importances].last[1] %>
+  relevance: <%= ControlObjectiveItem.relevances_values.last %>
   design_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   compliance_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
   sustantive_score: <%= DEFAULT_PARAMETERS[:admin_control_objective_qualifications].last[1] %>
