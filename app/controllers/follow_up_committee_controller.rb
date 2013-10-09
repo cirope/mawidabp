@@ -108,9 +108,7 @@ class FollowUpCommitteeController < ApplicationController
             end
 
             c_r.review.weaknesses.each do |w|
-              @risk_levels |= parameter_in(@auth_organization.id,
-                :admin_finding_risk_levels, w.created_at).
-                sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+              @risk_levels |= w.class.risks.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
               weaknesses_count[w.risk_text] ||= 0
 
