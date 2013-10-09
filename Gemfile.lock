@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 64ba1ab09bb2514bea9bf426bb83fd97fe7c6b68
+  revision: cfd9186e34a25a29f7cd2018e91548f5d1be22af
   branch: 4-0-stable
   specs:
     actionmailer (4.0.0)
@@ -151,7 +151,7 @@ GEM
     ttfunk (1.0.3)
     turn (0.9.6)
       ansi
-    tzinfo (0.3.37)
+    tzinfo (0.3.38)
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
@@ -178,7 +178,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   acts_as_tree
-  capistrano
+  capistrano (= 2.15.5)
   carrierwave
   coffee-rails
   dalli
