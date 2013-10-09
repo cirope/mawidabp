@@ -26,3 +26,7 @@
     high: 'Alto'
     very_high: 'Muy alto'
     excellent: 'Óptimo'
+  risk_types:
+    low: 'Bajo'
+    medium: 'Medio'
+    high: 'Alto'

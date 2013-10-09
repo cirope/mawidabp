@@ -77,9 +77,7 @@
     <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
       <p class="form_item">
         <%= f_f.label :risk, nil, :class => :inline %>
-        <%= f_f.select :risk, parameter_in(@auth_organization.id,
-          :admin_finding_risk_levels, @finding.created_at, true),
-          {:prompt => true}, {:class => :inline_item, :autofocus => true} %>
+        <%= risk_field(f_f, { prompt: true }, { class: :inline_item, autofocus: true }) %>
       </p>
       <p class="form_item">
         <%= f_f.label :priority, nil, :class => :inline %>

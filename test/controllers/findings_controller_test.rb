@@ -239,7 +239,7 @@ class FindingsControllerTest < ActionController::TestCase
               :solution_date => '',
               :audit_recommendations => 'Updated proposed action',
               :effect => 'Updated effect',
-              :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
+              :risk => Finding.risks_values.first,
               :priority => get_test_parameter(:admin_priorities).first[1],
               :follow_up_date => '',
               :finding_user_assignments_attributes => [
@@ -351,7 +351,7 @@ class FindingsControllerTest < ActionController::TestCase
             :solution_date => 31.days.from_now.to_date,
             :audit_recommendations => 'Updated proposed action',
             :effect => 'Updated effect',
-            :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
+            :risk => Finding.risks_values.first,
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => 3.days.from_now.to_date,
             :finding_user_assignments_attributes => [
@@ -454,7 +454,7 @@ class FindingsControllerTest < ActionController::TestCase
             :solution_date => '',
             :audit_recommendations => 'Updated proposed action',
             :effect => 'Updated effect',
-            :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
+            :risk => Finding.risks_values.first,
             :priority => get_test_parameter(:admin_priorities).first[1],
             :follow_up_date => '',
             :users_for_notification => [users(:bare_user).id],

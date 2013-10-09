@@ -126,7 +126,7 @@ class WeaknessesControllerTest < ActionController::TestCase
           solution_date: '',
           audit_recommendations: 'New proposed action',
           effect: 'New effect',
-          risk: get_test_parameter(:admin_finding_risk_levels).first[1],
+          risk: Finding.risks_values.first,
           priority: get_test_parameter(:admin_priorities).first[1],
           follow_up_date: 2.days.from_now.to_date,
           finding_user_assignments_attributes: [
@@ -195,7 +195,7 @@ class WeaknessesControllerTest < ActionController::TestCase
             solution_date: '',
             audit_recommendations: 'Updated proposed action',
             effect: 'Updated effect',
-            risk: get_test_parameter(:admin_finding_risk_levels).first[1],
+            risk: Finding.risks_values.first,
             priority: get_test_parameter(:admin_priorities).first[1],
             follow_up_date: '',
             finding_user_assignments_attributes: [

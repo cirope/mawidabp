@@ -47,7 +47,7 @@ class FindingTest < ActiveSupport::TestCase
         :solution_date => nil,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
-        :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
+        :risk => Finding.risks_values.first,
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => nil,
         :finding_user_assignments_attributes => {
@@ -91,7 +91,7 @@ class FindingTest < ActiveSupport::TestCase
         :solution_date => 30.days.from_now.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
-        :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
+        :risk => Finding.risks_values.first,
         :priority => get_test_parameter(:admin_priorities).first[1],
         :follow_up_date => 2.days.from_now.to_date
       )

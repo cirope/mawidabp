@@ -1,4 +1,6 @@
 module ConclusionCommonReports
+  include Parameters::Risk
+
   def weaknesses_by_state
     @title = t('conclusion_committee_report.weaknesses_by_state_title')
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
@@ -165,8 +167,6 @@ module ConclusionCommonReports
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
-    risk_levels = parameter_in(@auth_organization.id,
-      :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
 
@@ -184,7 +184,7 @@ module ConclusionCommonReports
             key = "#{audit_type_symbol}_#{audit_types.last}"
             conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
 
-            risk_levels.each do |rl|
+            RISK_TYPES.each do |rl|
               weaknesses_count_by_risk[rl[0]] = 0
               total_weaknesses_count_by_risk[rl[0]] ||= 0
 
@@ -209,13 +209,13 @@ module ConclusionCommonReports
 
             @tables_data[period] ||= {}
             @tables_data[period][key] = get_weaknesses_synthesis_table_data(
-              weaknesses_count, weaknesses_count_by_risk, risk_levels)
+              weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
           end
         end
       end
 
       @tables_data[period]['total'] = get_weaknesses_synthesis_table_data(
-        total_weaknesses_count, total_weaknesses_count_by_risk, risk_levels)
+        total_weaknesses_count, total_weaknesses_count_by_risk, RISK_TYPES)
     end
   end
 
@@ -293,8 +293,6 @@ module ConclusionCommonReports
     @periods = periods_for_interval
     @audit_types = [:internal, :external]
     @data = {}
-    risk_levels = parameter_in(@auth_organization.id,
-      :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
 
@@ -359,7 +357,7 @@ module ConclusionCommonReports
                 ]
               end
 
-              risk_levels.each do |rl|
+              RISK_TYPES.each do |rl|
                 weaknesses_count_by_risk[rl[0]] = 0
 
                 statuses.each do |s|
@@ -376,7 +374,7 @@ module ConclusionCommonReports
               end
 
               weaknesses_table_data = get_weaknesses_synthesis_table_data(
-                weaknesses_count, weaknesses_count_by_risk, risk_levels)
+                weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
 
               business_units[business_unit] = {
                 :conclusion_reviews => cfrs,
@@ -598,10 +596,7 @@ module ConclusionCommonReports
           weaknesses_count = {}
 
           coi.final_weaknesses.not_revoked.each do |w|
-            @risk_levels |= parameter_in(
-              @auth_organization.id,
-              :admin_finding_risk_levels, w.created_at
-            ).sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
@@ -854,10 +849,7 @@ module ConclusionCommonReports
           weaknesses_count = {}
 
           coi.final_weaknesses.each do |w|
-            @risk_levels |= parameter_in(
-              @auth_organization.id,
-              :admin_finding_risk_levels, w.created_at
-            ).sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1

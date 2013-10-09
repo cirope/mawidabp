@@ -36,8 +36,7 @@ class ControlObjectiveTest < ActiveSupport::TestCase
           :sustantive_tests => 'New sustantive tests'
         },
         :relevance => ControlObjective.relevances_values.first,
-        :risk =>
-          get_test_parameter(:admin_control_objective_risk_levels).first[1],
+        :risk => ControlObjective.risks_values.first,
         :order => 1
       )
     end

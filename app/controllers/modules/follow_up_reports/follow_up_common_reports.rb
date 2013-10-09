@@ -1,4 +1,6 @@
 module FollowUpCommonReports
+  include Parameters::Risk
+
   def weaknesses_by_state
     @title = t 'follow_up_committee.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
@@ -221,11 +223,9 @@ module FollowUpCommonReports
     @repeated_counts = {}
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
-    risk_levels = parameter_in(@auth_organization.id,
-      :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
-    highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
+    highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
 
     @periods.each do |period|
       total_weaknesses_count = {}
@@ -254,7 +254,7 @@ module FollowUpCommonReports
               "#{audit_type_symbol}_audit").finals(false).repeated.for_period(
               period).where(conditions).count
 
-            risk_levels.each do |rl|
+            RISK_TYPES.each do |rl|
               weaknesses_count_by_risk[rl[0]] = 0
               total_weaknesses_count_by_risk[rl[0]] ||= 0
 
@@ -339,7 +339,7 @@ module FollowUpCommonReports
               being_implemented_resume_from_counts(highest_being_implemented_counts)
             @tables_data[period] ||= {}
             @tables_data[period][key] = get_weaknesses_synthesis_table_data(
-              weaknesses_count, weaknesses_count_by_risk, risk_levels)
+              weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
           end
         end
       end
@@ -351,7 +351,7 @@ module FollowUpCommonReports
         being_implemented_resume_from_counts(
           total_highest_being_implemented_counts)
       @tables_data[period]['total'] = get_weaknesses_synthesis_table_data(
-        total_weaknesses_count, total_weaknesses_count_by_risk, risk_levels)
+        total_weaknesses_count, total_weaknesses_count_by_risk, RISK_TYPES)
     end
   end
 
@@ -450,11 +450,9 @@ module FollowUpCommonReports
     @periods = periods_for_interval
     @audit_types = [:internal, :external]
     @data = {}
-    risk_levels = parameter_in(@auth_organization.id,
-      :admin_finding_risk_levels, @from_date)
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
-    highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
+    highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
 
     @periods.each do |period|
       @data[period] ||= {}
@@ -524,7 +522,7 @@ module FollowUpCommonReports
                 ]
               end
 
-              risk_levels.each do |rl|
+              RISK_TYPES.each do |rl|
                 weaknesses_count_by_risk[rl[0]] = 0
 
                 statuses.each do |s|
@@ -579,7 +577,7 @@ module FollowUpCommonReports
               end
 
               weaknesses_table_data = get_weaknesses_synthesis_table_data(
-                weaknesses_count, weaknesses_count_by_risk, risk_levels)
+                weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
               being_implemented_resume = being_implemented_resume_from_counts(
                 being_implemented_counts)
               highest_being_implemented_resume =
@@ -823,10 +821,7 @@ module FollowUpCommonReports
           weaknesses_count = {}
 
           coi.weaknesses.not_revoked.each do |w|
-            @risk_levels |= parameter_in(
-              @auth_organization.id,
-              :admin_finding_risk_levels, w.created_at
-            ).sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
@@ -1079,10 +1074,7 @@ module FollowUpCommonReports
           weaknesses_count = {}
 
           coi.weaknesses.each do |w|
-            @risk_levels |= parameter_in(
-              @auth_organization.id,
-              :admin_finding_risk_levels, w.created_at
-            ).sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1

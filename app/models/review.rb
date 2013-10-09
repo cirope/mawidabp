@@ -1,4 +1,5 @@
 class Review < ActiveRecord::Base
+  include Parameters::Risk
   include ParameterSelector
   include Trimmer
 
@@ -704,9 +705,7 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -973,9 +972,7 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1095,9 +1092,7 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 

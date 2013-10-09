@@ -1,6 +1,7 @@
 class Finding < ActiveRecord::Base
   include ActsAsTree
   include Comparable
+  include Parameters::Risk
   include ParameterSelector
 
   acts_as_tree

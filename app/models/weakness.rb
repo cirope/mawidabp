@@ -68,18 +68,13 @@ class Weakness < Finding
   end
 
   def assign_highest_risk
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.control_objective_item.try(:review).try(:period).try(:organization_id)
-    risks = self.get_parameter(:admin_finding_risk_levels, false,
-      organization_id)
-    self.highest_risk = risks.map(&:last).max
+    self.highest_risk = self.class.risks_values.max
   end
 
   def risk_text
-    risks = self.get_parameter(:admin_finding_risk_levels)
-    risk = risks.detect { |r| r.last == self.risk }
+    risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    risk.try(:first) || ''
+    I18n.t("risk_types.#{risk.first}") rescue ''
   end
 
   def priority_text
