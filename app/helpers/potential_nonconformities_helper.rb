@@ -1,12 +1,13 @@
 module PotentialNonconformitiesHelper
   def next_potential_nonconformity_work_paper_code(potential_nonconformity)
-    review = potential_nonconformity.control_objective_item.try(:review)
-    code_prefix = parameter_in(@auth_organization.id,
-      :admin_code_prefix_for_work_papers_in_potential_nonconformities,
-      review.try(:created_at))
+    code_prefix = t('code_prefixes.work_papers_in_potential_nonconformities')
 
-    code_from_review= review ? review.last_potential_nonconformity_work_paper_code(code_prefix) :
+    code_from_review = begin
+      review = potential_nonconformity.control_objective_item.review
+      review.last_potential_nonconformity_work_paper_code(code_prefix)
+    rescue
       "#{code_prefix} 0".strip
+    end
 
     code_from_potential_nonconformity = potential_nonconformity.work_papers.reject(
       &:marked_for_destruction?).map(
@@ -16,11 +17,9 @@ module PotentialNonconformitiesHelper
   end
 
   def next_potential_nonconformity_code_for(potential_nonconformity)
-    review = potential_nonconformity.control_objective_item.try(:review)
-    code_prefix = parameter_in(@auth_organization.id,
-      :admin_code_prefix_for_potential_nonconformities, review.try(:created_at))
-
-    review ? review.next_potential_nonconformities_code(code_prefix) :
-      "#{code_prefix}1".strip
+    review = potential_nonconformity.control_objective_item.review
+    review.next_potential_nonconformities_code(potential_nonconformity.prefix)
+  rescue
+    "#{potential_nonconformity.prefix}1".strip
   end
 end

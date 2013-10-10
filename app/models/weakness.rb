@@ -39,9 +39,7 @@ class Weakness < Finding
     :on_or_before_message => I18n.t('finding.errors.cause_analysis_date_on_or_before'),
     :allow_nil => true, :allow_blank => true
   validates_each :review_code do |record, attr, value|
-    prefix = record.get_parameter(:admin_code_prefix_for_weaknesses, false,
-      record.control_objective_item.try(:review).try(:organization).try(:id))
-    regex = /\A#{prefix}\d+\Z/
+    regex = /\A#{record.prefix}\d+\Z/
 
     record.errors.add attr, :invalid unless value =~ regex
   end
@@ -62,9 +60,9 @@ class Weakness < Finding
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(self.finding_prefix ?
-        :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
-        :admin_code_prefix_for_work_papers_in_weaknesses)
+    work_paper.code_prefix = self.finding_prefix ?
+      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      I18n.t('code_prefixes.work_papers_in_weaknesses')
   end
 
   def assign_highest_risk
@@ -83,22 +81,26 @@ class Weakness < Finding
     I18n.t("priority_types.#{priority.first}") rescue ''
   end
 
-  def next_code(review = nil)
-    review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_weaknesses, review.try(:created_at))
+  def prefix
+    I18n.t('code_prefixes.weaknesses')
+  end
 
-    review ? review.next_weakness_code(code_prefix) : "#{code_prefix}1".strip
+  def next_code(review = nil)
+    review ||= self.control_objective_item.reload.review
+    review.next_weakness_code(self.prefix)
+  rescue
+    "#{self.prefix}1".strip
   end
 
   def last_work_paper_code(review = nil)
-    review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_weaknesses, review.try(:created_at))
+    code_prefix = I18n.t('code_prefixes.work_papers_in_weaknesses')
 
-    code_from_review = review ?
-      review.last_weakness_work_paper_code(code_prefix) :
+    code_from_review = begin
+      review ||= self.control_objective_item.reload.review
+      review.last_weakness_work_paper_code(code_prefix)
+    rescue
       "#{code_prefix} 0".strip
+    end
 
     code_from_weakness = self.work_papers.reject(
       &:marked_for_destruction?).map(

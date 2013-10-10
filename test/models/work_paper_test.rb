@@ -9,8 +9,7 @@ class WorkPaperTest < ActiveSupport::TestCase
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     GlobalModelConfig.current_organization_id =
       organizations(:default_organization).id
-    @work_paper.code_prefix = @work_paper.get_parameter(
-      :admin_code_prefix_for_work_papers_in_control_objectives)
+    @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
   end
 
   # Prueba que se realicen las búsquedas como se espera

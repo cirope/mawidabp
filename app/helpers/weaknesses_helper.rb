@@ -22,16 +22,16 @@ module WeaknessesHelper
   end
 
   def next_weakness_work_paper_code(weakness, follow_up = false)
-    review = weakness.control_objective_item.try(:review)
-    param_name = follow_up ?
-      :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
-      :admin_code_prefix_for_work_papers_in_weaknesses
-    code_prefix = parameter_in(@auth_organization.id, param_name,
-      review.try(:created_at))
+    code_prefix = follow_up ?
+      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      I18n.t('code_prefixes.work_papers_in_weaknesses')
 
-    code_from_review = review ?
-      review.last_weakness_work_paper_code(code_prefix) :
+    code_from_review = begin
+      review = weakness.control_objective_item.review
+      review.last_weakness_work_paper_code(code_prefix)
+    rescue
       "#{code_prefix} 0".strip
+    end
 
     code_from_weakness = weakness.work_papers.reject(
       &:marked_for_destruction?).map(

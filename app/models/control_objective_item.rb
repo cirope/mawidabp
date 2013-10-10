@@ -161,8 +161,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(
-      :admin_code_prefix_for_work_papers_in_control_objectives)
+    work_paper.code_prefix = I18n.t('code_prefixes.work_papers_in_control_objectives')
   end
 
   def set_proper_parent
