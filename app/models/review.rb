@@ -1,5 +1,6 @@
 class Review < ActiveRecord::Base
   include Parameters::Risk
+  include Parameters::Score
   include ParameterSelector
   include Trimmer
 
@@ -315,9 +316,7 @@ class Review < ActiveRecord::Base
   # como sigue: ['nota en texto', integer_promedio], por ejemplo
   # ['Satisfactorio', 90]
   def score_array
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.period.try(:organization_id)
-    scores = parameter_in organization_id, :admin_review_scores, self.created_at
+    scores = self.class.scores.to_a
     count = scores.size + 1
 
     self.effectiveness # Recalcula score
@@ -333,7 +332,7 @@ class Review < ActiveRecord::Base
   def score_text
     score = self.score_array
 
-    "#{score.first} (#{score.last}%)"
+    [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') rescue ''
   end
 
   def control_objective_items_for_score
@@ -1306,7 +1305,7 @@ class Review < ActiveRecord::Base
   end
 
   def add_score_details_table(pdf)
-    scores = self.get_parameter(:admin_review_scores)
+    scores = self.class.scores.to_a
     review_score = self.score_array.first
     columns = {}
     column_data = []
