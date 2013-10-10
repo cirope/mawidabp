@@ -1,9 +1,6 @@
 module NonconformitiesHelper
  def nonconformity_priority_text(nonconformity)
-    priorities = parameter_in(@auth_organization.id, :admin_priorities,
-      nonconformity.created_at)
-
-    name_for_option_value priorities, nonconformity.priority
+    name_for_option_value nonconformity.class.priorities, nonconformity.priority
   end
 
   def show_nonconformity_previous_follow_up_dates(nonconformity)

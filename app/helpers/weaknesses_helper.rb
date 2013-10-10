@@ -1,9 +1,6 @@
 module WeaknessesHelper
   def weakness_priority_text(weakness)
-    priorities = parameter_in(@auth_organization.id, :admin_priorities,
-      weakness.created_at)
-
-    name_for_option_value priorities, weakness.priority
+    name_for_option_value weakness.class.priorities, weakness.priority
   end
 
   def show_weakness_previous_follow_up_dates(weakness)

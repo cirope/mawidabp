@@ -46,7 +46,7 @@ class NonconformityTest < ActiveSupport::TestCase
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
         :risk => Nonconformity.risks_values.first,
-        :priority => get_test_parameter(:admin_priorities).first[1],
+        :priority => Nonconformity.priorities_values.first,
         :follow_up_date => nil,
         :finding_user_assignments_attributes => {
           :new_1 => {
@@ -90,7 +90,7 @@ class NonconformityTest < ActiveSupport::TestCase
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
         :risk => Nonconformity.risks_values.first,
-        :priority => get_test_parameter(:admin_priorities).first[1],
+        :priority => Nonconformity.priorities_values.first,
         :follow_up_date => 2.days.from_now.to_date,
         :finding_user_assignments_attributes => {
           :new_1 => {
@@ -289,10 +289,9 @@ class NonconformityTest < ActiveSupport::TestCase
   end
 
   test 'priority text' do
-    priorities = @nonconformity.get_parameter(:admin_priorities)
-    priority = priorities.detect { |p| p.last == @nonconformity.priority }
+    priority = Nonconformity.priorities.detect { |p| p.last == @nonconformity.priority }
 
-    assert_equal priority.first, @nonconformity.priority_text
+    assert_equal I18n.t("priority_types.#{priority.first}"), @nonconformity.priority_text
   end
 
   test 'must be approved' do

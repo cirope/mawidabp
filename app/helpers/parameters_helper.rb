@@ -1,5 +1,6 @@
 module ParametersHelper
   include Parameters::Risk
+  include Parameters::Priority
   include Parameters::Relevance
   include Parameters::Qualification
 
@@ -16,5 +17,10 @@ module ParametersHelper
   def risk_field(form, *options)
     form.select :risk,
       RISK_TYPES.map { |k,v| [t("risk_types.#{k}"), v] }, *options
+  end
+
+  def priority_field(form, *options)
+    form.select :priority,
+      PRIORITY_TYPES.map { |k,v| [t("priority_types.#{k}"), v] }, *options
   end
 end

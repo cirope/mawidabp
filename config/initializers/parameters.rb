@@ -15,11 +15,6 @@ DEFAULT_PARAMETERS = {
   :admin_code_prefix_for_work_papers_in_weaknesses_follow_up => 'PTSO',
   :admin_code_prefix_for_work_papers_in_nonconformities => 'PTNC',
   :admin_finding_stale_confirmed_days => '3',
-  :admin_priorities => [
-    ['Baja', 0],
-    ['Media', 1],
-    ['Alta', 2]
-  ],
   :admin_resource_units => [
     ['Hora', 0],
     ['Unidad', 1],

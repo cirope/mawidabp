@@ -78,11 +78,9 @@ class Weakness < Finding
   end
 
   def priority_text
-    priority = self.get_parameter(:admin_priorities).detect do |p|
-      p.last == self.priority
-    end
+    priority = self.class.priorities.detect { |p| p.last == self.priority }
 
-    priority.try(:first) || ''
+    I18n.t("priority_types.#{priority.first}") rescue ''
   end
 
   def next_code(review = nil)
