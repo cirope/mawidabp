@@ -1,9 +1,7 @@
 module Parameters::Priority
   extend ActiveSupport::Concern
 
-  included do
-    PRIORITY_TYPES = { low: 0, medium: 1, high: 2 }
-  end
+  PRIORITY_TYPES = { low: 0, medium: 1, high: 2 }
 
   module ClassMethods
     def priorities

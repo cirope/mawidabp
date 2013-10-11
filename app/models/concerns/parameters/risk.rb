@@ -1,9 +1,7 @@
 module Parameters::Risk
   extend ActiveSupport::Concern
 
-  included do
-    RISK_TYPES = { low: 0, medium: 1, high: 2 }
-  end
+  RISK_TYPES = { low: 0, medium: 1, high: 2 }
 
   module ClassMethods
     def risks

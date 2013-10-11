@@ -1,13 +1,11 @@
 module Parameters::Approach
   extend ActiveSupport::Concern
 
-  included do
-    APPROACH_TYPES = {
-      control: 0,
-      sustantive: 1,
-      control_sustantive: 2
-    }
-  end
+  APPROACH_TYPES = {
+    control: 0,
+    sustantive: 1,
+    control_sustantive: 2
+  }
 
   module ClassMethods
     def approaches

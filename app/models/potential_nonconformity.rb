@@ -30,34 +30,33 @@ class PotentialNonconformity < Finding
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix =
-      I18n.t('code_prefixes.work_papers_in_potential_nonconformities')
+    work_paper.code_prefix = work_paper_prefix
   end
 
   def prefix
     I18n.t('code_prefixes.potential_nonconformities')
   end
 
+  def work_paper_prefix
+    I18n.t('code_prefixes.work_papers_in_potential_nonconformities')
+  end
+
   def next_code(review = nil)
-    review ||= self.control_objective_item.reload.review
-    review.next_potential_nonconformity_code(self.prefix)
-  rescue
-    "#{self.prefix}1".strip
+    review ||= self.control_objective_item.try(:reload).try(:review)
+
+    review ? review.next_potential_nonconformity_code(prefix) : "#{prefix}1".strip
   end
 
   def last_work_paper_code(review = nil)
-    code_prefix = I18n.t('code_prefixes.work_papers_in_potential_nonconformities')
+    review ||= self.control_objective_item.try(:reload).try(:review)
 
-    code_from_review = begin
-      review ||= self.control_objective_item.reload.review
-      review.last_potential_nonconformity_work_paper_code(code_prefix)
-    rescue
-      "#{code_prefix} 0".strip
-    end
+    code_from_review = review ?
+      review.last_potential_nonconformity_work_paper_code(work_paper_prefix) :
+      "#{work_paper_prefix} 0".strip
 
     code_from_potential_nonconformity = self.work_papers.reject(
       &:marked_for_destruction?).map(
-      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
+      &:code).select { |c| c =~ /#{work_paper_prefix}\s\d+/ }.sort.last
 
     [code_from_review, code_from_potential_nonconformity].compact.max
   end

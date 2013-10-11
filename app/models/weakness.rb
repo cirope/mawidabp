@@ -62,7 +62,7 @@ class Weakness < Finding
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.finding_prefix ?
       I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
-      I18n.t('code_prefixes.work_papers_in_weaknesses')
+      work_paper_prefix
   end
 
   def assign_highest_risk
@@ -72,39 +72,39 @@ class Weakness < Finding
   def risk_text
     risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    I18n.t("risk_types.#{risk.first}") rescue ''
+    risk ? I18n.t("risk_types.#{risk.first}") : ''
   end
 
   def priority_text
     priority = self.class.priorities.detect { |p| p.last == self.priority }
 
-    I18n.t("priority_types.#{priority.first}") rescue ''
+    priority ? I18n.t("priority_types.#{priority.first}") : ''
   end
 
   def prefix
     I18n.t('code_prefixes.weaknesses')
   end
 
+  def work_paper_prefix
+    I18n.t('code_prefixes.work_papers_in_weaknesses')
+  end
+
   def next_code(review = nil)
-    review ||= self.control_objective_item.reload.review
-    review.next_weakness_code(self.prefix)
-  rescue
-    "#{self.prefix}1".strip
+    review ||= self.control_objective_item.try(:reload).try(:review)
+
+    review ? review.next_weakness_code(prefix) : "#{prefix}1".strip
   end
 
   def last_work_paper_code(review = nil)
-    code_prefix = I18n.t('code_prefixes.work_papers_in_weaknesses')
+    review ||= self.control_objective_item.try(:reload).try(:review)
 
-    code_from_review = begin
-      review ||= self.control_objective_item.reload.review
-      review.last_weakness_work_paper_code(code_prefix)
-    rescue
-      "#{code_prefix} 0".strip
-    end
+    code_from_review = review ?
+      review.last_weakness_work_paper_code(work_paper_prefix) :
+      "#{work_paper_prefix} 0".strip
 
     code_from_weakness = self.work_papers.reject(
       &:marked_for_destruction?).map(
-      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
+      &:code).select { |c| c =~ /#{work_paper_prefix}\s\d+/ }.sort.last
 
     [code_from_review, code_from_weakness].compact.max
   end

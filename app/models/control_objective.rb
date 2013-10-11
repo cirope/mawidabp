@@ -62,6 +62,6 @@ class ControlObjective < ActiveRecord::Base
   def risk_text
     risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    I18n.t("risk_types.#{risk.first}") rescue ''
+    risk ? I18n.t("risk_types.#{risk.first}") : ''
   end
 end

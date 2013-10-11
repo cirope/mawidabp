@@ -1,13 +1,11 @@
 module Parameters::Frequency
   extend ActiveSupport::Concern
 
-  included do
-    FREQUENCY_TYPES = {
-      monthly: 0,
-      biyearly: 1,
-      yearly: 2
-    }
-  end
+  FREQUENCY_TYPES = {
+    monthly: 0,
+    biyearly: 1,
+    yearly: 2
+  }
 
   module ClassMethods
     def frequencies

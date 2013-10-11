@@ -22,16 +22,14 @@ module NonconformitiesHelper
   end
 
   def next_nonconformity_work_paper_code(nonconformity, follow_up = false)
+    review = nonconformity.control_objective_item.try(:review)
     code_prefix = follow_up ?
-      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
-      I18n.t('code_prefixes.work_papers_in_nonconformities')
+      t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      nonconformity.work_paper_prefix
 
-    code_from_review = begin
-      review = nonconformity.control_objective_item.review
-      review.last_nonconformity_work_paper_code(code_prefix)
-    rescue
+    code_from_review = review ?
+      review.last_nonconformity_work_paper_code(code_prefix) :
       "#{code_prefix} 0".strip
-    end
 
     code_from_nonconformity = nonconformity.work_papers.reject(
       &:marked_for_destruction?).map(
