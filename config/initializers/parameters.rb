@@ -2,8 +2,6 @@
 
 DEFAULT_PARAMETERS = {
   :admin_blank_password_stale_days => 3,
-  :admin_code_prefix_for_work_papers_in_fortresses => 'PTF',
-  :admin_code_prefix_for_work_papers_in_nonconformities => 'PTNC',
   :admin_finding_stale_confirmed_days => '3',
   :admin_resource_units => [
     ['Hora', 0],

@@ -86,13 +86,14 @@ class Nonconformity < Finding
   end
 
   def last_work_paper_code(review = nil)
-    review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_nonconformities, review.try(:created_at))
+    code_prefix = I18n.t('code_prefixes.work_papers_in_nonconformities')
 
-    code_from_review = review ?
-      review.last_nonconformity_work_paper_code(code_prefix) :
+    code_from_review = begin
+      review ||= self.control_objective_item.reload.review
+      review.last_nonconformity_work_paper_code(code_prefix)
+    rescue
       "#{code_prefix} 0".strip
+    end
 
     code_from_nonconformity = self.work_papers.reject(
       &:marked_for_destruction?).map(

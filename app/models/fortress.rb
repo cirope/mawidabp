@@ -30,19 +30,18 @@ class Fortress < Finding
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(
-      :admin_code_prefix_for_work_papers_in_fortresses
-    )
+    work_paper.code_prefix = I18n.t('code_prefixes.work_papers_in_fortresses')
   end
 
   def last_work_paper_code(review = nil)
-    review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_fortresses, review.try(:created_at))
+    code_prefix = I18n.t('code_prefixes.work_papers_in_fortresses')
 
-    code_from_review = review ?
-      review.last_fortress_work_paper_code(code_prefix) :
+    code_from_review = begin
+      review ||= self.control_objective_item.reload.review
+      review.last_fortress_work_paper_code(code_prefix)
+    rescue
       "#{code_prefix} 0".strip
+    end
 
     code_from_fortress = self.work_papers.reject(
       &:marked_for_destruction?).map(
