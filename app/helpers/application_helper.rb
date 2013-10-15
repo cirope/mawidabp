@@ -226,7 +226,7 @@ module ApplicationHelper
 
   # Devuelve el HTML de un vínculo para mostrar el cuadro de búsqueda
   def link_to_search
-    search_link = link_to t('label.search'), '#', :onclick => 'Search.show()',
+    search_link = link_to t('label.search'), '#', :onclick => 'Search.show(); return false;',
       :id => :show_search_link, :title => t('message.search_link_title')
 
     @query.blank? ? search_link : content_tag(:span, search_link,
@@ -285,7 +285,7 @@ module ApplicationHelper
         image_tag(
           'grayarrow.gif', :size => '11x11', :alt => '>', :title => show_text
         ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
       ),
       :id => "show_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? 'display: none' : nil)
@@ -296,7 +296,7 @@ module ApplicationHelper
           'grayarrowdown.gif', :size => '11x11', :alt => '>',
           :title => hide_text
         ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}')", :class => :image_link
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
       ),
       :id => "hide_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? nil : 'display: none'))

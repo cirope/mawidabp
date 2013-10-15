@@ -287,7 +287,7 @@ class NonconformitiesController < ApplicationController
       params.require(:nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
         :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
-        :priority, :follow_up_date, :lock_version,
+        :priority, :follow_up_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ], 

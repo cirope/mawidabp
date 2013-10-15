@@ -15,7 +15,7 @@
   <% unless @user.reallocation_errors.blank? %>
     <p style="margin: 1em 0em;">
       <%= link_to t('label.details'), '#', :onclick =>
-        "$('#error_details').slideToggle()", :class => 'bold red' %>
+        "$('#error_details').slideToggle(); return false;", :class => 'bold red' %>
       <div id="error_details" style="display: none; margin-top: 1em;">
         <%= array_to_ul(@user.reallocation_errors, :class => :raw_list) %>
       </div>
