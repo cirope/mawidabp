@@ -877,21 +877,22 @@ module FollowUpCommonReports
             text = {}
 
             @risk_levels.each do |risk|
-              text[risk] ||= { :complete => 0, :incomplete => 0 }
-              if weaknesses_status_count[risk]
-                text[risk][:incomplete] = weaknesses_status_count[risk][:incomplete]
-                text[risk][:complete] = weaknesses_status_count[risk][:complete]
+              risk_text = t("risk_types.#{risk}")
+              text[risk_text] ||= { :complete => 0, :incomplete => 0 }
+              if weaknesses_status_count[risk_text]
+                text[risk_text][:incomplete] = weaknesses_status_count[risk_text][:incomplete]
+                text[risk_text][:complete] = weaknesses_status_count[risk_text][:complete]
               end
 
-              @control_objectives_data[period][pc][co.name][risk] ||= { :complete => [], :incomplete => [] }
-              coi_data[:weaknesses_ids][risk] ||= { :complete => [], :incomplete => [] }
-              @control_objectives_data[period][pc][co.name][risk][:complete].concat(
-                coi_data[:weaknesses_ids][risk][:complete]
+              @control_objectives_data[period][pc][co.name][risk_text] ||= { :complete => [], :incomplete => [] }
+              coi_data[:weaknesses_ids][risk_text] ||= { :complete => [], :incomplete => [] }
+              @control_objectives_data[period][pc][co.name][risk_text][:complete].concat(
+                coi_data[:weaknesses_ids][risk_text][:complete]
               )
-              @control_objectives_data[period][pc][co.name][risk][:incomplete].concat(
-                coi_data[:weaknesses_ids][risk][:incomplete]
+              @control_objectives_data[period][pc][co.name][risk_text][:incomplete].concat(
+                coi_data[:weaknesses_ids][risk_text][:incomplete]
               )
-              weaknesses_count_text[risk.to_sym] = text[risk]
+              weaknesses_count_text[risk_text.to_sym] = text[risk_text]
             end
           end
 
