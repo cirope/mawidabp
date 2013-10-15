@@ -897,7 +897,7 @@ module ConclusionCommonReports
             risk_text = t("risk_types.#{risk}")
             text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
 
-            @process_control_ids_data[pc][risk_text] = pc_data[:weaknesses_ids][risk_text]
+            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
 
             weaknesses_count_text << text
           end
