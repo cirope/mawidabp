@@ -894,17 +894,14 @@ module ConclusionCommonReports
           weaknesses_count_text = []
 
           @risk_levels.each do |risk|
-            text = "#{risk}: #{weaknesses_count[risk] || 0}"
+            risk_text = t("risk_types.#{risk}")
+            text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
 
-            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk]
+            @process_control_ids_data[pc][risk_text] = pc_data[:weaknesses_ids][risk_text]
 
             weaknesses_count_text << text
           end
         end
-
-        weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-          t('conclusion_committee_report.process_control_stats.without_weaknesses') :
-          @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
 
         @process_control_data[period] << {
           'process_control' => pc,
