@@ -5,8 +5,7 @@
         <tr>
           <td>
             <p class="form_item" style="margin: 0em;">
-              <% selected = params[action] ?
-                params[action][:risk_levels] : nil %>
+              <% selected = params[action] ? params[action][:risk] : nil %>
               <%= f.label :risk, Weakness.human_attribute_name(:risk),
                 :class => :inline %>
               <%= risk_field(f, { selected: selected }, { class: :inline_item }) %>

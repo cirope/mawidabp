@@ -119,9 +119,15 @@ class FollowUpCommitteeController < ApplicationController
               end
             end
 
-            weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-              t('follow_up_committee.synthesis_report.without_weaknesses') :
-              @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
+            weaknesses_count_text =
+            if weaknesses_count.values.sum == 0
+              t('follow_up_committee.synthesis_report.without_weaknesses')
+            else
+              @risk_levels.map do |risk|
+                risk_text = t("risk_types.#{risk}")
+                "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
+              end
+            end
             process_control_text = process_controls.sort do |pc1, pc2|
               pc1[1] <=> pc2[1]
             end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }

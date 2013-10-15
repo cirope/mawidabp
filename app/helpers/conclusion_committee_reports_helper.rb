@@ -41,19 +41,20 @@ module ConclusionCommitteeReportsHelper
       co = data['control_objective']
 
       @risk_levels.each do |risk|
-        ids_complete = @control_objectives_data[period][pc][co][risk][:complete]
-        ids_incomplete = @control_objectives_data[period][pc][co][risk][:incomplete]
+        risk_text = t("risk_types.#{risk}")
+        ids_complete = @control_objectives_data[period][pc][co][risk_text][:complete]
+        ids_incomplete = @control_objectives_data[period][pc][co][risk_text][:incomplete]
         url_complete = weaknesses_path(:ids => ids_complete)
         url_incomplete = weaknesses_path(:ids => ids_incomplete)
 
         if ids_incomplete.blank? && ids_complete.blank?
-          new_data << "#{risk}: 0 / 0"
+          new_data << "#{risk_text}: 0 / 0"
         elsif ids_incomplete.present? && ids_complete.blank?
-          new_data <<  "\"#{risk}: #{ids_incomplete.count}\":#{url_incomplete} / 0"
+          new_data <<  "\"#{risk_text}: #{ids_incomplete.count}\":#{url_incomplete} / 0"
         elsif ids_incomplete.blank? && ids_complete.present?
-          new_data << "[\"#{risk}: 0 / #{ids_complete.count}\":#{url_complete}]"
+          new_data << "[\"#{risk_text}: 0 / #{ids_complete.count}\":#{url_complete}]"
         elsif ids_incomplete.present? & ids_complete.present?
-          new_data << "#{risk}: \"#{ids_incomplete.count}\":#{url_incomplete} / \"#{ids_complete.count}\":#{url_complete}"
+          new_data << "#{risk_text}: \"#{ids_incomplete.count}\":#{url_incomplete} / \"#{ids_complete.count}\":#{url_complete}"
         end
       end
 

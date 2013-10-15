@@ -20,7 +20,7 @@ module ConclusionFinalReviewsHelper
     scores.each_with_index do |score, i|
       min_percentage = score[1]
       max_percentage = i > 0 && scores[i - 1] ? scores[i - 1][1] - 1 : 100
-      column_text = "#{score[0]}"
+      column_text = t("score_types.#{score[0]}")
 
       header << content_tag(:th, (score[0] != review_score ?
             raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):

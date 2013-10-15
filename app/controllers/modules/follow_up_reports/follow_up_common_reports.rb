@@ -1315,7 +1315,7 @@ module FollowUpCommonReports
         'count' => [Weakness.human_attribute_name('count'), 15]
       }
 
-      risk_levels.each {|rl| columns[rl[0]] = [rl[0], (55 / risk_levels.size)]}
+      risk_levels.each {|rl| columns[rl[0]] = [t("risk_types.#{rl[0]}"), (55 / risk_levels.size)]}
 
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].sum(&:second)

@@ -332,7 +332,7 @@ class Review < ActiveRecord::Base
   def score_text
     score = self.score_array
 
-    [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') rescue ''
+    score ? [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') : ''
   end
 
   def control_objective_items_for_score

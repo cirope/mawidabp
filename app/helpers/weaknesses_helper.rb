@@ -1,8 +1,4 @@
 module WeaknessesHelper
-  def weakness_priority_text(weakness)
-    name_for_option_value weakness.class.priorities, weakness.priority
-  end
-
   def show_weakness_previous_follow_up_dates(weakness)
     dates = weakness.all_follow_up_dates if weakness.being_implemented?
     list = String.new.html_safe

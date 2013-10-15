@@ -320,8 +320,11 @@ class ControlObjectiveItem < ActiveRecord::Base
   def relevance_text(show_value = false)
     relevance = self.class.relevances.detect { |r| r.last == self.relevance }
 
-    relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
-        relevance.first) : ''
+    if relevance
+      text = I18n.t("relevance_types.#{relevance.first}")
+
+      return show_value ? [text, "(#{relevance.last})"].join(' ') : text
+    end
   end
 
   def design_score_text(show_value = false)
@@ -329,9 +332,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       r.last == self.design_score
     end
 
-    design_score ? (show_value ?
-        "#{design_score.first} (#{design_score.last})" :
-        design_score.first) : ''
+    qualification_text(design_score, show_value)
   end
 
   def compliance_score_text(show_value = false)
@@ -339,9 +340,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       r.last == self.compliance_score
     end
 
-    compliance_score ? (show_value ?
-        "#{compliance_score.first} (#{compliance_score.last})" :
-        compliance_score.first) : ''
+    qualification_text(compliance_score, show_value)
   end
 
   def sustantive_score_text(show_value = false)
@@ -349,9 +348,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       r.last == self.sustantive_score
     end
 
-    sustantive_score ? (show_value ?
-        "#{sustantive_score.first} (#{sustantive_score.last})" :
-        sustantive_score.first) : ''
+    qualification_text(sustantive_score, show_value)
   end
 
   def to_pdf(organization = nil)
@@ -525,4 +522,13 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     { column: head, text: body }
   end
+
+  private
+    def qualification_text(score, show_value)
+      if score
+        text = I18n.t("qualification_types.#{score.first}")
+
+        return show_value ? [text, "(#{score.last})"].join(' ') : text
+      end
+    end
 end
