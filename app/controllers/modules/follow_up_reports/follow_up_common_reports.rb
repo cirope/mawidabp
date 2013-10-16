@@ -960,13 +960,14 @@ module FollowUpCommonReports
           if row[col_name].kind_of?(Hash)
             list = ""
             @risk_levels.each do |risk|
+              risk_text = t("risk_types.#{risk}")
               co = row["control_objective"]
               pc = row["process_control"]
 
-              incompletes = @control_objectives_data[period][pc][co][risk][:incomplete].count
-              completes = @control_objectives_data[period][pc][co][risk][:complete].count
+              incompletes = @control_objectives_data[period][pc][co][risk_text][:incomplete].count
+              completes = @control_objectives_data[period][pc][co][risk_text][:complete].count
 
-              list += "  • #{risk}: #{incompletes} / #{completes} \n"
+              list += "  • #{risk_text}: #{incompletes} / #{completes} \n"
             end
             new_row << list
           else
@@ -1121,9 +1122,10 @@ module FollowUpCommonReports
           weaknesses_count_text = []
 
           @risk_levels.each do |risk|
-            text = "#{risk}: #{weaknesses_count[risk] || 0}"
+            risk_text = t("risk_types.#{risk}")
+            text = "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
 
-            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk]
+            @process_control_ids_data[pc][text] = pc_data[:weaknesses_ids][risk_text]
 
             weaknesses_count_text << text
           end

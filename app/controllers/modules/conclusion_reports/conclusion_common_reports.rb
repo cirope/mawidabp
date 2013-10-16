@@ -735,13 +735,14 @@ module ConclusionCommonReports
           if row[col_name].kind_of?(Hash)
             list = ""
             @risk_levels.each do |risk|
+              risk_text = t("risk_types.#{risk}")
               co = row["control_objective"]
               pc = row["process_control"]
 
-              incompletes = @control_objectives_data[period][pc][co][risk][:incomplete].count
-              completes = @control_objectives_data[period][pc][co][risk][:complete].count
+              incompletes = @control_objectives_data[period][pc][co][risk_text][:incomplete].count
+              completes = @control_objectives_data[period][pc][co][risk_text][:complete].count
 
-              list += "  • #{risk}: #{incompletes} / #{completes} \n"
+              list += "  • #{risk_text}: #{incompletes} / #{completes} \n"
             end
             new_row << list
           else
