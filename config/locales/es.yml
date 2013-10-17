@@ -1589,7 +1589,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
         separator: ! ','
         significant: false
         strip_insignificant_zeros: false
-        unit: $S
+        unit: $
     format:
       delimiter: .
       precision: 2
