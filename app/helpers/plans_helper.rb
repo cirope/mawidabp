@@ -30,7 +30,7 @@ module PlansHelper
     grouped_plan_items = @plan.grouped_plan_items
     label = '<h1 class="simple_title" style="margin: .5em 0em;">%s</h1>'
 
-    BusinessUnitType.list.each do |but|
+    (BusinessUnitType.list + [nil]).each do |but|
       list << label % show_plan_group_link(but, grouped_plan_items[but])
     end
 
