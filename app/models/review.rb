@@ -1316,7 +1316,7 @@ class Review < ActiveRecord::Base
     scores.each_with_index do |score, i|
       min_percentage = score[1]
       max_percentage = i > 0 && scores[i - 1] ? scores[i - 1][1] - 1 : 100
-      column_text = "#{score[0]}"
+      column_text = I18n.t("score_types.#{score[0]}")
 
       column_headers << (score[0] != review_score ? column_text :
             "<b>#{column_text.upcase} (#{self.score}%)</b>"
