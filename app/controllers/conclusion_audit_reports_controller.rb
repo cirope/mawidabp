@@ -1,9 +1,12 @@
-require 'modules/conclusion_reports/conclusion_common_reports'
-require 'modules/conclusion_reports/conclusion_high_risk_reports'
-
 class ConclusionAuditReportsController < ApplicationController
-  include ConclusionCommonReports
-  include ConclusionHighRiskReports
+  include Reports::WeaknessesByState
+  include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByAuditType
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
+  include Reports::NonconformitiesReport  
 
   before_action :auth, :load_privileges, :check_privileges
 

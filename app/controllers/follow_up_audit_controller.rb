@@ -1,9 +1,12 @@
-require 'modules/follow_up_reports/follow_up_common_reports'
-require 'modules/follow_up_reports/follow_up_high_risk_reports'
-
 class FollowUpAuditController < ApplicationController
-  include FollowUpCommonReports
-  include FollowUpHighRiskReports
+  include Reports::WeaknessesByState                                                                                                  
+  include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByAuditType
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
+  include Reports::NonconformitiesReport
 
   before_action :auth, :load_privileges, :check_privileges
   hide_action :load_privileges, :get_organization,

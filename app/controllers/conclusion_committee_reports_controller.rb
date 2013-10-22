@@ -1,13 +1,9 @@
-require 'modules/conclusion_reports/conclusion_common_reports'
-require 'modules/conclusion_reports/conclusion_high_risk_reports'
-
-# =Controlador de reportes de conclusión
-#
-# Crea los reportes de conslusión
 class ConclusionCommitteeReportsController < ApplicationController
   include Parameters::Risk
-  include ConclusionCommonReports
-  include ConclusionHighRiskReports
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
 
   before_action :auth, :load_privileges, :check_privileges
 

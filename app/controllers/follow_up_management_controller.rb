@@ -1,7 +1,10 @@
-require 'modules/follow_up_reports/follow_up_common_reports'
-
 class FollowUpManagementController < ApplicationController
-  include FollowUpCommonReports
+  include Reports::WeaknessesByState                                                                                                  
+  include Reports::WeaknessesByRisk
+  include Reports::WeaknessesByAuditType
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+
   before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles

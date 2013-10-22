@@ -1,12 +1,9 @@
-require 'modules/follow_up_reports/follow_up_common_reports'
-require 'modules/follow_up_reports/follow_up_high_risk_reports'
-
-# =Controlador de comité
-#
-# Crea los reportes de comité
 class FollowUpCommitteeController < ApplicationController
-  include FollowUpCommonReports
-  include FollowUpHighRiskReports
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
+
   before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles
