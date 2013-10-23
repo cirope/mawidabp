@@ -1,8 +1,7 @@
 module Reports::ProcessControlStats                                                                                                 
-  extend ActiveSupport::Concern
-
   include Reports::Pdf
   include Reports::Period
+  include Parameters::Risk
 
   def process_control_stats(final = false, controller = 'conclusion')
     @controller = controller

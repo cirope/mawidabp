@@ -1,8 +1,7 @@
 module Reports::ControlObjectiveStats
-  extend ActiveSupport::Concern
-
   include Reports::Pdf
   include Reports::Period
+  include Parameters::Risk
 
   def control_objective_stats(final = false, controller = 'conclusion')
     @controller = controller

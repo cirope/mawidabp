@@ -1,11 +1,11 @@
 module Reports::WeaknessesByAuditType
-  extend ActiveSupport::Concern
-
   include Reports::Pdf
   include Reports::Period
+  include Parameters::Risk
 
   def weaknesses_by_audit_type(final = false, controller = 'conclusion')
     @controller = controller
+    @final = final
     @title = t("#{@controller}_committee_report.weaknesses_by_audit_type_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
     @periods = periods_for_interval
@@ -46,8 +46,8 @@ module Reports::WeaknessesByAuditType
 
               cfrs.each do |cfr|
                 review = cfr.review
-                weaknesses |= final ? review.final_weaknesses : review.weaknesses
-                oportunities |= final ? review.final_oportunities : review.oportunities
+                weaknesses |= @final ? review.final_weaknesses : review.weaknesses
+                oportunities |= @final ? review.final_oportunities : review.oportunities
               end
 
               grouped_weaknesses = weaknesses.group_by(&:state)
@@ -159,7 +159,7 @@ module Reports::WeaknessesByAuditType
 
               bu_data[:conclusion_reviews].each do |cr|
               
-                if final  
+                if @final  
                   findings_count = cr.review.final_weaknesses.size +
                     cr.review.final_oportunities.size
                 else

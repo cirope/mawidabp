@@ -1,8 +1,7 @@
 module Reports::WeaknessesByRisk                                                                                                     
-  extend ActiveSupport::Concern
-
   include Reports::Pdf
   include Reports::Period
+  include Parameters::Risk
 
   def weaknesses_by_risk(final = false, controller = 'conclusion')
     @controller = controller
@@ -78,7 +77,7 @@ module Reports::WeaknessesByRisk
     pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t("#{@controller}_conclusion_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.title"),
       t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
@@ -122,13 +121,13 @@ module Reports::WeaknessesByRisk
     end
 
     pdf.custom_save_as(
-      t("#{@controller}_committee_report.weaknesses_by_risk.pdf_name",
+      t("#{@controller}_report.weaknesses_by_risk.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_conclusion_committee_report.weaknesses_by_risk.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_risk.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
