@@ -548,7 +548,7 @@ class FindingsController < ApplicationController
 
     def finding_params
       params.require(:finding).permit(
-        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
+        :id, :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
         :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
         :follow_up_date, :correction, :correction_date, :cause_analysis, :cause_analysis_date,
         :nested_user, :lock_version, users_for_notification: [],
@@ -556,7 +556,7 @@ class FindingsController < ApplicationController
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
         work_papers_attributes: [
-          :id, :name, :code, :number_of_pages, :description, :_destroy,
+          :id, :name, :code, :number_of_pages, :description, :_destroy, :lock_version,
           file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_answers_attributes: [
@@ -568,6 +568,9 @@ class FindingsController < ApplicationController
         ],
         costs_attributes: [
           :id, :raw_cost, :cost, :cost_type, :description, :user_id, :_destroy
+        ],
+        comments_attributes: [
+          :user_id, :comment
         ]
       )
     end
