@@ -1,5 +1,4 @@
 module Reports::Period
-  extend ActiveSupport::Concern
 
   def periods_for_interval
     Period.includes(:reviews => :conclusion_final_review).where(

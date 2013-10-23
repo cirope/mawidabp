@@ -1,11 +1,12 @@
 module Reports::ControlObjectiveStats
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def control_objective_stats(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.control_objective_stats_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.control_objective_stats_title")
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
     @periods = periods_for_interval
     @risk_levels = []
@@ -13,7 +14,7 @@ module Reports::ControlObjectiveStats
     @columns = [
       ['process_control', BestPractice.human_attribute_name(:process_controls), 20],
       ['control_objective', ControlObjective.model_name.human, 40],
-      ['effectiveness', t("#{controller}_committee_report.control_objective_stats.average_effectiveness"), 20],
+      ['effectiveness', t("#{@controller}_committee_report.control_objective_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count_by_state'), 20]
     ]
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
@@ -132,7 +133,7 @@ module Reports::ControlObjectiveStats
 
           if weaknesses_count.values.sum == 0
             weaknesses_count_text = t(
-              "#{controller}_committee_report.control_objective_stats.without_weaknesses")
+              "#{@controller}_committee_report.control_objective_stats.without_weaknesses")
           else
             weaknesses_count_text = {}
             text = {}
@@ -191,8 +192,8 @@ module Reports::ControlObjectiveStats
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t("#{controller}_committee_report.period.title"),
-      t("#{controller}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -250,31 +251,31 @@ module Reports::ControlObjectiveStats
         end
       else
         pdf.text(
-          t("#{controller}_committee_report.control_objective_stats.without_audits_in_the_period"))
+          t("#{@controller}_committee_report.control_objective_stats.without_audits_in_the_period"))
       end
 
       pdf.move_down PDF_FONT_SIZE
       pdf.text t(
-        "#{controller}_committee_report.control_objective_stats.review_score_average",
+        "#{@controller}_committee_report.control_objective_stats.review_score_average",
         :score => @reviews_score_data[period]
       ), :inline_format => true
     end
 
     unless @filters.empty?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{controller}_committee_report.applied_filters",
+      pdf.text t("#{@controller}_committee_report.applied_filters",
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
         :inline_format => true
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.control_objective_stats.pdf_name",
+      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_committee_report.control_objective_stats.pdf_name",
+      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
   end

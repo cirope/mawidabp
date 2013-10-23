@@ -1,11 +1,12 @@
 module Reports::WeaknessesByRisk                                                                                                     
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def weaknesses_by_risk(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.weaknesses_by_risk_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.weaknesses_by_risk_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
     @audit_types = [
@@ -77,8 +78,8 @@ module Reports::WeaknessesByRisk
     pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t("#{controller}_conclusion_committee_report.period.title"),
-      t("#{controller}_committee_report.period.range",
+      t("#{@controller}_conclusion_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -95,7 +96,7 @@ module Reports::WeaknessesByRisk
 
           pdf.move_down PDF_FONT_SIZE * 2
 
-          pdf.add_title t("#{controller}_committee_report.weaknesses_type_#{audit_type_symbol}"),
+          pdf.add_title t("#{@controller}_committee_report.weaknesses_type_#{audit_type_symbol}"),
             (PDF_FONT_SIZE * 1.25).round, :center
 
           audit_type.last.each do |audit_types|
@@ -112,7 +113,7 @@ module Reports::WeaknessesByRisk
 
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
-        t("#{controller}_committee_report.weaknesses_by_risk.period_summary",
+        t("#{@controller}_committee_report.weaknesses_by_risk.period_summary",
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_down PDF_FONT_SIZE
@@ -121,13 +122,13 @@ module Reports::WeaknessesByRisk
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.weaknesses_by_risk.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_risk.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_conclusion_committee_report.weaknesses_by_risk.pdf_name",
+      t("#{@controller}_conclusion_committee_report.weaknesses_by_risk.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)

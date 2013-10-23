@@ -1,11 +1,12 @@
 module Reports::WeaknessesByRiskReport
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def weaknesses_by_risk_report(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.weaknesses_by_risk_report_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.weaknesses_by_risk_report_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score',
@@ -51,7 +52,7 @@ module Reports::WeaknessesByRiskReport
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'weaknesses_by_risk' =>
-            [t("#{controller}_committee_report.weaknesses_by_risk_report_title"), 70]
+            [t("#{@controller}_committee_report.weaknesses_by_risk_report_title"), 70]
         }
         column_data = []
         name = but.name
@@ -126,8 +127,8 @@ module Reports::WeaknessesByRiskReport
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t("#{controller}_committee_report.period.title"),
-      t("#{controller}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -147,10 +148,10 @@ module Reports::WeaknessesByRiskReport
             column_headers << columns[order].first
           end
           if !data[:external] && !@internal_title_showed
-            title = t("#{controller}_committee_report.weaknesses_by_risk_report.internal_audit_weaknesses")
+            title = t("#{@controller}_committee_report.weaknesses_by_risk_report.internal_audit_weaknesses")
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t("#{controller}_committee_report.weaknesses_by_risk_report.external_audit_weaknesses")
+            title = t("#{@controller}_committee_report.weaknesses_by_risk_report.external_audit_weaknesses")
             @external_title_showed = true
           end
 
@@ -177,7 +178,7 @@ module Reports::WeaknessesByRiskReport
             end
           else
             pdf.text(
-              t("#{controller}_committee_report.weaknesses_by_risk_report.without_audits_in_the_period"),
+              t("#{@controller}_committee_report.weaknesses_by_risk_report.without_audits_in_the_period"),
               :style => :italic
             )
           end
@@ -187,19 +188,19 @@ module Reports::WeaknessesByRiskReport
 
     unless @filters.empty?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{controller}_committee_report.applied_filters",
+      pdf.text t("#{@controller}_committee_report.applied_filters",
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
         :inline_format => true
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.weaknesses_by_risk_report.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_risk_report.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk_report', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_committee_report.weaknesses_by_risk_report.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_risk_report.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'weaknesses_by_risk_report', 0)
   end

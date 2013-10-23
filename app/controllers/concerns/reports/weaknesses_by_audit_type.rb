@@ -1,11 +1,12 @@
 module Reports::WeaknessesByAuditType
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def weaknesses_by_audit_type(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.weaknesses_by_audit_type_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.weaknesses_by_audit_type_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
     @periods = periods_for_interval
     @audit_types = [:internal, :external]
@@ -69,7 +70,7 @@ module Reports::WeaknessesByAuditType
                 end
 
                 oportunities_table_data << [
-                  "<b>#{t("#{controller}_committee_report.weaknesses_by_audit_type.total")}</b>",
+                  "<b>#{t("#{@controller}_committee_report.weaknesses_by_audit_type.total")}</b>",
                   "<b>#{total_oportunities}</b>"
                 ]
               end
@@ -122,8 +123,8 @@ module Reports::WeaknessesByAuditType
     pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t("#{controller}_committee_report.period.title"),
-      t("#{controller}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -170,7 +171,7 @@ module Reports::WeaknessesByAuditType
                   cr.review.reload.score_text
 
                 if findings_count == 0
-                  text << " (#{t("#{controller}_committee_report.weaknesses_by_audit_type.without_weaknesses")})"
+                  text << " (#{t("#{@controller}_committee_report.weaknesses_by_audit_type.without_weaknesses")})"
                 end
 
                 pdf.text text, :left => PDF_FONT_SIZE * 2, :inline_format => true
@@ -179,7 +180,7 @@ module Reports::WeaknessesByAuditType
               pdf.move_down PDF_FONT_SIZE
 
               pdf.add_title(
-                t("#{controller}_committee_report.weaknesses_by_audit_type.weaknesses"),
+                t("#{@controller}_committee_report.weaknesses_by_audit_type.weaknesses"),
                 PDF_FONT_SIZE)
 
               pdf.move_down PDF_FONT_SIZE
@@ -191,7 +192,7 @@ module Reports::WeaknessesByAuditType
                 pdf.move_down PDF_FONT_SIZE
 
                 pdf.add_title(
-                  t("#{controller}_committee_report.weaknesses_by_audit_type.oportunities"),
+                  t("#{@controller}_committee_report.weaknesses_by_audit_type.oportunities"),
                   PDF_FONT_SIZE)
 
                 pdf.move_down PDF_FONT_SIZE
@@ -231,13 +232,13 @@ module Reports::WeaknessesByAuditType
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.weaknesses_by_audit_type.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_audit_type.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_audit_type', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_committee_report.weaknesses_by_audit_type.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_audit_type.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_audit_type', 0)

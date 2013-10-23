@@ -1,5 +1,4 @@
 module Reports::Pdf
-  extend ActiveSupport::Concern
 
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)

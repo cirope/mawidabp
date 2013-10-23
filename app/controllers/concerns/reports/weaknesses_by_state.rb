@@ -1,17 +1,23 @@
 module Reports::WeaknessesByState
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def weaknesses_by_state(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.weaknesses_by_state_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.weaknesses_by_state_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval
     @weaknesses_counts = {}
     @being_implemented_resumes = {}
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
+    @audit_types = [
+      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+    ]
+    @sqm = @auth_organization.kind.eql? 'quality_management'
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}
@@ -138,8 +144,8 @@ module Reports::WeaknessesByState
     pdf.move_down PDF_FONT_SIZE * 2
 
     pdf.add_description_item(
-      t("#{controller}_committee_report.period.title"),
-      t("#{conclusion}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.title"),
+      t("#{@conclusion}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -186,7 +192,7 @@ module Reports::WeaknessesByState
 
       pdf.move_down PDF_FONT_SIZE
       pdf.add_title(
-        t("#{controller}_committee_report.weaknesses_by_state.period_summary",
+        t("#{@controller}_committee_report.weaknesses_by_state.period_summary",
           :period => period.inspect), (PDF_FONT_SIZE * 1.25).round, :center
       )
       pdf.move_down PDF_FONT_SIZE
@@ -200,13 +206,13 @@ module Reports::WeaknessesByState
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.weaknesses_by_state.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_state.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_state', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_committee_report.weaknesses_by_state.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_state.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_state', 0)

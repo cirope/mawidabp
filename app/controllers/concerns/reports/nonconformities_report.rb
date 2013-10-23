@@ -1,11 +1,12 @@
 module Reports::NonconformitiesReport                                                                                                 
   extend ActiveSupport::Concern
 
-  include Pdf
-  include Period
+  include Reports::Pdf
+  include Reports::Period
 
   def nonconformities_report(final = false, controller = 'conclusion')
-    @title = t("#{controller}_committee_report.nonconformities_report_title")
+    @controller = controller
+    @title = t("#{@controller}_committee_report.nonconformities_report_title")
     @from_date, @to_date = *make_date_range(params[:nonconformities_report])
     @periods = periods_for_interval
     @column_order = ['business_unit_report_name', 'score',
@@ -47,7 +48,7 @@ module Reports::NonconformitiesReport
           'business_unit_report_name' => [but.business_unit_label, 15],
           'score' => [Review.human_attribute_name(:score), 15],
           'nonconformities' =>
-            [t("#{controller}_committee_report.nonconformities_report_title"), 70]
+            [t("#{@controller}_committee_report.nonconformities_report_title"), 70]
         }
         column_data = []
         name = but.name
@@ -118,8 +119,8 @@ module Reports::NonconformitiesReport
     pdf.move_down PDF_FONT_SIZE
 
     pdf.add_description_item(
-      t("#{controller}_committee_report.period.title"),
-      t("#{controller}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.title"),
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
@@ -139,10 +140,10 @@ module Reports::NonconformitiesReport
             column_headers << columns[order].first
           end
           if !data[:external] && !@internal_title_showed
-            title = t("#{controller}_committee_report.nonconformities_report.internal_audit_nonconformities")
+            title = t("#{@controller}_committee_report.nonconformities_report.internal_audit_nonconformities")
             @internal_title_showed = true
           elsif data[:external] && !@external_title_showed
-            title = t("#{controller}_committee_report.nonconformities_report.external_audit_nonconformities")
+            title = t("#{@controller}_committee_report.nonconformities_report.external_audit_nonconformities")
             @external_title_showed = true
           end
 
@@ -174,7 +175,7 @@ module Reports::NonconformitiesReport
             end
           else
             pdf.text(
-              t("#{controller}_committee_report.nonconformities_report.without_audits_in_the_period"),
+              t("#{@controller}_committee_report.nonconformities_report.without_audits_in_the_period"),
               :style => :italic
             )
           end
@@ -184,19 +185,19 @@ module Reports::NonconformitiesReport
 
     unless @filters.empty?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{controller}_committee_report.applied_filters",
+      pdf.text t("#{@controller}_committee_report.applied_filters",
         :filters => @filters.to_sentence, :count => @filters.size),
         :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
         :inline_format => true
     end
 
     pdf.custom_save_as(
-      t("#{controller}_committee_report.nonconformities_report.pdf_name",
+      t("#{@controller}_committee_report.nonconformities_report.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'nonconformities_report', 0)
 
     redirect_to Prawn::Document.relative_path(
-      t("#{controller}_committee_report.nonconformities_report.pdf_name",
+      t("#{@controller}_committee_report.nonconformities_report.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'nonconformities_report', 0)
   end
