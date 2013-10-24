@@ -1,14 +1,14 @@
 <ul class="menu_list">
   <li><%= link_to t('conclusion_committee_report.synthesis_report_title'),
-      :action => :synthesis_report %></li>
+    :action => :synthesis_report %></li>
   <li><%= link_to t('conclusion_committee_report.weaknesses_by_risk_report_title'),
-      :action => :weaknesses_by_risk_report %></li>
+    :action => :weaknesses_by_risk_report, :final => true %></li>
   <li><%= link_to t('conclusion_committee_report.fixed_weaknesses_report_title'),
-      :action => :fixed_weaknesses_report %></li>
+    :action => :fixed_weaknesses_report, :final => true %></li>
   <li><%= link_to t('conclusion_committee_report.control_objective_stats_title'),
-      :action => :control_objective_stats %></li>
+    :action => :control_objective_stats, :final => true %></li>
   <li><%= link_to t('conclusion_committee_report.process_control_stats_title'),
-      :action => :process_control_stats %></li>
+    :action => :process_control_stats, :final => true %></li>
 </ul>
 
 <div class="clear"></div>
