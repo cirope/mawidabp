@@ -1,5 +1,4 @@
 class ConclusionCommitteeReportsController < ApplicationController
-  include Parameters::Risk
   include Reports::ControlObjectiveStats
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
