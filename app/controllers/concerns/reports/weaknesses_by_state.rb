@@ -4,8 +4,8 @@ module Reports::WeaknessesByState
   include Reports::Pdf
   include Reports::Period
 
-  def weaknesses_by_state(final = false, controller = 'conclusion')
-    @controller = controller
+  def weaknesses_by_state(final = false, controller_name = 'conclusion')
+    @controller = controller_name
     @title = t("#{@controller}_committee_report.weaknesses_by_state_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @periods = periods_for_interval

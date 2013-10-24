@@ -3,8 +3,8 @@ module Reports::WeaknessesByAuditType
   include Reports::Period
   include Parameters::Risk
 
-  def weaknesses_by_audit_type(final = false, controller = 'conclusion')
-    @controller = controller
+  def weaknesses_by_audit_type(final = false, controller_name = 'conclusion')
+    @controller = controller_name
     @final = final
     @title = t("#{@controller}_committee_report.weaknesses_by_audit_type_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
@@ -13,6 +13,7 @@ module Reports::WeaknessesByAuditType
     @data = {}
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
       sort { |s1, s2| s1.last <=> s2.last }
+    highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
 
     @periods.each do |period|
       @data[period] ||= {}
@@ -41,6 +42,7 @@ module Reports::WeaknessesByAuditType
               business_unit = cfrs.first.plan_item.business_unit
               weaknesses = []
               oportunities = []
+              repeated_count = 0
 
               cfrs.sort! {|cfr1, cfr2| cfr1.review.score <=> cfr2.review.score}
 
@@ -48,6 +50,8 @@ module Reports::WeaknessesByAuditType
                 review = cfr.review
                 weaknesses |= @final ? review.final_weaknesses : review.weaknesses
                 oportunities |= @final ? review.final_oportunities : review.oportunities
+                repeated_count += review.weaknesses.repeated.count +
+                  review.oportunities.repeated.count
               end
 
               grouped_weaknesses = weaknesses.group_by(&:state)
@@ -56,6 +60,10 @@ module Reports::WeaknessesByAuditType
               weaknesses_count = {}
               weaknesses_count_by_risk = {}
               total_oportunities = grouped_oportunities.values.sum(&:size)
+              being_implemented_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
+              highest_being_implemented_counts = {:current => 0, :stale => 0,
+                :current_rescheduled => 0, :stale_rescheduled => 0}
 
               if total_oportunities > 0
                 statuses.each do |s|
@@ -88,16 +96,63 @@ module Reports::WeaknessesByAuditType
                   weaknesses_count[s[1]] ||= {}
                   weaknesses_count[s[1]][rl[1]] = count_for_risk
                   weaknesses_count_by_risk[rl[0]] += weaknesses_count[s[1]][rl[1]]
+      
+                  if s.first.to_s == 'being_implemented'
+                    being_implemented = weaknesses_for_status.select do |w|
+                      w.risk == rl[1]
+                    end
+
+                    being_implemented.each do |w|
+                      unless w.stale?
+                        unless w.rescheduled?
+                          being_implemented_counts[:current] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:current] += 1
+                          end
+                        else
+                          being_implemented_counts[:current_rescheduled] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:current_rescheduled] += 1
+                          end
+                        end
+                      else
+                        unless w.rescheduled?
+                          being_implemented_counts[:stale] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:stale] += 1
+                          end
+                        else
+                          being_implemented_counts[:stale_rescheduled] += 1
+
+                          if rl == highest_risk
+                            highest_being_implemented_counts[:stale_rescheduled] += 1
+                          end
+                        end
+                      end
+                    end
+                  end
                 end
               end
 
               weaknesses_table_data = get_weaknesses_synthesis_table_data(
                 weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
+              being_implemented_resume = being_implemented_resume_from_counts(
+                being_implemented_counts)
+              highest_being_implemented_resume =
+                being_implemented_resume_from_counts(
+                highest_being_implemented_counts)
 
               business_units[business_unit] = {
                 :conclusion_reviews => cfrs,
                 :weaknesses_table_data => weaknesses_table_data,
-                :oportunities_table_data => oportunities_table_data
+                :oportunities_table_data => oportunities_table_data,
+                :repeated_count => repeated_count,
+                :being_implemented_resume => being_implemented_resume,
+                :highest_being_implemented_resume =>
+                  highest_being_implemented_resume
               }
             end
           end
@@ -187,6 +242,10 @@ module Reports::WeaknessesByAuditType
 
               add_weaknesses_synthesis_table(pdf,
                 bu_data[:weaknesses_table_data], 10)
+              add_being_implemented_resume(pdf,
+                bu_data[:being_implemented_resume])
+              add_being_implemented_resume(pdf,
+                bu_data[:highest_being_implemented_resume], 2)
 
               if type == :internal
                 pdf.move_down PDF_FONT_SIZE
@@ -223,6 +282,13 @@ module Reports::WeaknessesByAuditType
                   pdf.text t('follow_up_committee.without_oportunities'), :style => :italic
                 end
               end
+              
+              if bu_data[:repeated_count] > 0
+                pdf.move_down((PDF_FONT_SIZE * 0.5).round)
+                pdf.text t('follow_up_committee.repeated_count',
+                  :count => bu_data[:repeated_count],
+                  :font_size => PDF_FONT_SIZE)
+              end      
             end
           end
         else

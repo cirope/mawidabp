@@ -4,8 +4,8 @@ module Reports::NonconformitiesReport
   include Reports::Pdf
   include Reports::Period
 
-  def nonconformities_report(final = false, controller = 'conclusion')
-    @controller = controller
+  def nonconformities_report(final = false, controller_name = 'conclusion')
+    @controller = controller_name
     @title = t("#{@controller}_committee_report.nonconformities_report_title")
     @from_date, @to_date = *make_date_range(params[:nonconformities_report])
     @periods = periods_for_interval

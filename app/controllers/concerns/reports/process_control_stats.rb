@@ -3,8 +3,8 @@ module Reports::ProcessControlStats
   include Reports::Period
   include Parameters::Risk
 
-  def process_control_stats(final = false, controller = 'conclusion')
-    @controller = controller
+  def process_control_stats(final = false, controller_name = 'conclusion')
+    @controller = controller_name
     @title = t("#{@controller}_committee_report.process_control_stats_title")
     @from_date, @to_date = *make_date_range(params[:process_control_stats])
     @periods = periods_for_interval
