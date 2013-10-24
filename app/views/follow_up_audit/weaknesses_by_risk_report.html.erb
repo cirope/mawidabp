@@ -11,12 +11,12 @@
     <% @notorious_reviews[period].each do |data| %>
       <% if !data[:external] && !@internal_title_showed %>
         <h1 class="center_title">
-          <%= t 'follow_up_committee.weaknesses_by_risk_report.internal_audit_weaknesses' %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_report.internal_audit_weaknesses' %>
         </h1>
         <% @internal_title_showed = true %>
       <% elsif data[:external] && !@external_title_showed %>
         <h1 class="center_title">
-          <%= t 'follow_up_committee.weaknesses_by_risk_report.external_audit_weaknesses' %>
+          <%= t 'follow_up_committee_report.weaknesses_by_risk_report.external_audit_weaknesses' %>
         </h1>
         <% @external_title_showed = true %>
       <% end %>
@@ -45,7 +45,7 @@
         </table>
       <% else %>
         <p style="margin: 1em;">
-          <em><%= t 'follow_up_committee.weaknesses_by_risk_report.without_audits_in_the_period' %></em>
+          <em><%= t 'follow_up_committee_report.weaknesses_by_risk_report.without_audits_in_the_period' %></em>
         </p>
       <% end %>
     <% end %>
@@ -69,12 +69,12 @@
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.weaknesses_by_risk_report.title')
+          :value => t('follow_up_committee_report.weaknesses_by_risk_report.title')
         },
         {
           :name => :report_subtitle,
           :label => t('customize_report_form.subtitle'),
-          :value => t('follow_up_committee.weaknesses_by_risk_report.subtitle')
+          :value => t('follow_up_committee_report.weaknesses_by_risk_report.subtitle')
         }
       ]
     }
