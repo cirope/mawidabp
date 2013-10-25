@@ -145,7 +145,7 @@ module Reports::WeaknessesByState
 
     pdf.add_description_item(
       t("#{@controller}_committee_report.period.title"),
-      t("#{@conclusion}_committee_report.period.range",
+      t("#{@controller}_committee_report.period.range",
         :from_date => l(@from_date, :format => :long),
         :to_date => l(@to_date, :format => :long)))
 
