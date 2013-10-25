@@ -3,7 +3,6 @@
     <tr>
       <th><%= raw(ResourceClass.human_attribute_name(:name) +
         show_inline_help_for(:resource_class_name)) %></th>
-      <th class="expendable"><%= ResourceClass.human_attribute_name :unit %></th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,8 +13,6 @@
     <% @resource_classes.each do |resource_class| %>
       <tr class="<%= cycle('even', 'odd') %>">
         <td><%= h resource_class.name %></td>
-        <td class="expendable"><%= h name_for_option_value(parameter_in(@auth_organization.id,
-          :admin_resource_units, resource_class.created_at), resource_class.unit) %></td>
         <td><%= link_to_show resource_class %></td>
         <td><%= link_to_edit edit_resource_class_path(resource_class) %></td>
         <td><%= button_to_destroy resource_class %></td>

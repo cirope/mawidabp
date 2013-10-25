@@ -3,13 +3,6 @@
 DEFAULT_PARAMETERS = {
   :admin_blank_password_stale_days => 3,
   :admin_finding_stale_confirmed_days => '3',
-  :admin_resource_units => [
-    ['Hora', 0],
-    ['Unidad', 1],
-    ['$', 2],
-    ['USD', 3],
-    ['Otra', 4]
-  ],
   :admin_review_code_expresion => '^(\\d){2}-[A-Z]{2}-(\\d){2}-(\\d){2}$',
   :security_acount_expire_time => '90',
   :security_allow_concurrent_sessions => '1',

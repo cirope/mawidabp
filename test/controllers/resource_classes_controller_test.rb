@@ -64,7 +64,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
       post :create, {
         resource_class: {
           name: 'New resource class',
-          unit: get_test_parameter(:admin_resource_units).first[1],
           resource_class_type: ResourceClass::TYPES[:human],
           resources_attributes: [
             {
@@ -95,7 +94,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
           id: resource_classes(:human_resources).id,
           resource_class: {
             name: 'Updated resource class',
-            unit: get_test_parameter(:admin_resource_units).first[1],
             resource_class_type: ResourceClass::TYPES[:human],
             resources_attributes: [
               {
