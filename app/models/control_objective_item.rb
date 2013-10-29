@@ -1,4 +1,6 @@
 class ControlObjectiveItem < ActiveRecord::Base
+  include Parameters::Relevance
+  include Parameters::Qualification
   include ParameterSelector
   include Comparable
 
@@ -159,8 +161,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(
-      :admin_code_prefix_for_work_papers_in_control_objectives)
+    work_paper.code_prefix = I18n.t('code_prefixes.work_papers_in_control_objectives')
   end
 
   def set_proper_parent
@@ -206,12 +207,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   def effectiveness
     return 0 if self.exclude_from_score
 
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.review.try(:period).try(:organization_id)
-    parameter_qualifications = self.get_parameter(
-      :admin_control_objective_qualifications, false, organization_id)
-    highest_qualification =
-      parameter_qualifications.map { |item| item[1].to_i }.max || 0
+    highest_qualification = self.class.qualifications_values.max
     scores = [
       self.design_score,
       self.compliance_score,
@@ -322,47 +318,37 @@ class ControlObjectiveItem < ActiveRecord::Base
   end
 
   def relevance_text(show_value = false)
-    relevances = self.get_parameter(:admin_control_objective_importances)
-    relevance = relevances.detect { |r| r.last == self.relevance }
+    relevance = self.class.relevances.detect { |r| r.last == self.relevance }
 
-    relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
-        relevance.first) : ''
+    if relevance
+      text = I18n.t("relevance_types.#{relevance.first}")
+
+      return show_value ? [text, "(#{relevance.last})"].join(' ') : text
+    end
   end
 
   def design_score_text(show_value = false)
-    compliance_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    design_score = compliance_scores.detect do |r|
+    design_score = self.class.qualifications.detect do |r|
       r.last == self.design_score
     end
 
-    design_score ? (show_value ?
-        "#{design_score.first} (#{design_score.last})" :
-        design_score.first) : ''
+    qualification_text(design_score, show_value)
   end
 
   def compliance_score_text(show_value = false)
-    compliance_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    compliance_score = compliance_scores.detect do |r|
+    compliance_score = self.class.qualifications.detect do |r|
       r.last == self.compliance_score
     end
 
-    compliance_score ? (show_value ?
-        "#{compliance_score.first} (#{compliance_score.last})" :
-        compliance_score.first) : ''
+    qualification_text(compliance_score, show_value)
   end
 
   def sustantive_score_text(show_value = false)
-    sustantive_scores = self.get_parameter(
-      :admin_control_objective_qualifications)
-    sustantive_score = sustantive_scores.detect do |r|
+    sustantive_score = self.class.qualifications.detect do |r|
       r.last == self.sustantive_score
     end
 
-    sustantive_score ? (show_value ?
-        "#{sustantive_score.first} (#{sustantive_score.last})" :
-        sustantive_score.first) : ''
+    qualification_text(sustantive_score, show_value)
   end
 
   def to_pdf(organization = nil)
@@ -536,4 +522,13 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     { column: head, text: body }
   end
+
+  private
+    def qualification_text(score, show_value)
+      if score
+        text = I18n.t("qualification_types.#{score.first}")
+
+        return show_value ? [text, "(#{score.last})"].join(' ') : text
+      end
+    end
 end

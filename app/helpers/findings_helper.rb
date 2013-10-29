@@ -110,7 +110,7 @@ module FindingsHelper
           :alt => t('finding.show_status_change_history'),
           :title => t('finding.show_status_change_history')
         ),
-        '#', :onclick => "$('##{dom_id}').slideToggle()", :class => :image_link
+        '#', :onclick => "$('##{dom_id}').slideToggle();return false;", :class => :image_link
       ), :style => 'margin-left: .25em;'
     )
   end

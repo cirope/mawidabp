@@ -9,7 +9,7 @@ module ConclusionFinalReviewsHelper
   end
 
   def conclusion_review_score_details_table(review)
-    scores = review.get_parameter(:admin_review_scores)
+    scores = review.class.scores.to_a
     review_score = review.score_array.first
     header = String.new.html_safe
     footer = String.new.html_safe
@@ -20,7 +20,7 @@ module ConclusionFinalReviewsHelper
     scores.each_with_index do |score, i|
       min_percentage = score[1]
       max_percentage = i > 0 && scores[i - 1] ? scores[i - 1][1] - 1 : 100
-      column_text = "#{score[0]}"
+      column_text = t("score_types.#{score[0]}")
 
       header << content_tag(:th, (score[0] != review_score ?
             raw("<span style=\"font-weight: normal;\">#{column_text}</span>"):

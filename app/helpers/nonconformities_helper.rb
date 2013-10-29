@@ -1,9 +1,6 @@
 module NonconformitiesHelper
  def nonconformity_priority_text(nonconformity)
-    priorities = parameter_in(@auth_organization.id, :admin_priorities,
-      nonconformity.created_at)
-
-    name_for_option_value priorities, nonconformity.priority
+    name_for_option_value nonconformity.class.priorities, nonconformity.priority
   end
 
   def show_nonconformity_previous_follow_up_dates(nonconformity)
@@ -15,7 +12,7 @@ module NonconformitiesHelper
       dates.each { |d| list << content_tag(:li, l(d, :format => :long)) }
 
       out << link_to(t('nonconformity.previous_follow_up_dates'), '#', :onclick =>
-        "$('#previous_follow_up_dates').slideToggle()")
+        "$('#previous_follow_up_dates').slideToggle();return false;")
 
       out << content_tag(:div, content_tag(:ol, list),
         :id => 'previous_follow_up_dates', :style => 'display: none; margin-bottom: 1em;')
@@ -26,11 +23,9 @@ module NonconformitiesHelper
 
   def next_nonconformity_work_paper_code(nonconformity, follow_up = false)
     review = nonconformity.control_objective_item.try(:review)
-    param_name = follow_up ?
-      :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
-      :admin_code_prefix_for_work_papers_in_nonconformities
-    code_prefix = parameter_in(@auth_organization.id, param_name,
-      review.try(:created_at))
+    code_prefix = follow_up ?
+      t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      nonconformity.work_paper_prefix
 
     code_from_review = review ?
       review.last_nonconformity_work_paper_code(code_prefix) :

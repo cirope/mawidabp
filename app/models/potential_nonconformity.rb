@@ -12,9 +12,7 @@ class PotentialNonconformity < Finding
 
   # Restricciones
   validates_each :review_code do |record, attr, value|
-    prefix = record.get_parameter(:admin_code_prefix_for_potential_nonconformities, false,
-      record.control_objective_item.try(:review).try(:organization).try(:id))
-    regex = /\A#{prefix}\d+\Z/
+    regex = /\A#{record.prefix}\d+\Z/
 
     record.errors.add attr, :invalid unless value =~ regex
   end
@@ -32,37 +30,33 @@ class PotentialNonconformity < Finding
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(
-      :admin_code_prefix_for_work_papers_in_potential_nonconformities)
+    work_paper.code_prefix = work_paper_prefix
   end
 
   def prefix
-    self.control_objective_item.try(:review) ?
-      self.get_parameter(:admin_code_prefix_for_potential_nonconformities, false,
-      self.control_objective_item.review.organization.id) : nil
+    I18n.t('code_prefixes.potential_nonconformities')
+  end
+
+  def work_paper_prefix
+    I18n.t('code_prefixes.work_papers_in_potential_nonconformities')
   end
 
   def next_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_potential_nonconformities, review.try(:created_at))
 
-    review ? review.next_potential_nonconformity_code(code_prefix) : "#{code_prefix}1".strip
+    review ? review.next_potential_nonconformity_code(prefix) : "#{prefix}1".strip
   end
 
   def last_work_paper_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_potential_nonconformities,
-      review.try(:created_at))
 
     code_from_review = review ?
-      review.last_potential_nonconformity_work_paper_code(code_prefix) :
-      "#{code_prefix} 0".strip
+      review.last_potential_nonconformity_work_paper_code(work_paper_prefix) :
+      "#{work_paper_prefix} 0".strip
 
     code_from_potential_nonconformity = self.work_papers.reject(
       &:marked_for_destruction?).map(
-      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
+      &:code).select { |c| c =~ /#{work_paper_prefix}\s\d+/ }.sort.last
 
     [code_from_review, code_from_potential_nonconformity].compact.max
   end

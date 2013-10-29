@@ -86,8 +86,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
           period_id: periods(:third_period).id,
           procedure_control_items_attributes: [
             {
-              aproach: get_test_parameter(:admin_aproach_types).first[1],
-              frequency: get_test_parameter(:admin_frequency_types).first[1],
+              aproach: ProcedureControlItem.approaches_values.first,
+              frequency: ProcedureControlItem.frequencies_values.first,
               process_control_id:
                 process_controls(:iso_27000_assets_control).id,
               order: 1,
@@ -101,8 +101,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
                     sustantive_tests: 'New sustantive tests',
                     effects: 'New effects'
                   },
-                  relevance:
-                    get_test_parameter(:admin_control_objective_importances).first[1],
+                  relevance: ProcedureControlSubitem.relevances_values.first,
                   control_objective_id:
                     control_objectives(:iso_27000_security_organization_4_1).id,
                   order: 1,
@@ -138,8 +137,8 @@ class ProcedureControlsControllerTest < ActionController::TestCase
             {
               id:
                 procedure_control_items(:procedure_control_item_iso_27001_2).id,
-              aproach: get_test_parameter(:admin_aproach_types).first[1],
-              frequency: get_test_parameter(:admin_frequency_types).first[1],
+              aproach: ProcedureControlItem.approaches_values.first,
+              frequency: ProcedureControlItem.frequencies_values.first,
               process_control_id:
                 process_controls(:iso_27000_assets_control).id,
               order: 1,
@@ -154,8 +153,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
                     sustantive_tests: 'Updated sustantive tests',
                     effects: 'Updated effects'
                   },
-                  relevance:
-                    get_test_parameter(:admin_control_objective_importances).first[1],
+                  relevance: ProcedureControlSubitem.relevances_values.first,
                   control_objective_id:
                     control_objectives(:iso_27000_security_organization_4_1).id,
                   order: 1,

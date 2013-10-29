@@ -46,8 +46,8 @@ class WeaknessTest < ActiveSupport::TestCase
         :origination_date => 1.day.ago.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
-        :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
-        :priority => get_test_parameter(:admin_priorities).first[1],
+        :risk => Weakness.risks_values.first,
+        :priority => Weakness.priorities_values.first,
         :follow_up_date => nil,
         :finding_user_assignments_attributes => {
           :new_1 => {
@@ -90,8 +90,8 @@ class WeaknessTest < ActiveSupport::TestCase
         :solution_date => 30.days.from_now.to_date,
         :audit_recommendations => 'New proposed action',
         :effect => 'New effect',
-        :risk => get_test_parameter(:admin_finding_risk_levels).first[1],
-        :priority => get_test_parameter(:admin_priorities).first[1],
+        :risk => Weakness.risks_values.first,
+        :priority => Weakness.priorities_values.first,
         :follow_up_date => 2.days.from_now.to_date,
         :finding_user_assignments_attributes => {
           :new_1 => {
@@ -284,17 +284,15 @@ class WeaknessTest < ActiveSupport::TestCase
   end
 
   test 'risk text' do
-    risks = @weakness.get_parameter(:admin_finding_risk_levels)
-    risk = risks.detect { |r| r.last == @weakness.risk }
+    risk = Weakness.risks.detect { |r| r.last == @weakness.risk }
 
-    assert_equal risk.first, @weakness.risk_text
+    assert_equal I18n.t("risk_types.#{risk.first}"), @weakness.risk_text
   end
 
   test 'priority text' do
-    priorities = @weakness.get_parameter(:admin_priorities)
-    priority = priorities.detect { |p| p.last == @weakness.priority }
+    priority = Weakness.priorities.detect { |p| p.last == @weakness.priority }
 
-    assert_equal priority.first, @weakness.priority_text
+    assert_equal I18n.t("priority_types.#{priority.first}"), @weakness.priority_text
   end
 
   test 'must be approved' do

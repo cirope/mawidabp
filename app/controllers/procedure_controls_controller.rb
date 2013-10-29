@@ -160,10 +160,7 @@ class ProcedureControlsController < ApplicationController
 
     column_order = ['control_objective_text', 'control',
       'compliance_tests', 'sustantive_tests', 'effects', 'relevance']
-    procedure_control_column_order = ['process_control_id', 'aproach',
-      'frequency']
-    procedure_control_column_data = []
-    column_data, column_headers, procedure_control_headers = [], [], []
+    column_headers = []
 
     column_order.each_with_index do |c_name, i|
       column_headers << ([0, 5].include?(i) ?
@@ -171,26 +168,10 @@ class ProcedureControlsController < ApplicationController
           Control.human_attribute_name(c_name))
     end
 
-    procedure_control_column_order.each do |c_name|
-      procedure_control_headers << ProcedureControlItem.human_attribute_name(c_name)
-    end
-
     @procedure_control.procedure_control_items.each do |pci|
       column_data = []
-      aproachs = parameter_in(@auth_organization.id, :admin_aproach_types,
-        pci.created_at)
-      frequencies = parameter_in(@auth_organization.id, :admin_frequency_types,
-        pci.created_at)
-      procedure_control_column_data << [
-        "<i><b>#{pci.process_control.name}</b></i>",
-        ('<i><b>' + help.name_for_option_value(aproachs,
-            pci.aproach) + '</b></i>'),
-        ('<i><b>' + help.name_for_option_value(frequencies,
-            pci.frequency) + '</b></i>')
-      ]
 
       pdf.move_down PDF_FONT_SIZE
-
       pdf.move_down((PDF_FONT_SIZE * 0.5).round)
 
       pci.procedure_control_subitems.each do |pcs|

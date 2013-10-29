@@ -38,8 +38,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
           :sustantive_tests => 'New sustantive tests',
           :effects => 'New effects'
         },
-        :relevance =>
-          get_test_parameter(:admin_control_objective_importances).first[1],
+        :relevance => ProcedureControlSubitem.relevances_values.first,
         :order => 1
       )
 
@@ -63,8 +62,7 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
           :sustantive_tests => 'Updated sustantive tests',
           :effects => 'Updated effects'
         },
-        :relevance =>
-          get_test_parameter(:admin_control_objective_importances).first[1],
+        :relevance => ProcedureControlSubitem.relevances_values.first,
         :order => 1
       )
 

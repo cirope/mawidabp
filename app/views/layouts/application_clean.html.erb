@@ -28,8 +28,8 @@
     <div id="main_container">
       <% unless request.subdomains.first == APP_ADMIN_PREFIX %>
         <div id="mobile_menu">
-          <%= link_to t('menu.show_menu'), '#', :onclick => 'Menu.show()', :id => :show_menu %>
-          <%= link_to t('menu.hide_menu'), '#', :onclick => 'Menu.hide()', :id => :hide_menu, :style => 'display: none;' %>
+          <%= link_to t('menu.show_menu'), '#', :onclick => 'Menu.show(); return false;', :id => :show_menu %>
+          <%= link_to t('menu.hide_menu'), '#', :onclick => 'Menu.hide(); return false;', :id => :hide_menu, :style => 'display: none;' %>
         </div>
       <% end %>
       <div id="menu" style="display: none;">

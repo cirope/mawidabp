@@ -1,5 +1,6 @@
 class ControlObjective < ActiveRecord::Base
-  include ParameterSelector
+  include Parameters::Relevance
+  include Parameters::Risk
 
   has_paper_trail :meta => {
     :organization_id => proc { GlobalModelConfig.current_organization_id }
@@ -59,9 +60,8 @@ class ControlObjective < ActiveRecord::Base
   end
 
   def risk_text
-    risks = self.get_parameter(:admin_control_objective_risk_levels)
-    risk = risks.detect { |r| r.last == self.risk }
+    risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    risk ? risk.first : ''
+    risk ? I18n.t("risk_types.#{risk.first}") : ''
   end
 end

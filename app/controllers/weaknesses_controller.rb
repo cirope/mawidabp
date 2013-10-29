@@ -16,16 +16,6 @@ class WeaknessesController < ApplicationController
     @title = t 'weakness.index_title'
     default_conditions = [
       "#{Period.table_name}.organization_id = :organization_id",
-      [
-        [
-          "#{ConclusionReview.table_name}.review_id IS NULL",
-          "#{Weakness.table_name}.final = :boolean_false"
-        ].join(' AND '),
-        [
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-          "#{Weakness.table_name}.final = :boolean_true"
-        ].join(' AND ')
-      ].map { |condition| "(#{condition})" }.join(' OR ')
     ]
     parameters = {
       organization_id: @auth_organization.id,
@@ -40,8 +30,19 @@ class WeaknessesController < ApplicationController
     end
 
     if params[:ids]
-      default_conditions << "#{Weakness.table_name}.id IN(:ids)"
-      parameters[:ids] = params[:ids]
+      default_conditions << "#{Weakness.table_name}.id IN (:ids)"
+      parameters[:ids] = params[:ids].map(&:to_i)
+    else
+      default_conditions << [
+        [
+          "#{ConclusionReview.table_name}.review_id IS NULL",
+          "#{Weakness.table_name}.final = :boolean_false"
+        ].join(' AND '),
+        [
+          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+          "#{Weakness.table_name}.final = :boolean_true"
+        ].join(' AND ')
+      ].map { |condition| "(#{condition})" }.join(' OR ')
     end
 
     build_search_conditions Weakness,
@@ -292,7 +293,8 @@ class WeaknessesController < ApplicationController
     def weakness_params
       params.require(:weakness).permit(
         :control_objective_item_id, :review_code, :description, :answer,
-        :audit_comments, :state, :origination_date, :solution_date,
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
+        :audit_comments, :state, :origination_date, :solution_date, :repeated_of_id,
         :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
         :users_for_notification, :lock_version,
         finding_user_assignments_attributes: [

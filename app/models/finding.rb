@@ -1,6 +1,8 @@
 class Finding < ActiveRecord::Base
   include ActsAsTree
   include Comparable
+  include Parameters::Risk
+  include Parameters::Priority
   include ParameterSelector
 
   acts_as_tree
@@ -716,8 +718,7 @@ class Finding < ActiveRecord::Base
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix ||= self.get_parameter(
-      :admin_code_prefix_for_work_papers_in_weaknesses_follow_up)
+    work_paper.code_prefix ||= I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up')
   end
 
   def answer_added(finding_answer)

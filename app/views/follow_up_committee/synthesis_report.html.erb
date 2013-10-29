@@ -80,10 +80,10 @@
 <div style="margin: 0em 1em;">
   <% if @sqm %>
     <%= simple_format t('follow_up_committee.synthesis_report.sqm_references',
-      :risk_types => @risk_levels.to_sentence) %>
+      :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
   <% else %>
     <%= simple_format t('follow_up_committee.synthesis_report.references',
-      :risk_types => @risk_levels.to_sentence) %>
+      :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence) %>
   <% end %>
 </div>
 

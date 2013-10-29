@@ -1,11 +1,9 @@
 module FortressesHelper
   def next_fortress_work_paper_code(fortress, follow_up = false)
     review = fortress.control_objective_item.try(:review)
-    param_name = follow_up ?
-      :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
-      :admin_code_prefix_for_work_papers_in_fortresses
-    code_prefix = parameter_in(@auth_organization.id, param_name,
-      review.try(:created_at))
+    code_prefix = follow_up ?
+      t('code_prefixes.work_papers_in_fortresses_follow_up') :
+      fortress.work_paper_prefix
 
     code_from_review = review ?
       review.last_fortress_work_paper_code(code_prefix) :

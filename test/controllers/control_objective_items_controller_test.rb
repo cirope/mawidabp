@@ -95,8 +95,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
           :control_objective_item => {
             :control_objective_text => 'Updated text',
-            :relevance =>
-              get_test_parameter(:admin_control_objective_importances).last[1],
+            :relevance => ControlObjectiveItem.relevances_values.last,
             :control_attributes => {
               :id => controls(:bcra_A4609_security_management_responsible_dependency_item_editable_control_1).id,
               :control => 'Updated control',
@@ -105,10 +104,8 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
               :compliance_tests => 'Updated compliance tests',
               :sustantive_tests => 'Updated sustantive tests'
             },
-            :design_score =>
-              get_test_parameter(:admin_control_objective_qualifications).last[1],
-            :compliance_score =>
-              get_test_parameter(:admin_control_objective_qualifications).last[1],
+            :design_score => ControlObjectiveItem.qualifications_values.last,
+            :compliance_score => ControlObjectiveItem.qualifications_values.last,
             :audit_date => 10.days.from_now.to_date,
             :auditor_comment => 'Updated comment',
             :control_objective_id =>

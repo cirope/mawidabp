@@ -21,7 +21,6 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert_difference 'ResourceClass.count' do
       ResourceClass.create(
         :name => 'New resource class',
-        :unit => get_test_parameter(:admin_resource_units).first[1],
         :resource_class_type => ResourceClass::TYPES[:human],
         :organization => organizations(:default_organization)
       )
@@ -46,11 +45,9 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.name = '?_1'
     @resource_class.unit = '1.55'
     assert @resource_class.invalid?
-    assert_equal 2, @resource_class.errors.count
+    assert_equal 1, @resource_class.errors.count
     assert_equal [error_message_from_model(@resource_class, :name, :invalid)],
       @resource_class.errors[:name]
-    assert_equal [error_message_from_model(@resource_class, :unit,
-      :not_an_integer)], @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -58,11 +55,9 @@ class ResourceClassTest < ActiveSupport::TestCase
     @resource_class.name = nil
     @resource_class.unit = '  '
     assert @resource_class.invalid?
-    assert_equal 2, @resource_class.errors.count
+    assert_equal 1, @resource_class.errors.count
     assert_equal [error_message_from_model(@resource_class, :name, :blank)],
       @resource_class.errors[:name]
-    assert_equal [error_message_from_model(@resource_class, :unit, :blank)],
-      @resource_class.errors[:unit]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

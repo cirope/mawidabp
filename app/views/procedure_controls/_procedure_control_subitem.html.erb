@@ -40,9 +40,9 @@
     <% end %>
 
     <div class="item_field" style="width: 10%;">
-      <%= f.select :relevance, f.object.get_parameter(
-        :admin_control_objective_importances, true), {}, :class => :relevance,
-        :id => "procedure_control_subitem_#{id}_relevance" %>
+      <%= relevance_field(
+        f, {}, class: :relevance, id: "procedure_control_subitem_#{id}_relevance"
+      ) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :order, :class => :sort_number %>

@@ -1,4 +1,6 @@
 class Review < ActiveRecord::Base
+  include Parameters::Risk
+  include Parameters::Score
   include ParameterSelector
   include Trimmer
 
@@ -314,9 +316,7 @@ class Review < ActiveRecord::Base
   # como sigue: ['nota en texto', integer_promedio], por ejemplo
   # ['Satisfactorio', 90]
   def score_array
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.period.try(:organization_id)
-    scores = parameter_in organization_id, :admin_review_scores, self.created_at
+    scores = self.class.scores.to_a
     count = scores.size + 1
 
     self.effectiveness # Recalcula score
@@ -332,7 +332,7 @@ class Review < ActiveRecord::Base
   def score_text
     score = self.score_array
 
-    "#{score.first} (#{score.last}%)"
+    score ? [I18n.t("score_types.#{score.first}"), "(#{score.last}%)"].join(' ') : ''
   end
 
   def control_objective_items_for_score
@@ -704,9 +704,7 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -973,9 +971,7 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1095,9 +1091,7 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      risk_levels_text = parameter_in(GlobalModelConfig.current_organization_id,
-        :admin_finding_risk_levels, self.created_at).
-        sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
       pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1311,7 +1305,7 @@ class Review < ActiveRecord::Base
   end
 
   def add_score_details_table(pdf)
-    scores = self.get_parameter(:admin_review_scores)
+    scores = self.class.scores.to_a
     review_score = self.score_array.first
     columns = {}
     column_data = []
@@ -1322,7 +1316,7 @@ class Review < ActiveRecord::Base
     scores.each_with_index do |score, i|
       min_percentage = score[1]
       max_percentage = i > 0 && scores[i - 1] ? scores[i - 1][1] - 1 : 100
-      column_text = "#{score[0]}"
+      column_text = I18n.t("score_types.#{score[0]}")
 
       column_headers << (score[0] != review_score ? column_text :
             "<b>#{column_text.upcase} (#{self.score}%)</b>"

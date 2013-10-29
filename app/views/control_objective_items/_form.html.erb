@@ -39,11 +39,10 @@
         ControlObjectiveItem.human_attribute_name(:relevance) +
           show_inline_help_for(:control_objective_item_relevance)),
         :class => :inline %>
-      <%= co_f.select :relevance, parameter_in(@auth_organization.id,
-        :admin_control_objective_importances,
-        @control_objective_item.created_at, true),
-        {:include_blank => t('control_objective_item.not_rated')},
-        {:class => :inline_item, :disabled => readonly} %>
+      <%= relevance_field(co_f,
+        { include_blank: t('control_objective_item.not_rated') },
+        { class: :inline_item, disabled: readonly }
+      ) %>
     </p>
     <p class="form_item">
       <%= co_f.label :audit_date, nil, :class => :inline %>
@@ -112,36 +111,30 @@
   <div class="form_column_right">
     <p>
       <%= co_f.label :design_score %>
-      <%= co_f.select :design_score,
-        parameter_in(@auth_organization.id,
-        :admin_control_objective_qualifications,
-        @control_objective_item.created_at, true),
-        {:include_blank => t('control_objective_item.not_rated')},
-        {:disabled => readonly} %>
+      <%= qualification_field(co_f, :design_score,
+        { include_blank: t('control_objective_item.not_rated') },
+        { disabled: readonly }
+      )%>
     </p>
     <p>
       <%= yield :design_tests %>
     </p>
     <p>
       <%= co_f.label :compliance_score %>
-      <%= co_f.select :compliance_score,
-        parameter_in(@auth_organization.id,
-        :admin_control_objective_qualifications,
-        @control_objective_item.created_at, true),
-        {:include_blank => t('control_objective_item.not_rated')},
-        {:disabled => readonly} %>
+      <%= qualification_field(co_f, :compliance_score,
+        { include_blank: t('control_objective_item.not_rated') },
+        { disabled: readonly }
+      )%>
     </p>
     <p>
       <%= yield :compliance_tests %>
     </p>
     <p>
       <%= co_f.label :sustantive_score %>
-      <%= co_f.select :sustantive_score,
-        parameter_in(@auth_organization.id,
-        :admin_control_objective_qualifications,
-        @control_objective_item.created_at, true),
-        {:include_blank => t('control_objective_item.not_rated')},
-        {:disabled => readonly} %>
+      <%= qualification_field(co_f, :sustantive_score,
+        { include_blank: t('control_objective_item.not_rated') },
+        { disabled: readonly }
+      )%>
     </p>
     <p>
       <%= yield :sustantive_tests %>

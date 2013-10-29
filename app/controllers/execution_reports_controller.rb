@@ -64,17 +64,22 @@ class ExecutionReportsController < ApplicationController
             end
 
             r.weaknesses.each do |w|
-              @risk_levels |= parameter_in(
-                @auth_organization.id, :admin_finding_risk_levels, w.created_at
-              ).sort{|r1, r2| r2[1] <=> r1[1]}.map(&:first)
+              @risk_levels |= w.class.risks.sort{|r1, r2| r2[1] <=> r1[1]}.map(&:first)
 
               weaknesses_count[w.risk_text] ||= 0
               weaknesses_count[w.risk_text] += 1
             end
 
-            weaknesses_count_text = weaknesses_count.values.sum == 0 ?
-              t('execution_reports.detailed_management_report.without_weaknesses') :
-              @risk_levels.map { |risk| "#{risk}: #{weaknesses_count[risk] || 0}"}
+            weaknesses_count_text =
+              if weaknesses_count.values.sum == 0
+                t('execution_reports.detailed_management_report.without_weaknesses')
+              else
+                @risk_levels.map do |risk|
+                  risk_text = t("risk_types.#{risk}")
+                  "#{risk_text}: #{weaknesses_count[risk_text] || 0}"
+                end
+              end
+
             if @sqm
               nonconformities_count_text = r.nonconformities.count > 0 ?
                 r.nonconformities.count.to_s :

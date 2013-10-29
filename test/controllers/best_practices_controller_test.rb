@@ -81,10 +81,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'new compliance tests 1 1',
                     :sustantive_tests => 'new sustantive tests 1 1'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 1
                 },
                 {
@@ -96,10 +94,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'new compliance tests 1 2',
                     :sustantive_tests => 'new sustantive tests 1 2'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 2
                 }
               ]
@@ -117,10 +113,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'new compliance tests 2 1',
                     :sustantive_tests => 'new sustantive tests 2 1'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 1
                 },
                 {
@@ -132,10 +126,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'new compliance tests 2 2',
                     :sustantive_tests => 'new sustantive tests 2 2'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 2
                 }
               ]
@@ -214,10 +206,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'updated compliance tests 1 1',
                     :sustantive_tests => 'updated sustantive tests 1 1'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 1
                 },
                 {
@@ -232,10 +222,8 @@ class BestPracticesControllerTest < ActionController::TestCase
                     :compliance_tests => 'updated compliance_tests 1 2',
                     :sustantive_tests => 'updated sustantive_tests 1 2'
                   },
-                  :relevance => get_test_parameter(
-                    :admin_control_objective_importances).first[1],
-                  :risk =>
-                    get_test_parameter(:admin_control_objective_risk_levels).first[1],
+                  :relevance => ControlObjective.relevances_values.first,
+                  :risk => ControlObjective.risks_values.first,
                   :order => 2
                 }
               ]

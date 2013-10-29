@@ -8,7 +8,7 @@ class ParametersControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {:type => 'admin',
-      :id => parameters(:parameter_admin_aproach_types).to_param}
+      :id => parameters(:parameter_security_acount_expire_time).to_param}
     public_actions = []
     private_actions = [
       [:get, :index, {:type => 'admin'}],
@@ -41,7 +41,7 @@ class ParametersControllerTest < ActionController::TestCase
   test 'show parameter' do
     perform_auth
     get :show, :type => 'admin',
-      :id => parameters(:parameter_admin_aproach_types).id
+      :id => parameters(:parameter_security_acount_expire_time).id
     assert_response :success
     assert_not_nil assigns(:parameter)
     assert_select '#error_body', false
@@ -51,7 +51,7 @@ class ParametersControllerTest < ActionController::TestCase
   test 'edit parameter' do
     perform_auth
     get :edit, :type => 'admin',
-      :id => parameters(:parameter_admin_aproach_types).id
+      :id => parameters(:parameter_security_acount_expire_time).id
     assert_response :success
     assert_not_nil assigns(:parameter)
     assert_select '#error_body', false
@@ -79,7 +79,7 @@ class ParametersControllerTest < ActionController::TestCase
     perform_auth
     patch :update, {
       :type => 'admin',
-      :id => parameters(:parameter_admin_control_objective_qualifications).id,
+      :id => parameters(:parameter_security_acount_expire_time).id,
       :parameter => {
         :key_1 => 'New key 1',
         :value_1 => '1',

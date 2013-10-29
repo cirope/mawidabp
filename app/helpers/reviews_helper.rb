@@ -56,9 +56,7 @@ module ReviewsHelper
   end
 
   def next_review_work_paper_code(review)
-    code_prefix = parameter_in(@auth_organization.id,
-      :admin_code_prefix_for_work_papers_in_control_objectives,
-      review.try(:created_at))
+    code_prefix = t('code_prefixes.work_papers_in_control_objectives')
 
     review ? review.last_control_objective_work_paper_code(code_prefix) :
       "#{code_prefix} 0".strip

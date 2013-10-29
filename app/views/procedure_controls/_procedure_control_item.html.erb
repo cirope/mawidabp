@@ -28,12 +28,10 @@
       <% end %>
     </div>
     <div class="item_field" style="width: 23%;">
-      <%= f.select :aproach, parameter_in(@auth_organization.id,
-        :admin_aproach_types, f.object.created_at).map {|item| [item[0], item[1].to_i]} %>
+      <%= approach_field(f) %>
     </div>
     <div class="item_field" style="width: 23%;">
-      <%= f.select :frequency, parameter_in(@auth_organization.id,
-        :admin_frequency_types, f.object.created_at) %>
+      <%= frequency_field(f) %>
     </div>
     <div class="item_field item_controls" style="width: 5%;">
       <%= f.hidden_field :id %>

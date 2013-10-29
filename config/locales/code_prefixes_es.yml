@@ -1,0 +1,14 @@
+'es':
+  code_prefixes:
+    oportunities: 'OM'
+    nonconformities: 'NC'
+    potential_nonconformities: 'NCP'
+    fortresses: 'F'
+    weaknesses: 'O'
+    work_papers_in_control_objectives: 'PTOC'
+    work_papers_in_oportunities: 'PTOM'
+    work_papers_in_potential_nonconformities: 'PTNCP'
+    work_papers_in_weaknesses: 'PTO'
+    work_papers_in_fortresses: 'PTF'
+    work_papers_in_weaknesses_follow_up: 'PTSO'
+    work_papers_in_nonconformities: 'PTNC'

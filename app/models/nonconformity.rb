@@ -27,9 +27,7 @@ class Nonconformity < Finding
     :on_or_before_message => I18n.t('finding.errors.cause_analysis_date_on_or_before'),
     :allow_nil => true, :allow_blank => true
   validates_each :review_code do |record, attr, value|
-    prefix = record.get_parameter(:admin_code_prefix_for_nonconformities, false,
-      record.control_objective_item.try(:review).try(:organization).try(:id))
-    regex = /\A#{prefix}\d+\Z/
+    regex = /\A#{record.prefix}\d+\Z/
 
     record.errors.add attr, :invalid unless value =~ regex
   end
@@ -51,58 +49,55 @@ class Nonconformity < Finding
   end
 
   def prepare_work_paper(work_paper)
-    work_paper.code_prefix = self.get_parameter(self.finding_prefix ?
-        :admin_code_prefix_for_work_papers_in_weaknesses_follow_up :
-        :admin_code_prefix_for_work_papers_in_nonconformities)
+    work_paper.code_prefix = self.finding_prefix ?
+      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      work_paper_prefix
   end
 
   def assign_highest_risk
-    organization_id = GlobalModelConfig.current_organization_id ||
-      self.control_objective_item.try(:review).try(:period).try(:organization_id)
-    risks = self.get_parameter(:admin_finding_risk_levels, false,
-      organization_id)
-    self.highest_risk = risks.map(&:last).max
+    self.highest_risk = self.class.risks_values.max
   end
 
   def risk_text
-    risks = self.get_parameter(:admin_finding_risk_levels)
-    risk = risks.detect { |r| r.last == self.risk }
+    risk = self.class.risks.detect { |r| r.last == self.risk }
 
-    risk.try(:first) || ''
+    risk ? I18n.t("risk_types.#{risk.first}") : ''
   end
 
   def priority_text
-    priority = self.get_parameter(:admin_priorities).detect do |p|
-      p.last == self.priority
-    end
+    priority = self.class.priorities.detect { |p| p.last == self.priority }
 
-    priority.try(:first) || ''
+    priority ? I18n.t("priority_types.#{priority.first}") : ''
   end
 
   def rescheduled?
     self.all_follow_up_dates.size > 0
   end
 
+  def prefix
+    I18n.t('code_prefixes.nonconformities')
+  end
+
+  def work_paper_prefix
+    I18n.t('code_prefixes.work_papers_in_nonconformities')
+  end
+
   def next_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_nonconformities, review.try(:created_at))
 
-    review ? review.next_nonconformity_code(code_prefix) : "#{code_prefix}1".strip
+    review ? review.next_nonconformity_code(prefix) : "#{prefix}1".strip
   end
 
   def last_work_paper_code(review = nil)
     review ||= self.control_objective_item.try(:reload).try(:review)
-    code_prefix = self.parameter_in(GlobalModelConfig.current_organization_id,
-      :admin_code_prefix_for_work_papers_in_nonconformities, review.try(:created_at))
 
     code_from_review = review ?
-      review.last_nonconformity_work_paper_code(code_prefix) :
-      "#{code_prefix} 0".strip
+      review.last_nonconformity_work_paper_code(work_paper_prefix) :
+      "#{work_paper_prefix} 0".strip
 
     code_from_nonconformity = self.work_papers.reject(
       &:marked_for_destruction?).map(
-      &:code).select { |c| c =~ /#{code_prefix}\s\d+/ }.sort.last
+      &:code).select { |c| c =~ /#{work_paper_prefix}\s\d+/ }.sort.last
 
     [code_from_review, code_from_nonconformity].compact.max
   end

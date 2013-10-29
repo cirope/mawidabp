@@ -163,8 +163,8 @@
       <tbody>
         <% @finding.finding_answers.each do |finding_answer| %>
           <tr>
-            <td><%= h finding_answer.user.full_name %></td>
-            <td><%= simple_format h(finding_answer.answer) %></td>
+            <td><%= finding_answer.user.full_name %></td>
+            <td><%= simple_format finding_answer.answer %></td>
             <td>
               <%= finding_answer.file_model.try(:file?) ?
                 link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
@@ -237,7 +237,7 @@
   <% unless @finding.costs.blank? %>
     <p style="margin-bottom: 1em;">
       <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-        "$('#cost_details').slideToggle()" %>
+        "$('#cost_details').slideToggle(); return false;" %>
     </p>
     <div id="cost_details" style="display: none;">
       <div>

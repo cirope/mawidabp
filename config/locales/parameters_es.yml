@@ -1,0 +1,40 @@
+'es':
+  approach_types:
+    control: 'Control'
+    sustantive: 'Sustativo'
+    control_sustantive: 'Control/Sustantivo'
+  frequency_types:
+    monthly: 'Mensual'
+    biyearly: 'Semestral'
+    yearly: 'Anual'
+  relevance_types:
+    not_rated: 'Nulo'
+    low: 'Bajo'
+    moderate_low: 'Moderado/bajo'
+    moderate: 'Moderado'
+    high: 'Alto'
+    critical: 'Crítico'
+  qualification_types:
+    not_rated: 'Nulo'
+    very_low: 'Muy bajo'
+    low: 'Bajo'
+    moderately_low: 'Medianamente bajo'
+    medium_low: 'Medio bajo'
+    medium: 'Medio'
+    moderately_high: 'Medianamente alto'
+    medium_high: 'Medio alto'
+    high: 'Alto'
+    very_high: 'Muy alto'
+    excellent: 'Óptimo'
+  risk_types:
+    low: 'Bajo'
+    medium: 'Medio'
+    high: 'Alto'
+  priority_types:
+    low: 'Baja'
+    medium: 'Media'
+    high: 'Alta'
+  score_types:
+    satisfactory: 'Satisfactorio'
+    improve: 'Necesita mejorar'
+    unsatisfactory: 'No satisfactorio'
