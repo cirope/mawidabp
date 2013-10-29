@@ -35,4 +35,14 @@ namespace :deploy do
   end
 
   after :finishing, 'deploy:cleanup'
+
+  # TODO: remove when whenever add support to Capistrano 3
+  desc 'Update crontab with whenever'
+  after :finishing do
+    on roles(:all) do
+      within release_path do
+        execute :bundle, :exec, "whenever --update-crontab #{fetch(:application)}"
+      end
+    end
+  end
 end
