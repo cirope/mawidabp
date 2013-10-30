@@ -118,11 +118,11 @@ class User < ActiveRecord::Base
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
       password_min_length = record.get_parameter_for_now(
-        :security_password_minimum_length).to_i
+        :password_minimum_length).to_i
       password_min_time = record.get_parameter_for_now(
-        :security_password_minimum_time).to_i
+        :password_minimum_time).to_i
       password_regex = Regexp.new record.get_parameter_for_now(
-        :security_password_constraint)
+        :password_constraint)
 
       record.errors.add attr, :invalid if value && value !~ password_regex
 
@@ -410,12 +410,12 @@ class User < ActiveRecord::Base
 
   def expired?
     last_access.present? && last_access <
-      get_parameter(:security_acount_expire_time).to_i.days.ago
+      get_parameter(:account_expire_time).to_i.days.ago
   end
 
   def password_expired?
     password_changed.to_time <
-      get_parameter(:security_password_expire_time).to_i.days.ago
+      get_parameter(:password_expire_time).to_i.days.ago
   end
 
   def first_login?
@@ -427,14 +427,14 @@ class User < ActiveRecord::Base
   end
 
   def days_for_password_expiration
-    expire_notification = self.get_parameter(:security_expire_notification).to_i
+    expire_notification = self.get_parameter(:expire_notification).to_i
 
     warning_date = expire_notification.days.ago
     password_changed = self.password_changed.to_time
 
     if expire_notification != 0 && password_changed < warning_date
       expire_time_in_days = self.get_parameter(
-        :security_password_expire_time).to_i
+        :password_expire_time).to_i
 
       unless expire_time_in_days == 0
         expire_date = expire_time_in_days.days.ago
@@ -448,8 +448,8 @@ class User < ActiveRecord::Base
   def allow_concurrent_access?
     allow = true
 
-    if self.get_parameter_for_now(:security_allow_concurrent_sessions).to_i == 0
-      session_expire = self.get_parameter(:security_session_expire_time).to_i
+    if self.get_parameter_for_now(:allow_concurrent_sessions).to_i == 0
+      session_expire = self.get_parameter(:session_expire_time).to_i
 
       allow = !(self.logged_in? &&
           self.last_access > session_expire.minutes.ago)
@@ -502,7 +502,7 @@ class User < ActiveRecord::Base
   end
 
   def last_passwords
-    limit = self.get_parameter(:security_password_count).to_i - 1
+    limit = self.get_parameter(:password_count).to_i - 1
 
     @last_passwords ||= self.old_passwords.order('created_at DESC').limit(
       limit > 0 ? limit : 0)

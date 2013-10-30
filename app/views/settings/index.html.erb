@@ -1,0 +1,28 @@
+<table class="list">
+  <thead>
+    <tr>
+      <th><%= Setting.human_attribute_name 'name' %></th>
+      <th class="expendable"><%= Setting.human_attribute_name 'description' %></th>
+      <th><%= Setting.human_attribute_name 'value' %></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @settings.each do |setting| %>
+      <tr class="<%= cycle('even', 'odd') %>">
+        <td><%= super_truncate setting.to_s, 40 %></td>
+        <td class="expendable"><%= super_truncate setting.description, 40 %></td>
+        <td><%= setting.value %></td>
+        <td><%= link_to_show setting %></td>
+        <td><%= link_to_edit edit_setting_path(setting) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="links">
+  <%= pagination_links @settings %>
+  <div class="clear"></div>
+</div>

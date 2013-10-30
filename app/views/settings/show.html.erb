@@ -1,0 +1,17 @@
+<div id="showed_data">
+  <h1><%= t("parameter.#{@setting.name}") %></h1>
+  <p>
+    <strong><%= Setting.human_attribute_name 'description' %>:</strong>
+    <%= @setting.description %>
+  </p>
+  <p>
+    <strong><%= Setting.human_attribute_name 'value' %>:</strong>
+    <%= @setting.value %>
+  </p>
+</div>
+
+<div id="links">
+  <%= link_to t('label.edit'), edit_setting_path(@setting) %> |
+  <%= link_to t('label.list'), settings_path %> |
+  <%= link_to_back %>
+</div>

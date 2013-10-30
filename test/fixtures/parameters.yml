@@ -1,4 +1,4 @@
-<% DEFAULT_PARAMETERS.each do |name, value| %>
+<% DEFAULT_SETTINGS.each do |name, value| %>
 parameter_<%= name %>:
   name: <%= name %>
   description: Parameter <%= name %>

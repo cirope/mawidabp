@@ -6,12 +6,12 @@ class ParameterTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @parameter = Parameter.find parameters(:parameter_security_acount_expire_time).id
+    @parameter = Parameter.find parameters(:parameter_account_expire_time).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
   test 'search' do
-    fixture_parameter = parameters(:parameter_security_acount_expire_time)
+    fixture_parameter = parameters(:parameter_account_expire_time)
     assert_kind_of Parameter, @parameter
     assert_equal fixture_parameter.name, @parameter.name
     assert_equal fixture_parameter.value, @parameter.value
@@ -86,7 +86,7 @@ class ParameterTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
-    admin_aproach_types = parameters(:parameter_security_acount_expire_time)
+    admin_aproach_types = parameters(:parameter_account_expire_time)
 
     parameter = Parameter.new(
       :name => admin_aproach_types.name,
@@ -102,11 +102,11 @@ class ParameterTest < ActiveSupport::TestCase
 
   test 'find parameter' do
     parameter = Parameter.find_parameter(
-      organizations(:default_organization).id, :security_attempts_count,
+      organizations(:default_organization).id, :attempts_count,
       Date.today)
 
     assert_not_nil parameter
-    assert_equal parameters(:parameter_security_attempts_count).value,
+    assert_equal parameters(:parameter_attempts_count).value,
       parameter
 
     parameter = Parameter.find_parameter(

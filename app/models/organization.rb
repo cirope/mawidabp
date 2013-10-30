@@ -2,6 +2,7 @@ class Organization < ActiveRecord::Base
   include ParameterSelector
   include Trimmer
   include Comparable
+  include Organizations::Setting
 
   trimmed_fields :name, :prefix
 
@@ -14,7 +15,7 @@ class Organization < ActiveRecord::Base
 
   # Callbacks
   before_save :change_current_organization_id
-  after_create :create_initial_data
+  after_create :create_initial_roles
   after_save :restore_current_organization_id
   before_destroy :can_be_destroyed?
   after_destroy :destroy_image_model # TODO: delete when Rails fix gets in stable
@@ -25,9 +26,6 @@ class Organization < ActiveRecord::Base
 
   # Atributos de solo lectura
   attr_readonly :group_id
-
-  # Atributos no persistentes
-  attr_accessor :must_create_parameters, :must_create_roles
 
   # Restricciones
   validates :prefix, format: { with: /\A[A-Za-z][A-Za-z0-9\-]+\z/ },
@@ -76,15 +74,10 @@ class Organization < ActiveRecord::Base
     prefix <=> other.prefix
   end
 
-  # Crea la configuración inicial de la organización
-  def create_initial_data
-    create_initial_parameters if must_create_parameters
-    create_initial_roles if must_create_roles
-  end
-
   def self.all_parameters(param_name)
     all.map do |o|
-      { organization: o, parameter: Parameter.find_parameter(o.id, param_name) }
+      { organization: o, parameter:
+        Setting.find_by(organization_id: o.id, name: param_name).try(:value) }
     end
   end
 
@@ -116,34 +109,23 @@ class Organization < ActiveRecord::Base
   end
 
   private
+    def create_initial_roles
+      Role.transaction do
+        Role::TYPES.each do |type, value|
+          role = roles.build name: "#{type}_#{self.prefix}", role_type: value
 
-  def create_initial_parameters
-    DEFAULT_PARAMETERS.each do |name, value|
-      parameters.build(
-        name: name.to_s,
-        value: value,
-        description: nil
-      )
-    end
-  end
+          role.inject_auth_privileges Hash.new(Hash.new(true))
 
-  def create_initial_roles
-    Role.transaction do
-      Role::TYPES.each do |type, value|
-        role = roles.build name: "#{type}_#{self.prefix}", role_type: value
-
-        role.inject_auth_privileges Hash.new(Hash.new(true))
-
-        ALLOWED_MODULES_BY_TYPE[type].each do |mod|
-          role.privileges.build(
-            module: mod.to_s,
-            read: true,
-            modify: true,
-            erase: true,
-            approval: true
-          )
+          ALLOWED_MODULES_BY_TYPE[type].each do |mod|
+            role.privileges.build(
+              module: mod.to_s,
+              read: true,
+              modify: true,
+              erase: true,
+              approval: true
+            )
+          end
         end
       end
     end
-  end
 end

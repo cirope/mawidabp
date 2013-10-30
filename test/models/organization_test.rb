@@ -28,32 +28,14 @@ class OrganizationTest < ActiveSupport::TestCase
   # Prueba la creación de una organización
   test 'create' do
     assert_difference 'Organization.count' do
-      assert_difference 'Parameter.count', DEFAULT_PARAMETERS.size do
+      assert_difference 'Setting.count', DEFAULT_SETTINGS.size do
         assert_difference 'Role.count', Role::TYPES.size do
           @organization = Organization.create(
             :name => 'new3 organization',
             :prefix => 'newww-test-prefix',
-            :kind => 'public',
-            :must_create_parameters => true,
-            :must_create_roles => true
+            :kind => 'public'
           )
         end
-      end
-    end
-
-    assert_equal groups(:main_group).id,
-      Organization.find_by_prefix('newww-test-prefix').group_id
-  end
-
-  # Prueba la creación de una organización sin parámetros ni roles
-  test 'create without parameters or roles' do
-    assert_difference 'Organization.count' do
-      assert_no_difference ['Parameter.count', 'Role.count'] do
-        @organization = Organization.create(
-          :name => 'new3 organization',
-          :prefix => 'newww-test-prefix',
-          :kind => 'management_control'
-        )
       end
     end
 
@@ -64,15 +46,13 @@ class OrganizationTest < ActiveSupport::TestCase
   # Prueba la creación de una organización
   test 'create with wrong group' do
     assert_difference 'Organization.count' do
-      assert_difference 'Parameter.count', DEFAULT_PARAMETERS.size do
+      assert_difference 'Setting.count', DEFAULT_SETTINGS.size do
         assert_difference 'Role.count', Role::TYPES.size do
           @organization = Organization.create(
             :name => 'new3 organization',
             :prefix => 'newww-test-prefix',
             :kind => 'quality_management',
-            :group_id => groups(:second_group).id,
-            :must_create_parameters => true,
-            :must_create_roles => true
+            :group_id => groups(:second_group).id
           )
         end
       end

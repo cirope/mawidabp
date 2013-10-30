@@ -1,4 +1,6 @@
 MawidaBP::Application.routes.draw do
+  resources :settings, only: [:index, :show, :edit, :update]
+
   resources :questionnaires
 
   resources :polls do

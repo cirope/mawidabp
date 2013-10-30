@@ -37,10 +37,10 @@ class Parameter < ActiveRecord::Base
   end
 
   def self.find_parameter(organization_id, name, version = nil)
-    parameter = Parameter.where(
-      :name => name.to_s, :organization_id => organization_id
-    ).first.try(:version_of, version)
+    parameter = Setting.find_by(
+      name: name, organization_id: organization_id
+    ).try(:version_of, version)
 
-    parameter.try(:value) || DEFAULT_PARAMETERS[name]
+    parameter.try(:value) || DEFAULT_SETTINGS[name]
   end
 end

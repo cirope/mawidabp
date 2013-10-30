@@ -65,4 +65,10 @@ class ActiveSupport::TestCase
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
     end
   end
+
+  def assert_error(model, attribute, type, options = {})
+    assert model.errors[attribute].include?(
+      model.errors.generate_message(attribute, type, options)
+    )
+  end
 end
