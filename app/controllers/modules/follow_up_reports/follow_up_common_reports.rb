@@ -821,7 +821,7 @@ module FollowUpCommonReports
           weaknesses_count = {}
 
           coi.weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
@@ -841,6 +841,9 @@ module FollowUpCommonReports
           coi_data[:weaknesses] ||= {}
           coi_data[:effectiveness] ||= []
           coi_data[:effectiveness] << coi.effectiveness
+
+          coi_data[:reviews] ||= 0
+          coi_data[:reviews] += 1 if coi.final_weaknesses.size > 0
 
           weaknesses_count.each do |r, c|
             coi_data[:weaknesses][r] ||= 0
@@ -863,9 +866,9 @@ module FollowUpCommonReports
 
         cos.each do |co, coi_data|
           @control_objectives_data[period][pc][co.name] ||= {}
-          reviews_count = coi_data[:effectiveness].size
-          effectiveness = reviews_count > 0 ?
-            coi_data[:effectiveness].sum / reviews_count : 100
+          reviews_count = coi_data[:reviews]
+          effectiveness = coi_data[:effectiveness].size > 0 ?
+            coi_data[:effectiveness].sum.to_f / coi_data[:effectiveness].size : 100
           weaknesses_count = coi_data[:weaknesses]
 
           if weaknesses_count.values.sum == 0
@@ -1069,13 +1072,13 @@ module FollowUpCommonReports
       reviews_score_data[period] ||= []
 
       conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items_for_score.each do |coi|
+        c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews] ||= 0
+          pc_data[:reviews] ||= []
           weaknesses_count = {}
 
-          coi.weaknesses.each do |w|
+          coi.weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
@@ -1084,7 +1087,7 @@ module FollowUpCommonReports
             pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
 
-          pc_data[:reviews] += 1 if coi.final_weaknesses.size > 0
+          pc_data[:reviews] << coi.review_id if coi.final_weaknesses.size > 0
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -1136,7 +1139,7 @@ module FollowUpCommonReports
           'effectiveness' => t(
             'follow_up_committee.process_control_stats.average_effectiveness_resume',
             :effectiveness => "#{'%.2f' % effectiveness}%",
-            :count => pc_data[:reviews]
+            :count => pc_data[:reviews].uniq.size
           ),
           'weaknesses_count' => weaknesses_count_text
         }
