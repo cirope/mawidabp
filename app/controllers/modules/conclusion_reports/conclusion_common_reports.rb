@@ -596,7 +596,7 @@ module ConclusionCommonReports
           weaknesses_count = {}
 
           coi.final_weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
@@ -617,6 +617,9 @@ module ConclusionCommonReports
           coi_data[:weaknesses] ||= {}
           coi_data[:effectiveness] ||= []
           coi_data[:effectiveness] << coi.effectiveness
+
+          coi_data[:reviews] ||= 0
+          coi_data[:reviews] += 1 if coi.final_weaknesses.size > 0
 
           weaknesses_count.each do |r, c|
             coi_data[:weaknesses][r] ||= 0
@@ -640,9 +643,9 @@ module ConclusionCommonReports
         cos.each do |co, coi_data|
           @control_objectives_data[period][pc][co.name] ||= {}
 
-          reviews_count = coi_data[:effectiveness].size
-          effectiveness = reviews_count > 0 ?
-            coi_data[:effectiveness].sum / reviews_count : 100
+          reviews_count = coi_data[:reviews]
+          effectiveness = coi_data[:effectiveness].size > 0 ?
+            coi_data[:effectiveness].sum.to_f / coi_data[:effectiveness].size : 100
           weaknesses_count = coi_data[:weaknesses]
 
           if weaknesses_count.values.sum == 0
@@ -651,7 +654,7 @@ module ConclusionCommonReports
             )
           else
             weaknesses_count_text = {}
-            text = {}
+            text = {} 
 
             @risk_levels.each do |risk|
               risk_text = t("risk_types.#{risk}")
@@ -815,7 +818,7 @@ module ConclusionCommonReports
     reviews_score_data = {}
 
     if params[:process_control_stats]
-      unless params[:process_control_stats][:business_unit_type].blank?
+      if params[:process_control_stats][:business_unit_type].present?
         @selected_business_unit = BusinessUnitType.find(
           params[:process_control_stats][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(
@@ -824,7 +827,7 @@ module ConclusionCommonReports
           "\"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:process_control_stats][:business_unit].blank?
+      if params[:process_control_stats][:business_unit].present?
         business_units = params[:process_control_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
@@ -843,13 +846,13 @@ module ConclusionCommonReports
       reviews_score_data[period] ||= []
 
       conclusion_reviews.for_period(period).each do |c_r|
-        c_r.review.control_objective_items_for_score.each do |coi|
+        c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews] ||= 0
+          pc_data[:reviews] ||= []
           weaknesses_count = {}
 
-          coi.final_weaknesses.each do |w|
+          coi.final_weaknesses.not_revoked.each do |w|
             @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
@@ -858,7 +861,7 @@ module ConclusionCommonReports
             pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
 
-          pc_data[:reviews] += 1 if coi.final_weaknesses.size > 0
+          pc_data[:reviews] << coi.review_id if coi.final_weaknesses.size > 0
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -909,7 +912,7 @@ module ConclusionCommonReports
           'effectiveness' => t(
             'conclusion_committee_report.process_control_stats.average_effectiveness_resume',
             :effectiveness => "#{'%.2f' % effectiveness}%",
-            :count => pc_data[:reviews]
+            :count => pc_data[:reviews].uniq.size
           ),
           'weaknesses_count' => weaknesses_count_text
         }
