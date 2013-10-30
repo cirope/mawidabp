@@ -89,7 +89,7 @@ class RolesControllerTest < ActionController::TestCase
   end
 
   test 'update role' do
-    privilege = Privilege.find(privileges(:admin_administration_parameters).id)
+    privilege = Privilege.find(privileges(:admin_administration_settings).id)
     assert privilege.approval
 
     assert_no_difference ['Role.count', 'Privilege.count'] do

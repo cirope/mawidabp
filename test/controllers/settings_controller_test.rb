@@ -4,8 +4,7 @@ class SettingsControllerTest < ActionController::TestCase
   setup do
     @setting = settings(:parameter_finding_stale_confirmed_days)
 
-    user = User.find users(:administrator_user).id
-    perform_auth user
+    perform_auth
   end
 
   test "should get index" do
