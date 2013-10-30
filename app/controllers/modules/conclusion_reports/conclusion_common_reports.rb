@@ -596,7 +596,7 @@ module ConclusionCommonReports
           weaknesses_count = {}
 
           coi.final_weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
