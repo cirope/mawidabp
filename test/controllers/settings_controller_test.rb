@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SettingsControllerTest < ActionController::TestCase
   setup do
-    @setting = settings(:parameter_finding_stale_confirmed_days)
+    @setting = settings(:parameter_finding_stale_confirmed_days_default)
 
     perform_auth
   end

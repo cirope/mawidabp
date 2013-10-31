@@ -402,10 +402,6 @@ MawidaBP::Application.routes.draw do
 
   resources :roles
 
-  scope ':type', :type => /admin|security/ do
-    resources :parameters, :except => [:new, :create, :destroy]
-  end
-
   resources :error_records do
     collection do
       get :export_to_pdf

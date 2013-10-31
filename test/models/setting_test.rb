@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SettingTest < ActiveSupport::TestCase
   setup do
-    @setting = settings(:parameter_finding_stale_confirmed_days)
+    @setting = settings(:parameter_finding_stale_confirmed_days_default)
   end
 
   test 'blank attributes' do
@@ -26,7 +26,7 @@ class SettingTest < ActiveSupport::TestCase
   end
 
   test 'unique name scope organization' do
-    @setting.name = settings(:parameter_allow_concurrent_sessions).name
+    @setting.name = settings(:parameter_allow_concurrent_sessions_default).name
 
     assert @setting.invalid?
     assert_error @setting, :name, :taken

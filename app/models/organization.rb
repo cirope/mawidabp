@@ -43,7 +43,7 @@ class Organization < ActiveRecord::Base
   belongs_to :group
   belongs_to :image_model
   has_many :business_unit_types, -> { order('name ASC') }, dependent: :destroy
-  has_many :parameters, dependent: :destroy
+  has_many :settings, dependent: :destroy
   has_many :roles, dependent: :destroy
   has_many :organization_roles, dependent: :destroy
   has_many :best_practices, dependent: :destroy

@@ -10,7 +10,7 @@ module Organizations::Setting
   def create_settings
     DEFAULT_SETTINGS.each do |k,v|
       settings.create(
-        name: k, value: v, description: I18n.t("parameter.#{k}")
+        name: k, value: v, description: I18n.t("setting.#{k}")
       )
     end 
   end

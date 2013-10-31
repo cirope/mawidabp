@@ -1,7 +1,0 @@
-<% DEFAULT_SETTINGS.each do |name, value| %>
-parameter_<%= name %>:
-  name: <%= name %>
-  description: Parameter <%= name %>
-  organization: default_organization
-  value: <%= value.kind_of?(Array) ? value.inspect : value %>
-<% end %>
