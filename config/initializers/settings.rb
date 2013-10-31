@@ -1,16 +1,16 @@
 # Pesonalizado para cargar las configuraciones
 
 DEFAULT_SETTINGS = {
-  :finding_stale_confirmed_days => '3',
-  :review_code_expresion => '^(\\d){2}-[A-Z]{2}-(\\d){2}-(\\d){2}$',
-  :account_expire_time => '90',
-  :allow_concurrent_sessions => '1',
-  :attempts_count => '3',
-  :expire_notification => '15',
-  :password_constraint => '^(?=.*[a-zA-Z])(?=.*[0-9]).*$',
-  :password_count => '12',
-  :password_expire_time => '30',
-  :password_minimum_length => '8',
-  :password_minimum_time => '1',
-  :session_expire_time => '15'
+  finding_stale_confirmed_days: { value: '3', validates: 'numericality' },
+  review_code_expresion: { value: '^(\\d){2}-[A-Z]{2}-(\\d){2}-(\\d){2}$', validates: 'presence' },
+  account_expire_time: { value: '90', validates: 'numericality' },
+  allow_concurrent_sessions: { value: '1', validates: 'numericality' },
+  attempts_count: { value: '3', validates: 'numericality' },
+  expire_notification: { value: '15', validates: 'numericality' },
+  password_constraint: { value: '^(?=.*[a-zA-Z])(?=.*[0-9]).*$', validates: 'presence' },
+  password_count: { value: '12', validates: 'numericality' },
+  password_expire_time: { value: '30', validates: 'numericality' },
+  password_minimum_length: { value: '8', validates: 'numericality' },
+  password_minimum_time: { value: '1', validates: 'numericality' },
+  session_expire_time: { value: '15', validates: 'numericality' }
 }.with_indifferent_access.freeze

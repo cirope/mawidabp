@@ -14,7 +14,7 @@ administrator_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: true
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   notes: User notes
   hidden: false
@@ -35,7 +35,7 @@ poll_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: true
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   notes: User notes
   hidden: false
@@ -56,7 +56,7 @@ administrator_second_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -78,7 +78,7 @@ bare_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -99,7 +99,7 @@ first_time_user:
   failed_attempts: 0
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -122,7 +122,7 @@ expired_user:
   logged_in: false
   group_admin: false
   password_changed: <%= 2.days.ago %>
-  last_access: <%= DEFAULT_SETTINGS[:account_expire_time].to_i.days.ago.yesterday %>
+  last_access: <%= DEFAULT_SETTINGS[:account_expire_time][:value].to_i.days.ago.yesterday %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -144,7 +144,7 @@ disabled_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -166,10 +166,10 @@ blank_password_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   change_password_hash: <%= UUIDTools::UUID.random_create.to_s %>
-  hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  hash_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
   hidden: false
@@ -213,7 +213,7 @@ president_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   notes: User notes
   hidden: false
@@ -234,7 +234,7 @@ general_manager_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:president_user) %>
   notes: User notes
@@ -256,7 +256,7 @@ coordinator_manager_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:general_manager_user) %>
   notes: User notes
@@ -278,7 +278,7 @@ plain_manager_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
   notes: User notes
@@ -300,7 +300,7 @@ manager_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: manager_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
   notes: User notes
@@ -322,7 +322,7 @@ manager_second_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
   notes: User notes
@@ -344,7 +344,7 @@ plain_manager_second_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:coordinator_manager_user) %>
   notes: User notes
@@ -366,7 +366,7 @@ supervisor_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -388,7 +388,7 @@ supervisor_second_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -410,7 +410,7 @@ audited_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_user) %>
   notes: User notes
@@ -432,7 +432,7 @@ audited_second_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:plain_manager_second_user) %>
   notes: User notes
@@ -454,7 +454,7 @@ committee_user:
   last_access: <%= 2.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
   notes: User notes
@@ -476,7 +476,7 @@ auditor_user:
   last_access: <%= 30.minutes.ago.to_date.to_s(:db) %>
   logged_in: false
   group_admin: false
-  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time].to_i.days.ago.to_date.to_s(:db) %>
+  password_changed: <%= DEFAULT_SETTINGS[:password_minimum_time][:value].to_i.days.ago.to_date.to_s(:db) %>
   resource: auditor_resource
   manager_id: <%= ActiveRecord::FixtureSet.identify(:supervisor_user) %>
   notes: User notes

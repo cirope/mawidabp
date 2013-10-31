@@ -27,7 +27,7 @@ class SettingsControllerTest < ActionController::TestCase
     patch :update, {
       id: @setting.id,
       setting: {
-        value: 'New value',
+        value: '45',
         description: 'New description'
       }
     }
