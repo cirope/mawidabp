@@ -85,27 +85,20 @@ APP_AUDITOR_MENU_ITEMS = [
         :class => :menu_item_2,
         :children => [
           MenuItem.new(
-            :parameters,
-            :order => 1,
-            :controllers => :parameters,
-            :extra_conditions => "params[:type] == 'security'",
-            :url => {:controller => :parameters, :type => :security}
-          ),
-          MenuItem.new(
             :reports,
-            :order => 2,
+            :order => 1,
             :controllers => [:error_records, :login_records, :versions],
             :url => {:controller => :login_records, :action => :choose}
           ),
           MenuItem.new(
             :users,
-            :order => 3,
+            :order => 2,
             :controllers => :users,
             :url => {:controller => :users}
           ),
           MenuItem.new(
             :roles,
-            :order => 4,
+            :order => 3,
             :controllers => :roles,
             :url => {:controller => :roles}
           )
@@ -118,11 +111,10 @@ APP_AUDITOR_MENU_ITEMS = [
         :url => {:controller => :best_practices}
       ),
       MenuItem.new(
-        :parameters,
+        :settings,
         :order => 4,
-        :controllers => :parameters,
-        :extra_conditions => "params[:type] == 'admin'",
-        :url => {:controller => :parameters, :type => :admin}
+        :controllers => :settings,
+        :url => { :controller => :settings }
       ),
       MenuItem.new(
         :e_mails,
@@ -449,27 +441,20 @@ APP_AUDITOR_QM_MENU_ITEMS = [
         :class => :menu_item_2,
         :children => [
           MenuItem.new(
-            :parameters,
-            :order => 1,
-            :controllers => :parameters,
-            :extra_conditions => "params[:type] == 'security'",
-            :url => {:controller => :parameters, :type => :security}
-          ),
-          MenuItem.new(
             :reports,
-            :order => 2,
+            :order => 1,
             :controllers => [:error_records, :login_records, :versions],
             :url => {:controller => :login_records, :action => :choose}
           ),
           MenuItem.new(
             :users,
-            :order => 3,
+            :order => 2,
             :controllers => :users,
             :url => {:controller => :users}
           ),
           MenuItem.new(
             :roles,
-            :order => 4,
+            :order => 3,
             :controllers => :roles,
             :url => {:controller => :roles}
           )
@@ -482,11 +467,10 @@ APP_AUDITOR_QM_MENU_ITEMS = [
         :url => {:controller => :best_practices}
       ),
       MenuItem.new(
-        :parameters,
+        :settings,
         :order => 4,
-        :controllers => :parameters,
-        :extra_conditions => "params[:type] == 'admin'",
-        :url => {:controller => :parameters, :type => :admin}
+        :controllers => :settings,
+        :url => { :controller => :settings }
       ),
       MenuItem.new(
         :e_mails,

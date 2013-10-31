@@ -311,13 +311,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1, @user.errors.count
     assert_equal [error_message_from_model(@user, :password,
         :too_soon,
-        count: get_test_parameter(:security_password_minimum_time).to_i)],
+        count: get_test_parameter(:password_minimum_time).to_i)],
       @user.errors[:password]
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates already used password' do
-    password_count = get_test_parameter(:security_password_count).to_i
+    password_count = get_test_parameter(:password_count).to_i
 
     assert password_count > 0
 
@@ -487,7 +487,7 @@ class UserTest < ActiveSupport::TestCase
   test 'must change the password and days for password expiration' do
     assert_nil @user.days_for_password_expiration
     @user.password_changed = get_test_parameter(
-      :security_password_expire_time).to_i.next.days.ago
+      :password_expire_time).to_i.next.days.ago
 
     assert @user.must_change_the_password?
     assert @user.days_for_password_expiration < 0

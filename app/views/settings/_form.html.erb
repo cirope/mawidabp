@@ -1,0 +1,27 @@
+<%= form_for(@setting) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="form_column_left">
+    <div class="form_item field">
+      <%= f.label :name, class: 'inline' %>
+      <%= f.text_field :name, value: t("setting.#{@setting.name}"),
+          readonly: true, class: 'inline_item' %>
+    </div>
+    <div class="field">
+      <%= f.label :value %>
+      <%= f.text_field :value, autofocus: true %>
+    </div>
+    <div class="field">
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+  
+    <div style="display:none">
+      <%= f.hidden_field :lock_version %>
+    </div>
+
+    <div class="actions">
+      <span class="button"><%= f.submit %></span>
+    </div>
+  </div>
+<% end %>

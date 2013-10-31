@@ -1,4 +1,4 @@
-module ParametersHelper
+module SettingsHelper
   include Parameters::Risk
   include Parameters::Priority
   include Parameters::Relevance

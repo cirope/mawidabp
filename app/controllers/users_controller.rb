@@ -325,7 +325,7 @@ class UsersController < ApplicationController
 
           user.failed_attempts += 1
           max_attempts = @group_admin_mode ?
-            3 : user.get_parameter(:security_attempts_count).to_i
+            3 : user.get_parameter(:attempts_count).to_i
 
           if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
               user.is_enable?

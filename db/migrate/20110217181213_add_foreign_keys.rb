@@ -16,9 +16,6 @@ class AddForeignKeys < ActiveRecord::Migration
     # Tabla privileges
     add_foreign_key :privileges, :roles, :dependent => :restrict
 
-    # Tabla parameters
-    add_foreign_key :parameters, :organizations, :dependent => :restrict
-
     # Tabla roles
     add_foreign_key :roles, :organizations, :dependent => :restrict
 
@@ -177,9 +174,6 @@ class AddForeignKeys < ActiveRecord::Migration
 
     # Tabla privileges
     remove_foreign_key :privileges, :column => :role_id
-
-    # Tabla parameters
-    remove_foreign_key :parameters, :column => :organization_id
 
     # Tabla roles
     remove_foreign_key :roles, :column => :organization_id
