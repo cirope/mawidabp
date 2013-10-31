@@ -902,6 +902,8 @@ ActiveRecord::Schema.define(version: 20131025154139) do
 
   add_foreign_key "roles", "organizations", name: "roles_organization_id_fk", dependent: :restrict
 
+  add_foreign_key "settings", "organizations", name: "settings_organization_id_fk", dependent: :restrict
+
   add_foreign_key "users", "resources", name: "users_resource_id_fk", dependent: :restrict
   add_foreign_key "users", "users", name: "users_manager_id_fk", column: "manager_id", dependent: :restrict
 
