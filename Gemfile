@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.1.rc1'
+gem 'rails', '4.0.1.rc4'
 
 gem 'pg'
 gem 'foreigner'
@@ -20,7 +20,6 @@ gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
 gem 'unicode'
-gem 'capistrano', '2.15.5'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'dalli'
@@ -28,6 +27,11 @@ gem 'dalli'
 gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
+
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-rbenv', github: 'capistrano/rbenv'
 
 group :development do
   gem 'unicorn'

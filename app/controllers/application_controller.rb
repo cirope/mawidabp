@@ -130,10 +130,10 @@ class ApplicationController < ActionController::Base
 
   # Verifica el último acceso del usuario para comprobar si la sesión ha
   # expirado. Puede deshabilitarse con el parámetro
-  # :_security_session_expire_time_
+  # :_session_expire_time_
   def check_access_time #:doc:
     session_expire = @auth_organization ? parameter_in(@auth_organization.id,
-      :security_session_expire_time).to_i : 30
+      :session_expire_time).to_i : 30
     last_access = session[:last_access]
 
     if session_expire == 0 || last_access >= session_expire.minutes.ago

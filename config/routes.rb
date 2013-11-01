@@ -1,4 +1,6 @@
 MawidaBP::Application.routes.draw do
+  resources :settings, only: [:index, :show, :edit, :update]
+
   resources :questionnaires
 
   resources :polls do
@@ -399,10 +401,6 @@ MawidaBP::Application.routes.draw do
   resources :organizations
 
   resources :roles
-
-  scope ':type', :type => /admin|security/ do
-    resources :parameters, :except => [:new, :create, :destroy]
-  end
 
   resources :error_records do
     collection do

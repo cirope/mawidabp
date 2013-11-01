@@ -15,13 +15,6 @@
       <%= rc_f.label :resource_class_type, nil, :class => :inline %>
       <%= resource_class_type_field(rc_f) %>
     </p>
-
-    <p class="form_item">
-      <%= rc_f.label :unit, nil, :class => :inline %>
-      <%= rc_f.select :unit, parameter_in(@auth_organization.id,
-        :admin_resource_units, @resource_class.created_at),
-        {:prompt => true}, {:class => :inline_item} %>
-    </p>
   </div>
 
   <div class="items">

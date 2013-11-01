@@ -202,8 +202,7 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :unanswered_and_stale, ->(factor) {
-    stale_parameters = Organization.all_parameters(
-      :admin_finding_stale_confirmed_days)
+    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
     pre_conditions = []
     parameters = {
       :state => STATUS[:unanswered],
@@ -237,8 +236,7 @@ class Finding < ActiveRecord::Base
     ).references(:periods)
   }
   scope :unconfirmed_and_stale, -> {
-  stale_parameters = Organization.all_parameters(
-    :admin_finding_stale_confirmed_days)
+  stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
   pre_conditions = []
   parameters = {
     :state => STATUS[:unconfirmed],
@@ -270,8 +268,7 @@ class Finding < ActiveRecord::Base
     ).references(:periods)
   }
   scope :confirmed_and_stale, -> {
-    stale_parameters = Organization.all_parameters(
-      :admin_finding_stale_confirmed_days)
+    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
     pre_conditions = []
     parameters = {
       :state => STATUS[:confirmed],
@@ -971,7 +968,7 @@ class Finding < ActiveRecord::Base
 
   def stale_confirmed_days
     self.parameter_in(self.review.organization.id,
-      :admin_finding_stale_confirmed_days).to_i
+      'finding_stale_confirmed_days').to_i
   end
 
   def next_status_list(state = nil)

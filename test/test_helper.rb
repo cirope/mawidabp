@@ -47,7 +47,7 @@ class ActiveSupport::TestCase
   def get_test_parameter(parameter_name,
       organization = organizations(:default_organization))
 
-    Parameter.find_parameter(organization.id, parameter_name)
+    Setting.find_by(name: parameter_name, organization_id: organization.id).value
   end
 
   def error_message_from_model(model, attribute, message, extra = {})
@@ -64,5 +64,11 @@ class ActiveSupport::TestCase
     if File.exists?("#{TEMP_PATH}#{File.basename(file_name)}")
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
     end
+  end
+
+  def assert_error(model, attribute, type, options = {})
+    assert model.errors[attribute].include?(
+      model.errors.generate_message(attribute, type, options)
+    )
   end
 end

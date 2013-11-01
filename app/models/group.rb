@@ -22,8 +22,7 @@ class Group < ActiveRecord::Base
     allow_nil: true, allow_blank: true
 
   # Relaciones
-  has_many :organizations, -> { order('name ASC') }, dependent: :destroy,
-    after_add: :mark_for_parameters_and_role_creation
+  has_many :organizations, -> { order('name ASC') }, dependent: :destroy
 
   accepts_nested_attributes_for :organizations, allow_destroy: true
 
@@ -48,13 +47,6 @@ class Group < ActiveRecord::Base
       end
 
       Notifier.group_welcome_email(self).deliver
-    end
-  end
-
-  def mark_for_parameters_and_role_creation(organization)
-    if organization.new_record?
-      organization.must_create_parameters = true
-      organization.must_create_roles = true
     end
   end
 end

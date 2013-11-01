@@ -68,8 +68,6 @@ class OrganizationsController < ApplicationController
     @title = t 'organization.new_title'
     params[:organization].delete :business_units_attributes
     @organization = Organization.new(organization_params)
-    @organization.must_create_parameters = true
-    @organization.must_create_roles = true
 
     respond_to do |format|
       saved = false

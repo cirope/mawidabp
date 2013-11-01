@@ -5,12 +5,6 @@
     <%=h @resource_class.name %>
   </p>
 
-  <p>
-    <b><%= ResourceClass.human_attribute_name :unit %>:</b>
-    <%=h name_for_option_value(parameter_in(@auth_organization.id,
-        :admin_resource_units, @resource_class.created_at), @resource_class.unit) %>
-  </p>
-
   <table class="summary_table">
     <thead>
       <tr>

@@ -1,0 +1,13 @@
+<% DEFAULT_SETTINGS.each do |name, value| %>
+parameter_<%= name %>_default:
+  name: <%= name %>
+  description: Setting <%= name %>
+  organization: default_organization
+  value: <%= value[:value] %>
+
+parameter_<%= name %>_second: 
+  name: <%= name %>
+  description: Setting <%= name %>
+  organization: second_organization
+  value: <%= value[:value] %>
+<% end %>

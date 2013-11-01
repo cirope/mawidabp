@@ -1,4 +1,4 @@
-<% stale_confirmed_days = DEFAULT_PARAMETERS[:admin_finding_stale_confirmed_days].to_i %>
+<% stale_confirmed_days = DEFAULT_SETTINGS[:finding_stale_confirmed_days][:value].to_i %>
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item

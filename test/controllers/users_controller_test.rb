@@ -216,7 +216,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'excede maximun number off wrong attempts' do
     user = User.find users(:administrator_user).id
-    max_attempts = user.get_parameter(:security_attempts_count).to_i
+    max_attempts = user.get_parameter(:attempts_count).to_i
 
     assert_difference 'ErrorRecord.count', max_attempts + 1 do
       max_attempts.times do
@@ -329,7 +329,7 @@ class UsersControllerTest < ActionController::TestCase
     # TODO: eliminar cuando se corrija el error en JRuby que no permite que
     # este atributo se cargue desde los fixtures
     user.update_attribute :last_access,
-      get_test_parameter(:security_acount_expire_time).to_i.days.ago.yesterday
+      get_test_parameter(:account_expire_time).to_i.days.ago.yesterday
 
     assert user.enable?
     post :create_session,
@@ -346,7 +346,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'expired password' do
     user = User.find users(:administrator_user).id
     user.update_attribute :password_changed,
-      get_test_parameter(:security_password_expire_time).to_i.next.days.ago
+      get_test_parameter(:password_expire_time).to_i.next.days.ago
 
     post :create_session,
       :user => {
@@ -363,7 +363,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'warning about password expiration' do
     password_changed = get_test_parameter(
-      :security_expire_notification).to_i.next.days.ago
+      :expire_notification).to_i.next.days.ago
     user = User.find users(:administrator_user).id
 
     user.update_attribute :password_changed, password_changed
@@ -380,14 +380,14 @@ class UsersControllerTest < ActionController::TestCase
     ).first
     assert_kind_of LoginRecord, login_record
     assert_not_nil I18n.t('message.password_expire_in_x',
-      :count => get_test_parameter(:security_expire_notification).to_i - 2),
+      :count => get_test_parameter(:expire_notification).to_i - 2),
       flash.notice
   end
 
   test 'concurrent users' do
-    parameter = Parameter.where(
+    parameter = Setting.where(
       :organization_id => organizations(:default_organization).id,
-      :name => 'security_allow_concurrent_sessions'
+      :name => 'allow_concurrent_sessions'
     ).first
 
     assert parameter.update(:value => 0)

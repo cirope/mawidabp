@@ -31,11 +31,10 @@ class ResourceClass < ActiveRecord::Base
   # Restricciones
   validates :name, format:{ with: /\A\w[\w\s]*\z/ }, allow_nil: true,
     allow_blank: true
-  validates :name, :unit, :resource_class_type, :organization_id,
+  validates :name, :resource_class_type, :organization_id,
     presence: true
   validates :name, length: { maximum: 255 }, allow_nil: true,
     allow_blank: true
-  validates :unit, numericality: { only_integer: true }, allow_nil: true
   validates :resource_class_type, inclusion: {in: TYPES.values},
     allow_blank: true, allow_nil: true
   validates :name, uniqueness: {
