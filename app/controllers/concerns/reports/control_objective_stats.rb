@@ -81,7 +81,7 @@ module Reports::ControlObjectiveStats
           weaknesses = final ? coi.final_weaknesses : coi.weaknesses
 
           weaknesses.not_revoked.each do |w|
-            @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+            @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
             weaknesses_count[w.risk_text] ||= 0
             weaknesses_count[w.risk_text] += 1
@@ -102,6 +102,9 @@ module Reports::ControlObjectiveStats
           coi_data[:weaknesses] ||= {}
           coi_data[:effectiveness] ||= []
           coi_data[:effectiveness] << coi.effectiveness
+
+          coi_data[:reviews] ||= 0
+          coi_data[:reviews] += 1 if weaknesses.size > 0
 
           weaknesses_count.each do |r, c|
             coi_data[:weaknesses][r] ||= 0
@@ -125,9 +128,9 @@ module Reports::ControlObjectiveStats
         cos.each do |co, coi_data|
           @control_objectives_data[period][pc][co.name] ||= {}
 
-          reviews_count = coi_data[:effectiveness].size
-          effectiveness = reviews_count > 0 ?
-            coi_data[:effectiveness].sum / reviews_count : 100
+          reviews_count = coi_data[:reviews]
+          effectiveness = coi_data[:effectiveness].size > 0 ?
+            coi_data[:effectiveness].sum.to_f / coi_data[:effectiveness].size : 100
           weaknesses_count = coi_data[:weaknesses]
 
           if weaknesses_count.values.sum == 0
