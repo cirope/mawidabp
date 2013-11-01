@@ -114,14 +114,11 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @potential_nonconformity.control_objective_item_id = nil
     @potential_nonconformity.review_code = '   '
+
     assert @potential_nonconformity.invalid?
-    assert_equal 3, @potential_nonconformity.errors.count
-    assert_equal [error_message_from_model(@potential_nonconformity,
-      :control_objective_item_id, :blank)],
-      @potential_nonconformity.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@potential_nonconformity, :review_code, :blank),
-      error_message_from_model(@potential_nonconformity, :review_code, :invalid)].sort,
-      @potential_nonconformity.errors[:review_code].sort
+    assert_error @potential_nonconformity, :control_objective_item_id, :blank
+    assert_error @potential_nonconformity, :review_code, :blank
+    assert_error @potential_nonconformity, :review_code, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -129,42 +126,36 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
     another_potential_nonconformity = PotentialNonconformity.find(findings(
         :bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity).id)
     @potential_nonconformity.review_code = another_potential_nonconformity.review_code
+
     assert @potential_nonconformity.invalid?
-    assert_equal 1, @potential_nonconformity.errors.count
-    assert_equal [error_message_from_model(@potential_nonconformity, :review_code, :taken)],
-      @potential_nonconformity.errors[:review_code]
+    assert_error @potential_nonconformity, :review_code, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @potential_nonconformity.review_code = 'abcdd' * 52
     @potential_nonconformity.type = 'abcdd' * 52
+
     assert @potential_nonconformity.invalid?
-    assert_equal 3, @potential_nonconformity.errors.count
-    assert_equal [error_message_from_model(@potential_nonconformity, :review_code, :too_long,
-      :count => 255), error_message_from_model(@potential_nonconformity, :review_code,
-      :invalid)].sort, @potential_nonconformity.errors[:review_code].sort
-    assert_equal [error_message_from_model(@potential_nonconformity, :type, :too_long,
-      :count => 255)], @potential_nonconformity.errors[:type]
+    assert_error @potential_nonconformity, :review_code, :too_long, count: 255
+    assert_error @potential_nonconformity, :review_code, :invalid
+    assert_error @potential_nonconformity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @potential_nonconformity.state = Finding::STATUS.values.sort.last.next
+
     assert @potential_nonconformity.invalid?
-    assert_equal 1, @potential_nonconformity.errors.count
-    assert_equal [error_message_from_model(@potential_nonconformity, :state, :inclusion)],
-      @potential_nonconformity.errors[:state]
+    assert_error @potential_nonconformity, :state, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @potential_nonconformity.control_objective_item_id = '?nil'
+
     assert @potential_nonconformity.invalid?
-    assert_equal 1, @potential_nonconformity.errors.count
-    assert_equal [error_message_from_model(@potential_nonconformity,
-      :control_objective_item_id, :not_a_number)],
-      @potential_nonconformity.errors[:control_objective_item_id]
+    assert_error @potential_nonconformity, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do

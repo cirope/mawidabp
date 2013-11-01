@@ -73,31 +73,27 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @control_objective.name = nil
+
     assert @control_objective.invalid?
-    assert_equal 1, @control_objective.errors.count
-    assert_equal [error_message_from_model(@control_objective, :name, :blank)],
-      @control_objective.errors[:name]
+    assert_error @control_objective, :name, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
     @control_objective.relevance = '12.3'
     @control_objective.risk = '_12'
+
     assert @control_objective.invalid?
-    assert_equal 2, @control_objective.errors.count
-    assert_equal [error_message_from_model(@control_objective, :relevance,
-      :not_an_integer)], @control_objective.errors[:relevance]
-    assert_equal [error_message_from_model(@control_objective, :risk,
-      :not_a_number)], @control_objective.errors[:risk]
+    assert_error @control_objective, :relevance, :not_an_integer
+    assert_error @control_objective, :risk, :not_a_number
   end
 
   test 'validates duplicated attributes' do
     @control_objective.name =
       control_objectives(:iso_27000_security_organization_4_1).name
+
     assert @control_objective.invalid?
-    assert_equal 1, @control_objective.errors.count
-    assert_equal [error_message_from_model(@control_objective, :name, :taken)],
-      @control_objective.errors[:name]
+    assert_error @control_objective, :name, :taken
 
     # Nombres iguales pero distintos procesos de negocio
     @control_objective.name =
@@ -110,9 +106,8 @@ class ControlObjectiveTest < ActiveSupport::TestCase
   test 'validates that have at least one control' do
     assert @control_objective.valid?
     @control_objective.control = nil
+
     assert @control_objective.invalid?
-    assert_equal 1, @control_objective.errors.count
-    assert_equal [error_message_from_model(@control_objective, :control,
-      :blank)], @control_objective.errors[:control]
+    assert_error @control_objective, :control, :blank
   end
 end

@@ -59,21 +59,17 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank atrtributes' do
     @finding_review_assignment.finding_id = nil
+
     assert @finding_review_assignment.invalid?
-    assert_equal 1, @finding_review_assignment.errors.count
-    assert_equal [error_message_from_model(
-      @finding_review_assignment, :finding_id, :blank)],
-      @finding_review_assignment.errors[:finding_id]
+    assert_error @finding_review_assignment, :finding_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
     @finding_review_assignment.finding_id = '123-'
+
     assert @finding_review_assignment.invalid?
-    assert_equal 1, @finding_review_assignment.errors.count
-    assert_equal [error_message_from_model(
-      @finding_review_assignment, :finding_id, :not_a_number)],
-      @finding_review_assignment.errors[:finding_id]
+    assert_error @finding_review_assignment, :finding_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -85,10 +81,8 @@ class FindingReviewAssignmentTest < ActiveSupport::TestCase
       :finding_id => @finding_review_assignment.finding_id
     )
     finding_review_assignment.review = review
-    finding_review_assignment.invalid?
+
     assert finding_review_assignment.invalid?
-    assert_equal 1, finding_review_assignment.errors.count
-    assert_equal [error_message_from_model(finding_review_assignment, :finding_id,
-        :taken)], finding_review_assignment.errors[:finding_id]
+    assert_error finding_review_assignment, :finding_id, :taken
   end
 end

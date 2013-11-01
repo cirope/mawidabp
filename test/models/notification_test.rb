@@ -57,12 +57,10 @@ class NotificationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @notification.confirmation_hash = '   '
     @notification.user_id = nil
+
     assert @notification.invalid?
-    assert_equal 2, @notification.errors.count
-    assert_equal [error_message_from_model(@notification, :confirmation_hash,
-      :blank)], @notification.errors[:confirmation_hash]
-    assert_equal [error_message_from_model(@notification, :user_id, :blank)],
-      @notification.errors[:user_id]
+    assert_error @notification, :confirmation_hash, :blank
+    assert_error @notification, :user_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -71,25 +69,20 @@ class NotificationTest < ActiveSupport::TestCase
     @notification.status = '_12'
     @notification.user_who_confirm_id = 'x123'
     @notification.confirmation_date = '12/34/34'
+
     assert @notification.invalid?
-    assert_equal 4, @notification.errors.count
-    assert_equal [error_message_from_model(@notification, :user_id,
-      :not_an_integer)], @notification.errors[:user_id]
-    assert_equal [error_message_from_model(@notification, :status,
-      :not_a_number)], @notification.errors[:status]
-    assert_equal [error_message_from_model(@notification, :user_who_confirm_id,
-      :not_a_number)], @notification.errors[:user_who_confirm_id]
-    assert_equal [error_message_from_model(@notification, :confirmation_date,
-      :invalid_datetime)], @notification.errors[:confirmation_date]
+    assert_error @notification, :user_id, :not_an_integer
+    assert_error @notification, :status, :not_a_number
+    assert_error @notification, :user_who_confirm_id, :not_a_number
+    assert_error @notification, :confirmation_date, :invalid_datetime
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates lenght attributes' do
     @notification.confirmation_hash = 'abc' * 100
+
     assert @notification.invalid?
-    assert_equal 1, @notification.errors.count
-    assert_equal [error_message_from_model(@notification, :confirmation_hash,
-      :too_long, :count => 255)], @notification.errors[:confirmation_hash]
+    assert_error @notification, :confirmation_hash, :too_long, count: 255
   end
 
   test 'dynamic functions' do

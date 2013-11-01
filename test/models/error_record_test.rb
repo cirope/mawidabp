@@ -50,9 +50,8 @@ class ErrorRecordTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates inclusion attributes' do
     @error_record.error = ErrorRecord::ERRORS.values.sort.last.next
+
     assert @error_record.invalid?
-    assert_equal 1, @error_record.errors.count
-    assert_equal [error_message_from_model(@error_record, :error, :inclusion)],
-      @error_record.errors[:error]
+    assert_error @error_record, :error, :inclusion
   end
 end

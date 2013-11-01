@@ -54,37 +54,31 @@ class DetractTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @detract.value = '  '
     @detract.user_id = nil
+
     assert @detract.invalid?
-    assert_equal 2, @detract.errors.count
-    assert_equal [error_message_from_model(@detract, :value, :blank)],
-      @detract.errors[:value]
-    assert_equal [error_message_from_model(@detract, :user_id, :blank)],
-      @detract.errors[:user_id]
+    assert_error @detract, :value, :blank
+    assert_error @detract, :user_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @detract.value = '12-9'
+
     assert @detract.invalid?
-    assert_equal 1, @detract.errors.count
-    assert_equal [error_message_from_model(@detract, :value, :not_a_number)],
-      @detract.errors[:value]
+    assert_error @detract, :value, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates attributes boundaries' do
     @detract.value = '-0.01'
+
     assert @detract.invalid?
-    assert_equal 1, @detract.errors.count
-    assert_equal [error_message_from_model(@detract, :value,
-      :greater_than_or_equal_to, :count => 0)], @detract.errors[:value]
+    assert_error @detract, :value, :greater_than_or_equal_to, count: 0
 
     @detract.reload
-
     @detract.value = '1.01'
+
     assert @detract.invalid?
-    assert_equal 1, @detract.errors.count
-    assert_equal [error_message_from_model(@detract, :value,
-      :less_than_or_equal_to, :count => 1)], @detract.errors[:value]
+    assert_error @detract, :value, :less_than_or_equal_to, count: 1
   end
 end

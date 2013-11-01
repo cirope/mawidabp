@@ -47,32 +47,27 @@ class InlineHelpTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @inline_help.language = '   '
     @inline_help.name = '   '
+
     assert @inline_help.invalid?
-    assert_equal 2, @inline_help.errors.count
-    assert_equal [error_message_from_model(@inline_help, :language, :blank)],
-      @inline_help.errors[:language]
-    assert_equal [error_message_from_model(@inline_help, :name, :blank)],
-      @inline_help.errors[:name]
+    assert_error @inline_help, :language, :blank
+    assert_error @inline_help, :name, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @inline_help.name = inline_helps(:es_review_score).name
+
     assert @inline_help.invalid?
-    assert_equal 1, @inline_help.errors.count
-    assert_equal [error_message_from_model(@inline_help, :name, :taken)],
-      @inline_help.errors[:name]
+    assert_error @inline_help, :name, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @inline_help.language = 'abcd' * 3
     @inline_help.name = 'abcde' * 52
+
     assert @inline_help.invalid?
-    assert_equal 2, @inline_help.errors.count
-    assert_equal [error_message_from_model(@inline_help, :language, :too_long,
-      :count => 10)], @inline_help.errors[:language]
-    assert_equal [error_message_from_model(@inline_help, :name, :too_long,
-      :count => 255)], @inline_help.errors[:name]
+    assert_error @inline_help, :language, :too_long, count: 10
+    assert_error @inline_help, :name, :too_long, count: 255
   end
 end

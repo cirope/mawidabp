@@ -57,42 +57,33 @@ class LoginRecordTest < ActiveSupport::TestCase
   test 'validates nil attributes' do
     @login_record.user_id = nil
     @login_record.organization_id = nil
+
     assert @login_record.invalid?
-    assert_equal 2, @login_record.errors.count
-    assert_equal [error_message_from_model(@login_record, :user_id, :blank)],
-      @login_record.errors[:user_id]
-    assert_equal [error_message_from_model(@login_record, :organization_id,
-      :blank)], @login_record.errors[:organization_id]
+    assert_error @login_record, :user_id, :blank
+    assert_error @login_record, :organization_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates dates attributes' do
     @login_record.start = Time.now
     @login_record.end = 10.hours.ago
+
     assert @login_record.invalid?
-    assert_equal 1, @login_record.errors.count
-    assert_equal [error_message_from_model(@login_record, :end, :after,
-      :restriction => I18n.l(@login_record.start, :format => :validation))],
-      @login_record.errors[:end]
+    assert_error @login_record, :end, :after, restriction: I18n.l(@login_record.start, format: :validation)
 
     @login_record.reload
     @login_record.start = 'XX'
+
     assert @login_record.invalid?
-    assert_equal 2, @login_record.errors.count
-    assert_equal [
-      error_message_from_model(@login_record, :start, :blank),
-      error_message_from_model(@login_record, :start, :invalid_datetime)
-    ].sort, @login_record.errors[:start].sort
+    assert_error @login_record, :start, :blank
+    assert_error @login_record, :start, :invalid_datetime
 
     @login_record.reload
     @login_record.start = ''
     @login_record.end = ''
+
     assert @login_record.invalid?
-    assert_equal 2, @login_record.errors.count
-    assert_equal [error_message_from_model(@login_record, :start, :blank)],
-      @login_record.errors[:start]
-    assert_equal [
-      error_message_from_model(@login_record, :end, :invalid_datetime)
-    ], @login_record.errors[:end]
+    assert_error @login_record, :start, :blank
+    assert_error @login_record, :end, :invalid_datetime
   end
 end

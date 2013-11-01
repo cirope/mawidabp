@@ -52,31 +52,26 @@ class HelpItemTest < ActiveSupport::TestCase
     @help_item.name = nil
     @help_item.description = '  '
     @help_item.order_number = nil
+
     assert @help_item.invalid?
-    assert_equal 3, @help_item.errors.count
-    assert_equal [error_message_from_model(@help_item, :name, :blank)],
-      @help_item.errors[:name]
-    assert_equal [error_message_from_model(@help_item, :description, :blank)],
-      @help_item.errors[:description]
-    assert_equal [error_message_from_model(@help_item, :order_number, :blank)],
-      @help_item.errors[:order_number]
+    assert_error @help_item, :name, :blank
+    assert_error @help_item, :description, :blank
+    assert_error @help_item, :order_number, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @help_item.order_number = '?123'
+
     assert @help_item.invalid?
-    assert_equal 1, @help_item.errors.count
-    assert_equal [error_message_from_model(@help_item, :order_number,
-      :not_a_number)], @help_item.errors[:order_number]
+    assert_error @help_item, :order_number, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @help_item.name = 'abcde' * 52
+
     assert @help_item.invalid?
-    assert_equal 1, @help_item.errors.count
-    assert_equal [error_message_from_model(@help_item, :name, :too_long,
-      :count => 255)], @help_item.errors[:name]
+    assert_error @help_item, :name, :too_long, count: 255
   end
 end

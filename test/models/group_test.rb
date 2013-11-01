@@ -47,12 +47,10 @@ class GroupTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @group.name = ' '
     @group.admin_email = ' '
+
     assert @group.invalid?
-    assert_equal 2, @group.errors.count
-    assert_equal [error_message_from_model(@group, :name, :blank)],
-      @group.errors[:name]
-    assert_equal [error_message_from_model(@group, :admin_email, :blank)],
-      @group.errors[:admin_email]
+    assert_error @group, :name, :blank
+    assert_error @group, :admin_email, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -60,26 +58,21 @@ class GroupTest < ActiveSupport::TestCase
     @group.name = 'abcdd' * 52
     @group.admin_hash = 'abcdd' * 52
     @group.admin_email = "#{'abcdd' * 20}@test.com"
+
     assert @group.invalid?
-    assert_equal 3, @group.errors.count
-    assert_equal [error_message_from_model(@group, :name, :too_long,
-      :count => 255)], @group.errors[:name]
-    assert_equal [error_message_from_model(@group, :admin_hash, :too_long,
-      :count => 255)], @group.errors[:admin_hash]
-    assert_equal [error_message_from_model(@group, :admin_email, :too_long,
-      :count => 100)], @group.errors[:admin_email]
+    assert_error @group, :name, :too_long, count: 255
+    assert_error @group, :admin_hash, :too_long, count: 255
+    assert_error @group, :admin_email, :too_long, count: 100
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @group.name = groups(:second_group).name
     @group.admin_email = groups(:second_group).admin_email
+
     assert @group.invalid?
-    assert_equal 2, @group.errors.count
-    assert_equal [error_message_from_model(@group, :name, :taken)],
-      @group.errors[:name]
-    assert_equal [error_message_from_model(@group, :admin_email, :taken)],
-      @group.errors[:admin_email]
+    assert_error @group, :name, :taken
+    assert_error @group, :admin_email, :taken
   end
 
   test 'send group welcome email' do

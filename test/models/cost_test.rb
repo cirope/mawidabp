@@ -56,18 +56,13 @@ class CostTest < ActiveSupport::TestCase
     @cost.item_type = '   '
     @cost.cost_type = '   '
     @cost.user_id = nil
+
     assert @cost.invalid?
-    assert_equal 5, @cost.errors.count
-    assert_equal [error_message_from_model(@cost, :cost, :blank)],
-      @cost.errors[:cost]
-    assert_equal [error_message_from_model(@cost, :item_id, :blank)],
-      @cost.errors[:item_id]
-    assert_equal [error_message_from_model(@cost, :item_type, :blank)],
-      @cost.errors[:item_type]
-    assert_equal [error_message_from_model(@cost, :cost_type, :blank)],
-      @cost.errors[:cost_type]
-    assert_equal [error_message_from_model(@cost, :user_id, :blank)],
-      @cost.errors[:user_id]
+    assert_error @cost, :cost, :blank
+    assert_error @cost, :item_id, :blank
+    assert_error @cost, :item_type, :blank
+    assert_error @cost, :cost_type, :blank
+    assert_error @cost, :user_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -75,23 +70,19 @@ class CostTest < ActiveSupport::TestCase
     @cost.cost = '12-9'
     @cost.item_id = '12.2'
     @cost.user_id = '15.4'
+
     assert @cost.invalid?
-    assert_equal 3, @cost.errors.count
-    assert_equal [error_message_from_model(@cost, :cost, :not_a_number)],
-      @cost.errors[:cost]
-    assert_equal [error_message_from_model(@cost, :item_id, :not_an_integer)],
-      @cost.errors[:item_id]
-    assert_equal [error_message_from_model(@cost, :user_id, :not_an_integer)],
-      @cost.errors[:user_id]
+    assert_error @cost, :cost, :not_a_number
+    assert_error @cost, :item_id, :not_an_integer
+    assert_error @cost, :user_id, :not_an_integer
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates attributes boundaries' do
     @cost.cost = '-1'
     assert @cost.invalid?
-    assert_equal 1, @cost.errors.count
-    assert_equal [error_message_from_model(@cost, :cost,
-      :greater_than_or_equal_to, :count => 0)], @cost.errors[:cost]
+
+    assert_error @cost, :cost, :greater_than_or_equal_to, count: 0
   end
 
   test 'fetch the correct time from raw cost' do

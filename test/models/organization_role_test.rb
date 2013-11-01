@@ -57,12 +57,10 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @organization_role.organization_id = nil
     @organization_role.role_id = '   '
+
     assert @organization_role.invalid?
-    assert_equal 2, @organization_role.errors.count
-    assert_equal [error_message_from_model(@organization_role, :organization_id,
-      :blank)], @organization_role.errors[:organization_id]
-    assert_equal [error_message_from_model(@organization_role, :role_id,
-        :blank)],  @organization_role.errors[:role_id]
+    assert_error @organization_role, :organization_id, :blank
+    assert_error @organization_role, :role_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -70,24 +68,20 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     @organization_role.organization_id = '?nil'
     @organization_role.role_id = '?123'
     @organization_role.user_id = '12.2'
+
     assert @organization_role.invalid?
-    assert_equal 3, @organization_role.errors.count
-    assert_equal [error_message_from_model(@organization_role, :organization_id,
-      :not_a_number)], @organization_role.errors[:organization_id]
-    assert_equal [error_message_from_model(@organization_role, :role_id,
-      :not_a_number)], @organization_role.errors[:role_id]
-    assert_equal [error_message_from_model(@organization_role, :user_id,
-      :not_an_integer)], @organization_role.errors[:user_id]
+    assert_error @organization_role, :organization_id, :not_a_number
+    assert_error @organization_role, :role_id, :not_a_number
+    assert_error @organization_role, :user_id, :not_an_integer
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     organization_role = OrganizationRole.new(
       @organization_role.attributes.merge('id' => nil))
+
     assert organization_role.invalid?
-    assert_equal 1, organization_role.errors.count
-    assert_equal [error_message_from_model(organization_role, :role_id,
-        :taken)], organization_role.errors[:role_id]
+    assert_error organization_role, :role_id, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -99,8 +93,6 @@ class OrganizationRoleTest < ActiveSupport::TestCase
     )
     
     assert organization_role.invalid?
-    assert_equal 1, organization_role.errors.count
-    assert_equal [error_message_from_model(organization_role, :role_id,
-      :invalid)], organization_role.errors[:role_id]
+    assert_error organization_role, :role_id, :invalid
   end
 end
