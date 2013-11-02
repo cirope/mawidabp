@@ -7,7 +7,10 @@ set :deploy_via, :remote_cache
 set :scm, :git
 
 set :linked_files, %w{config/app_config.yml}
-set :linked_dirs, %w{log private public/error_files}
+set :linked_dirs, %w{log}
+
+set :rbenv_type, :user
+set :rbenv_ruby, '2.0.0-p247'
 
 set :keep_releases, 5
 
