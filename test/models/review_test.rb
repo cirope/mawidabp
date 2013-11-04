@@ -83,25 +83,20 @@ class ReviewTest < ActiveSupport::TestCase
     @review.description = '   '
     @review.period_id = nil
     @review.plan_item_id = nil
+
     assert @review.invalid?
-    assert_equal 4, @review.errors.count
-    assert_equal [error_message_from_model(@review, :identification, :blank)],
-      @review.errors[:identification]
-    assert_equal [error_message_from_model(@review, :description, :blank)],
-      @review.errors[:description]
-    assert_equal [error_message_from_model(@review, :period_id, :blank)],
-      @review.errors[:period_id]
-    assert_equal [error_message_from_model(@review, :plan_item_id, :blank)],
-      @review.errors[:plan_item_id]
+    assert_error @review, :identification, :blank
+    assert_error @review, :description, :blank
+    assert_error @review, :period_id, :blank
+    assert_error @review, :plan_item_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @review.identification = 'abcdd' * 52
+
     assert @review.invalid?
-    assert_equal 1, @review.errors.count
-    assert_equal [error_message_from_model(@review, :identification, :too_long,
-      :count => 255)], @review.errors[:identification]
+    assert_error @review, :identification, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -109,34 +104,28 @@ class ReviewTest < ActiveSupport::TestCase
     @review.identification = '?nil'
     @review.period_id = '12.3'
     @review.plan_item_id = '?nil'
+
     assert @review.invalid?
-    assert_equal 3, @review.errors.count
-    assert_equal [error_message_from_model(@review, :identification, :invalid)],
-      @review.errors[:identification]
-    assert_equal [error_message_from_model(@review, :period_id,
-        :not_an_integer)], @review.errors[:period_id]
-    assert_equal [error_message_from_model(@review, :plan_item_id,
-      :not_a_number)], @review.errors[:plan_item_id]
+    assert_error @review, :identification, :invalid
+    assert_error @review, :period_id, :not_an_integer
+    assert_error @review, :plan_item_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @review.identification = reviews(:past_review).identification
     @review.plan_item_id = reviews(:past_review).plan_item_id
+
     assert @review.invalid?
-    assert_equal 2, @review.errors.count
-    assert_equal [error_message_from_model(@review, :identification, :taken)],
-      @review.errors[:identification]
-    assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
-      @review.errors[:plan_item_id]
+    assert_error @review, :identification, :taken
+    assert_error @review, :plan_item_id, :taken
 
     # La identificación sólo debe ser única dentro de la organización
     @review.period_id = periods(:current_period_second_organization).id
     @review.period.reload
+
     assert @review.invalid?
-    assert_equal 1, @review.errors.count
-    assert_equal [error_message_from_model(@review, :plan_item_id, :taken)],
-      @review.errors[:plan_item_id]
+    assert_error @review, :plan_item_id, :taken
   end
 
   test 'validates valid attributes' do
@@ -144,9 +133,7 @@ class ReviewTest < ActiveSupport::TestCase
       :current_plan_item_4_without_business_unit).id
 
     assert @review.invalid?
-    assert_equal 1, @review.errors.count
-    assert_equal [error_message_from_model(@review, :plan_item, :invalid)],
-      @review.errors[:plan_item]
+    assert_error @review, :plan_item, :invalid
   end
 
   test 'can be modified' do

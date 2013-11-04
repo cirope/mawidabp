@@ -51,29 +51,25 @@ class QuestionnaireTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @questionnaire.name = '  '
     @questionnaire.organization = nil
+
     assert @questionnaire.invalid?
-    assert_equal 2, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :blank)],
-      @questionnaire.errors[:name]
-    assert_equal [error_message_from_model(@questionnaire, :organization_id, :blank)],
-      @questionnaire.errors[:organization_id]
+    assert_error @questionnaire, :name, :blank
+    assert_error @questionnaire, :organization_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @questionnaire.name = 'abcde' * 52
+
     assert @questionnaire.invalid?
-    assert_equal 1, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :too_long,
-      :count => 255)], @questionnaire.errors[:name]
+    assert_error @questionnaire, :name, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     @questionnaire.name = questionnaires(:questionnaire_two).name
+
     assert @questionnaire.invalid?
-    assert_equal 1, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :taken)],
-      @questionnaire.errors[:name]
+    assert_error @questionnaire, :name, :taken
   end
 end

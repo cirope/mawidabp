@@ -51,12 +51,10 @@ class RoleTest < ActiveSupport::TestCase
   test 'validates formated attributes' do
     @role.name = '?nil'
     @role.organization_id = 'xx'
+
     assert @role.invalid?
-    assert_equal 2, @role.errors.count
-    assert_equal [error_message_from_model(@role, :name, :invalid)],
-      @role.errors[:name]
-    assert_equal [error_message_from_model(@role, :organization_id,
-      :not_a_number)], @role.errors[:organization_id]
+    assert_error @role, :name, :invalid
+    assert_error @role, :organization_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -64,41 +62,35 @@ class RoleTest < ActiveSupport::TestCase
     @role.name = nil
     @role.organization_id = ' '
     @role.role_type = nil
+
     assert @role.invalid?
-    assert_equal 3, @role.errors.count
-    assert_equal [error_message_from_model(@role, :name, :blank)],
-      @role.errors[:name]
-    assert_equal [error_message_from_model(@role, :organization_id, :blank)],
-      @role.errors[:organization_id]
-    assert_equal [error_message_from_model(@role, :role_type, :blank)],
-      @role.errors[:role_type]
+    assert_error @role, :name, :blank
+    assert_error @role, :organization_id, :blank
+    assert_error @role, :role_type, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @role.name = 'abcdd' * 52
+
     assert @role.invalid?
-    assert_equal 1, @role.errors.count
-    assert_equal [error_message_from_model(@role, :name, :too_long,
-      :count => 255)], @role.errors[:name]
+    assert_error @role, :name, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @role.role_type = Role::TYPES.values.sort.last.next
+
     assert @role.invalid?
-    assert_equal 1, @role.errors.count
-    assert_equal [error_message_from_model(@role, :role_type, :inclusion)],
-      @role.errors[:role_type]
+    assert_error @role, :role_type, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @role.name = roles(:auditor_senior_role).name
+
     assert @role.invalid?
-    assert_equal 1, @role.errors.count
-    assert_equal [error_message_from_model(@role, :name, :taken)],
-      @role.errors[:name]
+    assert_error @role, :name, :taken
   end
 
   test 'allowed controllers' do

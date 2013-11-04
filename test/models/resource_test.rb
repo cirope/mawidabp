@@ -47,39 +47,34 @@ class ResourceTest < ActiveSupport::TestCase
   test 'validates formated attributes' do
     @resource.resource_class_id = '1.2'
     @resource.cost_per_unit = '_1'
+
     assert @resource.invalid?
-    assert_equal 2, @resource.errors.count
-    assert_equal [error_message_from_model(@resource, :resource_class_id,
-      :not_an_integer)], @resource.errors[:resource_class_id]
-    assert_equal [error_message_from_model(@resource, :cost_per_unit,
-      :not_a_number)], @resource.errors[:cost_per_unit]
+    assert_error @resource, :resource_class_id, :not_an_integer
+    assert_error @resource, :cost_per_unit, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @resource.name = ''
+
     assert @resource.invalid?
-    assert_equal 1, @resource.errors.count
-    assert_equal [error_message_from_model(@resource, :name, :blank)],
-      @resource.errors[:name]
+    assert_error @resource, :name, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @resource.name = 'abcdd' * 52
+
     assert @resource.invalid?
-    assert_equal 1, @resource.errors.count
-    assert_equal [error_message_from_model(@resource, :name, :too_long,
-      :count => 255)], @resource.errors[:name]
+    assert_error @resource, :name, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @resource.reload
     @resource.name = resources(:developer_resource).name
+
     assert @resource.invalid?
-    assert_equal 1, @resource.errors.count
-    assert_equal [error_message_from_model(@resource, :name, :taken)],
-      @resource.errors[:name]
+    assert_error @resource, :name, :taken
   end
 end

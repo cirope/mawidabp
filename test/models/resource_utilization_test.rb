@@ -57,14 +57,11 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
     @resource_utilization.units = nil
     @resource_utilization.cost_per_unit = ' '
     @resource_utilization.resource_id = '   '
+
     assert @resource_utilization.invalid?
-    assert_equal 3, @resource_utilization.errors.count
-    assert_equal [error_message_from_model(@resource_utilization, :units,
-      :blank)], @resource_utilization.errors[:units]
-    assert_equal [error_message_from_model(@resource_utilization,
-        :cost_per_unit, :blank)], @resource_utilization.errors[:cost_per_unit]
-    assert_equal [error_message_from_model(@resource_utilization, :resource_id,
-      :blank)], @resource_utilization.errors[:resource_id]
+    assert_error @resource_utilization, :units, :blank
+    assert_error @resource_utilization, :cost_per_unit, :blank
+    assert_error @resource_utilization, :resource_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -73,17 +70,12 @@ class ResourceUtilizationTest < ActiveSupport::TestCase
     @resource_utilization.cost_per_unit = '_1'
     @resource_utilization.resource_id = '12.5'
     @resource_utilization.resource_consumer_id = '1.5'
+
     assert @resource_utilization.invalid?
-    assert_equal 4, @resource_utilization.errors.count
-    assert_equal [error_message_from_model(@resource_utilization, :units,
-      :not_a_number)], @resource_utilization.errors[:units]
-    assert_equal [error_message_from_model(@resource_utilization, :cost_per_unit,
-      :not_a_number)], @resource_utilization.errors[:cost_per_unit]
-    assert_equal [error_message_from_model(@resource_utilization, :resource_id,
-      :not_an_integer)], @resource_utilization.errors[:resource_id]
-    assert_equal [error_message_from_model(@resource_utilization,
-      :resource_consumer_id, :not_an_integer)],
-      @resource_utilization.errors[:resource_consumer_id]
+    assert_error @resource_utilization, :units, :not_a_number
+    assert_error @resource_utilization, :cost_per_unit, :not_a_number
+    assert_error @resource_utilization, :resource_id, :not_an_integer
+    assert_error @resource_utilization, :resource_consumer_id, :not_an_integer
   end
 
   test 'cost function' do

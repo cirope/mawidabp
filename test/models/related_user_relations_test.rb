@@ -49,11 +49,9 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @related_user_relation.related_user = nil
+
     assert @related_user_relation.invalid?
-    assert_equal 1, @related_user_relation.errors.count
-    assert_equal [
-      error_message_from_model(@related_user_relation, :related_user, :blank)
-    ], @related_user_relation.errors[:related_user]
+    assert_error @related_user_relation, :related_user, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -65,9 +63,6 @@ class RelatedUserRelationTest < ActiveSupport::TestCase
     @related_user_relation.related_user = related_user_relation.related_user
 
     assert @related_user_relation.invalid?
-    assert_equal 1, @related_user_relation.errors.count
-    assert_equal [
-      error_message_from_model(@related_user_relation, :related_user_id, :taken)
-    ], @related_user_relation.errors[:related_user_id]
+    assert_error @related_user_relation, :related_user_id, :taken
   end
 end

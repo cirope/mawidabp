@@ -97,19 +97,12 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     @procedure_control_subitem.control_objective_id = '?123'
     @procedure_control_subitem.relevance = '?123'
     @procedure_control_subitem.order = '?123'
+
     assert @procedure_control_subitem.invalid?
-    assert_equal 4, @procedure_control_subitem.errors.count
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-      :procedure_control_item_id, :not_a_number)],
-      @procedure_control_subitem.errors[:procedure_control_item_id]
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-      :control_objective_id, :not_a_number)],
-      @procedure_control_subitem.errors[:control_objective_id]
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-        :relevance, :not_a_number)],
-      @procedure_control_subitem.errors[:relevance]
-    assert_equal [error_message_from_model(@procedure_control_subitem, :order,
-      :not_a_number)], @procedure_control_subitem.errors[:order]
+    assert_error @procedure_control_subitem, :procedure_control_item_id, :not_a_number
+    assert_error @procedure_control_subitem, :control_objective_id, :not_a_number
+    assert_error @procedure_control_subitem, :relevance, :not_a_number
+    assert_error @procedure_control_subitem, :order, :not_a_number
   end
   
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -118,18 +111,12 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     @procedure_control_subitem.control_objective_id = nil
     @procedure_control_subitem.relevance = ' '
     @procedure_control_subitem.order = nil
+
     assert @procedure_control_subitem.invalid?
-    assert_equal 4, @procedure_control_subitem.errors.count
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-      :control_objective_text, :blank)],
-      @procedure_control_subitem.errors[:control_objective_text]
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-      :control_objective_id, :blank)],
-      @procedure_control_subitem.errors[:control_objective_id]
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-        :relevance, :blank)], @procedure_control_subitem.errors[:relevance]
-    assert_equal [error_message_from_model(@procedure_control_subitem, :order,
-      :blank)], @procedure_control_subitem.errors[:order]
+    assert_error @procedure_control_subitem, :control_objective_text, :blank
+    assert_error @procedure_control_subitem, :control_objective_id, :blank
+    assert_error @procedure_control_subitem, :relevance, :blank
+    assert_error @procedure_control_subitem, :order, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -137,20 +124,17 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
     @procedure_control_subitem.control_objective_id = 
       procedure_control_subitems(:procedure_control_subitem_iso_27001_1_2).
       control_objective_id
+
     assert @procedure_control_subitem.invalid?
-    assert_equal 1, @procedure_control_subitem.errors.count
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-      :control_objective_id, :taken)], @procedure_control_subitem.errors[
-      :control_objective_id]
+    assert_error @procedure_control_subitem, :control_objective_id, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates that have at least one control' do
     assert @procedure_control_subitem.valid?
     @procedure_control_subitem.control = nil
+
     assert @procedure_control_subitem.invalid?
-    assert_equal 1, @procedure_control_subitem.errors.count
-    assert_equal [error_message_from_model(@procedure_control_subitem,
-        :control, :blank)], @procedure_control_subitem.errors[:control]
+    assert_error @procedure_control_subitem, :control, :blank
   end
 end
