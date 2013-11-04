@@ -25,7 +25,7 @@
       <span style="font-style: italic;"><%= l(@finding_answer.commitment_date, :format => :long) %></span>
     </p>
   <% end %>
-  <% if @finding_answer.file_model.try(:file?) %>
+  <% if @finding_answer.file_model.try(:file) %>
     <p>
       <b><%= FindingAnswer.human_attribute_name(:file_model) %></b>:
       <span style="font-style: italic;"><%= @finding_answer.file_model.identifier %></span>

@@ -17,7 +17,7 @@
       <%= wp_f.text_area :description, :class => :tiny_component %>
     </div>
 
-    <% if !wp_f.object.file_model.try(:file?) || wp_f.object.file_model.new_record? %>
+    <% if !wp_f.object.file_model.try(:file) || wp_f.object.file_model.new_record? %>
       <div class="item_field" style="width: 10%;">
         <% wp_f.object.build_file_model unless wp_f.object.file_model.try(:new_record?) %>
         <%= wp_f.fields_for :file_model do |fm_f| %>
@@ -30,7 +30,9 @@
     <% else %>
       <div class="item_field" style="width: 10%;">
         <span style="display: block;">
-          <%= link_to_download wp_f.object.file_model.file.url if wp_f.object.file_model.file? && wp_f.object.file_model.file.cached?.blank? %>
+          <%= link_to_download(
+            wp_f.object.file_model.file.url
+          ) if wp_f.object.file_model.try(:file).try(:url) && wp_f.object.file_model.file.cached?.blank? %>
         </span>
         <% unless frozen %>
           <%= wp_f.fields_for :file_model do |fm_f| %>
