@@ -187,7 +187,7 @@
             <td><%= h finding_answer.user.full_name %></td>
             <td><%= simple_format h(finding_answer.answer) %></td>
             <td>
-              <%= finding_answer.file_model.try(:file) ?
+              <%= finding_answer.file_model.try(:file?) ?
                 link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
             </td>
             <td>
@@ -223,7 +223,7 @@
             <td><%=h wp.code %></td>
             <td><%=h wp.number_of_pages %></td>
             <td><%= simple_format h(wp.description) %></td>
-            <td><%= wp.file_model.try(:file) ?
+            <td><%= wp.file_model.try(:file?) ?
               link_to(t('label.download'), wp.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>
