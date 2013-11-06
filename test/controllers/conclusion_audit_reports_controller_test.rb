@@ -45,7 +45,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true
         }
     end
 
@@ -61,13 +63,15 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
       },
-      :report_title => 'New title'
+      :report_title => 'New title',
+      :controller => 'conclusion',
+      :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_state', 0)
+      'weaknesses_by_state', 0)
   end
 
   test 'weaknesses by risk' do
@@ -81,7 +85,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -95,7 +101,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title'
 
@@ -103,7 +111,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_risk', 0)
+      'weaknesses_by_risk', 0)
   end
 
   test 'weaknesses by audit type report' do
@@ -117,7 +125,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -132,7 +142,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
       },
       :report_title => 'New title'
 
@@ -140,7 +152,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_audit_type', 0)
+      'weaknesses_by_audit_type', 0)
   end
 
   test 'cost analysis report' do
@@ -232,7 +244,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -248,7 +262,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+      :business_unit => 'one',
+      :controller => 'conclusion',
+      :final => true  
     }
 
     assert_response :success
@@ -261,7 +277,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :create_weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
@@ -284,7 +302,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -300,7 +320,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+      :business_unit => 'one',
+      :controller => 'conclusion',
+      :final => true  
     }
 
     assert_response :success
@@ -313,7 +335,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :create_fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
@@ -336,7 +360,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -353,7 +379,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one',
-      :control_objective => 'a'
+      :control_objective => 'a',
+      :controller => 'conclusion',
+      :final => true  
     }
 
     assert_response :success
@@ -366,7 +394,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
@@ -389,7 +419,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -405,7 +437,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+      :business_unit => 'one',
+      :controller => 'conclusion',
+      :final => true  
     }
 
     assert_response :success
@@ -418,7 +452,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :create_process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
@@ -441,7 +477,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :nonconformities_report, :nonconformities_report => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true  
         }
     end
 
@@ -457,9 +495,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+      :business_unit => 'one',
+      :controller => 'conclusion',
+      :final => true  
     }
-
     assert_response :success
     assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/nonconformities_report'
@@ -470,7 +509,9 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :create_nonconformities_report, :nonconformities_report => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true  
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'

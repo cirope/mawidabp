@@ -43,7 +43,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',
+        :final => true
         }
     end
 
@@ -57,7 +59,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
 
     post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',
+      :final => true
       },
       :report_title => 'New title'
 
@@ -65,7 +69,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       I18n.t('conclusion_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_state', 0)
+      'weaknesses_by_state', 0)
   end
 
   test 'weaknesses by risk report' do
@@ -79,7 +83,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',                                                                                                                                                  
+        :final => true
         }
     end
 
@@ -93,7 +99,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
 
     post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',                                                                                                                                                  
+      :final => true
       },
       :report_title => 'New title'
 
@@ -101,7 +109,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       I18n.t('conclusion_committee_report.weaknesses_by_risk.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_risk', 0)
+     'weaknesses_by_risk', 0)
   end
 
   test 'weaknesses by audit type report' do
@@ -130,7 +138,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',                                                                                                                                                  
+        :final => true
       },
       :report_title => 'New title'
 
@@ -138,7 +148,7 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       I18n.t('conclusion_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
-      'conclusion_weaknesses_by_audit_type', 0)
+      'weaknesses_by_audit_type', 0)
   end
 
   test 'control objective stats report' do
@@ -152,7 +162,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',                                                                                                                                                  
+        :final => true
         }
     end
 
@@ -169,7 +181,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one',
-      :control_objective => 'a'
+      :control_objective => 'a',
+      :controller => 'conclusion',                                                                                                                                                  
+      :final => true
     }
 
     assert_response :success
@@ -182,7 +196,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',                                                                                                                                                  
+      :final => true
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
@@ -205,7 +221,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
     assert_nothing_raised(Exception) do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+        :to_date => 10.years.from_now.to_date,
+        :controller => 'conclusion',                                                                                                                                                  
+        :final => true
         }
     end
 
@@ -221,7 +239,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+      :business_unit => 'one',
+      :controller => 'conclusion',                                                                                                                                                  
+      :final => true
     }
 
     assert_response :success
@@ -234,7 +254,9 @@ class ConclusionManagementReportsControllerTest < ActionController::TestCase
 
     get :create_process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
+      :controller => 'conclusion',                                                                                                                                                  
+      :final => true
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle'
