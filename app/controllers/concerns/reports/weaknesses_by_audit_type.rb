@@ -3,9 +3,9 @@ module Reports::WeaknessesByAuditType
   include Reports::Period
   include Parameters::Risk
 
-  def weaknesses_by_audit_type(final = false, controller_name = 'conclusion')
-    @controller = controller_name
-    @final = final
+  def weaknesses_by_audit_type
+    @controller = params[:controller_name]
+    @final = params[:final]
     @title = t("#{@controller}_committee_report.weaknesses_by_audit_type_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_audit_type])
     @periods = periods_for_interval

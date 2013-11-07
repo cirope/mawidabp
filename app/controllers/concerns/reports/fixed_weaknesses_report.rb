@@ -4,8 +4,9 @@ module Reports::FixedWeaknessesReport
   include Reports::Pdf
   include Reports::Period
 
-  def fixed_weaknesses_report(final = false, controller_name = 'conclusion')
-    @controller = controller_name
+  def fixed_weaknesses_report
+    @controller = params[:controller_name]
+    final = params[:final]
     @title = t("#{@controller}_committee_report.fixed_weaknesses_report_title")
     @from_date, @to_date = *make_date_range(params[:fixed_weaknesses_report])
     @periods = periods_by_solution_date_for_interval

@@ -3,8 +3,9 @@ module Reports::ControlObjectiveStats
   include Reports::Period
   include Parameters::Risk
 
-  def control_objective_stats(final = false, controller_name = 'conclusion')
-    @controller = controller_name
+  def control_objective_stats
+    @controller = params[:controller_name]
+    final = params[:final]
     @title = t("#{@controller}_committee_report.control_objective_stats_title")
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
     @periods = periods_for_interval

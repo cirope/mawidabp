@@ -3,8 +3,9 @@ module Reports::WeaknessesByRisk
   include Reports::Period
   include Parameters::Risk
 
-  def weaknesses_by_risk(final = false, controller_name = 'conclusion')
-    @controller = controller_name
+  def weaknesses_by_risk
+    @controller = params[:controller_name]
+    final = params[:final]
     @title = t("#{@controller}_committee_report.weaknesses_by_risk_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
