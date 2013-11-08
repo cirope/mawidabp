@@ -7,7 +7,7 @@
             <p class="form_item" style="margin: 0em;">
               <% selected = params[action] ?
                 params[action][:rescheduling] : nil %>
-              <%= f.label :rescheduling, t('follow_up_committee.rescheduling'),
+              <%= f.label :rescheduling, t('follow_up_committee_report.rescheduling'),
                 :class => :inline %>
               <%= f.select :rescheduling, @rescheduling_options,
                 {:selected => selected, :include_blank => true}, {:class => :inline_item} %>
@@ -15,7 +15,7 @@
           </td>
           <td>
             <p class="form_item" style="margin: 0em;">
-              <%= f.label :detailed, t('follow_up_committee.detailed_report'),
+              <%= f.label :detailed, t('follow_up_committee_report.detailed_report'),
                   :class => 'inline' %>
               <%= f.check_box :detailed, :class => 'inline_item' %>
             </p>

@@ -1,13 +1,9 @@
-require 'modules/conclusion_reports/conclusion_common_reports'
-require 'modules/conclusion_reports/conclusion_high_risk_reports'
-
-# =Controlador de reportes de conclusión
-#
-# Crea los reportes de conslusión
 class ConclusionCommitteeReportsController < ApplicationController
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
   include Parameters::Risk
-  include ConclusionCommonReports
-  include ConclusionHighRiskReports
 
   before_action :auth, :load_privileges, :check_privileges
 
@@ -113,7 +109,7 @@ class ConclusionCommitteeReportsController < ApplicationController
             end
 
             c_r.review.final_weaknesses.not_revoked.each do |w|
-              @risk_levels |= self.class.risks.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
+              @risk_levels |= RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map { |r| r.first }
 
               weaknesses_count[w.risk_text] ||= 0
               weaknesses_count[w.risk_text] += 1

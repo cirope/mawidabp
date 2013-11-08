@@ -1,5 +1,7 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_state, :extra_params => {},
+  :locals => {:action => :weaknesses_by_state, :extra_params => {
+    :controller_name => 'follow_up', :final => false
+  },
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>

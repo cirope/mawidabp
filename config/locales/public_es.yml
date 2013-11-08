@@ -634,7 +634,7 @@
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
-  follow_up_committee:
+  follow_up_committee_report:
     index_title: "Reportes de comité"
     control_objective_stats_title: "Observaciones por objetivo de control"
     process_control_stats_title: "Observaciones por proceso"
