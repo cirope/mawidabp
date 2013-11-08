@@ -43,7 +43,9 @@
     without_data: "Sin datos"
 
   lang:
-    es: "Español"
+    es: 'Español'
+    public_es: 'Público'
+    mc_es: 'Control de gestión'
 
   menu:
     exit: "Salir"

@@ -44,7 +44,9 @@
     without_data: "Sin datos"
 
   lang:
-    es: "Español"
+    es: 'Español'
+    public_es: 'Público'
+    mc_es: 'Control de gestión'
 
   menu:
     exit: "Salir"
@@ -62,6 +64,7 @@
         users: "Usuarios"
         roles: "Perfiles y Privilegios"
       best_practices: "Buenas prácticas"
+      settings: 'Configuraciones'
       e_mails: "Correos"
       detracts: "Detractores"
       questionnaires_title: "Cuestionarios"
