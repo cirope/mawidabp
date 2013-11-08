@@ -1,6 +1,8 @@
 <%= render :partial => 'shared/filter_form',
   :locals => {
-    :action => :control_objective_stats, :extra_params => {},
+    :action => :control_objective_stats, :extra_params => {
+      :controller_name => 'follow_up', :final => false
+    },
     :forms => {
       :control_objective => 1, :date_range => 2, :business_unit => 3
     }

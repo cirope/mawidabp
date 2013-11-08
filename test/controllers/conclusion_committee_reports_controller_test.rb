@@ -97,7 +97,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'conclusion',
+        :final => true
     end
 
     assert_response :success
@@ -113,7 +115,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-    }
+      },
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_response :success
     assert_select '#error_body', false
@@ -128,7 +132,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
@@ -149,7 +155,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'conclusion',
+        :final => true
     end
 
     assert_response :success
@@ -165,7 +173,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-    }
+      },
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_response :success
     assert_select '#error_body', false
@@ -180,7 +190,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
@@ -201,7 +213,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'conclusion',
+        :final => true
     end
 
     assert_response :success
@@ -218,7 +232,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one',
       :control_objective => 'a'
-    }
+      },
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_response :success
     assert_select '#error_body', false
@@ -233,7 +249,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
@@ -254,7 +272,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'conclusion',
+        :final => true
     end
 
     assert_response :success
@@ -270,7 +290,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-    }
+      },
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_response :success
     assert_select '#error_body', false
@@ -285,7 +307,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion',
+      :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.process_control_stats.pdf_name',

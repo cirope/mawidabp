@@ -44,7 +44,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',                                                                                                                                              
+        :final => false
     end
 
     assert_response :success
@@ -56,12 +58,15 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     perform_auth
     post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
     },
-    :report_title => 'New title'
+    :report_title => 'New title',
+    :controller_name => 'follow_up',                                                                                                                                              
+    :final => false
+
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.weaknesses_by_state.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_by_state.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_state', 0)
@@ -79,7 +84,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',                                                                                                                                              
+        :final => false
     end
 
     assert_response :success
@@ -94,7 +101,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
       },
-      :report_title => 'New title'
+      :report_title => 'New title',
+      :controller_name => 'follow_up',                                                                                                                                              
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.weaknesses_by_risk.pdf_name',
@@ -115,7 +124,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false        
     end
 
     assert_response :success
@@ -131,10 +142,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :report_title => 'New title'
+        :report_title => 'New title',
+        :controller_name => 'follow_up',
+        :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.weaknesses_by_audit_type.pdf_name',
+      I18n.t('follow_up_committee_report.weaknesses_by_audit_type.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'weaknesses_by_audit_type', 0)
@@ -189,7 +202,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false
     end
 
     assert_response :success
@@ -205,7 +220,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'three'
-    }
+      },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_select '#error_body', false
@@ -220,7 +237,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.weaknesses_by_risk_report.pdf_name',
@@ -241,7 +260,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false
     end
 
     assert_response :success
@@ -257,7 +278,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'three'
-    }
+      },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_select '#error_body', false
@@ -272,7 +295,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.fixed_weaknesses_report.pdf_name',
@@ -293,7 +318,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false
     end
 
     assert_response :success
@@ -310,7 +337,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one',
       :control_objective => 'a'
-    }
+    },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_select '#error_body', false
@@ -322,10 +351,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.control_objective_stats.pdf_name',
@@ -346,7 +377,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false
     end
 
     assert_response :success
@@ -362,7 +395,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-    }
+      },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_select '#error_body', false
@@ -377,7 +412,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.process_control_stats.pdf_name',
@@ -398,7 +435,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       get :nonconformities_report, :nonconformities_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up',
+        :final => false
     end
 
     assert_response :success
@@ -414,7 +453,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-    }
+      },
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_response :success
     assert_select '#error_body', false
@@ -426,10 +467,12 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :create_nonconformities_report, :nonconformities_report => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+      :to_date => 10.years.from_now.to_date,
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up',
+      :final => false
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.nonconformities_report.pdf_name',

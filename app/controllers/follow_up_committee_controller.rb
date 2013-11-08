@@ -1,12 +1,9 @@
-require 'modules/follow_up_reports/follow_up_common_reports'
-require 'modules/follow_up_reports/follow_up_high_risk_reports'
-
-# =Controlador de comité
-#
-# Crea los reportes de comité
 class FollowUpCommitteeController < ApplicationController
-  include FollowUpCommonReports
-  include FollowUpHighRiskReports
+  include Reports::ControlObjectiveStats
+  include Reports::ProcessControlStats
+  include Reports::WeaknessesByRiskReport
+  include Reports::FixedWeaknessesReport
+
   before_action :auth, :load_privileges, :check_privileges
 
   # Muestra una lista con los reportes disponibles
@@ -503,7 +500,7 @@ class FollowUpCommitteeController < ApplicationController
       @indicators[period] << {
         :column_data => row_order.map do |mask, i|
           {
-            'indicator' => t("follow_up_committee.qa_indicators.indicators.#{i}"),
+            'indicator' => t("follow_up_committee_report.qa_indicators.indicators.#{i}"),
             'value' => (mask % indicators[i] if indicators[i])
           }
         end
@@ -606,7 +603,7 @@ class FollowUpCommitteeController < ApplicationController
 
     @weaknesses_data = []
     if @rescheduling && @rescheduling > 0
-      @filters = ["<b>#{t 'follow_up_committee.rescheduling'}</b>#{@rescheduling ==
+      @filters = ["<b>#{t 'follow_up_committee_report.rescheduling'}</b>#{@rescheduling ==
         @rescheduling_options.last.last ?
         " #{t('label.greater_or_equal_than')}" : ' ='} #{@rescheduling}"]
     end
@@ -623,8 +620,8 @@ class FollowUpCommitteeController < ApplicationController
               version = w.versions[i].reify
               next_version = w
             else
-              version = w.versions[i].reify
-              next_version = w.versions[i + 1].reify
+              version = w.versions[i].reify rescue nil
+              next_version = w.versions[i + 1].reify rescue nil
             end
 
             follow_up_date = version.try(:follow_up_date)
@@ -670,7 +667,7 @@ class FollowUpCommitteeController < ApplicationController
               ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
               "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
               "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
-              "<b>#{I18n.t('follow_up_committee.rescheduling')}</b>:\n #{follow_up_date_modifications.join("\n")}"
+              "<b>#{I18n.t('follow_up_committee_report.rescheduling')}</b>:\n #{follow_up_date_modifications.join("\n")}"
 
             if detailed == 1
               rescheduled_being_implemented_weaknesses <<
