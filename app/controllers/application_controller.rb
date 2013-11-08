@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
       when 'public'
         I18n.locale = :public_es
       when 'management_control'
-        I18n.locale = :management_control_es
+        I18n.locale = :mc_es
       else
         I18n.locale = :es
       end
