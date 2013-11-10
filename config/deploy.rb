@@ -2,7 +2,7 @@ set :application, 'mawidabp'
 set :user, 'deployer'
 set :repo_url, 'git://github.com/cirope/mawidabp.git'
 
-set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
+set :deploy_to, "/var/www/#{fetch(:application)}"
 set :deploy_via, :remote_cache
 set :scm, :git
 
@@ -15,14 +15,14 @@ set :rbenv_ruby, '2.0.0-p247'
 set :keep_releases, 5
 
 namespace :deploy do
+  after:finishing, 'deploy:cleanup'
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      execute :touch, release_path.join('tmp/restart.txt')
+      execute 'service unicorn upgrade'
     end
   end
-
-  after :finishing, 'deploy:cleanup'
 
   # TODO: remove when whenever add support to Capistrano 3
   desc 'Update crontab with whenever'
@@ -33,4 +33,14 @@ namespace :deploy do
       end
     end
   end
+
+  namespace :check do
+    task linked_files: 'config/app_config.yml'
+  end
+end
+
+remote_file 'config/app_config.yml' => '/tmp/app_config.yml', roles: :app
+
+file '/tmp/app_config.yml' do |t|
+  sh "curl -o #{t.name} https://raw.github.com/cirope/mawidabp/master/config/app_config.example.yml"
 end

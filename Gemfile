@@ -33,8 +33,9 @@ gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-rbenv', github: 'capistrano/rbenv'
 
+gem 'unicorn'
+
 group :development do
-  gem 'unicorn'
   gem 'unicorn-rails'
 end
 

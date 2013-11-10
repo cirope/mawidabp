@@ -10,7 +10,7 @@
 #       Install PostgreSQL and put its /bin directory on your path.
 
 development:
-  database: mawida_development
+  database: mawidabp_development
   adapter: postgresql
   encoding: utf8
   pool: 5
@@ -36,7 +36,7 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  database: mawida_test
+  database: mawidabp_test
   adapter: postgresql
   encoding: utf8
   pool: 5
@@ -59,7 +59,7 @@ test:
   #min_messages: warning
 
 production:
-  database: mawida_production
+  database: mawidabp_production
   adapter: postgresql
   encoding: utf8
   pool: 5
