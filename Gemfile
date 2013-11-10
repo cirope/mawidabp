@@ -34,10 +34,7 @@ gem 'capistrano-rails'
 gem 'capistrano-rbenv', github: 'capistrano/rbenv'
 
 gem 'unicorn'
-
-group :development do
-  gem 'unicorn-rails'
-end
+gem 'unicorn-rails'
 
 group :test do
   gem 'rake' # Travis CI need this

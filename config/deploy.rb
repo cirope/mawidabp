@@ -1,4 +1,4 @@
-set :application, 'mawidabp'
+set :application, 'mawidabp.com'
 set :user, 'deployer'
 set :repo_url, 'git://github.com/cirope/mawidabp.git'
 
@@ -7,7 +7,7 @@ set :deploy_via, :remote_cache
 set :scm, :git
 
 set :linked_files, %w{config/app_config.yml}
-set :linked_dirs, %w{log private public/error_files}
+set :linked_dirs, %w{bin log private public/error_files}
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.0.0-p247'
@@ -20,6 +20,7 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
+      execute 'service unicorn start'
       execute 'service unicorn upgrade'
     end
   end
