@@ -11,7 +11,7 @@ preload_app true
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory Rails.root.to_s
+working_directory ::Rails.root.to_s
 
 listen '/tmp/unicorn.sock', backlog: 1024
 
