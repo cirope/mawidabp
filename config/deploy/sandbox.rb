@@ -1,5 +1,5 @@
 set :stage, :sandbox
-set :rails_env, 'production'
+set :rails_env, 'sandbox'
 set :branch, 'sandbox'
 
 role :all, %w{localhost}
