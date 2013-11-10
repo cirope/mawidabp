@@ -1,5 +1,7 @@
 # See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete
 # documentation.
+#
+app_path = File.expand_path(File.dirname(__FILE__) + '/..')
 
 # Use at least one worker per core if you're on a dedicated server,
 # more will usually help for _short_ waits on databases/caches.
@@ -11,7 +13,7 @@ preload_app true
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory ::Rails.root.to_s
+working_directory app_path
 
 listen '/tmp/unicorn.sock', backlog: 1024
 
@@ -23,8 +25,8 @@ pid '/tmp/unicorn.pid'
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "#{Rails.root}/log/unicorn.stderr.log"
-stdout_path "#{Rails.root}/log/unicorn.stdout.log"
+stderr_path "#{app_path}/log/unicorn.stderr.log"
+stdout_path "#{app_path}/log/unicorn.stdout.log"
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
