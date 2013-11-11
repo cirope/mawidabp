@@ -927,10 +927,6 @@
         one: "El siguiente desvío / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
         other: "Las siguientes desvíos / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
-    pending_poll_email:
-      title: "%{name}, tiene una encuesta pendiente"
-      answer_poll: 'Contestar encuesta'
-      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
@@ -1941,6 +1937,10 @@
         questions: "Preguntas"
         polls: "Encuestas"
         pollable_type: "Clase encuestable"
+        email_subject: "Asunto email"                                                                                                                                                 
+        email_link: "Link email"
+        email_text: "Texto email"
+        email_clarification: "Aclaración email" 
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
