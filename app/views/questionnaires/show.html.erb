@@ -3,10 +3,29 @@
     <b><%= Questionnaire.human_attribute_name :name %>:</b>
     <%= @questionnaire.name %>
   </p>
+  <p>                                                                                                                                                                                 
+    <b><%= Questionnaire.human_attribute_name :email_subject %>:</b>
+    <%= @questionnaire.email_subject %>
+  </p>
+  <p>                                                                                                                                                                                 
+    <b><%= Questionnaire.human_attribute_name :email_link %>:</b>
+    <%= @questionnaire.email_link %>
+  </p>
+  <% if @questionnaire.email_text? %>
+    <p>                                                                                                                                                                               
+      <b><%= Questionnaire.human_attribute_name :email_text %>:</b>
+      <%= @questionnaire.email_text %>
+    </p>
+  <% end %>
+  <% if @questionnaire.email_clarification? %>
+    <p>                                                                                                                                                                                     <b><%= Questionnaire.human_attribute_name :email_clarification %>:</b>
+      <%= @questionnaire.email_clarification %>
+    </p>
+  <% end %>
   <% if @questionnaire.pollable_type? %>
     <p>
       <b><%= Questionnaire.human_attribute_name :pollable_type %>:</b>
-      <%= @questionnaire.pollable_type %>
+      <%= @questionnaire.pollable_type.constantize.model_name.human %>
     </p>
   <% end %>
   <p>
