@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131025154139) do
+ActiveRecord::Schema.define(version: 20131111132549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -590,11 +590,15 @@ ActiveRecord::Schema.define(version: 20131025154139) do
 
   create_table "questionnaires", force: true do |t|
     t.string   "name"
-    t.integer  "lock_version",    default: 0
+    t.integer  "lock_version",        default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
     t.string   "pollable_type"
+    t.string   "email_subject"
+    t.string   "email_link"
+    t.string   "email_text"
+    t.string   "email_clarification"
   end
 
   add_index "questionnaires", ["name"], name: "index_questionnaires_on_name", using: :btree
