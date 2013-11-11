@@ -6,30 +6,27 @@ class Notifier < ActionMailer::Base
 
   def pending_poll_email(poll)
     @poll = poll
-    @user = poll.user
-    @hash = @user.change_password_hash
-    @organization = poll.organization
+    @organization = poll.organization                                                                                                                                                 
     @token = poll.access_token
 
-    mail(
-      :to => @user.email,
-      :subject => "[#{@organization.prefix.upcase}] " + t(
-        'notifier.pending_poll_email.title', :name => @user.informal_name
-      )
-    )
-  end
+    # Si es un usuario
+    if poll.user
+      @user = poll.user
+      @hash = @user.change_password_hash
+      email = @user.email
+      subject = "[#{@organization.prefix.upcase}] " + poll.questionnaire.email_subject
+      @footer = 'footer'
+     # Si es un cliente externo
+    elsif poll.customer_email
+      @user = poll.customer_email
+      email = @user
+      subject = poll.questionnaire.email_subject
+      @footer = 'client_footer' 
+    end
 
-  def client_pending_poll(poll)
-    @name = poll.customer_email
-    @poll = poll
-    @organization = poll.organization
-    @token = poll.access_token
-
     mail(
-      :to => poll.customer_email,
-      :subject => t(
-        'notifier.client_pending_poll.subject'
-      )
+      :to => email,
+      :subject => subject
     )
   end
 
