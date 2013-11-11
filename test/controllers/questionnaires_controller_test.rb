@@ -62,6 +62,9 @@ class QuestionnairesControllerTest < ActionController::TestCase
           post :create, {
             questionnaire: {
               name: "Nuevo cuestionario",
+              email_text: "Email text",
+              email_link: "Email link",
+              email_subject: "Email subject",
               questions_attributes: [
                 {
                   question: "Cuestion multi choice",
@@ -75,6 +78,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
               ]
             }
           }
+  p @response.body
         end
       end
     end
