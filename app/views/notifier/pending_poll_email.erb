@@ -1,5 +1,5 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <p><b><%= @user %></b></p>
+  <p><b><%= @user + ', ' %></b></p>
   <p><%= @poll.questionnaire.email_text %></p>
   <p>
     <%= link_to @poll.questionnaire.email_link,
