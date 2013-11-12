@@ -1,6 +1,8 @@
 class Poll < ActiveRecord::Base
   before_save :generate_access_token, :on => :create
 
+  attr_accessor :customer_name
+
   has_paper_trail :meta => {
     :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
   }

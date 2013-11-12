@@ -11,17 +11,16 @@ class Notifier < ActionMailer::Base
 
     # Si es un usuario
     if poll.user
-      @user = poll.user
-      @hash = @user.change_password_hash
-      email = @user.email
-      subject = "[#{@organization.prefix.upcase}] " + poll.questionnaire.email_subject
       @footer = 'footer'
-     # Si es un cliente externo
+      @user = poll.user.informal_name
+      email = poll.user.email
+      subject = "[#{@organization.prefix.upcase}] " + poll.questionnaire.email_subject
+    # Si es un cliente externo
     elsif poll.customer_email
-      @user = poll.customer_email
-      email = @user
+      @footer = 'client_footer'
+      @user = poll.customer_name ? poll.customer_name : poll.customer_email
+      email = poll.customer_email 
       subject = poll.questionnaire.email_subject
-      @footer = 'client_footer' 
     end
 
     mail(

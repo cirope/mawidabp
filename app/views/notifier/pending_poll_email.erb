@@ -1,5 +1,6 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <p><%= "#{@user}, #{@poll.questionnaire.email_text}" %></p>
+  <p><b><%= @user %></b></p>
+  <p><%= @poll.questionnaire.email_text %></p>
   <p>
     <%= link_to @poll.questionnaire.email_link,
       edit_poll_url(
