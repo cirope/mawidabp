@@ -139,7 +139,7 @@ module Reports::ProcessControlStats
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 

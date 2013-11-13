@@ -13,7 +13,7 @@ class ErrorRecordsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:index])
     default_conditions = [
       "#{ErrorRecord.table_name}.organization_id = :organization_id",
-      { organization_id: @auth_organization.id }
+      { organization_id: current_organization.id }
     ]
 
     unless params[:search]
@@ -51,7 +51,7 @@ class ErrorRecordsController < ApplicationController
   def show
     @title = t 'error_record.show_title'
     @error_record = ErrorRecord.where(
-      organization_id: @auth_organization.id, id: params[:id]
+      organization_id: current_organization.id, id: params[:id]
     ).first
 
     respond_to do |format|
@@ -74,14 +74,14 @@ class ErrorRecordsController < ApplicationController
         {
           from_date: from_date,
           to_date: to_date.to_time.end_of_day,
-          organization_id: @auth_organization.id
+          organization_id: current_organization.id
         }
       ]
     ).order('created_at DESC')
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('error_record.index_title')
 
     pdf.move_down PDF_FONT_SIZE

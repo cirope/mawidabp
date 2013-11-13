@@ -14,7 +14,7 @@ class DetractsController < ApplicationController
   def index
     @title = t 'detract.index_title'
     conditions = ["#{Organization.table_name}.id = :organization_id"]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
 
     unless @has_approval
       conditions << "#{User.table_name}.id = :user_id"
@@ -53,7 +53,7 @@ class DetractsController < ApplicationController
     @user = @detract.try(:user) || (@auth_user unless @has_approval)
 
     if @user
-      @detracts = @user.detracts.for_organization(@auth_organization).order(
+      @detracts = @user.detracts.for_organization(current_organization).order(
         'created_at DESC'
       ).limit(LAST_DETRACTORS_LIMIT)
     end
@@ -72,7 +72,7 @@ class DetractsController < ApplicationController
     @user = User.find params[:id]
 
     conditions = {
-      organization_id: @auth_organization.id
+      organization_id: current_organization.id
     }
 
     unless @has_approval
@@ -128,7 +128,7 @@ class DetractsController < ApplicationController
 
   private
     def set_detract
-      conditions = { id: params[:id], organization_id: @auth_organization.id }
+      conditions = { id: params[:id], organization_id: current_organization.id }
 
       unless @has_approval
         conditions["#{User.table_name}.id"] = @auth_user.id

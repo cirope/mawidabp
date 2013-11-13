@@ -19,7 +19,7 @@ class ExecutionReportsController < ApplicationController
   def detailed_management_report
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'process_control',
       'weaknesses_count']
     @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
@@ -121,7 +121,7 @@ class ExecutionReportsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -234,7 +234,7 @@ class ExecutionReportsController < ApplicationController
     @title = t 'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state])
     @audit_types = [:internal, :external]
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
     @counts = []
     @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
       s1.last <=> s2.last
@@ -270,7 +270,7 @@ class ExecutionReportsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 

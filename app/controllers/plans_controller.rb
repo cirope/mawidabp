@@ -14,7 +14,7 @@ class PlansController < ApplicationController
   def index
     @title = t 'plan.index_title'
     @plans = Plan.includes(:period).where(
-      "#{Period.table_name}.organization_id" => @auth_organization.id
+      "#{Period.table_name}.organization_id" => current_organization.id
     ).order("#{Period.table_name}.start DESC").paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -136,7 +136,7 @@ class PlansController < ApplicationController
   # * GET /plans/export_to_pdf/1
   def export_to_pdf
     @plan = find_with_organization(params[:id], true)
-    @plan.to_pdf @auth_organization, !params[:include_details].blank?
+    @plan.to_pdf current_organization, !params[:include_details].blank?
 
     respond_to do |format|
       format.html { redirect_to @plan.relative_pdf_path }
@@ -151,7 +151,7 @@ class PlansController < ApplicationController
     conditions = [
       "#{BusinessUnitType.table_name}.organization_id = :organization_id"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
 
     if params[:business_unit_type_id].to_i > 0
       conditions << "#{BusinessUnitType.table_name}.id = :but_id"
@@ -188,7 +188,7 @@ class PlansController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -259,7 +259,7 @@ class PlansController < ApplicationController
       ] : [:period]
 
       Plan.includes(*include).where(
-        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+        :id => id, "#{Period.table_name}.organization_id" => current_organization.id
       ).first
     end
 
@@ -270,7 +270,7 @@ class PlansController < ApplicationController
     # _id_::  ID del plan de trabajo que se quiere recuperar
     def exists?(id) #:doc:
       Plan.includes(:period).where(
-        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
+        :id => id, "#{Period.table_name}.organization_id" => current_organization.id
       ).first
     end
 

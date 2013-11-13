@@ -10,7 +10,7 @@
         {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-        :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
+        :object => WorkPaper.new(:organization_id => current_organization.id)})}';" %>
     <% end %>
   <% end %>
   <%= co_f.error_messages %>
@@ -147,7 +147,7 @@
 
   <%= render :partial => 'weaknesses_summary', :locals => {:readonly => readonly} %>
   <%= render :partial => 'oportunities_summary', :locals => {:readonly => readonly} %>
-  <% if @auth_organization.kind.eql? 'quality_management' %>
+  <% if current_organization.kind.eql? 'quality_management' %>
     <%= render :partial => 'fortresses_summary', :locals => {:readonly => readonly} %>
     <%= render :partial => 'nonconformities_summary', :locals => {:readonly => readonly} %>
     <%= render :partial => 'potential_nonconformities_summary', :locals => {:readonly => readonly} %>

@@ -16,7 +16,7 @@
 
   <tbody>
     <% @users.each do |user| %>
-      <% detract = user.detracts.for_organization(@auth_organization).last %>
+      <% detract = user.detracts.for_organization(current_organization).last %>
       <tr class="<%= cycle('even', 'odd') %>">
         <td><%= h user.user %></td>
         <td><%= h user.full_name %></td>

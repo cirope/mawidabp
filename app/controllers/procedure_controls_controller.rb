@@ -14,7 +14,7 @@ class ProcedureControlsController < ApplicationController
   def index
     @title = t 'procedure_control.index_title'
     @procedure_controls = ProcedureControl.includes(:period).where(
-      "#{Period.table_name}.organization_id" => @auth_organization.id
+      "#{Period.table_name}.organization_id" => current_organization.id
     ).order("#{ProcedureControl.table_name}.created_at DESC").paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
@@ -155,7 +155,7 @@ class ProcedureControlsController < ApplicationController
     @procedure_control = find_with_organization(params[:id], true)
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_planning_header @auth_organization, @procedure_control.period
+    pdf.add_planning_header current_organization, @procedure_control.period
     pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
@@ -247,7 +247,7 @@ class ProcedureControlsController < ApplicationController
         process_control: :best_practice
       ).where(
         id: params[:control_objective],
-        best_practices: { organization_id: @auth_organization.id }
+        best_practices: { organization_id: current_organization.id }
       ).first
     end
 
@@ -295,7 +295,7 @@ class ProcedureControlsController < ApplicationController
       ] : [:period]
 
       ProcedureControl.includes(*include).where(
-        id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
+        id: id, "#{Period.table_name}.organization_id" => current_organization.id
       ).first
     end
 
@@ -306,7 +306,7 @@ class ProcedureControlsController < ApplicationController
     # _id_::  ID del plan de trabajo que se quiere recuperar
     def exists?(id) #:doc:
       ProcedureControl.includes(:period).where(
-        id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
+        id: id, "#{Period.table_name}.organization_id" => current_organization.id
       ).first
     end
 

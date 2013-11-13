@@ -14,7 +14,7 @@ class OrganizationsController < ApplicationController
   def index
     @title = t 'organization.index_title'
     @organizations = Organization.where(
-      :group_id => @auth_organization.group_id
+      :group_id => current_organization.group_id
     ).order('name ASC').paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -142,7 +142,7 @@ class OrganizationsController < ApplicationController
 
     def set_organization
       @organization = Organization.where(
-        group_id: @auth_organization.group_id, id: params[:id]
+        group_id: current_organization.group_id, id: params[:id]
       ).first
     end
 end

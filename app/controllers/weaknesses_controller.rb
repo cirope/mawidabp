@@ -18,7 +18,7 @@ class WeaknessesController < ApplicationController
       "#{Period.table_name}.organization_id = :organization_id",
     ]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       boolean_true: true,
       boolean_false: false
     }
@@ -159,7 +159,7 @@ class WeaknessesController < ApplicationController
   #
   # * GET /weaknesses/follow_up_pdf/1
   def follow_up_pdf
-    @weakness.follow_up_pdf(@auth_organization)
+    @weakness.follow_up_pdf(current_organization)
     redirect_to @weakness.relative_follow_up_pdf_path
   end
 
@@ -183,7 +183,7 @@ class WeaknessesController < ApplicationController
       'organizations.id = :organization_id',
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -225,7 +225,7 @@ class WeaknessesController < ApplicationController
     parameters = {
       boolean_false: false,
       finding_id: params[:finding_id],
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -263,7 +263,7 @@ class WeaknessesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id].to_i
     }
 
@@ -320,7 +320,7 @@ class WeaknessesController < ApplicationController
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
       ).where(
-        id: params[:id], Period.table_name => {organization_id: @auth_organization.id}
+        id: params[:id], Period.table_name => {organization_id: current_organization.id}
       ).references(:periods).first
     end
 

@@ -18,7 +18,7 @@ module Reports::WeaknessesByState
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}
@@ -138,7 +138,7 @@ module Reports::WeaknessesByState
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 

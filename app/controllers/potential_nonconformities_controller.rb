@@ -24,7 +24,7 @@ class PotentialNonconformitiesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {organization_id: @auth_organization.id,
+    parameters = {organization_id: current_organization.id,
       boolean_true: true, boolean_false: false}
 
     if params[:control_objective].to_i > 0
@@ -150,7 +150,7 @@ class PotentialNonconformitiesController < ApplicationController
   #
   # * GET /potential_nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    @potential_nonconformity.follow_up_pdf(@auth_organization)
+    @potential_nonconformity.follow_up_pdf(current_organization)
     redirect_to @potential_nonconformity.relative_follow_up_pdf_path
   end
 
@@ -174,7 +174,7 @@ class PotentialNonconformitiesController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -216,7 +216,7 @@ class PotentialNonconformitiesController < ApplicationController
     parameters = {
       boolean_false: false,
       finding_id: params[:finding_id],
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -256,7 +256,7 @@ class PotentialNonconformitiesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id].to_i
     }
 
@@ -309,7 +309,7 @@ class PotentialNonconformitiesController < ApplicationController
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
       ).where(
-        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
+        id: params[:id], Period.table_name => { organization_id: current_organization.id }
       ).first
     end
 

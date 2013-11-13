@@ -4,7 +4,7 @@
     <p class="form_item">
       <label class="inline"><%= Organization.model_name.human %>:</label>
       <%= text_field nil, :organization_name,
-        :value => @auth_organization.name, :readonly => true,
+        :value => current_organization.name, :readonly => true,
         :size => nil, :class => :inline_item %>
     </p>
     <p class="form_item">

@@ -10,6 +10,8 @@ class Organization < ActiveRecord::Base
     organization_id: ->(o) { GlobalModelConfig.current_organization_id }
   }
 
+  cattr_accessor :current_id
+
   # Constantes
   INVALID_PREFIXES = ['www', APP_ADMIN_PREFIX]
 
@@ -56,6 +58,8 @@ class Organization < ActiveRecord::Base
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy
   has_many :users, -> { readonly.uniq }, through: :organization_roles
+  has_many :reviews
+  has_many :conclusion_reviews
 
   accepts_nested_attributes_for :image_model, allow_destroy: true,
     reject_if: ->(attributes) { attributes['image'].blank? }

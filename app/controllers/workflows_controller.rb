@@ -15,7 +15,7 @@ class WorkflowsController < ApplicationController
   def index
     @title = t 'workflow.index_title'
     @workflows = Workflow.includes(:period, :review).where(
-      "#{Period.table_name}.organization_id" => @auth_organization.id
+      "#{Period.table_name}.organization_id" => current_organization.id
     ).order("#{Review.table_name}.identification DESC").paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     ).references(:periods, :reviews)
@@ -151,7 +151,7 @@ class WorkflowsController < ApplicationController
   # * GET /workflow_items/export_to_pdf/1
   def export_to_pdf
     @workflow = find_with_organization(params[:id])
-    @workflow.to_pdf @auth_organization, !params[:include_details].blank?
+    @workflow.to_pdf current_organization, !params[:include_details].blank?
 
     respond_to do |format|
       format.html { redirect_to @workflow.relative_pdf_path }
@@ -167,7 +167,7 @@ class WorkflowsController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -242,7 +242,7 @@ class WorkflowsController < ApplicationController
   # _id_::  ID del programa de trabajo que se quiere recuperar
   def find_with_organization(id) #:doc:
     Workflow.includes(:period, {workflow_items: :resource_utilizations}).where(
-      id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
+      id: id, "#{Period.table_name}.organization_id" => current_organization.id
     ).references(:periods).first
   end
   alias :exists? :find_with_organization

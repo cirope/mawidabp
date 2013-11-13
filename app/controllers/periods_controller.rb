@@ -11,7 +11,7 @@ class PeriodsController < ApplicationController
   # * GET /periods.xml
   def index
     @title = t 'period.index_title'
-    @periods = Period.where(:organization_id => @auth_organization.id).order(
+    @periods = Period.where(:organization_id => current_organization.id).order(
       'start DESC'
     ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
 
@@ -40,7 +40,7 @@ class PeriodsController < ApplicationController
   # * GET /periods/new.xml
   def new
     @title = t 'period.new_title'
-    @period = Period.new(:organization_id => @auth_organization.id)
+    @period = Period.new(:organization_id => current_organization.id)
     session[:back_to] = params[:back_to]
 
     respond_to do |format|
@@ -120,13 +120,13 @@ class PeriodsController < ApplicationController
   private
     def set_period
       @period = Period.where(
-        id: params[:id], organization_id: @auth_organization.id
+        id: params[:id], organization_id: current_organization.id
       ).first
     end
 
     def period_params
       params.require(:period).permit(
         :number, :description, :start, :end, :lock_version
-      ).merge(organization_id: @auth_organization.id)
+      ).merge(organization_id: current_organization.id)
     end
 end

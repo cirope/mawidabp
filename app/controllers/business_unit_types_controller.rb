@@ -13,7 +13,7 @@ class BusinessUnitTypesController < ApplicationController
   def index
     @title = t 'business_unit_type.index_title'
     @business_unit_types = BusinessUnitType.where(
-      :organization_id => @auth_organization.id
+      :organization_id => current_organization.id
     ).order(['external ASC', 'name ASC']).paginate(
       :page => params[:page],
       :per_page => APP_LINES_PER_PAGE
@@ -123,7 +123,7 @@ class BusinessUnitTypesController < ApplicationController
   private
     def set_business_unit_type
       @business_unit_type = BusinessUnitType.where(
-        id: params[:id], organization_id: @auth_organization.id
+        id: params[:id], organization_id: current_organization.id
       ).first
     end
 

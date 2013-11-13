@@ -16,7 +16,7 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
     default_conditions = {
-      Period.table_name => {organization_id: @auth_organization.id}
+      Period.table_name => {organization_id: current_organization.id}
     }
 
     build_search_conditions ControlObjectiveItem, default_conditions
@@ -63,7 +63,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.includes(:review).where(
         control_objective_id: params[:control_objective],
         review_id: params[:review],
-        Review.table_name => {organization_id: @auth_organization.id}
+        Review.table_name => {organization_id: current_organization.id}
       ).order('created_at DESC').first
       session[:back_to] = edit_review_url(params[:review].to_i)
     end
@@ -131,7 +131,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.includes(
         :control, :weaknesses, :work_papers, { review: :period }
       ).where(
-        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
+        id: params[:id], Period.table_name => { organization_id: current_organization.id }
       ).first
     end
 

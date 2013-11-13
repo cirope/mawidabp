@@ -14,7 +14,7 @@ class BestPracticesController < ApplicationController
   def index
     @title = t 'best_practice.index_title'
     @best_practices = BestPractice.where(
-      organization_id: @auth_organization.id
+      organization_id: current_organization.id
     ).order('created_at DESC').paginate(
       page: params[:page],
       per_page: APP_LINES_PER_PAGE

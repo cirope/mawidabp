@@ -57,7 +57,7 @@ class QuestionnairesController < ApplicationController
   def create
     @title = t 'questionnaire.new_title'
     @questionnaire = Questionnaire.new(questionnaire_params)
-    @questionnaire.organization = @auth_organization
+    @questionnaire.organization = current_organization
 
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice?
@@ -130,7 +130,7 @@ class QuestionnairesController < ApplicationController
   private
     def set_questionnaire
       @questionnaire = Questionnaire.by_organization(
-        @auth_organization.id, params[:id]
+        current_organization.id, params[:id]
       ).first
     end
 

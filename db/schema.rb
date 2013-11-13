@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131025154139) do
+ActiveRecord::Schema.define(version: 20131112151450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,10 +103,12 @@ ActiveRecord::Schema.define(version: 20131025154139) do
     t.text     "applied_procedures"
     t.boolean  "approved"
     t.date     "close_date"
+    t.integer  "organization_id"
   end
 
   add_index "conclusion_reviews", ["close_date"], name: "index_conclusion_reviews_on_close_date", using: :btree
   add_index "conclusion_reviews", ["issue_date"], name: "index_conclusion_reviews_on_issue_date", using: :btree
+  add_index "conclusion_reviews", ["organization_id"], name: "index_conclusion_reviews_on_organization_id", using: :btree
   add_index "conclusion_reviews", ["review_id"], name: "index_conclusion_reviews_on_review_id", using: :btree
   add_index "conclusion_reviews", ["type"], name: "index_conclusion_reviews_on_type", using: :btree
 
@@ -675,7 +677,7 @@ ActiveRecord::Schema.define(version: 20131025154139) do
     t.text     "description"
     t.integer  "period_id"
     t.integer  "plan_item_id"
-    t.integer  "lock_version",   default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "file_model_id"
@@ -683,10 +685,12 @@ ActiveRecord::Schema.define(version: 20131025154139) do
     t.integer  "score"
     t.integer  "top_scale"
     t.integer  "achieved_scale"
+    t.integer  "organization_id"
   end
 
   add_index "reviews", ["file_model_id"], name: "index_reviews_on_file_model_id", using: :btree
   add_index "reviews", ["identification"], name: "index_reviews_on_identification", using: :btree
+  add_index "reviews", ["organization_id"], name: "index_reviews_on_organization_id", using: :btree
   add_index "reviews", ["period_id"], name: "index_reviews_on_period_id", using: :btree
   add_index "reviews", ["plan_item_id"], name: "index_reviews_on_plan_item_id", using: :btree
 

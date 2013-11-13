@@ -25,7 +25,7 @@ class FollowUpCommitteeController < ApplicationController
     @title = t 'follow_up_committee.synthesis_report_title'
     @from_date, @to_date = *make_date_range(params[:synthesis_report])
     @periods = periods_for_interval
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'score',
         'process_control', 'weaknesses_count']
     @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
@@ -181,7 +181,7 @@ class FollowUpCommitteeController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -517,7 +517,7 @@ class FollowUpCommitteeController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -688,7 +688,7 @@ class FollowUpCommitteeController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 

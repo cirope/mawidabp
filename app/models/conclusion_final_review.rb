@@ -12,30 +12,16 @@ class ConclusionFinalReview < ConclusionReview
   }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
 
   # Named scopes
-  scope :list, -> {
-    includes(
-      review: :period
-    ).where(
-      "#{Period.table_name}.organization_id = :organization_id",
-      organization_id: GlobalModelConfig.current_organization_id
-    ).references(:periods)
-  }
+  scope :list, -> {}
   scope :list_all_by_date, ->(from_date, to_date) {
     includes(
       review: [
-        :period,
         { plan_item: { business_unit: :business_unit_type } }
       ]
     ).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        'issue_date BETWEEN :from_date AND :to_date'
-      ].join(' AND '),
-      {
-        from_date: from_date, to_date: to_date,
-        organization_id: GlobalModelConfig.current_organization_id
-      }
-    ).references(:periods, :business_unit_types).order(
+      'issue_date BETWEEN :from_date AND :to_date',
+      from_date: from_date, to_date: to_date
+    ).references(:business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
@@ -46,20 +32,13 @@ class ConclusionFinalReview < ConclusionReview
   scope :list_all_by_solution_date, ->(from_date, to_date) {
     includes(
       review: [
-        :period,
         { plan_item: { business_unit: :business_unit_type } },
         { control_objective_items: :weaknesses }
       ]
     ).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date"
-      ].join(' AND '),
-      {
-        from_date: from_date, to_date: to_date,
-        organization_id: GlobalModelConfig.current_organization_id
-      }
-    ).references(:periods, :findings, :business_unit_types).order(
+      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      from_date: from_date, to_date: to_date
+    ).references(:findings, :business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
@@ -70,27 +49,20 @@ class ConclusionFinalReview < ConclusionReview
   scope :list_all_by_final_solution_date, ->(from_date, to_date) {
     includes(
       review: [
-        :period,
         { plan_item: { business_unit: :business_unit_type } },
         { control_objective_items: :final_weaknesses }
       ]
     ).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date"
-      ].join(' AND '),
-      {
-        from_date: from_date, to_date: to_date,
-        organization_id: GlobalModelConfig.current_organization_id
-      }
-    ).references(:periods, :findings, :business_unit_types).order(
+      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      from_date: from_date, to_date: to_date
+    ).references(:findings, :business_unit_types).order(
       [
         "#{BusinessUnitType.table_name}.external ASC",
         "#{BusinessUnitType.table_name}.name ASC",
         'issue_date ASC'
       ]
     )
-  }
+  } 
   scope :internal_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}

@@ -23,7 +23,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
     assert @controller.send(:login_check)
     assert @controller.instance_variable_defined?(:@auth_user)
-    assert @controller.instance_variable_defined?(:@auth_organization)
+    assert @controller.instance_variable_defined?(:@current_organization)
   end
 
   test 'failed login check function' do

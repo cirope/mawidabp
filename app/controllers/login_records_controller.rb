@@ -25,7 +25,7 @@ class LoginRecordsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:index])
     default_conditions = [
       'organization_id = :organization_id',
-      {:organization_id => @auth_organization.id}
+      {:organization_id => current_organization.id}
     ]
 
     unless params[:search]
@@ -63,7 +63,7 @@ class LoginRecordsController < ApplicationController
   def show
     @title = t 'login_record.show_title'
     @login_record = LoginRecord.where(
-      :id => params[:id], :organization_id => @auth_organization.id
+      :id => params[:id], :organization_id => current_organization.id
     ).first
 
     respond_to do |format|
@@ -86,14 +86,14 @@ class LoginRecordsController < ApplicationController
         {
           :from_date => from_date,
           :to_date => to_date.to_time.end_of_day,
-          :organization_id => @auth_organization.id
+          :organization_id => current_organization.id
         }
       ]
     ).order('start DESC')
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('login_record.index_title')
 
     pdf.move_down PDF_FONT_SIZE

@@ -19,7 +19,7 @@ class FollowUpAuditController < ApplicationController
   # * GET /follow_up_audit
   def index
     @title = t 'follow_up_audit.index_title'
-    @quality_management = @auth_organization.kind.eql? 'quality_management'
+    @quality_management = current_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html
@@ -121,7 +121,7 @@ class FollowUpAuditController < ApplicationController
       column_widths << pdf.percent_width(column.last)
     end
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
     pdf.move_down PDF_FONT_SIZE

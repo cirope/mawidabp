@@ -13,7 +13,7 @@ class ResourceClassesController < ApplicationController
   def index
     @title = t 'resource_class.index_title'
     @resource_classes = ResourceClass.where(
-      organization_id: @auth_organization.id
+      organization_id: current_organization.id
     ).order('name ASC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
@@ -67,7 +67,7 @@ class ResourceClassesController < ApplicationController
   def create
     @title = t 'resource_class.new_title'
     @resource_class = ResourceClass.new(
-      resource_class_params.merge(organization_id: @auth_organization.id)
+      resource_class_params.merge(organization_id: current_organization.id)
     )
 
     respond_to do |format|
@@ -122,7 +122,7 @@ class ResourceClassesController < ApplicationController
   private
     def set_resource_class
       @resource_class = ResourceClass.where(
-        id: params[:id], organization_id: @auth_organization.id
+        id: params[:id], organization_id: current_organization.id
       ).first
     end
 

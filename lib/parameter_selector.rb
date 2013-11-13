@@ -9,15 +9,11 @@ module ParameterSelector
 
   def get_parameter(param_name, show_value = false, organization_id = nil)
     if self.respond_to?(:created_at)
-      self.parameter_in(
-        organization_id || GlobalModelConfig.current_organization_id, param_name
-      )
+      self.parameter_in(organization_id || Organization.current_id, param_name)
     end
   end
 
   def get_parameter_for_now(param_name, show_value = false, organization_id = nil)
-    self.parameter_in(
-      organization_id || GlobalModelConfig.current_organization_id, param_name
-    )
+    self.parameter_in(organization_id || Organization.current_id, param_name)
   end
 end

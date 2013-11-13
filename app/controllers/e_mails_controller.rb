@@ -7,7 +7,7 @@ class EMailsController < ApplicationController
     @title = t 'email.index_title'
 
     default_conditions = {
-      :organization_id => @auth_organization.id
+      :organization_id => current_organization.id
     }
 
     build_search_conditions EMail, default_conditions

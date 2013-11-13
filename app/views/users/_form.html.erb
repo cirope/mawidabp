@@ -153,7 +153,7 @@
     <div id="organization_roles">
       <% organization_roles =
         @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
-        @user.organization_roles.for_group(@auth_organization.group_id)
+        @user.organization_roles.for_group(current_organization.group_id)
       %>
       <%= u_f.fields_for :organization_roles, organization_roles do |or_f| %>
         <%= render :partial => 'organization_role', :locals =>

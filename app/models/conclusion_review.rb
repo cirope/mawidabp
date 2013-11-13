@@ -1,9 +1,8 @@
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: Organization.current_id }
+  default_scope { where(organization_id: Organization.current_id) }
 
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
@@ -93,7 +92,7 @@ class ConclusionReview < ActiveRecord::Base
   attr_readonly :review_id
 
   # Restricciones
-  validates :review_id, :presence => true
+  validates :review_id, :organization_id, :presence => true
   validates :issue_date, :applied_procedures, :presence => true
   validates_length_of :type, :maximum => 255, :allow_nil => true,
     :allow_blank => true
@@ -101,6 +100,7 @@ class ConclusionReview < ActiveRecord::Base
 
   # Relaciones
   belongs_to :review
+  belongs_to :organization
   has_one :plan_item, :through => :review
   has_many :control_objective_items, :through => :review
 
@@ -149,7 +149,7 @@ class ConclusionReview < ActiveRecord::Base
     cover_bottom_text = "#{self.review.plan_item.business_unit.name}\n"
     cover_bottom_text << I18n.l(self.issue_date, :format => :long)
 
-    auth_organization = Organization.find GlobalModelConfig.current_organization_id
+    current_organization = Organization.find(self.organization_id)
 
     pdf.add_review_header organization, self.review.identification.strip,
       self.review.plan_item.project.strip
@@ -199,7 +199,7 @@ class ConclusionReview < ActiveRecord::Base
     grouped_control_objectives.each do |process_control, cois|
       process_control_text = "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>"
-      process_control_text += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
+      process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
       pdf.text process_control_text, :justification => :full,
           :inline_format => true
 
@@ -371,7 +371,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
-          header += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
 
@@ -485,7 +485,7 @@ class ConclusionReview < ActiveRecord::Base
           column_headers, column_widths = [], []
           header = "<b><i>#{ProcessControl.model_name.human}: " +
               "#{process_control.name}</i></b>"
-          header += " (#{process_control.best_practice.name})" if auth_organization.kind.eql?('public')
+          header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
 
           column_headers << header
           column_widths << pdf.percent_width(100)
@@ -654,7 +654,7 @@ class ConclusionReview < ActiveRecord::Base
       self.review.has_final_review?
     items_count = 1
 
-    pdf.add_review_header organization || self.review.try(:organization),
+    pdf.add_review_header organization || self.organization,
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
@@ -698,7 +698,7 @@ class ConclusionReview < ActiveRecord::Base
     use_finals = !self.kind_of?(ConclusionDraftReview) ||
       self.review.has_final_review?
 
-    pdf.add_review_header organization || self.review.try(:organization),
+    pdf.add_review_header organization || self.organization,
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
@@ -726,7 +726,7 @@ class ConclusionReview < ActiveRecord::Base
 
     pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
-    pdf.add_review_header organization || self.review.try(:organization),
+    pdf.add_review_header organization || self.organization,
       self.review.try(:identification),
       self.review.try(:plan_item).try(:project)
 
@@ -845,7 +845,7 @@ class ConclusionReview < ActiveRecord::Base
       pdf = Prawn::Document.create_generic_pdf(:portrait, false)
       pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
 
-      pdf.add_review_header organization || self.review.try(:organization),
+      pdf.add_review_header organization || self.organization,
         self.review.try(:identification),
         self.review.try(:plan_item).try(:project)
 
@@ -905,7 +905,7 @@ class ConclusionReview < ActiveRecord::Base
       column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
       column_data, column_widths, column_headers = [], [], []
       pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
-      pdf.add_review_header organization || self.review.try(:organization),
+      pdf.add_review_header organization || self.organization,
         self.review.try(:identification),
         self.review.try(:plan_item).try(:project)
 

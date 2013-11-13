@@ -11,7 +11,7 @@ class RolesController < ApplicationController
   # * GET /roles.xml
   def index
     @title = t 'role.index_title'
-    @roles = Role.list(@auth_organization.id).paginate(
+    @roles = Role.list(current_organization.id).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -117,7 +117,7 @@ class RolesController < ApplicationController
   private
     def set_role
       @role = Role.where(
-        id: params[:id], organization_id: @auth_organization.id
+        id: params[:id], organization_id: current_organization.id
       ).first
     end
 
@@ -126,6 +126,6 @@ class RolesController < ApplicationController
         :name, :role_type, :lock_version, privileges_attributes: [
           :id, :module, :approval, :erase, :modify, :read
         ]
-      ).merge(organization_id: @auth_organization.id)
+      ).merge(organization_id: current_organization.id)
     end
 end

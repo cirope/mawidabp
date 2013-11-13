@@ -22,7 +22,7 @@ class FindingsController < ApplicationController
     @is_responsible = params[:as_responsible]
     default_conditions = {
       :final => false,
-      Period.table_name => {:organization_id => @auth_organization.id}
+      Period.table_name => {:organization_id => current_organization.id}
     }
 
     if @auth_user.committee? || @selected_user
@@ -163,7 +163,7 @@ class FindingsController < ApplicationController
     selected_user = User.find(params[:user_id]) if params[:user_id]
     default_conditions = {
       :final => false,
-      Period.table_name => {:organization_id => @auth_organization.id}
+      Period.table_name => {:organization_id => current_organization.id}
     }
 
     if @auth_user.committee? || selected_user
@@ -238,7 +238,7 @@ class FindingsController < ApplicationController
     related_users = @auth_user.related_users_and_descendants
     default_conditions = {
       :final => false,
-      Period.table_name => {:organization_id => @auth_organization.id}
+      Period.table_name => {:organization_id => current_organization.id}
     }
 
     if @auth_user.committee? || selected_user
@@ -281,7 +281,7 @@ class FindingsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('finding.index_title')
 
     column_order = [
@@ -428,7 +428,7 @@ class FindingsController < ApplicationController
   def follow_up_pdf
     finding = Finding.find_by(id: params[:id])
 
-    finding.follow_up_pdf(@auth_organization)
+    finding.follow_up_pdf(current_organization)
 
     redirect_to finding.relative_follow_up_pdf_path
   end
@@ -441,7 +441,7 @@ class FindingsController < ApplicationController
       'organizations.id = :organization_id',
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -483,7 +483,7 @@ class FindingsController < ApplicationController
     parameters = {
       :boolean_false => false,
       :finding_id => params[:finding_id],
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -522,7 +522,7 @@ class FindingsController < ApplicationController
       conditions = {
         :id => params[:id],
         :final => false,
-        Period.table_name => {:organization_id => @auth_organization.id}
+        Period.table_name => {:organization_id => current_organization.id}
       }
 
       if @auth_user.can_act_as_audited?

@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     <% @users.each do |user| %>
-      <% expire_time = parameter_in(@auth_organization.id,
+      <% expire_time = parameter_in(current_organization.id,
         :session_expire_time, user.created_at).to_i %>
       <tr class="<%= cycle('even', 'odd') %> <%= user.enable? ? :enabled_item : :disabled_item %>">
         <td>

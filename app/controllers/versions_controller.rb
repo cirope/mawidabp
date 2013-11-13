@@ -10,7 +10,7 @@ class VersionsController < ApplicationController
     @title = t 'version.show_title'
     @version = Version.where(
       id: params[:id],
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       important: true
     ).first
 
@@ -38,7 +38,7 @@ class VersionsController < ApplicationController
         {
           from_date: @from_date,
           to_date: @to_date.to_time.end_of_day,
-          organization_id: @auth_organization.id,
+          organization_id: current_organization.id,
           types: ['User', 'Parameter'],
           boolean_true: true
         }
@@ -68,7 +68,7 @@ class VersionsController < ApplicationController
       {
         from_date: @from_date,
         to_date: @to_date.to_time.end_of_day,
-        organization_id: @auth_organization.id,
+        organization_id: current_organization.id,
         types: ['User', 'Parameter'],
         boolean_true: true
       }
@@ -76,7 +76,7 @@ class VersionsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title @title
 
     column_order = [['created_at', 12], ['whodunnit', 28], ['item', 50],

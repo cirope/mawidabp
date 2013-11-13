@@ -4,8 +4,11 @@
 # de control (#ControlObjectiveItem)
 class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :update_auth_user_id, :load_privileges,
-    :control_objective_items_for_period, :sort_control_objective_items!
+  before_action :set_review, only: [
+    :show, :edit, :update, :destroy, :review_data, :download_work_papers,
+    :survey_pdf
+  ]
+  before_action :set_review_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los informes
@@ -14,15 +17,12 @@ class ReviewsController < ApplicationController
   # * GET /reviews.xml
   def index
     @title = t 'review.index_title'
-    default_conditions = {
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    }
 
-    build_search_conditions Review, default_conditions
+    build_search_conditions Review
 
-    @reviews = Review.includes(:period, { plan_item: :business_unit }).where(
+    @reviews = Review.includes({ plan_item: :business_unit }).where(
       @conditions
-    ).order('identification DESC').references(:periods).paginate(
+    ).order('identification DESC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -42,7 +42,6 @@ class ReviewsController < ApplicationController
   # * GET /reviews/1.xml
   def show
     @title = t 'review.show_title'
-    @review = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -56,14 +55,11 @@ class ReviewsController < ApplicationController
   # * GET /reviews/new.xml
   def new
     @title = t 'review.new_title'
-    first_period = Period.list.first
-    @review = Review.new
-    clone_id = params[:clone_from].to_i
-    clone_review = find_with_organization(clone_id) if exists?(clone_id)
+    @review = current_organization.reviews.new
 
-    @review.clone_from clone_review if clone_review
+    @review.clone_from @review_clone if @review_clone
     @review.period_id = params[:period] ?
-      params[:period].to_i : first_period.try(:id)
+      params[:period].to_i : Period.list.first.try(:id)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -76,7 +72,6 @@ class ReviewsController < ApplicationController
   # * GET /reviews/1/edit
   def edit
     @title = t 'review.edit_title'
-    @review = find_with_organization(params[:id])
   end
 
   # Crea un nuevo informe siempre que cumpla con las validaciones. Además
@@ -86,7 +81,7 @@ class ReviewsController < ApplicationController
   # * POST /reviews.xml
   def create
     @title = t 'review.new_title'
-    @review = Review.new(review_params)
+    @review = current_organization.reviews.new(review_params)
 
     respond_to do |format|
       if @review.save
@@ -108,7 +103,6 @@ class ReviewsController < ApplicationController
   # * PATCH /reviews/1.xml
   def update
     @title = t 'review.edit_title'
-    @review = find_with_organization(params[:id])
 
     respond_to do |format|
       if @review.update(review_params)
@@ -131,11 +125,7 @@ class ReviewsController < ApplicationController
   # * DELETE /reviews/1
   # * DELETE /reviews/1.xml
   def destroy
-    @review = find_with_organization(params[:id])
-
-    unless @review.destroy
-      flash.alert = t 'review.errors.can_not_be_destroyed'
-    end
+    flash.alert = t 'review.errors.can_not_be_destroyed' unless @review.destroy
 
     respond_to do |format|
       format.html { redirect_to(reviews_url) }
@@ -147,8 +137,6 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/review_data/1.json
   def review_data
-    @review = find_with_organization(params[:id])
-
     respond_to do |format|
       format.json  { render json: @review.to_json(
         only: [],
@@ -166,11 +154,9 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/download_work_papers/1
   def download_work_papers
-    review = find_with_organization(params[:id])
+    @review.zip_all_work_papers current_organization
 
-    review.zip_all_work_papers @auth_organization
-
-    redirect_to review.relative_work_papers_zip_path
+    redirect_to @review.relative_work_papers_zip_path
   end
 
   # Devuelve los datos del ítem del plan
@@ -197,7 +183,7 @@ class ReviewsController < ApplicationController
   def procedure_control_data
     @procedure_control = ProcedureControl.includes(:period).where(
       id: params[:id],
-      "#{Period.table_name}.organization_id" => @auth_organization.id
+      "#{Period.table_name}.organization_id" => current_organization.id
     ).references(:periods).first
 
     render template: 'procedure_controls/show'
@@ -207,11 +193,9 @@ class ReviewsController < ApplicationController
   #
   # * GET /reviews/survey_pdf/1
   def survey_pdf
-    review = find_with_organization(params[:id])
+    @review.survey_pdf(current_organization)
 
-    review.survey_pdf(@auth_organization)
-
-    redirect_to review.relative_survey_pdf_path
+    redirect_to @review.relative_survey_pdf_path
   end
 
   # Muestra sugerencias de observaciones / oportunidades de mejora reiteradas
@@ -228,7 +212,7 @@ class ReviewsController < ApplicationController
         "#{BusinessUnit.table_name}.id = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       states: [
         Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
       ],
@@ -257,7 +241,7 @@ class ReviewsController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -293,7 +277,7 @@ class ReviewsController < ApplicationController
     ].compact
     parameters = {
       boolean_false: false,
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       states: [
         Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
       ],
@@ -333,7 +317,7 @@ class ReviewsController < ApplicationController
       "#{BestPractice.table_name}.organization_id = :organization_id",
       "#{ProcedureControl.table_name}.period_id = :period_id"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
 
     @tokens.each_with_index do |t, i|
@@ -371,70 +355,53 @@ class ReviewsController < ApplicationController
   end
 
   private
+    def review_params
+      params.require(:review).permit(
+        :identification, :description, :survey, :period_id, :plan_item_id,
+        :procedure_control_subitem_ids, :lock_version,
+        file_model_attributes: [:id, :file, :file_cache, :_destroy],
+        finding_review_assignments_attributes: [
+          :id, :finding_id, :_destroy, :lock_version
+        ],
+        review_user_assignments_attributes: [
+          :id, :assignment_type, :user_id, :_destroy
+        ],
+        control_objective_items_attributes: [
+          :id, :control_objective_id, :control_objective_text, :order_number, :_destroy, 
+          control_attributes: [
+            :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
+          ]
+        ],
+        procedure_control_subitem_ids: []
+      )
+    end
 
-  def review_params
-    params.require(:review).permit(
-      :identification, :description, :survey, :period_id, :plan_item_id,
-      :procedure_control_subitem_ids, :lock_version,
-      file_model_attributes: [:id, :file, :file_cache, :_destroy],
-      finding_review_assignments_attributes: [
-        :id, :finding_id, :_destroy, :lock_version
-      ],
-      review_user_assignments_attributes: [
-        :id, :assignment_type, :user_id, :_destroy
-      ],
-      control_objective_items_attributes: [
-        :id, :control_objective_id, :control_objective_text, :order_number, :_destroy, 
-        control_attributes: [
-          :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
-        ]
-      ],
-      procedure_control_subitem_ids: []
-    )
-  end
+    def set_review
+      @review = Review.includes(
+        :period,
+        { plan_item: :business_unit },
+        { control_objective_items: :control_objective },
+        { review_user_assignments: :user },
+        { finding_review_assignments: :finding }
+      ).find(params[:id])
+    end
 
-  # Busca el informe indicado siempre que pertenezca a la organización. En el
-  # caso que no se encuentre (ya sea que no existe un informe con ese ID o que
-  # no pertenece a la organización con la que se autenticó el usuario) devuelve
-  # nil.
-  #
-  # _id_::  ID del informe que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Review.includes(
-      :period,
-      {plan_item: :business_unit},
-      {control_objective_items: :control_objective},
-      {review_user_assignments: :user},
-      {finding_review_assignments: :finding}
-    ).where(
-      id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).references(:periods).first
-  end
+    def set_review_clone
+      @review_clone = Review.find_by(id: params[:clone_from].to_i)
+    end
 
-  # Indica si existe el informe indicado, siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # informe con ese ID o que no pertenece a la organización con la que se
-  # autenticó el usuario) devuelve false.
-  #
-  # _id_::  ID del informe que se quiere recuperar
-  def exists?(id) #:doc:
-    Review.includes(:period).where(
-      id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).references(:periods).first
-  end
-
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      review_data: :read,
-      download_work_papers: :read,
-      plan_item_data: :read,
-      procedure_control_data: :read,
-      survey_pdf: :read,
-      suggested_findings: :read,
-      auto_complete_for_user: :read,
-      auto_complete_for_finding: :read,
-      auto_complete_for_procedure_control_subitem: :read,
-      estimated_amount: :read
-    )
-  end
+    def load_privileges
+      @action_privileges.update(
+        review_data: :read,
+        download_work_papers: :read,
+        plan_item_data: :read,
+        procedure_control_data: :read,
+        survey_pdf: :read,
+        suggested_findings: :read,
+        auto_complete_for_user: :read,
+        auto_complete_for_finding: :read,
+        auto_complete_for_procedure_control_subitem: :read,
+        estimated_amount: :read
+      )
+    end
 end

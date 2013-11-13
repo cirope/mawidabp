@@ -16,7 +16,7 @@ class PollsController < ApplicationController
       )
     else
       default_conditions = {
-        organization_id: @auth_organization.id
+        organization_id: current_organization.id
       }
 
       build_search_conditions Poll, default_conditions
@@ -106,7 +106,7 @@ class PollsController < ApplicationController
   def create
     @title = t 'poll.new_title'
     @poll = Poll.new(poll_params)
-    @poll.organization = @auth_organization
+    @poll.organization = current_organization
     polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
               questionnaire_id: @poll.questionnaire.id,
               user_id: @poll.user.id
@@ -173,7 +173,7 @@ class PollsController < ApplicationController
     ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       self_id: params[:user_id]
     }
     @tokens.each_with_index do |t, i|
@@ -233,7 +233,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -354,7 +354,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :portrait
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -537,7 +537,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -647,7 +647,7 @@ class PollsController < ApplicationController
       @parsed_file.each  do |row|
         poll = Poll.new(
           questionnaire_id: questionnaire_id,
-          organization_id: @auth_organization.id
+          organization_id: current_organization.id
         )
         poll.customer_email = row[0]
 

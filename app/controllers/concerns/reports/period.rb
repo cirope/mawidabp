@@ -9,7 +9,7 @@ module Reports::Period
       {
         :from_date => @from_date,
         :to_date => @to_date,
-        :organization_id => @auth_organization.id
+        :organization_id => current_organization.id
       }
     ).references(:reviews)
   end
@@ -26,7 +26,7 @@ module Reports::Period
       {
         :from_date => @from_date,
         :to_date => @to_date,
-        :organization_id => @auth_organization.id
+        :organization_id => current_organization.id
       }
     ).references(:reviews)
   end

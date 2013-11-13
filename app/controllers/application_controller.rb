@@ -12,6 +12,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  around_filter :scope_current_organization
+
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
   rescue_from Exception do |exception|
@@ -45,13 +47,17 @@ class ApplicationController < ActionController::Base
   end
 
   def current_organization
-    load_organization
-    Finding.current_organization = @auth_organization
-
-    @auth_organization.try(:id)
+    @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
   end
+  helper_method :current_organization
 
   private
+    def scope_current_organization
+      Organization.current_id = current_organization.id
+      yield
+    ensure
+      Organization.current_id = nil
+    end
 
   def load_user
     if @auth_user.nil? && session[:user_id]
@@ -61,15 +67,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def load_organization
-    if @auth_organization.nil? && session[:organization_id]
-      @auth_organization = Organization.find(session[:organization_id])
-    end
-  end
-
   # Verifica que el login se haya realizado y el usuario esté activo
   def login_check #:doc:
-    load_organization
+    current_organization
     load_user
 
     !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&
@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
   # Luego de invocada pone a dispoción las siguientes variables:
   # @*auth_user*::          Contiene la instancia de la clase #User que
   #                         representa al usuario
-  # @*auth_organization*::  Organización que seleccionó el usuario
+  # @*current_organization*::  Organización que seleccionó el usuario
   # @*action_privileges*::  Privilegios que tiene el usuario sobre la acción en
   #                         curso
   # @*privileges*::         Contiene los privilegios del usuario sobre cualquier
@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
     action = (params[:action] || 'none').to_sym
 
     if login_check
-      case @auth_organization.try(:kind)
+      case current_organization.try(:kind)
       when 'public'
         I18n.locale = :public_es
       when 'management_control'
@@ -118,8 +118,8 @@ class ApplicationController < ActionController::Base
         :destroy => :erase
       )
 
-      @auth_privileges = @auth_organization ?
-        @auth_user.try(:privileges, @auth_organization) : {}
+      @auth_privileges = current_organization ?
+        @auth_user.try(:privileges, current_organization) : {}
     else
       go_to = request.fullpath
       session[:go_to] = go_to unless action == :logout || request.xhr?
@@ -132,7 +132,7 @@ class ApplicationController < ActionController::Base
   # expirado. Puede deshabilitarse con el parámetro
   # :_session_expire_time_
   def check_access_time #:doc:
-    session_expire = @auth_organization ? parameter_in(@auth_organization.id,
+    session_expire = current_organization ? parameter_in(current_organization.id,
       :session_expire_time).to_i : 30
     last_access = session[:last_access]
 
@@ -177,7 +177,7 @@ class ApplicationController < ActionController::Base
   end
 
   def module_name_for(controller_name)
-    if @auth_organization.kind == 'quality_management'
+    if current_organization.kind == 'quality_management'
       modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
     else
       modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS

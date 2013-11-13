@@ -15,7 +15,7 @@ class ConclusionAuditReportsController < ApplicationController
   # * GET /conclusion_audit_reports
   def index
     @title = t('conclusion_audit_report.index_title')
-    @quality_management = @auth_organization.kind.eql? 'quality_management'
+    @quality_management = current_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html
@@ -131,7 +131,7 @@ class ConclusionAuditReportsController < ApplicationController
     pdf = Prawn::Document.create_generic_pdf :landscape
     columns = {}
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 

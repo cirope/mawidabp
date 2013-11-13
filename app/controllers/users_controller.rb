@@ -40,7 +40,7 @@ class UsersController < ApplicationController
         ].join(' OR '),
         "#{User.table_name}.group_admin = :boolean_false"
       ].join(' AND '),
-      { organization_id: @auth_organization.id, boolean_false: false }
+      { organization_id: current_organization.id, boolean_false: false }
     ]
 
     build_search_conditions User, default_conditions
@@ -211,8 +211,7 @@ class UsersController < ApplicationController
     auth_user = User.find(session[:user_id]) if session[:user_id]
 
     if auth_user && session[:organization_id]
-      auth_organization = Organization.find(session[:organization_id])
-      GlobalModelConfig.current_organization_id = auth_organization.try :id
+      GlobalModelConfig.current_organization_id = current_organization.try :id
     end
 
     if auth_user.try(:is_enable?) && auth_user.logged_in?
@@ -220,10 +219,9 @@ class UsersController < ApplicationController
     else
       @title = t 'user.login_title'
       @user = User.new
-      organization_prefix = request.subdomains.first
-      @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
+      @group_admin_mode = current_organization.prefix == APP_ADMIN_PREFIX
 
-      @organization = Organization.find_by(prefix: organization_prefix)
+      @organization = current_organization 
     end
   end
 
@@ -358,7 +356,7 @@ class UsersController < ApplicationController
   # * PATCH /users/blank_password/1.xml
   def blank_password
     if @user
-      @user.reset_password!(@auth_organization)
+      @user.reset_password!(current_organization)
       redirect_to_index t('user.password_reseted', user: @user.user)
     end
   end
@@ -377,11 +375,11 @@ class UsersController < ApplicationController
   # * POST /users/send_password_reset.xml
   def send_password_reset
     @title = t 'user.reset_password_title'
-    @auth_organization = Organization.find_by(prefix: request.subdomains.first)
+
     @user = find_with_organization(params[:email], :email)
 
     if @user && !@user.hidden
-      @user.reset_password!(@auth_organization)
+      @user.reset_password!(current_organization)
       redirect_to_login t('user.password_reset_sended')
     else
       redirect_to reset_password_users_url, notice: t('user.unknown_email')
@@ -398,7 +396,7 @@ class UsersController < ApplicationController
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
         params[:confirmation_hash]).first
-      @auth_organization = @auth_user.organizations.first if @auth_user
+      @current_organization = @auth_user.organizations.first if @auth_user
     else
       login_check
     end
@@ -421,7 +419,7 @@ class UsersController < ApplicationController
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
         params[:confirmation_hash]).first
-      @auth_organization = @auth_user.organizations.first if @auth_user
+      @current_organization = @auth_user.organizations.first if @auth_user
     else
       login_check
     end
@@ -644,7 +642,7 @@ class UsersController < ApplicationController
   # * GET /users/export_to_pdf
   def export_to_pdf
     default_conditions = {
-      "#{Organization.table_name}.id" => @auth_organization.id
+      "#{Organization.table_name}.id" => current_organization.id
     }
 
     build_search_conditions User, default_conditions
@@ -655,7 +653,7 @@ class UsersController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('user.index_title')
 
     column_order = [['user', 10], ['name', 10], ['last_name', 10],
@@ -732,7 +730,7 @@ class UsersController < ApplicationController
     ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       self_id: params[:user_id]
     }
     @tokens.each_with_index do |t, i|
@@ -776,7 +774,7 @@ class UsersController < ApplicationController
             "#{Organization.table_name}.id IS NULL"
           ].join(' OR ')
         ].map {|c| "(#{c})"}.join(' AND '),
-        {:id => id, :organization_id => @auth_organization.id}
+        {:id => id, :organization_id => current_organization.id}
       ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
     end
 
