@@ -78,7 +78,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
               ]
             }
           }
-  p @response.body
         end
       end
     end
