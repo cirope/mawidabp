@@ -95,16 +95,6 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def name
-    if self.pollable_id.present?
-      "#{self.questionnaire.name} (#{self.pollable_type.constantize.model_name.human})"
-    elsif self.questionnaire.id == 4 # Comité
-      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.monthly_committee'})"
-    else
-      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.general'})"
-    end
-  end
-
   private
 
   def user_id_xor_customer_email
