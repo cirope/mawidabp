@@ -177,11 +177,7 @@ module Reports::WeaknessesByAuditType
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    pdf.add_description_item(
-      t("#{@controller}_committee_report.period.title"),
-      t("#{@controller}_committee_report.period.range",
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+    add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
       pdf.move_down PDF_FONT_SIZE

@@ -245,4 +245,12 @@ module Reports::Pdf
       being_implemented_resume.to_sentence
     end
   end
+
+  def add_pdf_description(pdf, controller, from_date, to_date)
+    pdf.add_description_item(
+      t("#{controller}_committee_report.period.title"),
+      t("#{controller}_committee_report.period.range",
+        :from_date => l(from_date, :format => :long),
+        :to_date => l(to_date, :format => :long))) 
+  end
 end
