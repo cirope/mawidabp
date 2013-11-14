@@ -161,8 +161,6 @@ class User < ActiveRecord::Base
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_many :detracts, -> { order("#{Detract.table_name}.created_at ASC") },
-    dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
   has_many :reviews, -> { uniq }, through: :review_user_assignments

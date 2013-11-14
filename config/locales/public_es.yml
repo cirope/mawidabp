@@ -69,7 +69,6 @@
       best_practices: "Buenas prácticas"
       settings: 'Configuraciones'
       e_mails: "Correos"
-      detracts: "Detractores"
       questionnaires_title: "Cuestionarios"
       questionnaires:
         definition: "Definición"
@@ -458,17 +457,6 @@
     create: "Generar"
     title: "Título"
     subtitle: "Subtítulo"
-
-  detract:
-    index_title: "Listado de detractores"
-    show_title: "Detalle del detractor"
-    new_title: "Agregar detractor"
-    correctly_created: "Detractor agregado correctamente."
-    show_last_detracts: "Ver los últimos detractores"
-    last_detract: "Último detractor"
-    last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
-    without_detract: "No tiene ningún detractor asignado al momento"
-    user_without_detracts: "No tiene ningún detractor asignado al momento"
 
   email:
     index_title: "Listado de correos"
@@ -1512,7 +1500,6 @@
       control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
@@ -1654,11 +1641,6 @@
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      detract:
-        organization_id: "Organización"
-        user_id: "Usuario"
-        value: "Valor"
-        observations: "Observaciones"
       e_mail:
         to: "Para"
         subject: "Asunto"
@@ -2240,7 +2222,6 @@
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
-    detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"
