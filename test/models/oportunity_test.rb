@@ -6,10 +6,10 @@ class OportunityTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @oportunity = Oportunity.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera

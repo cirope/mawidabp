@@ -3,9 +3,7 @@ class ProcedureControlItem < ActiveRecord::Base
   include Parameters::Frequency
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
   scope :list_for_process_control, ->(process_control_id) {
     where(:process_control_id => process_control_id)

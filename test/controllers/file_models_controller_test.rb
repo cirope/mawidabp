@@ -5,8 +5,8 @@ class FileModelsControllerTest < ActionController::TestCase
   fixtures :organizations, :users
 
   def setup
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+    set_organization
+
     file_name = "#{TEMP_PATH}temp_test.txt"
 
     File.open(file_name, 'w') { |f| f << 'some test text' }

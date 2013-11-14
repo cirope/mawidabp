@@ -11,21 +11,14 @@ class ErrorRecordsController < ApplicationController
   def index
     @title = t 'error_record.index_title'
     @from_date, @to_date = *make_date_range(params[:index])
-    default_conditions = [
-      "#{ErrorRecord.table_name}.organization_id = :organization_id",
-      { organization_id: current_organization.id }
-    ]
 
     unless params[:search]
-      default_conditions[0] = [
-        default_conditions[0],
-        "#{ErrorRecord.table_name}.created_at BETWEEN :from_date AND :to_date"
-      ].join(' AND ')
-
-      default_conditions[1].merge!(from_date: @from_date,
-        to_date: @to_date.to_time.end_of_day)
+      default_conditions = [
+        "#{ErrorRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
+        { from_date: @from_date, to_date: @to_date.to_time.end_of_day }
+      ]
     else
-      build_search_conditions ErrorRecord, default_conditions
+      build_search_conditions ErrorRecord
     end
 
     @error_records = ErrorRecord.includes(:user).where(
@@ -50,9 +43,7 @@ class ErrorRecordsController < ApplicationController
   # * GET /error_records/1.xml
   def show
     @title = t 'error_record.show_title'
-    @error_record = ErrorRecord.where(
-      organization_id: current_organization.id, id: params[:id]
-    ).first
+    @error_record = ErrorRecord.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -67,14 +58,10 @@ class ErrorRecordsController < ApplicationController
     from_date, to_date = *make_date_range(params[:range])
     error_records = ErrorRecord.includes(:user).where(
       [
-        [
-          'organization_id = :organization_id',
-          'created_at BETWEEN :from_date AND :to_date'
-        ].join(' AND '),
+        'created_at BETWEEN :from_date AND :to_date'
         {
           from_date: from_date,
-          to_date: to_date.to_time.end_of_day,
-          organization_id: current_organization.id
+          to_date: to_date.to_time.end_of_day
         }
       ]
     ).order('created_at DESC')

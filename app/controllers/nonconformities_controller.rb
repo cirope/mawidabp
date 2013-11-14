@@ -13,23 +13,16 @@ class NonconformitiesController < ApplicationController
   def index
     @title = t 'nonconformity.index_title'
     default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
       [
-        [
-          "#{ConclusionReview.table_name}.review_id IS NULL",
-          "#{Nonconformity.table_name}.final = :boolean_false"
-        ].join(' AND '),
-        [
-          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-          "#{Nonconformity.table_name}.final = :boolean_true"
-        ].join(' AND ')
-      ].map { |condition| "(#{condition})" }.join(' OR ')
-    ]
-    parameters = {
-      :organization_id => current_organization.id,
-      :boolean_true => true,
-      :boolean_false => false
-    }
+        "#{ConclusionReview.table_name}.review_id IS NULL",
+        "#{Nonconformity.table_name}.final = :boolean_false"
+      ].join(' AND '),
+      [
+        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+        "#{Nonconformity.table_name}.final = :boolean_true"
+      ].join(' AND ')
+    ].map { |condition| "(#{condition})" }.join(' OR ')
+    parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Nonconformity.table_name}.control_objective_item_id = " +
@@ -309,16 +302,13 @@ class NonconformitiesController < ApplicationController
 
     def set_nonconformity
       @nonconformity = Nonconformity.includes(
-        :finding_relations,
-        :work_papers,
+        :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).where(
-        :id => params[:id], Period.table_name => {:organization_id => current_organization.id}
-      ).first
+      ).find(params[:id])
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
         :auto_complete_for_user => :read,

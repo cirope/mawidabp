@@ -243,7 +243,7 @@ class NotifierTest < ActionMailer::TestCase
       I18n.t('conclusion_review.global_score_sheet')
     ]
 
-    GlobalModelConfig.current_organization_id = organization.id
+    Organization.current_id = organization.id
 
     conclusion_review.to_pdf organization
     conclusion_review.review.score_sheet organization, false

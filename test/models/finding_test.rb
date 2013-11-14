@@ -6,10 +6,10 @@ class FindingTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @finding = Finding.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -875,7 +875,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify for stale and unconfirmed findings' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     assert_equal 4, Finding.unconfirmed_for_notification.size
@@ -921,7 +921,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     assert_equal 3, Finding.next_to_expire.size
@@ -964,7 +964,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'mark stale and confirmed findings as unanswered' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     findings = Finding.confirmed_and_stale.select do |finding|
@@ -1013,7 +1013,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'not mark stale and confirmed findings if has an answer' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
 
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
@@ -1046,7 +1046,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify manager if necesary' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
 

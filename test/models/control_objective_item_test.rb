@@ -7,10 +7,10 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @control_objective_item = ControlObjectiveItem.find control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera

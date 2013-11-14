@@ -1,9 +1,9 @@
 class Workflow < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
+  default_scope -> { where(organization_id: Organization.current_id) }
 
   # Callbacks
   before_validation :set_proper_parent
@@ -16,7 +16,7 @@ class Workflow < ActiveRecord::Base
   attr_readonly :period_id, :review_id
 
   # Restricciones
-  validates :period_id, :review_id, :presence => true
+  validates :period_id, :review_id, :organization_id, :presence => true
   validates :review_id, :uniqueness => true, :allow_nil => true,
     :allow_blank => true
   validates :period_id, :review_id, :numericality => {:only_integer => true},
@@ -26,7 +26,7 @@ class Workflow < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   belongs_to :review
-  has_one :organization, :through => :period
+  belongs_to :organization
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {
@@ -43,6 +43,7 @@ class Workflow < ActiveRecord::Base
     super(attributes, options)
 
     self.period ||= Period.currents.first
+    self.organization_id ||= Organization.current_id
   end
 
   def set_proper_parent

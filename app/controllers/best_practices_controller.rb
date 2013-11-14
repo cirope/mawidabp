@@ -13,9 +13,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices.xml
   def index
     @title = t 'best_practice.index_title'
-    @best_practices = BestPractice.where(
-      organization_id: current_organization.id
-    ).order('created_at DESC').paginate(
+    @best_practices = BestPractice.order('created_at DESC').paginate(
       page: params[:page],
       per_page: APP_LINES_PER_PAGE
     )
@@ -91,7 +89,6 @@ class BestPracticesController < ApplicationController
   # * PATCH /best_practices/1.xml
   def update
     @title = t 'best_practice.edit_title'
-    params[:best_practice][:organization_id] = @best_practice.organization_id
 
     respond_to do |format|
       if @best_practice.update(best_practice_params)
@@ -127,9 +124,7 @@ class BestPracticesController < ApplicationController
 
   private
     def set_best_practice
-      @best_practice = BestPractice.where(
-        id: params[:id], organization_id: current_organization
-      ).first
+      @best_practice = BestPractice.find(params[:id])
     end
 
     def best_practice_params

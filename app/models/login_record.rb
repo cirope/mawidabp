@@ -1,6 +1,10 @@
 class LoginRecord < ActiveRecord::Base
   include ParameterSelector
 
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
+  default_scope -> { where(organization_id: Organization.current_id) }
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :user => {
@@ -12,10 +16,6 @@ class LoginRecord < ActiveRecord::Base
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   })
-
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
 
   attr_accessor :request
 

@@ -2,6 +2,8 @@ require 'test_helper'
 
 class QuestionnaireTest < ActiveSupport::TestCase
   def setup
+    set_organization
+
     @questionnaire = Questionnaire.find questionnaires(:questionnaire_one).id
   end
 

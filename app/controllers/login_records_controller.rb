@@ -3,6 +3,9 @@
 # Lista y muestra registros de ingreso (#LoginRecord)
 class LoginRecordsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
+  before_action :set_login_record, only: [
+    :show, :edit, :update, :destroy
+  ]
 
   # Muestra un menú con los distintos listados disponibles (registros de ingreso
   # y registros de errores)
@@ -23,21 +26,16 @@ class LoginRecordsController < ApplicationController
   def index
     @title = t 'login_record.index_title'
     @from_date, @to_date = *make_date_range(params[:index])
-    default_conditions = [
-      'organization_id = :organization_id',
-      {:organization_id => current_organization.id}
-    ]
 
     unless params[:search]
-      default_conditions[0] = [
-        default_conditions[0],
-        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date"
-      ].join(' AND ')
+      default_conditions = [
+        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
+        :from_date => @from_date, :to_date => @to_date.to_time.end_of_day
+      ]
 
-      default_conditions[1].merge!(:from_date => @from_date,
-        :to_date => @to_date.to_time.end_of_day)
-    else
       build_search_conditions LoginRecord, default_conditions
+    else
+      build_search_conditions LoginRecord
     end
 
     @login_records = LoginRecord.includes(:user).where(
@@ -62,9 +60,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/1.xml
   def show
     @title = t 'login_record.show_title'
-    @login_record = LoginRecord.where(
-      :id => params[:id], :organization_id => current_organization.id
-    ).first
+    @login_record = LoginRecord.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -79,14 +75,10 @@ class LoginRecordsController < ApplicationController
     from_date, to_date = *make_date_range(params[:range])
     login_records = LoginRecord.includes(:user).where(
       [
-        [
-          'organization_id = :organization_id',
-          'created_at BETWEEN :from_date AND :to_date'
-        ].join(' AND '),
+        'created_at BETWEEN :from_date AND :to_date'
         {
           :from_date => from_date,
-          :to_date => to_date.to_time.end_of_day,
-          :organization_id => current_organization.id
+          :to_date => to_date.to_time.end_of_day
         }
       ]
     ).order('start DESC')
@@ -146,7 +138,7 @@ class LoginRecordsController < ApplicationController
   end
 
   private
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(choose: :read, export_to_pdf: :read)
     end
 end

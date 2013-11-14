@@ -6,6 +6,8 @@ class InlineHelpTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @inline_help = InlineHelp.find inline_helps(:es_review_identification).id
   end
 

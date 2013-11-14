@@ -4,8 +4,10 @@
 # sus ítems (#WorkflowItem)
 class WorkflowsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :update_auth_user_id, :exists?,
-    :load_privileges
+  before_action :set_workflow, only: [
+    :show, :edit, :update, :destroy, :export_to_pdf
+  ]
+  before_action :set_workflow_clone, only: [:new]
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los programas de trabajo
@@ -14,11 +16,11 @@ class WorkflowsController < ApplicationController
   # * GET /workflows.xml
   def index
     @title = t 'workflow.index_title'
-    @workflows = Workflow.includes(:period, :review).where(
-      "#{Period.table_name}.organization_id" => current_organization.id
-    ).order("#{Review.table_name}.identification DESC").paginate(
+    @workflows = Workflow.includes(:review).order(
+      "#{Review.table_name}.identification DESC")
+    .paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
-    ).references(:periods, :reviews)
+    ).references(:reviews)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -32,7 +34,6 @@ class WorkflowsController < ApplicationController
   # * GET /workflows/1.xml
   def show
     @title = t 'workflow.show_title'
-    @workflow = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -47,12 +48,9 @@ class WorkflowsController < ApplicationController
   def new
     @title = t 'workflow.new_title'
     @workflow = Workflow.new
-    clone_id = params[:clone_from].respond_to?(:to_i) ?
-      params[:clone_from].to_i : 0
-    clone_workflow = find_with_organization(clone_id) if exists?(clone_id)
 
-    if clone_workflow
-      clone_workflow.workflow_items.each do |wi|
+    if @workflow_clone
+      @workflow_clone.workflow_items.each do |wi|
         attributes = wi.attributes.merge(
           'id' => nil,
           'resource_utilizations_attributes' =>
@@ -76,7 +74,6 @@ class WorkflowsController < ApplicationController
   # * GET /workflows/1/edit
   def edit
     @title = t 'workflow.edit_title'
-    @workflow = find_with_organization(params[:id])
   end
 
   # Crea un nuevo programa de trabajo siempre que cumpla con las validaciones.
@@ -111,7 +108,6 @@ class WorkflowsController < ApplicationController
   # * PATCH /workflows/1.xml
   def update
     @title = t 'workflow.edit_title'
-    @workflow = find_with_organization(params[:id])
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number <=> wfi_b.order_number
     end
@@ -137,7 +133,6 @@ class WorkflowsController < ApplicationController
   # * DELETE /workflows/1
   # * DELETE /workflows/1.xml
   def destroy
-    @workflow = find_with_organization(params[:id])
     @workflow.destroy
 
     respond_to do |format|
@@ -150,7 +145,6 @@ class WorkflowsController < ApplicationController
   #
   # * GET /workflow_items/export_to_pdf/1
   def export_to_pdf
-    @workflow = find_with_organization(params[:id])
     @workflow.to_pdf current_organization, !params[:include_details].blank?
 
     respond_to do |format|
@@ -222,38 +216,35 @@ class WorkflowsController < ApplicationController
   end
 
   private
-
-  def workflow_params
-    params.require(:workflow).permit(
-      :period_id, :review_id, :allow_overload, :lock_version,
-      workflow_items_attributes: [
-        :id, :task, :start, :end, :plain_predecessors, :order_number, :_destroy,
-        resource_utilizations_attributes: [
-          :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+    def workflow_params
+      params.require(:workflow).permit(
+        :period_id, :review_id, :allow_overload, :lock_version,
+        workflow_items_attributes: [
+          :id, :task, :start, :end, :plain_predecessors, :order_number, :_destroy,
+          resource_utilizations_attributes: [
+            :id, :resource_id, :resource_type, :units, :cost_per_unit, :_destroy
+          ]
         ]
-      ]
-    )
-  end
+      )
+    end
 
-  # Busca el programa de trabajo indicado siempre que pertenezca a la
-  # organización. En el caso que no se encuentre (ya sea que no existe un
-  # programa de trabajo con ese ID o que no pertenece a la organización con la
-  # que se autenticó el usuario) devuelve nil.
-  # _id_::  ID del programa de trabajo que se quiere recuperar
-  def find_with_organization(id) #:doc:
-    Workflow.includes(:period, {workflow_items: :resource_utilizations}).where(
-      id: id, "#{Period.table_name}.organization_id" => current_organization.id
-    ).references(:periods).first
-  end
-  alias :exists? :find_with_organization
+    def set_workflow
+      @workflow = Workflow.includes(
+        { workflow_items: :resource_utilizations }
+      ).find(params[:id])
+    end
 
-  def load_privileges #:nodoc:
-    @action_privileges.update(
-      export_to_pdf: :read,
-      auto_complete_for_user: :read,
-      reviews_for_period: :read,
-      resource_data: :read,
-      estimated_amount: :read
-    )
-  end
+    def set_workflow_clone
+      @workflow_clone = Workflow.find_by(id: params[:clone_from].try(:to_i))
+    end
+
+    def load_privileges #:nodoc:
+      @action_privileges.update(
+        export_to_pdf: :read,
+        auto_complete_for_user: :read,
+        reviews_for_period: :read,
+        resource_data: :read,
+        estimated_amount: :read
+      )
+    end
 end

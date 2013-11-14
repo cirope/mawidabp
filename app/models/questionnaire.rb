@@ -1,17 +1,23 @@
 class Questionnaire < ActiveRecord::Base
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
+  default_scope -> { where(organization_id: Organization.current_id) }
+
   # Constantes
   POLLABLE_TYPES = [
     'ConclusionReview'
   ]
+
+  # Callbacks
+  after_initialize :set_organization
 
   # Validaciones
   validates :name, :organization_id, :presence => true
   validates_uniqueness_of :name, :allow_nil => true, :allow_blank => true
   validates_length_of :name, :maximum => 255, :allow_nil => true,
     :allow_blank => true
+
   # Relaciones
   belongs_to :organization
   has_many :polls, :dependent => :destroy
@@ -19,20 +25,18 @@ class Questionnaire < ActiveRecord::Base
     :dependent => :destroy
 
   # Named scopes
-  scope :by_pollable_type, ->(type) {
-    where(:pollable_type => type)
-  }
-  scope :pollable, -> {
-    where('pollable_type IS NOT NULL')
-  }
-  scope :list, -> {
-    where(:organization_id => GlobalModelConfig.current_organization_id)
-  }
+  scope :by_pollable_type, ->(type) { where(:pollable_type => type) }
+  scope :pollable, -> { where('pollable_type IS NOT NULL') }
+  scope :list, -> {}
   scope :by_organization, ->(org_id, id) {
-    where('id = :id AND organization_id = :org_id', :org_id => org_id, :id => id)
+    unscoped.where('id = :id AND organization_id = :org_id', :org_id => org_id, :id => id)
   }
 
   accepts_nested_attributes_for :questions, :allow_destroy => true
+
+  def set_organization
+    self.organization_id ||= Organization.current_id
+  end
 
   def total_polls(answered = true)
     total = 0

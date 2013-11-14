@@ -6,6 +6,8 @@ class LoginRecordTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @login_record = LoginRecord.find(
       login_records(:administrator_user_success_login_record).id)
   end

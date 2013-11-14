@@ -6,6 +6,8 @@ class ResourceClassTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @resource_class = ResourceClass.find resource_classes(:human_resources).id
   end
 

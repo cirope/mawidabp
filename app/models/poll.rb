@@ -1,9 +1,10 @@
 class Poll < ActiveRecord::Base
   before_save :generate_access_token, :on => :create
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
+  default_scope -> { where(organization_id: Organization.current_id) }
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     :name => {
@@ -55,16 +56,12 @@ class Poll < ActiveRecord::Base
     self.answered = true
   end
   # Named scopes
-  scope :list, -> {
-    where(:organization_id => GlobalModelConfig.current_organization_id)
-  }
+  scope :list, -> {}
   scope :between_dates, ->(from, to) {
-    where('created_at BETWEEN :from AND :to AND organization_id = :o_id',
-      :from => from, :to => to, :o_id => GlobalModelConfig.current_organization_id)
+    where('created_at BETWEEN :from AND :to', :from => from, :to => to)
   }
   scope :by_questionnaire, ->(questionnaire_id) {
-    where('questionnaire_id = :q_id AND organization_id = :o_id',
-      :q_id => questionnaire_id, :o_id => GlobalModelConfig.current_organization_id)
+    where('questionnaire_id = :q_id', :q_id => questionnaire_id)
   }
   scope :answered, ->(answered) {
     where('answered = :answered', :answered => answered)

@@ -6,6 +6,8 @@ class ErrorRecordTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @error_record = ErrorRecord.find(
       error_records(:administrator_user_failed_attempt).id)
   end

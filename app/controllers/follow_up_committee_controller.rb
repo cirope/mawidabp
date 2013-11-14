@@ -487,8 +487,7 @@ class FollowUpCommitteeController < ApplicationController
 
       # Work papers digitalization
       wps = WorkPaper.includes(:owner, :file_model).where(
-        'created_at BETWEEN :start AND :end AND organization_id = :organization_id',
-        params.merge(:organization_id => GlobalModelConfig.current_organization_id)
+        'created_at BETWEEN :start AND :end', params
       ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
 
       wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }

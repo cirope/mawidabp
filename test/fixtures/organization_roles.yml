@@ -8,6 +8,11 @@ admin_role_for_administrator_user_in_second_organization:
   organization: second_organization
   role: admin_role
 
+admin_second_role_for_administrator_second_user_in_default_organization:
+  user: administrator_second_user
+  organization: default_organization
+  role: admin_second_role
+
 admin_second_role_for_administrator_second_user_in_second_organization:
   user: administrator_second_user
   organization: second_organization

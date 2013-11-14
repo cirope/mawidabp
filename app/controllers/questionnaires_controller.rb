@@ -6,7 +6,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires.json
   def index
     @title = t 'questionnaire.index_title'
-    @questionnaires = Questionnaire.list.paginate(
+    @questionnaires = Questionnaire.paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
@@ -57,7 +57,6 @@ class QuestionnairesController < ApplicationController
   def create
     @title = t 'questionnaire.new_title'
     @questionnaire = Questionnaire.new(questionnaire_params)
-    @questionnaire.organization = current_organization
 
     @questionnaire.questions.each do |question|
       if question.answer_multi_choice?
@@ -129,9 +128,7 @@ class QuestionnairesController < ApplicationController
 
   private
     def set_questionnaire
-      @questionnaire = Questionnaire.by_organization(
-        current_organization.id, params[:id]
-      ).first
+      @questionnaire = Questionnaire.find(params[:id])
     end
 
     def questionnaire_params

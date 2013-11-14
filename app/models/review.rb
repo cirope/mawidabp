@@ -6,8 +6,9 @@ class Review < ActiveRecord::Base
 
   trimmed_fields :identification
 
-  has_paper_trail meta: { organization_id: Organization.current_id }
-  default_scope { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
+  default_scope -> { where(organization_id: Organization.current_id) }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -30,6 +31,7 @@ class Review < ActiveRecord::Base
   })
 
   # Callbacks
+  after_initialize :set_organization
   before_validation :set_proper_parent, :can_be_modified?
   before_save :calculate_score
   before_destroy :can_be_destroyed?
@@ -162,6 +164,10 @@ class Review < ActiveRecord::Base
   accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
   accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
+
+  def set_organization
+    self.organization_id ||= Organization.current_id
+  end
 
   def to_s
     self.long_identification +

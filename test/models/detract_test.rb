@@ -6,6 +6,8 @@ class DetractTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @detract = Detract.find detracts(
       :adequate_for_administrator_in_default_organization).id
   end

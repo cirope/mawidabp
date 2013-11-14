@@ -1,9 +1,7 @@
 class Plan < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
   # Callbacks
   before_validation :set_proper_parent

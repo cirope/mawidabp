@@ -20,10 +20,7 @@ class FindingsController < ApplicationController
     @self_and_descendants = @auth_user.descendants + [@auth_user]
     @related_users = @auth_user.related_users_and_descendants
     @is_responsible = params[:as_responsible]
-    default_conditions = {
-      :final => false,
-      Period.table_name => {:organization_id => current_organization.id}
-    }
+    default_conditions = { final: false }
 
     if @auth_user.committee? || @selected_user
       if @selected_user
@@ -161,10 +158,7 @@ class FindingsController < ApplicationController
     completed = params[:completed]
     related_users = @auth_user.related_users_and_descendants
     selected_user = User.find(params[:user_id]) if params[:user_id]
-    default_conditions = {
-      :final => false,
-      Period.table_name => {:organization_id => current_organization.id}
-    }
+    default_conditions = { final: false }
 
     if @auth_user.committee? || selected_user
       if params[:user_id]
@@ -236,10 +230,7 @@ class FindingsController < ApplicationController
     selected_user = User.find(params[:user_id]) if params[:user_id]
     detailed = params[:include_details].present?
     related_users = @auth_user.related_users_and_descendants
-    default_conditions = {
-      :final => false,
-      Period.table_name => {:organization_id => current_organization.id}
-    }
+    default_conditions = { final: false }
 
     if @auth_user.committee? || selected_user
       if params[:user_id]
@@ -512,18 +503,9 @@ class FindingsController < ApplicationController
   end
 
   private
-    # Busca la debilidad u oportunidad indicada siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe o que no
-    # pertenece a la organización con la que se autenticó el usuario) devuelve
-    # nil.
-    # _id_::  ID de la debilidad u oportunidad que se quiere recuperar
-    def set_finding #:doc:
+    def set_finding
       includes = [{:control_objective_item => {:review => :period}}]
-      conditions = {
-        :id => params[:id],
-        :final => false,
-        Period.table_name => {:organization_id => current_organization.id}
-      }
+      conditions = { :id => params[:id], :final => false }
 
       if @auth_user.can_act_as_audited?
         includes << :users
@@ -575,8 +557,6 @@ class FindingsController < ApplicationController
       )
     end
 
-    # Elimina los atributos que no pueden ser modificados por usuarios
-    # del tipo "Auditado".
     def prepare_parameters
       if @auth_user.can_act_as_audited?
         params[:finding].delete_if do |k,|
@@ -586,7 +566,7 @@ class FindingsController < ApplicationController
       end
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :export_to_csv => :read,
         :export_to_pdf => :read,

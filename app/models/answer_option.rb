@@ -1,8 +1,7 @@
 class AnswerOption < ActiveRecord::Base
-  has_paper_trail meta: {
-    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
-  }
-  
+
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
   # Validaciones
   validates :option, presence: true
   validates_length_of :option, maximum: 255, allow_nil: true,

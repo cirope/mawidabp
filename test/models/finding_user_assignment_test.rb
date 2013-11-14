@@ -6,11 +6,11 @@ class FindingUserAssignmentTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @finding_user_assignment = FindingUserAssignment.find(
       finding_user_assignments(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_administrator_user).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera

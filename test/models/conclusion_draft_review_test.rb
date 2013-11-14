@@ -6,6 +6,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
     @conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_current_draft_review).id)
   end

@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class PollTest < ActiveSupport::TestCase
- def setup
+  def setup
+    set_organization
+
     @poll = Poll.find polls(:poll_one).id
   end
 

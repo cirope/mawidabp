@@ -14,14 +14,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses.xml
   def index
     @title = t 'weakness.index_title'
-    default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
-    ]
-    parameters = {
-      organization_id: current_organization.id,
-      boolean_true: true,
-      boolean_false: false
-    }
+    parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +

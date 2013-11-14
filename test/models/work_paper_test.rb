@@ -6,9 +6,8 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
     @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
   end
 

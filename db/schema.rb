@@ -128,9 +128,11 @@ ActiveRecord::Schema.define(version: 20131112151450) do
     t.integer  "sustantive_score"
     t.integer  "order_number"
     t.boolean  "exclude_from_score",     default: false, null: false
+    t.integer  "organization_id"
   end
 
   add_index "control_objective_items", ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id", using: :btree
+  add_index "control_objective_items", ["organization_id"], name: "index_control_objective_items_on_organization_id", using: :btree
   add_index "control_objective_items", ["review_id"], name: "index_control_objective_items_on_review_id", using: :btree
 
   create_table "control_objectives", force: true do |t|
@@ -302,6 +304,7 @@ ActiveRecord::Schema.define(version: 20131112151450) do
     t.date     "correction_date"
     t.string   "cause_analysis"
     t.date     "cause_analysis_date"
+    t.integer  "organization_id"
   end
 
   add_index "findings", ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id", using: :btree
@@ -309,6 +312,7 @@ ActiveRecord::Schema.define(version: 20131112151450) do
   add_index "findings", ["final"], name: "index_findings_on_final", using: :btree
   add_index "findings", ["first_notification_date"], name: "index_findings_on_first_notification_date", using: :btree
   add_index "findings", ["follow_up_date"], name: "index_findings_on_follow_up_date", using: :btree
+  add_index "findings", ["organization_id"], name: "index_findings_on_organization_id", using: :btree
   add_index "findings", ["parent_id"], name: "index_findings_on_parent_id", using: :btree
   add_index "findings", ["repeated_of_id"], name: "index_findings_on_repeated_of_id", using: :btree
   add_index "findings", ["state"], name: "index_findings_on_state", using: :btree
@@ -805,11 +809,13 @@ ActiveRecord::Schema.define(version: 20131112151450) do
   create_table "workflows", force: true do |t|
     t.integer  "review_id"
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
+  add_index "workflows", ["organization_id"], name: "index_workflows_on_organization_id", using: :btree
   add_index "workflows", ["period_id"], name: "index_workflows_on_period_id", using: :btree
   add_index "workflows", ["review_id"], name: "index_workflows_on_review_id", using: :btree
 

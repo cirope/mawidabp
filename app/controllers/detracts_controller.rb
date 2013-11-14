@@ -13,15 +13,18 @@ class DetractsController < ApplicationController
   # * GET /detracts.xml
   def index
     @title = t 'detract.index_title'
-    conditions = ["#{Organization.table_name}.id = :organization_id"]
-    parameters = {organization_id: current_organization.id}
 
     unless @has_approval
+      conditions = []
+      parameters = {}
+
       conditions << "#{User.table_name}.id = :user_id"
       parameters[:user_id] = @auth_user
+    
+      build_search_conditions User, [conditions.join(' AND '), parameters]
+    else
+      build_search_conditions User
     end
-
-    build_search_conditions User, [conditions.join(' AND '), parameters]
 
     @users = User.includes(:organizations).where(@conditions).order(
       [
@@ -53,9 +56,9 @@ class DetractsController < ApplicationController
     @user = @detract.try(:user) || (@auth_user unless @has_approval)
 
     if @user
-      @detracts = @user.detracts.for_organization(current_organization).order(
-        'created_at DESC'
-      ).limit(LAST_DETRACTORS_LIMIT)
+      @detracts = @user.detracts.order(
+        'created_at DESC
+      ').limit(LAST_DETRACTORS_LIMIT)
     end
 
     respond_to do |format|
@@ -71,9 +74,7 @@ class DetractsController < ApplicationController
   def show_last_detracts
     @user = User.find params[:id]
 
-    conditions = {
-      organization_id: current_organization.id
-    }
+    conditions = {}
 
     unless @has_approval
       conditions["#{User.table_name}.id"] = @auth_user.child_ids |
@@ -128,20 +129,20 @@ class DetractsController < ApplicationController
 
   private
     def set_detract
-      conditions = { id: params[:id], organization_id: current_organization.id }
-
       unless @has_approval
-        conditions["#{User.table_name}.id"] = @auth_user.id
+        @detract = Detract.includes(:user => :children).where(
+          "#{User.table_name}.id = :user_id", @auth_user.id
+        ).first
+      else
+        @detract = Detract.find(params[:id])
       end
-
-      @detract = Detract.includes(:user => :children).where(conditions).first
     end
 
     def detract_params
       params.require(:detract).permit(:value, :observations, :user_id, :lock_version)
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       if @action_privileges
         @action_privileges.update({
           new: :approval,

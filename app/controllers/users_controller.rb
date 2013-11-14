@@ -210,8 +210,8 @@ class UsersController < ApplicationController
   def login
     auth_user = User.find(session[:user_id]) if session[:user_id]
 
-    if auth_user && session[:organization_id]
-      GlobalModelConfig.current_organization_id = current_organization.try :id
+    if auth_user
+      Organization.current_id = current_organization.try :id
     end
 
     if auth_user.try(:is_enable?) && auth_user.logged_in?
@@ -236,7 +236,7 @@ class UsersController < ApplicationController
 
     @organization = Organization.find_by(prefix: organization_prefix)
 
-    GlobalModelConfig.current_organization_id = @organization.try :id
+    Organization.current_id = @organization.try :id
 
     if @organization || @group_admin_mode
       conditions = ["LOWER(#{User.table_name}.user) = :user"]

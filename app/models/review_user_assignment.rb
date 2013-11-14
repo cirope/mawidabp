@@ -2,9 +2,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
   # Constantes
   TYPES = {

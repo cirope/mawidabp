@@ -55,7 +55,7 @@ class ReviewsController < ApplicationController
   # * GET /reviews/new.xml
   def new
     @title = t 'review.new_title'
-    @review = current_organization.reviews.new
+    @review = Review.new
 
     @review.clone_from @review_clone if @review_clone
     @review.period_id = params[:period] ?
@@ -81,7 +81,7 @@ class ReviewsController < ApplicationController
   # * POST /reviews.xml
   def create
     @title = t 'review.new_title'
-    @review = current_organization.reviews.new(review_params)
+    @review = Review.new(review_params)
 
     respond_to do |format|
       if @review.save
@@ -207,12 +207,10 @@ class ReviewsController < ApplicationController
       [
         "#{Finding.table_name}.final = :boolean_false",
         "#{Finding.table_name}.state IN(:states)",
-        "#{Period.table_name}.organization_id = :organization_id",
         "#{ConclusionReview.table_name}.review_id IS NOT NULL",
         "#{BusinessUnit.table_name}.id = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
-      organization_id: current_organization.id,
       states: [
         Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]
       ],
@@ -387,7 +385,7 @@ class ReviewsController < ApplicationController
     end
 
     def set_review_clone
-      @review_clone = Review.find_by(id: params[:clone_from].to_i)
+      @review_clone = Review.find_by(id: params[:clone_from].try(:to_i))
     end
 
     def load_privileges

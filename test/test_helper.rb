@@ -9,7 +9,9 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  def set_organization(organization = nil)
+    Organization.current_id = (organization || organizations(:default_organization)).id
+  end
 
   # Función para utilizar en las pruebas de los métodos que requieren
   # autenticación

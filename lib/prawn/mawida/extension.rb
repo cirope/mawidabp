@@ -17,7 +17,7 @@ module Prawn
         id_path = ('%08d' % id).scan(/\d{4}/)
         user_path = ('%08d' % (PaperTrail.whodunnit || 0)).scan(/\d{4}/)
         organization_path = ('%08d' %
-          (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/)
+          (Organization.current_id || 0)).scan(/\d{4}/)
 
         organization_path + user_path + ['pdfs', sub_directory] + id_path +
           [filename]

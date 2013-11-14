@@ -1,14 +1,14 @@
 class Detract < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
-  # Named scopes
-  scope :for_organization, ->(organization) {
-    where(:organization_id => organization.id)
-  }
+  default_scope -> { where(organization_id: Organization.current_id) }
+
+  scope :for_organization, ->(organization) {}
+
+  # Callbacks
+  after_initialize :set_organization
 
   # Restricciones sobre los atributos
   attr_readonly :organization_id
@@ -23,9 +23,7 @@ class Detract < ActiveRecord::Base
   belongs_to :user
   belongs_to :organization
 
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
-
-    self.organization_id = GlobalModelConfig.current_organization_id
+  def set_organization
+    self.organization_id ||= Organization.current_id
   end
 end

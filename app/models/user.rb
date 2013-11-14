@@ -8,6 +8,17 @@ class User < ActiveRecord::Base
 
   trimmed_fields :user, :email, :name, :last_name
 
+  has_paper_trail ignore: [:last_access, :logged_in], meta: {
+    organization_id: -> { Organization.current_id },
+    important: -> { user.is_an_important_change }
+  }
+
+  default_scope -> {
+    includes(:organizations).references(:organizations).where(
+      organizations: { id: Organization.current_id }
+    )
+  }
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     user: {
@@ -28,11 +39,6 @@ class User < ActiveRecord::Base
     }
   )
 
-  has_paper_trail ignore: [:last_access, :logged_in], meta: {
-    organization_id: ->(user) { GlobalModelConfig.current_organization_id },
-    important: ->(user) { user.is_an_important_change }
-  }
-
   acts_as_tree foreign_key: 'manager_id', readonly: true,
     order: 'last_name ASC, name ASC', dependent: :nullify
 
@@ -44,11 +50,7 @@ class User < ActiveRecord::Base
   alias_attribute :informal, :user
 
   # Named scopes
-  scope :list, -> {
-    includes(:organizations).references(:organizations).where(
-      organizations: { id: GlobalModelConfig.current_organization_id }
-    )
-  }
+  scope :list, -> {}
   scope :with_valid_confirmation_hash, ->(confirmation_hash) {
     where(
       [
@@ -263,7 +265,7 @@ class User < ActiveRecord::Base
 
   def first_pending_poll
     polls.detect do |p|
-      p.answered == false && p.organization.id == GlobalModelConfig.current_organization_id
+      p.answered == false && p.organization.id == Organization.current_id
     end
   end
 
@@ -351,7 +353,7 @@ class User < ActiveRecord::Base
 
   def send_notification_if_necesary
     unless send_notification_email.blank?
-      organization = Organization.find GlobalModelConfig.current_organization_id
+      organization = Organization.find Organization.current_id
 
       reset_password!(organization, false)
 
@@ -403,7 +405,7 @@ class User < ActiveRecord::Base
 
   # Método para determinar si el usuario está o no habilitado
   def is_enable?
-    enable? && GlobalModelConfig.current_organization_id && !expired?
+    enable? && Organization.current_id && !expired?
   end
 
   def is_group_admin?
@@ -542,7 +544,7 @@ class User < ActiveRecord::Base
   end
 
   def get_type
-    self.roles(GlobalModelConfig.current_organization_id).max.try(:get_type)
+    self.roles(Organization.current_id).max.try(:get_type)
   end
 
   def privileges(organization)
@@ -566,7 +568,7 @@ class User < ActiveRecord::Base
   # Definición dinámica de todos los métodos "tipo?"
   Role::TYPES.each do |type, value|
     define_method("#{type}?") do
-      self.roles(GlobalModelConfig.current_organization_id).any? do |role|
+      self.roles(Organization.current_id).any? do |role|
         role.role_type == value
       end
     end

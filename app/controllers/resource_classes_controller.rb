@@ -12,9 +12,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes.xml
   def index
     @title = t 'resource_class.index_title'
-    @resource_classes = ResourceClass.where(
-      organization_id: current_organization.id
-    ).order('name ASC').paginate(
+    @resource_classes = ResourceClass.order('name ASC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -121,9 +119,7 @@ class ResourceClassesController < ApplicationController
 
   private
     def set_resource_class
-      @resource_class = ResourceClass.where(
-        id: params[:id], organization_id: current_organization.id
-      ).first
+      @resource_class = ResourceClass.find(params[:id])
     end
 
     def resource_class_params

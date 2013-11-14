@@ -8,11 +8,10 @@ class ApplicationController < ActionController::Base
   # Funciones para seleccionar la correcta versión de parámetros que debe
   # utilizarse
   include ParameterSelector
-  include GlobalModelConfig
 
   protect_from_forgery
 
-  around_filter :scope_current_organization
+  before_action :scope_current_organization
 
   # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
   # para mostrar un mensaje de error personalizado
@@ -54,9 +53,6 @@ class ApplicationController < ActionController::Base
   private
     def scope_current_organization
       Organization.current_id = current_organization.id
-      yield
-    ensure
-      Organization.current_id = nil
     end
 
   def load_user

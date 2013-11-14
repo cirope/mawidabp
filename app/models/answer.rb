@@ -1,7 +1,6 @@
 class Answer < ActiveRecord::Base
-  has_paper_trail meta: {
-    organization_id: ->(answer) { GlobalModelConfig.current_organization_id }
-  }
+
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
   # Validaciones
   validates_length_of :comments, maximum: 255, allow_nil: true, allow_blank: true

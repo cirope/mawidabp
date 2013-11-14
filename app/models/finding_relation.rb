@@ -1,7 +1,6 @@
 class FindingRelation < ActiveRecord::Base
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
+
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
 
   # Restricciones
   validates :description, :related_finding_id, :presence => true
@@ -14,11 +13,11 @@ class FindingRelation < ActiveRecord::Base
 
     record.errors.add attr, :taken if repeated_relations.size > 1
   end
-  
+
   # Relaciones
   belongs_to :finding
   belongs_to :related_finding, :class_name => 'Finding'
-  
+
   def to_s
     "#{self.finding} [#{self.description}]"
   end

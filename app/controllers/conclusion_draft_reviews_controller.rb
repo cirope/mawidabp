@@ -321,7 +321,7 @@ class ConclusionDraftReviewsController < ApplicationController
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         export_to_pdf: :read,
         score_sheet: :read,

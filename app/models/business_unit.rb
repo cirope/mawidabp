@@ -4,11 +4,9 @@ class BusinessUnit < ActiveRecord::Base
   trimmed_fields :name
 
   include ParameterSelector
-  
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
-  
+
+  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+
   # Alias de atributos
   alias_attribute :label, :name
 

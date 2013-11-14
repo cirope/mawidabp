@@ -60,7 +60,10 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.xml
   # * GET /conclusion_final_reviews/new.json
   def new
-    unless ConclusionFinalReview.exists?(review_id: params[:review])
+    conclusion_final_review =
+      ConclusionFinalReview.find_by(review_id: params[:review])
+
+    unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
       @conclusion_final_review = ConclusionFinalReview.new(
         review_id: params[:review])
@@ -82,9 +85,6 @@ class ConclusionFinalReviewsController < ApplicationController
         }
       end
     else
-      conclusion_final_review = ConclusionFinalReview.where(
-        review_id: params[:review]).first
-
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
     end
   end
@@ -404,7 +404,6 @@ class ConclusionFinalReviewsController < ApplicationController
     def set_conclusion_final_review
       @conclusion_final_review = ConclusionFinalReview.includes(
         review: [
-          :period,
           :plan_item,
           {
             control_objective_items: [
@@ -412,9 +411,7 @@ class ConclusionFinalReviewsController < ApplicationController
             ]
           }
         ]
-      ).where(
-        id: params[:id], Period.table_name => { organization_id: current_organization.id }
-      ).references(:periods).first
+      ).find(params[:id])
     end
 
     def conclusion_final_review_params
@@ -424,7 +421,7 @@ class ConclusionFinalReviewsController < ApplicationController
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update({
           export_to_pdf: :read,
           score_sheet: :read,
