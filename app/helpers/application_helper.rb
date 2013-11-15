@@ -39,8 +39,9 @@ module ApplicationHelper
   def super_truncate(text, length = 30)
     unless text.blank?
       omission = content_tag(:abbr, '...', :title => text)
+      safe_text = text.gsub '%', '%%'
 
-      truncate(text, :length => length, :omission => '%s') % omission
+      truncate(safe_text, :length => length, :omission => '%s') % omission
     end
   end
 
