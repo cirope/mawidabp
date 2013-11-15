@@ -202,13 +202,7 @@ module Reports::ProcessControlStats
       ), :inline_format => true
     end
 
-    unless @filters.empty?
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{@controller}_committee_report.applied_filters",
-        :filters => @filters.to_sentence, :count => @filters.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
-        :inline_format => true
-    end
+    add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
     pdf.custom_save_as(
       t("#{@controller}_committee_report.process_control_stats.pdf_name",
