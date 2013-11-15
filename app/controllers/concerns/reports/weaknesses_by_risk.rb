@@ -230,7 +230,7 @@ module Reports::WeaknessesByRisk
     end
 
     pdf.custom_save_as(
-      t("#{@controller}_report.weaknesses_by_risk.pdf_name",
+      t("#{@controller}_committee_report.weaknesses_by_risk.pdf_name",
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)),
       'weaknesses_by_risk', 0)
