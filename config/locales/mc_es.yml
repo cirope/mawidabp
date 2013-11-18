@@ -1828,6 +1828,11 @@
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+      paper_trail/version:
+        item: "Objeto"
+        event: "Evento"
+        whodunnit: "Ejecutor"
+        created_at: "Fecha"
       period:
         number: "Número"
         description: "Descripción"
@@ -1919,10 +1924,10 @@
         questions: "Preguntas"
         polls: "Encuestas"
         pollable_type: "Clase encuestable"
-        email_subject: "Asunto email"                                                                                                                                                 
+        email_subject: "Asunto email"
         email_link: "Link email"
         email_text: "Texto email"
-        email_clarification: "Aclaración email" 
+        email_clarification: "Aclaración email"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
@@ -2005,11 +2010,6 @@
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'
-      version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
       weakness:
         control_objective_item_id: "Objetivo/Meta"
         description: "Desvío"

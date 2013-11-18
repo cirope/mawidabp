@@ -1,22 +1,22 @@
 <div id="showed_data">
 <p>
-  <b><%= Version.human_attribute_name 'created_at' %>:</b>
+  <b><%= PaperTrail::Version.human_attribute_name 'created_at' %>:</b>
   <%=l @version.created_at, :format => :long %>
 </p>
 
 <p>
-  <b><%= Version.human_attribute_name 'whodunnit' %>:</b>
+  <b><%= PaperTrail::Version.human_attribute_name 'whodunnit' %>:</b>
   <%=h show_whodunnit(@version.whodunnit) %>
 </p>
 
 <p>
-  <b><%= Version.human_attribute_name 'item' %>:</b>
+  <b><%= PaperTrail::Version.human_attribute_name 'item' %>:</b>
   <%=h @version.item ?
     "#{@version.item.class.model_name.human} (#{@version.reify(:has_one => false) || @version.item})" : '-' %>
 </p>
 
 <p>
-  <b><%= Version.human_attribute_name 'event' %>:</b>
+  <b><%= PaperTrail::Version.human_attribute_name 'event' %>:</b>
   <%=h t("version.event_#{@version.event}") %>
 </p>
 

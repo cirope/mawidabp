@@ -31,6 +31,7 @@ class VersionsControllerTest < ActionController::TestCase
     get :show, :id => versions(:important_version).to_param
     assert_response :success
     assert_not_nil assigns(:version)
+    puts @response.body
     assert_select '#error_body', false
     assert_select 'table.summary_table'
     assert_template 'versions/show'
@@ -58,6 +59,6 @@ class VersionsControllerTest < ActionController::TestCase
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('version.pdf_list_name',
         :from_date => from_date.to_formatted_s(:db),
-        :to_date => to_date.to_formatted_s(:db)), Version.table_name)
+        :to_date => to_date.to_formatted_s(:db)), PaperTrail::Version.table_name)
   end
 end
