@@ -31,7 +31,6 @@ class VersionsControllerTest < ActionController::TestCase
     get :show, :id => versions(:important_version).to_param
     assert_response :success
     assert_not_nil assigns(:version)
-    puts @response.body
     assert_select '#error_body', false
     assert_select 'table.summary_table'
     assert_template 'versions/show'
