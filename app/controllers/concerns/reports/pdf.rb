@@ -16,6 +16,15 @@ module Reports::Pdf
     pdf
   end
 
+  def add_period_title(pdf, period, align = :left)
+    pdf.move_down PDF_FONT_SIZE
+
+    pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
+      (PDF_FONT_SIZE * 1.25).round, align
+
+    pdf.move_down PDF_FONT_SIZE
+  end
+
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
       columns = {}

@@ -162,9 +162,7 @@ module Reports::WeaknessesByRisk
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :left
+      add_period_title(pdf, period)
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.kind_of?(Symbol) ?

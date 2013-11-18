@@ -212,11 +212,7 @@ module Reports::ControlObjectiveStats
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :left
-
-      pdf.move_down PDF_FONT_SIZE
+      add_period_title(pdf, period)
 
       column_data = []
       columns = {}

@@ -121,11 +121,7 @@ module Reports::FixedWeaknessesReport
 
     @periods.each do |period|
       unless @reviews[period].blank?
-        pdf.move_down PDF_FONT_SIZE
-        pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-          (PDF_FONT_SIZE * 1.25).round, :justify
-
-        pdf.move_down PDF_FONT_SIZE
+        add_period_title(pdf, period, :justify)
 
         @reviews[period].each do |data|
           columns = data[:columns]
