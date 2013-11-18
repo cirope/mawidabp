@@ -1,5 +1,21 @@
 module Reports::Pdf
 
+  def init_pdf(organization, title, subtitle)
+    pdf = Prawn::Document.create_generic_pdf :landscape
+
+    pdf.add_generic_report_header organization
+
+    pdf.add_title title, PDF_FONT_SIZE, :center
+
+    pdf.move_down PDF_FONT_SIZE
+
+    pdf.add_title subtitle, PDF_FONT_SIZE, :center
+
+    pdf.move_down PDF_FONT_SIZE * 2
+
+    pdf
+  end
+
   def add_weaknesses_synthesis_table(pdf, data, font_size = PDF_FONT_SIZE)
     if data.kind_of?(Hash)
       columns = {}

@@ -115,17 +115,7 @@ module Reports::WeaknessesByRiskReport
   def create_weaknesses_by_risk_report
     self.weaknesses_by_risk_report
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

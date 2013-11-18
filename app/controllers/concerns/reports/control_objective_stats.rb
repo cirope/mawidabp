@@ -207,17 +207,7 @@ module Reports::ControlObjectiveStats
   def create_control_objective_stats
     self.control_objective_stats
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

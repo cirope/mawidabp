@@ -169,13 +169,7 @@ module Reports::WeaknessesByAuditType
   def create_weaknesses_by_audit_type
     self.weaknesses_by_audit_type
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
