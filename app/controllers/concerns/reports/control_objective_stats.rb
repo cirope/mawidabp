@@ -287,14 +287,8 @@ module Reports::ControlObjectiveStats
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
-    pdf.custom_save_as(
-      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'control_objective_stats')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'control_objective_stats')
   end
 end

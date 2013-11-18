@@ -185,14 +185,8 @@ module Reports::FixedWeaknessesReport
 
     add_pdf_filters(pdf, @controllers, @filters) if @filters.present?
 
-    pdf.custom_save_as(
-      t("#{@controller}_committee_report.fixed_weaknesses_report.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'fixed_weaknesses_report')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.fixed_weaknesses_report.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'fixed_weaknesses_report')
   end
 end

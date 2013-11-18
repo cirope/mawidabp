@@ -261,4 +261,20 @@ module Reports::Pdf
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
       :inline_format => true
   end 
+
+  def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0) 
+    pdf.custom_save_as(
+      t("#{controller}_committee_report.#{sub_directory}.pdf_name",
+        :from_date => from_date.to_formatted_s(:db),
+        :to_date => to_date.to_formatted_s(:db)), sub_directory, id
+    )
+  end
+
+  def redirect_to_pdf(controller, from_date, to_date, sub_directory, id = 0)
+    redirect_to Prawn::Document.relative_path(
+      t("#{controller}_committee_report.#{sub_directory}.pdf_name",
+        :from_date => from_date.to_formatted_s(:db),
+        :to_date => to_date.to_formatted_s(:db)), sub_directory, id
+    )
+  end
 end
