@@ -183,12 +183,7 @@ module Reports::FixedWeaknessesReport
       end
     end
 
-    unless @filters.empty?
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{@controller}_committee_report.applied_filters",
-        :filters => @filters.to_sentence, :count => @filters.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
-    end
+    add_pdf_filters(pdf, @controllers, @filters) if @filters.present?
 
     pdf.custom_save_as(
       t("#{@controller}_committee_report.fixed_weaknesses_report.pdf_name",
