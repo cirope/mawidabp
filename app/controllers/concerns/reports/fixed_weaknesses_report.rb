@@ -115,17 +115,7 @@ module Reports::FixedWeaknessesReport
   def create_fixed_weaknesses_report
     self.fixed_weaknesses_report
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
@@ -183,21 +173,10 @@ module Reports::FixedWeaknessesReport
       end
     end
 
-    unless @filters.empty?
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text t("#{@controller}_committee_report.applied_filters",
-        :filters => @filters.to_sentence, :count => @filters.size),
-        :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
-    end
+    add_pdf_filters(pdf, @controllers, @filters) if @filters.present?
 
-    pdf.custom_save_as(
-      t("#{@controller}_committee_report.fixed_weaknesses_report.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'fixed_weaknesses_report')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.fixed_weaknesses_report.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'fixed_weaknesses_report', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'fixed_weaknesses_report')
   end
 end

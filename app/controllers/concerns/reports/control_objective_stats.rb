@@ -207,17 +207,7 @@ module Reports::ControlObjectiveStats
   def create_control_objective_stats
     self.control_objective_stats
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
@@ -287,14 +277,8 @@ module Reports::ControlObjectiveStats
 
     add_pdf_filters(pdf, @controller, @filters) if @filters.present?
 
-    pdf.custom_save_as(
-      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'control_objective_stats')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.control_objective_stats.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'control_objective_stats', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'control_objective_stats')
   end
 end

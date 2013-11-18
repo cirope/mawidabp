@@ -169,13 +169,7 @@ module Reports::WeaknessesByAuditType
   def create_weaknesses_by_audit_type
     self.weaknesses_by_audit_type
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header @auth_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
@@ -293,16 +287,8 @@ module Reports::WeaknessesByAuditType
       end
     end
 
-    pdf.custom_save_as(
-      t("#{@controller}_committee_report.weaknesses_by_audit_type.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
-      'weaknesses_by_audit_type', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'weaknesses_by_audit_type')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.weaknesses_by_audit_type.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
-      'weaknesses_by_audit_type', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_by_audit_type')
   end
 end
