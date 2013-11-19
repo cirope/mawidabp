@@ -5,10 +5,10 @@
 <table class="list">
   <thead>
     <tr>
-      <th><%= Version.human_attribute_name(:created_at) %></th>
-      <th><%= Version.human_attribute_name(:whodunnit) %></th>
-      <th class="expendable"><%= Version.human_attribute_name(:item) %></th>
-      <th class="expendable"><%= Version.human_attribute_name(:event) %></th>
+      <th><%= PaperTrail::Version.human_attribute_name 'created_at' %></th>
+      <th><%= PaperTrail::Version.human_attribute_name 'whodunnit' %></th>
+      <th class="expendable"><%= PaperTrail::Version.human_attribute_name 'item' %></th>
+      <th class="expendable"><%= PaperTrail::Version.human_attribute_name 'event' %></th>
       <th></th>
     </tr>
   </thead>

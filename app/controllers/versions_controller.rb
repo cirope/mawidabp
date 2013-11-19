@@ -8,7 +8,7 @@ class VersionsController < ApplicationController
   # * GET /versions/1.xml
   def show
     @title = t 'version.show_title'
-    @version = Version.where(
+    @version = PaperTrail::Version.where(
       id: params[:id],
       organization_id: @auth_organization.id,
       important: true
@@ -28,7 +28,7 @@ class VersionsController < ApplicationController
     @from_date, @to_date = *make_date_range(params[:security_changes_report])
 
     unless params[:download]
-      @versions = Version.where(
+      @versions = PaperTrail::Version.where(
         [
           'organization_id = :organization_id',
           'created_at BETWEEN :from_date AND :to_date',
@@ -58,7 +58,7 @@ class VersionsController < ApplicationController
   private
 
   def download_security_changes_report
-    versions = Version.where(
+    versions = PaperTrail::Version.where(
       [
         'organization_id = :organization_id',
         'created_at BETWEEN :from_date AND :to_date',
@@ -84,7 +84,7 @@ class VersionsController < ApplicationController
     column_data, column_headers, column_widths = [], [], []
 
     column_order.each do |col_name, col_width|
-      column_headers << Version.human_attribute_name(col_name)
+      column_headers << PaperTrail::Version.human_attribute_name(col_name)
       column_widths << pdf.percent_width(col_width)
     end
 
@@ -119,9 +119,9 @@ class VersionsController < ApplicationController
       from_date: @from_date.to_formatted_s(:db),
       to_date: @to_date.to_formatted_s(:db))
 
-    pdf.custom_save_as(pdf_name, Version.table_name)
+    pdf.custom_save_as(pdf_name, PaperTrail::Version.table_name)
 
-    redirect_to Prawn::Document.relative_path(pdf_name, Version.table_name)
+    redirect_to Prawn::Document.relative_path(pdf_name, PaperTrail::Version.table_name)
   end
 
   def load_privileges #:nodoc:
