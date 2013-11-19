@@ -1,9 +1,7 @@
 class Workflow < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Callbacks
   before_validation :set_proper_parent
@@ -14,6 +12,9 @@ class Workflow < ActiveRecord::Base
   attr_writer :cost
 
   attr_readonly :period_id, :review_id
+
+  # Scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
   validates :period_id, :review_id, :organization_id, :presence => true
@@ -43,7 +44,6 @@ class Workflow < ActiveRecord::Base
     super(attributes, options)
 
     self.period ||= Period.currents.first
-    self.organization_id ||= Organization.current_id
   end
 
   def set_proper_parent

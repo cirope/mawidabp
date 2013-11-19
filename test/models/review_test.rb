@@ -6,8 +6,9 @@ class ReviewTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
     @review = Review.find reviews(:review_with_conclusion).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -22,7 +23,7 @@ class ReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un reporte
   test 'create' do
     assert_difference 'Review.count' do
-      @review = Review.create(
+      @review = Review.list.create(
         :identification => 'New Identification',
         :description => 'New Description',
         :period_id => periods(:current_period).id,
@@ -119,7 +120,6 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :identification, :taken
     assert_error @review, :plan_item_id, :taken
 
-    # La identificación sólo debe ser única dentro de la organización
     @review.period_id = periods(:current_period_second_organization).id
     @review.period.reload
 

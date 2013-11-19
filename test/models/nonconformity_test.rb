@@ -33,7 +33,7 @@ class NonconformityTest < ActiveSupport::TestCase
   # Prueba la creación de una no conformidad
   test 'create' do
     assert_difference 'Nonconformity.count' do
-      @nonconformity = Nonconformity.new(
+      @nonconformity = Nonconformity.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'NC020',

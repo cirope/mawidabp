@@ -7,6 +7,8 @@ class PeriodTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @period = Period.find periods(:current_period).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -21,12 +23,11 @@ class PeriodTest < ActiveSupport::TestCase
   # Prueba la creación de un periodo
   test 'create' do
     assert_difference 'Period.count' do
-      Period.create(
+      Period.list.create(
         :number => '20',
         :description => 'New period',
         :start => 2.months.from_now.to_date, # Administrador
-        :end => 3.months.from_now.to_date,
-        :organization => organizations(:default_organization)
+        :end => 3.months.from_now.to_date
       )
     end
   end

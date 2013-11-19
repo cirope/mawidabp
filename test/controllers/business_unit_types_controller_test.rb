@@ -67,7 +67,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'New business unit label',
           :project_label => 'New project label',
           :external => '0',
-          :business_units_attributes => [ 
+          :business_units_attributes => [
             {
               :name => 'New business unit'
             }

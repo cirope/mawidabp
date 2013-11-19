@@ -12,9 +12,8 @@ class ConclusionFinalReview < ConclusionReview
   }.merge(GENERIC_COLUMNS_FOR_SEARCH).with_indifferent_access
 
   # Named scopes
-  scope :list, -> {}
   scope :list_all_by_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       review: [
         { plan_item: { business_unit: :business_unit_type } }
       ]
@@ -30,7 +29,7 @@ class ConclusionFinalReview < ConclusionReview
     )
   }
   scope :list_all_by_solution_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       review: [
         { plan_item: { business_unit: :business_unit_type } },
         { control_objective_items: :weaknesses }
@@ -47,7 +46,7 @@ class ConclusionFinalReview < ConclusionReview
     )
   }
   scope :list_all_by_final_solution_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       review: [
         { plan_item: { business_unit: :business_unit_type } },
         { control_objective_items: :final_weaknesses }
@@ -62,7 +61,7 @@ class ConclusionFinalReview < ConclusionReview
         'issue_date ASC'
       ]
     )
-  } 
+  }
   scope :internal_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}

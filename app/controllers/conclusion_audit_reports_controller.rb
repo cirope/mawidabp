@@ -6,7 +6,7 @@ class ConclusionAuditReportsController < ApplicationController
   include Reports::ProcessControlStats
   include Reports::WeaknessesByRiskReport
   include Reports::FixedWeaknessesReport
-  include Reports::NonconformitiesReport  
+  include Reports::NonconformitiesReport
 
   before_action :auth, :load_privileges, :check_privileges
 

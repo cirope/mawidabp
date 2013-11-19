@@ -2,11 +2,10 @@ class WorkPaper < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :sorted_by_code, -> { order('code ASC') }
   scope :with_prefix, ->(prefix) {
     where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
@@ -17,7 +16,6 @@ class WorkPaper < ActiveRecord::Base
   attr_readonly :organization_id
 
   # Callbacks
-  after_initialize :set_organization
   before_save :check_for_modifications
   after_save :create_cover_and_zip
   after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
@@ -58,10 +56,6 @@ class WorkPaper < ActiveRecord::Base
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     :reject_if => lambda { |attributes| attributes['file'].blank? }
-
-  def set_organization
-    self.organization_id = Organization.current_id
-  end
 
   def inspect
     "#{self.code} - #{self.name} (#{self.pages_to_s})"

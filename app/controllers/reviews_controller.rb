@@ -20,9 +20,9 @@ class ReviewsController < ApplicationController
 
     build_search_conditions Review
 
-    @reviews = Review.includes({ plan_item: :business_unit }).where(
+    @reviews = Review.list.includes({ plan_item: :business_unit }).where(
       @conditions
-    ).order('identification DESC').paginate(
+    ).reorder('identification DESC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -81,7 +81,7 @@ class ReviewsController < ApplicationController
   # * POST /reviews.xml
   def create
     @title = t 'review.new_title'
-    @review = Review.new(review_params)
+    @review = Review.list.new(review_params)
 
     respond_to do |format|
       if @review.save
@@ -365,7 +365,7 @@ class ReviewsController < ApplicationController
           :id, :assignment_type, :user_id, :_destroy
         ],
         control_objective_items_attributes: [
-          :id, :control_objective_id, :control_objective_text, :order_number, :_destroy, 
+          :id, :control_objective_id, :control_objective_text, :order_number, :_destroy,
           control_attributes: [
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]

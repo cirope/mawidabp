@@ -3,11 +3,9 @@ require 'test_helper'
 # Clase para probar el modelo "WorkflowItem"
 class WorkflowItemTest < ActiveSupport::TestCase
   fixtures :workflow_items, :workflows, :control_objective_items, :resources
-  
+
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @workflow_item = WorkflowItem.find(
       workflow_items(:with_conclusion_workflow_item_1).id)
   end

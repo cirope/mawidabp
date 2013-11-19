@@ -22,7 +22,7 @@ class ConclusionFinalReviewsController < ApplicationController
     order = @order_by || "issue_date DESC"
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
-    @conclusion_final_reviews = ConclusionFinalReview.includes(
+    @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [{ plan_item: :business_unit }]
     ).where(@conditions).order(order).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
@@ -61,7 +61,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.json
   def new
     conclusion_final_review =
-      ConclusionFinalReview.find_by(review_id: params[:review])
+      ConclusionFinalReview.list.find_by(review_id: params[:review])
 
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
@@ -102,7 +102,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews.xml
   def create
     @title = t 'conclusion_final_review.new_title'
-    @conclusion_final_review = ConclusionFinalReview.new(
+    @conclusion_final_review = ConclusionFinalReview.list.new(
       conclusion_final_review_params, {}, false)
 
     respond_to do |format|
@@ -280,13 +280,9 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    default_conditions = {
-      "#{Period.table_name}.organization_id" => current_organization.id
-    }
+    build_search_conditions ConclusionFinalReview
 
-    build_search_conditions ConclusionFinalReview, default_conditions
-
-    conclusion_final_reviews = ConclusionFinalReview.includes(
+    conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).references(:periods, :reviews, :business_units).order(
       @order_by || 'issue_date DESC'
@@ -402,16 +398,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
   private
     def set_conclusion_final_review
-      @conclusion_final_review = ConclusionFinalReview.includes(
-        review: [
-          :plan_item,
-          {
-            control_objective_items: [
-              :control, :final_weaknesses, :final_oportunities
-            ]
-          }
-        ]
-      ).find(params[:id])
+      @conclusion_final_review = ConclusionFinalReview.list.find(params[:id])
     end
 
     def conclusion_final_review_params

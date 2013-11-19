@@ -6,10 +6,10 @@ class WeaknessTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @weakness = Weakness.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -34,7 +34,7 @@ class WeaknessTest < ActiveSupport::TestCase
   # Prueba la creación de una debilidad
   test 'create' do
     assert_difference 'Weakness.count' do
-      @weakness = Weakness.new(
+      @weakness = Weakness.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',

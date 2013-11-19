@@ -1,9 +1,7 @@
 class ConclusionReview < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
@@ -35,6 +33,7 @@ class ConclusionReview < ActiveRecord::Base
   }.with_indifferent_access
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :for_period, ->(period) {
     includes(:review =>:period).where(
       "#{Period.table_name}.id" => period.id
@@ -87,7 +86,6 @@ class ConclusionReview < ActiveRecord::Base
   }
 
   # Callbacks
-  after_initialize :set_organization
   before_destroy :can_be_destroyed?
 
   # Restricciones de los atributos
@@ -121,10 +119,6 @@ class ConclusionReview < ActiveRecord::Base
         :field => "#{Review.table_name}.identification ASC"
       }
     })
-  end
-
-  def set_organization
-    self.organization_id ||= Organization.current_id
   end
 
   def can_be_destroyed?

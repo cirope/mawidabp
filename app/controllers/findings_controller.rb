@@ -51,7 +51,7 @@ class FindingsController < ApplicationController
 
     build_search_conditions Finding, default_conditions
 
-    @findings = Finding.includes(
+    @findings = Finding.list.includes(
       {
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
@@ -184,7 +184,7 @@ class FindingsController < ApplicationController
 
     build_search_conditions Finding, default_conditions
 
-    findings = Finding.includes(
+    findings = Finding.list.includes(
       {
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]
@@ -256,7 +256,7 @@ class FindingsController < ApplicationController
 
     build_search_conditions Finding, default_conditions
 
-    findings = Finding.includes(
+    findings = Finding.list.includes(
       {
         :control_objective_item => {
           :review => [:conclusion_final_review, :period, :plan_item]

@@ -30,11 +30,10 @@ class LoginRecordTest < ActiveSupport::TestCase
   # Prueba la creación de un registro de ingreso
   test 'create' do
     assert_difference 'LoginRecord.count' do
-      @login_record = LoginRecord.create(
+      @login_record = LoginRecord.list.create(
         :start => 2.hours.ago,
         :end => Time.now,
         :user_id => users(:administrator_user).id,
-        :organization_id => organizations(:default_organization).id,
         :data => 'Some data'
       )
     end

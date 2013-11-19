@@ -29,7 +29,7 @@ class OportunityTest < ActiveSupport::TestCase
   # Prueba la creación de una oportunidad
   test 'create' do
     assert_difference 'Oportunity.count' do
-      @oportunity = Oportunity.new(
+      @oportunity = Oportunity.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'OM20',

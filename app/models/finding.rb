@@ -7,9 +7,7 @@ class Finding < ActiveRecord::Base
 
   acts_as_tree
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   cattr_accessor :current_user, :current_organization
 
@@ -136,6 +134,7 @@ class Finding < ActiveRecord::Base
   ]
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :with_prefix, ->(prefix) {
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
@@ -160,7 +159,12 @@ class Finding < ActiveRecord::Base
   scope :for_notification, -> { where(:state => STATUS[:notify], :final => false) }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
   scope :sort_by_code, -> { order('review_code ASC') }
-  scope :for_current_organization, -> {}
+  scope :for_current_organization, -> {
+    includes(:control_objective_item => {:review => :period}).where(
+      "#{Period.table_name}.organization_id = :organization_id",
+      :organization_id => Organization.current_id
+    ).references(:periods)
+  }
   scope :for_period, ->(period) {
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
@@ -311,8 +315,14 @@ class Finding < ActiveRecord::Base
         :review => [:period, :conclusion_final_review, {:plan_item => :business_unit}]
       }
     ).where(
-      "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
-      :begin => from_date, :end => to_date
+      [
+        "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
+        "#{Period.table_name}.organization_id = :organization_id"
+      ].join(' AND '),
+      {
+        :begin => from_date, :end => to_date,
+        :organization_id => Organization.current_id
+      }
     ).references(:conslusion_reviews, :periods).order(
       order ?
         ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
@@ -324,14 +334,18 @@ class Finding < ActiveRecord::Base
   }
   scope :list_all_in_execution_by_date, ->(from_date, to_date) {
     includes(
-      :control_objective_item => {:review => [:conclusion_final_review]}
+      :control_objective_item => {:review => [:period, :conclusion_final_review]}
     ).where(
       [
         "#{Review.table_name}.created_at BETWEEN :begin AND :end",
+        "#{Period.table_name}.organization_id = :organization_id",
         "#{ConclusionFinalReview.table_name}.review_id IS NULL"
       ].join(' AND '),
-      { :begin => from_date, :end => to_date }
-    ).references(:reviews, :conclusion_reviews)
+      {
+        :begin => from_date, :end => to_date,
+        :organization_id => Organization.current_id
+      }
+    ).references(:reviews, :periods, :conclusion_reviews)
   }
   scope :internal_audit, -> {
     includes(
@@ -516,7 +530,6 @@ class Finding < ActiveRecord::Base
     self.state ||= STATUS[:incomplete]
     self.final ||= false
     self.finding_prefix ||= false
-    self.organization_id ||= Organization.current_id
   end
 
   def self.columns_for_sort

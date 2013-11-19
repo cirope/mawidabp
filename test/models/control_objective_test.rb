@@ -3,7 +3,7 @@ require 'test_helper'
 # Clase para probar el modelo "ControlObjective"
 class ControlObjectiveTest < ActiveSupport::TestCase
   fixtures :control_objectives
-  
+
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @control_objective = ControlObjective.find(

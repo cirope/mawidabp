@@ -10,7 +10,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def set_organization(organization = nil)
-    Organization.current_id = (organization || organizations(:default_organization)).id
+    Organization.current_id =
+      (organization || organizations(:default_organization)).id
   end
 
   # Función para utilizar en las pruebas de los métodos que requieren

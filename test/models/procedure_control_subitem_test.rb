@@ -7,6 +7,8 @@ class ProcedureControlSubitemTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @procedure_control_subitem = ProcedureControlSubitem.find(
       procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id)
   end

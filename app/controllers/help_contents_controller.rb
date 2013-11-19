@@ -49,7 +49,7 @@ class HelpContentsController < ApplicationController
   end
 
   # Recupera los datos para editar un contenido de ayuda
-  # 
+  #
   # * GET /help_contents/1/edit
   def edit
     @title = t 'help_content.edit_title'

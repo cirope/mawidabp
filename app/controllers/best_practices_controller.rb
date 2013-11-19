@@ -13,7 +13,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices.xml
   def index
     @title = t 'best_practice.index_title'
-    @best_practices = BestPractice.order('created_at DESC').paginate(
+    @best_practices = BestPractice.list.reorder('created_at DESC').paginate(
       page: params[:page],
       per_page: APP_LINES_PER_PAGE
     )
@@ -67,7 +67,7 @@ class BestPracticesController < ApplicationController
   # * POST /best_practices.xml
   def create
     @title = t 'best_practice.new_title'
-    @best_practice = BestPractice.new(best_practice_params)
+    @best_practice = BestPractice.list.new(best_practice_params)
 
     respond_to do |format|
       if @best_practice.save
@@ -100,7 +100,7 @@ class BestPracticesController < ApplicationController
         format.xml  { render xml: @best_practice.errors, status: :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'best_practice.stale_object_error'
     redirect_to action: :edit
@@ -124,7 +124,7 @@ class BestPracticesController < ApplicationController
 
   private
     def set_best_practice
-      @best_practice = BestPractice.find(params[:id])
+      @best_practice = BestPractice.list.find(params[:id])
     end
 
     def best_practice_params

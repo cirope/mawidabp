@@ -18,7 +18,7 @@ class ControlObjectiveItemsController < ApplicationController
 
     build_search_conditions ControlObjectiveItem
 
-    @control_objectives = ControlObjectiveItem.includes(
+    @control_objectives = ControlObjectiveItem.list.includes(
         :weaknesses,
         :work_papers,
         {review: :period},
@@ -55,9 +55,9 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1/edit
   def edit
     @title = t 'control_objective_item.edit_title'
-    
+
     if params[:control_objective] && params[:review]
-      @control_objective_item = ControlObjectiveItem.includes(:review).where(
+      @control_objective_item = ControlObjectiveItem.list.includes(:review).where(
         control_objective_id: params[:control_objective],
         review_id: params[:review]
       ).order('created_at DESC').first
@@ -88,7 +88,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = review.control_objective_items.detect do |coi|
         coi.id == @control_objective_item.id
       end
-      
+
       if updated
         flash.notice = t 'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil

@@ -1,7 +1,7 @@
 class ImageModel < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   mount_uploader :image, ImageUploader, mount_on: :image_file_name
 

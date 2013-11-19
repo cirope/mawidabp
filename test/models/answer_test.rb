@@ -3,8 +3,6 @@ require 'test_helper'
 class AnswerTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @answer = Answer.find answers(:answer_written).id
   end
 

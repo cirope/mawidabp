@@ -6,7 +6,7 @@ class SettingsController < ApplicationController
   def index
     @title = t 'setting.index_title'
 
-    @settings = current_organization.settings.paginate(
+    @settings = Setting.list.paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
   end
@@ -37,7 +37,7 @@ class SettingsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_setting
-      @setting = current_organization.settings.find(params[:id])
+      @setting = Setting.list.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

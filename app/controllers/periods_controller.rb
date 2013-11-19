@@ -11,9 +11,9 @@ class PeriodsController < ApplicationController
   # * GET /periods.xml
   def index
     @title = t 'period.index_title'
-    @periods = Period.where(:organization_id => current_organization.id).order(
-      'start DESC'
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    @periods = Period.list.reorder('start DESC').paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html # index.html.erb
@@ -40,7 +40,7 @@ class PeriodsController < ApplicationController
   # * GET /periods/new.xml
   def new
     @title = t 'period.new_title'
-    @period = Period.new(:organization_id => current_organization.id)
+    @period = Period.new
     session[:back_to] = params[:back_to]
 
     respond_to do |format|
@@ -62,7 +62,7 @@ class PeriodsController < ApplicationController
   # * POST /periods.xml
   def create
     @title = t 'period.new_title'
-    @period = Period.new(period_params)
+    @period = Period.list.new(period_params)
 
     respond_to do |format|
       if @period.save
@@ -95,7 +95,7 @@ class PeriodsController < ApplicationController
         format.xml  { render :xml => @period.errors, :status => :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'period.stale_object_error'
     redirect_to :action => :edit
@@ -119,14 +119,12 @@ class PeriodsController < ApplicationController
 
   private
     def set_period
-      @period = Period.where(
-        id: params[:id], organization_id: current_organization.id
-      ).first
+      @period = Period.find(params[:id])
     end
 
     def period_params
       params.require(:period).permit(
         :number, :description, :start, :end, :lock_version
-      ).merge(organization_id: current_organization.id)
+      )
     end
 end

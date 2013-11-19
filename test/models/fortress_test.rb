@@ -25,7 +25,7 @@ class FortressTest < ActiveSupport::TestCase
   # Prueba la creación de una fortaleza
   test 'create' do
     assert_difference 'Fortress.count' do
-      @fortress = Fortress.new(
+      @fortress = Fortress.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'F20',

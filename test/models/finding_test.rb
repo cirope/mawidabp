@@ -6,10 +6,10 @@ class FindingTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @finding = Finding.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -35,7 +35,7 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba la creación de una debilidad
   test 'create' do
     assert_difference 'Finding.count' do
-      @finding = @finding.class.new(
+      @finding = @finding.class.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
@@ -79,7 +79,7 @@ class FindingTest < ActiveSupport::TestCase
     # No se puede crear una observación de un objetivo que está en un informe
     # definitivo
     assert_no_difference 'Finding.count' do
-      Finding.create(
+      Finding.list.create(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'O020',

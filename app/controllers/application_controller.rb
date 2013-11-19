@@ -46,13 +46,15 @@ class ApplicationController < ActionController::Base
   end
 
   def current_organization
-    @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
+    if APP_ADMIN_PREFIX != request.subdomains.first
+      @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
+    end
   end
   helper_method :current_organization
 
   private
     def scope_current_organization
-      Organization.current_id = current_organization.id
+      Organization.current_id = current_organization.try(:id)
     end
 
   def load_user
@@ -65,7 +67,6 @@ class ApplicationController < ActionController::Base
 
   # Verifica que el login se haya realizado y el usuario esté activo
   def login_check #:doc:
-    current_organization
     load_user
 
     !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&

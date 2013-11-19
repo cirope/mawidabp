@@ -26,7 +26,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
   # Prueba la creación de un registro de error
   test 'create' do
     assert_difference 'ErrorRecord.count' do
-      @error_record = ErrorRecord.create(
+      @error_record = ErrorRecord.list.create(
         :error => 1,
         :data => 'Some data',
         :user_id => users(:administrator_user).id

@@ -6,9 +6,7 @@ class Review < ActiveRecord::Base
 
   trimmed_fields :identification
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -31,7 +29,6 @@ class Review < ActiveRecord::Base
   })
 
   # Callbacks
-  after_initialize :set_organization
   before_validation :set_proper_parent, :can_be_modified?
   before_save :calculate_score
   before_destroy :can_be_destroyed?
@@ -42,29 +39,31 @@ class Review < ActiveRecord::Base
   attr_readonly :plan_item_id
 
   # Named scopes
-  scope :list, -> { order('identification ASC') }
+  scope :list, -> {
+    where(organization_id: Organization.current_id).order('identification ASC')
+  }
   scope :list_with_approved_draft, -> {
-    includes(:conclusion_draft_review).where(
+    list.includes(:conclusion_draft_review).where(
       ConclusionReview.table_name => { approved: true }
-    ).list.references(:conclusion_reviews)
+    ).references(:conclusion_reviews)
   }
   scope :list_with_final_review, -> {
-    includes(:conclusion_final_review).where(
+    list.includes(:conclusion_final_review).where(
       "#{ConclusionReview.table_name}.review_id IS NOT NULL"
-    ).list.references(:conclusion_reviews)
+    ).references(:conclusion_reviews)
   }
   scope :list_without_final_review, -> {
-    includes(:conclusion_final_review).where(
+    list.includes(:conclusion_final_review).where(
       "#{ConclusionReview.table_name}.review_id IS NULL"
-    ).list.references(:conclusion_reviews)
+    ).references(:conclusion_reviews)
   }
   scope :list_without_draft_review, -> {
-    includes(:conclusion_draft_review).where(
+    list.includes(:conclusion_draft_review).where(
       "#{ConclusionReview.table_name}.review_id IS NULL"
-    ).list.references(:conclusion_reviews)
+    ).references(:conclusion_reviews)
   }
   scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       :period, :conclusion_final_review, {
         :plan_item => {:business_unit => :business_unit_type}
       }
@@ -85,12 +84,11 @@ class Review < ActiveRecord::Base
     ).references(:conclusion_reviews, :business_unit_types)
   }
   scope :list_all_without_workflow, ->(period_id) {
-    includes(:workflow).list.where(
+    list.includes(:workflow).list.where(
       [
         "#{table_name}.period_id = :period_id",
         "#{Workflow.table_name}.review_id IS NULL"
-      ].join(' AND '),
-      { :period_id => period_id }
+      ].join(' AND '), { :period_id => period_id }
     ).references(:workflows)
   }
   scope :internal_audit, -> {
@@ -119,12 +117,11 @@ class Review < ActiveRecord::Base
   validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates_each :identification do |record, attr, value|
-    reviews = Review.where(
+    reviews = Review.list.where(
       [
         'identification = :identification',
         (record.id ? "#{table_name}.id != :id" : "#{table_name}.id IS NOT NULL")
-      ].join(' AND '),
-      { :identification => value, :id => record.id }
+      ].join(' AND '), { :identification => value, :id => record.id }
     )
     record.errors.add attr, :taken if reviews.count > 0
   end
@@ -164,10 +161,6 @@ class Review < ActiveRecord::Base
   accepts_nested_attributes_for :finding_review_assignments, :allow_destroy => true
   accepts_nested_attributes_for :file_model, :allow_destroy => true
   accepts_nested_attributes_for :control_objective_items, :allow_destroy => true
-
-  def set_organization
-    self.organization_id ||= Organization.current_id
-  end
 
   def to_s
     self.long_identification +

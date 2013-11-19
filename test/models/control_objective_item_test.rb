@@ -34,7 +34,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   # Prueba la creación de un item de objetivo de control
   test 'create' do
     assert_difference ['ControlObjectiveItem.count', 'Control.count'] do
-      @control_objective_item = ControlObjectiveItem.create(
+      @control_objective_item = ControlObjectiveItem.list.create(
         :control_objective_text => 'New text',
         :relevance => ControlObjectiveItem.relevances_values.last,
         :design_score => ControlObjectiveItem.qualifications_values.last,
@@ -61,7 +61,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.update(
       :control_objective_text => 'Updated text'),
       @control_objective_item.errors.full_messages.join('; ')
-    
+
     @control_objective_item.reload
     assert_equal 'Updated text', @control_objective_item.control_objective_text
   end
@@ -71,11 +71,11 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert_no_difference 'ControlObjectiveItem.count' do
       @control_objective_item.destroy
     end
-    
+
     control_objective_item = control_objective_items(
       :iso_27000_security_organization_4_3_item_editable_without_findings
     )
-    
+
     # Sin observaciones es posible eliminar
     assert_difference 'ControlObjectiveItem.count', -1 do
       control_objective_item.destroy
@@ -141,7 +141,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     review = @control_objective_item.review
 
     review.save!
-    
+
     old_score = review.score
 
     assert_not_equal min_qualification_value,
@@ -154,7 +154,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
         }
       }
     )
-    
+
     assert_not_equal old_score, review.score
   end
 

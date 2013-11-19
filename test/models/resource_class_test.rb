@@ -21,7 +21,7 @@ class ResourceClassTest < ActiveSupport::TestCase
   # Prueba la creación de una clase de recurso
   test 'create' do
     assert_difference 'ResourceClass.count' do
-      ResourceClass.create(
+      ResourceClass.list.create(
         :name => 'New resource class',
         :resource_class_type => ResourceClass::TYPES[:human],
         :organization => organizations(:default_organization)
@@ -39,7 +39,10 @@ class ResourceClassTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de clases de recursos
   test 'delete' do
-    assert_difference('ResourceClass.count', -1) { @resource_class.destroy }
+    assert_difference('ResourceClass.count', -1) do
+      # TODO unscoped current_organization
+      User.unscoped { @resource_class.destroy }
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

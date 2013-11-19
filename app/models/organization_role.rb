@@ -1,7 +1,7 @@
 class OrganizationRole < ActiveRecord::Base
 
   has_paper_trail meta: {
-    organization_id: -> { Organization.current_id },
+    organization_id: ->(obj) { Organization.current_id },
     important: true
   }
 

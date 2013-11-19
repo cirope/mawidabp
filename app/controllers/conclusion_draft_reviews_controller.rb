@@ -20,7 +20,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
     build_search_conditions ConclusionDraftReview
 
-    @conclusion_draft_reviews = ConclusionDraftReview.includes(
+    @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [
         :conclusion_final_review,
         { plan_item: :business_unit }
@@ -87,7 +87,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * POST /conclusion_draft_reviews.xml
   def create
     @title = t 'conclusion_draft_review.new_title'
-    @conclusion_draft_review = ConclusionDraftReview.new(
+    @conclusion_draft_review = ConclusionDraftReview.list.new(
       conclusion_draft_review_params)
 
     respond_to do |format|
@@ -304,12 +304,7 @@ class ConclusionDraftReviewsController < ApplicationController
 
   private
     def set_conclusion_draft_review
-      @conclusion_draft_review = ConclusionDraftReview.includes(
-        review: [
-          :conclusion_final_review, :plan_item,
-          { control_objective_items: [:control, :weaknesses, :oportunities] }
-        ]
-      ).find(params[:id])
+      @conclusion_draft_review = ConclusionDraftReview.list.find(params[:id])
 
       @conclusion_draft_review = nil if @conclusion_draft_review.has_final_review?
     end

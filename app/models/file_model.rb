@@ -1,13 +1,13 @@
 class FileModel < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   mount_uploader :file, FileUploader, :mount_on => :file_file_name
-  
+
   # Atributos no persistentes
   attr_accessor :delete_file
-  
+
   # Callbacks
   before_save :destroy_file?, :update_file_attributes
 
@@ -23,7 +23,7 @@ class FileModel < ActiveRecord::Base
   def delete_file?
     self.delete_file == '1' || self.delete_file == true
   end
-  
+
   def destroy_file?
     self.remove_file! if self.delete_file?
   end

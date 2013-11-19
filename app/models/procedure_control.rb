@@ -1,27 +1,26 @@
 class ProcedureControl < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Named scope
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :list_by_period, ->(period_id) {
     includes(:period).where(
-      "#{Period.table_name}.organization_id" => GlobalModelConfig.current_organization_id,
       "#{table_name}.period_id" => period_id
     ).order('number DESC').references(:periods)
   }
 
   # Restricciones
-  validates :period_id, :presence => true
+  validates :period_id, :organization_id, :presence => true
   validates :period_id, :numericality => {:only_integer => true},
     :allow_nil => true
   validates :period_id, :uniqueness => true, :allow_nil => true,
     :allow_blank => true
 
-
   # Relaciones
   belongs_to :period
-  has_one :organization, :through => :period
+  belongs_to :organization
   has_many :procedure_control_items, -> { order("#{ProcedureControlItem.table_name}.order ASC") },
     :dependent => :destroy, :after_add => :assign_procedure_control
 

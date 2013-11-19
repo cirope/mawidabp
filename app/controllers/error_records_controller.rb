@@ -21,7 +21,7 @@ class ErrorRecordsController < ApplicationController
       build_search_conditions ErrorRecord
     end
 
-    @error_records = ErrorRecord.includes(:user).where(
+    @error_records = ErrorRecord.list.includes(:user).where(
       @conditions || default_conditions
     ).order("#{ErrorRecord.table_name}.created_at DESC").paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE

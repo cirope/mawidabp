@@ -2,7 +2,7 @@ class ControlObjective < ActiveRecord::Base
   include Parameters::Relevance
   include Parameters::Risk
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Callbacks
   before_destroy :can_be_destroyed?

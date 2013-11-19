@@ -28,7 +28,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
   # Prueba la creación de una no conformidad potencial
   test 'create' do
     assert_difference 'PotentialNonconformity.count' do
-      @potential_nonconformity = PotentialNonconformity.new(
+      @potential_nonconformity = PotentialNonconformity.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'NCP20',

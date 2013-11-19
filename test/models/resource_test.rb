@@ -6,6 +6,8 @@ class ResourceTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @resource = Resource.find resources(:auditor_resource).id
   end
 
@@ -40,7 +42,10 @@ class ResourceTest < ActiveSupport::TestCase
 
   # Prueba de eliminación de recursos
   test 'delete' do
-    assert_difference('Resource.count', -1) { @resource.destroy }
+    assert_difference('Resource.count', -1) do
+      # TODO unscoped current_organization
+      User.unscoped { @resource.destroy }
+    end
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

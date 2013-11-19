@@ -210,18 +210,15 @@ class UsersController < ApplicationController
   def login
     auth_user = User.find(session[:user_id]) if session[:user_id]
 
-    if auth_user
-      Organization.current_id = current_organization.try :id
-    end
-
     if auth_user.try(:is_enable?) && auth_user.logged_in?
       redirect_to controller: :welcome
     else
       @title = t 'user.login_title'
       @user = User.new
-      @group_admin_mode = current_organization.prefix == APP_ADMIN_PREFIX
+      organization_prefix = request.subdomains.first
+      @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
 
-      @organization = current_organization 
+      @organization = Organization.find_by(prefix: organization_prefix)
     end
   end
 

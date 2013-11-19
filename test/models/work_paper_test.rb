@@ -6,9 +6,10 @@ class WorkPaperTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
     @work_paper = WorkPaper.find work_papers(:image_work_paper).id
     @work_paper.code_prefix = I18n.t("code_prefixes.work_papers_in_control_objectives")
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -29,7 +30,7 @@ class WorkPaperTest < ActiveSupport::TestCase
   # Prueba la creación de un papel de trabajo
   test 'create' do
     assert_difference 'WorkPaper.count' do
-      @work_paper = WorkPaper.create(
+      @work_paper = WorkPaper.list.create(
         :owner => control_objective_items(:iso_27000_security_policy_3_1_item),
         :name => 'New name',
         :code => 'PTOC 20',

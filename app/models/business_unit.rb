@@ -5,7 +5,7 @@ class BusinessUnit < ActiveRecord::Base
 
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Alias de atributos
   alias_attribute :label, :name
@@ -19,7 +19,7 @@ class BusinessUnit < ActiveRecord::Base
     :allow_blank => true
   validates :name, :uniqueness =>
     {:case_sensitive => false, :scope => :business_unit_type_id}
-  
+
   # Relaciones
   belongs_to :business_unit_type
   has_many :plan_items, :dependent => :destroy
@@ -29,14 +29,14 @@ class BusinessUnit < ActiveRecord::Base
       :only => [:id],
       :methods => [:label, :informal]
     }
-    
+
     super(default_options.merge(options || {}))
   end
-  
+
   def informal
     self.business_unit_type.try(:name)
   end
-  
+
   def can_be_destroyed?
     unless self.plan_items.empty?
       self.errors.add :base,

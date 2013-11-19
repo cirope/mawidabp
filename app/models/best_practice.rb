@@ -1,16 +1,15 @@
 class BestPractice < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Callbacks
-  after_initialize :set_organization
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, -> { order('name ASC') }
+  scope :list, -> {
+    where(organization_id: Organization.current_id).order('name ASC')
+  }
 
   # Restricciones
   validates :name, :organization_id, presence: true
@@ -26,15 +25,11 @@ class BestPractice < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC")},
+  has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC") },
     :dependent => :destroy,
     :after_add => :assign_best_practice
 
   accepts_nested_attributes_for :process_controls, :allow_destroy => true
-
-  def set_organization
-    self.organization_id = Organization.current_id
-  end
 
   def assign_best_practice(process_control)
     process_control.best_practice = self

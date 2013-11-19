@@ -4,9 +4,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -27,6 +25,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     }
   })
 
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :not_excluded_from_score, -> { where(exclude_from_score: false) }
   scope :with_names, ->(*control_objective_names) {
     conditions = []
@@ -131,7 +130,6 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     self.finished ||= false
     self.build_control unless self.control
-    self.organization_id ||= Organization.current_id
   end
 
   def to_s

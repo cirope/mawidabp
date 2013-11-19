@@ -1,9 +1,7 @@
 class ErrorRecord < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
-
-  default_scope -> { where(organization_id: Organization.current_id) }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
@@ -23,6 +21,9 @@ class ErrorRecord < ActiveRecord::Base
     :on_password_change => 2,
     :user_disabled => 3
   }.freeze
+
+  # Scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Atributos no persistentes
   attr_accessor :request, :user_name, :error_type

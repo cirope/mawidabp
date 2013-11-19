@@ -16,9 +16,7 @@ class PollsController < ApplicationController
         page: params[:page], per_page: APP_LINES_PER_PAGE
       )
     else
-      default_conditions = {}
-
-      build_search_conditions Poll
+      build_search_conditions Poll.list
 
       unless @columns.first == 'answered' && @columns.size == 1
         @polls = Poll.includes(
@@ -30,6 +28,7 @@ class PollsController < ApplicationController
           page: params[:page], per_page: APP_LINES_PER_PAGE
         )
       else
+        default_conditions = {}
         # Solo busca por columna contestada
         if params[:search][:query].downcase == 'si'
           default_conditions[:answered] = true
@@ -97,8 +96,7 @@ class PollsController < ApplicationController
   # POST /polls.json
   def create
     @title = t 'poll.new_title'
-    @poll = Poll.new(poll_params)
-    @poll.organization = current_organization
+    @poll = Poll.list.new(poll_params)
     polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
               questionnaire_id: @poll.questionnaire.id,
               user_id: @poll.user.id

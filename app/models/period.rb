@@ -2,69 +2,43 @@ class Period < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Callbacks
   before_destroy :can_be_destroyed?
 
   # Named scopes
-  scope :list, -> {
-    where(:organization_id => GlobalModelConfig.current_organization_id).order(
-      'number DESC'
-    )
-  }
+  scope :list, -> { where(organization_id: Organization.current_id).order('number DESC') }
   scope :list_by_date, ->(from_date, to_date) {
-    where(
+    list.where(
       [
-        "#{table_name}.organization_id = :organization_id",
-        [
-          "#{table_name}.start BETWEEN :from_date AND :to_date",
-          "#{table_name}.end BETWEEN :from_date AND :to_date"
-        ].join(' OR ')
-      ].map {|c| "(#{c})"}.join(' AND '),
-      {
-        :from_date => from_date,
-        :to_date => to_date,
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
+        "#{table_name}.start BETWEEN :from_date AND :to_date",
+        "#{table_name}.end BETWEEN :from_date AND :to_date"
+      ].join(' OR '), { :from_date => from_date, :to_date => to_date }
+    ).reorder(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
   scope :currents, -> {
-    where(
+    list.where(
       [
-        'organization_id = :organization_id',
         "#{table_name}.start <= :today",
         "#{table_name}.end >= :today"
-      ].join(' AND '),
-      {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :today => Date.today
-      }
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"])
+      ].join(' AND '), { :today => Date.today }
+    ).reorder(["#{table_name}.start ASC", "#{table_name}.end ASC"])
   }
   scope :list_all_without_plans, -> {
-    includes(:plans).where(
-      [
-        "#{table_name}.organization_id = :organization_id",
-        "#{Plan.table_name}.period_id IS NULL"
-      ].join(' AND '),
-      {:organization_id => GlobalModelConfig.current_organization_id}
-    ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"]).references(
+    list.includes(:plans).where(
+      "#{Plan.table_name}.period_id IS NULL"
+    ).reorder(["#{table_name}.start ASC", "#{table_name}.end ASC"]).references(
       :plans
     )
   }
   scope :list_all_without_procedure_controls, -> {
-    includes(:procedure_controls).where(
-      [
-        "#{table_name}.organization_id = :organization_id",
-        "#{ProcedureControl.table_name}.period_id IS NULL"
-      ].join(' AND '),
-      {:organization_id => GlobalModelConfig.current_organization_id}
+    list.includes(:procedure_controls).where(
+      "#{ProcedureControl.table_name}.period_id IS NULL"
     ).order(["#{table_name}.start ASC", "#{table_name}.end ASC"]).references(
       :procedure_controls
     )
   }
-
 
   # Restricciones
   validates :number, :numericality => {:only_integer => true},

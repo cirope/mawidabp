@@ -4,8 +4,6 @@ class ApplicationControllerTest < ActionController::TestCase
   fixtures :users, :organizations
 
   def setup
-    set_organization
-
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator_user).id
     @controller.send(:session)[:organization_id] =
@@ -13,6 +11,8 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send(:session)[:last_access] = 30.seconds.ago
     @controller.send('response=', @response)
     @controller.send('request=', @request)
+
+    set_organization
   end
 
   test 'sucess login check function' do

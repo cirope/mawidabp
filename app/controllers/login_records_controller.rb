@@ -38,11 +38,13 @@ class LoginRecordsController < ApplicationController
       build_search_conditions LoginRecord
     end
 
-    @login_records = LoginRecord.includes(:user).where(
+    @login_records = LoginRecord.list.includes(:user).where(
       @conditions || default_conditions
     ).order(
       "#{LoginRecord.table_name}.start DESC"
-    ).references(:users).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:users).paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -60,7 +62,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/1.xml
   def show
     @title = t 'login_record.show_title'
-    @login_record = LoginRecord.find(params[:id])
+    @login_record = LoginRecord.list.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -73,7 +75,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
-    login_records = LoginRecord.includes(:user).where(
+    login_records = LoginRecord.list.includes(:user).where(
       [
         'created_at BETWEEN :from_date AND :to_date'
         {

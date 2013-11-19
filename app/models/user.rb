@@ -9,14 +9,8 @@ class User < ActiveRecord::Base
   trimmed_fields :user, :email, :name, :last_name
 
   has_paper_trail ignore: [:last_access, :logged_in], meta: {
-    organization_id: -> { Organization.current_id },
-    important: -> { user.is_an_important_change }
-  }
-
-  default_scope -> {
-    includes(:organizations).references(:organizations).where(
-      organizations: { id: Organization.current_id }
-    )
+    organization_id: ->(obj) { Organization.current_id },
+    important: ->(user) { user.is_an_important_change }
   }
 
   # Constantes
@@ -40,7 +34,7 @@ class User < ActiveRecord::Base
   )
 
   acts_as_tree foreign_key: 'manager_id', readonly: true,
-    order: 'last_name ASC, name ASC', dependent: :nullify
+    order: "#{table_name}.last_name ASC, #{table_name}.name ASC", dependent: :nullify
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
@@ -50,7 +44,11 @@ class User < ActiveRecord::Base
   alias_attribute :informal, :user
 
   # Named scopes
-  scope :list, -> {}
+  scope :list, -> {
+    includes(:organizations).where(
+      organizations: { id: Organization.current_id }
+    ).references(:organizations)
+  }
   scope :with_valid_confirmation_hash, ->(confirmation_hash) {
     where(
       [

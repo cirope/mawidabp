@@ -508,11 +508,13 @@ ActiveRecord::Schema.define(version: 20131112151450) do
 
   create_table "plans", force: true do |t|
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
+  add_index "plans", ["organization_id"], name: "index_plans_on_organization_id", using: :btree
   add_index "plans", ["period_id"], name: "index_plans_on_period_id", using: :btree
 
   create_table "polls", force: true do |t|
@@ -576,12 +578,14 @@ ActiveRecord::Schema.define(version: 20131112151450) do
 
   create_table "procedure_controls", force: true do |t|
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   add_index "procedure_controls", ["created_at"], name: "index_procedure_controls_on_created_at", using: :btree
+  add_index "procedure_controls", ["organization_id"], name: "index_procedure_controls_on_organization_id", using: :btree
   add_index "procedure_controls", ["period_id"], name: "index_procedure_controls_on_period_id", using: :btree
 
   create_table "process_controls", force: true do |t|

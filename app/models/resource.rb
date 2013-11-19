@@ -1,7 +1,7 @@
 class Resource < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: -> { Organization.current_id } }
+  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
   # Restricciones
   validates :name, :presence => true
@@ -13,10 +13,10 @@ class Resource < ActiveRecord::Base
     :allow_nil => true
   validates :resource_class_id, :numericality => {:only_integer => true},
     :allow_nil => true
-  
+
   # Relaciones
   belongs_to :resource_class
-  has_many :users, :dependent => :nullify
+  has_many :users, dependent: :nullify
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
 
   def to_s

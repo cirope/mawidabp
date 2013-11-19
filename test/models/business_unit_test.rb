@@ -6,8 +6,6 @@ class BusinessUnitTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @business_unit = BusinessUnit.find business_units(:business_unit_one).id
   end
 

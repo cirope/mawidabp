@@ -6,9 +6,9 @@ class UserTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    set_organization
-
     @user = User.find users(:administrator_second_user).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
