@@ -44,9 +44,8 @@ class OldPasswordTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @old_password.password = 'abcdd' * 52
+
     assert @old_password.invalid?
-    assert_equal 1, @old_password.errors.count
-    assert_equal [error_message_from_model(@old_password, :password, :too_long,
-      :count => 255)], @old_password.errors[:password]
+    assert_error @old_password, :password, :too_long, count: 255
   end
 end

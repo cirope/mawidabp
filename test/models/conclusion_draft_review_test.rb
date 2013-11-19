@@ -74,33 +74,27 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
     @conclusion_review.issue_date = nil
     @conclusion_review.review_id = nil
     @conclusion_review.applied_procedures = '   '
+
     assert @conclusion_review.invalid?
-    assert_equal 3, @conclusion_review.errors.count
-    assert_equal [error_message_from_model(@conclusion_review, :issue_date,
-      :blank)], @conclusion_review.errors[:issue_date]
-    assert_equal [error_message_from_model(@conclusion_review, :review_id,
-      :blank)], @conclusion_review.errors[:review_id]
-    assert_equal [error_message_from_model(@conclusion_review,
-      :applied_procedures, :blank)],
-      @conclusion_review.errors[:applied_procedures]
+    assert_error @conclusion_review, :issue_date, :blank
+    assert_error @conclusion_review, :review_id, :blank
+    assert_error @conclusion_review, :applied_procedures, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @conclusion_review.issue_date = '13/13/13'
+
     assert @conclusion_review.invalid?
-    assert_equal 1, @conclusion_review.errors.count
-    assert_equal [error_message_from_model(@conclusion_review, :issue_date,
-      :blank)], @conclusion_review.errors[:issue_date]
+    assert_error @conclusion_review, :issue_date, :blank
   end
 
   test 'validates unique attributes' do
     @conclusion_review.review_id =
       conclusion_reviews(:conclusion_past_draft_review).review_id
+
     assert @conclusion_review.invalid?
-    assert_equal 1, @conclusion_review.errors.count
-    assert_equal [error_message_from_model(@conclusion_review, :review_id,
-      :taken)], @conclusion_review.errors[:review_id]
+    assert_error @conclusion_review, :review_id, :taken
   end
 
   test 'validates force approved review' do

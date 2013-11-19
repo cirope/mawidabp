@@ -49,22 +49,18 @@ class FindingRelationTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @finding_relation.related_finding_id = ' '
     @finding_relation.description = nil
+
     assert @finding_relation.invalid?
-    assert_equal 2, @finding_relation.errors.count
-    assert_equal [error_message_from_model(@finding_relation,
-        :related_finding_id, :blank)],
-      @finding_relation.errors[:related_finding_id]
-    assert_equal [error_message_from_model(@finding_relation, :description,
-        :blank)], @finding_relation.errors[:description]
+    assert_error @finding_relation, :related_finding_id, :blank
+    assert_error @finding_relation, :description, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length attributes' do
     @finding_relation.description = 'abcde' * 52
     assert @finding_relation.invalid?
-    assert_equal 1, @finding_relation.errors.count
-    assert_equal [error_message_from_model(@finding_relation, :description,
-        :too_long, :count => 255)], @finding_relation.errors[:description]
+
+    assert_error @finding_relation, :description, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -74,10 +70,8 @@ class FindingRelationTest < ActiveSupport::TestCase
 
     finding_relation.finding.finding_relations.build(
       :related_finding => finding_relation.related_finding)
+
     assert finding_relation.invalid?
-    assert_equal 1, finding_relation.errors.count
-    assert_equal [error_message_from_model(finding_relation,
-        :related_finding_id, :taken)],
-      finding_relation.errors[:related_finding_id]
+    assert_error finding_relation, :related_finding_id, :taken
   end
 end

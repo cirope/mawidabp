@@ -50,33 +50,28 @@ class WorkflowTest < ActiveSupport::TestCase
   test 'validates formated attributes' do
     @workflow.period_id = '?123'
     @workflow.review_id = '?123'
+
     assert @workflow.invalid?
-    assert_equal 2, @workflow.errors.count
-    assert_equal [error_message_from_model(@workflow, :period_id,
-        :not_a_number)], @workflow.errors[:period_id]
-    assert_equal [error_message_from_model(@workflow, :review_id,
-        :not_a_number)], @workflow.errors[:review_id]
+    assert_error @workflow, :period_id, :not_a_number
+    assert_error @workflow, :review_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @workflow.period_id = nil
     @workflow.review_id = nil
+
     assert @workflow.invalid?
-    assert_equal 2, @workflow.errors.count
-    assert_equal [error_message_from_model(@workflow, :period_id, :blank)],
-      @workflow.errors[:period_id]
-    assert_equal [error_message_from_model(@workflow, :review_id, :blank)],
-      @workflow.errors[:review_id]
+    assert_error @workflow, :period_id, :blank
+    assert_error @workflow, :review_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @workflow.review_id = workflows(:past_workflow).review_id
+
     assert @workflow.invalid?
-    assert_equal 2, @workflow.errors.count
-    assert_equal [error_message_from_model(@workflow, :review_id, :taken)],
-      @workflow.errors[:review_id]
+    assert_error @workflow, :review_id, :taken
     assert @workflow.errors.full_messages.include?(I18n.t('workflow.readonly'))
   end
 

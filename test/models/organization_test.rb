@@ -87,13 +87,9 @@ class OrganizationTest < ActiveSupport::TestCase
     @organization.kind = nil
 
     assert @organization.invalid?
-    assert_equal 3, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :name, :blank)],
-      @organization.errors[:name]
-    assert_equal [error_message_from_model(@organization, :prefix, :blank)],
-      @organization.errors[:prefix]
-    assert_equal [error_message_from_model(@organization, :kind, :blank)],
-      @organization.errors[:kind]
+    assert_error @organization, :name, :blank
+    assert_error @organization, :prefix, :blank
+    assert_error @organization, :kind, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -102,26 +98,21 @@ class OrganizationTest < ActiveSupport::TestCase
     @organization.prefix = 'abcdd' * 52
 
     assert @organization.invalid?
-    assert_equal 2, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :name, :too_long,
-      :count => 255)], @organization.errors[:name]
-    assert_equal [error_message_from_model(@organization, :prefix, :too_long,
-      :count => 255)], @organization.errors[:prefix]
+    assert_error @organization, :name, :too_long, count: 255
+    assert_error @organization, :prefix, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
     @organization.prefix = '?123'
+
     assert @organization.invalid?
-    assert_equal 1, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :prefix, :invalid)],
-      @organization.errors[:prefix]
+    assert_error @organization, :prefix, :invalid
 
     @organization.prefix = 'abc_abc'
+
     assert @organization.invalid?
-    assert_equal 1, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :prefix, :invalid)],
-      @organization.errors[:prefix]
+    assert_error @organization, :prefix, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -132,18 +123,13 @@ class OrganizationTest < ActiveSupport::TestCase
     )
 
     assert @organization.invalid?
-    assert_equal 2, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :name, :taken)],
-      @organization.errors[:name]
-    assert_equal [error_message_from_model(@organization, :prefix, :taken)],
-      @organization.errors[:prefix]
+    assert_error @organization, :name, :taken
+    assert_error @organization, :prefix, :taken
 
     @organization.group_id = groups(:second_group).id
 
     assert @organization.invalid?
-    assert_equal 1, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :prefix, :taken)],
-      @organization.errors[:prefix]
+    assert_error @organization, :prefix, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -151,17 +137,13 @@ class OrganizationTest < ActiveSupport::TestCase
     @organization.prefix = Organization::INVALID_PREFIXES.first
 
     assert @organization.invalid?
-    assert_equal 1, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :prefix, :exclusion)],
-      @organization.errors[:prefix]
+    assert_error @organization, :prefix, :exclusion
   end
 
   test 'validates included attributes' do
     @organization.kind = 'another_kind'
 
     assert @organization.invalid?
-    assert_equal 1, @organization.errors.count
-    assert_equal [error_message_from_model(@organization, :kind, :inclusion)],
-      @organization.errors[:kind]
+    assert_error @organization, :kind, :inclusion
   end
 end

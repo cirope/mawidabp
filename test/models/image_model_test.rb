@@ -63,11 +63,9 @@ class ImageModelTest < ActiveSupport::TestCase
   test 'validates lenght attributes' do
     @image_model.image_file_name = 'abc' * 100
     @image_model.image_content_type = "image/#{'abc' * 100}"
+
     assert @image_model.invalid?
-    assert_equal 2, @image_model.errors.count
-    assert_equal [error_message_from_model(@image_model, :image_file_name,
-        :too_long, :count => 255)], @image_model.errors[:image_file_name]
-    assert_equal [error_message_from_model(@image_model, :image_content_type,
-      :too_long, :count => 255)], @image_model.errors[:image_content_type]
+    assert_error @image_model, :image_file_name, :too_long, count: 255
+    assert_error @image_model, :image_content_type, :too_long, count: 255
   end
 end

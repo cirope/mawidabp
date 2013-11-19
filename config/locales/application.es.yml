@@ -43,7 +43,9 @@
     without_data: "Sin datos"
 
   lang:
-    es: "Español"
+    es: 'Español'
+    public_es: 'Público'
+    mc_es: 'Control de gestión'
 
   menu:
     exit: "Salir"
@@ -63,7 +65,6 @@
       best_practices: "Buenas prácticas"
       settings: 'Configuraciones'
       e_mails: "Correos"
-      detracts: "Detractores"
       questionnaires: "Cuestionarios"
     planning_title: "PLANIFICACIÓN"
     planning:
@@ -92,8 +93,8 @@
         management: "Reportes de la gerencia"
     follow_up_title: "SEGUIMIENTO"
     follow_up:
-      pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas"
+      pending_findings: "Hallazgos pendientes"
+      complete_findings: "Hallazgos solucionados"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
@@ -448,17 +449,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     create: "Generar"
     title: "Título"
     subtitle: "Subtítulo"
-
-  detract:
-    index_title: "Listado de detractores"
-    show_title: "Detalle del detractor"
-    new_title: "Agregar detractor"
-    correctly_created: "Detractor agregado correctamente."
-    show_last_detracts: "Ver los últimos detractores"
-    last_detract: "Último detractor"
-    last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
-    without_detract: "No tiene ningún detractor asignado al momento"
-    user_without_detracts: "No tiene ningún detractor asignado al momento"
 
   email:
     index_title: "Listado de correos"
@@ -1232,9 +1222,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     user_release_completed: "Liberación de responsabilidades finalizada correctamente"
     new_user_label: "Nuevo responsable"
     old_user_label: "Responsable anterior"
-    reassign_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+    reassign_with_findings: "¿Incluir hallazgos pendientes?"
     reassign_with_reviews: "¿Incluir informes en ejecución?"
-    release_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+    release_with_findings: "¿Incluir hallazgos pendientes?"
     release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
@@ -1258,8 +1248,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las observaciones y oportunidades de mejora pendientes del informe %{reviews}"
-        other: "Se han reasignado las observaciones y oportunidades de mejora pendientes de los informes %{reviews}"
+        one: "Se han reasignado los hallazgos pendientes del informe %{reviews}"
+        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
@@ -1376,7 +1366,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
@@ -1518,11 +1507,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      detract:
-        organization_id: "Organización"
-        user_id: "Usuario"
-        value: "Valor"
-        observations: "Observaciones"
       e_mail:
         to: "Para"
         subject: "Asunto"
@@ -1701,6 +1685,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+      paper_trail/version:
+        item: "Objeto"
+        event: "Evento"
+        whodunnit: "Ejecutor"
+        created_at: "Fecha"
       period:
         number: "Número"
         description: "Descripción"
@@ -1869,11 +1858,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'
-      version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
       weakness:
         control_objective_item_id: "Objetivo de control"
         description: "Observación"
@@ -2048,7 +2032,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
-    detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"

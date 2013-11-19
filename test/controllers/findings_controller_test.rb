@@ -1,6 +1,6 @@
 require 'test_helper'
 
-# Pruebas para el controlador de observaciones y oportunidades
+# Pruebas para el controlador de hallazgos
 class FindingsControllerTest < ActionController::TestCase
   fixtures :findings, :users
 

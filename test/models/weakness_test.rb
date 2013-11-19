@@ -137,22 +137,15 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.audit_recommendations = '  '
     @weakness.risk = nil
     @weakness.priority = nil
+
     assert @weakness.invalid?
-    assert_equal 7, @weakness.errors.count
-    assert_equal [error_message_from_model(@weakness,
-      :control_objective_item_id, :blank)],
-      @weakness.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@weakness, :review_code, :blank),
-      error_message_from_model(@weakness, :review_code, :invalid)].sort,
-      @weakness.errors[:review_code].sort
-    assert_equal [error_message_from_model(@weakness, :risk, :blank)],
-      @weakness.errors[:risk]
-    assert_equal [error_message_from_model(@weakness, :priority, :blank)],
-      @weakness.errors[:priority]
-    assert_equal [error_message_from_model(@weakness, :audit_recommendations, :blank)],
-      @weakness.errors[:audit_recommendations]
-    assert_equal [error_message_from_model(@weakness, :state, :inclusion)],
-      @weakness.errors[:state]
+    assert_error @weakness, :control_objective_item_id, :blank
+    assert_error @weakness, :review_code, :blank
+    assert_error @weakness, :review_code, :invalid
+    assert_error @weakness, :risk, :blank
+    assert_error @weakness, :priority, :blank
+    assert_error @weakness, :audit_recommendations, :blank
+    assert_error @weakness, :state, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -160,10 +153,9 @@ class WeaknessTest < ActiveSupport::TestCase
     another_weakness = Weakness.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @weakness.review_code = another_weakness.review_code
+
     assert @weakness.invalid?
-    assert_equal 1, @weakness.errors.count
-    assert_equal [error_message_from_model(@weakness, :review_code, :taken)],
-      @weakness.errors[:review_code]
+    assert_error @weakness, :review_code, :taken
 
     # Se puede duplicar si es de otro informe
     another_weakness = Weakness.find(findings(
@@ -178,11 +170,8 @@ class WeaknessTest < ActiveSupport::TestCase
     @weakness.cause_analysis_date = 'xxx'
 
     assert @weakness.invalid?
-    assert_equal 4, @weakness.errors.count
-    assert_equal error_message_from_model(@weakness, :correction_date, :invalid_date),
-      @weakness.errors[:correction_date].first
-    assert_equal error_message_from_model(@weakness, :cause_analysis_date, :invalid_date),
-      @weakness.errors[:cause_analysis_date].first
+    assert_error @weakness, :correction_date, :invalid_date
+    assert_error @weakness, :cause_analysis_date, :invalid_date
 
     assert @weakness.update_attribute(:state, 0)
     @weakness.correction_date = '25/05/2013'
@@ -201,35 +190,29 @@ class WeaknessTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @weakness.review_code = 'abcdd' * 52
     @weakness.type = 'abcdd' * 52
+
     assert @weakness.invalid?
-    assert_equal 3, @weakness.errors.count
-    assert_equal [error_message_from_model(@weakness, :review_code, :too_long,
-      :count => 255), error_message_from_model(@weakness, :review_code,
-      :invalid)].sort, @weakness.errors[:review_code].sort
-    assert_equal [error_message_from_model(@weakness, :type, :too_long,
-      :count => 255)], @weakness.errors[:type]
+    assert_error @weakness, :review_code, :too_long, count: 255
+    assert_error @weakness, :review_code, :invalid
+    assert_error @weakness, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @weakness.state = Finding::STATUS.values.sort.last.next
+
     assert @weakness.invalid?
-    assert_equal 1, @weakness.errors.count
-    assert_equal [error_message_from_model(@weakness, :state, :inclusion)],
-      @weakness.errors[:state]
+    assert_error @weakness, :state, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @weakness.control_objective_item_id = '?nil'
     @weakness.review_code = 'BAD_PREFIX_2'
+
     assert @weakness.invalid?
-    assert_equal 2, @weakness.errors.count
-    assert_equal [error_message_from_model(@weakness,
-      :control_objective_item_id, :not_a_number)],
-      @weakness.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@weakness, :review_code, :invalid)],
-      @weakness.errors[:review_code]
+    assert_error @weakness, :control_objective_item_id, :not_a_number
+    assert_error @weakness, :review_code, :invalid
   end
 
   test 'next code' do

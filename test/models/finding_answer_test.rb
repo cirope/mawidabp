@@ -125,12 +125,10 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.answer = '      '
     @finding_answer.finding_id = nil
     @finding_answer.commitment_date = ''
+
     assert @finding_answer.invalid?
-    assert_equal 2, @finding_answer.errors.count
-    assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
-      @finding_answer.errors[:answer]
-    assert_equal [error_message_from_model(@finding_answer, :finding_id,
-        :blank)], @finding_answer.errors[:finding_id]
+    assert_error @finding_answer, :answer, :blank
+    assert_error @finding_answer, :finding_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -139,12 +137,10 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.answer = '      '
     @finding_answer.finding = findings(:iso_27000_security_policy_3_1_item_weakness)
     @finding_answer.commitment_date = ''
+
     assert @finding_answer.invalid?
-    assert_equal 2, @finding_answer.errors.count
-    assert_equal [error_message_from_model(@finding_answer, :answer, :blank)],
-      @finding_answer.errors[:answer]
-    assert_equal [error_message_from_model(@finding_answer, :commitment_date,
-        :blank)], @finding_answer.errors[:commitment_date]
+    assert_error @finding_answer, :answer, :blank
+    assert_error @finding_answer, :commitment_date, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -153,15 +149,11 @@ class FindingAnswerTest < ActiveSupport::TestCase
     @finding_answer.user_id = '?123'
     @finding_answer.file_model_id = 'incorrect'
     @finding_answer.commitment_date = '13/13/13'
+
     assert @finding_answer.invalid?
-    assert_equal 4, @finding_answer.errors.count
-    assert_equal [error_message_from_model(@finding_answer, :finding_id,
-      :not_a_number)], @finding_answer.errors[:finding_id]
-    assert_equal [error_message_from_model(@finding_answer, :user_id,
-      :not_a_number)], @finding_answer.errors[:user_id]
-    assert_equal [error_message_from_model(@finding_answer, :file_model_id,
-      :not_a_number)], @finding_answer.errors[:file_model_id]
-  assert_equal [error_message_from_model(@finding_answer, :commitment_date,
-      :invalid_date)], @finding_answer.errors[:commitment_date]
+    assert_error @finding_answer, :finding_id, :not_a_number
+    assert_error @finding_answer, :user_id, :not_a_number
+    assert_error @finding_answer, :file_model_id, :not_a_number
+    assert_error @finding_answer, :commitment_date, :invalid_date
   end
 end

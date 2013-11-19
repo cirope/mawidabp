@@ -123,16 +123,12 @@ class FindingTest < ActiveSupport::TestCase
     @finding.control_objective_item_id = nil
     @finding.review_code = '   '
     @finding.description = '   '
+
     assert @finding.invalid?
-    assert_equal 4, @finding.errors.count
-    assert_equal [error_message_from_model(@finding,
-        :control_objective_item_id, :blank)],
-      @finding.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@finding, :review_code, :blank),
-      error_message_from_model(@finding, :review_code, :invalid)].sort,
-      @finding.errors[:review_code].sort
-    assert_equal [error_message_from_model(@finding, :description, :blank)],
-      @finding.errors[:description]
+    assert_error @finding, :control_objective_item_id, :blank
+    assert_error @finding, :review_code, :blank
+    assert_error @finding, :review_code, :invalid
+    assert_error @finding, :description, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -143,21 +139,18 @@ class FindingTest < ActiveSupport::TestCase
     )
     @finding.follow_up_date = nil
     @finding.answer = '   '
+
     assert @finding.invalid?
-    assert_equal 2, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :follow_up_date, :blank)],
-      @finding.errors[:follow_up_date]
-    assert_equal [error_message_from_model(@finding, :answer, :blank)],
-      @finding.errors[:answer]
+    assert_error @finding, :follow_up_date, :blank
+    assert_error @finding, :answer, :blank
 
     assert @finding.reload.update(
       :state => Finding::STATUS[:implemented_audited],
       :solution_date => 1.month.from_now)
     @finding.solution_date = nil
+
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :solution_date, :blank)],
-      @finding.errors[:solution_date]
+    assert_error @finding, :solution_date, :blank
 
     @finding = Finding.find(
       findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
@@ -165,10 +158,9 @@ class FindingTest < ActiveSupport::TestCase
 
     @finding.state = Finding::STATUS[:revoked]
     @finding.audit_comments = '  '
+
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :audit_comments, :blank)],
-      @finding.errors[:audit_comments]
+    assert_error @finding, :audit_comments, :blank
   end
 
   test 'validates special not blank attributes' do
@@ -179,11 +171,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.solution_date = Date.tomorrow
 
     assert finding.invalid?
-    assert_equal 2, finding.errors.size
-    assert_equal [error_message_from_model(finding, :follow_up_date,
-        :must_be_blank)], finding.errors[:follow_up_date]
-    assert_equal [error_message_from_model(finding, :solution_date,
-        :must_be_blank)], finding.errors[:solution_date]
+    assert_error finding, :follow_up_date, :must_be_blank
+    assert_error finding, :solution_date, :must_be_blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -191,10 +180,9 @@ class FindingTest < ActiveSupport::TestCase
     another_finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
     @finding.review_code = another_finding.review_code
+
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :review_code, :taken)],
-      @finding.errors[:review_code]
+    assert_error @finding, :review_code, :taken
 
     # Se puede duplicar si es de otro informe
     another_finding = Finding.find(findings(
@@ -207,13 +195,11 @@ class FindingTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @finding.review_code = 'abcdd' * 52
     @finding.type = 'abcdd' * 52
+
     assert @finding.invalid?
-    assert_equal 3, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :review_code, :too_long,
-        :count => 255), error_message_from_model(@finding, :review_code,
-        :invalid)].sort, @finding.errors[:review_code].sort
-    assert_equal [error_message_from_model(@finding, :type, :too_long,
-        :count => 255)], @finding.errors[:type]
+    assert_error @finding, :review_code, :too_long, count: 255
+    assert_error @finding, :review_code, :invalid
+    assert_error @finding, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -227,11 +213,7 @@ class FindingTest < ActiveSupport::TestCase
     @finding.origination_date = '15/13/12'
 
     assert @finding.invalid?
-
-    assert_equal 1, @finding.errors.count
-    assert_equal [error_message_from_model(@finding,
-      :control_objective_item_id, :not_a_number)],
-      @finding.errors[:control_objective_item_id]
+    assert_error @finding, :control_objective_item_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -241,10 +223,9 @@ class FindingTest < ActiveSupport::TestCase
     @finding.state = @finding.next_status_list.values.reject do |s|
       s == @finding.state
     end.sort.last.next
+
     assert @finding.invalid?
-    assert_equal 2, @finding.errors.count
-    assert_equal [error_message_from_model(@finding, :state, :inclusion)],
-      @finding.errors[:state]
+    assert_error @finding, :state, :inclusion
   end
 
   test 'validates status' do
@@ -256,9 +237,7 @@ class FindingTest < ActiveSupport::TestCase
 
       assert @finding.invalid?
       # Dependiendo del estado se validan más o menos cosas
-      assert !@finding.errors.empty?
-      assert @finding.errors[:state].include?(
-        error_message_from_model(@finding, :state, :inclusion))
+      assert_error @finding, :state, :inclusion
     end
   end
 
@@ -273,9 +252,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.state = Finding::STATUS[:being_implemented]
     assert finding.invalid?
 
-    assert_equal [
-      error_message_from_model(finding, :state, :must_have_a_comment)
-    ], finding.errors[:state]
+    assert_error finding, :state, :must_have_a_comment
 
     finding.comments.build(
       :comment => 'Test comment',
@@ -287,10 +264,8 @@ class FindingTest < ActiveSupport::TestCase
     finding.state = Finding::STATUS[:revoked]
     assert finding.invalid?
 
-    assert_equal [
-      error_message_from_model(finding, :state, :can_not_be_revoked),
-      error_message_from_model(finding, :state, :invalid)
-    ], finding.errors[:state]
+    assert_error finding, :state, :can_not_be_revoked
+    assert_error finding, :state, :invalid
   end
 
   test 'validates implemented audited with work papers' do
@@ -302,9 +277,7 @@ class FindingTest < ActiveSupport::TestCase
 
     assert finding.work_papers.empty?
     assert finding.invalid?
-    assert_equal 1, finding.errors.size
-    assert_equal [error_message_from_model(finding, :state,
-        :must_have_a_work_paper)], finding.errors[:state]
+    assert_error finding, :state, :must_have_a_work_paper
   end
 
   test 'validates audited users' do
@@ -314,9 +287,7 @@ class FindingTest < ActiveSupport::TestCase
       end
 
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.size
-    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
-        :invalid)], @finding.errors[:finding_user_assignments]
+    assert_error @finding, :finding_user_assignments, :invalid
   end
 
   test 'validates auditor users' do
@@ -324,9 +295,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.finding_user_assignments.reject { |fua| fua.user.auditor? }
 
     assert @finding.invalid?
-    assert_equal 1, @finding.errors.size
-    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
-        :invalid)], @finding.errors[:finding_user_assignments]
+    assert_error @finding, :finding_user_assignments, :invalid
   end
 
   test 'validates supervisor users' do
@@ -334,10 +303,7 @@ class FindingTest < ActiveSupport::TestCase
       @finding.finding_user_assignments.reject { |fua| fua.user.supervisor? }
 
     assert @finding.invalid?
-
-    assert_equal 1, @finding.errors.size
-    assert_equal [error_message_from_model(@finding, :finding_user_assignments,
-        :invalid)], @finding.errors[:finding_user_assignments]
+    assert_error @finding, :finding_user_assignments, :invalid
   end
 
   test 'stale function' do
@@ -432,9 +398,7 @@ class FindingTest < ActiveSupport::TestCase
     finding.answer = ''
 
     assert finding.invalid?
-    assert_equal 1, finding.errors.size
-    assert_equal [error_message_from_model(finding, :answer, :blank)],
-      finding.errors[:answer]
+    assert_error finding, :answer, :blank
   end
 
   test 'dynamic functions' do

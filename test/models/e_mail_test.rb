@@ -47,11 +47,9 @@ class EMailTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @email.to = ' '
     @email.subject = ' '
+
     assert @email.invalid?
-    assert_equal 2, @email.errors.count
-    assert_equal [error_message_from_model(@email, :to, :blank)],
-      @email.errors[:to]
-    assert_equal [error_message_from_model(@email, :subject, :blank)],
-      @email.errors[:subject]
+    assert_error @email, :to, :blank
+    assert_error @email, :subject, :blank
   end
 end

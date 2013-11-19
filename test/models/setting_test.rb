@@ -31,4 +31,11 @@ class SettingTest < ActiveSupport::TestCase
     assert @setting.invalid?
     assert_error @setting, :name, :taken
   end
+
+  test 'validates numericality attributes' do
+    @setting.value = 'value'
+
+    assert @setting.invalid?
+    assert_error @setting, :value, :not_a_number
+  end
 end

@@ -38,27 +38,24 @@ class HelpContentTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @help_content.language = '   '
+
     assert @help_content.invalid?
-    assert_equal 1, @help_content.errors.count
-    assert_equal [error_message_from_model(@help_content, :language, :blank)],
-      @help_content.errors[:language]
+    assert_error @help_content, :language, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @help_content.language = help_contents(:help_en).language
+
     assert @help_content.invalid?
-    assert_equal 1, @help_content.errors.count
-    assert_equal [error_message_from_model(@help_content, :language, :taken)],
-      @help_content.errors[:language]
+    assert_error @help_content, :language, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @help_content.language = 'abcd' * 3
+
     assert @help_content.invalid?
-    assert_equal 1, @help_content.errors.count
-    assert_equal [error_message_from_model(@help_content, :language, :too_long,
-      :count => 10)], @help_content.errors[:language]
+    assert_error @help_content, :language, :too_long, count: 10
   end
 end

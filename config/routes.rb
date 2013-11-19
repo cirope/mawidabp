@@ -33,12 +33,6 @@ MawidaBP::Application.routes.draw do
 
   resources :groups
 
-  resources :detracts, only: [:index, :show, :new, :create] do
-    member do
-      get :show_last_detracts
-    end
-  end
-
   resources :inline_helps
 
   get 'welcome', as: 'welcome', to: 'welcome#index'

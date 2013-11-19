@@ -41,33 +41,24 @@ class AnswerTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
-    # Cuestión escrita
-    assert @answer.valid?
-    assert_equal 0, @answer.errors.count
     @answer.answer = '  '
-    @answer.save
+
     assert @answer.invalid?
-    assert_equal 1, @answer.errors.count
-    assert_equal [error_message_from_model(@answer, :answer, :blank)],
-      @answer.errors[:answer]
+    assert_error @answer, :answer, :blank
+
     # Cuestión multi choice
     answer = answers(:answer_multi_choice)
-    assert answer.valid?
-    assert_equal 0, answer.errors.count
     answer.answer_option = nil
-    answer.save
+
     assert answer.invalid?
-    assert_equal 1, answer.errors.count
-    assert_equal [error_message_from_model(answer, :answer_option, :blank)],
-      answer.errors[:answer_option]
+    assert_error answer, :answer_option, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @answer.answer = 'abcde' * 52
+
     assert @answer.invalid?
-    assert_equal 1, @answer.errors.count
-    assert_equal [error_message_from_model(@answer, :answer, :too_long,
-      count: 255)], @answer.errors[:answer]
+    assert_error @answer, :answer, :too_long, count: 255
   end
 end

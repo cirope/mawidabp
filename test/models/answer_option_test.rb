@@ -39,18 +39,16 @@ class AnswerOptionTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @answer_option.option = '  '
+
     assert @answer_option.invalid?
-    assert_equal 1, @answer_option.errors.count
-    assert_equal [error_message_from_model(@answer_option, :option, :blank)],
-      @answer_option.errors[:option]
+    assert_error @answer_option, :option, :blank
   end
   
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @answer_option.option = 'abcde' * 52
+
     assert @answer_option.invalid?
-    assert_equal 1, @answer_option.errors.count
-    assert_equal [error_message_from_model(@answer_option, :option, :too_long,
-      :count => 255)], @answer_option.errors[:option]
+    assert_error @answer_option, :option, :too_long, count: 255
   end
 end

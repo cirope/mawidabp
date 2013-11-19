@@ -2,7 +2,15 @@ questionnaire_one:
   name: Encuesta al personal de auditoría
   organization: default_organization
   pollable_type: ConclusionReview
+  email_text: Email text
+  email_link: Email link
+  email_subject: Email subject
+  email_clarification:
 
 questionnaire_two:
   name: Encuesta de fin de año
   organization: default_organization
+  email_text: Email text
+  email_link: Email link
+  email_subject: Email subject
+  email_clarification:

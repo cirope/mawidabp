@@ -62,50 +62,45 @@ class PrivilegeTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @privilege.module = nil
+
     assert @privilege.invalid?
-    assert_equal 1, @privilege.errors.count
-    assert_equal [error_message_from_model(@privilege, :module, :blank)],
-      @privilege.errors[:module]
+    assert_error @privilege, :module, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @privilege.module = 'abcdd' * 52
+
     assert @privilege.invalid?
-    assert_equal 3, @privilege.errors.count
-    assert_equal [error_message_from_model(@privilege, :module, :too_long,
-      :count => 255), error_message_from_model(@privilege, :module, :inclusion),
-    error_message_from_model(@privilege, :module, :invalid)].sort,
-    @privilege.errors[:module].sort
+    assert_error @privilege, :module, :too_long, count: 255
+    assert_error @privilege, :module, :inclusion
+    assert_error @privilege, :module, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @privilege.module = 'fake_controller'
+
     assert @privilege.invalid?
-    assert_equal 2, @privilege.errors.count
-    assert_equal [error_message_from_model(@privilege, :module, :inclusion),
-      error_message_from_model(@privilege, :module, :invalid)].sort,
-      @privilege.errors[:module].sort
+    assert_error @privilege, :module, :inclusion
+    assert_error @privilege, :module, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     @privilege.module = privileges(:admin_follow_up_notifications).module
+
     assert @privilege.invalid?
-    assert_equal 1, @privilege.errors.count
-    assert_equal [error_message_from_model(@privilege, :module, :taken)],
-      @privilege.errors[:module]
+    assert_error @privilege, :module, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates role allow module in privileges' do
     @privilege = Privilege.find(privileges(:audited_follow_up_notifications).id)
     @privilege.module = 'administration_settings'
+
     assert @privilege.invalid?
-    assert_equal 1, @privilege.errors.count
-    assert_equal [error_message_from_model(@privilege, :module, :invalid)],
-      @privilege.errors[:module]
+    assert_error @privilege, :module, :invalid
   end
 
   test 'mark implicit privileges function' do

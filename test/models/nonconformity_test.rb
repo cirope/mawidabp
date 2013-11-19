@@ -136,22 +136,14 @@ class NonconformityTest < ActiveSupport::TestCase
     @nonconformity.audit_recommendations = '  '
     @nonconformity.risk = nil
     @nonconformity.priority = nil
+
     assert @nonconformity.invalid?
-    assert_equal 7, @nonconformity.errors.count
-    assert_equal [error_message_from_model(@nonconformity,
-      :control_objective_item_id, :blank)],
-      @nonconformity.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@nonconformity, :review_code, :blank),
-      error_message_from_model(@nonconformity, :review_code, :invalid)].sort,
-      @nonconformity.errors[:review_code].sort
-    assert_equal [error_message_from_model(@nonconformity, :risk, :blank)],
-      @nonconformity.errors[:risk]
-    assert_equal [error_message_from_model(@nonconformity, :priority, :blank)],
-      @nonconformity.errors[:priority]
-    assert_equal [error_message_from_model(@nonconformity, :audit_recommendations, :blank)],
-      @nonconformity.errors[:audit_recommendations]
-    assert_equal [error_message_from_model(@nonconformity, :state, :inclusion)],
-      @nonconformity.errors[:state]
+    assert_error @nonconformity, :control_objective_item_id, :blank
+    assert_error @nonconformity, :review_code, :blank
+    assert_error @nonconformity, :review_code, :invalid
+    assert_error @nonconformity, :risk, :blank
+    assert_error @nonconformity, :priority, :blank
+    assert_error @nonconformity, :audit_recommendations, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -159,10 +151,9 @@ class NonconformityTest < ActiveSupport::TestCase
     another_nonconformity = Nonconformity.find(findings(
         :bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented).id)
     @nonconformity.review_code = another_nonconformity.review_code
+
     assert @nonconformity.invalid?
-    assert_equal 1, @nonconformity.errors.count
-    assert_equal [error_message_from_model(@nonconformity, :review_code, :taken)],
-      @nonconformity.errors[:review_code]
+    assert_error @nonconformity, :review_code, :taken
 
     # Se puede duplicar si es de otro informe
     another_nonconformity = Nonconformity.find(findings(
@@ -175,22 +166,19 @@ class NonconformityTest < ActiveSupport::TestCase
   test 'validates length of attributes' do
     @nonconformity.review_code = 'abcdd' * 52
     @nonconformity.type = 'abcdd' * 52
+
     assert @nonconformity.invalid?
-    assert_equal 3, @nonconformity.errors.count
-    assert_equal [error_message_from_model(@nonconformity, :review_code, :too_long,
-      :count => 255), error_message_from_model(@nonconformity, :review_code,
-      :invalid)].sort, @nonconformity.errors[:review_code].sort
-    assert_equal [error_message_from_model(@nonconformity, :type, :too_long,
-      :count => 255)], @nonconformity.errors[:type]
+    assert_error @nonconformity, :review_code, :too_long, count: 255
+    assert_error @nonconformity, :review_code, :invalid
+    assert_error @nonconformity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @nonconformity.state = Finding::STATUS.values.sort.last.next
+
     assert @nonconformity.invalid?
-    assert_equal 1, @nonconformity.errors.count
-    assert_equal [error_message_from_model(@nonconformity, :state, :inclusion)],
-      @nonconformity.errors[:state]
+    assert_error @nonconformity, :state, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -199,19 +187,15 @@ class NonconformityTest < ActiveSupport::TestCase
     @nonconformity.cause_analysis_date = 'xxx'
 
     assert @nonconformity.invalid?
-    assert_equal 4, @nonconformity.errors.count
-    assert_equal error_message_from_model(@nonconformity, :correction_date, :invalid_date),
-      @nonconformity.errors[:correction_date].first
-    assert_equal error_message_from_model(@nonconformity, :cause_analysis_date, :invalid_date),
-      @nonconformity.errors[:cause_analysis_date].first
+    assert_error @nonconformity, :correction_date, :invalid_date
+    assert_error @nonconformity, :cause_analysis_date, :invalid_date
 
     assert @nonconformity.update_attribute(:state, 0)
     @nonconformity.correction_date = '25/05/2013'
     @nonconformity.cause_analysis_date = '24/05/2013'
     @nonconformity.follow_up_date = '23/05/2013'
-    assert @nonconformity.invalid?
 
-    assert_equal 2, @nonconformity.errors.count
+    assert @nonconformity.invalid?
     assert_equal [I18n.t('finding.errors.correction_date_on_or_before')],
       @nonconformity.errors[:correction_date]
     assert_equal [I18n.t('finding.errors.cause_analysis_date_on_or_before')],
@@ -222,13 +206,10 @@ class NonconformityTest < ActiveSupport::TestCase
   test 'validates well formated attributes' do
     @nonconformity.control_objective_item_id = '?nil'
     @nonconformity.review_code = 'BAD_PREFIX_2'
+
     assert @nonconformity.invalid?
-    assert_equal 2, @nonconformity.errors.count
-    assert_equal [error_message_from_model(@nonconformity,
-      :control_objective_item_id, :not_a_number)],
-      @nonconformity.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@nonconformity, :review_code, :invalid)],
-      @nonconformity.errors[:review_code]
+    assert_error @nonconformity, :control_objective_item_id, :not_a_number
+    assert_error @nonconformity, :review_code, :invalid
   end
 
   test 'next code' do

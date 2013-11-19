@@ -59,21 +59,18 @@ class PollTest < ActiveSupport::TestCase
     @poll.user = nil
     @poll.questionnaire = nil
     @poll.organization = nil
+
     assert @poll.invalid?
-    assert_equal 3, @poll.errors.count
-    assert_equal [error_message_from_model(@poll, :questionnaire_id, :blank)],
-      @poll.errors[:questionnaire_id]
-    assert_equal [error_message_from_model(@poll, :organization_id, :blank)],
-      @poll.errors[:organization_id]
-    assert_equal [error_message_from_model(@poll, :base, :invalid)],
-      @poll.errors[:base]
+    assert_error @poll, :questionnaire_id, :blank
+    assert_error @poll, :organization_id, :blank
+    assert_error @poll, :base, :invalid
 
     # Validación customer_email xor user
     @poll.customer_email = 'customer@email.com'
     @poll.user = users(:poll_user)
+
     assert @poll.invalid?
-    assert_equal [error_message_from_model(@poll, :base, :invalid)],
-      @poll.errors[:base]
+    assert_error @poll, :base, :invalid
     assert_equal 3, @poll.errors.count
 
     @poll.customer_email = 'customer@email.com'
@@ -90,10 +87,9 @@ class PollTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @poll.comments = 'abcde' * 52
+
     assert @poll.invalid?
-    assert_equal 1, @poll.errors.count
-    assert_equal [error_message_from_model(@poll, :comments, :too_long,
-      :count => 255)], @poll.errors[:comments]
+    assert_error @poll, :comments, :too_long, count: 255
   end
 
   test 'validates pollable_type attribute' do

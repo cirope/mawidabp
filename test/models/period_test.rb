@@ -64,16 +64,11 @@ class PeriodTest < ActiveSupport::TestCase
     @period.number = '_1'
     @period.start = '_1'
     @period.end = '_1'
+
     assert @period.invalid?
-    assert_equal 5, @period.errors.count
-    assert_equal [error_message_from_model(@period, :number, :not_a_number)],
-      @period.errors[:number]
-    assert_equal [error_message_from_model(@period, :start, :invalid_date),
-      error_message_from_model(@period, :start, :blank)].sort,
-      @period.errors[:start].sort
-    assert_equal [error_message_from_model(@period, :end, :invalid_date),
-      error_message_from_model(@period, :end, :blank)].sort,
-      @period.errors[:end].sort
+    assert_error @period, :number, :not_a_number
+    assert_error @period, :start, :invalid_date
+    assert_error @period, :end, :invalid_date
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -83,45 +78,37 @@ class PeriodTest < ActiveSupport::TestCase
     @period.end = '   '
     @period.description = nil
     @period.organization_id = nil
+
     assert @period.invalid?
-    assert_equal 5, @period.errors.count
-    assert_equal [error_message_from_model(@period, :number, :blank)],
-      @period.errors[:number]
-    assert_equal [error_message_from_model(@period, :start, :blank)],
-      @period.errors[:start]
-    assert_equal [error_message_from_model(@period, :end, :blank)],
-      @period.errors[:end]
-    assert_equal [error_message_from_model(@period, :description, :blank)],
-      @period.errors[:description]
-    assert_equal [error_message_from_model(@period, :organization_id, :blank)],
-      @period.errors[:organization_id]
+    assert_error @period, :number, :blank
+    assert_error @period, :start, :blank
+    assert_error @period, :end, :blank
+    assert_error @period, :description, :blank
+    assert_error @period, :organization_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates relative date attributes' do
     @period.end = @period.start.yesterday
+
     assert @period.invalid?
-    assert_equal 1, @period.errors.count
-    assert_equal [error_message_from_model(@period, :end, :after,
-      :restriction => I18n.l(@period.start))], @period.errors[:end]
+    assert_error @period, :end, :after, restriction: I18n.l(@period.start)
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @period.number = periods(:past_period).number
+
     assert @period.invalid?
-    assert_equal 1, @period.errors.count
-    assert_equal [error_message_from_model(@period, :number, :taken)],
-      @period.errors[:number]
+    assert_error @period, :number, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates integer number format' do
     @period.number = 1.5
+
     assert @period.invalid?
-    assert_equal 1, @period.errors.count
-    assert_equal [error_message_from_model(@period, :number, :not_an_integer)],
-      @period.errors[:number]
+    assert_error @period, :number, :not_an_integer
   end
 
   test 'contains' do

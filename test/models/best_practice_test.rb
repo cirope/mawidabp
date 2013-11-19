@@ -61,37 +61,32 @@ class BestPracticeTest < ActiveSupport::TestCase
   test 'validates blank atrtributes' do
     @best_practice.name = nil
     @best_practice.organization_id = '  '
+
     assert @best_practice.invalid?
-    assert_equal 2, @best_practice.errors.count
-    assert_equal [error_message_from_model(@best_practice, :name, :blank)],
-      @best_practice.errors[:name]
-    assert_equal [error_message_from_model(@best_practice, :organization_id,
-      :blank)], @best_practice.errors[:organization_id]
+    assert_error @best_practice, :name, :blank
+    assert_error @best_practice, :organization_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @best_practice.name = 'abcdd' * 52
+
     assert @best_practice.invalid?
-    assert_equal 1, @best_practice.errors.count
-    assert_equal [error_message_from_model(@best_practice, :name, :too_long,
-      :count => 255)], @best_practice.errors[:name]
+    assert_error @best_practice, :name, :too_long, count: 255
   end
 
   test 'validates formated attributes' do
     @best_practice.organization_id = 'a'
+
     assert @best_practice.invalid?
-    assert_equal 1, @best_practice.errors.count
-    assert_equal [error_message_from_model(@best_practice, :organization_id,
-      :not_a_number)], @best_practice.errors[:organization_id]
+    assert_error @best_practice, :organization_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @best_practice.name = best_practices(:bcra_A4609).name
+
     assert @best_practice.invalid?
-    assert_equal 1, @best_practice.errors.count
-    assert_equal [error_message_from_model(@best_practice, :name, :taken)],
-      @best_practice.errors[:name]
+    assert_error @best_practice, :name, :taken
   end
 end

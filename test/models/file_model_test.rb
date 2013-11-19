@@ -66,12 +66,10 @@ class FileModelTest < ActiveSupport::TestCase
   test 'validates lenght attributes' do
     @file_model.file_file_name = "#{'abc' * 100}.txt"
     @file_model.file_content_type = 'abc' * 100
+
     assert @file_model.invalid?
-    assert_equal 2, @file_model.errors.count
-    assert_equal [error_message_from_model(@file_model, :file_file_name, :too_long,
-      :count => 255)], @file_model.errors[:file_file_name]
-    assert_equal [error_message_from_model(@file_model, :file_content_type, :too_long,
-      :count => 255)], @file_model.errors[:file_content_type]
+    assert_error @file_model, :file_file_name, :too_long, count: 255
+    assert_error @file_model, :file_content_type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -81,9 +79,6 @@ class FileModelTest < ActiveSupport::TestCase
     )
 
     assert @file_model.invalid?
-    assert_equal 1, @file_model.errors.count
-    assert_equal [
-      error_message_from_model(@file_model, :file, :without_extension)
-    ], @file_model.errors[:file]
+    assert_error @file_model, :file, :without_extension
   end
 end

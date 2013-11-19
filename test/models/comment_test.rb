@@ -50,9 +50,8 @@ class CommentTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @comment.comment = ' '
+
     assert @comment.invalid?
-    assert_equal 1, @comment.errors.count
-    assert_equal [error_message_from_model(@comment, :comment, :blank)],
-      @comment.errors[:comment]
+    assert_error @comment, :comment, :blank
   end
 end

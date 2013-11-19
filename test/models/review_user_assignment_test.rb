@@ -60,14 +60,10 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   test 'validates blank atrtributes' do
     @review_user_assignment.assignment_type = nil
     @review_user_assignment.user_id = nil
+
     assert @review_user_assignment.invalid?
-    assert_equal 2, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :assignment_type, :blank)],
-      @review_user_assignment.errors[:assignment_type]
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :user_id, :blank)],
-      @review_user_assignment.errors[:user_id]
+    assert_error @review_user_assignment, :assignment_type, :blank
+    assert_error @review_user_assignment, :user_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -75,45 +71,35 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     @review_user_assignment.assignment_type = 'aaa'
     @review_user_assignment.user_id = '123-'
     @review_user_assignment.review_id = '12.3'
+
     assert @review_user_assignment.invalid?
-    assert_equal 3, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :assignment_type, :not_a_number)],
-      @review_user_assignment.errors[:assignment_type]
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :user_id, :not_a_number)],
-      @review_user_assignment.errors[:user_id]
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :review_id,
-      :not_an_integer)], @review_user_assignment.errors[:review_id]
+    assert_error @review_user_assignment, :assignment_type, :not_a_number
+    assert_error @review_user_assignment, :user_id, :not_a_number
+    assert_error @review_user_assignment, :review_id, :not_an_integer
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES.values.sort.last.next
+
     assert @review_user_assignment.invalid?
-    assert_equal 1, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      @review_user_assignment, :assignment_type, :inclusion)],
-      @review_user_assignment.errors[:assignment_type]
+    assert_error @review_user_assignment, :assignment_type, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates user is a supervisor and manager attributes' do
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES[:supervisor]
+
     assert @review_user_assignment.invalid?
-    assert_equal 1, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(@review_user_assignment, :user_id,
-        :invalid)], @review_user_assignment.errors[:user_id]
+    assert_error @review_user_assignment, :user_id, :invalid
 
     @review_user_assignment.assignment_type =
       ReviewUserAssignment::TYPES[:manager]
+
     assert @review_user_assignment.invalid?
-    assert_equal 1, @review_user_assignment.errors.count
-    assert_equal [error_message_from_model(@review_user_assignment, :user_id,
-        :invalid)], @review_user_assignment.errors[:user_id]
+    assert_error @review_user_assignment, :user_id, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -124,11 +110,9 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
     review_user_assignment = review.review_user_assignments.build(
       @review_user_assignment.attributes.merge('id' => nil))
     review_user_assignment.review = review
+
     assert review_user_assignment.invalid?
-    assert_equal 1, review_user_assignment.errors.count
-    assert_equal [error_message_from_model(
-      review_user_assignment, :user_id, :taken)],
-      review_user_assignment.errors[:user_id]
+    assert_error review_user_assignment, :user_id, :taken
   end
 
   test 'user reassignment' do

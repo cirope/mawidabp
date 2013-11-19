@@ -44,38 +44,34 @@ class ResourceClassTest < ActiveSupport::TestCase
   test 'validates formated attributes' do
     @resource_class.name = '?_1'
     @resource_class.unit = '1.55'
+
     assert @resource_class.invalid?
-    assert_equal 1, @resource_class.errors.count
-    assert_equal [error_message_from_model(@resource_class, :name, :invalid)],
-      @resource_class.errors[:name]
+    assert_error @resource_class, :name, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @resource_class.name = nil
     @resource_class.unit = '  '
+
     assert @resource_class.invalid?
-    assert_equal 1, @resource_class.errors.count
-    assert_equal [error_message_from_model(@resource_class, :name, :blank)],
-      @resource_class.errors[:name]
+    assert_error @resource_class, :name, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @resource_class.name = 'abcdd' * 52
+
     assert @resource_class.invalid?
-    assert_equal 1, @resource_class.errors.count
-    assert_equal [error_message_from_model(@resource_class, :name, :too_long,
-      :count => 255)], @resource_class.errors[:name]
+    assert_error @resource_class, :name, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @resource_class.name = resource_classes(:hardware_resources).name
+
     assert @resource_class.invalid?
-    assert_equal 1, @resource_class.errors.count
-    assert_equal [error_message_from_model(@resource_class, :name, :taken)],
-      @resource_class.errors[:name]
+    assert_error @resource_class, :name, :taken
 
     @resource_class.organization_id = organizations(:second_organization).id
     assert @resource_class.valid?
@@ -85,11 +81,9 @@ class ResourceClassTest < ActiveSupport::TestCase
   test 'validates included attributes' do
     @resource_class.resource_class_type =
       ResourceClass::TYPES.values.sort.last.next
+
     assert @resource_class.invalid?
-    assert_equal 1, @resource_class.errors.count
-    assert_equal [error_message_from_model(@resource_class,
-        :resource_class_type, :inclusion)],
-      @resource_class.errors[:resource_class_type]
+    assert_error @resource_class, :resource_class_type, :inclusion
   end
 
   test 'dynamic functions' do

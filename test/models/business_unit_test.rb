@@ -54,27 +54,24 @@ class BusinessUnitTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @business_unit.name = ' '
+
     assert @business_unit.invalid?
-    assert_equal 1, @business_unit.errors.count
-    assert_equal [error_message_from_model(@business_unit, :name, :blank)],
-      @business_unit.errors[:name]
+    assert_error @business_unit, :name, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @business_unit.name = 'abcdd' * 52
+
     assert @business_unit.invalid?
-    assert_equal 1, @business_unit.errors.count
-    assert_equal [error_message_from_model(@business_unit, :name, :too_long,
-      :count => 255)], @business_unit.errors[:name]
+    assert_error @business_unit, :name, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @business_unit.name = business_units(:business_unit_two).name
+
     assert @business_unit.invalid?
-    assert_equal 1, @business_unit.errors.count
-    assert_equal [error_message_from_model(@business_unit, :name, :taken)],
-      @business_unit.errors[:name]
+    assert_error @business_unit, :name, :taken
   end
 end

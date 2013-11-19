@@ -115,14 +115,11 @@ class OportunityTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @oportunity.control_objective_item_id = nil
     @oportunity.review_code = '   '
+
     assert @oportunity.invalid?
-    assert_equal 3, @oportunity.errors.count
-    assert_equal [error_message_from_model(@oportunity,
-      :control_objective_item_id, :blank)],
-      @oportunity.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@oportunity, :review_code, :blank),
-      error_message_from_model(@oportunity, :review_code, :invalid)].sort,
-      @oportunity.errors[:review_code].sort
+    assert_error @oportunity, :control_objective_item_id, :blank
+    assert_error @oportunity, :review_code, :blank
+    assert_error @oportunity, :review_code, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -130,42 +127,36 @@ class OportunityTest < ActiveSupport::TestCase
     another_oportunity = Oportunity.find(findings(
         :bcra_A4609_security_management_responsible_dependency_notify_oportunity).id)
     @oportunity.review_code = another_oportunity.review_code
+
     assert @oportunity.invalid?
-    assert_equal 1, @oportunity.errors.count
-    assert_equal [error_message_from_model(@oportunity, :review_code, :taken)],
-      @oportunity.errors[:review_code]
+    assert_error @oportunity, :review_code, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @oportunity.review_code = 'abcdd' * 52
     @oportunity.type = 'abcdd' * 52
+
     assert @oportunity.invalid?
-    assert_equal 3, @oportunity.errors.count
-    assert_equal [error_message_from_model(@oportunity, :review_code, :too_long,
-      :count => 255), error_message_from_model(@oportunity, :review_code,
-      :invalid)].sort, @oportunity.errors[:review_code].sort
-    assert_equal [error_message_from_model(@oportunity, :type, :too_long,
-      :count => 255)], @oportunity.errors[:type]
+    assert_error @oportunity, :review_code, :too_long, count: 255
+    assert_error @oportunity, :review_code, :invalid
+    assert_error @oportunity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates included attributes' do
     @oportunity.state = Finding::STATUS.values.sort.last.next
+
     assert @oportunity.invalid?
-    assert_equal 1, @oportunity.errors.count
-    assert_equal [error_message_from_model(@oportunity, :state, :inclusion)],
-      @oportunity.errors[:state]
+    assert_error @oportunity, :state, :inclusion
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @oportunity.control_objective_item_id = '?nil'
+
     assert @oportunity.invalid?
-    assert_equal 1, @oportunity.errors.count
-    assert_equal [error_message_from_model(@oportunity,
-      :control_objective_item_id, :not_a_number)],
-      @oportunity.errors[:control_objective_item_id]
+    assert_error @oportunity, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do
@@ -214,23 +205,23 @@ class OportunityTest < ActiveSupport::TestCase
 
     @oportunity.state = Finding::STATUS[:implemented_audited]
     @oportunity.solution_date = nil
+
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.without_solution_date'),
       @oportunity.approval_errors.first
 
     @oportunity.state = Finding::STATUS[:implemented]
     @oportunity.solution_date = 2.days.from_now.to_date
     @oportunity.follow_up_date = nil
+
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.with_solution_date'),
       @oportunity.approval_errors.first
 
     @oportunity.state = Finding::STATUS[:being_implemented]
     @oportunity.answer = ' '
+
     assert !@oportunity.must_be_approved?
-    assert_equal 2, @oportunity.approval_errors.size
     assert_equal [I18n.t('oportunity.errors.without_answer'),
       I18n.t('oportunity.errors.with_solution_date')].sort,
       @oportunity.approval_errors.sort
@@ -238,8 +229,8 @@ class OportunityTest < ActiveSupport::TestCase
     @oportunity.reload
     assert @oportunity.must_be_approved?
     @oportunity.state = Finding::STATUS[:notify]
+
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.not_valid_state'),
       @oportunity.approval_errors.first
 
@@ -250,7 +241,6 @@ class OportunityTest < ActiveSupport::TestCase
       end
 
     assert !@oportunity.must_be_approved?
-    assert_equal 1, @oportunity.approval_errors.size
     assert_equal I18n.t('oportunity.errors.without_audited'),
       @oportunity.approval_errors.first
 

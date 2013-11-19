@@ -103,47 +103,39 @@ class FortressTest < ActiveSupport::TestCase
   test 'validates blank attributes' do
     @fortress.control_objective_item_id = nil
     @fortress.review_code = '   '
+
     assert @fortress.invalid?
-    assert_equal 3, @fortress.errors.count
-    assert_equal [error_message_from_model(@fortress,
-      :control_objective_item_id, :blank)],
-      @fortress.errors[:control_objective_item_id]
-    assert_equal [error_message_from_model(@fortress, :review_code, :blank),
-      error_message_from_model(@fortress, :review_code, :invalid)].sort,
-      @fortress.errors[:review_code].sort
+    assert_error @fortress, :control_objective_item_id, :blank
+    assert_error @fortress, :review_code, :blank
+    assert_error @fortress, :review_code, :invalid
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     another_fortress = Fortress.find(findings(:bcra_A4609_security_management_responsible_dependency_fortress_2).id)
     @fortress.review_code = another_fortress.review_code
+
     assert @fortress.invalid?
-    assert_equal 1, @fortress.errors.count
-    assert_equal [error_message_from_model(@fortress, :review_code, :taken)],
-      @fortress.errors[:review_code]
+    assert_error @fortress, :review_code, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @fortress.review_code = 'abcdd' * 52
     @fortress.type = 'abcdd' * 52
+
     assert @fortress.invalid?
-    assert_equal 3, @fortress.errors.count
-    assert_equal [error_message_from_model(@fortress, :review_code, :too_long,
-      :count => 255), error_message_from_model(@fortress, :review_code,
-      :invalid)].sort, @fortress.errors[:review_code].sort
-    assert_equal [error_message_from_model(@fortress, :type, :too_long,
-      :count => 255)], @fortress.errors[:type]
+    assert_error @fortress, :review_code, :too_long, count: 255
+    assert_error @fortress, :review_code, :invalid
+    assert_error @fortress, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
     @fortress.control_objective_item_id = '?nil'
+
     assert @fortress.invalid?
-    assert_equal 1, @fortress.errors.count
-    assert_equal [error_message_from_model(@fortress,
-      :control_objective_item_id, :not_a_number)],
-      @fortress.errors[:control_objective_item_id]
+    assert_error @fortress, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do

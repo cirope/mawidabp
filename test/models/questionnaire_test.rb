@@ -17,6 +17,9 @@ class QuestionnaireTest < ActiveSupport::TestCase
       Questionnaire.create(
         :name => 'Cuestionario de prueba',
         :organization_id => organizations(:default_organization).id,
+        :email_subject => "email@subject.com",
+        :email_text => "Email text",
+        :email_link => "Email link",
         :questions_attributes => {
           '1' => {
             :question => "Cuestion multi choice",
@@ -50,30 +53,40 @@ class QuestionnaireTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @questionnaire.name = '  '
+    @questionnaire.email_subject = '  '
+    @questionnaire.email_text = '  '
+    @questionnaire.email_link = '  '
     @questionnaire.organization = nil
+
     assert @questionnaire.invalid?
-    assert_equal 2, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :blank)],
-      @questionnaire.errors[:name]
-    assert_equal [error_message_from_model(@questionnaire, :organization_id, :blank)],
-      @questionnaire.errors[:organization_id]
+    assert_error @questionnaire, :name, :blank
+    assert_error @questionnaire, :email_subject, :blank
+    assert_error @questionnaire, :email_text, :blank
+    assert_error @questionnaire, :email_link, :blank
+    assert_error @questionnaire, :organization_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @questionnaire.name = 'abcde' * 52
+    @questionnaire.email_subject = 'abcde' * 52
+    @questionnaire.email_text = 'abcde' * 52
+    @questionnaire.email_link = 'abcde' * 52
+    @questionnaire.email_clarification = 'abcde' * 52
+
     assert @questionnaire.invalid?
-    assert_equal 1, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :too_long,
-      :count => 255)], @questionnaire.errors[:name]
+    assert_error @questionnaire, :name, :too_long, count: 255
+    assert_error @questionnaire, :email_subject, :too_long, count: 255    
+    assert_error @questionnaire, :email_text, :too_long, count: 255
+    assert_error @questionnaire, :email_link, :too_long, count: 255
+    assert_error @questionnaire, :email_clarification, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates unique attributes' do
     @questionnaire.name = questionnaires(:questionnaire_two).name
+
     assert @questionnaire.invalid?
-    assert_equal 1, @questionnaire.errors.count
-    assert_equal [error_message_from_model(@questionnaire, :name, :taken)],
-      @questionnaire.errors[:name]
+    assert_error @questionnaire, :name, :taken
   end
 end

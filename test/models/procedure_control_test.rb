@@ -46,28 +46,25 @@ class ProcedureControlTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates formated attributes' do
     @procedure_control.period_id = '?nil'
+
     assert @procedure_control.invalid?
-    assert_equal 1, @procedure_control.errors.count
-    assert_equal [error_message_from_model(@procedure_control, :period_id,
-      :not_a_number)], @procedure_control.errors[:period_id]
+    assert_error @procedure_control, :period_id, :not_a_number
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @procedure_control.period_id = nil
+
     assert @procedure_control.invalid?
-    assert_equal 1, @procedure_control.errors.count
-    assert_equal [error_message_from_model(@procedure_control, :period_id,
-      :blank)], @procedure_control.errors[:period_id]
+    assert_error @procedure_control, :period_id, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @procedure_control.period_id =
       procedure_controls(:procedure_control_bcra_A4609).period_id
+
     assert @procedure_control.invalid?
-    assert_equal 1, @procedure_control.errors.count
-    assert_equal [error_message_from_model(@procedure_control,
-      :period_id, :taken)], @procedure_control.errors[:period_id]
+    assert_error @procedure_control, :period_id, :taken
   end
 end

@@ -70,16 +70,10 @@ class ControlTest < ActiveSupport::TestCase
     @control.validates_presence_of_sustantive_tests = true
 
     assert @control.invalid?
-    assert_equal 5, @control.errors.size
-    assert_equal [error_message_from_model(@control, :control, :blank)],
-      @control.errors[:control]
-    assert_equal [error_message_from_model(@control, :effects, :blank)],
-      @control.errors[:effects]
-    assert_equal [error_message_from_model(@control, :design_tests, :blank)],
-      @control.errors[:design_tests]
-    assert_equal [error_message_from_model(@control, :compliance_tests,
-        :blank)], @control.errors[:compliance_tests]
-    assert_equal [error_message_from_model(@control, :compliance_tests,
-        :blank)], @control.errors[:compliance_tests]
+    assert_error @control, :control, :blank
+    assert_error @control, :effects, :blank
+    assert_error @control, :design_tests, :blank
+    assert_error @control, :compliance_tests, :blank
+    assert_error @control, :sustantive_tests, :blank
   end
 end
