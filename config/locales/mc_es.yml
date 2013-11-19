@@ -69,7 +69,6 @@
       best_practices: "Buenas prácticas"
       settings: 'Configuraciones'
       e_mails: "Correos"
-      detracts: "Detractores"
       questionnaires_title: "Cuestionarios"
       questionnaires:
         definition: "Definición"
@@ -458,17 +457,6 @@
     create: "Generar"
     title: "Título"
     subtitle: "Subtítulo"
-
-  detract:
-    index_title: "Listado de detractores"
-    show_title: "Detalle del detractor"
-    new_title: "Agregar detractor"
-    correctly_created: "Detractor agregado correctamente."
-    show_last_detracts: "Ver los últimos detractores"
-    last_detract: "Último detractor"
-    last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
-    without_detract: "No tiene ningún detractor asignado al momento"
-    user_without_detracts: "No tiene ningún detractor asignado al momento"
 
   email:
     index_title: "Listado de correos"
@@ -927,10 +915,6 @@
         one: "El siguiente desvío / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
         other: "Las siguientes desvíos / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
-    pending_poll_email:
-      title: "%{name}, tiene una encuesta pendiente"
-      answer_poll: 'Contestar encuesta'
-      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
@@ -1516,7 +1500,6 @@
       control_objective: "Objetivo/Meta"
       control_objective_item: "Objetivo/Meta"
       cost: "Costo"
-      detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
       finding: "Desvío / Oportunidad"
@@ -1658,11 +1641,6 @@
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      detract:
-        organization_id: "Organización"
-        user_id: "Usuario"
-        value: "Valor"
-        observations: "Desvíos"
       e_mail:
         to: "Para"
         subject: "Asunto"
@@ -1850,6 +1828,11 @@
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+      paper_trail/version:
+        item: "Objeto"
+        event: "Evento"
+        whodunnit: "Ejecutor"
+        created_at: "Fecha"
       period:
         number: "Número"
         description: "Descripción"
@@ -1941,6 +1924,10 @@
         questions: "Preguntas"
         polls: "Encuestas"
         pollable_type: "Clase encuestable"
+        email_subject: "Asunto email"
+        email_link: "Link email"
+        email_text: "Texto email"
+        email_clarification: "Aclaración email"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
@@ -2023,11 +2010,6 @@
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'
-      version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
       weakness:
         control_objective_item_id: "Objetivo/Meta"
         description: "Desvío"
@@ -2240,7 +2222,6 @@
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos/Metas"
-    detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de desvíos"

@@ -128,13 +128,12 @@ class String
   end
 end
 
-class Version
+class PaperTrail::Version
   def changes_until(other)
     changes = []
-    old_attributes = self.reify(has_one: false).try(:attributes) || {}
-    new_attributes = (other.try(:reify, has_one: false) ||
-        self.item.try(:reload)).try(:attributes) || {}
-    item_class = self.try(:class) || self.item.try(:class)
+    old_attributes = reify(has_one: false).try(:attributes) || {}
+    new_attributes = (other.try(:reify, has_one: false) || item).try(:attributes) || {}
+    item_class = self.try(:class) || item.try(:class)
 
     old_attributes.each do |attribute, old_value|
       new_value = new_attributes.delete attribute

@@ -638,6 +638,7 @@ class PollsController < ApplicationController
           organization_id: current_organization.id
         )
         poll.customer_email = row[0]
+        poll.customer_name = row[1]
 
         if poll.save
           n+=1

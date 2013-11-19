@@ -1,4 +1,4 @@
-module Reports::WeaknessesByRisk                                                                                                     
+module Reports::WeaknessesByRisk
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
@@ -21,7 +21,7 @@ module Reports::WeaknessesByRisk
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
     highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
-    
+
     @periods.each do |period|
       total_weaknesses_count = {}
       total_weaknesses_count_by_risk = {}
@@ -157,24 +157,12 @@ module Reports::WeaknessesByRisk
   def create_weaknesses_by_risk
     self.weaknesses_by_risk
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
+    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
 
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
-
-    pdf.add_description_item(
-      t("#{@controller}_committee_report.period.title"),
-      t("#{@controller}_committee_report.period.range",
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+    add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :left
+      add_period_title(pdf, period)
 
       @audit_types.each do |audit_type|
         audit_type_symbol = audit_type.kind_of?(Symbol) ?
@@ -233,16 +221,8 @@ module Reports::WeaknessesByRisk
       end
     end
 
-    pdf.custom_save_as(
-      t("#{@controller}_report.weaknesses_by_risk.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
-      'weaknesses_by_risk', 0)
+    save_pdf(pdf, @controller, @from_date, @to_date, 'weaknesses_by_risk')
 
-    redirect_to Prawn::Document.relative_path(
-      t("#{@controller}_committee_report.weaknesses_by_risk.pdf_name",
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)),
-      'weaknesses_by_risk', 0)
+    redirect_to_pdf(@controller, @from_date, @to_date, 'weaknesses_by_risk')
   end
 end

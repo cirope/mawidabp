@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131112151450) do
+ActiveRecord::Schema.define(version: 20131114182935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,20 +176,6 @@ ActiveRecord::Schema.define(version: 20131112151450) do
   add_index "costs", ["cost_type"], name: "index_costs_on_cost_type", using: :btree
   add_index "costs", ["item_type", "item_id"], name: "index_costs_on_item_type_and_item_id", using: :btree
   add_index "costs", ["user_id"], name: "index_costs_on_user_id", using: :btree
-
-  create_table "detracts", force: true do |t|
-    t.decimal  "value",           precision: 3, scale: 2
-    t.text     "observations"
-    t.integer  "user_id"
-    t.integer  "organization_id"
-    t.integer  "lock_version",                            default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "detracts", ["created_at"], name: "index_detracts_on_created_at", using: :btree
-  add_index "detracts", ["organization_id"], name: "index_detracts_on_organization_id", using: :btree
-  add_index "detracts", ["user_id"], name: "index_detracts_on_user_id", using: :btree
 
   create_table "e_mails", force: true do |t|
     t.text     "to"
@@ -600,11 +586,15 @@ ActiveRecord::Schema.define(version: 20131112151450) do
 
   create_table "questionnaires", force: true do |t|
     t.string   "name"
-    t.integer  "lock_version",    default: 0
+    t.integer  "lock_version",        default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
     t.string   "pollable_type"
+    t.string   "email_subject"
+    t.string   "email_link"
+    t.string   "email_text"
+    t.string   "email_clarification"
   end
 
   add_index "questionnaires", ["name"], name: "index_questionnaires_on_name", using: :btree
@@ -839,9 +829,6 @@ ActiveRecord::Schema.define(version: 20131112151450) do
   add_foreign_key "control_objectives", "process_controls", name: "control_objectives_process_control_id_fk", dependent: :restrict
 
   add_foreign_key "costs", "users", name: "costs_user_id_fk", dependent: :restrict
-
-  add_foreign_key "detracts", "organizations", name: "detracts_organization_id_fk", dependent: :restrict
-  add_foreign_key "detracts", "users", name: "detracts_user_id_fk", dependent: :restrict
 
   add_foreign_key "error_records", "organizations", name: "error_records_organization_id_fk", dependent: :restrict
   add_foreign_key "error_records", "users", name: "error_records_user_id_fk", dependent: :restrict

@@ -133,7 +133,8 @@ class QuestionnairesController < ApplicationController
 
     def questionnaire_params
       params.require(:questionnaire).permit(
-        :name, :lock_version, :pollable_type, questions_attributes: [
+        :name, :lock_version, :pollable_type, :email_text, :email_subject, :email_link,
+        :email_clarification, questions_attributes: [
           :id, :question, :sort_order, :answer_type, :lock_version, :_destroy
         ]
       )

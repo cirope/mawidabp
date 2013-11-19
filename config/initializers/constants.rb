@@ -38,8 +38,6 @@ FINDING_MAX_PDF_ROWS = 100
 FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_STALE_UNCONFIRMED_DAYS = 1
-# Cantidad de detractores a mostrar en el resumen por usuario
-LAST_DETRACTORS_LIMIT = 20
 # Cuenta de correo destino de las notificaciones (se enviarán todas las
 # notificaciones a esta cuenta)
 NOTIFICATIONS_EMAIL = 'notificaciones@mawidabp.com'.freeze

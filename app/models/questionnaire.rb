@@ -8,11 +8,11 @@ class Questionnaire < ActiveRecord::Base
   ]
 
   # Validaciones
-  validates :name, :organization_id, :presence => true
+  validates :name, :organization_id, :email_subject, :email_text, :email_link,
+    :presence => true
   validates_uniqueness_of :name, :allow_nil => true, :allow_blank => true
-  validates_length_of :name, :maximum => 255, :allow_nil => true,
-    :allow_blank => true
-
+  validates_length_of :name, :email_subject, :email_text, :email_link,
+    :email_clarification, :maximum => 255, :allow_nil => true, :allow_blank => true
   # Relaciones
   belongs_to :organization
   has_many :polls, :dependent => :destroy

@@ -3,6 +3,8 @@ class Poll < ActiveRecord::Base
 
   has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
 
+  attr_accessor :customer_name
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     :name => {
@@ -82,23 +84,9 @@ class Poll < ActiveRecord::Base
 
   def send_poll_email
     begin
-      if self.customer_email.present?
-        Notifier.client_pending_poll(self).deliver
-      else
-        Notifier.pending_poll_email(self).deliver
-      end
+      Notifier.pending_poll_email(self).deliver
     rescue Exception
       self.destroy
-    end
-  end
-
-  def name
-    if self.pollable_id.present?
-      "#{self.questionnaire.name} (#{self.pollable_type.constantize.model_name.human})"
-    elsif self.questionnaire.id == 4 # Comité
-      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.monthly_committee'})"
-    else
-      "#{self.questionnaire.name} (#{I18n.t 'questionnaire.general'})"
     end
   end
 

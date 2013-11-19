@@ -1,19 +1,5 @@
 # Menú del auditado
 APP_AUDITED_MENU_ITEMS = [
-  # ADMINISTRACIÓN
-  MenuItem.new(
-    :administration,
-    :order => 1,
-    :url => '#menu_administration',
-    :children => [
-      MenuItem.new(
-        :detracts,
-        :order => 1,
-        :controllers => :detracts,
-        :url => {:controller => :detracts}
-      )
-    ]
-  ),
   MenuItem.new(
     :follow_up,
     :order => 1,
@@ -43,7 +29,7 @@ APP_AUDITED_MENU_ITEMS = [
   ),
   MenuItem.new(
     :help,
-    :order => 6,
+    :order => 2,
     :url => {:controller => :help_contents, :action => :show_content},
     :controllers => [:help_contents, :help_items, :inline_helps],
     :exclude_from_privileges => true
@@ -123,14 +109,8 @@ APP_AUDITOR_MENU_ITEMS = [
         :url => {:controller => :e_mails}
       ),
       MenuItem.new(
-        :detracts,
-        :order => 6,
-        :controllers => :detracts,
-        :url => {:controller => :detracts}
-      ),
-      MenuItem.new(
         :questionnaires,
-        :order => 7,
+        :order => 6,
         :url => '#menu_administration_questionnaires',
         :class => :menu_item_2,
         :children => [
@@ -356,20 +336,6 @@ APP_AUDITOR_MENU_ITEMS = [
 
 # Menú del auditado para organizaciones de Gestión de la Calidad
 APP_AUDITED_QM_MENU_ITEMS = [
-  # ADMINISTRACIÓN
-  MenuItem.new(
-    :administration,
-    :order => 1,
-    :url => '#menu_administration',
-    :children => [
-      MenuItem.new(
-        :detracts,
-        :order => 1,
-        :controllers => :detracts,
-        :url => {:controller => :detracts}
-      )
-    ]
-  ),
   MenuItem.new(
     :follow_up,
     :order => 1,
@@ -399,7 +365,7 @@ APP_AUDITED_QM_MENU_ITEMS = [
   ),
   MenuItem.new(
     :help,
-    :order => 6,
+    :order => 2,
     :url => {:controller => :help_contents, :action => :show_content},
     :controllers => [:help_contents, :help_items, :inline_helps],
     :exclude_from_privileges => true
@@ -479,14 +445,8 @@ APP_AUDITOR_QM_MENU_ITEMS = [
         :url => {:controller => :e_mails}
       ),
       MenuItem.new(
-        :detracts,
-        :order => 6,
-        :controllers => :detracts,
-        :url => {:controller => :detracts}
-      ),
-      MenuItem.new(
         :questionnaires,
-        :order => 7,
+        :order => 6,
         :url => '#menu_administration_questionnaires',
         :class => :menu_item_2,
         :children => [

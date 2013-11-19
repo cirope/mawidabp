@@ -8,13 +8,28 @@
       <%= qe_f.label :name %>
       <%= qe_f.text_field :name, :maxlength => 255, :autofocus => true %>
     </p>
+    <p>                                                                                                                                                                               
+      <%= qe_f.label :email_subject %>
+      <%= qe_f.text_field :email_subject, :maxlength => 255 %>
+    </p>
+    <p>                                                                                                                                                                               
+      <%= qe_f.label :email_link %>
+      <%= qe_f.text_field :email_link, :maxlength => 255 %>
+    </p>
+    <p>                                                                                                                                                                               
+      <%= qe_f.label :email_text %>
+      <%= qe_f.text_area :email_text, :maxlength => 255 %>
+    </p>
+    <p>                                                                                                                                                                               
+      <%= qe_f.label :email_clarification %>
+      <%= qe_f.text_area :email_clarification, :maxlength => 255 %>
+    </p>
     <p>
       <%= qe_f.label :pollable_type %>
       <%= qe_f.select :pollable_type, Questionnaire::POLLABLE_TYPES.map{ |type|
             [type.constantize.model_name.human, type]
           }, { :prompt => t('helpers.select.prompt') }
-
- %>
+      %>
     </p>
   </div>
 

@@ -13,7 +13,7 @@ class NotifierTest < ActionMailer::TestCase
     assert !ActionMailer::Base.deliveries.empty?
     assert_equal [poll.user.email], response.to
     assert response.subject.include?(
-      I18n.t('notifier.pending_poll_email.title', :name => poll.user.informal_name)
+      poll.questionnaire.email_subject
     )
   end
 
