@@ -68,6 +68,7 @@ module Reports::ControlObjectiveStats
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
     @periods = periods_for_interval
     @risk_levels = []
+    @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first } 
     @filters = []
     @columns = [
       ['process_control', BestPractice.human_attribute_name(:process_controls), 20],
@@ -137,8 +138,6 @@ module Reports::ControlObjectiveStats
         weaknesses = @final ? coi.final_weaknesses : coi.weaknesses
 
         weaknesses.not_revoked.each do |w|
-          @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
-
           weaknesses_count[w.risk_text] ||= 0
           weaknesses_count[w.risk_text] += 1
 
