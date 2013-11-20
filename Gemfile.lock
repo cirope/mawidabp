@@ -47,8 +47,9 @@ GEM
       sshkit (>= 0.0.23)
     capistrano-bundler (1.0.0)
       capistrano (>= 3.0.0.pre)
-    capistrano-rails (1.0.0)
-      capistrano
+    capistrano-rails (1.1.0)
+      capistrano (>= 3.0.0)
+      capistrano-bundler (>= 1.0.0)
     carrierwave (0.9.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -90,8 +91,9 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
     newrelic_rpm (3.6.9.171)
-    paper_trail (3.0.0.beta1)
+    paper_trail (3.0.0.rc2)
       activerecord (>= 3.0, < 5.0)
+      activesupport (>= 3.0, < 5.0)
     pdf-reader (1.3.3)
       Ascii85 (~> 1.0.0)
       afm (~> 0.2.0)
@@ -149,7 +151,7 @@ GEM
       atomic
     tilt (1.4.1)
     timeliness (0.3.7)
-    tins (0.13.0)
+    tins (0.13.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -198,7 +200,7 @@ DEPENDENCIES
   mini_magick
   minitest
   newrelic_rpm
-  paper_trail (= 3.0.0.beta1)
+  paper_trail (= 3.0.0.rc2)
   pg
   prawn
   rails (= 4.0.1)

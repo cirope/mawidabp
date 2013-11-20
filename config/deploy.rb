@@ -3,6 +3,10 @@ set :user, 'deployer'
 set :repo_url, 'git://github.com/cirope/mawidabp.git'
 
 set :deploy_to, "/var/www/#{fetch(:application)}"
+
+set :format, :pretty
+set :log_level, :info
+
 set :deploy_via, :remote_cache
 set :scm, :git
 

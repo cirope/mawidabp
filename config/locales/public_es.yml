@@ -47,7 +47,9 @@
     without_data: "Sin datos"
 
   lang:
-    es: "Español"
+    es: 'Español'
+    public_es: 'Público'
+    mc_es: 'Control de gestión'
 
   menu:
     exit: "Salir"
@@ -65,8 +67,8 @@
         users: "Usuarios"
         roles: "Perfiles y Privilegios"
       best_practices: "Buenas prácticas"
+      settings: 'Configuraciones'
       e_mails: "Correos"
-      detracts: "Detractores"
       questionnaires_title: "Cuestionarios"
       questionnaires:
         definition: "Definición"
@@ -99,8 +101,8 @@
         management: "Reportes de la gerencia"
     follow_up_title: "SEGUIMIENTO"
     follow_up:
-      pending_findings: "Observaciones y Oportunidades pendientes"
-      complete_findings: "Observaciones y Oportunidades solucionadas o reiteradas"
+      pending_findings: "Hallazgos pendientes"
+      complete_findings: "Hallazgos solucionados o reiterados"
       notifications: "Notificaciones"
       reports_title: "Reportes"
       reports:
@@ -456,17 +458,6 @@
     title: "Título"
     subtitle: "Subtítulo"
 
-  detract:
-    index_title: "Listado de detractores"
-    show_title: "Detalle del detractor"
-    new_title: "Agregar detractor"
-    correctly_created: "Detractor agregado correctamente."
-    show_last_detracts: "Ver los últimos detractores"
-    last_detract: "Último detractor"
-    last_detracts: "Resumen de los últimos *%{count}* detractores de *%{user}*"
-    without_detract: "No tiene ningún detractor asignado al momento"
-    user_without_detracts: "No tiene ningún detractor asignado al momento"
-
   email:
     index_title: "Listado de correos"
     show_title: "Detalles del correo"
@@ -634,7 +625,7 @@
       without_oportunities: "Sin Oportunidades de Mejora en el periodo"
       pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
 
-  follow_up_committee:
+  follow_up_committee_report:
     index_title: "Reportes de comité"
     control_objective_stats_title: "Observaciones por objetivo de control"
     process_control_stats_title: "Observaciones por proceso"
@@ -924,10 +915,6 @@
         one: "La siguiente observación / oportunidad de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
         other: "Las siguientes observaciones / oportunidades de mejora han cambiado su estado a *Sin respuesta*, por no recibir confirmación o una respuesta"
       if_no_answer_is_given_the_following_users_will_be_notified: "De continuar en el mismo estado (Sin respuesta) se producirán las siguientes notificaciones"
-    pending_poll_email:
-      title: "%{name}, tiene una encuesta pendiente"
-      answer_poll: 'Contestar encuesta'
-      clarification: "Ha recibido este correo porque se le ha asignado una encuesta en el sistema 'MawidaBP'"
     group_welcome_email:
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
@@ -1277,9 +1264,9 @@
     pending_weaknesses_detailed:
       one: "*Una* observación *pendiente*"
       other: "*%{count}* observaciones *pendientes*"
-    reassign_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+    reassign_with_findings: "¿Incluir hallazgos pendientes?"
     reassign_with_reviews: "¿Incluir informes en ejecución?"
-    release_with_findings: "¿Incluir observaciones y oportunidades pendientes?"
+    release_with_findings: "¿Incluir hallazgos pendientes?"
     release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
@@ -1303,8 +1290,8 @@
         one: "Se ha reasignado la responsabilidad del informe en ejecución %{reviews}"
         other: "Se han reasignado la responsabilidad de los informes en ejecución %{reviews}"
       reassigned_to_findings_from_reviews:
-        one: "Se han reasignado las observaciones y oportunidades de mejora pendientes del informe %{reviews}"
-        other: "Se han reasignado las observaciones y oportunidades de mejora pendientes de los informes %{reviews}"
+        one: "Se han reasignado las hallazgos pendientes del informe %{reviews}"
+        other: "Se han reasignado las hallazgos pendientes de los informes %{reviews}"
     responsibility_release:
       title: "Liberación de responsabilidades"
     unconfirmed_findings: "Observaciones sin confirmar a la fecha"
@@ -1513,7 +1500,6 @@
       control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      detract: "Detractor"
       e_mail: "Correo"
       error_record: "Registro de error"
       finding: "Observación / Oportunidad"
@@ -1655,11 +1641,6 @@
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      detract:
-        organization_id: "Organización"
-        user_id: "Usuario"
-        value: "Valor"
-        observations: "Observaciones"
       e_mail:
         to: "Para"
         subject: "Asunto"
@@ -1847,6 +1828,11 @@
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
+      paper_trail/version:
+        item: "Objeto"
+        event: "Evento"
+        whodunnit: "Ejecutor"
+        created_at: "Fecha"
       period:
         number: "Número"
         description: "Descripción"
@@ -1938,6 +1924,10 @@
         questions: "Preguntas"
         polls: "Encuestas"
         pollable_type: "Clase encuestable"
+        email_subject: "Asunto email"
+        email_link: "Link email"
+        email_text: "Texto email"
+        email_clarification: "Aclaración email"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
@@ -2020,11 +2010,6 @@
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'
-      version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
       weakness:
         control_objective_item_id: "Objetivo de control"
         description: "Observación"
@@ -2237,7 +2222,6 @@
     conclusion_final_reviews: "Informe definitivo"
     conclusion_management_reports: "Reportes de la gerencia (Conclusión)"
     control_objective_items: "Objetivos de control"
-    detracts: "Detractores"
     error_records: "Registro de errores"
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"

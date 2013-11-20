@@ -1,5 +1,7 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_risk, :extra_params => {},
+  :locals => {:action => :weaknesses_by_risk, :extra_params => {
+    :controller_name => 'follow_up', :final => false
+  },
   :forms => {:date_range => true}} %>
 
 <div style="margin: 1em;">

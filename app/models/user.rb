@@ -92,6 +92,7 @@ class User < ActiveRecord::Base
   validates :function, :salt, :change_password_hash,
     length: {maximum: 255}, allow_nil: true, allow_blank: true
   validates :password, confirmation: true, unless: :is_encrypted?
+  validates :language, length: { maximum: 10 }
   validates_each :manager_id do |record, attr, value|
     if value
       parent = User.find(value)
@@ -160,8 +161,6 @@ class User < ActiveRecord::Base
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_many :detracts, -> { order("#{Detract.table_name}.created_at ASC") },
-    dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
   has_many :reviews, -> { uniq }, through: :review_user_assignments
@@ -192,6 +191,7 @@ class User < ActiveRecord::Base
     self.enable ||= false
     self.send_notification_email = true if send_notification_email.nil?
     self.password_changed = Time.now
+    self.language ||= 'es'
 
     if send_notification_email
       self.change_password_hash = UUIDTools::UUID.random_create.to_s
