@@ -26,12 +26,12 @@ var BrowserManipulation = {
 
     Helper.showLoading();
     var query = [];
-    
+
     for(var param in params) {
       var arg = [encodeURIComponent(param)];
-      
+
       if(params[param]) {arg.push(encodeURIComponent(params[param]));}
-      
+
       query.push(arg.join('='))
     }
 
@@ -73,16 +73,16 @@ var EventHandler = {
      */
   hideItem: function(e) {
     var target = e.data('target');
-    
+
     Helper.hideItem(e.parents(target));
 
     e.prev('input[type=hidden].destroy').val('1');
-    
+
     e.parents(target).find('input.sort_number').addClass('hidden_sort_number').
       removeClass('sort_number');
 
     FormUtil.completeSortNumbers();
-    
+
     e.trigger('item:removed');
   },
 
@@ -116,7 +116,7 @@ var EventHandler = {
 
     e.parents(target).before(Util.replaceIds(template, /NEW_SUBRECORD/g));
   },
-  
+
   /**
    * Marca un archivo adjunto para ser eliminado
    */
@@ -133,7 +133,7 @@ var EventHandler = {
     Helper.removeItem(e.parents(e.data('target')), function() {
       FormUtil.completeSortNumbers();
     });
-    
+
     e.trigger('item:removed');
   },
 
@@ -163,7 +163,7 @@ var Helper = {
   hideItem: function(element, callback) {
     var func = $(element).is('tr') ? 'fadeOut' : 'slideUp';
     var time = $(element).is('tr') ? 300 : 500;
-    
+
     $(element).stop()[func](time, callback);
   },
 
@@ -187,7 +187,7 @@ var Helper = {
       opacity: 0.6,
       stop: function() {FormUtil.completeSortNumbers();}
     });
-    
+
     // Queridisimo Explorer
     if($.browser.msie) {$(elementId).find(elements).css('opacity', '1');}
   },
@@ -198,10 +198,10 @@ var Helper = {
   removeItem: function(element, callback) {
     var func = $(element).is('tr') ? 'fadeOut' : 'slideUp';
     var time = $(element).is('tr') ? 300 : 500;
-    
+
     $(element).stop()[func](time, function() {
       $(element).remove();
-      
+
       if(jQuery.isFunction(callback)) {callback();}
     });
   },
@@ -215,14 +215,14 @@ var Helper = {
     if(e.is(':not(:visible):not(:animated)')) {
       var func = $(element).is('tr') ? 'fadeIn' : 'slideDown';
       var time = $(element).is('tr') ? 300 : 500;
-      
+
       e[func](time, function() {
         e.find(
           '*[autofocus]:not([readonly]):not([disabled]):visible:first'
         ).focus();
 
         if(jQuery.isFunction(callback)) {callback();}
-	
+
       });
     }
   },
@@ -259,7 +259,7 @@ var Helper = {
         '#show_element_' + elementId + '_content',
         '#hide_element_' + elementId + '_content'
       ];
-      
+
       $(links.join(', ')).toggle();
     });
   },
@@ -281,7 +281,7 @@ var HTMLUtil = {
   arrayToUL: function(array, attributes) {
     if($.isArray(array) && array.length > 0) {
       var ul = $('<ul></ul>', attributes);
-      
+
       $.each(array, function(i, e) {
         if($.isArray(e) && e.length > 1 && typeof e[0] == 'string' &&
           $.isArray(e[1])) {
@@ -321,7 +321,7 @@ var HTMLUtil = {
 
     return includeBlank ? '<option value=""></option>' + options : options;
   },
-  
+
   /**
      * Ejecuta la función HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
      * de un contenedor span con clase file_container
@@ -353,7 +353,7 @@ var HTMLUtil = {
           input.css({left: left + 'px'});
         }
       });
-      
+
       element.wrap('<div class="stylized_file"></div>');
     }
   },
@@ -378,7 +378,7 @@ var Menu = {
      */
   show: function() {
     $('#app_content').hide();
-    
+
     if($('#main_mobile_menu').length > 0) {
       $('#session').show();
       $('#main_mobile_menu').show();
@@ -388,11 +388,11 @@ var Menu = {
       );
       $('#main_mobile_menu').before($('#session'))
     }
-    
+
     $('#show_menu').hide();
     $('#hide_menu').show();
   },
-  
+
   hide: function() {
     $('#main_mobile_menu').hide();
     $('#session').hide();
@@ -411,22 +411,22 @@ var Observer = {
     $(document).on('click', '#menu_container a', function(event) {
       var menuName = $(this).attr('href').replace(/.*#/, '')
       var content = State.menu[menuName];
-      
+
       if($(this).hasClass('menu_item_1') && content) {
         $('#menu_level_1').html(content);
         $('#menu_level_2').html('&nbsp;');
         $('.menu_item_1').removeClass('highlight');
-        
+
         event.stopPropagation();
         event.preventDefault();
       } else if($(this).hasClass('menu_item_2') && content) {
         $('#menu_level_2').html(content);
         $('.menu_item_2').removeClass('highlight');
-        
+
         event.stopPropagation();
         event.preventDefault();
       }
-      
+
       $(this).addClass('highlight');
     });
   },
@@ -444,7 +444,7 @@ var Observer = {
           'previous-' + e.parents('ul').data('level'),
           $('#main_mobile_menu').html()
         );
-        
+
         $('#main_mobile_menu').html(content);
 
         event.stopPropagation();
@@ -458,7 +458,7 @@ var Observer = {
       }
     });
   },
-  
+
   attachToInputFile: function(span) {
     var imageAttrs = {
       src: "<%= image_path 'new_document.gif' %>",
@@ -499,7 +499,7 @@ var Search = {
       var hiddenFilter = $.map(columns, function(e) {
         return 'input[value="' + e + '"]';
       }).join(', ');
-      
+
       var columnNamesDiv = $('#search_column_names');
 
       if(e.hasClass('selected')) {
@@ -522,7 +522,7 @@ var Search = {
       $('#search_query').focus();
     });
   },
-  
+
   show: function() {
     var search = $('#search:not(:visible):not(:animated)');
 
@@ -574,14 +574,14 @@ var Util = {
 // Funciones ejecutadas cuando se carga cada página
 jQuery(function($) {
   var eventList = $.map(EventHandler, function(v, k ) {return k;});
-  
+
   // Para que los navegadores que no soportan HTML5 funcionen con autofocus
   $('[autofocus]:not([readonly]):not([disabled]):visible:first').focus();
-  
+
   $(document).bind('ajax:after', function(event) {
     Helper.showLoading($(event.target));
   });
-  
+
   $(document).bind('ajax:complete', function(event) {
     Helper.hideLoading($(event.target));
   });
@@ -589,7 +589,7 @@ jQuery(function($) {
   $(document).keydown(function(event) {
     if (event.which == 32 && event.ctrlKey) {
       Search.show();
-      
+
       event.stopPropagation();
       event.preventDefault();
     }
@@ -601,21 +601,21 @@ jQuery(function($) {
 
     if($.inArray(eventName, eventList) != -1) {
       EventHandler[eventName]($(this));
-      
+
       event.preventDefault();
       event.stopPropagation();
     }
   });
-  
+
   $(document).on('click', '.inline_menu h3 a', function(event) {
     if (event.stopped) return;
-    
+
     $(this).parents('.inline_menu').find('ul').slideToggle();
-    
+
     event.preventDefault();
     event.stopPropagation();
   });
-  
+
   $(document).on('focus', 'input.calendar:not(.hasDatepicker)', function() {
     if($(this).data('time')) {
       $(this).datetimepicker({showOn: 'both'}).focus();
@@ -635,7 +635,7 @@ jQuery(function($) {
       lastWorkPaperCode = lastWorkPaperCode.previous(2);
     }
   });
-  
+
   $('.popup').dialog({
     autoOpen: false,
     draggable: false,
@@ -651,7 +651,7 @@ jQuery(function($) {
       $(this).parents('.ui-dialog').hide().fadeIn(500);
     }
   });
-  
+
   $(document).on('click', 'span.popup_link', function(event) {
     $($(this).data('helpDialog')).dialog('open').dialog(
       'option', 'position', [
@@ -659,7 +659,7 @@ jQuery(function($) {
         event.pageY - $(window).scrollTop()
       ]
     );
-    
+
     return false;
   });
 
@@ -677,14 +677,14 @@ jQuery(function($) {
     $.each(State.showMessages, function() {
       var message = this.message;
       var expired = this.expired;
-      
+
       this.timer_id = window.setTimeout(
         "Helper.showMessage('" + message + "', " + expired + ")",
         this.time * 1000
       );
     });
   }
-  
+
   $(document).bind({
     // Reinicia los timers con los mensajes diferidos
     ajaxStart: function() {
@@ -704,11 +704,11 @@ jQuery(function($) {
       });
     }
   });
-  
+
   $('#loading').bind({
     ajaxStart: function() {$(this).show();},
     ajaxStop: function() {$(this).hide();}
   });
-  
+
   AutoComplete.observeAll();
 });
