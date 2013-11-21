@@ -14,8 +14,7 @@ class BestPracticesController < ApplicationController
   def index
     @title = t 'best_practice.index_title'
     @best_practices = BestPractice.list.reorder('created_at DESC').paginate(
-      page: params[:page],
-      per_page: APP_LINES_PER_PAGE
+      page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -124,7 +123,9 @@ class BestPracticesController < ApplicationController
 
   private
     def set_best_practice
-      @best_practice = BestPractice.list.find(params[:id])
+      @best_practice = BestPractice.list.includes(
+        process_controls: { control_objectives: :control }
+      ).find(params[:id])
     end
 
     def best_practice_params

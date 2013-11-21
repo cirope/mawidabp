@@ -13,8 +13,7 @@ class BusinessUnitTypesController < ApplicationController
   def index
     @title = t 'business_unit_type.index_title'
     @business_unit_types = BusinessUnitType.list.paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
