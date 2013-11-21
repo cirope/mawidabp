@@ -17,9 +17,6 @@ module Reports::ControlObjectiveStats
     @periods.each do |period|
       count_conclusion_review_weaknesses(period)
 
-      @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
-        (@reviews_score_data[period].sum.to_f / @reviews_score_data[period].size).round : 100
-
       @process_controls.each do |pc, cos|
         @control_objectives_data[period][pc] ||= {}
 
@@ -27,7 +24,6 @@ module Reports::ControlObjectiveStats
           @control_objectives_data[period][pc][co.name] ||= {}
           @coi_data = data
 
-          reviews_count = @coi_data[:reviews]
           effectiveness = @coi_data[:effectiveness].size > 0 ?
             @coi_data[:effectiveness].sum.to_f / @coi_data[:effectiveness].size : 100
           @weaknesses_count = @coi_data[:weaknesses]
@@ -44,7 +40,7 @@ module Reports::ControlObjectiveStats
             'control_objective' => co.name,
             'effectiveness' => t(
               'conclusion_committee_report.control_objective_stats.average_effectiveness_resume',
-              :effectiveness => "#{'%.2f' % effectiveness}%", :count => reviews_count
+              :effectiveness => "#{'%.2f' % effectiveness}%", :count => @coi_data[:reviews]
             ),
             'weaknesses_count' => @weaknesses_count_text
           }
@@ -139,6 +135,9 @@ module Reports::ControlObjectiveStats
 
       @reviews_score_data[period] << c_r.review.score
     end
+
+    @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
+      (@reviews_score_data[period].sum.to_f / @reviews_score_data[period].size).round : 100
   end
 
   def sort_process_control_data(period)
