@@ -63,9 +63,9 @@ executive_manager_role_for_coordinator_manager_user_in_second_organization:
   organization: second_organization
   role: executive_manager_role
 
-executive_manager_role_for_president_user_in_default_organization:
+executive_manager_role_for_president_user_in_second_organization:
   user: president_user
-  organization: default_organization
+  organization: second_organization
   role: executive_manager_role
 
 executive_manager_role_for_president_user_in_second_organization:
