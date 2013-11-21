@@ -1295,8 +1295,7 @@ class Finding < ActiveRecord::Base
     previous_version = self.versions.first
 
     while (previous_version.try(:event) &&
-          last_checked_version = (previous_version.try(:next) ||
-            self.versions.build(:object => object_to_string(self))))
+          last_checked_version = previous_version.try(:next))
       has_important_changes = important_attributes.any? do |attribute|
         current_value = last_checked_version.reify(:has_one => false) ?
           last_checked_version.reify(:has_one => false).send(attribute) : nil

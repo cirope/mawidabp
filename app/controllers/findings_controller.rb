@@ -290,9 +290,6 @@ class FindingsController < ApplicationController
       column_order << [
         'audit_comments', Finding.human_attribute_name(:audit_comments), 15
       ]
-#      column_order << [
-#        'answer', Finding.human_attribute_name(:answer), 17
-#      ]
     end
 
     column_order.each do |column, col_name, col_width|
