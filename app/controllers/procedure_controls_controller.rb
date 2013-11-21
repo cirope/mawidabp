@@ -16,7 +16,7 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls.xml
   def index
     @title = t 'procedure_control.index_title'
-    @procedure_controls = ProcedureControl.order(
+    @procedure_controls = ProcedureControl.list.order(
       "#{ProcedureControl.table_name}.created_at DESC"
     ).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
@@ -89,9 +89,7 @@ class ProcedureControlsController < ApplicationController
   # * POST /procedure_controls.xml
   def create
     @title = t 'procedure_control.new_title'
-    @procedure_control = ProcedureControl.new(
-      procedure_control_params.merge(organization_id: current_organization.id)
-    )
+    @procedure_control = ProcedureControl.list.new(procedure_control_params)
 
     respond_to do |format|
       if @procedure_control.save
@@ -272,7 +270,7 @@ class ProcedureControlsController < ApplicationController
     end
 
     def set_procedure_control
-      @procedure_control = ProcedureControl.includes(
+      @procedure_control = ProcedureControl.list.includes(
         procedure_control_items: [
           { process_control: :control_objectives},
           { procedure_control_subitems: :control}
@@ -281,7 +279,7 @@ class ProcedureControlsController < ApplicationController
     end
 
     def set_procedure_control_clone
-      @procedure_control = ProcedureControl.find_by(
+      @procedure_control_clone = ProcedureControl.list.find_by(
         id: params[:clone_from].try(:to_i)
       )
     end

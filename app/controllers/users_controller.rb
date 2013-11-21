@@ -14,6 +14,10 @@ class UsersController < ApplicationController
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
+  before_action :set_user, only: [
+    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
+    :reassignment_edit, :reassignment_update, :release_edit, :release_update
+  ]
   layout proc { |controller|
     use_clean = [
       'login', 'create_session', 'reset_password', 'send_password_reset'
@@ -21,10 +25,6 @@ class UsersController < ApplicationController
 
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
   }
-  before_action :set_user, only: [
-    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
-    :reassignment_edit, :reassignment_update, :release_edit, :release_update
-  ]
 
   # Lista los usuarios
   #
@@ -265,11 +265,7 @@ class UsersController < ApplicationController
 
       if !@group_admin_mode && auth_user && auth_user.is_enable? && !auth_user.hidden &&
           @user.password_was_encrypted && auth_user.password == @user.password
-        record = LoginRecord.new(
-          user: auth_user,
-          organization: @organization,
-          request: request
-        )
+        record = LoginRecord.list.new(user: auth_user, request: request)
 
         if record.save
           days_for_password_expiration =
@@ -315,8 +311,9 @@ class UsersController < ApplicationController
         redirect_to controller: :groups, action: :index
       else
         if (user = User.find_by(user: @user.user))
-          ErrorRecord.create(user: user, organization: @organization,
-            request: request, error_type: :on_login)
+          ErrorRecord.list.create(
+            user: user, request: request, error_type: :on_login
+          )
 
           user.failed_attempts += 1
           max_attempts = @group_admin_mode ?
@@ -326,16 +323,17 @@ class UsersController < ApplicationController
               user.is_enable?
             user.enable = false
 
-            ErrorRecord.create(user: user, organization: @organization,
-              request: request, error_type: :user_disabled)
+            ErrorRecord.list.create(
+              user: user, request: request, error_type: :user_disabled
+            )
           end
 
           user.is_an_important_change = false
           user.save(validate: false)
         else
-          ErrorRecord.create(user_name: @user.user,
-            organization: @organization, request: request,
-            error_type: :on_login)
+          ErrorRecord.list.create(
+            user_name: @user.user, request: request, error_type: :on_login
+          )
         end
 
         @user.password = nil
@@ -771,13 +769,13 @@ class UsersController < ApplicationController
             "#{Organization.table_name}.id IS NULL"
           ].join(' OR ')
         ].map {|c| "(#{c})"}.join(' AND '),
-        {:id => id, :organization_id => current_organization.id}
+        {:id => id, :organization_id => current_organization.try(:id)}
       ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
     end
 
     def set_user
       @user = User.includes(:organizations).where(
-        user: params[:id], "#{Organization.table_name}.id" => current_organization
+        user: params[:id], "#{Organization.table_name}.id" => current_organization.try(:id)
       ).references(:organizations).first if params[:id].present?
     end
 

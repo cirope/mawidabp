@@ -57,6 +57,12 @@ class WorkPaper < ActiveRecord::Base
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
     :reject_if => lambda { |attributes| attributes['file'].blank? }
 
+  def initialize(attributes = nil, options = {})
+    super(attributes, options)
+
+    self.organization_id = Organization.current_id
+  end
+
   def inspect
     "#{self.code} - #{self.name} (#{self.pages_to_s})"
   end

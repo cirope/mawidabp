@@ -1,5 +1,5 @@
 class FollowUpAuditController < ApplicationController
-  include Reports::WeaknessesByState                                                                                                  
+  include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
@@ -9,10 +9,6 @@ class FollowUpAuditController < ApplicationController
   include Reports::NonconformitiesReport
 
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :get_organization,
-    :add_weaknesses_synthesis_table, :being_implemented_resume_from_counts,
-    :add_being_implemented_resume, :make_date_range,
-    :get_weaknesses_synthesis_table_data
 
   # Muestra una lista con los reportes disponibles
   #

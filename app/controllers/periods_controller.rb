@@ -119,7 +119,7 @@ class PeriodsController < ApplicationController
 
   private
     def set_period
-      @period = Period.find(params[:id])
+      @period = Period.list.find(params[:id])
     end
 
     def period_params

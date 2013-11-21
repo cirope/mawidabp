@@ -6,13 +6,10 @@ class EMailsController < ApplicationController
   def index
     @title = t 'email.index_title'
 
-    default_conditions = {
-      :organization_id => current_organization.id
-    }
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions EMail, true
 
-    build_search_conditions EMail, default_conditions
-
-    @emails = EMail.where(@conditions).paginate(
+    @emails = EMail.list.where(@conditions).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
@@ -26,7 +23,7 @@ class EMailsController < ApplicationController
   # GET /emails/1.json
   def show
     @title = t 'email.show_title'
-    @email = EMail.find(params[:id])
+    @email = EMail.list.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

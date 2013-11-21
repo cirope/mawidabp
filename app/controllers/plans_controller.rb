@@ -17,7 +17,7 @@ class PlansController < ApplicationController
   # * GET /plans.xml
   def index
     @title = t 'plan.index_title'
-    @plans = Plan.includes(:period).order(
+    @plans = Plan.list.includes(:period).order(
       "#{Period.table_name}.start DESC"
     ).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
@@ -72,7 +72,7 @@ class PlansController < ApplicationController
   # * POST /plans.xml
   def create
     @title = t 'plan.new_title'
-    @plan = Plan.new(plan_params.merge(organization_id: current_organization.id))
+    @plan = Plan.list.new(plan_params)
 
     @plan.clone_from @plan_clone if @plan_clone
 
@@ -246,16 +246,16 @@ class PlansController < ApplicationController
     end
 
     def set_plan
-      @plan = Plan.includes(
-        plan_items: {
+      @plan = Plan.list.includes(
+        plan_items: [
           :resource_utilizations, :business_unit,
           { review: :conclusion_final_review }
-        }
+        ]
       ).find(params[:id])
     end
 
     def set_plan_clone
-      @plan_clone = Plan.find_by(id: params[:clone_from].try(:to_i))
+      @plan_clone = Plan.list.find_by(id: params[:clone_from].try(:to_i))
     end
 
     def load_privileges

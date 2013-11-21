@@ -3,7 +3,9 @@
 # Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)
 class OportunitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_oportunity, only: [:show, :edit, :update, :follow_up_pdf, :undo_reiteration]
+  before_action :set_oportunity, only: [
+    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las oportunidades de mejora
@@ -14,14 +16,16 @@ class OportunitiesController < ApplicationController
     @title = t 'oportunity.index_title'
     default_conditions = [
       [
-        "#{ConclusionReview.table_name}.review_id IS NULL",
-        "#{Oportunity.table_name}.final = :boolean_false"
-      ].join(' AND '),
-      [
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{Oportunity.table_name}.final = :boolean_true"
-      ].join(' AND ')
-    ].map {|condition| "(#{condition})"}.join(' OR ')
+        [
+          "#{ConclusionReview.table_name}.review_id IS NULL",
+          "#{Oportunity.table_name}.final = :boolean_false"
+        ].join(' AND '),
+        [
+          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+          "#{Oportunity.table_name}.final = :boolean_true"
+        ].join(' AND ')
+      ].map {|condition| "(#{condition})"}.join(' OR ')
+    ]
     parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
@@ -38,7 +42,7 @@ class OportunitiesController < ApplicationController
     build_search_conditions Oportunity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @oportunities = Oportunity.includes(
+    @oportunities = Oportunity.list.includes(
       :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
@@ -80,7 +84,7 @@ class OportunitiesController < ApplicationController
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      {:control_objective_item_id => params[:control_objective_item]}, {}, true
+      {:control_objective_item_id => params[:control_objective_item]}
     )
 
     respond_to do |format|
@@ -102,7 +106,7 @@ class OportunitiesController < ApplicationController
   # * POST /oportunities.xml
   def create
     @title = t 'oportunity.new_title'
-    @oportunity = Oportunity.new(oportunity_params)
+    @oportunity = Oportunity.list.new(oportunity_params)
 
     respond_to do |format|
       if @oportunity.save
@@ -280,7 +284,8 @@ class OportunitiesController < ApplicationController
 
   private
     def set_oportunity
-      @oportunity = Oportunity.includes(:finding_relations, :work_papers,
+      @oportunity = Oportunity.list.includes(
+        :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
       ).find(params[:id])
@@ -289,7 +294,7 @@ class OportunitiesController < ApplicationController
     def oportunity_params
       params.require(:oportunity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, :follow_up_date, 
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date, :follow_up_date,
         :state, :organization_date, :solution_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
@@ -300,7 +305,7 @@ class OportunitiesController < ApplicationController
         ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy

@@ -12,8 +12,9 @@ class EMail < ActiveRecord::Base
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   )
-  # Default scope
+  # Scopes
   default_scope { order('created_at DESC') }
+  scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
   validates :to, :subject, :presence => true

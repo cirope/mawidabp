@@ -18,7 +18,8 @@ class ErrorRecordsController < ApplicationController
         { from_date: @from_date, to_date: @to_date.to_time.end_of_day }
       ]
     else
-      build_search_conditions ErrorRecord
+      # TODO default_conditions empty fails, added 'true' param
+      build_search_conditions ErrorRecord, true
     end
 
     @error_records = ErrorRecord.list.includes(:user).where(
@@ -43,7 +44,7 @@ class ErrorRecordsController < ApplicationController
   # * GET /error_records/1.xml
   def show
     @title = t 'error_record.show_title'
-    @error_record = ErrorRecord.find(params[:id])
+    @error_record = ErrorRecord.list.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -56,9 +57,9 @@ class ErrorRecordsController < ApplicationController
   # * GET /error_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
-    error_records = ErrorRecord.includes(:user).where(
+    error_records = ErrorRecord.list.includes(:user).where(
       [
-        'created_at BETWEEN :from_date AND :to_date'
+        'created_at BETWEEN :from_date AND :to_date',
         {
           from_date: from_date,
           to_date: to_date.to_time.end_of_day

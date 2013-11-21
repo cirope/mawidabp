@@ -13,14 +13,16 @@ class PotentialNonconformitiesController < ApplicationController
     @title = t 'potential_nonconformity.index_title'
     default_conditions = [
       [
-        "#{ConclusionReview.table_name}.review_id IS NULL",
-        "#{PotentialNonconformity.table_name}.final = :boolean_false"
-      ].join(' AND '),
-      [
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{PotentialNonconformity.table_name}.final = :boolean_true"
-      ].join(' AND ')
-    ].map {|condition| "(#{condition})"}.join(' OR ')
+        [
+          "#{ConclusionReview.table_name}.review_id IS NULL",
+          "#{PotentialNonconformity.table_name}.final = :boolean_false"
+        ].join(' AND '),
+        [
+          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+          "#{PotentialNonconformity.table_name}.final = :boolean_true"
+        ].join(' AND ')
+      ].map {|condition| "(#{condition})"}.join(' OR ')
+    ]
     parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
@@ -37,7 +39,7 @@ class PotentialNonconformitiesController < ApplicationController
     build_search_conditions PotentialNonconformity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @potential_nonconformities = PotentialNonconformity.includes(
+    @potential_nonconformities = PotentialNonconformity.list.includes(
       :work_papers,
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
@@ -79,7 +81,7 @@ class PotentialNonconformitiesController < ApplicationController
   def new
     @title = t 'potential_nonconformity.new_title'
     @potential_nonconformity = PotentialNonconformity.new(
-      {control_objective_item_id: params[:control_objective_item]}, {}, true
+      {control_objective_item_id: params[:control_objective_item]}
     )
 
     respond_to do |format|
@@ -101,7 +103,7 @@ class PotentialNonconformitiesController < ApplicationController
   # * POST /potential_nonconformities.xml
   def create
     @title = t 'potential_nonconformity.new_title'
-    @potential_nonconformity = PotentialNonconformity.new(potential_nonconformity_params)
+    @potential_nonconformity = PotentialNonconformity.list.new(potential_nonconformity_params)
 
     respond_to do |format|
       if @potential_nonconformity.save
@@ -280,7 +282,7 @@ class PotentialNonconformitiesController < ApplicationController
     def potential_nonconformity_params
       params.require(:potential_nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, 
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
         :state, :follow_up_date, :solution_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
@@ -291,7 +293,7 @@ class PotentialNonconformitiesController < ApplicationController
         ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -300,7 +302,7 @@ class PotentialNonconformitiesController < ApplicationController
     end
 
     def set_potential_nonconformity
-      @potential_nonconformity = PotentialNonconformity.includes(
+      @potential_nonconformity = PotentialNonconformity.list.includes(
         :finding_relations, :work_papers,
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }

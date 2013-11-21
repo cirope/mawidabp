@@ -3,6 +3,8 @@ require 'test_helper'
 class PollsControllerTest < ActionController::TestCase
   test 'public and private actions' do
     poll = polls(:poll_one)
+    @request.host = "#{poll.organization.prefix}.localhost.i"
+
     id_token = { id: poll.to_param, token: poll.access_token }
     id_param = {id: poll.to_param}
     public_actions = [
@@ -108,6 +110,8 @@ class PollsControllerTest < ActionController::TestCase
 
   test 'edit poll' do
     poll = polls(:poll_one)
+    @request.host = "#{poll.organization.prefix}.localhost.i"
+
     get :edit, id: poll.id, token: poll.access_token
     assert_response :success
     assert_not_nil assigns(:poll)
@@ -116,9 +120,12 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'update poll' do
+    poll = polls(:poll_one)
+    @request.host = "#{poll.organization.prefix}.localhost.i"
+
     assert_no_difference ['Poll.count', 'Answer.count'] do
       patch :update, {
-        id: polls(:poll_one).id,
+        id: poll.id,
         poll: {
           user_id: users(:administrator_user).id,
           questionnaire_id: questionnaires(:questionnaire_one).id,

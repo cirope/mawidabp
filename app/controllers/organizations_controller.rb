@@ -78,7 +78,7 @@ class OrganizationsController < ApplicationController
             :organization => @organization,
             :role => @organization.roles.sort.first
           ).valid?
-          
+
         raise ActiveRecord::Rollback unless saved
       end
 
@@ -113,7 +113,7 @@ class OrganizationsController < ApplicationController
         format.xml  { render :xml => @organization.errors, :status => :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'organization.stale_object_error'
     redirect_to :action => :edit

@@ -18,13 +18,14 @@ class ReviewsController < ApplicationController
   def index
     @title = t 'review.index_title'
 
-    build_search_conditions Review
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions Review, true
 
-    @reviews = Review.list.includes({ plan_item: :business_unit }).where(
-      @conditions
-    ).reorder('identification DESC').paginate(
+    @reviews = Review.list.includes(
+      :period, { plan_item: :business_unit }
+    ).where(@conditions).reorder('identification DESC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    ).references(:periods)
 
     respond_to do |format|
       format.html {
@@ -375,17 +376,11 @@ class ReviewsController < ApplicationController
     end
 
     def set_review
-      @review = Review.includes(
-        :period,
-        { plan_item: :business_unit },
-        { control_objective_items: :control_objective },
-        { review_user_assignments: :user },
-        { finding_review_assignments: :finding }
-      ).find(params[:id])
+      @review = Review.list.find(params[:id])
     end
 
     def set_review_clone
-      @review_clone = Review.find_by(id: params[:clone_from].try(:to_i))
+      @review_clone = Review.list.find_by(id: params[:clone_from].try(:to_i))
     end
 
     def load_privileges

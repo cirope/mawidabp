@@ -3,9 +3,6 @@
 # Lista y muestra registros de ingreso (#LoginRecord)
 class LoginRecordsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_login_record, only: [
-    :show, :edit, :update, :destroy
-  ]
 
   # Muestra un menú con los distintos listados disponibles (registros de ingreso
   # y registros de errores)
@@ -35,7 +32,8 @@ class LoginRecordsController < ApplicationController
 
       build_search_conditions LoginRecord, default_conditions
     else
-      build_search_conditions LoginRecord
+      # TODO default_conditions empty fails, added 'true' param
+      build_search_conditions LoginRecord, true
     end
 
     @login_records = LoginRecord.list.includes(:user).where(
@@ -77,7 +75,7 @@ class LoginRecordsController < ApplicationController
     from_date, to_date = *make_date_range(params[:range])
     login_records = LoginRecord.list.includes(:user).where(
       [
-        'created_at BETWEEN :from_date AND :to_date'
+        'created_at BETWEEN :from_date AND :to_date',
         {
           :from_date => from_date,
           :to_date => to_date.to_time.end_of_day

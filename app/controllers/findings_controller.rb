@@ -417,7 +417,7 @@ class FindingsController < ApplicationController
   #
   # * GET /oportunities/follow_up_pdf/1
   def follow_up_pdf
-    finding = Finding.find_by(id: params[:id])
+    finding = Finding.list.find_by(id: params[:id])
 
     finding.follow_up_pdf(current_organization)
 
@@ -519,7 +519,9 @@ class FindingsController < ApplicationController
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
         Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
 
-      @finding = Finding.includes(includes).where(conditions).references(:periods, :organizations).first
+      @finding = Finding.includes(includes).where(conditions).references(
+        :periods, :organizations
+      ).first
 
       # TODO: eliminar cuando se corrija el problema que hace que include solo
       # traiga el primer usuario

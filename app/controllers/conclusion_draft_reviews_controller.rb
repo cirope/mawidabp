@@ -18,12 +18,14 @@ class ConclusionDraftReviewsController < ApplicationController
   def index
     @title = t 'conclusion_draft_review.index_title'
 
-    build_search_conditions ConclusionDraftReview
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions ConclusionDraftReview, true
 
     @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [
+        :period,
         :conclusion_final_review,
-        { plan_item: :business_unit }
+        {plan_item: :business_unit}
       ]
     ).where(@conditions).references(
       :reviews, :business_units
@@ -43,7 +45,7 @@ class ConclusionDraftReviewsController < ApplicationController
           )
         end
       }
-      format.xml  { render xml: @conclusion_draft_reviews }
+      format.xml { render xml: @conclusion_draft_reviews }
     end
   end
 
@@ -304,7 +306,14 @@ class ConclusionDraftReviewsController < ApplicationController
 
   private
     def set_conclusion_draft_review
-      @conclusion_draft_review = ConclusionDraftReview.list.find(params[:id])
+      @conclusion_draft_review = ConclusionDraftReview.list.includes(
+        review: [
+          :period,
+          :conclusion_final_review,
+          :plan_item,
+          { control_objective_items: [:control, :weaknesses, :oportunities] }
+        ]
+      ).find(params[:id])
 
       @conclusion_draft_review = nil if @conclusion_draft_review.has_final_review?
     end

@@ -17,16 +17,17 @@ class ConclusionFinalReviewsController < ApplicationController
   def index
     @title = t 'conclusion_final_review.index_title'
 
-    build_search_conditions ConclusionFinalReview
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions ConclusionFinalReview, true
 
     order = @order_by || "issue_date DESC"
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
-      review: [{ plan_item: :business_unit }]
+      review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).order(order).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
-    ).references(:reviews, :business_units)
+    ).references(:periods, :reviews, :business_units)
 
     respond_to do |format|
       format.html {
@@ -65,8 +66,8 @@ class ConclusionFinalReviewsController < ApplicationController
 
     unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
-      @conclusion_final_review = ConclusionFinalReview.new(
-        review_id: params[:review])
+      @conclusion_final_review =
+        ConclusionFinalReview.new(review_id: params[:review])
 
       respond_to do |format|
         format.html # new.html.erb
@@ -102,8 +103,8 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews.xml
   def create
     @title = t 'conclusion_final_review.new_title'
-    @conclusion_final_review = ConclusionFinalReview.list.new(
-      conclusion_final_review_params, {}, false)
+    @conclusion_final_review =
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -126,8 +127,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @title = t 'conclusion_final_review.edit_title'
 
     respond_to do |format|
-      if @conclusion_final_review.update(
-          conclusion_final_review_params)
+      if @conclusion_final_review.update(conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
@@ -280,7 +280,8 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    build_search_conditions ConclusionFinalReview
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions ConclusionFinalReview, true
 
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
@@ -398,7 +399,17 @@ class ConclusionFinalReviewsController < ApplicationController
 
   private
     def set_conclusion_final_review
-      @conclusion_final_review = ConclusionFinalReview.list.find(params[:id])
+      @conclusion_final_review = ConclusionFinalReview.list.includes(
+        review: [
+          :period,
+          :plan_item,
+          {
+            control_objective_items: [
+              :control, :final_weaknesses, :final_oportunities
+            ]
+          }
+        ]
+      ).find(params[:id])
     end
 
     def conclusion_final_review_params

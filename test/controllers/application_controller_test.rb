@@ -99,7 +99,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.send(:check_privileges)
     assert_nil  @controller.send(:flash)[:notice]
-    assert_response :success
+    assert_redirected_to login_users_url
   end
 
   test 'check group admin function' do

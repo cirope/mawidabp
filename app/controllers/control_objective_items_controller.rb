@@ -16,7 +16,8 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
 
-    build_search_conditions ControlObjectiveItem
+    # TODO default_conditions empty fails, added 'true' param
+    build_search_conditions ControlObjectiveItem, true
 
     @control_objectives = ControlObjectiveItem.list.includes(
         :weaknesses,
@@ -102,9 +103,9 @@ class ControlObjectiveItemsController < ApplicationController
       end
     end
 
-    rescue ActiveRecord::StaleObjectError
-      flash.alert = t 'control_objective_item.stale_object_error'
-      redirect_to action: :edit
+  rescue ActiveRecord::StaleObjectError
+    flash.alert = t 'control_objective_item.stale_object_error'
+    redirect_to action: :edit
   end
 
   # Elimina un objetivo de control
@@ -124,7 +125,7 @@ class ControlObjectiveItemsController < ApplicationController
 
   private
     def set_control_objective_item
-      @control_objective_item = ControlObjectiveItem.includes(
+      @control_objective_item = ControlObjectiveItem.list.includes(
         :control, :weaknesses, :work_papers
       ).find(params[:id])
     end

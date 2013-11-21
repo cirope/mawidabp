@@ -46,9 +46,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_organization
-    if APP_ADMIN_PREFIX != request.subdomains.first
-      @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
-    end
+    @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
   end
   helper_method :current_organization
 
@@ -67,6 +65,7 @@ class ApplicationController < ActionController::Base
 
   # Verifica que el login se haya realizado y el usuario esté activo
   def login_check #:doc:
+    current_organization
     load_user
 
     !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&
@@ -174,10 +173,12 @@ class ApplicationController < ActionController::Base
   end
 
   def module_name_for(controller_name)
-    if current_organization.kind == 'quality_management'
-      modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
-    else
-      modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
+    if current_organization
+      if current_organization.kind == 'quality_management'
+        modules =  @auth_user.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
+      else
+        modules =  @auth_user.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
+      end
     end
 
     top_level_menu = true

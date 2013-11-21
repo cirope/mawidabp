@@ -16,10 +16,11 @@ class PollsController < ApplicationController
         page: params[:page], per_page: APP_LINES_PER_PAGE
       )
     else
-      build_search_conditions Poll.list
+      # TODO default_conditions empty fails, added 'true' param
+      build_search_conditions Poll, true
 
       unless @columns.first == 'answered' && @columns.size == 1
-        @polls = Poll.includes(
+        @polls = Poll.list.includes(
           :questionnaire,
           :user
         ).where(@conditions).order(
@@ -36,7 +37,7 @@ class PollsController < ApplicationController
           default_conditions[:answered] = false
         end
 
-        @polls = Poll.includes(
+        @polls = Poll.list.includes(
           :questionnaire,
           :user
         ).where(default_conditions).order(
@@ -85,7 +86,7 @@ class PollsController < ApplicationController
   def edit
     @title = t 'poll.edit_title'
 
-    if @poll.nil? || params[:token] != @poll.access_token
+    if @poll.nil? || (params[:token] != @poll.access_token)
       redirect_to login_users_url, alert: t('poll.not_found')
     elsif @poll.answered?
       redirect_to poll_path(@poll, layout: 'application_clean'), alert: t('poll.access_denied')
@@ -667,7 +668,7 @@ class PollsController < ApplicationController
     end
 
     def set_poll
-      @poll = Poll.find(params[:id])
+      @poll = Poll.list.find(params[:id])
     end
 
     def load_privileges

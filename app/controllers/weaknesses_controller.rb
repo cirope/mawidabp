@@ -14,6 +14,7 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses.xml
   def index
     @title = t 'weakness.index_title'
+    default_conditions = []
     parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
@@ -26,7 +27,8 @@ class WeaknessesController < ApplicationController
       default_conditions << "#{Weakness.table_name}.id IN (:ids)"
       parameters[:ids] = params[:ids].map(&:to_i)
     else
-      default_conditions << [
+      default_conditions <<
+      [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
           "#{Weakness.table_name}.final = :boolean_false"
@@ -41,7 +43,7 @@ class WeaknessesController < ApplicationController
     build_search_conditions Weakness,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @weaknesses = Weakness.includes(
+    @weaknesses = Weakness.list.includes(
       :work_papers,
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
@@ -85,7 +87,7 @@ class WeaknessesController < ApplicationController
   def new
     @title = t 'weakness.new_title'
     @weakness = Weakness.new(
-      {control_objective_item_id: params[:control_objective_item]}, {}, true
+      {control_objective_item_id: params[:control_objective_item]}
     )
 
     respond_to do |format|
@@ -107,7 +109,7 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses.xml
   def create
     @title = t 'weakness.new_title'
-    @weakness = Weakness.new(weakness_params)
+    @weakness = Weakness.list.new(weakness_params)
 
     respond_to do |format|
       if @weakness.save
@@ -308,16 +310,14 @@ class WeaknessesController < ApplicationController
     end
 
     def set_weakness
-      @weakness = Weakness.includes(
+      @weakness = Weakness.list.includes(
         :finding_relations, :work_papers,
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
-      ).where(
-        id: params[:id], Period.table_name => {organization_id: current_organization.id}
-      ).references(:periods).first
+      ).find(params[:id])
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         follow_up_pdf: :read,
         auto_complete_for_user: :read,

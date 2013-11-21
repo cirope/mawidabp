@@ -16,7 +16,7 @@ class WorkflowsController < ApplicationController
   # * GET /workflows.xml
   def index
     @title = t 'workflow.index_title'
-    @workflows = Workflow.includes(:review).order(
+    @workflows = Workflow.list.includes(:review).order(
       "#{Review.table_name}.identification DESC")
     .paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
@@ -83,7 +83,7 @@ class WorkflowsController < ApplicationController
   # * POST /workflows.xml
   def create
     @title = t 'workflow.new_title'
-    @workflow = Workflow.new(workflow_params)
+    @workflow = Workflow.list.new(workflow_params)
     @workflow.workflow_items.sort! do |wfi_a, wfi_b|
       wfi_a.order_number.to_i <=> wfi_b.order_number.to_i
     end
@@ -229,16 +229,18 @@ class WorkflowsController < ApplicationController
     end
 
     def set_workflow
-      @workflow = Workflow.includes(
+      @workflow = Workflow.list.includes(
         { workflow_items: :resource_utilizations }
       ).find(params[:id])
     end
 
     def set_workflow_clone
-      @workflow_clone = Workflow.find_by(id: params[:clone_from].try(:to_i))
+      @workflow_clone = Workflow.list.find_by(
+        id: params[:clone_from].try(:to_i)
+      )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         export_to_pdf: :read,
         auto_complete_for_user: :read,

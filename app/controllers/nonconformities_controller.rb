@@ -14,14 +14,16 @@ class NonconformitiesController < ApplicationController
     @title = t 'nonconformity.index_title'
     default_conditions = [
       [
-        "#{ConclusionReview.table_name}.review_id IS NULL",
-        "#{Nonconformity.table_name}.final = :boolean_false"
-      ].join(' AND '),
-      [
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{Nonconformity.table_name}.final = :boolean_true"
-      ].join(' AND ')
-    ].map { |condition| "(#{condition})" }.join(' OR ')
+        [
+          "#{ConclusionReview.table_name}.review_id IS NULL",
+          "#{Nonconformity.table_name}.final = :boolean_false"
+        ].join(' AND '),
+        [
+          "#{ConclusionReview.table_name}.review_id IS NOT NULL",
+          "#{Nonconformity.table_name}.final = :boolean_true"
+        ].join(' AND ')
+      ].map { |condition| "(#{condition})" }.join(' OR ')
+    ]
     parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
@@ -38,7 +40,7 @@ class NonconformitiesController < ApplicationController
     build_search_conditions Nonconformity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @nonconformities = Nonconformity.includes(
+    @nonconformities = Nonconformity.list.includes(
       :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
@@ -80,7 +82,7 @@ class NonconformitiesController < ApplicationController
   def new
     @title = t 'nonconformity.new_title'
     @nonconformity = Nonconformity.new(
-      {:control_objective_item_id => params[:control_objective_item]}, {}, true
+      {:control_objective_item_id => params[:control_objective_item]}
     )
 
     respond_to do |format|
@@ -102,7 +104,7 @@ class NonconformitiesController < ApplicationController
   # * POST /nonconformities.xml
   def create
     @title = t 'nonconformity.new_title'
-    @nonconformity = Nonconformity.new(nonconformity_params)
+    @nonconformity = Nonconformity.list.new(nonconformity_params)
 
     respond_to do |format|
       if @nonconformity.save
@@ -278,17 +280,17 @@ class NonconformitiesController < ApplicationController
   private
     def nonconformity_params
       params.require(:nonconformity).permit(
-        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, 
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
         :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
         :priority, :follow_up_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
-        ], 
+        ],
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,
           file_model_attributes: [:id, :file, :file_cache]
-        ], 
+        ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
           :notify_users, :_destroy,
@@ -301,7 +303,7 @@ class NonconformitiesController < ApplicationController
     end
 
     def set_nonconformity
-      @nonconformity = Nonconformity.includes(
+      @nonconformity = Nonconformity.list.includes(
         :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}

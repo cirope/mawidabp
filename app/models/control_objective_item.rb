@@ -130,6 +130,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     self.finished ||= false
     self.build_control unless self.control
+    self.organization_id ||= Organization.current_id
   end
 
   def to_s

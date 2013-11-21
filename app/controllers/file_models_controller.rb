@@ -1,6 +1,6 @@
 class FileModelsController < ApplicationController
   before_action :auth
-  
+
   def download
     redirect = true
 
