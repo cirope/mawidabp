@@ -799,7 +799,7 @@ class Finding < ActiveRecord::Base
   end
 
   def audited_and_system_quality_management?
-    current_user.try(:can_act_as_audited?) && current_organization.kind.eql?('quality_management')
+    current_user.try(:can_act_as_audited?) && self.organization.kind.eql?('quality_management')
   end
 
   def mark_as_unconfirmed!
