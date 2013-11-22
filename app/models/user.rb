@@ -8,10 +8,15 @@ class User < ActiveRecord::Base
 
   trimmed_fields :user, :email, :name, :last_name
 
-  has_paper_trail ignore: [:last_access, :logged_in], meta: {
-    organization_id: ->(obj) { Organization.current_id },
-    important: ->(user) { user.is_an_important_change }
-  }
+  has_paper_trail(
+    ignore: [
+      :last_access, :logged_in, :updated_at, :lock_version
+    ],
+    meta: {
+      organization_id: ->(obj) { Organization.current_id },
+      important: ->(user) { user.is_an_important_change }
+    }
+  )
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(

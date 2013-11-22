@@ -137,7 +137,7 @@ class ApplicationController < ActionController::Base
 
       unless @auth_user.first_login?
         begin
-          @auth_user.update_attribute :last_access, session[:last_access]
+          @auth_user.update(last_access: session[:last_access])
         rescue ActiveRecord::StaleObjectError
           @auth_user.reload
         end
