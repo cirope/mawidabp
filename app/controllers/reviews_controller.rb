@@ -18,8 +18,7 @@ class ReviewsController < ApplicationController
   def index
     @title = t 'review.index_title'
 
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions Review, true
+    build_search_conditions Review
 
     @reviews = Review.list.includes(
       :period, { plan_item: :business_unit }

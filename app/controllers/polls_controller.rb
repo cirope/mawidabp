@@ -16,8 +16,7 @@ class PollsController < ApplicationController
         page: params[:page], per_page: APP_LINES_PER_PAGE
       )
     else
-      # TODO default_conditions empty fails, added 'true' param
-      build_search_conditions Poll, true
+      build_search_conditions Poll
 
       unless @columns.first == 'answered' && @columns.size == 1
         @polls = Poll.list.includes(

@@ -16,8 +16,7 @@ class ControlObjectiveItemsController < ApplicationController
   def index
     @title = t 'control_objective_item.index_title'
 
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions ControlObjectiveItem, true
+    build_search_conditions ControlObjectiveItem
 
     @control_objectives = ControlObjectiveItem.list.includes(
         :weaknesses,

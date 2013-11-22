@@ -32,8 +32,7 @@ class LoginRecordsController < ApplicationController
 
       build_search_conditions LoginRecord, default_conditions
     else
-      # TODO default_conditions empty fails, added 'true' param
-      build_search_conditions LoginRecord, true
+      build_search_conditions LoginRecord
     end
 
     @login_records = LoginRecord.list.includes(:user).where(

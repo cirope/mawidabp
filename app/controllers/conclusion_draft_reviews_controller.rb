@@ -18,8 +18,7 @@ class ConclusionDraftReviewsController < ApplicationController
   def index
     @title = t 'conclusion_draft_review.index_title'
 
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions ConclusionDraftReview, true
+    build_search_conditions ConclusionDraftReview
 
     @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [

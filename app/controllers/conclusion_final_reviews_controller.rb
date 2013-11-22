@@ -17,8 +17,7 @@ class ConclusionFinalReviewsController < ApplicationController
   def index
     @title = t 'conclusion_final_review.index_title'
 
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions ConclusionFinalReview, true
+    build_search_conditions ConclusionFinalReview
 
     order = @order_by || "issue_date DESC"
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
@@ -280,8 +279,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions ConclusionFinalReview, true
+    build_search_conditions ConclusionFinalReview
 
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]

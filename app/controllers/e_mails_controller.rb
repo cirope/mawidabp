@@ -6,8 +6,7 @@ class EMailsController < ApplicationController
   def index
     @title = t 'email.index_title'
 
-    # TODO default_conditions empty fails, added 'true' param
-    build_search_conditions EMail, true
+    build_search_conditions EMail
 
     @emails = EMail.list.where(@conditions).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE

@@ -18,8 +18,7 @@ class ErrorRecordsController < ApplicationController
         { from_date: @from_date, to_date: @to_date.to_time.end_of_day }
       ]
     else
-      # TODO default_conditions empty fails, added 'true' param
-      build_search_conditions ErrorRecord, true
+      build_search_conditions ErrorRecord
     end
 
     @error_records = ErrorRecord.list.includes(:user).where(
