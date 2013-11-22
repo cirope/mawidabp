@@ -375,7 +375,17 @@ class ReviewsController < ApplicationController
     end
 
     def set_review
-      @review = Review.list.find(params[:id])
+      @review = Review.list.includes(
+        { plan_item: :business_unit },
+        { review_user_assignments: :user },
+        { finding_review_assignments: :finding },
+        { control_objective_items:
+          [
+            :control,
+            { control_objective: :process_control }
+          ]
+        }
+      ).find(params[:id])
     end
 
     def set_review_clone
