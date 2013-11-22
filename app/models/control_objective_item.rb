@@ -4,7 +4,9 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({

@@ -1,6 +1,8 @@
 class AnswerOption < ActiveRecord::Base
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   # Validaciones
   validates :option, presence: true

@@ -4,7 +4,9 @@ class ProcedureControlSubitem < ActiveRecord::Base
   # Alias de atributos
   alias_attribute :label, :control_objective_text
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   before_validation(:on => :create) { fill_control_objective_text }
 

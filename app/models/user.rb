@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
       :last_access, :logged_in, :updated_at, :lock_version
     ],
     meta: {
-      organization_id: ->(obj) { Organization.current_id },
+      organization_id: ->(model) { Organization.current_id },
       important: ->(user) { user.is_an_important_change }
     }
   )

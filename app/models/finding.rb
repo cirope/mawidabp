@@ -7,7 +7,9 @@ class Finding < ActiveRecord::Base
 
   acts_as_tree
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   cattr_accessor :current_user, :current_organization
 

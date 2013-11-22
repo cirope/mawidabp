@@ -5,7 +5,9 @@ class BusinessUnit < ActiveRecord::Base
 
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   # Alias de atributos
   alias_attribute :label, :name

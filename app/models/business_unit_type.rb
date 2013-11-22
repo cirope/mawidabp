@@ -3,7 +3,9 @@ class BusinessUnitType < ActiveRecord::Base
 
   trimmed_fields :name, :business_unit_label, :project_label
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   # Named scopes
   scope :list, -> {

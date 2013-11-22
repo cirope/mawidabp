@@ -3,7 +3,9 @@ class HelpItem < ActiveRecord::Base
 
   acts_as_tree :order => 'order_number ASC'
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   # Restricciones
   validates :name, :description, :order_number, :presence => true

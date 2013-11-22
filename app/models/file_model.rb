@@ -1,7 +1,9 @@
 class FileModel < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail meta: { organization_id: ->(obj) { Organization.current_id } }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   mount_uploader :file, FileUploader, :mount_on => :file_file_name
 
