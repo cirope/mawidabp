@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   before_action :auth, only: [:destroy]
+  before_action :set_admin_mode, only: [:new, :create]
 
   layout ->(controller) { controller.request.xhr? ? false : 'clean' }
 
@@ -11,14 +12,12 @@ class SessionsController < ApplicationController
     else
       @title = t 'user.login_title'
       @user = User.new
-      @group_admin_mode = request.subdomains.first == APP_ADMIN_PREFIX
     end
   end
 
   def create
     @title = t 'user.login_title'
     @user = User.new(user_params)
-    @group_admin_mode = request.subdomains.first == APP_ADMIN_PREFIX
 
     if current_organization || @group_admin_mode
       conditions = ["LOWER(#{User.table_name}.user) = :user"]
@@ -143,5 +142,9 @@ class SessionsController < ApplicationController
   private
     def user_params
       params.require(:user).permit(:user, :password)
+    end
+
+    def set_admin_mode
+      @group_admin_mode = request.subdomains.first == APP_ADMIN_PREFIX
     end
 end

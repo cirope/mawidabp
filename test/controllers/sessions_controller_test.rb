@@ -41,8 +41,7 @@ class SessionsControllerTest < ActionController::TestCase
 
   test 'login hidden user' do
     user = users(:administrator_user)
-    user.hidden = true
-    assert user.save
+    assert user.update_attribute(:hidden,  true)
 
     assert_difference 'ErrorRecord.count' do
       post :create,
@@ -302,10 +301,6 @@ class SessionsControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
-    assert_redirected_to edit_password_user_url(user)
-
-    # Cualquier petición redirecciona nuevamente al cambio de contraseña
-    get users_url
     assert_redirected_to edit_password_user_url(user)
   end
 
