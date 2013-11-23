@@ -43,7 +43,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'check correct access time function' do
     login_admin
-    
+
     assert @controller.send(:check_access_time)
     assert_nil @controller.send(:session)[:go_to]
     assert_not_nil @controller.instance_variable_get(:@auth_user)
@@ -57,7 +57,7 @@ class ApplicationControllerTest < ActionController::TestCase
     assert @controller.send(:check_access_time)
     assert_not_nil @controller.send(:session)[:go_to]
     assert_nil @controller.instance_variable_get(:@auth_user)
-    assert_redirected_to login_users_url
+    assert_redirected_to login_url
     assert_equal I18n.t('message.session_time_expired'),
       @controller.send(:flash)[:alert]
   end
@@ -78,7 +78,7 @@ class ApplicationControllerTest < ActionController::TestCase
     login_admin
 
     @controller.send(:redirect_to_login)
-    assert_redirected_to login_users_url
+    assert_redirected_to login_url
   end
 
   test 'restart session function' do
@@ -99,7 +99,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.send(:check_privileges)
     assert_nil  @controller.send(:flash)[:notice]
-    assert_redirected_to login_users_url
+    assert_redirected_to login_url
   end
 
   test 'check group admin function' do
@@ -121,7 +121,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
     @controller.send(:check_privileges)
     assert_not_nil  @controller.send(:flash)[:alert]
-    assert_redirected_to login_users_url
+    assert_redirected_to login_url
   end
 
   test 'make date range' do

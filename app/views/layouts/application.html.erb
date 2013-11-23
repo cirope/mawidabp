@@ -15,6 +15,7 @@
       <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
       <%= yield :js_extra %>
     <% end %>
+    <%= csrf_meta_tags %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=device-dpi" />
   </head>
   <body>

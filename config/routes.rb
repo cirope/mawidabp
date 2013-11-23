@@ -1,4 +1,9 @@
 MawidaBP::Application.routes.draw do
+  # Sessions
+  get    'login',    to: 'sessions#new',     as: 'login'
+  post   'sessions', to: 'sessions#create',  as: 'sessions'
+  delete 'logout',   to: 'sessions#destroy', as: 'logout'
+
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :questionnaires
@@ -411,8 +416,6 @@ MawidaBP::Application.routes.draw do
 
   resources :users do
     collection do
-      get :login
-      post :create_session
       get :new_initial
       post :create_initial
       get :export_to_pdf
@@ -426,7 +429,6 @@ MawidaBP::Application.routes.draw do
     member do
       get :user_status
       get :user_status_without_graph
-      get :logout
       get :edit_password
       patch :update_password
       get :edit_personal_data
@@ -488,7 +490,7 @@ MawidaBP::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'users#login'
+  root 'sessions#new'
 
   get 'private/:path', :to => 'file_models#download',
     :constraints => { :path => /.+/ }

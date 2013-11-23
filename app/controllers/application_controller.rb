@@ -46,7 +46,9 @@ class ApplicationController < ActionController::Base
   end
 
   def current_organization
-    @current_organization ||= Organization.find_by(prefix: request.subdomains.first)
+    @current_organization ||= Organization.find_by(
+      prefix: request.subdomains.first
+    ) unless request.subdomains.first == APP_ADMIN_PREFIX
   end
   helper_method :current_organization
 
@@ -162,7 +164,7 @@ class ApplicationController < ActionController::Base
   # _message_:: Mensaje que se mostrará luego de la redirección
   def redirect_to_login(message = nil, type = :notice) #:doc:
     flash[type] = message if message
-    redirect_to login_users_url
+    redirect_to login_url
   end
 
   # Reinicia la sessión (conservando el contenido de flash)

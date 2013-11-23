@@ -86,7 +86,7 @@ class PollsController < ApplicationController
     @title = t 'poll.edit_title'
 
     if @poll.nil? || (params[:token] != @poll.access_token)
-      redirect_to login_users_url, alert: t('poll.not_found')
+      redirect_to login_url, alert: t('poll.not_found')
     elsif @poll.answered?
       redirect_to poll_path(@poll, layout: 'application_clean'), alert: t('poll.access_denied')
     end
@@ -122,10 +122,10 @@ class PollsController < ApplicationController
 
     respond_to do |format|
       if @poll.nil?
-        format.html { redirect_to login_users_url, alert: t('poll.not_found') }
+        format.html { redirect_to login_url, alert: t('poll.not_found') }
       elsif @poll.update(poll_params)
         if @auth_user
-          format.html { redirect_to login_users_url, notice: t('poll.correctly_updated') }
+          format.html { redirect_to login_url, notice: t('poll.correctly_updated') }
         else
           format.html { redirect_to poll_url(@poll, layout: 'application_clean'), notice: t('poll.correctly_updated') }
         end

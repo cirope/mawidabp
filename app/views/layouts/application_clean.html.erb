@@ -10,6 +10,7 @@
     <%= stylesheet_link_tag 'application' %>
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
     <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
     <%= javascript_tag do %>
       <%= raw "State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
       <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
@@ -36,7 +37,7 @@
         <div id="session">
           <% if @auth_user %>
             <div id="user">[ <%= @auth_user.user %> ]</div>
-            <%= link_to t('menu.exit'), logout_user_path(@auth_user) %>
+            <%= link_to t('menu.exit'), logout_path, method: :delete %>
           <% end %>
         </div>
         <div class="clear">&nbsp;</div>

@@ -5,12 +5,12 @@
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
   before_action :auth, except: [
-    :login, :create_session, :edit_password, :update_password, :new_initial,
-    :create_initial, :initial_roles, :reset_password, :send_password_reset
+    :edit_password, :update_password, :new_initial, :create_initial,
+    :initial_roles, :reset_password, :send_password_reset
   ]
   before_action :load_privileges
   before_action :check_privileges, except: [
-    :login, :create_session, :logout, :user_status, :edit_password, :user_status_without_graph,
+    :user_status, :edit_password, :user_status_without_graph,
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   ]
   layout proc { |controller|
     use_clean = [
-      'login', 'create_session', 'reset_password', 'send_password_reset'
+      'reset_password', 'send_password_reset'
     ].include?(controller.action_name)
 
     controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
@@ -201,147 +201,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json { render json: roles.map { |r| [r.name, r.id] } }
-    end
-  end
-
-  # Realiza la autenticación de los usuarios.
-  #
-  # * GET /users/login
-  def login
-    auth_user = User.find(session[:user_id]) if session[:user_id]
-
-    if auth_user.try(:is_enable?) && auth_user.logged_in?
-      redirect_to controller: :welcome
-    else
-      @title = t 'user.login_title'
-      @user = User.new
-      organization_prefix = request.subdomains.first
-      @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
-
-      @organization = Organization.find_by(prefix: organization_prefix)
-    end
-  end
-
-  # Realiza la autenticación de los usuarios.
-  #
-  # * POST /users/create_session
-  def create_session
-    @title = t 'user.login_title'
-    @user = User.new(user_params)
-    organization_prefix = request.subdomains.first
-    @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
-
-    @organization = Organization.find_by(prefix: organization_prefix)
-
-    Organization.current_id = @organization.try :id
-
-    if @organization || @group_admin_mode
-      conditions = ["LOWER(#{User.table_name}.user) = :user"]
-      parameters = {user: @user.user.downcase}
-
-      if @group_admin_mode
-        conditions << "#{User.table_name}.group_admin = :true"
-        parameters[:true] = true
-      else
-        conditions << "#{Organization.table_name}.id = :organization_id"
-        parameters[:organization_id] = @organization.id
-      end
-
-      auth_user = User.includes(:organizations).where(
-        conditions.join(' AND '), parameters
-      ).references(:organizations).first
-
-      @user.salt = auth_user.salt if auth_user
-      @user.encrypt_password
-
-      if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
-        session[:user_id] = auth_user.id
-        flash.notice ||= t 'message.must_change_the_password'
-        session[:go_to] = edit_password_user_url(auth_user)
-      elsif !@group_admin_mode && auth_user && auth_user.expired?
-        auth_user.is_an_important_change = false
-        auth_user.update_attribute :enable, false
-      end
-
-      if !@group_admin_mode && auth_user && auth_user.is_enable? && !auth_user.hidden &&
-          @user.password_was_encrypted && auth_user.password == @user.password
-        record = LoginRecord.list.new(user: auth_user, request: request)
-
-        if record.save
-          days_for_password_expiration =
-            auth_user.days_for_password_expiration
-
-          if days_for_password_expiration
-            flash.notice = t(days_for_password_expiration >= 0 ?
-                'message.password_expire_in_x' :
-                'message.password_expired_x_days_ago',
-              count: days_for_password_expiration.abs)
-          end
-
-          unless auth_user.allow_concurrent_access?
-            auth_user = nil
-            @user = User.new
-            flash.alert = t 'message.you_are_already_logged'
-
-            render action: :login
-          end
-
-          if auth_user
-            session[:last_access] = Time.now
-            auth_user.logged_in!(session[:last_access])
-            session[:user_id] = auth_user.id
-            session[:organization_id] = @organization.id
-            if poll = auth_user.first_pending_poll
-              flash.notice = t 'poll.must_answer_poll'
-              go_to = edit_poll_url(poll, token: poll.access_token, layout: 'application_clean')
-            else
-              go_to = session[:go_to] || { controller: :welcome }
-            end
-            session[:go_to], session[:record_id] = nil, record.id
-
-            redirect_to go_to
-          end
-        end
-      elsif @group_admin_mode && auth_user.try(:is_group_admin?) &&
-          auth_user.password == @user.password
-        session[:last_access] = Time.now
-        auth_user.logged_in!(session[:last_access])
-        session[:user_id] = auth_user.id
-
-        redirect_to controller: :groups, action: :index
-      else
-        if (user = User.find_by(user: @user.user))
-          ErrorRecord.list.create(
-            user: user, request: request, error_type: :on_login
-          )
-
-          user.failed_attempts += 1
-          max_attempts = @group_admin_mode ?
-            3 : user.get_parameter(:attempts_count).to_i
-
-          if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
-              user.is_enable?
-            user.enable = false
-
-            ErrorRecord.list.create(
-              user: user, request: request, error_type: :user_disabled
-            )
-          end
-
-          user.is_an_important_change = false
-          user.save(validate: false)
-        else
-          ErrorRecord.list.create(
-            user_name: @user.user, request: request, error_type: :on_login
-          )
-        end
-
-        @user.password = nil
-        flash.alert = t 'message.invalid_user_or_password'
-        render action: :login
-      end
-    else
-      render action: :login unless session[:user_id]
     end
   end
 
@@ -615,21 +474,6 @@ class UsersController < ApplicationController
       flash.alert = t('user.user_release_failed')
       render action: :reassignment_edit
     end
-  end
-
-  # Cierra la sesión del usuario y registra su egreso
-  #
-  # * GET /users/logout/1
-  # * GET /users/logout/1.xml
-  def logout
-    if session[:record_id] && LoginRecord.exists?(session[:record_id])
-      LoginRecord.find(session[:record_id]).end!
-    end
-
-    @auth_user.logout! if @auth_user
-
-    restart_session
-    redirect_to_login t('message.session_closed_correctly')
   end
 
   # Lista las usuarios
