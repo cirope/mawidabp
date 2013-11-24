@@ -44,7 +44,7 @@ class SessionsController < ApplicationController
         session[:go_to] = edit_password_user_url(auth_user)
       elsif !@group_admin_mode && auth_user && auth_user.expired?
         auth_user.is_an_important_change = false
-        auth_user.update_attribute :enable, false
+        auth_user.update(enable: false)
       end
 
       if !@group_admin_mode && auth_user && auth_user.is_enable? && !auth_user.hidden &&

@@ -72,10 +72,7 @@ class User < ActiveRecord::Base
       findings: { state: Finding::STATUS[:notify], final: false }
     ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
   }
-  scope :not_hidden, -> { where(
-    'hidden = false'
-    )
-  }
+  scope :not_hidden, -> { where('hidden = false') }
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?
@@ -123,12 +120,19 @@ class User < ActiveRecord::Base
     if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
-      password_min_length = record.get_parameter_for_now(
-        :password_minimum_length).to_i
-      password_min_time = record.get_parameter_for_now(
-        :password_minimum_time).to_i
-      password_regex = Regexp.new record.get_parameter_for_now(
-        :password_constraint)
+      password_min_length = Organization.current_id ?
+        record.get_parameter_for_now(:password_minimum_length).to_i :
+        DEFAULT_SETTINGS['password_minimum_length'].fetch('value', 8)
+      password_min_time = Organization.current_id ?
+        record.get_parameter_for_now(:password_minimum_time).to_i :
+        DEFAULT_SETTINGS['password_minimum_time'].fetch('value', 1)
+      password_regex = Regexp.new(
+          Organization.current_id ?
+          record.get_parameter_for_now(:password_constraint) :
+          DEFAULT_SETTINGS['password_constraint'].fetch(
+            'value', '^(?=.*[a-zA-Z])(?=.*[0-9]).*$'
+          )
+      )
 
       record.errors.add attr, :invalid if value && value !~ password_regex
 
