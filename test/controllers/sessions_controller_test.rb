@@ -4,7 +4,9 @@ class SessionsControllerTest < ActionController::TestCase
   fixtures :users, :roles, :organizations
 
   def setup
-    @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
+    @organization = organizations(:default_organization)
+
+    @request.host = "#{@organization.prefix}.localhost.i"
   end
 
   test "should get login" do
@@ -163,7 +165,9 @@ class SessionsControllerTest < ActionController::TestCase
 
   test 'excede maximun number off wrong attempts' do
     user = User.find users(:administrator_user).id
-    max_attempts = user.get_parameter(:attempts_count).to_i
+    max_attempts = user.get_parameter(
+      :attempts_count, false, @organization.id
+    ).to_i
 
     assert_difference 'ErrorRecord.count', max_attempts + 1 do
       max_attempts.times do
