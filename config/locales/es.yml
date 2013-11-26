@@ -968,15 +968,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       body_title:
         one: "El siguiente hallazgo está próximo a vencer"
         other: "Los siguientes hallazgos están próximos a vencer"
-    client_footer:
+    footer:
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
-    footer:
-      email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
-      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
     notification:
