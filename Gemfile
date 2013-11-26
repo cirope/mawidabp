@@ -40,6 +40,7 @@ end
 
 group :test do
   gem 'rake' # Travis CI need this
+  gem 'timecop'
   gem 'minitest', require: false
   gem 'turn'
 end
