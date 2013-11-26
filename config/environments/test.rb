@@ -33,4 +33,11 @@ MawidaBP::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  # Set timecop to January 3, 2013 10:05:00 AM UTC
+  config.after_initialize do
+    t = Time.utc(2013, 1, 3, 10, 5, 0)
+
+    Timecop.travel(t)
+  end
 end
