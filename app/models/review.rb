@@ -33,7 +33,7 @@ class Review < ActiveRecord::Base
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?
   before_save :calculate_score
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
   attr_reader :approval_errors, :procedure_control_subitem_ids
@@ -140,7 +140,7 @@ class Review < ActiveRecord::Base
   belongs_to :file_model
   belongs_to :organization
   has_one :conclusion_draft_review, :dependent => :destroy
-  has_one :conclusion_final_review
+  has_one :conclusion_final_review, dependent: :destroy, dependent: :destroy
   has_one :business_unit, :through => :plan_item
   has_one :workflow, :dependent => :destroy
   has_many :control_objective_items, :dependent => :destroy, :after_add => :assign_review

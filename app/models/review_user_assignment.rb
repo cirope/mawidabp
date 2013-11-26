@@ -16,7 +16,7 @@ class ReviewUserAssignment < ActiveRecord::Base
 
   # Callbacks
   before_validation :can_be_modified?
-  before_destroy :can_be_modified?, :delete_user_in_all_review_findings
+  #before_destroy :can_be_modified?, :delete_user_in_all_review_findings
   before_save :check_user_modification
 
   # Restricciones

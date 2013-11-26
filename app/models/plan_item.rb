@@ -39,7 +39,7 @@ class PlanItem < ActiveRecord::Base
   scope :with_business_unit, -> { where("#{table_name}.business_unit_id IS NOT NULL") }
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   serialize :predecessors, Array
 
@@ -134,7 +134,7 @@ class PlanItem < ActiveRecord::Base
   # Relaciones
   belongs_to :plan
   belongs_to :business_unit
-  has_one :review
+  has_one :review, dependent: :destroy
   has_one :business_unit_type, :through => :business_unit
   has_many :resource_utilizations, :as => :resource_consumer,
     :dependent => :destroy

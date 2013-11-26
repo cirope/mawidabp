@@ -7,7 +7,7 @@ class Plan < ActiveRecord::Base
 
   # Callbacks
   before_validation :set_proper_parent
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Atributos no persistentes
   attr_accessor :allow_overload, :allow_duplication, :new_version

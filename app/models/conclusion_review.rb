@@ -88,7 +88,7 @@ class ConclusionReview < ActiveRecord::Base
   }
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Restricciones de los atributos
   attr_readonly :review_id

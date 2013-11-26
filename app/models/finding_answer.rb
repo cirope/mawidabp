@@ -7,6 +7,8 @@ class FindingAnswer < ActiveRecord::Base
 
   # Callbacks
   after_create :send_notification_to_users
+  # TODO delete when Rails fix it
+  after_destroy :destroy_file_model
 
   # Atributos no persistentes
   attr_accessor :notify_users
@@ -28,7 +30,7 @@ class FindingAnswer < ActiveRecord::Base
   # Relaciones
   belongs_to :finding
   belongs_to :user, -> { where("#{User.table_name}.hidden" => [true,false]) }
-  belongs_to :file_model, :dependent => :destroy
+  belongs_to :file_model
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true
 
@@ -36,6 +38,10 @@ class FindingAnswer < ActiveRecord::Base
     super(attributes, options)
 
     self.notify_users = true if self.notify_users.nil?
+  end
+
+  def destroy_file_model
+    self.file_model.try(:destroy!)
   end
 
   def send_notification_to_users

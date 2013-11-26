@@ -33,7 +33,7 @@ class BusinessUnitType < ActiveRecord::Base
   end
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Relaciones
   belongs_to :organization

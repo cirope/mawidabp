@@ -8,7 +8,7 @@ class WorkflowItem < ActiveRecord::Base
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o
   # creados
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Atributos serializabled
   serialize :predecessors, Array

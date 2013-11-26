@@ -17,7 +17,7 @@ class Organization < ActiveRecord::Base
   before_save :change_current_organization_id
   after_create :create_initial_roles
   after_save :restore_current_organization_id
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
   after_destroy :destroy_image_model # TODO: delete when Rails fix gets in stable
 
   # Named scopes
@@ -55,6 +55,7 @@ class Organization < ActiveRecord::Base
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy
   has_many :users, -> { readonly.uniq }, through: :organization_roles
+  has_many :e_mails, dependent: :destroy
 
   accepts_nested_attributes_for :image_model, allow_destroy: true,
     reject_if: ->(attributes) { attributes['image'].blank? }

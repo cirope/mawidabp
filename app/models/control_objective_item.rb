@@ -51,7 +51,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Callbacks
   before_validation :set_proper_parent, :can_be_modified?,
     :enable_control_validations
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
   before_validation(on: :create) { fill_control_objective_text }
 
   # Validaciones

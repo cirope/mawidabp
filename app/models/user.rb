@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   scope :not_hidden, -> { where('hidden = false') }
 
   # Callbacks
-  before_destroy :has_not_orphan_fingings?
+  #before_destroy :has_not_orphan_fingings?
   before_validation :inject_auth_privileges_in_roles, :set_proper_parent
   before_update :check_roles_changes
   after_update :log_password_change

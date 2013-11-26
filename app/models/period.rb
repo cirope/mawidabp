@@ -7,7 +7,7 @@ class Period < ActiveRecord::Base
   }
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id).order('number DESC') }
@@ -54,10 +54,10 @@ class Period < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :reviews
-  has_many :plans
-  has_many :workflows
-  has_many :procedure_controls
+  has_many :reviews, dependent: :destroy
+  has_many :plans, dependent: :destroy
+  has_many :workflows, dependent: :destroy
+  has_many :procedure_controls, dependent: :destroy
 
   def <=>(other)
     start_result = self.start <=> other.start

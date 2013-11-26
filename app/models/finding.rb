@@ -365,7 +365,7 @@ class Finding < ActiveRecord::Base
   before_create :can_be_created?
   before_save :can_be_modified?, :check_users_for_notification,
     :check_for_reiteration
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
   after_update :notify_changes_to_users
   before_validation :set_proper_parent
   before_validation :change_review_code, :on => :update
@@ -632,9 +632,10 @@ class Finding < ActiveRecord::Base
   end
 
   def check_for_final_review(_)
-    if self.final? && self.review && self.review.is_frozen?
-      raise 'Conclusion Final Review frozen'
-    end
+    #if self.final? && self.review && self.review.is_frozen?
+    #  raise 'Conclusion Final Review frozen'
+    #end
+    true
   end
 
   def set_proper_parent

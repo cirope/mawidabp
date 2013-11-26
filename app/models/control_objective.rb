@@ -7,7 +7,7 @@ class ControlObjective < ActiveRecord::Base
   }
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Named scopes
   scope :list, -> {

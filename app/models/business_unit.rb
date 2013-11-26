@@ -13,7 +13,7 @@ class BusinessUnit < ActiveRecord::Base
   alias_attribute :label, :name
 
   # Callbacks
-  before_destroy :can_be_destroyed?
+  #before_destroy :can_be_destroyed?
 
   # Restricciones
   validates :name, :presence => true
