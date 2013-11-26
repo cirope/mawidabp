@@ -120,19 +120,9 @@ class User < ActiveRecord::Base
     if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
-      password_min_length = Organization.current_id ?
-        record.get_parameter_for_now(:password_minimum_length).to_i :
-        DEFAULT_SETTINGS['password_minimum_length'].fetch('value', 8)
-      password_min_time = Organization.current_id ?
-        record.get_parameter_for_now(:password_minimum_time).to_i :
-        DEFAULT_SETTINGS['password_minimum_time'].fetch('value', 1)
-      password_regex = Regexp.new(
-          Organization.current_id ?
-          record.get_parameter_for_now(:password_constraint) :
-          DEFAULT_SETTINGS['password_constraint'].fetch(
-            'value', '^(?=.*[a-zA-Z])(?=.*[0-9]).*$'
-          )
-      )
+      password_min_length = record.get_parameter_for_now(:password_minimum_length).to_i
+      password_min_time = record.get_parameter_for_now(:password_minimum_time).to_i
+      password_regex = Regexp.new(record.get_parameter_for_now(:password_constraint))
 
       record.errors.add attr, :invalid if value && value !~ password_regex
 
