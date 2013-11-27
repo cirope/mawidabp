@@ -8,11 +8,7 @@ module ParameterSelector
       name: param_name, organization_id: organization_id
     ).try(:value)
 
-    unless setting
-      DEFAULT_SETTINGS[param_name].fetch('value') { raise 'No organization selected' }
-    else
-      setting
-    end
+    setting || DEFAULT_SETTINGS[param_name].fetch('value')
   end
 
   def get_parameter(param_name, show_value = false, organization_id = nil)

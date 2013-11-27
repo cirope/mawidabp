@@ -874,8 +874,7 @@
         one: "El siguiente desvío / oportunidad de mejora está próxima a vencer"
         other: "Los siguientes desvíos / oportunidades de mejora están próximas a vencer"
     footer:
-      email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
+      email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
