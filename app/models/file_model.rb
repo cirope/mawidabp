@@ -41,7 +41,7 @@ class FileModel < ActiveRecord::Base
   end
 
   private
-  
+
   def update_file_attributes
     if file.present? && file_file_name_changed?
       self.file_content_type = file.file.content_type

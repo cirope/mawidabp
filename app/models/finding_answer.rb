@@ -40,10 +40,6 @@ class FindingAnswer < ActiveRecord::Base
     self.notify_users = true if self.notify_users.nil?
   end
 
-  def destroy_file_model
-    self.file_model.try(:destroy!)
-  end
-
   def send_notification_to_users
     if self.notify_users == true || self.notify_users == '1'
       users = self.finding.users - [self.user]
@@ -53,4 +49,9 @@ class FindingAnswer < ActiveRecord::Base
       end
     end
   end
+
+  private
+    def destroy_file_model
+      self.file_model.try(:destroy!)
+    end
 end
