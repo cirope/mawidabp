@@ -48,7 +48,7 @@ module Reports::DetailedManagement
   def init_vars
     @title = t 'execution_reports.detailed_management_report_title'
     @from_date, @to_date = *make_date_range(params[:detailed_management_report])
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
     @column_order = ['business_unit_report_name', 'review', 'process_control',
       'weaknesses_count']
     @column_order << (@sqm ? 'nonconformities_count' : 'oportunities_count')
@@ -125,7 +125,7 @@ module Reports::DetailedManagement
   def create_detailed_management_report
     self.detailed_management_report
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.detailed_management_report.clarification'),

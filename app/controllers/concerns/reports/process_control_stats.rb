@@ -1,4 +1,4 @@
-module Reports::ProcessControlStats                                                                                                 
+module Reports::ProcessControlStats
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk

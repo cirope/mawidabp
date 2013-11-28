@@ -15,7 +15,7 @@ module Reports::WeaknessesByStateExecution
     @title = t 'execution_reports.weaknesses_by_state_title'
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_state_execution])
     @audit_types = [:internal, :external]
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
     @counts = []
     @status = Finding::STATUS.except(:repeated, :revoked).sort do |s1, s2|
       s1.last <=> s2.last
@@ -48,7 +48,7 @@ module Reports::WeaknessesByStateExecution
   def create_weaknesses_by_state_execution
     self.weaknesses_by_state_execution
 
-    pdf = init_pdf(@auth_organization, params[:report_title])
+    pdf = init_pdf(params[:report_title])
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.weaknesses_by_state.clarification'),
