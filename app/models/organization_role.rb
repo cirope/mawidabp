@@ -44,9 +44,9 @@ class OrganizationRole < ActiveRecord::Base
   end
 
   # Relaciones
-  belongs_to :user, -> { readonly }
-  belongs_to :organization, -> { readonly }
-  belongs_to :role, -> { readonly }
+  belongs_to :user
+  belongs_to :organization
+  belongs_to :role
 
   def to_s
     "#{self.role.name} (#{self.organization.name})"

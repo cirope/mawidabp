@@ -12,6 +12,7 @@ class Finding < ActiveRecord::Base
   }
 
   cattr_accessor :current_user, :current_organization
+  after_destroy :destroy_control_objective_item
 
   # Constantes
   COLUMNS_FOR_SEARCH = {
@@ -1697,5 +1698,9 @@ class Finding < ActiveRecord::Base
     end
 
     column_headers
+  end
+
+  def destroy_control_objective_item
+    self.control_objective_item.try(:destroy!)
   end
 end

@@ -54,7 +54,7 @@ class Organization < ActiveRecord::Base
   has_many :resource_classes, dependent: :destroy
   has_many :polls, dependent: :destroy
   has_many :questionnaires, dependent: :destroy
-  has_many :users, -> { readonly.uniq }, through: :organization_roles
+  has_many :users, through: :organization_roles, dependent: :destroy
   has_many :e_mails, dependent: :destroy
 
   accepts_nested_attributes_for :image_model, allow_destroy: true,

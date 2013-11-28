@@ -20,7 +20,8 @@ class WorkPaper < ActiveRecord::Base
   # Callbacks
   before_save :check_for_modifications
   after_save :create_cover_and_zip
-  after_destroy :destroy_file_model # TODO: delete when Rails fix gets in stable
+  # TODO: delete when Rails fix gets in stable
+  #after_destroy :destroy_file_model
 
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true

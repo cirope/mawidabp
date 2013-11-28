@@ -160,6 +160,8 @@ class User < ActiveRecord::Base
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :user_who_confirms, class_name: 'Notification', dependent: :destroy
+  has_many :costs, dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
   has_many :reviews, -> { uniq }, through: :review_user_assignments
@@ -176,6 +178,7 @@ class User < ActiveRecord::Base
     source_type: 'Weakness', source: :finding
   has_many :oportunities, -> { uniq }, through: :finding_user_assignments,
     source_type: 'Oportunity', source: :finding
+  has_many :finding_answers, dependent: :destroy
 
   accepts_nested_attributes_for :organization_roles, allow_destroy: true,
     reject_if: proc { |attributes|
