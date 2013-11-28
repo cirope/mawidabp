@@ -162,7 +162,7 @@ class User < ActiveRecord::Base
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :confirmation_notifications, class_name: 'Notification',
-    dependent: :destroy, foreign_key: 'user_who_confirm_id'
+    dependent: :nullify, foreign_key: 'user_who_confirm_id'
   has_many :costs, dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
