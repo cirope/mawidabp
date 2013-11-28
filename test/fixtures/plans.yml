@@ -1,8 +1,11 @@
 current_plan:
   period: current_period
+  organization: default_organization
 
 past_plan:
   period: past_period
+  organization: default_organization
 
 unrelated_plan:
   period: third_period
+  organization: default_organization

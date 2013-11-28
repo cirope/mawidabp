@@ -1,11 +1,14 @@
 current_workflow:
   period: current_period
   review: current_review
+  organization: default_organization
 
 past_workflow:
   period: past_period
   review: past_review
+  organization: default_organization
 
 with_conclusion_workflow:
   period: current_period
   review: review_with_conclusion
+  organization: default_organization

@@ -12,9 +12,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes.xml
   def index
     @title = t 'resource_class.index_title'
-    @resource_classes = ResourceClass.where(
-      organization_id: @auth_organization.id
-    ).order('name ASC').paginate(
+    @resource_classes = ResourceClass.list.order('name ASC').paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -66,9 +64,7 @@ class ResourceClassesController < ApplicationController
   # * POST /resource_classes.xml
   def create
     @title = t 'resource_class.new_title'
-    @resource_class = ResourceClass.new(
-      resource_class_params.merge(organization_id: @auth_organization.id)
-    )
+    @resource_class = ResourceClass.list.new(resource_class_params)
 
     respond_to do |format|
       if @resource_class.save
@@ -121,9 +117,7 @@ class ResourceClassesController < ApplicationController
 
   private
     def set_resource_class
-      @resource_class = ResourceClass.where(
-        id: params[:id], organization_id: @auth_organization.id
-      ).first
+      @resource_class = ResourceClass.list.find(params[:id])
     end
 
     def resource_class_params

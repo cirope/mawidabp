@@ -6,10 +6,10 @@ class OportunityTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @oportunity = Oportunity.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -29,7 +29,7 @@ class OportunityTest < ActiveSupport::TestCase
   # Prueba la creación de una oportunidad
   test 'create' do
     assert_difference 'Oportunity.count' do
-      @oportunity = Oportunity.new(
+      @oportunity = Oportunity.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'OM20',

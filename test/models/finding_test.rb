@@ -8,8 +8,8 @@ class FindingTest < ActiveSupport::TestCase
   def setup
     @finding = Finding.find(
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -35,7 +35,7 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba la creación de una debilidad
   test 'create' do
     assert_difference 'Finding.count' do
-      @finding = @finding.class.new(
+      @finding = @finding.class.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
@@ -79,7 +79,7 @@ class FindingTest < ActiveSupport::TestCase
     # No se puede crear una observación de un objetivo que está en un informe
     # definitivo
     assert_no_difference 'Finding.count' do
-      Finding.create(
+      Finding.list.create(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'O020',
@@ -875,7 +875,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify for stale and unconfirmed findings' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     assert_equal 4, Finding.unconfirmed_for_notification.size
@@ -921,7 +921,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'warning users about findings expiration' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     assert_equal 3, Finding.next_to_expire.size
@@ -964,7 +964,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'mark stale and confirmed findings as unanswered' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
     findings = Finding.confirmed_and_stale.select do |finding|
@@ -1013,7 +1013,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'not mark stale and confirmed findings if has an answer' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
 
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
@@ -1046,7 +1046,7 @@ class FindingTest < ActiveSupport::TestCase
   end
 
   test 'notify manager if necesary' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)
 

@@ -1,5 +1,5 @@
 class FollowUpAuditController < ApplicationController
-  include Reports::WeaknessesByState                                                                                                  
+  include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
@@ -9,17 +9,13 @@ class FollowUpAuditController < ApplicationController
   include Reports::NonconformitiesReport
 
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :load_privileges, :get_organization,
-    :add_weaknesses_synthesis_table, :being_implemented_resume_from_counts,
-    :add_being_implemented_resume, :make_date_range,
-    :get_weaknesses_synthesis_table_data
 
   # Muestra una lista con los reportes disponibles
   #
   # * GET /follow_up_audit
   def index
     @title = t 'follow_up_audit.index_title'
-    @quality_management = @auth_organization.kind.eql? 'quality_management'
+    @quality_management = current_organization.kind.eql? 'quality_management'
 
     respond_to do |format|
       format.html
@@ -121,7 +117,7 @@ class FollowUpAuditController < ApplicationController
       column_widths << pdf.percent_width(column.last)
     end
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
     pdf.move_down PDF_FONT_SIZE

@@ -1,9 +1,12 @@
 class Setting < ActiveRecord::Base
-  has_paper_trail
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
 
   attr_readonly :name
 
-  default_scope { order('name ASC') }
+  scope :list, -> { where(organization_id: Organization.current_id).order('name ASC') }
 
   validates :name, :value, :organization_id, presence: true
   validates :name, :value, length: { maximum: 255 }

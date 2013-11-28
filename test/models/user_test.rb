@@ -7,8 +7,8 @@ class UserTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @user = User.find users(:administrator_second_user).id
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -510,7 +510,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'notify finding changes function' do
-    GlobalModelConfig.current_organization_id = nil
+    Organization.current_id = nil
     user = User.find users(:administrator_user).id
     # Sólo funciona si no es un fin de semana
     assert ![0, 6].include?(Date.today.wday)

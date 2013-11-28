@@ -2,6 +2,8 @@ require 'test_helper'
 
 class QuestionnaireTest < ActiveSupport::TestCase
   def setup
+    set_organization
+
     @questionnaire = Questionnaire.find questionnaires(:questionnaire_one).id
   end
 
@@ -14,7 +16,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
   # Prueba la creación de un cuestionario
   test 'create' do
     assert_difference ['Questionnaire.count', 'Question.count'] do
-      Questionnaire.create(
+      Questionnaire.list.create(
         :name => 'Cuestionario de prueba',
         :organization_id => organizations(:default_organization).id,
         :email_subject => "email@subject.com",

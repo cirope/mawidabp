@@ -6,6 +6,8 @@ class PlanTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @plan = Plan.find plans(:current_plan).id
   end
 
@@ -18,7 +20,7 @@ class PlanTest < ActiveSupport::TestCase
   # Prueba la creación de un plan de trabajo
   test 'create' do
     assert_difference 'Plan.count' do
-      Plan.create(:period_id => periods(:unused_period).id)
+      Plan.list.create(:period_id => periods(:unused_period).id)
     end
   end
 
@@ -172,7 +174,7 @@ class PlanTest < ActiveSupport::TestCase
 
   test 'clone from with period' do
     period = Period.find periods(:unused_period).id
-    new_plan = Plan.new(:period_id => period.id)
+    new_plan = Plan.list.new(:period_id => period.id)
     new_plan.clone_from(@plan)
 
     assert new_plan.plan_items.size > 0

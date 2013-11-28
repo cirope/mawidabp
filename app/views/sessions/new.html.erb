@@ -2,9 +2,9 @@
   <div id="logo">
     <%= image_tag 'logo_mini.gif', :size => '139x27', :alt => t('app_name') %>
   </div>
-  <% if @organization || @group_admin_mode %>
+  <% if current_organization || @group_admin_mode %>
     <!--[form:user]-->
-    <%= form_for @user, :url => create_session_users_path do |f| %>
+    <%= form_for @user, url: sessions_path do |f| %>
       <p>
         <%= f.label :user %>
         <%= f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>

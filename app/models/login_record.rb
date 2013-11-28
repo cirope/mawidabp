@@ -1,6 +1,10 @@
 class LoginRecord < ActiveRecord::Base
   include ParameterSelector
 
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :user => {
@@ -13,11 +17,10 @@ class LoginRecord < ActiveRecord::Base
     }
   })
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
-  }
-
   attr_accessor :request
+
+  # Scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
 
   # Restricciones
   validates :user_id, :organization_id, :start, :presence => true

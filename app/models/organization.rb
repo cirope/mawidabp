@@ -7,7 +7,7 @@ class Organization < ActiveRecord::Base
   trimmed_fields :name, :prefix
 
   has_paper_trail meta: {
-    organization_id: ->(o) { GlobalModelConfig.current_organization_id }
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Constantes
@@ -62,15 +62,21 @@ class Organization < ActiveRecord::Base
   def initialize(attributes = nil, options = {})
     super(attributes, options)
 
-    if GlobalModelConfig.current_organization_id &&
-        Organization.exists?(GlobalModelConfig.current_organization_id)
-      self.group_id = Organization.find(
-        GlobalModelConfig.current_organization_id).group_id
+    if Organization.current_id && Organization.exists?(Organization.current_id)
+      self.group_id = Organization.find(Organization.current_id).group_id
     end
   end
 
   def <=>(other)
     prefix <=> other.prefix
+  end
+
+  def self.current_id
+    mawidabp_store[:current_organization_id]
+  end
+
+  def self.current_id=(organization_id)
+    mawidabp_store[:current_organization_id] = organization_id
   end
 
   def self.all_parameters(param_name)
@@ -81,12 +87,12 @@ class Organization < ActiveRecord::Base
   end
 
   def change_current_organization_id
-    @_current_organization_id = GlobalModelConfig.current_organization_id
-    GlobalModelConfig.current_organization_id = id if id
+    @_current_organization_id = Organization.current_id
+    Organization.current_id = id if id
   end
 
   def restore_current_organization_id
-    GlobalModelConfig.current_organization_id = @_current_organization_id
+    Organization.current_id = @_current_organization_id
   end
 
   def can_be_destroyed?
@@ -108,6 +114,10 @@ class Organization < ActiveRecord::Base
   end
 
   private
+    def self.mawidabp_store
+      Thread.current[:mawidabp] ||= {}
+    end
+
     def create_initial_roles
       Role.transaction do
         Role::TYPES.each do |type, value|

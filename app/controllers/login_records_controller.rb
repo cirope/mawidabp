@@ -23,28 +23,25 @@ class LoginRecordsController < ApplicationController
   def index
     @title = t 'login_record.index_title'
     @from_date, @to_date = *make_date_range(params[:index])
-    default_conditions = [
-      'organization_id = :organization_id',
-      {:organization_id => @auth_organization.id}
-    ]
 
     unless params[:search]
-      default_conditions[0] = [
-        default_conditions[0],
-        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date"
-      ].join(' AND ')
+      default_conditions = [
+        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
+        :from_date => @from_date, :to_date => @to_date.to_time.end_of_day
+      ]
 
-      default_conditions[1].merge!(:from_date => @from_date,
-        :to_date => @to_date.to_time.end_of_day)
-    else
       build_search_conditions LoginRecord, default_conditions
+    else
+      build_search_conditions LoginRecord
     end
 
-    @login_records = LoginRecord.includes(:user).where(
+    @login_records = LoginRecord.list.includes(:user).where(
       @conditions || default_conditions
     ).order(
       "#{LoginRecord.table_name}.start DESC"
-    ).references(:users).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).references(:users).paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
+    )
 
     respond_to do |format|
       format.html {
@@ -62,9 +59,7 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/1.xml
   def show
     @title = t 'login_record.show_title'
-    @login_record = LoginRecord.where(
-      :id => params[:id], :organization_id => @auth_organization.id
-    ).first
+    @login_record = LoginRecord.list.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -77,23 +72,19 @@ class LoginRecordsController < ApplicationController
   # * GET /login_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
-    login_records = LoginRecord.includes(:user).where(
+    login_records = LoginRecord.list.includes(:user).where(
       [
-        [
-          'organization_id = :organization_id',
-          'created_at BETWEEN :from_date AND :to_date'
-        ].join(' AND '),
+        'created_at BETWEEN :from_date AND :to_date',
         {
           :from_date => from_date,
-          :to_date => to_date.to_time.end_of_day,
-          :organization_id => @auth_organization.id
+          :to_date => to_date.to_time.end_of_day
         }
       ]
     ).order('start DESC')
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('login_record.index_title')
 
     pdf.move_down PDF_FONT_SIZE
@@ -146,7 +137,7 @@ class LoginRecordsController < ApplicationController
   end
 
   private
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(choose: :read, export_to_pdf: :read)
     end
 end

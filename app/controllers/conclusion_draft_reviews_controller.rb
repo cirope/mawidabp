@@ -17,20 +17,17 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews.xml
   def index
     @title = t 'conclusion_draft_review.index_title'
-    default_conditions = {
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    }
 
-    build_search_conditions ConclusionDraftReview, default_conditions
+    build_search_conditions ConclusionDraftReview
 
-    @conclusion_draft_reviews = ConclusionDraftReview.includes(
+    @conclusion_draft_reviews = ConclusionDraftReview.list.includes(
       review: [
         :period,
         :conclusion_final_review,
         {plan_item: :business_unit}
       ]
     ).where(@conditions).references(
-      :periods, :reviews, :business_units
+      :reviews, :business_units
     ).order(
       [
         "#{ConclusionDraftReview.table_name}.issue_date DESC",
@@ -47,7 +44,7 @@ class ConclusionDraftReviewsController < ApplicationController
           )
         end
       }
-      format.xml  { render xml: @conclusion_draft_reviews }
+      format.xml { render xml: @conclusion_draft_reviews }
     end
   end
 
@@ -91,7 +88,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * POST /conclusion_draft_reviews.xml
   def create
     @title = t 'conclusion_draft_review.new_title'
-    @conclusion_draft_review = ConclusionDraftReview.new(
+    @conclusion_draft_review = ConclusionDraftReview.list.new(
       conclusion_draft_review_params)
 
     respond_to do |format|
@@ -134,7 +131,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * GET /conclusion_draft_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_draft_review.to_pdf(@auth_organization, params[:export_options])
+    @conclusion_draft_review.to_pdf(current_organization, params[:export_options])
 
     respond_to do |format|
       format.html { redirect_to @conclusion_draft_review.relative_pdf_path }
@@ -149,11 +146,11 @@ class ConclusionDraftReviewsController < ApplicationController
     review = @conclusion_draft_review.review
 
     if params[:global].blank?
-      review.score_sheet(@auth_organization, true)
+      review.score_sheet(current_organization, true)
 
       redirect_to review.relative_score_sheet_path
     else
-      review.global_score_sheet(@auth_organization, true)
+      review.global_score_sheet(current_organization, true)
 
       redirect_to review.relative_global_score_sheet_path
     end
@@ -164,7 +161,7 @@ class ConclusionDraftReviewsController < ApplicationController
   # * GET /conclusion_draft_reviews/download_work_papers/1
   def download_work_papers
     review = @conclusion_draft_review.review
-    review.zip_all_work_papers @auth_organization
+    review.zip_all_work_papers current_organization
 
     redirect_to review.relative_work_papers_zip_path
   end
@@ -180,7 +177,7 @@ class ConclusionDraftReviewsController < ApplicationController
   #
   # * POST /conclusion_draft_reviews/create_bundle
   def create_bundle
-    @conclusion_draft_review.create_bundle_zip @auth_organization,
+    @conclusion_draft_review.create_bundle_zip current_organization,
       params[:index_items]
 
     redirect_to @conclusion_draft_review.relative_bundle_zip_path
@@ -211,14 +208,14 @@ class ConclusionDraftReviewsController < ApplicationController
         note = params[:conclusion_review][:email_note]
       end
 
-      @conclusion_draft_review.to_pdf(@auth_organization)
+      @conclusion_draft_review.to_pdf(current_organization)
 
       if include_score_sheet
-        @conclusion_draft_review.review.score_sheet @auth_organization, true
+        @conclusion_draft_review.review.score_sheet current_organization, true
       end
 
       if include_global_score_sheet
-        @conclusion_draft_review.review.global_score_sheet(@auth_organization,
+        @conclusion_draft_review.review.global_score_sheet(current_organization,
           true)
       end
 
@@ -263,7 +260,7 @@ class ConclusionDraftReviewsController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(users.name) LIKE :user_data_#{i}",
@@ -289,7 +286,7 @@ class ConclusionDraftReviewsController < ApplicationController
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
         id: params[:id],
-        "#{Period.table_name}.organization_id" => @auth_organization.id
+        "#{Period.table_name}.organization_id" => current_organization.id
       ).references(:periods).first
 
       response = {
@@ -308,22 +305,14 @@ class ConclusionDraftReviewsController < ApplicationController
 
   private
     def set_conclusion_draft_review
-      @conclusion_draft_review = ConclusionDraftReview.includes(
+      @conclusion_draft_review = ConclusionDraftReview.list.includes(
         review: [
           :period,
           :conclusion_final_review,
           :plan_item,
           { control_objective_items: [:control, :weaknesses, :oportunities] }
         ]
-      ).where(
-        [
-          [
-            "#{ConclusionDraftReview.table_name}.id = :id",
-            "#{Period.table_name}.organization_id = :organization_id"
-          ].join(' AND '),
-          { id: params[:id], organization_id: @auth_organization.id }
-        ]
-      ).references(:periods).first
+      ).find(params[:id])
 
       @conclusion_draft_review = nil if @conclusion_draft_review.has_final_review?
     end
@@ -335,7 +324,7 @@ class ConclusionDraftReviewsController < ApplicationController
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         export_to_pdf: :read,
         score_sheet: :read,

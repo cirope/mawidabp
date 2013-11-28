@@ -22,7 +22,7 @@ class BusinessUnitTypeTest < ActiveSupport::TestCase
   # Prueba la creación de un grupo
   test 'create' do
     assert_difference 'BusinessUnitType.count' do
-      @business_unit_type = BusinessUnitType.create(
+      @business_unit_type = BusinessUnitType.list.create(
         :name => 'New business unit type',
         :business_unit_label => 'New business unit label',
         :project_label => 'New project label',

@@ -18,7 +18,7 @@ module Reports::WeaknessesByState
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}

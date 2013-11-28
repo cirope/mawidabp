@@ -2,8 +2,8 @@ class ControlObjective < ActiveRecord::Base
   include Parameters::Relevance
   include Parameters::Risk
 
-  has_paper_trail :meta => {
-    :organization_id => proc { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Callbacks

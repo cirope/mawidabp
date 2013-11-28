@@ -7,29 +7,34 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
+  def set_organization(organization = nil)
+    Organization.current_id =
+      (organization || organizations(:default_organization)).id
+  end
+
   # Función para utilizar en las pruebas de los métodos que requieren
   # autenticación
   def perform_auth(user = users(:administrator_user),
       organization = organizations(:default_organization))
     @request.host = "#{organization.prefix}.localhost.i"
-    temp_controller, @controller = @controller, UsersController.new
+    temp_controller, @controller = @controller, SessionsController.new
     password = user.is_encrypted? ? PLAIN_PASSWORDS[user.user] : user.password
 
     if session[:user_id]
-      get :logout, :id => User.find(session[:user_id]).user
+      delete :destroy
       assert_nil session[:user_id]
       temp_controller.instance_eval { @auth_user = nil }
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
     end
 
-    post :create_session, {
+    post :create, {
       :user => { :user => user.user, :password => password }
     }, {}
 
     if user == users(:poll_user)
       assert_redirected_to edit_poll_url(polls(:poll_one).id)
     else
-      assert_redirected_to :controller => :welcome, :action => :index
+      assert_redirected_to welcome_url
     end
 
     assert_not_nil session[:user_id]

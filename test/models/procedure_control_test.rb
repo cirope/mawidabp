@@ -6,6 +6,8 @@ class ProcedureControlTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @procedure_control = ProcedureControl.find(
       procedure_controls(:procedure_control_iso_27001).id)
   end
@@ -20,7 +22,7 @@ class ProcedureControlTest < ActiveSupport::TestCase
   # Prueba la creación de un procedimientos de control
   test 'create' do
     assert_difference 'ProcedureControl.count' do
-      ProcedureControl.create(
+      ProcedureControl.list.create(
         :period_id => periods(:third_period).id
       )
     end

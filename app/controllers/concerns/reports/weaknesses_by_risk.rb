@@ -1,4 +1,4 @@
-module Reports::WeaknessesByRisk                                                                                                     
+module Reports::WeaknessesByRisk
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
@@ -21,7 +21,7 @@ module Reports::WeaknessesByRisk
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
     highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
-    
+
     @periods.each do |period|
       total_weaknesses_count = {}
       total_weaknesses_count_by_risk = {}

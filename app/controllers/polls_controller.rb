@@ -1,6 +1,7 @@
 class PollsController < ApplicationController
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
+  before_action :set_poll, only: [:show, :edit, :update, :destroy]
 
   layout 'application'
   require 'csv'
@@ -15,14 +16,10 @@ class PollsController < ApplicationController
         page: params[:page], per_page: APP_LINES_PER_PAGE
       )
     else
-      default_conditions = {
-        organization_id: @auth_organization.id
-      }
-
-      build_search_conditions Poll, default_conditions
+      build_search_conditions Poll
 
       unless @columns.first == 'answered' && @columns.size == 1
-        @polls = Poll.includes(
+        @polls = Poll.list.includes(
           :questionnaire,
           :user
         ).where(@conditions).order(
@@ -31,6 +28,7 @@ class PollsController < ApplicationController
           page: params[:page], per_page: APP_LINES_PER_PAGE
         )
       else
+        default_conditions = {}
         # Solo busca por columna contestada
         if params[:search][:query].downcase == 'si'
           default_conditions[:answered] = true
@@ -38,7 +36,7 @@ class PollsController < ApplicationController
           default_conditions[:answered] = false
         end
 
-        @polls = Poll.includes(
+        @polls = Poll.list.includes(
           :questionnaire,
           :user
         ).where(default_conditions).order(
@@ -59,13 +57,7 @@ class PollsController < ApplicationController
   # GET /polls/1.json
   def show
     @title = t 'poll.show_title'
-    @poll = Poll.find params[:id]
-
-    if params[:layout]
-      @layout = params[:layout]
-    else
-      @layout = 'application'
-    end
+    @layout = params[:layout] || 'application'
 
     respond_to do |format|
       if @poll.present?
@@ -92,10 +84,9 @@ class PollsController < ApplicationController
   # GET /polls/1/edit
   def edit
     @title = t 'poll.edit_title'
-    @poll = Poll.find(params[:id])
 
-    if @poll.nil? || params[:token] != @poll.access_token
-      redirect_to login_users_url, alert: t('poll.not_found')
+    if @poll.nil? || (params[:token] != @poll.access_token)
+      redirect_to login_url, alert: t('poll.not_found')
     elsif @poll.answered?
       redirect_to poll_path(@poll, layout: 'application_clean'), alert: t('poll.access_denied')
     end
@@ -105,8 +96,7 @@ class PollsController < ApplicationController
   # POST /polls.json
   def create
     @title = t 'poll.new_title'
-    @poll = Poll.new(poll_params)
-    @poll.organization = @auth_organization
+    @poll = Poll.list.new(poll_params)
     polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
               questionnaire_id: @poll.questionnaire.id,
               user_id: @poll.user.id
@@ -129,14 +119,13 @@ class PollsController < ApplicationController
   # PATCH /polls/1.json
   def update
     @title = t 'poll.edit_title'
-    @poll = Poll.find(params[:id])
 
     respond_to do |format|
       if @poll.nil?
-        format.html { redirect_to login_users_url, alert: t('poll.not_found') }
+        format.html { redirect_to login_url, alert: t('poll.not_found') }
       elsif @poll.update(poll_params)
         if @auth_user
-          format.html { redirect_to login_users_url, notice: t('poll.correctly_updated') }
+          format.html { redirect_to login_url, notice: t('poll.correctly_updated') }
         else
           format.html { redirect_to poll_url(@poll, layout: 'application_clean'), notice: t('poll.correctly_updated') }
         end
@@ -154,7 +143,6 @@ class PollsController < ApplicationController
   # DELETE /polls/1
   # DELETE /polls/1.json
   def destroy
-    @poll = Poll.find(params[:id])
     @poll.destroy
 
     respond_to do |format|
@@ -173,7 +161,7 @@ class PollsController < ApplicationController
     ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       self_id: params[:user_id]
     }
     @tokens.each_with_index do |t, i|
@@ -233,7 +221,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -354,7 +342,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :portrait
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -537,7 +525,7 @@ class PollsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
 
@@ -647,7 +635,7 @@ class PollsController < ApplicationController
       @parsed_file.each  do |row|
         poll = Poll.new(
           questionnaire_id: questionnaire_id,
-          organization_id: @auth_organization.id
+          organization_id: current_organization.id
         )
         poll.customer_email = row[0]
         poll.customer_name = row[1]
@@ -669,30 +657,33 @@ class PollsController < ApplicationController
   end
 
   private
-
-  def poll_params
-    params.require(:poll).permit(
-      :user_id, :questionnaire_id, :comments, :lock_version,
-      answers_attributes: [
-        :id, :answer, :comments, :answer_option_id, :type
-      ]
-    )
-  end
-
-  def load_privileges #:nodoc:
-    if @action_privileges
-      @action_privileges.update(
-        auto_complete_for_user: :read,
-        reports: :read,
-        summary_by_answers: :read,
-        create_summary_by_answers: :read,
-        summary_by_business_unit: :read,
-        create_summary_by_business_unit: :read,
-        summary_by_questionnaire: :read,
-        create_summary_by_questionnaire: :read,
-        auto_complete_for_user: :read,
-        import_csv_customers: :read
+    def poll_params
+      params.require(:poll).permit(
+        :user_id, :questionnaire_id, :comments, :lock_version,
+        answers_attributes: [
+          :id, :answer, :comments, :answer_option_id, :type
+        ]
       )
     end
-  end
+
+    def set_poll
+      @poll = Poll.list.find(params[:id])
+    end
+
+    def load_privileges
+      if @action_privileges
+        @action_privileges.update(
+          auto_complete_for_user: :read,
+          reports: :read,
+          summary_by_answers: :read,
+          create_summary_by_answers: :read,
+          summary_by_business_unit: :read,
+          create_summary_by_business_unit: :read,
+          summary_by_questionnaire: :read,
+          create_summary_by_questionnaire: :read,
+          auto_complete_for_user: :read,
+          import_csv_customers: :read
+        )
+      end
+    end
 end

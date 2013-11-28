@@ -2,22 +2,20 @@
 # utilizarse
 module ParameterSelector
   def parameter_in(organization_id, param_name, param_date = nil, show_value = false)
-    raise 'No organization selected' unless organization_id
+    organization_id = Organization.current_id unless organization_id
 
-    Setting.find_by(name: param_name, organization_id: organization_id).try(:value)
+    setting = Setting.find_by(
+      name: param_name, organization_id: organization_id
+    ).try(:value)
+
+    setting || DEFAULT_SETTINGS[param_name].fetch('value')
   end
 
   def get_parameter(param_name, show_value = false, organization_id = nil)
-    if self.respond_to?(:created_at)
-      self.parameter_in(
-        organization_id || GlobalModelConfig.current_organization_id, param_name
-      )
-    end
+    self.parameter_in(organization_id, param_name)
   end
 
   def get_parameter_for_now(param_name, show_value = false, organization_id = nil)
-    self.parameter_in(
-      organization_id || GlobalModelConfig.current_organization_id, param_name
-    )
+    self.parameter_in(organization_id, param_name)
   end
 end

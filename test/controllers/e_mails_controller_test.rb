@@ -2,10 +2,10 @@ require 'test_helper'
 
 class EMailsControllerTest < ActionController::TestCase
   fixtures :e_mails
-  
+
   setup do
     @email = e_mails(:urgent_email)
-    
+
     perform_auth
   end
 
@@ -16,7 +16,7 @@ class EMailsControllerTest < ActionController::TestCase
     assert_select '#error_body', false
     assert_template 'e_mails/index'
   end
-  
+
   test 'show email' do
     get :show, :id => @email.to_param
     assert_response :success

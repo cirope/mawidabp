@@ -5,6 +5,10 @@
 class PlansController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
+  before_action :set_plan, only: [
+    :show, :edit, :update, :destroy, :export_to_pdf
+  ]
+  before_action :set_plan_clone, only: [:new, :create]
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista los planes de trabajo
@@ -13,9 +17,9 @@ class PlansController < ApplicationController
   # * GET /plans.xml
   def index
     @title = t 'plan.index_title'
-    @plans = Plan.includes(:period).where(
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).order("#{Period.table_name}.start DESC").paginate(
+    @plans = Plan.list.includes(:period).order(
+      "#{Period.table_name}.start DESC"
+    ).paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
@@ -31,7 +35,6 @@ class PlansController < ApplicationController
   # * GET /plans/1.xml
   def show
     @title = t 'plan.show_title'
-    @plan = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -46,10 +49,8 @@ class PlansController < ApplicationController
   def new
     @title = t 'plan.new_title'
     @plan = Plan.new
-    clone_id = params[:clone_from].to_i
-    clone_plan = find_with_organization(clone_id) if exists?(clone_id)
 
-    @plan.clone_from clone_plan if clone_plan
+    @plan.clone_from @plan_clone if @plan_clone
 
     respond_to do |format|
       format.html # new.html.erb
@@ -62,7 +63,6 @@ class PlansController < ApplicationController
   # * GET /plans/1/edit
   def edit
     @title = t 'plan.edit_title'
-    @plan = find_with_organization(params[:id], true)
   end
 
   # Crea un nuevo plan de trabajo siempre que cumpla con las validaciones.
@@ -72,15 +72,18 @@ class PlansController < ApplicationController
   # * POST /plans.xml
   def create
     @title = t 'plan.new_title'
-    @plan = Plan.new(plan_params)
-    clone_id = params[:clone_from].to_i
-    clone_plan = find_with_organization(clone_id) if exists?(clone_id)
+    @plan = Plan.list.new(plan_params)
 
-    @plan.clone_from clone_plan if clone_plan
+    @plan.clone_from @plan_clone if @plan_clone
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_created')) }
+        format.html {
+          redirect_to(
+            edit_plan_url(@plan, business_unit_type: params[:business_unit_type]),
+            notice: t('plan.correctly_created')
+          )
+        }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => :new }
@@ -97,11 +100,15 @@ class PlansController < ApplicationController
   # * PATCH /plans/1.xml
   def update
     @title = t 'plan.edit_title'
-    @plan = find_with_organization(params[:id], true)
 
     respond_to do |format|
       if @plan.update(plan_params)
-        format.html { redirect_to(edit_plan_url(@plan, :business_unit_type => params[:business_unit_type]), :notice => t('plan.correctly_updated')) }
+        format.html {
+          redirect_to(
+            edit_plan_url(@plan, business_unit_type: params[:business_unit_type]),
+            notice: t('plan.correctly_updated')
+          )
+        }
         format.xml  { head :ok }
       else
         format.html { render :action => :edit }
@@ -119,8 +126,6 @@ class PlansController < ApplicationController
   # * DELETE /plans/1
   # * DELETE /plans/1.xml
   def destroy
-    @plan = find_with_organization(params[:id])
-
     unless @plan.destroy
       flash.alert = t 'plan.errors.can_not_be_destroyed'
     end
@@ -135,8 +140,7 @@ class PlansController < ApplicationController
   #
   # * GET /plans/export_to_pdf/1
   def export_to_pdf
-    @plan = find_with_organization(params[:id], true)
-    @plan.to_pdf @auth_organization, !params[:include_details].blank?
+    @plan.to_pdf current_organization, !params[:include_details].blank?
 
     respond_to do |format|
       format.html { redirect_to @plan.relative_pdf_path }
@@ -151,7 +155,7 @@ class PlansController < ApplicationController
     conditions = [
       "#{BusinessUnitType.table_name}.organization_id = :organization_id"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
 
     if params[:business_unit_type_id].to_i > 0
       conditions << "#{BusinessUnitType.table_name}.id = :but_id"
@@ -188,7 +192,7 @@ class PlansController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -222,7 +226,6 @@ class PlansController < ApplicationController
   end
 
   private
-
     def plan_params
       params.require(:plan).permit(
         :period_id, :allow_overload, :allow_duplication, :new_version,
@@ -242,39 +245,20 @@ class PlansController < ApplicationController
       end
     end
 
-    # Busca el plan de trabajo indicado siempre que pertenezca a la organización.
-    # En el caso que no se encuentre (ya sea que no existe un plan de trabajo con
-    # ese ID o que no pertenece a la organización con la que se autenticó el
-    # usuario) devuelve nil.
-    # _id_::  ID del plan de trabajo que se quiere recuperar
-    def find_with_organization(id, include_all = false) #:doc:
-      include = include_all ? [
-        :period, {
-          :plan_items => [
-            :resource_utilizations,
-            :business_unit,
-            {:review => :conclusion_final_review}
-          ]
-        }
-      ] : [:period]
-
-      Plan.includes(*include).where(
-        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-      ).first
+    def set_plan
+      @plan = Plan.list.includes(
+        plan_items: [
+          :resource_utilizations, :business_unit,
+          { review: :conclusion_final_review }
+        ]
+      ).find(params[:id])
     end
 
-    # Indica si existe el plan de trabajo indicado, siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe un plan
-    # de trabajo con ese ID o que no pertenece a la organización con la que se
-    # autenticó el usuario) devuelve false.
-    # _id_::  ID del plan de trabajo que se quiere recuperar
-    def exists?(id) #:doc:
-      Plan.includes(:period).where(
-        :id => id, "#{Period.table_name}.organization_id" => @auth_organization.id
-      ).first
+    def set_plan_clone
+      @plan_clone = Plan.list.find_by(id: params[:clone_from].try(:to_i))
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :export_to_pdf => :read,
         :auto_complete_for_business_unit_business_unit_id => :read,

@@ -5,10 +5,10 @@ class FortressTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @fortress = Fortress.find(
       findings(:bcra_A4609_security_management_responsible_dependency_fortress).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -25,7 +25,7 @@ class FortressTest < ActiveSupport::TestCase
   # Prueba la creación de una fortaleza
   test 'create' do
     assert_difference 'Fortress.count' do
-      @fortress = Fortress.new(
+      @fortress = Fortress.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'F20',

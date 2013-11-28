@@ -8,8 +8,8 @@ class OrganizationRoleTest < ActiveSupport::TestCase
   def setup
     @organization_role = OrganizationRole.find(
       organization_roles(:admin_role_for_administrator_user_in_default_organization).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera

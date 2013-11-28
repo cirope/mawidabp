@@ -6,6 +6,8 @@ class ErrorRecordTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @error_record = ErrorRecord.find(
       error_records(:administrator_user_failed_attempt).id)
   end
@@ -24,7 +26,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
   # Prueba la creación de un registro de error
   test 'create' do
     assert_difference 'ErrorRecord.count' do
-      @error_record = ErrorRecord.create(
+      @error_record = ErrorRecord.list.create(
         :error => 1,
         :data => 'Some data',
         :user_id => users(:administrator_user).id

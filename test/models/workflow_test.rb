@@ -7,6 +7,8 @@ class WorkflowTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @workflow = Workflow.find workflows(:with_conclusion_workflow).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -21,7 +23,7 @@ class WorkflowTest < ActiveSupport::TestCase
   # Prueba la creación de un programa de trabajo
   test 'create' do
     assert_difference 'Workflow.count' do
-      Workflow.create(
+      Workflow.list.create(
         :period_id => periods(:current_period).id,
         :review_id => reviews(:review_without_conclusion).id
       )

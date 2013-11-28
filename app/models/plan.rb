@@ -1,8 +1,8 @@
 class Plan < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Callbacks
@@ -15,8 +15,11 @@ class Plan < ActiveRecord::Base
 
   attr_readonly :period_id
 
+  # Scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
+
   # Restricciones
-  validates :period_id, :presence => true
+  validates :period_id, :organization, :presence => true
   validates :period_id, :uniqueness => true, :allow_nil => true,
     :allow_blank => true
   validates :period_id, :numericality => {:only_integer => true},
@@ -29,7 +32,7 @@ class Plan < ActiveRecord::Base
 
   # Relaciones
   belongs_to :period
-  has_one :organization, :through => :period
+  belongs_to :organization
   has_many :plan_items, -> { order("#{PlanItem.table_name}.order_number ASC") },
     :dependent => :destroy
 

@@ -1,8 +1,8 @@
 class Control < ActiveRecord::Base
   include ParameterSelector
-  
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   attr_accessor :validates_presence_of_control, :validates_presence_of_effects,

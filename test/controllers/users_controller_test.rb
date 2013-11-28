@@ -14,9 +14,6 @@ class UsersControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     id_param = {:id => users(:administrator_user).to_param}
-    public_actions = [
-      [:get, :login]
-    ]
     private_actions = [
       [:get, :index],
       [:get, :show, id_param],
@@ -30,416 +27,16 @@ class UsersControllerTest < ActionController::TestCase
       [:patch, :update_password, id_param],
       [:get, :edit_personal_data, id_param],
       [:patch, :update_personal_data, id_param],
-      [:get, :logout, id_param],
       [:get, :new_initial],
       [:post, :create_initial],
     ]
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert [I18n.t('message.must_be_authenticated'),
         I18n.t('user.confirmation_link_invalid')].include?(flash.alert)
     end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
-  end
-
-  test 'login users' do
-    get :login
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_select '#error_body', false
-    assert_template 'users/login'
-  end
-
-  test 'login users in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    get :login
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_select '#error_body', false
-    assert_template 'users/login'
-  end
-
-  # Prueba que no pueda autenticarse un usuario que no es válido
-  test 'invalid user and password attempt' do
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => { :user => 'someone', :password => 'without authorization' }
-
-      error_record = ErrorRecord.where(
-        'data LIKE :data', :data => '%someone%'
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  # Prueba que no pueda autenticarse un usuario que está dado de baja
-  test 'login hidden user' do
-    user = users(:administrator_user)
-    user.hidden = true
-    assert user.save
-
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => user.user,
-          :password => PLAIN_PASSWORDS[user.user]
-        }
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-
-  test 'invalid user and password attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => { :user => 'someone', :password => 'without authorization' }
-
-      error_record = ErrorRecord.where(
-        'data LIKE :data', :data => '%someone%'
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'invalid password attempt' do
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:administrator_user).user,
-          :password => 'wrong password'
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:administrator_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'invalid password attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:administrator_user).user,
-          :password => 'wrong password'
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:administrator_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'disabled user attempt' do
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:disabled_user).user,
-          :password => PLAIN_PASSWORDS[users(:disabled_user).user]
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:disabled_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'disabled user attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:disabled_user).user,
-          :password => PLAIN_PASSWORDS[users(:disabled_user).user]
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:disabled_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'no group admin user attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:administrator_second_user).user,
-          :password => PLAIN_PASSWORDS[users(:administrator_second_user).user]
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:administrator_second_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'excede maximun number off wrong attempts' do
-    user = User.find users(:administrator_user).id
-    max_attempts = user.get_parameter(:attempts_count).to_i
-
-    assert_difference 'ErrorRecord.count', max_attempts + 1 do
-      max_attempts.times do
-        post :create_session,
-          :user => { :user => user.user, :password => 'wrong password' }
-        error_record = ErrorRecord.where(
-          :user_id => user.id, :error => ErrorRecord::ERRORS[:on_login]
-        ).order('created_at DESC').first
-        assert_kind_of ErrorRecord, error_record
-        assert_response :success
-        # en div#alert se leen los mensajes de flash[]
-        assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-      end
-
-      assert_response :success
-      error_record = ErrorRecord.where(
-        :user_id => users(:administrator_user).id,
-        :error => ErrorRecord::ERRORS[:user_disabled]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      user = User.find users(:administrator_user).id
-      assert_equal max_attempts, user.failed_attempts
-      assert_equal false, user.enable?
-    end
-  end
-
-  test 'login without organization' do
-    @request.host = 'localhost.i'
-
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-    assert_response :success
-    assert_select '#no_organization', I18n.t('message.no_organization')
-  end
-
-  test 'login sucesfully' do
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-
-    assert_redirected_to :controller => :welcome, :action => :index
-    login_record = LoginRecord.where(
-      :user_id => users(:administrator_user).id,
-      :organization_id => organizations(:default_organization).id
-    ).first
-    assert_kind_of LoginRecord, login_record
-  end
-
-  test 'login with polls' do
-    user = users(:poll_user)
-    post :create_session,
-      :user => {
-        :user => user.user,
-        :password => PLAIN_PASSWORDS[user.user]
-      }
-
-    poll = user.first_pending_poll
-    assert_redirected_to edit_poll_url(poll, :layout => 'application_clean', :token => poll.access_token)
-
-    login_record = LoginRecord.where(
-      :user_id => user.id,
-      :organization_id => organizations(:default_organization).id
-    ).first
-
-    assert_kind_of LoginRecord, login_record
-  end
-
-  test 'login sucesfully in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
-
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-
-    assert_redirected_to :controller => :groups, :action => :index
-    login_record = LoginRecord.where(
-      :user_id => users(:administrator_user).id,
-      :organization_id => organizations(:default_organization).id
-    ).first
-    assert_kind_of LoginRecord, login_record
-  end
-
-  test 'login with hashed password' do
-    assert_difference 'ErrorRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:administrator_user).user,
-          :password => users(:administrator_user).password
-        }
-      error_record = ErrorRecord.where(
-        :user_id => users(:administrator_user).id,
-        :error => ErrorRecord::ERRORS[:on_login]
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_response :success
-      # en div#alert se leen los mensajes de flash[]
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
-    end
-  end
-
-  test 'expired user attempt' do
-    user = User.find users(:expired_user).id
-    # TODO: eliminar cuando se corrija el error en JRuby que no permite que
-    # este atributo se cargue desde los fixtures
-    user.update_attribute :last_access,
-      get_test_parameter(:account_expire_time).to_i.days.ago.yesterday
-
-    assert user.enable?
-    post :create_session,
-      :user => {
-        :user => users(:expired_user).user,
-        :password => PLAIN_PASSWORDS[users(:expired_user).user]
-      }
-
-    assert_select '#error_body', false
-    assert_response :success
-    assert !user.reload.enable?
-  end
-
-  test 'expired password' do
-    user = User.find users(:administrator_user).id
-    user.update_attribute :password_changed,
-      get_test_parameter(:password_expire_time).to_i.next.days.ago
-
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-
-    assert_redirected_to edit_password_user_url(user)
-
-    # Cualquier petición redirecciona nuevamente al cambio de contraseña
-    get :index
-    assert_redirected_to edit_password_user_url(user)
-  end
-
-  test 'warning about password expiration' do
-    password_changed = get_test_parameter(
-      :expire_notification).to_i.next.days.ago
-    user = User.find users(:administrator_user).id
-
-    user.update_attribute :password_changed, password_changed
-
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-    assert_redirected_to(:controller => :welcome, :action => :index)
-    login_record = LoginRecord.where(
-      :user_id => users(:administrator_user).id,
-      :organization_id => organizations(:default_organization).id
-    ).first
-    assert_kind_of LoginRecord, login_record
-    assert_not_nil I18n.t('message.password_expire_in_x',
-      :count => get_test_parameter(:expire_notification).to_i - 2),
-      flash.notice
-  end
-
-  test 'concurrent users' do
-    parameter = Setting.where(
-      :organization_id => organizations(:default_organization).id,
-      :name => 'allow_concurrent_sessions'
-    ).first
-
-    assert parameter.update(:value => 0)
-
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-
-    assert_redirected_to :controller => :welcome, :action => :index
-
-    post :create_session, {:user => {
-      :user => users(:administrator_user).user,
-      :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-    }}, {}
-
-    assert_response :success
-    assert_select '#error_body', false
-    assert_template 'users/login'
-    assert_select '#alert p', I18n.t('message.you_are_already_logged')
-  end
-
-  test 'redirected instead of relogin' do
-    post :create_session,
-      :user => {
-        :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
-      }
-
-    assert_redirected_to :controller => :welcome, :action => :index
-
-    get :login
-
-    assert_redirected_to :controller => :welcome, :action => :index
-  end
-
-  test 'first login' do
-    assert_difference 'LoginRecord.count' do
-      post :create_session,
-        :user => {
-          :user => users(:first_time_user).user,
-          :password => PLAIN_PASSWORDS[users(:first_time_user).user]
-        }
-    end
-
-    assert_redirected_to edit_password_user_url(users(:first_time_user))
-    login_record = LoginRecord.where(
-      :user_id => users(:first_time_user).id,
-      :organization_id => organizations(:default_organization).id
-    ).first
-    assert_kind_of LoginRecord, login_record
   end
 
   test 'list users' do
@@ -726,7 +323,7 @@ class UsersControllerTest < ActionController::TestCase
       post :send_password_reset, :email => users(:blank_password_user).email
     end
 
-    assert_redirected_to login_users_url
+    assert_redirected_to login_url
     user = User.find(users(:blank_password_user).id)
     assert_not_nil user.change_password_hash
     assert_not_equal original_hash, user.change_password_hash
@@ -753,7 +350,7 @@ class UsersControllerTest < ActionController::TestCase
       }
 
       user = User.find(users(:administrator_user).id)
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert_equal User.digest('new_password_123', user.salt), user.password
     end
   end
@@ -777,7 +374,7 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     user = User.find(users(:blank_password_user).id)
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_equal User.digest('new_password_123', user.salt), user.password
     assert_not_nil user.last_access
     assert_equal 0, user.failed_attempts
@@ -785,7 +382,7 @@ class UsersControllerTest < ActionController::TestCase
     # No se puede usar 2 veces el mismo hash
     get :edit_password, {:id => users(:blank_password_user).to_param,
       :confirmation_hash => users(:blank_password_user).change_password_hash}
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
   end
 
   test 'change expired blank password' do
@@ -801,7 +398,7 @@ class UsersControllerTest < ActionController::TestCase
 
 
     user = User.find(users(:expired_blank_password_user).id)
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_not_equal User.digest('new_password_123', user.salt), user.password
   end
 
@@ -815,7 +412,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'new initial with invalid hash' do
     get :new_initial, :hash => "#{groups(:main_group).admin_hash}x"
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
@@ -844,7 +441,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_equal I18n.t('user.correctly_created'), flash.notice
   end
 
@@ -873,7 +470,7 @@ class UsersControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
@@ -892,7 +489,7 @@ class UsersControllerTest < ActionController::TestCase
     xhr :get, :initial_roles, :id => organizations(:default_organization).id,
       :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
 
-    assert_redirected_to :controller => :users, :action => :login
+    assert_redirected_to login_url
     assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
@@ -924,13 +521,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal 'Updated Name', assigns(:auth_user).name
     assert_select '#error_body', false
     assert_template 'users/edit_personal_data'
-  end
-
-  test 'logout' do
-    perform_auth
-    get :logout, :id => users(:administrator_user).user
-    assert_nil session[:user_id]
-    assert_redirected_to :controller => :users, :action => :login
   end
 
   test 'user findings reassignment edit' do

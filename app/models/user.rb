@@ -8,6 +8,16 @@ class User < ActiveRecord::Base
 
   trimmed_fields :user, :email, :name, :last_name
 
+  has_paper_trail(
+    ignore: [
+      :last_access, :logged_in, :updated_at, :lock_version
+    ],
+    meta: {
+      organization_id: ->(model) { Organization.current_id },
+      important: ->(user) { user.is_an_important_change }
+    }
+  )
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
     user: {
@@ -28,13 +38,8 @@ class User < ActiveRecord::Base
     }
   )
 
-  has_paper_trail ignore: [:last_access, :logged_in], meta: {
-    organization_id: ->(user) { GlobalModelConfig.current_organization_id },
-    important: ->(user) { user.is_an_important_change }
-  }
-
   acts_as_tree foreign_key: 'manager_id', readonly: true,
-    order: 'last_name ASC, name ASC', dependent: :nullify
+    order: "#{table_name}.last_name ASC, #{table_name}.name ASC", dependent: :nullify
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
@@ -45,9 +50,9 @@ class User < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    includes(:organizations).references(:organizations).where(
-      organizations: { id: GlobalModelConfig.current_organization_id }
-    )
+    includes(:organizations).where(
+      organizations: { id: Organization.current_id }
+    ).references(:organizations)
   }
   scope :with_valid_confirmation_hash, ->(confirmation_hash) {
     where(
@@ -67,10 +72,7 @@ class User < ActiveRecord::Base
       findings: { state: Finding::STATUS[:notify], final: false }
     ).order(["#{table_name}.last_name ASC", "#{table_name}.name ASC"])
   }
-  scope :not_hidden, -> { where(
-    'hidden = false'
-    )
-  }
+  scope :not_hidden, -> { where('hidden = false') }
 
   # Callbacks
   before_destroy :has_not_orphan_fingings?
@@ -118,12 +120,9 @@ class User < ActiveRecord::Base
     if user
       digested_password = User.digest(value, user.salt) if value && user
       repeated = false
-      password_min_length = record.get_parameter_for_now(
-        :password_minimum_length).to_i
-      password_min_time = record.get_parameter_for_now(
-        :password_minimum_time).to_i
-      password_regex = Regexp.new record.get_parameter_for_now(
-        :password_constraint)
+      password_min_length = record.get_parameter_for_now(:password_minimum_length).to_i
+      password_min_time = record.get_parameter_for_now(:password_minimum_time).to_i
+      password_regex = Regexp.new(record.get_parameter_for_now(:password_constraint))
 
       record.errors.add attr, :invalid if value && value !~ password_regex
 
@@ -261,7 +260,7 @@ class User < ActiveRecord::Base
 
   def first_pending_poll
     polls.detect do |p|
-      p.answered == false && p.organization.id == GlobalModelConfig.current_organization_id
+      p.answered == false && p.organization.id == Organization.current_id
     end
   end
 
@@ -349,7 +348,7 @@ class User < ActiveRecord::Base
 
   def send_notification_if_necesary
     unless send_notification_email.blank?
-      organization = Organization.find GlobalModelConfig.current_organization_id
+      organization = Organization.find Organization.current_id
 
       reset_password!(organization, false)
 
@@ -401,7 +400,7 @@ class User < ActiveRecord::Base
 
   # Método para determinar si el usuario está o no habilitado
   def is_enable?
-    enable? && GlobalModelConfig.current_organization_id && !expired?
+    enable? && Organization.current_id && !expired?
   end
 
   def is_group_admin?
@@ -540,7 +539,7 @@ class User < ActiveRecord::Base
   end
 
   def get_type
-    self.roles(GlobalModelConfig.current_organization_id).max.try(:get_type)
+    self.roles(Organization.current_id).max.try(:get_type)
   end
 
   def privileges(organization)
@@ -564,7 +563,7 @@ class User < ActiveRecord::Base
   # Definición dinámica de todos los métodos "tipo?"
   Role::TYPES.each do |type, value|
     define_method("#{type}?") do
-      self.roles(GlobalModelConfig.current_organization_id).any? do |role|
+      self.roles(Organization.current_id).any? do |role|
         role.role_type == value
       end
     end

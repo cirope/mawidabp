@@ -5,26 +5,26 @@
 # salir de la aplicación de manera segura.
 class UsersController < ApplicationController
   before_action :auth, except: [
-    :login, :create_session, :edit_password, :update_password, :new_initial,
-    :create_initial, :initial_roles, :reset_password, :send_password_reset
+    :edit_password, :update_password, :new_initial, :create_initial,
+    :initial_roles, :reset_password, :send_password_reset
   ]
   before_action :load_privileges
   before_action :check_privileges, except: [
-    :login, :create_session, :logout, :user_status, :edit_password, :user_status_without_graph,
+    :user_status, :edit_password, :user_status_without_graph,
     :update_password, :edit_personal_data, :update_personal_data, :new_initial,
     :create_initial, :initial_roles, :reset_password, :send_password_reset
   ]
-  layout proc { |controller|
-    use_clean = [
-      'login', 'create_session', 'reset_password', 'send_password_reset'
-    ].include?(controller.action_name)
-
-    controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
-  }
   before_action :set_user, only: [
     :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
     :reassignment_edit, :reassignment_update, :release_edit, :release_update
   ]
+  layout proc { |controller|
+    use_clean = [
+      'reset_password', 'send_password_reset'
+    ].include?(controller.action_name)
+
+    controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
+  }
 
   # Lista los usuarios
   #
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
         ].join(' OR '),
         "#{User.table_name}.group_admin = :boolean_false"
       ].join(' AND '),
-      { organization_id: @auth_organization.id, boolean_false: false }
+      { organization_id: current_organization.id, boolean_false: false }
     ]
 
     build_search_conditions User, default_conditions
@@ -204,161 +204,13 @@ class UsersController < ApplicationController
     end
   end
 
-  # Realiza la autenticación de los usuarios.
-  #
-  # * GET /users/login
-  def login
-    auth_user = User.find(session[:user_id]) if session[:user_id]
-
-    if auth_user && session[:organization_id]
-      auth_organization = Organization.find(session[:organization_id])
-      GlobalModelConfig.current_organization_id = auth_organization.try :id
-    end
-
-    if auth_user.try(:is_enable?) && auth_user.logged_in?
-      redirect_to controller: :welcome
-    else
-      @title = t 'user.login_title'
-      @user = User.new
-      organization_prefix = request.subdomains.first
-      @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
-
-      @organization = Organization.find_by(prefix: organization_prefix)
-    end
-  end
-
-  # Realiza la autenticación de los usuarios.
-  #
-  # * POST /users/create_session
-  def create_session
-    @title = t 'user.login_title'
-    @user = User.new(user_params)
-    organization_prefix = request.subdomains.first
-    @group_admin_mode = organization_prefix == APP_ADMIN_PREFIX
-
-    @organization = Organization.find_by(prefix: organization_prefix)
-
-    GlobalModelConfig.current_organization_id = @organization.try :id
-
-    if @organization || @group_admin_mode
-      conditions = ["LOWER(#{User.table_name}.user) = :user"]
-      parameters = {user: @user.user.downcase}
-
-      if @group_admin_mode
-        conditions << "#{User.table_name}.group_admin = :true"
-        parameters[:true] = true
-      else
-        conditions << "#{Organization.table_name}.id = :organization_id"
-        parameters[:organization_id] = @organization.id
-      end
-
-      auth_user = User.includes(:organizations).where(
-        conditions.join(' AND '), parameters
-      ).references(:organizations).first
-
-      @user.salt = auth_user.salt if auth_user
-      @user.encrypt_password
-
-      if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
-        session[:user_id] = auth_user.id
-        flash.notice ||= t 'message.must_change_the_password'
-        session[:go_to] = edit_password_user_url(auth_user)
-      elsif !@group_admin_mode && auth_user && auth_user.expired?
-        auth_user.is_an_important_change = false
-        auth_user.update_attribute :enable, false
-      end
-
-      if !@group_admin_mode && auth_user && auth_user.is_enable? && !auth_user.hidden &&
-          @user.password_was_encrypted && auth_user.password == @user.password
-        record = LoginRecord.new(
-          user: auth_user,
-          organization: @organization,
-          request: request
-        )
-
-        if record.save
-          days_for_password_expiration =
-            auth_user.days_for_password_expiration
-
-          if days_for_password_expiration
-            flash.notice = t(days_for_password_expiration >= 0 ?
-                'message.password_expire_in_x' :
-                'message.password_expired_x_days_ago',
-              count: days_for_password_expiration.abs)
-          end
-
-          unless auth_user.allow_concurrent_access?
-            auth_user = nil
-            @user = User.new
-            flash.alert = t 'message.you_are_already_logged'
-
-            render action: :login
-          end
-
-          if auth_user
-            session[:last_access] = Time.now
-            auth_user.logged_in!(session[:last_access])
-            session[:user_id] = auth_user.id
-            session[:organization_id] = @organization.id
-            if poll = auth_user.first_pending_poll
-              flash.notice = t 'poll.must_answer_poll'
-              go_to = edit_poll_url(poll, token: poll.access_token, layout: 'application_clean')
-            else
-              go_to = session[:go_to] || { controller: :welcome }
-            end
-            session[:go_to], session[:record_id] = nil, record.id
-
-            redirect_to go_to
-          end
-        end
-      elsif @group_admin_mode && auth_user.try(:is_group_admin?) &&
-          auth_user.password == @user.password
-        session[:last_access] = Time.now
-        auth_user.logged_in!(session[:last_access])
-        session[:user_id] = auth_user.id
-
-        redirect_to controller: :groups, action: :index
-      else
-        if (user = User.find_by(user: @user.user))
-          ErrorRecord.create(user: user, organization: @organization,
-            request: request, error_type: :on_login)
-
-          user.failed_attempts += 1
-          max_attempts = @group_admin_mode ?
-            3 : user.get_parameter(:attempts_count).to_i
-
-          if (max_attempts != 0 && user.failed_attempts >= max_attempts) &&
-              user.is_enable?
-            user.enable = false
-
-            ErrorRecord.create(user: user, organization: @organization,
-              request: request, error_type: :user_disabled)
-          end
-
-          user.is_an_important_change = false
-          user.save(validate: false)
-        else
-          ErrorRecord.create(user_name: @user.user,
-            organization: @organization, request: request,
-            error_type: :on_login)
-        end
-
-        @user.password = nil
-        flash.alert = t 'message.invalid_user_or_password'
-        render action: :login
-      end
-    else
-      render action: :login unless session[:user_id]
-    end
-  end
-
   # Blanquea la contraseña de un usuario
   #
   # * PATCH /users/blank_password/1
   # * PATCH /users/blank_password/1.xml
   def blank_password
     if @user
-      @user.reset_password!(@auth_organization)
+      @user.reset_password!(current_organization)
       redirect_to_index t('user.password_reseted', user: @user.user)
     end
   end
@@ -377,11 +229,11 @@ class UsersController < ApplicationController
   # * POST /users/send_password_reset.xml
   def send_password_reset
     @title = t 'user.reset_password_title'
-    @auth_organization = Organization.find_by(prefix: request.subdomains.first)
+
     @user = find_with_organization(params[:email], :email)
 
     if @user && !@user.hidden
-      @user.reset_password!(@auth_organization)
+      @user.reset_password!(current_organization)
       redirect_to_login t('user.password_reset_sended')
     else
       redirect_to reset_password_users_url, notice: t('user.unknown_email')
@@ -398,7 +250,7 @@ class UsersController < ApplicationController
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
         params[:confirmation_hash]).first
-      @auth_organization = @auth_user.organizations.first if @auth_user
+      @current_organization = @auth_user.organizations.first if @auth_user
     else
       login_check
     end
@@ -421,7 +273,7 @@ class UsersController < ApplicationController
     unless params[:confirmation_hash].blank?
       @auth_user = User.with_valid_confirmation_hash(
         params[:confirmation_hash]).first
-      @auth_organization = @auth_user.organizations.first if @auth_user
+      @current_organization = @auth_user.organizations.first if @auth_user
     else
       login_check
     end
@@ -624,27 +476,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # Cierra la sesión del usuario y registra su egreso
-  #
-  # * GET /users/logout/1
-  # * GET /users/logout/1.xml
-  def logout
-    if session[:record_id] && LoginRecord.exists?(session[:record_id])
-      LoginRecord.find(session[:record_id]).end!
-    end
-
-    @auth_user.logout! if @auth_user
-
-    restart_session
-    redirect_to_login t('message.session_closed_correctly')
-  end
-
   # Lista las usuarios
   #
   # * GET /users/export_to_pdf
   def export_to_pdf
     default_conditions = {
-      "#{Organization.table_name}.id" => @auth_organization.id
+      "#{Organization.table_name}.id" => current_organization.id
     }
 
     build_search_conditions User, default_conditions
@@ -655,7 +492,7 @@ class UsersController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('user.index_title')
 
     column_order = [['user', 10], ['name', 10], ['last_name', 10],
@@ -732,7 +569,7 @@ class UsersController < ApplicationController
     ]
     conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       self_id: params[:user_id]
     }
     @tokens.each_with_index do |t, i|
@@ -776,13 +613,13 @@ class UsersController < ApplicationController
             "#{Organization.table_name}.id IS NULL"
           ].join(' OR ')
         ].map {|c| "(#{c})"}.join(' AND '),
-        {:id => id, :organization_id => @auth_organization.id}
+        {:id => id, :organization_id => current_organization.try(:id)}
       ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
     end
 
     def set_user
       @user = User.includes(:organizations).where(
-        user: params[:id], "#{Organization.table_name}.id" => current_organization
+        user: params[:id], "#{Organization.table_name}.id" => current_organization.try(:id)
       ).references(:organizations).first if params[:id].present?
     end
 

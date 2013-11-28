@@ -8,8 +8,8 @@ class ReviewUserAssignmentTest < ActiveSupport::TestCase
   def setup
     @review_user_assignment = ReviewUserAssignment.find(review_user_assignments(
         :review_with_conclusion_auditor).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera

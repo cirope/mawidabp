@@ -15,13 +15,10 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items.xml
   def index
     @title = t 'control_objective_item.index_title'
-    default_conditions = {
-      Period.table_name => {organization_id: @auth_organization.id}
-    }
 
-    build_search_conditions ControlObjectiveItem, default_conditions
+    build_search_conditions ControlObjectiveItem
 
-    @control_objectives = ControlObjectiveItem.includes(
+    @control_objectives = ControlObjectiveItem.list.includes(
         :weaknesses,
         :work_papers,
         {review: :period},
@@ -58,12 +55,11 @@ class ControlObjectiveItemsController < ApplicationController
   # * GET /control_objective_items/1/edit
   def edit
     @title = t 'control_objective_item.edit_title'
-    
+
     if params[:control_objective] && params[:review]
-      @control_objective_item = ControlObjectiveItem.includes(:review).where(
+      @control_objective_item = ControlObjectiveItem.list.includes(:review).where(
         control_objective_id: params[:control_objective],
-        review_id: params[:review],
-        Review.table_name => {organization_id: @auth_organization.id}
+        review_id: params[:review]
       ).order('created_at DESC').first
       session[:back_to] = edit_review_url(params[:review].to_i)
     end
@@ -92,7 +88,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = review.control_objective_items.detect do |coi|
         coi.id == @control_objective_item.id
       end
-      
+
       if updated
         flash.notice = t 'control_objective_item.correctly_updated'
         back_to, session[:back_to] = session[:back_to], nil
@@ -106,9 +102,9 @@ class ControlObjectiveItemsController < ApplicationController
       end
     end
 
-    rescue ActiveRecord::StaleObjectError
-      flash.alert = t 'control_objective_item.stale_object_error'
-      redirect_to action: :edit
+  rescue ActiveRecord::StaleObjectError
+    flash.alert = t 'control_objective_item.stale_object_error'
+    redirect_to action: :edit
   end
 
   # Elimina un objetivo de control
@@ -128,11 +124,9 @@ class ControlObjectiveItemsController < ApplicationController
 
   private
     def set_control_objective_item
-      @control_objective_item = ControlObjectiveItem.includes(
-        :control, :weaknesses, :work_papers, { review: :period }
-      ).where(
-        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
-      ).first
+      @control_objective_item = ControlObjectiveItem.list.includes(
+        :control, :weaknesses, :work_papers
+      ).find(params[:id])
     end
 
     def control_objective_item_params

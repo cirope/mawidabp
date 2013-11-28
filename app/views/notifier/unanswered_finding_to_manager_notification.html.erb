@@ -15,7 +15,7 @@
   </h3>
 
   <% if @finding.organization %>
-    <% GlobalModelConfig.current_organization_id = @finding.organization.id %>
+    <% Organization.current_id = @finding.organization.id %>
     <h2 style="margin-bottom: 1em;"><%=h @finding.organization.name %></h2>
   <% end %>
 

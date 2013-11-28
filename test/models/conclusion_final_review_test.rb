@@ -8,8 +8,8 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
   def setup
     @conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_current_final_review).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -38,7 +38,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings_count do
-        @conclusion_review = ConclusionFinalReview.new({
+        @conclusion_review = ConclusionFinalReview.list.new({
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -84,7 +84,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
 
     assert_difference 'ConclusionFinalReview.count' do
       assert_difference 'Finding.count', findings.size do
-        @conclusion_review = ConclusionFinalReview.new({
+        @conclusion_review = ConclusionFinalReview.list.new({
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -131,7 +131,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     weakness = Weakness.find findings(:bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness).id
     assert weakness.update_attribute :state, 7
 
-    @conclusion_review = ConclusionFinalReview.new({
+    @conclusion_review = ConclusionFinalReview.list.new({
           :review => review,
           :issue_date => Date.today,
           :close_date => 2.days.from_now.to_date,
@@ -235,7 +235,7 @@ class ConclusionFinalReviewTest < ActiveSupport::TestCase
     assert_equal 0, final_work_papers_count
 
     assert_difference 'ConclusionFinalReview.count' do
-      @conclusion_review = ConclusionFinalReview.new({
+      @conclusion_review = ConclusionFinalReview.list.new({
         :review => review,
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,

@@ -7,8 +7,8 @@ class OrganizationTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @organization = Organization.find organizations(:default_organization).id
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
