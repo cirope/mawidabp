@@ -39,14 +39,14 @@ MawidaBP::Application.routes.draw do
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 
   [
-    'weaknesses_by_state',
+    'weaknesses_by_state_execution',
     'detailed_management_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
   [
-    'create_weaknesses_by_state',
+    'create_weaknesses_by_state_execution',
     'create_detailed_management_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
