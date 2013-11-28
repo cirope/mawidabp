@@ -104,7 +104,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :nonconformities, -> { where(final: false) }, dependent: :destroy
   has_many :potential_nonconformities, -> { where(final: false) },
     dependent: :destroy
-  has_many :final_weaknesses, -> { where(final: false) }, dependent: :destroy,
+  has_many :final_weaknesses, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Weakness'
   has_many :final_oportunities, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Oportunity'
