@@ -1,9 +1,9 @@
 module Reports::Pdf
 
-  def init_pdf(organization, title, subtitle)
+  def init_pdf(title, subtitle)
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title title, PDF_FONT_SIZE, :center
 
