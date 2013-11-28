@@ -3,6 +3,7 @@ class Review < ActiveRecord::Base
   include Parameters::Score
   include ParameterSelector
   include Trimmer
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :identification
 

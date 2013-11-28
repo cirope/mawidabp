@@ -1,4 +1,6 @@
 class EMail < ActiveRecord::Base
+  include PaperTrail::DependentDestroy
+
   has_paper_trail
 
   # Constantes

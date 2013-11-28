@@ -1,9 +1,9 @@
 class BusinessUnit < ActiveRecord::Base
   include Trimmer
+  include ParameterSelector
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :name
-
-  include ParameterSelector
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }

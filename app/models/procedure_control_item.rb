@@ -2,6 +2,7 @@ class ProcedureControlItem < ActiveRecord::Base
   include Parameters::Approach
   include Parameters::Frequency
   include Comparable
+  include PaperTrail::DependentDestroy
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }

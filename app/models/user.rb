@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   include ParameterSelector
   include Comparable
   include Trimmer
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :user, :email, :name, :last_name
 
@@ -160,7 +161,8 @@ class User < ActiveRecord::Base
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_many :user_who_confirms, class_name: 'Notification', dependent: :destroy
+  has_many :confirmation_notifications, class_name: 'Notification',
+    dependent: :destroy, foreign_key: 'user_who_confirm_id'
   has_many :costs, dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy
   has_many :review_user_assignments, dependent: :destroy
@@ -169,7 +171,7 @@ class User < ActiveRecord::Base
     after_add: :mark_roles_as_changed,
     after_remove: :mark_roles_as_changed
   has_many :organizations, -> { uniq }, through: :organization_roles
-  has_many :finding_user_assignments
+  has_many :finding_user_assignments, dependent: :destroy
   has_many :related_user_relations, dependent: :destroy
   has_many :related_users, through: :related_user_relations
   has_many :findings, -> { uniq }, through: :finding_user_assignments,

@@ -1,5 +1,6 @@
 class ProcedureControlSubitem < ActiveRecord::Base
   include Parameters::Relevance
+  include PaperTrail::DependentDestroy
 
   # Alias de atributos
   alias_attribute :label, :control_objective_text

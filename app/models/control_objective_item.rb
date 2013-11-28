@@ -3,6 +3,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   include Parameters::Qualification
   include ParameterSelector
   include Comparable
+  include PaperTrail::DependentDestroy
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }

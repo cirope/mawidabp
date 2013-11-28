@@ -1,6 +1,7 @@
 class ControlObjective < ActiveRecord::Base
   include Parameters::Relevance
   include Parameters::Risk
+  include PaperTrail::DependentDestroy
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }

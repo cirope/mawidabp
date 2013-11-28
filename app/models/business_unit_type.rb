@@ -1,5 +1,6 @@
 class BusinessUnitType < ActiveRecord::Base
   include Trimmer
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :name, :business_unit_label, :project_label
 

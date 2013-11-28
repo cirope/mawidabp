@@ -5,7 +5,7 @@ namespace :epilady do
     PaperTrail.enabled = false
     ActiveRecord::Base.lock_optimistically = false
 
-    orgs_prefix = ['uai-inv']
+    orgs_prefix = ['inv']
 
     Organization.where(prefix: orgs_prefix).each do |o|
 
@@ -13,12 +13,9 @@ namespace :epilady do
         organization_id: o.id
       ).map(&:user).map(&:id).uniq
 
-      PaperTrail::Version.where(organization_id: o.id).find_each do |version|
-        version.destroy
-      end
-
       o.destroy
-
+    end
+=begin
       current_users_ids = OrganizationRole.where(
         'user_id IN (?)', users_ids
       ).map(&:user).map(&:id).uniq
@@ -27,5 +24,6 @@ namespace :epilady do
 
       users.each { |u| u.destroy }
     end
+=end
   end
 end

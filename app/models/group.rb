@@ -1,5 +1,6 @@
 class Group < ActiveRecord::Base
   include Trimmer
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :name, :admin_email, :admin_hash
 

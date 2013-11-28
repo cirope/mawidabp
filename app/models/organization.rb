@@ -3,6 +3,7 @@ class Organization < ActiveRecord::Base
   include Trimmer
   include Comparable
   include Organizations::Setting
+  include PaperTrail::DependentDestroy
 
   trimmed_fields :name, :prefix
 
@@ -56,6 +57,8 @@ class Organization < ActiveRecord::Base
   has_many :questionnaires, dependent: :destroy
   has_many :users, through: :organization_roles, dependent: :destroy
   has_many :e_mails, dependent: :destroy
+  has_many :version_organizations, dependent: :destroy, class_name: 'PaperTrail::Version',
+    foreign_key: 'organization_id'
 
   accepts_nested_attributes_for :image_model, allow_destroy: true,
     reject_if: ->(attributes) { attributes['image'].blank? }

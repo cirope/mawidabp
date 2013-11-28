@@ -1,4 +1,6 @@
 class Poll < ActiveRecord::Base
+  include PaperTrail::DependentDestroy
+
   before_save :generate_access_token, :on => :create
 
   has_paper_trail meta: {
