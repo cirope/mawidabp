@@ -6,7 +6,7 @@ namespace :epilady do
     ActiveRecord::Base.lock_optimistically = false
     ActiveRecord::Base.logger = nil
 
-    orgs_prefix = ['spv']
+    orgs_prefix = ['brc']
 
     Organization.where(prefix: orgs_prefix).each do |o|
 
@@ -22,7 +22,7 @@ namespace :epilady do
 
       users = User.find(users_ids - current_users_ids)
 
-      users.find_each { |u| u.destroy }
+      users.each { |u| u.destroy }
     end
   end
 end
