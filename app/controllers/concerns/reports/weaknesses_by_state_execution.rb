@@ -48,7 +48,7 @@ module Reports::WeaknessesByStateExecution
   def create_weaknesses_by_state_execution
     self.weaknesses_by_state_execution
 
-    pdf = init_pdf(params[:report_title])
+    pdf = init_pdf(params[:report_title], nil)
 
     pdf.text '<i>%s</i>' %
       t('execution_reports.weaknesses_by_state.clarification'),
