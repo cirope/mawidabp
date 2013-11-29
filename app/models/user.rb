@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   include Comparable
   include Trimmer
   include PaperTrail::DependentDestroy
+  include Associations::DestroyInBatches
 
   trimmed_fields :user, :email, :name, :last_name
 
@@ -161,7 +162,7 @@ class User < ActiveRecord::Base
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_many :confirmation_notifications, class_name: 'Notification',
+  has_many :confirmed_notifications, class_name: 'Notification',
     dependent: :nullify, foreign_key: 'user_who_confirm_id'
   has_many :costs, dependent: :destroy
   has_many :resource_utilizations, as: :resource, dependent: :destroy

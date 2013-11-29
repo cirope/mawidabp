@@ -4,8 +4,9 @@ namespace :epilady do
   task pluck: :environment do
     PaperTrail.enabled = false
     ActiveRecord::Base.lock_optimistically = false
+    ActiveRecord::Base.logger = nil
 
-    orgs_prefix = ["default", "demo", "frspv", "jn", "sil", "qacrp", "uai-inv", "inv"]
+    orgs_prefix = ['spv']
 
     Organization.where(prefix: orgs_prefix).each do |o|
 
@@ -21,7 +22,7 @@ namespace :epilady do
 
       users = User.find(users_ids - current_users_ids)
 
-      users.each { |u| u.destroy }
+      users.find_each { |u| u.destroy }
     end
   end
 end

@@ -4,6 +4,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
   include PaperTrail::DependentDestroy
+  include Associations::DestroyInBatches
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }
@@ -116,8 +117,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :final_potential_nonconformities, -> { where(final: true) },
     dependent: :destroy, class_name: 'PotentialNonconformity'
   has_many :work_papers, -> { order('code ASC') }, as: :owner, dependent: :destroy,
-    before_add: [:check_for_final_review, :prepare_work_paper],
-    before_remove: :check_for_final_review
+    before_add: [:check_for_final_review, :prepare_work_paper]
   has_one :control, -> { order("#{Control.table_name}.order ASC") }, as: :controllable,
     dependent: :destroy
 

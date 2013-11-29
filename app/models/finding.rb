@@ -5,6 +5,7 @@ class Finding < ActiveRecord::Base
   include Parameters::Priority
   include ParameterSelector
   include PaperTrail::DependentDestroy
+  include Associations::DestroyInBatches
 
   acts_as_tree
 
@@ -13,7 +14,6 @@ class Finding < ActiveRecord::Base
   }
 
   cattr_accessor :current_user, :current_organization
-  after_destroy :destroy_control_objective_item
 
   # Constantes
   COLUMNS_FOR_SEARCH = {
@@ -371,6 +371,8 @@ class Finding < ActiveRecord::Base
   after_update :notify_changes_to_users
   before_validation :set_proper_parent
   before_validation :change_review_code, :on => :update
+  after_destroy :destroy_control_objective_item
+  before_destroy :destroy_repeated_of
 
   # Restricciones
   validates :control_objective_item_id, :description, :review_code,
@@ -463,7 +465,7 @@ class Finding < ActiveRecord::Base
   belongs_to :organization
   belongs_to :control_objective_item
   belongs_to :repeated_of, :foreign_key => 'repeated_of_id',
-    :dependent => :destroy, :autosave => true, :class_name => 'Finding'
+    :autosave => true, :class_name => 'Finding'
   has_one :repeated_in, :foreign_key => 'repeated_of_id',
     :class_name => 'Finding'
   has_one :review, :through => :control_objective_item
@@ -474,19 +476,17 @@ class Finding < ActiveRecord::Base
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :finding_relations, :dependent => :destroy,
     :before_add => :check_for_valid_relation
-  has_many :inverse_finding_relations, -> { readonly },
-    :foreign_key => :related_finding_id, :class_name => 'FindingRelation'
+  has_many :inverse_finding_relations, :foreign_key => :related_finding_id,
+    :class_name => 'FindingRelation', dependent: :destroy
   has_many :notifications, -> { order('created_at').uniq },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
   has_many :work_papers, -> { order('code ASC') }, :as => :owner,
-    :dependent => :destroy, :before_add => [:prepare_work_paper, :check_for_final_review],
-    :before_remove => :check_for_final_review
+    :dependent => :destroy, :before_add => [:prepare_work_paper, :check_for_final_review]
   has_many :comments, -> { order('created_at ASC') }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
-    :inverse_of => :finding, :before_add => :check_for_final_review,
-    :before_remove => :check_for_final_review
+    :inverse_of => :finding, :before_add => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
   has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
@@ -634,10 +634,9 @@ class Finding < ActiveRecord::Base
   end
 
   def check_for_final_review(_)
-    #if self.final? && self.review && self.review.is_frozen?
-    #  raise 'Conclusion Final Review frozen'
-    #end
-    true
+    if self.final? && self.review && self.review.is_frozen?
+      raise 'Conclusion Final Review frozen'
+    end
   end
 
   def set_proper_parent
@@ -1703,5 +1702,9 @@ class Finding < ActiveRecord::Base
 
   def destroy_control_objective_item
     self.control_objective_item.try(:destroy!)
+  end
+
+  def destroy_repeated_of
+    Finding.where(repeated_of_id: self.id).find_each { |f| f.try(:destroy!) }
   end
 end

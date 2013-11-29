@@ -4,6 +4,7 @@ class Organization < ActiveRecord::Base
   include Comparable
   include Organizations::Setting
   include PaperTrail::DependentDestroy
+  include Associations::DestroyInBatches
 
   trimmed_fields :name, :prefix
 

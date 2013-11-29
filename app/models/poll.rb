@@ -1,5 +1,6 @@
 class Poll < ActiveRecord::Base
   include PaperTrail::DependentDestroy
+  include Associations::DestroyInBatches
 
   before_save :generate_access_token, :on => :create
 
