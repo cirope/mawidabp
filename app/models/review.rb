@@ -5,6 +5,7 @@ class Review < ActiveRecord::Base
   include Trimmer
   include PaperTrail::DependentDestroy
   include Associations::DestroyInBatches
+  include Associations::DestroyFileModel
 
   trimmed_fields :identification
 

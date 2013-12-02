@@ -2,6 +2,7 @@ class WorkPaper < ActiveRecord::Base
   include ParameterSelector
   include Comparable
   include PaperTrail::DependentDestroy
+  include Associations::DestroyFileModel
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }
@@ -21,8 +22,6 @@ class WorkPaper < ActiveRecord::Base
   # Callbacks
   before_save :check_for_modifications
   after_save :create_cover_and_zip
-  # TODO: delete when Rails fix gets in stable
-  #after_destroy :destroy_file_model
 
   # Restricciones
   validates :organization_id, :name, :code, :number_of_pages, :presence => true
@@ -266,9 +265,4 @@ class WorkPaper < ActiveRecord::Base
   def sanitized_code
     self.code.sanitized_for_filename
   end
-
-  private
-    def destroy_file_model
-      self.file_model.try(:destroy!)
-    end
 end

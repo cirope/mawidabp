@@ -1,6 +1,7 @@
 class FindingAnswer < ActiveRecord::Base
   include ParameterSelector
   include PaperTrail::DependentDestroy
+  include Associations::DestroyFileModel
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }
@@ -8,8 +9,6 @@ class FindingAnswer < ActiveRecord::Base
 
   # Callbacks
   after_create :send_notification_to_users
-  # TODO delete when Rails fix it
-  after_destroy :destroy_file_model
 
   # Atributos no persistentes
   attr_accessor :notify_users
@@ -50,9 +49,4 @@ class FindingAnswer < ActiveRecord::Base
       end
     end
   end
-
-  private
-    def destroy_file_model
-      self.file_model.try(:destroy!)
-    end
 end
