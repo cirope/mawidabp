@@ -56,15 +56,8 @@ module Reports::CostAnalysis
       "%.2f%% (#{@currency_mask % amount_difference.abs})" % deviation
     @total_estimated_amount += estimated_amount
     @total_real_amount += real_amount
-
-    @total_cost_data[period] ||= []
-    @total_cost_data[period] << [
-      conclusion_review.review.business_unit.name,
-      conclusion_review.review.to_s,
-      @currency_mask % estimated_amount,
-      @currency_mask % real_amount,
-      deviation_text
-    ]
+  
+    set_total_cost_data(conclusion_review, period, estimated_amount, real_amount, deviation_text)
   end
 
   def set_estimated_data(conclusion_review)
@@ -73,24 +66,7 @@ module Reports::CostAnalysis
     @real_resources = conclusion_review.review.workflow ?
       conclusion_review.review.workflow.resource_utilizations.group_by(&:resource) : {}
 
-    estimated_resources.each do |resource, estimated_utilizations|
-      real_utilizations = @real_resources.delete(resource) || []
-      estimated_amount = estimated_utilizations.sum(&:cost)
-      real_amount = real_utilizations.sum(&:cost)
-      amount_difference = estimated_amount - real_amount
-      deviation = real_amount > 0 ?
-        amount_difference / real_amount.to_f * 100 :
-        (estimated_amount > 0 ? 100 : 0)
-      deviation_text =
-        "%.2f%% (#{@currency_mask % amount_difference.abs})" % deviation
-
-      @data[:data] << [
-        resource.resource_name,
-        @currency_mask % estimated_amount,
-        @currency_mask % real_amount,
-        deviation_text
-      ]
-    end
+    set_estimated_resources_data(estimated_resources)
   end
 
   def set_real_data
@@ -121,6 +97,17 @@ module Reports::CostAnalysis
       "<b>#{@currency_mask % @total_estimated_amount}</b>",
       "<b>#{@currency_mask % @total_real_amount}</b>",
       "<b>#{total_deviation_mask % total_deviation}</b>"
+    ]
+  end
+
+  def set_total_cost_data(conclusion_review, period, estimated_amount, real_amount, deviation_text)
+    @total_cost_data[period] ||= []
+    @total_cost_data[period] << [
+      conclusion_review.review.business_unit.name,
+      conclusion_review.review.to_s,
+      @currency_mask % estimated_amount,
+      @currency_mask % real_amount,
+      deviation_text
     ]
   end
 
@@ -184,6 +171,27 @@ module Reports::CostAnalysis
           :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
         )
       end
+    end
+  end
+
+  def set_estimated_resources_data(estimated_resources)
+    estimated_resources.each do |resource, estimated_utilizations|
+      real_utilizations = @real_resources.delete(resource) || []
+      estimated_amount = estimated_utilizations.sum(&:cost)
+      real_amount = real_utilizations.sum(&:cost)
+      amount_difference = estimated_amount - real_amount
+      deviation = real_amount > 0 ?
+        amount_difference / real_amount.to_f * 100 :
+        (estimated_amount > 0 ? 100 : 0)
+      deviation_text =
+        "%.2f%% (#{@currency_mask % amount_difference.abs})" % deviation
+
+      @data[:data] << [
+        resource.resource_name,
+        @currency_mask % estimated_amount,
+        @currency_mask % real_amount,
+        deviation_text
+      ]                                                                                                                                                                               
     end
   end
 
