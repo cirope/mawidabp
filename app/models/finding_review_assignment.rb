@@ -1,6 +1,6 @@
 class FindingReviewAssignment < ActiveRecord::Base
   include Comparable
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
 
   has_paper_trail meta: {
     organization_id: ->(model) { Organization.current_id }

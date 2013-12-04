@@ -3,7 +3,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   include Parameters::Qualification
   include ParameterSelector
   include Comparable
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
 
   has_paper_trail meta: {

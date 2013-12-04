@@ -1,7 +1,7 @@
 class BusinessUnit < ActiveRecord::Base
   include Trimmer
   include ParameterSelector
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
 
   trimmed_fields :name

@@ -1,6 +1,6 @@
 class FindingAnswer < ActiveRecord::Base
   include ParameterSelector
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyFileModel
 
   has_paper_trail meta: {

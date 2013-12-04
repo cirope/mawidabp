@@ -4,7 +4,7 @@ class Finding < ActiveRecord::Base
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
 
   acts_as_tree

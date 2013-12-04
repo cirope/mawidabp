@@ -1,4 +1,4 @@
-module PaperTrail::DependentDestroy
+module Associations::DestroyPaperTrail
   extend ActiveSupport::Concern
 
   included do

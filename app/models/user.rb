@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   include ParameterSelector
   include Comparable
   include Trimmer
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
 
   trimmed_fields :user, :email, :name, :last_name

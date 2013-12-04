@@ -1,6 +1,6 @@
 class Plan < ActiveRecord::Base
   include ParameterSelector
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
 
   has_paper_trail meta: {

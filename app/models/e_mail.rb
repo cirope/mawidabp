@@ -1,5 +1,5 @@
 class EMail < ActiveRecord::Base
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
 
   has_paper_trail
 

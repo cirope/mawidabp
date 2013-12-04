@@ -3,7 +3,7 @@ class Review < ActiveRecord::Base
   include Parameters::Score
   include ParameterSelector
   include Trimmer
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyInBatches
   include Associations::DestroyFileModel
 

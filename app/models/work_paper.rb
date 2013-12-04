@@ -1,7 +1,7 @@
 class WorkPaper < ActiveRecord::Base
   include ParameterSelector
   include Comparable
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
   include Associations::DestroyFileModel
 
   has_paper_trail meta: {

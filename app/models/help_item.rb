@@ -1,6 +1,6 @@
 class HelpItem < ActiveRecord::Base
   include ActsAsTree
-  include PaperTrail::DependentDestroy
+  include Associations::DestroyPaperTrail
 
   acts_as_tree :order => 'order_number ASC'
 

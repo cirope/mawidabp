@@ -1,3 +1,5 @@
+require_relative '../epilady/logger'
+
 namespace :epilady do
   desc 'Removes organizations with associated models'
 
@@ -6,10 +8,26 @@ namespace :epilady do
     ActiveRecord::Base.lock_optimistically = false
     ActiveRecord::Base.logger = nil
 
-    orgs_prefix = ['default', 'demo', 'frspv', 'jn', 'sil', 'qacrp', 'uai-inv', 'inv']
+    identifications = ['default', 'demo', 'frspv', 'jn', 'sil', 'qacrp', 'uai-inv', 'inv']
+    organizations = Organization.where(prefix: identifications)
+    organizations_ids = organizations.map(&:id)
 
-    Organization.where(prefix: orgs_prefix).each do |o|
-      o.destroy
+    organizations.map(&:destroy)
+
+    PaperTrail::Version.find_each do |version|
+      begin
+        model = version.reify
+
+        if model.respond_to?(:organization_id) &&
+          organizations_ids.include?(model.organization_id)
+
+          version.destroy
+        end
+      rescue Exception => e
+        Epilady::Logger.log e.message
+
+        version.destroy
+      end
     end
   end
 end
