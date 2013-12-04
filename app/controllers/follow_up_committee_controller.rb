@@ -105,7 +105,7 @@ class FollowUpCommitteeController < ApplicationController
             end
 
             c_r.review.weaknesses.each do |w|
-              @risk_levels |= w.class.risks.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+              @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
 
               weaknesses_count[w.risk_text] ||= 0
 
@@ -130,7 +130,7 @@ class FollowUpCommitteeController < ApplicationController
             end.map { |pc| "#{pc[0]} (#{'%.2f' % pc[1]}%)" }
             if @sqm
               nonconformities_count_text = c_r.review.nonconformities.count > 0 ?
-                c_r.review.final_nonconformities.count.to_s :
+                c_r.review.nonconformities.count.to_s :
                 t('follow_up_committee.synthesis_report.without_nonconformities')
             else
               oportunities_count_text = c_r.review.oportunities.count > 0 ?

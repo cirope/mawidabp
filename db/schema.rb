@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131126161633) do
+ActiveRecord::Schema.define(version: 20131202121050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,9 +286,9 @@ ActiveRecord::Schema.define(version: 20131126161633) do
     t.date     "origination_date"
     t.integer  "repeated_of_id"
     t.integer  "highest_risk"
-    t.string   "correction"
+    t.text     "correction"
     t.date     "correction_date"
-    t.string   "cause_analysis"
+    t.text     "cause_analysis"
     t.date     "cause_analysis_date"
     t.integer  "organization_id"
   end

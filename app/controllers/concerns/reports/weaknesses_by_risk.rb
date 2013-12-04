@@ -141,7 +141,7 @@ module Reports::WeaknessesByRisk
           end
         end
       end
-      
+
       @repeated_counts[period]['total'] = total_repeated_count
       @being_implemented_resumes[period]['total'] =
         being_implemented_resume_from_counts(total_being_implemented_counts)
@@ -157,7 +157,7 @@ module Reports::WeaknessesByRisk
   def create_weaknesses_by_risk
     self.weaknesses_by_risk
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

@@ -212,7 +212,7 @@ module Reports::ControlObjectiveStats
   def create_control_objective_stats
     self.control_objective_stats
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
