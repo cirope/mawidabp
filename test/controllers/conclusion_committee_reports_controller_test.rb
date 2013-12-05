@@ -35,7 +35,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   test 'synthesis report' do
     perform_auth
 
-    get :synthesis_report
+    get :synthesis_report, :controller_name => 'conclusion'
     assert_response :success
     assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/synthesis_report'
@@ -44,7 +44,8 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       get :synthesis_report, :synthesis_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'conclusion'
     end
 
     assert_response :success
@@ -59,7 +60,8 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
-      }
+      },
+      :controller_name => 'conclusion'
 
     assert_response :success
     assert_select '#error_body', false
@@ -76,8 +78,8 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
-
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'conclusion'
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_committee_report.synthesis_report.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
