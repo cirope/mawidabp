@@ -84,7 +84,7 @@ class OportunitiesController < ApplicationController
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      {:control_objective_item_id => params[:control_objective_item]}
+      { :control_objective_item_id => params[:control_objective_item] }, {}, true
     )
 
     respond_to do |format|

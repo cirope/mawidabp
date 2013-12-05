@@ -81,7 +81,7 @@ class PotentialNonconformitiesController < ApplicationController
   def new
     @title = t 'potential_nonconformity.new_title'
     @potential_nonconformity = PotentialNonconformity.new(
-      {control_objective_item_id: params[:control_objective_item]}
+      {control_objective_item_id: params[:control_objective_item]}, {}, true
     )
 
     respond_to do |format|
