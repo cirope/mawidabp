@@ -257,8 +257,8 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
@@ -289,8 +289,8 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
@@ -676,8 +676,8 @@
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin observaciones'
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
@@ -708,8 +708,8 @@
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin observaciones'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     qa_indicators:
