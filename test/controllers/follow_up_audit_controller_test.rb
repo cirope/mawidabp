@@ -156,13 +156,13 @@ class FollowUpAuditControllerTest < ActionController::TestCase
   test 'cost analysis report' do
     perform_auth
 
-    get :cost_analysis
+    get :follow_up_cost_analysis
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'follow_up_audit/cost_analysis'
+    assert_template 'follow_up_audit/follow_up_cost_analysis'
 
     assert_nothing_raised(Exception) do
-      get :cost_analysis, :cost_analysis => {
+      get :follow_up_cost_analysis, :follow_up_cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         }
@@ -170,21 +170,21 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'follow_up_audit/cost_analysis'
+    assert_template 'follow_up_audit/follow_up_cost_analysis'
   end
 
   test 'create cost analysis report' do
     perform_auth
 
-    post :create_cost_analysis,
-      :cost_analysis => {
+    post :create_follow_up_cost_analysis,
+      :follow_up_cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
         :report_title => 'New title'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_audit.cost_analysis.pdf_name',
+      I18n.t('follow_up_committee_report.follow_up_cost_analysis.pdf_name',
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'follow_up_cost_analysis', 0)

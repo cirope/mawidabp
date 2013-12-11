@@ -210,12 +210,12 @@ MawidaBP::Application.routes.draw do
     :to => 'conclusion_audit_reports#cost_analysis',
     :include_details => 1
 
-  get 'follow_up_audit/cost_analysis',
-    :as => 'cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#cost_analysis'
-  post 'follow_up_audit/create_cost_analysis',
-    :as => 'create_cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#create_cost_analysis'
+  get 'follow_up_audit/follow_up_cost_analysis',
+    :as => 'follow_up_cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#follow_up_cost_analysis'
+  post 'follow_up_audit/create_follow_up_cost_analysis',
+    :as => 'create_follow_up_cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#create_follow_up_cost_analysis'
 
   scope ':completed', :completed => /complete|incomplete/ do
     resources :findings, :except => [:destroy] do
