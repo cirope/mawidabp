@@ -145,6 +145,6 @@ class SessionsController < ApplicationController
     end
 
     def set_admin_mode
-      @group_admin_mode = request.subdomains.first == APP_ADMIN_PREFIX
+      @group_admin_mode = APP_ADMIN_PREFIXES.include?(request.subdomains.first)
     end
 end

@@ -27,7 +27,7 @@
         {:time_left => parameter_in(current_organization.id, :session_expire_time).to_i} %>
     <% end %>
     <div id="main_container">
-      <% unless request.subdomains.first == APP_ADMIN_PREFIX %>
+      <% unless APP_ADMIN_PREFIXES.include?(request.subdomains.first) %>
         <div id="mobile_menu">
           <%= link_to t('menu.show_menu'), '#', :onclick => 'Menu.show(); return false;', :id => :show_menu %>
           <%= link_to t('menu.hide_menu'), '#', :onclick => 'Menu.hide(); return false;', :id => :hide_menu, :style => 'display: none;' %>

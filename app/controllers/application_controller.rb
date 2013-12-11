@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= Organization.find_by(
       prefix: request.subdomains.first
-    ) unless request.subdomains.first == APP_ADMIN_PREFIX
+    ) unless APP_ADMIN_PREFIXES.include?(request.subdomains.first)
   end
   helper_method :current_organization
 

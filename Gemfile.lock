@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/capistrano/rbenv.git
-  revision: 9576473fc95d9f7539eb01b13574ac03f52a8dcd
+  revision: d3ced5e51fa2b25e96ad748578734c38929640df
   specs:
     capistrano-rbenv (2.0.0)
       capistrano (~> 3.0)
@@ -92,7 +92,7 @@ GEM
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.7.0)
-    newrelic_rpm (3.6.9.171)
+    newrelic_rpm (3.7.0.177)
     paper_trail (3.0.0.rc2)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)

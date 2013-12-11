@@ -18,7 +18,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'login users in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     get :new
     assert_response :success
@@ -57,7 +57,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'invalid user and password attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     assert_difference 'ErrorRecord.count' do
       post :create,
@@ -90,7 +90,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'invalid password attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     assert_difference 'ErrorRecord.count' do
       post :create,
@@ -126,7 +126,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'disabled user attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     assert_difference 'ErrorRecord.count' do
       post :create,
@@ -145,7 +145,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'no group admin user attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     assert_difference 'ErrorRecord.count' do
       post :create,
@@ -242,7 +242,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'login sucesfully in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIX}.localhost.i"
+    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 
     post :create,
       :user => {
