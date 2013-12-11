@@ -1,4 +1,6 @@
 MawidaBP::Application.routes.draw do
+  get '/users/login', to: redirect('/') # _Backward compatibility_
+
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'
   post   'sessions', to: 'sessions#create',  as: 'sessions'

@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
       end
     else
       restart_session
-      go_to = request.fullpath
+      go_to = request.fullpath if request.get?
       session[:go_to] = params[:action].try(:to_sym) != :logout ? go_to : nil
       @auth_user = nil
       redirect_to_login t('message.session_time_expired'), :alert
