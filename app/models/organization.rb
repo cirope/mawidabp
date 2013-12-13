@@ -54,7 +54,7 @@ class Organization < ActiveRecord::Base
   has_many :users, -> { readonly.uniq }, through: :organization_roles
 
   accepts_nested_attributes_for :image_model, allow_destroy: true,
-    reject_if: ->(attributes) { attributes['image'].blank? }
+    reject_if: ->(attrs) { ['image', 'image_cache'].all? { |a| attrs[a].blank? } }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
