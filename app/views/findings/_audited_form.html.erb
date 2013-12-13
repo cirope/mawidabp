@@ -249,7 +249,7 @@
             <td><%= h work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
             <td><%= simple_format h(work_paper.description) %></td>
-            <td><%= work_paper.file_model.try(:file?) ?
+            <td><%= work_paper.file_model.try(:file) ?
               link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
         <% end %>

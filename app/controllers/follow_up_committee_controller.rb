@@ -169,7 +169,7 @@ class FollowUpCommitteeController < ApplicationController
         'created_at BETWEEN :start AND :end', params
       ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
 
-      wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }
+      wps_with_files = wps.select { |wp| wp.file_model.try(:file) }
 
       indicators[:digitalized] = wps.size > 0 ?
         (wps_with_files.size.to_f / wps.size) * 100 : nil

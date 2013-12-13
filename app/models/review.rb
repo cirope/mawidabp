@@ -561,7 +561,7 @@ class Review < ActiveRecord::Base
 
     pdf.move_down PDF_FONT_SIZE * 2
 
-    note_text = self.file_model.try(:file?) ?
+    note_text = self.file_model.try(:file) ?
       I18n.t('review.survey.with_attachment') :
       I18n.t('review.survey.without_attachment')
 
@@ -1417,7 +1417,7 @@ class Review < ActiveRecord::Base
         end
       end
 
-      if self.file_model.try(:file?)
+      if self.file_model.try(:file)
         self.add_file_to_zip self.file_model.file.path,
           self.file_model.identifier, dirs[:survey], zipfile
       end
@@ -1451,7 +1451,7 @@ class Review < ActiveRecord::Base
   end
 
   def add_work_paper_to_zip(wp, dir, zipfile, prefix = nil)
-    if wp.file_model.try(:file?) && File.exist?(wp.file_model.file.path)
+    if wp.file_model.try(:file) && File.exist?(wp.file_model.file.path)
       self.add_file_to_zip(wp.file_model.file.path,
         wp.file_model.identifier, dir, zipfile)
     else

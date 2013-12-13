@@ -102,7 +102,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def check_for_modifications
-    @zip_must_be_created = self.file_model.try(:file?) ||
+    @zip_must_be_created = self.file_model.try(:file) ||
       self.file_model.try(:changed?)
     @cover_must_be_created = self.changed?
 
@@ -110,7 +110,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def create_cover_and_zip
-    self.file_model.try(:file?).tap do |file|
+    self.file_model.try(:file).tap do |file|
       self.create_pdf_cover if @cover_must_be_created && file
       self.create_zip if @zip_must_be_created || (@cover_must_be_created && file)
     end
@@ -165,7 +165,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def pdf_cover_name(filename = nil)
-    if self.file_model.try(:file?)
+    if self.file_model.try(:file)
       filename ||= self.file_model.identifier.sanitized_for_filename
       filename = filename.sanitized_for_filename.sub(
         /^(#{Regexp.quote(self.sanitized_code)})?\-?(zip-)*/i, '')
@@ -176,7 +176,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def absolute_cover_path(filename = nil)
-    if self.file_model.try(:file?)
+    if self.file_model.try(:file)
       File.join File.dirname(self.file_model.file.path), self.pdf_cover_name
     else
       "#{TEMP_PATH}#{self.pdf_cover_name(filename || self.object_id.abs)}"
