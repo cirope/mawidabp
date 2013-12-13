@@ -17,10 +17,10 @@ module ReviewsHelper
 
     grouped_plan_items = PlanItem.list_unused(@review.period_id).group_by(
       &:business_unit_type)
-
+    
     business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by(&:project)
-
+      
       OpenStruct.new({:name => but.name, :plan_items => sorted_plan_items})
     end
 
@@ -79,7 +79,7 @@ module ReviewsHelper
       content_tag :span, t('review.view_procedure_control_for_the_period')
     end
   end
-
+  
   def show_readonly_review_survey(review)
     link_for_download = link_to(
       t('label.download'),
@@ -87,14 +87,14 @@ module ReviewsHelper
     ).html_safe
     link_for_download_attachment = link_to(
       t('review.survey.download_attachment'), review.file_model.file.url
-    ).html_safe if review.file_model.try(:file)
-
+    ).html_safe if review.file_model.try(:file?)
+    
     out = "<b>#{Review.human_attribute_name(:survey)}</b>"
-
+    
     out << " | #{link_for_download}" unless review.survey.blank?
-    out << " | #{link_for_download_attachment}" if review.file_model.try(:file)
+    out << " | #{link_for_download_attachment}" if review.file_model.try(:file?)
     out << "#{show_inline_help_for(:review_survey)}:"
-
+    
     raw(out + simple_format(h(review.survey)))
   end
 end

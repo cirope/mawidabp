@@ -88,7 +88,7 @@
           </span>
         <% end %>
 
-        <% if r_f.object.file_model.try(:file) && !r_f.object.file_model.new_record? %>
+        <% if r_f.object.file_model.try(:file?) && !r_f.object.file_model.new_record? %>
           <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
           <%= link_to_delete_attachment fm_f, :file unless readonly %>
         <% end %>

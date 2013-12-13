@@ -11,7 +11,7 @@
         <%= finding_answer.answer %>
       <% end %>
     </td>
-    <% if !finding_answer.file_model.try(:file) || finding_answer.file_model.new_record? %>
+    <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
       <td>
         <% if finding_answer.new_record? %>
           <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
@@ -27,7 +27,7 @@
       </td>
     <% else %>
       <td>
-        <%= link_to_download finding_answer.file_model.file.url if finding_answer.file_model.file %>
+        <%= link_to_download finding_answer.file_model.file.url if finding_answer.file_model.file? %>
       </td>
     <% end %>
     <td>
