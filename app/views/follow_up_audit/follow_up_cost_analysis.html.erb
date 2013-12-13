@@ -1,5 +1,5 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :cost_analysis, :extra_params => {},
+  :locals => {:action => :follow_up_cost_analysis, :extra_params => {},
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
@@ -76,7 +76,7 @@
     :options => {
       :form_name => 'report',
       :url => request.query_parameters.merge(
-        {:action => :create_cost_analysis, :_ts => Time.now.to_i}
+        {:action => :create_follow_up_cost_analysis, :_ts => Time.now.to_i}
       ),
       :fields => [
         {

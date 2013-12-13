@@ -39,7 +39,7 @@ module Reports::ControlObjectiveStats
             'process_control' => pc,
             'control_objective' => co.name,
             'effectiveness' => t(
-              'conclusion_committee_report.control_objective_stats.average_effectiveness_resume',
+              "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
               :effectiveness => "#{'%.2f' % effectiveness}%", :count => @coi_data[:reviews]
             ),
             'weaknesses_count' => @weaknesses_count_text
@@ -171,7 +171,7 @@ module Reports::ControlObjectiveStats
   end
 
   def count_weaknesses_by_risk(weaknesses)
-    weaknesses.not_revoked.each do |w|
+    weaknesses.each do |w|
       @weaknesses_count[w.risk_text] ||= 0
       @weaknesses_count[w.risk_text] += 1
 
@@ -199,7 +199,7 @@ module Reports::ControlObjectiveStats
     @coi_data[:weaknesses_ids] ||= {}
 
     @weaknesses_count = {}
-    @weaknesses = @final ? coi.final_weaknesses : coi.weaknesses
+    @weaknesses = @final ? coi.final_weaknesses.not_revoked : coi.weaknesses.not_revoked
 
     @coi_data[:weaknesses] ||= {}
     @coi_data[:effectiveness] ||= []

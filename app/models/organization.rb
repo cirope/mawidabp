@@ -10,9 +10,6 @@ class Organization < ActiveRecord::Base
     organization_id: ->(model) { Organization.current_id }
   }
 
-  # Constantes
-  INVALID_PREFIXES = ['www', APP_ADMIN_PREFIX]
-
   # Callbacks
   before_save :change_current_organization_id
   after_create :create_initial_roles
@@ -35,7 +32,7 @@ class Organization < ActiveRecord::Base
     allow_blank: true
   validates :prefix, uniqueness: { case_sensitive: false }
   validates :name, uniqueness: { case_sensitive: false, scope: :group_id }
-  validates :prefix, exclusion: { in: INVALID_PREFIXES }
+  validates :prefix, exclusion: { in: APP_ADMIN_PREFIXES }
   validates :kind, inclusion: { in: ORGANIZATION_KINDS }, allow_nil: true,
     allow_blank: true
 

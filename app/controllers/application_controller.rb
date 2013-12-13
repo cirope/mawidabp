@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   def current_organization
     @current_organization ||= Organization.find_by(
       prefix: request.subdomains.first
-    ) unless request.subdomains.first == APP_ADMIN_PREFIX
+    ) unless APP_ADMIN_PREFIXES.include?(request.subdomains.first)
   end
   helper_method :current_organization
 
@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
       end
     else
       restart_session
-      go_to = request.fullpath
+      go_to = request.fullpath if request.get?
       session[:go_to] = params[:action].try(:to_sym) != :logout ? go_to : nil
       @auth_user = nil
       redirect_to_login t('message.session_time_expired'), :alert

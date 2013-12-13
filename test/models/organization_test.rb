@@ -134,7 +134,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates excluded attributes' do
-    @organization.prefix = Organization::INVALID_PREFIXES.first
+    @organization.prefix = APP_ADMIN_PREFIXES.first
 
     assert @organization.invalid?
     assert_error @organization, :prefix, :exclusion

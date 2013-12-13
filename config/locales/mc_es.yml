@@ -257,8 +257,8 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
@@ -289,8 +289,8 @@
       subtitle: "INFORMES DEFINITIVOS"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con desvíos en un informe'
-        other: '%{effectiveness} con desvíos en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: 'Sin auditorías en el periodo'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
@@ -676,11 +676,13 @@
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin desvíos'
       without_audits_in_the_period: "Sin auditorías en el periodo"
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+    follow_up_cost_analysis:
+      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
       pdf_name: "desvíos_de_riesgo_alto_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Desvíos Auditoría Interna"
@@ -708,8 +710,8 @@
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} con desvíos en un informe'
-        other: '%{effectiveness} con desvíos en %{count} informes'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
       without_weaknesses: 'Sin desvíos'
       review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
     qa_indicators:
