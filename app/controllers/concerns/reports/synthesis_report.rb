@@ -179,7 +179,7 @@ module Reports::SynthesisReport
     ]
   end
 
-  def sort_column_data                                                                                                                                                              
+  def sort_column_data
     @column_data.sort! do |cd_1, cd_2|
       cd_1[2].score <=> cd_2[2].score
     end
