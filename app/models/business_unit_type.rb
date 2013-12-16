@@ -7,6 +7,9 @@ class BusinessUnitType < ActiveRecord::Base
     organization_id: ->(model) { Organization.current_id }
   }
 
+  # Default scope
+  default_scope -> { where(organization_id: Organization.current_id) }
+  
   # Named scopes
   scope :list, -> {
     where(organization_id: Organization.current_id).order(
