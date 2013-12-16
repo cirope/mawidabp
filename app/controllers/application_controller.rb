@@ -132,7 +132,7 @@ class ApplicationController < ActionController::Base
   def check_access_time #:doc:
     session_expire = current_organization ? parameter_in(current_organization.id,
       :session_expire_time).to_i : 30
-    last_access = session.fetch(:last_access) { 10.years.ago }
+    last_access = session[:last_access] || 10.years.ago
 
     if session_expire == 0 || last_access >= session_expire.minutes.ago
       session[:last_access] = Time.now
