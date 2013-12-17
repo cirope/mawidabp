@@ -1,5 +1,5 @@
 <div style="margin-top: 2em; padding-top: 1em; font-size: .8em; border-top: 1px dotted gray;">
-  <p style="color: #cc0000;">
+  <p>
     <%= textilize_without_paragraph t('notifier.footer.warning') %>
   </p>
   <p>
@@ -9,9 +9,6 @@
     <li>
       <b><%= t 'notifier.footer.email_label' %></b>:
       <a href="mailto:<%= SUPPORT_EMAIL %>"><%= SUPPORT_EMAIL %></a>
-    </li>
-    <li>
-      <b><%= t 'notifier.footer.phone_label' %></b>: <%= SUPPORT_PHONE %>
     </li>
   </ul>
   <p>

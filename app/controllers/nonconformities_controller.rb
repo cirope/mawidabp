@@ -13,7 +13,6 @@ class NonconformitiesController < ApplicationController
   def index
     @title = t 'nonconformity.index_title'
     default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
       [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
@@ -25,11 +24,7 @@ class NonconformitiesController < ApplicationController
         ].join(' AND ')
       ].map { |condition| "(#{condition})" }.join(' OR ')
     ]
-    parameters = {
-      :organization_id => @auth_organization.id,
-      :boolean_true => true,
-      :boolean_false => false
-    }
+    parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Nonconformity.table_name}.control_objective_item_id = " +
@@ -45,7 +40,7 @@ class NonconformitiesController < ApplicationController
     build_search_conditions Nonconformity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @nonconformities = Nonconformity.includes(
+    @nonconformities = Nonconformity.list.includes(
       :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
@@ -109,7 +104,7 @@ class NonconformitiesController < ApplicationController
   # * POST /nonconformities.xml
   def create
     @title = t 'nonconformity.new_title'
-    @nonconformity = Nonconformity.new(nonconformity_params)
+    @nonconformity = Nonconformity.list.new(nonconformity_params)
 
     respond_to do |format|
       if @nonconformity.save
@@ -154,7 +149,7 @@ class NonconformitiesController < ApplicationController
   #
   # * GET /nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    @nonconformity.follow_up_pdf(@auth_organization)
+    @nonconformity.follow_up_pdf(current_organization)
     redirect_to @nonconformity.relative_follow_up_pdf_path
   end
 
@@ -178,7 +173,7 @@ class NonconformitiesController < ApplicationController
       'organizations.id = :organization_id',
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -220,7 +215,7 @@ class NonconformitiesController < ApplicationController
     parameters = {
       :boolean_false => false,
       :finding_id => params[:finding_id],
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -258,7 +253,7 @@ class NonconformitiesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id].to_i
     }
 
@@ -285,17 +280,17 @@ class NonconformitiesController < ApplicationController
   private
     def nonconformity_params
       params.require(:nonconformity).permit(
-        :control_objective_item_id, :review_code, :description, :answer, :audit_comments, 
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, 
+        :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
         :state, :origination_date, :solution_date, :audit_recomendations, :effect, :risk,
         :priority, :follow_up_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
-        ], 
+        ],
         work_papers_attributes: [
           :id, :name, :code, :number_of_pages, :description, :_destroy,
           file_model_attributes: [:id, :file, :file_cache]
-        ], 
+        ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
           :notify_users, :_destroy,
@@ -308,17 +303,14 @@ class NonconformitiesController < ApplicationController
     end
 
     def set_nonconformity
-      @nonconformity = Nonconformity.includes(
-        :finding_relations,
-        :work_papers,
+      @nonconformity = Nonconformity.list.includes(
+        :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).where(
-        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
-      ).first
+      ).find(params[:id])
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
         :auto_complete_for_user => :read,

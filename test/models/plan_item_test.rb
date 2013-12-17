@@ -7,6 +7,8 @@ class PlanItemTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
+    set_organization
+
     @plan_item = PlanItem.find plan_items(:current_plan_item_1).id
   end
 

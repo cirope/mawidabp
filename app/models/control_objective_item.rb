@@ -4,6 +4,10 @@ class ControlObjectiveItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
+
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     review: {
@@ -23,9 +27,8 @@ class ControlObjectiveItem < ActiveRecord::Base
     }
   })
 
-  scope :not_excluded_from_score, -> {
-    where(exclude_from_score: false)
-  }
+  scope :list, -> { where(organization_id: Organization.current_id) }
+  scope :not_excluded_from_score, -> { where(exclude_from_score: false) }
   scope :with_names, ->(*control_objective_names) {
     conditions = []
     parameters = {}
@@ -40,10 +43,6 @@ class ControlObjectiveItem < ActiveRecord::Base
     ).references(:control_objectives)
   }
 
-  has_paper_trail meta: {
-    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
-  }
-
   # Atributos no persistentes
   attr_reader :approval_errors
   # Alias de atributos
@@ -56,7 +55,8 @@ class ControlObjectiveItem < ActiveRecord::Base
   before_validation(on: :create) { fill_control_objective_text }
 
   # Validaciones
-  validates :control_objective_text, :control_objective_id, presence: true
+  validates :control_objective_text, :control_objective_id,
+    :organization_id, presence: true
   validates :control_objective_id, :review_id,
     numericality: {only_integer: true}, allow_nil: true
   validates :relevance, numericality:
@@ -95,6 +95,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   validate :score_completion
 
   # Relaciones
+  belongs_to :organization
   belongs_to :control_objective, inverse_of: :control_objective_items
   belongs_to :review, inverse_of: :control_objective_items
   has_many :weaknesses, -> { where(final: false) }, dependent: :destroy
@@ -103,7 +104,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :nonconformities, -> { where(final: false) }, dependent: :destroy
   has_many :potential_nonconformities, -> { where(final: false) },
     dependent: :destroy
-  has_many :final_weaknesses, -> { where(final: false) }, dependent: :destroy,
+  has_many :final_weaknesses, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Weakness'
   has_many :final_oportunities, -> { where(final: true) }, dependent: :destroy,
     class_name: 'Oportunity'
@@ -131,6 +132,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     self.finished ||= false
     self.build_control unless self.control
+    self.organization_id ||= Organization.current_id
   end
 
   def to_s

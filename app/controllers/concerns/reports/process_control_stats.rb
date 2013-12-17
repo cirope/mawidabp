@@ -1,4 +1,4 @@
-module Reports::ProcessControlStats                                                                                                 
+module Reports::ProcessControlStats
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
@@ -137,7 +137,7 @@ module Reports::ProcessControlStats
   def create_process_control_stats
     self.process_control_stats
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

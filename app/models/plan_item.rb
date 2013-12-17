@@ -2,8 +2,8 @@ class PlanItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Atributos no persistentes
@@ -11,18 +11,14 @@ class PlanItem < ActiveRecord::Base
 
   # Named scopes
   scope :list_unused, ->(period_id) {
-    includes(:review, {:plan => :period}).where(
+    includes(:review, :plan).where(
       [
         "#{Plan.table_name}.period_id = :period_id",
-        "#{Period.table_name}.organization_id = :organization_id",
         "#{Review.table_name}.plan_item_id IS NULL",
         "#{table_name}.business_unit_id IS NOT NULL",
       ].join(' AND '),
-      {
-        :period_id => period_id,
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
-    ).references(:plans, :periods, :reviews, :plan_items).order(
+      { :period_id => period_id }
+    ).references(:plans, :reviews).order(
       [
         "#{PlanItem.table_name}.order_number ASC",
         "#{PlanItem.table_name}.project ASC"

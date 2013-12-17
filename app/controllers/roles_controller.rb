@@ -11,7 +11,7 @@ class RolesController < ApplicationController
   # * GET /roles.xml
   def index
     @title = t 'role.index_title'
-    @roles = Role.list(@auth_organization.id).paginate(
+    @roles = Role.list.paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -62,7 +62,7 @@ class RolesController < ApplicationController
   # * POST /roles.xml
   def create
     @title = t 'role.new_title'
-    @role = Role.new(role_params)
+    @role = Role.list.new(role_params)
     @role.inject_auth_privileges @auth_privileges
 
     respond_to do |format|
@@ -116,9 +116,7 @@ class RolesController < ApplicationController
 
   private
     def set_role
-      @role = Role.where(
-        id: params[:id], organization_id: @auth_organization.id
-      ).first
+      @role = Role.list.find(params[:id])
     end
 
     def role_params
@@ -126,6 +124,6 @@ class RolesController < ApplicationController
         :name, :role_type, :lock_version, privileges_attributes: [
           :id, :module, :approval, :erase, :modify, :read
         ]
-      ).merge(organization_id: @auth_organization.id)
+      )
     end
 end

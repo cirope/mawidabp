@@ -1,15 +1,12 @@
 class Cost < ActiveRecord::Base
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Named scopes
-  scope :audit, -> {
-    where(:cost_type => 'audit')
-  }
-  scope :audited, -> {
-    where(:cost_type => 'audited')
-  }
+  scope :audit, -> { where(:cost_type => 'audit') }
+  scope :audited, -> { where(:cost_type => 'audited') }
 
   # Restricciones
   validates :cost, :cost_type, :user_id, :item_id, :item_type, :presence => true

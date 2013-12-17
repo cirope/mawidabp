@@ -1,4 +1,4 @@
-module Organizations::Setting 
+module Organizations::Setting
   extend ActiveSupport::Concern
 
   included do
@@ -9,9 +9,9 @@ module Organizations::Setting
 
   def create_settings
     DEFAULT_SETTINGS.each do |k,v|
-      settings.create(
+      settings.create!(
         name: k, value: v[:value], description: I18n.t("setting.#{k}")
       )
-    end 
+    end
   end
 end

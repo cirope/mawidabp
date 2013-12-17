@@ -6,6 +6,7 @@ conclusion_current_final_review:
   applied_procedures: Current Final Applied Procedures
   conclusion: Current Final Conclusion
   approved: true
+  organization: default_organization
   created_at: <%= 2.days.ago.to_date.to_s(:db) %>
 
 conclusion_current_draft_review:
@@ -15,6 +16,7 @@ conclusion_current_draft_review:
   applied_procedures: Current Draft Applied Procedures
   conclusion: Current Draft Conclusion
   approved: true
+  organization: default_organization
 
 conclusion_past_final_review:
   type: ConclusionFinalReview
@@ -24,6 +26,7 @@ conclusion_past_final_review:
   applied_procedures: Past Final Applied Procedures
   conclusion: Past Final Conclusion
   approved: true
+  organization: default_organization
   created_at: <%= 2.months.ago.to_date.to_s(:db) %>
 
 conclusion_past_draft_review:
@@ -33,6 +36,7 @@ conclusion_past_draft_review:
   applied_procedures: Past Draft Applied Procedures
   conclusion: Past Draft Conclusion
   approved: true
+  organization: default_organization
 
 conclusion_with_conclusion_draft_review:
   type: ConclusionDraftReview
@@ -41,6 +45,7 @@ conclusion_with_conclusion_draft_review:
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true
+  organization: default_organization
   
 conclusion_approved_with_conclusion_draft_review:
   type: ConclusionDraftReview
@@ -49,3 +54,4 @@ conclusion_approved_with_conclusion_draft_review:
   applied_procedures: With Conclusion Draft Applied Procedures
   conclusion: With Conclusion Draft Conclusion
   approved: true
+  organization: default_organization

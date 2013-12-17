@@ -2,7 +2,7 @@ class ResourceClass < ActiveRecord::Base
   include ParameterSelector
 
   has_paper_trail meta: {
-    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Constantes
@@ -12,17 +12,12 @@ class ResourceClass < ActiveRecord::Base
   }
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :human_resources, -> {
-    where(
-      organization_id: GlobalModelConfig.current_organization_id,
-      resource_class_type: TYPES[:human]
-    ).order('name ASC')
+    list.where(resource_class_type: TYPES[:human]).order('name ASC')
   }
   scope :material_resources, -> {
-    where(
-      organization_id: GlobalModelConfig.current_organization_id,
-      resource_class_type: TYPES[:material]
-    ).order('name ASC')
+    list.where(resource_class_type: TYPES[:material]).order('name ASC')
   }
 
   # Restricciones de atributos

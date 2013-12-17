@@ -1,8 +1,8 @@
 class FindingReviewAssignment < ActiveRecord::Base
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Restricciones

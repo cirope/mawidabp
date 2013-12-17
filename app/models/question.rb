@@ -1,6 +1,7 @@
 class Question < ActiveRecord::Base
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   ANSWER_TYPES = {
@@ -41,5 +42,4 @@ class Question < ActiveRecord::Base
   ANSWER_TYPES.each do |answer_type, answer_value|
     define_method("answer_#{answer_type}?") { self.answer_type == answer_value }
   end
-
 end

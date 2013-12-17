@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.1'
+gem 'rails', '4.0.2'
 
 gem 'pg'
 gem 'foreigner'
@@ -15,7 +15,7 @@ gem 'validates_timeliness'
 gem 'RedCloth'
 gem 'whenever'
 gem 'will_paginate'
-gem 'paper_trail', '3.0.0.rc2'
+gem 'paper_trail'
 gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
@@ -31,13 +31,14 @@ gem 'uglifier'
 gem 'capistrano'
 gem 'capistrano-bundler'
 gem 'capistrano-rails'
-gem 'capistrano-rbenv', github: 'capistrano/rbenv'
+gem 'capistrano-rbenv'
 
 gem 'unicorn'
 gem 'unicorn-rails'
 
 group :test do
   gem 'rake' # Travis CI need this
+  gem 'timecop'
   gem 'minitest', require: false
   gem 'turn'
 end

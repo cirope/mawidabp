@@ -2,8 +2,8 @@ class WorkflowItem < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Callbacks para registrar los cambios en los modelos cuando son modificados o

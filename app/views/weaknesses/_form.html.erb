@@ -18,7 +18,7 @@
         {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-        :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
+        :object => WorkPaper.new(:organization_id => current_organization.id)})}';" %>
     <% end %>
   <% end %>
   <%= f.error_messages %>
@@ -87,7 +87,7 @@
       <%= calendar_text_field f, :origination_date, false, nil,
         :disabled => readonly %>
     </p>
-    <% if @auth_organization.kind.eql? 'quality_management' %>
+    <% if current_organization.kind.eql? 'quality_management' %>
       <p>
         <%= f.label :correction %>
         <%= f.text_area :correction, :style => 'height: 4em;',
@@ -135,7 +135,7 @@
         </p>
       <% end %>
     <% end %>
-    <% if @auth_organization.kind.eql? 'quality_management' %>
+    <% if current_organization.kind.eql? 'quality_management' %>
       <p>
         <%= f.label :cause_analysis %>
         <%= f.text_area :cause_analysis, :style => 'height: 4em;',

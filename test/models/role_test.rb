@@ -8,6 +8,8 @@ class RoleTest < ActiveSupport::TestCase
   def setup
     @role = Role.find roles(:admin_role).id
     @role.inject_auth_privileges(Hash.new(Hash.new(true)))
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -20,10 +22,9 @@ class RoleTest < ActiveSupport::TestCase
   # Prueba la creación de un perfil
   test 'create' do
     assert_difference 'Role.count' do
-      @role = Role.new(
+      @role = Role.list.new(
         :name => 'New name',
-        :role_type => Role::TYPES[:admin],
-        :organization_id => organizations(:default_organization).id
+        :role_type => Role::TYPES[:admin]
       )
 
       @role.inject_auth_privileges(Hash.new(Hash.new(true)))

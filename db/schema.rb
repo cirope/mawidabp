@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131114182935) do
+ActiveRecord::Schema.define(version: 20131202121050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,10 +103,12 @@ ActiveRecord::Schema.define(version: 20131114182935) do
     t.text     "applied_procedures"
     t.boolean  "approved"
     t.date     "close_date"
+    t.integer  "organization_id"
   end
 
   add_index "conclusion_reviews", ["close_date"], name: "index_conclusion_reviews_on_close_date", using: :btree
   add_index "conclusion_reviews", ["issue_date"], name: "index_conclusion_reviews_on_issue_date", using: :btree
+  add_index "conclusion_reviews", ["organization_id"], name: "index_conclusion_reviews_on_organization_id", using: :btree
   add_index "conclusion_reviews", ["review_id"], name: "index_conclusion_reviews_on_review_id", using: :btree
   add_index "conclusion_reviews", ["type"], name: "index_conclusion_reviews_on_type", using: :btree
 
@@ -126,9 +128,11 @@ ActiveRecord::Schema.define(version: 20131114182935) do
     t.integer  "sustantive_score"
     t.integer  "order_number"
     t.boolean  "exclude_from_score",     default: false, null: false
+    t.integer  "organization_id"
   end
 
   add_index "control_objective_items", ["control_objective_id"], name: "index_control_objective_items_on_control_objective_id", using: :btree
+  add_index "control_objective_items", ["organization_id"], name: "index_control_objective_items_on_organization_id", using: :btree
   add_index "control_objective_items", ["review_id"], name: "index_control_objective_items_on_review_id", using: :btree
 
   create_table "control_objectives", force: true do |t|
@@ -282,10 +286,11 @@ ActiveRecord::Schema.define(version: 20131114182935) do
     t.date     "origination_date"
     t.integer  "repeated_of_id"
     t.integer  "highest_risk"
-    t.string   "correction"
+    t.text     "correction"
     t.date     "correction_date"
-    t.string   "cause_analysis"
+    t.text     "cause_analysis"
     t.date     "cause_analysis_date"
+    t.integer  "organization_id"
   end
 
   add_index "findings", ["control_objective_item_id"], name: "index_findings_on_control_objective_item_id", using: :btree
@@ -293,6 +298,7 @@ ActiveRecord::Schema.define(version: 20131114182935) do
   add_index "findings", ["final"], name: "index_findings_on_final", using: :btree
   add_index "findings", ["first_notification_date"], name: "index_findings_on_first_notification_date", using: :btree
   add_index "findings", ["follow_up_date"], name: "index_findings_on_follow_up_date", using: :btree
+  add_index "findings", ["organization_id"], name: "index_findings_on_organization_id", using: :btree
   add_index "findings", ["parent_id"], name: "index_findings_on_parent_id", using: :btree
   add_index "findings", ["repeated_of_id"], name: "index_findings_on_repeated_of_id", using: :btree
   add_index "findings", ["state"], name: "index_findings_on_state", using: :btree
@@ -441,20 +447,6 @@ ActiveRecord::Schema.define(version: 20131114182935) do
   add_index "organizations", ["name"], name: "index_organizations_on_name", using: :btree
   add_index "organizations", ["prefix"], name: "index_organizations_on_prefix", unique: true, using: :btree
 
-  create_table "parameters", force: true do |t|
-    t.string   "name",            limit: 100
-    t.text     "value"
-    t.text     "description"
-    t.integer  "organization_id"
-    t.integer  "lock_version",                default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "parameters", ["name", "organization_id"], name: "index_parameters_on_name_and_organization_id", unique: true, using: :btree
-  add_index "parameters", ["name"], name: "index_parameters_on_name", using: :btree
-  add_index "parameters", ["organization_id"], name: "index_parameters_on_organization_id", using: :btree
-
   create_table "periods", force: true do |t|
     t.integer  "number"
     t.text     "description"
@@ -488,11 +480,13 @@ ActiveRecord::Schema.define(version: 20131114182935) do
 
   create_table "plans", force: true do |t|
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
+  add_index "plans", ["organization_id"], name: "index_plans_on_organization_id", using: :btree
   add_index "plans", ["period_id"], name: "index_plans_on_period_id", using: :btree
 
   create_table "polls", force: true do |t|
@@ -556,12 +550,14 @@ ActiveRecord::Schema.define(version: 20131114182935) do
 
   create_table "procedure_controls", force: true do |t|
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
   add_index "procedure_controls", ["created_at"], name: "index_procedure_controls_on_created_at", using: :btree
+  add_index "procedure_controls", ["organization_id"], name: "index_procedure_controls_on_organization_id", using: :btree
   add_index "procedure_controls", ["period_id"], name: "index_procedure_controls_on_period_id", using: :btree
 
   create_table "process_controls", force: true do |t|
@@ -665,7 +661,7 @@ ActiveRecord::Schema.define(version: 20131114182935) do
     t.text     "description"
     t.integer  "period_id"
     t.integer  "plan_item_id"
-    t.integer  "lock_version",   default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "file_model_id"
@@ -673,10 +669,12 @@ ActiveRecord::Schema.define(version: 20131114182935) do
     t.integer  "score"
     t.integer  "top_scale"
     t.integer  "achieved_scale"
+    t.integer  "organization_id"
   end
 
   add_index "reviews", ["file_model_id"], name: "index_reviews_on_file_model_id", using: :btree
   add_index "reviews", ["identification"], name: "index_reviews_on_identification", using: :btree
+  add_index "reviews", ["organization_id"], name: "index_reviews_on_organization_id", using: :btree
   add_index "reviews", ["period_id"], name: "index_reviews_on_period_id", using: :btree
   add_index "reviews", ["plan_item_id"], name: "index_reviews_on_plan_item_id", using: :btree
 
@@ -791,11 +789,13 @@ ActiveRecord::Schema.define(version: 20131114182935) do
   create_table "workflows", force: true do |t|
     t.integer  "review_id"
     t.integer  "period_id"
-    t.integer  "lock_version", default: 0
+    t.integer  "lock_version",    default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organization_id"
   end
 
+  add_index "workflows", ["organization_id"], name: "index_workflows_on_organization_id", using: :btree
   add_index "workflows", ["period_id"], name: "index_workflows_on_period_id", using: :btree
   add_index "workflows", ["review_id"], name: "index_workflows_on_review_id", using: :btree
 
@@ -854,8 +854,6 @@ ActiveRecord::Schema.define(version: 20131114182935) do
 
   add_foreign_key "organizations", "groups", name: "organizations_group_id_fk", dependent: :restrict
   add_foreign_key "organizations", "image_models", name: "organizations_image_model_id_fk", dependent: :restrict
-
-  add_foreign_key "parameters", "organizations", name: "parameters_organization_id_fk", dependent: :restrict
 
   add_foreign_key "periods", "organizations", name: "periods_organization_id_fk", dependent: :restrict
 

@@ -3,7 +3,9 @@
 # Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)
 class OportunitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  before_action :set_oportunity, only: [:show, :edit, :update, :follow_up_pdf, :undo_reiteration]
+  before_action :set_oportunity, only: [
+    :show, :edit, :update, :follow_up_pdf, :undo_reiteration
+  ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
   # Lista las oportunidades de mejora
@@ -13,7 +15,6 @@ class OportunitiesController < ApplicationController
   def index
     @title = t 'oportunity.index_title'
     default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
       [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
@@ -25,8 +26,7 @@ class OportunitiesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {:organization_id => @auth_organization.id,
-      :boolean_true => true, :boolean_false => false}
+    parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
@@ -42,7 +42,7 @@ class OportunitiesController < ApplicationController
     build_search_conditions Oportunity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @oportunities = Oportunity.includes(
+    @oportunities = Oportunity.list.includes(
       :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
@@ -84,7 +84,7 @@ class OportunitiesController < ApplicationController
   def new
     @title = t 'oportunity.new_title'
     @oportunity = Oportunity.new(
-      {:control_objective_item_id => params[:control_objective_item]}, {}, true
+      { :control_objective_item_id => params[:control_objective_item] }, {}, true
     )
 
     respond_to do |format|
@@ -106,7 +106,7 @@ class OportunitiesController < ApplicationController
   # * POST /oportunities.xml
   def create
     @title = t 'oportunity.new_title'
-    @oportunity = Oportunity.new(oportunity_params)
+    @oportunity = Oportunity.list.new(oportunity_params)
 
     respond_to do |format|
       if @oportunity.save
@@ -151,7 +151,7 @@ class OportunitiesController < ApplicationController
   #
   # * GET /oportunities/follow_up_pdf/1
   def follow_up_pdf
-    @oportunity.follow_up_pdf(@auth_organization)
+    @oportunity.follow_up_pdf(current_organization)
 
     redirect_to @oportunity.relative_follow_up_pdf_path
   end
@@ -176,7 +176,7 @@ class OportunitiesController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -218,7 +218,7 @@ class OportunitiesController < ApplicationController
     parameters = {
       :boolean_false => false,
       :finding_id => params[:finding_id],
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -258,7 +258,7 @@ class OportunitiesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id].to_i
     }
 
@@ -284,18 +284,17 @@ class OportunitiesController < ApplicationController
 
   private
     def set_oportunity
-      @oportunity = Oportunity.includes( :finding_relations, :work_papers,
+      @oportunity = Oportunity.list.includes(
+        :finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).where(
-        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
-      ).first
+      ).find(params[:id])
     end
 
     def oportunity_params
       params.require(:oportunity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, :follow_up_date, 
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date, :follow_up_date,
         :state, :organization_date, :solution_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
@@ -306,7 +305,7 @@ class OportunitiesController < ApplicationController
         ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -314,7 +313,7 @@ class OportunitiesController < ApplicationController
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :follow_up_pdf => :read,
         :auto_complete_for_user => :read,

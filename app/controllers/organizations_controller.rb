@@ -14,7 +14,7 @@ class OrganizationsController < ApplicationController
   def index
     @title = t 'organization.index_title'
     @organizations = Organization.where(
-      :group_id => @auth_organization.group_id
+      :group_id => current_organization.group_id
     ).order('name ASC').paginate(
       :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
@@ -78,7 +78,7 @@ class OrganizationsController < ApplicationController
             :organization => @organization,
             :role => @organization.roles.sort.first
           ).valid?
-          
+
         raise ActiveRecord::Rollback unless saved
       end
 
@@ -113,7 +113,7 @@ class OrganizationsController < ApplicationController
         format.xml  { render :xml => @organization.errors, :status => :unprocessable_entity }
       end
     end
-    
+
   rescue ActiveRecord::StaleObjectError
     flash.alert = t 'organization.stale_object_error'
     redirect_to :action => :edit
@@ -142,7 +142,7 @@ class OrganizationsController < ApplicationController
 
     def set_organization
       @organization = Organization.where(
-        group_id: @auth_organization.group_id, id: params[:id]
+        group_id: current_organization.group_id, id: params[:id]
       ).first
     end
 end

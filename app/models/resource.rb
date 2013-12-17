@@ -1,8 +1,8 @@
 class Resource < ActiveRecord::Base
   include ParameterSelector
-  
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Restricciones
@@ -15,10 +15,10 @@ class Resource < ActiveRecord::Base
     :allow_nil => true
   validates :resource_class_id, :numericality => {:only_integer => true},
     :allow_nil => true
-  
+
   # Relaciones
   belongs_to :resource_class
-  has_many :users, :dependent => :nullify
+  has_many :users, dependent: :nullify
   has_many :resource_utilizations, :as => :resource, :dependent => :destroy
 
   def to_s

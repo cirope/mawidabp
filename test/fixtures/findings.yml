@@ -21,6 +21,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
@@ -44,6 +45,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 <% (1..4).each do |level| %>
 
@@ -70,6 +72,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
+  organization: default_organization
 
 <% end %>
 
@@ -96,6 +99,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
@@ -119,6 +123,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_fortress:
   type: Fortress
@@ -141,6 +146,7 @@ bcra_A4609_security_management_responsible_dependency_fortress:
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level:
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_fortress_2:
   type: Fortress
@@ -163,6 +169,7 @@ bcra_A4609_security_management_responsible_dependency_fortress_2:
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level:
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented:
   type: Nonconformity
@@ -185,6 +192,7 @@ bcra_A4609_security_management_responsible_dependency_nonconformity_being_implem
   origination_date: <%= 2.years.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
   type: Nonconformity
@@ -208,6 +216,7 @@ iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 <% (1..4).each do |level| %>
 
@@ -233,6 +242,7 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_l
   first_notification_date: <%= (stale_confirmed_days + stale_confirmed_days * level).next.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: <%= level - 1 %>
+  organization: default_organization
 
 <% end %>
 
@@ -258,6 +268,7 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
   first_notification_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
   type: Nonconformity
@@ -281,6 +292,7 @@ iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity:
   type: Nonconformity
@@ -303,6 +315,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   type: Nonconformity
@@ -325,6 +338,7 @@ bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   follow_up_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   type: Nonconformity
@@ -348,6 +362,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   follow_up_date: <%= FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_nonconformity:
   type: Nonconformity
@@ -370,6 +385,7 @@ iso_27000_security_policy_3_1_item_nonconformity:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
   type: Nonconformity
@@ -392,6 +408,7 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity:
   type: PotentialNonconformity
@@ -405,6 +422,7 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity_2:
   type: PotentialNonconformity
@@ -418,6 +436,7 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_potential_nonconformity:
   type: PotentialNonconformity
@@ -431,6 +450,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
   type: PotentialNonconformity
@@ -446,6 +466,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
   type: PotentialNonconformity
@@ -460,6 +481,7 @@ iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
   type: PotentialNonconformity
@@ -474,6 +496,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
   type: PotentialNonconformity
@@ -488,6 +511,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   type: Oportunity
@@ -501,6 +525,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   type: Oportunity
@@ -514,6 +539,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
@@ -527,6 +553,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   solution_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
   type: Weakness
@@ -549,6 +576,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
@@ -567,6 +595,7 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
   follow_up_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
@@ -585,6 +614,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   follow_up_date:
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   type: Oportunity
@@ -600,6 +630,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   first_notification_date: <%= FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_organization_4_2_item_editable_oportunity:
   type: Oportunity
@@ -614,6 +645,7 @@ iso_27000_security_organization_4_2_item_editable_oportunity:
   confirmation_date: <%= Date.today.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   type: Oportunity
@@ -628,6 +660,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   confirmation_date: <%= stale_confirmed_days.next.days.ago_in_business.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization
 
 iso_27000_security_policy_3_1_item_weakness:
   type: Weakness
@@ -650,7 +683,7 @@ iso_27000_security_policy_3_1_item_weakness:
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
-
+  organization: default_organization
 
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
   type: Weakness
@@ -673,3 +706,4 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
   follow_up_date: <%= 2.days.ago.to_date.to_s(:db) %>
   final: false
   notification_level: 0
+  organization: default_organization

@@ -6,8 +6,8 @@ class Review < ActiveRecord::Base
 
   trimmed_fields :identification
 
-  has_paper_trail :meta => {
-    :organization_id => lambda { |user| GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Constantes
@@ -42,60 +42,39 @@ class Review < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    includes(:period).where(
-      "#{Period.table_name}.organization_id" => GlobalModelConfig.current_organization_id
-    ).order('identification ASC').references(:periods)
+    where(organization_id: Organization.current_id).order('identification ASC')
   }
   scope :list_with_approved_draft, -> {
-    includes(:period, :conclusion_draft_review).where(
-      ConclusionReview.table_name => {:approved => true},
-      Period.table_name => {
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
-    ).order('identification ASC').references(:periods, :conclusion_reviews)
+    list.includes(:conclusion_draft_review).where(
+      ConclusionReview.table_name => { approved: true }
+    ).references(:conclusion_reviews)
   }
   scope :list_with_final_review, -> {
-    includes(:period, :conclusion_final_review).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL"
-      ].join(' AND '),
-      { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC').references(:periods, :conclusion_reviews)
+    list.includes(:conclusion_final_review).where(
+      "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+    ).references(:conclusion_reviews)
   }
   scope :list_without_final_review, -> {
-    includes(:period, :conclusion_final_review).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        "#{ConclusionReview.table_name}.review_id IS NULL"
-      ].join(' AND '),
-      { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC').references(:periods, :conclusion_reviews)
+    list.includes(:conclusion_final_review).where(
+      "#{ConclusionReview.table_name}.review_id IS NULL"
+    ).references(:conclusion_reviews)
   }
   scope :list_without_draft_review, -> {
-    includes(:period, :conclusion_draft_review).where(
-      [
-        "#{Period.table_name}.organization_id = :organization_id",
-        "#{ConclusionReview.table_name}.review_id IS NULL"
-      ].join(' AND '),
-      { :organization_id => GlobalModelConfig.current_organization_id }
-    ).order('identification ASC').references(:periods, :conclusion_reviews)
+    list.includes(:conclusion_draft_review).where(
+      "#{ConclusionReview.table_name}.review_id IS NULL"
+    ).references(:conclusion_reviews)
   }
   scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       :period, :conclusion_final_review, {
         :plan_item => {:business_unit => :business_unit_type}
       }
     ).where(
       [
-        "#{Period.table_name}.organization_id = :organization_id",
         "#{table_name}.created_at BETWEEN :from_date AND :to_date",
         "#{ConclusionFinalReview.table_name}.review_id IS NULL"
       ].join(' AND '),
-      {
-        :from_date => from_date, :to_date => to_date.to_time.end_of_day,
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
+      { :from_date => from_date, :to_date => to_date.to_time.end_of_day }
     ).order(
       [
         "#{Period.table_name}.start ASC",
@@ -104,22 +83,15 @@ class Review < ActiveRecord::Base
         "#{BusinessUnitType.table_name}.name ASC",
         "#{table_name}.created_at ASC"
       ]
-    ).references(:periods, :conclusion_reviews, :business_unit_types)
+    ).references(:conclusion_reviews, :business_unit_types)
   }
   scope :list_all_without_workflow, ->(period_id) {
-    includes(:period, :workflow).where(
+    list.includes(:workflow).list.where(
       [
-        "#{Period.table_name}.organization_id = :organization_id",
         "#{table_name}.period_id = :period_id",
         "#{Workflow.table_name}.review_id IS NULL"
-      ].join(' AND '),
-      {
-        :organization_id => GlobalModelConfig.current_organization_id,
-        :period_id => period_id
-      }
-    ).order("#{table_name}.identification ASC").references(
-      :periods, :workflows
-    )
+      ].join(' AND '), { :period_id => period_id }
+    ).references(:workflows)
   }
   scope :internal_audit, -> {
     includes(
@@ -142,25 +114,17 @@ class Review < ActiveRecord::Base
   validates :identification, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
   validates :identification, :description, :period_id, :plan_item_id,
-    :presence => true
+    :organization_id, :presence => true
   validates :plan_item_id, :uniqueness => {:case_sensitive => false}
   validates :period_id, :plan_item_id, :numericality => {:only_integer => true},
     :allow_nil => true, :allow_blank => true
   validates_each :identification do |record, attr, value|
-    organization_id = record.period.try(:organization_id)
-    reviews = Review.includes(:period).where(
+    reviews = Review.list.where(
       [
-        "#{Period.table_name}.organization_id = :organization_id",
         'identification = :identification',
         (record.id ? "#{table_name}.id != :id" : "#{table_name}.id IS NOT NULL")
-      ].join(' AND '),
-      {
-        :organization_id => organization_id,
-        :identification => value,
-        :id => record.id
-      }
-    ).references(:periods)
-
+      ].join(' AND '), { :identification => value, :id => record.id }
+    )
     record.errors.add attr, :taken if reviews.count > 0
   end
   validates_each :review_user_assignments do |record, attr, value|
@@ -174,7 +138,7 @@ class Review < ActiveRecord::Base
   belongs_to :period
   belongs_to :plan_item
   belongs_to :file_model
-  has_one :organization, :through => :period
+  belongs_to :organization
   has_one :conclusion_draft_review, :dependent => :destroy
   has_one :conclusion_final_review
   has_one :business_unit, :through => :plan_item
@@ -1479,7 +1443,7 @@ class Review < ActiveRecord::Base
 
   def work_papers_zip_path
     filename_prefix = Review.human_attribute_name(:work_papers).downcase.sanitized_for_filename
-    path = ('%08d' % (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/) +
+    path = ('%08d' % (Organization.current_id || 0)).scan(/\d{4}/) +
       [Review.table_name] + ('%08d' % self.id).scan(/\d{4}/) +
       ["#{filename_prefix}-#{self.sanitized_identification}.zip"]
 

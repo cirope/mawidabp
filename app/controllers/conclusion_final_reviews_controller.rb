@@ -16,16 +16,13 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews.xml
   def index
     @title = t 'conclusion_final_review.index_title'
-    default_conditions = {
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    }
 
-    build_search_conditions ConclusionFinalReview, default_conditions
+    build_search_conditions ConclusionFinalReview
 
     order = @order_by || "issue_date DESC"
     order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
 
-    @conclusion_final_reviews = ConclusionFinalReview.includes(
+    @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).order(order).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
@@ -63,10 +60,13 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/new.xml
   # * GET /conclusion_final_reviews/new.json
   def new
-    unless ConclusionFinalReview.exists?(review_id: params[:review])
+    conclusion_final_review =
+      ConclusionFinalReview.list.find_by(review_id: params[:review])
+
+    unless conclusion_final_review
       @title = t 'conclusion_final_review.new_title'
-      @conclusion_final_review = ConclusionFinalReview.new(
-        review_id: params[:review])
+      @conclusion_final_review =
+        ConclusionFinalReview.new(review_id: params[:review])
 
       respond_to do |format|
         format.html # new.html.erb
@@ -85,9 +85,6 @@ class ConclusionFinalReviewsController < ApplicationController
         }
       end
     else
-      conclusion_final_review = ConclusionFinalReview.where(
-        review_id: params[:review]).first
-
       redirect_to edit_conclusion_final_review_url(conclusion_final_review)
     end
   end
@@ -105,8 +102,8 @@ class ConclusionFinalReviewsController < ApplicationController
   # * POST /conclusion_final_reviews.xml
   def create
     @title = t 'conclusion_final_review.new_title'
-    @conclusion_final_review = ConclusionFinalReview.new(
-      conclusion_final_review_params, {}, false)
+    @conclusion_final_review =
+      ConclusionFinalReview.list.new(conclusion_final_review_params)
 
     respond_to do |format|
       if @conclusion_final_review.save
@@ -129,8 +126,7 @@ class ConclusionFinalReviewsController < ApplicationController
     @title = t 'conclusion_final_review.edit_title'
 
     respond_to do |format|
-      if @conclusion_final_review.update(
-          conclusion_final_review_params)
+      if @conclusion_final_review.update(conclusion_final_review_params)
         flash.notice = t 'conclusion_final_review.correctly_updated'
         format.html { redirect_to(conclusion_final_reviews_url) }
         format.xml  { head :ok }
@@ -149,7 +145,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf/1
   def export_to_pdf
-    @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
 
     respond_to do |format|
       format.html { redirect_to @conclusion_final_review.relative_pdf_path }
@@ -164,11 +160,11 @@ class ConclusionFinalReviewsController < ApplicationController
     review = @conclusion_final_review.review
 
     if params[:global].blank?
-      review.score_sheet(@auth_organization)
+      review.score_sheet(current_organization)
 
       redirect_to review.relative_score_sheet_path
     else
-      review.global_score_sheet(@auth_organization)
+      review.global_score_sheet(current_organization)
 
       redirect_to review.relative_global_score_sheet_path
     end
@@ -179,7 +175,7 @@ class ConclusionFinalReviewsController < ApplicationController
   # * GET /conclusion_final_reviews/download_work_papers/1
   def download_work_papers
     review = @conclusion_final_review.review
-    review.zip_all_work_papers @auth_organization
+    review.zip_all_work_papers current_organization
 
     redirect_to review.relative_work_papers_zip_path
   end
@@ -195,7 +191,7 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * POST /conclusion_final_reviews/create_bundle
   def create_bundle
-    @conclusion_final_review.create_bundle_zip @auth_organization,
+    @conclusion_final_review.create_bundle_zip current_organization,
       params[:index_items]
 
     redirect_to @conclusion_final_review.relative_bundle_zip_path
@@ -226,14 +222,14 @@ class ConclusionFinalReviewsController < ApplicationController
       note = params[:conclusion_review][:email_note]
     end
 
-    @conclusion_final_review.to_pdf(@auth_organization, params[:export_options])
+    @conclusion_final_review.to_pdf(current_organization, params[:export_options])
 
     if include_score_sheet
-      @conclusion_final_review.review.score_sheet @auth_organization, false
+      @conclusion_final_review.review.score_sheet current_organization, false
     end
 
     if include_global_score_sheet
-      @conclusion_final_review.review.global_score_sheet(@auth_organization,
+      @conclusion_final_review.review.global_score_sheet(current_organization,
         false)
     end
 
@@ -259,7 +255,7 @@ class ConclusionFinalReviewsController < ApplicationController
             @conclusion_final_review.polls.create!(
               questionnaire_id: user_data[:questionnaire_id],
               user_id: user.id,
-              organization_id: @auth_organization.id,
+              organization_id: current_organization.id,
               pollable_type: questionnaire.pollable_type
             )
           else
@@ -283,13 +279,9 @@ class ConclusionFinalReviewsController < ApplicationController
   #
   # * GET /conclusion_final_reviews/export_to_pdf
   def export_list_to_pdf
-    default_conditions = {
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    }
+    build_search_conditions ConclusionFinalReview
 
-    build_search_conditions ConclusionFinalReview, default_conditions
-
-    conclusion_final_reviews = ConclusionFinalReview.includes(
+    conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).references(:periods, :reviews, :business_units).order(
       @order_by || 'issue_date DESC'
@@ -297,7 +289,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header @auth_organization
+    pdf.add_generic_report_header current_organization
     pdf.add_title t('conclusion_final_review.index_title')
 
     column_order = [
@@ -381,7 +373,7 @@ class ConclusionFinalReviewsController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(users.name) LIKE :user_data_#{i}",
@@ -405,7 +397,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
   private
     def set_conclusion_final_review
-      @conclusion_final_review = ConclusionFinalReview.includes(
+      @conclusion_final_review = ConclusionFinalReview.list.includes(
         review: [
           :period,
           :plan_item,
@@ -415,9 +407,7 @@ class ConclusionFinalReviewsController < ApplicationController
             ]
           }
         ]
-      ).where(
-        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
-      ).references(:periods).first
+      ).find(params[:id])
     end
 
     def conclusion_final_review_params
@@ -427,7 +417,7 @@ class ConclusionFinalReviewsController < ApplicationController
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update({
           export_to_pdf: :read,
           score_sheet: :read,

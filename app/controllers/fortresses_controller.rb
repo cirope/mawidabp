@@ -10,7 +10,6 @@ class FortressesController < ApplicationController
   def index
     @title = t 'fortress.index_title'
     default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
       [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
@@ -22,8 +21,7 @@ class FortressesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {:organization_id => @auth_organization.id,
-      :boolean_true => true, :boolean_false => false}
+    parameters = { :boolean_true => true, :boolean_false => false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
@@ -39,7 +37,7 @@ class FortressesController < ApplicationController
     build_search_conditions Fortress,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @fortresses = Fortress.includes(
+    @fortresses = Fortress.list.includes(
       :work_papers,
       :control_objective_item => {
         :review => [:period, :plan_item, :conclusion_final_review]
@@ -103,7 +101,7 @@ class FortressesController < ApplicationController
   # * POST /fortresses.xml
   def create
     @title = t 'fortress.new_title'
-    @fortress = Fortress.new(fortress_params)
+    @fortress = Fortress.list.new(fortress_params)
 
     respond_to do |format|
       if @fortress.save
@@ -152,7 +150,7 @@ class FortressesController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {:organization_id => @auth_organization.id}
+    parameters = {:organization_id => current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -188,7 +186,7 @@ class FortressesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      :organization_id => @auth_organization.id,
+      :organization_id => current_organization.id,
       :review_id => params[:review_id].to_i
     }
 
@@ -214,12 +212,10 @@ class FortressesController < ApplicationController
 
   private
     def set_fortress
-      @fortress = Fortress.includes( :finding_relations, :work_papers,
+      @fortress = Fortress.list.includes(:finding_relations, :work_papers,
         {:finding_user_assignments => :user},
         {:control_objective_item => {:review => :period}}
-      ).where(
-        :id => params[:id], Period.table_name => {:organization_id => @auth_organization.id}
-      ).first
+      ).find(params[:id])
     end
 
     def fortress_params
@@ -235,13 +231,13 @@ class FortressesController < ApplicationController
         ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_relations_attributes: [:description, :related_finding_id]
       )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :auto_complete_for_user => :read,
         :auto_complete_for_control_objective_item => :read

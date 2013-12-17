@@ -5,8 +5,8 @@ class FileModelsControllerTest < ActionController::TestCase
   fixtures :organizations, :users
 
   def setup
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+    set_organization
+
     file_name = "#{TEMP_PATH}temp_test.txt"
 
     File.open(file_name, 'w') { |f| f << 'some test text' }
@@ -24,7 +24,7 @@ class FileModelsControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 

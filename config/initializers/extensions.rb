@@ -17,7 +17,7 @@ class ActiveRecord::Base
   end
 
   def self.prepare_search_conditions(*conditions)
-    (conditions || []).map { |c| "(#{sanitize_sql(c)})" }.join(' AND ')
+    (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize_sql(c)})" }.join(' AND ')
   end
 
   def self.get_column_name(column)

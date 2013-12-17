@@ -8,6 +8,8 @@ class ProcedureControlItemTest < ActiveSupport::TestCase
   def setup
     @procedure_control_item = ProcedureControlItem.find(
       procedure_control_items(:procedure_control_item_iso_27001_1).id)
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera

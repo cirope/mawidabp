@@ -1,8 +1,8 @@
 class BestPractice < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Callbacks
@@ -10,9 +10,7 @@ class BestPractice < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    where(
-      :organization_id => GlobalModelConfig.current_organization_id
-    ).order('name ASC')
+    where(organization_id: Organization.current_id).order('name ASC')
   }
 
   # Restricciones
@@ -29,17 +27,11 @@ class BestPractice < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC")},
+  has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC") },
     :dependent => :destroy,
     :after_add => :assign_best_practice
 
   accepts_nested_attributes_for :process_controls, :allow_destroy => true
-
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
-
-    self.organization_id = GlobalModelConfig.current_organization_id
-  end
 
   def assign_best_practice(process_control)
     process_control.best_practice = self

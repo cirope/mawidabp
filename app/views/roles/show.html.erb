@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <% if @auth_organization.kind.eql? 'quality_management' %>
+      <% if current_organization.kind.eql? 'quality_management' %>
         <% menu_items = @role.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS %>
       <% else %>
         <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>

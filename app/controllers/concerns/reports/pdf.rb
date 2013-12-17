@@ -1,17 +1,18 @@
 module Reports::Pdf
 
-  def init_pdf(organization, title, subtitle)
+  def init_pdf(title, subtitle)
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header organization
+    pdf.add_generic_report_header current_organization
 
     pdf.add_title title, PDF_FONT_SIZE, :center
 
     pdf.move_down PDF_FONT_SIZE
 
-    pdf.add_title subtitle, PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
+    if subtitle
+      pdf.add_title subtitle, PDF_FONT_SIZE, :center
+      pdf.move_down PDF_FONT_SIZE * 2
+    end
 
     pdf
   end
@@ -276,18 +277,18 @@ module Reports::Pdf
       t("#{controller}_committee_report.period.title"),
       t("#{controller}_committee_report.period.range",
         :from_date => l(from_date, :format => :long),
-        :to_date => l(to_date, :format => :long))) 
+        :to_date => l(to_date, :format => :long)))
   end
-  
+
   def add_pdf_filters(pdf, controller, filters)
     pdf.move_down PDF_FONT_SIZE
     pdf.text t("#{controller}_committee_report.applied_filters",
       :filters => filters.to_sentence, :count => filters.size),
       :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
       :inline_format => true
-  end 
+  end
 
-  def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0) 
+  def save_pdf(pdf, controller, from_date, to_date, sub_directory, id = 0)
     pdf.custom_save_as(
       t("#{controller}_committee_report.#{sub_directory}.pdf_name",
         :from_date => from_date.to_formatted_s(:db),

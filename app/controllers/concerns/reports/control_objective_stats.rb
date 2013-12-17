@@ -4,60 +4,50 @@ module Reports::ControlObjectiveStats
   include Parameters::Risk
 
   def control_objective_stats
-    init_vars 
-    
+    init_vars
+
     if params[:control_objective_stats]
       conclusion_reviews_by_business_unit_type if params[:control_objective_stats][:business_unit_type].present?
 
       conclusion_reviews_by_business_unit if params[:control_objective_stats][:business_unit].present?
-        
+
       conclusion_reviews_by_control_objective if params[:control_objective_stats][:control_objective].present?
     end
 
     @periods.each do |period|
-      @reviews_score_data[period] ||= []
-      @process_controls = {}
-      @weaknesses_status_count = {}
-
-      count_conclusion_review_weaknesses period
-
-
-      @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
-        (@reviews_score_data[period].sum.to_f / @reviews_score_data[period].size).round : 100
-
-      @process_control_data[period] ||= []
+      count_conclusion_review_weaknesses(period)
 
       @process_controls.each do |pc, cos|
         @control_objectives_data[period][pc] ||= {}
 
-        cos.each do |co, coi_data|
+        cos.each do |co, data|
           @control_objectives_data[period][pc][co.name] ||= {}
+          @coi_data = data
 
-          reviews_count = coi_data[:reviews]
-          effectiveness = coi_data[:effectiveness].size > 0 ?
-            coi_data[:effectiveness].sum.to_f / coi_data[:effectiveness].size : 100
-          weaknesses_count = coi_data[:weaknesses]
+          effectiveness = @coi_data[:effectiveness].size > 0 ?
+            @coi_data[:effectiveness].sum.to_f / @coi_data[:effectiveness].size : 100
+          @weaknesses_count = @coi_data[:weaknesses]
 
-          if weaknesses_count.values.sum == 0
+          if @weaknesses_count.values.sum == 0
             @weaknesses_count_text = t(
               "#{@controller}_committee_report.control_objective_stats.without_weaknesses")
           else
-            group_findings_by_risk(period, pc, co, coi_data)
+            group_findings_by_risk(period, pc, co, @coi_data)
           end
 
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
             'effectiveness' => t(
-              'conclusion_committee_report.control_objective_stats.average_effectiveness_resume',
-              :effectiveness => "#{'%.2f' % effectiveness}%", :count => reviews_count
+              "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
+              :effectiveness => "#{'%.2f' % effectiveness}%", :count => @coi_data[:reviews]
             ),
             'weaknesses_count' => @weaknesses_count_text
           }
         end
       end
 
-      sort_process_control_data period
+      sort_process_control_data(period)
     end
   end
 
@@ -68,6 +58,7 @@ module Reports::ControlObjectiveStats
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
     @periods = periods_for_interval
     @risk_levels = []
+    @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
     @filters = []
     @columns = [
       ['process_control', BestPractice.human_attribute_name(:process_controls), 20],
@@ -93,8 +84,8 @@ module Reports::ControlObjectiveStats
       params[:control_objective_stats][:business_unit_type])
     @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
       "\"#{@selected_business_unit.name.strip}\""
-  
-    @conclusion_reviews = @conclusion_reviews.by_business_unit_type(                                                                                                                                        
+
+    @conclusion_reviews = @conclusion_reviews.by_business_unit_type(
       @selected_business_unit.id)
   end
 
@@ -106,9 +97,9 @@ module Reports::ControlObjectiveStats
     unless business_units.empty?
       @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
         "\"#{params[:control_objective_stats][:business_unit].strip}\""
-    
+
       @conclusion_reviews = @conclusion_reviews.by_business_unit_names(
-        *business_units)    
+        *business_units)
     end
   end
 
@@ -121,57 +112,32 @@ module Reports::ControlObjectiveStats
     unless @control_objectives.empty?
       @filters << "<b>#{ControlObjective.model_name.human}</b> = " +
         "\"#{params[:control_objective_stats][:control_objective].strip}\""
-   
+
       @conclusion_reviews = @conclusion_reviews.by_control_objective_names(
         *@control_objectives)
     end
   end
 
   def count_conclusion_review_weaknesses(period)
+    @reviews_score_data[period] ||= []
+    @process_control_data[period] ||= []
+    @process_controls = {}
+    @weaknesses_status_count = {}
+
     @conclusion_reviews.for_period(period).each do |c_r|
       c_r.review.control_objective_items.not_excluded_from_score.with_names(*@control_objectives).each do |coi|
-        @process_controls[coi.process_control.name] ||= {}
-        coi_data = @process_controls[coi.process_control.name][coi.control_objective] || {}
-        coi_data[:weaknesses_ids] ||= {}
-        weaknesses_count = {}
-        weaknesses = @final ? coi.final_weaknesses : coi.weaknesses
+        init_control_objective_item_data(coi)
 
-        weaknesses.not_revoked.each do |w|
-          @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
+        count_weaknesses_by_risk(@weaknesses)
 
-          weaknesses_count[w.risk_text] ||= 0
-          weaknesses_count[w.risk_text] += 1
-
-          @weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
-
-          coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
-
-          if Finding::PENDING_STATUS.include? w.state
-            @weaknesses_status_count[w.risk_text][:incomplete] += 1
-            coi_data[:weaknesses_ids][w.risk_text][:incomplete] << w.id
-          else
-            @weaknesses_status_count[w.risk_text][:complete] += 1
-            coi_data[:weaknesses_ids][w.risk_text][:complete] << w.id
-          end
-        end
-
-        coi_data[:weaknesses] ||= {}
-        coi_data[:effectiveness] ||= []
-        coi_data[:effectiveness] << coi.effectiveness
-
-        coi_data[:reviews] ||= 0
-        coi_data[:reviews] += 1 if weaknesses.size > 0
-
-        weaknesses_count.each do |r, c|
-          coi_data[:weaknesses][r] ||= 0
-          coi_data[:weaknesses][r] += c
-        end
-
-        @process_controls[coi.process_control.name][coi.control_objective] = coi_data
+        @process_controls[coi.process_control.name][coi.control_objective] = @coi_data
       end
 
       @reviews_score_data[period] << c_r.review.score
-    end 
+    end
+
+    @reviews_score_data[period] = @reviews_score_data[period].size > 0 ?
+      (@reviews_score_data[period].sum.to_f / @reviews_score_data[period].size).round : 100
   end
 
   def sort_process_control_data(period)
@@ -184,7 +150,7 @@ module Reports::ControlObjectiveStats
   end
 
   def group_findings_by_risk(period, pc, co, coi_data)
-    @weaknesses_count_text = {}                                                                                                                                               
+    @weaknesses_count_text = {}
     text = {}
 
     @risk_levels.each do |risk|
@@ -204,61 +170,63 @@ module Reports::ControlObjectiveStats
     end
   end
 
+  def count_weaknesses_by_risk(weaknesses)
+    weaknesses.each do |w|
+      @weaknesses_count[w.risk_text] ||= 0
+      @weaknesses_count[w.risk_text] += 1
+
+      @weaknesses_status_count[w.risk_text] ||= { :incomplete => 0, :complete => 0 }
+      @coi_data[:weaknesses_ids][w.risk_text] ||= { :incomplete => [], :complete => [] }
+
+      if Finding::PENDING_STATUS.include? w.state
+        @weaknesses_status_count[w.risk_text][:incomplete] += 1
+        @coi_data[:weaknesses_ids][w.risk_text][:incomplete] << w.id
+      else
+        @weaknesses_status_count[w.risk_text][:complete] += 1
+        @coi_data[:weaknesses_ids][w.risk_text][:complete] << w.id
+      end
+    end
+
+    @weaknesses_count.each do |r, c|
+      @coi_data[:weaknesses][r] ||= 0
+      @coi_data[:weaknesses][r] += c
+    end
+  end
+
+  def init_control_objective_item_data(coi)
+    @process_controls[coi.process_control.name] ||= {}
+    @coi_data = @process_controls[coi.process_control.name][coi.control_objective] || {}
+    @coi_data[:weaknesses_ids] ||= {}
+
+    @weaknesses_count = {}
+    @weaknesses = @final ? coi.final_weaknesses.not_revoked : coi.weaknesses.not_revoked
+
+    @coi_data[:weaknesses] ||= {}
+    @coi_data[:effectiveness] ||= []
+    @coi_data[:effectiveness] << coi.effectiveness
+
+    @coi_data[:reviews] ||= 0
+    @coi_data[:reviews] += 1 if @weaknesses.size > 0
+  end
+
   def create_control_objective_stats
     self.control_objective_stats
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 
     @periods.each do |period|
       add_period_title(pdf, period)
 
-      column_data = []
-      columns = {}
-      column_headers, column_widths = [], []
+      prepare_pdf_table_headers(pdf)
 
-      @columns.each do |col_name, col_title, col_width|
-        column_headers << "<b>#{col_title}</b>"
-        column_widths << pdf.percent_width(col_width)
+      @process_control_data[period].each do |data|
+        @column_data << prepare_pdf_table_row(data, period)
       end
 
-      @process_control_data[period].each do |row|
-        new_row = []
-
-        @columns.each do |col_name, _|
-          if row[col_name].kind_of?(Hash)
-            list = ""
-            @risk_levels.each do |risk|
-              risk_text = t("risk_types.#{risk}")
-              co = row["control_objective"]
-              pc = row["process_control"]
-
-              incompletes = @control_objectives_data[period][pc][co][risk_text][:incomplete].count
-              completes = @control_objectives_data[period][pc][co][risk_text][:complete].count
-
-              list += "  • #{risk_text}: #{incompletes} / #{completes} \n"
-            end
-            new_row << list
-          else
-            new_row << row[col_name]
-          end
-        end
-
-        column_data << new_row
-      end
-
-      unless column_data.blank?
-        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-          table_options = pdf.default_table_options(column_widths)
-
-          pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-          end
-        end
+      unless @column_data.blank?
+        add_pdf_table(pdf)
       else
         pdf.text(
           t("#{@controller}_committee_report.control_objective_stats.without_audits_in_the_period"))
@@ -276,5 +244,52 @@ module Reports::ControlObjectiveStats
     save_pdf(pdf, @controller, @from_date, @to_date, 'control_objective_stats')
 
     redirect_to_pdf(@controller, @from_date, @to_date, 'control_objective_stats')
+  end
+
+  def prepare_pdf_table_headers(pdf)
+    @column_data, @column_headers, @column_widths = [], [], []
+
+    @columns.each do |col_name, col_title, col_width|
+      @column_headers << "<b>#{col_title}</b>"
+      @column_widths << pdf.percent_width(col_width)
+    end
+  end
+
+  def prepare_pdf_table_row(data, period)
+    new_row = []
+
+    @columns.each do |col_name, _|
+      if data[col_name].kind_of?(Hash)
+        list = ''
+        @risk_levels.each do |risk|
+          risk_text = t("risk_types.#{risk}")
+          co = data["control_objective"]
+          pc = data["process_control"]
+
+          incompletes = @control_objectives_data[period][pc][co][risk_text][:incomplete].count
+          completes = @control_objectives_data[period][pc][co][risk_text][:complete].count
+
+          list += "  • #{risk_text}: #{incompletes} / #{completes} \n"
+        end
+        new_row << list
+      else
+        new_row << data[col_name]
+      end
+    end
+
+    new_row
+  end
+
+  def add_pdf_table(pdf)
+    pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+      table_options = pdf.default_table_options(@column_widths)
+
+      pdf.table(@column_data.insert(0, @column_headers), table_options) do
+        row(0).style(
+          :background_color => 'cccccc',
+          :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+        )
+      end
+    end
   end
 end

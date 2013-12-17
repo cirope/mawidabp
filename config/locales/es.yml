@@ -259,13 +259,13 @@
       pdf_name: 'observaciones_por_objetivo_de_control_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR OBJETIVO DE CONTROL"
       subtitle: "INFORMES DEFINITIVOS"
-      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
+      without_weaknesses: "Sin observaciones"
+      without_audits_in_the_period: "Sin auditorías en el periodo"
+      review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -296,16 +296,16 @@
       title: "Intervalo"
       range: "desde el %{from_date} al %{to_date}"
     process_control_stats:
-      pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
+      pdf_name: "observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "INFORMES DEFINITIVOS"
-      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
-      without_audits_in_the_period: 'Sin auditorías en el periodo'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
+      without_weaknesses: "Sin observaciones"
+      without_audits_in_the_period: "Sin auditorías en el period"
+      review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     qa_indicators:
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
       subtitle: ""
@@ -329,7 +329,7 @@
 Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Informática)"
       without_audits_in_the_period: "Sin auditorías en el periodo"
       without_audits_in_the_interval: "Sin auditorías en el intervalo seleccionado"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin hallazgos"
       without_nonconformities: "Sin no conformidades"
       without_oportunities: "Sin oportunidades de mejora"
       references: "Referencias:\n\n(1) Calificación: la calificación (efectividad de control ponderada) de cada informe, se calcula como un promedio ponderado. Se suman las efectividades de los objetivos de control multiplicadas por su peso y el resultado se divide por la suma de los pesos.\n(2) Procesos de negocio: los procesos de negocio aparecen ordenados por su calificación de menor a mayor.\n(3) Cantidad de Observaciones: muestra la cantidad de observaciones obtenidas en el informe, ordenadas según nivel de riesgo (%{risk_types}). En caso de no tener observaciones, aparece la leyenda \"Sin observaciones\".\n(4) Cantidad de Oportunidades de Mejora: muestra la cantidad de oportunidades de mejora obtenidas en el informe. En caso de no tener oportunidades de mejora, aparece la leyenda \"Sin oportunidades de mejora\"."
@@ -354,7 +354,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_informes_definitivos_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
       title: "OBSERVACIONES/OPORTUNIDADES DE MEJORA INFORMES DEFINITIVOS\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
@@ -554,7 +554,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     finding_answers: "Comentarios de seguimiento"
     comments: "Justificación de cambios de estado"
     costs: "Hasta el momento se ha dedicado *%{cost}* al seguimiento de la observación"
-    csv_name: "listado_de_observaciones-oportunidades_de_mejora"
+    csv_name: "listado_de_hallazgos"
     add_finding_relation: "Agregar relación"
     add_finding_answer: "Agregar comentario"
     add_user: "Agregar usuario"
@@ -719,11 +719,13 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       subtitle: "SEGUIMIENTO DE INFORMES"
       average_effectiveness: 'Efectividad promedio'
       average_effectiveness_resume:
-        one: '%{effectiveness} en un informe'
-        other: '%{effectiveness} en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
+      without_weaknesses: "Sin observaciones"
       without_audits_in_the_period: "Sin auditorías en el periodo"
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+      review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
+    follow_up_cost_analysis:
+      pdf_name: "analisis_de_costos_seguimiento_%{from_date}_al_%{to_date}.pdf"
     fixed_weaknesses_report:
       pdf_name: "observaciones_por_riesgo_solucionadas_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Observaciones Auditoría Interna"
@@ -757,12 +759,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       pdf_name: 'observaciones_por_proceso_de_negocio_%{from_date}_al_%{to_date}.pdf'
       title: "OBSERVACIONES AGRUPADAS POR PROCESO DE NEGOCIO"
       subtitle: "SEGUIMIENTO DE INFORMES"
-      average_effectiveness: 'Efectividad promedio'
+      average_effectiveness: "Efectividad promedio"
       average_effectiveness_resume:
-        one: '%{effectiveness} con observaciones en un informe'
-        other: '%{effectiveness} con observaciones en %{count} informes'
-      without_weaknesses: 'Sin observaciones'
-      review_score_average: 'Promedio de calificaciones de los informes: <b>%{score}%</b>'
+        one: "%{effectiveness} (%{count} informe con observaciones en el O.C.)"
+        other: "%{effectiveness} (%{count} informes con observaciones en el O.C.)"
+      without_weaknesses: "Sin observaciones"
+      review_score_average: "Promedio de calificaciones de los informes: <b>%{score}%</b>"
     qa_indicators:
       without_data: "Sin datos para el rango de fechas ingresado"
       title: "Sistema de Gestión de la Calidad Auditoría Interna - Indicadores de Calidad"
@@ -821,7 +823,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_audit_type:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades"
-      without_weaknesses: "Sin observaciones"
+      without_weaknesses: "Sin hallazgos"
       pdf_name: "observaciones_seguimiento_por_tipo_de_auditoria_%{from_date}_al_%{to_date}.pdf"
       title: "SEGUIMIENTO DE OBSERVACIONES/OPORTUNIDADES DE MEJORA\nTOTALES POR TIPO DE AUDITORÍA"
       total: "TOTAL"
@@ -968,15 +970,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       body_title:
         one: "El siguiente hallazgo está próximo a vencer"
         other: "Los siguientes hallazgos están próximos a vencer"
-    client_footer:
+    footer:
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
-    footer:
-      email_label: "Correo (preferentemente)"
-      phone_label: "Teléfono"
-      warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
     notification:
@@ -2103,7 +2099,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         email_subject: "Asunto email"
         email_link: "Link email"
         email_text: "Texto email"
-        email_clarification: "Aclaración email"        
+        email_clarification: "Aclaración email"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'

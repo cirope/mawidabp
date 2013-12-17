@@ -17,7 +17,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       get action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -39,7 +39,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
   test 'synthesis report' do
     perform_auth
 
-    get :synthesis_report
+    get :synthesis_report, :controller_name => 'follow_up'
     assert_response :success
     assert_select '#error_body', false
     assert_template 'follow_up_committee/synthesis_report'
@@ -48,7 +48,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       get :synthesis_report, :synthesis_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
-        }
+        },
+        :controller_name => 'follow_up'
     end
 
     assert_response :success
@@ -63,7 +64,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'three'
-      }
+      },
+      :controller_name => 'follow_up'
 
     assert_response :success
     assert_select '#error_body', false
@@ -80,7 +82,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
+      :report_subtitle => 'New subtitle',
+      :controller_name => 'follow_up'
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('follow_up_committee.synthesis_report.pdf_name',

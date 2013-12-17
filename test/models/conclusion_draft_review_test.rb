@@ -8,6 +8,8 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   def setup
     @conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_current_draft_review).id)
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -29,7 +31,7 @@ class ConclusionDraftReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe borrador
   test 'create' do
     assert_difference 'ConclusionDraftReview.count' do
-      @conclusion_review = ConclusionDraftReview.create(
+      @conclusion_review = ConclusionDraftReview.list.create(
         :review => reviews(:review_without_conclusion),
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,

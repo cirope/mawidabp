@@ -116,7 +116,7 @@ class GroupsController < ApplicationController
   end
 
   private
-  
+
   def group_params
     params.require(:group).permit(
       :name, :description, :admin_email, :send_notification_email,

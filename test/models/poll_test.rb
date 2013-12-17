@@ -1,8 +1,10 @@
 require 'test_helper'
 
 class PollTest < ActiveSupport::TestCase
- def setup
+  def setup
     @poll = Poll.find polls(:poll_one).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -18,13 +20,12 @@ class PollTest < ActiveSupport::TestCase
   # Prueba la creación de una encuesta
   test 'create' do
     assert_difference ['Poll.count', 'Answer.count'] do
-      Poll.create(
+      Poll.list.create(
         :comments => 'New comments',
         :answered => false,
         :pollable_id => ActiveRecord::FixtureSet.identify(:conclusion_current_final_review),
         :pollable_type => 'ConclusionReview',
         :questionnaire_id => questionnaires(:questionnaire_one).id,
-        :organization_id => organizations(:default_organization).id,
         :user_id => users(:poll_user).id,
         :answers_attributes => {
           '1' => {

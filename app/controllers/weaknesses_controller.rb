@@ -14,14 +14,8 @@ class WeaknessesController < ApplicationController
   # * GET /weaknesses.xml
   def index
     @title = t 'weakness.index_title'
-    default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
-    ]
-    parameters = {
-      organization_id: @auth_organization.id,
-      boolean_true: true,
-      boolean_false: false
-    }
+    default_conditions = []
+    parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
@@ -33,7 +27,8 @@ class WeaknessesController < ApplicationController
       default_conditions << "#{Weakness.table_name}.id IN (:ids)"
       parameters[:ids] = params[:ids].map(&:to_i)
     else
-      default_conditions << [
+      default_conditions <<
+      [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
           "#{Weakness.table_name}.final = :boolean_false"
@@ -48,7 +43,7 @@ class WeaknessesController < ApplicationController
     build_search_conditions Weakness,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @weaknesses = Weakness.includes(
+    @weaknesses = Weakness.list.includes(
       :work_papers,
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
@@ -114,7 +109,7 @@ class WeaknessesController < ApplicationController
   # * POST /weaknesses.xml
   def create
     @title = t 'weakness.new_title'
-    @weakness = Weakness.new(weakness_params)
+    @weakness = Weakness.list.new(weakness_params)
 
     respond_to do |format|
       if @weakness.save
@@ -159,7 +154,7 @@ class WeaknessesController < ApplicationController
   #
   # * GET /weaknesses/follow_up_pdf/1
   def follow_up_pdf
-    @weakness.follow_up_pdf(@auth_organization)
+    @weakness.follow_up_pdf(current_organization)
     redirect_to @weakness.relative_follow_up_pdf_path
   end
 
@@ -183,7 +178,7 @@ class WeaknessesController < ApplicationController
       'organizations.id = :organization_id',
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -225,7 +220,7 @@ class WeaknessesController < ApplicationController
     parameters = {
       boolean_false: false,
       finding_id: params[:finding_id],
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -263,7 +258,7 @@ class WeaknessesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id].to_i
     }
 
@@ -315,16 +310,14 @@ class WeaknessesController < ApplicationController
     end
 
     def set_weakness
-      @weakness = Weakness.includes(
+      @weakness = Weakness.list.includes(
         :finding_relations, :work_papers,
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
-      ).where(
-        id: params[:id], Period.table_name => {organization_id: @auth_organization.id}
-      ).references(:periods).first
+      ).find(params[:id])
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         follow_up_pdf: :read,
         auto_complete_for_user: :read,

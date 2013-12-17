@@ -1,4 +1,4 @@
-module Reports::WeaknessesByRisk                                                                                                     
+module Reports::WeaknessesByRisk
   include Reports::Pdf
   include Reports::Period
   include Parameters::Risk
@@ -21,7 +21,7 @@ module Reports::WeaknessesByRisk
     @being_implemented_resumes = {}
     @highest_being_implemented_resumes = {}
     highest_risk = RISK_TYPES.sort {|r1, r2| r1[1] <=> r2[1]}.last
-    
+
     @periods.each do |period|
       total_weaknesses_count = {}
       total_weaknesses_count_by_risk = {}
@@ -141,7 +141,7 @@ module Reports::WeaknessesByRisk
           end
         end
       end
-      
+
       @repeated_counts[period]['total'] = total_repeated_count
       @being_implemented_resumes[period]['total'] =
         being_implemented_resume_from_counts(total_being_implemented_counts)
@@ -157,7 +157,7 @@ module Reports::WeaknessesByRisk
   def create_weaknesses_by_risk
     self.weaknesses_by_risk
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

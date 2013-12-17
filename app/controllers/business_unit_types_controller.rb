@@ -12,11 +12,8 @@ class BusinessUnitTypesController < ApplicationController
   # * GET /business_unit_types.xml
   def index
     @title = t 'business_unit_type.index_title'
-    @business_unit_types = BusinessUnitType.where(
-      :organization_id => @auth_organization.id
-    ).order(['external ASC', 'name ASC']).paginate(
-      :page => params[:page],
-      :per_page => APP_LINES_PER_PAGE
+    @business_unit_types = BusinessUnitType.list.paginate(
+      :page => params[:page], :per_page => APP_LINES_PER_PAGE
     )
 
     respond_to do |format|
@@ -26,7 +23,7 @@ class BusinessUnitTypesController < ApplicationController
   end
 
   # Muestra el detalle de un tipo de unidad de negocio
-  # 
+  #
   # * GET /business_unit_types/1
   # * GET /business_unit_types/1.xml
   def show
@@ -39,7 +36,7 @@ class BusinessUnitTypesController < ApplicationController
   end
 
   # Permite ingresar los datos para crear un nuevo tipo de unidad de negocio
-  # 
+  #
   # * GET /business_unit_types/new
   # * GET /business_unit_types/new.xml
   def new
@@ -53,7 +50,7 @@ class BusinessUnitTypesController < ApplicationController
   end
 
   # Recupera los datos para modificar un tipo de unidad de negocio
-  # 
+  #
   # * GET /business_unit_types/1/edit
   def edit
     @title = t 'business_unit_type.edit_title'
@@ -61,12 +58,12 @@ class BusinessUnitTypesController < ApplicationController
 
   # Crea un nuevo tipo de unidad de negocio siempre que cumpla con las
   # validaciones. Además crea las unidades de negocio que lo componen.
-  # 
+  #
   # * POST /business_unit_types
   # * POST /business_unit_types.xml
   def create
     @title = t 'business_unit_type.new_title'
-    @business_unit_type = BusinessUnitType.new(business_unit_type_params)
+    @business_unit_type = BusinessUnitType.list.new(business_unit_type_params)
 
     respond_to do |format|
       if @business_unit_type.save
@@ -83,7 +80,7 @@ class BusinessUnitTypesController < ApplicationController
   # Actualiza el contenido de un tipo de unidad de negocio siempre que cumpla
   # con las validaciones. Además actualiza el contenido de las unidades de
   # negocio que la componen.
-  # 
+  #
   # * PATCH /business_unit_types/1
   # * PATCH /business_unit_types/1.xml
   def update
@@ -122,9 +119,7 @@ class BusinessUnitTypesController < ApplicationController
 
   private
     def set_business_unit_type
-      @business_unit_type = BusinessUnitType.where(
-        id: params[:id], organization_id: @auth_organization.id
-      ).first
+      @business_unit_type = BusinessUnitType.list.find(params[:id])
     end
 
     def business_unit_type_params

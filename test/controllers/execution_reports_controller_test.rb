@@ -7,11 +7,13 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   # y no accesibles las privadas
   test 'public and private actions' do
     public_actions = []
-    private_actions = [:index, :weaknesses_by_state]
+    private_actions = [
+      :index, :weaknesses_by_state_execution, :detailed_management_report
+    ]
 
     private_actions.each do |action|
       get action
-      assert_redirected_to controller: :users, action: :login
+      assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -67,16 +69,16 @@ class ExecutionReportsControllerTest < ActionController::TestCase
       'detailed_management_report', 0)
   end
 
-  test 'weaknesses by state report' do
+  test 'weaknesses by state execution report' do
     perform_auth
 
-    get :weaknesses_by_state
+    get :weaknesses_by_state_execution
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'execution_reports/weaknesses_by_state'
+    assert_template 'execution_reports/weaknesses_by_state_execution'
 
     assert_nothing_raised(Exception) do
-      get :weaknesses_by_state, weaknesses_by_state: {
+      get :weaknesses_by_state_execution, weaknesses_by_state_execution: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date
         }
@@ -84,12 +86,12 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_select '#error_body', false
-    assert_template 'execution_reports/weaknesses_by_state'
+    assert_template 'execution_reports/weaknesses_by_state_execution'
   end
 
-  test 'create weaknesses by state report' do
+  test 'create weaknesses by state execution report' do
     perform_auth
-    post :create_weaknesses_by_state, weaknesses_by_state: {
+    post :create_weaknesses_by_state_execution, weaknesses_by_state_execution: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date
     },

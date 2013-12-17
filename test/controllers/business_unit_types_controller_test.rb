@@ -21,7 +21,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -67,7 +67,7 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
           :business_unit_label => 'New business unit label',
           :project_label => 'New project label',
           :external => '0',
-          :business_units_attributes => [ 
+          :business_units_attributes => [
             {
               :name => 'New business unit'
             }

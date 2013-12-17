@@ -2,6 +2,8 @@ require 'test_helper'
 
 class QuestionTest < ActiveSupport::TestCase
   def setup
+    set_organization
+
     @question = Question.find questions(:question_multi_choice).id
   end
 

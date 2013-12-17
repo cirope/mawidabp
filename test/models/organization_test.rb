@@ -7,8 +7,8 @@ class OrganizationTest < ActiveSupport::TestCase
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @organization = Organization.find organizations(:default_organization).id
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -134,7 +134,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates excluded attributes' do
-    @organization.prefix = Organization::INVALID_PREFIXES.first
+    @organization.prefix = APP_ADMIN_PREFIXES.first
 
     assert @organization.invalid?
     assert_error @organization, :prefix, :exclusion

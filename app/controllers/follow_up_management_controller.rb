@@ -1,5 +1,5 @@
 class FollowUpManagementController < ApplicationController
-  include Reports::WeaknessesByState                                                                                                  
+  include Reports::WeaknessesByState
   include Reports::WeaknessesByRisk
   include Reports::WeaknessesByAuditType
   include Reports::ControlObjectiveStats
@@ -19,7 +19,7 @@ class FollowUpManagementController < ApplicationController
   end
 
   private
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         :weaknesses_by_state => :read,
         :create_weaknesses_by_state => :read,

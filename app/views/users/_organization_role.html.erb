@@ -1,6 +1,6 @@
 <% id = dynamic_object_id('organization_role', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<% roles = f.object.organization ? Role.list(f.object.organization.try(:id)) : [] %>
+<% roles = f.object.organization ? Role.list : [] %>
 <div class="organization_role item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">
@@ -29,7 +29,7 @@
           :hash => params[:hash]) %>';
 
         Helper.showLoading(element);
-        
+
         $.get(url, { id: $(element).val(), format: 'json' }, function(data) {
           HTMLUtil.updateOptions(
             roleSelect,

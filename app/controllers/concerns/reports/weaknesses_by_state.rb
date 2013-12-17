@@ -18,7 +18,7 @@ module Reports::WeaknessesByState
       [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
       [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
     ]
-    @sqm = @auth_organization.kind.eql? 'quality_management'
+    @sqm = current_organization.kind.eql? 'quality_management'
 
     @periods.each do |period|
       @weaknesses_counts[period] ||= {}
@@ -127,16 +127,16 @@ module Reports::WeaknessesByState
           end
         end
       end
-    
+
       @being_implemented_resumes[period]['total'] =
-        being_implemented_resume_from_counts(total_being_implemented_counts) 
+        being_implemented_resume_from_counts(total_being_implemented_counts)
     end
   end
 
   def create_weaknesses_by_state
     self.weaknesses_by_state
 
-    pdf = init_pdf(@auth_organization, params[:report_title], params[:report_subtitle])
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
 
     add_pdf_description(pdf, @controller, @from_date, @to_date)
 

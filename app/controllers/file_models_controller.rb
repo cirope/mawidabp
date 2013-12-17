@@ -1,15 +1,14 @@
 class FileModelsController < ApplicationController
   before_action :auth
-  
+
   def download
     redirect = true
 
     file_name = File.expand_path(File.join(PRIVATE_PATH, params[:path] || ''))
-    organization = Organization.find(GlobalModelConfig.current_organization_id)
     organization_paths = ["#{PRIVATE_PATH}#{File.join(('%08d' %
-      (GlobalModelConfig.current_organization_id || 0)).scan(/\d{4}/))}"]
-    organization.group.organizations.each do |o|
-      if o.id != organization.id && @auth_user.organizations.include?(o)
+      (current_organization.id || 0)).scan(/\d{4}/))}"]
+    current_organization.group.organizations.each do |o|
+      if o.id != current_organization.id && @auth_user.organizations.include?(o)
         organization_paths <<
           "#{PRIVATE_PATH}#{File.join(('%08d' % (o.id || 0)).scan(/\d{4}/))}"
       end

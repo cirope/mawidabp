@@ -8,8 +8,8 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   def setup
     @conclusion_review = ConclusionReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
-    GlobalModelConfig.current_organization_id =
-      organizations(:default_organization).id
+
+    set_organization
   end
 
   # Prueba que se realicen las búsquedas como se espera
@@ -31,7 +31,7 @@ class ConclusionReviewTest < ActiveSupport::TestCase
   # Prueba la creación de un informe de conclusión
   test 'create' do
     assert_difference 'ConclusionReview.count' do
-      @conclusion_review = ConclusionFinalReview.new({
+      @conclusion_review = ConclusionFinalReview.list.new({
         :review => reviews(:review_approved_with_conclusion),
         :issue_date => Date.today,
         :close_date => 2.days.from_now.to_date,

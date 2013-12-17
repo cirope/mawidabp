@@ -20,7 +20,7 @@ module UsersHelper
   end
 
   def user_organizations_field(form, id = nil )
-    group = @auth_organization ? @auth_organization.group :
+    group = current_organization ? current_organization.group :
       Group.find_by_admin_hash(params[:hash])
     
     form.select :organization_id, sorted_options_array_for(

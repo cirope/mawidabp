@@ -1,6 +1,6 @@
 <ul class="menu_list">
   <li><%= link_to t('conclusion_committee_report.synthesis_report_title'),
-    :action => :synthesis_report %></li>
+    :action => :synthesis_report, :controller_name => 'conclusion' %></li>
   <li><%= link_to t('conclusion_committee_report.weaknesses_by_risk_report_title'),
     :action => :weaknesses_by_risk_report, :controller_name => 'conclusion', :final => true %></li>
   <li><%= link_to t('conclusion_committee_report.fixed_weaknesses_report_title'),

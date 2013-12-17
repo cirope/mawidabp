@@ -12,7 +12,6 @@ class PotentialNonconformitiesController < ApplicationController
   def index
     @title = t 'potential_nonconformity.index_title'
     default_conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
       [
         [
           "#{ConclusionReview.table_name}.review_id IS NULL",
@@ -24,8 +23,7 @@ class PotentialNonconformitiesController < ApplicationController
         ].join(' AND ')
       ].map {|condition| "(#{condition})"}.join(' OR ')
     ]
-    parameters = {organization_id: @auth_organization.id,
-      boolean_true: true, boolean_false: false}
+    parameters = { boolean_true: true, boolean_false: false }
 
     if params[:control_objective].to_i > 0
       default_conditions << "#{Weakness.table_name}.control_objective_item_id = " +
@@ -41,7 +39,7 @@ class PotentialNonconformitiesController < ApplicationController
     build_search_conditions PotentialNonconformity,
       default_conditions.map { |c| "(#{c})" }.join(' AND ')
 
-    @potential_nonconformities = PotentialNonconformity.includes(
+    @potential_nonconformities = PotentialNonconformity.list.includes(
       :work_papers,
       control_objective_item: {
         review: [:period, :plan_item, :conclusion_final_review]
@@ -105,7 +103,7 @@ class PotentialNonconformitiesController < ApplicationController
   # * POST /potential_nonconformities.xml
   def create
     @title = t 'potential_nonconformity.new_title'
-    @potential_nonconformity = PotentialNonconformity.new(potential_nonconformity_params)
+    @potential_nonconformity = PotentialNonconformity.list.new(potential_nonconformity_params)
 
     respond_to do |format|
       if @potential_nonconformity.save
@@ -150,7 +148,7 @@ class PotentialNonconformitiesController < ApplicationController
   #
   # * GET /potential_nonconformities/follow_up_pdf/1
   def follow_up_pdf
-    @potential_nonconformity.follow_up_pdf(@auth_organization)
+    @potential_nonconformity.follow_up_pdf(current_organization)
     redirect_to @potential_nonconformity.relative_follow_up_pdf_path
   end
 
@@ -174,7 +172,7 @@ class PotentialNonconformitiesController < ApplicationController
       "#{Organization.table_name}.id = :organization_id",
       "#{User.table_name}.hidden = false"
     ]
-    parameters = {organization_id: @auth_organization.id}
+    parameters = {organization_id: current_organization.id}
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
@@ -216,7 +214,7 @@ class PotentialNonconformitiesController < ApplicationController
     parameters = {
       boolean_false: false,
       finding_id: params[:finding_id],
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id]
     }
     @tokens.each_with_index do |t, i|
@@ -256,7 +254,7 @@ class PotentialNonconformitiesController < ApplicationController
       "#{ControlObjectiveItem.table_name}.review_id = :review_id"
     ]
     parameters = {
-      organization_id: @auth_organization.id,
+      organization_id: current_organization.id,
       review_id: params[:review_id].to_i
     }
 
@@ -284,7 +282,7 @@ class PotentialNonconformitiesController < ApplicationController
     def potential_nonconformity_params
       params.require(:potential_nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
-        :cause_analysis, :cause_analysis_date, :correction, :correction_date, 
+        :cause_analysis, :cause_analysis_date, :correction, :correction_date,
         :state, :follow_up_date, :solution_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
@@ -295,7 +293,7 @@ class PotentialNonconformitiesController < ApplicationController
         ],
         finding_answers_attributes: [
           :id, :answer, :auditor_comments, :commitment_date, :user_id,
-          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]                                                  
+          :notify_users, :_destroy, file_model_attributes: [:id, :file, :file_cache]
         ],
         finding_relations_attributes: [
           :id, :description, :related_finding_id, :_destroy
@@ -304,16 +302,14 @@ class PotentialNonconformitiesController < ApplicationController
     end
 
     def set_potential_nonconformity
-      @potential_nonconformity = PotentialNonconformity.includes(
+      @potential_nonconformity = PotentialNonconformity.list.includes(
         :finding_relations, :work_papers,
         { finding_user_assignments: :user },
         { control_objective_item: { review: :period } }
-      ).where(
-        id: params[:id], Period.table_name => { organization_id: @auth_organization.id }
-      ).first
+      ).find(params[:id])
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         follow_up_pdf: :read,
         auto_complete_for_user: :read,

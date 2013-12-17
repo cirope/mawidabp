@@ -5,7 +5,10 @@
 # #ProcedureControlSubitem)
 class ProcedureControlsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
-  hide_action :find_with_organization, :update_auth_user_id, :load_privileges
+  before_action :set_procedure_control, only: [
+    :show, :edit, :update, :destroy, :export_to_pdf
+  ]
+  before_action :set_procedure_control_clone, only: [:new]
 
   # Lista los procedimientos y pruebas de control
   #
@@ -13,9 +16,9 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls.xml
   def index
     @title = t 'procedure_control.index_title'
-    @procedure_controls = ProcedureControl.includes(:period).where(
-      "#{Period.table_name}.organization_id" => @auth_organization.id
-    ).order("#{ProcedureControl.table_name}.created_at DESC").paginate(
+    @procedure_controls = ProcedureControl.list.order(
+      "#{ProcedureControl.table_name}.created_at DESC"
+    ).paginate(
       page: params[:page], per_page: APP_LINES_PER_PAGE
     )
 
@@ -31,7 +34,6 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/1.xml
   def show
     @title = t 'procedure_control.show_title'
-    @procedure_control = find_with_organization(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -47,15 +49,8 @@ class ProcedureControlsController < ApplicationController
     @title = t 'procedure_control.new_title'
     @procedure_control = ProcedureControl.new
 
-    clone_id = params[:clone_from].respond_to?(:to_i) ?
-      params[:clone_from].to_i : 0
-
-    if exists?(clone_id)
-      clone_procedure_control = find_with_organization(clone_id)
-    end
-
-    if clone_procedure_control
-      clone_procedure_control.procedure_control_items.each do |pci|
+    if @procedure_control_clone
+      @procedure_control_clone.procedure_control_items.each do |pci|
         pcs_attributes = pci.procedure_control_subitems.map do |pcs|
           pcs.attributes.merge(
             'id' => nil,
@@ -85,7 +80,6 @@ class ProcedureControlsController < ApplicationController
   # * GET /procedure_controls/1/edit
   def edit
     @title = t 'procedure_control.edit_title'
-    @procedure_control = find_with_organization(params[:id], true)
   end
 
   # Crea un nuevo procedimiento de control siempre que cumpla con las
@@ -95,7 +89,7 @@ class ProcedureControlsController < ApplicationController
   # * POST /procedure_controls.xml
   def create
     @title = t 'procedure_control.new_title'
-    @procedure_control = ProcedureControl.new(procedure_control_params)
+    @procedure_control = ProcedureControl.list.new(procedure_control_params)
 
     respond_to do |format|
       if @procedure_control.save
@@ -116,7 +110,6 @@ class ProcedureControlsController < ApplicationController
   # * PATCH /procedure_controls/1.xml
   def update
     @title = t 'procedure_control.edit_title'
-    @procedure_control = find_with_organization(params[:id], true)
 
     respond_to do |format|
       if @procedure_control.update(procedure_control_params)
@@ -139,7 +132,6 @@ class ProcedureControlsController < ApplicationController
   # * DELETE /procedure_controls/1
   # * DELETE /procedure_controls/1.xml
   def destroy
-    @procedure_control = find_with_organization(params[:id])
     @procedure_control.destroy
 
     respond_to do |format|
@@ -152,10 +144,9 @@ class ProcedureControlsController < ApplicationController
   #
   # * GET /procedure_controls/export_to_pdf/1
   def export_to_pdf
-    @procedure_control = find_with_organization(params[:id], true)
     pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_planning_header @auth_organization, @procedure_control.period
+    pdf.add_planning_header current_organization, @procedure_control.period
     pdf.add_title ProcedureControl.model_name.human
 
     column_order = ['control_objective_text', 'control',
@@ -247,7 +238,7 @@ class ProcedureControlsController < ApplicationController
         process_control: :best_practice
       ).where(
         id: params[:control_objective],
-        best_practices: { organization_id: @auth_organization.id }
+        best_practices: { organization_id: current_organization.id }
       ).first
     end
 
@@ -262,7 +253,6 @@ class ProcedureControlsController < ApplicationController
   end
 
   private
-
     def procedure_control_params
       params.require(:procedure_control).permit(
         :period_id, :lock_version,
@@ -279,38 +269,22 @@ class ProcedureControlsController < ApplicationController
       )
     end
 
-    # Busca el procedimiento de control indicado siempre que pertenezca a la
-    # organización. En el caso que no se encuentre (ya sea que no existe un
-    # procedimiento de control con ese ID o que no pertenece a la organización
-    # con la que se autenticó el usuario) devuelve nil.
-    # _id_::  ID del procedimiento de control que se quiere recuperar
-    def find_with_organization(id, include_all = false) #:doc:
-      include = include_all ? [
-        :period, {
-          procedure_control_items: [
-            {process_control: :control_objectives},
-            {procedure_control_subitems: :control}
-          ]
-        }
-      ] : [:period]
-
-      ProcedureControl.includes(*include).where(
-        id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
-      ).first
+    def set_procedure_control
+      @procedure_control = ProcedureControl.list.includes(
+        procedure_control_items: [
+          { process_control: :control_objectives},
+          { procedure_control_subitems: :control}
+        ]
+      ).find(params[:id])
     end
 
-    # Indica si existe el procedimiento de control indicado, siempre que
-    # pertenezca a la organización. En el caso que no se encuentre (ya sea que no
-    # existe un procedimiento de control con ese ID o que no pertenece a la
-    # organización con la que se autenticó el usuario) devuelve false.
-    # _id_::  ID del plan de trabajo que se quiere recuperar
-    def exists?(id) #:doc:
-      ProcedureControl.includes(:period).where(
-        id: id, "#{Period.table_name}.organization_id" => @auth_organization.id
-      ).first
+    def set_procedure_control_clone
+      @procedure_control_clone = ProcedureControl.list.find_by(
+        id: params[:clone_from].try(:to_i)
+      )
     end
 
-    def load_privileges #:nodoc:
+    def load_privileges
       @action_privileges.update(
         export_to_pdf: :read,
         get_control_objectives: :read,

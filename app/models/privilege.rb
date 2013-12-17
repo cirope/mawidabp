@@ -1,12 +1,12 @@
 class Privilege < ActiveRecord::Base
   include ParameterSelector
-  
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   after_validation :mark_implicit_privileges
-  
+
   # Restricciones
   validates :module, :presence => true
   validates :module, :length => {:maximum => 255}, :allow_nil => true,
@@ -16,7 +16,7 @@ class Privilege < ActiveRecord::Base
   validates_each :module do |record, attr, value|
     ## Permitido el por el tipo de rol
     allowed_modules = record.role.allowed_modules if record.role
-    
+
     if !value.blank? && !(allowed_modules || []).include?(value)
       record.errors.add attr, :invalid
     end

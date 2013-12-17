@@ -2,11 +2,12 @@ class WorkPaper < ActiveRecord::Base
   include ParameterSelector
   include Comparable
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :sorted_by_code, -> { order('code ASC') }
   scope :with_prefix, ->(prefix) {
     where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
@@ -56,12 +57,12 @@ class WorkPaper < ActiveRecord::Base
   belongs_to :owner, :polymorphic => true
 
   accepts_nested_attributes_for :file_model, :allow_destroy => true,
-    :reject_if => lambda { |attributes| attributes['file'].blank? }
+    reject_if: ->(attrs) { ['file', 'file_cache'].all? { |a| attrs[a].blank? } }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)
 
-    self.organization_id = GlobalModelConfig.current_organization_id
+    self.organization_id = Organization.current_id
   end
 
   def inspect

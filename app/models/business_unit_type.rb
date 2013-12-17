@@ -3,28 +3,21 @@ class BusinessUnitType < ActiveRecord::Base
 
   trimmed_fields :name, :business_unit_label, :project_label
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
+  # Default scope
+  default_scope -> { where(organization_id: Organization.current_id) }
+  
   # Named scopes
   scope :list, -> {
-    where(:organization_id => GlobalModelConfig.current_organization_id).order(
+    where(organization_id: Organization.current_id).order(
       ['external ASC', 'name ASC']
     )
   }
-  scope :internal_audit, -> {
-    where(
-      :organization_id => GlobalModelConfig.current_organization_id,
-      :external => false
-    )
-  }
-  scope :external_audit, -> {
-    where(
-      :organization_id => GlobalModelConfig.current_organization_id,
-      :external => true
-    )
-  }
+  scope :internal_audit, -> { where( external: false) }
+  scope :external_audit, -> { where( external: true) }
 
   # Restricciones
   validates :name, :business_unit_label, :presence => true
@@ -51,12 +44,6 @@ class BusinessUnitType < ActiveRecord::Base
   has_many :plan_items, -> { uniq }, :through => :business_units
 
   accepts_nested_attributes_for :business_units, :allow_destroy => true
-
-  def initialize(attributes = nil, options = {})
-    super(attributes, options)
-
-    self.organization_id = GlobalModelConfig.current_organization_id
-  end
 
   def can_be_destroyed?
     self.business_units.all?(&:can_be_destroyed?)

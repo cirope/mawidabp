@@ -1,5 +1,5 @@
 <%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_state, :extra_params => {},
+  :locals => {:action => :weaknesses_by_state_execution, :extra_params => {},
   :forms => {:date_range => {:avoid_inline_help => true}}} %>
 
 <%  @counts.each do |count_data| %>
@@ -130,7 +130,7 @@
     :options => {
       :form_name => 'report',
       :url => request.query_parameters.merge(
-        {:action => :create_weaknesses_by_state, :_ts => Time.now.to_i}
+        {:action => :create_weaknesses_by_state_execution, :_ts => Time.now.to_i}
       ),
       :fields => [
         {

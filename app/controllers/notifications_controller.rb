@@ -67,7 +67,7 @@ class NotificationsController < ApplicationController
       :confirmation_hash => params[:id]
     ).first
 
-    @auth_organization =
+    current_organization =
       @notification.try(:user).try(:organizations).try(:first)
 
     @notification.notify!(params[:reject].blank?) if @notification

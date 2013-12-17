@@ -1,8 +1,8 @@
 class Workflow < ActiveRecord::Base
   include ParameterSelector
 
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Callbacks
@@ -15,8 +15,11 @@ class Workflow < ActiveRecord::Base
 
   attr_readonly :period_id, :review_id
 
+  # Scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
+
   # Restricciones
-  validates :period_id, :review_id, :presence => true
+  validates :period_id, :review_id, :organization_id, :presence => true
   validates :review_id, :uniqueness => true, :allow_nil => true,
     :allow_blank => true
   validates :period_id, :review_id, :numericality => {:only_integer => true},
@@ -26,7 +29,7 @@ class Workflow < ActiveRecord::Base
   # Relaciones
   belongs_to :period
   belongs_to :review
-  has_one :organization, :through => :period
+  belongs_to :organization
   has_one :plan_item, :through => :review
 
   has_many :workflow_items, -> {

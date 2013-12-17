@@ -7,6 +7,10 @@ class Finding < ActiveRecord::Base
 
   acts_as_tree
 
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
+  }
+
   cattr_accessor :current_user, :current_organization
 
   # Constantes
@@ -35,10 +39,6 @@ class Finding < ActiveRecord::Base
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   }.with_indifferent_access
-
-  has_paper_trail meta: {
-    organization_id: Proc.new { GlobalModelConfig.current_organization_id }
-  }
 
   STATUS = {
     :confirmed => -3,
@@ -136,6 +136,7 @@ class Finding < ActiveRecord::Base
   ]
 
   # Named scopes
+  scope :list, -> { where(organization_id: Organization.current_id) }
   scope :with_prefix, ->(prefix) {
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
@@ -160,12 +161,7 @@ class Finding < ActiveRecord::Base
   scope :for_notification, -> { where(:state => STATUS[:notify], :final => false) }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
   scope :sort_by_code, -> { order('review_code ASC') }
-  scope :for_current_organization, -> {
-    includes(:control_objective_item => {:review => :period}).where(
-      "#{Period.table_name}.organization_id = :organization_id",
-      :organization_id => GlobalModelConfig.current_organization_id
-    ).references(:periods)
-  }
+  scope :for_current_organization, -> { list }
   scope :for_period, ->(period) {
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
@@ -236,31 +232,31 @@ class Finding < ActiveRecord::Base
     ).references(:periods)
   }
   scope :unconfirmed_and_stale, -> {
-  stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
-  pre_conditions = []
-  parameters = {
-    :state => STATUS[:unconfirmed],
-    :boolean_false => false
-  }
+    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
+    pre_conditions = []
+    parameters = {
+      :state => STATUS[:unconfirmed],
+      :boolean_false => false
+    }
 
-  stale_parameters.each_with_index do |stale_parameter, i|
-    stale_days = stale_parameter[:parameter].to_i
-    parameters[:"stale_unconfirmed_date_#{i}"] =
-      (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
-    parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+    stale_parameters.each_with_index do |stale_parameter, i|
+      stale_days = stale_parameter[:parameter].to_i
+      parameters[:"stale_unconfirmed_date_#{i}"] =
+        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
+      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
 
-    pre_conditions << [
-      "first_notification_date < :stale_unconfirmed_date_#{i}",
-      "#{Period.table_name}.organization_id = :organization_id_#{i}",
+      pre_conditions << [
+        "first_notification_date < :stale_unconfirmed_date_#{i}",
+        "#{Period.table_name}.organization_id = :organization_id_#{i}",
+      ].join(' AND ')
+    end
+
+    fix_conditions = [
+      'state = :state',
+      'final = :boolean_false'
     ].join(' AND ')
-  end
 
-  fix_conditions = [
-    'state = :state',
-    'final = :boolean_false'
-  ].join(' AND ')
-
-  includes(:control_objective_item => { :review => :period }).where(
+    includes(:control_objective_item => { :review => :period }).where(
       [
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
@@ -311,41 +307,28 @@ class Finding < ActiveRecord::Base
   scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
   scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
   scope :list_all_by_date, ->(from_date, to_date, order) {
-    includes(
-      :control_objective_item => {
-        :review => [:period, :conclusion_final_review, {:plan_item => :business_unit}]
-      }
+    list.includes(
+      review: [:period, :conclusion_final_review, {:plan_item => :business_unit}]
     ).where(
-      [
-        "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
-        "#{Period.table_name}.organization_id = :organization_id"
-      ].join(' AND '),
-      {
-        :begin => from_date, :end => to_date,
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
+      "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
+      { :begin => from_date, :end => to_date }
     ).references(:conslusion_reviews, :periods).order(
       order ?
         ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
     )
   }
-  scope :with_status_for_report, -> { where(
-    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values
-    )
+  scope :with_status_for_report, -> {
+    where(:state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values)
   }
   scope :list_all_in_execution_by_date, ->(from_date, to_date) {
-    includes(
+    list.includes(
       :control_objective_item => {:review => [:period, :conclusion_final_review]}
     ).where(
       [
         "#{Review.table_name}.created_at BETWEEN :begin AND :end",
-        "#{Period.table_name}.organization_id = :organization_id",
         "#{ConclusionFinalReview.table_name}.review_id IS NULL"
       ].join(' AND '),
-      {
-        :begin => from_date, :end => to_date,
-        :organization_id => GlobalModelConfig.current_organization_id
-      }
+      { :begin => from_date, :end => to_date }
     ).references(:reviews, :periods, :conclusion_reviews)
   }
   scope :internal_audit, -> {
@@ -389,7 +372,7 @@ class Finding < ActiveRecord::Base
 
   # Restricciones
   validates :control_objective_item_id, :description, :review_code,
-    :presence => true
+    :organization_id, :presence => true
   validates :review_code, :type, :length => {:maximum => 255},
     :allow_nil => true, :allow_blank => true
   validates :control_objective_item_id,
@@ -475,6 +458,7 @@ class Finding < ActiveRecord::Base
   end
 
   # Relaciones
+  belongs_to :organization
   belongs_to :control_objective_item
   belongs_to :repeated_of, :foreign_key => 'repeated_of_id',
     :dependent => :destroy, :autosave => true, :class_name => 'Finding'
@@ -817,7 +801,7 @@ class Finding < ActiveRecord::Base
   end
 
   def audited_and_system_quality_management?
-    current_user.try(:can_act_as_audited?) && current_organization.kind.eql?('quality_management')
+    current_user.try(:can_act_as_audited?) && self.organization.kind.eql?('quality_management')
   end
 
   def mark_as_unconfirmed!
@@ -1313,8 +1297,7 @@ class Finding < ActiveRecord::Base
     previous_version = self.versions.first
 
     while (previous_version.try(:event) &&
-          last_checked_version = (previous_version.try(:next) ||
-            self.versions.build(:object => object_to_string(self))))
+          last_checked_version = previous_version.try(:next))
       has_important_changes = important_attributes.any? do |attribute|
         current_value = last_checked_version.reify(:has_one => false) ?
           last_checked_version.reify(:has_one => false).send(attribute) : nil

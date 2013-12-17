@@ -19,7 +19,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
 
     private_actions.each do |action|
       send *action
-      assert_redirected_to :controller => :users, :action => :login
+      assert_redirected_to login_url
       assert_equal I18n.t('message.must_be_authenticated'), flash.alert
     end
 
@@ -118,7 +118,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
                 :organization_id => organizations(:default_organization).id,
-                :file_model_attributes => 
+                :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
               },
               {
@@ -127,7 +127,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :number_of_pages => '10',
                 :description => 'New workpaper2 description',
                 :organization_id => organizations(:default_organization).id,
-                :file_model_attributes =>  
+                :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
 	      }
 	    ]
@@ -135,7 +135,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
         }
       end
     end
-    
+
     assert_redirected_to edit_control_objective_item_url(
       control_objective_items(
         :bcra_A4609_security_management_responsible_dependency_item_editable))

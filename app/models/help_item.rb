@@ -2,8 +2,9 @@ class HelpItem < ActiveRecord::Base
   include ActsAsTree
 
   acts_as_tree :order => 'order_number ASC'
-  has_paper_trail :meta => {
-    :organization_id => Proc.new { GlobalModelConfig.current_organization_id }
+
+  has_paper_trail meta: {
+    organization_id: ->(model) { Organization.current_id }
   }
 
   # Restricciones
@@ -12,7 +13,7 @@ class HelpItem < ActiveRecord::Base
     :allow_nil => true, :allow_blank => true
   validates :name, :length => {:maximum => 255}, :allow_nil => true,
     :allow_blank => true
-  
+
   # Relaciones
   belongs_to :help_content
 

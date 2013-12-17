@@ -19,7 +19,7 @@
         {:form_builder_local => :wp_f,
         :partial => 'work_papers/work_paper',
         :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-        :object => WorkPaper.new(:organization_id => @auth_organization.id)})}';" %>
+        :object => WorkPaper.new(:organization_id => current_organization.id)})}';" %>
     <% end %>
   <% end %>
   <%= f.error_messages %>

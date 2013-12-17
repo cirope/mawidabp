@@ -1,4 +1,11 @@
 MawidaBP::Application.routes.draw do
+  get '/users/login', to: redirect('/') # _Backward compatibility_
+
+  # Sessions
+  get    'login',    to: 'sessions#new',     as: 'login'
+  post   'sessions', to: 'sessions#create',  as: 'sessions'
+  delete 'logout',   to: 'sessions#destroy', as: 'logout'
+
   resources :settings, only: [:index, :show, :edit, :update]
 
   resources :questionnaires
@@ -39,14 +46,14 @@ MawidaBP::Application.routes.draw do
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 
   [
-    'weaknesses_by_state',
+    'weaknesses_by_state_execution',
     'detailed_management_report'
   ].each do |action|
     get "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
   [
-    'create_weaknesses_by_state',
+    'create_weaknesses_by_state_execution',
     'create_detailed_management_report'
   ].each do |action|
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
@@ -205,12 +212,12 @@ MawidaBP::Application.routes.draw do
     :to => 'conclusion_audit_reports#cost_analysis',
     :include_details => 1
 
-  get 'follow_up_audit/cost_analysis',
-    :as => 'cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#cost_analysis'
-  post 'follow_up_audit/create_cost_analysis',
-    :as => 'create_cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#create_cost_analysis'
+  get 'follow_up_audit/follow_up_cost_analysis',
+    :as => 'follow_up_cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#follow_up_cost_analysis'
+  post 'follow_up_audit/create_follow_up_cost_analysis',
+    :as => 'create_follow_up_cost_analysis_follow_up_audit',
+    :to => 'follow_up_audit#create_follow_up_cost_analysis'
 
   scope ':completed', :completed => /complete|incomplete/ do
     resources :findings, :except => [:destroy] do
@@ -411,8 +418,6 @@ MawidaBP::Application.routes.draw do
 
   resources :users do
     collection do
-      get :login
-      post :create_session
       get :new_initial
       post :create_initial
       get :export_to_pdf
@@ -426,7 +431,6 @@ MawidaBP::Application.routes.draw do
     member do
       get :user_status
       get :user_status_without_graph
-      get :logout
       get :edit_password
       patch :update_password
       get :edit_personal_data
@@ -488,7 +492,7 @@ MawidaBP::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'users#login'
+  root 'sessions#new'
 
   get 'private/:path', :to => 'file_models#download',
     :constraints => { :path => /.+/ }
