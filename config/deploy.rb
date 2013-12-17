@@ -11,7 +11,7 @@ set :deploy_via, :remote_cache
 set :scm, :git
 
 set :linked_files, %w{config/app_config.yml}
-set :linked_dirs, %w{log private public/error_files}
+set :linked_dirs, %w{bin log private public/error_files}
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.0.0-p353'
@@ -24,7 +24,7 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # execute 'service unicorn upgrade'
+      execute 'service unicorn upgrade'
     end
   end
 
@@ -37,14 +37,4 @@ namespace :deploy do
       end
     end
   end
-
-  namespace :check do
-    task linked_files: 'config/app_config.yml'
-  end
-end
-
-remote_file 'config/app_config.yml' => '/tmp/app_config.yml', roles: :app
-
-file '/tmp/app_config.yml' do |t|
-  sh "curl -o #{t.name} https://raw.github.com/cirope/mawidabp/master/config/app_config.example.yml"
 end
