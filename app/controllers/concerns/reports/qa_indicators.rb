@@ -1,4 +1,5 @@
 module Reports::QAIndicators
+  include Reports::Pdf
 
   def qa_indicators
     init_qa_vars
@@ -200,88 +201,75 @@ module Reports::QAIndicators
       end
     }
   end
-  # Crea un PDF con un resumen de indicadores de calidad para un determinado
-  # rango de fechas
-  #
-  # * POST /follow_up_committees/create_qa_indicators
+
   def create_qa_indicators
     self.qa_indicators
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_description_item(
-      t('follow_up_committee.period.title'),
-      t('follow_up_committee.period.range',
-        :from_date => l(@from_date, :format => :long),
-        :to_date => l(@to_date, :format => :long)))
+    pdf = init_pdf(params[:report_title], params[:report_subtitle])
+    add_pdf_description(pdf, 'follow_up', @from_date, @to_date)
 
     @periods.each do |period|
-      pdf.move_down PDF_FONT_SIZE
-      pdf.add_title "#{Period.model_name.human}: #{period.inspect}",
-        (PDF_FONT_SIZE * 1.25).round, :left
-      pdf.move_down PDF_FONT_SIZE
-
-      @indicators[period].each do |data|
-        columns = {}
-        column_data, column_headers, column_widths = [], [], []
-
-        @columns.each do |col_name|
-          column_headers << "<b>#{col_name.last}</b>"
-          column_widths << pdf.percent_width(50)
-        end
-
-        data[:column_data].each do |row|
-          new_row = []
-
-          row.each do |column_name, column_content|
-            new_row << (column_content.present? ? column_content :
-              (t'follow_up_committee.qa_indicators.without_data'))
-          end
-
-          column_data << new_row
-        end
-
-        unless column_data.blank?
-          pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-            table_options = pdf.default_table_options(column_widths)
-
-            pdf.table(column_data.insert(0, column_headers), table_options) do
-            row(0).style(
-              :background_color => 'cccccc',
-              :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-            )
-            end
-          end
-        else
-          pdf.text(
-            t('follow_up_committee.qa_indicators.without_audits_in_the_period'),
-            :style => :italic)
-        end
-      end
-
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text @ancient_medium_risk_label if @ancient_medium_risk_label
-      pdf.text @ancient_highest_risk_label if @ancient_highest_risk_label
+      add_period_title(pdf, period)
+      prepare_indicators_data(pdf, period)
+      add_ancient_indicators(pdf)
     end
 
-    pdf.custom_save_as(
-      t('follow_up_committee.qa_indicators.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
+    save_pdf(pdf, 'follow_up', @from_date, @to_date, 'qa_indicators')
+    redirect_to_pdf('follow_up', @from_date, @to_date, 'qa_indicators')
+  end
 
-    redirect_to Prawn::Document.relative_path(
-      t('follow_up_committee.qa_indicators.pdf_name',
-        :from_date => @from_date.to_formatted_s(:db),
-        :to_date => @to_date.to_formatted_s(:db)), 'qa_indicators', 0)
+  def prepare_indicators_data(pdf, period)
+    @indicators[period].each do |data|
+      prepare_columns(pdf)
+      prepare_rows(data)
+      add_pdf_table(pdf)
+    end
+  end
+
+  def prepare_columns(pdf)
+    @column_data, @column_headers, @column_widths = [], [], []
+
+    @columns.each do |col_name|
+      @column_headers << "<b>#{col_name.last}</b>"
+      @column_widths << pdf.percent_width(50)
+    end
+  end
+
+  def prepare_rows(data)
+    data[:column_data].each do |row|
+      new_row = []
+
+      row.each do |column_name, column_content|
+        new_row << (column_content.present? ? column_content :
+          (t'follow_up_committee.qa_indicators.without_data'))
+      end
+
+      @column_data << new_row
+    end
+  end
+
+  def add_pdf_table(pdf)
+    unless @column_data.blank?
+      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        table_options = pdf.default_table_options(@column_widths)
+
+        pdf.table(@column_data.insert(0, @column_headers), table_options) do
+        row(0).style(
+          :background_color => 'cccccc',
+          :padding => [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
+        )
+        end
+      end
+    else
+      pdf.text(
+        t('follow_up_committee.qa_indicators.without_audits_in_the_period'),
+        :style => :italic)
+    end
+  end
+
+  def add_ancient_indicators(pdf)
+    pdf.move_down PDF_FONT_SIZE
+    pdf.text @ancient_medium_risk_label if @ancient_medium_risk_label
+    pdf.text @ancient_highest_risk_label if @ancient_highest_risk_label
   end
 end
