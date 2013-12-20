@@ -10,8 +10,8 @@ module Reports::WeaknessesByRisk
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk])
     @periods = periods_for_interval
     @audit_types = [
-      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
     ]
     @tables_data = {}
     statuses = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).

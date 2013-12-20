@@ -15,8 +15,8 @@ module Reports::WeaknessesByState
     @status = Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).
         sort { |s1, s2| s1.last <=> s2.last }
     @audit_types = [
-      [:internal, BusinessUnitType.internal_audit.map {|but| [but.name, but.id]}],
-      [:external, BusinessUnitType.external_audit.map {|but| [but.name, but.id]}]
+      [:internal, BusinessUnitType.list.internal_audit.map {|but| [but.name, but.id]}],
+      [:external, BusinessUnitType.list.external_audit.map {|but| [but.name, but.id]}]
     ]
     @sqm = current_organization.kind.eql? 'quality_management'
 
