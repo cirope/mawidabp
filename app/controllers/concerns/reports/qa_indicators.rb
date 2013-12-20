@@ -43,11 +43,11 @@ module Reports::QAIndicators
     @medium_risk_days = @medium_risk_total = 0
     @highest_risk_days = @highest_risk_total = 0
 
-    count_weaknesses_by_risk
+    count_qa_weaknesses
     add_ancient_risk_labels
   end
 
-  def count_weaknesses_by_risk
+  def count_qa_weaknesses
     # Tomo todos los informes de definitivos sin tener en cuenta el filtro de fechas
     ConclusionFinalReview.list.each do |cfr|
       medium_risk_weaknesses = cfr.review.weaknesses.with_medium_risk.being_implemented
@@ -220,13 +220,13 @@ module Reports::QAIndicators
 
   def prepare_indicators_data(pdf, period)
     @indicators[period].each do |data|
-      prepare_columns(pdf)
-      prepare_rows(data)
+      prepare_qa_columns(pdf)
+      prepare_qa_rows(data)
       add_pdf_table(pdf)
     end
   end
 
-  def prepare_columns(pdf)
+  def prepare_qa_columns(pdf)
     @column_data, @column_headers, @column_widths = [], [], []
 
     @columns.each do |col_name|
@@ -235,7 +235,7 @@ module Reports::QAIndicators
     end
   end
 
-  def prepare_rows(data)
+  def prepare_qa_rows(data)
     data[:column_data].each do |row|
       new_row = []
 
