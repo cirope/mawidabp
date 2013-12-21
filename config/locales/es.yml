@@ -974,7 +974,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."
       title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"
