@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=device-dpi" />
   </head>
   <body>
+    <%= render 'shared/compatibility_warning' %>
     <div id="loading" style="display: none;">
       <%= image_tag 'loading.gif', :size => '43x11', :alt => t('message.loading') %>
     </div>
