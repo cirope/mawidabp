@@ -296,7 +296,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :report_subtitle => 'New subtitle'
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee.rescheduled_being_implemented_weaknesses_report.pdf_name',
+      I18n.t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report.pdf_name',
         :from_date => 2.years.ago.to_date.to_formatted_s(:db),
         :to_date => 2.years.from_now.to_date.to_formatted_s(:db)),
       'rescheduled_being_implemented_weaknesses_report', 0)
