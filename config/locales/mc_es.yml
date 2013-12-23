@@ -139,6 +139,7 @@
     you_are_already_logged: "Este usuario ya ha iniciado sesión"
     empty_result: "Sin resultados, modifique el criterio"
     automatic_by_the_system: "Realizado de forma automática por el sistema"
+    compatibility_warning_html: 'Está usando un navegador <strong>obsoleto</strong>. Por favor considere <a href="http://browsehappy.com/">actualizarlo</a>'
 
   error:
     title: "Error"
@@ -879,7 +880,7 @@
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo. Para realizar cualquier interacción debe ingresar al sistema."
       title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
-      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 7 o superior*"
+      recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
       unconfirmed: "Notificaciones sin confirmar"

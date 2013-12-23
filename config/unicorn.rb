@@ -17,8 +17,8 @@ working_directory app_path
 
 listen '/tmp/unicorn.sock', backlog: 1024
 
-# nuke workers after 60 seconds
-timeout 60
+# nuke workers after 180 seconds
+timeout 180
 
 pid '/tmp/unicorn.pid'
 
