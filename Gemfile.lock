@@ -99,8 +99,7 @@ GEM
       ttfunk
     pg (0.17.1)
     polyglot (0.3.3)
-    prawn (0.13.0)
-      afm
+    prawn (0.13.1)
       pdf-reader (~> 1.2)
       ruby-rc4
       ttfunk (~> 1.0.3)
