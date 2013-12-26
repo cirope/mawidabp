@@ -20,11 +20,4 @@ set :keep_releases, 5
 
 namespace :deploy do
   after:finishing, 'deploy:cleanup'
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      execute 'service unicorn upgrade'
-    end
-  end
 end
