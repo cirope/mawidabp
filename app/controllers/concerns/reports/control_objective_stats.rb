@@ -38,10 +38,7 @@ module Reports::ControlObjectiveStats
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
-            'effectiveness' => t(
-              "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
-              :effectiveness => "#{'%.2f' % effectiveness}%", :count => @coi_data[:reviews]
-            ),
+            'effectiveness' => effectiveness_label(effectiveness),
             'weaknesses_count' => @weaknesses_count_text
           }
         end
@@ -116,6 +113,23 @@ module Reports::ControlObjectiveStats
       @conclusion_reviews = @conclusion_reviews.by_control_objective_names(
         *@control_objectives)
     end
+  end
+
+  def effectiveness_label(effectiveness)
+    effectiveness_label = []
+
+    effectiveness_label << t(
+      "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
+      :effectiveness => "#{'%.2f' % effectiveness}%",
+      :count => @coi_data[:review_ids].count 
+    )
+
+    effectiveness_label <<  t(
+      "#{@controller}_committee_report.control_objective_stats.reviews_with_weaknesses",
+      :count => @coi_data[:reviews]
+    )
+
+    effectiveness_label.join(' / ')
   end
 
   def count_conclusion_review_weaknesses(period)
@@ -204,6 +218,10 @@ module Reports::ControlObjectiveStats
     @coi_data[:weaknesses] ||= {}
     @coi_data[:effectiveness] ||= []
     @coi_data[:effectiveness] << coi.effectiveness
+
+    id = coi.review.id
+    @coi_data[:review_ids] ||= []
+    @coi_data[:review_ids] << id if @coi_data[:review_ids].exclude? id
 
     @coi_data[:reviews] ||= 0
     @coi_data[:reviews] += 1 if @weaknesses.size > 0

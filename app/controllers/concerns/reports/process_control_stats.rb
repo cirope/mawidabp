@@ -56,7 +56,10 @@ module Reports::ProcessControlStats
         c_r.review.control_objective_items.not_excluded_from_score.each do |coi|
           pc_data = process_controls[coi.process_control.name] ||= {}
           pc_data[:weaknesses_ids] ||= {}
-          pc_data[:reviews] ||= []
+          pc_data[:reviews] ||= 0
+          id = coi.review.id
+          pc_data[:review_ids] ||= []
+          pc_data[:review_ids] << id if pc_data[:review_ids].exclude? id
           weaknesses_count = {}
           weaknesses = final ? coi.final_weaknesses : coi.weaknesses
 
@@ -69,7 +72,7 @@ module Reports::ProcessControlStats
             pc_data[:weaknesses_ids][w.risk_text] << w.id
           end
 
-          pc_data[:reviews] << coi.review_id if weaknesses.size > 0
+          pc_data[:reviews] += 1 if weaknesses.size > 0
 
           pc_data[:weaknesses] ||= {}
           pc_data[:effectiveness] ||= []
@@ -116,11 +119,8 @@ module Reports::ProcessControlStats
 
         @process_control_data[period] << {
           'process_control' => pc,
-          'effectiveness' => t(
-            "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
-            :effectiveness => "#{'%.2f' % effectiveness}%",
-            :count => pc_data[:reviews].uniq.size
-          ),
+          'effectiveness' => effectiveness_label(
+            effectiveness, pc_data[:reviews], pc_data[:review_ids]),
           'weaknesses_count' => weaknesses_count_text
         }
       end
@@ -132,6 +132,23 @@ module Reports::ProcessControlStats
         ef1 <=> ef2
       end
     end
+  end
+
+  def effectiveness_label(effectiveness, reviews, review_ids)
+    effectiveness_label = []
+
+   effectiveness_label << t(
+      "#{@controller}_committee_report.process_control_stats.average_effectiveness_resume",
+      :effectiveness => "#{'%.2f' % effectiveness}%",
+      :count => review_ids.count
+    )
+
+    effectiveness_label <<  t(
+      "#{@controller}_committee_report.process_control_stats.reviews_with_weaknesses",
+      :count => reviews
+    )
+
+    effectiveness_label.join(' / ')
   end
 
   def create_process_control_stats
