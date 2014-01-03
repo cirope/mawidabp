@@ -38,7 +38,7 @@ module Reports::ControlObjectiveStats
           @process_control_data[period] << {
             'process_control' => pc,
             'control_objective' => co.name,
-            'effectiveness' => effectiveness_label(effectiveness),
+            'effectiveness' => get_effectiveness(effectiveness),
             'weaknesses_count' => @weaknesses_count_text
           }
         end
@@ -115,13 +115,13 @@ module Reports::ControlObjectiveStats
     end
   end
 
-  def effectiveness_label(effectiveness)
+  def get_effectiveness(effectiveness)
     effectiveness_label = []
 
     effectiveness_label << t(
       "#{@controller}_committee_report.control_objective_stats.average_effectiveness_resume",
       :effectiveness => "#{'%.2f' % effectiveness}%",
-      :count => @coi_data[:review_ids].count 
+      :count => @coi_data[:review_ids].count
     )
 
     effectiveness_label <<  t(
