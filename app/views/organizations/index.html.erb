@@ -1,4 +1,4 @@
-<table class="list">
+<table class="table table-condensed">
   <thead>
     <tr>
       <th><%= Organization.human_attribute_name :name %></th>
@@ -17,7 +17,7 @@
         <td><%= t "activerecord.attributes.organization.kind_options.#{organization.kind}" %></td>
         <td><%= link_to_show organization %></td>
         <td><%= link_to_edit edit_organization_path(organization) %></td>
-        <td><%= button_to_destroy organization %></td>
+        <td><%= link_to_destroy organization %></td>
       </tr>
     <% end %>
   </tbody>

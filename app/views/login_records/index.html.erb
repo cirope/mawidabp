@@ -8,7 +8,7 @@
   :columns => @query.blank? ? LoginRecord::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="list">
+<table class="table table-condensed">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>
@@ -21,8 +21,8 @@
   <tbody>
   <% @login_records.each do |login_record| %>
     <tr class="<%= cycle('even', 'odd') %>">
-      <td><%=h login_record.user.user %></td>
-      <td><%=h l(login_record.start, :format => :short) if login_record.start %></td>
+      <td><%= login_record.user.user %></td>
+      <td><%= l(login_record.start, :format => :short) if login_record.start %></td>
       <td class="expendable"><%=h l(login_record.end, :format => :short) if login_record.end %></td>
       <td class="expendable"><%= super_truncate(login_record.data, 40) %></td>
       <td><%= link_to_show login_record %></td>

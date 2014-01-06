@@ -15,11 +15,11 @@
     <div class="collapse navbar-collapse" role="navigation">
       <% if @auth_user && @auth_user.password && current_organization %>
         <ul class="nav navbar-nav">
-          <%= render partial: 'shared/menu_item', locals: {
-            user: @auth_user,
-            organization: current_organization,
-            menu_items: @auth_user.get_menu(current_organization.kind)
-          } %>
+          <%= render(
+            partial: 'shared/menu_item',
+            collection: @auth_user.get_menu(current_organization.kind),
+            as: :menu_item
+          ) %>
         </ul>
         <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
       <% end %>

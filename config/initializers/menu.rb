@@ -3,7 +3,6 @@ APP_AUDITED_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     :order => 1,
-    :url => '#menu_follow_up',
     :children => [
       MenuItem.new(
         :pending_findings,
@@ -42,13 +41,11 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :administration,
     :order => 1,
-    :url => '#menu_administration',
     :children => [
       MenuItem.new(
         :organization,
         :order => 1,
-        :url => { controller: :organizations },
-        :class => :menu_item_2,
+        :url => {:controller => :organizations},
         :children => [
           MenuItem.new(
             :management,
@@ -67,8 +64,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :security,
         :order => 2,
-        :url => '#menu_administration_security',
-        :class => :menu_item_2,
+        :url => {:controller => :login_records, :action => :choose},
         :children => [
           MenuItem.new(
             :reports,
@@ -111,8 +107,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :questionnaires,
         :order => 6,
-        :url => '#menu_administration_questionnaires',
-        :class => :menu_item_2,
+        :url => {:controller => :questionnaires},
         :children => [
           MenuItem.new(
             :definition,
@@ -144,7 +139,6 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :planning,
     :order => 2,
-    :url => '#menu_planning',
     :children => [
       MenuItem.new(
         :resources,
@@ -161,8 +155,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :audit,
         :order => 3,
-        :url => '#menu_planning_audit',
-        :class => :menu_item_2,
+        :url => {:controller => :plans},
         :children => [
           MenuItem.new(
             :plans,
@@ -184,7 +177,6 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :execution,
     :order => 3,
-    :url => '#menu_execution',
     :children => [
       MenuItem.new(
         :reviews,
@@ -228,7 +220,6 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :conclusion,
     :order => 4,
-    :url => '#menu_conclusion',
     :children => [
       MenuItem.new(
         :draft_reviews,
@@ -245,8 +236,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         :order => 3,
-        :url => '#menu_conclusion_reports',
-        :class => :menu_item_2,
+        :url => {:controller => :conclusion_audit_reports},
         :children => [
           MenuItem.new(
             :audit,
@@ -274,7 +264,6 @@ APP_AUDITOR_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     :order => 5,
-    :url => '#menu_follow_up',
     :children => [
       MenuItem.new(
         :pending_findings,
@@ -299,8 +288,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         :order => 4,
-        :url => '#menu_follow_up_reports',
-        :class => :menu_item_2,
+        :url => {:controller => :follow_up_audit},
         :children => [
           MenuItem.new(
             :audit,
@@ -339,7 +327,6 @@ APP_AUDITED_QM_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     :order => 1,
-    :url => '#menu_follow_up',
     :children => [
       MenuItem.new(
         :pending_findings,
@@ -378,13 +365,11 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   MenuItem.new(
     :administration,
     :order => 1,
-    :url => '#menu_administration',
     :children => [
       MenuItem.new(
         :organization,
         :order => 1,
-        :url => '#menu_administration_organization',
-        :class => :menu_item_2,
+        :url => {:controller => :organizations},
         :children => [
           MenuItem.new(
             :management,
@@ -403,8 +388,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :security,
         :order => 2,
-        :url => '#menu_administration_security',
-        :class => :menu_item_2,
+        :url => {:controller => :login_records, :action => :choose},
         :children => [
           MenuItem.new(
             :reports,
@@ -447,8 +431,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :questionnaires,
         :order => 6,
-        :url => '#menu_administration_questionnaires',
-        :class => :menu_item_2,
+        :url => {:controller => :questionnaires},
         :children => [
           MenuItem.new(
             :definition,
@@ -480,7 +463,6 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   MenuItem.new(
     :planning,
     :order => 2,
-    :url => '#menu_planning',
     :children => [
       MenuItem.new(
         :resources,
@@ -497,8 +479,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :audit,
         :order => 3,
-        :url => '#menu_planning_audit',
-        :class => :menu_item_2,
+        :url => {:controller => :plans},
         :children => [
           MenuItem.new(
             :plans,
@@ -520,7 +501,6 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   MenuItem.new(
     :execution,
     :order => 3,
-    :url => '#menu_execution',
     :children => [
       MenuItem.new(
         :reviews,
@@ -543,8 +523,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :findings,
         :order => 4,
-        :url => '#menu_execution_findings',
-        :class => :menu_item_2,
+        :url => {:controller => :nonconformities},
         :children => [
           MenuItem.new(
             :nonconformities,
@@ -590,7 +569,6 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   MenuItem.new(
     :conclusion,
     :order => 4,
-    :url => '#menu_conclusion',
     :children => [
       MenuItem.new(
         :draft_reviews,
@@ -607,8 +585,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         :order => 3,
-        :url => '#menu_conclusion_reports',
-        :class => :menu_item_2,
+        :url => {:controller => :conclusion_audit_reports},
         :children => [
           MenuItem.new(
             :audit,
@@ -636,7 +613,6 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
     :order => 5,
-    :url => '#menu_follow_up',
     :children => [
       MenuItem.new(
         :pending_findings,
@@ -661,8 +637,7 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :reports,
         :order => 4,
-        :url => '#menu_follow_up_reports',
-        :class => :menu_item_2,
+        :url => {:controller => :follow_up_audit},
         :children => [
           MenuItem.new(
             :audit,

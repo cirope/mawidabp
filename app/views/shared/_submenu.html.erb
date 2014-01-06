@@ -1,6 +1,5 @@
-<% menu_item.children.each do |submenu_item| %>
-  <% selected = submenu_item.submenu_names.include?(@current_module) %>
-  <li <%== 'class="selected"' if selected %>>
-    <%= link_to submenu_item.to_s, submenu_item.url %>
-  </li>
-<% end %>
+<ul class="submenu nav nav-pills">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">Profile</a></li>
+  <li><a href="#">Messages</a></li>
+</ul>
