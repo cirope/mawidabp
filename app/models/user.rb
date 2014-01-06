@@ -532,9 +532,9 @@ class User < ActiveRecord::Base
 
   def get_menu(type = nil)
     if type == 'quality_management'
-      self.audited? ? 'audited_qm_menu' : 'auditor_qm_menu'
+      self.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS
     else
-      self.audited? ? 'audited_menu' : 'auditor_menu'
+      self.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS
     end
   end
 

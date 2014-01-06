@@ -1,0 +1,17 @@
+<% menu_items.each do |menu_item| %>
+  <% selected = menu_item.submenu_names.include?(@current_module) %>
+
+  <% if menu_item.children.present? %>
+    <li class="dropdown <%= 'selected' if selected %>">
+      <%= link_to menu_item.url, class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+        <%= menu_item.to_s %>
+        <b class="caret"></b>
+      <% end %>
+      <ul class="dropdown-menu">
+        <%= render partial: 'shared/submenu', locals: { menu_item: menu_item } %>
+      </ul>
+    </li>
+  <% else %>
+    <li><%= link_to menu_item.to_s, menu_item.url %></li>
+  <% end %>
+<% end %>

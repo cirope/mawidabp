@@ -18,13 +18,8 @@ class UsersController < ApplicationController
     :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
     :reassignment_edit, :reassignment_update, :release_edit, :release_update
   ]
-  layout proc { |controller|
-    use_clean = [
-      'reset_password', 'send_password_reset'
-    ].include?(controller.action_name)
 
-    controller.request.xhr? ? false : (use_clean ? 'clean' : 'application')
-  }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   # Lista los usuarios
   #

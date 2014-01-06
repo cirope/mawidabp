@@ -1,58 +1,39 @@
 <!doctype html>
+<!--[if lt IE 8]> <html class="lt-ie8"> <![endif]-->
+<!--[if gt IE 7]><!--> <html lang="<%= locale %>"> <!--<![endif]-->
 <% @title ||= t("actioncontroller.#{controller_name}") %>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- Ver el porqué de esto en: www.phpied.com/conditional-comments-block-downloads/ -->
-    <!--[if IE]><![endif]-->
-    <title><%= t(:app_name) %><%= raw " &lt;#{current_organization.name}&gt;" if current_organization %> | <%= @title %></title>
-    <%= favicon_link_tag '/favicon.ico' %>
-    <%= stylesheet_link_tag 'application' %>
-    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7' %><![endif]-->
-    <%= javascript_include_tag 'application' %>
-    <%= javascript_tag do %>
-      <%= raw "State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
-      <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
-      <%= yield :js_extra %>
-    <% end %>
-    <%= csrf_meta_tags %>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, target-densitydpi=device-dpi" />
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8" />
+  <title><%= t(:app_name) %><%= raw " &lt;#{current_organization.name}&gt;" if current_organization %> | <%= @title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <%= stylesheet_link_tag    'application', data: { turbolinks_track: true }, media: 'all' %>
+  <%= javascript_include_tag 'application', data: { turbolinks_track: true } %>
+  <!--[if lt IE 9]>
+    <%= javascript_include_tag 'application-ie', data: { turbolinks_track: true } %>
+  <![endif]-->
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag '/favicon.ico' %>
+  <%= javascript_tag do %>
+    <%= raw "State.unsavedDataWarning = '#{t('message.unsaved_data_warning')}';" %>
+    <%= raw "State.validationFailedMessage = '#{t('message.validation_failed_message')}';" %>
+    <%= yield :js_extra %>
+  <% end %>
+</head>
+<body data-controller="<%= controller_name %>">
+  <div class="alert alert-warning hidden loading-caption">
+    <strong><%= t 'navigation.loading' %></strong>
+  </div>
+  <div class="container">
     <%= render 'shared/compatibility_warning' %>
-    <div id="loading" style="display: none;">
-      <%= image_tag 'loading.gif', :size => '43x11', :alt => t('message.loading') %>
-    </div>
-    <% if current_organization && parameter_in(current_organization.id, :session_expire_time).to_i > 0 %>
-      <%= render :partial => 'shared/time_left', :locals =>
-        {:time_left => parameter_in(current_organization.id, :session_expire_time).to_i} %>
-    <% end %>
-    <div id="main_container">
-      <div id="mobile_menu">
-        <%= link_to t('menu.show_menu'), '#', :onclick => 'Menu.show(); return false;', :id => :show_menu %>
-        <%= link_to t('menu.hide_menu'), '#', :onclick => 'Menu.hide(); return false;', :id => :hide_menu, :style => 'display: none;' %>
-      </div>
-      <% if @auth_user && @auth_user.password && current_organization %>
-        <div id="menu_container">
-          <%= render :partial =>
-            "shared/#{@auth_user.get_menu(current_organization.kind)}",
-            :locals => {:user => @auth_user, :organization => current_organization} %>
-        </div>
-      <% else %>
-        <div id="menu" style="display: none;"></div>
-      <% end %>
-      <div id="page">
-        <div id="app_content">
-          <%= yield %>
-        </div>
-        <div class="clear" style="margin: 0px; padding: 0px;">&nbsp;</div>
-        <%= render :partial => 'shared/notice' if flash.notice %>
-        <%= render :partial => 'shared/alert' if flash.alert %>
-      </div>
-    </div>
+    <%= render 'shared/menu' %>
+    <%= render 'shared/flash' if flash_message.present? %>
+    <%= render 'shared/time_left' %>
+    <%= yield %>
+
     <%= javascript_tag do %>
       <%= yield :js_extra_bottom %>
     <% end %>
     <%= yield :extra_html_bottom %>
-  </body>
+  </div>
+</body>
 </html>

@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   before_action :auth, only: [:destroy]
   before_action :set_admin_mode, only: [:new, :create]
 
-  layout ->(controller) { controller.request.xhr? ? false : 'clean' }
+  layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
   def new
     auth_user = User.find(session[:user_id]) if session[:user_id]

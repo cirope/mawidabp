@@ -1,0 +1,28 @@
+<div class="navbar navbar-default navbar-fixed-top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <% if @auth_user && @auth_user.password && current_organization %>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      <% end %>
+
+      <%= link_to t('app_name'), root_url, class: 'navbar-brand' %>
+    </div>
+
+    <div class="collapse navbar-collapse" role="navigation">
+      <% if @auth_user && @auth_user.password && current_organization %>
+        <ul class="nav navbar-nav">
+          <%= render partial: 'shared/menu_item', locals: {
+            user: @auth_user,
+            organization: current_organization,
+            menu_items: @auth_user.get_menu(current_organization.kind)
+          } %>
+        </ul>
+        <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
+      <% end %>
+    </div>
+  </div>
+</div>

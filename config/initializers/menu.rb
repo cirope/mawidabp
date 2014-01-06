@@ -47,7 +47,7 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :organization,
         :order => 1,
-        :url => '#menu_administration_organization',
+        :url => { controller: :organizations },
         :class => :menu_item_2,
         :children => [
           MenuItem.new(
