@@ -9,11 +9,11 @@
 
     <% @indicators[period].each do |data| %>
       <% unless data[:column_data].blank? %>
-        <table class="summary_table" style="margin: 0em 1em;">
+        <table class="table table-condensed table-striped">
           <thead>
             <tr>
               <% @columns.each do |col_name| %>
-                <th style="width: 50%;"><%= col_name.last %></th>
+                <th><%= col_name.last %></th>
               <% end %>
             </tr>
           </thead>

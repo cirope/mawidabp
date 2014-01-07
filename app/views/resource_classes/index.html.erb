@@ -1,21 +1,19 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= raw(ResourceClass.human_attribute_name(:name) +
         show_inline_help_for(:resource_class_name)) %></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @resource_classes.each do |resource_class| %>
-      <tr class="<%= cycle('even', 'odd') %>">
-        <td><%= h resource_class.name %></td>
+      <tr>
+        <td><%= resource_class.name %></td>
         <td><%= link_to_show resource_class %></td>
         <td><%= link_to_edit edit_resource_class_path(resource_class) %></td>
-        <td><%= button_to_destroy resource_class %></td>
+        <td><%= link_to_destroy resource_class %></td>
       </tr>
     <% end %>
   </tbody>
@@ -24,5 +22,4 @@
 <div id="links">
   <%= pagination_links @resource_classes %>
   <%= link_to t('label.new'), new_resource_class_path %>
-  <div class="clear"></div>
 </div>

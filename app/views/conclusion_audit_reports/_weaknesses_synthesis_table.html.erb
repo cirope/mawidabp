@@ -1,10 +1,9 @@
 <% if table_data.kind_of?(Hash) %>
-  <table class="summary_table" style="margin: 1em 0em;">
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
         <% table_data[:order].each do |column| %>
-          <% col_data = table_data[:columns][column] %>
-          <th style="width: <%= "#{col_data.last}%" %>;"><%= raw col_data.first %></th>
+          <th><%= raw table_data[:columns][column].first %></th>
         <% end %>
       </tr>
     </thead>

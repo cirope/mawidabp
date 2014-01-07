@@ -24,12 +24,11 @@
       <% end %>
       <h1 style="margin: 1em;"><%= data[:name] %></h1>
       <% unless data[:column_data].blank? %>
-        <table class="summary_table" style="margin: 0em 1em;">
+        <table class="table table-condensed table-striped">
           <thead>
             <tr>
               <% @column_order.each do |col_name| %>
-                <% column = data[:columns][col_name] %>
-                <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
+                <th><%= data[:columns][col_name].first %></th>
               <% end %>
             </tr>
           </thead>

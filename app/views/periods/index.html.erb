@@ -1,27 +1,25 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= raw(Period.human_attribute_name(:number) +
         show_inline_help_for(:period_number)) %></th>
-      <th class="expendable"><%= Period.human_attribute_name :description %></th>
-      <th class="expendable"><%= Period.human_attribute_name :start %></th>
-      <th class="expendable"><%= Period.human_attribute_name :end %></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th class="visible-lg"><%= Period.human_attribute_name :description %></th>
+      <th class="visible-lg"><%= Period.human_attribute_name :start %></th>
+      <th class="visible-lg"><%= Period.human_attribute_name :end %></th>
+      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @periods.each do |period| %>
-      <tr class="<%= cycle('even', 'odd') %>">
-        <td><%= h period.number %></td>
-        <td class="expendable"><%= super_truncate period.description, 40 %></td>
-        <td class="expendable"><%= h l(period.start, :format => :short) %></td>
-        <td class="expendable"><%= h l(period.end, :format => :short) %></td>
+      <tr>
+        <td><%= period.number %></td>
+        <td class="visible-lg"><%= super_truncate period.description, 40 %></td>
+        <td class="visible-lg"><%= l(period.start, :format => :short) %></td>
+        <td class="visible-lg"><%= l(period.end, :format => :short) %></td>
         <td><%= link_to_show period %></td>
         <td><%= link_to_edit edit_period_path(period) %></td>
-        <td><%= button_to_destroy period %></td>
+        <td><%= link_to_destroy period %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,5 +28,4 @@
 <div id="links">
   <%= pagination_links @periods %>
   <%= link_to t('label.new'), new_period_path %>
-  <div class="clear"></div>
 </div>

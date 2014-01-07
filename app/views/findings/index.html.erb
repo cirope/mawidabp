@@ -1,7 +1,7 @@
 <% if @query.blank? && @order_by.blank? && (@self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user) %>
   <div class="filter" style="margin: 1em;">
     <div>
-      <table>
+      <table class="table table-condensed">
         <tbody>
           <tr>
             <td style="padding-right: 1em; width: 90%;">
@@ -14,7 +14,7 @@
                 <%= show_finding_related_users %>
               <% end %>
             </td>
-            <td class="nowrap" style="text-align: right;">
+            <td class="nowrap" class="text-right">
               <%= link_to_if @selected_user, t('label.cancel'),
                 findings_path(params[:completed]),
                 {:style => 'margin-left: 1em;'} %>
@@ -34,44 +34,44 @@
   :columns => @query.blank? ? Finding::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead  id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true }, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
-      <%= make_filterable_column Finding.human_attribute_name(:description), {:expendable => true}, 'description' %>
-      <%= make_not_available_column raw(Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state)), :expendable => true %>
+      <%= make_filterable_column Finding.human_attribute_name(:description), { 'visible-lg' => true }, 'description' %>
+      <%= make_not_available_column raw(Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state)), 'visible-lg' => true %>
       <%= make_not_available_column Finding.human_attribute_name(
-          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), :expendable => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), :expendable => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:priority), :expendable => true %>
-      <%= make_not_available_column Finding.human_attribute_name(:finding_answers), :expendable => true %>
-      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), :expendable => true %>
-      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
+          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), 'visible-lg' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk), 'visible-lg' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:priority), 'visible-lg' => true %>
+      <%= make_not_available_column Finding.human_attribute_name(:finding_answers), 'visible-lg' => true %>
+      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), 'visible-lg' => true %>
+      <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @findings.each do |finding| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= finding_updated_at_text finding %></td>
         <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
-        <td class="expendable"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
+        <td class="visible-lg"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
         <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(finding) %></td>
-        <td class="expendable"><%= super_truncate(finding.description, 30) %></td>
-        <td class="expendable"><%= h finding.state_text %></td>
+        <td class="visible-lg"><%= super_truncate(finding.description, 30) %></td>
+        <td class="visible-lg"><%= finding.state_text %></td>
         <% if params[:completed] == 'complete' %>
-          <td class="expendable"><%= h l(finding.solution_date, :format => :short) if finding.solution_date %></td>
+          <td class="visible-lg"><%= l(finding.solution_date, :format => :short) if finding.solution_date %></td>
         <% else %>
-          <td class="expendable"><%= finding_follow_up_date_text(finding) %></td>
+          <td class="visible-lg"><%= finding_follow_up_date_text(finding) %></td>
         <% end %>
-        <td class="expendable"><%= h finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
-        <td class="expendable"><%= h finding.respond_to?(:priority_text) ? finding.priority_text : '-' %></td>
-        <td class="expendable"><%= show_finding_answers_count(finding) %></td>
-        <td class="expendable"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="visible-lg"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
+        <td class="visible-lg"><%= finding.respond_to?(:priority_text) ? finding.priority_text : '-' %></td>
+        <td class="visible-lg"><%= show_finding_answers_count(finding) %></td>
+        <td class="visible-lg"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
         <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>
@@ -97,7 +97,6 @@
     export_to_csv_findings_path(
       request.query_parameters.merge(:format => :csv, :include_details => 1)
     ) %>
-  <div class="clear"></div>
 </div>
 
 <script type="text/javascript">

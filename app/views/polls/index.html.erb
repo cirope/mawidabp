@@ -3,7 +3,7 @@
   :columns => @query.blank? ? Poll::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'name', 'last_name' %>
@@ -11,20 +11,20 @@
       <%= make_filterable_column Poll.human_attribute_name(:answered), nil, 'answered' %>
       <%= make_not_available_column Poll.human_attribute_name(:send_date) %>
       <%= make_not_available_column Poll.human_attribute_name(:answer_date) %>
-      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
+      <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @polls.each do |poll| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= poll.user ? poll.user.informal_name : poll.customer_email %></td>
         <td><%= poll.questionnaire.name %></td>
         <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
         <td><%= l poll.created_at.to_date, :format => :long %></td>
         <td><%= l(poll.updated_at.to_date, :format => :long) if poll.answered %></td>
         <td><%= link_to_show poll %></td>
-        <td><%= button_to_destroy poll %></td>
+        <td><%= link_to_destroy poll %></td>
       </tr>
     <% end %>
   </tbody>
@@ -34,5 +34,4 @@
   <%= pagination_links @polls %>
   <%= link_to t('label.new'), new_poll_path %> |
   <%= link_to t('poll.import_csv_customers_title'), import_csv_customers_polls_path %>
-  <div class="clear"></div>
 </div>

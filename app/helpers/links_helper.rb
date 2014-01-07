@@ -25,6 +25,10 @@ module LinksHelper
     link_with_icon({ action: 'show', icon: 'glyphicon-search' }, *args)
   end
 
+  def link_to_clone(*args)
+    link_with_icon({ action: 'copy', icon: 'glyphicon-file' }, *args)
+  end
+
   private
     def link_with_icon(options = {}, *args)
       arg_options = args.extract_options!

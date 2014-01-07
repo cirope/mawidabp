@@ -3,24 +3,23 @@
   :columns => @query.blank? ? EMail::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <%= make_not_available_column EMail.human_attribute_name(:created_at) %>
       <%= make_filterable_column EMail.human_attribute_name(:to), nil, 'to' %>
       <%= make_filterable_column EMail.human_attribute_name(:subject), nil, 'subject' %>
-      <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
+      <th class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @emails.each do |email| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= l email.created_at, :format => :short %></td>
         <td><%= super_truncate email.to %></td>
         <td><%= super_truncate email.subject %></td>
         <td><%= link_to_show email %></td>
-        <td></td>
       </tr>
     <% end %>
   </tbody>
@@ -29,5 +28,4 @@
 <div id="links">
   <%= pagination_links @emails %>
   <%= link_to_back %>
-  <div class="clear"></div>
 </div>

@@ -11,36 +11,20 @@
 <% end %>
 
 <% if totals > 0 %>
-  <table class="summary_table" style="margin: 1em;">
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
-        <th style="width: 20%;">
-          <%= Finding.human_attribute_name(:state) %>
-        </th>
+        <th> <%= Finding.human_attribute_name(:state) %> </th>
         <% if audit_type_symbol == :internal && !@sqm %>
-          <th style="width: 40%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
-          </th>
-          <th style="width: 40%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
-          </th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %></th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %></th>
         <% elsif audit_type_symbol == :internal && @sqm %>
-          <th style="width: 20%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
-          </th>
-          <th style="width: 20%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %>
-          </th>
-          <th style="width: 20%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.nonconformities_column') %>
-          </th>
-          <th style="width: 20%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column') %>
-          </th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %></th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.oportunities_column') %></th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.nonconformities_column') %></th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.potential_nonconformities_column') %></th>
         <% else %>
-          <th style="width: 40%;">
-            <%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %>
-          </th>
+          <th><%= t('conclusion_committee_report.weaknesses_by_state.weaknesses_column') %></th>
         <% end %>
       </tr>
     </thead>

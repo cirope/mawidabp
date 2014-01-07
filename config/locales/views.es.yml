@@ -11,6 +11,7 @@ es:
     logout: 'Salir'
     show: 'Ver'
     back: 'Volver'
+    copy: 'Copiar'
 
   sessions:
     new:

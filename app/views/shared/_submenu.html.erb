@@ -1,5 +1,13 @@
-<ul class="submenu nav nav-pills">
-  <li class="active"><a href="#">Home</a></li>
-  <li><a href="#">Profile</a></li>
-  <li><a href="#">Messages</a></li>
-</ul>
+<% if submenu_item.children.present? &&
+  submenu_item.submenu_names.include?(@current_module) %>
+  <%= content_for :submenu do %>
+    <ul class="submenu nav nav-pills">
+      <% submenu_item.children.each do |sub_submenu_item| %>
+        <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
+        <li <%== 'class="active"' if active %>>
+          <%= link_to sub_submenu_item.to_s, sub_submenu_item.url %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

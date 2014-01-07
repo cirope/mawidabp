@@ -1,22 +1,20 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= Role.human_attribute_name :name %></th>
       <th><%= Role.human_attribute_name :role_type %></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @roles.each do |role| %>
-      <tr class="<%= cycle('even', 'odd') %>">
-        <td><%=h role.name %></td>
+      <tr>
+        <td><%= role.name %></td>
         <td><%= role_type_text(role.role_type) %></td>
         <td><%= link_to_show role %></td>
         <td><%= link_to_edit edit_role_path(role) %></td>
-        <td><%= button_to_destroy role %></td>
+        <td><%= link_to_destroy role %></td>
       </tr>
     <% end %>
   </tbody>
@@ -25,5 +23,4 @@
 <div id="links">
   <%= pagination_links(@roles) %>
   <%= link_to t('label.new'), new_role_path %>
-<div class="clear"></div>
 </div>

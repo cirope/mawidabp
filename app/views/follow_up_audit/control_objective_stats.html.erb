@@ -19,11 +19,11 @@
       <em><%= t 'follow_up_committee.control_objective_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
-    <table class="summary_table" style="margin: 0em 1em;">
+    <table class="table table-condensed table-striped">
       <thead>
         <tr>
           <% @columns.each do |col_name, col_title, col_width| %>
-            <th style="width: <%= "#{col_width}%" %>;"><%= col_title %></th>
+            <th><%= col_title %></th>
           <% end %>
         </tr>
       </thead>

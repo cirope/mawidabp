@@ -2,31 +2,31 @@
   :options => {},
   :columns => @query.blank? ? Review::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Period.model_name.human, nil, 'period' %>
       <%= make_filterable_column raw(Review.human_attribute_name(:identification) + show_inline_help_for(:review_identification)), nil, 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), {:expendable => true}, 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
-      <%= make_not_available_column raw(Review.human_attribute_name(:description) + show_inline_help_for(:review_description)), :expendable => true %>
-      <th colspan="4" style="text-align: right;"><%= link_to_search %></th>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { 'visible-lg' => true }, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true }, 'project' %>
+      <%= make_not_available_column raw(Review.human_attribute_name(:description) + show_inline_help_for(:review_description)), 'visible-lg' => true %>
+      <th colspan="4" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
 
   <tbody>
     <% @reviews.each do |review| %>
       <% has_final = review.has_final_review? %>
-      <tr class="<%= cycle('even', 'odd') %> <%= has_final ? :readonly_item : :writable_item %>">
+      <tr <%== 'class="text-muted"' if has_final %>>
         <td><%= show_period_with_dates_as_abbr review.period %></td>
-        <td class="nowrap"><%= h review.identification %></td>
-        <td class="expendable"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
-        <td class="expendable"><%= super_truncate review.plan_item.project, 25 %></td>
-        <td class="expendable"><%= super_truncate review.description, 25 %></td>
-        <td><%= link_to_clone new_review_path(:clone_from => review.id), :label => t('review.copy') %></td>
+        <td class="nowrap"><%= review.identification %></td>
+        <td class="visible-lg"><%= super_truncate review.plan_item.business_unit.name, 25 %></td>
+        <td class="visible-lg"><%= super_truncate review.plan_item.project, 25 %></td>
+        <td class="visible-lg"><%= super_truncate review.description, 25 %></td>
+        <td><%= link_to_clone new_review_path(:clone_from => review.id) %></td>
         <td><%= link_to_show review %></td>
         <td><%= link_to_edit edit_review_path(review) %></td>
-        <td><%= button_to_destroy review unless has_final %></td>
+        <td><%= link_to_destroy review unless has_final %></td>
       </tr>
     <% end %>
   </tbody>
@@ -35,5 +35,4 @@
 <div id="links">
   <%= pagination_links @reviews %>
   <%= link_to t('label.new'), new_review_path %>
-  <div class="clear"></div>
 </div>

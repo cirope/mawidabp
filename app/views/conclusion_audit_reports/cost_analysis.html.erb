@@ -7,60 +7,58 @@
   <h1 class="simple_title with_border_bottom">
     <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
-  <div style="margin: 1em;">
-    <% unless @total_cost_data[period].blank? %>
-      <table class="summary_table">
+  <% unless @total_cost_data[period].blank? %>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| %>
+            <th>
+              <%= t :"conclusion_audit_report.cost_analysis.general_column_#{col_name}" %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @total_cost_data[period].each do |total_data| %>
+          <tr>
+            <% total_data.each do |col_data| %>
+              <td><%= raw col_data %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'conclusion_audit_report.cost_analysis.without_audits_in_the_period' %></em>
+    </p>
+  <% end %>
+
+  <% unless @detailed_data[period].blank? %>
+    <% @detailed_data[period].each do |detailed_data| %>
+      <h2 style="margin: 1em 0em;"><%= detailed_data[:review] %></h2>
+      <table class="table table-condensed table-striped">
         <thead>
           <tr>
-            <% @column_order.each do |col_name, col_width| %>
-              <th style="width: <%= "#{col_width}%" %>">
-                <%= t :"conclusion_audit_report.cost_analysis.general_column_#{col_name}" %>
+            <% @detailed_column_order.each do |col_name, col_width| %>
+              <th>
+                <%= t :"conclusion_audit_report.cost_analysis.detailed_column_#{col_name}" %>
               </th>
             <% end %>
           </tr>
         </thead>
         <tbody>
-          <% @total_cost_data[period].each do |total_data| %>
+          <% detailed_data[:data].each do |data| %>
             <tr>
-              <% total_data.each do |col_data| %>
+              <% data.each do |col_data| %>
                 <td><%= raw col_data %></td>
               <% end %>
             </tr>
           <% end %>
         </tbody>
       </table>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t 'conclusion_audit_report.cost_analysis.without_audits_in_the_period' %></em>
-      </p>
     <% end %>
-
-    <% unless @detailed_data[period].blank? %>
-      <% @detailed_data[period].each do |detailed_data| %>
-        <h2 style="margin: 1em 0em;"><%= detailed_data[:review] %></h2>
-        <table class="summary_table">
-          <thead>
-            <tr>
-              <% @detailed_column_order.each do |col_name, col_width| %>
-                <th style="width: <%= "#{col_width}%" %>">
-                  <%= t :"conclusion_audit_report.cost_analysis.detailed_column_#{col_name}" %>
-                </th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <% detailed_data[:data].each do |data| %>
-              <tr>
-                <% data.each do |col_data| %>
-                  <td><%= raw col_data %></td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
-    <% end %>
-  </div>
+  <% end %>
 <% end %>
 
 <div id="links">

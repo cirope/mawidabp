@@ -28,7 +28,7 @@
         <% totals = total_weaknesses + total_oportunities %>
         <% totals+= (total_nonconformities + total_potential_nonconformities) if @sqm %>
         <% unless totals == 0 %>
-          <table class="summary_table" style="margin: 1em;">
+          <table class="table table-condensed table-striped">
             <thead>
               <tr>
                 <th style="width: 20%;">

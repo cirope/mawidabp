@@ -6,63 +6,58 @@
   <h1 class="simple_title with_border_bottom">
     <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
   </h1>
-  <div style="margin: 1em;">
-    <h1><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h1>
-    <% unless @weaknesses_data[period].blank? %>
-      <table class="summary_table">
-        <thead>
-          <tr>
-            <% @column_order.each do |col_name, col_width| %>
-              <th style="width: <%= "#{col_width}%" %>">
-                <%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %>
-              </th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% @weaknesses_data[period].each do |columns| %>
-            <tr>
-              <% columns.each do |column| %>
-                <td><%= raw column %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t 'follow_up_audit.cost_analysis.without_weaknesses' %></em>
-      </p>
-    <% end %>
 
-    <h1><%= t 'follow_up_audit.cost_analysis.oportunities' %></h1>
-    <% unless @oportunities_data[period].blank? %>
-      <table class="summary_table">
-        <thead>
+  <h1><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h1>
+  <% unless @weaknesses_data[period].blank? %>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| %>
+            <th><%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @weaknesses_data[period].each do |columns| %>
           <tr>
-            <% @column_order.each do |col_name, col_width| %>
-              <th style="width: <%= "#{col_width}%" %>">
-                <%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %>
-              </th>
+            <% columns.each do |column| %>
+              <td><%= raw column %></td>
             <% end %>
           </tr>
-        </thead>
-        <tbody>
-          <% @oportunities_data[period].each do |columns| %>
-            <tr>
-              <% columns.each do |column| %>
-                <td><%= raw column %></td>
-              <% end %>
-            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'follow_up_audit.cost_analysis.without_weaknesses' %></em>
+    </p>
+  <% end %>
+
+  <h1><%= t 'follow_up_audit.cost_analysis.oportunities' %></h1>
+  <% unless @oportunities_data[period].blank? %>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <% @column_order.each do |col_name, col_width| %>
+            <th><%= t :"follow_up_audit.cost_analysis.column_#{col_name}" %></th>
           <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p style="margin: 1em;">
-        <em><%= t 'follow_up_audit.cost_analysis.without_oportunities' %></em>
-      </p>
-    <% end %>
-  </div>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunities_data[period].each do |columns| %>
+          <tr>
+            <% columns.each do |column| %>
+              <td><%= raw column %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="margin: 1em;">
+      <em><%= t 'follow_up_audit.cost_analysis.without_oportunities' %></em>
+    </p>
+  <% end %>
 <% end %>
 
 <div id="links">

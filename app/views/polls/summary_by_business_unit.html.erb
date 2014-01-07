@@ -6,7 +6,7 @@
   <br /><h1 style="margin: 0em 1em;"><%= @questionnaire.name %></h1>
   <% @business_unit_polls.each_key do |but| %>
     <br /><h2 style="margin: 0em 1em;"><%= but %>:</h2><br />
-    <table class="summary_table" style="margin: 0em 1em;">
+    <table class="table table-condensed table-striped">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
