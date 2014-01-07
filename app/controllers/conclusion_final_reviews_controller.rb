@@ -293,12 +293,13 @@ class ConclusionFinalReviewsController < ApplicationController
     pdf.add_title t('conclusion_final_review.index_title')
 
     column_order = [
-      ['period', Review.human_attribute_name(:period_id), 10],
-      ['identification', Review.human_attribute_name(:identification), 10],
+      ['period', Review.human_attribute_name(:period_id), 5],
+      ['identification', Review.human_attribute_name(:identification), 8],
       ['business_unit', PlanItem.human_attribute_name(:business_unit_id), 30],
       ['project', PlanItem.human_attribute_name(:project), 30],
       ['issue_date', ConclusionDraftReview.human_attribute_name(:issue_date), 10],
       ['close_date', ConclusionDraftReview.human_attribute_name(:close_date), 10],
+      ['score', Review.human_attribute_name(:score), 7]
     ]
 
     columns = {}
@@ -317,6 +318,7 @@ class ConclusionFinalReviewsController < ApplicationController
         cfr.review.plan_item.project,
         "<b>#{cfr.issue_date ? l(cfr.issue_date, format: :minimal) : ''}</b>",
         (cfr.close_date ? l(cfr.close_date, format: :minimal) : ''),
+        cfr.review.score.to_s + '%'
       ]
     end
 
