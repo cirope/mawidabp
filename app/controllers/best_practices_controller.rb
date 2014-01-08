@@ -1,8 +1,3 @@
-# =Controlador de buenas prácticas
-#
-# Lista, muestra, crea, modifica y elimina buenas prácticas (#BestPractice),
-# procesos de negocio (#ProcessControl) y objetivos de control
-# (#ControlObjective)
 class BestPracticesController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_best_practice, only: [:show, :edit, :update, :destroy]
@@ -13,9 +8,7 @@ class BestPracticesController < ApplicationController
   # * GET /best_practices.xml
   def index
     @title = t 'best_practice.index_title'
-    @best_practices = BestPractice.list.reorder('created_at DESC').paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    @best_practices = BestPractice.list.reorder('created_at DESC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -6,9 +6,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires.json
   def index
     @title = t 'questionnaire.index_title'
-    @questionnaires = Questionnaire.list.paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @questionnaires = Questionnaire.list.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

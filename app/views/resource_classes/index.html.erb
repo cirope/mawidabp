@@ -19,7 +19,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @resource_classes %>
-  <%= link_to t('label.new'), new_resource_class_path %>
-</div>
+<%= pagination_links @resource_classes %>
+
+<%= link_to t('label.new'), new_resource_class_path, class: 'btn btn-primary' %>

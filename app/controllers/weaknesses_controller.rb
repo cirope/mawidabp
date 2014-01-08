@@ -1,6 +1,3 @@
-# =Controlador de observaciones
-#
-# Lista, muestra, crea, modifica y elimina observaciones (#Weakness)
 class WeaknessesController < ApplicationController
   before_filter :auth, :load_privileges, :check_privileges
   before_action :set_weakness, only: [
@@ -53,9 +50,7 @@ class WeaknessesController < ApplicationController
         "#{Review.table_name}.identification DESC",
         "#{Weakness.table_name}.review_code ASC"
       ]
-    ).references(:periods, :conclusion_reviews).paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    ).references(:periods, :conclusion_reviews).page(params[:page])
 
     respond_to do |format|
       format.html {

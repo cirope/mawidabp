@@ -1,7 +1,3 @@
-# =Controlador de objetivos de control
-#
-# Lista, muestra, modifica y elimina objetivos de control
-# (#ControlObjectiveItem)
 class ControlObjectiveItemsController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_control_objective_item, only: [
@@ -25,7 +21,7 @@ class ControlObjectiveItemsController < ApplicationController
         {control_objective: :process_control}
     ).where(@conditions).order(
       "#{Review.table_name}.identification DESC"
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {

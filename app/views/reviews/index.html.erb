@@ -32,7 +32,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @reviews %>
-  <%= link_to t('label.new'), new_review_path %>
-</div>
+<%= pagination_links @reviews %>
+
+<%= link_to t('label.new'), new_review_path, class: 'btn btn-primary' %>

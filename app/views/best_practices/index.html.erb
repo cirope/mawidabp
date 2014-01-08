@@ -20,7 +20,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @best_practices %>
-  <%= link_to t('label.new'), new_best_practice_path %>
-</div>
+<%= pagination_links @best_practices %>
+
+<%= link_to t('label.new'), new_best_practice_path, class: 'btn btn-primary' %>

@@ -34,9 +34,8 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @conclusion_final_reviews %>
-  <%= link_to t('label.new'), new_conclusion_final_review_path %> |
-  <%= link_to t('label.download'), export_list_to_pdf_conclusion_final_reviews_path(
-    :search => params[:search], :_ts => Time.now.to_i) %>
-</div>
+<%= pagination_links @conclusion_final_reviews %>
+
+<%= link_to t('label.new'), new_conclusion_final_review_path, class: 'btn btn-primary' %>
+<%= link_to t('label.download'), export_list_to_pdf_conclusion_final_reviews_path(
+  :search => params[:search], :_ts => Time.now.to_i), class: 'btn btn-default' %>

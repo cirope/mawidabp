@@ -1,44 +1,40 @@
-<div id="showed_data">
-  <p>
-    <b><%= BusinessUnitType.human_attribute_name :name %>:</b>
-    <%=h @business_unit_type.name %>
-  </p>
+<p>
+  <b><%= BusinessUnitType.human_attribute_name :name %>:</b>
+  <%= @business_unit_type.name %>
+</p>
 
-  <p>
-    <b><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</b>
-    <%=h @business_unit_type.business_unit_label %>
-  </p>
+<p>
+  <b><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</b>
+  <%= @business_unit_type.business_unit_label %>
+</p>
 
-  <p>
-    <b><%= BusinessUnitType.human_attribute_name :project_label %>:</b>
-    <%=h @business_unit_type.project_label %>
-  </p>
+<p>
+  <b><%= BusinessUnitType.human_attribute_name :project_label %>:</b>
+  <%= @business_unit_type.project_label %>
+</p>
 
-  <p>
-    <b><%= BusinessUnitType.human_attribute_name :external %>:</b>
-    <%=t @business_unit_type.external ? 'label.yes' : 'label.no' %>
-  </p>
+<p>
+  <b><%= BusinessUnitType.human_attribute_name :external %>:</b>
+  <%=t @business_unit_type.external ? 'label.yes' : 'label.no' %>
+</p>
 
-  <% unless @business_unit_type.business_units.empty? %>
-    <table class="summary_table">
-      <thead>
+<% unless @business_unit_type.business_units.empty? %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th><%= BusinessUnit.model_name.human %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @business_unit_type.business_units.each do |bu| %>
         <tr>
-          <th><%= BusinessUnit.model_name.human %></th>
+          <td><%= bu.name %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @business_unit_type.business_units.each do |bu| %>
-          <tr>
-            <td><%= h bu.name %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-</div>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_business_unit_type_path(@business_unit_type) %> |
-  <%= link_to t('label.list'), business_unit_types_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_edit edit_business_unit_type_path(@business_unit_type) %> |
+<%= link_to t('label.list'), business_unit_types_path %> |
+<%= link_to_back %>

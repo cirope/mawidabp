@@ -1,0 +1,21 @@
+<div class="item_field" style="width: 50%;">
+  <div class="search">
+    <% field_classes = [:search, :autocomplete_field] %>
+    <% field_classes << :field_with_errors unless @user.errors[:manager_id].blank? %>
+    <%= f.input :nested_user, input_html: {
+        id: "user_manager_#{@user.id}",
+        value: (@user.parent.try(:full_name_with_function) || ''),
+        class: field_classes.join(' '),
+        title: t('label.search'),
+        :autocomplete => :off,
+        'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+        'data-autocomplete-url' => auto_complete_for_user_users_path
+      }
+    %>
+    <%= f.input :manager_id, as: :hidden, class: :autocomplete_id %>
+  </div>
+</div>
+<div class="item_field" style="width: 10%;">
+  <%= link_to t('user.unlink_manager'), '#', :onclick =>
+  "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
+</div>

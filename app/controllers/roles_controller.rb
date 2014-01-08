@@ -1,6 +1,3 @@
-# =Controlador de perfiles
-#
-# Lista, muestra, crea, modifica y elimina perfiles (#Role)
 class RolesController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_role, only: [:show, :edit, :update, :destroy]
@@ -11,9 +8,7 @@ class RolesController < ApplicationController
   # * GET /roles.xml
   def index
     @title = t 'role.index_title'
-    @roles = Role.list.paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    @roles = Role.list.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

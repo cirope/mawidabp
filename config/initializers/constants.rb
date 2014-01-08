@@ -18,8 +18,6 @@ APP_ADMIN_PREFIXES = ['admin', 'www'].freeze
 APP_FILES_PATH = File.join(PRIVATE_PATH, 'file_models', File::SEPARATOR).freeze
 # Ruta a las imágenes subidas a la aplicación
 APP_IMAGES_PATH = File.join(PRIVATE_PATH, 'image_models', File::SEPARATOR).freeze
-# Cantidad de líneas por página
-APP_LINES_PER_PAGE = 12
 # Variable con los idiomas disponibles (Debería reemplazarse con
 # I18.available_locales cuando se haya completado la traducción a Inglés)
 AVAILABLE_LOCALES = [:public_es, :es, :mc_es].freeze

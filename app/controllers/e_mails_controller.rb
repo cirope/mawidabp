@@ -8,9 +8,7 @@ class EMailsController < ApplicationController
 
     build_search_conditions EMail
 
-    @emails = EMail.list.where(@conditions).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @emails = EMail.list.where(@conditions).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

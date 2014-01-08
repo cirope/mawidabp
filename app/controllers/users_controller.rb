@@ -1,8 +1,3 @@
-# =Controlador de usuarios
-#
-# Lista, muestra, crea, modifica y elimina usuarios (#User). Además controla el
-# ingreso al sistema, permite blanquear la contraseña, cambiarla, etc. y
-# salir de la aplicación de manera segura.
 class UsersController < ApplicationController
   before_action :auth, except: [
     :edit_password, :update_password, :new_initial, :create_initial,
@@ -42,9 +37,7 @@ class UsersController < ApplicationController
 
     @users = User.includes(:organizations).where(@conditions).not_hidden.order(
       "#{User.table_name}.user ASC"
-    ).references(:organizations).paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    ).references(:organizations).page(params[:page])
 
     respond_to do |format|
       format.html {

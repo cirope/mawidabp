@@ -1,7 +1,3 @@
-# =Controlador de planes de trabajo
-#
-# Lista, muestra, crea, modifica y elimina planes de trabajo (#Plan) y sus ítems
-# (#PlanItem)
 class PlansController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
@@ -19,9 +15,7 @@ class PlansController < ApplicationController
     @title = t 'plan.index_title'
     @plans = Plan.list.includes(:period).order(
       "#{Period.table_name}.start DESC"
-    ).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    ).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

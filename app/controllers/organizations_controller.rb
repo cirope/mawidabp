@@ -15,9 +15,7 @@ class OrganizationsController < ApplicationController
     @title = t 'organization.index_title'
     @organizations = Organization.where(
       :group_id => current_organization.group_id
-    ).order('name ASC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    ).order('name ASC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

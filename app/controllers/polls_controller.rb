@@ -12,9 +12,7 @@ class PollsController < ApplicationController
     @current_module = 'administration_questionnaires_polls'
     @title = t 'poll.index_title'
     if params[:id]
-      @polls = Poll.by_questionnaire(params[:id]).paginate(
-        page: params[:page], per_page: APP_LINES_PER_PAGE
-      )
+      @polls = Poll.by_questionnaire(params[:id]).page(params[:page])
     else
       build_search_conditions Poll
 
@@ -24,9 +22,7 @@ class PollsController < ApplicationController
           :user
         ).where(@conditions).order(
           "#{Poll.table_name}.created_at DESC"
-        ).paginate(
-          page: params[:page], per_page: APP_LINES_PER_PAGE
-        )
+        ).page(params[:page])
       else
         default_conditions = {}
         # Solo busca por columna contestada
@@ -41,9 +37,7 @@ class PollsController < ApplicationController
           :user
         ).where(default_conditions).order(
           "#{Poll.table_name}.created_at DESC"
-        ).paginate(
-          page: params[:page], per_page: APP_LINES_PER_PAGE
-        )
+        ).page(params[:page])
       end
     end
 

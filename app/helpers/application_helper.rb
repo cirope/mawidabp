@@ -1,11 +1,11 @@
-# =Helper de la aplicación
-#
-# Helper del que heredan los demás helpers de la aplicación.
-#
-# Todas las funciones definidas aquí están disponibles para *TODOS* los demás
-# helpers y quedan también disponibles en las vistas
 module ApplicationHelper
   include ParameterSelector
+
+  def copy_attribute_errors(from, to, form_builder)
+    form_builder.object.errors[from].each do |message|
+      form_builder.object.errors.add(to, message)
+    end
+  end
 
   def textilize(text)
     if text.blank?

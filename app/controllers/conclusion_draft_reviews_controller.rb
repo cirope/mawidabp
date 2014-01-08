@@ -33,7 +33,7 @@ class ConclusionDraftReviewsController < ApplicationController
         "#{ConclusionDraftReview.table_name}.issue_date DESC",
         "#{ConclusionFinalReview.table_name}.created_at DESC"
       ].join(', ')
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {

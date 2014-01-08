@@ -30,8 +30,8 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @polls %>
-  <%= link_to t('label.new'), new_poll_path %> |
-  <%= link_to t('poll.import_csv_customers_title'), import_csv_customers_polls_path %>
-</div>
+<%= pagination_links @polls %>
+
+<%= link_to t('label.new'), new_poll_path, class: 'btn btn-primary' %>
+<%= link_to t('poll.import_csv_customers_title'),
+  import_csv_customers_polls_path, class: 'btn btn-default' %>

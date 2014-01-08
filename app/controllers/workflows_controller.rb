@@ -1,7 +1,3 @@
-# =Controlador de programas de trabajo
-#
-# Lista, muestra, crea, modifica y elimina programas de trabajo (#Workflow) y
-# sus ítems (#WorkflowItem)
 class WorkflowsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_workflow, only: [
@@ -17,9 +13,8 @@ class WorkflowsController < ApplicationController
   def index
     @title = t 'workflow.index_title'
     @workflows = Workflow.list.includes(:review).order(
-      "#{Review.table_name}.identification DESC")
-    .paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
+      "#{Review.table_name}.identification DESC").page(
+      params[:page]
     ).references(:reviews)
 
     respond_to do |format|

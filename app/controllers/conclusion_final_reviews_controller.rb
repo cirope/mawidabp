@@ -24,9 +24,8 @@ class ConclusionFinalReviewsController < ApplicationController
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
-    ).where(@conditions).order(order).paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    ).references(:periods, :reviews, :business_units)
+    ).where(@conditions).order(order).page(params[:page])
+    .references(:periods, :reviews, :business_units)
 
     respond_to do |format|
       format.html {

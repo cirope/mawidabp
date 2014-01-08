@@ -6,9 +6,7 @@ class SettingsController < ApplicationController
   def index
     @title = t 'setting.index_title'
 
-    @settings = Setting.list.paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    @settings = Setting.list.page(params[:page])
   end
 
   # GET /settings/1

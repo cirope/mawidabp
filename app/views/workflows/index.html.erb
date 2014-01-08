@@ -27,7 +27,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @workflows %>
-  <%= link_to t('label.new'), new_workflow_path %>
-</div>
+<%= pagination_links @workflows %>
+
+<%= link_to t('label.new'), new_workflow_path, class: 'btn btn-primary' %>

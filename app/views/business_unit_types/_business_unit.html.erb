@@ -1,15 +1,12 @@
-<% id = "business_unit_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="business_unit item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 50%;">
-      <%= f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </div>
-    <div class="item_field item_controls" style="width: 35%;">
-      <%= remove_item_link(f) %>
-    </div>
+<% id = f.object.object_id %>
+<fieldset class="row">
+  <div class="col-md-10">
+    <%= f.input :name, label: false,
+      placeholder: BusinessUnit.human_attribute_name('name'),
+      input_html: { id: "#{id}", autofocus: true }
+    %>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>
+  <div class="col-md-2">
+    <%= link_to_remove_nested_item(f) %>
+  </div>
+</fieldset>

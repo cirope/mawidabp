@@ -12,10 +12,10 @@
 //= require bootstrap
 //= require jquery.url
 //= require jquery.mw
+//= require dynamic_form
+//= require effect_helper
 //= require common
 //= require autocomplete
 //= require extensions
 //= require form_modification
-//= require mobile_style
-//= require validation
 //= require ui

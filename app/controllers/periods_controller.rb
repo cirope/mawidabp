@@ -1,6 +1,3 @@
-# =Controlador de periodos
-#
-# Lista, muestra, crea, modifica y elimina periodos (#Period)
 class PeriodsController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_period, only: [:show, :edit, :update, :destroy]
@@ -11,9 +8,7 @@ class PeriodsController < ApplicationController
   # * GET /periods.xml
   def index
     @title = t 'period.index_title'
-    @periods = Period.list.reorder('start DESC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @periods = Period.list.reorder('start DESC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -21,7 +21,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @organizations %>
-  <%= link_to t('label.new'), new_organization_path %>
-</div>
+<%= pagination_links @organizations %>
+
+<%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>

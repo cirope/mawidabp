@@ -1,175 +1,71 @@
-<!--[form:user]-->
-<%= form_for @user, :url => url do |u_f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var child='#{escape_javascript(render(:partial => 'child',
-        :object => User.new, :locals => {:f => u_f, :is_dynamic => true}))}';" %>
-    <%= raw "var organization_role='#{generate_template(u_f,
-        :organization_roles)}';" %>
-    <%= raw "var related_user_relation='#{generate_template(u_f,
-        :related_user_relations)}';" %>
-  <% end %>
-  <%= u_f.error_messages %>
-  <div class="form_column_left">
-    <p>
-      <%= u_f.label :user %>
-      <%= u_f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>
-    </p>
-    <p>
-      <%= u_f.label :name %>
-      <%= u_f.text_field :name, :maxlength => 100, :size => 10 %>
-    </p>
-    <p>
-      <%= u_f.label :last_name %>
-      <%= u_f.text_field :last_name, :maxlength => 100, :size => 10 %>
-    </p>
-    <p>
-      <%= u_f.label :email %>
-      <%= u_f.text_field :email, :maxlength => 100, :size => 10 %>
-    </p>
-    <p>
-      <%= u_f.label :function %>
-      <%= u_f.text_field :function, :maxlength => 255, :size => 10 %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= u_f.label :notes %>
-      <%= u_f.text_area :notes, :style => 'height: 5em;' %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :resource_id, nil, :class => :inline %>
-      <%= user_resource_field(u_f) %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :language, nil, :class => :inline %>
-      <%= user_language_field(u_f) %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :logged_in, nil, :class => :inline %>
-      <%= u_f.check_box :logged_in, :class => :inline_item %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :enable, nil, :class => :inline %>
-      <%= u_f.check_box :enable, :class => :inline_item %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :hidden, nil, :class => :inline %>
-      <%= u_f.check_box :hidden, :class => :inline_item %>
-    </p>
-    <p class="form_item">
-      <%= u_f.label :send_notification_email, nil, :class => :inline %>
-      <%= u_f.check_box :send_notification_email, {:class => :inline_item}, '1', '' %>
-    </p>
-    <div style="display: none;"><%= u_f.hidden_field :lock_version %></div>
-  </div>
+<%= simple_form_for @user, :url => url do |f| %>
+  <%= f.error_notification %>
 
-  <% if @auth_user %>
-    <div class="items">
-      <div class="column_headers">
-        <div class="item_column" style="width: 50%;">
-          <h3><%= User.human_attribute_name(:manager_id) %></h3>
-        </div>
-        <div class="item_column" style="width: 10%;">&nbsp;</div>
-        <div class="clear"></div>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :user, input_html: { maxlength: 30, autofocus: true } %>
+        <%= f.input :name, input_html: { maxlength: 100 } %>
+        <%= f.input :last_name, input_html: { maxlength: 100 } %>
+        <%= f.input :email, input_html: { maxlength: 100 } %>
+        <%= f.input :function, input_html: { maxlength: 255 } %>
       </div>
-      <div class="item_field" style="width: 50%;">
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :field_with_errors unless @user.errors[:manager_id].blank? %>
-          <%= u_f.text_field :nested_user,
-            :id => "user_manager_#{@user.id}",
-            :value => (@user.parent.try(:full_name_with_function) || ''),
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-            'data-autocomplete-url' => auto_complete_for_user_users_path %>
-          <%= u_f.hidden_field :manager_id, :class => :autocomplete_id %>
-        </div>
-      </div>
-      <div class="item_field" style="width: 10%;">
-        <%= link_to t('user.unlink_manager'), '#', :onclick =>
-          "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
+      <div class="col-md-6">
+        <%= f.input :notes %>
+        <%= user_resource_field(f) %>
+        <%= user_language_field(f) %>
+        <%= f.input :logged_in, label: false, inline_label: true %>
+        <%= f.input :enable, label: false, inline_label: true %>
+        <%= f.input :hidden, label: false, inline_label: true %>
+        <%= f.input :send_notification_email, label: false, inline_label: true %>
+        <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
 
-    <div class="items">
-      <div class="column_headers">
-        <div class="item_column" style="width: 50%;">
-          <h3><%= t('user.children') %></h3>
-        </div>
-        <div class="item_column" style="width: 10%;">&nbsp;</div>
-        <div class="clear"></div>
+    <% if @auth_user %>
+      <h3><%= User.human_attribute_name(:manager_id) %></h3>
+
+      <div id="parent">
+        <%= render partial: 'parent', locals: { f: f } %>
       </div>
+
+      <h3><%= t('user.children') %></h3>
 
       <div id="children">
-        <%= render :partial => 'child', :collection => @user.children,
-          :locals => {:f => u_f, :is_dynamic => false} %>
+        <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
       </div>
-    </div>
 
-    <p class="add_item">
-      <%= link_to t('user.add_child'), '#', 'data-template' => 'child',
-        'data-event' => 'addNestedItem', 'data-container' => '#children' %>
-    </p>
-  <% end %>
+      <%= link_to_add_fields(t('user.add_child'), f, :related_user_relations, 'users/child') %>
+    <% end %>
 
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 50%;">
-        <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;"></div>
-      <div class="clear"></div>
-    </div>
+    <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
 
     <div id="related_user_relations">
-      <%= u_f.fields_for :related_user_relations do |rur_f| %>
-        <%= render :partial => 'related_user_relation', :locals =>
-          {:f => rur_f, :is_dynamic => false} %>
+      <%= f.simple_fields_for :related_user_relations do |r_f| %>
+        <%= render partial: 'related_user_relation', locals: { f: r_f } %>
       <% end %>
     </div>
-  </div>
 
-  <p class="add_item">
-    <%= link_to t('user.add_related_user_relations'), '#',
-      'data-template' => 'related_user_relation',
-      'data-event' => 'addNestedItem',
-      'data-container' => '#related_user_relations' %>
-  </p>
+    <%= link_to_add_fields(t('user.add_related_user_relations'), f, :related_user_relations) %>
 
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 40%;">
-        <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
-      </div>
-      <div class="item_column" style="width: 40%;">
-        <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;"></div>
-      <div class="clear"></div>
-    </div>
+    <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
+    <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
 
     <div id="organization_roles">
       <% organization_roles =
         @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
         @user.organization_roles.for_group(current_organization.group_id)
       %>
-      <%= u_f.fields_for :organization_roles, organization_roles do |or_f| %>
-        <%= render :partial => 'organization_role', :locals =>
-          {:f => or_f, :is_dynamic => false} %>
+      <%= f.simple_fields_for :organization_roles, organization_roles do |or_f| %>
+        <%= render partial: 'organizations/organization_role', locals: { f: or_f } %>
       <% end %>
     </div>
+
+    <%= link_to_add_fields(t('user.add_organization_role'), f,
+      :organization_roles, 'organizations/organization_role') %>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('user.add_organization_role'), '#',
-      'data-template' => :organization_role,
-      'data-event' => 'addNestedItem',
-      'data-container' => '#organization_roles' %>
-  </p>
-  <p>
-    <span class="button"><%= u_f.submit %></span>
-  </p>
+  <div class="form-actions form-footer">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:user] -->

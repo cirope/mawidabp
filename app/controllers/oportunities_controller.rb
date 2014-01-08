@@ -1,6 +1,3 @@
-# =Controlador de oportunidades de mejora
-#
-# Lista, muestra, crea, modifica y elimina oportunidades de mejora (#Oportunity)
 class OportunitiesController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_oportunity, only: [
@@ -52,7 +49,7 @@ class OportunitiesController < ApplicationController
         "#{Review.table_name}.identification DESC",
         "#{Oportunity.table_name}.review_code ASC"
       ]
-    ).paginate(:page => params[:page], :per_page => APP_LINES_PER_PAGE)
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {

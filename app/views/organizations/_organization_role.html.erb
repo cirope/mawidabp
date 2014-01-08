@@ -1,0 +1,37 @@
+<% id = f.object.object_id %>
+<fieldset>
+  <div class="row">
+    <% unless f.object.organization %>
+      <div class="col-md-5">
+        <% field_classes = ['autocomplete_field'] %>
+        <% copy_attribute_errors(:organization_id, :auto_organization_name, f) %>
+        <%= f.input :auto_organization_name, label: false,
+          placeholder: OrganizationRole.human_attribute_name('role_id'),
+          input_html: {
+            id: "auto_organization_#{id}",
+            class: field_classes.join(' '),
+            value: f.object.organization.try(:label),
+            autofocus: true,
+            data: {
+              'autocomplete-url' => organizations_path(format: :json),
+              'autocomplete-id-target' => "#auto_organization_id_#{id}"
+            }
+          }
+        %>
+        <%= f.input :organization_id, as: :hidden,
+          input_html: { class: 'autocomplete_id', id: "auto_organization_id_#{id}" }
+        %>
+      </div>
+    <% end %>
+    <div class="col-md-2 nested-actions">
+      <%= f.input :id, as: :hidden %>
+      <% if @auth_organization.nil? || f.object.organization_id == @auth_organization.id %>
+        <%= link_to_remove_nested_item(f) %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10">
+    </div>
+  </div>
+</fieldset>

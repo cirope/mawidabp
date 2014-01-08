@@ -1,7 +1,3 @@
-# =Controlador de debilidades y oportunidades de mejora
-#
-# Lista, muestra, modifica y elimina debilidades (#Weakness) y oportunidades de
-# mejora (#Oportunity) y sus respuestas (#FindingAnswer)
 class FindingsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_finding, only: [:show, :edit, :update]
@@ -67,9 +63,7 @@ class FindingsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @findings = @findings.paginate(
-          :page => params[:page], :per_page => APP_LINES_PER_PAGE
-        )
+        @findings = @findings.page(params[:page])
 
         if @findings.size == 1 && !@query.blank? && !params[:page]
           redirect_to finding_url(params[:completed], @findings.first)

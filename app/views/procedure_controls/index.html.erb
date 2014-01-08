@@ -23,7 +23,6 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @procedure_controls %>
-  <%= link_to t('label.new'), new_procedure_control_path %>
-</div>
+<%= pagination_links @procedure_controls %>
+
+<%= link_to t('label.new'), new_procedure_control_path, class: 'btn btn-primary' %>

@@ -10,4 +10,12 @@ module OrganizationsHelper
 
     out
   end
+
+  def kind_field(form)
+    collection = ORGANIZATION_KINDS.collect do |kind|
+      [t("activerecord.attributes.organization.kind_options.#{kind}"), kind]
+    end
+
+    form.input :kind, collection: collection
+  end
 end

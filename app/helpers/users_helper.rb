@@ -5,7 +5,7 @@ module UsersHelper
 
   def user_resource_field(form, inline = true)
     resource_classes = ResourceClass.human_resources
-    
+
     form.grouped_collection_select(:resource_id, resource_classes, :resources,
       :to_s, :id, :to_s,
       {:prompt => true},
@@ -22,18 +22,18 @@ module UsersHelper
   def user_organizations_field(form, id = nil )
     group = current_organization ? current_organization.group :
       Group.find_by_admin_hash(params[:hash])
-    
+
     form.select :organization_id, sorted_options_array_for(
       Organization.list_for_group(group), :name, :id), {:prompt => true},
       {:id => "#{id}_organization_id"}
   end
-  
+
   def user_weaknesses_links(user)
     filtered_weaknesses = user.weaknesses.for_current_organization.finals(
       false).not_incomplete
     pending_count = filtered_weaknesses.with_pending_status.count
     complete_count = filtered_weaknesses.count - pending_count
-    
+
     pending_link = link_to_unless(pending_count == 0,
       textilize_without_paragraph(
         t('user.weaknesses.pending', :count => pending_count)

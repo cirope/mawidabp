@@ -35,10 +35,9 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @oportunities %>
-  <% if params[:control_objective].to_i > 0 %>
-    <%= link_to t('label.new'), new_oportunity_path(
-      :control_objective_item => params[:control_objective]) %>
-  <% end %>
-</div>
+<%= pagination_links @oportunities %>
+
+<% if params[:control_objective].to_i > 0 %>
+  <%= link_to t('label.new'), new_oportunity_path(
+    :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
+<% end %>

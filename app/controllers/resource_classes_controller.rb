@@ -1,7 +1,3 @@
-# =Controlador de clases de recursos
-#
-# Lista, muestra, crea, modifica y elimina clases de recursos (#ResourceClass) y
-# sus recursos (#Resource)
 class ResourceClassesController < ApplicationController
   before_action :auth, :check_privileges
   before_action :set_resource_class, only: [:show, :edit, :update, :destroy]
@@ -12,9 +8,7 @@ class ResourceClassesController < ApplicationController
   # * GET /resource_classes.xml
   def index
     @title = t 'resource_class.index_title'
-    @resource_classes = ResourceClass.list.order('name ASC').paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    @resource_classes = ResourceClass.list.order('name ASC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

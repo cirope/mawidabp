@@ -2,6 +2,10 @@ body {
   padding-top: 70px;
 }
 
+.form-footer {
+  padding-bottom: 20px;
+}
+
 .loading-caption {
   position: fixed;
   top: 0%;
@@ -14,10 +18,19 @@ body {
   z-index: 1100;
 }
 
-.submenu {
-  margin-bottom: 15px;
+.nav-menu {
+  padding: 10px 0;
+  background-color: #f7f5fa;
 }
 
 .nowrap {
   white-space: nowrap;
+}
+
+.pagination, .pager {
+  margin: 0;
+}
+
+.submenu {
+  margin-bottom: 15px;
 }

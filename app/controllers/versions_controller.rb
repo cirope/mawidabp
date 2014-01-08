@@ -42,9 +42,7 @@ class VersionsController < ApplicationController
           types: ['User', 'Parameter'],
           boolean_true: true
         }
-      ).order('created_at DESC').paginate(
-        page: params[:page], per_page: APP_LINES_PER_PAGE
-      )
+      ).order('created_at DESC').page(params[:page])
 
       respond_to do |format|
         format.html # index.html.erb

@@ -1,4 +1,3 @@
-<div id="showed_data">
 <p>
   <b><%= Organization.human_attribute_name 'name' %>:</b>
   <%= @organization.name %>
@@ -26,10 +25,9 @@
 <% if @organization.image_model %>
   <div style="margin-top: 1em;"><%= organization_image_tag %></div>
 <% end %>
-</div>
 
-<div id="links">
-<%= link_to t('label.edit'), edit_organization_path(@organization) %> |
+<hr />
+
+<%= link_to_edit edit_organization_path(@organization) %> |
 <%= link_to t('label.list'), organizations_path %> |
 <%= link_to_back %>
-</div>

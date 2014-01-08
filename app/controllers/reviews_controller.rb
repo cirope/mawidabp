@@ -1,7 +1,3 @@
-# =Controlador de informes
-#
-# Lista, muestra, crea, modifica y elimina informes (#Review) y sus objetivos
-# de control (#ControlObjectiveItem)
 class ReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
@@ -22,8 +18,8 @@ class ReviewsController < ApplicationController
 
     @reviews = Review.list.includes(
       :period, { plan_item: :business_unit }
-    ).where(@conditions).reorder('identification DESC').paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
+    ).where(@conditions).reorder('identification DESC').page(
+      params[:page]
     ).references(:periods)
 
     respond_to do |format|

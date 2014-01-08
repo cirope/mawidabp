@@ -1,8 +1,3 @@
-# =Controlador de procedimientos y pruebas de control
-#
-# Lista, muestra, crea, modifica y elimina procedimientos y pruebas de control
-# (#ProcedureControl) y sus ítems (#ProcedureControlItem y
-# #ProcedureControlSubitem)
 class ProcedureControlsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_procedure_control, only: [
@@ -18,9 +13,7 @@ class ProcedureControlsController < ApplicationController
     @title = t 'procedure_control.index_title'
     @procedure_controls = ProcedureControl.list.order(
       "#{ProcedureControl.table_name}.created_at DESC"
-    ).paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
-    )
+    ).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -1,6 +1,3 @@
-# =Controlador de registros de errores
-#
-# Lista y muestra registros de errores (#ErrorRecord)
 class ErrorRecordsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
 
@@ -23,8 +20,8 @@ class ErrorRecordsController < ApplicationController
 
     @error_records = ErrorRecord.list.includes(:user).where(
       @conditions || default_conditions
-    ).order("#{ErrorRecord.table_name}.created_at DESC").paginate(
-      page: params[:page], per_page: APP_LINES_PER_PAGE
+    ).order("#{ErrorRecord.table_name}.created_at DESC").page(
+      params[:page]
     ).references(:users)
 
     respond_to do |format|
