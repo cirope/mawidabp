@@ -172,7 +172,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     average = (total / cois_count.to_f).round
 
-    scores = Review.scores.to_a
+    scores = Review.scores(@review.created_at).to_a
     scores.sort! { |s1, s2| s2[1].to_i <=> s1[1].to_i }
     count = scores.size + 1
 
