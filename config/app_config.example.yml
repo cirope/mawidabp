@@ -1,1 +1,4 @@
 smtp_password: '123456'
+highest_score_organizations:
+  1: '31-01-2014'
+  2: '31-02-2014'
