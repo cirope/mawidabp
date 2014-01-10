@@ -1,4 +1,14 @@
-smtp_password: '123456'
+smtp:
+  address: 'smtp.gmail.com'
+  port: 587
+  user_name: 'username@change.me'
+  password: '<password>'
+  authentication: 'plain'
+  enable_starttls_auto: true
+
+public_host: 'public.domain.com'
+support_email: 'noreply@change.me'
+
 highest_score_organizations:
   1: '31-01-2014'
   2: '31-02-2014'

@@ -13,8 +13,7 @@
       <% end %>
       <p>
         <%= link_to t('notifier.notification.confirm'),
-          confirm_notification_url(n, :protocol => URL_PROTOCOL,
-            :host => "#{organization.prefix}.#{URL_HOST}") %>
+          confirm_notification_url(n, :host => "#{organization.prefix}.#{URL_HOST}") %>
       </p>
     <% end %>
   <% end %>

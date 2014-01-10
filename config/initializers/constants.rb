@@ -38,9 +38,6 @@ FINDING_MAX_PDF_ROWS = 100
 FINDING_WARNING_EXPIRE_DAYS = 7
 # Cantidad de días a los que se debe enviar una nueva solicitud de confirmación
 FINDING_STALE_UNCONFIRMED_DAYS = 1
-# Cuenta de correo destino de las notificaciones (se enviarán todas las
-# notificaciones a esta cuenta)
-NOTIFICATIONS_EMAIL = 'notificaciones@mawidabp.com'.freeze
 # Días a los que se consideran anticuadas las notificaciones
 NOTIFICATIONS_STALE_DAYS = 2
 # Ruta hasta donde se almacenan los archivos de errores
@@ -73,8 +70,6 @@ TEST_FILE = File.join('..', '..', 'public', '500.html').freeze
 TEST_FILE_FULL_PATH = File.join(Rails.root, 'public', '500.html').freeze
 # Dirección base para formar los links absolutos
 URL_HOST = (Rails.env.development? ? 'lvh.me:3000' : 'mawidabp.com').freeze
-# Protocolo a utilizar para formar los links absolutos
-URL_PROTOCOL = (Rails.env.development? ? 'http' : 'https').freeze
 # Expresión regular para separar términos en las cadenas de búsqueda (operador
 # AND)
 SEARCH_AND_REGEXP = /\s*[;]+\s*|\s+AND\s+|\s+Y\s+/i
