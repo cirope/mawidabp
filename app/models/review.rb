@@ -280,7 +280,8 @@ class Review < ActiveRecord::Base
   # como sigue: ['nota en texto', integer_promedio], por ejemplo
   # ['Satisfactorio', 90]
   def score_array
-    scores = self.class.scores(self.created_at).to_a
+    created_at = self.new_record? ? Date.today.to_s : self.created_at
+    scores = self.class.scores(created_at).to_a
     count = scores.size + 1
 
     self.effectiveness # Recalcula score
