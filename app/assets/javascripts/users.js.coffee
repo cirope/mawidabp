@@ -20,3 +20,4 @@ jQuery ->
       colors: colors
       formatter: (x) -> x + ' (' + (x / $('#pending_weaknesses_graph').data('total') * 100).toFixed(2) + '%' + ')'
 
+  $(document).on 'click, keypress', '', ->

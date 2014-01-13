@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 
   # Atributos no persistentes
   attr_accessor :user_data, :send_notification_email, :roles_changed,
-    :reallocation_errors, :nested_user
+    :reallocation_errors
 
   # Alias de atributos
   alias_attribute :informal, :user
@@ -183,6 +183,9 @@ class User < ActiveRecord::Base
     }
   accepts_nested_attributes_for :related_user_relations, allow_destroy: true,
     reject_if: proc { |attributes| attributes['related_user_id'].blank? }
+
+  accepts_nested_attributes_for :children, allow_destroy: true,
+    reject_if: proc { |attributes| attributes['user_id'].blank? }
 
   def initialize(attributes = nil, options = {})
     super(attributes, options)

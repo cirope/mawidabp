@@ -3,20 +3,19 @@ module UsersHelper
     content_tag(:abbr, h(user.user), :title => user.email)
   end
 
-  def user_resource_field(form, inline = true)
+  def user_resource_field(form)
     resource_classes = ResourceClass.human_resources
 
-    form.grouped_collection_select(:resource_id, resource_classes, :resources,
-      :to_s, :id, :to_s,
-      {:prompt => true},
-      {:class => (:inline_item if inline)})
+    form.association :resource, collection: resource_classes, as: :grouped_select,
+      group_method: :resources, label_method: :to_s, value_method: :id
   end
 
-  def user_language_field(form, inline = true)
-    options = AVAILABLE_LOCALES.map { |lang| [t("lang.#{lang}"), lang.to_s] }
+  def user_language_field(form)
+    options = AVAILABLE_LOCALES.map do |lang|
+      [t("lang.#{lang}"), lang.to_s]
+    end.sort{ |a, b| a[0] <=> b[0] }
 
-    form.select :language, options.sort{ |a, b| a[0] <=> b[0] }, {},
-      {:class => (:inline_item if inline)}
+    form.input :language, collection: options
   end
 
   def user_organizations_field(form, id = nil )
@@ -44,7 +43,7 @@ module UsersHelper
         t('user.weaknesses.complete', :count => complete_count)
       ), findings_path(:completed => 'complete', :user_id => user.id)
     )
-    
+
     raw("#{pending_link} | #{complete_link}")
   end
 end

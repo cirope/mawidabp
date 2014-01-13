@@ -1,8 +1,8 @@
-<%= render 'form' %>
-
-<div id="links">
+<%= content_for :form_actions do %>
   <%= link_to_unless(@setting.new_record?, t('label.show'),
       setting_path(@setting)) %> |
   <%= link_to t('label.list'), settings_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

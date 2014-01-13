@@ -17,7 +17,7 @@
         <%= f.input :logged_in, label: false, inline_label: true %>
         <%= f.input :enable, label: false, inline_label: true %>
         <%= f.input :hidden, label: false, inline_label: true %>
-        <%= f.input :send_notification_email, label: false, inline_label: true %>
+        <%= f.input :send_notification_email, as: :boolean, label: false, inline_label: true %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
@@ -32,10 +32,13 @@
       <h3><%= t('user.children') %></h3>
 
       <div id="children">
-        <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
+        <% @user.children.build %>
+        <%= f.simple_fields_for :children do |c_f| %>
+          <%= render partial: 'child', locals: { f: c_f } %>
+        <% end %>
       </div>
 
-      <%= link_to_add_fields(t('user.add_child'), f, :related_user_relations, 'users/child') %>
+      <%= link_to_add_fields(t('user.add_child'), f, :children) %>
     <% end %>
 
     <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>

@@ -2020,7 +2020,7 @@
         last_access: "Último acceso"
         logged_in: "Conectado"
         organization_roles: "Perfiles"
-        resource_id: "Tipo de recurso"
+        resource: "Tipo de recurso"
         manager_id: "Superior"
         send_notification_email: "Enviar notificación"
         roles: 'Perfiles'

@@ -1,31 +1,26 @@
-<% child = f.object %>
 <% id = f.object.object_id %>
-<div class="child item" id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 50%;">
-      <% if child.new_record? %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
-          <%= text_field_tag :nested_user, '',
-            :id => "user_child_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-            'data-autocomplete-url' => auto_complete_for_user_users_path %>
-          <%= hidden_field_tag 'user[child_ids][]', child.id,
-            :id => "hidden_child_#{id}", :class => :autocomplete_id %>
-        </div>
-      <% else %>
-        <%= text_field_tag "user_child_#{id}", child.full_name_with_function,
-          :readonly => true %>
-        <%= hidden_field_tag 'user[child_ids][]', child.id,
-          :id => "hidden_child_#{id}" %>
-      <% end %>
+<fieldset>
+  <div class="row">
+    <div class="col-md-10">
+      <% copy_attribute_errors(:relative_id, :auto_user_name, f) %>
+      <%= f.input :auto_user_name, label: false,
+        input_html: {
+          id: "auto_user_#{id}",
+          class: 'autocomplete_field',
+          autofocus: true,
+          value: f.object.try(:label),
+          data: {
+            autocomplete_url: auto_complete_for_user_users_path,
+            autocomplete_id_target: "#auto_child_#{id}"
+          }
+        }
+      %>
+      <%= f.input :child, as: :hidden, input_html: { class: 'autocomplete_id', id: "auto_child_#{id}" } %>
     </div>
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_list_item_link(f) %>
+    <div class="col-md-2">
+      <%= f.input :id, as: :hidden %>
+      <%= f.input :lock_version, as: :hidden %>
+      <%= link_to_remove_nested_item(f) %>
     </div>
   </div>
-</div>
+</fieldset>

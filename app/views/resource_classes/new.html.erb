@@ -1,6 +1,6 @@
-<%= render :partial => 'form' %>
-  
-<div id="links">
-<%= link_to t('label.list'), resource_classes_path %> |
-<%= link_to_back %>
-</div>
+<%= content_for :form_actions do %>
+  <%= link_to t('label.list'), resource_classes_path %> |
+  <%= link_to_back %>
+<% end %>
+
+<%= render 'form' %>
