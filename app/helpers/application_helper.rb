@@ -344,7 +344,8 @@ module ApplicationHelper
   #
   # * _fields_:: El objeto form para el que se va a generar el link
   def remove_list_item_link(fields, remove_class = nil)
-    link_to('X', '#', :title => t('label.delete'),
+    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'),
+      '#', :title => t('label.delete'),
       'data-target' => ".#{remove_class || fields.object.class.name.underscore}",
       'data-event' => 'removeListItem')
   end

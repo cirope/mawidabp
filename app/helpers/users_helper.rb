@@ -6,13 +6,13 @@ module UsersHelper
   def user_resource_field(form)
     resource_classes = ResourceClass.human_resources
 
-    form.association :resource, collection: resource_classes, as: :grouped_select,
-      group_method: :resources, label_method: :to_s, value_method: :id
+    form.input :resource_id, collection: resource_classes, as: :grouped_select,
+      group_method: :resources, prompt: true, label: User.human_attribute_name('resource')
   end
 
   def user_language_field(form)
-    options = AVAILABLE_LOCALES.map do |lang|
-      [t("lang.#{lang}"), lang.to_s]
+    options = AVAILABLE_LOCALES.map do
+      |lang| [t("lang.#{lang}"), lang.to_s]
     end.sort{ |a, b| a[0] <=> b[0] }
 
     form.input :language, collection: options
@@ -22,9 +22,9 @@ module UsersHelper
     group = current_organization ? current_organization.group :
       Group.find_by_admin_hash(params[:hash])
 
-    form.select :organization_id, sorted_options_array_for(
-      Organization.list_for_group(group), :name, :id), {:prompt => true},
-      {:id => "#{id}_organization_id"}
+    form.input :organization_id, collection: sorted_options_array_for(
+      Organization.list_for_group(group), :name, :id), prompt: true,
+      label: false, input_html: { id: "#{id}_organization_id" }
   end
 
   def user_weaknesses_links(user)

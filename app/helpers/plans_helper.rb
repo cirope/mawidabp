@@ -4,8 +4,7 @@ module PlansHelper
 
     form.input :resource_id, collection: resource_classes, as: :grouped_select,
       group_method: :resources, label: false, prompt: true, input_html: {
-      class: (:inline_item if inline), :id => "#{id}_resource_id",
-      autofocus: true
+      id: "#{id}_resource_id", autofocus: true
     }
   end
 
