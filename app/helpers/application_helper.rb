@@ -58,10 +58,10 @@ module ApplicationHelper
 
   def show_info(text, html_options = {})
     content_tag(:span, !text.blank? ?
-        content_tag(
-          :abbr, 'i', :title => text,
-          :class => "info #{html_options[:class]}"
-        ) : '&nbsp;'.html_safe, :class => 'info_box'
+      content_tag(
+        :abbr, nil, title: text,
+        class: "info #{html_options[:class]} glyphicon glyphicon-info-sign"
+      ) : nil, class: 'info_box'
     ).html_safe
   end
 
@@ -281,23 +281,18 @@ module ApplicationHelper
   # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
   def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
-    out = content_tag(:div,
+    out = content_tag(:span,
       link_to(
-        image_tag(
-          'grayarrow.gif', :size => '11x11', :alt => '>', :title => show_text
-        ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
+        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "show_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? 'display: none' : nil)
     )
-    out << content_tag(:div,
+    out << content_tag(:span,
       link_to(
-        image_tag(
-          'grayarrowdown.gif', :size => '11x11', :alt => '>',
-          :title => hide_text
-        ),
-        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;", :class => :image_link
+        content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
+        '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "hide_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? nil : 'display: none'))
@@ -314,7 +309,7 @@ module ApplicationHelper
     }
     options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    link_to(image_tag('move.gif', :size => '6x14', :alt => '[M]'), '#',
+    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-move'), '#',
       *(args << options))
   end
 
@@ -341,7 +336,7 @@ module ApplicationHelper
 
     out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to('X', '#', link_options.merge(options))
+    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), '#', link_options.merge(options))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un
@@ -410,8 +405,8 @@ module ApplicationHelper
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
 
     link_to(
-      image_tag('insert.gif', :size => '19x13', :alt => options[:label],
-        :title => options.delete(:label), :class => options[:class]), "#",
+      content_tag(:span, nil, title: options.delete(:label),
+        class: 'glyphicon glyphicon-indent-left'), "#",
       {
         'data-template' => options.delete(:class_to_insert) ||
           fields.object.class.name.underscore,

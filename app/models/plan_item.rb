@@ -215,16 +215,16 @@ class PlanItem < ActiveRecord::Base
 
   def status_color
     if self.try(:review).try(:has_final_review?)
-      :green
+      'text-success'
     elsif self.try(:review)
       if self.end >= Date.today
-        :gray
+        'text-muted'
       else
-        :yellow
+        'text-warning'
       end
     elsif !self.try(:review) && self.try(:business_unit)
       if self.try(:start) && self.start < Date.today
-        :red
+        'text-danger'
       end
     end
   end

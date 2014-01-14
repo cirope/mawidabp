@@ -1,10 +1,14 @@
 <div class="row">
   <div class="col-md-4">
-    <ul class="nav nav-menu">
-      <li><%= link_to t('execution_reports.detailed_management_report_title'),
-          :action => :detailed_management_report %></li>
-      <li><%= link_to t('execution_reports.weaknesses_by_state_title'),
-          :action => :weaknesses_by_state_execution %></li>
-    </ul>
+    <div class="well well-sm text-center">
+      <%= link_to t('execution_reports.detailed_management_report_title'),
+        :action => :detailed_management_report %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('execution_reports.weaknesses_by_state_title'),
+        :action => :weaknesses_by_state_execution %>
+    </div>
   </div>
 </div>

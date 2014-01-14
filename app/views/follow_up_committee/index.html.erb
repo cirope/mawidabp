@@ -1,20 +1,48 @@
 <div class="row">
   <div class="col-md-4">
-    <ul class="nav nav-menu">
-      <li><%= link_to t('follow_up_committee.synthesis_report_title'),
-      :action => :synthesis_report, :controller_name => 'follow_up' %></li>
-      <li><%= link_to t('follow_up_committee_report.weaknesses_by_risk_report_title'),
-        :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false %></li>
-      <li><%= link_to t('follow_up_committee_report.fixed_weaknesses_report_title'),
-        :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false %></li>
-      <li><%= link_to t('follow_up_committee_report.control_objective_stats_title'),
-        :action => :control_objective_stats, :controller_name => 'follow_up', :final => false %></li>
-      <li><%= link_to t('follow_up_committee_report.process_control_stats_title'),
-        :action => :process_control_stats, :controller_name => 'follow_up', :final => false %></li>
-      <li><%= link_to t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report_title'),
-        :action => :rescheduled_being_implemented_weaknesses_report %></li>
-      <li><%= link_to t('follow_up_committee_report.qa_indicators_title'),
-        :action => :qa_indicators %></li>
-    </ul>
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee.synthesis_report_title'),
+        :action => :synthesis_report, :controller_name => 'follow_up' %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.weaknesses_by_risk_report_title'),
+        :action => :weaknesses_by_risk_report, :controller_name => 'follow_up', :final => false %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.fixed_weaknesses_report_title'),
+        :action => :fixed_weaknesses_report, :controller_name => 'follow_up', :final => false %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.control_objective_stats_title'),
+        :action => :control_objective_stats, :controller_name => 'follow_up', :final => false %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.process_control_stats_title'),
+        :action => :process_control_stats, :controller_name => 'follow_up', :final => false %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report_title'),
+        :action => :rescheduled_being_implemented_weaknesses_report %>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('follow_up_committee_report.qa_indicators_title'),
+        :action => :qa_indicators %>
+    </div>
   </div>
 </div>

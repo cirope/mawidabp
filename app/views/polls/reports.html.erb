@@ -1,12 +1,20 @@
 <div class="row">
   <div class="col-md-4">
-    <ul class="nav nav-menu">
-      <li><%= link_to t('poll.summary_by_questionnaire'),
-          :action => :summary_by_questionnaire %></li>
-      <li><%= link_to t('poll.summary_by_business_unit'),
-          :action => :summary_by_business_unit %></li>
-      <li><%= link_to t('poll.summary_by_answers'),
-          :action => :summary_by_answers %></li>
-    </ul>
+    <div class="well well-sm text-center">
+      <%= link_to t('poll.summary_by_questionnaire'),
+        :action => :summary_by_questionnaire %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('poll.summary_by_business_unit'),
+        :action => :summary_by_business_unit %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well well-sm text-center">
+      <%= link_to t('poll.summary_by_answers'),
+        :action => :summary_by_answers %>
+    </div>
   </div>
 </div>

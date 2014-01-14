@@ -1,22 +1,23 @@
 <% id = dynamic_object_id('material_resource_utilization', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="material_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 30%;">
-    <%= plan_resource_field(f, id, false) %>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">
+      <%= plan_resource_field(f, id, false) %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :units %>
+    <div class="col-md-3">
+      <%= f.input :units, label: false %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
+    <div class="col-md-3">
+      <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
-    <div class="item_field item_controls" style="width: 10%;">
+    <div class="col-md-1">
       <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
         'data-parent' => :plan_item,
-        :class_to_insert => :material_resource_utilization) %> |
+        :class_to_insert => :material_resource_utilization) %>
+      <span class="text-muted">|</span>
       <%= remove_item_link(f, 'material_resource_utilization') %>
-      <%= f.hidden_field :resource_type %>
+      <%= f.input :resource_type, as: :hidden %>
     </div>
   </div>
 </div>
@@ -31,7 +32,7 @@
     var url = '<%= resource_data_plans_path %>';
 
     Helper.showLoading(id);
-    
+
     $.get(url, { id: $(this).val(), format: 'json' }, function(data) {
       $('#<%= id %>_cost_per_unit').val(data.cost_per_unit || '');
     }).complete(function() {

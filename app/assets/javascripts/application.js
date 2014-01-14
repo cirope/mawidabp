@@ -8,13 +8,14 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery-ui-timepicker-addon
-//= require datepicker/jquery.ui.datepicker-es
+//= require jquery.ui.datepicker-es
 //= require bootstrap
 //= require autocomplete
 //= require jquery.url
 //= require jquery.mw
 //= require dynamic_form
 //= require effect_helper
+//= require date_pickers
 //= require common
 //= require extensions
 //= require ui

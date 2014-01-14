@@ -1,11 +1,11 @@
 <% id = dynamic_object_id('human_resource_utilization', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="human_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 30%;">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">
       <% if f.object.new_record? %>
         <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
+          <% field_classes = [:search, :autocomplete_field, 'form-control'] %>
           <% field_classes << :error_field unless f.object.errors[:resource_id].blank? %>
           <%= text_field_tag 'resource_utilization[user_data]',
             f.object.resource.try(:full_name_with_resource),
@@ -15,29 +15,32 @@
             :autocomplete => :off,
             :autofocus => true,
             'data-autocomplete-url' => auto_complete_for_user_plans_path(:format => :json) %>
-          <%= f.hidden_field :resource_id, :value => f.object.resource_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
+          <%= f.input :resource_id, as: :hidden, input_html: {
+            value: f.object.resource_id, id: "hidden_user_id_#{id}", class: 'autocomplete_id'
+          } %>
         </div>
       <% else %>
-        <%= f.hidden_field :resource_id, :value => f.object.resource_id,
-          :id => "hidden_user_id_#{id}" %>
+        <%= f.input :resource_id, as: :hidden, input_html: {
+          value: f.object.resource_id, id: "hidden_user_id_#{id}"
+        } %>
         <%= text_field_tag "resource_utilization_user_#{id}",
           f.object.resource.try(:full_name_with_function, f.object.created_at),
-          :readonly => true %>
+          readonly: true, class: 'form-control' %>
       <% end %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :units %>
+    <div class="col-md-3">
+    <%= f.input :units, label: false %>
     </div>
-    <div class="item_field" style="width: 20%;">
-    <%= f.text_field :cost_per_unit, :id => "#{id}_cost_per_unit" %>
+    <div class="col-md-3">
+      <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
-    <div class="item_field item_controls" style="width: 10%;">
+    <div class="item_field item_controls col-md-1">
       <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
         'data-parent' => :plan_item,
-        :class_to_insert => :human_resource_utilization) %> |
+        :class_to_insert => :human_resource_utilization) %>
+      <span class="text-muted">|</span>
       <%= remove_item_link(f, 'human_resource_utilization') %>
-      <%= f.hidden_field :resource_type %>
+      <%= f.input :resource_type, as: :hidden %>
     </div>
   </div>
 </div>
