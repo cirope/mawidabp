@@ -1,41 +1,40 @@
-<div id="showed_data">
-  <p>
-    <b><%= Role.human_attribute_name :name %>:</b>
-    <%=h @role.name %>
-  </p>
+<p>
+  <strong><%= Role.human_attribute_name :name %>:</strong>
+  <%= @role.name %>
+</p>
 
-  <p>
-    <b><%= Role.human_attribute_name :role_type %>:</b>
-    <%= role_type_text(@role.role_type, nil) %>
-  </p>
+<p>
+  <strong><%= Role.human_attribute_name :role_type %>:</strong>
+  <%= role_type_text(@role.role_type, nil) %>
+</p>
 
-  <table class="summary_table clear">
-    <thead>
-      <tr>
-        <th><%= Privilege.model_name.human %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :read %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :modify %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :erase %></th>
-        <th style="width: 5%;"><%= Privilege.human_attribute_name :approval %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% if current_organization.kind.eql? 'quality_management' %>
-        <% menu_items = @role.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS %>
-      <% else %>
-        <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
-      <% end %>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th class="text-center"><%= Privilege.model_name.human %></th>
+      <th><%= Privilege.human_attribute_name :read %></th>
+      <th><%= Privilege.human_attribute_name :modify %></th>
+      <th><%= Privilege.human_attribute_name :erase %></th>
+      <th><%= Privilege.human_attribute_name :approval %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if current_organization.kind.eql? 'quality_management' %>
+      <% menu_items = @role.audited? ? APP_AUDITED_QM_MENU_ITEMS : APP_AUDITOR_QM_MENU_ITEMS %>
+    <% else %>
+      <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
+    <% end %>
 
-      <% menu_items.each do |menu_item| %>
-        <%= render :partial => 'menu_item_show', :locals => {
-          :menu_item => menu_item} %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+    <% menu_items.each do |menu_item| %>
+      <%= render partial: 'menu_item_show', locals: { menu_item: menu_item } %>
+    <% end %>
+  </tbody>
+</table>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_role_path(@role) %> |
+<hr />
+
+<div class="pull-right form-footer">
+  <%= link_to_edit edit_role_path(@role) %> |
   <%= link_to t('label.list'), roles_path %> |
   <%= link_to_back %>
 </div>
