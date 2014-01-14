@@ -142,6 +142,7 @@ class UsersController < ApplicationController
   # * DELETE /users/1
   # * DELETE /users/1.xml
   def destroy
+    skdjksjd
     unless @user.disable!
       flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
     else

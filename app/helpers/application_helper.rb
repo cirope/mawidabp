@@ -449,7 +449,7 @@ module ApplicationHelper
       :is_dynamic => true
     }.merge(user_options)
 
-    form_builder.fields_for(method, options[:object],
+    form_builder.simple_fields_for(method, options[:object],
       :child_index => options[:child_index]) do |f|
       render(:partial => options[:partial], :locals => {
           options[:form_builder_local] => f,
