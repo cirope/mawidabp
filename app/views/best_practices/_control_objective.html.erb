@@ -1,41 +1,44 @@
 <% id = dynamic_object_id('control_objective', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="control_objective item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 11%;">
-      <%= f.text_area :name, :autofocus => true %>
+  <div class="row">
+    <div class="col-md-2">
+      <%= f.input :name, label: false, input_html: { autofocus: true } %>
     </div>
 
-    <%= f.fields_for :control do |c_f| %>
-      <div class="item_field" style="width: 11%;">
-        <%= c_f.hidden_field :order %>
-        <%= c_f.text_area :control %>
+    <%= f.simple_fields_for :control do |c_f| %>
+      <div class="col-md-2">
+        <%= c_f.input :order, as: :hidden %>
+        <%= c_f.input :control, label: false %>
       </div>
-      <div class="item_field" style="width: 11%;">
-        <%= c_f.text_area :design_tests %>
+      <div class="col-md-1">
+        <%= c_f.input :design_tests, label: false %>
       </div>
-      <div class="item_field" style="width: 11%;">
-        <%= c_f.text_area :compliance_tests %>
+      <div class="col-md-2">
+        <%= c_f.input :compliance_tests, label: false %>
       </div>
-      <div class="item_field" style="width: 11%;">
-        <%= c_f.text_area :sustantive_tests %>
+      <div class="col-md-1">
+        <%= c_f.input :sustantive_tests, label: false %>
       </div>
-      <div class="item_field" style="width: 11%;">
-        <%= c_f.text_area :effects %>
+      <div class="col-md-1">
+        <%= c_f.input :effects, label: false %>
       </div>
     <% end %>
 
-    <div class="item_field" style="width: 11%;">
-      <%= relevance_field(f, prompt: true) %>
+    <div class="col-md-1">
+      <%= relevance_field(f, label: false, prompt: true) %>
     </div>
-    <div class="item_field" style="width: 11%;">
-      <%= risk_field(f, prompt: true) %>
+    <div class="col-md-1">
+      <%= risk_field(f, label: false, prompt: true) %>
     </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= f.hidden_field :order, :class => :sort_number %>
-      <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-        'data-parent' => :process_control, 'data-child' => :control_objectives) %> |
-      <%= remove_item_link(f) %>
+    <div class="col-md-1">
+      <div class="show_hide">
+        <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
+        <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
+          'data-parent' => :process_control, 'data-child' => :control_objectives) %>
+        <span class="text-muted">|</span>
+        <%= remove_item_link(f) %>
+      </div>
     </div>
   </div>
 </div>

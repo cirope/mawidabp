@@ -1,6 +1,6 @@
-<%= render :partial => 'form' %>
+<%= content_for :form_actions do %>
+  <%= link_to t('label.list'), best_practices_path %> |
+  <%= link_to_back %>
+<% end %>
 
-<div id="links">
-<%= link_to t('label.list'), best_practices_path %> |
-<%= link_to_back %>
-</div>
+<%= render 'form' %>

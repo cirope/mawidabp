@@ -34,4 +34,16 @@ module DynamicFormHelper
 
     raw out
   end
+
+  def link_to_remove_child_item(form)
+    link_to(
+      content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'), '#',
+      title: t('label.delete'),
+      data: {
+        'dynamic-target' => '.child',
+        'dynamic-form-event' => 'removeItem',
+        'show-tooltip' => true
+      }
+    )
+  end
 end

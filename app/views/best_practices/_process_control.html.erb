@@ -1,68 +1,63 @@
 <% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="process_control item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="show_hide_field">
-      <%= link_to_show_hide "control_objectives_for_#{id}",
-        t('best_practice.show_control_objectives'),
-        t('best_practice.hide_control_objectives') %>
+  <div class="row">
+    <%= link_to_show_hide "control_objectives_for_#{id}",
+      t('best_practice.show_control_objectives'),
+      t('best_practice.hide_control_objectives') %>
+    <div class="col-md-6">
+      <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
     </div>
-    <div class="item_field" style="width: 50%;">
-      <%= f.text_field :name, :maxlength => 255, :autofocus => true %>
-    </div>
-    <div class="item_field item_controls" style="width: 35%;">
-      <%= f.hidden_field :id %>
-      <%= f.hidden_field :order, :class => :sort_number %>
-      <%= insert_record_link(f) %> |
+    <div class="col-md-2 show_hide">
+      <%= insert_record_link(f) %>
+      <span class="text-muted">|</span>
       <%= remove_item_link(f) %>
+      <%= f.input :id, as: :hidden %>
+      <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
     </div>
+  </div>
 
-    <div class="items hidden_items" id="control_objectives_for_<%= id %>" style="display: none;">
-      <div>
-        <div class="column_headers">
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :name %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :control %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :design_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :compliance_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :sustantive_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= Control.human_attribute_name :effects %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :relevance %></h3>
-          </div>
-          <div class="item_column" style="width: 11%;">
-            <h3><%= ControlObjective.human_attribute_name :risk %></h3>
-          </div>
-          <div class="item_column" style="width: 5%;"></div>
-          <div class="clear"></div>
-        </div>
-
-        <div class="control_objectives">
-          <%= f.fields_for :control_objectives do |co_f| %>
-            <%= render :partial => 'control_objective', :locals =>
-              {:f => co_f, :is_dynamic => false} %>
-          <% end %>
-        </div>
-        <p style="margin-bottom: 1em;">
-          <%= link_to t('best_practice.add_control_objective'), '#',
-            'data-template' => :control_objective,
-            'data-event' => 'addNestedSubitem',
-            'data-parent' => :process_control,
-            'data-child' => :control_objectives %>
-        </p>
+  <div class="items nested_item" id="control_objectives_for_<%= id %>" style="display: none;">
+    <div class="row">
+      <div class="col-md-2">
+        <h4><strong><%= ControlObjective.human_attribute_name :name %></strong></h4>
+      </div>
+      <div class="col-md-2">
+        <h4><strong><%= Control.human_attribute_name :control %></strong></h4>
+      </div>
+      <div class="col-md-1">
+        <h4><strong><%= Control.human_attribute_name :design_tests %></strong></h4>
+      </div>
+      <div class="col-md-2">
+        <h4><strong><%= Control.human_attribute_name :compliance_tests %></strong></h4>
+      </div>
+      <div class="col-md-1">
+        <h4><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h4>
+      </div>
+      <div class="col-md-1">
+        <h4><strong><%= Control.human_attribute_name :effects %></strong></h4>
+      </div>
+      <div class="col-md-1">
+        <h4><strong><%= ControlObjective.human_attribute_name :relevance %></strong></h4>
+      </div>
+      <div class="col-md-1">
+        <h4><strong><%= ControlObjective.human_attribute_name :risk %></strong></h4>
       </div>
     </div>
+
+    <div class="control_objectives">
+      <%= f.simple_fields_for :control_objectives do |co_f| %>
+        <%= render partial: 'control_objective', locals: { f: co_f, is_dynamic: false } %>
+      <% end %>
+    </div>
+    <p style="margin-bottom: 1em;">
+      <%= link_to t('best_practice.add_control_objective'), '#',
+        'data-template' => :control_objective,
+        'data-event' => 'addNestedSubitem',
+        'data-parent' => :process_control,
+        'data-child' => :control_objectives,
+        class: 'btn btn-default btn-sm' %>
+    </p>
   </div>
 </div>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>

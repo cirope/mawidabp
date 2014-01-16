@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-6">
       <% if related_user_relation.new_record? %>
-        <% field_classes = [:search, :autocomplete_field, 'form-control'] %>
+        <% field_classes = [:autocomplete_field, 'form-control'] %>
         <%= f.input :related_user, label: false, input_html: {
           id: "user_related_user_relation_#{id}",
           class: field_classes.join(' '),
@@ -12,7 +12,8 @@
           autocomplete: :off,
           autofocus: true,
           'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-          'data-autocomplete-url' => auto_complete_for_user_users_path
+          'data-autocomplete-url' => auto_complete_for_user_users_path,
+          'data-autocomplete-id-target' => "#hidden_related_user_relation_#{id}"
         } %>
         <%= f.input :related_user_id, as: :hidden, input_html: {
           id: "hidden_related_user_relation_#{id}", class: :autocomplete_id
@@ -28,7 +29,9 @@
       <% end %>
     </div>
     <div class="col-md-6">
-      <%= remove_item_link(f) %>
+      <div class="show_hide">
+        <%= remove_item_link(f) %>
+      </div>
     </div>
   </div>
 </div>

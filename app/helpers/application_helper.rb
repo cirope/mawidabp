@@ -281,7 +281,7 @@ module ApplicationHelper
   # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
   def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
-    out = content_tag(:span,
+    out = content_tag(:div,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
@@ -289,7 +289,7 @@ module ApplicationHelper
       :id => "show_element_#{element_id}_content", :class => :show_hide,
       :style => (displayed ? 'display: none' : nil)
     )
-    out << content_tag(:span,
+    out << content_tag(:div,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
@@ -336,7 +336,8 @@ module ApplicationHelper
 
     out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), '#', link_options.merge(options))
+    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'),
+      '#', link_options.merge(options))
   end
 
   # Devuelve HTML con un link para eliminar un componente de una lista de un
@@ -406,7 +407,7 @@ module ApplicationHelper
     target = ".#{options[:class_to_insert]}" unless options[:class_to_insert].blank?
 
     link_to(
-      content_tag(:span, nil, title: options.delete(:label),
+      content_tag(:div, nil, title: options.delete(:label),
         class: 'glyphicon glyphicon-indent-left'), "#",
       {
         'data-template' => options.delete(:class_to_insert) ||

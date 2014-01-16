@@ -7,13 +7,15 @@
       <%= user_organizations_field(f, id) %>
     </div>
     <div class="col-md-4">
-    <%= f.input :role_id, collection: sorted_options_array_for(roles, :name, :id),
-      prompt: true, label: false, disabled: f.object.organization.nil?,
-      input_html: { class: :role_select }
-    %>
+      <%= f.input :role_id, collection: sorted_options_array_for(roles, :name, :id),
+        prompt: true, label: false, disabled: f.object.organization.nil?,
+        input_html: { class: :role_select }
+      %>
     </div>
     <div class="col-md-2">
-      <%= remove_item_link(f) %>
+      <div class="show_hide">
+        <%= remove_item_link(f) %>
+      </div>
     </div>
   </div>
 </div>

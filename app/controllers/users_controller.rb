@@ -94,7 +94,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        @user.send_welcome_email
+        #@user.send_welcome_email
         flash.notice = t 'user.correctly_created'
         format.html { redirect_to(users_url) }
         format.xml  { render xml: @user, status: :created, location: @user }
@@ -122,7 +122,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        @user.send_notification_if_necesary
+        #@user.send_notification_if_necesary
         flash.notice = t 'user.correctly_updated'
         format.html { redirect_to(users_url) }
         format.xml  { head :ok }

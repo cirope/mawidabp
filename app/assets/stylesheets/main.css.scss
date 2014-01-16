@@ -18,12 +18,21 @@ body {
   z-index: 1100;
 }
 
+.nested_item {
+  margin-left: 23px;
+}
+
 .nowrap {
   white-space: nowrap;
 }
 
 .pagination, .pager {
   margin: 0;
+}
+
+.show_hide {
+  float: left;
+  margin: 5px;
 }
 
 .submenu {

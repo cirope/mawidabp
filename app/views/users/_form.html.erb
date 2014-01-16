@@ -1,7 +1,5 @@
 <%= simple_form_for @user do |f| %>
   <% content_for :js_extra do %>
-    <%= raw "var child='#{escape_javascript(render(:partial => 'child',
-        :object => User.new, :locals => {:f => f, :is_dynamic => true}))}';" %>
     <%= raw "var organization_role='#{generate_template(f,
         :organization_roles)}';" %>
     <%= raw "var related_user_relation='#{generate_template(f,
@@ -31,57 +29,52 @@
   </div>
 
   <% if @auth_user %>
+    <hr />
     <div class="items">
+      <h3><%= User.human_attribute_name(:manager_id) %></h3>
+
       <div class="row">
         <div class="col-md-6">
-          <h3><%= User.human_attribute_name(:manager_id) %></h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <% field_classes = [:search, :autocomplete_field, 'form-control'] %>
+          <% field_classes = [:autocomplete_field, 'form-control'] %>
           <% field_classes << :field_with_errors unless @user.errors[:manager_id].blank? %>
-          <%= f.input :nested_user, label: false, input_html: {
-            id: "user_manager_#{@user.id}",
-            value: (@user.parent.try(:full_name_with_function) || ''),
-            class: field_classes.join(' '),
-            title: t('label.search'),
-            autocomplete: :off,
-            'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-            'data-autocomplete-url' => auto_complete_for_user_users_path
-          } %>
+          <%= f.input :nested_user, label: false,
+            input_html: {
+              id: "user_manager_#{@user.id}",
+              value: (@user.parent.try(:full_name_with_function) || ''),
+              class: field_classes.join(' '),
+              title: t('label.search'),
+              autocomplete: :off,
+              data: {
+                'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+                'autocomplete-url' => auto_complete_for_user_users_path,
+                'autocomplete-id-target' => '#user_manager_id'
+              }
+            } %>
           <%= f.input :manager_id, as: :hidden, input_html: { class: :autocomplete_id } %>
         </div>
+
         <div class="col-md-6">
-          <%= link_to t('user.unlink_manager'), '#', :onclick =>
-            "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
+          <div class="show_hide">
+            <%= link_to t('user.unlink_manager'), '#', :onclick =>
+              "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="items">
-      <div class="row">
-        <div class="col-md-6">
-          <h3><%= t('user.children') %></h3>
-        </div>
-      </div>
+    <hr />
+    <h3><%= t('user.children') %></h3>
 
-      <div id="children">
-        <%= render partial: 'child', collection: @user.children,
-          locals: { f: f, is_dynamic: false } %>
-      </div>
-
-      <%= link_to t('user.add_child'), '#', 'data-template' => 'child',
-        'data-event' => 'addNestedItem', 'data-container' => '#children' %>
+    <div id="children">
+      <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
     </div>
+
+    <%= link_to_add_fields(t('user.add_child'), f, :children, 'new_child') %>
   <% end %>
 
+  <hr />
   <div class="items">
-    <div class="row">
-      <div class="col-md-6">
-        <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
-      </div>
-    </div>
+    <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
 
     <div id="related_user_relations">
       <%= f.simple_fields_for :related_user_relations do |rur_f| %>
@@ -90,12 +83,13 @@
       <% end %>
     </div>
 
-    <%= link_to t('user.add_related_user_relations'), '#',
-      'data-template' => 'related_user_relation',
-      'data-event' => 'addNestedItem',
-      'data-container' => '#related_user_relations' %>
+    <%= link_to t('user.add_related_user_relations'), '#', data: {
+      template: 'related_user_relation', event: 'addNestedItem',
+      container: '#related_user_relations'
+    }, class: 'btn btn-default btn-sm' %>
   </div>
 
+  <hr />
   <div class="items">
     <div class="row">
       <div class="col-md-6">
@@ -116,10 +110,10 @@
       <% end %>
     </div>
 
-    <%= link_to t('user.add_organization_role'), '#',
-      'data-template' => :organization_role,
-      'data-event' => 'addNestedItem',
-      'data-container' => '#organization_roles' %>
+    <%= link_to t('user.add_organization_role'), '#', data: {
+      template: :organization_role, event: 'addNestedItem',
+      container: '#organization_roles'
+    }, class: 'btn btn-default btn-sm' %>
   </div>
 
   <hr />
@@ -127,5 +121,6 @@
   <div class="form-actions form-footer">
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
+    <%= yield :user_actions %>
   </div>
 <% end %>
