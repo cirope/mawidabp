@@ -10,7 +10,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="col-md-6">
+        <div class="col-md-8">
           <% if @plan.new_record? %>
             <%= f.association :period, collection: Period.list_all_without_plans,
               label_method: :inspect, value_method: :id, prompt: true,
@@ -48,28 +48,28 @@
   <% else %>
     <div class="row">
       <div class="col-md-3 col-md-offset-1">
-        <h4><strong><%= raw(BusinessUnit.model_name.human +
-          show_inline_help_for(:plan_business_unit)) %></strong></h4>
+        <h5><strong><%= raw(BusinessUnit.model_name.human +
+          show_inline_help_for(:plan_business_unit)) %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h4><strong><%= raw(PlanItem.human_attribute_name(:project) +
-          show_inline_help_for(:plan_project)) %></strong></h4>
+        <h5><strong><%= raw(PlanItem.human_attribute_name(:project) +
+          show_inline_help_for(:plan_project)) %></strong></h5>
       </div>
       <div class="col-md-3">
         <div class="row">
           <div class="col-md-6">
-            <h4><strong><%= raw(PlanItem.human_attribute_name(:start) +
-              show_inline_help_for(:plan_start)) %></strong></h4>
+            <h5><strong><%= raw(PlanItem.human_attribute_name(:start) +
+              show_inline_help_for(:plan_start)) %></strong></h5>
           </div>
           <div class="col-md-6">
-            <h4><strong><%= raw(PlanItem.human_attribute_name(:end) +
-              show_inline_help_for(:plan_end)) %></strong></h4>
+            <h5><strong><%= raw(PlanItem.human_attribute_name(:end) +
+              show_inline_help_for(:plan_end)) %></strong></h5>
           </div>
         </div>
       </div>
       <div class="col-md-2">
-        <h4><strong><%= raw(PlanItem.human_attribute_name(:predecessors) +
-          show_inline_help_for(:plan_predecessors)) %></strong></h4>
+        <h5><strong><%= raw(PlanItem.human_attribute_name(:predecessors) +
+          show_inline_help_for(:plan_predecessors)) %></strong></h5>
       </div>
     </div>
 
@@ -98,10 +98,9 @@
       <% end %>
     </div>
 
-    <p class="add_item">
-      <%= link_to t('plan.add_plan_item'), '#', 'data-template' => :plan_item,
-        'data-event' => 'addNestedItem', 'data-container' => '#plan_items' %>
-    </p>
+    <%= link_to t('plan.add_plan_item'), '#', 'data-template' => :plan_item,
+      'data-event' => 'addNestedItem', 'data-container' => '#plan_items',
+    class: 'btn btn-info btn-sm' %>
   <% end %>
 
   <% if @plan.has_duplication? %>

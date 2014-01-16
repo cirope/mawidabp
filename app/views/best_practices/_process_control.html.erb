@@ -1,47 +1,51 @@
 <% id = "process_control_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="process_control item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div class="row">
-    <%= link_to_show_hide "control_objectives_for_#{id}",
-      t('best_practice.show_control_objectives'),
-      t('best_practice.hide_control_objectives') %>
-    <div class="col-md-6">
-      <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
-    </div>
-    <div class="col-md-2 show_hide">
-      <%= insert_record_link(f) %>
-      <span class="text-muted">|</span>
-      <%= remove_item_link(f) %>
-      <%= f.input :id, as: :hidden %>
-      <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="show_hide">
+        <%= link_to_show_hide "control_objectives_for_#{id}",
+          t('best_practice.show_control_objectives'),
+          t('best_practice.hide_control_objectives') %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
+      </div>
+      <div class="col-md-2 show_hide">
+        <%= insert_record_link(f) %>
+        <span class="text-muted">|</span>
+        <%= remove_item_link(f) %>
+        <%= f.input :id, as: :hidden %>
+        <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
+      </div>
     </div>
   </div>
 
   <div class="items nested_item" id="control_objectives_for_<%= id %>" style="display: none;">
     <div class="row">
       <div class="col-md-2">
-        <h4><strong><%= ControlObjective.human_attribute_name :name %></strong></h4>
+        <h5><strong><%= ControlObjective.human_attribute_name :name %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h4><strong><%= Control.human_attribute_name :control %></strong></h4>
+        <h5><strong><%= Control.human_attribute_name :control %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h4><strong><%= Control.human_attribute_name :design_tests %></strong></h4>
+        <h5><strong><%= Control.human_attribute_name :design_tests %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h4><strong><%= Control.human_attribute_name :compliance_tests %></strong></h4>
+        <h5><strong><%= Control.human_attribute_name :compliance_tests %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h4><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h4>
+        <h5><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h4><strong><%= Control.human_attribute_name :effects %></strong></h4>
+        <h5><strong><%= Control.human_attribute_name :effects %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h4><strong><%= ControlObjective.human_attribute_name :relevance %></strong></h4>
+        <h5><strong><%= ControlObjective.human_attribute_name :relevance %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h4><strong><%= ControlObjective.human_attribute_name :risk %></strong></h4>
+        <h5><strong><%= ControlObjective.human_attribute_name :risk %></strong></h5>
       </div>
     </div>
 
@@ -56,7 +60,7 @@
         'data-event' => 'addNestedSubitem',
         'data-parent' => :process_control,
         'data-child' => :control_objectives,
-        class: 'btn btn-default btn-sm' %>
+        class: 'btn btn-info btn-sm' %>
     </p>
   </div>
 </div>

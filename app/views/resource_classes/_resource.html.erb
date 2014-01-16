@@ -1,21 +1,23 @@
 <% id = f.object.object_id %>
 <fieldset>
-  <div class="row">
-    <div class="col-md-3">
-      <%= f.input :name, label: false,
-        input_html: { id: "resource_name_#{id}", maxlength: 255, autofocus: true }
-      %>
-    </div>
-    <div class="col-md-4">
-      <%= f.input :description, label: false,
-        input_html: { id: "resource_description_#{id}" } %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :cost_per_unit, label: false,
-        input_html: { id: "resource_cost_per_unit_#{id}" } %>
-    </div>
-    <div class="col-md-2">
-      <%= link_to_remove_nested_item(f) %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-3">
+        <%= f.input :name, label: false,
+          input_html: { id: "resource_name_#{id}", maxlength: 255, autofocus: true }
+        %>
+      </div>
+      <div class="col-md-4">
+        <%= f.input :description, label: false,
+          input_html: { id: "resource_description_#{id}" } %>
+      </div>
+      <div class="col-md-3">
+        <%= f.input :cost_per_unit, label: false,
+          input_html: { id: "resource_cost_per_unit_#{id}" } %>
+      </div>
+      <div class="col-md-2">
+        <%= link_to_remove_nested_item(f) %>
+      </div>
     </div>
   </div>
 </fieldset>

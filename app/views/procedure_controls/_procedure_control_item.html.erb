@@ -1,95 +1,103 @@
 <% id = dynamic_object_id('procedure_control_item', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
 <div class="procedure_control_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="show_hide_field">
-      <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
-        t('procedure_control.show_procedure_control_subitems'),
-        t('procedure_control.hide_procedure_control_subitems') %>
-    </div>
-    <div class="item_field" style="width: 23%;">
-      <% unless f.object.process_control_id %>
-        <%= procedure_control_best_practices_select(id) %>
-      <% else %>
-        <%= text_field_tag "best_practice_#{id}",
-          f.object.process_control.best_practice.name, :readonly => true %>
-      <% end %>
-    </div>
-    <div class="item_field" style="width: 23%;">
-      <% unless f.object.process_control_id %>
-        <%= f.select(:process_control_id, [],
-          {:prompt => true},
-          {:id => "#{id}_process_control_id", :disabled => true}) %>
-      <% else %>
-        <%= f.hidden_field :process_control_id %>
-        <%= text_field_tag "process_control_#{id}", f.object.process_control.name,
-          :readonly => true,
-          :class => (:error_field unless f.object.errors.blank?) %>
-      <% end %>
-    </div>
-    <div class="item_field" style="width: 23%;">
-      <%= approach_field(f) %>
-    </div>
-    <div class="item_field" style="width: 23%;">
-      <%= frequency_field(f) %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= f.hidden_field :id %>
-      <%= f.hidden_field :order, :class => :sort_number %>
-      <%= insert_record_link(f) %> |
-      <%= remove_item_link(f) %>
-    </div>
-
-    <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>" style="display: none;">
-      <div>
-        <div class="column_headers">
-          <div class="item_column" style="width: 13%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name :control_objective_id %></h3>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-1">
+            <div class="show_hide">
+              <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
+                t('procedure_control.show_procedure_control_subitems'),
+                t('procedure_control.hide_procedure_control_subitems') %>
+            </div>
           </div>
-          <div class="item_column" style="width: 13%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></h3>
+          <div class="col-md-11">
+            <% unless f.object.process_control_id %>
+              <%= procedure_control_best_practices_select(id) %>
+            <% else %>
+              <%= f.input "best_practice_#{id}", label: false, input_html: {
+                value: f.object.process_control.best_practice.name, readonly: true
+              } %>
+            <% end %>
           </div>
-          <div class="item_column" style="width: 13%;">
-            <h3><%= Control.human_attribute_name :control %></h3>
-          </div>
-          <div class="item_column" style="width: 13%;">
-            <h3><%= Control.human_attribute_name :design_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 13%;">
-            <h3><%= Control.human_attribute_name :compliance_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 13%;">
-            <h3><%= Control.human_attribute_name :sustantive_tests %></h3>
-          </div>
-          <div class="item_column" style="width: 10%;">
-            <h3><%= Control.human_attribute_name :effects %></h3>
-          </div>
-          <div class="item_column" style="width: 10%;">
-            <h3><%= ProcedureControlSubitem.human_attribute_name :relevance %></h3>
-          </div>
-          <div class="item_column" style="width: 5%;"></div>
-          <div class="clear"></div>
         </div>
-
-        <div class="procedure_control_subitems">
-          <%= f.fields_for :procedure_control_subitems do |pcs_f| %>
-            <%= render :partial => 'procedure_control_subitem',
-              :locals => {:f => pcs_f, :is_dynamic => false,
-              :control_objectives => (f.object.process_control ?
-                  f.object.process_control.control_objectives.map {|co| [co.name, co.id]} :
-                  []) } %>
-          <% end %>
+      </div>
+      <div class="col-md-3">
+        <% unless f.object.process_control_id %>
+          <%= f.input :process_control_id, collection: [], label: false,
+            prompt: true, input_html: { id: "#{id}_process_control_id", disabled: true }
+          %>
+        <% else %>
+          <%= f.input :process_control_id, as: :hidden %>
+          <%= f.input "process_control_#{id}", label: false, input_html: {
+            value: f.object.process_control.name, readonly: true
+          } %>
+        <% end %>
+      </div>
+      <div class="col-md-3">
+        <%= approach_field(f) %>
+      </div>
+      <div class="col-md-2">
+        <%= frequency_field(f) %>
+      </div>
+      <div class="col-md-1">
+        <div class="show_hide">
+          <%= f.input :id, as: :hidden %>
+          <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
+          <%= insert_record_link(f) %>
+          <span class="text-muted">|</span>
+          <%= remove_item_link(f) %>
         </div>
-
-        <p style="margin-bottom: 1em;">
-          <%= link_to t('procedure_control.add_procedure_control_subitem'),
-            '#', 'data-template' => :procedure_control_subitem,
-            'data-event' => 'addNestedSubitem',
-            'data-parent' => :procedure_control_item,
-            'data-child' => :procedure_control_subitems %>
-        </p>
       </div>
     </div>
+  </div>
+
+  <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>"
+    style="display: none; margin: 0 0 15px 25px;">
+    <div class="row">
+      <div class="col-md-2">
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :control_objective_id %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></strong></h5>
+      </div>
+      <div class="col-md-2">
+        <h5><strong><%= Control.human_attribute_name :control %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= Control.human_attribute_name :design_tests %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= Control.human_attribute_name :compliance_tests %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= Control.human_attribute_name :effects %></strong></h5>
+      </div>
+      <div class="col-md-1">
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :relevance %></strong></h5>
+      </div>
+    </div>
+
+    <div class="procedure_control_subitems">
+      <%= f.simple_fields_for :procedure_control_subitems do |pcs_f| %>
+        <%= render :partial => 'procedure_control_subitem',
+          :locals => {:f => pcs_f, :is_dynamic => false,
+          :control_objectives => (f.object.process_control ?
+              f.object.process_control.control_objectives.map {|co| [co.name, co.id]} :
+              []) } %>
+      <% end %>
+    </div>
+
+    <%= link_to t('procedure_control.add_procedure_control_subitem'),
+      '#', 'data-template' => :procedure_control_subitem,
+      'data-event' => 'addNestedSubitem',
+      'data-parent' => :procedure_control_item,
+      'data-child' => :procedure_control_subitems,
+      class: 'btn btn-info btn-sm' %>
   </div>
 </div>
 <% unless f.object.process_control_id %>
@@ -103,13 +111,13 @@
         var url = '<%= url_for :action => :get_process_controls %>';
 
         Helper.showLoading(element);
-        
+
         $.get(url, { best_practice: element.val(), format: 'json' }, function(data) {
           HTMLUtil.updateOptions(
             processControlId,
             HTMLUtil.optionsFromArray(data)
           );
-          
+
           clearControlObjectives(subitemsId);
         }).complete(function() {
           Helper.hideLoading(element);
@@ -122,17 +130,17 @@
         clearControlObjectives(subitemsId);
       }
     });
-    
+
     $('#<%= id %>_process_control_id').change(function() {
       var parentId = 'procedure_control_subitems_for_<%= id %>';
-      
+
       if(!$(this).val().match(/^\s*$/)) {
         var element = $(this);
         var url = '<%= url_for :action => :get_control_objectives %>';
 
         Helper.showLoading(element);
         $('#' + parentId + ' select').attr('disabled', true);
-        
+
         $.get(url, { process_control: element.val(), format: 'json' }, function(data) {
           procedureControlItemHash['<%= id %>'] = data;
 
@@ -150,7 +158,7 @@
         clearControlObjectives(parentId);
       }
     });
-    
+
     FormUtil.completeSortNumbers();
   </script>
 <% end %>

@@ -57,11 +57,11 @@ module ApplicationHelper
   end
 
   def show_info(text, html_options = {})
-    content_tag(:span, !text.blank? ?
+    content_tag(:div, !text.blank? ?
       content_tag(
         :abbr, nil, title: text,
         class: "info #{html_options[:class]} glyphicon glyphicon-info-sign"
-      ) : nil, class: 'info_box'
+      ) : nil
     ).html_safe
   end
 
@@ -286,7 +286,7 @@ module ApplicationHelper
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "show_element_#{element_id}_content", :class => :show_hide,
+      :id => "show_element_#{element_id}_content",
       :style => (displayed ? 'display: none' : nil)
     )
     out << content_tag(:div,
@@ -294,7 +294,7 @@ module ApplicationHelper
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
-      :id => "hide_element_#{element_id}_content", :class => :show_hide,
+      :id => "hide_element_#{element_id}_content",
       :style => (displayed ? nil : 'display: none'))
   end
 

@@ -35,12 +35,14 @@
       <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
     </div>
     <div class="item_field item_controls col-md-1">
-      <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-        'data-parent' => :plan_item,
-        :class_to_insert => :human_resource_utilization) %>
-      <span class="text-muted">|</span>
-      <%= remove_item_link(f, 'human_resource_utilization') %>
-      <%= f.input :resource_type, as: :hidden %>
+      <div class="show_hide">
+        <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
+          'data-parent' => :plan_item,
+          :class_to_insert => :human_resource_utilization) %>
+        <span class="text-muted">|</span>
+        <%= remove_item_link(f, 'human_resource_utilization') %>
+        <%= f.input :resource_type, as: :hidden %>
+      </div>
     </div>
   </div>
 </div>
