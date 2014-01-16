@@ -94,7 +94,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        #@user.send_welcome_email
+        @user.send_welcome_email
         flash.notice = t 'user.correctly_created'
         format.html { redirect_to(users_url) }
         format.xml  { render xml: @user, status: :created, location: @user }
@@ -122,7 +122,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.update(user_params)
-        #@user.send_notification_if_necesary
+        @user.send_notification_if_necesary
         flash.notice = t 'user.correctly_updated'
         format.html { redirect_to(users_url) }
         format.xml  { head :ok }
@@ -312,7 +312,7 @@ class UsersController < ApplicationController
     if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
       @user = User.new
 
-      render layout: 'application_clean'
+      render layout: 'clean'
     else
       restart_session
       redirect_to_login t('message.must_be_authenticated'), :alert
@@ -333,7 +333,7 @@ class UsersController < ApplicationController
         restart_session
         redirect_to_login t('user.correctly_created')
       else
-        render action: :new_initial, layout: 'application_clean'
+        render action: :new_initial, layout: 'clean'
       end
     else
       restart_session

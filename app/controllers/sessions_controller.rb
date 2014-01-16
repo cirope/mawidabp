@@ -76,7 +76,7 @@ class SessionsController < ApplicationController
             session[:user_id] = auth_user.id
             if poll = auth_user.first_pending_poll
               flash.notice = t 'poll.must_answer_poll'
-              go_to = edit_poll_url(poll, token: poll.access_token, layout: 'application_clean')
+              go_to = edit_poll_url(poll, token: poll.access_token, layout: 'clean')
             else
               go_to = session[:go_to] || welcome_url
             end

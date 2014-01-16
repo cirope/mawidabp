@@ -1,24 +1,25 @@
-<% id = "question_#{(is_dynamic ? 'NEW_RECORD' : rand(100000000000))}" %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="question item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div class="item_field" style="width: 50%;">
-    <%= f.text_area :question, :autofocus => true, :style => 'height: 3em;' %>
+<% id = f.object.object_id %>
+<fieldset class="question">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :question, label: false, input_html: { autofocus: true } %>
+      </div>
+      <div class="col-md-5">
+        <%= f.input :answer_type, as: :boolean, label: false,
+          inline_label: t('activerecord.models.answer_multi_choice'),
+          input_html: { id: "#{id}_answer_type" }
+        %>
+      </div>
+      <div class="col-md-1">
+        <%= f.input :sort_order, as: :hidden, input_html: { class: 'sort_number' } %>
+        <%= f.input :lock_version, as: :hidden %>
+        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_move %>
+      </div>
+    </div>
   </div>
-  <div class="item_field" style="width: 35%;">
-    <%= f.check_box :answer_type, :id => "#{id}_answer_type" %>
-    <%= content_tag(
-      :label, t('activerecord.models.answer_multi_choice'),
-      :for => "#{id}_answer_type", :class => 'inline'
-    ) %>
-  </div>
-  <div class="item_field" style="width: 10%;">
-    <%= f.hidden_field :sort_order, :class => 'sort_number' %>
-    <%= hidden_lock_version(f) %>
-    <%= remove_item_link(f) %>
-    <%= link_to_move %>
-  </div>
-</div>
+</fieldset>
 <script type="text/javascript">
-  Helper.showItem('#<%= id %>');
   FormUtil.completeSortNumbers();
 </script>

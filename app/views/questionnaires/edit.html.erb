@@ -1,7 +1,7 @@
-<%= render_form t('label.modify') %>
-
-<div id="links">
-  <%= link_to t('label.show'), @questionnaire %> |
+<%= content_for :form_actions do %>
+  <%= link_to_show @questionnaire %> |
   <%= link_to t('label.list'), questionnaires_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

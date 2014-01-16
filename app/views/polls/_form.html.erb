@@ -1,54 +1,47 @@
-<%= form_for(@poll) do |p_f| %>
-  <%= p_f.error_messages %>
+<%= simple_form_for(@poll) do |f| %>
+  <%= f.error_notification %>
   <% unless @poll.new_record? %>
     <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
 
-    <%= p_f.fields_for :answers do |a_f| %>
-      <%= render :partial => 'answer', :locals => {:f => a_f} %>
+    <hr />
+    <%= f.simple_fields_for :answers do |a_f| %>
+      <%= render partial: 'answer', locals: { f: a_f } %>
     <% end %>
 
     <hr />
   <% end %>
 
-  <div class="form_column_left">
-    <% if @poll.new_record? %>
-      <div>
-        <br />
-        <% field_classes = [:search, :autocomplete_field] %>
-        <%= p_f.label :user_id, :for => "user_id_#{@poll.id}" %>
-        <div class="search">
-          <%= p_f.text_field :user_id,
-            :id => "user_id_#{@poll.id}",
-            :class => field_classes.join(' '),
-            :value => '',
-            :title => t('label.search'),
-            :autocomplete => :off,
-            'data-autocomplete-params' => ("{user_id: #{@poll.id}}" unless @poll.new_record?),
-            'data-autocomplete-url' => auto_complete_for_user_polls_path %>
-          <%= p_f.hidden_field :user_id, :class => :autocomplete_id %>
-        </div>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if @poll.new_record? %>
+          <%= f.input :user_id, input_html: {
+            id: "user_id_#{@poll.id}",
+            class: 'autocomplete_field',
+            title: t('label.search'),
+            data: {
+              'autocomplete-params' => ("{user_id: #{@poll.id}}" unless @poll.new_record?),
+              'autocomplete-url' => auto_complete_for_user_polls_path,
+              'autocomplete-id-target' => "#hidden_user_id_#{@poll.id}"
+            }
+          } %>
+          <%= f.input :user_id, as: :hidden, input_html: {
+            class: 'autocomplete_id', id: "hidden_user_id_#{@poll.id}"
+          } %>
+          <%= f.input :questionnaire_id, collection: Questionnaire.list.map { |q| [q.name, q.id] },
+            prompt: true
+          %>
+        <% else %>
+          <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>
+        <% end %>
       </div>
-      <div>
-        <br />
-        <%= p_f.label :questionnaire_id %>
-        <%= p_f.select :questionnaire_id, Questionnaire.list.map{|q| [q.name, q.id] },
-          :prompt => true %>
-      </div>
-    <% else %>
-      <p class="form_item">
-        <br />
-        <%= p_f.label(
-          "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})",
-          :id => 'poll_comments_label', :for => 'poll_comments'
-        ) %>
-        <%= p_f.text_area :comments %>
-      </p>
-    <% end %>
+    </div>
   </div>
 
-  <%= hidden_lock_version(p_f) %>
-
-  <p>
-    <span class="button"><%= p_f.submit %></span>
-  </p>
+  <hr />
+  <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-default btn-primary' %>
+  </div>
 <% end %>

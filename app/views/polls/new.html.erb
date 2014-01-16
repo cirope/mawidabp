@@ -1,6 +1,6 @@
-<%= render_form t('label.save') %>
-
-<div id="links">
+<%= content_for :form_actions do %>
   <%= link_to t('label.list'), polls_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

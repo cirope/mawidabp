@@ -51,7 +51,7 @@ class PollsController < ApplicationController
   # GET /polls/1.json
   def show
     @title = t 'poll.show_title'
-    @layout = params[:layout] || 'application'
+    @layout = params[:layout].present? ? 'clean' : 'application'
 
     respond_to do |format|
       if @poll.present?
@@ -82,7 +82,7 @@ class PollsController < ApplicationController
     if @poll.nil? || (params[:token] != @poll.access_token)
       redirect_to login_url, alert: t('poll.not_found')
     elsif @poll.answered?
-      redirect_to poll_path(@poll, layout: 'application_clean'), alert: t('poll.access_denied')
+      redirect_to poll_path(@poll, layout: 'clean'), alert: t('poll.access_denied')
     end
   end
 
@@ -121,7 +121,7 @@ class PollsController < ApplicationController
         if @auth_user
           format.html { redirect_to login_url, notice: t('poll.correctly_updated') }
         else
-          format.html { redirect_to poll_url(@poll, layout: 'application_clean'), notice: t('poll.correctly_updated') }
+          format.html { redirect_to poll_url(@poll, layout: 'clean'), notice: t('poll.correctly_updated') }
         end
         format.json { head :ok }
       else
