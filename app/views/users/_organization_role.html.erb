@@ -1,7 +1,6 @@
-<% id = dynamic_object_id('organization_role', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
 <% roles = f.object.organization ? Role.list : [] %>
-<div class="organization_role item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
+<% id = f.object.object_id %>
+<fieldset class="organization_role">
   <div class="row">
     <div class="col-md-6">
       <%= user_organizations_field(f, id) %>
@@ -14,38 +13,35 @@
     </div>
     <div class="col-md-2">
       <div class="show_hide">
-        <%= remove_item_link(f) %>
+        <%= link_to_remove_nested_item(f) %>
       </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>
-  <script type="text/javascript">
-    $('#<%= id %>_organization_id').change(function() {
-      var element = $(this);
-      var roleSelect = $('.role_select', element.parents('.organization_role'));
+</fieldset>
+<script type="text/javascript">
+  $('#<%= id %>_organization_id').change(function() {
+    var element = $(this);
+    var roleSelect = $('.role_select', element.parents('.organization_role'));
 
-      if(!$(element).val().match(/^\s*$/)) {
-        var url = '<%= url_for(:action => (@auth_user ? :roles : :initial_roles),
-          :hash => params[:hash]) %>';
+    if(!$(element).val().match(/^\s*$/)) {
+      var url = '<%= url_for(:action => (@auth_user ? :roles : :initial_roles),
+        :hash => params[:hash]) %>';
 
-        Helper.showLoading(element);
+      Helper.showLoading(element);
 
-        $.get(url, { id: $(element).val(), format: 'json' }, function(data) {
-          HTMLUtil.updateOptions(
-            roleSelect,
-            HTMLUtil.optionsFromArray(data)
-          );
+      $.get(url, { id: $(element).val(), format: 'json' }, function(data) {
+        HTMLUtil.updateOptions(
+          roleSelect,
+          HTMLUtil.optionsFromArray(data)
+        );
 
-          roleSelect.val('');
-        }).complete(function() {
-          Helper.hideLoading(element);
-        });
-      } else {
-        roleSelect.html('');
-        roleSelect.attr('disabled', true);
-      }
-    });
-  </script>
+        roleSelect.val('');
+      }).complete(function() {
+        Helper.hideLoading(element);
+      });
+    } else {
+      roleSelect.html('');
+      roleSelect.attr('disabled', true);
+    }
+  });
+</script>

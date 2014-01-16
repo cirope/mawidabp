@@ -1,42 +1,27 @@
-<% related_user_relation = f.object %>
-<% id = "#{dynamic_object_id('related_user_relation', f)}_#{is_dynamic ? 'NEW_RECORD' : related_user_relation.id}" %>
-<div class="related_user_relation item" id="<%= id %>" <%= raw 'style="display: none;"' if is_dynamic %>>
+<% id = f.object.object_id %>
+<fieldset class="related_user_relation">
   <div class="row">
     <div class="col-md-6">
-      <% if related_user_relation.new_record? %>
-        <% field_classes = [:autocomplete_field, 'form-control'] %>
-        <%= f.input :related_user, label: false, input_html: {
-          id: "user_related_user_relation_#{id}",
-          class: field_classes.join(' '),
-          title: t('label.search'),
-          autocomplete: :off,
-          autofocus: true,
-          'data-autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-          'data-autocomplete-url' => auto_complete_for_user_users_path,
-          'data-autocomplete-id-target' => "#hidden_related_user_relation_#{id}"
-        } %>
-        <%= f.input :related_user_id, as: :hidden, input_html: {
-          id: "hidden_related_user_relation_#{id}", class: :autocomplete_id
-        } %>
-      <% else %>
-        <%= f.input "user_related_user_relation_#{id}", label: false, input_html: {
-          value: related_user_relation.related_user.try(:full_name_with_function),
-          readonly: true
-        } %>
-        <%= f.input :related_user_id, as: :hidden, input_html: {
-          id: "hidden_related_user_relation_#{id}"
-        } %>
-      <% end %>
+      <%= f.input :related_user, label: false, input_html: {
+        id: "user_related_user_relation_#{id}",
+        class: 'autocomplete_field',
+        title: t('label.search'),
+        value: f.object.try(:related_user).try(:full_name_with_function),
+        autofocus: true,
+        data: {
+          'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+          'autocomplete-url' => auto_complete_for_user_users_path,
+          'autocomplete-id-target' => "#hidden_related_user_relation_#{id}"
+        }
+      } %>
+      <%= f.input :related_user_id, as: :hidden, input_html: {
+        id: "hidden_related_user_relation_#{id}", class: :autocomplete_id
+      } %>
     </div>
     <div class="col-md-6">
       <div class="show_hide">
-        <%= remove_item_link(f) %>
+        <%= link_to_remove_nested_item(f) %>
       </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showItem('#<%= id %>');
-  </script>
-<% end %>
+</fieldset>

@@ -1,10 +1,4 @@
 <%= simple_form_for @user do |f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var organization_role='#{generate_template(f,
-        :organization_roles)}';" %>
-    <%= raw "var related_user_relation='#{generate_template(f,
-        :related_user_relations)}';" %>
-  <% end %>
   <%= f.error_notification %>
   <div class="form-inputs">
     <div class="row">
@@ -30,34 +24,30 @@
 
   <% if @auth_user %>
     <hr />
-    <div class="items">
-      <h3><%= User.human_attribute_name(:manager_id) %></h3>
+    <h3><%= User.human_attribute_name(:manager_id) %></h3>
 
-      <div class="row">
-        <div class="col-md-6">
-          <% field_classes = [:autocomplete_field, 'form-control'] %>
-          <% field_classes << :field_with_errors unless @user.errors[:manager_id].blank? %>
-          <%= f.input :nested_user, label: false,
-            input_html: {
-              id: "user_manager_#{@user.id}",
-              value: (@user.parent.try(:full_name_with_function) || ''),
-              class: field_classes.join(' '),
-              title: t('label.search'),
-              autocomplete: :off,
-              data: {
-                'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
-                'autocomplete-url' => auto_complete_for_user_users_path,
-                'autocomplete-id-target' => '#user_manager_id'
-              }
-            } %>
-          <%= f.input :manager_id, as: :hidden, input_html: { class: :autocomplete_id } %>
-        </div>
+    <div class="row">
+      <div class="col-md-6">
+        <% copy_attribute_errors(:manager_id, :nested_user, f) %>
+        <%= f.input :nested_user, label: false,
+          input_html: {
+            id: "user_manager_#{@user.id}",
+            value: (@user.parent.try(:full_name_with_function) || ''),
+            class: 'autocomplete_field',
+            title: t('label.search'),
+            data: {
+              'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+              'autocomplete-url' => auto_complete_for_user_users_path,
+              'autocomplete-id-target' => '#user_manager_id'
+            }
+          } %>
+        <%= f.input :manager_id, as: :hidden, input_html: { class: :autocomplete_id } %>
+      </div>
 
-        <div class="col-md-6">
-          <div class="show_hide">
-            <%= link_to t('user.unlink_manager'), '#', :onclick =>
-              "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
-          </div>
+      <div class="col-md-6">
+        <div class="show_hide">
+          <%= link_to t('user.unlink_manager'), '#', :onclick =>
+            "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
         </div>
       </div>
     </div>
@@ -73,47 +63,36 @@
   <% end %>
 
   <hr />
-  <div class="items">
-    <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
+  <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
 
-    <div id="related_user_relations">
-      <%= f.simple_fields_for :related_user_relations do |rur_f| %>
-        <%= render partial: 'related_user_relation',
-          locals: { f: rur_f, is_dynamic: false } %>
-      <% end %>
-    </div>
+  <div id="related_user_relations">
+    <%= f.simple_fields_for :related_user_relations do |rur_f| %>
+      <%= render partial: 'related_user_relation', locals: { f: rur_f } %>
+    <% end %>
 
-    <%= link_to t('user.add_related_user_relations'), '#', data: {
-      template: 'related_user_relation', event: 'addNestedItem',
-      container: '#related_user_relations'
-    }, class: 'btn btn-default btn-sm' %>
+    <%= link_to_add_fields(t('user.add_related_user_relations'), f, :related_user_relations) %>
   </div>
 
   <hr />
-  <div class="items">
-    <div class="row">
-      <div class="col-md-6">
-        <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
-      </div>
-      <div class="col-md-6">
-        <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
     </div>
-
-    <div id="organization_roles">
-      <% organization_roles =
-        @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
-        @user.organization_roles.for_group(current_organization.group_id)
-      %>
-      <%= f.simple_fields_for :organization_roles, organization_roles do |or_f| %>
-        <%= render partial: 'organization_role', locals: { f: or_f, is_dynamic: false } %>
-      <% end %>
+    <div class="col-md-6">
+      <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
     </div>
+  </div>
 
-    <%= link_to t('user.add_organization_role'), '#', data: {
-      template: :organization_role, event: 'addNestedItem',
-      container: '#organization_roles'
-    }, class: 'btn btn-default btn-sm' %>
+  <div id="organization_roles">
+    <% organization_roles =
+      @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
+      @user.organization_roles.for_group(current_organization.group_id)
+    %>
+    <%= f.simple_fields_for :organization_roles, organization_roles do |or_f| %>
+      <%= render partial: 'organization_role', locals: { f: or_f } %>
+    <% end %>
+
+    <%= link_to_add_fields(t('user.add_organization_role'), f, :organization_roles) %>
   </div>
 
   <hr />
