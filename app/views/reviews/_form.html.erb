@@ -41,23 +41,28 @@
       <div class="col-md-6">
         <%= f.input :survey, label: raw(Review.human_attribute_name(:survey) +
           show_inline_help_for(:review_survey)), input_html: { readonly: readonly } %>
-        <p class="form_item" style="margin-bottom: 0em;">
-          <%= f.label :file_model_id %>
-          <% f.object.build_file_model unless f.object.file_model %>
-          <%= f.simple_fields_for :file_model do |fm_f| %>
-            <% unless readonly %>
-              <span class="file_container">
-                <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
-                <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-              </span>
-            <% end %>
-
-            <% if f.object.file_model.try(:file?) && !f.object.file_model.new_record? %>
-              <%= link_to_download f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
-              <%= link_to_delete_attachment fm_f, :file unless readonly %>
-            <% end %>
-          <% end %>
-        </p>
+        <%= f.label :file_model_id %>
+        <% f.object.build_file_model unless f.object.file_model %>
+        <%= f.simple_fields_for :file_model do |fm_f| %>
+          <div class="row">
+            <div class="col-md-10">
+              <% unless readonly %>
+                <span class="file_container">
+                  <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+                  <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
+                </span>
+              <% end %>
+            </div>
+            <div class="col-md-2">
+              <div class="show_hide">
+                <% if f.object.file_model.try(:file?) && !f.object.file_model.new_record? %>
+                  <%= link_to_download f.object.file_model.file.url %>
+                  <%= link_to_delete_attachment fm_f, :file unless readonly %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
         <p>
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
             :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
