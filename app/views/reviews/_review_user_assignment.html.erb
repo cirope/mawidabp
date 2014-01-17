@@ -1,43 +1,35 @@
-<% id = dynamic_object_id('review_user_assignment', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="review_user_assignment item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 40%;">
-      <% unless readonly %>
-        <div class="search">
-          <% errors_on_user = f.object.errors[:user_id] | f.object.errors[:user] %>
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :error_field unless errors_on_user.blank? %>
-          <%= text_field_tag 'review_user_assignment[user_data]',
-            f.object.user.try(:full_name_with_function, f.object.updated_at),
-            :id => "review_user_assignment_user_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-url' => auto_complete_for_user_reviews_path(:format => :json) %>
-          <%= f.hidden_field :user_id, :value => f.object.user_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
+<% id = f.object.object_id %>
+<% readonly ||= false %>
+<fieldset class="review_user_assignment">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-5">
+        <% copy_attribute_errors(:user_id, :auto_user_name, f) %>
+        <%= f.input :auto_user_name, label: false,
+          input_html: {
+            value: f.object.try(:user).try(:full_name_with_function, f.object.updated_at),
+            id: "review_user_assignment_user_#{id}",
+            class: 'autocomplete_field',
+            title: t('label.search'),
+            autofocus: true,
+            readonly: readonly,
+            data: {
+              'autocomplete-url' => auto_complete_for_user_reviews_path,
+              'autocomplete-id-target' => "#auto_user_id_#{id}"
+            }
+          } %>
+        <%= f.input :user_id, as: :hidden, input_html: {
+          id: "auto_user_id_#{id}", class: 'autocomplete_id'
+        } %>
+      </div>
+      <div class="col-md-5">
+        <%= user_assignment_type_field(f, false, readonly) %>
+      </div>
+      <div class="col-md-2">
+        <div class="show_hide">
+          <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
-      <% else %>
-        <%= f.hidden_field :user_id, :value => f.object.user_id,
-          :id => "hidden_user_id_#{id}" %>
-        <%= text_field_tag "review_user_assignment_user_#{id}",
-          f.object.user.try(:full_name_with_function, f.object.created_at),
-          :readonly => true %>
-      <% end %>
-    </div>
-    <div class="item_field" style="width: 20%;">
-      <%= user_assignment_type_field(f, false, readonly) %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) unless readonly %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-<script type="text/javascript">
-  Helper.showItem('#<%= id %>');
-  AutoComplete.observeAll();
-</script>
-<% end %>
+</fieldset>

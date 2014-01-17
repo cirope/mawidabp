@@ -36,7 +36,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{business_unit_type_id: #{@business_unit_type.id}}" if @business_unit_type),
+            'data-autocomplete-params' => ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
             'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
           <%= f.input :business_unit_id, as: :hidden, input_html: {
               value: f.object.business_unit_id,
@@ -116,11 +116,11 @@
             <%= link_to t('plan.add_material_resource_utilization'), '#',
               'data-template' => :material_resource_utilization,
               'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-              'data-child' => :material_resource_utilizations, class: 'btn btn-info btn-sm' %>
+              'data-child' => :material_resource_utilizations, class: 'btn btn-default btn-sm' %>
             <%= link_to t('plan.add_human_resource_utilization'), '#',
               'data-template' => :human_resource_utilization,
               'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-              'data-child' => :human_resource_utilizations, class: 'btn btn-info btn-sm' %>
+              'data-child' => :human_resource_utilizations, class: 'btn btn-default btn-sm' %>
           </p>
         </div>
       </div>

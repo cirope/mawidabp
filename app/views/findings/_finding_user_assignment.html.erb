@@ -16,7 +16,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{finding_id: #{@finding.id}}" unless @finding.new_record?),
+            'data-autocomplete-params' => ({ finding_id: @finding.id } unless @finding.new_record?),
             'data-autocomplete-url' => auto_complete_for_user_findings_path(:format => :json) %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>

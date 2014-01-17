@@ -9,7 +9,7 @@
           autofocus: true,
           value: (f.object.full_name_with_function if f.object.persisted?),
           data: {
-            'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+            'autocomplete-params' => ({ user_id: @user.id } unless @user.new_record?),
             'autocomplete-url' => auto_complete_for_user_users_path,
             'autocomplete-id-target' => "#auto_user_id_#{id}"
           }

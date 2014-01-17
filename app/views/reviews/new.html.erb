@@ -1,10 +1,10 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
+<%= content_for :form_actions do %>
   <%= link_to t('label.list'), reviews_path %> |
   <%= link_to_procedure_control_for_review @review %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>
 
 <div id="procedure_control_data"></div>
 

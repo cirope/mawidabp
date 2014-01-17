@@ -50,7 +50,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{review_id: #{@weakness.review.id}}" if @weakness.review),
+            'data-autocomplete-params' => ({ review_id: @weakness.review.id } if @weakness.review),
             'data-autocomplete-url' => auto_complete_for_control_objective_item_weaknesses_path(:format => :json) %>
           <%= f.hidden_field :control_objective_item_id,
             :class => :autocomplete_id %>

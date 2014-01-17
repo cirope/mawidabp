@@ -269,9 +269,8 @@ module ApplicationHelper
     options.merge!(args.shift) if args.first.kind_of?(Hash)
     html_options.merge!(args.pop) if args.last.kind_of?(Hash)
 
-    link_to(image_tag('download.gif', :size => '23x24',
-        :alt => options[:label], :title => options.delete(:label)),
-      *(args.empty? ? [options, html_options] : args << html_options))
+    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-download-alt'),
+      title: options.delete(:label))
   end
 
   # Devuelve el HTML de un control para mostrar y ocultar el contenido de un
@@ -387,7 +386,7 @@ module ApplicationHelper
       :value => form.object.marked_for_destruction? ? 1 : 0
     )
     out << link_to(
-      'X', '#', {
+      content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), '#', {
         :title => t('label.delete_file'), 'data-event' => 'removeAttachment'
       }.merge(options)
     )

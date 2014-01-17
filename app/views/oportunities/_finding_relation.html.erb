@@ -6,8 +6,8 @@
     <div class="item_field" style="width: 60%;">
       <% if finding_relation.related_finding.blank? || is_dynamic %>
         <div class="search">
-          <% extra_parameters = "review_id: #{@oportunity.control_objective_item.try(:review).try(:id) || '""'}"  %>
-          <% extra_parameters << ",finding_id: #{@oportunity.id}" unless @oportunity.new_record? %>
+          <% extra_parameters = { review_id: @oportunity.control_objective_item.try(:review).try(:id) || '' } %>
+          <% extra_parameters[:finding_id] = @oportunity.id unless @oportunity.new_record? %>
           <% field_classes = [:search, :autocomplete_field] %>
           <% field_classes << :error_field unless finding_relation.errors[:related_finding_id].blank? %>
           <%= text_field_tag 'oportunity[nested_finding_relation]',
@@ -17,7 +17,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{#{extra_parameters}}"),
+            'data-autocomplete-params' => extra_parameters,
             'data-autocomplete-url' => auto_complete_for_finding_relation_oportunities_path(:format => :json) %>
           <%= f.hidden_field :related_finding_id,
             :id => "hidden_related_finding_#{id}", :class => :autocomplete_id %>

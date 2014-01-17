@@ -14,7 +14,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{weakness_id: #{@nonconformity.id}}" unless @nonconformity.new_record?),
+            'data-autocomplete-params' => ({ weakness_id: @nonconformity.id } unless @nonconformity.new_record?),
             'data-autocomplete-url' => auto_complete_for_user_weaknesses_path %>
           <%= f.hidden_field :user_id, :value => f.object.user_id,
             :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>

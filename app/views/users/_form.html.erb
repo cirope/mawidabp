@@ -36,7 +36,7 @@
             class: 'autocomplete_field',
             title: t('label.search'),
             data: {
-              'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+              'autocomplete-params' => ({ user_id: @user.id } unless @user.new_record?),
               'autocomplete-url' => auto_complete_for_user_users_path,
               'autocomplete-id-target' => '#user_manager_id'
             }

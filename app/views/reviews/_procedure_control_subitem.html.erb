@@ -1,32 +1,30 @@
-<% id = 'procedure_control_subitem'.concat(procedure_control_subitem.id || 'NEW_RECORD') %>
-<div class="procedure_control_subitem item" <%= raw 'style="display: none;"' if is_dynamic %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 95%;">
-      <div class="search">
-        <% field_classes = [:search, :autocomplete_field] %>
-        <%= text_field_tag 'procedure_control_subitem[procedure_control_subitem_data]', '',
-            :id => "procedure_control_subitem_#{id}",
-            :class => field_classes.join(' '),
-            :style => 'width: 95%;',
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => "{period_id: #{@review.period_id}}",
-            'data-autocomplete-url' => auto_complete_for_procedure_control_subitem_reviews_path %>
-        <%= hidden_field_tag 'review[procedure_control_subitem_ids][]',
-          procedure_control_subitem.id,
-          :id => "hidden_procedure_control_subitem_#{id}",
-          :class => :autocomplete_id %>
+<% id = f.object.object_id %>
+<fieldset class="procedure_control_subitem">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-10">
+        <%= f.input 'procedure_control_subitem_data', label: false,
+          input_html: {
+            id: "procedure_control_subitem_#{id}",
+            name: 'procedure_control_subitem[procedure_control_subitem_data]',
+            class: 'autocomplete_field',
+            title: t('label.search'),
+            autofocus: true,
+            data: {
+              'autocomplete-params' => { period_id: @review.period_id },
+              'autocomplete-url' => auto_complete_for_procedure_control_subitem_reviews_path,
+              'autocomplete-id-target' => "#hidden_procedure_control_subitem_#{id}"
+            }
+          } %>
+          <%= f.input "hidden_procedure_control_subitem_#{id}", as: :hidden, input_html: {
+            name: 'review[procedure_control_subitem_ids][]', value: procedure_control_subitem.id,
+            id: "hidden_procedure_control_subitem_#{id}", class: 'autocomplete_id' } %>
+      </div>
+      <div class="col-md-2">
+        <div class="show_hide">
+          <%= link_to_remove_nested_item(f) %>
+        </div>
       </div>
     </div>
-    <div class="item_field item_controls" style="width: 2%;">
-      <%= remove_item_link(nil, 'procedure_control_subitem') %>
-    </div>
   </div>
-</div>
-<% if is_dynamic %>
-<script type="text/javascript">
-  Helper.showItem('#<%= id %>');
-  AutoComplete.observeAll();
-</script>
-<% end %>
+</fieldset>

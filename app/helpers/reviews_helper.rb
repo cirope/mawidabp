@@ -17,16 +17,16 @@ module ReviewsHelper
 
     grouped_plan_items = PlanItem.list_unused(@review.period_id).group_by(
       &:business_unit_type)
-    
+
     business_unit_types = grouped_plan_items.map do |but, plan_items|
       sorted_plan_items = plan_items.sort_by(&:project)
-      
+
       OpenStruct.new({:name => but.name, :plan_items => sorted_plan_items})
     end
 
     form.grouped_collection_select :plan_item_id, business_unit_types,
       :plan_items, :name, :id, :project, {:prompt => true},
-      {:class => :inline_item, :disabled => readonly}
+      {:class => 'form-control', :disabled => readonly}
   end
 
   def review_business_unit_type_text(review)
@@ -42,9 +42,8 @@ module ReviewsHelper
       [t("review.user_assignment.type_#{k}"), v]
     end
 
-    form.select :assignment_type, sort_options_array(options),
-      {:prompt => true},
-      {:class => (:inline_item if inline), :disabled => disabled}
+    form.input :assignment_type, collection: sort_options_array(options),
+      prompt: true, label: false, input_html: { disabled: disabled }
   end
 
   def user_assignment_type_text(type)

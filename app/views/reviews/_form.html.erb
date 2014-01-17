@@ -1,234 +1,161 @@
 <% readonly = @review.has_final_review? %>
 <% frozen = @review.is_frozen? %>
-<!--[form:review]-->
-<%= form_for @review, :html => { :multipart => true } do |r_f| %>
+<%= simple_form_for @review do |f| %>
   <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
   <% unless readonly %>
     <% js_extra << "var control_objective='#{escape_javascript render(
       :partial => 'procedure_control_subitem',
-      :locals => {:procedure_control_subitem => ProcedureControlSubitem.new,
+      :locals => { f: f, :procedure_control_subitem => ProcedureControlSubitem.new,
       :is_dynamic => true})}';" %>
-    <% js_extra << "var review_user_assignment='#{generate_template(r_f,
-      :review_user_assignments, :locals => {:readonly => readonly})}';" %>
-    <% js_extra << "var finding_review_assignment='#{generate_template(r_f,
-      :finding_review_assignments, :locals => {:readonly => readonly})}';" %>
   <% end %>
-  <%= r_f.error_messages %>
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= r_f.label :identification,
-        raw(Review.human_attribute_name(:identification) +
-          show_inline_help_for(:review_identification)), :class => :inline %>
-      <%= r_f.text_field :identification, :readonly => readonly,
-        :class => :inline_item %>
-    </p>
-    <% if [:new, :create].include?(controller.action_name.to_sym) %>
-      <p class="form_item">
-        <%= r_f.label :period_id, raw(Review.human_attribute_name(:period_id) +
-            link_to_add(new_period_path(:back_to => new_review_path))), :class => :inline %>
-        <%= r_f.select :period_id, Period.list.map { |p| [p.inspect, p.id] },
-          {:prompt => true}, {:class => :inline_item} %>
-      </p>
-    <% else %>
-      <p class="form_item">
-        <label class="inline"><%= Review.human_attribute_name :period_id %></label>
-        <%= text_field_tag :period_description, @review.period.inspect,
-          :class => :inline_item, :size => nil, :readonly => true %>
-        <%=  %>
-      </p>
-    <% end %>
-    <% if @review.new_record? %>
-      <p class="form_item">
-        <%= r_f.label :plan_item_id, nil, :class => :inline %>
-        <%= review_plan_item_field(r_f, readonly) %>
-      </p>
-    <% else %>
-      <p class="form_item">
-        <%= label_tag :plan_item, Review.human_attribute_name(:plan_item_id),
-          :class => :inline %>
-        <%= text_field_tag :plan_item, @review.plan_item.project,
-          :class => :inline_item, :readonly => true %>
-      </p>
-    <% end %>
-    <p class="form_item">
-      <%= label_tag :business_unit, Review.human_attribute_name(:business_unit),
-        :class => :inline %>
-      <%= text_field_tag :business_unit,
-        review_business_unit_text(@review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :audit_type, raw(Review.human_attribute_name(:audit_type) +
-          show_inline_help_for(:review_audit_type)), :class => :inline %>
-      <%= text_field_tag :audit_type,
-        review_business_unit_type_text(@review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p>
-      <%= r_f.label :description, raw(Review.human_attribute_name(:description) +
-          show_inline_help_for(:review_description)) %>
-      <%= r_f.text_area :description, :readonly => readonly %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= r_f.label :survey, raw(Review.human_attribute_name(:survey) +
-          show_inline_help_for(:review_survey)) %>
-      <%= r_f.text_area :survey, :readonly => readonly,
-        :style => 'height: 16em;' %>
-    </p>
-    <p class="form_item" style="margin-bottom: 0em;">
-      <label class="inline"><%= Review.human_attribute_name :file_model_id %></label>
-      <% r_f.object.build_file_model unless r_f.object.file_model %>
-      <%= r_f.fields_for :file_model do |fm_f| %>
-        <% unless readonly %>
-          <span class="file_container">
-            <%= fm_f.file_field :file, :class => 'inline_item file' %>
-            <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
-          </span>
-        <% end %>
+  <%= f.error_notification %>
 
-        <% if r_f.object.file_model.try(:file?) && !r_f.object.file_model.new_record? %>
-          <%= link_to_download r_f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
-          <%= link_to_delete_attachment fm_f, :file unless readonly %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :identification, label: raw(Review.human_attribute_name(:identification) +
+          show_inline_help_for(:review_identification)), input_html: { readonly: readonly } %>
+        <% if [:new, :create].include?(controller.action_name.to_sym) %>
+          <%= f.input :period_id, label: raw(Review.human_attribute_name(:period_id) +
+            link_to_add(new_period_path(:back_to => new_review_path))),
+            collection: Period.list.map { |p| [p.inspect, p.id] }, prompt: true %>
+        <% else %>
+          <%= f.input :period_description, label: Review.human_attribute_name('period_id'),
+            input_html: { value: @review.period.inspect, readonly: true } %>
         <% end %>
-      <% end %>
-    </p>
-    <p>
-      <%= link_to_unless @review.new_record?, t('review.survey.download'),
-        :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
-    </p>
-    <div id="estimated_amount" style="margin-top: .5em;">
-      <%= render :partial => 'estimated_amount',
-        :locals => {:plan_item => @review.plan_item} %>
+        <% if @review.new_record? %>
+          <%= f.label :plan_item_id %>
+          <%= review_plan_item_field(f, readonly) %>
+        <% else %>
+          <%= f.input :plan_item,
+            input_html: { value: @review.plan_item.project, readonly: true } %>
+        <% end %>
+        <%= f.input :business_unit,
+          input_html: { value: review_business_unit_text(@review), readonly: true } %>
+        <%= f.input :audit_type, label: raw(Review.human_attribute_name(:audit_type) +
+          show_inline_help_for(:review_audit_type)), input_html: {
+          value: review_business_unit_type_text(@review), readonly: true } %>
+        <%= f.input :description, label: raw(Review.human_attribute_name(:description) +
+          show_inline_help_for(:review_description)), input_html: { readonly: readonly } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :survey, label: raw(Review.human_attribute_name(:survey) +
+          show_inline_help_for(:review_survey)), input_html: { readonly: readonly } %>
+        <p class="form_item" style="margin-bottom: 0em;">
+          <%= f.label :file_model_id %>
+          <% f.object.build_file_model unless f.object.file_model %>
+          <%= f.simple_fields_for :file_model do |fm_f| %>
+            <% unless readonly %>
+              <span class="file_container">
+                <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+                <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
+              </span>
+            <% end %>
+
+            <% if f.object.file_model.try(:file?) && !f.object.file_model.new_record? %>
+              <%= link_to_download f.object.file_model.file.url, :style => 'margin-left: 1em;' %>
+              <%= link_to_delete_attachment fm_f, :file unless readonly %>
+            <% end %>
+          <% end %>
+        </p>
+        <p>
+          <%= link_to_unless @review.new_record?, t('review.survey.download'),
+            :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>
+        </p>
+        <div id="estimated_amount">
+          <%= render partial: 'estimated_amount', locals: { plan_item: @review.plan_item } %>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 40%;">
-        <h3><%= ReviewUserAssignment.human_attribute_name :user %></h3>
-      </div>
-      <div class="item_column" style="width: 20%;">
-        <h3><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
-          show_inline_help_for(:review_user_assignment_type)) %></h3>
-      </div>
-      <div class="item_column" style="width: 5%;"></div>
-      <div class="clear"></div>
+  <div class="row">
+    <div class="col-md-5">
+      <h5><strong><%= ReviewUserAssignment.human_attribute_name :user %></strong></h5>
     </div>
+    <div class="col-md-5">
+      <h5><strong><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
+        show_inline_help_for(:review_user_assignment_type)) %></strong></h5>
+    </div>
+  </div>
 
-    <div id="review_user_assignments">
-      <%= r_f.fields_for :review_user_assignments do |rua_f| %>
-        <%= render :partial => 'review_user_assignment',
-          :locals => {:f => rua_f, :is_dynamic => false, :readonly => readonly} %>
-      <% end %>
-    </div>
+  <div id="review_user_assignments">
+    <%= f.simple_fields_for :review_user_assignments do |rua_f| %>
+      <%= render partial: 'review_user_assignment', locals: { f: rua_f, readonly: readonly } %>
+    <% end %>
   </div>
 
   <% unless readonly %>
-    <p class="add_item">
-      <%= link_to t('review.add_user_assignment'), '#',
-        'data-event' => 'addNestedItem',
-        'data-template' => :review_user_assignment,
-        'data-container' => '#review_user_assignments' %>
-    </p>
+    <%= link_to_add_fields(t('review.add_user_assignment'), f, :review_user_assignments) %>
   <% end %>
 
   <% unless @review.control_objective_items.empty? %>
-    <div class="textual_items" style="margin-top: 2em;">
-      <h1><%= t('review.control_objective_items_label') %></h1>
-      <div id="control_objective_items">
-        <% @review.grouped_control_objective_items.each do |pc, cois| %>
-          <div id="process_control_<%= pc.id %>" class="process_control">
-            <h3>
-              <%= pc.name %>
-              <%= link_to_move :class => 'image_link process_control_move' unless readonly %>
-            </h3>
-            <%= r_f.fields_for :control_objective_items, cois.sort do |coi_f| %>
-              <%= render :partial => 'control_objective_item', :locals => {
-                :co_f => coi_f, :readonly => readonly} %>
-            <% end %>
-          </div>
-          <script type="text/javascript">
-            Helper.makeSortable(
-              '#process_control_<%= pc.id %>',
-              'div.control_objective_item',
-              'a.move'
-            );
-          </script>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-
-  <% unless readonly %>
-    <div class="items" style="margin-top: 2em;">
-      <div class="column_headers">
-        <div class="item_column" style="width: 95%;">
-          <h3><%= ControlObjective.model_name.human %></h3>
+    <h2 style="margin-top: 30px;"><strong><%= t('review.control_objective_items_label') %></strong></h2>
+    <hr />
+    <div id="control_objective_items">
+      <% @review.grouped_control_objective_items.each do |pc, cois| %>
+        <div id="process_control_<%= pc.id %>" class="process_control">
+          <h4><strong>
+            <%= pc.name %>
+            <%= link_to_move :class => 'process_control_move' unless readonly %>
+          </strong></h4>
+          <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
+            <%= render partial: 'control_objective_item', locals: { co_f: coi_f, readonly: readonly } %>
+          <% end %>
         </div>
-        <div class="item_column" style="width: 2%;"></div>
-        <div class="clear"></div>
-      </div>
-
-      <div id="control_objectives">
-      </div>
-    </div>
-
-    <p class="add_item">
-      <%= link_to t('review.add_control_objective'), '#',
-        'data-event' => 'addNestedItem',
-        'data-template' => :control_objective,
-        'data-container' => '#control_objectives' %>
-    </p>
-  <% end %>
-
-  <div class="items" style="margin-top: 2em;">
-    <h1><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></h1>
-    <div id="suggested_findings"></div>
-    
-    <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
-    <% unless finding_relations.empty? %>
-      <%= r_f.fields_for :finding_review_assignments, finding_relations do |fra_f| %>
-        <%= render :partial => 'finding_review_assignment_readonly',
-          :locals => {:f => fra_f, :is_dynamic => false, :readonly => readonly} %>
+        <script type="text/javascript">
+          Helper.makeSortable('#process_control_<%= pc.id %>', 'div.control_objective_item', 'a.move');
+        </script>
       <% end %>
-    <% end %>
-    
-    <div class="column_headers">
-      <div class="item_column" style="width: 95%;">
-        <h3><%= FindingReviewAssignment.human_attribute_name :finding %></h3>
-      </div>
-      <div class="item_column" style="width: 5%;"></div>
-      <div class="clear"></div>
     </div>
-
-    <div id="finding_review_assignments"></div>
-  </div>
+  <% end %>
 
   <% unless readonly %>
-    <p class="add_item">
-      <%= link_to t('review.add_finding_assignment'), '#',
-        'data-event' => 'addNestedItem',
-        'data-template' => :finding_review_assignment,
-        'data-container' => '#finding_review_assignments' %> |
-      <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
-        suggested_findings_review_path(:id => @review.plan_item_id, :format => :html) : '#',
-        :remote => true, :id => :link_to_suggested_findings,
-        :class => (:link_without_action unless @review.plan_item_id) %>
-    </p>
+    <div class="row">
+      <div class="col-md-6">
+        <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
+      </div>
+    </div>
+
+    <div id="control_objectives"></div>
+
+    <%= link_to t('review.add_control_objective'), '#',
+      'data-event' => 'addNestedItem', 'data-template' => :control_objective,
+      'data-container' => '#control_objectives', class: 'btn btn-default btn-sm' %>
   <% end %>
 
-  <%= hidden_lock_version(r_f) %>
+  <h2><strong><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></strong></h2>
+  <div id="suggested_findings"></div>
 
-  <p>
-    <span class="button"><%= r_f.submit %></span>
-  </p>
+  <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
+  <% unless finding_relations.empty? %>
+    <%= f.simple_fields_for :finding_review_assignments, finding_relations do |fra_f| %>
+      <%= render partial: 'finding_review_assignment_readonly', locals: { f: fra_f, readonly: readonly } %>
+    <% end %>
+  <% end %>
+
+  <h2><strong><%= FindingReviewAssignment.human_attribute_name :finding %></strong></h2>
+  <div id="finding_review_assignments"></div>
+
+  <% unless readonly %>
+    <%= link_to_add_fields(t('review.add_finding_assignment'), f, :finding_review_assignments) %>
+    <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
+      suggested_findings_review_path(id: @review.plan_item_id) : '#',
+      :remote => true, :id => :link_to_suggested_findings,
+      :class => 'btn btn-default btn-sm' %>
+  <% end %>
+
+  <hr />
+
+  <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
   <%= content_for :js_extra do %>
     <%= raw js_extra %>
   <% end %>
 <% end %>
-<!--[eoform:review] -->
 <script type="text/javascript">
 //<![CDATA[
 jQuery(function() {
@@ -242,7 +169,7 @@ jQuery(function() {
 
     if(!$(this).val().match(/^\s*$/)) {
       Helper.showLoading(element);
-      
+
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
         $('#business_unit').val(data.business_unit_name);
         $('#audit_type').val(data.business_unit_type);

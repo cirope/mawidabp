@@ -9,7 +9,7 @@
         value: f.object.try(:related_user).try(:full_name_with_function),
         autofocus: true,
         data: {
-          'autocomplete-params' => ("{user_id: #{@user.id}}" unless @user.new_record?),
+          'autocomplete-params' => ({ user_id: @user.id } unless @user.new_record?),
           'autocomplete-url' => auto_complete_for_user_users_path,
           'autocomplete-id-target' => "#hidden_related_user_relation_#{id}"
         }

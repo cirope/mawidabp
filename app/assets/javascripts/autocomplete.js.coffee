@@ -8,10 +8,15 @@ jQuery ($) ->
 
     input.autocomplete
       source: (request, response) ->
+        params = { q: request.term }
+
+        if(extra = input.data('autocompleteParams'))
+          params = $.extend({}, params, extra)
+
         $.ajax
           url: input.data('autocompleteUrl')
           dataType: 'json'
-          data: { q: request.term }
+          data: params
           success: (data)->
             response $.map data, (item) ->
               content = $('<div></div>')

@@ -51,7 +51,7 @@
             :title => t('label.search'),
             :autocomplete => :off,
             :autofocus => true,
-            'data-autocomplete-params' => ("{review_id: #{@oportunity.review.id}}" if @oportunity.review),
+            'data-autocomplete-params' => ({ review_id: @oportunity.review.id } if @oportunity.review),
             'data-autocomplete-url' => auto_complete_for_control_objective_item_oportunities_path(:format => :json) %>
           <%= f.hidden_field :control_objective_item_id,
             :class => :autocomplete_id %>
