@@ -45,7 +45,7 @@
         <% f.object.build_file_model unless f.object.file_model %>
         <%= f.simple_fields_for :file_model do |fm_f| %>
           <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-11">
               <% unless readonly %>
                 <span class="file_container">
                   <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
@@ -53,7 +53,7 @@
                 </span>
               <% end %>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
               <div class="show_hide">
                 <% if f.object.file_model.try(:file?) && !f.object.file_model.new_record? %>
                   <%= link_to_download f.object.file_model.file.url %>
