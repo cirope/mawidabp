@@ -24,8 +24,10 @@
             input_html: { value: @review.period.inspect, readonly: true } %>
         <% end %>
         <% if @review.new_record? %>
-          <%= f.label :plan_item_id %>
-          <%= review_plan_item_field(f, readonly) %>
+          <div class="form-group">
+            <%= f.label :plan_item_id %>
+            <%= review_plan_item_field(f, readonly) %>
+          </div>
         <% else %>
           <%= f.input :plan_item,
             input_html: { value: @review.plan_item.project, readonly: true } %>

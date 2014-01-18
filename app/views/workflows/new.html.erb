@@ -1,6 +1,6 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
+<%= content_for :form_actions do %>
   <%= link_to t('label.list'), workflows_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

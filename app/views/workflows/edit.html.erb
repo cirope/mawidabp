@@ -1,7 +1,5 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
-  <%= link_to t('label.show'), @workflow %> |
+<%= content_for :form_actions do %>
+  <%= link_to_show @workflow %> |
   <%= link_to t('label.list'), workflows_path %> |
   <%= link_to t('workflow.download_global_workflow'),
     export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
@@ -9,4 +7,6 @@
     export_to_pdf_workflow_path(:include_details => 1,
     :_ts => Time.now.to_i) %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>
