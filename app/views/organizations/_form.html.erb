@@ -10,15 +10,22 @@
       <% end %>
       <%= kind_field f %>
       <% unless @organization.new_record? %>
-        <% @organization.build_image_model unless @organization.image_model %>
-        <%= f.simple_fields_for :image_model do |im_f| %>
-          <%= im_f.input :image %>
-        <% end %>
-        <% if @organization.image_model && @organization.image_model.valid? &&
-          @organization.errors.empty? %>
-          <%= link_to_download @organization.image_model.image.url,
-            style: 'margin-left: 5px;' %>
-        <% end %>
+        <div class="row">
+          <div class="col-md-11">
+            <% @organization.build_image_model unless @organization.image_model %>
+            <%= f.simple_fields_for :image_model do |im_f| %>
+              <%= im_f.input :image, label: false %>
+            <% end %>
+          </div>
+          <div class="col-md-1">
+            <div class="show_hide">
+              <% if @organization.image_model && @organization.image_model.valid? &&
+                @organization.errors.empty? %>
+                <%= link_to_download @organization.image_model.image.url %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       <% else %>
         <div class="alert alert-warning">
           <%= t('organization.new_organization_can_not_have_image') %>
@@ -28,13 +35,13 @@
     <div class="col-md-6">
       <%= f.input :description %>
     </div>
-    <%= f.input :lock_version, as: :hidden %>
   </div>
 
   <hr />
 
   <div class="form-actions">
     <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

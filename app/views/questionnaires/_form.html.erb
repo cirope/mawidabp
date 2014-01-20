@@ -26,7 +26,7 @@
   <div id="questions">
     <% @questionnaire.questions.build if @questionnaire.questions.empty? %>
     <%= f.simple_fields_for :questions do |qn_f| %>
-      <%= render partial: 'question', locals: { f: qn_f } %>
+      <%= render 'question', f: qn_f %>
     <% end %>
 
     <%= link_to_add_fields(t('questionnaire.add_question'), f, :questions) %>

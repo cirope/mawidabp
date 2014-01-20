@@ -1,12 +1,12 @@
-<%= render :partial => 'form' %>
-
-<div id="links">
+<%= content_for :form_actions do %>
   <%= link_to_unless @control_objective_item.is_in_a_final_review?,
     t('control_objective_item.review.edit'),
     edit_review_path(@control_objective_item.review) %> |
   <%= link_to t('control_objective_item.review.show'),
     review_path(@control_objective_item.review) %> |
-  <%= link_to t('label.show'), @control_objective_item %> |
+  <%= link_to_show @control_objective_item %> |
   <%= link_to t('label.list'), control_objective_items_path %> |
   <%= link_to_back %>
-</div>
+<% end %>
+
+<%= render 'form' %>

@@ -1,6 +1,5 @@
-<% id = dynamic_object_id('control_objective', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="control_objective item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
+<% id = f.object.object_id %>
+<fieldset class="control_objective" id="<%= id %>">
   <div class="row">
     <div class="col-md-2">
       <%= f.input :name, label: false, input_html: { autofocus: true } %>
@@ -34,15 +33,11 @@
     <div class="col-md-1">
       <div class="show_hide">
         <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
-        <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-          'data-parent' => :process_control, 'data-child' => :control_objectives) %>
+        <%= link_to_insert_field(f) %>
         <span class="text-muted">|</span>
-        <%= remove_item_link(f) %>
+        <%= link_to_remove_nested_item(f) %>
       </div>
     </div>
   </div>
-</div>
+</fieldset>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>

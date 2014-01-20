@@ -4,33 +4,33 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <div class="form-inputs">
-          <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
-            label: raw(ResourceClass.human_attribute_name(:name) +
-            show_inline_help_for(:resource_class_name)) %>
-          <%= resource_class_type_field(f) %>
-        </div>
+        <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
+          label: raw(ResourceClass.human_attribute_name(:name) +
+          show_inline_help_for(:resource_class_name)) %>
+        <%= resource_class_type_field(f) %>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-3">
-      <h3><%= Resource.human_attribute_name :name %></h3>
+      <h5><strong><%= Resource.human_attribute_name :name %></strong></h5>
     </div>
     <div class="col-md-4">
-      <h3><%= Resource.human_attribute_name :description %></h3>
+      <h5><strong><%= Resource.human_attribute_name :description %></strong></h5>
     </div>
     <div class="col-md-3">
-      <h3><%= Resource.human_attribute_name :cost_per_unit %></h3>
+      <h5><strong><%= Resource.human_attribute_name :cost_per_unit %></strong></h5>
     </div>
   </div>
 
-  <%= f.simple_fields_for :resources do |r_f| %>
-    <%= render partial: 'resource', locals: { f: r_f } %>
-  <% end %>
+  <div id="resources">
+    <%= f.simple_fields_for :resources do |r_f| %>
+      <%= render 'resource', f: r_f %>
+    <% end %>
 
-  <%= link_to_add_fields(t('resource_class.add_resource'), f, :resources) %>
+    <%= link_to_add_fields(t('resource_class.add_resource'), f, :resources) %>
+  </div>
 
   <hr />
 

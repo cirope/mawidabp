@@ -1,70 +1,48 @@
-<% id = "workpaper_#{(is_dynamic ? child_index : rand(100000000000))}" %>
-<% hide = is_dynamic || wp_f.object.marked_for_destruction? %>
-<div class="work_paper item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
-  <div>
-    <div class="item_field" style="width: 20%;">
-      <%= wp_f.text_field :name, :class => 'required tiny_component', :autofocus => true %>
+<% id = f.object.object_id %>
+<fieldset class="work_paper">
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.input :name, label: false, input_html: {
+        class: 'required tiny_component', autofocus: true } %>
     </div>
-    <div class="item_field" style="width: 20%;">
-      <%= wp_f.text_field :code,
-        :class => 'required tiny_component work_paper_code', :readonly => true %>
+    <div class="col-md-2">
+      <%= f.input :code, label: false, input_html: {
+        class: 'required tiny_component work_paper_code', readonly: true } %>
     </div>
-    <div class="item_field" style="width: 15%;">
-      <%= wp_f.text_field :number_of_pages,
-        :class => 'required tiny_component' %>
+    <div class="col-md-2">
+      <%= f.input :number_of_pages, label: false, input_html: { class: 'required tiny_component' } %>
     </div>
-    <div class="item_field" style="width: 25%;">
-      <%= wp_f.text_area :description, :class => :tiny_component %>
+    <div class="col-md-2">
+      <%= f.input :description, label: false, input_html: { class: 'tiny_component' } %>
     </div>
 
-    <% if !wp_f.object.file_model.try(:file?) || wp_f.object.file_model.new_record? %>
-      <div class="item_field" style="width: 10%;">
-        <% wp_f.object.build_file_model unless wp_f.object.file_model.try(:new_record?) %>
-        <%= wp_f.fields_for :file_model do |fm_f| %>
+    <div class="col-md-2">
+      <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>
+        <% f.object.build_file_model unless f.object.file_model.try(:new_record?) %>
+        <%= f.simple_fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.file_field :file, :class => 'inline_item file' %>
-            <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
+            <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+            <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
           </span>
         <% end %>
-      </div>
-    <% else %>
-      <div class="item_field" style="width: 10%;">
-        <span style="display: block;">
-          <%= link_to_download wp_f.object.file_model.file.url if wp_f.object.file_model.file? && wp_f.object.file_model.file.cached?.blank? %>
-        </span>
+      <% else %>
         <% unless frozen %>
-          <%= wp_f.fields_for :file_model do |fm_f| %>
+          <%= f.simple_fields_for :file_model do |fm_f| %>
             <span class="file_container">
-              <%= fm_f.file_field :file, :class => 'inline_item file' %>
-              <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
+              <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+              <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
             </span>
           <% end %>
         <% end %>
-      </div>
-    <% end %>
-
-    <div style="display:none">
-      <%= wp_f.hidden_field :lock_version %>
+      <% end %>
     </div>
-
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_item_link(wp_f) unless frozen %>
+    <div class="col-md-1">
+      <div class="show_hide">
+        <%= f.input :lock_version, as: :hidden %>
+        <%= link_to_download f.object.file_model.file.url if f.object.file_model.file? &&
+          f.object.file_model.file.cached?.blank? %>
+        <%= link_to_remove_nested_item(f) unless frozen %>
+      </div>
     </div>
   </div>
-</div>
-<script type="text/javascript">HTMLUtil.stylizeAllInputFiles();</script>
-<% if is_dynamic %>
-  <script type="text/javascript">
-  (function() {
-    var id = '#<%= id %>';
-
-    Helper.showItem(id);
-
-    if(lastWorkPaperCode) {
-      lastWorkPaperCode = lastWorkPaperCode.next(2);
-
-      $(id).find('.work_paper_code').val(lastWorkPaperCode);
-    }
-  })();
-  </script>
-<% end %>
+</fieldset>

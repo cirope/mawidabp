@@ -1,25 +1,25 @@
 <%= simple_form_for @business_unit_type do |f| %>
   <%= f.error_notification %>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-inputs">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
         <%= f.input :business_unit_label, input_html: { maxlength: 255 } %>
         <%= f.input :project_label, input_html: { maxlength: 255 } %>
         <%= f.input :external, label: false, inline_label: true %>
-      </div>
 
-      <h3><%= BusinessUnit.model_name.human %></h3>
+        <h3><%= BusinessUnit.model_name.human %></h3>
 
-      <div id="business_units">
-        <%= f.simple_fields_for :business_units do |bu_f| %>
-          <%= render partial: 'business_unit', locals: { f: bu_f } %>
-        <% end %>
+        <div id="business_units">
+          <%= f.simple_fields_for :business_units do |bu_f| %>
+            <%= render partial: 'business_unit', locals: { f: bu_f } %>
+          <% end %>
 
-        <%= link_to_add_fields(
-          t('business_unit_type.add_business_unit'), f, :business_units
-        ) %>
+          <%= link_to_add_fields(
+            t('business_unit_type.add_business_unit'), f, :business_units
+          ) %>
+        </div>
       </div>
     </div>
   </div>

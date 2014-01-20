@@ -3,7 +3,19 @@
     template = e.data('dynamic-template')
     regexp = new RegExp(e.data('id'), 'g')
 
-    e.before DynamicFormHelper.replaceIds(template, regexp)
+    if (insert_into = $(e.data('insert-into'))).length
+      insert_into.append(template)
+    else
+      e.before DynamicFormHelper.replaceIds(template, regexp)
+
+    e.trigger('dynamic-item.added', e)
+
+  insertNestedItem: (e) ->
+    source = e.data('dynamic-source')
+    template = $(source).data('dynamic-template')
+    regexp = new RegExp(e.data('id'), 'g')
+
+    e.closest('fieldset').before DynamicFormHelper.replaceIds(template, regexp)
 
     e.trigger('dynamic-item.added', e)
 

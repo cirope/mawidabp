@@ -1,6 +1,5 @@
-<% id = dynamic_object_id('plan_item', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="plan_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
+<% id = f.object.object_id %>
+<fieldset class="plan_item">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-1">
@@ -27,30 +26,23 @@
       </div>
       <div class="col-md-3">
         <% unless f.object.business_unit %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field, 'form-control'] %>
-          <% field_classes << :error_field unless f.object.errors[:business_unit_id].blank? %>
-          <%= text_field_tag 'plan_item[business_unit_data]', '',
-            :id => "plan_item_business_unit_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
-            'data-autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path(:format => :json) %>
-          <%= f.input :business_unit_id, as: :hidden, input_html: {
-              value: f.object.business_unit_id,
-              id: "hidden_business_unit_id_#{id}",
-              class: :autocomplete_id
+          <%= f.input :business_unit_id, label: false, input_html: {
+            name: 'plan_item[business_unit_data]', id: "plan_item_business_unit_#{id}",
+            class: 'autocomplete_field', title: t('label.search'),
+            autofocus: true, data: {
+              'autocomplete-params' => ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
+              'autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path,
+              'autocomplete-id-target' => "#hidden_business_unit_id_#{id}"
+            }
           } %>
-        </div>
+          <%= f.input :business_unit_id, as: :hidden, input_html: {
+            value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}",
+            class: 'autocomplete_id' } %>
         <% else %>
-          <%= text_field_tag "plan_item_business_unit_#{id}",
-            f.object.business_unit.name, disabled: true, class: 'form-control' %>
+          <%= f.input "plan_item_business_unit_#{id}", label: false, input_html: {
+            value: f.object.business_unit.name, disabled: true } %>
           <%= f.input :business_unit_id, as: :hidden, input_html: {
-            value: f.object.business_unit_id,
-            id: "hidden_business_unit_id_#{id}"
-          } %>
+            value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
         <% end %>
       </div>
       <div class="col-md-2">
@@ -67,25 +59,23 @@
         </div>
       </div>
       <div class="col-md-2">
-        <%= f.input :plain_predecessors, label: false, input_html: {
-          maxlength: 255,
-          class: (:error_field unless f.object.errors[:predecessors].blank?)
-        } %>
+        <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
       </div>
-      <div class="col-md-1 item_controls">
-        <%= f.hidden_field :id %>
+      <div class="col-md-1">
+        <%= f.input :id, as: :hidden %>
         <div class="show_hide">
-          <%= insert_record_link(f) %>
+          <%= link_to_insert_field(f) %>
           <span class="text-muted">|</span>
           <%= link_to_move %>
           <% unless f.object.try(:review) %>
-            <span class="text-muted">|</span> <%= remove_item_link(f)  %>
+            <span class="text-muted">|</span>
+            <%= link_to_remove_nested_item(f) %>
           <% end %>
         </div>
       </div>
     </div>
 
-    <div class="items hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
+    <div class="hidden_items" id="resource_utilizations_for_<%= id %>" style="display: none;">
       <div class="row">
         <div class="col-md-4 col-md-offset-1">
           <h5><strong><%= ResourceUtilization.human_attribute_name :resource_id %></strong></h5>
@@ -98,40 +88,35 @@
         </div>
       </div>
 
-      <div class="material_resource_utilizations">
+      <div id="material_resource_utilizations_<%= id %>">
         <%= f.simple_fields_for :resource_utilizations, f.object.material_resource_utilizations do |ru_f| %>
-          <%= render partial: 'material_resource_utilization', locals: { f: ru_f, is_dynamic: false } %>
+          <%= render 'material_resource_utilization', f: ru_f %>
         <% end %>
       </div>
 
-      <div class="human_resource_utilizations">
+      <div id="human_resource_utilizations_<%= id %>">
         <%= f.simple_fields_for :resource_utilizations, f.object.human_resource_utilizations do |ru_f| %>
-          <%= render partial: 'human_resource_utilization', locals: { f: ru_f, is_dynamic: false } %>
+          <%= render 'human_resource_utilization', f: ru_f %>
         <% end %>
       </div>
 
       <div class="row">
         <div class="col-md-offset-1">
           <p style="margin: 0 0 20px 5px;">
-            <%= link_to t('plan.add_material_resource_utilization'), '#',
-              'data-template' => :material_resource_utilization,
-              'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-              'data-child' => :material_resource_utilizations, class: 'btn btn-default btn-sm' %>
-            <%= link_to t('plan.add_human_resource_utilization'), '#',
-              'data-template' => :human_resource_utilization,
-              'data-event' => 'addNestedSubitem', 'data-parent' => :plan_item,
-              'data-child' => :human_resource_utilizations, class: 'btn btn-default btn-sm' %>
+            <%= link_to_add_fields(t('plan.add_material_resource_utilization'), f, :resource_utilizations,
+              'material_resource_utilization', {
+              insert_into: "#material_resource_utilizations_#{id}", association: 'material_resource_utilizations'
+            } ) %>
+            <%= link_to_add_fields(t('plan.add_human_resource_utilization'), f, :resource_utilizations,
+              'human_resource_utilization', {
+              insert_into: "#human_resource_utilizations_#{id}", association: 'human_resource_utilizations'
+            } ) %>
           </p>
         </div>
       </div>
     </div>
   </div>
-</div>
+</fieldset>
 <script type="text/javascript">
   FormUtil.completeSortNumbers();
 </script>
-<% if is_dynamic %>
-<script type="text/javascript">
-  Helper.showItem('#<%= id %>');
-</script>
-<% end %>

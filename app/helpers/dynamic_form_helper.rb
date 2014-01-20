@@ -1,16 +1,28 @@
 module DynamicFormHelper
-  def link_to_add_fields(name, form, association, partial = nil)
+  def link_to_add_fields(name, form, association, partial = nil, data = {})
     new_object = form.object.send(association).klass.new
     id = new_object.object_id
     fields = form.fields_for(association, new_object, child_index: id) do |f|
-      render(partial || association.to_s.singularize, f: f)
+      render((partial || association.to_s.singularize), f: f)
     end
 
     link_to(
       name, '#', class: 'btn btn-default btn-sm', title: name, data: {
         'id' => id,
+        'association' => association,
         'dynamic-form-event' => 'addNestedItem',
         'dynamic-template' => fields.gsub("\n", ''),
+        'show-tooltip' => true
+      }.merge(data)
+    )
+  end
+
+  def link_to_insert_field(form, source = nil)
+    link_to(
+      content_tag(:span, nil, class: 'glyphicon glyphicon-indent-left'), '#', data: {
+        'id' => form.object.object_id,
+        'dynamic-form-event' => 'insertNestedItem',
+        'dynamic-source' => "[data-association='#{(source || form.object.class.to_s.tableize)}']",
         'show-tooltip' => true
       }
     )

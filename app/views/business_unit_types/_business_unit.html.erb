@@ -1,12 +1,14 @@
 <% id = f.object.object_id %>
-<fieldset class="row">
-  <div class="col-md-10">
-    <%= f.input :name, label: false,
-      placeholder: BusinessUnit.human_attribute_name('name'),
-      input_html: { id: "#{id}", autofocus: true }
-    %>
-  </div>
-  <div class="col-md-2">
-    <%= link_to_remove_nested_item(f) %>
+<fieldset>
+  <div class="row">
+    <div class="col-md-11">
+      <%= f.input :name, label: false, placeholder: BusinessUnit.human_attribute_name('name'),
+        input_html: { id: "#{id}", autofocus: true } %>
+    </div>
+    <div class="col-md-1">
+      <div class="show_hide">
+        <%= link_to_remove_nested_item(f) %>
+      </div>
+    </div>
   </div>
 </fieldset>

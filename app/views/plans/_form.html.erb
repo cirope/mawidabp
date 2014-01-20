@@ -1,8 +1,6 @@
 <%= simple_form_for @plan do |f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var plan_item='#{generate_template(f, :plan_items)}';" %>
-  <% end %>
   <%= f.error_notification %>
+
   <% unless params[:business_unit_type].blank? %>
     <%= show_plan_business_unit_type_info %>
   <% end %>
@@ -74,33 +72,14 @@
     </div>
 
     <div id="plan_items">
-      <% count = 0 # TODO: esto debería desaparecer cuando corrijan un error en Rails %>
       <% plan_items_for_selected_business_unit_type.each do |pi| %>
-        <% index = (pi.new_record? ? 100000000 : 0) + (count += 1) %>
-        <%= f.simple_fields_for :plan_items, pi, :child_index => index do |pi_f| %>
-          <% mru_template = nil %>
-          <% content_for :js_extra do %>
-            <% hru_template ||= generate_template(pi_f, :resource_utilizations,
-              :object => ResourceUtilization.new(:resource_type => 'User'),
-              :partial => 'human_resource_utilization',
-              :child_index => 'NEW_SUBRECORD') %>
-            <% mru_template ||= generate_template(pi_f, :resource_utilizations,
-              :object => ResourceUtilization.new(:resource_type => 'Resource'),
-              :partial => 'material_resource_utilization',
-              :child_index => 'NEW_SUBRECORD') %>
-            <%= raw "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-            <%= raw "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
-            <% mru_template = 0 %>
-            <% hru_template = 0 %>
-          <% end %>
-          <%= render partial: 'plan_item', locals: { f: pi_f, is_dynamic: false } %>
+        <%= f.simple_fields_for :plan_items, pi do |pi_f| %>
+          <%= render 'plan_item', f: pi_f %>
         <% end %>
       <% end %>
-    </div>
 
-    <%= link_to t('plan.add_plan_item'), '#', 'data-template' => :plan_item,
-      'data-event' => 'addNestedItem', 'data-container' => '#plan_items',
-    class: 'btn btn-default btn-sm' %>
+      <%= link_to_add_fields(t('plan.add_plan_item'), f, :plan_items) %>
+    </div>
   <% end %>
 
   <% if @plan.has_duplication? %>
@@ -141,14 +120,14 @@ function calculateEstimatedAmount() {
 jQuery(function() {
   $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
     var item = $(this).data('item');
-    
+
     if (item.cost_per_unit) {
       $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
         item.cost_per_unit
       );
     }
   });
-  
-  Helper.makeSortable('#plan_items', 'div.plan_item', 'a.move');
+
+  Helper.makeSortable('#plan_items', 'fieldset.plan_item', 'a.move');
 });
 </script>
