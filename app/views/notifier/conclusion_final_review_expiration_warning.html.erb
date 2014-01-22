@@ -1,7 +1,6 @@
 <% organization = @cfr.review.organization %>
 <% conclusion_review_url = conclusion_final_review_url(@cfr,
-     :host => ("#{organization.prefix}.#{URL_HOST}" if organization),
-     :protocol => URL_PROTOCOL) %>
+     :host => ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
 
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <% Organization.current_id = organization.id %>

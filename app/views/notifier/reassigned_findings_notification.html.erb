@@ -34,8 +34,7 @@
     <p>
       <%= link_to t('notifier.notification.confirm'),
           confirm_notification_url(@notification,
-            :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization),
-            :protocol => URL_PROTOCOL) %>
+            :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
     </p>
   <% end %>
   <%= render :partial => 'footer' %>

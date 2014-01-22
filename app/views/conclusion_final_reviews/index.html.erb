@@ -14,6 +14,7 @@
       <%= make_filterable_column PlanItem.human_attribute_name(:project), {:expendable => true}, 'project' %>
       <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:issue_date) + show_inline_help_for(:conclusion_review_issue_date)), {:expendable => true}, 'issue_date' %>
       <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:close_date) + show_inline_help_for(:conclusion_review_close_date)), {:expendable => true}, 'close_date' %>
+      <%= make_not_available_column Review.human_attribute_name(:score) %>
       <th colspan="2" style="text-align: right;"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -27,6 +28,7 @@
         <td class="expendable"><%= super_truncate(conclusion_final_review.review.plan_item.project, 30) %></td>
         <td class="expendable"><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
         <td class="expendable"><%= l(conclusion_final_review.close_date, :format => :short) if conclusion_final_review.close_date %></td>
+        <td class="expendable"><%= conclusion_final_review.review.score.to_s + '%' %>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
       </tr>

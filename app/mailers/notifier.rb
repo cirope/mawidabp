@@ -1,12 +1,12 @@
 class Notifier < ActionMailer::Base
   helper :application
-  default :from => "\"#{I18n.t('app_name')}\" <#{NOTIFICATIONS_EMAIL}>",
+  default :from => "\"#{I18n.t('app_name')}\" <#{APP_CONFIG['support_email']}>",
     :charset => 'UTF-8', :content_type => 'text/html',
     :date => proc { Time.now }
 
   def pending_poll_email(poll)
     @poll = poll
-    @organization = poll.organization                                                                                                                                                 
+    @organization = poll.organization
     @token = poll.access_token
 
     # Si es un usuario
@@ -17,7 +17,7 @@ class Notifier < ActionMailer::Base
     # Si es un cliente externo
     elsif poll.customer_email
       @user = poll.customer_name ? poll.customer_name : poll.customer_email
-      email = poll.customer_email 
+      email = poll.customer_email
       subject = poll.questionnaire.email_subject
     end
 

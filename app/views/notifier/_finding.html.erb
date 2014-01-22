@@ -1,7 +1,6 @@
 <% organization = finding.review.period.organization %>
 <% finding_url = finding_url(finding.pending? ? 'incomplete' : 'complete',
-  finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization),
-  :protocol => URL_PROTOCOL) %>
+  finding, :host => ("#{organization.prefix}.#{URL_HOST}" if organization)) %>
 <p style="margin: .1em 0em;">
   <b><%= Review.model_name.human %></b>:
   <%= finding.review %>
