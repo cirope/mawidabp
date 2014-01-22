@@ -51,10 +51,6 @@ class ActiveSupport::TestCase
     Setting.find_by(name: parameter_name, organization_id: organization.id).value
   end
 
-  def error_message_from_model(model, attribute, message, extra = {})
-    ::ActiveModel::Errors.new(model).generate_message(attribute, message, extra)
-  end
-
   def backup_file(file_name)
     if File.exists?(file_name)
       FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"

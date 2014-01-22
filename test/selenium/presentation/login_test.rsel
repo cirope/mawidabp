@@ -1,6 +1,0 @@
-#setup :fixtures => :all
-open :controller => :users, :action => :login
-assert_title "glob:Mawida <*> | #{I18n.t(:'user.login_title')}"
-type 'user_user', 'admin'
-type 'user_password', 'admin123'
-click_and_wait 'user_submit'
