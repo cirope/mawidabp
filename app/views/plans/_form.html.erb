@@ -106,7 +106,7 @@ function calculateEstimatedAmount() {
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
     var value = $(e).val();
-    var unitsString = $(e).parents('.item').find('input[name$="[units]"]').val();
+    var unitsString = $(e).parents('fieldset').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
 
     estimatedTotal += (parseFloat(value) || 0) * units;
