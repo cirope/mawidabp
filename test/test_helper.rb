@@ -7,15 +7,13 @@ class ActiveSupport::TestCase
 
   fixtures :all
 
-  def set_organization(organization = nil)
-    Organization.current_id =
-      (organization || organizations(:default_organization)).id
+  def set_organization organization = organizations(:default_organization)
+    Organization.current_id = organization.id
   end
 
   # Función para utilizar en las pruebas de los métodos que requieren
   # autenticación
-  def perform_auth(user = users(:administrator_user),
-      organization = organizations(:default_organization))
+  def perform_auth user = users(:administrator_user), organization = organizations(:default_organization)
     @request.host = "#{organization.prefix}.localhost.i"
     temp_controller, @controller = @controller, SessionsController.new
     password = user.is_encrypted? ? PLAIN_PASSWORDS[user.user] : user.password
@@ -45,25 +43,24 @@ class ActiveSupport::TestCase
     @controller = temp_controller
   end
 
-  def get_test_parameter(parameter_name,
-      organization = organizations(:default_organization))
+  def get_test_parameter parameter_name, organization = organizations(:default_organization)
 
     Setting.find_by(name: parameter_name, organization_id: organization.id).value
   end
 
-  def backup_file(file_name)
+  def backup_file file_name
     if File.exists?(file_name)
       FileUtils.cp file_name, "#{TEMP_PATH}#{File.basename(file_name)}"
     end
   end
 
-  def restore_file(file_name)
+  def restore_file file_name
     if File.exists?("#{TEMP_PATH}#{File.basename(file_name)}")
       FileUtils.mv "#{TEMP_PATH}#{File.basename(file_name)}", file_name
     end
   end
 
-  def assert_error(model, attribute, type, options = {})
+  def assert_error model, attribute, type, options = {}
     assert model.errors[attribute].include?(
       model.errors.generate_message(attribute, type, options)
     )
