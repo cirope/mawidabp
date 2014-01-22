@@ -1,6 +1,7 @@
 <% id = dynamic_object_id('organization_role', f) %>
 <% hide = is_dynamic || f.object.marked_for_destruction? %>
-<% roles = f.object.organization ? Role.list : [] %>
+<% roles = f.object.organization ? Role.list_by_organization(
+     f.object.organization.id) : [] %>
 <div class="organization_role item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
   <div>
     <div class="item_field" style="width: 40%;">

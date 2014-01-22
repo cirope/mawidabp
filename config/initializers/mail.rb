@@ -9,4 +9,3 @@ MawidaBP::Application.configure do
 end
 
 ActionMailer::Base.register_observer(MailObserver)
-
