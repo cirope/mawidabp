@@ -73,10 +73,10 @@ module Reports::QAIndicators
       (@highest_risk_days / @highest_risk_total).round : nil
 
 
-    @ancient_medium_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
+    @ancient_medium_risk_label = "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
       #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
 
-    @ancient_highest_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
+    @ancient_highest_risk_label = "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
       #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
   end
 
