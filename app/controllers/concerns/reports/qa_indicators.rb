@@ -72,12 +72,13 @@ module Reports::QAIndicators
     ancient_highest_risk_weaknesses = @highest_risk_total > 0 ?
       (@highest_risk_days / @highest_risk_total).round : nil
 
+    @ancient_medium_risk_label =
+      "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
+       #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
 
-    @ancient_medium_risk_label = "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
-      #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
-
-    @ancient_highest_risk_label = "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
-      #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
+    @ancient_highest_risk_label =
+      "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
+       #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
   end
 
   def calculate_highest_weaknesses_solution_rate
@@ -137,11 +138,12 @@ module Reports::QAIndicators
     reviews_count = period.plans.inject(0.0) do |pt, p|
       pt + p.plan_items.joins(
         :review => :conclusion_final_review
-      ).with_business_unit.between(params[:start], params[:end]).count
+      ).with_business_unit.between(@from_date, @to_date).count
     end
+
     plan_items_count = period.plans.inject(0.0) do |pt, p|
       pt + p.plan_items.with_business_unit.between(
-        params[:start], params[:end]
+        @from_date, @to_date
       ).count
     end
 
