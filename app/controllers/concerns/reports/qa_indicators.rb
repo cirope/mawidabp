@@ -23,7 +23,6 @@ module Reports::QAIndicators
     @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     )
-    @params = { :start => @from_date, :end => @to_date }
     @indicators = {}
   end
 
@@ -173,8 +172,9 @@ module Reports::QAIndicators
   end
 
   def calculate_work_papers_digitalization
-    wps = WorkPaper.includes(:owner, :file_model).where(
-      'created_at BETWEEN :start AND :end', @params
+    wps = WorkPaper.list.includes(:owner, :file_model).where(
+      'created_at BETWEEN :start AND :end',
+      start: @from_date, end: @to_date
     ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
 
     wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }
