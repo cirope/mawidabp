@@ -40,7 +40,7 @@ class RolesController < ApplicationController
   # * GET /roles/new.xml
   def new
     @title = t 'role.new_title'
-    @role = Role.new(params[:role])
+    @role = Role.new params[:role] ? role_params : {}
 
     respond_to do |format|
       format.html # new.html.erb
