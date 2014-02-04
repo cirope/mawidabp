@@ -1,7 +1,7 @@
 <% readonly = @control_objective_item.is_in_a_final_review? %>
 <% frozen = @control_objective_item.review.try(:is_frozen?) %>
 <%= simple_form_for @control_objective_item do |f| %>
-  <%= f.error_notification %>
+  <%= f.error_messages %>
 
   <div class="form-inputs">
     <div class="row">

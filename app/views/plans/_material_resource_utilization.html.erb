@@ -16,7 +16,7 @@
           <%= link_to_insert_field(f, 'material_resource_utilizations') %>
           <span class="text-muted">|</span>
           <%= link_to_remove_nested_item(f) %>
-          <%= f.input :resource_type, as: :hidden %>
+          <%= f.input :resource_type, as: :hidden, input_html: { value: 'Resource' } %>
         </div>
       </div>
     </div>

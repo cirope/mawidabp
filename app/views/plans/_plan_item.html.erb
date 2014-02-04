@@ -62,15 +62,15 @@
         <%= f.input :plain_predecessors, label: false, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-1">
-        <%= f.input :id, as: :hidden %>
         <div class="show_hide">
+          <%= f.input :id, as: :hidden %>
           <%= link_to_insert_field(f) %>
           <span class="text-muted">|</span>
-          <%= link_to_move %>
           <% unless f.object.try(:review) %>
-            <span class="text-muted">|</span>
             <%= link_to_remove_nested_item(f) %>
+            <span class="text-muted">|</span>
           <% end %>
+          <%= link_to_move %>
         </div>
       </div>
     </div>

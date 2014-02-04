@@ -366,20 +366,6 @@ module ApplicationHelper
     out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-plus'), *(args << options))
   end
 
-  # Devuelve el HTML de un vínculo para clonar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_clone(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.copy')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('copy_document.gif', :size => '20x21',
-        :alt => options[:label], :title => options.delete(:label)),
-      *(args << html_options))
-  end
-
   def link_to_delete_attachment(form, name, *args)
     options = args.extract_options!
     out = form.hidden_field(

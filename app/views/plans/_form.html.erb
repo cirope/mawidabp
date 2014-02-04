@@ -1,5 +1,5 @@
 <%= simple_form_for @plan do |f| %>
-  <%= f.error_notification %>
+  <%= f.error_messages %>
 
   <% unless params[:business_unit_type].blank? %>
     <%= show_plan_business_unit_type_info %>
@@ -106,7 +106,7 @@ function calculateEstimatedAmount() {
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
     var value = $(e).val();
-    var unitsString = $(e).parents('fieldset').find('input[name$="[units]"]').val();
+    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
 
     estimatedTotal += (parseFloat(value) || 0) * units;
@@ -122,7 +122,7 @@ jQuery(function() {
     var item = $(this).data('item');
 
     if (item.cost_per_unit) {
-      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
         item.cost_per_unit
       );
     }

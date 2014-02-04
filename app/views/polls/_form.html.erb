@@ -1,5 +1,5 @@
 <%= simple_form_for(@poll) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error_messages %>
   <% unless @poll.new_record? %>
     <h1><%= t 'activerecord.attributes.questionnaire.questions' %></h1>
 

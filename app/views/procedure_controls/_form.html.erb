@@ -1,7 +1,7 @@
 <%= simple_form_for @procedure_control do |f| %>
   <% js_extra = 'var procedureControlItemHash = {};' %>
   <% js_extra << "\nvar procedure_control_item='#{generate_template(f, :procedure_control_items)}';" %>
-  <%= f.error_notification %>
+  <%= f.error_messages %>
 
   <div class="form-inputs">
     <div class="row">

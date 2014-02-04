@@ -1,47 +1,49 @@
 <% id = f.object.object_id %>
 <fieldset class="human_resource_utilization">
-  <div class="row">
-    <div class="col-md-4 col-md-offset-1">
-      <% if f.object.new_record? %>
-        <%= f.input :resource_id, label: false,
-          input_html: {
-            name: 'resource_utilization[user_data]',
-            value: f.object.resource.try(:full_name_with_resource),
-            id: "resource_utilization_user_#{id}",
-            class: 'autocomplete_field',
-            title: t('label.search'),
-            autofocus: true,
-            data: {
-              'autocomplete-url' => auto_complete_for_user_plans_path,
-              'autocomplete-id-target' => "#hidden_resource_id_#{id}"
-            }
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-1">
+        <% if f.object.new_record? %>
+          <%= f.input :resource_id, label: false,
+            input_html: {
+              name: 'resource_utilization[user_data]',
+              value: f.object.resource.try(:full_name_with_resource),
+              id: "resource_utilization_user_#{id}",
+              class: 'autocomplete_field',
+              title: t('label.search'),
+              autofocus: true,
+              data: {
+                'autocomplete-url' => auto_complete_for_user_plans_path,
+                'autocomplete-id-target' => "#hidden_resource_id_#{id}"
+              }
+            } %>
+          <%= f.input :resource_id, as: :hidden, input_html: {
+            value: f.object.resource_id, id: "hidden_resource_id_#{id}", class: 'autocomplete_id'
           } %>
-        <%= f.input :resource_id, as: :hidden, input_html: {
-          value: f.object.resource_id, id: "hidden_resource_id_#{id}", class: 'autocomplete_id'
-        } %>
-      <% else %>
-        <%= f.input :resource_id, as: :hidden, input_html: {
-          value: f.object.resource_id, id: "hidden_resource_id_#{id}"
-        } %>
-      <%= f.input :resource_id, label: false, input_html: {
-        name: "resource_utilization_user_#{id}",
-        value: f.object.resource.try(:full_name_with_function, f.object.created_at),
-        readonly: true
-      } %>
-      <% end %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :units, label: false %>
-    </div>
-    <div class="col-md-3">
-      <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
-    </div>
-    <div class="col-md-1">
-      <div class="show_hide">
-        <%= link_to_insert_field(f, 'human_resource_utilizations') %>
-        <span class="text-muted">|</span>
-        <%= link_to_remove_nested_item(f) %>
-        <%= f.input :resource_type, as: :hidden %>
+        <% else %>
+          <%= f.input :resource_id, as: :hidden, input_html: {
+            value: f.object.resource_id, id: "hidden_resource_id_#{id}"
+          } %>
+          <%= f.input :resource_id, label: false, input_html: {
+            name: "resource_utilization_user_#{id}",
+            value: f.object.resource.try(:full_name_with_function, f.object.created_at),
+            readonly: true
+          } %>
+        <% end %>
+      </div>
+      <div class="col-md-3">
+        <%= f.input :units, label: false %>
+      </div>
+      <div class="col-md-3">
+        <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
+      </div>
+      <div class="col-md-1">
+        <div class="show_hide">
+          <%= link_to_insert_field(f, 'human_resource_utilizations') %>
+          <span class="text-muted">|</span>
+          <%= link_to_remove_nested_item(f) %>
+          <%= f.input :resource_type, as: :hidden, input_html: { value: 'User' } %>
+        </div>
       </div>
     </div>
   </div>

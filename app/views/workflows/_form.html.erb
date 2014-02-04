@@ -1,6 +1,5 @@
 <%= simple_form_for @workflow do |f| %>
-  <% js_extra = "var workflow_item='#{generate_template(f, :workflow_items)}';" %>
-  <%= f.error_notification %>
+  <%= f.error_messages %>
 
   <div class="form-inputs">
     <div class="row">
@@ -51,8 +50,7 @@
             "calculateCost(); return false;", :style => 'margin-left: .5em;' %></td>
         <td>
           <div id="estimated_amount">
-            <%= render partial: 'estimated_amount',
-              locals: { plan_item: @workflow.review.try(:plan_item) } %>
+            <%= render 'estimated_amount', plan_item: @workflow.review.try(:plan_item) %>
           </div>
         </td>
       </tr>
@@ -78,31 +76,16 @@
 
   <div id="workflow_items">
     <%= f.simple_fields_for :workflow_items, @workflow.workflow_items.sort! do |wi_f| %>
-      <% hru_template ||= generate_template(wi_f, :resource_utilizations,
-        :object => ResourceUtilization.new(:resource_type => 'User'),
-        :partial => 'human_resource_utilization',
-        :child_index => 'NEW_SUBRECORD') %>
-      <% mru_template ||= generate_template(wi_f, :resource_utilizations,
-        :object => ResourceUtilization.new(:resource_type => 'Resource'),
-        :partial => 'material_resource_utilization',
-        :child_index => 'NEW_SUBRECORD') %>
-      <% js_extra << "var material_resource_utilization = '#{mru_template}';" unless mru_template == 0 %>
-      <% js_extra << "var human_resource_utilization = '#{hru_template}';" unless hru_template == 0 %>
-      <% mru_template = 0 %>
-      <% hru_template = 0 %>
-      <%= render partial: 'workflow_item', locals: { f: wi_f, is_dynamic: false } %>
+      <%= render 'workflow_item', f: wi_f %>
     <% end %>
+
+    <%= link_to_add_fields(t('label.add_item'), f, :workflow_items) %>
   </div>
 
-  <%= link_to t('label.add_item'), '#', 'data-template' => :workflow_item,
-    'data-event' => 'addNestedItem', 'data-container' => '#workflow_items',
-  class: 'btn btn-default btn-sm' %>
-
   <% if @workflow.overloaded? %>
-    <p class="form_item">
-      <%= f.label :allow_overload, t('workflow.allow_overload'),
-        :class => 'inline error_field' %>
-      <%= f.check_box :allow_overload, :class => :inline_item %>
+    <p>
+      <%= f.input :allow_overload, as: :boolean, label: false,
+        inline_label: t('workflow.allow_overload') %>
     </p>
   <% end %>
 
@@ -113,9 +96,6 @@
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
-  <%= content_for :js_extra do %>
-    <%= raw js_extra %>
-  <% end %>
 <% end %>
 <script type="text/javascript">
 function calculateCost() {
@@ -123,7 +103,7 @@ function calculateCost() {
   var estimatedCost = 0;
 
   $('input[name$="[cost_per_unit]"]').each(function(i, e) {
-    var unitsString = $(e).closest('.item').find('input[name$="[units]"]').val();
+    var unitsString = $(e).closest('fieldset').find('input[name$="[units]"]').val();
     var units = parseFloat(unitsString) || 0;
     estimatedCost += (parseFloat($(e).val()) || 0) * units;
   });
@@ -138,7 +118,7 @@ jQuery(function() {
     var item = $(this).data('item');
 
     if (item.cost_per_unit) {
-      $(this).parents('.item:first').find('input[name$="[cost_per_unit]"]').val(
+      $(this).closest('fieldset').find('input[name$="[cost_per_unit]"]').val(
         item.cost_per_unit
       );
     }
@@ -180,7 +160,7 @@ jQuery(function() {
     });
   });
 
-  Helper.makeSortable('#workflow_items', 'div.workflow_item', 'a.move');
+  Helper.makeSortable('#workflow_items', 'fieldset.workflow_item', 'a.move');
   FormUtil.completeSortNumbers();
 });
 </script>

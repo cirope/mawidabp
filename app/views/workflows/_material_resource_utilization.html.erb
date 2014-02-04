@@ -1,9 +1,8 @@
-<% id = dynamic_object_id('material_resource_utilization', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="material_resource_utilization item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div class=form-inputs"">
+<% id = f.object.object_id %>
+<fieldset class="material_resource_utilization">
+  <div class="form-inputs">
     <div class="row">
-      <div class="col-md-3 col-md-offset-1">
+      <div class="col-md-4 col-md-offset-1">
         <%= plan_resource_field(f, id, false) %>
       </div>
       <div class="col-md-3">
@@ -12,21 +11,17 @@
       <div class="col-md-3">
         <%= f.input :cost_per_unit, label: false, input_html: { id: "#{id}_cost_per_unit" } %>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <div class="show_hide">
-          <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-            'data-parent' => :workflow_item,
-            :class_to_insert => :material_resource_utilization) %> |
-          <%= remove_item_link(f, 'material_resource_utilization') %>
-          <%= f.input :resource_type, as: :hidden %>
+          <%= link_to_insert_field(f, 'material_resource_utilizations') %>
+          <span class="text-muted">|</span>
+          <%= link_to_remove_nested_item(f) %>
+          <%= f.input :resource_type, as: :hidden, input_html: { value: 'Resource' } %>
         </div>
       </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% end %>
+</fieldset>
 <script type="text/javascript">
 (function() {
   var id = '#<%= id %>_resource_id';

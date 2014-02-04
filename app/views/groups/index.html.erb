@@ -1,4 +1,4 @@
-<table class="list">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th><%= Group.human_attribute_name :name %></th>
@@ -9,19 +9,17 @@
 
   <tbody>
     <% @groups.each do |group| %>
-      <tr class="<%= cycle('even', 'odd') %>">
+      <tr>
         <td><%= super_truncate group.name, 30 %></td>
         <td><%= super_truncate group.description, 30 %></td>
         <td><%= link_to_show group %></td>
         <td><%= link_to_edit edit_group_path(group) %></td>
-        <td><%= button_to_destroy group %></td>
+        <td><%= link_to_destroy group %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<div id="links">
-  <%= pagination_links @groups %>
-  <%= link_to t('label.new'), new_group_path %>
-  <div class="clear"></div>
-</div>
+<%= pagination_links @groups %>
+
+<%= link_to t('label.new'), new_group_path, class: 'btn btn-primary' %>
