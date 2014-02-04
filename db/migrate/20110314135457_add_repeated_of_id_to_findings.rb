@@ -4,7 +4,7 @@ class AddRepeatedOfIdToFindings < ActiveRecord::Migration
 
     add_index :findings, :repeated_of_id
     add_foreign_key :findings, :findings, :column => :repeated_of_id,
-      :dependent => :restrict
+      :options => FOREIGN_KEY_OPTIONS
   end
 
   def self.down

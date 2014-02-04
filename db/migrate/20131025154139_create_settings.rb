@@ -12,6 +12,6 @@ class CreateSettings < ActiveRecord::Migration
 
     add_index :settings, :name
     add_index :settings, [:name, :organization_id], unique: true
-    add_foreign_key :settings, :organizations, dependent: :restrict
+    add_foreign_key :settings, :organizations, options: FOREIGN_KEY_OPTIONS
   end
 end

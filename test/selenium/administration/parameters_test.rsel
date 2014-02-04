@@ -1,4 +1,0 @@
-open :controller => :parameters, :action => :index
-assert_title "glob:Mawida <*> | #{I18n.t('parameter.index_title')}"
-click_and_wait "css=img[alt='#{I18n.t('label.show')}']"
-assert_title "glob:Mawida <*> | #{I18n.t('parameter.show_title')}"

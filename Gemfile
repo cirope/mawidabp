@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.0.2'
+gem 'rails', '~> 4.0.2'
 
 gem 'pg'
 gem 'foreigner'
@@ -34,7 +34,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
-  gem 'capistrano-rbenv', '~> 2.0'
+  gem 'capistrano-rbenv'
   gem 'unicorn-rails'
 end
 

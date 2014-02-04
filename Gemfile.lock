@@ -189,7 +189,7 @@ DEPENDENCIES
   capistrano
   capistrano-bundler
   capistrano-rails
-  capistrano-rbenv (~> 2.0)
+  capistrano-rbenv
   carrierwave
   coffee-rails
   dalli
@@ -203,7 +203,7 @@ DEPENDENCIES
   paper_trail
   pg
   prawn
-  rails (= 4.0.2)
+  rails (~> 4.0.2)
   rake
   rubyzip
   sass-rails

@@ -14,11 +14,10 @@
       <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
     <% end %>
   <% end %>
-  
+
   <%= link_to t('notifier.notification.confirm'),
         confirm_notification_url(@notification,
-          :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization),
-          :protocol => URL_PROTOCOL) %>
-  
+          :host => ("#{first_organization.prefix}.#{URL_HOST}" if first_organization)) %>
+
   <%= render :partial => 'footer' %>
 </div>
