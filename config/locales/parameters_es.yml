@@ -1,4 +1,4 @@
-'es':
+es: &common
   approach_types:
     control: 'Control'
     sustantive: 'Sustativo'
@@ -38,3 +38,9 @@
     satisfactory: 'Satisfactorio'
     improve: 'Necesita mejorar'
     unsatisfactory: 'No satisfactorio'
+
+public_es:
+  <<: *common
+
+mgc_es:
+  <<: *common

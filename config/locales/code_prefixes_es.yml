@@ -1,4 +1,4 @@
-'es':
+es: &common
   code_prefixes:
     oportunities: 'OM'
     nonconformities: 'NC'
@@ -12,3 +12,9 @@
     work_papers_in_fortresses: 'PTF'
     work_papers_in_weaknesses_follow_up: 'PTSO'
     work_papers_in_nonconformities: 'PTNC'
+
+public_es:
+  <<: *common
+
+mgc_es:
+  <<: *common
