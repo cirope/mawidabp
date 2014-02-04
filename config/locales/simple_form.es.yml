@@ -1,4 +1,4 @@
-'es':
+es: &common
   simple_form:
     "yes": 'Si'
     "no": 'No'
@@ -24,3 +24,8 @@
     #     username: 'User name to sign in.'
     #     password: 'No special characters, please.'
 
+public_es:
+  <<: *common
+
+mgc_es:
+  <<: *common

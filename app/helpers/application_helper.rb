@@ -234,32 +234,6 @@ module ApplicationHelper
       :style => 'display: none;')
   end
 
-  # Devuelve el HTML de un vínculo para editar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_edit(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.edit')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('edit.gif', :size => '19x18', :alt => options[:label],
-        :title => options.delete(:label)), *(args << html_options))
-  end
-
-  # Devuelve el HTML de un vínculo para mostrar un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_show(*args)
-    html_options = {:class => :image_link}
-    options = {:label => t('label.show')}
-    options.merge!(args.pop) if args.last.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(image_tag('view.gif', :size => '24x20', :alt => options[:label],
-        :title => options.delete(:label)), *(args << html_options))
-  end
-
   # Devuelve el HTML de un vínculo para descargar algo relacionado a un ítem.
   #
   # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta

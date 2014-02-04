@@ -1,4 +1,4 @@
-es:
+es: &common
   messages:
     confirmation: '¿Está seguro?'
     not_authorized: 'Debe ingresar para ver el contenido'
@@ -49,3 +49,9 @@ es:
       submit: 'Actualizar mis datos'
     update:
       success: 'Tus datos se actualizaron correctamente'
+
+public_es:
+  <<: *common
+
+mgc_es:
+  <<: *common

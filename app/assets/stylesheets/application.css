@@ -5,7 +5,8 @@
  *= require_self
  *= require bootstrap
  *= require bootstrap-theme
+ *= require jquery-ui
+ *= require jquery-ui-theme
  *= require main
- *= require jquery/ui-custom
  *= require roles
 */
