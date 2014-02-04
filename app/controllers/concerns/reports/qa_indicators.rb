@@ -23,7 +23,6 @@ module Reports::QAIndicators
     @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
     )
-    @params = { :start => @from_date, :end => @to_date }
     @indicators = {}
   end
 
@@ -72,12 +71,13 @@ module Reports::QAIndicators
     ancient_highest_risk_weaknesses = @highest_risk_total > 0 ?
       (@highest_risk_days / @highest_risk_total).round : nil
 
+    @ancient_medium_risk_label =
+      "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
+       #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
 
-    @ancient_medium_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_medium_risk_weaknesses')}:
-      #{t('label.day', :count => ancient_medium_risk_weaknesses)}" if ancient_medium_risk_weaknesses
-
-    @ancient_highest_risk_label = "#{t('follow_up_committee.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
-      #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
+    @ancient_highest_risk_label =
+      "#{t('follow_up_committee_report.qa_indicators.indicators.ancient_highest_risk_weaknesses')}:
+       #{t('label.day', :count => ancient_highest_risk_weaknesses)}" if ancient_highest_risk_weaknesses
   end
 
   def calculate_highest_weaknesses_solution_rate
@@ -137,11 +137,12 @@ module Reports::QAIndicators
     reviews_count = period.plans.inject(0.0) do |pt, p|
       pt + p.plan_items.joins(
         :review => :conclusion_final_review
-      ).with_business_unit.between(params[:start], params[:end]).count
+      ).with_business_unit.between(@from_date, @to_date).count
     end
+
     plan_items_count = period.plans.inject(0.0) do |pt, p|
       pt + p.plan_items.with_business_unit.between(
-        params[:start], params[:end]
+        @from_date, @to_date
       ).count
     end
 
@@ -171,8 +172,9 @@ module Reports::QAIndicators
   end
 
   def calculate_work_papers_digitalization
-    wps = WorkPaper.includes(:owner, :file_model).where(
-      'created_at BETWEEN :start AND :end', @params
+    wps = WorkPaper.list.includes(:owner, :file_model).where(
+      'created_at BETWEEN :start AND :end',
+      start: @from_date, end: @to_date
     ).select { |wp| wp.owner.try(:is_in_a_final_review?) }
 
     wps_with_files = wps.select { |wp| wp.file_model.try(:file?) }

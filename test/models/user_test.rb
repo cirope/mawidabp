@@ -196,13 +196,10 @@ class UserTest < ActiveSupport::TestCase
   test 'validates duplicated attributes' do
     @user.user = users(:bare_user).user
     @user.email = users(:bare_user).email
-    @user.name = users(:bare_user).name
-    @user.last_name = users(:bare_user).last_name
 
     assert @user.invalid?
     assert_error @user, :user, :taken
     assert_error @user, :email, :taken
-    assert_error @user, :name, :taken
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

@@ -151,12 +151,12 @@ module Reports::SynthesisReport
   def get_nonconformities_count_text(c_r)
     c_r.review.nonconformities.count > 0 ?
       c_r.review.nonconformities.count.to_s :
-      t("#{@controller}_committee.synthesis_report.without_nonconformities")
+      t("#{@controller}_committee_report.synthesis_report.without_nonconformities")
   end
 
   def get_oportunities_count_text(c_r)
     c_r.review.oportunities.count > 0 ?                                                                                                                                                     c_r.review.final_oportunities.count.to_s :
-      t("#{@controller}_committee.synthesis_report.without_oportunities")
+      t("#{@controller}_committee_report.synthesis_report.without_oportunities")
   end
 
   def set_column_data(c_r)
