@@ -1,0 +1,21 @@
+markdown: rdiscount
+permalink: pretty
+destination: ../../public/help
+pygments: true
+assets:
+  baseurl: /help/assets/
+  js_compressor: uglifier
+  css_compressor: sass
+  sources:
+    - _assets/images
+    - _assets/javascripts
+    - _assets/stylesheets
+    - _vendor/assets/stylesheets
+    - _vendor/assets/javascripts
+    - _vendor/assets/fonts
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - .git
+  - .gitignore
+languages: ['es']
