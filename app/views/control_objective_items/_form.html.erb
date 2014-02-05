@@ -1,5 +1,6 @@
 <% readonly = @control_objective_item.is_in_a_final_review? %>
 <% frozen = @control_objective_item.review.try(:is_frozen?) %>
+
 <%= simple_form_for @control_objective_item do |f| %>
   <%= f.error_messages %>
 
@@ -106,7 +107,7 @@
   </div>
 
   <%= link_to_add_fields(t('control_objective_item.add_work_paper'), f, :work_papers,
-    'work_papers/work_paper', frozen: frozen) unless frozen %>
+    'work_papers/work_paper') unless frozen %>
 
   <hr />
 

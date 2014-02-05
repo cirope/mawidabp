@@ -49,7 +49,7 @@ class PotentialNonconformitiesController < ApplicationController
         "#{Review.table_name}.identification DESC",
         "#{PotentialNonconformity.table_name}.review_code ASC"
       ]
-    ).paginate(page: params[:page], per_page: APP_LINES_PER_PAGE)
+    ).page(params[:page])
 
     respond_to do |format|
       format.html {

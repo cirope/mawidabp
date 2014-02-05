@@ -5,10 +5,8 @@ module FindingsHelper
       finding.next_status_list : finding.next_status_list.except(:repeated)
     options = statuses.map { |k, v| [t(:"finding.status_#{k}"), v] }
 
-    form.select :state, sort_options_array(options),
-      {:prompt => true},
-      {:class => (:inline_item if inline),
-      :disabled => (disabled || finding.unconfirmed?)}
+    form.input :state, collection: sort_options_array(options), label: false,
+      prompt: true, input_html: { disabled: (disabled || finding.unconfirmed?) }
   end
 
   def finding_repeated_of_label(form, readonly)
@@ -32,7 +30,9 @@ module FindingsHelper
 
   def finding_repeated_of_if_field(form, readonly)
     if !form.object.new_record? && form.object.repeated_of
-      text_field_tag :repeated_of_finding, form.object.repeated_of, :disabled => true
+      form.input :repeated_of_finding, label: false, input_html: {
+        value: form.object.repeated_of, disabled: true
+      }
     else
       review = form.object.control_objective_item.try(:review)
       fras = (review.try(:finding_review_assignments) || []).reject do |fra|
@@ -40,8 +40,8 @@ module FindingsHelper
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
 
-      form.select :repeated_of_id, findings, {:prompt => true},
-        {:disabled => readonly}
+      form.input :repeated_of_id, collection: findings, prompt: true,
+        label: false, input_html: { disabled: readonly }
     end
   end
 

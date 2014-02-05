@@ -1,5 +1,6 @@
+<% frozen = frozen rescue true %>
 <% id = f.object.object_id %>
-<fieldset class="work_paper">
+<fieldset class="work_paper" id="<%= id %>">
   <div class="row">
     <div class="col-md-3">
       <%= f.input :name, label: false, input_html: {
@@ -15,7 +16,6 @@
     <div class="col-md-2">
       <%= f.input :description, label: false, input_html: { class: 'tiny_component' } %>
     </div>
-
     <div class="col-md-2">
       <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>
         <% f.object.build_file_model unless f.object.file_model.try(:new_record?) %>
@@ -46,3 +46,14 @@
     </div>
   </div>
 </fieldset>
+<script type="text/javascript">
+  +function() {
+    var id = '#<%= id %>';
+
+    if(lastWorkPaperCode) {
+      lastWorkPaperCode = lastWorkPaperCode.next(2);
+
+      $(id).find('.work_paper_code').val(lastWorkPaperCode);
+    }
+  }(jQuery);
+</script>

@@ -1,11 +1,11 @@
-'public_es':
+public_es:
   app_name: "MawidaBP"
   app_copyright: "Copyright © 2008-%{year} MawidaBP. Todos los derechos reservados."
 
   label:
     attach_csv: "Importar CSV"
-    yes: "Si"
-    no: "No"
+    'yes': "Si"
+    'no': "No"
     add: "Agregar"
     total: "Total"
     by: "por"

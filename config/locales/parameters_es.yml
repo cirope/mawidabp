@@ -42,5 +42,5 @@ es: &common
 public_es:
   <<: *common
 
-mgc_es:
+mc_es:
   <<: *common

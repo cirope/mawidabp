@@ -1,10 +1,10 @@
-'es':
+es:
   app_name: "MawidaBP"
   app_copyright: "Copyright © 2008-%{year} MawidaBP. Todos los derechos reservados."
 
   label:
-    "yes": "Si"
-    "no": "No"
+    'yes': "Si"
+    'no': "No"
     add: "Agregar"
     add_item: "Agregar ítem"
     apply_filter: "Aplicar filtro"

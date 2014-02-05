@@ -5,7 +5,7 @@
   } %>
 <% end %>
 <table class="table table-condensed table-striped">
-  <thead id="column_headers">
+  <thead>
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
@@ -41,3 +41,5 @@
   <%= link_to t('label.new'), new_oportunity_path(
     :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
 <% end %>
+
+<div class="clearfix form-footer"></div>
