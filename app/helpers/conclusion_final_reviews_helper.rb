@@ -4,8 +4,8 @@ module ConclusionFinalReviewsHelper
       [review]
     options = reviews.compact.map { |r| [r.identification, r.id] }
 
-    form.select :review_id, options, {:prompt => true},
-      {:class => :inline_item, :autofocus => true}
+    form.input :review_id, collection: options, prompt: true,
+      input_html: { autofocus: true }
   end
 
   def conclusion_review_score_details_table(review)

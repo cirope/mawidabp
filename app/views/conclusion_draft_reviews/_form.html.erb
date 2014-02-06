@@ -1,111 +1,83 @@
-<!--[form:conclusion_draft_review]-->
-<%= form_for @conclusion_draft_review do |f| %>
+<%= simple_form_for @conclusion_draft_review do |f| %>
   <%= f.error_messages %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <% unless @conclusion_draft_review.review %>
-        <%= f.label :review_id, nil, :class => :inline %>
-        <%= f.select :review_id,
-          Review.list_without_draft_review.map { |r| [r.identification, r.id] },
-          {:prompt => true}, {:class => :inline_item, :autofocus => true} %>
-      <% else %>
-        <%= f.hidden_field :review_id %>
-        <%= content_tag :label,
-          ConclusionDraftReview.human_attribute_name(:review_id),
-          :class => :inline %>
-        <%= text_field_tag :review,
-          @conclusion_draft_review.review.identification,
-          :class => :inline_item, :readonly => true %>
-      <% end %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :business_unit,
-        ConclusionReview.human_attribute_name(:business_unit), :class => :inline %>
-      <%= text_field_tag :business_unit,
-        (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :project, ConclusionReview.human_attribute_name(:project),
-        :class => :inline %>
-      <%= text_field_tag :project,
-        (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p>
-      <%= f.label :applied_procedures %>
-      <%= f.text_area :applied_procedures %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p>
-      <%= f.label :conclusion %>
-      <%= f.text_area :conclusion %>
-    </p>
-    <p class="form_item">
-      <%= label_tag :score, Review.human_attribute_name(:score),
-        :class => :inline %>
-      <%= text_field_tag :score,
-        (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= f.label :issue_date, raw(
-        ConclusionDraftReview.human_attribute_name(:issue_date) +
-          show_inline_help_for(:conclusion_review_issue_date)),
-        :class => :inline %>
-      <%= calendar_text_field f, :issue_date, false, nil,
-        :class => :inline_item %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% unless @conclusion_draft_review.review %>
+          <%= f.input :review_id, collection:
+            Review.list_without_draft_review.map { |r| [r.identification, r.id] },
+            prompt: true, input_html: { autofocus: true } %>
+        <% else %>
+          <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
+            input_html: { value: @conclusion_draft_review.review.identification, readonly: true } %>
+          <%= f.input :review_id, as: :hidden %>
+        <% end %>
+        <%= f.input :business_unit, input_html: {
+          value: (@conclusion_draft_review.review.business_unit.name if @conclusion_draft_review.review),
+          readonly: true } %>
+        <%= f.input :project, input_html: {
+          value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review),
+          readonly: true } %>
+        <%= f.input :applied_procedures %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :conclusion %>
+        <%= f.input :score, input_html: {
+          value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
+          readonly: true } %>
+        <%= f.input :issue_date, as: :date_picker, label: raw(
+            ConclusionDraftReview.human_attribute_name(:issue_date) +
+              show_inline_help_for(:conclusion_review_issue_date)) %>
+      </div>
+    </div>
   </div>
 
   <div id="approval_text">
     <%= show_inline_help_for(:conclusion_review_approved) %>
-    <%= content_tag(:div, t('conclusion_draft_review.approved'),
-      :class => 'green bold', :id => :approved,
+    <%= content_tag(:span, t('conclusion_draft_review.approved'),
+      :class => 'text-success', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
-    <div id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
-      <p class="red bold">
+    <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
+      <span class="text-danger">
         <%= t('conclusion_draft_review.not_approved') %>
-      </p>
+      </span>
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
       <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
           :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
-    </div>
-    <div>
+    </span>
+    <span>
       <%= link_to t('conclusion_draft_review.check_for_approval'),
         {:action => :check_for_approval, :format => :json},
         {:style => 'margin-left: 1em;', :id => 'check_for_approval'} %>
-    </div>
+    </span>
     <% if @conclusion_draft_review.updated_at %>
-      <div style="margin-left: 1em;">
+      <span style="margin-left: 1em;">
         | <%= t('conclusion_draft_review.last_verified_date',
           :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
-      </div>
+      </span>
     <% end %>
   </div>
-  <div id="approval_errors_detail" style="display: none; clear: both;">
-    <div>
-      <div id="error_list_container">
-        <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors),
-          :id => :error_list, :class => :raw_list) %>
-      </div>
 
-      <p id="force_approval_prompt" class="form_item" <%= raw(@conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"') %>>
-        <%= f.label :force_approval, nil, :class => 'inline error_field' %>
-        <%= f.check_box :force_approval, :class => :inline_item %>
-      </p>
+  <div id="approval_errors_detail" style="display: none; margin-top: 2em;">
+    <div id="error_list_container">
+      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors),
+        :id => :error_list) %>
     </div>
+
+    <p id="force_approval_prompt" <%= raw(@conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"') %>>
+      <%= f.input :force_approval, as: :boolean, label: false, inline_label: true %>
+    </p>
   </div>
 
-  <%= hidden_lock_version(f) %>
-  
-  <p>
-    <span class="button"><%= f.submit %></span>
-  </p>
+  <hr />
+
+  <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:conclusion_draft_review] -->
 <script type="text/javascript">
   function showOrHideErrors() {
     $('#approval_errors_detail').slideToggle(300, function() {
@@ -116,7 +88,7 @@
       );
     });
   }
-  
+
   $('#check_for_approval').click(function(event) {
     if(parseInt($('#conclusion_draft_review_review_id').val()) > 0) {
       var url = '<%= url_for({:action => :check_for_approval, :format => :json}) %>';
@@ -130,7 +102,7 @@
           $('#force_approval_prompt').hide();
         } else {
           var errorsUl = HTMLUtil.arrayToUL(
-            data.errors, {'id': 'error_list', 'class': 'raw_list'}
+            data.errors, {'id': 'error_list' }
           );
 
           if($('#approval_errors_detail:visible').length > 0) {
@@ -150,11 +122,11 @@
             $('#force_approval_prompt').hide();
           }
 
-          $('#not_approved').find('p').stop(true, true).effect('highlight', {}, 2000);
+          $('#not_approved').find('span').stop(true, true).effect('highlight', {}, 2000);
         }
       });
     }
-    
+
     event.preventDefault();
   });
 
@@ -164,7 +136,7 @@
 
     if(parseInt($(this).val()) > 0) {
       Helper.showLoading('#conclusion_draft_review_review_id');
-      
+
       $.get(url.replace(/REVIEW_ID/, $(this).val()), {format: 'json' }, function(data) {
         $('#business_unit').val(data.business_unit.name || '');
         $('#project').val(data.plan_item.project || '');
