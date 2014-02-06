@@ -1,47 +1,44 @@
-<% id = "#{dynamic_object_id('user', f)}_#{is_dynamic ? 'NEW_RECORD' : f.object.id}" %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="finding_user_assignment item" id="<%= id %>" <%= raw 'style="display: none;"' if hide %>>
-  <div>
-    <div class="item_field" style="width: 60%;">
-      <% unless readonly %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :error_field unless (f.object.errors[:user_id] | f.object.errors[:user]).blank? %>
-          <%= text_field_tag 'oportunity[nested_user]',
-            f.object.user.try(:full_name_with_function),
-            :id => "oportunity_user_#{id}",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => ({ oportunity_id: @oportunity.id } unless @oportunity.new_record?),
-            'data-autocomplete-url' => auto_complete_for_user_oportunities_path(:format => :json) %>
-          <%= f.hidden_field :user_id, :value => f.object.user_id,
-            :id => "hidden_user_id_#{id}", :class => :autocomplete_id %>
+<% readonly = readonly rescue true %>
+<% id = f.object.object_id %>
+<fieldset class="finding_user_assignment">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% unless readonly %>
+          <%= f.input :user_id, label: false, input_html: {
+            value: f.object.user.try(:full_name_with_function),
+            id: "weakness_user_#{id}",
+            name: "auto_user_id_#{id}",
+            class: 'autocomplete_field', title: t('label.search'),
+            autocomplete: :off, autofocus: true,
+            data: {
+              autocomplete_params: ({ weakness_id: @oportunity.id } unless @oportunity.new_record?),
+              autocomplete_url: auto_complete_for_user_weaknesses_path,
+              autocomplete_id_target: "#user_id_#{id}"
+            }
+          } %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: f.object.user_id,
+            id: "user_id_#{id}", class: 'autocomplete_id' } %>
+        <% else %>
+          <%= f.input :user_id, as: :hidden, input_html: {
+            value: f.object.user_id, id: "user_id_#{id}" } %>
+          <%= f.input "weakness_user_#{id}", label: false, input_html: {
+            value: f.object.user.full_name_with_function(@oportunity.created_at), readonly: true } %>
+        <% end %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :responsible_auditor, as: :boolean, label: false, input_html: {
+          disabled: readonly || (f.object.user && f.object.user.can_act_as_audited?) } %>
+      </div>
+      <div class="col-md-2">
+        <%= f.input :process_owner, as: :boolean, label: false, input_html: {
+          disabled: readonly || (f.object.user && !f.object.user.can_act_as_audited?) } %>
+      </div>
+      <div class="col-md-2">
+        <div class="show_hide">
+          <%= link_to_remove_nested_item(f) unless readonly %>
         </div>
-      <% else %>
-        <%= f.hidden_field :user_id, :value => f.object.user_id,
-          :id => "hidden_user_id_#{id}" %>
-        <%= text_field_tag "oportunity_user_#{id}",
-          f.object.user.full_name_with_function(@oportunity.created_at), :readonly => true %>
-      <% end %>
-    </div>
-    <div class="item_field" style="width: 15%;">
-      <%= f.check_box :responsible_auditor,
-        :disabled => readonly || (f.object.user && f.object.user.can_act_as_audited?) %>
-    </div>
-    <div class="item_field" style="width: 15%;">
-      <%= f.check_box :process_owner,
-        :disabled => readonly || (f.object.user && !f.object.user.can_act_as_audited?) %>
-    </div>
-    <div class="item_field item_controls" style="width: 5%;">
-      <%= remove_item_link(f) unless readonly %>
+      </div>
     </div>
   </div>
-</div>
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showItem('#<%= id %>');
-    AutoComplete.observeAll();
-  </script>
-<% end %>
+</fieldset>

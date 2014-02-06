@@ -667,7 +667,6 @@ class PollsController < ApplicationController
     def load_privileges
       if @action_privileges
         @action_privileges.update(
-          auto_complete_for_user: :read,
           reports: :read,
           summary_by_answers: :read,
           create_summary_by_answers: :read,

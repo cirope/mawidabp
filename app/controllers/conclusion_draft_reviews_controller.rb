@@ -1,8 +1,6 @@
-# =Controlador de informes borradores
-#
-# Lista, muestra, crea, modifica y elimina informes borradores
-# (#ConclusionDraftReview)
 class ConclusionDraftReviewsController < ApplicationController
+  include AutoCompleteFor::User
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet,
@@ -247,38 +245,6 @@ class ConclusionDraftReviewsController < ApplicationController
       render action: :compose_email
     else
       redirect_to conclusion_draft_reviews_url
-    end
-  end
-
-  # Método para el autocompletado de usuarios
-  #
-  # * POST /reviews/auto_complete_for_user
-  def auto_complete_for_user
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
-    ]
-    parameters = {organization_id: current_organization.id}
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "LOWER(users.name) LIKE :user_data_#{i}",
-        "LOWER(users.last_name) LIKE :user_data_#{i}",
-        "LOWER(users.email) LIKE :user_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @users = User.includes(:organizations).where(
-      [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
-    ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).references(:organizations).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @users }
     end
   end
 
