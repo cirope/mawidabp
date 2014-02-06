@@ -33,17 +33,15 @@
                 autocomplete_id_target: '#control_objective_item_id'
               }
             } %>
-            <%= f.input :control_objective_item_id, as: :hidden, input_html: {
-              id: 'control_objective_item_id'
-            } %>
           <% else %>
             <%= f.input :control_objective_name, label: false, input_html: {
               id: :oportunity_control_objective_item,
               value: "#{@oportunity.control_objective_item.control_objective_text}
               (#{@oportunity.control_objective_item.process_control.name})",
               readonly: true } %>
-            <%= f.input :control_objective_item_id, as: :hidden %>
           <% end %>
+          <%= f.input :control_objective_item_id, as: :hidden,
+            input_html: { id: 'control_objective_item_id' } %>
         </div>
         <%= finding_repeated_of_label(f, readonly) %>
         <%= finding_repeated_of_if_field(f, readonly) %>
@@ -86,209 +84,191 @@
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= t('finding.responsibles', count: @oportunity.users.size) %>
-        <%= show_inline_help_for(:finding_responsibles) %>
-      </h3>
+  <hr />
+
+  <h3>
+    <%= t('finding.responsibles', count: @oportunity.users.size) %>
+    <%= show_inline_help_for(:finding_responsibles) %>
+  </h3>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-6">
-          <h5><strong><%= User.model_name.human %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
-            show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
-            show_inline_help_for(:finding_user_assignment_process_owner)) %></strong></h5>
-        </div>
-      </div>
-
-      <div id="finding_user_assignments">
-        <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
-          <%= render 'findings/finding_user_assignment', f: fua_f,
-            readonly: readonly, parent: f %>
-        <% end %>
-
-        <%= link_to_add_fields(t('finding.add_user'), f,
-          :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
-      </div>
+    <div class="col-md-2">
+      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
+        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
+        show_inline_help_for(:finding_user_assignment_process_owner)) %></strong></h5>
     </div>
   </div>
 
+  <div id="finding_user_assignments">
+    <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
+      <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
+    <% end %>
+
+    <%= link_to_add_fields(t('finding.add_user'), f,
+      :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
+  </div>
+
+  <hr />
+
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %>
-        </h3>
-      </div>
-      <div class="panel-body">
-        <ul>
-          <% repeated_ancestors.each do |repeated_ancestor| %>
-            <li><%= repeated_ancestor %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+    <h3>
+      <%= raw(t('finding.repeated_ancestors') +
+        show_inline_help_for(:finding_repeated_ancestors)) %>
+    </h3>
+
+    <ul>
+      <% repeated_ancestors.each do |repeated_ancestor| %>
+        <li><%= repeated_ancestor %></li>
+      <% end %>
+    </ul>
+    <hr />
   <% end %>
 
   <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %>
-        </h3>
-      </div>
-      <div class="panel-body">
-        <ul>
-          <% repeated_children.each do |repeated_child| %>
-            <li><%= repeated_child %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
+    <h3>
+      <%= raw(t('finding.repeated_children') +
+        show_inline_help_for(:finding_repeated_children)) %>
+    </h3>
+
+    <ul>
+      <% repeated_children.each do |repeated_child| %>
+        <li><%= repeated_child %></li>
+      <% end %>
+    </ul>
+    <hr />
   <% end %>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= t('finding.finding_relations') %>
-        <%= show_inline_help_for(:finding_relations) %>
-      </h3>
+  <h3>
+    <%= t('finding.finding_relations') %>
+    <%= show_inline_help_for(:finding_relations) %>
+  </h3>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= FindingRelation.human_attribute_name :related_finding_id %></strong></h5>
     </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-6">
-          <h5><strong><%= FindingRelation.human_attribute_name :related_finding_id %></strong></h5>
-        </div>
-        <div class="col-md-4">
-          <h5><strong><%= FindingRelation.human_attribute_name :description %></strong></h5>
-        </div>
-      </div>
-
-      <div id="finding_relations">
-        <%= f.simple_fields_for :finding_relations do |fr_f| %>
-          <%= render 'findings/finding_relation', f: fr_f, parent: f %>
-        <% end %>
-
-        <%= link_to_add_fields(t('finding.add_finding_relation'), f,
-          :finding_relations, 'findings/finding_relation') unless frozen %>
-      </div>
-
-      <% unless @oportunity.inverse_finding_relations.blank? %>
-        <h2>
-          <%= t('finding.inverse_finding_relations') %>
-          <%= show_inline_help_for(:inverse_finding_relations) %>
-        </h2>
-
-        <table class="table table-condensed table-striped">
-          <thead>
-            <tr>
-              <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-              <th><%= FindingRelation.human_attribute_name :description %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @oportunity.inverse_finding_relations.each do |ifr| %>
-              <tr>
-                <td><%= ifr.finding %></td>
-                <td><%= ifr.description %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
+    <div class="col-md-4">
+      <h5><strong><%= FindingRelation.human_attribute_name :description %></strong></h5>
     </div>
   </div>
+
+  <div id="finding_relations">
+    <%= f.simple_fields_for :finding_relations do |fr_f| %>
+      <%= render 'findings/finding_relation', f: fr_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('finding.add_finding_relation'), f,
+      :finding_relations, 'findings/finding_relation') unless frozen %>
+  </div>
+
+  <% unless @oportunity.inverse_finding_relations.blank? %>
+    <h2>
+      <%= t('finding.inverse_finding_relations') %>
+      <%= show_inline_help_for(:inverse_finding_relations) %>
+    </h2>
+
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
+          <th><%= FindingRelation.human_attribute_name :description %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.inverse_finding_relations.each do |ifr| %>
+          <tr>
+            <td><%= ifr.finding %></td>
+            <td><%= ifr.description %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <hr />
 
   <% unless @oportunity.finding_answers.blank? %>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <%= t('finding.finding_answers') %>
-          <%= show_inline_help_for(:finding_comments) %>
-        </h3>
-      </div>
-      <div class="panel-body">
-        <table class="table table-condensed table-striped">
-          <thead>
-            <tr>
-              <th><%= User.model_name.human %></th>
-              <th><%= FindingAnswer.human_attribute_name :answer %></th>
-              <th>
-                <%= FindingAnswer.human_attribute_name :file_model %>
-                <%= show_inline_help_for(:finding_file_model) %>
-              </th>
-              <th><%= FindingAnswer.human_attribute_name :created_at %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @oportunity.finding_answers.each do |finding_answer| %>
-              <tr>
-                <td><%= finding_answer.user.full_name %></td>
-                <td><%= simple_format finding_answer.answer %></td>
-                <td>
-                  <%= finding_answer.file_model.try(:file?) ?
-                    link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
-                </td>
-                <td>
-                  <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
-                  <% if finding_answer.commitment_date %>
-                    <br />
-                    <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-                    <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <h3>
+      <%= t('finding.finding_answers') %>
+      <%= show_inline_help_for(:finding_comments) %>
+    </h3>
+
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <th><%= User.model_name.human %></th>
+          <th><%= FindingAnswer.human_attribute_name :answer %></th>
+          <th>
+            <%= FindingAnswer.human_attribute_name :file_model %>
+            <%= show_inline_help_for(:finding_file_model) %>
+          </th>
+          <th><%= FindingAnswer.human_attribute_name :created_at %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @oportunity.finding_answers.each do |finding_answer| %>
+          <tr>
+            <td><%= finding_answer.user.full_name %></td>
+            <td><%= simple_format finding_answer.answer %></td>
+            <td>
+              <%= finding_answer.file_model.try(:file?) ?
+                link_to(t('label.download'), finding_answer.file_model.file.url) : '---' %>
+            </td>
+            <td>
+              <%= l(finding_answer.created_at, :format => :long) if finding_answer.created_at %>
+              <% if finding_answer.commitment_date %>
+                <br />
+                <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
+                <br /><%= l(finding_answer.commitment_date, :format => :long) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <hr />
   <% end %>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">
-        <%= t('finding.work_papers') %>
-        <%= show_inline_help_for(:finding_work_papers) %>
-      </h3>
+  <h3>
+    <%= t('finding.work_papers') %>
+    <%= show_inline_help_for(:finding_work_papers) %>
+  </h3>
+
+  <div class="row">
+    <div class="col-md-3">
+      <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
     </div>
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-3">
-          <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= WorkPaper.human_attribute_name :code %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= WorkPaper.human_attribute_name :number_of_pages %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= WorkPaper.human_attribute_name :description %></strong></h5>
-        </div>
-        <div class="col-md-2">
-          <h5><strong><%= WorkPaper.human_attribute_name :file_model %></strong></h5>
-        </div>
-      </div>
-
-      <div id="work_papers">
-        <%= f.simple_fields_for :work_papers do |wp_f| %>
-          <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
-        <% end %>
-
-        <%= link_to_add_fields(
-          t('finding.add_work_paper'), f, :work_papers, 'work_papers/work_paper'
-        ) unless frozen %>
-      </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :code %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :number_of_pages %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :description %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :file_model %></strong></h5>
     </div>
   </div>
+
+  <div id="work_papers">
+    <%= f.simple_fields_for :work_papers do |wp_f| %>
+      <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
+    <% end %>
+
+    <%= link_to_add_fields(
+      t('finding.add_work_paper'), f, :work_papers, 'work_papers/work_paper'
+    ) unless frozen %>
+  </div>
+
+  <hr />
 
   <div class="form-actions form-footer">
     <div class="pull-right"><%= yield :form_actions %></div>

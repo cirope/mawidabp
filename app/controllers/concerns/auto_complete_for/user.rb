@@ -1,7 +1,6 @@
 module AutoCompleteFor::User
   extend ActiveSupport::Concern
 
-  # GET /finding_class/auto_complete_for_user
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}

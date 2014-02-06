@@ -3,178 +3,139 @@
     @fortress.control_objective_item.review : nil) %>
 <% frozen = review.try(:is_frozen?) %>
 <% show_history_changes = @fortress.status_change_history.size > 1 %>
-<!--[form:fortress]-->
-<%= form_for @fortress, :html => {:multipart => true} do |f| %>
+
+<%= simple_form_for @fortress do |f| %>
   <% content_for :js_extra do %>
-    <% unless readonly %>
-      <%= raw "var finding_user_assignment='#{generate_template(f,
-          :finding_user_assignments, :locals => {:readonly => readonly})}';" %>
-    <% end %>
-    <% unless frozen %>
     <%= raw "var lastWorkPaperCode = '#{next_fortress_work_paper_code(
         @fortress)}';" %>
-    <%= raw "var finding_relation='#{generate_template(f, :finding_relations,
-        :object => FindingRelation.new(:finding_id => @fortress.id))}';" %>
-    <%= raw "var work_paper='#{generate_template(f, :work_papers,
-        {:form_builder_local => :wp_f,
-        :partial => 'work_papers/work_paper',
-        :locals => {:child_index => 'NEW_RECORD', :frozen => false},
-        :object => WorkPaper.new(:organization_id => current_organization.id)})}';" %>
-    <% end %>
   <% end %>
+
   <%= f.error_messages %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= content_tag :label, Review.model_name.human, :class => :inline %>
-      <%= text_field_tag :review, review.identification,
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= f.label :review_code, nil, :class => :inline %>
-      <%= f.text_field :review_code, :class => :inline_item, :maxlength => 255,
-        :size => 10, :readonly => true %>
-    </p>
-    <div>
-      <label for="fortress_control_objective_item">
-        <%= raw(ControlObjective.model_name.human +
-          show_inline_help_for(:finding_control_objective_item)) %>
-      </label>
-      <% if !readonly && !@fortress.new_record? %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
-          <% field_classes << :error_field unless (@fortress.errors[:control_objective_item_id] | @fortress.errors[:control_objective_item]).blank? %>
-          <%= text_field_tag 'fortress[auto_control_objective_item]',
-            @fortress.control_objective_item.try(:control_objective_text),
-            :id => 'fortress_control_objective_item',
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-params' => ({ review_id: @fortress.review.id } if @fortress.review),
-            'data-autocomplete-url' => auto_complete_for_control_objective_item_fortresses_path(:format => :json) %>
-          <%= f.hidden_field :control_objective_item_id,
-            :class => :autocomplete_id %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :review, label: Review.model_name.human(count: 1),
+          input_html: { value: review.try(:identification), readonly: true } %>
+        <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
+        <div>
+          <label for="fortress_control_objective_item">
+            <%= raw(ControlObjective.model_name.human +
+              show_inline_help_for(:finding_control_objective_item)) %>
+          </label>
+          <% if !readonly && !@fortress.new_record? %>
+            <%= f.input :control_objective_item_id, label: false, input_html: {
+              value: @fortress.control_objective_item.try(:control_objective_text),
+              class: 'autocomplete_field', title: t('label.search'),
+              autocomplete: :off, autofocus: true,
+              data: {
+                autocomplete_params: ({ review_id: @fortress.review.id } if @fortress.review),
+                autocomplete_url: auto_complete_for_control_objective_item_fortresses_path,
+                autocomplete_id_target: '#control_objective_item_id'
+              }
+            } %>
+          <% else %>
+            <%= f.input :control_objective_name, label: false, input_html: {
+              id: :fortress_control_objective_item,
+              value: "#{@fortress.control_objective_item.control_objective_text}
+                (#{@fortress.control_objective_item.process_control.name})",
+              readonly: true } %>
+          <% end %>
+          <%= f.input :control_objective_item_id, as: :hidden,
+            input_html: { id: 'control_objective_item_id' } %>
         </div>
-      <% else %>
-        <%= text_field nil, :control_objective_name, :size => nil,
-          :id => :fortress_control_objective_item,
-          :value => "#{@fortress.control_objective_item.control_objective_text} (#{@fortress.control_objective_item.process_control.name})",
-          :readonly => true %>
-        <%= f.hidden_field :control_objective_item_id %>
-      <% end %>
-    </div>
-    <p>
-      <%= f.label :description %>
-      <%= f.text_area :description, :readonly => readonly, :autofocus => true,
-        :style => 'height: 15em;' %>
-    </p>
-  </div>
-  <div class="form_column_right">
-    <p class="form_item">
-    <% if show_history_changes %>
-      <%= render :partial => 'findings/history_changes',
-        :locals => { :finding => @fortress } %>
-    <% end %>
-    </p>
-    <p>
-      <%= f.label :origination_date,
-        raw(Fortress.human_attribute_name(:origination_date) +
-          show_inline_help_for(:finding_origination_date)) %>
-      <%= calendar_text_field f, :origination_date, false, nil, :disabled => readonly %>
-    </p>
+        <%= f.input :description, autofocus: true, input_html: { readonly: readonly } %>
+      </div>
+      <div class="col-md-6">
+        <% if show_history_changes %>
+          <%= render 'findings/history_changes', finding: @fortress %>
+        <% end %>
+        <%= f.input :origination_date, as: :date_picker, label:
+            raw(Fortress.human_attribute_name(:origination_date) +
+              show_inline_help_for(:finding_origination_date)),
+            input_html: { disabled: readonly } %>
 
-    <% if @fortress.must_have_a_comment? %>
-      <%= f.fields_for :comments,
-        @fortress.comments.build(:user => @auth_user) do |c_f| %>
-        <p>
-          <%= c_f.label :comment, nil, :class => :error_field %>
-          <%= c_f.text_area :comment, :class => :error_field %>
-          <%= c_f.hidden_field :user_id %>
-        </p>
-      <% end %>
-    <% end %>
+        <% if @fortress.must_have_a_comment? %>
+          <%= f.simple_fields_for :comments,
+            @fortress.comments.build(user: @auth_user) do |c_f| %>
+            <%= c_f.input :comment %>
+            <%= c_f.input :user_id, as: :hidden %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <div style="clear: both; margin-top: 2em;">
-    <h1>
-      <%= t('finding.responsibles', :count => @fortress.users.size) %>
-      <%= show_inline_help_for(:finding_responsibles) %>
-    </h1>
-  </div>
+  <hr />
 
-  <div class="column_headers">
-    <div class="item_column" style="width: 60%;">
-      <h3><%= User.model_name.human %></h3>
+  <h3>
+    <%= t('finding.responsibles', :count => @fortress.users.size) %>
+    <%= show_inline_help_for(:finding_responsibles) %>
+  </h3>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="item_column" style="width: 15%;">
-      <h3><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
-        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
+        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></strong></h5>
     </div>
-    <div class="item_column" style="width: 15%;">
-      <h3><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
-        show_inline_help_for(:finding_user_assignment_process_owner)) %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
+        show_inline_help_for(:finding_user_assignment_process_owner)) %></strong></h5>
     </div>
-    <div class="item_column" style="width: 5%;"></div>
-    <div class="clear"></div>
   </div>
 
   <div id="finding_user_assignments">
-    <%= f.fields_for :finding_user_assignments do |fua_f| %>
-      <%= render :partial => 'finding_user_assignment', :locals =>
-        {:f => fua_f, :is_dynamic => false, :readonly => readonly} %>
+    <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
+      <%= render 'findings/finding_user_assignment', f: fua_f, readonly: readonly %>
     <% end %>
+
+    <%= link_to_add_fields(t('finding.add_user'), f,
+      :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
   </div>
 
-  <p class="add_item">
-    <%= link_to_unless readonly, t('finding.add_user'), '#',
-      'data-template' => :finding_user_assignment,
-      'data-event' => 'addNestedItem',
-      'data-container' => '#finding_user_assignments' %>
-  </p>
+  <hr />
 
-  <h1>
+  <h3>
     <%= t('finding.work_papers') %>
     <%= show_inline_help_for(:finding_work_papers) %>
-  </h1>
+  </h3>
 
-  <div class="column_headers">
-    <div class="item_column" style="width: 20%;">
-      <h3><%= WorkPaper.human_attribute_name :name %></h3>
+  <div class="row">
+    <div class="col-md-3">
+      <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
     </div>
-    <div class="item_column" style="width: 20%;">
-      <h3><%= WorkPaper.human_attribute_name :code %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :code %></strong></h5>
     </div>
-    <div class="item_column" style="width: 15%;">
-      <h3><%= WorkPaper.human_attribute_name :number_of_pages %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :number_of_pages %></strong></h5>
     </div>
-    <div class="item_column" style="width: 25%;">
-      <h3><%= WorkPaper.human_attribute_name :description %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :description %></strong></h5>
     </div>
-    <div class="item_column" style="width: 10%;">
-      <h3><%= WorkPaper.human_attribute_name :file_model %></h3>
+    <div class="col-md-2">
+      <h5><strong><%= WorkPaper.human_attribute_name :file_model %></strong></h5>
     </div>
-    <div class="item_column" style="width: 10%;"></div>
-    <div class="clear"></div>
   </div>
 
   <div id="work_papers">
-    <%= f.fields_for :work_papers do |wp_f| %>
-      <%= render :partial => 'work_papers/work_paper', :locals =>
-        {:wp_f => wp_f, :is_dynamic => false, :frozen => frozen,
-        :child_index => 'NEW_RECORD'} %>
+    <%= f.simple_fields_for :work_papers do |wp_f| %>
+      <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
     <% end %>
+
+    <%= link_to_add_fields(
+      t('finding.add_work_paper'), f, :work_papers, 'work_papers/work_paper'
+    ) unless frozen %>
   </div>
 
-  <p class="add_item">
-    <%= link_to_unless frozen, t('finding.add_work_paper'), '#',
-      'data-template' => :work_paper, 'data-event' => 'addNestedItem',
-      'data-container' => '#work_papers' %>
-  </p>
+  <hr />
 
-  <%= hidden_lock_version(f) %>
-
-  <p>
-     <span class="button"><%= f.submit nil, :disabled => frozen %></span>
-  </p>
+  <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary', disabled: frozen %>
+  </div>
 <% end %>
