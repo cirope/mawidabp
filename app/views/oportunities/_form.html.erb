@@ -110,33 +110,49 @@
 
       <div id="finding_user_assignments">
         <%= f.simple_fields_for :finding_user_assignments do |fua_f| %>
-          <%= render 'finding_user_assignment', f: fua_f, readonly: readonly %>
+          <%= render 'findings/finding_user_assignment', f: fua_f,
+            readonly: readonly, parent: f %>
         <% end %>
 
-        <%= link_to_add_fields(
-          t('finding.add_user'), f, :finding_user_assignments
-        ) unless readonly %>
+        <%= link_to_add_fields(t('finding.add_user'), f,
+          :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
       </div>
+    </div>
+  </div>
 
-      <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
-        <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
-        <ul class="raw_list">
+  <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <ul>
           <% repeated_ancestors.each do |repeated_ancestor| %>
             <li><%= repeated_ancestor %></li>
           <% end %>
         </ul>
-      <% end %>
+      </div>
+    </div>
+  <% end %>
 
-      <% unless (repeated_children = @oportunity.repeated_children).blank? %>
-        <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
-        <ul class="raw_list">
+  <% unless (repeated_children = @oportunity.repeated_children).blank? %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <ul>
           <% repeated_children.each do |repeated_child| %>
             <li><%= repeated_child %></li>
           <% end %>
         </ul>
-      <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -157,12 +173,11 @@
 
       <div id="finding_relations">
         <%= f.simple_fields_for :finding_relations do |fr_f| %>
-          <%= render 'finding_relation', f: fr_f %>
+          <%= render 'findings/finding_relation', f: fr_f, parent: f %>
         <% end %>
 
-        <%= link_to_add_fields(
-          t('finding.add_finding_relation'), f, :finding_relations
-        ) unless frozen %>
+        <%= link_to_add_fields(t('finding.add_finding_relation'), f,
+          :finding_relations, 'findings/finding_relation') unless frozen %>
       </div>
 
       <% unless @oportunity.inverse_finding_relations.blank? %>
@@ -276,6 +291,7 @@
   </div>
 
   <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary', disabled: frozen %>
   </div>

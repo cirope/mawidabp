@@ -21,7 +21,7 @@
           } %>
         <% else %>
           <%= f.input :user_id, label: false, input_html: {
-            value: finding_user.full_name_with_function(@weakness.created_at),
+            value: finding_user.full_name_with_function(finding.created_at),
             id: "finding_user_#{id}", name: "user_name_#{id}", readonly: true
           } %>
         <% end %>
