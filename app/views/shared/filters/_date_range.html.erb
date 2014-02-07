@@ -1,22 +1,21 @@
 <% avoid_inline_help = display[:avoid_inline_help] if display.kind_of?(Hash) %>
-<div id="date_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div class="date-filter form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.label :from_date, raw(
-            t('conclusion_committee_report.from_date') +
-            (show_inline_help_for(:report_from_date) unless avoid_inline_help).to_s
-          ), :class => 'inline' %>
-        <%= calendar_text_field f, :from_date, false, @from_date,
-          :size => nil, :class => 'inline_item' %>
-      </div>
-      <div class="col-md-6">
-        <%= f.label :to_date, raw(
-            t('conclusion_committee_report.to_date') +
-            (show_inline_help_for(:report_to_date) unless avoid_inline_help).to_s
-          ), :class => 'inline' %>
-        <%= calendar_text_field f, :to_date, false, @to_date,
-          :size => nil, :class => 'inline_item' %>
-      </div>
-    </div>
+<div class="form-group">
+  <%= f.label raw(
+    t('conclusion_committee_report.from_date') +
+    (show_inline_help_for(:report_from_date) unless avoid_inline_help).to_s
+  ), required: false, class: 'col-md-2' %>
+  <div class="col-md-10">
+    <%= f.text_field :from_date, value: l(@from_date), autocomplete: :off,
+      class: 'form-control', data: { date_picker: true } %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label raw(
+    t('conclusion_committee_report.to_date') +
+    (show_inline_help_for(:report_to_date) unless avoid_inline_help).to_s
+  ), required: false, class: 'col-md-2' %>
+  <div class="col-md-10">
+    <%= f.text_field :to_date, value: l(@to_date), autocomplete: :off,
+      class: 'form-control', data: { date_picker: true } %>
+  </div>
 </div>

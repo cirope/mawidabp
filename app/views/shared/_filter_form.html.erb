@@ -1,19 +1,20 @@
-<% url = url_for({:action => action}.merge(extra_params)) %>
-<%= simple_form_for action, :url => url, :html => {:method => :get, :class => 'no_observe_changes'} do |f| %>
-  <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>
-    <%= render :partial => "shared/filters/#{f_name}",
-      :locals => {:f => f, :display => display, :action => action} %>
-  <% end %>
-  <% if extra_params %>
-    <div style="display: none;">
-      <% extra_params.each do |name, value| %>
-        <%= hidden_field_tag name, value %>
+<% url = url_for({ action: action }.merge(extra_params)) %>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= simple_form_for action, url: url, html: { method: :get, class: 'form-horizontal form-inline' } do |f| %>
+      <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>
+        <%= render partial: "shared/filters/#{f_name}",
+          locals: { f: f, display: display, action: action } %>
       <% end %>
-    </div>
-  <% end %>
-
-  <div class="form-actions">
-    <%= f.submit t('label.apply_filter'), class: 'btn btn-default' %>
-    <%= link_to t('label.cancel'), url %>
+      <% if extra_params %>
+        <div class="hidden">
+          <% extra_params.each do |name, value| %>
+            <%= hidden_field_tag name, value %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= f.submit t('label.apply_filter'), class: 'btn btn-sm btn-default' %> |
+      <%= link_to t('label.cancel'), url %>
+    <% end %>
   </div>
-<% end %>
+</div>
