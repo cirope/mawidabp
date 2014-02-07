@@ -1,25 +1,25 @@
 <p>
-  <b><%= Organization.human_attribute_name 'name' %>:</b>
+  <strong><%= Organization.human_attribute_name 'name' %>:</strong>
   <%= @organization.name %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'prefix' %>:</b>
+  <strong><%= Organization.human_attribute_name 'prefix' %>:</strong>
   <%= @organization.prefix %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'kind' %>:</b>
+  <strong><%= Organization.human_attribute_name 'kind' %>:</strong>
   <%= t "activerecord.attributes.organization.kind_options.#{@organization.kind}" %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'description' %>:</b>
+  <strong><%= Organization.human_attribute_name 'description' %>:</strong>
   <%= @organization.description %>
 </p>
 
 <p>
-  <b><%= Organization.human_attribute_name 'image_model' %>:</b>
+  <strong><%= Organization.human_attribute_name 'image_model' %>:</strong>
 </p>
 
 <% if @organization.image_model %>

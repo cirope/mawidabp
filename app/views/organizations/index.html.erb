@@ -21,6 +21,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @organizations %>
+<hr />
 
-<%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>
+<div>
+  <div class="pull-right">
+    <%= pagination_links @organizations %>
+  </div>
+  <%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>
+</div>

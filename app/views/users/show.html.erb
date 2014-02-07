@@ -1,91 +1,93 @@
-<div id="showed_data">
-  <p>
-    <b><%= User.human_attribute_name :user %>:</b>
-    <%= @user.user %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :user %>:</strong>
+  <%= @user.user %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :name %>:</b>
-    <%= @user.name %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :name %>:</strong>
+  <%= @user.name %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :last_name %>:</b>
-    <%= @user.last_name %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :last_name %>:</strong>
+  <%= @user.last_name %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :email %>:</b>
-    <%= @user.email %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :email %>:</strong>
+  <%= @user.email %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :function %>:</b>
-    <%= @user.function %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :function %>:</strong>
+  <%= @user.function %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :language %>:</b>
-    <%= @user.language %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :language %>:</strong>
+  <%= @user.language %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :resource_id %>:</b>
-    <%= @user.resource %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :resource_id %>:</strong>
+  <%= @user.resource %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :enable %>:</b>
-    <%=t @user.enable? ? 'label.yes' : 'label.no' %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :enable %>:</strong>
+  <%= t @user.enable? ? 'label.yes' : 'label.no' %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :logged_in %>:</b>
-    <%=t @user.logged_in? ? 'label.yes' : 'label.no' %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :logged_in %>:</strong>
+  <%= t @user.logged_in? ? 'label.yes' : 'label.no' %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :failed_attempts %>:</b>
-    <%= @user.failed_attempts %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :failed_attempts %>:</strong>
+  <%= @user.failed_attempts %>
+</p>
 
-  <p>
-    <b><%= User.human_attribute_name :password_changed %>:</b>
-    <%= l(@user.password_changed, :format => :long) %>
-  </p>
+<p>
+  <strong><%= User.human_attribute_name :password_changed %>:</strong>
+  <%= l(@user.password_changed, format: :long) %>
+</p>
 
-  <p>
-    <b><%= t('user.profiles_label') %>:</b>
-    <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
-  </p>
+<p>
+  <strong><%= t('user.profiles_label') %>:</strong>
+  <%= @user.organization_roles.map(&:to_s).join(APP_ENUM_SEPARATOR) %>
+</p>
 
-  <p>
-    <b><%= t('user.organizations_label') %>:</b>
-    <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
-  </p>
-  <% if @user.parent %>
-    <p>
-      <b><%= User.human_attribute_name(:manager_id) %>:</b>
-      <%= link_to @user.parent.full_name, @user.parent %>
-    </p>
-  <% end %>
-  <% unless @user.children.blank? %>
-    <p><strong><%= t('user.children') %></strong></p>
-    <ul class="raw_list">
-      <% @user.children.each do |child| %>
-        <li><%= link_to child.full_name, child %></li>
-      <% end %>
-    </ul>
-  <% end %>
+<p>
+  <strong><%= t('user.organizations_label') %>:</strong>
+  <%= @user.organizations.map(&:name).join(APP_ENUM_SEPARATOR) %>
+</p>
 
-  <div>
-    <b><%= User.human_attribute_name :notes %>:</b>
-    <%= simple_format @user.notes %>
-  </div>
+<% if @user.parent %>
+  <p>
+    <strong><%= User.human_attribute_name(:manager_id) %>:</strong>
+    <%= link_to @user.parent.full_name, @user.parent %>
+  </p>
+<% end %>
+
+<% unless @user.children.blank? %>
+  <p><strong><%= t('user.children') %></strong></p>
+  <ul>
+    <% @user.children.each do |child| %>
+      <li><%= link_to child.full_name, child %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<div>
+  <strong><%= User.human_attribute_name :notes %>:</strong>
+  <%= simple_format @user.notes %>
 </div>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_user_path(@user) %> |
+<hr />
+
+<div class="form-footer">
+  <%= link_to_edit edit_user_path(@user) %> |
   <%= link_to t('user.status'), user_status_user_path(@user) %> |
   <%= link_to t('label.list'), users_path %> |
   <%= link_to_back %>

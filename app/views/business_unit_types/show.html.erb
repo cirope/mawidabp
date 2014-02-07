@@ -1,21 +1,21 @@
 <p>
-  <b><%= BusinessUnitType.human_attribute_name :name %>:</b>
+  <strong><%= BusinessUnitType.human_attribute_name :name %>:</strong>
   <%= @business_unit_type.name %>
 </p>
 
 <p>
-  <b><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</b>
+  <strong><%= BusinessUnitType.human_attribute_name :business_unit_label %>:</strong>
   <%= @business_unit_type.business_unit_label %>
 </p>
 
 <p>
-  <b><%= BusinessUnitType.human_attribute_name :project_label %>:</b>
+  <strong><%= BusinessUnitType.human_attribute_name :project_label %>:</strong>
   <%= @business_unit_type.project_label %>
 </p>
 
 <p>
-  <b><%= BusinessUnitType.human_attribute_name :external %>:</b>
-  <%=t @business_unit_type.external ? 'label.yes' : 'label.no' %>
+  <strong><%= BusinessUnitType.human_attribute_name :external %>:</strong>
+  <%= t @business_unit_type.external ? 'label.yes' : 'label.no' %>
 </p>
 
 <% unless @business_unit_type.business_units.empty? %>
@@ -34,6 +34,8 @@
     </tbody>
   </table>
 <% end %>
+
+<hr />
 
 <%= link_to_edit edit_business_unit_type_path(@business_unit_type) %> |
 <%= link_to t('label.list'), business_unit_types_path %> |

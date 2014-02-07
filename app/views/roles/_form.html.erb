@@ -1,5 +1,6 @@
 <%= simple_form_for @role do |f| %>
   <%= f.error_messages %>
+
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
@@ -28,7 +29,7 @@
         <% menu_items = @role.audited? ? APP_AUDITED_MENU_ITEMS : APP_AUDITOR_MENU_ITEMS %>
       <% end %>
       <% menu_items.each do |menu_item| %>
-        <%= render partial: 'menu_item', locals: { menu_item: menu_item, role_form: f } %>
+        <%= render 'menu_item', menu_item: menu_item, role_form: f %>
       <% end %>
     </tbody>
   </table>
@@ -45,14 +46,14 @@
 
 var Privileges = {
   markChildren: function(element, checked) {
-    var parent = element.parents('.menu_item').attr('id');
+    var parent = element.parents('tr').attr('id');
     var type = element.data('type');
     var children = $('*[data-parent="' + parent + '"] :checkbox[data-type="' + type + '"]');
 
     children.attr('checked', checked).trigger('click').attr('checked', checked);
   },
   markSiblings: function(element, type, checked) {
-    var siblings = element.parents('.menu_item').find(
+    var siblings = element.parents('tr').find(
       '[data-type="' + type + '"]'
     );
 

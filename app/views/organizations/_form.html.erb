@@ -10,21 +10,15 @@
       <% end %>
       <%= kind_field f %>
       <% unless @organization.new_record? %>
-        <div class="row">
-          <div class="col-md-11">
-            <% @organization.build_image_model unless @organization.image_model %>
-            <%= f.simple_fields_for :image_model do |im_f| %>
-              <%= im_f.input :image, label: false %>
-            <% end %>
-          </div>
-          <div class="col-md-1">
-            <div class="show_hide">
-              <% if @organization.image_model && @organization.image_model.valid? &&
-                @organization.errors.empty? %>
-                <%= link_to_download @organization.image_model.image.url %>
-              <% end %>
-            </div>
-          </div>
+        <% @organization.build_image_model unless @organization.image_model %>
+        <%= f.simple_fields_for :image_model do |im_f| %>
+          <%= im_f.input :image, label: Organization.human_attribute_name(:image_model) %>
+        <% end %>
+        <div class="show_hide">
+          <% if @organization.image_model && @organization.image_model.valid? &&
+            @organization.errors.empty? %>
+            <%= link_to_download @organization.image_model.image.url %>
+          <% end %>
         </div>
       <% else %>
         <div class="alert alert-warning">

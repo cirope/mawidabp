@@ -1,34 +1,36 @@
-<div id="showed_data">
 <p>
-  <b><%= PaperTrail::Version.human_attribute_name 'created_at' %>:</b>
-  <%=l @version.created_at, :format => :long %>
+  <strong><%= PaperTrail::Version.human_attribute_name 'created_at' %>:</strong>
+  <%= l @version.created_at, format: :long %>
 </p>
 
 <p>
-  <b><%= PaperTrail::Version.human_attribute_name 'whodunnit' %>:</b>
-  <%=h show_whodunnit(@version.whodunnit) %>
+  <strong><%= PaperTrail::Version.human_attribute_name 'whodunnit' %>:</strong>
+  <%= show_whodunnit(@version.whodunnit) %>
 </p>
 
 <p>
-  <b><%= PaperTrail::Version.human_attribute_name 'item' %>:</b>
-  <%=h @version.item ?
-    "#{@version.item.class.model_name.human} (#{@version.reify(:has_one => false) || @version.item})" : '-' %>
+  <strong><%= PaperTrail::Version.human_attribute_name 'item' %>:</strong>
+  <%= @version.item ?
+    "#{@version.item.class.model_name.human} (#{@version.reify(has_one: false) || @version.item})" : '-' %>
 </p>
 
 <p>
-  <b><%= PaperTrail::Version.human_attribute_name 'event' %>:</b>
-  <%=h t("version.event_#{@version.event}") %>
+  <strong><%= PaperTrail::Version.human_attribute_name 'event' %>:</strong>
+  <%= t("version.event_#{@version.event}") %>
 </p>
 
-<h1 style="margin-top: 1em;"><%= t 'version.changes' %></h1>
+<div class="page-header">
+  <h3><strong><%= t 'version.changes' %></strong></h3>
+</div>
+
 <% changes = @version.changes_from_next %>
 <% unless changes.blank? %>
-  <table class="summary_table">
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
-        <th style="width: 20%;"><%= t 'version.column_attribute' %></th>
-        <th style="width: 40%;"><%= t 'version.column_old_value' %></th>
-        <th style="width: 40%;"><%= t 'version.column_new_value' %></th>
+        <th><%= t 'version.column_attribute' %></th>
+        <th><%= t 'version.column_old_value' %></th>
+        <th><%= t 'version.column_new_value' %></th>
       </tr>
     </thead>
     <tbody>
@@ -44,9 +46,8 @@
 <% else %>
   <p><%= t 'version.without_changes' %></p>
 <% end %>
-</div>
 
-<div id="links">
+<hr />
+
 <%= link_to t('label.list'), security_changes_report_versions_path %> |
 <%= link_to_back %>
-</div>

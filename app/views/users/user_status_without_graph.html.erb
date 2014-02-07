@@ -1,71 +1,74 @@
-<h1 class="title"><%= @user.informal_name %></h1>
-
-<div class="float_image">
-  <h2 style="font-weight: normal;">
-    <%= textilize_without_paragraph(t('user.high_risk_weaknesses',
-                                      :count => @filtered_weaknesses.with_highest_risk.count)) %>
-  </h2>
-  <table class="summary_table">
-    <% Weakness.weaknesses_for_graph(@filtered_weaknesses.with_highest_risk).each do |weakness| %>
-      <tr>
-        <td><%= weakness[:label] %></td>
-        <td>
-          <% if @filtered_weaknesses.with_highest_risk.count > 0 %>
-            <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
-          <% else %>
-            <%= "0" %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
+<div class="page-header">
+  <h2><%= @user.informal_name %></h2>
 </div>
 
-<div class="float_image">
-  <h2 style="font-weight: normal;">
-    <%= user_weaknesses_links(@user) %>
-  </h2>
-  <table class="summary_table">
-    <% Weakness.weaknesses_for_graph(@filtered_weaknesses).each do |weakness| %>
-      <tr>
-        <td><%= weakness[:label] %></td>
-        <td>
-          <% if @filtered_weaknesses.count > 0 %>
-            <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.count * 100).round(2)}%)" %>
-          <% else %>
-            <%= "0" %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
+<div class="row">
+  <div class="col-md-4">
+    <h5>
+      <%= textilize_without_paragraph(t('user.high_risk_weaknesses',
+        :count => @filtered_weaknesses.with_highest_risk.count)) %>
+    </h5>
+    <table class="table table-condensed table-striped">
+      <% Weakness.weaknesses_for_graph(@filtered_weaknesses.with_highest_risk).each do |weakness| %>
+        <tr>
+          <td><%= weakness[:label] %></td>
+          <td>
+            <% if @filtered_weaknesses.with_highest_risk.count > 0 %>
+              <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.with_highest_risk.count * 100).round(2)}%)" %>
+            <% else %>
+              <%= "0" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="col-md-4">
+    <h5>
+      <%= user_weaknesses_links(@user) %>
+    </h5>
+    <table class="table table-condensed table-striped">
+      <% Weakness.weaknesses_for_graph(@filtered_weaknesses).each do |weakness| %>
+        <tr>
+          <td><%= weakness[:label] %></td>
+          <td>
+            <% if @filtered_weaknesses.count > 0 %>
+              <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.count * 100).round(2)}%)" %>
+            <% else %>
+              <%= "0" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+  <div class="col-md-4">
+    <h5>
+      <%= textilize_without_paragraph(t('user.pending_weaknesses_detailed',
+        :count => @filtered_weaknesses.with_pending_status.count)) %>
+    </h5>
+    <table class="table table-condensed table-striped">
+      <% Weakness.pending_weaknesses_for_graph(@filtered_weaknesses).each do |weakness| %>
+        <tr>
+          <td><%= weakness[:label] %></td>
+          <td>
+            <% if @filtered_weaknesses.with_pending_status.count > 0 %>
+              <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.with_pending_status.count * 100).round(2)}%)" %>
+            <% else %>
+              <%= "0" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
 </div>
 
-<br />
-<div class="float_image">
-  <h2 style="font-weight: normal;">
-    <br /><%= textilize_without_paragraph(t('user.pending_weaknesses_detailed',
-               :count => @filtered_weaknesses.with_pending_status.count)) %>
-  </h2>
-  <table class="summary_table">
-    <% Weakness.pending_weaknesses_for_graph(@filtered_weaknesses).each do |weakness| %>
-      <tr>
-        <td><%= weakness[:label] %></td>
-        <td>
-          <% if @filtered_weaknesses.with_pending_status.count > 0 %>
-            <%= "  #{weakness[:value]} (#{(weakness[:value].to_f / @filtered_weaknesses.with_pending_status.count * 100).round(2)}%)" %>
-          <% else %>
-            <%= "0" %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</div>
+<hr />
 
-<div id="links">
-  <%= link_to t('label.show'), user_path(@user) %> |
-  <%= link_to t('label.list'), users_path %> |
-  <%= link_to t('user.graph_mode'), user_status_user_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_show user_path(@user) %> |
+<%= link_to t('label.list'), users_path %> |
+<%= link_to t('user.graph_mode'), user_status_user_path %> |
+<%= link_to_back %>

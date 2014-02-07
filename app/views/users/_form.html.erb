@@ -1,5 +1,6 @@
 <%= simple_form_for @user do |f| %>
   <%= f.error_messages %>
+
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
@@ -22,48 +23,51 @@
     </div>
   </div>
 
+  <hr />
+
   <% if @auth_user %>
-    <hr />
-    <h3><%= User.human_attribute_name(:manager_id) %></h3>
+    <h5>
+      <strong><%= User.human_attribute_name(:manager_id) %></strong>
+    </h5>
 
     <div class="row">
       <div class="col-md-6">
-        <% copy_attribute_errors(:manager_id, :nested_user, f) %>
-        <%= f.input :nested_user, label: false,
+        <%= f.input :manager_id, as: :string, label: false,
           input_html: {
-            id: "user_manager_#{@user.id}",
+            id: 'auto_manager_id', name: 'auto_manager_id',
             value: (@user.parent.try(:full_name_with_function) || ''),
-            class: 'autocomplete_field',
-            title: t('label.search'),
+            class: 'autocomplete_field', title: t('label.search'),
             data: {
-              'autocomplete-params' => ({ user_id: @user.id } unless @user.new_record?),
-              'autocomplete-url' => auto_complete_for_user_users_path,
-              'autocomplete-id-target' => '#user_manager_id'
+              autocomplete_params: ({ user_id: @user.id } unless @user.new_record?),
+              autocomplete_url: auto_complete_for_user_users_path,
+              autocomplete_id_target: '#user_manager_id'
             }
           } %>
-        <%= f.input :manager_id, as: :hidden, input_html: { class: :autocomplete_id } %>
+        <%= f.input :manager_id, as: :hidden %>
       </div>
 
       <div class="col-md-6">
         <div class="show_hide">
-          <%= link_to t('user.unlink_manager'), '#', :onclick =>
-            "$('#user_manager_#{@user.id}').val(''); $('#user_manager_id').val(''); return false;" %>
+          <%= link_to t('user.unlink_manager'), '#', onclick:
+            "$('#auto_manager_id').val(''); $('#user_manager_id').val(''); return false;" %>
         </div>
       </div>
     </div>
 
     <hr />
-    <h3><%= t('user.children') %></h3>
+    <h5><strong><%= t('user.children') %></strong></h5>
 
     <div id="children">
       <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
 
       <%= link_to_add_fields(t('user.add_child'), f, :children, 'new_child') %>
     </div>
+    <hr />
   <% end %>
 
-  <hr />
-  <h3><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></h3>
+  <h5>
+    <strong><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></strong>
+  </h5>
 
   <div id="related_user_relations">
     <%= f.simple_fields_for :related_user_relations do |rur_f| %>
@@ -74,12 +78,17 @@
   </div>
 
   <hr />
+
   <div class="row">
     <div class="col-md-6">
-      <h3><%= OrganizationRole.human_attribute_name :organization_id %></h3>
+      <h5>
+        <strong><%= OrganizationRole.human_attribute_name :organization_id %></strong>
+      </h5>
     </div>
     <div class="col-md-6">
-      <h3><%= OrganizationRole.human_attribute_name :role_id %></h3>
+      <h5>
+        <strong><%= OrganizationRole.human_attribute_name :role_id %></strong>
+      </h5>
     </div>
   </div>
 

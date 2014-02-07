@@ -24,6 +24,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @business_unit_types %>
+<hr />
 
-<%= link_to t('label.new'), new_business_unit_type_path, class: 'btn btn-primary' %>
+<div>
+  <div class="pull-right">
+    <%= pagination_links @business_unit_types %>
+  </div>
+  <%= link_to t('label.new'), new_business_unit_type_path, class: 'btn btn-primary' %>
+</div>

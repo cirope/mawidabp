@@ -3,7 +3,7 @@
   :columns => @query.blank? ? User::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 <table class="table table-condensed table-striped">
-  <thead id="column_headers">
+  <thead>
     <tr>
       <th></th>
       <%= make_filterable_column User.human_attribute_name(:user), nil, 'user' %>
@@ -30,7 +30,9 @@
         <td class="nowrap"><%= show_user_with_email_as_abbr(user) %></td>
         <td><%= user.full_name %></td>
         <td class="visible-lg"><%= super_truncate(user.function || '-', 40) %></td>
-        <td class="visible-lg"><%= t user.logged_in? && user.last_access && user.last_access >= expire_time.minutes.ago ? 'label.yes' : 'label.no' %></td>
+        <td class="visible-lg">
+          <%= t user.logged_in? && user.last_access && user.last_access >= expire_time.minutes.ago ? 'label.yes' : 'label.no' %>
+        </td>
         <td class="visible-lg"><%= l user.last_access, :format => :short if user.last_access %></td>
         <td class="visible-lg"><%= user.failed_attempts %></td>
         <td><%= link_to_show user %></td>
@@ -41,8 +43,13 @@
   </tbody>
 </table>
 
-<%= pagination_links @users %>
+<hr />
 
-<%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %>
-<%= link_to t('label.download'), export_to_pdf_users_path(
-  :search => params[:search], :_ts => Time.now.to_i), class: 'btn btn-default' %>
+<div>
+  <div class="pull-right">
+    <%= pagination_links @users %>
+  </div>
+  <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
+  <%= link_to t('label.download'), export_to_pdf_users_path(
+    :search => params[:search], :_ts => Time.now.to_i) %>
+</div>

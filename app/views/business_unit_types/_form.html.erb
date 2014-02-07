@@ -9,11 +9,12 @@
         <%= f.input :project_label, input_html: { maxlength: 255 } %>
         <%= f.input :external, label: false, inline_label: true %>
 
-        <h3><%= BusinessUnit.model_name.human %></h3>
+        <hr />
+        <h5><strong><%= BusinessUnit.model_name.human %></strong></h5>
 
         <div id="business_units">
           <%= f.simple_fields_for :business_units do |bu_f| %>
-            <%= render partial: 'business_unit', locals: { f: bu_f } %>
+            <%= render 'business_unit', f: bu_f %>
           <% end %>
 
           <%= link_to_add_fields(
