@@ -10,7 +10,7 @@
 } %>
 
 <table class="table table-condensed table-striped">
-  <thead>
+  <thead id="column_headers">
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>
       <%= make_not_available_column ErrorRecord.human_attribute_name(:created_at) %>

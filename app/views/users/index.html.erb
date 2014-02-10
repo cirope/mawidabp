@@ -3,7 +3,7 @@
   :columns => @query.blank? ? User::COLUMNS_FOR_SEARCH.keys : @columns
 } %>
 <table class="table table-condensed table-striped">
-  <thead>
+  <thead id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column User.human_attribute_name(:user), nil, 'user' %>
