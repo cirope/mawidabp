@@ -1,5 +1,5 @@
 <% url = url_for({ action: action }.merge(extra_params)) %>
-<div class="panel panel-default">
+<div id="filter_box" class="panel panel-default">
   <div class="panel-body">
     <%= simple_form_for action, url: url, html: { method: :get, class: 'form-horizontal form-inline' } do |f| %>
       <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>

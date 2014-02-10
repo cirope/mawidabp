@@ -52,7 +52,7 @@ SimpleForm.setup do |config|
     b.use :label
     b.wrapper tag: 'div', class: 'controls' do |input|
       input.wrapper tag: 'div', class: 'input-append' do |append|
-      append.use :input
+        append.use :input
       end
       input.use :hint, wrap_with: { tag: 'span', class: 'help-block' }
       input.use :error, wrap_with: { tag: 'span', class: 'help-block' }

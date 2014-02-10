@@ -42,3 +42,16 @@ body {
 .submenu {
   margin-bottom: 15px;
 }
+
+table th.disabled {
+  color: #7b7b7b;
+}
+
+table th.filterable {
+  cursor: default;
+}
+
+table th.not_available {
+  text-decoration: line-through;
+  color: #888;
+}
