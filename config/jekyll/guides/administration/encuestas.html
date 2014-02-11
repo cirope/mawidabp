@@ -1,0 +1,64 @@
+---
+title: Encuestas
+layout: articles
+category: administration
+guide: false
+order: 4
+---
+
+<h3>Encuestas</h3>
+
+<p>
+  En esta sección puede enviar Encuestas a los usuarios del sistema. Para ello primero
+  debe:
+</p>
+
+<div class="media">
+  <span class="badge pull-left">1</span>
+  <div class="media-body">
+    <p>Crear un cuestionario:
+      Debe definir un conjunto de preguntas y el tipo de las mismas. También debemos definir el
+      texto que va a ser incluído en el correo que va a ser enviado para que el destinatario
+      pueda ingresar a contestar su encuesta. Si es necesario puede incluír una asociación a una
+      clase ‘encuestable’ para seleccionar el envío de este cuestionario por ejemplo cuando se
+      notifica un informe definitivo. Los campos a completar son:
+      <ul>
+        <li>Nombre: nombre del cuestionario</li>
+        <li>Asunto email: asunto del correo que va a recibir el encuestado</li>
+        <li>Link email: texto del enlace hacia la encuesta</li>
+        <li>Texto email: cuerpo del correo</li>
+        <li>Aclaración email: texto que consiste en una explicación del motivo de recepción del
+          correo</li>
+        <li>Clase encuestable: en caso de querer asociar la encuesta a alguna clase por ejemplo
+          Informe Definitivo se deberá seleccionar la misma de una lista desplegable</li>
+        <li>Preguntas: se debe ingresar el texto junto con el tipo de pregunta. Existen dos tipos
+          de preguntas:</li>
+          <ul>
+            <li>Preguntas abiertas</li>
+            <li>Preguntas múltiple opción</li>
+          </ul>
+      </ul>
+    </p>
+  </div>
+</div>
+
+<div class="media">
+  <span class="badge pull-left">2</span>
+  <div class="media-body">
+    <p>Proceder al envío de la encuesta completando los siguientes campos:
+      <ol>
+        <li>Usuario: es el destinatario de la encuesta</li>
+        <li>Cuestionario: es el conjunto de preguntas definidas anteriormente</li>
+      </ol>
+    </p>
+  </div>
+</div>
+
+<br />
+
+<p class="text-muted">
+  <span class="label label-default">Nota</span>
+  También puede realizar envíos masivos de encuestas a clientes mediante ‘Importar
+  clientes CSV’, para lo que debe seleccionar el cuestionario a responder y el archivo
+  CSV con los clientes que van a ser encuestados
+</p>
