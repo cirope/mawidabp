@@ -30,8 +30,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @polls %>
+<hr />
 
-<%= link_to t('label.new'), new_poll_path, class: 'btn btn-primary' %>
-<%= link_to t('poll.import_csv_customers_title'),
-  import_csv_customers_polls_path, class: 'btn btn-default' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @polls %></div>
+  <%= link_to t('label.new'), new_poll_path, class: 'btn btn-primary' %>
+  <%= link_to t('poll.import_csv_customers_title'),
+    import_csv_customers_polls_path, class: 'btn btn-default' %>
+</div>

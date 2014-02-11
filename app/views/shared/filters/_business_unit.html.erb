@@ -1,32 +1,21 @@
 <div id="business_unit_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div>
-    <table class="generic_filter">
-      <tbody>
-        <tr>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% selected = params[action] ?
-                params[action][:business_unit_type] : nil %>
-              <%= f.label :business_unit_type, BusinessUnitType.model_name.human,
-                :class => :inline %>
-              <%= f.select :business_unit_type,
-                BusinessUnitType.list.map { |but| [but.name, but.id.to_s] },
-                {:include_blank => t('helpers.select.prompt'), :selected => selected},
-                {:class => :inline_item} %>
-            </p>
-          </td>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% business_unit_filter = params[action] ?
-                params[action][:business_unit] : nil %>
-              <%= f.label :business_unit, BusinessUnit.model_name.human,
-                :class => :inline %>
-              <%= f.text_field :business_unit, :value => business_unit_filter,
-                :maxlength => 3072, :size => nil, :class => :inline_item %>
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-md-6">
+      <% selected = params[action] ? params[action][:business_unit_type] : nil %>
+      <%= f.label BusinessUnitType.model_name.human, required: false, class: 'col-md-3' %>
+      <div class="col-md-9">
+        <%= f.input :business_unit_type, collection: BusinessUnitType.list, label: false,
+          label_method: :name, value_method: :id, include_blank: t('helpers.select.prompt'),
+          selected: selected %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <% business_unit_filter = params[action] ? params[action][:business_unit] : nil %>
+      <%= f.label BusinessUnit.model_name.human, required: false, class: 'col-md-3' %>
+      <div class="col-md-9">
+        <%= f.input :business_unit, label: false,
+          input_html: { value: business_unit_filter, maxlength: 3072 } %>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,10 +1,10 @@
 <p>
-  <b><%= raw(ResourceClass.human_attribute_name(:name) +
-      show_inline_help_for(:resource_class_name)) %>:</b>
+  <strong><%= raw(ResourceClass.human_attribute_name(:name) +
+      show_inline_help_for(:resource_class_name)) %>:</strong>
   <%= @resource_class.name %>
 </p>
 
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-bordered">
   <thead>
     <tr>
       <th><%= Resource.human_attribute_name :name %></th>
@@ -23,8 +23,8 @@
   </tbody>
 </table>
 
-<div id="links">
-  <%= link_to t('label.edit'), edit_resource_class_path(@resource_class) %> |
-  <%= link_to t('label.list'), resource_classes_path %> |
-  <%= link_to_back %>
-</div>
+<hr />
+
+<%= link_to_edit edit_resource_class_path(@resource_class) %> |
+<%= link_to t('label.list'), resource_classes_path %> |
+<%= link_to_back %>

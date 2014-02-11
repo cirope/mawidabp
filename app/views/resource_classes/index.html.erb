@@ -19,6 +19,9 @@
   </tbody>
 </table>
 
-<%= pagination_links @resource_classes %>
+<hr />
 
-<%= link_to t('label.new'), new_resource_class_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @resource_classes %></div>
+  <%= link_to t('label.new'), new_resource_class_path, class: 'btn btn-primary' %>
+</div>

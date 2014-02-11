@@ -35,11 +35,15 @@
   </tbody>
 </table>
 
-<%= pagination_links @oportunities %>
+<hr />
 
-<% if params[:control_objective].to_i > 0 %>
-  <%= link_to t('label.new'), new_oportunity_path(
-    :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
-<% end %>
+<div class="form-footer">
+  <div class="pull-right">
+    <%= pagination_links @oportunities %>
+  </div>
 
-<div class="clearfix form-footer"></div>
+  <% if params[:control_objective].to_i > 0 %>
+    <%= link_to t('label.new'), new_oportunity_path(
+      :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
+  <% end %>
+</div>

@@ -3,37 +3,41 @@
 <% columns_for_sort = options[:columns_for_sort] || [] %>
 <% query_string = params[:search] ? params[:search][:query] : nil %>
 <% order_field = params[:search] ? params[:search][:order] : nil %>
-<div id="search" class="panel panel-default" <%== "style='display: none;'" if (@query.blank? && @order_by.blank?) %>>
-  <div class="panel-body">
-    <%= simple_form_for url, html: { method: :get, class: 'form-inline' } do |f| %>
-      <%= f.input 'search_query', label: false, input_html: {
-        value: query_string, id: 'search_query', name: 'search[query]', maxlength: 100 } %>
-      <div id="search_column_names" class="hidden">
-        <% columns.each do |column| %>
-          <%= f.input 'search[columns]', as: :hidden, input_html: {
-            value: column, name: 'search[columns][]', id: "search_column_#{column}" } %>
-        <% end %>
-      </div>
-
-      <% unless columns_for_sort.empty? %>
-        <%= f.input 'search_order', label: false, collection: columns_for_sort,
-          label_method: ->(cols){ cols.last[:name] }, value_method: :first,
-          prompt: t('message.sort_by'), selected: order_field,
-          input_html: { id: 'search_order', name: 'search[order]' } %>
-      <% end %>
-
-      <%= f.submit t('label.search'), class: 'btn btn-sm btn-default' %> |
-      <%= link_to t('label.cancel'), url %>
-
-      <% unless extra_parameters.empty? %>
-        <div class="hidden">
-          <% extra_parameters.each do |parameter_name, parameter_value| %>
-            <%= hidden_field_tag parameter_name, parameter_value %>
+<div id="search" <%== "style='display: none;'" if (@query.blank? && @order_by.blank?) %>>
+  <%= simple_form_for url, html: { method: :get } do |f| %>
+    <div class="row">
+      <div class="<%= columns_for_sort.empty? ? 'col-md-10' : 'col-md-7' %>">
+        <%= f.input 'search_query', label: false, input_html: {
+          value: query_string, id: 'search_query', name: 'search[query]', maxlength: 100 } %>
+        <div id="search_column_names" class="hidden">
+          <% columns.each do |column| %>
+            <%= f.input 'search[columns]', as: :hidden, input_html: {
+              value: column, name: 'search[columns][]', id: "search_column_#{column}" } %>
           <% end %>
         </div>
+      </div>
+      <% unless columns_for_sort.empty? %>
+        <div class="col-md-3">
+          <%= f.input 'search_order', label: false, collection: columns_for_sort,
+            label_method: ->(cols){ cols.last[:name] }, value_method: :first,
+            prompt: t('message.sort_by'), selected: order_field,
+            input_html: { id: 'search_order', name: 'search[order]' } %>
+        </div>
       <% end %>
+      <div class="col-md-2">
+        <%= f.submit t('label.search'), class: 'btn btn-default' %> |
+        <%= link_to t('label.cancel'), url %>
+      </div>
+    </div>
+
+    <% unless extra_parameters.empty? %>
+      <div class="hidden">
+        <% extra_parameters.each do |parameter_name, parameter_value| %>
+          <%= hidden_field_tag parameter_name, parameter_value %>
+        <% end %>
+      </div>
     <% end %>
-  </div>
+  <% end %>
 </div>
 <% unless @query.blank? && @order_by.blank? %>
   <% content_for :js_extra_bottom do %>

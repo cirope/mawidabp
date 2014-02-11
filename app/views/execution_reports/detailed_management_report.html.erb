@@ -3,29 +3,33 @@
   :forms => {:date_range => {:avoid_inline_help => true}}} %>
 
 <% @audits_by_period.each do |audit_by_period| %>
-  <h1 class="simple_title with_border_bottom">
-    <strong><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></strong>
-  </h1>
+  <div class="page-header">
+    <h3>
+      <strong><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></strong>
+    </h3>
+  </div>
   <% audit_by_period[:audits_by_business_unit].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
-      <h1 class="center_title">
+      <h2 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
-      </h1>
+      </h2>
       <% @internal_title_showed = true %>
     <% elsif data[:external] && !@external_title_showed %>
-      <h1 class="center_title">
+      <h2 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
-      </h1>
+      </h2>
       <% @external_title_showed = true %>
     <% end %>
-    <h1 style="margin: 1em;"><%= data[:name] %></h1>
+    <div class="page-header">
+      <h3><%= data[:name] %></h3>
+    </div>
     <% unless data[:column_data].blank? %>
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
             <% @column_order.each do |col_name| %>
               <% column = data[:columns][col_name] %>
-              <th style="width: <%= "#{column.last}%" %>;"><%= column.first %></th>
+              <th><%= column.first %></th>
             <% end %>
           </tr>
         </thead>
@@ -34,33 +38,34 @@
             <tr>
               <% @column_order.each_index do |i| %>
                 <td><%= row[i].kind_of?(Array) ?
-                  array_to_ul(row[i], :class => :raw_list) :
-                  row[i] %></td>
+                  array_to_ul(row[i], class: 'list-unstyled') : row[i] %></td>
               <% end %>
             </tr>
           <% end %>
         </tbody>
       </table>
     <% else %>
-      <p style="margin: 1em;">
+      <p>
         <em><%= t 'execution_reports.detailed_management_report.without_audits_in_the_period' %></em>
       </p>
     <% end %>
   <% end %>
 <% end %>
 <% if @audits_by_period.empty? %>
-  <p style="margin: 2em 1em; font-size: 1.2em;">
+  <p style="margin: 2em 1em;">
     <em><%= t 'execution_reports.detailed_management_report.without_audits_in_the_interval' %></em>
   </p>
 <% end %>
 
-<div style="margin: 1em;">
+<div>
   <%= simple_format (@sqm ? t('execution_reports.detailed_management_report.sqm_references') :
-    t('execution_reports.detailed_management_report.references', 
+    t('execution_reports.detailed_management_report.references',
     :risk_types => @risk_levels.map { |r| r = t("risk_types.#{r}") }.to_sentence)) %>
 </div>
 
-<div id="links">
+<hr />
+
+<div class="form-footer">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
     "Helper.showItem('#customize_report_form'); return false;" %>

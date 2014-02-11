@@ -1,26 +1,24 @@
-<div id="showed_data">
-  <p>
-    <b><%= EMail.human_attribute_name 'to' %>:</b>
-    <%= @email.to %>
-  </p>
+<p>
+  <strong><%= EMail.human_attribute_name 'to' %>:</strong>
+  <%= @email.to %>
+</p>
 
-  <p>
-    <b><%= EMail.human_attribute_name 'subject' %>:</b>
-    <%= @email.subject %>
-  </p>
+<p>
+  <strong><%= EMail.human_attribute_name 'subject' %>:</strong>
+  <%= @email.subject %>
+</p>
 
-  <p>
-    <b><%= EMail.human_attribute_name 'body' %>:</b>
-    <%= raw @email.body %>
-  </p>
+<p>
+  <strong><%= EMail.human_attribute_name 'body' %>:</strong>
+  <%= raw @email.body %>
+</p>
 
-  <p>
-    <b><%= EMail.human_attribute_name 'attachments' %>:</b>
-    <%= @email.attachments %>
-  </p>
-</div>
+<p>
+  <strong><%= EMail.human_attribute_name 'attachments' %>:</strong>
+  <%= @email.attachments %>
+</p>
 
-<div id="links">
-  <%= link_to t('label.list'), e_mails_path %> |
-  <%= link_to_back %>
-</div>
+<hr />
+
+<%= link_to t('label.list'), e_mails_path %> |
+<%= link_to_back %>

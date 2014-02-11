@@ -4,23 +4,17 @@
     <div class="row">
       <div class="col-md-1">
         <div class="row">
-          <div class="col-md-2">
-            <div class="show_hide">
-              <%= show_plan_item_info(f.object) %>
-            </div>
+          <div class="col-md-1">
+            <%= show_plan_item_info(f.object) %>
           </div>
-          <div class="col-md-2">
-            <div class="show_hide">
-              <%= link_to_show_hide "resource_utilizations_for_#{id}",
-                t('plan.show_resource_utilization'),
-                t('plan.hide_resource_utilization')
-              %>
-            </div>
+          <div class="col-md-1">
+            <%= link_to_show_hide "resource_utilizations_for_#{id}",
+              t('plan.show_resource_utilization'),
+              t('plan.hide_resource_utilization') %>
           </div>
-          <div class="col-md-6 col-md-offset-2">
+          <div class="col-md-4">
             <%= f.input :order_number, as: :string, label: false,
-              input_html: { class: 'sort_number', readonly: true }
-            %>
+              input_html: { class: 'sort_number', readonly: true } %>
           </div>
         </div>
       </div>
@@ -30,20 +24,17 @@
             name: 'plan_item[business_unit_data]', id: "plan_item_business_unit_#{id}",
             class: 'autocomplete_field', title: t('label.search'),
             autofocus: true, data: {
-              'autocomplete-params' => ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
-              'autocomplete-url' => auto_complete_for_business_unit_business_unit_id_plans_path,
-              'autocomplete-id-target' => "#hidden_business_unit_id_#{id}"
+              autocomplete_params: ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
+              autocomplete_url: auto_complete_for_business_unit_business_unit_id_plans_path,
+              autocomplete_id_target: "#hidden_business_unit_id_#{id}"
             }
           } %>
-          <%= f.input :business_unit_id, as: :hidden, input_html: {
-            value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}",
-            class: 'autocomplete_id' } %>
         <% else %>
           <%= f.input "plan_item_business_unit_#{id}", label: false, input_html: {
             value: f.object.business_unit.name, disabled: true } %>
-          <%= f.input :business_unit_id, as: :hidden, input_html: {
-            value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
         <% end %>
+        <%= f.input :business_unit_id, as: :hidden, input_html: {
+          value: f.object.business_unit_id, id: "hidden_business_unit_id_#{id}" } %>
       </div>
       <div class="col-md-2">
         <%= f.input :project, label: false, input_html: { maxlength: 255 } %>

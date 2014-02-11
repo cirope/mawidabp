@@ -18,6 +18,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @questionnaires %>
+<hr />
 
-<%= link_to t('label.new'), new_questionnaire_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right">
+    <%= pagination_links @questionnaires %>
+  </div>
+  <%= link_to t('label.new'), new_questionnaire_path, class: 'btn btn-primary' %>
+</div>

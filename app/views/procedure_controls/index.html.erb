@@ -23,6 +23,9 @@
   </tbody>
 </table>
 
-<%= pagination_links @procedure_controls %>
+<hr />
 
-<%= link_to t('label.new'), new_procedure_control_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @procedure_controls %></div>
+  <%= link_to t('label.new'), new_procedure_control_path, class: 'btn btn-primary' %>
+</div>

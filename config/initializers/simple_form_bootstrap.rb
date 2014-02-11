@@ -15,7 +15,7 @@ inputs.each do |input_type|
 
   new_class = Class.new(superclass) do
     def input_html_classes
-      super.push('form-control input-sm')
+      super.push('form-control')
     end
   end
 

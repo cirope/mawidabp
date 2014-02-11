@@ -2,29 +2,28 @@
   <%= f.error_messages %>
 
   <% unless params[:business_unit_type].blank? %>
-    <%= show_plan_business_unit_type_info %>
+    <div class="page-header">
+      <%= show_plan_business_unit_type_info %>
+    </div>
   <% end %>
 
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
-        <div class="col-md-8">
-          <% if @plan.new_record? %>
-            <%= f.association :period, collection: Period.list_all_without_plans,
-              label_method: :inspect, value_method: :id, prompt: true,
-              label: Plan.human_attribute_name('period_id'), input_html: { autofocus: true }
-            %>
-          <% else %>
-            <%= f.input :period_id, as: :hidden %>
-            <%= f.input :period, label: Plan.human_attribute_name('period_id'), input_html: {
-              value: @plan.period.try(:inspect), readonly: true
-            } %>
-          <% end %>
-        </div>
+      <div class="col-md-5">
+        <% if @plan.new_record? %>
+          <%= f.association :period, collection: Period.list_all_without_plans,
+            label_method: :inspect, value_method: :id, prompt: true,
+            label: Plan.human_attribute_name('period_id'), input_html: { autofocus: true }
+          %>
+        <% else %>
+          <%= f.input :period_id, as: :hidden %>
+          <%= f.input :period, label: Plan.human_attribute_name('period_id'), input_html: {
+            value: @plan.period.try(:inspect), readonly: true
+          } %>
+        <% end %>
       </div>
-      <div class="col-md-6">
-        <br />
-        <div class="well well-sm">
+      <div class="col-md-5 col-md-offset-2">
+        <div class="alert alert-warning">
           <%= Plan.human_attribute_name :estimated_amount %>:
           <strong>
             <%= t('number.currency.format.unit') %>
@@ -33,8 +32,8 @@
             </span>
           </strong>
           <% unless params[:business_unit_type].blank? %>
-            <%= link_to t('plan.calculate_estimated_amount'), '#', :onclick =>
-              "calculateEstimatedAmount(); return false;", :style => 'margin-left: .5em;' %>
+            <%= link_to t('plan.calculate_estimated_amount'), '#', onclick:
+              "calculateEstimatedAmount(); return false;", style: 'margin-left: .5em;' %>
           <% end %>
         </div>
       </div>
@@ -44,6 +43,7 @@
   <% if params[:business_unit_type].blank? %>
     <%= show_plan_business_unit_type_list %>
   <% else %>
+    <hr />
     <div class="row">
       <div class="col-md-3 col-md-offset-1">
         <h5><strong><%= raw(BusinessUnit.model_name.human +

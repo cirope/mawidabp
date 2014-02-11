@@ -255,7 +255,7 @@ module ApplicationHelper
   # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
   def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
-    out = content_tag(:div,
+    out = content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
@@ -263,7 +263,7 @@ module ApplicationHelper
       :id => "show_element_#{element_id}_content",
       :style => (displayed ? 'display: none' : nil)
     )
-    out << content_tag(:div,
+    out << content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-down'),
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"

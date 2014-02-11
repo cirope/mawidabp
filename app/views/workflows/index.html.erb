@@ -27,6 +27,9 @@
   </tbody>
 </table>
 
-<%= pagination_links @workflows %>
+<hr />
 
-<%= link_to t('label.new'), new_workflow_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @workflows %></div>
+  <%= link_to t('label.new'), new_workflow_path, class: 'btn btn-primary' %>
+</div>

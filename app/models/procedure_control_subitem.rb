@@ -81,7 +81,10 @@ class ProcedureControlSubitem < ActiveRecord::Base
   def relevance_text(show_value = false)
     relevance = self.class.relevances.detect { |r| r.last == self.relevance }
 
-    relevance ? (show_value ? "#{relevance.first} (#{relevance.last})" :
-        relevance.first) : ''
+    if relevance
+      text = I18n.t("relevance_types.#{relevance.first}")
+
+      return show_value ? [text, "(#{relevance.last})"].join(' ') : text
+    end
   end
 end
