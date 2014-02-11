@@ -1,0 +1,142 @@
+---
+title: Transición de estados
+layout: articles
+category: findings
+guide: false
+order: 3
+---
+
+<h3>Transición de estados</h3>
+
+<p>Al crear un hallazgo el mismo debe tener alguno de los siguientes
+  estados:
+</p>
+
+<br />
+
+<table class="table table-hover">
+  <th>Estado</th>
+  <th>Descripción</th>
+  <th>Válido en Informe Borrador</th>
+  <tr>
+    <td>Incompleto</td>
+    <td>Permite al auditor definir el hallazgo sin que el auditado pueda verlo</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Notificar</td>
+    <td>En forma diaria (a las 20:00 hs) el sistema envía un correo con los datos
+      de los hallazgos a todos los involucrados. El auditado puede tener acceso, en
+      el momento que se le asigna este estado</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>En proceso de implementación</td>
+    <td>El hallazgo está siendo solucionado por el auditado</td>
+    <td>Si</td>
+  </tr>
+  <tr>
+    <td>Implementado</td>
+    <td>El hallazgo fue solucionado por el auditado, pero el auditor aún no lo ha
+    verificado</td>
+    <td>Si</td>
+  </tr>
+  <tr>
+    <td>Implementado/Auditado</td>
+    <td>El auditor ha verificado la solución del hallazgo</td>
+    <td>Si</td>
+  </tr>
+  <tr>
+    <td>Riesgo asumido</td>
+    <td>Hallazgo que no es factible de solucionarse por algún motivo</td>
+    <td>Si</td>
+  </tr>
+  <tr>
+    <td>Anulado</td>
+    <td>Hallazgo que se da de baja y no forma parte del informe definitivo</td>
+    <td>Si</td>
+  </tr>
+</table>
+
+<br />
+
+<p>Cuando se notifica al usuario por email (estado Notificar) el sistema cambiará
+  el estado del hallazgo automáticamente a:
+</p>
+
+<br />
+
+<table class="table table-hover">
+  <th>Estado</th>
+  <th>Descripción</th>
+  <th>Cambio según evento</th>
+  <tr>
+    <td>No confirmado</td>
+    <td>El auditado aún no ha confirmado la recepción del mismo (desde el correo
+    electrónico o escribiendo un comentario en “Comentarios de seguimiento”).</td>
+    <td>Confirmado</td>
+  </tr>
+  <tr>
+    <td>Confirmado</td>
+    <td>El auditado ha confirmado la recepción del mismo</td>
+    <td>Sin respuesta: el auditado no ha emitido comentario alguno, dentro del
+     periodo establecido en “Fechas a considerar”</td>
+  </tr>
+</table>
+
+<p class="text-muted">
+  <span class="label label-default">Nota</span>
+  Desde el estado <strong>Confirmado</strong>, un usuario <strong>auditor</strong>
+  puede cambiarle el estado a cualquiera de los válidos
+</p>
+
+<br />
+
+<p>Una vez definido el estado del hallazgo, las transiciones válidas son las
+  siguientes:
+</p>
+
+<br />
+
+<table class="table table-hover">
+  <th>Descripción</th>
+  <th>Cambio según evento</th>
+  <tr>
+    <td>Incompleto</td>
+    <td>Notificar | En proceso de Implementación | Implementado | Implementado/Auditado
+      | Riesgo asumido | Anulado</td>
+  </tr>
+  <tr>
+    <td>En proceso de implementación</td>
+    <td>Implementado | Implementado/Auditado | Riesgo asumido | Anulado</td>
+  </tr>
+  <tr>
+    <td>Implementado</td>
+    <td>Implementado/Auditado | Riesgo asumido | Anulado</td>
+  </tr>
+  <tr>
+    <td>Implementado/Auditado</td>
+    <td>Anulado</td>
+  </tr>
+  <tr>
+    <td>Riesgo ausumido</td>
+    <td>Anulado</td>
+  </tr>
+  <tr>
+    <td>Notificar</td>
+    <td>No confirmado | Anulado</td>
+  </tr>
+  <tr>
+    <td>No confirmado</td>
+    <td>Confirmado | Anulado</td>
+  </tr>
+  <tr>
+    <td>Confirmado</td>
+    <td>Sin respuesta | Anulado</td>
+  </tr>
+  <tr>
+    <td>Sin respuesta</td>
+    <td>En proceso de Implementación | Implementado | Implementado/Auditado
+      | Riesgo asumido | Anulado</td>
+  </tr>
+</table>
