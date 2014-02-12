@@ -6,9 +6,7 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3>
-      <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
-    </h3>
+    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
   </div>
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>

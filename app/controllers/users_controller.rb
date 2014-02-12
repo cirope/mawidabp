@@ -235,12 +235,11 @@ class UsersController < ApplicationController
   def edit_password
     @title = t 'user.change_password_title'
 
-    unless params[:confirmation_hash].blank?
-      @auth_user = User.with_valid_confirmation_hash(
-        params[:confirmation_hash]).first
-      @current_organization = @auth_user.organizations.first if @auth_user
-    else
+    if params[:confirmation_hash].blank?
       login_check
+    else
+      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).first
+      @current_organization = @auth_user.organizations.first if @auth_user
     end
 
     unless @auth_user
