@@ -6,13 +6,11 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><%= "#{Period.model_name.human}: #{period.inspect}" %></h3>
+    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
   </div>
   <% unless @selected_business_unit %>
     <p class="lead">
-      <strong>
-        <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
-      </strong>
+      <%= synthesis_report_organization_score_average(@audits_by_business_unit[period]) %>
     </p>
     <p>
       <%= t('conclusion_committee_report.synthesis_report.organization_score_note',
@@ -22,19 +20,17 @@
 
   <% @audits_by_business_unit[period].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
-      <h1 class="text-center">
+      <h2 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
-      </h1>
+      </h2>
       <% @internal_title_showed = true %>
     <% elsif data[:external] && !@external_title_showed %>
-      <h1 class="text-center">
+      <h2 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
-      </h1>
+      </h2>
       <% @external_title_showed = true %>
     <% end %>
-    <div class="page-header">
-      <h3><%= data[:name] %></h3>
-    </div>
+    <h3><%= data[:name] %></h3>
     <% unless data[:column_data].blank? %>
       <table class="table table-condensed table-striped">
         <thead>
@@ -48,7 +44,8 @@
           <% data[:column_data].each do |row| %>
             <tr>
               <% @column_order.each_index do |i| %>
-                <td><%= row[i].kind_of?(Array) ? array_to_ul(row[i]) : row[i] %></td>
+                <td><%= row[i].kind_of?(Array) ?
+                  array_to_ul(row[i], class: 'list-unstyled') : row[i] %></td>
               <% end %>
             </tr>
           <% end %>
@@ -62,7 +59,7 @@
            data[:review_scores]) %>
       </p>
     <% else %>
-      <p>
+      <p style="margin: 1em;">
         <em><%= t 'conclusion_committee_report.synthesis_report.without_audits_in_the_period' %></em>
       </p>
     <% end %>

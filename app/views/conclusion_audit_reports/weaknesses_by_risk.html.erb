@@ -5,14 +5,14 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><%= "#{Period.model_name.human}: #{period.inspect}" %></h3>
+    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
   </div>
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>
     <% unless audit_type.last.empty? %>
-      <h1 class="text-center">
+      <h2 class="text-center">
         <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
-      </h1>
+      </h2>
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
         <h3><%= audit_types.first %></h3>
@@ -22,10 +22,10 @@
     <% end %>
   <% end %>
 
-  <h1 class="text-center">
+  <h2 class="text-center">
     <%= t('conclusion_committee_report.weaknesses_by_risk.period_summary',
       :period => period.inspect) %>
-  </h1>
+  </h2>
   <%= render :partial => 'weaknesses_synthesis_table', :locals => {
     :table_data => @tables_data[period]['total']} %>
 <% end %>

@@ -4,9 +4,9 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
-  </h1>
+  <div class="page-header">
+    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+  </div>
   <% unless @total_cost_data[period].blank? %>
     <table class="table table-condensed table-striped">
       <thead>
@@ -36,7 +36,7 @@
 
   <% unless @detailed_data[period].blank? %>
     <% @detailed_data[period].each do |detailed_data| %>
-      <h2 style="margin: 1em 0em;"><%= detailed_data[:review] %></h2>
+      <h3><%= detailed_data[:review] %></h3>
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
@@ -61,7 +61,9 @@
   <% end %>
 <% end %>
 
-<div id="links">
+<hr />
+
+<div class="form-footer">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
     "Helper.showItem('#customize_report_form'); return false;" %>

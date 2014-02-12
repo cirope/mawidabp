@@ -37,6 +37,9 @@
   </tbody>
 </table>
 
-<%= pagination_links @conclusion_draft_reviews %>
+<hr />
 
-<%= link_to t('label.new'), new_conclusion_draft_review_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @conclusion_draft_reviews %></div>
+  <%= link_to t('label.new'), new_conclusion_draft_review_path, class: 'btn btn-primary' %>
+</div>

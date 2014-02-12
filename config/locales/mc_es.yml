@@ -42,7 +42,7 @@ mc_es:
     search: "Buscar"
     send: "Enviar"
     show: "Ver"
-    show_downloads: "Ver descargas &#x25BC;"
+    show_downloads: "Ver descargas"
     update: "Actualizar"
     without_data: "Sin datos"
 

@@ -28,7 +28,7 @@
         <td class="visible-lg"><%= super_truncate(conclusion_final_review.review.plan_item.project, 30) %></td>
         <td class="visible-lg"><%= l(conclusion_final_review.issue_date, :format => :short) if conclusion_final_review.issue_date %></td>
         <td class="visible-lg"><%= l(conclusion_final_review.close_date, :format => :short) if conclusion_final_review.close_date %></td>
-        <td class="expendable"><%= conclusion_final_review.review.score.to_s + '%' %>
+        <td class="visible-lg"><%= conclusion_final_review.review.score.to_s + '%' %>
         <td><%= link_to_show conclusion_final_review %></td>
         <td><%= link_to_edit edit_conclusion_final_review_path(conclusion_final_review) %></td>
       </tr>
@@ -36,8 +36,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @conclusion_final_reviews %>
+<hr />
 
-<%= link_to t('label.new'), new_conclusion_final_review_path, class: 'btn btn-primary' %>
-<%= link_to t('label.download'), export_list_to_pdf_conclusion_final_reviews_path(
-  :search => params[:search], :_ts => Time.now.to_i), class: 'btn btn-default' %>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @conclusion_final_reviews %></div>
+  <%= link_to t('label.new'), new_conclusion_final_review_path, class: 'btn btn-primary' %> |
+  <%= link_to t('label.download'), export_list_to_pdf_conclusion_final_reviews_path(
+    :search => params[:search], :_ts => Time.now.to_i) %>
+</div>

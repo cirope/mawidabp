@@ -35,11 +35,12 @@
   </tbody>
 </table>
 
-<%= pagination_links @potential_nonconformities %>
+<hr />
 
-<% if params[:control_objective].to_i > 0 %>
-  <%= link_to t('label.new'), new_potential_nonconformity_path(
-    :control_objective_item => params[:control_objective]) %>
-<% end %>
-
-<div class="clearfix form-footer"></div>
+<div class="form-footer">
+  <div class="pull-right"><%= pagination_links @potential_nonconformities %></div>
+  <% if params[:control_objective].to_i > 0 %>
+    <%= link_to t('label.new'), new_potential_nonconformity_path(
+      :control_objective_item => params[:control_objective]) %>
+  <% end %>
+</div>
