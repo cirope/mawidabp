@@ -1,0 +1,95 @@
+---
+title: Perfiles y privilegios
+layout: articles
+category: administration
+guide: false
+order: 5
+---
+
+<h3>Perfiles y privilegios</h3>
+
+<p>
+  Cada usuario debe tener por lo menos un <strong>Perfil</strong> correspondiente a
+  una determinada <strong>Organización</strong>. Cada Perfil definido en el sistema
+  cuenta con una serie de <strong>Privilegios</strong> (permisos) que determinarán
+  el acceso a determinadas funcionalidades del sistema. Los perfiles definidos en
+  general tienen los siguientes privilegios:
+</p>
+
+<h4>Administración</h4>
+
+<p>Acceso a todas las funcionalidades del sistema.</p>
+
+<h4>Seguridad</h4>
+
+<p>Acceso a administración de organizaciones con sus respectivas unidades de
+   negocio (lectura). Reportes de seguridad y Perfiles y privilegios (lectura).
+   Manejo de usuarios (lectura/escritura). Configuraciones generales del
+   sistema (lectura/escritura/eliminación).
+</p>
+
+<h4>Auditado</h4>
+
+<p>Acceso a hallazgos pendientes y notificaciones (lectura/escritura). Hallazgos
+  solucionados o reiterados (lectura). Debe haber por lo menos un usuario con
+  este perfil en cada uno de los informes de auditoría y en sus respectivos
+  hallazgos.
+</p>
+
+<h4>Auditor</h4>
+
+<p>Acceso a unidades de negocio y usuarios (lectura). Manejo de buenas prácticas
+  (lectura/escritura). Recursos y periodos (lectura). Manejo del plan de
+  auditoría (lectura/escritura). Reportes de Ejecución. Informes de ejecución
+  y programas de trabajo (lectura/escritura). Observaciones, oportunidades de
+  mejora y objetivos de control (lectura/escritura/eliminación). Informe
+  borrador (lectura/escritura/eliminación) e informes definitivos
+  (lectura/escritura). Notificaciones y hallazgos pendientes (lectura/escritura).
+  Hallazgos solucionados o reiterados (lectura). Reportes de auditoría. Debe
+  haber por lo menos un usuario con este perfil en cada uno de los informes de
+  auditoría y en sus respectivos hallazgos.
+</p>
+
+<h4>Supervisor</h4>
+
+<p>Acceso a gestión de organizaciones (lectura/escritura). Unidades de negocio
+  (lectura/escritura/eliminación). Usuarios y correos (lectura). Manejo de buenas
+  prácticas (lectura/escritura/eliminación). Reportes de cuestionarios. Acceso
+  completo a Planificación, Ejecución y Conclusión. Hallazgos pendientes y
+  notificaciones (lectura/escritura). Hallazgos solucionados o reiterados (lectura).
+  Reportes de seguimiento. Debe haber <strong>por lo menos</strong> un usuario con
+  este perfil en cada uno de los informes de auditoría y en sus respectivos
+  hallazgos.
+</p>
+
+<h4>Auditor externo</h4>
+
+<p>Acceso a Informes de Ejecución, observaciones, oportunidades de mejora,
+  objetivos de control (lectura). Informes definitivos (lectura). Hallazgos
+  pendientes (lectura/escritura). Hallazgos solucionados o reiterados y
+  notificaciones (lectura).
+</p>
+
+<h4>Comité</h4>
+
+<p>Acceso a Buenas prácticas (lectura). Reportes de cuestionarios. Planificación (lectura).
+  Informes definitivos (lectura). Reportes de Ejecución, Conclusión y Seguimiento.
+</p>
+
+<h4>Dado de baja</h4>
+
+<p>No cuenta con privilegios en el sistema.</p>
+
+<br />
+
+<p>
+  <span class="label label-default">Notas</span>
+  <ol class="text-muted">
+    <li>Los perfiles y/o privilegios pueden diferir de los detallados anteriormente
+    dependiendo de la organización a la cual correspondan.</li>
+    <li>El privilegio de lectura/escritura para el Seguimiento de Hallazgos pendientes
+    <strong>solo</strong> es aplicable a los hallazgos a los cuales se encuentra
+    relacionado el usuario. <strong>Solo</strong> en el caso del perfil Comité se
+    podrán ver la totalidad de los hallazgos.</li>
+  </ol>
+</p>
