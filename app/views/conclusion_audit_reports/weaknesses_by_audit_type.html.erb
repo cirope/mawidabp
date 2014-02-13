@@ -22,9 +22,7 @@
           <p style="margin-top: 1em;">
             <strong><%= t('actioncontroller.reviews') %></strong>
           </p>
-          <%= array_to_ul(
-            audit_by_type_reviews_array(bu_data[:conclusion_reviews]),
-            class: 'list-unstyled') %>
+          <%= array_to_ul(audit_by_type_reviews_array(bu_data[:conclusion_reviews])) %>
 
           <div style="margin-bottom: 1em;">
             <h3><%= t('conclusion_committee_report.weaknesses_by_audit_type.weaknesses') %></h3>
@@ -52,7 +50,7 @@
                 </table>
               <% else %>
                 <p style="margin: 1em;">
-                  <em><%= t('follow_up_committee.without_oportunities') %></em>
+                  <em><%= t('follow_up_committee_report.without_oportunities') %></em>
                 </p>
               <% end %>
             <% end %>
@@ -61,7 +59,7 @@
       <% end %>
     <% else %>
       <p style="margin: 1em;">
-        <em><%= t('follow_up_committee.without_weaknesses') %></em>
+        <em><%= t('follow_up_committee_report.without_weaknesses') %></em>
       </p>
     <% end %>
   <% end %>

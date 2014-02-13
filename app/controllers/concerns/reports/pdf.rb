@@ -82,7 +82,7 @@ module Reports::Pdf
       statuses.each do |state|
         sub_total_count = weaknesses_count[state.last].sum(&:second)
         percentage_total = 0
-        column_row = {'state' => "<b>#{t("finding.status_#{state.first}")}</b>"}
+        column_row = {'state' => "<strong>#{t("finding.status_#{state.first}")}</strong>"}
 
         risk_levels.each do |rl|
           highest_risk = risk_levels.sort {|r1, r2| r1[1] <=> r2[1]}.last
@@ -110,8 +110,8 @@ module Reports::Pdf
       end
 
       column_row = {
-        'state' => "<b>#{t('follow_up_committee.weaknesses_by_risk.total')}</b>",
-        'count' => "<b>#{total_count}</b>"
+        'state' => "<strong>#{t('follow_up_committee_report.weaknesses_by_risk.total')}</strong>",
+        'count' => "<strong>#{total_count}</b>"
       }
 
       weaknesses_count_by_risk.each do |risk, count|

@@ -134,7 +134,7 @@ module Reports::WeaknessesByRisk
             @highest_being_implemented_resumes[period] ||= {}
             @highest_being_implemented_resumes[period][key] =
               being_implemented_resume_from_counts(highest_being_implemented_counts)
-            
+
             @tables_data[period] ||= {}
             @tables_data[period][key] = get_weaknesses_synthesis_table_data(
               weaknesses_count, weaknesses_count_by_risk, RISK_TYPES)
@@ -207,7 +207,7 @@ module Reports::WeaknessesByRisk
       pdf.move_down PDF_FONT_SIZE
 
       add_weaknesses_synthesis_table(pdf, @tables_data[period]['total'])
-    
+
       add_being_implemented_resume(pdf,
         @being_implemented_resumes[period]['total'])
       add_being_implemented_resume(pdf,

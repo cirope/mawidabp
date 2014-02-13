@@ -58,7 +58,7 @@ module ConclusionCommitteeReportsHelper
         end
       end
 
-      array_to_ul(new_data, class: 'list-unstyled')
+      array_to_ul(new_data)
     else
       data['weaknesses_count']
     end
@@ -75,7 +75,7 @@ module ConclusionCommitteeReportsHelper
         new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
       end
 
-      array_to_ul(new_data, class: 'list-unstyled')
+      array_to_ul(new_data)
     else
       data['weaknesses_count']
     end
