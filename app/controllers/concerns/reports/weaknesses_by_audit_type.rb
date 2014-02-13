@@ -267,7 +267,7 @@ module Reports::WeaknessesByAuditType
                     end
                   end
                 else
-                  pdf.text t('follow_up_committee.without_oportunities'), :style => :italic
+                  pdf.text t('follow_up_committee_report.without_oportunities'), :style => :italic
                 end
               end
               
@@ -280,7 +280,7 @@ module Reports::WeaknessesByAuditType
             end
           end
         else
-          pdf.text t('follow_up_committee.without_weaknesses'), :style => :italic
+          pdf.text t('follow_up_committee_report.without_weaknesses'), :style => :italic
         end
       end
     end

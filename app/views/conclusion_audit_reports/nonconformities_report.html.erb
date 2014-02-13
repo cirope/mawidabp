@@ -5,22 +5,22 @@
 <% @periods.each do |period| %>
   <% unless @notorious_reviews[period].blank? %>
     <div class="page-header">
-      <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+      <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
     </div>
 
     <% @notorious_reviews[period].each do |data| %>
       <% if !data[:external] && !@internal_title_showed %>
-        <h2 class="text-center">
+        <h3 class="text-center">
           <%= t 'conclusion_committee_report.nonconformities_report.internal_audit_nonconformities' %>
-        </h2>
+        </h3>
         <% @internal_title_showed = true %>
       <% elsif data[:external] && !@external_title_showed %>
-        <h2 class="text-center">
+        <h3 class="text-center">
           <%= t 'conclusion_committee_report.nonconformities_report.external_audit_nonconformities' %>
-        </h2>
+        </h3>
         <% @external_title_showed = true %>
       <% end %>
-      <h3><%= data[:name] %></h3>
+      <h4><%= data[:name] %></h4>
       <% unless data[:column_data].blank? %>
         <table class="table table-condensed table-striped">
           <thead>

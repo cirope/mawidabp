@@ -6,18 +6,18 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
   <% @audit_types.each do |audit_type| %>
     <% audit_type_symbol = audit_type.first %>
     <% unless audit_type.last.empty? %>
-      <h2 class="text-center">
+      <h3 class="text-center">
         <%= t "conclusion_committee_report.findings_type_#{audit_type_symbol}" %>
-      </h2>
+      </h3>
 
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
-        <h3><%= audit_types.first %></h3>
+        <h4><%= audit_types.first %></h4>
         <% locals = {
              :weaknesses_count => @weaknesses_counts[period]["#{key}_weaknesses"],
              :oportunities_count => @weaknesses_counts[period]["#{key}_oportunities"],
@@ -34,10 +34,10 @@
     <% end %>
   <% end %>
 
-  <h2 class="text-center">
+  <h3 class="text-center">
     <%= t('conclusion_committee_report.weaknesses_by_state.period_summary',
       :period => period.inspect) %>
-  </h2>
+  </h3>
   <% locals = {
        :weaknesses_count => @weaknesses_counts[period]['total_weaknesses'],
        :oportunities_count => @weaknesses_counts[period]['total_oportunities'],

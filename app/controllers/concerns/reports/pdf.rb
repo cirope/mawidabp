@@ -122,7 +122,7 @@ module Reports::Pdf
 
       {:order => column_order, :data => column_data, :columns => columns}
     else
-      t('follow_up_committee.without_weaknesses')
+      t('follow_up_committee_report.without_weaknesses')
     end
   end
 
