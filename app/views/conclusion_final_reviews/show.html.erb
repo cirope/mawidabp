@@ -4,9 +4,10 @@
     <%= @conclusion_final_review.review.identification %>
   </h2>
 </div>
-<h2><%= @conclusion_final_review.review.plan_item.project %></h2>
-<h3><%= @conclusion_final_review.review.plan_item.business_unit.name %></h3>
+<h3><%= @conclusion_final_review.review.plan_item.project %></h3>
 
+<br />
+<h4><%= @conclusion_final_review.review.plan_item.business_unit.name %></h4>
 <p>
   <strong><%= raw(t('conclusion_review.issue_date_title') +
     show_inline_help_for(:conclusion_review_issue_date)) %></strong>:
@@ -16,14 +17,12 @@
   <strong><%= @conclusion_final_review.review.business_unit.business_unit_type.business_unit_label %></strong>:
   <%= @conclusion_final_review.review.business_unit.name %>
 </p>
-
 <% unless @conclusion_final_review.review.business_unit.business_unit_type.project_label.blank? %>
   <p>
     <strong><%= @conclusion_final_review.review.business_unit.business_unit_type.project_label %></strong>:
     <%= @conclusion_final_review.review.plan_item.project %>
   </p>
 <% end %>
-
 <p>
   <strong><%= t('conclusion_review.audit_period_title') %></strong>:
   <%= t('conclusion_review.audit_period',
@@ -31,7 +30,8 @@
       :end => I18n.l(@conclusion_final_review.review.plan_item.end, :format => :long)) %>
 </p>
 
-<h3><%= t('conclusion_review.objectives_and_scopes') %></h3>
+<br />
+<h4><%= t('conclusion_review.objectives_and_scopes') %></h4>
 <% grouped_control_objectives = @conclusion_final_review.review.grouped_control_objective_items %>
 <% grouped_control_objectives.each do |process_control, cois| %>
   <p>
@@ -46,11 +46,13 @@
 <% end %>
 
 <% unless @conclusion_final_review.applied_procedures.blank? %>
-  <h3><%= t('conclusion_review.applied_procedures') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.applied_procedures') %></h4>
   <p><%= @conclusion_final_review.applied_procedures %></p>
 <% end %>
 
-<h3><%= t('conclusion_review.conclusion') %></h3>
+<br />
+<h4><%= t('conclusion_review.conclusion') %></h4>
 <%= conclusion_review_score_details_table @conclusion_final_review.review %>
 
 <p><small><%= t('review.review_qualification_explanation') %></small></p>
@@ -64,7 +66,8 @@
 end %>
 
 <% if review_has_fortresses %>
-  <h3><%= t('conclusion_review.fortresses') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.fortresses') %></h4>
 
   <table class="table table-condensed table-striped">
     <% grouped_control_objectives.each do |process_control, cois| %>
@@ -78,7 +81,8 @@ end %>
 end %>
 
 <% if review_has_observations %>
-  <h3><%= t('conclusion_review.findings') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.findings') %></h3>
 
   <table class="table table-condensed table-striped">
     <% grouped_control_objectives.each do |process_control, cois| %>
@@ -92,7 +96,8 @@ end %>
 end %>
 
 <% if review_has_nonconformities %>
-  <h3><%= t('conclusion_review.nonconformities') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.nonconformities') %></h4>
 
   <table class="table table-condensed table-striped">
     <% grouped_control_objectives.each do |process_control, cois| %>
@@ -106,7 +111,8 @@ end %>
 end %>
 
 <% if review_has_oportunities %>
-  <h3><%= t('conclusion_review.oportunities') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.oportunities') %></h4>
 
   <table class="table table-condensed table-striped">
     <% grouped_control_objectives.each do |process_control, cois| %>
@@ -120,7 +126,8 @@ end %>
 end %>
 
 <% if review_has_potential_nonconformities %>
-  <h3><%= t('conclusion_review.potential_nonconformities') %></h3>
+  <br />
+  <h4><%= t('conclusion_review.potential_nonconformities') %></h4>
 
   <table class="table table-condensed table-striped">
     <% grouped_control_objectives.each do |process_control, cois| %>

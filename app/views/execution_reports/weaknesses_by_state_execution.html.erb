@@ -4,14 +4,13 @@
 
 <%  @counts.each do |count_data| %>
   <div class="page-header">
-    <h3 class="simple_title with_border_bottom">
-      <strong><%= Period.model_name.human %>: <%= count_data[:period].inspect %></strong>
-    </h3>
+    <h2><%= Period.model_name.human %>: <%= count_data[:period].inspect %></h2>
   </div>
   <% @audit_types.each do |type| %>
-    <h2 class="text-center">
+    <h3 class="text-center">
       <%= t "execution_reports.findings_type_#{type}" %>
-    </h2>
+    </h3>
+    <br />
     <% if count_data[:counts][type] %>
       <% count_data[:counts][type].each do |review, counts| %>
         <% weaknesses_count = counts[:weaknesses] %>
@@ -24,7 +23,7 @@
           <% total_nonconformities = nonconformities_count.values.sum %>
           <% total_potential_nonconformities = potential_nonconformities_count.values.sum %>
         <% end %>
-        <h3><%= "#{Review.model_name.human}: #{review}" %></h3>
+        <h4><%= "#{Review.model_name.human}: #{review}" %></h4>
         <% totals = total_weaknesses + total_oportunities %>
         <% totals+= (total_nonconformities + total_potential_nonconformities) if @sqm %>
         <% unless totals == 0 %>
@@ -85,20 +84,20 @@
             </tbody>
           </table>
         <% else %>
-          <p style="margin: 1em 0;">
+          <p style="margin: 1em;">
             <em><%= t 'execution_reports.without_findings' %></em>
           </p>
         <% end %>
       <% end %>
     <% else %>
-      <p style="margin: 1em 0;">
+      <p style="margin: 1em;">
         <em><%= t 'execution_reports.without_weaknesses' %></em>
       </p>
     <% end %>
   <% end %>
 <% end %>
 <% if @counts.empty? %>
-  <p style="margin: 2em 0;">
+  <p style="margin: 1em;">
     <em><%= t 'execution_reports.without_weaknesses_in_the_interval' %></em>
   </p>
 <% end %>

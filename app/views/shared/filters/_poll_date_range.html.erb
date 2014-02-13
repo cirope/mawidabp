@@ -1,31 +1,29 @@
 <% avoid_inline_help = display[:avoid_inline_help] if display.kind_of?(Hash) %>
 <div id="poll_date_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div>
-    <table class="date_filter">
-      <tbody>
-        <tr>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <%= f.label :from_date, raw(
-                  t('conclusion_committee_report.from_date') +
-                  (show_inline_help_for(:poll_report_from_date) unless avoid_inline_help).to_s
-                ), :class => 'inline' %>
-              <%= calendar_text_field f, :from_date, false, @from_date,
-                :size => nil, :class => 'inline_item' %>
-            </p>
-          </td>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <%= f.label :to_date, raw(
-                  t('conclusion_committee_report.to_date') +
-                  (show_inline_help_for(:poll_report_to_date) unless avoid_inline_help).to_s
-                ), :class => 'inline' %>
-              <%= calendar_text_field f, :to_date, false, @to_date,
-                :size => nil, :class => 'inline_item' %>
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.label :from_date, raw(
+          t('conclusion_committee_report.from_date') +
+          (show_inline_help_for(:poll_report_from_date) unless avoid_inline_help).to_s
+        ), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.text_field :from_date, value: l(@from_date), autocomplete: :off,
+            class: 'form-control', data: { date_picker: true } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.label :to_date, raw(
+          t('conclusion_committee_report.to_date') +
+          (show_inline_help_for(:poll_report_to_date) unless avoid_inline_help).to_s
+        ), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.text_field :to_date, value: l(@to_date), autocomplete: :off,
+            class: 'form-control', data: { date_picker: true } %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

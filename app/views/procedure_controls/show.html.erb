@@ -1,10 +1,10 @@
 <div class="page-header">
-  <h3><%= Period.model_name.human %>: <%= @procedure_control.period.inspect %></h3>
+  <h2><%= Period.model_name.human %>: <%= @procedure_control.period.inspect %></h2>
 </div>
 
 <% @procedure_control.procedure_control_items.each do |pci| %>
   <h4><%= "#{pci.best_practice.name} (#{pci.process_control.name})" %></h4>
-  <table class="table table-condensed table-striped table-bordered">
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
         <th><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></th>

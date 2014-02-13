@@ -49,13 +49,13 @@
 
 <% unless @plan.plan_items.all? { |pi| pi.resource_utilizations.blank? } %>
   <div class="page-header">
-    <h3><%= t('plan.pdf.resource_utilization') %></h3>
+    <h2><%= t('plan.pdf.resource_utilization') %></h2>
   </div>
 
   <% @plan.plan_items.each do |plan_item| %>
     <% unless plan_item.resource_utilizations.blank? %>
       <h4>
-        <strong>(<%= plan_item.order_number %>)</strong> <%= plan_item.project %>
+        (<%= plan_item.order_number %>) <%= plan_item.project %>
         (<%= plan_item.business_unit.try(:name) %>)
       </h4>
       <table class="table table-striped table-condensed">

@@ -1,20 +1,17 @@
 <div class="row">
   <div class="col-md-4">
-    <div class="well well-sm text-center">
-      <%= link_to t('poll.summary_by_questionnaire'),
-        :action => :summary_by_questionnaire %>
-    </div>
+    <%= link_to t('poll.summary_by_questionnaire'),
+      { action: :summary_by_questionnaire },
+      class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-4">
-    <div class="well well-sm text-center">
-      <%= link_to t('poll.summary_by_business_unit'),
-        :action => :summary_by_business_unit %>
-    </div>
+    <%= link_to t('poll.summary_by_business_unit'),
+      { action: :summary_by_business_unit },
+      class: 'btn btn-default btn-lg btn-block' %>
   </div>
   <div class="col-md-4">
-    <div class="well well-sm text-center">
-      <%= link_to t('poll.summary_by_answers'),
-        :action => :summary_by_answers %>
-    </div>
+    <%= link_to t('poll.summary_by_answers'),
+      { action: :summary_by_answers },
+      class: 'btn btn-default btn-lg btn-block' %>
   </div>
 </div>

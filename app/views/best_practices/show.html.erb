@@ -3,8 +3,8 @@
 </div>
 
 <% @best_practice.process_controls.each do |pc| %>
-  <h3><%= "#{@best_practice.name} (#{pc.name})" %></h3>
-  <table class="table table-condensed table-striped table-bordered">
+  <h4><%= "#{@best_practice.name} (#{pc.name})" %></h4>
+  <table class="table table-condensed table-striped">
     <thead>
       <tr>
         <th><%= ControlObjective.human_attribute_name :name %></th>

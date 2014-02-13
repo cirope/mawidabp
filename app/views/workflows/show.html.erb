@@ -1,6 +1,6 @@
 <% currency_mask = "#{t('number.currency.format.unit')}%.2f" %>
 <div class="page-header">
-  <h3><strong><%= @workflow.review %></strong></h3>
+  <h2><%= @workflow.review %></h2>
 </div>
 
 <p>
@@ -45,13 +45,13 @@
 
 <% unless @workflow.workflow_items.all? { |wi| wi.resource_utilizations.blank? } %>
   <div class="page-header">
-    <h3><strong><%= t('workflow.pdf.resources_utilization') %></strong></h3>
+    <h2><%= t('workflow.pdf.resources_utilization') %></h2>
   </div>
 
   <% @workflow.workflow_items.each do |workflow_item| %>
     <% unless workflow_item.resource_utilizations.blank? %>
       <h4>
-        <strong>(<%= workflow_item.order_number %>)</strong> <%= workflow_item.task %>
+        (<%= workflow_item.order_number %>) <%= workflow_item.task %>
       </h4>
       <table class="table table-condensed table-striped">
         <thead>

@@ -4,25 +4,21 @@
 
 <% @audits_by_period.each do |audit_by_period| %>
   <div class="page-header">
-    <h3>
-      <strong><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></strong>
-    </h3>
+    <h2><%= Period.model_name.human %>: <%= audit_by_period[:period].inspect %></h2>
   </div>
   <% audit_by_period[:audits_by_business_unit].each do |data| %>
     <% if !data[:external] && !@internal_title_showed %>
-      <h2 class="text-center">
+      <h3 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.internal_audit_weaknesses' %>
-      </h2>
+      </h3>
       <% @internal_title_showed = true %>
     <% elsif data[:external] && !@external_title_showed %>
-      <h2 class="text-center">
+      <h3 class="text-center">
         <%= t 'conclusion_committee_report.synthesis_report.external_audit_weaknesses' %>
-      </h2>
+      </h3>
       <% @external_title_showed = true %>
     <% end %>
-    <div class="page-header">
-      <h3><%= data[:name] %></h3>
-    </div>
+    <h4><%= data[:name] %></h4>
     <% unless data[:column_data].blank? %>
       <table class="table table-condensed table-striped">
         <thead>
@@ -45,14 +41,14 @@
         </tbody>
       </table>
     <% else %>
-      <p>
+      <p style="margin: 1em;">
         <em><%= t 'execution_reports.detailed_management_report.without_audits_in_the_period' %></em>
       </p>
     <% end %>
   <% end %>
 <% end %>
 <% if @audits_by_period.empty? %>
-  <p style="margin: 2em 0;">
+  <p style="margin: 1em;">
     <em><%= t 'execution_reports.detailed_management_report.without_audits_in_the_interval' %></em>
   </p>
 <% end %>

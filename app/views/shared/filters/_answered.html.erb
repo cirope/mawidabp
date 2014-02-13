@@ -1,20 +1,16 @@
 <div id="answered_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <table class="generic_filter">
-    <tbody>
-      <tr>
-        <td>
-          <p class="form_item" style="margin: 0em;">
-            <% selected = params[action] ?
-              params[action][:answered] : nil %>
-            <%= f.label :answered, Poll.human_attribute_name(:answered),
-              :class => :inline %>
-            <%= f.select :answered, [[t('label.yes'), true], [t('label.no'), false]],
-              {:selected => selected, :include_blank => t('helpers.select.prompt')},
-              {:class => :inline_item} %>
-          </p>
-        </td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:answered] : nil %>
+        <%= f.label :answered, Poll.human_attribute_name(:answered),
+          class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.select :answered, [[t('label.yes'), true], [t('label.no'), false]],
+            { selected: selected, include_blank: t('helpers.select.prompt') },
+            class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
