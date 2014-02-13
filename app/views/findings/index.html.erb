@@ -79,26 +79,31 @@
   </tbody>
 </table>
 
-<%= pagination_links @findings %>
+<hr />
 
-<%= link_to t('finding.download'),
-  export_to_pdf_findings_path(
-    request.query_parameters.merge(:_ts => Time.now.to_i)
-  ), class: 'btn btn-default btn-sm' %>
-<%= link_to t('finding.download_detailed'),
+<div class="form-footer">
+  <div class="pull-right">
+    <%= pagination_links @findings %>
+  </div>
+
+  <%= link_to t('finding.download'),
+    export_to_pdf_findings_path(
+      request.query_parameters.merge(:_ts => Time.now.to_i)
+  ) %> |
+  <%= link_to t('finding.download_detailed'),
     export_to_pdf_findings_path(
       request.query_parameters.merge(:_ts => Time.now.to_i, :include_details => 1)
-    ), class: 'btn btn-default btn-sm' %>
-<%= link_to t('finding.download_xml'),
-  findings_path(
-    request.query_parameters.merge(:_ts => Time.now.to_i, :format => :xml)
-  ), class: 'btn btn-default btn-sm' %>
-<%= link_to t('finding.download_csv'),
-  export_to_csv_findings_path(
-    request.query_parameters.merge(:format => :csv, :include_details => 1)
-  ), class: 'btn btn-default btn-sm' %>
+  ) %> |
+  <%= link_to t('finding.download_xml'),
+    findings_path(
+      request.query_parameters.merge(:_ts => Time.now.to_i, :format => :xml)
+  ) %> |
+  <%= link_to t('finding.download_csv'),
+    export_to_csv_findings_path(
+      request.query_parameters.merge(:format => :csv, :include_details => 1)
+  ) %>
+</div>
 
-<div class="form-footer"></div>
 <script type="text/javascript">
   $('#user_id_select').change(function() {
     if($(this).val()) {

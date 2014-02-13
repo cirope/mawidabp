@@ -50,7 +50,7 @@ module FollowUpCommitteeHelper
         end
       end
 
-      array_to_ul(new_data, :class => :raw_list)
+      array_to_ul(new_data, class: 'list-unstyled')
     else
       data['weaknesses_count']
     end
@@ -67,7 +67,7 @@ module FollowUpCommitteeHelper
         new_data << (ids.blank? ? label : "[\"#{label}\":#{url}]")
       end
 
-      array_to_ul(new_data, :class => :raw_list)
+      array_to_ul(new_data, class: 'list-unstyled')
     else
       data['weaknesses_count']
     end

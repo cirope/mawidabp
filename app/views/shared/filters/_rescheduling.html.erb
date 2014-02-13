@@ -1,27 +1,24 @@
 <div id="rescheduling_filter" class="filter" <%= 'style="display: none;"' unless display %>>
-  <div>
-    <table class="generic_filter">
-      <tbody>
-        <tr>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <% selected = params[action] ?
-                params[action][:rescheduling] : nil %>
-              <%= f.label :rescheduling, t('follow_up_committee_report.rescheduling'),
-                :class => :inline %>
-              <%= f.select :rescheduling, @rescheduling_options,
-                {:selected => selected, :include_blank => true}, {:class => :inline_item} %>
-            </p>
-          </td>
-          <td>
-            <p class="form_item" style="margin: 0em;">
-              <%= f.label :detailed, t('follow_up_committee_report.detailed_report'),
-                  :class => 'inline' %>
-              <%= f.check_box :detailed, :class => 'inline_item' %>
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <% selected = params[action] ? params[action][:rescheduling] : nil %>
+        <%= f.label :rescheduling, t('follow_up_committee_report.rescheduling'),
+          class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.select :rescheduling, @rescheduling_options,
+            { selected: selected, include_blank: true }, { class: 'form-control' } %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= f.label :detailed, t('follow_up_committee_report.detailed_report'),
+          class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.check_box :detailed %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

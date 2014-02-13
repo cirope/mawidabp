@@ -31,7 +31,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
 
     @weaknesses_data = []
     if @rescheduling && @rescheduling > 0
-      @filters = ["<b>#{t 'follow_up_committee_report.rescheduling'}</b>#{@rescheduling ==
+      @filters = ["<strong>#{t 'follow_up_committee_report.rescheduling'}</strong>#{@rescheduling ==
         @rescheduling_options.last.last ?
         " #{t('label.greater_or_equal_than')}" : ' ='} #{@rescheduling}"]
     end
@@ -41,7 +41,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
     @follow_up_date_modifications = []
     @rescheduled_being_implemented_weaknesses = []
 
-    @last_version = w.versions.size - 1                                                                                                                                            
+    @last_version = w.versions.size - 1
 
     if @last_version >= 0
       (0..@last_version).each do |i|
@@ -68,7 +68,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
   def get_audited(w)
     audited = w.users.select(&:audited?).map do |u|
       w.process_owners.include?(u) ?
-      "<b>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</b>" :
+      "<strong>#{u.full_name} (#{FindingUserAssignment.human_attribute_name(:process_owner)})</strong>" :
       u.full_name
     end
   end
@@ -77,16 +77,16 @@ module Reports::RescheduledBeingImplementedWeaknesses
     audited = get_audited w
 
     @rescheduled_being_implemented_weaknesses =
-      "<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
-      "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
-      "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
-      "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
-      "<b>#{Weakness.human_attribute_name(:priority)}</b>: #{w.priority_text}",
-      "<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}",
-      ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
-      "<b>#{I18n.t('finding.audited', :count => audited.size)}</b>: #{audited.join('; ')}",
-      "<b>#{Weakness.human_attribute_name(:description)}</b>: #{w.description}",
-      "<b>#{I18n.t('follow_up_committee_report.rescheduling')}</b>:\n #{@follow_up_date_modifications.join("\n")}"
+      "<strong>#{Review.model_name.human}</strong>: #{w.review.to_s}",
+      "<strong>#{Weakness.human_attribute_name(:review_code)}</strong>: #{w.review_code}",
+      "<strong>#{Weakness.human_attribute_name(:state)}</strong>: #{w.state_text}",
+      "<strong>#{Weakness.human_attribute_name(:risk)}</strong>: #{w.risk_text}",
+      "<strong>#{Weakness.human_attribute_name(:priority)}</strong>: #{w.priority_text}",
+      "<strong>#{Weakness.human_attribute_name(:follow_up_date)}</strong>: #{l(w.follow_up_date, :format => :long)}",
+      ("<strong>#{Weakness.human_attribute_name(:origination_date)}</strong>: #{l(w.origination_date, :format => :long)}" if w.origination_date),
+      "<strong>#{I18n.t('finding.audited', :count => audited.size)}</strong>: #{audited.join('; ')}",
+      "<strong>#{Weakness.human_attribute_name(:description)}</strong>: #{w.description}",
+      "<strong>#{I18n.t('follow_up_committee_report.rescheduling')}</strong>:\n #{@follow_up_date_modifications.join("\n")}"
 
     add_detailed_data(w) if @detailed == 1
 
@@ -95,12 +95,12 @@ module Reports::RescheduledBeingImplementedWeaknesses
 
   def add_detailed_data(w)
     @rescheduled_being_implemented_weaknesses <<
-      "<b>#{Weakness.human_attribute_name(:audit_comments)}</b>: #{w.audit_comments}"
+      "<strong>#{Weakness.human_attribute_name(:audit_comments)}</strong>: #{w.audit_comments}"
     @rescheduled_being_implemented_weaknesses <<
-      "<b>#{Weakness.human_attribute_name(:answer)}</b>: #{w.answer}"
+      "<strong>#{Weakness.human_attribute_name(:answer)}</strong>: #{w.answer}"
   end
 
-  def add_rescheduled_data(i,w)                                                                                                                                                     
+  def add_rescheduled_data(i,w)
     if @follow_up_date && @next_follow_up_date && @being_implemented
       # Si se reprogramó hacia el futuro
       if @follow_up_date != @next_follow_up_date && @follow_up_date < @next_follow_up_date
