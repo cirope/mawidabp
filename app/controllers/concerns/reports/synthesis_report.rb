@@ -173,7 +173,7 @@ module Reports::SynthesisReport
       c_r.review.reload,
       process_control_text,
       @risk_levels.blank? ?
-        t('follow_up_committee.synthesis_report.without_weaknesses') :
+        t('follow_up_committee_report.synthesis_report.without_weaknesses') :
         @weaknesses_count_text,
       @sqm ? nonconformities_count_text : oportunities_count_text
     ]

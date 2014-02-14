@@ -6,24 +6,24 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
   <% @audit_types.each do |audit_type| %>
     <% unless audit_type.last.empty? %>
       <% audit_type_symbol = audit_type.first %>
-      <h2 class="text-center">
+      <h3 class="text-center">
         <%= t("conclusion_committee_report.weaknesses_type_#{audit_type_symbol}") %>
-      </h2>
+      </h3>
       <% audit_type.last.each do |audit_types| %>
         <% key = "#{audit_type_symbol}_#{audit_types.last}" %>
-        <h3><%= audit_types.first %></h3>
+        <h4><%= audit_types.first %></h4>
         <%= render :partial => 'weaknesses_synthesis_table', :locals => {
           :table_data => @tables_data[period][key],
           :being_implemented_resume => @being_implemented_resumes[period][key],
           :highest_being_implemented_resume => @highest_being_implemented_resumes[period][key]} %>
         <% if @repeated_counts[period][key] > 0 %>
           <p>
-            <%= t('follow_up_committee.repeated_count',
+            <%= t('follow_up_committee_report.repeated_count',
               :count => @repeated_counts[period][key]) %>
           </p>
         <% end %>
@@ -31,17 +31,17 @@
     <% end %>
   <% end %>
 
-  <h2 class="text-center">
-    <%= t('follow_up_committee.weaknesses_by_risk.period_summary',
+  <h3 class="text-center">
+    <%= t('follow_up_committee_report.weaknesses_by_risk.period_summary',
       :period => period.inspect) %>
-  </h2>
+  </h3>
   <%= render :partial => 'weaknesses_synthesis_table', :locals => {
     :table_data => @tables_data[period]['total'],
     :being_implemented_resume => @being_implemented_resumes[period]['total'],
     :highest_being_implemented_resume => @highest_being_implemented_resumes[period]['total']} %>
   <% if @repeated_counts[period]['total'] > 0 %>
     <p>
-      <%= t('follow_up_committee.repeated_count',
+      <%= t('follow_up_committee_report.repeated_count',
         :count => @repeated_counts[period]['total']) %>
     </p>
   <% end %>
@@ -66,7 +66,7 @@
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.weaknesses_by_risk.title')
+          :value => t('follow_up_committee_report.weaknesses_by_risk.title')
         }
       ]
     }

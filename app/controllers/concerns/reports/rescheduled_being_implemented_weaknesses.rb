@@ -22,7 +22,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
   end
 
   def init_rescheduled_vars
-    @title = t 'follow_up_committee.rescheduled_being_implemented_weaknesses_report_title'
+    @title = t 'follow_up_committee_report.rescheduled_being_implemented_weaknesses_report_title'
     @parameters = params[:rescheduled_being_implemented_weaknesses_report]
     @from_date, @to_date = *make_date_range(@parameters)
     @rescheduling_options = [[1,1], [2,2], [3,3], ['+', 4]]
@@ -142,7 +142,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
       end
     else
       pdf.text(
-        t('follow_up_committee.rescheduled_being_implemented_weaknesses_report.without_data'))
+        t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report.without_data'))
     end
   end
 end

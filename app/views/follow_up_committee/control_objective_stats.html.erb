@@ -11,12 +11,12 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
 
   <% if @process_control_data[period].blank? %>
     <p style="margin: 1em;">
-      <em><%= t 'follow_up_committee.control_objective_stats.without_audits_in_the_period' %></em>
+      <em><%= t 'follow_up_committee_report.control_objective_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
     <table class="table table-condensed table-striped">
@@ -45,7 +45,7 @@
 
   <p style="margin: 1em 0;">
     <%= raw t(
-      'follow_up_committee.control_objective_stats.review_score_average',
+      'follow_up_committee_report.control_objective_stats.review_score_average',
       :score => @reviews_score_data[period]
     ) %>
   </p>

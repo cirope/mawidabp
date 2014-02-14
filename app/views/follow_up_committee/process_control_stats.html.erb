@@ -6,12 +6,12 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
 
   <% if @process_control_data[period].blank? %>
     <p style="margin: 1em;">
-      <em><%= t 'follow_up_committee.process_control_stats.without_audits_in_the_period' %></em>
+      <em><%= t 'follow_up_committee_report.process_control_stats.without_audits_in_the_period' %></em>
     </p>
   <% else %>
     <table class="table table-condensed table-striped">
@@ -40,7 +40,7 @@
 
   <p style="margin: 1em 0;">
     <%= raw t(
-      'follow_up_committee.process_control_stats.review_score_average',
+      'follow_up_committee_report.process_control_stats.review_score_average',
       :score => @reviews_score_data[period]
     ) %>
   </p>
@@ -65,12 +65,12 @@
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.process_control_stats.title')
+          :value => t('follow_up_committee_report.process_control_stats.title')
         },
         {
           :name => :report_subtitle,
           :label => t('customize_report_form.subtitle'),
-          :value => t('follow_up_committee.process_control_stats.subtitle')
+          :value => t('follow_up_committee_report.process_control_stats.subtitle')
         }
       ]
     }

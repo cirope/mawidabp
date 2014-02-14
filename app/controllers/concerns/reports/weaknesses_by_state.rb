@@ -87,11 +87,11 @@ module Reports::WeaknessesByState
 
             being_implemented_counts = {:current => 0, :stale => 0,
               :current_rescheduled => 0, :stale_rescheduled => 0}
-          
+
             @weaknesses_counts[period]['total_repeated'] ||= 0
             @weaknesses_counts[period]['total_repeated'] +=
               @weaknesses_counts[period]["#{key}_repeated"]
-          
+
             @status.each do |state|
               if state.first.to_s == 'being_implemented'
                 being_implemented = Weakness.with_status_for_report.

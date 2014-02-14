@@ -13,12 +13,12 @@ module Reports::QAIndicators
   end
 
   def init_qa_vars
-    @title = t('follow_up_committee.qa_indicators_title')
+    @title = t('follow_up_committee_report.qa_indicators_title')
     @from_date, @to_date = *make_date_range(params[:qa_indicators])
     @periods = periods_for_interval
     @columns = [
-      ['indicator', t('follow_up_committee.qa_indicators.indicator')],
-      ['value', t('follow_up_committee.qa_indicators.value')]
+      ['indicator', t('follow_up_committee_report.qa_indicators.indicator')],
+      ['value', t('follow_up_committee_report.qa_indicators.value')]
     ]
     @conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
@@ -243,7 +243,7 @@ module Reports::QAIndicators
 
       row.each do |column_name, column_content|
         new_row << (column_content.present? ? column_content :
-          (t'follow_up_committee.qa_indicators.without_data'))
+          (t'follow_up_committee_report.qa_indicators.without_data'))
       end
 
       @column_data << new_row
@@ -264,7 +264,7 @@ module Reports::QAIndicators
       end
     else
       pdf.text(
-        t('follow_up_committee.qa_indicators.without_audits_in_the_period'),
+        t('follow_up_committee_report.qa_indicators.without_audits_in_the_period'),
         :style => :italic)
     end
   end

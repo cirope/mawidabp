@@ -4,10 +4,10 @@
 
 <% @periods.each do |period| %>
   <div class="page-header">
-    <h3><strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong></h3>
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
   </div>
 
-  <h3><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h3>
+  <h4><%= t 'follow_up_audit.cost_analysis.weaknesses' %></h4>
   <% unless @weaknesses_data[period].blank? %>
     <table class="table table-condensed table-striped">
       <thead>
@@ -33,7 +33,7 @@
     </p>
   <% end %>
 
-  <h3><%= t 'follow_up_audit.cost_analysis.oportunities' %></h3>
+  <h4><%= t 'follow_up_audit.cost_analysis.oportunities' %></h4>
   <% unless @oportunities_data[period].blank? %>
     <table class="table table-condensed table-striped">
       <thead>

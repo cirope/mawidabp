@@ -1,4 +1,4 @@
-module Reports::FixedWeaknessesReport                                                                                                
+module Reports::FixedWeaknessesReport
   extend ActiveSupport::Concern
 
   include Reports::Pdf
@@ -15,11 +15,11 @@ module Reports::FixedWeaknessesReport
     @reviews = {}
     conclusion_reviews = final ? ConclusionFinalReview.list_all_by_final_solution_date(
       @from_date, @to_date) :
-      ConclusionFinalReview.list_all_by_solution_date(                                               
-      @from_date, @to_date)  
+      ConclusionFinalReview.list_all_by_solution_date(
+      @from_date, @to_date)
 
     if params[:fixed_weaknesses_report]
-      risk = params[:fixed_weaknesses_report][:risk] 
+      risk = params[:fixed_weaknesses_report][:risk]
 
       unless params[:fixed_weaknesses_report][:business_unit_type].blank?
         @selected_business_unit = BusinessUnitType.find(
@@ -61,7 +61,7 @@ module Reports::FixedWeaknessesReport
 
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []
-          weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses  
+          weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           weaknesses_by_risk = weaknesses.with_solution_date_between(
             @from_date, @to_date).by_risk(risk)
 

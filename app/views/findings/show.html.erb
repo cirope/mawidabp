@@ -228,10 +228,8 @@
   </table>
 <% end %>
 
-<h3>
   <%= textilize t('finding.costs',
     :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
-</h3>
 
 <% unless @finding.costs.blank? %>
   <p style="margin: 1em 0;">

@@ -201,7 +201,7 @@ module Reports::Pdf
       end
 
       column_data << [
-        "<b>#{t('follow_up_committee.weaknesses_by_state.total')}</b>",
+        "<b>#{t('follow_up_committee_report.weaknesses_by_state.total')}</b>",
         "<b>#{total_weaknesses}</b>"
       ]
 
@@ -230,11 +230,11 @@ module Reports::Pdf
 
       if repeated_count > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-        pdf.text t('follow_up_committee.repeated_count',
+        pdf.text t('follow_up_committee_report.repeated_count',
           :count => repeated_count, :font_size => PDF_FONT_SIZE)
       end
     else
-      pdf.text t('follow_up_committee.without_weaknesses'),
+      pdf.text t('follow_up_committee_report.without_weaknesses'),
         :font_size => PDF_FONT_SIZE, :style => :italic
     end
   end
@@ -260,7 +260,7 @@ module Reports::Pdf
         0.00 : (count.to_f / total_of_being_implemented) * 100
       sub_status_resume = "<b>#{count}</b> "
       sub_status_resume << t(
-        "follow_up_committee.weaknesses_being_implemented_#{sub_status}",
+        "follow_up_committee_report.weaknesses_being_implemented_#{sub_status}",
         :count => count)
       sub_status_resume << " (#{'%.2f' % sub_status_percentage}%)"
 

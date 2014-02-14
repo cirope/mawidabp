@@ -270,13 +270,13 @@ module Reports::WeaknessesByAuditType
                   pdf.text t('follow_up_committee_report.without_oportunities'), :style => :italic
                 end
               end
-              
+
               if bu_data[:repeated_count] > 0
                 pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-                pdf.text t('follow_up_committee.repeated_count',
+                pdf.text t('follow_up_committee_report.repeated_count',
                   :count => bu_data[:repeated_count],
                   :font_size => PDF_FONT_SIZE)
-              end      
+              end
             end
           end
         else

@@ -5,39 +5,38 @@
   :forms => {:date_range => true}} %>
 
 <% @periods.each do |period| %>
-  <h1 class="simple_title with_border_bottom">
-    <strong><%= "#{Period.model_name.human}: #{period.inspect}" %></strong>
-  </h1>
+  <div class="page-header">
+    <h2><%= "#{Period.model_name.human}: #{period.inspect}" %></h2>
+  </div>
   <% @audit_types.each do |type| %>
-    <h1 class="center_title">
+    <h3 class="text-center">
       <%= t(:"conclusion_committee_report.findings_type_#{type}") %>
-    </h1>
+    </h3>
     <% unless @data[period][type].blank? %>
       <% @data[period][type].each do |data_item| %>
-        <h1><%= data_item[:title] %></h1>
+        <h4><%= data_item[:title] %></h4>
         <% data_item[:business_units].each do |bu, bu_data| %>
           <p>
-            <b><%= bu.business_unit_type.business_unit_label %></b>:
+            <strong><%= bu.business_unit_type.business_unit_label %></strong>:
             <%= bu.name %>
           </p>
           <p style="margin-top: 1em;">
             <strong><%= t('actioncontroller.reviews') %></strong>
           </p>
           <%= array_to_ul(
-            audit_by_type_reviews_array(bu_data[:conclusion_reviews]),
-            :class => :raw_list) %>
+            audit_by_type_reviews_array(bu_data[:conclusion_reviews])) %>
 
           <div style="margin-bottom: 1em;">
-            <h2><%= t('follow_up_committee.weaknesses_by_audit_type.weaknesses') %></h2>
+            <h4><%= t('follow_up_committee_report.weaknesses_by_audit_type.weaknesses') %></h4>
             <%= render :partial => 'weaknesses_synthesis_table', :locals => {
               :table_data => bu_data[:weaknesses_table_data],
               :being_implemented_resume => bu_data[:being_implemented_resume],
               :highest_being_implemented_resume => bu_data[:highest_being_implemented_resume]} %>
 
             <% if type == :internal %>
-              <h2 style="margin-top: 1em;">
-                <%= t('follow_up_committee.weaknesses_by_audit_type.oportunities') %>
-              </h2>
+              <h4 style="margin-top: 1em;">
+                <%= t('follow_up_committee_report.weaknesses_by_audit_type.oportunities') %>
+              </h4>
               <% unless bu_data[:oportunities_table_data].blank? %>
                 <table class="table table-condensed table-striped">
                   <thead>
@@ -56,29 +55,31 @@
                   </tbody>
                 </table>
               <% else %>
-                <p style="margin: 1em 0em; font-size: 1.1em;">
-                  <em><%= t('follow_up_committee.without_oportunities') %></em>
+                <p style="margin: 1em;">
+                  <em><%= t('follow_up_committee_report.without_oportunities') %></em>
                 </p>
               <% end %>
             <% end %>
           </div>
           <% if bu_data[:repeated_count] > 0 %>
             <p style="margin-bottom: .5em;">
-              <%= t('follow_up_committee.repeated_count',
+              <%= t('follow_up_committee_report.repeated_count',
                 :count => bu_data[:repeated_count]) %>
             </p>
           <% end %>
         <% end %>
       <% end %>
     <% else %>
-      <p style="margin: 1em; font-size: 1.1em;">
-        <em><%= t('follow_up_committee.without_weaknesses') %></em>
+      <p style="margin: 1em;">
+        <em><%= t('follow_up_committee_report.without_weaknesses') %></em>
       </p>
     <% end %>
   <% end %>
 <% end %>
 
-<div id="links">
+<hr />
+
+<div class="form-footer">
   <%= link_to t('label.back'), :action => :index %> |
   <%= link_to t('label.download'), '#', :onclick =>
     "Helper.showItem('#customize_report_form'); return false;" %>
@@ -95,7 +96,7 @@
         {
           :name => :report_title,
           :label => t('customize_report_form.title'),
-          :value => t('follow_up_committee.weaknesses_by_audit_type.title')
+          :value => t('follow_up_committee_report.weaknesses_by_audit_type.title')
         }
       ]
     }

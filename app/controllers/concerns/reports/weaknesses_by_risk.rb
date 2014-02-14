@@ -191,7 +191,7 @@ module Reports::WeaknessesByRisk
 
             if @repeated_counts[period][key] > 0
               pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-              pdf.text t('follow_up_committee.repeated_count',
+              pdf.text t('follow_up_committee_report.repeated_count',
                 :count => @repeated_counts[period][key],
                 :font_size => PDF_FONT_SIZE)
             end
@@ -215,7 +215,7 @@ module Reports::WeaknessesByRisk
 
       if @repeated_counts[period]['total'] > 0
         pdf.move_down((PDF_FONT_SIZE * 0.5).round)
-        pdf.text t('follow_up_committee.repeated_count',
+        pdf.text t('follow_up_committee_report.repeated_count',
           :count => @repeated_counts[period]['total'],
           :font_size => PDF_FONT_SIZE)
       end

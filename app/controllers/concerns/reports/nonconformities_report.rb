@@ -1,4 +1,4 @@
-module Reports::NonconformitiesReport                                                                                                 
+module Reports::NonconformitiesReport
   extend ActiveSupport::Concern
 
   include Reports::Pdf
