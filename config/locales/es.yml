@@ -984,7 +984,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     footer:
       email_label: "Correo"
       warning: "Por favor, *no contestar* el presente correo."
-      title: "Correo enviado por el sistema 'MawidaBP'. Cualquier inquietud comunicarse al área de soporte:"
+      title: "Correo enviado por el sistema 'Mawidabp'. Cualquier inquietud comunicarse al área de soporte:"
       recommendations: "Recomendamos utilizar *Mozilla Firefox*, *Google Chrome* e *Internet Explorer 8 o superior*"
     notification:
       pending: "Notificaciones pendientes"
@@ -1026,12 +1026,12 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       title: "El grupo %{name} ha sido creado"
       initial_user: "Para comenzar a utilizar el sistema debe primero crear un usuario"
       create_user: "Crear usuario"
-      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'MawidaBP'"
+      clarification: "Ha recibido este correo porque se le ha asignado un grupo en el sistema 'Mawidabp'"
     welcome_email:
       title: "%{name}, su cuenta ha sido creada"
       initial_password: "Para comenzar a utilizar el sistema debe primero establecer su contraseña"
       change_password: "Establecer contraseña"
-      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'MawidaBP' del área de Auditoría Interna."
+      clarification: "Ha recibido este correo porque ha sido dado de alta en el sistema 'Mawidabp' del área de Auditoría Interna."
       organizations_sites:
         one: "Luego puede ingresar en la siguiente dirección:"
         other: "Luego puede ingresar en cualquiera de las siguientes direcciones (dependiendo de la organización que seleccione):"
