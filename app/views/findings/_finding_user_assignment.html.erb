@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-md-6">
         <% unless readonly %>
-          <%= f.input :user_id, label: false, input_html: {
+          <%= f.input :user_id, as: :string, label: false, input_html: {
             value: finding_user.try(:full_name_with_function),
             id: "finding_user_#{id}", name: "auto_user_id_#{id}",
             class: 'autocomplete_field', title: t('label.search'),
@@ -20,7 +20,7 @@
             }
           } %>
         <% else %>
-          <%= f.input :user_id, label: false, input_html: {
+          <%= f.input :user_id, as: :string, label: false, input_html: {
             value: finding_user.full_name_with_function(finding.created_at),
             id: "finding_user_#{id}", name: "user_name_#{id}", readonly: true
           } %>

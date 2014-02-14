@@ -2,7 +2,7 @@
 <% inline_help = InlineHelp.find_by_language_and_name(@auth_user.language, name.to_s) %>
 <% can_edit = @auth_user.admin? %>
 <span class="popup_link_container">
-  <span data-help-dialog="#inline_item_<%= name %>" class="popup_link" title="<%= t('inline_help.link_title') %>">?</span>
+  <span data-help-dialog="#inline_item_<%= name %>" class="popup_link glyphicon glyphicon-question-sign" title="<%= t('inline_help.link_title') %>"></span>
 </span>
 
 <% unless @rendered_helps.include?(name) %>

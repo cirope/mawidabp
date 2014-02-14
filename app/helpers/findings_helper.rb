@@ -24,7 +24,7 @@ module FindingsHelper
         content_tag(:span, raw(link), :class => 'popup_link_container')
       ), :for => 'repeated_of_finding'
     else
-      form.label :repeated_of_id
+      form.label readonly ? :repeated_of_finding : :repeated_of_id
     end
   end
 
