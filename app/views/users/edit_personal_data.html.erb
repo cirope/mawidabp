@@ -1,45 +1,35 @@
 <%= simple_form_for @auth_user, url: update_personal_data_user_path(@auth_user) do |f| %>
-  <div class="form_column_left">
-    <%= f.error_messages %>
-    <p class="form_item">
-      <label class="inline"><%= Organization.model_name.human %>:</label>
-      <%= text_field nil, :organization_name,
-        :value => current_organization.name, :readonly => true,
-        :size => nil, :class => :inline_item %>
-    </p>
-    <p class="form_item">
-      <label class="inline"><%= User.human_attribute_name 'user' %>:</label>
-      <%= f.text_field :user, :readonly => true, :size => nil,
-        :class => :inline_item %>
-    </p>
-    <p>
-      <%= f.label :name %>
-      <%= f.text_field :name, :maxlength => 100, :autofocus => true %>
-    </p>
-    <p>
-      <%= f.label :last_name %>
-      <%= f.text_field :last_name, :maxlength => 100 %>
-    </p>
-    <p>
-      <%= f.label :email %>
-      <%= f.text_field :email, :maxlength => 100 %>
-    </p>
-    <p>
-      <%= f.label :function %>
-      <%= f.text_field :function, :maxlength => 255 %>
-    </p>
-    <p class="form_item">
-      <%= f.label :language, nil, :class => :inline %>
-      <%= user_language_field(f) %>
-    </p>
-    <%= hidden_lock_version(f) %>
-  </div>
-  <p>
-    <span class="button"><%= f.submit t('label.modify') %></span>
-  </p>
-<% end %>
+  <%= f.error_notification %>
 
-<div id="links">
-  <%= link_to t('user.change_password_title'), edit_password_user_path(@auth_user) %> |
-  <%= link_to t('user.status'), user_status_user_path(@auth_user) %>
-</div>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <p>
+          <strong><%= Organization.model_name.human %>:</strong>
+          <%= current_organization.name %>
+        </p>
+        <p>
+          <strong><%= User.human_attribute_name :user %>:</strong>
+          <%= @auth_user.user %>
+        </p>
+
+        <br />
+        <%= f.input :name, input_html: { maxlength: 100, autofocus: true } %>
+        <%= f.input :last_name, input_html: { maxlength: 100 } %>
+        <%= f.input :email, input_html: { maxlength: 100 } %>
+        <%= f.input :function, input_html: { maxlength: 255 } %>
+        <%= user_language_field(f) %>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+  <div class="form-actions form-footer">
+    <div class="pull-right">
+      <%= link_to t('user.change_password_title'), edit_password_user_path(@auth_user) %> |
+      <%= link_to t('user.status'), user_status_user_path(@auth_user) %>
+    </div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit t('label.modify'), class: 'btn btn-primary' %>
+  </div>
+<% end %>

@@ -120,13 +120,13 @@ module Reports::CostAnalysis
 
     @periods.each do |period|
       add_period_title(pdf, period)
-      @column_headers, @column_widths = [], []                                                                                                                                          
+      @column_headers, @column_widths = [], []
       unless @total_cost_data[period].blank?
         set_columns(pdf)
         add_total_cost_table(pdf, period)
       else
         pdf.text(
-          t('conclusion_audit_report.cost_analysis.without_audits_in_the_period'), 
+          t('conclusion_audit_report.cost_analysis.without_audits_in_the_period'),
             :font_size => PDF_FONT_SIZE)
       end
 
@@ -145,10 +145,15 @@ module Reports::CostAnalysis
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
 
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t('conclusion_audit_report.cost_analysis.pdf_name',
         :from_date => @from_date.to_formatted_s(:db),
         :to_date => @to_date.to_formatted_s(:db)), 'cost_analysis', 0)
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   def set_columns(pdf)

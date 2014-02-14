@@ -1,7 +1,5 @@
-<!--[form:finding]-->
-<%= form_for @finding, :as => :finding, :url => finding_path(params[:completed], @finding), :html =>
-  {:method => :patch, :class => :validate, :multipart => true,
-  :id => "edit_finding_#{@finding.id}"} do |f_f| %>
+<%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
+  html: { method: :patch, class: :validate, id: "edit_finding_#{@finding.id}"} do |f_f| %>
   <% content_for :js_extra do %>
     <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
       :object => @finding.finding_answers.new(:user_id => @auth_user.id))}';" %>
@@ -320,5 +318,4 @@
     <span class="button"><%= f_f.submit %></span>
   </p>
 <% end %>
-<!--[eoform:finding] -->
 <%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>

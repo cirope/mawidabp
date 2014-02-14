@@ -297,10 +297,15 @@ module Reports::Pdf
   end
 
   def redirect_to_pdf(controller, from_date, to_date, sub_directory, id = 0)
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t("#{controller}_committee_report.#{sub_directory}.pdf_name",
         :from_date => from_date.to_formatted_s(:db),
         :to_date => to_date.to_formatted_s(:db)), sub_directory, id
     )
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 end

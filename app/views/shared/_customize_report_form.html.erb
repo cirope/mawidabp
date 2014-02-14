@@ -1,25 +1,32 @@
-<!--[form:customize_report_form]-->
-<%= form_for options[:form_name], :url => options[:url] do |f| %>
-  <% options[:fields].each do |field| %>
-    <div class="field">
-      <%= label_tag field[:name], field[:label] %>
-      <%= text_area_tag field[:name], field[:value], :rows => 20,
-        :cols => 80, :style => 'height: 20em;' %>
+<div class="modal fade" id="customize_report" tabindex="-1" role="dialog"
+  aria-labelledby="customize_report_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= simple_form_for options[:form_name], url: options[:url], remote: true do |f| %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3 class="modal-title" id="customize_report_label">
+            <%= t('reports.customization_titles') %>
+          </h3>
+        </div>
+        <div class="modal-body">
+          <% options[:fields].each do |field| %>
+            <div class="form-group">
+              <%= label_tag field[:name], field[:label] %>
+              <%= text_area_tag field[:name], field[:value], class: 'form-control' %>
+            </div>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+          <div class="pull-right">
+            <% if options[:show_link_to_back] %>
+              <%= link_to_back %>
+            <% end %>
+          </div>
+          <%= f.submit (options[:submit_label] || t('customize_report_form.create')),
+            class: 'btn btn-primary', data: { disable_with: t('reports.generating') } %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
-  <% unless options[:exclude_extra_parameters] %>
-    <%=  %>
-  <% end %>
-
-  <div class="actions">
-    <span class="button">
-      <%= f.submit(options[:submit_label] || t('customize_report_form.create')) %>
-    </span>
   </div>
-<% end %>
-<!--[eoform:customize_report_form] -->
-<% if options[:show_link_to_back] %>
-  <div id="links">
-    <%= link_to_back %>
-  </div>
-<% end %>
+</div>

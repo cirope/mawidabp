@@ -34,25 +34,22 @@
 
 <div class="form-footer">
   <%= link_to t('label.back'), :action => :index %> |
-  <%= link_to t('label.download'), '#', :onclick =>
-    "Helper.showItem('#customize_report_form'); return false;" %>
+  <%= link_to t('label.download'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
-<div id="customize_report_form" style="display: none;">
-  <div>
-  <%= render :partial => 'shared/customize_report_form', :locals => {
-    :options => {
-      :form_name => 'report',
-      :url => request.query_parameters.merge(
-        {:action => :create_weaknesses_by_risk, :_ts => Time.now.to_i}
-      ),
-      :fields => [
-        {
-          :name => :report_title,
-          :label => t('customize_report_form.title'),
-          :value => t('conclusion_committee_report.weaknesses_by_risk.title')
-        }
-      ]
-    }
-  } %>
-  </div>
-</div>
+
+<%= render :partial => 'shared/customize_report_form', :locals => {
+  :options => {
+    :form_name => 'report',
+    :url => request.query_parameters.merge(
+      {:action => :create_weaknesses_by_risk, :_ts => Time.now.to_i}
+    ),
+    :fields => [
+      {
+        :name => :report_title,
+        :label => t('customize_report_form.title'),
+        :value => t('conclusion_committee_report.weaknesses_by_risk.title')
+      }
+    ]
+  }
+} %>

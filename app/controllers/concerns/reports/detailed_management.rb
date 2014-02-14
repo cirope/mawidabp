@@ -211,11 +211,17 @@ module Reports::DetailedManagement
         to_date: @to_date.to_formatted_s(:db)),
       'detailed_management_report', 0)
 
-    redirect_to Prawn::Document.relative_path(
+    @report_path = Prawn::Document.relative_path(
       t('execution_reports.detailed_management_report.pdf_name',
-        from_date: @from_date.to_formatted_s(:db),
-        to_date: @to_date.to_formatted_s(:db)),
-      'detailed_management_report', 0)
+      from_date: @from_date.to_formatted_s(:db),
+      to_date: @to_date.to_formatted_s(:db)),
+      'detailed_management_report', 0
+    )
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   def add_report_references(pdf)

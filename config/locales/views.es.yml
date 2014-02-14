@@ -49,6 +49,9 @@ es: &common
       submit: 'Actualizar mis datos'
     update:
       success: 'Tus datos se actualizaron correctamente'
+  reports:
+    customization_titles: 'Personalización de títulos'
+    generating: 'Generando reporte...'
 
 public_es:
   <<: *common
