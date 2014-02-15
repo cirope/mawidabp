@@ -11,11 +11,11 @@ module UsersHelper
   end
 
   def user_language_field(form)
-    options = AVAILABLE_LOCALES.map do
-      |lang| [t("lang.#{lang}"), lang.to_s]
+    options = AVAILABLE_LOCALES.map do |lang|
+      [t("lang.#{lang}"), lang.to_s]
     end.sort{ |a, b| a[0] <=> b[0] }
 
-    form.input :language, collection: options
+   form.input :language, collection: options, prompt: true
   end
 
   def user_organizations_field(form, id = nil )
