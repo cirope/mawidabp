@@ -25,13 +25,6 @@ APP_AUDITED_MENU_ITEMS = [
         :url => {:controller => :notifications}
       )
     ]
-  ),
-  MenuItem.new(
-    :help,
-    :order => 2,
-    :url => {:controller => :help_contents, :action => :show_content},
-    :controllers => [:help_contents, :help_items, :inline_helps],
-    :exclude_from_privileges => true
   )
 ].freeze
 
@@ -311,14 +304,6 @@ APP_AUDITOR_MENU_ITEMS = [
         ]
       )
     ]
-  ),
-  # AYUDA
-  MenuItem.new(
-    :help,
-    :order => 6,
-    :url => {:controller => :help_contents, :action => :show_content},
-    :controllers => [:help_contents, :help_items, :inline_helps],
-    :exclude_from_privileges => true
   )
 ].freeze
 
@@ -349,13 +334,6 @@ APP_AUDITED_QM_MENU_ITEMS = [
         :url => {:controller => :notifications}
       )
     ]
-  ),
-  MenuItem.new(
-    :help,
-    :order => 2,
-    :url => {:controller => :help_contents, :action => :show_content},
-    :controllers => [:help_contents, :help_items, :inline_helps],
-    :exclude_from_privileges => true
   )
 ].freeze
 
@@ -660,14 +638,6 @@ APP_AUDITOR_QM_MENU_ITEMS = [
         ]
       )
     ]
-  ),
-  # AYUDA
-  MenuItem.new(
-    :help,
-    :order => 6,
-    :url => {:controller => :help_contents, :action => :show_content},
-    :controllers => [:help_contents, :help_items, :inline_helps],
-    :exclude_from_privileges => true
   )
 ].freeze
 

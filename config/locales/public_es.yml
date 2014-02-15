@@ -55,7 +55,7 @@ public_es:
     exit: "Salir"
     show_menu: "Ver menú"
     hide_menu: "Ocultar menú"
-    administration_title: "ADMINISTRACIÓN"
+    administration_title: "Administración"
     administration:
       organization_title: "Organización"
       organization:
@@ -74,7 +74,7 @@ public_es:
         definition: "Definición"
         polls: "Encuestas"
         reports: "Reportes"
-    planning_title: "PLANIFICACIÓN"
+    planning_title: "Planificación"
     planning:
       periods: "Periodos"
       resources: "Recursos"
@@ -82,7 +82,7 @@ public_es:
       audit:
         plans: "Plan de trabajo"
         procedure_controls: "Procedimientos y pruebas de control"
-    execution_title: "EJECUCIÓN"
+    execution_title: "Ejecución"
     execution:
       reviews: "Informes"
       workflows: "Programa de trabajo"
@@ -90,7 +90,7 @@ public_es:
       weaknesses: "Observaciones"
       oportunities: "Oportunidades de mejora"
       reports: "Reportes"
-    conclusion_title: "CONCLUSIÓN"
+    conclusion_title: "Conclusión"
     conclusion:
       draft_reviews: "Informe borrador"
       final_reviews: "Informe definitivo"
@@ -99,7 +99,7 @@ public_es:
         audit: "Reportes de auditoría"
         committee: "Reportes de comité"
         management: "Reportes de la gerencia"
-    follow_up_title: "SEGUIMIENTO"
+    follow_up_title: "Seguimiento"
     follow_up:
       pending_findings: "Hallazgos pendientes"
       complete_findings: "Hallazgos solucionados o reiterados"
@@ -109,7 +109,7 @@ public_es:
         committee: "Reportes de comité"
         audit: "Reportes de auditoría"
         management: "Reportes de la gerencia"
-    help_title: "AYUDA"
+    help_title: "Ayuda"
 
   message:
     change_weakness_risk: "El riesgo de la observación ha cambiado"
