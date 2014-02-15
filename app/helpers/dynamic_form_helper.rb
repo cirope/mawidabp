@@ -1,9 +1,9 @@
 module DynamicFormHelper
-  def link_to_add_fields(name, form, association, partial = nil, data = {})
-    new_object = form.object.send(association).new
+  def link_to_add_fields(name, form, association, partial = nil, data = {}, locals = {})
+    new_object = form.object.send(association).build
     id = new_object.object_id
     fields = form.fields_for(association, new_object, child_index: id) do |f|
-      render((partial || association.to_s.singularize), f: f)
+      render((partial || association.to_s.singularize), locals.merge(f: f, parent: form))
     end
 
     link_to(

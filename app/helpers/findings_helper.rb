@@ -92,14 +92,11 @@ module FindingsHelper
 
 
   def finding_answer_notification_check(form)
-    label_and_check = [
-      form.label(:notify_users, nil, :class => :plain_label),
+    form.input :notify_users, as: :boolean, label: false, inline_label: raw(
+      FindingAnswer.human_attribute_name(:notify_users) +
       show_inline_help_for(:finding_answer_notification,
-        'finding_answer_notification_NEW_RECORD'),
-      form.check_box(:notify_users, :style => 'margin: 0em 0em 0em 1em;')
-    ]
-
-    raw label_and_check.map {|tag| content_tag(:span, tag)}.join
+        'finding_answer_notification_NEW_RECORD')
+    )
   end
 
   def finding_show_status_change_history(dom_id)

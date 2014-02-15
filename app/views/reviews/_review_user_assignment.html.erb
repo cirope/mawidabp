@@ -1,5 +1,4 @@
 <% id = f.object.object_id %>
-<% readonly ||= false %>
 <fieldset class="review_user_assignment">
   <div class="form-inputs">
     <div class="row">
@@ -14,13 +13,11 @@
             autofocus: true,
             readonly: readonly,
             data: {
-              'autocomplete-url' => auto_complete_for_user_reviews_path,
-              'autocomplete-id-target' => "#auto_user_id_#{id}"
+              autocomplete_url: auto_complete_for_user_reviews_path,
+              autocomplete_id_target: "#auto_user_id_#{id}"
             }
           } %>
-        <%= f.input :user_id, as: :hidden, input_html: {
-          id: "auto_user_id_#{id}", class: 'autocomplete_id'
-        } %>
+        <%= f.input :user_id, as: :hidden, input_html: { id: "auto_user_id_#{id}" } %>
       </div>
       <div class="col-md-5">
         <%= user_assignment_type_field(f, false, readonly) %>

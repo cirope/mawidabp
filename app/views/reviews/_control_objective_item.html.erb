@@ -1,32 +1,33 @@
-<% control_objective_item = co_f.object %>
-<div class="control_objective_item">
-  <ul>
-    <li>
-      <%= content_tag :span, control_objective_item.control_objective_text,
-        :class => ('strike text-muted' if control_objective_item.finished) %>
-
-      <% if control_objective_item.new_record? %>
-        <div style="display: none;">
-          <%= co_f.input :control_objective_id, as: :hidden %>
-          <%= co_f.input :control_objective_text, as: :hidden %>
-          <%= co_f.simple_fields_for :control do |c_f| %>
-            <%= c_f.input :control, as: :hidden %>
-            <%= c_f.input :effects, as: :hidden %>
-            <%= c_f.input :design_tests, as: :hidden %>
-            <%= c_f.input :compliance_tests, as: :hidden %>
-            <%= c_f.input :sustantive_tests, as: :hidden %>
-          <% end %>
-        </div>
-      <% elsif !readonly %>
-        <span class="text-muted">|</span>
-        <%= link_to_move %>
-        <span class="text-muted">|</span>
-        <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
-        <span class="text-muted">|</span>
-        <%= remove_item_link(co_f) %>
-        <%= co_f.input :id, as: :hidden %>
-        <%= co_f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
+<% control_objective_item = f.object %>
+<fieldset class="control_objective_item">
+  <% if control_objective_item.new_record? %>
+    <div style="display: none;">
+      <%= f.input :control_objective_id, as: :hidden %>
+      <%= f.input :control_objective_text, as: :hidden %>
+      <%= f.simple_fields_for :control do |c_f| %>
+        <%= c_f.input :control, as: :hidden %>
+        <%= c_f.input :effects, as: :hidden %>
+        <%= c_f.input :design_tests, as: :hidden %>
+        <%= c_f.input :compliance_tests, as: :hidden %>
+        <%= c_f.input :sustantive_tests, as: :hidden %>
       <% end %>
-    </li>
-  </ul>
-</div>
+    </div>
+  <% else %>
+    <ul>
+      <li>
+        <%= content_tag :span, control_objective_item.control_objective_text,
+          :class => ('strike text-muted' if control_objective_item.finished) %>
+        <% if !readonly %>
+          <span class="text-muted">|</span>
+          <%= link_to_move %>
+          <span class="text-muted">|</span>
+          <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
+          <span class="text-muted">|</span>
+          <%= link_to_remove_nested_item(f) %>
+          <%= f.input :id, as: :hidden %>
+          <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
+        <% end %>
+      </li>
+    </ul>
+  <% end %>
+</fieldset>

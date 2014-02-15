@@ -1,69 +1,68 @@
-<% finding_answer = f.object %>
-<% hide = is_dynamic || finding_answer.marked_for_destruction? %>
-<tr class="finding_answer item" <%= raw 'style="display: none;"' if hide %>>
-    <td>
-      <%= finding_answer.user.full_name %>
-    </td>
-    <td>
-      <% if finding_answer.new_record? %>
-        <%= f.text_area :answer, :autofocus => true, :style => 'height: 4em;' %>
-      <% else %>
-        <%= finding_answer.answer %>
-      <% end %>
-    </td>
-    <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
-      <td>
+<%
+  finding_answer = f.object
+  finding_answer.user ||= @auth_user
+%>
+<fieldset class="finding_answer">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-3">
+        <%= finding_answer.user.full_name %>
         <% if finding_answer.new_record? %>
-          <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
-          <%= f.fields_for :file_model do |fm_f| %>
-            <span class="file_container">
-              <%= fm_f.file_field :file, :class => 'inline_item file' %>
-              <%= fm_f.hidden_field :file_cache, :title => fm_f.object.identifier %>
-            </span>
+          <%= f.input :user_id, as: :hidden, input_html: { value: @auth_user.id }  %>
+        <% end %>
+      </div>
+      <div class="col-md-4">
+        <% if finding_answer.new_record? %>
+          <%= f.input :answer, label: false, input_html: { autofocus: true } %>
+        <% else %>
+          <%= finding_answer.answer %>
+        <% end %>
+      </div>
+      <div class="col-md-2">
+        <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
+          <% if finding_answer.new_record? %>
+            <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
+            <%= f.simple_fields_for :file_model do |fm_f| %>
+              <span class="file_container">
+                <%= fm_f.input :file, label: false %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+              </span>
+            <% end %>
+          <% else %>
+            ---
           <% end %>
         <% else %>
-          ---
+          <%= link_to_download finding_answer.file_model.file.url if finding_answer.file_model.file? %>
         <% end %>
-      </td>
-    <% else %>
-      <td>
-        <%= link_to_download finding_answer.file_model.file.url if finding_answer.file_model.file? %>
-      </td>
-    <% end %>
-    <td>
-      <% if finding_answer.created_at %>
-        <%= l(finding_answer.created_at, :format => :long) %>
-        <% if finding_answer.commitment_date %>
-          <br />
-          <br /><b><%= FindingAnswer.human_attribute_name(:commitment_date) %></b>:
-          <br /><%= l(finding_answer.commitment_date, :format => :long) %>
-        <% end %>
-      <% else %>
-        <% if finding_answer.user.can_act_as_audited? &&
-            finding_answer.finding.pending? &&
-            finding_answer.finding.commitment_date.blank? %>
-          <div style="margin-bottom: .5em; clear: both;">
-            <%= f.label :commitment_date,
-              raw(FindingAnswer.human_attribute_name(:commitment_date) +
+      </div>
+      <div class="col-md-2">
+        <% if finding_answer.created_at %>
+          <%= l(finding_answer.created_at, format: :long) %>
+          <% if finding_answer.commitment_date %>
+            <br />
+            <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+            <br /><%= l(finding_answer.commitment_date, format: :long) %>
+          <% end %>
+        <% else %>
+          <% if finding_answer.user.can_act_as_audited? &&
+              finding_answer.finding.pending? &&
+              finding_answer.finding.commitment_date.blank? %>
+            <%= f.input :commitment_date, as: :date_picker, label: raw(
+              FindingAnswer.human_attribute_name(:commitment_date) +
                 show_inline_help_for(:finding_answer_commitment_date,
-                "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")),
-              :class => :plain_label, :style => 'display: block;'%>
-            <%= calendar_text_field f, :commitment_date, false, nil,
-              :class => 'required' %>
-          </div>
+                  "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")
+              ) %>
+          <% end %>
+          <%= finding_answer_notification_check(f) %>
         <% end %>
-      <div style="clear: both;"><%= finding_answer_notification_check(f) %></div>
-      <% end %>
-    </td>
-    <td>
-      <%= remove_item_link(f) if finding_answer.new_record? %>
-      <%= f.hidden_field :user_id %>
-      <%= f.hidden_field :id %>
-    </td>
-</tr>
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showLastItem('.finding_answer');
-    HTMLUtil.stylizeAllInputFiles();
-  </script>
-<% end %>
+      </div>
+      <div class="col-md-1">
+        <div class="show_hide">
+          <%= link_to_remove_nested_item(f) if finding_answer.new_record? %>
+          <%= f.input :user_id, as: :hidden %>
+          <%= f.input :id, as: :hidden %>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>

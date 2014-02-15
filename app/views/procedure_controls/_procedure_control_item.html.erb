@@ -1,6 +1,5 @@
-<% id = dynamic_object_id('procedure_control_item', f) %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="procedure_control_item item" <%= raw 'style="display: none;"' if hide %> id="<%= id %>">
+<% id = f.object.object_id %>
+<fieldset class="procedure_control_item">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-3">
@@ -45,16 +44,15 @@
         <div class="show_hide">
           <%= f.input :id, as: :hidden %>
           <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
-          <%= insert_record_link(f) %>
+          <%= link_to_insert_field(f) %>
           <span class="text-muted">|</span>
-          <%= remove_item_link(f) %>
+          <%= link_to_remove_nested_item(f) %>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="items hidden_items" id="procedure_control_subitems_for_<%= id %>"
-    style="display: none; margin: 0 0 15px 25px;">
+  <div id="procedure_control_subitems_for_<%= id %>" style="display: none; margin: 0 0 15px 25px;">
     <div class="row">
       <div class="col-md-2">
         <h5><strong><%= ProcedureControlSubitem.human_attribute_name :control_objective_id %></strong></h5>
@@ -84,22 +82,14 @@
 
     <div class="procedure_control_subitems">
       <%= f.simple_fields_for :procedure_control_subitems do |pcs_f| %>
-        <%= render :partial => 'procedure_control_subitem',
-          :locals => {:f => pcs_f, :is_dynamic => false,
-          :control_objectives => (f.object.process_control ?
-              f.object.process_control.control_objectives.map {|co| [co.name, co.id]} :
-              []) } %>
+        <%= render 'procedure_control_subitem', f: pcs_f %>
       <% end %>
-    </div>
 
-    <%= link_to t('procedure_control.add_procedure_control_subitem'),
-      '#', 'data-template' => :procedure_control_subitem,
-      'data-event' => 'addNestedSubitem',
-      'data-parent' => :procedure_control_item,
-      'data-child' => :procedure_control_subitems,
-      class: 'btn btn-default btn-sm' %>
+      <%= link_to_add_fields(t('procedure_control.add_procedure_control_subitem'),
+        f, :procedure_control_subitems) %>
+    </div>
   </div>
-</div>
+</fieldset>
 <% unless f.object.process_control_id %>
   <script type="text/javascript">
     $('#<%= id %>_best_practice').change(function() {
@@ -162,9 +152,7 @@
     FormUtil.completeSortNumbers();
   </script>
 <% end %>
-<% if is_dynamic %>
-  <script type="text/javascript">Helper.showItem('#<%= id %>');</script>
-<% elsif f.object.try(:process_control).try(:control_objectives) %>
+<% if f.object.try(:process_control).try(:control_objectives) %>
   <% content_for :js_extra_bottom do %>
     <% options = [[t('helpers.select.prompt'), '']] +
         f.object.process_control.control_objectives.map { |co| [co.name, co.id] } %>

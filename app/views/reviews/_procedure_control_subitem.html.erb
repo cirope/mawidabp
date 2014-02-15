@@ -3,7 +3,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-10">
-        <%= f.input 'procedure_control_subitem_data', label: false,
+        <%= f.input :id, label: false,
           input_html: {
             id: "procedure_control_subitem_#{id}",
             name: 'procedure_control_subitem[procedure_control_subitem_data]',
@@ -11,14 +11,14 @@
             title: t('label.search'),
             autofocus: true,
             data: {
-              'autocomplete-params' => { period_id: @review.period_id },
-              'autocomplete-url' => auto_complete_for_procedure_control_subitem_reviews_path,
-              'autocomplete-id-target' => "#hidden_procedure_control_subitem_#{id}"
+              autocomplete_params: { period_id: @review.period_id },
+              autocomplete_url: auto_complete_for_procedure_control_subitem_reviews_path,
+              autocomplete_id_target: "#hidden_procedure_control_subitem_#{id}"
             }
           } %>
           <%= f.input "hidden_procedure_control_subitem_#{id}", as: :hidden, input_html: {
-            name: 'review[procedure_control_subitem_ids][]', value: procedure_control_subitem.id,
-            id: "hidden_procedure_control_subitem_#{id}", class: 'autocomplete_id' } %>
+            name: 'review[procedure_control_subitem_ids][]', value: f.object.id,
+            id: "hidden_procedure_control_subitem_#{id}" } %>
       </div>
       <div class="col-md-2">
         <div class="show_hide">

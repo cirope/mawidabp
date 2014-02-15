@@ -2,6 +2,9 @@
 <% frozen = @control_objective_item.review.try(:is_frozen?) %>
 
 <%= simple_form_for @control_objective_item do |f| %>
+    <% content_for :js_extra do %>
+      <%= raw("var lastWorkPaperCode = '#{next_control_objective_work_paper_code(@control_objective_item)}';") unless frozen %>
+    <% end %>
   <%= f.error_messages %>
 
   <div class="form-inputs">
@@ -68,20 +71,26 @@
     </div>
   </div>
 
-  <%= render partial: 'weaknesses_summary', locals: { readonly: readonly } %>
-  <%= render partial: 'oportunities_summary', locals: { readonly: readonly } %>
+  <br />
+  <%= render 'weaknesses_summary', readonly: readonly %>
+
+  <br />
+  <%= render 'oportunities_summary', readonly: readonly %>
   <% if current_organization.kind.eql? 'quality_management' %>
-    <%= render partial: 'fortresses_summary', locals: { readonly: readonly } %>
-    <%= render partial: 'nonconformities_summary', locals: { readonly: readonly } %>
-    <%= render partial: 'potential_nonconformities_summary', locals: { readonly: readonly } %>
+    <br />
+    <%= render 'fortresses_summary', readonly: readonly %>
+    <br />
+    <%= render 'nonconformities_summary', readonly: readonly %>
+    <br />
+    <%= render 'potential_nonconformities_summary', readonly: readonly %>
   <% end %>
 
-  <h2>
+  <br />
+  <h4>
     <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
       :count => @control_objective_item.work_papers.size) +
       show_inline_help_for(:control_objective_item_work_papers)) %>
-  </h2>
-
+  </h4>
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
@@ -102,12 +111,12 @@
 
   <div id="work_papers">
     <%= f.simple_fields_for :work_papers do |wp_f| %>
-      <%= render partial: 'work_papers/work_paper', locals: { f: wp_f, frozen: frozen } %>
+      <%= render 'work_papers/work_paper', f: wp_f, frozen: frozen %>
     <% end %>
-  </div>
 
-  <%= link_to_add_fields(t('control_objective_item.add_work_paper'), f, :work_papers,
-    'work_papers/work_paper') unless frozen %>
+    <%= link_to_add_fields(t('control_objective_item.add_work_paper'), f, :work_papers,
+      'work_papers/work_paper') unless frozen %>
+  </div>
 
   <hr />
 

@@ -1,142 +1,83 @@
 <%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
-  html: { method: :patch, class: :validate, id: "edit_finding_#{@finding.id}"} do |f_f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var finding_answer='#{generate_template(f_f, :finding_answers,
-      :object => @finding.finding_answers.new(:user_id => @auth_user.id))}';" %>
-  <% end %>
-  <%= f_f.error_messages %>
+  html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
+  <%= f.error_messages %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= content_tag :label, Review.model_name.human, :class => :inline %>
-      <%= text_field_tag :review, @finding.review.try(:identification),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= content_tag :label, PlanItem.human_attribute_name(:project),
-        :class => :inline %>
-      <%= text_field_tag :project, @finding.review.try(:plan_item).try(:project),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= f_f.label :review_code, nil, :class => :inline %>
-      <%= f_f.text_field :review_code, :class => :inline_item, :size => nil,
-        :readonly => true %>
-    </p>
-    <p class="form_item">
-      <%= content_tag :label,
-        raw(ConclusionFinalReview.human_attribute_name(:issue_date) +
-        show_inline_help_for(:finding_issue_date)),
-        :class => :inline %>
-      <%= text_field_tag :issue_date, @finding.issue_date ?
-        l(@finding.issue_date, :format => :long) :
-        t('finding.without_conclusion_final_review'),
-        :class => :inline_item, :readonly => true %>
-    </p>
-    <% if @finding.control_objective_item %>
-      <p>
-        <label><%= ControlObjective.model_name.human %>:</label>
-        <%= text_area nil, :control_objective_name, :size => nil,
-          :value => "#{@finding.control_objective_item.control_objective_text} (#{@finding.control_objective_item.process_control.name})",
-          :readonly => true %>
-        <%= f_f.hidden_field :control_objective_item_id %>
-      </p>
-    <% end %>
-    <p>
-      <%= f_f.label :description %>
-      <%= f_f.text_area :description, :readonly => true, :style => 'height: 17em;' %>
-    </p>
-    <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
-      <p>
-        <%= f_f.label :effect %>
-        <%= f_f.text_area :effect, :size => nil, :readonly => true %>
-      </p>
-      <p>
-        <%= f_f.label :audit_recommendations %>
-        <%= f_f.text_area :audit_recommendations, :size => nil, :readonly => true %>
-      </p>
-    <% end %>
-  </div>
-  <div class="form_column_right">
-    <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
-      <p class="form_item">
-        <%= f_f.label :risk, nil, :class => :inline %>
-        <%= risk_field(f_f, { prompt: true }, { class: :inline_item, disabled: true }) %>
-      </p>
-      <p class="form_item">
-        <%= f_f.label :priority, nil, :class => :inline %>
-        <%= priority_field(f_f, { prompt: true }, { class: :inline_item, disabled: true }) %>
-      </p>
-    <% end %>
-    <% unless @finding.kind_of? Fortress %>
-      <p class="form_item">
-        <%= f_f.label :state, raw(Finding.human_attribute_name(:state) +
-          show_inline_help_for(:finding_state)), :class => :inline %>
-        <%= finding_status_field(f_f, true, true) %>
-      </p>
-    <% end %>
-    <p>
-      <%= f_f.label :origination_date,
-        raw(Finding.human_attribute_name(:origination_date) +
-        show_inline_help_for(:finding_origination_date)) %>
-      <%= f_f.text_field :origination_date, :value =>
-        (l @finding.origination_date, :format => :short if @finding.origination_date),
-        :readonly => true %>
-    </p>
-    <% if current_organization.kind.eql?('quality_management') &&
-       (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
-      <p>
-        <%= f_f.label :correction %>
-        <%= f_f.text_area :correction, :style => 'height: 4em;' %>
-      </p>
-      <p>
-        <%= f_f.label :correction_date %>
-        <%= calendar_text_field f_f, :correction_date, false, nil %>
-      </p>
-      <p>
-        <%= f_f.label :cause_analysis %>
-        <%= f_f.text_area :cause_analysis, :style => 'height: 4em;' %>
-      </p>
-      <p>
-        <%= f_f.label :cause_analysis_date %>
-        <%= calendar_text_field f_f, :cause_analysis_date, false, nil %>
-      </p>
-    <% end %>
-    <p>
-      <%= f_f.label :answer %>
-      <%= f_f.text_area :answer, :readonly => true %>
-    </p>
-    <p>
-      <%= f_f.label :follow_up_date,
-        raw(@finding.class.human_attribute_name(:follow_up_date) +
-        show_inline_help_for(:finding_follow_up_date)) %>
-      <%= f_f.text_field :follow_up_date, :value =>
-        (l @finding.follow_up_date, :format => :short if @finding.follow_up_date),
-        :readonly => true %>
-    </p>
-    <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
-
-    <p>
-      <%= f_f.label :solution_date,
-        raw(Finding.human_attribute_name(:solution_date) +
-        show_inline_help_for(:finding_solution_date)) %>
-      <%= f_f.text_field :solution_date, :value =>
-        (l @finding.solution_date, :format => :short if @finding.solution_date),
-        :readonly => true %>
-      <%= f_f.hidden_field :id %>
-    </p>
-    <p>
-      <%= f_f.label :audit_comments %>
-      <%= f_f.text_area :audit_comments, :readonly => true %>
-    </p>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :review, label: Review.model_name.human,
+          input_html: { value: @finding.review.try(:identification), readonly: true } %>
+        <%= f.input :project, label: PlanItem.human_attribute_name(:project),
+          input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
+        <%= f.input :review_code, input_html: { readonly: true } %>
+        <%= f.input :issue_date, label: raw(
+          ConclusionFinalReview.human_attribute_name(:issue_date) +
+          show_inline_help_for(:finding_issue_date)), input_html: { readonly: true,
+            value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
+              t('finding.without_conclusion_final_review')) } %>
+        <% if @finding.control_objective_item %>
+          <%= f.input :control_objective_name, label: ControlObjective.model_name.human, input_html: {
+            value: "#{@finding.control_objective_item.control_objective_text}
+            (#{@finding.control_objective_item.process_control.name})",
+          }, readonly: true %>
+          <%= f.input :control_objective_item_id, as: :hidden %>
+        <% end %>
+        <%= f.input :description, input_html: { readonly: true } %>
+        <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
+          <%= f.input :effect, input_html: { readonly: true } %>
+          <%= f.input :audit_recommendations, input_html: { readonly: true } %>
+        <% end %>
+      </div>
+      <div class="col-md-6">
+        <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
+          <%= risk_field(f, prompt: true, disabled: true) %>
+          <%= priority_field(f, prompt: true, disabled: true) %>
+        <% end %>
+        <% unless @finding.kind_of? Fortress %>
+          <%= f.label :state, raw(Finding.human_attribute_name(:state) +
+            show_inline_help_for(:finding_state)) %>
+          <%= finding_status_field(f, true, true) %>
+        <% end %>
+        <%= f.input :origination_date, as: :date_picker, label: raw(
+          Finding.human_attribute_name(:origination_date) +
+          show_inline_help_for(:finding_origination_date)
+        ), input_html: { readonly: true,
+          value: (l(@finding.origination_date, format: :short) if @finding.origination_date)
+        } %>
+        <% if current_organization.kind.eql?('quality_management') &&
+          (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
+          <%= f.input :correction %>
+          <%= f.input :correction_date, as: :date_picker %>
+          <%= f.input :cause_analysis %>
+          <%= f.input :cause_analysis_date, as: :date_picker %>
+        <% end %>
+        <%= f.input :answer, readonly: true %>
+        <%= f.input :follow_up_date, as: :date_picker, label: raw(
+          @finding.class.human_attribute_name(:follow_up_date) +
+          show_inline_help_for(:finding_follow_up_date)
+        ), input_html: { readonly: true,
+          value: (l @finding.follow_up_date, format: :short if @finding.follow_up_date)
+        } %>
+        <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
+        <%= f.input :solution_date, as: :date_picker, label: raw(
+          Finding.human_attribute_name(:solution_date) +
+          show_inline_help_for(:finding_solution_date)
+        ), input_html: { readonly: true,
+          value: (l @finding.solution_date, format: :short if @finding.solution_date)
+        } %>
+        <%= f.input :id, as: :hidden %>
+        <%= f.input :audit_comments, input_html: { readonly: true } %>
+      </div>
+    </div>
   </div>
 
   <% unless @finding.important_dates.blank? %>
-    <h1 class="clear">
+    <br />
+    <h4>
       <%= t('finding.important_dates.title') %>
       <%= show_inline_help_for(:finding_important_dates) %>
-    </h1>
-    <ul class="raw_list">
+    </h4>
+    <ul>
       <% @finding.important_dates.each do |important_date| %>
         <li><%= textilize_without_paragraph important_date %></li>
       <% end %>
@@ -147,9 +88,10 @@
     <% audited, auditors = *@finding.users.partition(&:audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
-    <div style="clear: both; margin: 0em 0em 1em 0em;">
-      <h1><%= t('finding.responsibles', :count => @finding.users.size) %></h1>
-      <table class="summary_table" style="margin-bottom: 2em;">
+    <br />
+    <div>
+      <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+      <table class="table table-condensed table-striped">
         <thead>
           <tr>
             <th><%= t('finding.audited', :count => audited.size) %></th>
@@ -174,8 +116,9 @@
   <% end %>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <h1><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h1>
-    <ul class="raw_list">
+    <br />
+    <h4><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h4>
+    <ul>
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
@@ -183,54 +126,54 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <h1><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h1>
-    <ul class="raw_list">
+    <br />
+    <h4><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h4>
+    <ul>
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
     </ul>
   <% end %>
 
-  <h1>
+  <br />
+  <h4>
     <%= t('finding.finding_answers') %>
     <%= show_inline_help_for(:finding_comments) %>
-  </h1>
-
-  <table class="summary_table" id="finding_answers">
-    <thead>
-      <tr>
-        <th><%= User.model_name.human %></th>
-        <th><%= FindingAnswer.human_attribute_name :answer %></th>
-        <th>
+  </h4>
+  <div class="row">
+    <div class="col-md-3">
+      <h5><strong><%= User.model_name.human %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= FindingAnswer.human_attribute_name :answer %></strong></h5>
+    </div>
+    <div class="col-md-2">
+      <h5>
+        <strong>
           <%= FindingAnswer.human_attribute_name :file_model %>
           <%= show_inline_help_for(:finding_file_model) %>
-        </th>
-        <th>
-          <%= FindingAnswer.human_attribute_name :created_at %>
-        </th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
-      <%= f_f.fields_for :finding_answers do |fa_f| %>
-        <%= render :partial => 'finding_answer', :locals =>
-          {:f => fa_f, :is_dynamic => false} %>
-      <% end %>
-    </tbody>
-  </table>
+        </strong>
+      </h5>
+    </div>
+    <div class="col-md-2">
+      <h5><strong><%= FindingAnswer.human_attribute_name :created_at %></strong></h5>
+    </div>
+  </div>
 
-  <p class="add_item">
-    <%= link_to t('finding.add_finding_answer'), '#',
-      'data-template' => :finding_answer,
-      'data-event' => 'addNestedItem',
-      'data-container' => '#finding_answers' %>
-  </p>
+  <div id="finding_answers">
+    <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
+    <%= f.simple_fields_for :finding_answers do |fa_f| %>
+      <%= render 'finding_answer', f: fa_f %>
+    <% end %>
+
+    <%= link_to_add_fields(t('finding.add_finding_answer'), f, :finding_answers) %>
+  </div>
 
   <% unless @finding.work_papers.blank? %>
-    <h1><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h1>
+    <br />
+    <h4><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h4>
 
-    <table class="summary_table">
+    <table class="table table-condensed table-striped">
       <thead>
         <tr>
           <th><%= WorkPaper.human_attribute_name :name %></th>
@@ -243,10 +186,10 @@
       <tbody>
         <% @finding.work_papers.each do |work_paper| %>
           <tr>
-            <td><%= h work_paper.name %></td>
-            <td><%= h work_paper.code %></td>
+            <td><%= work_paper.name %></td>
+            <td><%= work_paper.code %></td>
             <td><%= work_paper.number_of_pages %></td>
-            <td><%= simple_format h(work_paper.description) %></td>
+            <td><%= simple_format work_paper.description %></td>
             <td><%= work_paper.file_model.try(:file?) ?
               link_to(t('label.download'), work_paper.file_model.file.url) : '---' %></td>
           </tr>
@@ -255,67 +198,65 @@
     </table>
   <% end %>
 
-  <div style="clear: both; margin-top: 2em;">
-    <div class="title" style="font-weight: normal;">
-      <%= textilize t('finding.costs',
-        :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
-    </div>
+  <br />
+  <%= textilize t('finding.costs',
+    :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
-    <% unless @finding.costs.blank? %>
-      <p style="margin-bottom: 1em;">
-        <%= link_to t('finding.view_cost_details'), '#', :onclick =>
-          "$('#cost_details').slideToggle(); return false;" %>
-      </p>
-      <div id="cost_details" style="display: none;">
-        <div>
-          <table class="summary_table">
-            <thead>
+  <% unless @finding.costs.blank? %>
+    <p style="margin-bottom: 1em;">
+      <%= link_to t('finding.view_cost_details'), '#', :onclick =>
+        "$('#cost_details').slideToggle(); return false;" %>
+    </p>
+    <div id="cost_details" style="display: none;">
+      <div>
+        <table class="table table-condensed table-striped">
+          <thead>
+            <tr>
+              <th><%= Cost.human_attribute_name :created_at %></th>
+              <th><%= Cost.human_attribute_name :cost %></th>
+              <th><%= Cost.human_attribute_name :description %></th>
+              <th><%= Cost.human_attribute_name :user_id %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
               <tr>
-                <th><%= Cost.human_attribute_name :created_at %></th>
-                <th><%= Cost.human_attribute_name :cost %></th>
-                <th><%= Cost.human_attribute_name :description %></th>
-                <th><%= Cost.human_attribute_name :user_id %></th>
+                <td><%= l(cost.created_at, :format => :long) %></td>
+                <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
+                <td><%= cost.description.blank? ? '-' : cost.description %></td>
+                <td><%= cost.user.full_name %></td>
               </tr>
-            </thead>
-            <tbody>
-              <% @finding.costs.reject {|f| f.new_record?}.each do |cost| %>
-                <tr>
-                  <td><%= l(cost.created_at, :format => :long) %></td>
-                  <td><%= time_in_words_with_abbr(cost.cost.hours) %></td>
-                  <td><%= h cost.description.blank? ? '-' : cost.description %></td>
-                  <td><%= h cost.user.full_name %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+            <% end %>
+          </tbody>
+        </table>
       </div>
-    <% end %>
-
-    <div class="column_headers">
-      <div class="item_column" style="width: 20%;">
-        <h3>
-          <%= Cost.human_attribute_name :cost %>
-          <%= show_inline_help_for(:finding_cost_input) %>
-        </h3>
-      </div>
-      <div class="item_column" style="width: 75%;">
-        <h3><%= Cost.human_attribute_name :description %></h3>
-      </div>
-      <div class="clear"></div>
     </div>
+  <% end %>
 
-    <div id="costs">
-      <%= f_f.fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
-          Cost.new(:user => @auth_user, :cost_type => 'audited') do |c_f| %>
-        <%= render :partial => 'cost', :locals => {:f => c_f} %>
-      <% end %>
+  <br />
+  <div class="row">
+    <div class="col-md-2">
+      <%= Cost.human_attribute_name :cost %>
+      <%= show_inline_help_for(:finding_cost_input) %>
+    </div>
+    <div class="col-md-10">
+      <%= Cost.human_attribute_name :description %>
     </div>
   </div>
 
-  <%= hidden_lock_version(f_f) %>
-  <p>
-    <span class="button"><%= f_f.submit %></span>
-  </p>
+  <div id="costs">
+    <%= f.simple_fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
+        Cost.new(:user => @auth_user, :cost_type => 'audited') do |c_f| %>
+      <%= render 'cost', f: c_f %>
+    <% end %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions form-footer">
+    <div class="pull-right"><%= yield :form_actions %></div>
+    <%= f.input :lock_version, as: :hidden %>
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
 <% end %>
 <%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>

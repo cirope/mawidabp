@@ -1,6 +1,6 @@
 <%
   id = f.object.object_id
-  finding = f.object.finding
+  finding = f.object.finding || parent.object
   finding_relation = f.object
 %>
 <fieldset class="finding_relation">
@@ -10,7 +10,7 @@
         <% if finding_relation.related_finding.blank? %>
           <% extra_parameters = { review_id: finding.try(:review).try(:id) || '' } %>
           <% extra_parameters[:finding_id] = finding.id unless finding.new_record? %>
-          <%= f.input :related_finding_id, label: false, input_html: {
+          <%= f.input :related_finding_id, as: :string, label: false, input_html: {
             value: finding_relation.related_finding.to_s,
             id: "finding_finding_relation_#{id}", class: 'autocomplete_field',
             title: t('label.search'), autocomplete: :off, autofocus: true,
@@ -22,7 +22,7 @@
           } %>
         <% else %>
           <%= f.input "finding_finding_relation_#{id}", label: false, input_html: {
-            value: finding_relation.related_finding.try(:to_s), readonly: true } %>
+            value: finding_relation.related_finding.to_s, readonly: true } %>
         <% end %>
         <%= f.input :related_finding_id, as: :hidden,
           input_html: { id: "hidden_related_finding_#{id}" } %>

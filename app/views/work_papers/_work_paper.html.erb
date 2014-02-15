@@ -3,25 +3,24 @@
 <fieldset class="work_paper" id="<%= id %>">
   <div class="row">
     <div class="col-md-3">
-      <%= f.input :name, label: false, input_html: {
-        class: 'required tiny_component', autofocus: true } %>
+      <%= f.input :name, label: false, input_html: { autofocus: true } %>
     </div>
     <div class="col-md-2">
       <%= f.input :code, label: false, input_html: {
-        class: 'required tiny_component work_paper_code', readonly: true } %>
+        class: 'work_paper_code', readonly: true } %>
     </div>
     <div class="col-md-2">
-      <%= f.input :number_of_pages, label: false, input_html: { class: 'required tiny_component' } %>
+      <%= f.input :number_of_pages, label: false %>
     </div>
     <div class="col-md-2">
-      <%= f.input :description, label: false, input_html: { class: 'tiny_component' } %>
+      <%= f.input :description, label: false %>
     </div>
     <div class="col-md-2">
       <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>
         <% f.object.build_file_model unless f.object.file_model.try(:new_record?) %>
         <%= f.simple_fields_for :file_model do |fm_f| %>
           <span class="file_container">
-            <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+            <%= fm_f.input :file, label: false %>
             <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
           </span>
         <% end %>
@@ -29,7 +28,7 @@
         <% unless frozen %>
           <%= f.simple_fields_for :file_model do |fm_f| %>
             <span class="file_container">
-              <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+              <%= fm_f.input :file, label: false %>
               <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
             </span>
           <% end %>
@@ -47,7 +46,7 @@
   </div>
 </fieldset>
 <script type="text/javascript">
-  +function() {
+  (function() {
     var id = '#<%= id %>';
 
     if(lastWorkPaperCode) {
@@ -55,5 +54,5 @@
 
       $(id).find('.work_paper_code').val(lastWorkPaperCode);
     }
-  }(jQuery);
+  })();
 </script>

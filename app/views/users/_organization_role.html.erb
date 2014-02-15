@@ -1,5 +1,4 @@
-<% roles = f.object.organization ? Role.list_by_organization(
-     f.object.organization.id) : [] %>
+<% roles = f.object.organization ? Role.list_by_organization(f.object.organization.id) : [] %>
 <% id = f.object.object_id %>
 <fieldset class="organization_role">
   <div class="row">

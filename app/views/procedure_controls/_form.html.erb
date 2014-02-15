@@ -1,6 +1,5 @@
 <%= simple_form_for @procedure_control do |f| %>
   <% js_extra = 'var procedureControlItemHash = {};' %>
-  <% js_extra << "\nvar procedure_control_item='#{generate_template(f, :procedure_control_items)}';" %>
   <%= f.error_messages %>
 
   <div class="form-inputs">
@@ -54,24 +53,15 @@
   </div>
 
   <div id="procedure_control_items">
-    <% pci_template = nil %>
     <% @procedure_control.procedure_control_items.build if @procedure_control.procedure_control_items.empty? %>
     <%= f.simple_fields_for :procedure_control_items,
       @procedure_control.procedure_control_items.sort do |pci_f| %>
-      <% pci_template ||= generate_template(pci_f,
-        :procedure_control_subitems, :child_index => 'NEW_SUBRECORD',
-        :locals => {:control_objectives => []}) unless pci_template == 0 %>
-      <% js_extra << "\nvar procedure_control_subitem = '#{pci_template}';" unless pci_template == 0 %>
-      <% pci_template = 0 %>
-      <%= render partial: 'procedure_control_item', locals: { f: pci_f, is_dynamic: false } %>
+      <%= render 'procedure_control_item', f: pci_f, control_objectives: [] %>
     <% end %>
-  </div>
 
-  <%= link_to t('procedure_control.add_procedure_control_item'), '#',
-    'data-template' => :procedure_control_item,
-    'data-event' => 'addNestedItem',
-    'data-container' => '#procedure_control_items',
-    class: 'btn btn-default btn-sm' %>
+    <%= link_to_add_fields(t('procedure_control.add_procedure_control_item'),
+      f, :procedure_control_items) %>
+  </div>
 
   <hr />
 

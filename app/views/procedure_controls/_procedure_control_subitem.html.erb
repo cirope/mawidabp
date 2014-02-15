@@ -1,6 +1,10 @@
-<% id = f.object.new_record? ? 'NEW_SUBRECORD' : f.object.id %>
-<% hide = is_dynamic || f.object.marked_for_destruction? %>
-<div class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>" <%= raw 'style="display: none;"' if hide %>>
+<%
+  procedure_control_item = f.object.procedure_control_item
+  control_objectives = (procedure_control_item.process_control ?
+    procedure_control_item.process_control.control_objectives.map {|co| [co.name, co.id]} : [])
+%>
+<% id = f.object.object_id %>
+<fieldset class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>">
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-2">
@@ -42,23 +46,21 @@
 
       <div class="col-md-1">
         <%= relevance_field(
-          f, {}, label: false, class: :relevance, id: "procedure_control_subitem_#{id}_relevance"
+          f, {}, label: false, input_html: { id: "procedure_control_subitem_#{id}_relevance" }
         ) %>
       </div>
       <div class="col-md-1">
         <div class="show_hide">
           <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
-          <%= insert_record_link(f, 'data-event' => 'insertRecordSubitem',
-            'data-target' => '.procedure_control_subitem',
-            'data-parent' => :procedure_control_item) %>
+          <%= link_to_insert_field(f) %>
           <span class="text-muted">|</span>
-          <%= remove_item_link(f) %>
+          <%= link_to_remove_nested_item(f) %>
         </div>
       </div>
       <script type="text/javascript">FormUtil.completeSortNumbers();</script>
     </div>
   </div>
-</div>
+</fieldset>
 <script type="text/javascript">
   $('#procedure_control_subitem_<%= id %>_control_objective').change(function() {
     var parentId = '#<%= "procedure_control_subitem_#{id}" %>';
@@ -81,7 +83,6 @@
     }
   });
 </script>
-<% if is_dynamic %>
 <script type="text/javascript">
 (function() {
   var thisElement = $('#procedure_control_subitem_<%= id %>');
@@ -93,8 +94,5 @@
       HTMLUtil.optionsFromArray(options)
     );
   }
-  
-  Helper.showItem('#procedure_control_subitem_<%= id %>');
 })();
 </script>
-<% end %>

@@ -1,7 +1,7 @@
 <div id="finding_status_change_history" style="display: none;">
   <div>
-    <h2><%= t('finding.status_change_history') %></h2>
-    <ul class="raw_list">
+    <h4><strong><%= t('finding.status_change_history') %></strong></h4>
+    <ul>
       <% finding.status_change_history.each do |historic_finding| %>
         <% title = historic_finding.user_who_make_it.try(:full_name) ||
           t('message.automatic_by_the_system') %>
@@ -13,7 +13,7 @@
     </ul>
 
     <% unless finding.comments.reject(&:new_record?).empty? %>
-      <h2><%= t('finding.comments') %></h2>
+      <h4><%= t('finding.comments') %></h4>
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
@@ -26,8 +26,8 @@
           <% finding.comments.reject(&:new_record?).each do |comment| %>
             <tr>
               <td><%= l comment.created_at, :format => :minimal %></td>
-              <td><%= h comment.user.try(:full_name) %></td>
-              <td><%= h comment.comment %></td>
+              <td><%= comment.user.try(:full_name) %></td>
+              <td><%= comment.comment %></td>
             </tr>
           <% end %>
         </tbody>

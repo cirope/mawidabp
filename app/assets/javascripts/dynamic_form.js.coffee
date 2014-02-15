@@ -55,3 +55,5 @@ jQuery ($) ->
     $(element).prev('fieldset').find(
       '[autofocus]:not([readonly]):enabled:visible:first'
     ).focus()
+
+  $('[name$="[_destroy]"][value=1]').closest('fieldset').hide()

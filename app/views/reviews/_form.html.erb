@@ -2,12 +2,6 @@
 <% frozen = @review.is_frozen? %>
 <%= simple_form_for @review do |f| %>
   <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-  <% unless readonly %>
-    <% js_extra << "var control_objective='#{escape_javascript render(
-      :partial => 'procedure_control_subitem',
-      :locals => { f: f, :procedure_control_subitem => ProcedureControlSubitem.new,
-      :is_dynamic => true})}';" %>
-  <% end %>
   <%= f.error_messages %>
 
   <div class="form-inputs">
@@ -88,26 +82,27 @@
 
   <div id="review_user_assignments">
     <%= f.simple_fields_for :review_user_assignments do |rua_f| %>
-      <%= render partial: 'review_user_assignment', locals: { f: rua_f, readonly: readonly } %>
+      <%= render 'review_user_assignment', f: rua_f, readonly: readonly %>
     <% end %>
+
+    <%= link_to_add_fields(
+      t('review.add_user_assignment'), f, :review_user_assignments, nil, {}, { readonly: readonly }
+    ) unless readonly %>
   </div>
 
-  <% unless readonly %>
-    <%= link_to_add_fields(t('review.add_user_assignment'), f, :review_user_assignments) %>
-  <% end %>
-
   <% unless @review.control_objective_items.empty? %>
-    <h2 style="margin-top: 30px;"><strong><%= t('review.control_objective_items_label') %></strong></h2>
-    <hr />
+    <div class="page-header">
+      <h3><%= t('review.control_objective_items_label') %></h3>
+    </div>
     <div id="control_objective_items">
       <% @review.grouped_control_objective_items.each do |pc, cois| %>
         <div id="process_control_<%= pc.id %>" class="process_control">
-          <h4><strong>
+          <h4>
             <%= pc.name %>
             <%= link_to_move :class => 'process_control_move' unless readonly %>
-          </strong></h4>
+          </h4>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
-            <%= render partial: 'control_objective_item', locals: { co_f: coi_f, readonly: readonly } %>
+            <%= render 'control_objective_item', f: coi_f, readonly: readonly %>
           <% end %>
         </div>
         <script type="text/javascript">
@@ -120,28 +115,34 @@
   <% unless readonly %>
     <div class="row">
       <div class="col-md-6">
-        <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
+        <h4><%= ControlObjective.model_name.human %></h4>
       </div>
     </div>
 
-    <div id="control_objectives"></div>
-
-    <%= link_to t('review.add_control_objective'), '#',
-      'data-event' => 'addNestedItem', 'data-template' => :control_objective,
-      'data-container' => '#control_objectives', class: 'btn btn-default btn-sm' %>
+    <div id="control_objectives">
+      <%= link_to_add_fields(
+        t('review.add_control_objective'), f, :control_objective_items, 'procedure_control_subitem'
+      ) %>
+    </div>
   <% end %>
 
-  <h2><strong><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></strong></h2>
+  <div class="page-header">
+    <h3><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></h3>
+  </div>
+
   <div id="suggested_findings"></div>
 
   <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>
   <% unless finding_relations.empty? %>
     <%= f.simple_fields_for :finding_review_assignments, finding_relations do |fra_f| %>
-      <%= render partial: 'finding_review_assignment_readonly', locals: { f: fra_f, readonly: readonly } %>
+      <%= render 'finding_review_assignment_readonly', f: fra_f, readonly: readonly %>
     <% end %>
   <% end %>
 
-  <h2><strong><%= FindingReviewAssignment.human_attribute_name :finding %></strong></h2>
+  <div class="page-header">
+    <h3><%= FindingReviewAssignment.human_attribute_name :finding %></h3>
+  </div>
+
   <div id="finding_review_assignments"></div>
 
   <% unless readonly %>
@@ -193,7 +194,7 @@ jQuery(function() {
       }).complete(function() {
         Helper.hideLoading(element);
       });
-      
+
       $.get(amount_url, { id: element.val() }, function(data) {
         $('#estimated_amount').html(data);
       }).complete(function() {
@@ -205,28 +206,26 @@ jQuery(function() {
       $('#link_to_suggested_findings').addClass('link_without_action');
     }
   });
-  
+
   $('#link_to_suggested_findings').click(function() {
     if($('#link_to_suggested_findings').attr('href') == '#') {
       return false;
     }
   });
-  
+
   $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
     $('#suggested_findings').html(data);
   });
-  
+
   $(document).on('ajax:success', '#procedure_control_link', function(event, data) {
     $('#procedure_control_data').html(data);
   });
-  
+
   Helper.makeSortable(
     '#control_objective_items', 'div.process_control', 'a.process_control_move'
   );
-  
+
   FormUtil.completeSortNumbers();
-  
-  AutoComplete.observeAll();
 
   HTMLUtil.stylizeAllInputFiles();
 });
