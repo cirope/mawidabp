@@ -4,21 +4,13 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <p>
-          <strong><%= Organization.model_name.human %>:</strong>
-          <%= current_organization.name %>
-        </p>
-        <p>
-          <strong><%= User.human_attribute_name :user %>:</strong>
-          <%= @auth_user.user %>
-        </p>
-
-        <br />
         <%= f.input :name, input_html: { maxlength: 100, autofocus: true } %>
         <%= f.input :last_name, input_html: { maxlength: 100 } %>
         <%= f.input :email, input_html: { maxlength: 100 } %>
+      </div>
+      <div class="col-md-6">
         <%= f.input :function, input_html: { maxlength: 255 } %>
-        <%= user_language_field(f) %>
+        <%= user_language_field f %>
       </div>
     </div>
   </div>
