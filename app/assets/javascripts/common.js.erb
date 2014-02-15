@@ -244,11 +244,10 @@ var Helper = {
   },
 
   /**
-     * Muestra mensajes en el div "time_left" si existe
+     * Muestra mensajes en el div "time-left" si existe
      */
   showMessage: function(message, expired) {
-    $('#time_left').find('span.message').html(message);
-    $('#time_left:not(:visible)').stop().fadeIn();
+    $('#time-left').removeClass('hidden').find('.message').html(message);
 
     State.sessionExpire = State.sessionExpire || expired;
   },
@@ -691,7 +690,7 @@ jQuery(function($) {
       $.each(State.showMessages, function() {
         if(!State.sessionExpire) {
           window.clearTimeout(this.timer_id);
-          $('#time_left').hide();
+          $('#time-left').addClass('hidden');
 
           var message = this.message;
           var expired = this.expired;

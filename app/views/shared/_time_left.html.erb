@@ -1,8 +1,8 @@
 <% time_left = parameter_in(current_organization.try(:id), :session_expire_time).to_i %>
 <% if current_organization && time_left > 0 %>
-  <div id="time_left" class="alert alert-danger alert-dismissable fade in" style="display: none;">
+  <div id="time-left" class="alert alert-danger alert-dismissable fade in hidden">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <div class="message text-center"></div>
+    <p class="message text-center"></p>
   </div>
   <script type="text/javascript">
     State.showMessages[0] = {
