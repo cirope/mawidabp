@@ -32,7 +32,7 @@ class VersionsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:version)
     assert_select '#error_body', false
-    assert_select 'table.summary_table'
+    assert_select 'table.table'
     assert_template 'versions/show'
   end
 

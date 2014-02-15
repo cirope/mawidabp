@@ -125,7 +125,7 @@
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_user'), f,
-      :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
+      :finding_user_assignments, 'findings/finding_user_assignment', {}, readonly: readonly) unless readonly %>
   </div>
 
   <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>

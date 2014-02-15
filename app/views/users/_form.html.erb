@@ -1,5 +1,5 @@
 <%= simple_form_for @user do |f| %>
-  <%= f.error_messages %>
+  <%= f.error_notification %>
 
   <div class="form-inputs">
     <div class="row">
@@ -94,6 +94,7 @@
 
   <div id="organization_roles">
     <% organization_roles =
+      @user.organization_roles.build
       @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
       @user.organization_roles.for_group(current_organization.group_id)
     %>

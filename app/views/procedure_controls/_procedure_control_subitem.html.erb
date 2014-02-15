@@ -83,6 +83,7 @@
     }
   });
 </script>
+<% if f.object.new_record? %>
 <script type="text/javascript">
 (function() {
   var thisElement = $('#procedure_control_subitem_<%= id %>');
@@ -96,3 +97,4 @@
   }
 })();
 </script>
+<% end %>

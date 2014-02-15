@@ -37,7 +37,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -52,7 +52,7 @@ class SessionsControllerTest < ActionController::TestCase
           :password => PLAIN_PASSWORDS[user.user]
         }
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -68,7 +68,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -85,7 +85,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -104,7 +104,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -121,7 +121,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -140,7 +140,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -159,7 +159,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -178,7 +178,7 @@ class SessionsControllerTest < ActionController::TestCase
         ).order('created_at DESC').first
         assert_kind_of ErrorRecord, error_record
         assert_response :success
-        assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+        assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
       end
 
       assert_response :success
@@ -271,7 +271,7 @@ class SessionsControllerTest < ActionController::TestCase
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
       assert_response :success
-      assert_select '#alert p', I18n.t('message.invalid_user_or_password')
+      assert_select 'div.alert-danger strong', I18n.t('message.invalid_user_or_password')
     end
   end
 
@@ -355,7 +355,7 @@ class SessionsControllerTest < ActionController::TestCase
     assert_response :success
     assert_select '#error_body', false
     assert_template 'sessions/new'
-    assert_select '#alert p', I18n.t('message.you_are_already_logged')
+    assert_select 'div.alert', I18n.t('message.you_are_already_logged')
   end
 
   test 'redirected instead of relogin' do
