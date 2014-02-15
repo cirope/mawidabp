@@ -1,7 +1,4 @@
-<p>
-  <strong><%= Organization.human_attribute_name 'name' %>:</strong>
-  <%= @organization.name %>
-</p>
+<h2><%= @organization.name %></h2>
 
 <p>
   <strong><%= Organization.human_attribute_name 'prefix' %>:</strong>
@@ -23,7 +20,8 @@
 </p>
 
 <% if @organization.image_model %>
-  <div style="margin-top: 1em;"><%= organization_image_tag %></div>
+  <br />
+  <div><%= organization_image_tag %></div>
 <% end %>
 
 <hr />

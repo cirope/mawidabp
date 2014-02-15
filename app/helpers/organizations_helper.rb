@@ -16,6 +16,6 @@ module OrganizationsHelper
       [t("activerecord.attributes.organization.kind_options.#{kind}"), kind]
     end
 
-    form.input :kind, collection: collection
+    form.input :kind, collection: collection, prompt: true
   end
 end
