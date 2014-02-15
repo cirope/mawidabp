@@ -1,7 +1,7 @@
 <% readonly = !@conclusion_final_review.new_record? %>
 
 <%= simple_form_for @conclusion_final_review do |f| %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">

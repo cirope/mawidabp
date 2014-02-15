@@ -1,5 +1,5 @@
 <%= simple_form_for @plan do |f| %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <% unless params[:business_unit_type].blank? %>
     <div class="page-header">

@@ -1,6 +1,6 @@
 <%= simple_form_for @finding, :as => :finding, url: finding_path(params[:completed], @finding),
   html: { method: :patch, id: "edit_finding_#{@finding.id}"} do |f| %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">

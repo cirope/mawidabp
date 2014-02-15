@@ -2,7 +2,7 @@
 <% frozen = @review.is_frozen? %>
 <%= simple_form_for @review do |f| %>
   <% js_extra = "var lastWorkPaperCode = '#{next_review_work_paper_code(@review)}';" %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">

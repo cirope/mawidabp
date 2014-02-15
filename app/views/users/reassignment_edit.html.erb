@@ -1,5 +1,5 @@
 <%= simple_form_for @user, url: reassignment_update_user_path(@user) do |f| %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <p>

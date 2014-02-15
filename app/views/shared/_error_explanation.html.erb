@@ -1,0 +1,20 @@
+<% model = f.object %>
+<% if model.errors.any? %>
+  <div id="error_explanation">
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= t('activerecord.errors.template.header', count: model.errors.count) %>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <p><%= t('activerecord.errors.template.body') %></p>
+        <ul>
+          <% model.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+<% end %>

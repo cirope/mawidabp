@@ -9,7 +9,7 @@
     <%= raw("var lastWorkPaperCode = '#{next_oportunity_work_paper_code(@oportunity)}';") unless frozen %>
   <% end %>
 
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">

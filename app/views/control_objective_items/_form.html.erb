@@ -5,7 +5,7 @@
     <% content_for :js_extra do %>
       <%= raw("var lastWorkPaperCode = '#{next_control_objective_work_paper_code(@control_objective_item)}';") unless frozen %>
     <% end %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">

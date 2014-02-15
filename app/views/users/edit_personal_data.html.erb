@@ -1,5 +1,5 @@
 <%= simple_form_for @auth_user, url: update_personal_data_user_path(@auth_user) do |f| %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
     <div class="row">
