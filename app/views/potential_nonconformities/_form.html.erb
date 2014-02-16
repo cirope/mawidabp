@@ -86,14 +86,12 @@
   </div>
 
   <hr />
-
-  <h3>
+  <h4>
     <%= t('finding.responsibles', count: @potential_nonconformity.users.size) %>
     <%= show_inline_help_for(:finding_responsibles) %>
-  </h3>
-
+  </h4>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
@@ -112,42 +110,41 @@
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_user'), f,
-      :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
+      :finding_user_assignments, 'findings/finding_user_assignment', {}, readonly: readonly
+    ) unless readonly %>
   </div>
 
-  <hr />
-
   <% unless (repeated_ancestors = @potential_nonconformity.repeated_ancestors).blank? %>
-    <h3>
+    <br />
+    <h4>
       <%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %>
-    </h3>
+    </h4>
 
     <ul>
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
       <% end %>
     </ul>
-    <hr />
   <% end %>
 
   <% unless (repeated_children = @potential_nonconformity.repeated_children).blank? %>
-    <h3>
+    <br />
+    <h4>
       <%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %>
-    </h3>
+    </h4>
 
     <ul>
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
       <% end %>
     </ul>
-    <hr />
   <% end %>
 
-  <h3>
+  <br />
+  <h4>
     <%= t('finding.finding_relations') %>
     <%= show_inline_help_for(:finding_relations) %>
-  </h3>
-
+  </h4>
   <div class="row">
     <div class="col-md-6">
       <h5><strong><%= FindingRelation.human_attribute_name :related_finding_id %></strong></h5>
@@ -166,13 +163,12 @@
       :finding_relations, 'findings/finding_relation') unless frozen %>
   </div>
 
-  <hr />
-
   <% unless @potential_nonconformity.inverse_finding_relations.blank? %>
-    <h2>
+    <br />
+    <h4>
       <%= t('finding.inverse_finding_relations') %>
       <%= show_inline_help_for(:inverse_finding_relations) %>
-    </h2>
+    </h4>
 
     <table class="table table-condensed table-striped">
       <thead>
@@ -190,14 +186,14 @@
         <% end %>
       </tbody>
     </table>
-    <hr />
   <% end %>
 
   <% unless @potential_nonconformity.finding_answers.blank? %>
-    <h3>
+    <br />
+    <h4>
       <%= t('finding.finding_answers') %>
       <%= show_inline_help_for(:finding_comments) %>
-    </h3>
+    </h4>
 
     <table class="table table-condensed table-striped">
       <thead>
@@ -232,14 +228,13 @@
         <% end %>
       </tbody>
     </table>
-    <hr />
   <% end %>
 
-  <h3>
+  <br />
+  <h4>
     <%= t('finding.work_papers') %>
     <%= show_inline_help_for(:finding_work_papers) %>
-  </h3>
-
+  </h4>
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>

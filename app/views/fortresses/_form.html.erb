@@ -66,15 +66,13 @@
     </div>
   </div>
 
-  <hr />
-
-  <h3>
+  <br />
+  <h4>
     <%= t('finding.responsibles', :count => @fortress.users.size) %>
     <%= show_inline_help_for(:finding_responsibles) %>
-  </h3>
-
+  </h4>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
@@ -93,16 +91,15 @@
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_user'), f,
-      :finding_user_assignments, 'findings/finding_user_assignment') unless readonly %>
+      :finding_user_assignments, 'findings/finding_user_assignment', {}, readonly: readonly
+    ) unless readonly %>
   </div>
 
-  <hr />
-
-  <h3>
+  <br />
+  <h4>
     <%= t('finding.work_papers') %>
     <%= show_inline_help_for(:finding_work_papers) %>
-  </h3>
-
+  </h4>
   <div class="row">
     <div class="col-md-3">
       <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
