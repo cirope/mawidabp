@@ -14,12 +14,6 @@
         <%= f.simple_fields_for :image_model do |im_f| %>
           <%= im_f.input :image, label: Organization.human_attribute_name(:image_model) %>
         <% end %>
-        <div class="show_hide">
-          <% if @organization.image_model && @organization.image_model.valid? &&
-            @organization.errors.empty? %>
-            <%= link_to_download @organization.image_model.image.url %>
-          <% end %>
-        </div>
       <% else %>
         <div class="alert alert-warning">
           <%= t('organization.new_organization_can_not_have_image') %>
@@ -27,7 +21,7 @@
       <% end %>
     </div>
     <div class="col-md-6">
-      <%= f.input :description %>
+      <%= f.input :description, input_html: { rows: 5 } %>
     </div>
   </div>
 
