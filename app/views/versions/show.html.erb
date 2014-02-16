@@ -19,11 +19,11 @@
   <%= t("version.event_#{@version.event}") %>
 </p>
 
-<h3><%= t 'version.changes' %></h3>
-
 <% changes = @version.changes_from_next %>
 <% unless changes.blank? %>
   <table class="table table-condensed table-striped">
+    <caption><h3><%= t 'version.changes' %></h3></caption>
+
     <thead>
       <tr>
         <th><%= t 'version.column_attribute' %></th>
