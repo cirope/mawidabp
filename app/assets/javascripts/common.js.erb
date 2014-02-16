@@ -403,61 +403,6 @@ var Menu = {
 
 // Observadores de eventos
 var Observer = {
-  /**
-     * Agrega un listener a los eventos de click en el menú principal
-     */
-  attachToMenu: function() {
-    $(document).on('click', '#menu_container a', function(event) {
-      var menuName = $(this).attr('href').replace(/.*#/, '')
-      var content = State.menu[menuName];
-
-      if($(this).hasClass('menu_item_1') && content) {
-        $('#menu_level_1').html(content);
-        $('#menu_level_2').html('&nbsp;');
-        $('.menu_item_1').removeClass('highlight');
-
-        event.stopPropagation();
-        event.preventDefault();
-      } else if($(this).hasClass('menu_item_2') && content) {
-        $('#menu_level_2').html(content);
-        $('.menu_item_2').removeClass('highlight');
-
-        event.stopPropagation();
-        event.preventDefault();
-      }
-
-      $(this).addClass('highlight');
-    });
-  },
-  /**
-     * Agrega un listener a los eventos de click en el menú principal en móviles
-     */
-  attachToMobileMenu: function() {
-    $(document).on('click', '#main_container a', function(event) {
-      var e = $(this);
-      var menuName = e.attr('href').replace(/.*#/, '');
-      var content = State.menu[menuName];
-
-      if(e.is('.menu_item_1, .menu_item_2') && content) {
-        $('#main_mobile_menu').data(
-          'previous-' + e.parents('ul').data('level'),
-          $('#main_mobile_menu').html()
-        );
-
-        $('#main_mobile_menu').html(content);
-
-        event.stopPropagation();
-        event.preventDefault();
-      } else if(e.is('.back')) {
-        $('#main_mobile_menu').html(
-          $('#main_mobile_menu').data(
-            'previous-' + (e.parents('ul').data('level') - 1)
-          )
-        );
-      }
-    });
-  },
-
   attachToInputFile: function(span) {
     var imageAttrs = {
       src: "<%= image_path 'new_document.gif' %>",
@@ -661,15 +606,6 @@ jQuery(function($) {
 
     return false;
   });
-
-  if($('#menu_container').length > 0 &&
-      (!/mobi|mini|fennec/i.test(navigator.userAgent) ||
-      window.screen.width > 800)) {
-    Observer.attachToMenu();
-  } else if($('#mobile_menu').length > 0) {
-    Observer.attachToMobileMenu();
-    window.scrollTo(0, 1).delay(1000);
-  }
 
   // Mensajes diferidos
   if($.isArray(State.showMessages)) {
