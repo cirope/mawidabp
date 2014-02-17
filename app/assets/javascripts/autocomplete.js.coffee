@@ -39,7 +39,7 @@ jQuery ($) ->
         input.trigger 'autocomplete:update', input
 
         false
-      open: -> $('.ui-menu').css('width', input.outheWidth())
+      open: -> $('.ui-menu').css('width', input.outerWidth())
 
     input.data('ui-autocomplete')._renderItem = (ul, item) ->
       $('<li></li>').data('item.autocomplete', item).append(
