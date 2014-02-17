@@ -30,22 +30,22 @@
           input_html: { value: review_business_unit_text(@review), readonly: true } %>
         <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
           value: review_business_unit_type_text(@review), readonly: true } %>
-        <%= f.input :description, label: Review.human_attribute_name(:description),
-          input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-6">
+        <%= f.input :description, label: Review.human_attribute_name(:description),
+          input_html: { readonly: readonly, rows: 5 } %>
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
-          input_html: { readonly: readonly } %>
-        <%= f.label :file_model_id %>
+          input_html: { readonly: readonly, rows: 5 } %>
         <% f.object.build_file_model unless f.object.file_model %>
         <%= f.simple_fields_for :file_model do |fm_f| %>
           <div class="row">
             <div class="col-md-11">
-              <% unless readonly %>
-                <span class="file_container">
-                  <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
-                  <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-                </span>
+              <% if readonly %>
+                <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
+              <% else %>
+                <%= fm_f.label :file, Review.human_attribute_name('file_model_id') %>
+                <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
+                <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
               <% end %>
             </div>
             <div class="col-md-1">
@@ -71,10 +71,10 @@
 
   <div class="row">
     <div class="col-md-5">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name :user %></strong></h5>
+      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'user' %></strong></h5>
     </div>
     <div class="col-md-5">
-      <h5><strong><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></strong></h5>
+      <h5><strong><%= ReviewUserAssignment.human_attribute_name 'assignment_type' %></strong></h5>
     </div>
   </div>
 
@@ -112,8 +112,8 @@
 
   <% unless readonly %>
     <div class="row">
-      <div class="col-md-6">
-        <h4><%= ControlObjective.model_name.human %></h4>
+      <div class="col-md-10">
+        <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
       </div>
     </div>
 
@@ -124,9 +124,9 @@
     </div>
   <% end %>
 
-  <div class="page-header">
-    <h3><%= t('review.findings_label') %></h3>
-  </div>
+  <h3><%= t 'review.findings_label' %></h3>
+
+  <hr />
 
   <div id="suggested_findings"></div>
 
@@ -137,14 +137,12 @@
     <% end %>
   <% end %>
 
-  <div class="page-header">
-    <h3><%= FindingReviewAssignment.human_attribute_name :finding %></h3>
-  </div>
-
-  <div id="finding_review_assignments"></div>
-
   <% unless readonly %>
-    <%= link_to_add_fields(t('review.add_finding_assignment'), f, :finding_review_assignments) %>
+    <h5><strong><%= FindingReviewAssignment.human_attribute_name 'finding' %></strong></h5>
+
+    <div id="finding_review_assignments"></div>
+
+    <%= link_to_add_fields t('review.add_finding_assignment'), f, :finding_review_assignments %>
     <%= link_to t('review.suggest_findings'), @review.plan_item_id ?
       suggested_findings_review_path(id: @review.plan_item_id) : '#',
       :remote => true, :id => :link_to_suggested_findings,

@@ -1,25 +1,21 @@
 <% if @findings.empty? %>
-  <p class="align-top" style="margin: 1em 0em; color: #47ae00; font-weight: bold;">
-    <%= t('review.without_suggested_findings') %>
-  </p>
+  <div class="alert alert-success">
+    <p><%= t 'review.without_suggested_findings' %></p>
+  </div>
 <% else %>
   <% @findings.each_with_index do |finding, i| %>
-    <div class="finding_review_assignment align-top">
-      <div>
-        <ul class="raw_list">
-          <li>
-            <%= hidden_field_tag "review[finding_review_assignments_attributes][#{i + 1000}][finding_id]",
-              finding.id, :id => "hidden_finding_id_#{finding.id}" %>
-            <%= finding %> |
-            <%= link_to_show finding %> |
-            <%= remove_item_link(nil, 'finding_review_assignment') %>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <ul>
+      <li>
+        <%= hidden_field_tag "review[finding_review_assignments_attributes][#{i + 1000}][finding_id]",
+          finding.id, :id => "hidden_finding_id_#{finding.id}" %>
+        <%= finding %> |
+        <%= link_to_show finding %> |
+        <%= remove_item_link(nil, 'finding_review_assignment') %>
+      </li>
+    </ul>
   <% end %>
 <% end %>
 
 <script type="text/javascript">
-  $('#suggested_findings').stop(true, true).effect('highlight', {}, 2000);
+  $('#suggested_findings').effect('highlight', {}, 2000);
 </script>
