@@ -2,24 +2,18 @@
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :name, input_html: { maxlength: 255 } %>
-        <%= f.input :description %>
-      </div>
-    </div>
+    <%= f.input :name, input_html: { maxlength: 255 } %>
+    <%= f.input :description %>
   </div>
 
-  <h5 style="margin-left: 4.5em;">
-    <strong><%= ProcessControl.model_name.human %></strong>
-  </h5>
+  <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
 
   <div id="process_controls">
     <%= f.simple_fields_for :process_controls do |p_f| %>
       <%= render 'process_control', f: p_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('best_practice.add_process_control'), f, :process_controls) %>
+    <%= link_to_add_fields t('best_practice.add_process_control'), f, :process_controls %>
   </div>
 
   <hr />

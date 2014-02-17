@@ -1,17 +1,19 @@
 <% id = f.object.object_id %>
 <fieldset class="process_control">
   <div class="form-inputs row">
-    <div class="col-md-6">
-      <div class="col-md-1 show_hide">
-        <%= link_to_show_hide "control_objectives_for_#{id}",
-          t('best_practice.show_control_objectives'),
-          t('best_practice.hide_control_objectives') %>
-      </div>
-      <div class="col-md-11">
-        <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
+    <div class="col-md-11">
+      <div class="media">
+        <div class="pull-left show_hide">
+          <%= link_to_show_hide "control_objectives_for_#{id}",
+            t('best_practice.show_control_objectives'),
+            t('best_practice.hide_control_objectives') %>
+        </div>
+        <div class="media-body">
+          <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
+        </div>
       </div>
     </div>
-    <div class="col-md-2 show_hide">
+    <div class="col-md-1 show_hide">
       <%= link_to_insert_field(f) %>
       <span class="text-muted">|</span>
       <%= link_to_remove_nested_item(f) %>
@@ -20,9 +22,7 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-offset-1">
-  <div id="control_objectives_for_<%= id %>" style="display: none;">
+  <div id="control_objectives_for_<%= id %>" class="nested" style="display: none;">
     <div class="row">
       <div class="col-md-2">
         <h5><strong><%= ControlObjective.human_attribute_name :name %></strong></h5>
@@ -56,8 +56,6 @@
       <% end %>
 
       <%= link_to_add_fields(t('best_practice.add_control_objective'), f, :control_objectives) %>
-    </div>
-  </div>
     </div>
   </div>
 </fieldset>

@@ -261,7 +261,8 @@ module ApplicationHelper
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "show_element_#{element_id}_content",
-      :style => (displayed ? 'display: none' : nil)
+      :style => (displayed ? 'display: none' : nil),
+      :class => 'media-object'
     )
     out << content_tag(:span,
       link_to(
@@ -269,7 +270,9 @@ module ApplicationHelper
         '#', :onclick => "Helper.showOrHideWithArrow('#{element_id}'); return false;"
       ),
       :id => "hide_element_#{element_id}_content",
-      :style => (displayed ? nil : 'display: none'))
+      :style => (displayed ? nil : 'display: none'),
+      :class => 'media-object'
+    )
   end
 
   # Devuelve el HTML de un vínculo para mover un ítem.
