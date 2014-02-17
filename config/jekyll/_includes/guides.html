@@ -3,7 +3,7 @@
 </div>
 
 {% sorted_for page in site.pages sort_by:guide_order %}
-  {% if page.guide %}
+  {% if page.guide_order %}
     {% assign limit = forloop.index0 | modulo:3 %}
     {% if limit == 0 %}
     <div class="row">
