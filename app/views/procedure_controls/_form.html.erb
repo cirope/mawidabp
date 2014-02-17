@@ -32,30 +32,25 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
-      <div class="row">
-        <div class="col-md-11 col-md-offset-1">
-          <h5><strong><%= raw(BestPractice.model_name.human +
-            show_inline_help_for(:procedure_control_best_practice)) %></strong></h5>
-        </div>
-      </div>
+    <div class="col-md-3 nested">
+      <h5><strong><%= raw(BestPractice.model_name.human +
+        show_inline_help_for(:procedure_control_best_practice)) %></strong></h5>
     </div>
     <div class="col-md-3">
       <h5><strong><%= raw(ProcessControl.model_name.human +
         show_inline_help_for(:procedure_control_process_control)) %></strong></h5>
     </div>
     <div class="col-md-3">
-      <h5><strong><%= ProcedureControlItem.human_attribute_name :aproach %></strong></h5>
+      <h5><strong><%= ProcedureControlItem.human_attribute_name 'aproach' %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= ProcedureControlItem.human_attribute_name :frequency %></strong></h5>
+      <h5><strong><%= ProcedureControlItem.human_attribute_name 'frequency' %></strong></h5>
     </div>
   </div>
 
   <div id="procedure_control_items">
     <% @procedure_control.procedure_control_items.build if @procedure_control.procedure_control_items.empty? %>
-    <%= f.simple_fields_for :procedure_control_items,
-      @procedure_control.procedure_control_items.sort do |pci_f| %>
+    <%= f.simple_fields_for :procedure_control_items, @procedure_control.procedure_control_items.sort do |pci_f| %>
       <%= render 'procedure_control_item', f: pci_f, control_objectives: [] %>
     <% end %>
 
