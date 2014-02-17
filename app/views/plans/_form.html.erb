@@ -44,6 +44,7 @@
     <%= show_plan_business_unit_type_list %>
   <% else %>
     <hr />
+
     <div class="row">
       <div class="col-md-3 col-md-offset-1">
         <h5><strong><%= raw(BusinessUnit.model_name.human +
@@ -78,7 +79,7 @@
         <% end %>
       <% end %>
 
-      <%= link_to_add_fields(t('plan.add_plan_item'), f, :plan_items) %>
+      <%= link_to_add_fields t('plan.add_plan_item'), f, :plan_items %>
     </div>
   <% end %>
 

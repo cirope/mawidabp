@@ -1,5 +1,5 @@
 module PlansHelper
-  def plan_resource_field(form, id = '', inline = true)
+  def plan_resource_field form, id = '', inline = true
     resource_classes = ResourceClass.material_resources
 
     form.input :resource_id, collection: resource_classes, as: :grouped_select,
@@ -8,8 +8,8 @@ module PlansHelper
     }
   end
 
-  def show_plan_item_info(plan_item)
-    show_info(plan_item.status_text, :class => plan_item.status_color)
+  def show_plan_item_info plan_item
+    show_info plan_item.status_text, class: [plan_item.status_color, 'media-object'].join(' ')
   end
 
   def plan_items_for_selected_business_unit_type
