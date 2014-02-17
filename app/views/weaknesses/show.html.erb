@@ -49,8 +49,7 @@
 </div>
 
 <p>
-  <strong><%= raw(Weakness.human_attribute_name(:state) +
-    show_inline_help_for(:finding_state)) %>:</strong>
+  <strong><%= Weakness.human_attribute_name(:state) %>:</strong>
   <%= @weakness.state_text %>
 </p>
 
@@ -80,8 +79,7 @@
 </p>
 
 <p>
-  <strong><%= raw(Weakness.human_attribute_name(:follow_up_date) +
-    show_inline_help_for(:finding_follow_up_date)) %>:</strong>
+  <strong><%= Weakness.human_attribute_name(:follow_up_date) %>:</strong>
   <%=l @weakness.follow_up_date, :format => :long if @weakness.follow_up_date %>
 </p>
 
@@ -90,12 +88,11 @@
   <%=l @weakness.solution_date, :format => :long if @weakness.solution_date %>
 </p>
 
-<h3><%= raw(t('finding.responsibles', :count => @weakness.users.size) +
-  show_inline_help_for(:finding_responsibles)) %></h3>
+<h3><%= t('finding.responsibles', :count => @weakness.users.size) %></h3>
 <%= finding_responsibles_list(@weakness) %>
 
 <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
-  <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+  <h3><%= t('finding.repeated_ancestors') %></h3>
   <ul>
     <% repeated_ancestors.each do |repeated_ancestor| %>
       <li><%= repeated_ancestor %></li>
@@ -104,7 +101,7 @@
 <% end %>
 
 <% unless (repeated_children = @weakness.repeated_children).blank? %>
-  <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+  <h3><%= t('finding.repeated_children') %></h3>
   <ul>
     <% repeated_children.each do |repeated_child| %>
       <li><%= repeated_child %></li>
@@ -115,7 +112,6 @@
 <% unless @weakness.finding_relations.blank? %>
   <h3>
     <%= t('finding.finding_relations') %>
-    <%= show_inline_help_for(:finding_relations) %>
   </h3>
 
   <table class="table table-condensed table-striped">
@@ -139,7 +135,6 @@
 <% unless @weakness.inverse_finding_relations.blank? %>
   <h3>
     <%= t('finding.inverse_finding_relations') %>
-    <%= show_inline_help_for(:inverse_finding_relations) %>
   </h3>
 
   <table class="table table-condensed table-striped">
@@ -163,7 +158,6 @@
 <% unless @weakness.finding_answers.blank? %>
   <h3>
     <%= t('finding.finding_answers') %>
-    <%= show_inline_help_for(:finding_comments) %>
   </h3>
 
   <table class="table table-condensed table-striped">
@@ -173,7 +167,6 @@
         <th><%= FindingAnswer.human_attribute_name :answer %></th>
         <th>
           <%= FindingAnswer.human_attribute_name :file_model %>
-          <%= show_inline_help_for(:finding_file_model) %>
         </th>
         <th>
           <%= FindingAnswer.human_attribute_name :created_at %>
@@ -204,7 +197,7 @@
 <% end %>
 
 <% unless @weakness.work_papers.empty? %>
-  <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+  <h3><%= t('finding.work_papers') %></h3>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

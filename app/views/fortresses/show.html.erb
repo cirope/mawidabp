@@ -23,12 +23,11 @@
   <%=l @fortress.origination_date, :format => :long if @fortress.origination_date %>
 </p>
 
-<h3><%= raw(t('finding.responsibles', :count => @fortress.users.size) +
-    show_inline_help_for(:finding_responsibles)) %></h3>
+<h3><%= t('finding.responsibles', :count => @fortress.users.size) %></h3>
 <%= finding_responsibles_list(@fortress) %>
 
 <% unless @fortress.work_papers.empty? %>
-  <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+  <h3><%= t('finding.work_papers') %></h3>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

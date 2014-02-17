@@ -20,27 +20,23 @@
           value: @control_objective_item.review.period.inspect, readonly: true
         } %>
         <%= relevance_field(f,
-          label: raw(ControlObjectiveItem.human_attribute_name(:relevance) +
-            show_inline_help_for(:control_objective_item_relevance)),
+          label: ControlObjectiveItem.human_attribute_name(:relevance),
           input_html: { include_blank: t('control_objective_item.not_rated'), disabled: readonly }
         ) %>
         <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly } %>
 
         <%= f.simple_fields_for :control do |c_f| %>
-          <%= c_f.input :effects, label: raw(Control.human_attribute_name(:effects) +
-            show_inline_help_for(:control_objective_item_effects)), input_html: { readonly: readonly } %>
-          <%= c_f.input :control, label: raw(Control.human_attribute_name(:control) +
-            show_inline_help_for(:control_objective_item_control)), input_html: { readonly: readonly } %>
-          <%= f.input :effectiveness, label: raw(ControlObjectiveItem.human_attribute_name(:effectiveness) +
-            show_inline_help_for(:control_objective_item_effectiveness)),
+          <%= c_f.input :effects, label: Control.human_attribute_name(:effects), input_html: { readonly: readonly } %>
+          <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly } %>
+          <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
             input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
-          <%= f.input :finished, as: :boolean, label: false, inline_label: raw(
-            ControlObjectiveItem.human_attribute_name(:finished) + show_inline_help_for(
-            :control_objective_item_finished)), input_html: { disabled: readonly } %>
-          <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label: raw(
-            ControlObjectiveItem.human_attribute_name(:exclude_from_score) + show_inline_help_for(
-            :control_objective_item_exclude_from_score)), input_html: { disabled: readonly } %>
+          <%= f.input :finished, as: :boolean, label: false, inline_label:
+            ControlObjectiveItem.human_attribute_name(:finished),
+            input_html: { disabled: readonly } %>
+          <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
+            ControlObjectiveItem.human_attribute_name(:exclude_from_score),
+            input_html: { disabled: readonly } %>
 
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly } %>
@@ -87,9 +83,8 @@
 
   <br />
   <h4>
-    <%= raw(ControlObjectiveItem.human_attribute_name(:work_papers,
-      :count => @control_objective_item.work_papers.size) +
-      show_inline_help_for(:control_objective_item_work_papers)) %>
+    <%= ControlObjectiveItem.human_attribute_name(:work_papers,
+      :count => @control_objective_item.work_papers.size) %>
   </h4>
   <div class="row">
     <div class="col-md-3">

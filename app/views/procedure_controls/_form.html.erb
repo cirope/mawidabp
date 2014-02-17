@@ -35,14 +35,12 @@
     <div class="col-md-3">
       <div class="row">
         <div class="col-md-11 col-md-offset-1">
-          <h5><strong><%= raw(BestPractice.model_name.human +
-            show_inline_help_for(:procedure_control_best_practice)) %></strong></h5>
+          <h5><strong><%= BestPractice.model_name.human %></strong></h5>
         </div>
       </div>
     </div>
     <div class="col-md-3">
-      <h5><strong><%= raw(ProcessControl.model_name.human +
-        show_inline_help_for(:procedure_control_process_control)) %></strong></h5>
+      <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
     </div>
     <div class="col-md-3">
       <h5><strong><%= ProcedureControlItem.human_attribute_name :aproach %></strong></h5>

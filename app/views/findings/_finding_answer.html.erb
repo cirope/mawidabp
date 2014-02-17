@@ -47,11 +47,8 @@
           <% if finding_answer.user.can_act_as_audited? &&
               finding_answer.finding.pending? &&
               finding_answer.finding.commitment_date.blank? %>
-            <%= f.input :commitment_date, as: :date_picker, label: raw(
-              FindingAnswer.human_attribute_name(:commitment_date) +
-                show_inline_help_for(:finding_answer_commitment_date,
-                  "finding_answer_commitment_date_#{finding_answer.id || 'NEW_RECORD'}")
-              ) %>
+            <%= f.input :commitment_date, as: :date_picker, label:
+              FindingAnswer.human_attribute_name(:commitment_date) %>
           <% end %>
           <%= finding_answer_notification_check(f) %>
         <% end %>

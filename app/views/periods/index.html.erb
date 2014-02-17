@@ -1,8 +1,7 @@
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <th><%= raw(Period.human_attribute_name(:number) +
-        show_inline_help_for(:period_number)) %></th>
+      <th><%= Period.human_attribute_name(:number) %></th>
       <th class="visible-lg"><%= Period.human_attribute_name :description %></th>
       <th class="visible-lg"><%= Period.human_attribute_name :start %></th>
       <th class="visible-lg"><%= Period.human_attribute_name :end %></th>

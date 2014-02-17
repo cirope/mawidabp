@@ -13,14 +13,10 @@
     <tr>
       <th></th>
       <th><%= PlanItem.human_attribute_name :order_number %></th>
-      <th><%= raw(BusinessUnit.model_name.human +
-        show_inline_help_for(:plan_business_unit)) %></th>
-      <th><%= raw(PlanItem.human_attribute_name(:project) +
-        show_inline_help_for(:plan_project)) %></th>
-      <th><%= raw(PlanItem.human_attribute_name(:start) +
-        show_inline_help_for(:plan_start)) %></th>
-      <th><%= raw(PlanItem.human_attribute_name(:end) +
-        show_inline_help_for(:plan_end)) %></th>
+      <th><%= BusinessUnit.model_name.human %></th>
+      <th><%= PlanItem.human_attribute_name(:project) %></th>
+      <th><%= PlanItem.human_attribute_name(:start) %></th>
+      <th><%= PlanItem.human_attribute_name(:end) %></th>
       <th><%= PlanItem.human_attribute_name :human_resources_cost %></th>
       <th><%= PlanItem.human_attribute_name :material_resources_cost %></th>
       <th><%= PlanItem.human_attribute_name :total_resources_cost %></th>

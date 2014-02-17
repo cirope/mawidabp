@@ -7,8 +7,8 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :identification, label: raw(Review.human_attribute_name(:identification) +
-          show_inline_help_for(:review_identification)), input_html: { readonly: readonly } %>
+        <%= f.input :identification, label: Review.human_attribute_name(:identification),
+          input_html: { readonly: readonly } %>
         <% if [:new, :create].include?(controller.action_name.to_sym) %>
           <%= f.input :period_id, label: raw(Review.human_attribute_name(:period_id) +
             link_to_add(new_period_path(:back_to => new_review_path))),
@@ -28,15 +28,14 @@
         <% end %>
         <%= f.input :business_unit,
           input_html: { value: review_business_unit_text(@review), readonly: true } %>
-        <%= f.input :audit_type, label: raw(Review.human_attribute_name(:audit_type) +
-          show_inline_help_for(:review_audit_type)), input_html: {
+        <%= f.input :audit_type, label: Review.human_attribute_name(:audit_type), input_html: {
           value: review_business_unit_type_text(@review), readonly: true } %>
-        <%= f.input :description, label: raw(Review.human_attribute_name(:description) +
-          show_inline_help_for(:review_description)), input_html: { readonly: readonly } %>
+        <%= f.input :description, label: Review.human_attribute_name(:description),
+          input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :survey, label: raw(Review.human_attribute_name(:survey) +
-          show_inline_help_for(:review_survey)), input_html: { readonly: readonly } %>
+        <%= f.input :survey, label: Review.human_attribute_name(:survey),
+          input_html: { readonly: readonly } %>
         <%= f.label :file_model_id %>
         <% f.object.build_file_model unless f.object.file_model %>
         <%= f.simple_fields_for :file_model do |fm_f| %>
@@ -75,8 +74,7 @@
       <h5><strong><%= ReviewUserAssignment.human_attribute_name :user %></strong></h5>
     </div>
     <div class="col-md-5">
-      <h5><strong><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
-        show_inline_help_for(:review_user_assignment_type)) %></strong></h5>
+      <h5><strong><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></strong></h5>
     </div>
   </div>
 
@@ -127,7 +125,7 @@
   <% end %>
 
   <div class="page-header">
-    <h3><%= raw(t('review.findings_label') + show_inline_help_for(:review_findings)) %></h3>
+    <h3><%= t('review.findings_label') %></h3>
   </div>
 
   <div id="suggested_findings"></div>

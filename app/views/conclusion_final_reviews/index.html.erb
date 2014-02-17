@@ -12,8 +12,8 @@
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { 'visible-lg' => true }, 'business_unit' %>
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true }, 'project' %>
-      <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:issue_date) + show_inline_help_for(:conclusion_review_issue_date)), { 'visible-lg' => true }, 'issue_date' %>
-      <%= make_filterable_column raw(ConclusionDraftReview.human_attribute_name(:close_date) + show_inline_help_for(:conclusion_review_close_date)), { 'visible-lg' => true }, 'close_date' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), { 'visible-lg' => true }, 'issue_date' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), { 'visible-lg' => true }, 'close_date' %>
       <%= make_not_available_column Review.human_attribute_name(:score) %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>

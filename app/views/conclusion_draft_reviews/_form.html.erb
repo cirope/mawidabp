@@ -27,14 +27,12 @@
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
           readonly: true } %>
         <%= f.input :issue_date, as: :date_picker, label: raw(
-            ConclusionDraftReview.human_attribute_name(:issue_date) +
-              show_inline_help_for(:conclusion_review_issue_date)) %>
+            ConclusionDraftReview.human_attribute_name(:issue_date) %>
       </div>
     </div>
   </div>
 
   <div id="approval_text">
-    <%= show_inline_help_for(:conclusion_review_approved) %>
     <%= content_tag(:span, t('conclusion_draft_review.approved'),
       :class => 'text-success', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>

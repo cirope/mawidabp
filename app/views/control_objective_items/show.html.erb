@@ -9,20 +9,17 @@
 </div>
 
 <div>
-  <strong><%= raw(Control.human_attribute_name(:effects) +
-    show_inline_help_for(:control_objective_item_effects)) %>:</strong>
+  <strong><%= Control.human_attribute_name(:effects) %>:</strong>
   <%= simple_format @control_objective_item.control.effects %>
 </div>
 
 <p>
-  <strong><%= raw(ControlObjectiveItem.human_attribute_name(:relevance) +
-    show_inline_help_for(:control_objective_item_relevance)) %>:</strong>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:relevance) %>:</strong>
   <%= @control_objective_item.relevance_text %>
 </p>
 
 <div>
-  <strong><%= raw(Control.human_attribute_name(:control) +
-    show_inline_help_for(:control_objective_item_control)) %>:</strong>
+  <strong><%= Control.human_attribute_name(:control) %>:</strong>
   <%= simple_format @control_objective_item.control.control %>
 </div>
 
@@ -67,15 +64,13 @@
 </div>
 
 <p>
-  <strong><%= raw(ControlObjectiveItem.human_attribute_name(:effectiveness) +
-    show_inline_help_for(:control_objective_item_effectiveness)) %>:</strong>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:effectiveness) %>:</strong>
   <%= "#{@control_objective_item.effectiveness}%" %>
 </p>
 
 <p>
-  <strong><%= raw(ControlObjectiveItem.human_attribute_name(:finished) +
-    show_inline_help_for(:control_objective_item_finished)) %>:</strong>
-  <%=t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
+  <strong><%= ControlObjectiveItem.human_attribute_name(:finished) %>:</strong>
+  <%= t @control_objective_item.finished? ? 'label.yes' : 'label.no' %>
 </p>
 
 <%= render :partial => 'weaknesses_summary', :locals => {:readonly => true} %>

@@ -10,9 +10,9 @@
         <%= f.input :project, label: PlanItem.human_attribute_name(:project),
           input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
         <%= f.input :review_code, input_html: { readonly: true } %>
-        <%= f.input :issue_date, label: raw(
-          ConclusionFinalReview.human_attribute_name(:issue_date) +
-          show_inline_help_for(:finding_issue_date)), input_html: { readonly: true,
+        <%= f.input :issue_date, label:
+          ConclusionFinalReview.human_attribute_name(:issue_date),
+          input_html: { readonly: true,
             value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :
               t('finding.without_conclusion_final_review')) } %>
         <% if @finding.control_objective_item %>
@@ -34,14 +34,11 @@
           <%= priority_field(f, prompt: true, disabled: true) %>
         <% end %>
         <% unless @finding.kind_of? Fortress %>
-          <%= f.label :state, raw(Finding.human_attribute_name(:state) +
-            show_inline_help_for(:finding_state)) %>
+          <%= f.label :state, Finding.human_attribute_name(:state) %>
           <%= finding_status_field(f, true, true) %>
         <% end %>
-        <%= f.input :origination_date, as: :date_picker, label: raw(
-          Finding.human_attribute_name(:origination_date) +
-          show_inline_help_for(:finding_origination_date)
-        ), input_html: { readonly: true,
+        <%= f.input :origination_date, as: :date_picker, label:
+          Finding.human_attribute_name(:origination_date), input_html: { readonly: true,
           value: (l(@finding.origination_date, format: :short) if @finding.origination_date)
         } %>
         <% if current_organization.kind.eql?('quality_management') &&
@@ -52,17 +49,13 @@
           <%= f.input :cause_analysis_date, as: :date_picker %>
         <% end %>
         <%= f.input :answer, readonly: true %>
-        <%= f.input :follow_up_date, as: :date_picker, label: raw(
-          @finding.class.human_attribute_name(:follow_up_date) +
-          show_inline_help_for(:finding_follow_up_date)
-        ), input_html: { readonly: true,
+        <%= f.input :follow_up_date, as: :date_picker, label:
+          @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: true,
           value: (l @finding.follow_up_date, format: :short if @finding.follow_up_date)
         } %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
-        <%= f.input :solution_date, as: :date_picker, label: raw(
-          Finding.human_attribute_name(:solution_date) +
-          show_inline_help_for(:finding_solution_date)
-        ), input_html: { readonly: true,
+        <%= f.input :solution_date, as: :date_picker, label:
+          Finding.human_attribute_name(:solution_date), input_html: { readonly: true,
           value: (l @finding.solution_date, format: :short if @finding.solution_date)
         } %>
         <%= f.input :id, as: :hidden %>
@@ -75,7 +68,6 @@
     <br />
     <h4>
       <%= t('finding.important_dates.title') %>
-      <%= show_inline_help_for(:finding_important_dates) %>
     </h4>
     <ul>
       <% @finding.important_dates.each do |important_date| %>
@@ -117,7 +109,7 @@
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
     <br />
-    <h4><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h4>
+    <h4><%= t('finding.repeated_ancestors') %></h4>
     <ul>
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -127,7 +119,7 @@
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
     <br />
-    <h4><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h4>
+    <h4><%= t('finding.repeated_children') %></h4>
     <ul>
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -138,7 +130,6 @@
   <br />
   <h4>
     <%= t('finding.finding_answers') %>
-    <%= show_inline_help_for(:finding_comments) %>
   </h4>
   <div class="row">
     <div class="col-md-3">
@@ -151,7 +142,6 @@
       <h5>
         <strong>
           <%= FindingAnswer.human_attribute_name :file_model %>
-          <%= show_inline_help_for(:finding_file_model) %>
         </strong>
       </h5>
     </div>
@@ -171,7 +161,7 @@
 
   <% unless @finding.work_papers.blank? %>
     <br />
-    <h4><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h4>
+    <h4><%= t('finding.work_papers') %></h4>
 
     <table class="table table-condensed table-striped">
       <thead>
@@ -237,7 +227,6 @@
   <div class="row">
     <div class="col-md-2">
       <%= Cost.human_attribute_name :cost %>
-      <%= show_inline_help_for(:finding_cost_input) %>
     </div>
     <div class="col-md-10">
       <%= Cost.human_attribute_name :description %>

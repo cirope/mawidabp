@@ -8,11 +8,11 @@
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
       <%= make_filterable_column ProcessControl.model_name.human, { 'visible-lg' => true }, 'process_control' %>
       <%= make_filterable_column ControlObjective.model_name.human, nil, 'control_objective_text' %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:finished) + show_inline_help_for(:control_objective_item_finished)), 'visible-lg' => true %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:relevance) + show_inline_help_for(:control_objective_item_relevance)), 'visible-lg' => true %>
-      <%= make_not_available_column raw(ControlObjectiveItem.human_attribute_name(:effectiveness) + show_inline_help_for(:control_objective_item_effectiveness)), 'visible-lg' => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), 'visible-lg' => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), 'visible-lg' => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), 'visible-lg' => true %>
       <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), 'visible-lg' => true %>
-      <%= make_not_available_column raw(t('control_objective_item.has_work_papers') + show_inline_help_for(:control_objective_item_work_papers)), 'visible-lg' => true %>
+      <%= make_not_available_column t('control_objective_item.has_work_papers'), 'visible-lg' => true %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

@@ -26,13 +26,11 @@
         <%= f.input :score, input_html: {
           value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
           readonly: true } %>
-        <%= f.input :issue_date, as: :date_picker, label: raw(
-            ConclusionFinalReview.human_attribute_name(:issue_date) +
-            show_inline_help_for(:conclusion_review_issue_date)),
+        <%= f.input :issue_date, as: :date_picker, label:
+            ConclusionFinalReview.human_attribute_name(:issue_date),
             input_html: { readonly: readonly } %>
-        <%= f.input :close_date, as: :date_picker, label: raw(
-            ConclusionFinalReview.human_attribute_name(:close_date) +
-            show_inline_help_for(:conclusion_review_close_date)),
+        <%= f.input :close_date, as: :date_picker, label:
+            ConclusionFinalReview.human_attribute_name(:close_date),
             input_html: { readonly: readonly } %>
       </div>
     </div>

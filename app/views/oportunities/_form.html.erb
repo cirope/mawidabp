@@ -19,8 +19,7 @@
         <%= f.input :review_code, input_html: { maxlength: 255, readonly: true } %>
         <div>
           <label for="oportunity_control_objective_item">
-            <%= raw(ControlObjective.model_name.human +
-              show_inline_help_for(:finding_control_objective_item)) %>
+            <%= ControlObjective.model_name.human %>
           </label>
           <% if !readonly && !@oportunity.new_record? %>
             <%= f.input :control_objective_item_id, label: false, input_html: {
@@ -48,8 +47,7 @@
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-6">
-        <%= f.label :state, raw(Oportunity.human_attribute_name(:state) +
-            show_inline_help_for(:finding_state) +
+        <%= f.label :state, Oportunity.human_attribute_name(:state) +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : ''))  %>
         <%= finding_status_field(f, true, readonly) %>
@@ -59,17 +57,14 @@
         <% end %>
 
         <%= f.input :origination_date, as: :date_picker, label:
-            raw(Oportunity.human_attribute_name(:origination_date) +
-              show_inline_help_for(:finding_origination_date)),
+            Oportunity.human_attribute_name(:origination_date),
             input_html: { disabled: readonly } %>
         <%= f.input :answer, input_html: { readonly: readonly } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
-          raw(Oportunity.human_attribute_name(:follow_up_date) +
-            show_inline_help_for(:finding_follow_up_date)),
+          Oportunity.human_attribute_name(:follow_up_date),
           input_html: { disabled: readonly } %>
         <%= f.input :solution_date, as: :date_picker, label:
-          raw(Finding.human_attribute_name(:solution_date) +
-            show_inline_help_for(:finding_solution_date)),
+          Finding.human_attribute_name(:solution_date),
           input_html: { disabled: readonly } %>
 
         <% if @oportunity.must_have_a_comment? %>
@@ -87,19 +82,16 @@
   <br />
   <h4>
     <%= t('finding.responsibles', count: @oportunity.users.size) %>
-    <%= show_inline_help_for(:finding_responsibles) %>
   </h4>
   <div class="row">
     <div class="col-md-4">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:responsible_auditor) +
-        show_inline_help_for(:finding_user_assignment_responsible_auditor)) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name(:responsible_auditor) %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= raw(FindingUserAssignment.human_attribute_name(:process_owner) +
-        show_inline_help_for(:finding_user_assignment_process_owner)) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name(:process_owner) %></strong></h5>
     </div>
   </div>
 
@@ -116,8 +108,7 @@
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
     <br />
     <h4>
-      <%= raw(t('finding.repeated_ancestors') +
-        show_inline_help_for(:finding_repeated_ancestors)) %>
+      <%= t('finding.repeated_ancestors') %>
     </h4>
 
     <ul>
@@ -130,8 +121,7 @@
   <% unless (repeated_children = @oportunity.repeated_children).blank? %>
     <br />
     <h4>
-      <%= raw(t('finding.repeated_children') +
-        show_inline_help_for(:finding_repeated_children)) %>
+      <%= t('finding.repeated_children') %>
     </h4>
 
     <ul>
@@ -144,7 +134,6 @@
   <br />
   <h4>
     <%= t('finding.finding_relations') %>
-    <%= show_inline_help_for(:finding_relations) %>
   </h4>
   <div class="row">
     <div class="col-md-6">
@@ -168,7 +157,6 @@
     <br />
     <h4>
       <%= t('finding.inverse_finding_relations') %>
-      <%= show_inline_help_for(:inverse_finding_relations) %>
     </h4>
 
     <table class="table table-condensed table-striped">
@@ -193,7 +181,6 @@
     <br />
     <h4>
       <%= t('finding.finding_answers') %>
-      <%= show_inline_help_for(:finding_comments) %>
     </h4>
 
     <table class="table table-condensed table-striped">
@@ -203,7 +190,6 @@
           <th><%= FindingAnswer.human_attribute_name :answer %></th>
           <th>
             <%= FindingAnswer.human_attribute_name :file_model %>
-            <%= show_inline_help_for(:finding_file_model) %>
           </th>
           <th><%= FindingAnswer.human_attribute_name :created_at %></th>
         </tr>
@@ -234,7 +220,6 @@
   <br />
   <h4>
     <%= t('finding.work_papers') %>
-    <%= show_inline_help_for(:finding_work_papers) %>
   </h4>
   <div class="row">
     <div class="col-md-3">
