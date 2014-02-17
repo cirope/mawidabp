@@ -9,7 +9,7 @@
     <ul class="dropdown-menu">
       <% menu_item.children.each do |submenu_item| %>
         <li><%= link_to submenu_item.to_s, submenu_item.url %></li>
-        <%= render partial: 'shared/submenu', locals: { submenu_item: submenu_item } %>
+        <%= render 'shared/submenu', submenu_item: submenu_item %>
       <% end %>
     </ul>
   </li>

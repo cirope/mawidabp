@@ -1,0 +1,13 @@
+.ui-autocomplete {
+  .ui-state-focus {
+    span {
+      white-space: normal;
+    }
+  }
+
+  span.text-muted {
+    display: block;
+    font-size: .75em;
+    color: #999;
+  }
+}

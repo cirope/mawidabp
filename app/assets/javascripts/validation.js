@@ -13,7 +13,7 @@ jQuery(function() {
 
     if(hasErrors && State.validationFailedMessage) {
       alert(State.validationFailedMessage);
-      
+
       event.stopPropagation();
       event.preventDefault();
     } else {

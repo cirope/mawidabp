@@ -191,7 +191,12 @@ class ConclusionFinalReviewsController < ApplicationController
     @conclusion_final_review.create_bundle_zip current_organization,
       params[:index_items]
 
-    redirect_to @conclusion_final_review.relative_bundle_zip_path
+    @report_path = @conclusion_final_review.relative_bundle_zip_path
+
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js { render 'shared/pdf_report' }
+    end
   end
 
   # Confecciona el correo con el informe

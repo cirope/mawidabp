@@ -1,79 +1,59 @@
-<!--[form:conclusion_final_review]-->
-<%= form_for @conclusion_final_review,
-  :url => send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
+<%= simple_form_for @conclusion_final_review,
+  url: send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
   <% content_for :js_extra do %>
     <%= raw "var user='" + escape_javascript(render :partial => 'user',
       :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
   <% end %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-        :class => :inline_long,
-        :for => :conclusion_review_include_global_score_sheet %>
-      <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
-        false, :class => :inline_item %>
-    </p>
-
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-        :class => :inline_long,
-        :for => :conclusion_review_include_score_sheet %>
-      <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
-        :class => :inline_item %>
-    </p>
-
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_final_review.hide_control_objectives_excluded_from_score'),
-        :class => :inline_long,
-        :for => :export_options_hide_control_objectives_excluded_from_score %>
-      <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false,
-        :class => :inline_item %>
-    </p>
-
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_review.email_note'),
-        :for => :conclusion_review_email_note %>
-      <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
-        :cols => 40 %>
-    </p>
-  </div>
-
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 50%;">
-        <h3><%= User.model_name.human %></h3>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= f.label t('conclusion_review.include_global_score_sheet'),
+            for: :conclusion_review_include_global_score_sheet %>
+          <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, false %>
+        </div>
+        <div class="form-group">
+          <%= content_tag :label, t('conclusion_review.include_score_sheet'),
+            for: :conclusion_review_include_score_sheet %>
+          <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+        </div>
+        <div class="form-group">
+          <%= content_tag :label, t('conclusion_final_review.hide_control_objectives_excluded_from_score'),
+            for: :export_options_hide_control_objectives_excluded_from_score %>
+          <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
+        </div>
+        <%= f.input :conclusion_review_email_note, input_html: { rows: 5 } %>
       </div>
-      <div class="item_column" style="width: 30%;">
-        <h3><%= t 'poll.answer_poll' %></h3>
-      </div>
-    <div class="item_column" style="width: 10%;">&nbsp;</div>
-      <div class="clear"></div>
-    </div>
-
-    <div id="users">
-      <% @conclusion_final_review.review.users.each do |user| %>
-        <%= render :partial => 'user', :locals => {:user => user,
-          :is_dynamic => false} %>
-      <% end %>
     </div>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('conclusion_review.add_recipient'), '#',
-      'data-template' => :user, 'data-event' => 'addNestedItem',
-      'data-container' => '#users' %>
-  </p>
+  <div class="row">
+    <div class="col-md-6">
+      <h5><strong><%= User.model_name.human %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= t 'poll.answer_poll' %></strong></h5>
+    </div>
+  </div>
 
-  <p>
-    <span class="button"><%= f.submit t('label.send') %></span>
-  </p>
+  <div id="users">
+    <% @conclusion_final_review.review.users.each do |user| %>
+      <%= render 'user', user: user %>
+    <% end %>
+
+    <%= link_to_add_fields(t('conclusion_review.add_recipient'), f, :users) %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions form-footer">
+    <div class="pull-right">
+      <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
+      <%= link_to t('label.list'), conclusion_final_reviews_path %> |
+      <%= link_to_back %>
+    </div>
+    <%= f.submit t('label.send'), class: 'btn btn-primary' %>
+  </div>
 <% end %>
-<!--[eoform:conclusion_final_review] -->
-
-<div id="links">
-  <%= link_to t('label.edit'), edit_conclusion_final_review_path(@conclusion_final_review) %> |
-  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
-  <%= link_to_back %>
-</div>

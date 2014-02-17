@@ -1,35 +1,35 @@
-<!--[form:conclusion_draft_review]-->
-<%= form_for @conclusion_draft_review,
-  :url => send_by_email_conclusion_draft_review_path(@conclusion_draft_review) do |f| %>
+<%= simple_form_for @conclusion_draft_review,
+  url: send_by_email_conclusion_draft_review_path(@conclusion_draft_review) do |f| %>
   <% content_for :js_extra do %>
     <%= raw "var user='" + escape_javascript(render :partial => 'user',
       :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
   <% end %>
-  <%= f.error_messages %>
+  <%= render 'shared/error_explanation', f: f %>
 
-  <div class="form_column_left">
-    <p class="form_item">
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :include_global_score_sheet, as: :boolean %>
       <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
         :class => :inline_long,
         :for => :conclusion_review_include_global_score_sheet %>
       <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
         true, :class => :inline_item %>
-    </p>
 
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-        :class => :inline_long,
-        :for => :conclusion_review_include_score_sheet %>
-      <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
-        :class => :inline_item %>
-    </p>
+      <p class="form_item">
+        <%= content_tag :label, t('conclusion_review.include_score_sheet'),
+          :class => :inline_long,
+          :for => :conclusion_review_include_score_sheet %>
+        <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
+          :class => :inline_item %>
+      </p>
 
-    <p class="form_item">
-      <%= content_tag :label, t('conclusion_review.email_note'),
-        :for => :conclusion_review_email_note %>
-      <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
-        :cols => 40, :autofocus => true %>
-    </p>
+      <p class="form_item">
+        <%= content_tag :label, t('conclusion_review.email_note'),
+          :for => :conclusion_review_email_note %>
+        <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
+          :cols => 40, :autofocus => true %>
+      </p>
+    </div>
   </div>
 
   <div class="items">
@@ -59,7 +59,6 @@
     <span class="button"><%= f.submit t('label.send') %></span>
   </p>
 <% end %>
-<!--[eoform:conclusion_draft_review] -->
 
 <div id="links">
   <%= link_to t('label.edit'), edit_conclusion_draft_review_path(@conclusion_draft_review) %> |

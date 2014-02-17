@@ -46,6 +46,24 @@
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
+<%= render :partial => 'shared/customize_report_form', :locals => {
+  :options => {
+    :form_name => 'bundle',
+    :url => {
+      :action => :create_bundle,
+      :id => @conclusion_final_review,
+      :_ts => Time.now.to_i
+    },
+    :fields => [
+      {
+        :name => :index_items,
+        :label => t('conclusion_review.bundle_index.items_label'),
+        :value => t('conclusion_review.bundle_index.default_items')
+      }
+    ],
+    :submit_label => t('conclusion_review.bundle.create')
+  }
+} %>
 <script type="text/javascript">
 //<![CDATA[
   $('#conclusion_final_review_review_id').change(function() {

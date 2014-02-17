@@ -615,15 +615,15 @@ class Finding < ActiveRecord::Base
   end
 
   def informal
-    text = "<b>#{Finding.human_attribute_name(:description)}</b>: "
+    text = "<strong>#{Finding.human_attribute_name(:description)}</strong>: "
     text << self.description
-    text << "\n<b>#{Finding.human_attribute_name(:review_code)}</b>: "
+    text << "<br /><strong>#{Finding.human_attribute_name(:review_code)}</strong>: "
     text << self.review_code
-    text << "\n<b>#{Review.model_name.human}</b>: "
+    text << "<br /><strong>#{Review.model_name.human}</strong>: "
     text << self.control_objective_item.review.to_s
-    text << "\n<b>#{Finding.human_attribute_name(:state)}</b>: "
+    text << "<br /><strong>#{Finding.human_attribute_name(:state)}</strong>: "
     text << self.state_text
-    text << "\n<b>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</b>: "
+    text << "<br /><strong>#{ControlObjectiveItem.human_attribute_name(:control_objective_text)}</strong>: "
     text << self.control_objective_item.to_s
   end
 

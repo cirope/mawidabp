@@ -1,6 +1,6 @@
 <% id = user.id || 'NEW_RECORD' %>
 <% hide = is_dynamic || user.marked_for_destruction? %>
-<div class="user item" <%= raw 'style="display: none;"' if hide %> id="user_<%= id %>">
+<fieldset class="user item" <%= raw 'style="display: none;"' if hide %> id="user_<%= id %>">
   <div>
     <div class="item_field" style="width: 50%;">
       <% if is_dynamic %>

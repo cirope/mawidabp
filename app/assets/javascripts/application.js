@@ -6,9 +6,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
-//= require jquery-ui-timepicker-addon
+//= require jquery.ui.autocomplete
+//= require jquery.ui.datepicker
 //= require jquery.ui.datepicker-es
+//= require jquery-ui-timepicker-addon
+//= require jquery.ui.effect-highlight
+//= require jquery.ui.dialog
+//= require jquery.ui.sortable
 //= require bootstrap
 //= require autocomplete
 //= require jquery.url

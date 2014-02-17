@@ -24,7 +24,7 @@ jQuery ($) ->
               content.append $('<span class="title"></span>').text(item.label)
 
               if item.informal
-                content.append $('<br /><small class="text-muted"></small>').text(item.informal)
+                content.append $('<span class="text-muted"></span>').html(item.informal)
 
               { label: content.html(), value: item.label, item: item }
       type: 'get'
@@ -39,7 +39,7 @@ jQuery ($) ->
         input.trigger 'autocomplete:update', input
 
         false
-      open: -> $('.ui-menu').css('width', input.width())
+      open: -> $('.ui-menu').css('width', input.outheWidth())
 
     input.data('ui-autocomplete')._renderItem = (ul, item) ->
       $('<li></li>').data('item.autocomplete', item).append(

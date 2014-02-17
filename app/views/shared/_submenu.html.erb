@@ -1,13 +1,17 @@
 <% if submenu_item.children.present? &&
   submenu_item.submenu_names.include?(@current_module) %>
   <%= content_for :submenu do %>
-    <ul class="submenu nav nav-pills">
-      <% submenu_item.children.each do |sub_submenu_item| %>
-        <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
-        <li <%== 'class="active"' if active %>>
-          <%= link_to sub_submenu_item.to_s, sub_submenu_item.url %>
-        </li>
-      <% end %>
-    </ul>
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="submenu nav nav-pills">
+          <% submenu_item.children.each do |sub_submenu_item| %>
+            <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
+            <li <%== 'class="active"' if active %>>
+              <%= link_to sub_submenu_item.to_s, sub_submenu_item.url %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
   <% end %>
 <% end %>
