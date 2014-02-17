@@ -7,7 +7,9 @@
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true },
           label: raw(ResourceClass.human_attribute_name(:name) +
           show_inline_help_for(:resource_class_name)) %>
-        <%= resource_class_type_field(f) %>
+      </div>
+      <div class="col-md-6">
+        <%= resource_class_type_field f %>
       </div>
     </div>
   </div>
@@ -15,14 +17,14 @@
   <hr />
 
   <div class="row">
-    <div class="col-md-3">
-      <h5><strong><%= Resource.human_attribute_name :name %></strong></h5>
+    <div class="col-md-4">
+      <h5><strong><%= Resource.human_attribute_name 'name' %></strong></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= Resource.human_attribute_name :description %></strong></h5>
+      <h5><strong><%= Resource.human_attribute_name 'description' %></strong></h5>
     </div>
     <div class="col-md-3">
-      <h5><strong><%= Resource.human_attribute_name :cost_per_unit %></strong></h5>
+      <h5><strong><%= Resource.human_attribute_name 'cost_per_unit' %></strong></h5>
     </div>
   </div>
 
@@ -31,7 +33,7 @@
       <%= render 'resource', f: r_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('resource_class.add_resource'), f, :resources) %>
+    <%= link_to_add_fields t('resource_class.add_resource'), f, :resources %>
   </div>
 
   <hr />
