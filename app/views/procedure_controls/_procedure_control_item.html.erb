@@ -1,82 +1,80 @@
 <% id = f.object.object_id %>
 <fieldset class="procedure_control_item" id="<%= id %>">
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-3">
-        <div class="row">
-          <div class="col-md-1">
-            <div class="show_hide">
-              <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
-                t('procedure_control.show_procedure_control_subitems'),
-                t('procedure_control.hide_procedure_control_subitems') %>
-            </div>
-          </div>
-          <div class="col-md-11">
-            <% unless f.object.process_control_id %>
-              <%= procedure_control_best_practices_select(id) %>
-            <% else %>
-              <%= f.input "best_practice_#{id}", label: false, input_html: {
-                value: f.object.process_control.best_practice.name, readonly: true
-              } %>
-            <% end %>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="media">
+        <div class="pull-left">
+          <div class="show_hide">
+            <%= link_to_show_hide "procedure_control_subitems_for_#{id}",
+              t('procedure_control.show_procedure_control_subitems'),
+              t('procedure_control.hide_procedure_control_subitems') %>
           </div>
         </div>
-      </div>
-      <div class="col-md-3">
-        <% unless f.object.process_control_id %>
-          <%= f.input :process_control_id, collection: [], label: false,
-            prompt: true, input_html: { id: "#{id}_process_control_id", disabled: true }
-          %>
-        <% else %>
-          <%= f.input :process_control_id, as: :hidden %>
-          <%= f.input "process_control_#{id}", label: false, input_html: {
-            value: f.object.process_control.name, readonly: true
-          } %>
-        <% end %>
-      </div>
-      <div class="col-md-3">
-        <%= approach_field(f) %>
-      </div>
-      <div class="col-md-2">
-        <%= frequency_field(f) %>
-      </div>
-      <div class="col-md-1">
-        <div class="show_hide">
-          <%= f.input :id, as: :hidden %>
-          <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
-          <%= link_to_insert_field(f) %>
-          <span class="text-muted">|</span>
-          <%= link_to_remove_nested_item(f) %>
+        <div class="media-body">
+          <% unless f.object.process_control_id %>
+            <%= procedure_control_best_practices_select(id) %>
+          <% else %>
+            <%= f.input "best_practice_#{id}", label: false, input_html: {
+              value: f.object.process_control.best_practice.name, readonly: true
+            } %>
+          <% end %>
         </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <% unless f.object.process_control_id %>
+        <%= f.input :process_control_id, collection: [], label: false,
+          prompt: true, input_html: { id: "#{id}_process_control_id", disabled: true }
+        %>
+      <% else %>
+        <%= f.input :process_control_id, as: :hidden %>
+        <%= f.input "process_control_#{id}", label: false, input_html: {
+          value: f.object.process_control.name, readonly: true
+        } %>
+      <% end %>
+    </div>
+    <div class="col-md-3">
+      <%= approach_field(f) %>
+    </div>
+    <div class="col-md-2">
+      <%= frequency_field(f) %>
+    </div>
+    <div class="col-md-1">
+      <div class="show_hide">
+        <%= f.input :id, as: :hidden %>
+        <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
+        <%= link_to_insert_field f %>
+        <span class="text-muted">|</span>
+        <%= link_to_remove_nested_item f %>
       </div>
     </div>
   </div>
 
-  <div id="procedure_control_subitems_for_<%= id %>" style="display: none; margin: 0 0 15px 25px;">
+  <div id="procedure_control_subitems_for_<%= id %>" class="nested" style="display: none;">
     <div class="row">
       <div class="col-md-2">
-        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :control_objective_id %></strong></h5>
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name 'control_objective_id' %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :control_objective_text %></strong></h5>
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name 'control_objective_text' %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= Control.human_attribute_name :control %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'control' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :design_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'design_tests' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :compliance_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'compliance_tests' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'sustantive_tests' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :effects %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'effects' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= ProcedureControlSubitem.human_attribute_name :relevance %></strong></h5>
+        <h5><strong><%= ProcedureControlSubitem.human_attribute_name 'relevance' %></strong></h5>
       </div>
     </div>
 
@@ -85,8 +83,10 @@
         <%= render 'procedure_control_subitem', f: pcs_f %>
       <% end %>
 
-      <%= link_to_add_fields(t('procedure_control.add_procedure_control_subitem'),
-        f, :procedure_control_subitems) %>
+      <p>
+        <%= link_to_add_fields(t('procedure_control.add_procedure_control_subitem'),
+          f, :procedure_control_subitems) %>
+      </p>
     </div>
   </div>
 </fieldset>
