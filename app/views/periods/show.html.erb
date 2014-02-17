@@ -1,11 +1,6 @@
-<p>
-  <strong><%= raw(Period.human_attribute_name(:number) +
-      show_inline_help_for(:period_number)) %>:</strong>
-  <%= @period.number %>
-</p>
+<h2><%= @period.number %></h2>
 
-<p>
-  <strong><%= Period.human_attribute_name :description %>:</strong>
+<p class="lead">
   <%= @period.description %>
 </p>
 
