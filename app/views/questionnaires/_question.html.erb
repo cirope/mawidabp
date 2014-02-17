@@ -2,10 +2,10 @@
 <fieldset class="question">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-8">
         <%= f.input :question, label: false, input_html: { autofocus: true } %>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-3">
         <%= f.input :answer_type, as: :boolean, label: false,
           inline_label: t('activerecord.models.answer_multi_choice'),
           input_html: { id: "#{id}_answer_type" }

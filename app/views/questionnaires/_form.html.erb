@@ -7,6 +7,8 @@
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
         <%= f.input :email_subject, input_html: { maxlength: 255 } %>
         <%= f.input :email_link, input_html: { maxlength: 255 } %>
+      </div>
+      <div class="col-md-6">
         <%= f.input :email_text, input_html: { maxlength: 255 } %>
         <%= f.input :email_clarification, input_html: { maxlength: 255 } %>
         <%= pollable_type_field(f) %>
@@ -17,11 +19,15 @@
   <hr />
 
   <div class="row">
-    <div class="col-md-6">
-      <h3><%= t 'activerecord.attributes.questionnaire.questions' %></h3>
+    <div class="col-md-8">
+      <h5>
+        <strong><%= t 'activerecord.attributes.questionnaire.questions' %></strong>
+      </h5>
     </div>
-    <div class="col-md-6">
-      <h3><%= Question.human_attribute_name :answer_type %></h3>
+    <div class="col-md-4">
+      <h5>
+        <strong><%= Question.human_attribute_name :answer_type %></strong>
+      </h5>
     </div>
   </div>
 
@@ -39,7 +45,7 @@
   <div class="form-actions form-footer">
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
-    <%= f.submit class: 'btn btn-default btn-primary' %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
 <script type="text/javascript">
