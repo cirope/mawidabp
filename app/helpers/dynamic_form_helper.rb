@@ -3,16 +3,16 @@ module DynamicFormHelper
     new_object = form.object.send(association).build
     id = new_object.object_id
     fields = form.fields_for(association, new_object, child_index: id) do |f|
-      render((partial || association.to_s.singularize), locals.merge(f: f, parent: form))
+      render (partial || association.to_s.singularize), locals.merge(f: f, parent: form)
     end
 
     link_to(
       name, '#', class: 'btn btn-default btn-sm', title: name, data: {
-        'id' => id,
-        'association' => association,
-        'dynamic-form-event' => 'addNestedItem',
-        'dynamic-template' => fields.gsub("\n", ''),
-        'show-tooltip' => true
+        id: id,
+        association: association,
+        dynamic_form_event: 'addNestedItem',
+        dynamic_template: fields.gsub("\n", ''),
+        show_tooltip: true
       }.merge(data)
     )
   end

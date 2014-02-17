@@ -1,6 +1,5 @@
 <p>
-  <strong><%= raw(Review.human_attribute_name(:identification) +
-    show_inline_help_for(:review_identification)) %>:</strong>
+  <strong><%= Review.human_attribute_name(:identification) %>:</strong>
   <%= @review.identification %>
 </p>
 
@@ -20,8 +19,7 @@
 </p>
 
 <p>
-  <strong><%= raw(Review.human_attribute_name(:audit_type) +
-    show_inline_help_for(:review_audit_type)) %>:</strong>
+  <strong><%= Review.human_attribute_name(:audit_type) %>:</strong>
   <%= review_business_unit_type_text(@review) %>
 </p>
 
@@ -30,8 +28,7 @@
 </div>
 
 <div>
-  <strong><%= raw(Review.human_attribute_name(:description) +
-    show_inline_help_for(:review_description)) %>:</strong>
+  <strong><%= Review.human_attribute_name(:description) %>:</strong>
   <%= simple_format @review.description %>
 </div>
 
@@ -39,8 +36,7 @@
   <thead>
     <tr>
       <th><%= ReviewUserAssignment.human_attribute_name :user %></th>
-      <th><%= raw(ReviewUserAssignment.human_attribute_name(:assignment_type) +
-          show_inline_help_for(:review_user_assignment_type)) %></th>
+      <th><%= ReviewUserAssignment.human_attribute_name(:assignment_type) %></th>
     </tr>
   </thead>
   <tbody>

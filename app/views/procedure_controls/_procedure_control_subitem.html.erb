@@ -5,62 +5,65 @@
 %>
 <% id = f.object.object_id %>
 <fieldset class="procedure_control_subitem item" id="procedure_control_subitem_<%= id %>">
-  <div class="form-inputs">
-    <div class="row">
+  <div class="row">
+    <div class="col-md-2">
+      <%= f.input :control_objective_id, collection: control_objectives,
+        prompt: true, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_control_objective",
+          class: :control_objective, autofocus: true
+        } %>
+    </div>
+    <div class="col-md-2">
+      <%= f.input :control_objective_text, label: false, input_html: {
+        class: 'control_objective_text',
+        id: "procedure_control_subitem_#{id}_control_objective_texts"
+      } %>
+    </div>
+
+    <%= f.simple_fields_for :control do |c_f| %>
       <div class="col-md-2">
-        <%= f.input :control_objective_id, collection: control_objectives,
-          prompt: true, label: false, input_html: {
-            id: "procedure_control_subitem_#{id}_control_objective",
-            class: :control_objective, autofocus: true
-          } %>
-      </div>
-      <div class="col-md-2">
-        <%= f.input :control_objective_text, label: false, input_html: {
-          class: 'control_objective_text',
-          id: "procedure_control_subitem_#{id}_control_objective_texts"
+        <%= c_f.input :control, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_control"
         } %>
       </div>
-
-      <%= f.simple_fields_for :control do |c_f| %>
-        <div class="col-md-2">
-          <%= c_f.input :control, label: false, input_html: { class: 'control',
-            id: "procedure_control_subitem_#{id}_control" } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :design_tests, label: false, input_html: { class: 'tests',
-            id: "procedure_control_subitem_#{id}_design_tests" } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :compliance_tests, label: false, input_html: { class: 'tests',
-            id: "procedure_control_subitem_#{id}_compliance_tests" } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :sustantive_tests, label: false, input_html: { class: 'tests',
-            id: "procedure_control_subitem_#{id}_sustantive_tests" } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :effects, label: false, input_html: { class: :effects,
-            id: "procedure_control_subitem_#{id}_effects" } %>
-        </div>
-      <% end %>
-
       <div class="col-md-1">
-        <%= relevance_field(
-          f, {}, label: false, input_html: { id: "procedure_control_subitem_#{id}_relevance" }
-        ) %>
+        <%= c_f.input :design_tests, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_design_tests"
+        } %>
       </div>
       <div class="col-md-1">
-        <div class="show_hide">
-          <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
-          <%= link_to_insert_field(f) %>
-          <span class="text-muted">|</span>
-          <%= link_to_remove_nested_item(f) %>
-        </div>
+        <%= c_f.input :compliance_tests, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_compliance_tests"
+        } %>
       </div>
-      <script type="text/javascript">FormUtil.completeSortNumbers();</script>
+      <div class="col-md-1">
+        <%= c_f.input :sustantive_tests, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_sustantive_tests"
+        } %>
+      </div>
+      <div class="col-md-1">
+        <%= c_f.input :effects, label: false, input_html: {
+          id: "procedure_control_subitem_#{id}_effects"
+        } %>
+      </div>
+    <% end %>
+
+    <div class="col-md-1">
+      <%= relevance_field(
+        f, {}, label: false, prompt: true, input_html: { id: "procedure_control_subitem_#{id}_relevance" }
+      ) %>
+    </div>
+    <div class="col-md-1">
+      <div class="show_hide">
+        <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
+        <%= link_to_insert_field(f) %>
+        <span class="text-muted">|</span>
+        <%= link_to_remove_nested_item(f) %>
+      </div>
     </div>
   </div>
 </fieldset>
+<script type="text/javascript">FormUtil.completeSortNumbers();</script>
 <script type="text/javascript">
   $('#procedure_control_subitem_<%= id %>_control_objective').change(function() {
     var parentId = '#<%= "procedure_control_subitem_#{id}" %>';

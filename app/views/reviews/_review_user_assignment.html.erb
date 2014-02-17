@@ -2,7 +2,7 @@
 <fieldset class="review_user_assignment">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-6">
         <% copy_attribute_errors(:user_id, :auto_user_name, f) %>
         <%= f.input :auto_user_name, label: false,
           input_html: {
@@ -19,7 +19,7 @@
           } %>
         <%= f.input :user_id, as: :hidden, input_html: { id: "auto_user_id_#{id}" } %>
       </div>
-      <div class="col-md-5">
+      <div class="col-md-4">
         <%= user_assignment_type_field(f, false, readonly) %>
       </div>
       <div class="col-md-2">

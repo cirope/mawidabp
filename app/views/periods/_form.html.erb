@@ -5,9 +5,7 @@
     <div class="row">
       <div class="col-md-6">
         <%= f.input :number, as: :string, input_html: { autofocus: true },
-          label: raw(
-            Period.human_attribute_name(:number) + show_inline_help_for(:period_number)
-          )
+          label: Period.human_attribute_name(:number)
         %>
         <%= f.input :start, as: :date_picker %>
         <%= f.input :end, as: :date_picker %>

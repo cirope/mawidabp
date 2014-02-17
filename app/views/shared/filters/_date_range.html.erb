@@ -3,10 +3,8 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <%= f.label :from_date, raw(
-          t('conclusion_committee_report.from_date') +
-          (show_inline_help_for(:report_from_date) unless avoid_inline_help).to_s
-        ), class: 'col-md-3' %>
+        <%= f.label :from_date,
+          t('conclusion_committee_report.from_date'), class: 'col-md-3' %>
         <div class="col-md-9">
           <%= f.text_field :from_date, value: l(@from_date), autocomplete: :off,
             class: 'form-control', data: { date_picker: true } %>
@@ -15,10 +13,8 @@
     </div>
     <div class="col-md-6">
       <div class="form-group">
-        <%= f.label :to_date, raw(
-          t('conclusion_committee_report.to_date') +
-          (show_inline_help_for(:report_to_date) unless avoid_inline_help).to_s
-        ), class: 'col-md-3' %>
+        <%= f.label :to_date,
+          t('conclusion_committee_report.to_date'), class: 'col-md-3' %>
         <div class="col-md-9">
           <%= f.text_field :to_date, value: l(@to_date), autocomplete: :off,
             class: 'form-control', data: { date_picker: true } %>

@@ -50,8 +50,7 @@
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:state) +
-      show_inline_help_for(:finding_state)) %>:</b>
+    <b><%= Nonconformity.human_attribute_name(:state) %>:</b>
     <%= @nonconformity.state_text %>
   </div>
 
@@ -81,8 +80,7 @@
   </div>
 
   <div class="show_item">
-    <b><%= raw(Nonconformity.human_attribute_name(:follow_up_date) +
-      show_inline_help_for(:finding_follow_up_date)) %>:</b>
+    <b><%= Nonconformity.human_attribute_name(:follow_up_date) %>:</b>
     <%=l @nonconformity.follow_up_date, :format => :long if @nonconformity.follow_up_date %>
   </div>
 
@@ -91,12 +89,11 @@
     <%=l @nonconformity.solution_date, :format => :long if @nonconformity.solution_date %>
   </div>
 
-  <h3><%= raw(t('finding.responsibles', :count => @nonconformity.users.size) +
-    show_inline_help_for(:finding_responsibles)) %></h3>
+  <h3><%= t('finding.responsibles', :count => @nonconformity.users.size) %></h3>
   <%= finding_responsibles_list(@nonconformity) %>
 
   <% unless (repeated_ancestors = @nonconformity.repeated_ancestors).blank? %>
-    <h3><%= raw(t('finding.repeated_ancestors') + show_inline_help_for(:finding_repeated_ancestors)) %></h3>
+    <h3><%= t('finding.repeated_ancestors') %></h3>
     <ul class="raw_list">
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
@@ -105,7 +102,7 @@
   <% end %>
 
   <% unless (repeated_children = @nonconformity.repeated_children).blank? %>
-    <h3><%= raw(t('finding.repeated_children') + show_inline_help_for(:finding_repeated_children)) %></h3>
+    <h3><%= t('finding.repeated_children') %></h3>
     <ul class="raw_list">
       <% repeated_children.each do |repeated_child| %>
         <li><%= repeated_child %></li>
@@ -116,7 +113,6 @@
   <% unless @nonconformity.finding_relations.blank? %>
     <h3>
       <%= t('finding.finding_relations') %>
-      <%= show_inline_help_for(:finding_relations) %>
     </h3>
 
     <table class="summary_table">
@@ -140,7 +136,6 @@
   <% unless @nonconformity.inverse_finding_relations.blank? %>
     <h3>
       <%= t('finding.inverse_finding_relations') %>
-      <%= show_inline_help_for(:inverse_finding_relations) %>
     </h3>
 
     <table class="summary_table">
@@ -164,7 +159,6 @@
   <% unless @nonconformity.finding_answers.blank? %>
     <h3>
       <%= t('finding.finding_answers') %>
-      <%= show_inline_help_for(:finding_comments) %>
     </h3>
 
     <table class="summary_table">
@@ -174,7 +168,6 @@
           <th><%= FindingAnswer.human_attribute_name :answer %></th>
           <th>
             <%= FindingAnswer.human_attribute_name :file_model %>
-            <%= show_inline_help_for(:finding_file_model) %>
           </th>
           <th>
             <%= FindingAnswer.human_attribute_name :created_at %>
@@ -205,7 +198,7 @@
   <% end %>
 
   <% unless @nonconformity.work_papers.empty? %>
-    <h3><%= raw(t('finding.work_papers') + show_inline_help_for(:finding_work_papers)) %></h3>
+    <h3><%= t('finding.work_papers') %></h3>
     <table class="summary_table">
       <thead>
         <tr>

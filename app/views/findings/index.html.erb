@@ -42,13 +42,13 @@
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true }, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
       <%= make_filterable_column Finding.human_attribute_name(:description), { 'visible-lg' => true }, 'description' %>
-      <%= make_not_available_column raw(Finding.human_attribute_name(:state) + show_inline_help_for(:finding_state)), 'visible-lg' => true %>
+      <%= make_not_available_column Finding.human_attribute_name(:state), 'visible-lg' => true %>
       <%= make_not_available_column Finding.human_attribute_name(
           params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), 'visible-lg' => true %>
       <%= make_not_available_column Weakness.human_attribute_name(:risk), 'visible-lg' => true %>
       <%= make_not_available_column Weakness.human_attribute_name(:priority), 'visible-lg' => true %>
       <%= make_not_available_column Finding.human_attribute_name(:finding_answers), 'visible-lg' => true %>
-      <%= make_not_available_column raw(t('finding.has_work_papers') + show_inline_help_for(:finding_work_papers)), 'visible-lg' => true %>
+      <%= make_not_available_column t('finding.has_work_papers'), 'visible-lg' => true %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

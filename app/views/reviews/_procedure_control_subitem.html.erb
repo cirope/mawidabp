@@ -3,7 +3,7 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-10">
-        <%= f.input :id, label: false,
+        <%= f.input :id, as: :string, label: false,
           input_html: {
             id: "procedure_control_subitem_#{id}",
             name: 'procedure_control_subitem[procedure_control_subitem_data]',
@@ -22,7 +22,7 @@
       </div>
       <div class="col-md-2">
         <div class="show_hide">
-          <%= link_to_remove_nested_item(f) %>
+          <%= link_to_remove_nested_item f %>
         </div>
       </div>
     </div>
