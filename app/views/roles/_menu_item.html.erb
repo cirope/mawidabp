@@ -2,7 +2,7 @@
   <% privilege = @role.privileges.detect { |p| p.module == menu_item.menu_name } ||
     @role.privileges.build(:module => menu_item.menu_name) %>
   <%= role_form.simple_fields_for :privileges, privilege do |f| %>
-    <% parent_name_attribute = "data-parent=\"#{menu_item.parent.try(:menu_name)}\"" if menu_item.parent.try(:menu_name) %>
+    <% parent_name_attribute = "data-parent=\"#{menu_item.parent.menu_name}\"" if menu_item.parent %>
     <tr id="<%= menu_item.menu_name %>" <%= raw parent_name_attribute %>>
       <td>
         <span <%= raw "style=\"padding-left: #{menu_item.self_and_ancestors.size * 2 - 2}em;\"" %>
