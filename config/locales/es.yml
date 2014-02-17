@@ -2107,10 +2107,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         questions: "Preguntas"
         polls: "Encuestas"
         pollable_type: "Clase encuestable"
-        email_subject: "Asunto correo"
-        email_link: "Link correo"
-        email_text: "Texto correo"
-        email_clarification: "Aclaración correo"
+        email_subject: "Asunto del correo"
+        email_link: "Texto del enlace"
+        email_text: "Texto del correo"
+        email_clarification: "Aclaración del correo"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
