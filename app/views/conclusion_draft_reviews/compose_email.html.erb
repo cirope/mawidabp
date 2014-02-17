@@ -1,67 +1,54 @@
 <%= simple_form_for @conclusion_draft_review,
   url: send_by_email_conclusion_draft_review_path(@conclusion_draft_review) do |f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var user='" + escape_javascript(render :partial => 'user',
-      :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
-  <% end %>
   <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
+            for: :conclusion_review_include_global_score_sheet %>
+          <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1, true %>
+        </div>
+        <div class="form-group">
+          <%= content_tag :label, t('conclusion_review.include_score_sheet'),
+            for: :conclusion_review_include_score_sheet %>
+          <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false %>
+        </div>
+        <div class="form-group">
+          <%= content_tag :label, t('conclusion_review.email_note'),
+            for: :conclusion_review_email_note %>
+          <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5,
+            autofocus: true, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :include_global_score_sheet, as: :boolean %>
-      <%= content_tag :label, t('conclusion_review.include_global_score_sheet'),
-        :class => :inline_long,
-        :for => :conclusion_review_include_global_score_sheet %>
-      <%= check_box_tag 'conclusion_review[include_global_score_sheet]', 1,
-        true, :class => :inline_item %>
-
-      <p class="form_item">
-        <%= content_tag :label, t('conclusion_review.include_score_sheet'),
-          :class => :inline_long,
-          :for => :conclusion_review_include_score_sheet %>
-        <%= check_box_tag 'conclusion_review[include_score_sheet]', 1, false,
-          :class => :inline_item %>
-      </p>
-
-      <p class="form_item">
-        <%= content_tag :label, t('conclusion_review.email_note'),
-          :for => :conclusion_review_email_note %>
-        <%= text_area_tag 'conclusion_review[email_note]', nil, :rows => 5,
-          :cols => 40, :autofocus => true %>
-      </p>
+      <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
   </div>
 
-  <div class="items">
-    <div class="column_headers">
-      <div class="item_column" style="width: 50%;">
-        <h3><%= User.model_name.human %></h3>
-      </div>
-      <div class="item_column" style="width: 10%;">&nbsp;</div>
-      <div class="clear"></div>
-    </div>
+  <div id="users">
+    <% @conclusion_draft_review.review.users.each do |user| %>
+      <%= render 'user', item: user %>
+    <% end %>
 
-    <div id="users">
-      <% @conclusion_draft_review.review.users.each do |user| %>
-        <%= render :partial => 'user', :locals => {:user => user,
-          :is_dynamic => false} %>
-      <% end %>
-    </div>
+    <%= link_to_add_item(
+      t('conclusion_review.add_recipient'), @conclusion_draft_review.review.users.build, 'user'
+    ) %>
   </div>
 
-  <p class="add_item">
-    <%= link_to t('conclusion_review.add_recipient'), '#',
-      'data-template' => :user, 'data-event' => 'addNestedItem',
-      'data-container' => '#users' %>
-  </p>
+  <hr />
 
-  <p>
-    <span class="button"><%= f.submit t('label.send') %></span>
-  </p>
+  <div class="form-actions form-footer">
+    <div class="pull-right">
+      <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
+      <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
+      <%= link_to_back %>
+    </div>
+    <%= f.submit t('label.send'), class: 'btn btn-primary' %>
+  </div>
 <% end %>
-
-<div id="links">
-  <%= link_to t('label.edit'), edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
-  <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
-  <%= link_to_back %>
-</div>

@@ -1,37 +1,30 @@
-<% id = user.id || 'NEW_RECORD' %>
-<% hide = is_dynamic || user.marked_for_destruction? %>
-<div class="user item" <%= raw 'style="display: none;"' if hide %> id="user_<%= id %>">
-  <div>
-    <div class="item_field" style="width: 50%;">
-      <% if is_dynamic %>
-        <div class="search">
-          <% field_classes = [:search, :autocomplete_field] %>
+<%
+  user = item
+  id = user.id || item.object_id
+%>
+<fieldset class="user" style="margin-bottom: 10px;">
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <% if user.new_record? %>
           <%= text_field_tag "user[#{id}][data]", '',
-            :id => "user_#{id}_data",
-            :class => field_classes.join(' '),
-            :title => t('label.search'),
-            :autocomplete => :off,
-            :autofocus => true,
-            'data-autocomplete-url' => auto_complete_for_user_conclusion_draft_reviews_path(:format => :json) %>
-          <%= hidden_field_tag "user[#{id}][id]", user.id,
-            :class => :autocomplete_id %>
-        </div>
-      <% else %>
+            id: "user_#{id}_data",
+            class: 'autocomplete_field form-control',
+            title: t('label.search'),
+            autocomplete: :off,
+            autofocus: true, data: {
+              autocomplete_url: auto_complete_for_user_conclusion_draft_reviews_path,
+              autocomplete_id_target: "#user_#{id}_id"
+            } %>
+        <% else %>
+          <%= text_field_tag "user[#{id}][data]",
+            user.try(:full_name_with_function), readonly: true, class: 'form-control' %>
+        <% end %>
         <%= hidden_field_tag "user[#{id}][id]", user.id %>
-        <%= text_field_tag "user[#{id}][data]",
-          user.new_record? ? nil : user.full_name_with_function,
-          :readonly => true %>
-      <% end %>
-    </div>
-    <div class="item_field item_controls" style="width: 10%;">
-      <%= remove_item_link nil, 'user' %>
+      </div>
+      <div class="col-md-2">
+        <%= link_to_remove_child_item(nil) %>
+      </div>
     </div>
   </div>
-</div>
-
-<% if is_dynamic %>
-  <script type="text/javascript">
-    Helper.showItem('#user_<%= id %>');
-    AutoComplete.observeAll();
-  </script>
-<% end %>
+</fieldset>

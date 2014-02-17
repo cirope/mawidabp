@@ -213,6 +213,8 @@ class ConclusionFinalReviewsController < ApplicationController
   def send_by_email
     @title = t 'conclusion_final_review.send_by_email'
 
+    @questionnaires = Questionnaire.list.by_pollable_type 'ConclusionReview'
+
     users = []
     users_without_poll = []
 
@@ -235,7 +237,7 @@ class ConclusionFinalReviewsController < ApplicationController
         false)
     end
 
-    (params[:user].try(:values) || []).each do |user_data|
+    (params[:user].try(:values).try(:reject, &:blank?) || []).each do |user_data|
       user = User.find_by(id: user_data[:id]) if user_data[:id]
       send_options = {
         note: note,

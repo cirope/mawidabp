@@ -16,15 +16,14 @@
               autocomplete_url: auto_complete_for_user_conclusion_final_reviews_path,
               autocomplete_id_target: "#user_#{id}_id"
             } %>
-          <%= hidden_field_tag "user[#{id}][id]", user.id %>
         </div>
       <% else %>
         <div class="col-md-6">
-          <%= hidden_field_tag "user[#{id}][id]", user.id %>
           <%= text_field_tag "user[#{id}][data]", user.try(:full_name_with_function),
             readonly: true, class: 'form-control' %>
         </div>
       <% end %>
+      <%= hidden_field_tag "user[#{id}][id]", user.id %>
       <div class="col-md-4">
         <% if user.can_act_as_audited? %>
           <%= select_tag "user[#{id}]", options_from_collection_for_select(

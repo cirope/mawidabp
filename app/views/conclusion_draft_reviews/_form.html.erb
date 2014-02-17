@@ -26,7 +26,7 @@
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
           readonly: true } %>
-        <%= f.input :issue_date, as: :date_picker, label: raw(
+        <%= f.input :issue_date, as: :date_picker, label:
             ConclusionDraftReview.human_attribute_name(:issue_date) %>
       </div>
     </div>
