@@ -1,22 +1,16 @@
-<div class="form_column_left">
-  <%= form_for :dump_emails, :url => { :action => 'send_csv_polls' }, :html => { :multipart => true } do |f| %>
-    <p class="form_item">
-      <%= f.label Poll.human_attribute_name(:questionnaire_id) %>
-      <%= f.select :questionnaire_id, Questionnaire.list.map { |q| [q.name, q.id] } %>
-    </p>
-    <p class="form_item">
-      <%= f.label t('poll.import_csv_customers_title') %>
-      <%= f.file_field :file %>
-    </p>
-    <p class="form_item">
-      <%= f.submit t('label.attach_csv') %>
-    </p>
-  <% end %>
-</div>
+<%= simple_form_for :dump_emails, url: { action: 'send_csv_polls' }, html: { multipart: true } do |f| %>
+  <div class="form-inputs">
+    <%= f.input :questionnaire_id, collection: Questionnaire.list, label: Poll.human_attribute_name(:questionnaire_id), prompt: true %>
+    <%= f.input :file, as: :file, label: t('poll.import_csv_customers_title') %>
+  </div>
 
-<div id="links">
-  <%= link_to t('label.list'), polls_path %> |
-  <%= link_to_back %>
-</div>
+  <hr />
 
-
+  <div class="form-actions">
+    <div class="pull-right">
+      <%= link_to t('label.list'), polls_path %> |
+      <%= link_to_back %>
+    </div>
+    <%= f.button :submit, t('label.attach_csv'), class: 'btn-primary' %>
+  </div>
+<% end %>
