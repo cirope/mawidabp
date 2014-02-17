@@ -23,7 +23,7 @@
       </div>
       <div class="col-md-6">
         <%= f.input :conclusion, input_html: { readonly: readonly } %>
-        <%= f.input :score, input_html: {
+        <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_final_review.review.score_text if @conclusion_final_review.review),
           readonly: true } %>
         <%= f.input :issue_date, as: :date_picker, label: raw(

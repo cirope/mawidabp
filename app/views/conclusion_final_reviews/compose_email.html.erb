@@ -1,9 +1,5 @@
 <%= simple_form_for @conclusion_final_review,
   url: send_by_email_conclusion_final_review_path(@conclusion_final_review) do |f| %>
-  <% content_for :js_extra do %>
-    <%= raw "var user='" + escape_javascript(render :partial => 'user',
-      :locals => {:user => User.new, :is_dynamic => true}) + "';" %>
-  <% end %>
   <%= render 'shared/error_explanation', f: f %>
 
   <div class="form-inputs">
@@ -24,7 +20,10 @@
             for: :export_options_hide_control_objectives_excluded_from_score %>
           <%= check_box_tag 'export_options[hide_control_objectives_excluded_from_score]', 1, false %>
         </div>
-        <%= f.input :conclusion_review_email_note, input_html: { rows: 5 } %>
+        <div class="form-group">
+          <%= f.label t('conclusion_review.email_note'), for: :conclusion_review_email_note %>
+          <%= text_area_tag 'conclusion_review[email_note]', nil, rows: 5, class: 'form-control' %>
+        </div>
       </div>
     </div>
   </div>
@@ -40,10 +39,12 @@
 
   <div id="users">
     <% @conclusion_final_review.review.users.each do |user| %>
-      <%= render 'user', user: user %>
+      <%= render 'user', item: user %>
     <% end %>
 
-    <%= link_to_add_fields(t('conclusion_review.add_recipient'), f, :users) %>
+    <%= link_to_add_item(
+      t('conclusion_review.add_recipient'), @conclusion_final_review.review.users.build, 'user'
+    ) %>
   </div>
 
   <hr />

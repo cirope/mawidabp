@@ -236,7 +236,7 @@ class ConclusionFinalReviewsController < ApplicationController
     end
 
     (params[:user].try(:values) || []).each do |user_data|
-      user = User.find(user_data[:id]) if user_data[:id]
+      user = User.find_by(id: user_data[:id]) if user_data[:id]
       send_options = {
         note: note,
         include_score_sheet: include_score_sheet,

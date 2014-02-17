@@ -28,6 +28,20 @@ module DynamicFormHelper
     )
   end
 
+  def link_to_add_item(name, new_object, partial)
+    id = new_object.object_id
+    fields = render(partial, item: new_object)
+
+    link_to(
+      name, '#', class: 'btn btn-default btn-sm', title: name, data: {
+        'id' => id,
+        'dynamic-form-event' => 'addNestedItem',
+        'dynamic-template' => fields.gsub("\n", ''),
+        'show-tooltip' => true
+      }
+    )
+  end
+
   def link_to_remove_nested_item(form)
     new_record = form.object.new_record?
     out = ''
