@@ -92,11 +92,8 @@ module FindingsHelper
 
 
   def finding_answer_notification_check(form)
-    form.input :notify_users, as: :boolean, label: false, inline_label: raw(
-      FindingAnswer.human_attribute_name(:notify_users) +
-      show_inline_help_for(:finding_answer_notification,
-        'finding_answer_notification_NEW_RECORD')
-    )
+    form.input :notify_users, as: :boolean, label: false, inline_label:
+      FindingAnswer.human_attribute_name(:notify_users)
   end
 
   def finding_show_status_change_history(dom_id)
