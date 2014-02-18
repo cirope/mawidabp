@@ -80,7 +80,7 @@
 
     <div class="procedure_control_subitems">
       <%= f.simple_fields_for :procedure_control_subitems do |pcs_f| %>
-        <%= render 'procedure_control_subitem', f: pcs_f %>
+        <%= render 'procedure_control_subitem', f: pcs_f, parent: f %>
       <% end %>
 
       <p>

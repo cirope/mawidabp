@@ -1,5 +1,5 @@
 <%
-  procedure_control_item = f.object.procedure_control_item
+  procedure_control_item = parent.object
   control_objectives = (procedure_control_item.process_control ?
     procedure_control_item.process_control.control_objectives.map {|co| [co.name, co.id]} : [])
 %>
