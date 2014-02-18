@@ -1,6 +1,6 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :detailed_management_report, :extra_params => {},
-  :forms => {:date_range => {:avoid_inline_help => true}}} %>
+<%= render partial: 'shared/filter_form',
+  locals: { action: :detailed_management_report, extra_params: {},
+  forms: { date_range: true  }} %>
 
 <% @audits_by_period.each do |audit_by_period| %>
   <div class="page-header">

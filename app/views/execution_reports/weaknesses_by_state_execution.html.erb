@@ -1,6 +1,6 @@
-<%= render :partial => 'shared/filter_form',
-  :locals => {:action => :weaknesses_by_state_execution, :extra_params => {},
-  :forms => {:date_range => {:avoid_inline_help => true}}} %>
+<%= render partial: 'shared/filter_form',
+  locals: { action: :weaknesses_by_state_execution, extra_params: {},
+  forms: { date_range: true }} %>
 
 <%  @counts.each do |count_data| %>
   <div class="page-header">
