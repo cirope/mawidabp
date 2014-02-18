@@ -22,4 +22,6 @@
 //= require date_pickers
 //= require common
 //= require extensions
+//= require form_modification
+//= require validation
 //= require ui

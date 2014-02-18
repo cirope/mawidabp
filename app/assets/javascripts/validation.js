@@ -2,12 +2,12 @@ jQuery(function() {
   $('form').submit(function(event) {
     var hasErrors = false;
 
-    $('.required', $(this)).each(function() {
+    $(':input.required', $(this)).each(function() {
       if($(this).val().match(/^\s*$/)) {
-        $(this).addClass('error_field');
+        $(this).closest('.form-group').addClass('has-error');
         hasErrors = true;
       } else {
-        $(this).removeClass('error_field');
+        $(this).closest('form-group').removeClass('has-error');
       }
     });
 
