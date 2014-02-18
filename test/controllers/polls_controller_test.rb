@@ -146,7 +146,7 @@ class PollsControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to poll_url(polls(:poll_one), layout: 'application_clean')
+    assert_redirected_to poll_url(polls(:poll_one), layout: 'clean')
     assert_not_nil assigns(:poll)
     assert_equal 'Encuesta actualizada', assigns(:poll).comments
     assert_equal true, assigns(:poll).answered

@@ -12,9 +12,7 @@ class InlineHelpsController < ApplicationController
   # * GET /inline_helps.xml
   def index
     @title = t 'inline_help.index_title'
-    @inline_helps = InlineHelp.order(['language ASC', 'name ASC']).paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @inline_helps = InlineHelp.order(['language ASC', 'name ASC']).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

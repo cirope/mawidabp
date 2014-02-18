@@ -50,7 +50,7 @@
       <div class="col-md-6">
         <%= f.label :state, PotentialNonconformity.human_attribute_name(:state) +
             (show_history_changes ? finding_show_status_change_history(
-              :finding_status_change_history) : ''))  %>
+              :finding_status_change_history) : '')  %>
         <%= finding_status_field(f, true, readonly) %>
 
         <% if show_history_changes %>
@@ -224,19 +224,19 @@
   </h4>
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= workpaper.human_attribute_name 'name' %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= workpaper.human_attribute_name 'code' %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
     </div>
     <div class="col-md-1">
-      <h5><strong><%= workpaper.human_attribute_name 'number_of_pages' %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= workpaper.human_attribute_name 'description' %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= workpaper.human_attribute_name 'file_model' %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
     </div>
   </div>
 
