@@ -1,6 +1,6 @@
 <% url = url_for({ action: action }.merge(extra_params)) %>
 <div id="filter_box">
-  <%= simple_form_for action, url: url, html: { method: :get } do |f| %>
+  <%= simple_form_for action, url: url, html: { method: :get, class: 'no_observe_changes' } do |f| %>
     <div class="row">
       <div class="col-md-10">
         <% forms.sort { |f1, f2| f1.second.to_s <=> f2.second.to_s }.each do |f_name, display| %>
