@@ -29,12 +29,6 @@
           <%= c_f.input :control, label: Control.human_attribute_name(:control), input_html: { readonly: readonly, rows: 5 } %>
           <%= f.input :effectiveness, label: ControlObjectiveItem.human_attribute_name(:effectiveness),
             input_html: { value: "#{@control_objective_item.effectiveness}%", readonly: true } %>
-          <%= f.input :finished, as: :boolean, label: false, inline_label:
-            ControlObjectiveItem.human_attribute_name(:finished),
-            input_html: { disabled: readonly } %>
-          <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
-            ControlObjectiveItem.human_attribute_name(:exclude_from_score),
-            input_html: { disabled: readonly } %>
 
           <% content_for :design_tests do %>
             <%= c_f.input :design_tests, input_html: { readonly: readonly, rows: 5 } %>
@@ -61,6 +55,21 @@
         <%= yield :sustantive_tests %>
 
         <%= f.input :auditor_comment, input_html: { readonly: readonly, rows: 5 } %>
+
+        <br />
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :finished, as: :boolean, label: false, inline_label:
+              ControlObjectiveItem.human_attribute_name(:finished),
+              input_html: { disabled: readonly } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :exclude_from_score, as: :boolean, label: false, inline_label:
+              ControlObjectiveItem.human_attribute_name(:exclude_from_score),
+              input_html: { disabled: readonly } %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
