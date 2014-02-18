@@ -48,7 +48,9 @@
               finding_answer.finding.pending? &&
               finding_answer.finding.commitment_date.blank? %>
             <%= f.input :commitment_date, as: :date_picker, label:
-              FindingAnswer.human_attribute_name(:commitment_date) %>
+              FindingAnswer.human_attribute_name(:commitment_date), input_html: {
+              data: { required: true }
+            } %>
           <% end %>
           <%= finding_answer_notification_check(f) %>
         <% end %>

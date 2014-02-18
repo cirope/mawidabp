@@ -42,8 +42,8 @@
           <%= priority_field(f, prompt: true) %>
         <% end %>
         <% unless @finding.kind_of? Fortress %>
-          <%= f.label :state, Finding.human_attribute_name(:state) +
-            (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '') %>
+          <%= f.label :state, raw(Finding.human_attribute_name(:state) +
+            (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
           <%= finding_status_field(f) %>
         <% end %>
         <% if show_history_changes %>
@@ -297,7 +297,7 @@
 
   <div id="costs">
     <%= f.simple_fields_for :costs, @finding.costs.detect { |c| c.new_record? } ||
-        Cost.new(:user => @auth_user, :cost_type => 'audit') do |c_f| %>
+        Cost.new(user: @auth_user, cost_type: 'audit') do |c_f| %>
       <%= render 'cost', f: c_f %>
     <% end %>
   </div>
