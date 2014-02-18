@@ -4,7 +4,7 @@
 <% query_string = params[:search] ? params[:search][:query] : nil %>
 <% order_field = params[:search] ? params[:search][:order] : nil %>
 <div id="search" <%== "style='display: none;'" if (@query.blank? && @order_by.blank?) %>>
-  <%= simple_form_for url, html: { method: :get, class: 'no_observe_changes' } do |f| %>
+  <%= simple_form_for url, html: { method: :get, data: { no_observe_changes: true } } do |f| %>
     <div class="row">
       <div class="<%= columns_for_sort.empty? ? 'col-md-10' : 'col-md-7' %>">
         <%= f.input 'search_query', label: false, input_html: {

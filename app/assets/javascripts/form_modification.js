@@ -1,5 +1,5 @@
 jQuery(function() {
-  $('form:not(.no_observe_changes)').change(function() {
+  $('form:not([data-no-observe-changes])').change(function() {
     State.unsavedData = true;
   });
 
