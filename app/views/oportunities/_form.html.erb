@@ -47,7 +47,7 @@
         <%= f.input :description, autofocus: true, input_html: { readonly: readonly } %>
       </div>
       <div class="col-md-6">
-        <%= f.label :state, Oportunity.human_attribute_name(:state) +
+        <%= f.label :state, raw(Oportunity.human_attribute_name(:state) +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : ''))  %>
         <%= finding_status_field(f, true, readonly) %>
