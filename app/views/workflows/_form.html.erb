@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-6">
         <% if @workflow.new_record? %>
-          <%= review_id_field(f) %>
+          <%= review_id_field f %>
         <% else %>
           <%= f.input :review_description, label: Workflow.human_attribute_name('review_id'),
             input_html: { value: @workflow.review, readonly: true } %>
@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <table class="table table-condensed table-striped">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th></th>
