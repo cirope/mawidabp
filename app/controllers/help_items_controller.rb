@@ -11,9 +11,7 @@ class HelpItemsController < ApplicationController
   # * GET /help_items.xml
   def index
     @title = t 'help_item.index_title'
-    @help_items = HelpItem.order('name ASC').paginate(
-      :page => params[:page], :per_page => APP_LINES_PER_PAGE
-    )
+    @help_items = HelpItem.order('name ASC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
