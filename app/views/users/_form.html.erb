@@ -17,7 +17,9 @@
         <%= f.input :logged_in, label: false, inline_label: true %>
         <%= f.input :enable, label: false, inline_label: true %>
         <%= f.input :hidden, label: false, inline_label: true %>
-        <%= f.input :send_notification_email, as: :boolean, label: false, inline_label: true %>
+        <%= f.input :send_notification_email, as: :boolean,
+          checked_value: '1', unchecked_value: '', label: false,
+          inline_label: true %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
