@@ -152,7 +152,7 @@ module FindingsHelper
     end
 
     select nil, :user_id, sort_options_array(users), {:prompt => true},
-      {:name => :user_id, :id => :user_id_select, :class => :inline_item}
+      {:name => :user_id, :id => :user_id_select, :class => 'form-control'}
   end
 
 end

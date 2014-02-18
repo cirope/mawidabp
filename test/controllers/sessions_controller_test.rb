@@ -202,7 +202,7 @@ class SessionsControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:administrator_user).user]
       }
     assert_response :success
-    assert_select '#no_organization', I18n.t('message.no_organization')
+    assert_select 'div.alert-danger p', I18n.t('message.no_organization')
   end
 
   test 'login sucesfully' do

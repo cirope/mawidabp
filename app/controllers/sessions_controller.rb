@@ -124,6 +124,7 @@ class SessionsController < ApplicationController
         render action: :new
       end
     else
+      flash.alert = t 'message.no_organization'
       render action: :new unless session[:user_id]
     end
   end

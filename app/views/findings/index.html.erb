@@ -1,29 +1,25 @@
 <% if @query.blank? && @order_by.blank? && (@self_and_descendants.size > 1 || @related_users.size > 0 || @selected_user) %>
-  <div class="filter" style="margin: 1em;">
-    <div>
-      <table class="table table-condensed">
-        <tbody>
-          <tr>
-            <td style="padding-right: 1em; width: 90%;">
-              <% if @selected_user %>
-                <h2><%= @selected_user.full_name %>
-                <%= t('activerecord.attributes.finding_user_assignment.responsible_auditor') if @is_responsible %>
-                </h2>
-              <% else %>
-                <%= label_tag :user_id_select, User.model_name.human, :class => :inline %>
-                <%= show_finding_related_users %>
-              <% end %>
-            </td>
-            <td class="nowrap" class="text-right">
-              <%= link_to_if @selected_user, t('label.cancel'),
-                findings_path(params[:completed]),
-                {:style => 'margin-left: 1em;'} %>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <% if @selected_user %>
+    <div class="page-header">
+      <h3>
+        <%= @selected_user.full_name %>
+        <%= t('activerecord.attributes.finding_user_assignment.responsible_auditor') if @is_responsible %>
+        <small>
+          <span class="text-muted">|</span>
+          <%= link_to t('label.cancel'), findings_path(params[:completed]) if @selected_user %>
+        </small>
+      </h3>
     </div>
-  </div>
+  <% else %>
+    <div class="row">
+      <div class="col-md-6 form-group">
+        <%= label_tag :user_id_select, User.model_name.human, class: 'col-md-2' %>
+        <div class="col-md-10">
+          <%= show_finding_related_users %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 <% end %>
 <%= render :partial => 'shared/search', :locals => {
   :options => {
@@ -35,7 +31,7 @@
 } %>
 
 <table class="table table-condensed table-striped">
-  <thead  id="column_headers">
+  <thead id="column_headers">
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
