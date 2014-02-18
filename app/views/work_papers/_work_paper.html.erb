@@ -5,15 +5,15 @@
     <div class="col-md-3">
       <%= f.input :name, label: false, input_html: { autofocus: true } %>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
       <%= f.input :code, label: false, input_html: {
         class: 'work_paper_code', readonly: true } %>
     </div>
-    <div class="col-md-2">
-      <%= f.input :number_of_pages, label: false %>
+    <div class="col-md-1">
+      <%= f.input :number_of_pages, as: :string, label: false %>
     </div>
-    <div class="col-md-2">
-      <%= f.input :description, label: false %>
+    <div class="col-md-4">
+      <%= f.input :description, label: false, input_html: { rows: 1 } %>
     </div>
     <div class="col-md-2">
       <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>

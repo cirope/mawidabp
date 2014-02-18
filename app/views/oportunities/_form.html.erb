@@ -223,19 +223,19 @@
   </h4>
   <div class="row">
     <div class="col-md-3">
-      <h5><strong><%= WorkPaper.human_attribute_name :name %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'name' %></strong></h5>
+    </div>
+    <div class="col-md-1">
+      <h5><strong><%= WorkPaper.human_attribute_name 'code' %></strong></h5>
+    </div>
+    <div class="col-md-1">
+      <h5><strong><%= WorkPaper.human_attribute_name 'number_of_pages' %></strong></h5>
+    </div>
+    <div class="col-md-4">
+      <h5><strong><%= WorkPaper.human_attribute_name 'description' %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name :code %></strong></h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name :number_of_pages %></strong></h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name :description %></strong></h5>
-    </div>
-    <div class="col-md-2">
-      <h5><strong><%= WorkPaper.human_attribute_name :file_model %></strong></h5>
+      <h5><strong><%= WorkPaper.human_attribute_name 'file_model' %></strong></h5>
     </div>
   </div>
 

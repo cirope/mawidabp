@@ -1496,7 +1496,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Papel de trabajo (nombre)"
         code: "Papel de trabajo (código)"
         description: "Papel de trabajo (descripción)"
-        number_of_pages: "Papel de trabajo (cantidad de páginas)"
+        number_of_pages: "Papel de trabajo (páginas)"
       control_objective_item/work_papers/file_model:
         one: "Papel de trabajo (archivo)"
         file_file_name: "Papel de trabajo (nombre de archivo)"
@@ -1576,7 +1576,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Papel de trabajo (nombre)"
         code: "Papel de trabajo (código)"
         description: "Papel de trabajo (descripción)"
-        number_of_pages: "Papel de trabajo (cantidad de páginas)"
+        number_of_pages: "Papel de trabajo (páginas)"
       finding/work_papers/file_model:
         one: "Papel de trabajo (archivo)"
         file_file_name: "Papel de trabajo (nombre de archivo)"
@@ -1880,7 +1880,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         code: "Código"
         description: "Descripción"
         file_model: "Archivo"
-        number_of_pages: "Cantidad de páginas"
+        number_of_pages: "Páginas"
       workflow:
         organization_id: "Organización"
         period_id: "Periodo"
