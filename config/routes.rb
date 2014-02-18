@@ -256,7 +256,6 @@ MawidaBP::Application.routes.draw do
       patch :send_by_email
       get :download_work_papers
       get :score_sheet
-      get :bundle
       post :create_bundle
     end
 
@@ -273,7 +272,6 @@ MawidaBP::Application.routes.draw do
       patch :send_by_email
       get :download_work_papers
       get :score_sheet
-      get :bundle
       post :create_bundle
     end
 

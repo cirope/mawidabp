@@ -236,15 +236,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_redirected_to conclusion_review.review.relative_work_papers_zip_path
   end
 
-  test 'bundle' do
-    perform_auth
-    get :bundle, :id => conclusion_reviews(:conclusion_past_final_review).id
-    assert_response :success
-    assert_not_nil assigns(:conclusion_final_review)
-    assert_select '#error_body', false
-    assert_template 'conclusion_final_reviews/bundle'
-  end
-
   test 'download bundle' do
     perform_auth
 

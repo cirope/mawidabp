@@ -167,7 +167,9 @@ end %>
         :_ts => Time.now.to_i %></li>
     </ul>
   </span> |
-  <%= link_to t('conclusion_draft_review.create_bundle'),
-    :action => :bundle, :id => @conclusion_draft_review %> |
+  <%= link_to t('conclusion_draft_review.create_bundle'), '#',
+    data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_back %>
 </div>
+
+<%= render 'bundle' %>

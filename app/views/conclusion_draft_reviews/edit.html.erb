@@ -24,7 +24,6 @@
     </ul>
   </span> |
   <%= link_to t('conclusion_draft_review.create_bundle'), '#',
-    action: :bundle, id: @conclusion_draft_review,
     data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_if(@conclusion_draft_review.review.try(:can_be_sended?) &&
       !@conclusion_draft_review.has_final_review?,

@@ -4,7 +4,7 @@ class ConclusionFinalReviewsController < ApplicationController
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
-    :bundle, :create_bundle, :compose_email, :send_by_email
+    :create_bundle, :compose_email, :send_by_email
   ]
   layout proc{ |controller| controller.request.xhr? ? false : 'application' }
 
@@ -175,13 +175,6 @@ class ConclusionFinalReviewsController < ApplicationController
     review.zip_all_work_papers current_organization
 
     redirect_to review.relative_work_papers_zip_path
-  end
-
-  # Muestra las opciones editables del legajo
-  #
-  # * GET /conclusion_final_reviews/bundle/1
-  def bundle
-    @title = t 'conclusion_final_review.bundle_title'
   end
 
   # Crea el legajo completo del informe
