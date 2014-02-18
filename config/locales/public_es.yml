@@ -1643,7 +1643,7 @@ public_es:
           name: "Papel de trabajo (nombre)"
           code: "Papel de trabajo (código)"
           description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          number_of_pages: "Papel de trabajo (páginas)"
           file_model:
             one: "Papel de trabajo (archivo)"
             file_file_name: "Papel de trabajo (nombre de archivo)"
@@ -1725,7 +1725,7 @@ public_es:
           name: "Papel de trabajo (nombre)"
           code: "Papel de trabajo (código)"
           description: "Papel de trabajo (descripción)"
-          number_of_pages: "Papel de trabajo (cantidad de páginas)"
+          number_of_pages: "Papel de trabajo (páginas)"
           file_model:
             one: "Papel de trabajo (archivo)"
             file_file_name: "Papel de trabajo (nombre de archivo)"
@@ -2045,7 +2045,7 @@ public_es:
         code: "Código"
         description: "Descripción"
         file_model: "Archivo"
-        number_of_pages: "Cantidad de páginas"
+        number_of_pages: "Páginas"
       workflow:
         organization_id: "Organización"
         period_id: "Periodo"
