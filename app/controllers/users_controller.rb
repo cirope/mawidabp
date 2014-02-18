@@ -218,8 +218,7 @@ class UsersController < ApplicationController
   def send_password_reset
     @title = t 'user.reset_password_title'
 
-    @user = find_with_organization(params[:email], :email)
-
+    @user = find_with_organization(params[:user][:email], :email)
     if @user && !@user.hidden
       @user.reset_password!(current_organization)
       redirect_to_login t('user.password_reset_sended')
