@@ -51,11 +51,6 @@ module ApplicationHelper
         :count => ('%.2f' % (time_in_seconds / 3600)))).html_safe
   end
 
-  def show_inline_help_for(name, link_name = nil)
-    render(:partial => 'inline_helps/show_inline', :locals => {:name => name,
-      :link_name => (link_name || name)}).html_safe
-  end
-
   def show_info(text, html_options = {})
     content_tag(:div, !text.blank? ?
       content_tag(
