@@ -169,15 +169,15 @@ jQuery(function() {
     var amount_url = '<%= estimated_amount_reviews_path %>';
     var element = $(this);
 
-    $('#business_unit').val('');
-    $('#audit_type').val('');
+    $('#review_business_unit').val('');
+    $('#review_audit_type').val('');
 
     if(!$(this).val().match(/^\s*$/)) {
       Helper.showLoading(element);
 
       $.get(data_url, { id: element.val(), format: 'json' }, function(data) {
-        $('#business_unit').val(data.business_unit_name);
-        $('#audit_type').val(data.business_unit_type);
+        $('#review_business_unit').val(data.business_unit_name);
+        $('#review_audit_type').val(data.business_unit_type);
 
         if(data.link_to_suggested_findings) {
           $('#link_to_suggested_findings').attr(
@@ -196,7 +196,7 @@ jQuery(function() {
         $('#estimated_amount').html(data);
       }).complete(function() {
         Helper.hideLoading(element);
-        $('#estimated_amount').stop(true, true).effect('highlight', {}, 2000);
+        $('#estimated_amount').effect('highlight', {}, 2000);
       });
     } else {
       $('#link_to_suggested_findings').attr('href', '#');
