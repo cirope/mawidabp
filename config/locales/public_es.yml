@@ -556,7 +556,7 @@ public_es:
     responsibles:
       one: "Responsable"
       other: "Responsables"
-    send_notification: "¿Enviar notificación?"
+    send_notification: "¿Notificar?"
     show_status_change_history: "Ver historial de cambios de estado"
     status_change_history: "Historial de cambios de estado"
     status_confirmed: "Confirmada"

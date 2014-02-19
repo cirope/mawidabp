@@ -30,10 +30,10 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, input_html: { readonly: true } %>
+        <%= f.input :description, input_html: { readonly: true, rows: 5 } %>
         <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
-          <%= f.input :effect, input_html: { readonly: true } %>
-          <%= f.input :audit_recommendations, input_html: { readonly: true } %>
+          <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
@@ -42,7 +42,7 @@
           <%= priority_field(f, prompt: true) %>
         <% end %>
         <% unless @finding.kind_of? Fortress %>
-          <%= f.label :state, raw(Finding.human_attribute_name(:state) +
+          <%= f.label :state, raw(Finding.human_attribute_name(:state) + ' ' +
             (show_history_changes ? finding_show_status_change_history(:finding_status_change_history) : '')) %>
           <%= finding_status_field(f) %>
         <% end %>
@@ -66,14 +66,14 @@
           <%= f.input :cause_analysis %>
           <%= f.input :cause_analysis_date, as: :date_picker %>
         <% end %>
-        <%= f.input :answer %>
+        <%= f.input :answer, input_html: { rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date) %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
         <%= f.input :solution_date, as: :date_picker, label:
           Finding.human_attribute_name(:solution_date) %>
         <%= f.input :id, as: :hidden %>
-        <%= f.input :audit_comments %>
+        <%= f.input :audit_comments, input_html: { rows: 5 } %>
       </div>
     </div>
   </div>
@@ -92,7 +92,7 @@
   <br />
   <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
@@ -101,7 +101,7 @@
     <div class="col-md-2">
       <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
       <h5><strong><%= t 'finding.send_notification' %></strong></h5>
     </div>
   </div>
@@ -144,10 +144,10 @@
   </h4>
   <div class="row">
     <div class="col-md-6">
-      <h5><strong><%= FindingRelation.human_attribute_name :related_finding_id %></strong></h5>
+      <h5><strong><%= FindingRelation.human_attribute_name 'related_finding_id' %></strong></h5>
     </div>
     <div class="col-md-4">
-      <h5><strong><%= FindingRelation.human_attribute_name :description %></strong></h5>
+      <h5><strong><%= FindingRelation.human_attribute_name 'description' %></strong></h5>
     </div>
   </div>
 
@@ -168,8 +168,8 @@
     <table class="table table-condensed table-striped">
       <thead>
         <tr>
-          <th><%= FindingRelation.human_attribute_name :finding_id %></th>
-          <th><%= FindingRelation.human_attribute_name :description %></th>
+          <th><%= FindingRelation.human_attribute_name 'finding_id' %></th>
+          <th><%= FindingRelation.human_attribute_name 'description' %></th>
         </tr>
       </thead>
       <tbody>
@@ -188,21 +188,21 @@
     <%= t('finding.finding_answers') %>
   </h4>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="col-md-4">
-      <h5><strong><%= FindingAnswer.human_attribute_name :answer %></strong></h5>
+    <div class="col-md-5">
+      <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
     </div>
     <div class="col-md-2">
       <h5>
         <strong>
-          <%= FindingAnswer.human_attribute_name :file_model %>
+          <%= FindingAnswer.human_attribute_name 'file_model' %>
         </strong>
       </h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingAnswer.human_attribute_name :created_at %></strong></h5>
+      <h5><strong><%= FindingAnswer.human_attribute_name 'created_at' %></strong></h5>
     </div>
   </div>
 
@@ -261,10 +261,10 @@
         <table class="table table-condensed table-striped">
           <thead>
             <tr>
-              <th><%= Cost.human_attribute_name :created_at %></th>
-              <th><%= Cost.human_attribute_name :cost %></th>
-              <th><%= Cost.human_attribute_name :description %></th>
-              <th><%= Cost.human_attribute_name :user_id %></th>
+              <th><%= Cost.human_attribute_name 'created_at' %></th>
+              <th><%= Cost.human_attribute_name 'cost' %></th>
+              <th><%= Cost.human_attribute_name 'description' %></th>
+              <th><%= Cost.human_attribute_name 'user_id' %></th>
             </tr>
           </thead>
           <tbody>
@@ -286,12 +286,12 @@
     <div class="col-md-2">
       <h5>
         <strong>
-          <%= Cost.human_attribute_name :cost %>
+          <%= Cost.human_attribute_name 'cost' %>
         </strong>
       </h5>
     </div>
     <div class="col-md-10">
-      <h5><strong><%= Cost.human_attribute_name :description %></strong></h5>
+      <h5><strong><%= Cost.human_attribute_name 'description' %></strong></h5>
     </div>
   </div>
 
@@ -312,18 +312,18 @@
 <% end %>
 <%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>
 <script type="text/javascript">
-  $(document).on('click', '.user_for_notification_selector', function() {
-    var id = $(this).parents('.finding_user_assignment:first').find('.autocomplete_id').val();
-    var userField = $(this).parents('.finding_user_assignment').find('.user_for_notification');
+  $(document).on('click', '[data-user-selector]', function() {
+    var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
+    var userField = $(this).closest('fieldset').find('[name$="[users_for_notification][]"]');
 
     if($(this).is(':checked')) {
-      userField.val(id).addClass('autocomplete_id');
+      userField.val(id).attr('data-auto-complete', true);
     } else {
-      userField.val('').removeClass('autocomplete_id');
+      userField.val('').attr('data-auto-complete', false);
     }
   });
 
   $(document).on('change', '#finding_risk', function() {
-  alert('<%= I18n.t 'message.change_weakness_risk' %>');
+    alert('<%= I18n.t 'message.change_weakness_risk' %>');
   });
 </script>

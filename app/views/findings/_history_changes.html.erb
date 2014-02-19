@@ -14,7 +14,7 @@
 
     <% unless finding.comments.reject(&:new_record?).empty? %>
       <h4><%= t('finding.comments') %></h4>
-      <table class="table table-condensed table-striped">
+      <table class="table table-condensed">
         <thead>
           <tr>
             <th><%= Comment.human_attribute_name :created_at %></th>

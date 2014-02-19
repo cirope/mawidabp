@@ -100,15 +100,11 @@ module FindingsHelper
   end
 
   def finding_show_status_change_history(dom_id)
-    content_tag(:span,
-      link_to(
-        image_tag(
-          'clock.gif', :size => '11x11',
-          :alt => t('finding.show_status_change_history'),
-          :title => t('finding.show_status_change_history')
-        ),
-        '#', :onclick => "$('##{dom_id}').slideToggle();return false;", :class => :image_link
-      ), :style => 'margin-left: .25em;'
+    link_to(
+      content_tag(
+        :span, nil, class: 'glyphicon glyphicon-time', title: t('finding.show_status_change_history')
+      ),
+      '#', :onclick => "$('##{dom_id}').slideToggle(); return false;"
     )
   end
 

@@ -42,19 +42,19 @@
         <%= f.input :process_owner, as: :boolean, label: false, input_html: {
           disabled: readonly || (finding_user && !finding_user.can_act_as_audited?) } %>
       </div>
-      <% if for_notification && is_a_new_relation %>
-        <div class="col-md-1">
+      <div class="col-md-1">
+        <% if for_notification && is_a_new_relation %>
             <% if f.object.new_record? %>
               <div class="form-group">
                 <label class="checkbox">
-                  <%= check_box_tag "user_for_notification", '1', false %>
+                  <%= check_box_tag "user_for_notification", '1', false, data: { user_selector: true } %>
                 </label>
               </div>
             <% else %>
               --
             <% end %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
       <div class="col-md-1">
         <div class="show_hide">
           <%= link_to_remove_nested_item(f) unless readonly %>

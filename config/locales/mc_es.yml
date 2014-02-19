@@ -552,11 +552,11 @@ mc_es:
     audited:
       one: "Auditado"
       other: "Auditados"
-    readonly: "el desvío no puede ser creada ni modificada, ya se emitió el informe definitivo"
+    readonly: "El desvío no puede ser creado ni modificado, ya se emitió el informe definitivo"
     responsibles:
       one: "Responsable"
       other: "Responsables"
-    send_notification: "¿Enviar notificación?"
+    send_notification: "¿Notificar?"
     show_status_change_history: "Ver historial de cambios de estado"
     status_change_history: "Historial de cambios de estado"
     status_confirmed: "Confirmada"
