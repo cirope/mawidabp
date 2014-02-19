@@ -29,24 +29,19 @@
           <strong><%= Notification.human_attribute_name :status %>:</strong>
           <%= @notification.status_text %>
         </p>
-
         <p>
           <strong><%= Notification.human_attribute_name :user_who_confirm %>:</strong>
           <%= @notification.user_who_confirm.full_name if @notification.user_who_confirm %>
         </p>
-
         <p>
           <strong><%= Notification.human_attribute_name :created_at %>:</strong>
           <%= l @notification.created_at, format: :long %>
         </p>
-
         <p>
           <strong><%= Notification.human_attribute_name :confirmation_date %>:</strong>
           <%= l @notification.confirmation_date, format: :long if @notification.confirmation_date %>
         </p>
-        <p>
-          <%= f.input :notes, input_html: { rows: 4, readonly: @notification.unconfirmed? } %>
-        </p>
+        <%= f.input :notes, input_html: { rows: 5, readonly: @notification.unconfirmed? } %>
       </div>
     </div>
   </div>
