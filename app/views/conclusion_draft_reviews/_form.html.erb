@@ -19,15 +19,14 @@
         <%= f.input :project, input_html: {
           value: (@conclusion_draft_review.review.plan_item.project if @conclusion_draft_review.review),
           readonly: true } %>
-        <%= f.input :applied_procedures %>
-      </div>
-      <div class="col-md-6">
-        <%= f.input :conclusion %>
         <%= f.input :score, label: Review.human_attribute_name(:score), input_html: {
           value: (@conclusion_draft_review.review.score_text if @conclusion_draft_review.review),
           readonly: true } %>
-        <%= f.input :issue_date, as: :date_picker, label:
-            ConclusionDraftReview.human_attribute_name(:issue_date) %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :applied_procedures, input_html: { rows: 5 } %>
+        <%= f.input :conclusion, input_html: { rows: 5 } %>
+        <%= f.input :issue_date, as: :date_picker %>
       </div>
     </div>
   </div>
@@ -37,35 +36,34 @@
       :class => 'text-success', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
-      <span class="text-danger">
+      <span class="label label-danger">
         <%= t('conclusion_draft_review.not_approved') %>
-      </span>
+      </span>&nbsp;
       <% @conclusion_draft_review.review.try(:must_be_approved?) %>
       <%= link_to t('error.show_details'), '#', :onclick => 'showOrHideErrors(); return false;',
-          :id => :show_or_hide_link, :style => 'margin-left: .5em;' %>
-    </span>
+          :id => :show_or_hide_link %>
+    </span> |
     <span>
       <%= link_to t('conclusion_draft_review.check_for_approval'),
-        {:action => :check_for_approval, :format => :json},
-        {:style => 'margin-left: 1em;', :id => 'check_for_approval'} %>
+        {:action => :check_for_approval, :format => :json}, {:id => 'check_for_approval'} %>
     </span>
     <% if @conclusion_draft_review.updated_at %>
-      <span style="margin-left: 1em;">
+      <span>
         | <%= t('conclusion_draft_review.last_verified_date',
           :date => l(@conclusion_draft_review.updated_at, :format => :long)) %>
       </span>
     <% end %>
   </div>
 
-  <div id="approval_errors_detail" style="display: none; margin-top: 2em;">
+  <div id="approval_errors_detail" style="display: none;">
+    <br />
     <div id="error_list_container">
-      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors),
-        :id => :error_list) %>
+      <%= array_to_ul(@conclusion_draft_review.review.try(:approval_errors), :id => :error_list) %>
     </div>
 
-    <p id="force_approval_prompt" <%= raw(@conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"') %>>
+    <div id="force_approval_prompt" <%== @conclusion_draft_review.review.try(:can_be_approved_by_force) ? '' : 'style="display: none;"' %>>
       <%= f.input :force_approval, as: :boolean, label: false, inline_label: true %>
-    </p>
+    </div>
   </div>
 
   <hr />
@@ -139,16 +137,16 @@
       Helper.showLoading('#conclusion_draft_review_review_id');
 
       $.get(url.replace(/REVIEW_ID/, $(this).val()), {format: 'json' }, function(data) {
-        $('#business_unit').val(data.business_unit.name || '');
-        $('#project').val(data.plan_item.project || '');
-        $('#score').val(data.score_text || '');
+        $('#conclusion_draft_review_business_unit').val(data.business_unit.name || '');
+        $('#conclusion_draft_review_project').val(data.plan_item.project || '');
+        $('#conclusion_draft_review_score').val(data.score_text || '');
         $('#conclusion_draft_review_applied_procedures').focus();
       }).complete(function() {
         Helper.hideLoading('#conclusion_draft_review_review_id');
       });
     } else {
-      $('#business_unit').val('');
-      $('#project').val('');
+      $('#conclusion_draft_review_business_unit').val('');
+      $('#conclusion_draft_review_project').val('');
     }
 
     $('#error_list').remove();
