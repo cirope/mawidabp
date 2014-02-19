@@ -20,6 +20,11 @@
   </tbody>
 </table>
 
-<%= pagination_links @groups %>
+<hr />
 
-<%= link_to t('label.new'), new_group_path, class: 'btn btn-primary' %>
+<div class="form-footer">
+  <div class="pull-right">
+    <%= pagination_links @groups %>
+  </div>
+  <%= link_to t('label.new'), new_group_path, class: 'btn btn-primary' %>
+</div>
