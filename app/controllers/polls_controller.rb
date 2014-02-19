@@ -91,13 +91,12 @@ class PollsController < ApplicationController
   def create
     @title = t 'poll.new_title'
     @poll = Poll.list.new(poll_params)
-    polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
-              questionnaire_id: @poll.questionnaire.id,
-              user_id: @poll.user.id
-            )
+    polls = Poll.list.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
+      questionnaire_id: @poll.questionnaire.id, user_id: @poll.user.id
+    ) if @poll.questionnaire && @poll.user
 
     respond_to do |format|
-      if !polls.empty?
+      if polls.present?
         format.html { redirect_to new_poll_path, alert: t('poll.already_exists') }
       elsif @poll.save
         format.html { redirect_to @poll, notice: t('poll.correctly_created') }
