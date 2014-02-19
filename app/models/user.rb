@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
         confirmation_hash: confirmation_hash,
         time: BLANK_PASSWORD_STALE_DAYS.days.ago,
       }
-    ).limit(1)
+    ).take
   }
   scope :all_with_findings_for_notification, -> {
     includes(

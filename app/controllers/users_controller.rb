@@ -237,15 +237,15 @@ class UsersController < ApplicationController
     if params[:confirmation_hash].blank?
       login_check
     else
-      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).first
+      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash])
       @current_organization = @auth_user.organizations.first if @auth_user
     end
 
-    unless @auth_user
+    if @auth_user
+      @auth_user.password = nil
+    else
       restart_session
       redirect_to_login t('user.confirmation_link_invalid'), :alert
-    else
-      @auth_user.password = nil
     end
   end
 
@@ -256,12 +256,11 @@ class UsersController < ApplicationController
   def update_password
     @title = t 'user.change_password_title'
 
-    unless params[:confirmation_hash].blank?
-      @auth_user = User.with_valid_confirmation_hash(
-        params[:confirmation_hash]).first
-      @current_organization = @auth_user.organizations.first if @auth_user
-    else
+    if user_params[:confirmation_hash].blank?
       login_check
+    else
+      @auth_user = User.with_valid_confirmation_hash(user_params[:confirmation_hash])
+      @current_organization = @auth_user.organizations.first if @auth_user
     end
 
     if @auth_user
@@ -612,8 +611,9 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         :user, :name, :last_name, :email, :language, :notes, :resource_id,
-        :manager_id, :enable, :logged_in, :password, :hidden, :function,
-        :send_notification_email, :lock_version, child_ids: [],
+        :manager_id, :enable, :logged_in, :password, :password_confirmation,
+        :hidden, :function, :send_notification_email, :confirmation_hash,
+        :lock_version, child_ids: [],
         organization_roles_attributes: [
           :id, :organization_id, :role_id, :_destroy
         ],
