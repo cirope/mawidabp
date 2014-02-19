@@ -9,7 +9,7 @@
       <div class="col-md-3">
         <%= finding_answer.user.full_name %>
         <% if finding_answer.new_record? %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: @auth_user.id }  %>
+          <%= f.input :user_id, as: :hidden, input_html: { id: @auth_user.id, value: @auth_user.id }  %>
         <% end %>
       </div>
       <div class="col-md-4">
@@ -24,10 +24,8 @@
           <% if finding_answer.new_record? %>
             <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
             <%= f.simple_fields_for :file_model do |fm_f| %>
-              <span class="file_container">
-                <%= fm_f.input :file, label: false %>
-                <%= fm_f.input :file_cache, as: :hidden %>
-              </span>
+              <%= fm_f.input :file, label: false %>
+              <%= fm_f.input :file_cache, as: :hidden %>
             <% end %>
           <% else %>
             ---

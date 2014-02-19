@@ -11,7 +11,7 @@
         <%= f.input :function, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :notes %>
+        <%= f.input :notes, input_html: { rows: 5 } %>
         <%= user_resource_field(f) %>
         <%= user_language_field(f) %>
         <%= f.input :logged_in, label: false, inline_label: true %>
@@ -25,12 +25,8 @@
     </div>
   </div>
 
-  <hr />
-
   <% if @auth_user %>
-    <h5>
-      <strong><%= User.human_attribute_name(:manager_id) %></strong>
-    </h5>
+    <h5><strong><%= User.human_attribute_name(:manager_id) %></strong></h5>
 
     <div class="row">
       <div class="col-md-6">
@@ -56,7 +52,6 @@
       </div>
     </div>
 
-    <hr />
     <h5><strong><%= t('user.children') %></strong></h5>
 
     <div id="children">
@@ -64,9 +59,9 @@
 
       <%= link_to_add_fields(t('user.add_child'), f, :children, 'new_child') %>
     </div>
-    <hr />
   <% end %>
 
+  <br />
   <h5>
     <strong><%= RelatedUserRelation.human_attribute_name 'related_user_id' %></strong>
   </h5>
@@ -79,8 +74,7 @@
     <%= link_to_add_fields(t('user.add_related_user_relations'), f, :related_user_relations) %>
   </div>
 
-  <hr />
-
+  <br />
   <div class="row">
     <div class="col-md-6">
       <h5>
