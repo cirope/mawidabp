@@ -22,10 +22,10 @@
           }, readonly: true %>
           <%= f.input :control_objective_item_id, as: :hidden %>
         <% end %>
-        <%= f.input :description, input_html: { readonly: true } %>
+        <%= f.input :description, input_html: { readonly: true, rows: 5 } %>
         <% if @finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity) %>
-          <%= f.input :effect, input_html: { readonly: true } %>
-          <%= f.input :audit_recommendations, input_html: { readonly: true } %>
+          <%= f.input :effect, input_html: { readonly: true, rows: 4 } %>
+          <%= f.input :audit_recommendations, input_html: { readonly: true, rows: 2 } %>
         <% end %>
       </div>
       <div class="col-md-6">
@@ -48,7 +48,7 @@
           <%= f.input :cause_analysis %>
           <%= f.input :cause_analysis_date, as: :date_picker %>
         <% end %>
-        <%= f.input :answer, readonly: true %>
+        <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
         <%= f.input :follow_up_date, as: :date_picker, label:
           @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: true,
           value: (l @finding.follow_up_date, format: :short if @finding.follow_up_date)
@@ -59,7 +59,7 @@
           value: (l @finding.solution_date, format: :short if @finding.solution_date)
         } %>
         <%= f.input :id, as: :hidden %>
-        <%= f.input :audit_comments, input_html: { readonly: true } %>
+        <%= f.input :audit_comments, input_html: { readonly: true, rows: 5 } %>
       </div>
     </div>
   </div>
@@ -80,7 +80,7 @@
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
     <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed">
       <thead>
         <tr>
           <th><%= t('finding.audited', :count => audited.size) %></th>
@@ -125,21 +125,21 @@
     <%= t('finding.finding_answers') %>
   </h4>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="col-md-4">
-      <h5><strong><%= FindingAnswer.human_attribute_name :answer %></strong></h5>
+    <div class="col-md-5">
+      <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
     </div>
     <div class="col-md-2">
       <h5>
         <strong>
-          <%= FindingAnswer.human_attribute_name :file_model %>
+          <%= FindingAnswer.human_attribute_name 'file_model' %>
         </strong>
       </h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingAnswer.human_attribute_name :created_at %></strong></h5>
+      <h5><strong><%= FindingAnswer.human_attribute_name 'created_at' %></strong></h5>
     </div>
   </div>
 
@@ -149,7 +149,7 @@
       <%= render 'finding_answer', f: fa_f, parent: f %>
     <% end %>
 
-    <%= link_to_add_fields(t('finding.add_finding_answer'), f, :finding_answers) %>
+    <%= link_to_add_fields t('finding.add_finding_answer'), f, :finding_answers %>
   </div>
 
   <% unless @finding.work_papers.blank? %>
@@ -158,11 +158,11 @@
     <table class="table table-condensed table-striped">
       <thead>
         <tr>
-          <th><%= WorkPaper.human_attribute_name :name %></th>
-          <th><%= WorkPaper.human_attribute_name :code %></th>
-          <th><%= WorkPaper.human_attribute_name :number_of_pages %></th>
-          <th><%= WorkPaper.human_attribute_name :description %></th>
-          <th><%= WorkPaper.human_attribute_name :file_model %></th>
+          <th><%= WorkPaper.human_attribute_name 'name' %></th>
+          <th><%= WorkPaper.human_attribute_name 'code' %></th>
+          <th><%= WorkPaper.human_attribute_name 'number_of_pages' %></th>
+          <th><%= WorkPaper.human_attribute_name 'description' %></th>
+          <th><%= WorkPaper.human_attribute_name 'file_model' %></th>
         </tr>
       </thead>
       <tbody>
@@ -194,10 +194,10 @@
         <table class="table table-condensed table-striped">
           <thead>
             <tr>
-              <th><%= Cost.human_attribute_name :created_at %></th>
-              <th><%= Cost.human_attribute_name :cost %></th>
-              <th><%= Cost.human_attribute_name :description %></th>
-              <th><%= Cost.human_attribute_name :user_id %></th>
+              <th><%= Cost.human_attribute_name 'created_at' %></th>
+              <th><%= Cost.human_attribute_name 'cost' %></th>
+              <th><%= Cost.human_attribute_name 'description' %></th>
+              <th><%= Cost.human_attribute_name 'user_id' %></th>
             </tr>
           </thead>
           <tbody>
@@ -217,10 +217,10 @@
 
   <div class="row">
     <div class="col-md-2">
-      <%= Cost.human_attribute_name :cost %>
+      <%= Cost.human_attribute_name 'cost' %>
     </div>
     <div class="col-md-10">
-      <%= Cost.human_attribute_name :description %>
+      <%= Cost.human_attribute_name 'description' %>
     </div>
   </div>
 
@@ -239,4 +239,3 @@
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
-<%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>

@@ -39,24 +39,22 @@
       <% if finding_answer.created_at %>
         <%= l(finding_answer.created_at, format: :long) %>
         <% if finding_answer.commitment_date %>
-          <br />
-          <br /><strong><%= FindingAnswer.human_attribute_name(:commitment_date) %></strong>:
+          <br /><strong><%= FindingAnswer.human_attribute_name 'commitment_date' %></strong>:
           <br /><%= l(finding_answer.commitment_date, format: :long) %>
         <% end %>
       <% else %>
         <% if finding_answer.user.can_act_as_audited? &&
             finding.pending? && finding.commitment_date.blank? %>
-          <%= f.input :commitment_date, as: :date_picker, label:
-            FindingAnswer.human_attribute_name(:commitment_date), input_html: {
-            data: { required: true }
-          } %>
+          <%= f.input :commitment_date, as: :date_picker, label: false, hint:
+            FindingAnswer.human_attribute_name(:commitment_date),
+            input_html: { data: { required: true } } %>
         <% end %>
         <%= finding_answer_notification_check(f) %>
       <% end %>
     </div>
     <div class="col-md-1">
       <div class="show_hide">
-        <%= link_to_remove_nested_item(f) if finding_answer.new_record? %>
+        <%= link_to_remove_nested_item f if finding_answer.new_record? %>
         <%= f.input :user_id, as: :hidden %>
         <%= f.input :id, as: :hidden %>
       </div>

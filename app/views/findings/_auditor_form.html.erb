@@ -310,7 +310,6 @@
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
-<%= javascript_tag 'HTMLUtil.stylizeAllInputFiles();' %>
 <script type="text/javascript">
   $(document).on('click', '[data-user-selector]', function() {
     var id = $(this).closest('fieldset').find('[name$="[user_id]"]').val();
