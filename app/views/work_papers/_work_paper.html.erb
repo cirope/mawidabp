@@ -19,18 +19,14 @@
       <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>
         <% f.object.build_file_model unless f.object.file_model.try(:new_record?) %>
         <%= f.simple_fields_for :file_model do |fm_f| %>
-          <span class="file_container">
-            <%= fm_f.input :file, label: false %>
-            <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-          </span>
+          <%= fm_f.input :file, label: false %>
+          <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
         <% end %>
       <% else %>
         <% unless frozen %>
           <%= f.simple_fields_for :file_model do |fm_f| %>
-            <span class="file_container">
-              <%= fm_f.input :file, label: false %>
-              <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-            </span>
+            <%= fm_f.input :file, label: false %>
+            <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
           <% end %>
         <% end %>
       <% end %>

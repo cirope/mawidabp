@@ -4,12 +4,12 @@
   finding_user = f.object.user
   original_finding = finding.errors.empty? || finding.new_record? ? finding : Finding.find(finding.id)
   is_a_new_relation = original_finding.finding_user_assignments.detect { |fua| fua.user_id == f.object.user_id }.nil?
-  for_notification = for_notification rescue false
+  for_notification = for_notification
 %>
 <fieldset class="finding_user_assignment">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <% unless readonly %>
           <%= f.input :user_id, as: :string, label: false, input_html: {
             value: finding_user.try(:full_name_with_function),
@@ -42,16 +42,20 @@
         <%= f.input :process_owner, as: :boolean, label: false, input_html: {
           disabled: readonly || (finding_user && !finding_user.can_act_as_audited?) } %>
       </div>
-      <% if for_notification || is_a_new_relation %>
-        <div class="col-md-2">
-          <% if f.object.new_record? %>
-            <%= check_box_tag "user_for_notification", '1', false %>
-          <% else %>
-            --
-          <% end %>
+      <% if for_notification && is_a_new_relation %>
+        <div class="col-md-1">
+            <% if f.object.new_record? %>
+              <div class="form-group">
+                <label class="checkbox">
+                  <%= check_box_tag "user_for_notification", '1', false %>
+                </label>
+              </div>
+            <% else %>
+              --
+            <% end %>
         </div>
       <% end %>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <div class="show_hide">
           <%= link_to_remove_nested_item(f) unless readonly %>
         </div>

@@ -102,12 +102,12 @@ module ApplicationHelper
       list = array.map do |e|
         if e.kind_of?(Array) && e.first.kind_of?(String) &&
             e.second.kind_of?(Array)
-          content_tag(:li, raw("#{textilize(e.shift)}\n#{array_to_ul(e)}"))
+          content_tag(:li, raw("#{textilize_without_paragraph(e.shift)}\n#{array_to_ul(e)}"))
         else
           if e.kind_of?(Array)
-            e.map { |item| content_tag(:li, textilize(item)) }.join("\n")
+            e.map { |item| content_tag(:li, textilize_without_paragraph(item)) }.join("\n")
           else
-            content_tag(:li, textilize(e))
+            content_tag(:li, textilize_without_paragraph(e))
           end
         end
       end
