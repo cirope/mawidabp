@@ -4,7 +4,7 @@
     :onclick => "$('#estimated_cost_details').slideToggle(); return false;" %>
   <div id="estimated_cost_details" style="display: none;">
     <div>
-      <ul class="raw_list">
+      <ul>
         <% plan_item.resource_utilizations.each do |ru| %>
           <li><%= "#{ru.resource.resource_name}: #{currency_mask % ru.cost}" %></li>
         <% end %>
