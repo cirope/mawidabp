@@ -65,7 +65,6 @@
   </div>
 
   <% unless @finding.important_dates.blank? %>
-    <br />
     <h4>
       <%= t('finding.important_dates.title') %>
     </h4>
@@ -80,35 +79,31 @@
     <% audited, auditors = *@finding.users.partition(&:audited?) %>
     <% process_owners = @finding.process_owners %>
     <% responsible_auditors = @finding.responsible_auditors %>
-    <br />
-    <div>
-      <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
-      <table class="table table-condensed table-striped">
-        <thead>
+    <h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
+    <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <th><%= t('finding.audited', :count => audited.size) %></th>
+          <th><%= t('finding.reviewers', :count => auditors.size) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% [audited.size, auditors.size].max.times do %>
           <tr>
-            <th><%= t('finding.audited', :count => audited.size) %></th>
-            <th><%= t('finding.reviewers', :count => auditors.size) %></th>
+            <td><%= process_owners.include?(audited.first) ?
+                audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
+                audited.shift.try(:full_name) %>
+            </td>
+            <td><%= responsible_auditors.include?(auditors.first) ?
+                  auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
+                auditors.shift.try(:full_name) %></td>
           </tr>
-        </thead>
-        <tbody>
-          <% [audited.size, auditors.size].max.times do %>
-            <tr>
-              <td><%= process_owners.include?(audited.first) ?
-                  audited.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:process_owner)})" :
-                  audited.shift.try(:full_name) %>
-              </td>
-              <td><%= responsible_auditors.include?(auditors.first) ?
-                   auditors.shift.try(:full_name) + " (#{FindingUserAssignment.human_attribute_name(:responsible_auditor)})" :
-                  auditors.shift.try(:full_name) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   <% end %>
 
   <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-    <br />
     <h4><%= t('finding.repeated_ancestors') %></h4>
     <ul>
       <% repeated_ancestors.each do |repeated_ancestor| %>
@@ -118,7 +113,6 @@
   <% end %>
 
   <% unless (repeated_children = @finding.repeated_children).blank? %>
-    <br />
     <h4><%= t('finding.repeated_children') %></h4>
     <ul>
       <% repeated_children.each do |repeated_child| %>
@@ -127,7 +121,6 @@
     </ul>
   <% end %>
 
-  <br />
   <h4>
     <%= t('finding.finding_answers') %>
   </h4>
@@ -153,14 +146,13 @@
   <div id="finding_answers">
     <% @finding.finding_answers.build(:user => @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f %>
+      <%= render 'finding_answer', f: fa_f, parent: f %>
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_finding_answer'), f, :finding_answers) %>
   </div>
 
   <% unless @finding.work_papers.blank? %>
-    <br />
     <h4><%= t('finding.work_papers') %></h4>
 
     <table class="table table-condensed table-striped">
@@ -223,7 +215,6 @@
     </div>
   <% end %>
 
-  <br />
   <div class="row">
     <div class="col-md-2">
       <%= Cost.human_attribute_name :cost %>

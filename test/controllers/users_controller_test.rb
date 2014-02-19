@@ -320,7 +320,7 @@ class UsersControllerTest < ActionController::TestCase
     original_hash = users(:blank_password_user).change_password_hash
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_password_reset, :email => users(:blank_password_user).email
+      post :send_password_reset, user: { email: users(:blank_password_user).email }
     end
 
     assert_redirected_to login_url

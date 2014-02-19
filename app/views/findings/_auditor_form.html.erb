@@ -209,7 +209,7 @@
   <div id="finding_answers">
     <% @finding.finding_answers.build(user: @auth_user) unless @finding.finding_answers.any?(&:new_record?) %>
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
-      <%= render 'finding_answer', f: fa_f %>
+      <%= render 'finding_answer', f: fa_f, parent: f %>
     <% end %>
 
     <%= link_to_add_fields(t('finding.add_finding_answer'), f, :finding_answers) %>

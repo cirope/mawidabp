@@ -72,9 +72,9 @@
 </div>
 
 <% unless @finding.important_dates.blank? %>
-  <h3>
+  <h4>
     <%= t('finding.important_dates.title') %>
-  </h3>
+  </h4>
   <ul>
     <% @finding.important_dates.each do |important_date| %>
       <li><%= textilize_without_paragraph important_date %></li>
@@ -82,13 +82,13 @@
   </ul>
 <% end %>
 
-<h3><%= t('finding.responsibles', :count => @finding.users.size) %></h3>
+<h4><%= t('finding.responsibles', :count => @finding.users.size) %></h4>
 <%= finding_responsibles_list(@finding) %>
 
 <% unless @finding.finding_relations.blank? %>
-  <h3>
+  <h4>
     <%= t('finding.finding_relations') %>
-  </h3>
+  </h4>
 
   <table class="table table-condensed table-striped">
     <thead>
@@ -109,9 +109,9 @@
 <% end %>
 
 <% unless @finding.inverse_finding_relations.blank? %>
-  <h3>
+  <h4>
     <%= t('finding.inverse_finding_relations') %>
-  </h3>
+  </h4>
 
   <table class="table table-condensed table-striped">
     <thead>
@@ -132,9 +132,9 @@
 <% end %>
 
 <% unless @finding.finding_answers.blank? %>
-  <h3>
+  <h4>
     <%= t('finding.finding_answers') %>
-  </h3>
+  </h4>
 
   <table class="table table-condensed table-striped">
     <thead>
@@ -173,7 +173,7 @@
 <% end %>
 
 <% unless (repeated_ancestors = @finding.repeated_ancestors).blank? %>
-  <h3><%= t('finding.repeated_ancestors') %></h3>
+  <h4><%= t('finding.repeated_ancestors') %></h4>
   <ul>
     <% repeated_ancestors.each do |repeated_ancestor| %>
       <li><%= repeated_ancestor %></li>
@@ -182,7 +182,7 @@
 <% end %>
 
 <% unless (repeated_children = @finding.repeated_children).blank? %>
-  <h3><%= t('finding.repeated_children') %></h3>
+  <h4><%= t('finding.repeated_children') %></h4>
   <ul>
     <% repeated_children.each do |repeated_child| %>
       <li><%= repeated_child %></li>
@@ -191,7 +191,7 @@
 <% end %>
 
 <% unless @finding.work_papers.blank? %>
-  <h3><%= t('finding.work_papers') %></h3>
+  <h4><%= t('finding.work_papers') %></h4>
 
   <table class="table table-condensed table-striped">
     <thead>
@@ -218,11 +218,11 @@
   </table>
 <% end %>
 
-  <%= textilize t('finding.costs',
-    :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
+<%= textilize t('finding.costs',
+  :cost => time_in_words_with_abbr((@finding.cost || 0).hours)) %>
 
 <% unless @finding.costs.blank? %>
-  <p style="margin: 1em 0;">
+  <p>
     <%= link_to t('finding.view_cost_details'), '#', :onclick =>
       "$('#cost_details').slideToggle(); return false;" %>
   </p>
