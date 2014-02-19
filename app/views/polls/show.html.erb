@@ -24,13 +24,13 @@
           <%= ": #{answer.answer}" %>
         <% end %>
       <% end %>
+      <% if answer.comments.present? %>
+        <p>
+          <strong><%= Answer.human_attribute_name :comments %>: </strong>
+          <%= answer.comments %>
+        </p>
+      <% end %>
     </li>
-    <% if answer.comments.present? %>
-      <p>
-        <strong><%= Answer.human_attribute_name :comments %>: </strong>
-        <%= answer.comments %>
-      </p>
-    <% end %>
   <% end %>
 </ol>
 
