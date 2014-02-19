@@ -145,7 +145,7 @@ end %>
   <% end %>
   <%= link_to_edit edit_conclusion_draft_review_path(@conclusion_draft_review) %> |
   <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
-  <span class="dropdown dropup">
+  <div class="dropdown dropup inline">
     <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
       <%= t('label.show_downloads') %>
       <span class="caret"></span>
@@ -166,7 +166,7 @@ end %>
         :action => :download_work_papers, :id => @conclusion_draft_review,
         :_ts => Time.now.to_i %></li>
     </ul>
-  </span> |
+  </div> |
   <%= link_to t('conclusion_draft_review.create_bundle'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_back %>
