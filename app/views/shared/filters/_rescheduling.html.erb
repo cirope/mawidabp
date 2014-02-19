@@ -7,7 +7,8 @@
           class: 'col-md-3' %>
         <div class="col-md-9">
           <%= f.select :rescheduling, @rescheduling_options,
-            { selected: selected, include_blank: true }, { class: 'form-control' } %>
+            { selected: selected, include_blank: t('helpers.select.prompt') },
+            { class: 'form-control' } %>
         </div>
       </div>
     </div>
