@@ -171,7 +171,7 @@ var Helper = {
      * Oculta el elemento que indica que algo se está cargando
      */
   hideLoading: function(element) {
-    $('#loading:visible').hide();
+    $('.loading-caption').addClass('hidden');
 
     $(element).removeAttr('disabled');
   },
@@ -235,7 +235,7 @@ var Helper = {
      * Muestra una imagen para indicar que una operación está en curso
      */
   showLoading: function(element) {
-    $('#loading:not(:visible)').show();
+    $('.loading-caption').removeClass('hidden');
 
     $(element).attr('disabled', true);
   },
@@ -319,42 +319,6 @@ var HTMLUtil = {
   },
 
   /**
-     * Ejecuta la función HTMLUtil.stylizeInputFile en todos los inputs de tipo file dentro
-     * de un contenedor span con clase file_container
-     */
-  stylizeAllInputFiles: function() {
-    $('span.file_container').each(function(i, e) {
-      HTMLUtil.stylizeInputFile($(e));
-      Observer.attachToInputFile($(e));
-    });
-  },
-
-  /**
-     * Aplica un estilo "falso" a los inputs de tipo file
-     */
-  stylizeInputFile: function(element) {
-    if (!element || element.length == 0) return;
-
-    var input = $(element).find('input[type=file]');
-
-    if(input.parents('div.stylized_file').length == 0) {
-      element.mousemove(function(event) {
-        var left = (event.pageX - $(this).offset().left) - input.width() + 10;
-        var container = input.parents('span.file_container');
-        var xMin = container.position().left + container.width();
-        var xMax = xMin + container.width();
-
-        // Esta pregunta es por un bug en IE7 con overflow: hidden
-        if(event.pageX >= xMin && event.pageX <= xMax) {
-          input.css({left: left + 'px'});
-        }
-      });
-
-      element.wrap('<div class="stylized_file"></div>');
-    }
-  },
-
-  /**
      * Actualiza as opciones del select indicado y lo habilita si tiene por lo
      * menos una opción
      */
@@ -364,68 +328,6 @@ var HTMLUtil = {
     element.html(optionsString).attr(
       'disabled', $('option', element).length == 0
     );
-  }
-}
-
-// Manipulación del menú
-var Menu = {
-  /**
-     * Muestra el menú principal
-     */
-  show: function() {
-    $('#app_content').hide();
-
-    if($('#main_mobile_menu').length > 0) {
-      $('#session').show();
-      $('#main_mobile_menu').show();
-    } else {
-      $('#app_content').after(
-        $('#main_menu').clone().attr('id', 'main_mobile_menu')
-      );
-      $('#main_mobile_menu').before($('#session'))
-    }
-
-    $('#show_menu').hide();
-    $('#hide_menu').show();
-  },
-
-  hide: function() {
-    $('#main_mobile_menu').hide();
-    $('#session').hide();
-    $('#app_content').show();
-    $('#hide_menu').hide();
-    $('#show_menu').show();
-  }
-}
-
-// Observadores de eventos
-var Observer = {
-  attachToInputFile: function(span) {
-    var imageAttrs = {
-      src: "<%= image_path 'new_document.gif' %>",
-      width: 22,
-      height: 20
-    }
-    var e, imageTag;
-
-    if((e = span.find('input[type=hidden]')) && e.val() && !e.val().match(/^\s*$/)) {
-      imageTag = $(
-        '<img />', Util.merge(imageAttrs, { alt: e.attr('title'), title: e.attr('title') })
-      );
-
-      e.parents('span.file_container:visible').hide().after(imageTag);
-    }
-
-    span.find('input[type=file]:not(data-observed)').one('change', function() {
-      e = $(this);
-      imageTag = $(
-        '<img />', Util.merge(imageAttrs, { alt: e.val(), title: e.val() })
-      );
-
-      if(e.hasClass('file') && !e.val().match(/^\s*$/)) {
-        e.parents('span.file_container:visible').hide().after(imageTag);
-      }
-    });
   }
 }
 
@@ -548,26 +450,6 @@ jQuery(function($) {
     }
   });
 
-  $(document).on('click', '.inline_menu h3 a', function(event) {
-    if (event.stopped) return;
-
-    $(this).parents('.inline_menu').find('ul').slideToggle();
-
-    event.preventDefault();
-    event.stopPropagation();
-  });
-
-  $(document).on('focus', 'input.calendar:not(.hasDatepicker)', function() {
-    if($(this).data('time')) {
-      $(this).datetimepicker({showOn: 'both'}).focus();
-    } else {
-      $(this).datepicker({
-        showOn: 'both',
-        onSelect: function() {$(this).datepicker('hide');}
-      }).focus();
-    }
-  });
-
   // Cuando se remueve o se oculta un papel de trabajo reutilizar el código
   $(document).on('item:removed', '.work_paper', function() {
     var workPaperCode = $(this).find('input[name$="[code]"]').val();
@@ -637,8 +519,9 @@ jQuery(function($) {
     }
   });
 
-  $('#loading').bind({
-    ajaxStart: function() {$(this).show();},
-    ajaxStop: function() {$(this).hide();}
-  });
+  $(document).ajaxStart(
+    function() { $('.loading-caption').removeClass('hidden'); }
+  ).ajaxStop(
+    function() { $('.loading-caption').addClass('hidden'); }
+  );
 });
