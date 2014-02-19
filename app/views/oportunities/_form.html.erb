@@ -42,30 +42,23 @@
           <%= f.input :control_objective_item_id, as: :hidden,
             input_html: { id: 'control_objective_item_id' } %>
         </div>
-        <%= finding_repeated_of_label(f, readonly) %>
-        <%= finding_repeated_of_if_field(f, readonly) %>
-        <%= f.input :description, autofocus: true, input_html: { readonly: readonly } %>
+        <%= finding_repeated_of_label f, readonly %>
+        <%= finding_repeated_of_if_field f, readonly %>
+        <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
       </div>
       <div class="col-md-6">
         <%= f.label :state, raw(Oportunity.human_attribute_name(:state) +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : ''))  %>
-        <%= finding_status_field(f, true, readonly) %>
+        <%= finding_status_field f, true, readonly %>
 
         <% if show_history_changes %>
           <%= render 'findings/history_changes', finding: @oportunity %>
         <% end %>
 
-        <%= f.input :origination_date, as: :date_picker, label:
-            Oportunity.human_attribute_name(:origination_date),
-            input_html: { disabled: readonly } %>
-        <%= f.input :answer, input_html: { readonly: readonly } %>
-        <%= f.input :follow_up_date, as: :date_picker, label:
-          Oportunity.human_attribute_name(:follow_up_date),
-          input_html: { disabled: readonly } %>
-        <%= f.input :solution_date, as: :date_picker, label:
-          Finding.human_attribute_name(:solution_date),
-          input_html: { disabled: readonly } %>
+        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
 
         <% if @oportunity.must_have_a_comment? %>
           <%= f.simple_fields_for :comments,
@@ -74,24 +67,25 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
-        <%= f.input :audit_comments, input_html: { readonly: readonly } %>
+        <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: readonly } %>
       </div>
     </div>
   </div>
 
   <br />
   <h4>
-    <%= t('finding.responsibles', count: @oportunity.users.size) %>
+    <%= t 'finding.responsibles', count: @oportunity.users.size %>
   </h4>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name(:responsible_auditor) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name(:process_owner) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
     </div>
   </div>
 
@@ -108,7 +102,7 @@
   <% unless (repeated_ancestors = @oportunity.repeated_ancestors).blank? %>
     <br />
     <h4>
-      <%= t('finding.repeated_ancestors') %>
+      <%= t 'finding.repeated_ancestors' %>
     </h4>
 
     <ul>
