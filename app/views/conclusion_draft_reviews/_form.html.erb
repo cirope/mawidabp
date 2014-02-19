@@ -33,7 +33,7 @@
 
   <div id="approval_text">
     <%= content_tag(:span, t('conclusion_draft_review.approved'),
-      :class => 'text-success', :id => :approved,
+      :class => 'label label-success', :id => :approved,
       :style => ('display: none;' if !@conclusion_draft_review.approved?)) %>
     <span id="not_approved" <%= raw 'style="display: none;"' if @conclusion_draft_review.approved? %>>
       <span class="label label-danger">

@@ -22,7 +22,7 @@
             <%= ControlObjective.model_name.human %>
           </label>
           <% if !readonly && !@oportunity.new_record? %>
-            <%= f.input :control_objective_item_id, label: false, input_html: {
+            <%= f.input :control_objective_item, label: false, input_html: {
               value: @oportunity.control_objective_item.try(:control_objective_text),
               class: 'autocomplete_field', title: t('label.search'),
               autocomplete: :off, autofocus: true,
