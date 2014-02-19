@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
         confirmation_hash: confirmation_hash,
         time: BLANK_PASSWORD_STALE_DAYS.days.ago,
       }
-    ).take
+    )
   }
   scope :all_with_findings_for_notification, -> {
     includes(
@@ -191,7 +191,7 @@ class User < ActiveRecord::Base
     self.language ||= 'es'
 
     if send_notification_email
-      self.change_password_hash = UUIDTools::UUID.random_create.to_s
+      self.change_password_hash = SecureRandom.urlsafe_base64
     end
   end
 
@@ -380,7 +380,7 @@ class User < ActiveRecord::Base
   end
 
   def reset_password!(organization, notify = true)
-    self.change_password_hash = UUIDTools::UUID.random_create.to_s
+    self.change_password_hash = SecureRandom.urlsafe_base64
     self.hash_changed = Time.now
 
     Notifier.restore_password(self, organization).deliver if notify

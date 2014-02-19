@@ -161,7 +161,6 @@ GEM
     unicorn-rails (1.1.0)
       rack
       unicorn
-    uuidtools (2.1.4)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
     whenever (0.9.0)
@@ -204,7 +203,6 @@ DEPENDENCIES
   unicode
   unicorn
   unicorn-rails
-  uuidtools
   validates_timeliness
   whenever
   will_paginate

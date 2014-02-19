@@ -237,7 +237,7 @@ class UsersController < ApplicationController
     if params[:confirmation_hash].blank?
       login_check
     else
-      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash])
+      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).take
       @current_organization = @auth_user.organizations.first if @auth_user
     end
 
@@ -259,7 +259,7 @@ class UsersController < ApplicationController
     if user_params[:confirmation_hash].blank?
       login_check
     else
-      @auth_user = User.with_valid_confirmation_hash(user_params[:confirmation_hash])
+      @auth_user = User.with_valid_confirmation_hash(user_params[:confirmation_hash]).take
       @current_organization = @auth_user.organizations.first if @auth_user
     end
 

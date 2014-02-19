@@ -24,7 +24,7 @@ class UsersControllerTest < ActionController::TestCase
       [:delete, :destroy, id_param],
       [:patch, :blank_password, id_param],
       [:get, :edit_password, id_param],
-      [:patch, :update_password, id_param],
+      [:patch, :update_password, id_param.merge(user: id_param)],
       [:get, :edit_personal_data, id_param],
       [:patch, :update_personal_data, id_param],
       [:get, :new_initial],
@@ -356,8 +356,12 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'change blank password' do
-    get :edit_password, {:id => users(:blank_password_user).user,
-      :confirmation_hash => users(:blank_password_user).change_password_hash}
+    confirmation_hash = users(:blank_password_user).change_password_hash
+    get :edit_password, {
+      :id => users(:blank_password_user).to_param,
+      :confirmation_hash => confirmation_hash
+    }
+
     assert_response :success
     assert_select '#error_body', false
     assert_template 'users/edit_password'
@@ -367,9 +371,9 @@ class UsersControllerTest < ActionController::TestCase
         :id => users(:blank_password_user).to_param,
         :user => {
           :password => 'new_password_123',
-          :password_confirmation => 'new_password_123'
-        },
-        :confirmation_hash => users(:blank_password_user).change_password_hash
+          :password_confirmation => 'new_password_123',
+          :confirmation_hash => users(:blank_password_user).change_password_hash
+        }
       }
     end
 
@@ -377,11 +381,15 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to login_url
     assert_equal User.digest('new_password_123', user.salt), user.password
     assert_not_nil user.last_access
+    assert_nil user.change_password_hash
     assert_equal 0, user.failed_attempts
 
     # No se puede usar 2 veces el mismo hash
-    get :edit_password, {:id => users(:blank_password_user).to_param,
-      :confirmation_hash => users(:blank_password_user).change_password_hash}
+    get :edit_password, {
+      :id => users(:blank_password_user).to_param,
+      :confirmation_hash => confirmation_hash
+    }
+
     assert_redirected_to login_url
   end
 

@@ -32,7 +32,7 @@ class Group < ActiveRecord::Base
     self.send_notification_email = true if send_notification_email.nil?
 
     if send_notification_email
-      self.admin_hash = UUIDTools::UUID.random_create.to_s
+      self.admin_hash = SecureRandom.urlsafe_base64
     end
   end
 
@@ -41,7 +41,7 @@ class Group < ActiveRecord::Base
       unless admin_hash
         self.send_notification_email = false
 
-        self.update_attribute :admin_hash, UUIDTools::UUID.random_create.to_s
+        self.update_attribute :admin_hash, SecureRandom.urlsafe_base64
 
         self.send_notification_email = true
       end

@@ -40,7 +40,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   # Prueba de actualización de una notificacion
   test 'update' do
-    new_confirmation_hash = UUIDTools::UUID.random_create.to_s
+    new_confirmation_hash = SecureRandom.urlsafe_base64
 
     assert @notification.update(
       :confirmation_hash => new_confirmation_hash, :notes => 'Updated notes'),

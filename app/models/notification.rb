@@ -65,7 +65,7 @@ class Notification < ActiveRecord::Base
     super(attributes, options)
 
     self.status ||= STATUS[:unconfirmed]
-    self.confirmation_hash ||= UUIDTools::UUID.random_create.to_s
+    self.confirmation_hash ||= SecureRandom.urlsafe_base64
   end
 
   def <=>(other)
