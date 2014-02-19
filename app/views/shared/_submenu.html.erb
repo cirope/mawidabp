@@ -3,7 +3,7 @@
   <%= content_for :submenu do %>
     <div class="row">
       <div class="col-md-12">
-        <ul class="submenu nav nav-pills">
+        <ul class="submenu nav nav-tabs">
           <% submenu_item.children.each do |sub_submenu_item| %>
             <% active = sub_submenu_item.submenu_names.include?(@current_module) %>
             <li <%== 'class="active"' if active %>>
