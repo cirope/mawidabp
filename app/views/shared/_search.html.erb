@@ -18,10 +18,11 @@
       </div>
       <% unless columns_for_sort.empty? %>
         <div class="col-md-3">
-          <%= f.input 'search_order', label: false, collection: columns_for_sort,
-            label_method: ->(cols){ cols.last[:name] }, value_method: :first,
-            prompt: t('message.sort_by'), selected: order_field,
-            input_html: { id: 'search_order', name: 'search[order]' } %>
+          <%= f.input 'search_order', label: false, collection:
+            sort_options_array(columns_for_sort.map { |name, p| [p[:name], name.to_s] }),
+            prompt: t('message.sort_by'), selected: order_field, input_html: {
+              id: 'search_order', name: 'search[order]'
+            } %>
         </div>
       <% end %>
       <div class="col-md-2">
