@@ -24,7 +24,10 @@ module FindingsHelper
         content_tag(:span, raw(link), :class => 'popup_link_container')
       ), :for => 'repeated_of_finding'
     else
-      form.label readonly ? :repeated_of_finding : :repeated_of_id
+      form.label(
+        readonly && form.object.repeated_of.present? ? :repeated_of_finding : :repeated_of_id,
+        Finding.human_attribute_name(:repeated_of_id)
+      )
     end
   end
 
@@ -119,7 +122,7 @@ module FindingsHelper
       end
     end
 
-    array_to_ul users, :class => :raw_list
+    array_to_ul users
   end
 
   def show_finding_answers_count(finding)

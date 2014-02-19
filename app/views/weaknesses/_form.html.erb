@@ -43,20 +43,16 @@
         </div>
         <%= finding_repeated_of_label(f, readonly) %>
         <%= finding_repeated_of_if_field(f, readonly) %>
-        <%= f.input :description, autofocus: true, input_html: { readonly: readonly } %>
-        <%= f.input :effect, input_html: { readonly: readonly } %>
-        <%= f.input :audit_recommendations, input_html: { readonly: readonly } %>
-        <%= f.input :origination_date, as: :date_picker, label:
-            Weakness.human_attribute_name(:origination_date),
-            input_html: { disabled: readonly } %>
+        <%= f.input :description, autofocus: true, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :effect, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :audit_recommendations, input_html: { readonly: readonly, rows: 5 } %>
         <% if current_organization.kind.eql? 'quality_management' %>
-          <%= f.input :correction, input_html: { readonly: readonly } %>
-          <%= f.input :correction_date, as: :date_picker, label:
-            Weakness.human_attribute_name(:correction_date),
-            input_html: { disabled: readonly } %>
+          <%= f.input :correction, input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :correction_date, as: :date_picker, input_html: { disabled: readonly } %>
         <% end %>
       </div>
       <div class="col-md-6">
+        <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= risk_field(f, { input_html: { disabled: readonly }, prompt: true }) %>
         <%= priority_field(f, { input_html: { disabled: readonly }, prompt: true }) %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) +
@@ -76,36 +72,29 @@
           <% end %>
         <% end %>
         <% if current_organization.kind.eql? 'quality_management' %>
-          <%= f.input :cause_analysis, input_html: { readonly: readonly } %>
-          <%= f.input :cause_analysis_date, as: :date_picker, label:
-            Weakness.human_attribute_name(:cause_analysis_date),
-            input_html: { disabled: readonly } %>
+          <%= f.input :cause_analysis, input_html: { readonly: readonly, rows: 5 } %>
+          <%= f.input :cause_analysis_date, as: :date_picker, input_html: { disabled: readonly } %>
         <% end %>
-        <%= f.input :answer, input_html: { readonly: readonly } %>
-        <%= f.input :follow_up_date, as: :date_picker, label:
-          Weakness.human_attribute_name(:follow_up_date),
-          input_html: { disabled: readonly } %>
-        <%= f.input :solution_date, as: :date_picker, label:
-          Finding.human_attribute_name(:solution_date),
-          input_html: { disabled: readonly } %>
-        <%= f.input :audit_comments, input_html: { readonly: readonly } %>
+        <%= f.input :answer, input_html: { readonly: readonly, rows: 5 } %>
+        <%= f.input :follow_up_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :solution_date, as: :date_picker, input_html: { disabled: readonly } %>
+        <%= f.input :audit_comments, input_html: { readonly: readonly, rows: 5 } %>
       </div>
     </div>
   </div>
 
   <br />
-  <h4>
-    <%= t('finding.responsibles', count: @weakness.users.size) %>
-  </h4>
+  <h4><%= t 'finding.responsibles', count: @weakness.users.size %></h4>
+
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name(:responsible_auditor) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name 'responsible_auditor' %></strong></h5>
     </div>
     <div class="col-md-2">
-      <h5><strong><%= FindingUserAssignment.human_attribute_name(:process_owner) %></strong></h5>
+      <h5><strong><%= FindingUserAssignment.human_attribute_name 'process_owner' %></strong></h5>
     </div>
   </div>
 
@@ -120,9 +109,8 @@
 
   <% unless (repeated_ancestors = @weakness.repeated_ancestors).blank? %>
     <br />
-    <h4>
-      <%= t('finding.repeated_ancestors') %>
-    </h4>
+    <h4><%= t('finding.repeated_ancestors') %></h4>
+
     <ul>
       <% repeated_ancestors.each do |repeated_ancestor| %>
         <li><%= repeated_ancestor %></li>
