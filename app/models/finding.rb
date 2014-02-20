@@ -726,7 +726,8 @@ class Finding < ActiveRecord::Base
           :review_code => self.review_code,
           :review => self.review.try(:identification))
 
-        Notifier.changes_notification(removed, :title => title).deliver
+        Notifier.changes_notification(removed, title: title,
+          organizations: [organization]).deliver
       end
     end
   end

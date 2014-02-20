@@ -584,6 +584,7 @@ class User < ActiveRecord::Base
   def release_for_all_pending_findings(options = {})
     options.assert_valid_keys(:with_reviews, :with_findings)
     all_released = true
+    organizations = []
     items_for_notification = []
     self.reallocation_errors ||= []
 
@@ -595,6 +596,7 @@ class User < ActiveRecord::Base
           f.avoid_changes_notification = true
           f.users.delete self
           items_for_notification << description
+          organizations << f.organization
 
           if f.invalid?
             all_released = false
@@ -609,6 +611,7 @@ class User < ActiveRecord::Base
           unless rua.review.has_final_review?
             items_for_notification << "#{Review.model_name.human} " +
               rua.review.identification
+            organizations << rua.review.organization
 
             unless rua.destroy_without_notification
               all_released = false
@@ -634,7 +637,8 @@ class User < ActiveRecord::Base
       title = I18n.t('user.responsibility_release.title')
 
       Notifier.changes_notification(self, title: title,
-        content: items_for_notification).deliver
+        content: items_for_notification, organizations: organizations
+      ).deliver
     end
 
     all_released
@@ -703,7 +707,9 @@ class User < ActiveRecord::Base
         end
 
         if all_reassigned
+          organizations = []
           reviews = other.findings.all_for_reallocation.map do |f|
+            organizations << f.organization
             "*#{f.review.identification}*"
           end.uniq.sort
 
@@ -724,7 +730,8 @@ class User < ActiveRecord::Base
                 responsible: other.full_name_with_function)]
 
             Notifier.changes_notification([other, self], title: title,
-              body: body, content: content).deliver
+              body: body, content: content, organizations: organizations
+            ).deliver
           end
 
           unless unconfirmed_findings.blank?
