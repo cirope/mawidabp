@@ -31,7 +31,7 @@
     <%= render 'shared/menu' %>
     <%= yield :submenu %>
     <%= render 'shared/flash' if flash_message.present? %>
-    <%= render 'shared/time_left' %>
+    <%= render 'shared/time_left' if @auth_user %>
     <%= yield %>
 
     <%= javascript_tag do %>
