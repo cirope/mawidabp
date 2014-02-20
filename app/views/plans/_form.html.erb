@@ -79,11 +79,11 @@
   <% end %>
 
   <% if @plan.has_duplication? %>
-    <%= f.input :allow_duplication, as: :check_box %>
+    <%= f.input :allow_duplication, as: :boolean %>
   <% end %>
 
   <% if @plan.overloaded? %>
-    <%= f.input :allow_overload, as: :check_box %>
+    <%= f.input :allow_overload, as: :boolean %>
   <% end %>
 
   <hr />

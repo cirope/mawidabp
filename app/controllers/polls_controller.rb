@@ -609,18 +609,14 @@ class PollsController < ApplicationController
   end
 
   def send_csv_polls
-    if params[:dump_emails] && File.extname(params[:dump_emails][:file].original_filename).downcase == '.csv'
+    ext = File.extname(params[:dump_emails][:file].original_filename) rescue ''
 
+    if ext.downcase == '.csv'
       uploaded_file = params[:dump_emails][:file]
       file_name = uploaded_file.path
       questionnaire_id = params[:dump_emails][:questionnaire_id].to_i
 
-      text = File.read(
-        file_name,
-        { encoding: 'UTF-8',
-          delimiter: ';'
-        }
-      )
+      text = File.read(file_name, { encoding: 'UTF-8', delimiter: ';' })
 
       @parsed_file = CSV.parse(text)
       n = 0
@@ -640,7 +636,6 @@ class PollsController < ApplicationController
 
       flash[:notice] = t('poll.customer_polls_sended', count: n)
     else
-
       flash[:alert] = t('poll.error_csv_file_extension')
     end
 

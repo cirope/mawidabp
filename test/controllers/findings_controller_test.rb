@@ -50,11 +50,9 @@ class FindingsControllerTest < ActionController::TestCase
 
   test 'list findings in csv' do
     perform_auth
-    findings = Finding.limit 3
-
-    assert_nothing_raised(Exception) do
-      get :export_to_csv, :completed => 'incomplete', :findings => findings.to_a, :format => :csv
-    end
+    get :export_to_csv, :completed => 'incomplete', :format => :csv
+    assert_response :success
+    assert @response.headers['Content-Type'].start_with?('text/csv')
   end
 
   test 'list findings for follow_up_committee' do

@@ -13,31 +13,6 @@ class ApplicationController < ActionController::Base
 
   before_action :scope_current_organization
 
-  # Cualquier excepción no contemplada es capturada por esta función. Se utiliza
-  # para mostrar un mensaje de error personalizado
-  rescue_from Exception do |exception|
-    begin
-      error = "#{exception.class}: #{exception.message}\n\n"
-      exception.backtrace.each { |l| error << "#{l}\n" }
-
-      logger.error(error)
-
-      @title = t 'error.title'
-      create_exception_file exception
-
-      if login_check && response.redirect_url.blank?
-        render :template => 'shared/error', :locals => { :error => exception }
-      end
-
-      # En caso que la presentación misma de la excepción no salga como se espera
-      rescue => ex
-        error = "#{ex.class}: #{ex.message}\n\n"
-        ex.backtrace.each { |l| error << "#{l}\n" }
-
-        logger.error(error)
-    end
-  end
-
   def current_user
     load_user
     Finding.current_user = @auth_user
@@ -242,26 +217,6 @@ class ApplicationController < ActionController::Base
   rescue ActionController::RedirectBackError
     restart_session
     redirect_to_login t('message.insufficient_privileges'), :alert
-  end
-
-  # Crea un archivo en un directorio propio del usuario a partir de una
-  # excepción
-  def create_exception_file(exception) #:doc:
-    if @auth_user
-      dir_name = "#{ERROR_FILES_PATH}#{@auth_user.user}#{File::SEPARATOR}"
-
-      FileUtils.makedirs dir_name
-
-      File.open("#{dir_name}#{t('error.error_file')}.log", 'w') do |out|
-        # TODO: cifrar el contenido cuando esté disponible Rails 2.3 con
-        # ActiveSupport::MessageEncryptor
-        out << "#{exception.class}: #{exception.message}\n\n"
-
-        exception.backtrace.each { |l| out << "#{l}\n" }
-
-        out << "\nENV\n\n"
-      end
-    end
   end
 
   def make_date_range(parameters = nil)

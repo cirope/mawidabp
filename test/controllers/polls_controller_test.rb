@@ -356,7 +356,7 @@ class PollsControllerTest < ActionController::TestCase
     assert_no_difference 'Poll.count' do
       post :send_csv_polls, dump_emails: {}
 
-      assert_response :success
+      assert_redirected_to polls_path
     end
 
     # Prueba adjuntar un archivo que no sea csv
