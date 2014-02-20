@@ -7,11 +7,13 @@
     <%= form_for @user, url: sessions_path do |f| %>
       <p>
         <%= f.label :user %>
-        <%= f.text_field :user, :maxlength => 30, :size => 10, :autofocus => true %>
+        <%= f.text_field :user, :maxlength => 30, :size => 10, :autocomplete => :off,
+          :autofocus => true %>
       </p>
       <p>
         <%= f.label :password %>
-        <%= f.password_field :password, :maxlength => 128, :size => 10 %>
+        <%= f.password_field :password, :maxlength => 128, :size => 10,
+          :autocomplete => :off %>
       </p>
       <div class="submit">
         <span class="button"><%= f.submit t('user.enter') %></span>
