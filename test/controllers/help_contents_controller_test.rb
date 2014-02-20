@@ -36,7 +36,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:help_contents)
-    assert_select '#error_body', false
     assert_template 'help_contents/index'
   end
 
@@ -45,7 +44,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :show, :id => help_contents(:help_es).id
     assert_response :success
     assert_not_nil assigns(:help_content)
-    assert_select '#error_body', false
     assert_template 'help_contents/show'
   end
 
@@ -54,7 +52,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :show_content, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
-    assert_select '#error_body', false
     assert_template 'help_contents/show_content'
   end
 
@@ -63,7 +60,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :show_content
     assert_response :success
     assert_not_nil assigns(:help_item)
-    assert_select '#error_body', false
     assert_template 'help_contents/show_content'
   end
 
@@ -72,7 +68,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:help_content)
-    assert_select '#error_body', false
     assert_template 'help_contents/new'
   end
 
@@ -103,7 +98,6 @@ class HelpContentsControllerTest < ActionController::TestCase
     get :edit, :id => help_contents(:help_es).id
     assert_response :success
     assert_not_nil assigns(:help_content)
-    assert_select '#error_body', false
     assert_template 'help_contents/edit'
   end
 

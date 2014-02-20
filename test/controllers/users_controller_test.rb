@@ -44,7 +44,6 @@ class UsersControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:users)
-    assert_select '#error_body', false
     assert_template 'users/index'
   end
 
@@ -54,7 +53,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:users)
     assert_equal 5, assigns(:users).size
-    assert_select '#error_body', false
     assert_template 'users/index'
   end
 
@@ -72,7 +70,6 @@ class UsersControllerTest < ActionController::TestCase
     get :show, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/show'
   end
 
@@ -81,7 +78,6 @@ class UsersControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/new'
   end
 
@@ -152,7 +148,6 @@ class UsersControllerTest < ActionController::TestCase
     get :edit, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/edit'
   end
 
@@ -309,7 +304,6 @@ class UsersControllerTest < ActionController::TestCase
   test 'reset password' do
     get :reset_password
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'users/reset_password'
   end
 
@@ -334,7 +328,6 @@ class UsersControllerTest < ActionController::TestCase
     get :edit_password, {:id => users(:blank_password_user).to_param}
     assert_response :success
     assert_not_nil assigns(:auth_user)
-    assert_select '#error_body', false
     assert_template 'users/edit_password'
   end
 
@@ -363,7 +356,6 @@ class UsersControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'users/edit_password'
 
     assert_difference 'OldPassword.count' do
@@ -414,7 +406,6 @@ class UsersControllerTest < ActionController::TestCase
     get :new_initial, :hash => groups(:main_group).admin_hash
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/new_initial'
   end
 
@@ -506,7 +497,6 @@ class UsersControllerTest < ActionController::TestCase
     get :edit_personal_data, {:id => users(:administrator_user).user}
     assert_response :success
     assert_not_nil assigns(:auth_user)
-    assert_select '#error_body', false
     assert_template 'users/edit_personal_data'
   end
 
@@ -527,7 +517,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:auth_user)
     assert_equal 'Updated Name', assigns(:auth_user).name
-    assert_select '#error_body', false
     assert_template 'users/edit_personal_data'
   end
 
@@ -539,7 +528,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/reassignment_edit'
   end
 
@@ -575,7 +563,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/reassignment_edit'
   end
 
@@ -611,7 +598,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/reassignment_edit'
   end
 
@@ -645,7 +631,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/release_edit'
   end
 
@@ -674,7 +659,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/release_edit'
   end
 
@@ -703,7 +687,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:user)
     assert_nil assigns(:other)
-    assert_select '#error_body', false
     assert_template 'users/release_edit'
   end
 
@@ -728,7 +711,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'export to pdf' do
     perform_auth
 
-    assert_nothing_raised(Exception) { get :export_to_pdf }
+    assert_nothing_raised { get :export_to_pdf }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('user.pdf.pdf_name'), User.table_name)
@@ -737,7 +720,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'export with search' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :search => {
         :query => 'manager',
         :columns => ['user', 'name']
@@ -763,7 +746,6 @@ class UsersControllerTest < ActionController::TestCase
     get :user_status, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/user_status'
   end
 
@@ -772,7 +754,6 @@ class UsersControllerTest < ActionController::TestCase
     get :user_status_without_graph, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'users/user_status_without_graph'
   end
 

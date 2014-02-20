@@ -34,7 +34,6 @@ class FortressesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:fortresses)
-    assert_select '#error_body', false
     assert_template 'fortresses/index'
   end
 
@@ -54,7 +53,6 @@ class FortressesControllerTest < ActionController::TestCase
     end)
     assert_equal assigns(:fortresses).map {|o| o.review.identification}.sort,
       assigns(:fortresses).map {|o| o.review.identification}
-    assert_select '#error_body', false
     assert_template 'fortresses/index'
   end
 
@@ -76,7 +74,6 @@ class FortressesControllerTest < ActionController::TestCase
     get :show, :id => findings(:bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/show'
   end
 
@@ -86,7 +83,6 @@ class FortressesControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/new'
   end
 
@@ -136,7 +132,6 @@ class FortressesControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
     assert_not_nil assigns(:fortress)
-    assert_select '#error_body', false
     assert_template 'fortresses/edit'
   end
 

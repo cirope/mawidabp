@@ -133,7 +133,7 @@ class WorkflowTest < ActiveSupport::TestCase
       FileUtils.rm @workflow.absolute_pdf_path
     end
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @workflow.to_pdf(organizations(:default_organization))
     end
 

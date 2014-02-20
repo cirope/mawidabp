@@ -36,7 +36,6 @@ class PeriodsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:periods)
-    assert_select '#error_body', false
     assert_template 'periods/index'
   end
 
@@ -45,7 +44,6 @@ class PeriodsControllerTest < ActionController::TestCase
     get :show, :id => periods(:current_period).id
     assert_response :success
     assert_not_nil assigns(:period)
-    assert_select '#error_body', false
     assert_template 'periods/show'
   end
 
@@ -54,7 +52,6 @@ class PeriodsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:period)
-    assert_select '#error_body', false
     assert_template 'periods/new'
   end
 
@@ -95,7 +92,6 @@ class PeriodsControllerTest < ActionController::TestCase
     get :edit, :id => periods(:current_period).id
     assert_response :success
     assert_not_nil assigns(:period)
-    assert_select '#error_body', false
     assert_template 'periods/edit'
   end
 

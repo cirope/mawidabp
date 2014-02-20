@@ -41,7 +41,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
@@ -54,7 +53,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 3, assigns(:conclusion_draft_reviews).size
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
@@ -69,7 +67,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 3, assigns(:conclusion_draft_reviews).size
     assert assigns(:conclusion_draft_reviews).all? {|cdr| cdr.issue_date > 3.months.ago.to_date}
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
@@ -107,7 +104,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
     assert_equal 1, assigns(:conclusion_draft_reviews).size
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/index'
   end
 
@@ -116,7 +112,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     get :show, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/show'
   end
 
@@ -125,7 +120,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/new'
   end
 
@@ -142,7 +136,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to edit_conclusion_draft_review_url(assigns(:conclusion_draft_review))
   end
 
@@ -151,7 +145,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     get :edit, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/edit'
   end
 
@@ -182,20 +175,20 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.relative_pdf_path
   end
-  
+
   test 'export conclusion draft review without score' do
     perform_auth
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id,
         :export_options => { :hide_score => '1' }
     end
@@ -209,13 +202,13 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id, :global => 1
     end
 
@@ -229,7 +222,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :download_work_papers, :id => conclusion_review.id
     end
 
@@ -242,7 +235,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       post :create_bundle, :id => conclusion_review.id,
         :index_items => "one\ntwo"
     end
@@ -259,7 +252,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
     approval_hash = nil
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       approval_hash = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -275,7 +268,6 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_draft_reviews/compose_email'
   end
 

@@ -36,7 +36,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:business_unit_types)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/index'
   end
 
@@ -45,7 +44,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     get :show, :id => business_unit_types(:cycle).id
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/show'
   end
 
@@ -54,7 +52,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/new'
   end
 
@@ -86,7 +83,6 @@ class BusinessUnitTypesControllerTest < ActionController::TestCase
     get :edit, :id => business_unit_types(:cycle).id
     assert_response :success
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'business_unit_types/edit'
   end
 

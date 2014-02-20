@@ -28,7 +28,6 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'execution_reports/index'
   end
 
@@ -37,10 +36,9 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     get :detailed_management_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/detailed_management_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :detailed_management_report, detailed_management_report: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date
@@ -48,7 +46,6 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/detailed_management_report'
   end
 
@@ -74,10 +71,9 @@ class ExecutionReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_state_execution
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/weaknesses_by_state_execution'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_state_execution, weaknesses_by_state_execution: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date
@@ -85,7 +81,6 @@ class ExecutionReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'execution_reports/weaknesses_by_state_execution'
   end
 

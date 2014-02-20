@@ -13,7 +13,6 @@ class EMailsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:emails)
-    assert_select '#error_body', false
     assert_template 'e_mails/index'
   end
 
@@ -21,7 +20,6 @@ class EMailsControllerTest < ActionController::TestCase
     get :show, :id => @email.to_param
     assert_response :success
     assert_not_nil assigns(:email)
-    assert_select '#error_body', false
     assert_template 'e_mails/show'
   end
 end

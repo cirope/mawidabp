@@ -36,7 +36,6 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:procedure_controls)
-    assert_select '#error_body', false
     assert_template 'procedure_controls/index'
   end
 
@@ -45,7 +44,6 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     get :show, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
-    assert_select '#error_body', false
     assert_template 'procedure_controls/show'
   end
 
@@ -54,7 +52,6 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:procedure_control)
-    assert_select '#error_body', false
     assert_template 'procedure_controls/new'
   end
 
@@ -72,7 +69,6 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     assert procedure_control.procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum > 0
     assert_equal procedure_control.procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum,
       assigns(:procedure_control).procedure_control_items.map { |pi| pi.procedure_control_subitems.size }.sum
-    assert_select '#error_body', false
     assert_template 'procedure_controls/new'
   end
 
@@ -119,7 +115,6 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     get :edit, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
-    assert_select '#error_body', false
     assert_template 'procedure_controls/edit'
   end
 
@@ -190,7 +185,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
     procedure_control = ProcedureControl.find(
       procedure_controls(:procedure_control_iso_27001).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, id: procedure_control.id
     end
 

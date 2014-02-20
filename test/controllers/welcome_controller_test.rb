@@ -26,7 +26,6 @@ class WelcomeControllerTest < ActionController::TestCase
     perform_auth
     get :index
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'welcome/auditor_index'
   end
 
@@ -34,7 +33,6 @@ class WelcomeControllerTest < ActionController::TestCase
     perform_auth users(:audited_user)
     get :index
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'welcome/audited_index'
   end
 end

@@ -32,7 +32,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:questionnaires)
-    assert_select '#error_body', false
     assert_template 'questionnaires/index'
   end
 
@@ -41,7 +40,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
     get :show, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
-    assert_select '#error_body', false
     assert_template 'questionnaires/show'
   end
 
@@ -50,7 +48,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:questionnaire)
-    assert_select '#error_body', false
     assert_template 'questionnaires/new'
   end
 
@@ -89,7 +86,6 @@ class QuestionnairesControllerTest < ActionController::TestCase
     get :edit, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
-    assert_select '#error_body', false
     assert_template 'questionnaires/edit'
   end
 

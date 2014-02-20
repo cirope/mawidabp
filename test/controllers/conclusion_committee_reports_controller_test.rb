@@ -28,7 +28,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/index'
   end
 
@@ -37,10 +36,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     get :synthesis_report, :controller_name => 'conclusion'
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/synthesis_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :synthesis_report, :synthesis_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -49,7 +47,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/synthesis_report'
   end
 
@@ -64,7 +61,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :controller_name => 'conclusion'
 
     assert_response :success
-    assert_select '#error_body', false
     assert_not_nil assigns(:filters)
     assert_equal 2, assigns(:filters).size
     assert_template 'conclusion_committee_reports/synthesis_report'
@@ -92,10 +88,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -105,7 +100,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
   end
 
@@ -122,7 +116,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/weaknesses_by_risk_report'
   end
 
@@ -150,10 +143,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     get :fixed_weaknesses_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -163,7 +155,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
   end
 
@@ -180,7 +171,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/fixed_weaknesses_report'
   end
 
@@ -208,10 +198,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     get :control_objective_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/control_objective_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -221,7 +210,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/control_objective_stats'
   end
 
@@ -239,7 +227,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/control_objective_stats'
   end
 
@@ -267,10 +254,9 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
 
     get :process_control_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/process_control_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -280,7 +266,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/process_control_stats'
   end
 
@@ -297,7 +282,6 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_committee_reports/process_control_stats'
   end
 

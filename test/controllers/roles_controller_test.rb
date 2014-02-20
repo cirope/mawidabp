@@ -36,7 +36,6 @@ class RolesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:roles)
-    assert_select '#error_body', false
     assert_template 'roles/index'
   end
 
@@ -45,7 +44,6 @@ class RolesControllerTest < ActionController::TestCase
     get :show, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/show'
   end
 
@@ -54,7 +52,6 @@ class RolesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/new'
   end
 
@@ -84,7 +81,6 @@ class RolesControllerTest < ActionController::TestCase
     get :edit, id: roles(:admin_role).id
     assert_response :success
     assert_not_nil assigns(:role)
-    assert_select '#error_body', false
     assert_template 'roles/edit'
   end
 

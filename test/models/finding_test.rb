@@ -790,7 +790,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'follow up pdf' do
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @finding.follow_up_pdf(organizations(:default_organization))
     end
 
@@ -803,7 +803,7 @@ class FindingTest < ActiveSupport::TestCase
   test 'to pdf' do
     assert !File.exist?(@finding.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @finding.to_pdf(organizations(:default_organization))
     end
 

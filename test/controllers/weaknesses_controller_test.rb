@@ -37,7 +37,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
@@ -56,7 +55,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     end)
     assert_equal assigns(:weaknesses).map {|w| w.review.identification}.sort,
       assigns(:weaknesses).map {|w| w.review.identification}
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
@@ -72,7 +70,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:weaknesses)
     assert_equal 2, assigns(:weaknesses).size
     assert assigns(:weaknesses).all? { |w| ids.include?(w.id) }
-    assert_select '#error_body', false
     assert_template 'weaknesses/index'
   end
 
@@ -93,7 +90,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/show'
   end
 
@@ -103,7 +99,6 @@ class WeaknessesControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/new'
   end
 
@@ -172,7 +167,6 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :edit, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
-    assert_select '#error_body', false
     assert_template 'weaknesses/edit'
   end
 
@@ -258,7 +252,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     weakness = Weakness.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, id: weakness.id
     end
 

@@ -32,7 +32,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/index'
   end
 
@@ -41,10 +40,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :synthesis_report, :controller_name => 'follow_up'
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/synthesis_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :synthesis_report, :synthesis_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -53,7 +51,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/synthesis_report'
   end
 
@@ -68,7 +65,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :controller_name => 'follow_up'
 
     assert_response :success
-    assert_select '#error_body', false
     assert_not_nil assigns(:filters)
     assert_equal 2, assigns(:filters).size
     assert_template 'follow_up_committee/synthesis_report'
@@ -97,10 +93,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :qa_indicators
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/qa_indicators'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :qa_indicators, :qa_indicators => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -108,7 +103,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/qa_indicators'
   end
 
@@ -134,10 +128,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/weaknesses_by_risk_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -147,7 +140,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/weaknesses_by_risk_report'
   end
 
@@ -164,7 +156,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/weaknesses_by_risk_report'
   end
 
@@ -192,10 +183,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :fixed_weaknesses_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/fixed_weaknesses_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -205,7 +195,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/fixed_weaknesses_report'
   end
 
@@ -222,7 +211,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :final => false
     
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/fixed_weaknesses_report'
   end
 
@@ -250,10 +238,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :rescheduled_being_implemented_weaknesses_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :rescheduled_being_implemented_weaknesses_report,
         :rescheduled_being_implemented_weaknesses_report => {
           :from_date => 10.years.ago.to_date,
@@ -262,7 +249,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
   end
 
@@ -278,7 +264,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       }
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
   end
 
@@ -307,10 +292,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :control_objective_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/control_objective_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -320,7 +304,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/control_objective_stats'
   end
 
@@ -338,7 +321,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/control_objective_stats'
   end
 
@@ -366,10 +348,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     get :process_control_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/process_control_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -379,7 +360,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/process_control_stats'
   end
 
@@ -396,7 +376,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_committee/process_control_stats'
   end
 

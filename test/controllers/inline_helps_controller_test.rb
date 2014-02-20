@@ -36,7 +36,6 @@ class InlineHelpsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:inline_helps)
-    assert_select '#error_body', false
     assert_template 'inline_helps/index'
   end
 
@@ -45,7 +44,6 @@ class InlineHelpsControllerTest < ActionController::TestCase
     get :show, :id => inline_helps(:es_review_identification).id
     assert_response :success
     assert_not_nil assigns(:inline_help)
-    assert_select '#error_body', false
     assert_template 'inline_helps/show'
   end
 
@@ -54,7 +52,6 @@ class InlineHelpsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:inline_help)
-    assert_select '#error_body', false
     assert_template 'inline_helps/new'
   end
 
@@ -78,7 +75,6 @@ class InlineHelpsControllerTest < ActionController::TestCase
     get :edit, :id => inline_helps(:es_review_identification).id
     assert_response :success
     assert_not_nil assigns(:inline_help)
-    assert_select '#error_body', false
     assert_template 'inline_helps/edit'
   end
 

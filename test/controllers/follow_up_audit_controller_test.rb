@@ -28,7 +28,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/index'
   end
 
@@ -37,20 +36,18 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_state
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_state'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'follow_up',                                                                                                                                              
+        :controller_name => 'follow_up',
         :final => false
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_state'
   end
 
@@ -77,20 +74,18 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_risk'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'follow_up',                                                                                                                                              
+        :controller_name => 'follow_up',
         :final => false
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_risk'
   end
 
@@ -117,20 +112,18 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_audit_type
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_audit_type'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
-        :final => false        
+        :final => false
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_audit_type'
   end
 
@@ -158,10 +151,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :follow_up_cost_analysis
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/follow_up_cost_analysis'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_cost_analysis, :follow_up_cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -169,7 +161,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/follow_up_cost_analysis'
   end
 
@@ -195,10 +186,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -208,7 +198,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
   end
 
@@ -225,7 +214,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/weaknesses_by_risk_report'
   end
 
@@ -253,10 +241,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :fixed_weaknesses_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/fixed_weaknesses_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -266,7 +253,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/fixed_weaknesses_report'
   end
 
@@ -283,7 +269,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/fixed_weaknesses_report'
   end
 
@@ -311,10 +296,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :control_objective_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/control_objective_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -324,7 +308,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/control_objective_stats'
   end
 
@@ -342,7 +325,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/control_objective_stats'
   end
 
@@ -370,10 +352,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :process_control_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/process_control_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -383,7 +364,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/process_control_stats'
   end
 
@@ -400,7 +380,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/process_control_stats'
   end
 
@@ -428,10 +407,9 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :nonconformities_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/nonconformities_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :nonconformities_report, :nonconformities_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -441,7 +419,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/nonconformities_report'
   end
 
@@ -458,7 +435,6 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :final => false
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'follow_up_audit/nonconformities_report'
   end
 

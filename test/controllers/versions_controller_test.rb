@@ -31,7 +31,6 @@ class VersionsControllerTest < ActionController::TestCase
     get :show, :id => versions(:important_version).to_param
     assert_response :success
     assert_not_nil assigns(:version)
-    assert_select '#error_body', false
     assert_select 'table.table'
     assert_template 'versions/show'
   end
@@ -41,7 +40,6 @@ class VersionsControllerTest < ActionController::TestCase
     get :security_changes_report
     assert_response :success
     assert_not_nil assigns(:versions)
-    assert_select '#error_body', false
     assert_template 'versions/security_changes_report'
   end
 
@@ -50,7 +48,7 @@ class VersionsControllerTest < ActionController::TestCase
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :security_changes_report, :download => 1,
         :range => {:from_date => from_date, :to_date => to_date}
     end

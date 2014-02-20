@@ -32,7 +32,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
     perform_auth
     get :choose
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'login_records/choose'
   end
 
@@ -41,7 +40,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:login_records)
-    assert_select '#error_body', false
     assert_template 'login_records/index'
   end
 
@@ -56,7 +54,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:login_records)
     assert_equal 2, assigns(:login_records).size
     assert assigns(:login_records).all? { |lr| lr.data.match(/login data/i) }
-    assert_select '#error_body', false
     assert_template 'login_records/index'
   end
 
@@ -78,7 +75,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
     get :show, :id => login_records(:administrator_user_success_login_record).id
     assert_response :success
     assert_not_nil assigns(:login_record)
-    assert_select '#error_body', false
     assert_template 'login_records/show'
   end
 
@@ -87,7 +83,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf,
         :range => {:from_date => from_date, :to_date => to_date}
     end

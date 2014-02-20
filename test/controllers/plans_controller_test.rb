@@ -36,7 +36,6 @@ class PlansControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:plans)
-    assert_select '#error_body', false
     assert_template 'plans/index'
   end
 
@@ -45,7 +44,6 @@ class PlansControllerTest < ActionController::TestCase
     get :show, :id => plans(:current_plan).id
     assert_response :success
     assert_not_nil assigns(:plan)
-    assert_select '#error_body', false
     assert_template 'plans/show'
   end
 
@@ -54,7 +52,6 @@ class PlansControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:plan)
-    assert_select '#error_body', false
     assert_template 'plans/new'
   end
 
@@ -63,7 +60,6 @@ class PlansControllerTest < ActionController::TestCase
     get :new, :business_unit_type => business_unit_types(:cycle).to_param
     assert_response :success
     assert_not_nil assigns(:plan)
-    assert_select '#error_body', false
     assert_template 'plans/new'
   end
 
@@ -79,7 +75,6 @@ class PlansControllerTest < ActionController::TestCase
     assert plan.plan_items.map { |pi| pi.resource_utilizations.size }.sum > 0
     assert_equal plan.plan_items.map { |pi| pi.resource_utilizations.size }.sum,
       assigns(:plan).plan_items.map { |pi| pi.resource_utilizations.size }.sum
-    assert_select '#error_body', false
     assert_template 'plans/new'
   end
 
@@ -127,7 +122,6 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'plans/edit'
   end
 
@@ -138,7 +132,6 @@ class PlansControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:plan)
     assert_not_nil assigns(:business_unit_type)
-    assert_select '#error_body', false
     assert_template 'plans/edit'
   end
 
@@ -322,7 +315,7 @@ class PlansControllerTest < ActionController::TestCase
 
     plan = Plan.find(plans(:current_plan).id)
 
-    assert_nothing_raised(Exception) { get :export_to_pdf, :id => plan.id }
+    assert_nothing_raised { get :export_to_pdf, :id => plan.id }
 
     assert_redirected_to plan.relative_pdf_path
   end
@@ -333,28 +326,28 @@ class PlansControllerTest < ActionController::TestCase
       :q => 'fifth', :format => :json
     }
     assert_response :success
-    
+
     business_units = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, business_units.size # Fifth is in another organization
-    
+
     get :auto_complete_for_business_unit_business_unit_id, {
       :q => 'one', :format => :json
     }
     assert_response :success
-    
+
     business_units = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, business_units.size # One only
     assert business_units.all? { |u| (u['label'] + u['informal']).match /one/i }
-    
+
     get :auto_complete_for_business_unit_business_unit_id, {
       :q => 'business', :format => :json
     }
     assert_response :success
-    
+
     business_units = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 4, business_units.size # All in the organization (one, two, three and four)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
 
@@ -364,9 +357,9 @@ class PlansControllerTest < ActionController::TestCase
       :format => :json
     }
     assert_response :success
-    
+
     business_units = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, business_units.size # All in the organization (one and two)
     assert business_units.all? { |u| (u['label'] + u['informal']).match /business/i }
   end
@@ -375,25 +368,25 @@ class PlansControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Administrator
     assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
     get :auto_complete_for_user, { :q=> 'blank', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, users.size # Blank and Expired blank
     assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
     get :auto_complete_for_user, { :q => 'xyz', :format => :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size # None
   end
 
@@ -404,7 +397,7 @@ class PlansControllerTest < ActionController::TestCase
 
     xhr :get, :resource_data, :id => resources(:auditor_resource).id
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       resource_data = ActiveSupport::JSON.decode(@response.body)
     end
 

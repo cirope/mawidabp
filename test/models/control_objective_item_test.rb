@@ -395,7 +395,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
   test 'to pdf' do
     assert !File.exist?(@control_objective_item.absolute_pdf_path)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @control_objective_item.to_pdf(organizations(:default_organization))
     end
 

@@ -34,7 +34,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:control_objectives)
-    assert_select '#error_body', false
     assert_template 'control_objective_items/index'
   end
 
@@ -50,7 +49,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert(assigns(:control_objectives).all? do |coi|
       coi.control_objective_text.match(/seguridad/i)
     end)
-    assert_select '#error_body', false
     assert_template 'control_objective_items/index'
   end
 
@@ -72,7 +70,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     get :show, :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
-    assert_select '#error_body', false
     assert_template 'control_objective_items/show'
   end
 
@@ -82,7 +79,6 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
-    assert_select '#error_body', false
     assert_template 'control_objective_items/edit'
   end
 

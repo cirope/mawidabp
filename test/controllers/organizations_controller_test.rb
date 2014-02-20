@@ -38,7 +38,6 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:organizations)
     # Sólo la organización del grupo autenticado
     assert_equal 1, assigns(:organizations).size
-    assert_select '#error_body', false
     assert_template 'organizations/index'
   end
 
@@ -47,7 +46,6 @@ class OrganizationsControllerTest < ActionController::TestCase
     get :show, :id => organizations(:default_organization).id
     assert_response :success
     assert_not_nil assigns(:organization)
-    assert_select '#error_body', false
     assert_template 'organizations/show'
   end
 
@@ -56,7 +54,6 @@ class OrganizationsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:organization)
-    assert_select '#error_body', false
     assert_template 'organizations/new'
   end
 
@@ -108,7 +105,6 @@ class OrganizationsControllerTest < ActionController::TestCase
     get :edit, :id => organizations(:default_organization).id
     assert_response :success
     assert_not_nil assigns(:organization)
-    assert_select '#error_body', false
     assert_template 'organizations/edit'
   end
 

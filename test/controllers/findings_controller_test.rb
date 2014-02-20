@@ -36,7 +36,6 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -60,7 +59,6 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -77,7 +75,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert assigns(:findings).all? {|f| f.review.identification.match(/1 2 4/i)}
     assert_equal assigns(:findings).map {|f| f.review.identification}.sort,
       assigns(:findings).map {|f| f.review.identification}
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -92,7 +89,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:findings)
     assert_equal 10, assigns(:findings).size
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -104,7 +100,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:findings)
     assert_equal 2, assigns(:findings).size
     assert assigns(:findings).all? { |f| f.users.include?(user) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -116,7 +111,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:findings)
     assert_equal 1, assigns(:findings).size
     assert assigns(:findings).all? { |f| f.users.include?(user) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -132,7 +126,6 @@ class FindingsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:findings)
     assert_equal 2, assigns(:findings).size
     assert assigns(:findings).all? { |f| ids.include?(f.id) }
-    assert_select '#error_body', false
     assert_template 'findings/index'
   end
 
@@ -155,7 +148,6 @@ class FindingsControllerTest < ActionController::TestCase
       :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/show'
   end
 
@@ -165,7 +157,6 @@ class FindingsControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/show'
   end
 
@@ -175,7 +166,6 @@ class FindingsControllerTest < ActionController::TestCase
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/edit'
 
     auditor_response = @response.body.dup
@@ -185,7 +175,6 @@ class FindingsControllerTest < ActionController::TestCase
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:finding)
-    assert_select '#error_body', false
     assert_template 'findings/edit'
     # Diferentes forms
     assert_not_equal auditor_response, @response.body
@@ -501,7 +490,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'export list to pdf' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete'
     end
 
@@ -512,7 +501,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'export detailed list to pdf' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1
     end
 
@@ -523,7 +512,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'export list with search' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
       :columns => ['description', 'review'],
@@ -538,7 +527,7 @@ class FindingsControllerTest < ActionController::TestCase
   test 'export detailed list with search' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
         :search => {
           :query => '1 2 4 y w',
@@ -556,7 +545,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, :completed => 'incomplete', :id => finding.id
     end
 

@@ -13,7 +13,6 @@ class SessionsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'sessions/new'
   end
 
@@ -23,7 +22,6 @@ class SessionsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:user)
-    assert_select '#error_body', false
     assert_template 'sessions/new'
   end
 
@@ -289,7 +287,6 @@ class SessionsControllerTest < ActionController::TestCase
         :password => PLAIN_PASSWORDS[users(:expired_user).user]
       }
 
-    assert_select '#error_body', false
     assert_response :success
     assert !user.reload.enable?
   end
@@ -353,7 +350,6 @@ class SessionsControllerTest < ActionController::TestCase
     }}, {}
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'sessions/new'
     assert_select 'div.alert-danger p', I18n.t('message.you_are_already_logged')
   end

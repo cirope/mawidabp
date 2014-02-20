@@ -37,7 +37,6 @@ class NotificationsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:notifications)
-    assert_select '#error_body', false
     assert_template 'notifications/index'
   end
 
@@ -47,7 +46,6 @@ class NotificationsControllerTest < ActionController::TestCase
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
-    assert_select '#error_body', false
     assert_template 'notifications/show'
   end
 
@@ -57,7 +55,6 @@ class NotificationsControllerTest < ActionController::TestCase
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
     assert_not_nil assigns(:notification)
-    assert_select '#error_body', false
     assert_template 'notifications/edit'
   end
 

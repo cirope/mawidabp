@@ -34,7 +34,6 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:potential_nonconformities)
-    assert_select '#error_body', false
     assert_template 'potential_nonconformities/index'
   end
 
@@ -54,7 +53,6 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     end)
     assert_equal assigns(:potential_nonconformities).map {|o| o.review.identification}.sort,
       assigns(:potential_nonconformities).map {|o| o.review.identification}
-    assert_select '#error_body', false
     assert_template 'potential_nonconformities/index'
   end
 
@@ -76,7 +74,6 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:potential_nonconformity)
-    assert_select '#error_body', false
     assert_template 'potential_nonconformities/show'
   end
 
@@ -86,7 +83,6 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:potential_nonconformity)
-    assert_select '#error_body', false
     assert_template 'potential_nonconformities/new'
   end
 
@@ -150,7 +146,6 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
       :bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:potential_nonconformity)
-    assert_select '#error_body', false
     assert_template 'potential_nonconformities/edit'
   end
 
@@ -220,7 +215,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     potential_nonconformity = PotentialNonconformity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, id: potential_nonconformity.id
     end
 

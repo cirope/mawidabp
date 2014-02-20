@@ -42,7 +42,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:conclusion_final_reviews)
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/index'
   end
 
@@ -55,7 +54,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 2, assigns(:conclusion_final_reviews).size
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/index'
   end
 
@@ -70,7 +68,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:conclusion_final_reviews)
     assert_equal 2, assigns(:conclusion_final_reviews).size
     assert assigns(:conclusion_final_reviews).all? {|cfr| cfr.issue_date > 3.months.ago.to_date}
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/index'
   end
 
@@ -102,7 +99,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     get :show, :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/show'
   end
 
@@ -111,7 +107,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/new'
   end
 
@@ -119,7 +114,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     perform_auth
     xhr :get, :new, :format => 'json'
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       ActiveSupport::JSON.decode(@response.body)
     end
   end
@@ -152,7 +147,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     get :edit, :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/edit'
   end
 
@@ -182,7 +176,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id
     end
 
@@ -195,7 +189,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf, :id => conclusion_review.id,
         :export_options => {:hide_control_objectives_excluded_from_score => '1'}
     end
@@ -209,13 +203,13 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id
     end
 
     assert_redirected_to conclusion_review.review.relative_score_sheet_path
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :score_sheet, :id => conclusion_review.id, :global => 1
     end
 
@@ -229,7 +223,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :download_work_papers, :id => conclusion_review.id
     end
 
@@ -242,7 +236,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       post :create_bundle, :id => conclusion_review.id,
         :index_items => "one\ntwo"
     end
@@ -257,7 +251,6 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
       :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
-    assert_select '#error_body', false
     assert_template 'conclusion_final_reviews/compose_email'
   end
 
@@ -371,7 +364,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'export list to pdf' do
     perform_auth
 
-    assert_nothing_raised(Exception) { get :export_list_to_pdf }
+    assert_nothing_raised { get :export_list_to_pdf }
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('conclusion_final_review.pdf.pdf_name'),
@@ -381,7 +374,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   test 'export list with search' do
     perform_auth
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_list_to_pdf, :search => {
         :query => '1',
         :columns => ['period', 'identification']

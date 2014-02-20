@@ -36,7 +36,6 @@ class HelpItemsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:help_items)
-    assert_select '#error_body', false
     assert_template 'help_items/index'
   end
 
@@ -45,7 +44,6 @@ class HelpItemsControllerTest < ActionController::TestCase
     get :show, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
-    assert_select '#error_body', false
     assert_template 'help_items/show'
   end
 
@@ -54,7 +52,6 @@ class HelpItemsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:help_item)
-    assert_select '#error_body', false
     assert_template 'help_items/new'
   end
 
@@ -89,7 +86,6 @@ class HelpItemsControllerTest < ActionController::TestCase
     get :edit, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
-    assert_select '#error_body', false
     assert_template 'help_items/edit'
   end
 

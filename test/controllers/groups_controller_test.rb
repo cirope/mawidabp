@@ -36,7 +36,6 @@ class GroupsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:groups)
-    assert_select '#error_body', false
     assert_template 'groups/index'
   end
 
@@ -45,7 +44,6 @@ class GroupsControllerTest < ActionController::TestCase
     get :show, :id => groups(:main_group).id
     assert_response :success
     assert_not_nil assigns(:group)
-    assert_select '#error_body', false
     assert_template 'groups/show'
   end
 
@@ -54,7 +52,6 @@ class GroupsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:group)
-    assert_select '#error_body', false
     assert_template 'groups/new'
   end
 
@@ -125,7 +122,6 @@ class GroupsControllerTest < ActionController::TestCase
     get :edit, :id => groups(:main_group).id
     assert_response :success
     assert_not_nil assigns(:group)
-    assert_select '#error_body', false
     assert_template 'groups/edit'
   end
 

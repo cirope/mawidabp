@@ -37,7 +37,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_not_equal 0, assigns(:reviews).size
-    assert_select '#error_body', false
     assert_template 'reviews/index'
   end
 
@@ -50,7 +49,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:reviews)
     assert_equal 5, assigns(:reviews).size
-    assert_select '#error_body', false
     assert_template 'reviews/index'
   end
 
@@ -70,7 +68,6 @@ class ReviewsControllerTest < ActionController::TestCase
     get :show, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/show'
   end
 
@@ -79,7 +76,6 @@ class ReviewsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/new'
   end
 
@@ -96,7 +92,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert review.review_user_assignments.size > 0
     assert_equal review.review_user_assignments.size,
       assigns(:review).review_user_assignments.size
-    assert_select '#error_body', false
     assert_template 'reviews/new'
   end
 
@@ -152,7 +147,6 @@ class ReviewsControllerTest < ActionController::TestCase
     get :edit, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
-    assert_select '#error_body', false
     assert_template 'reviews/edit'
   end
 
@@ -217,11 +211,11 @@ class ReviewsControllerTest < ActionController::TestCase
     perform_auth
 
     review_data = nil
-    
+
     xhr :get, :review_data, id: reviews(:current_review).id,
       format: 'json'
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       review_data = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -240,7 +234,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
     xhr :get, :plan_item_data, id: plan_items(:current_plan_item_1).id
     assert_response :success
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       plan_item_data = ActiveSupport::JSON.decode(@response.body)
     end
 
@@ -256,7 +250,6 @@ class ReviewsControllerTest < ActionController::TestCase
       id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
-    assert_select '#error_body', false
     assert_template 'procedure_controls/show'
   end
 
@@ -264,7 +257,7 @@ class ReviewsControllerTest < ActionController::TestCase
     perform_auth
     review = Review.find reviews(:current_review).id
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :survey_pdf, id: review.id
     end
 
@@ -285,7 +278,6 @@ class ReviewsControllerTest < ActionController::TestCase
         f.review.plan_item.business_unit_id == review.plan_item.business_unit_id
       end
     )
-    assert_select '#error_body', false
     assert_template 'reviews/suggested_findings'
   end
 
@@ -294,7 +286,7 @@ class ReviewsControllerTest < ActionController::TestCase
 
     review = Review.find reviews(:current_review).id
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :download_work_papers, id: review.id
     end
 
@@ -306,7 +298,6 @@ class ReviewsControllerTest < ActionController::TestCase
     get :estimated_amount, id: plan_items(:past_plan_item_1).id
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'reviews/_estimated_amount'
   end
 
@@ -314,25 +305,25 @@ class ReviewsControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_user, { q: 'admin', format: :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, users.size # Administrator
     assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
 
     get :auto_complete_for_user, { q: 'blank', format: :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, users.size # Blank and Expired blank
     assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
 
     post :auto_complete_for_user, { q: 'xyz', format: :json }
     assert_response :success
-    
+
     users = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, users.size
   end
 
@@ -342,9 +333,9 @@ class ReviewsControllerTest < ActionController::TestCase
       q: 'ges seg', period_id: periods(:past_period).id, format: :json
     }
     assert_response :success
-    
+
     procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, procedure_control_subitems.size # Gestión de la seguridad
     assert(
       procedure_control_subitems.all? do
@@ -356,9 +347,9 @@ class ReviewsControllerTest < ActionController::TestCase
       q: 'depen', period_id: periods(:past_period).id, format: :json
     }
     assert_response :success
-    
+
     procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, procedure_control_subitems.size # Dependencia del área responsable
     assert(
       procedure_control_subitems.all? do
@@ -370,9 +361,9 @@ class ReviewsControllerTest < ActionController::TestCase
       q: 'xyz', period_id: periods(:past_period).id, format: :json
     }
     assert_response :success
-    
+
     procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, procedure_control_subitems.size # None
   end
 
@@ -380,25 +371,25 @@ class ReviewsControllerTest < ActionController::TestCase
     perform_auth
     get :auto_complete_for_finding, { q: 'O001', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 2, findings.size # Se excluye la observación O01 que no tiene informe definitivo
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001/i }
 
     get :auto_complete_for_finding, { q: 'O001, 1 2 3', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 1, findings.size # Solo O01 del informe 1 2 3
     assert findings.all? { |f| (f['label'] + f['informal']).match /O001.*1 2 3/i }
 
     get :auto_complete_for_finding, { q: 'x_none', format: :json }
     assert_response :success
-    
+
     findings = ActiveSupport::JSON.decode(@response.body)
-    
+
     assert_equal 0, findings.size # Sin resultados
   end
 end

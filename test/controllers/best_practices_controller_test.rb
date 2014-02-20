@@ -36,7 +36,6 @@ class BestPracticesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:best_practices)
-    assert_select '#error_body', false
     assert_template 'best_practices/index'
   end
 
@@ -45,7 +44,6 @@ class BestPracticesControllerTest < ActionController::TestCase
     get :show, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
-    assert_select '#error_body', false
     assert_template 'best_practices/show'
   end
 
@@ -54,7 +52,6 @@ class BestPracticesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:best_practice)
-    assert_select '#error_body', false
     assert_template 'best_practices/new'
   end
 
@@ -174,7 +171,6 @@ class BestPracticesControllerTest < ActionController::TestCase
     get :edit, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
-    assert_select '#error_body', false
     assert_template 'best_practices/edit'
   end
 

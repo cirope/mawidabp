@@ -36,7 +36,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
@@ -55,7 +54,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
     end)
     assert_equal assigns(:nonconformities).map {|w| w.review.identification}.sort,
       assigns(:nonconformities).map {|w| w.review.identification}
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
@@ -71,7 +69,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:nonconformities)
     assert_equal 2, assigns(:nonconformities).size
     assert assigns(:nonconformities).all? { |w| ids.include?(w.id) }
-    assert_select '#error_body', false
     assert_template 'nonconformities/index'
   end
 
@@ -92,7 +89,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
     get :show, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/show'
   end
 
@@ -102,7 +98,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/new'
   end
 
@@ -177,7 +172,6 @@ class NonconformitiesControllerTest < ActionController::TestCase
     get :edit, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
-    assert_select '#error_body', false
     assert_template 'nonconformities/edit'
   end
 
@@ -259,7 +253,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     nonconformity = Nonconformity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity).id)
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :follow_up_pdf, :id => nonconformity.id
     end
 

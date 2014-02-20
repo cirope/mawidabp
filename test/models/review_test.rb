@@ -504,7 +504,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'score sheet pdf' do
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @review.score_sheet(organizations(:default_organization))
     end
 
@@ -515,7 +515,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'global score sheet pdf' do
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @review.global_score_sheet(organizations(:default_organization))
     end
 
@@ -526,7 +526,7 @@ class ReviewTest < ActiveSupport::TestCase
   end
 
   test 'zip all work papers' do
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       @review.zip_all_work_papers
     end
 

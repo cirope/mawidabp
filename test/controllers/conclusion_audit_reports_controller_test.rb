@@ -30,7 +30,6 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/index'
   end
 
@@ -39,20 +38,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_state
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_state'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_state, :weaknesses_by_state => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_state'
   end
 
@@ -79,20 +76,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_risk'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk, :weaknesses_by_risk => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_risk'
   end
 
@@ -119,20 +114,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_audit_type
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_audit_type'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_audit_type, :weaknesses_by_audit_type => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date,
         :controller_name => 'conclusion',
-        :final => true  
-        }
+        :final => true
+      }
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_audit_type'
   end
 
@@ -161,11 +154,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :cost_analysis
     assert_response :success
-    assert_select '#error_body', false
     assert_equal assigns(:title), expected_title
     assert_template 'conclusion_audit_reports/cost_analysis'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :cost_analysis, :cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -173,7 +165,6 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/cost_analysis'
   end
 
@@ -200,11 +191,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :cost_analysis, :include_details => 1
     assert_response :success
-    assert_select '#error_body', false
     assert_equal assigns(:title), expected_title
     assert_template 'conclusion_audit_reports/cost_analysis'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :cost_analysis, :include_details => 1, :cost_analysis => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
@@ -212,7 +202,6 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/cost_analysis'
   end
 
@@ -238,20 +227,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :weaknesses_by_risk_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
   end
 
@@ -264,11 +251,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
       },
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/weaknesses_by_risk_report'
   end
 
@@ -296,20 +282,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :fixed_weaknesses_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
   end
 
@@ -322,11 +306,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
       },
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/fixed_weaknesses_report'
   end
 
@@ -354,20 +337,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :control_objective_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/control_objective_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :control_objective_stats, :control_objective_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/control_objective_stats'
   end
 
@@ -381,11 +362,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :business_unit => 'one',
       :control_objective => 'a',
       },
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/control_objective_stats'
   end
 
@@ -413,20 +393,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :process_control_stats
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/process_control_stats'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/process_control_stats'
   end
 
@@ -439,11 +417,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
       },
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/process_control_stats'
   end
 
@@ -471,20 +448,18 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
 
     get :nonconformities_report
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/nonconformities_report'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :nonconformities_report, :nonconformities_report => {
         :from_date => 10.years.ago.to_date,
         :to_date => 10.years.from_now.to_date
         },
-        :controller_name => 'conclusion',                                                                                                                                                  
+        :controller_name => 'conclusion',
         :final => true
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/nonconformities_report'
   end
 
@@ -497,11 +472,10 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :business_unit_type => business_unit_types(:cycle).id,
       :business_unit => 'one'
       },
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'conclusion_audit_reports/nonconformities_report'
   end
 

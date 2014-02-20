@@ -31,7 +31,6 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:error_records)
-    assert_select '#error_body', false
     assert_template 'error_records/index'
   end
 
@@ -46,7 +45,6 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:error_records)
     assert_equal 2, assigns(:error_records).size
     assert assigns(:error_records).all? { |er| er.data.match(/usefull/i) }
-    assert_select '#error_body', false
     assert_template 'error_records/index'
   end
 
@@ -68,7 +66,6 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     get :show, :id => error_records(:administrator_user_failed_attempt).id
     assert_response :success
     assert_not_nil assigns(:error_record)
-    assert_select '#error_body', false
     assert_template 'error_records/show'
   end
 
@@ -77,7 +74,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :export_to_pdf,
         :range => {:from_date => from_date, :to_date => to_date}
     end

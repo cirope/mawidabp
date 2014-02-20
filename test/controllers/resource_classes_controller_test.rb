@@ -36,7 +36,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:resource_classes)
-    assert_select '#error_body', false
     assert_template 'resource_classes/index'
   end
 
@@ -45,7 +44,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
     get :show, id: resource_classes(:human_resources).id
     assert_response :success
     assert_not_nil assigns(:resource_class)
-    assert_select '#error_body', false
     assert_template 'resource_classes/show'
   end
 
@@ -54,7 +52,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:resource_class)
-    assert_select '#error_body', false
     assert_template 'resource_classes/new'
   end
 
@@ -82,7 +79,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
     get :edit, id: resource_classes(:human_resources).id
     assert_response :success
     assert_not_nil assigns(:resource_class)
-    assert_select '#error_body', false
     assert_template 'resource_classes/edit'
   end
 

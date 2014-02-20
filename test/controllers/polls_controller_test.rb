@@ -48,7 +48,6 @@ class PollsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:polls)
-    assert_select '#error_body', false
     assert_template 'polls/index'
   end
 
@@ -57,7 +56,6 @@ class PollsControllerTest < ActionController::TestCase
     get :reports
     assert_response :success
     assert_not_nil assigns(:title)
-    assert_select '#error_body', false
     assert_template 'polls/reports'
   end
 
@@ -66,7 +64,6 @@ class PollsControllerTest < ActionController::TestCase
     get :show, id: polls(:poll_one).id
     assert_response :success
     assert_not_nil assigns(:poll)
-    assert_select '#error_body', false
     assert_template 'polls/show'
   end
 
@@ -75,7 +72,6 @@ class PollsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
     assert_not_nil assigns(:poll)
-    assert_select '#error_body', false
     assert_template 'polls/new'
   end
 
@@ -115,7 +111,6 @@ class PollsControllerTest < ActionController::TestCase
     get :edit, id: poll.id, token: poll.access_token
     assert_response :success
     assert_not_nil assigns(:poll)
-    assert_select '#error_body', false
     assert_template 'polls/edit'
   end
 
@@ -168,10 +163,9 @@ class PollsControllerTest < ActionController::TestCase
 
     get :summary_by_questionnaire
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_questionnaire'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :summary_by_questionnaire, summary_by_questionnaire: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date,
@@ -180,7 +174,6 @@ class PollsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_questionnaire'
   end
 
@@ -193,7 +186,6 @@ class PollsControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_select '#error_body', false
     assert_not_nil assigns(:questionnaire)
     assert_not_nil assigns(:polls)
     assert_not_nil assigns(:answered)
@@ -223,10 +215,9 @@ class PollsControllerTest < ActionController::TestCase
 
     get :summary_by_business_unit
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_business_unit'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :summary_by_business_unit, summary_by_business_unit: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date,
@@ -236,7 +227,6 @@ class PollsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_business_unit'
   end
 
@@ -250,7 +240,6 @@ class PollsControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_select '#error_body', false
     assert_not_nil assigns(:questionnaire)
     assert_not_nil assigns(:questionnaires)
     assert_not_nil assigns(:from_date)
@@ -283,10 +272,9 @@ class PollsControllerTest < ActionController::TestCase
 
     get :summary_by_answers
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_answers'
 
-    assert_nothing_raised(Exception) do
+    assert_nothing_raised do
       get :summary_by_answers, summary_by_answers: {
         from_date: 10.years.ago.to_date,
         to_date: 10.years.from_now.to_date,
@@ -296,7 +284,6 @@ class PollsControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_select '#error_body', false
     assert_template 'polls/summary_by_answers'
   end
 
@@ -310,7 +297,6 @@ class PollsControllerTest < ActionController::TestCase
     }
 
     assert_response :success
-    assert_select '#error_body', false
     assert_not_nil assigns(:questionnaire)
     assert_not_nil assigns(:polls)
     assert_not_nil assigns(:answered)
