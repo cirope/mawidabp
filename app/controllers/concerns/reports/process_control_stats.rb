@@ -5,7 +5,7 @@ module Reports::ProcessControlStats
 
   def process_control_stats
     @controller = params[:controller_name]
-    final = params[:final]
+    final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.process_control_stats_title")
     @from_date, @to_date = *make_date_range(params[:process_control_stats])
     @periods = periods_for_interval

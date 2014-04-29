@@ -3,8 +3,8 @@
     <div class="well">
       <%= simple_form_for @user, url: sessions_path, html: { data: { no_observe_changes: true } } do |f| %>
         <div class="form-inputs">
-          <%= f.input :user, input_html: { maxlength: 30, autofocus: true } %>
-          <%= f.input :password, input_html: { maxlength: 128 } %>
+          <%= f.input :user, input_html: { maxlength: 30, autofocus: true, autocomplete: 'off' } %>
+          <%= f.input :password, input_html: { maxlength: 128, autocomplete: 'off' } %>
         </div>
 
         <div class="form-actions">

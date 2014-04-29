@@ -168,9 +168,13 @@ class Notifier < ActionMailer::Base
     @content = options[:content]
     @body = options[:body]
     @notification = options[:notification]
+    option_organizations = options[:organizations] ?
+      options[:organizations].uniq : []
     organizations = @notification ?
       @notification.findings.map(&:organization).uniq : []
-    prefixes = organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    organizations += option_organizations
+
+    prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail(

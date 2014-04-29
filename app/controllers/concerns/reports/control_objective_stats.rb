@@ -50,7 +50,7 @@ module Reports::ControlObjectiveStats
 
   def init_vars
     @controller = params[:controller_name]
-    @final = params[:final]
+    @final = params[:final] == 'true'
     @title = t("#{@controller}_committee_report.control_objective_stats_title")
     @from_date, @to_date = *make_date_range(params[:control_objective_stats])
     @periods = periods_for_interval
@@ -211,7 +211,6 @@ module Reports::ControlObjectiveStats
     @process_controls[coi.process_control.name] ||= {}
     @coi_data = @process_controls[coi.process_control.name][coi.control_objective] || {}
     @coi_data[:weaknesses_ids] ||= {}
-
     @weaknesses_count = {}
     @weaknesses = @final ? coi.final_weaknesses.not_revoked : coi.weaknesses.not_revoked
 
