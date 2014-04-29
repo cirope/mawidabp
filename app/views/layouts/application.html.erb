@@ -30,7 +30,7 @@
     <%= render 'shared/compatibility_warning' %>
     <%= render 'shared/menu' %>
     <%= yield :submenu %>
-    <%= render 'shared/flash' if flash_message.present? %>
+    <%= render 'shared/flash' if flash_message %>
     <%= render 'shared/time_left' if @auth_user %>
     <%= yield %>
 

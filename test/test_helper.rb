@@ -16,7 +16,7 @@ class ActiveSupport::TestCase
   def perform_auth user = users(:administrator_user), organization = organizations(:default_organization)
     @request.host = "#{organization.prefix}.localhost.i"
     temp_controller, @controller = @controller, SessionsController.new
-    password = user.is_encrypted? ? PLAIN_PASSWORDS[user.user] : user.password
+    password = user.is_encrypted? ? ::PLAIN_PASSWORDS[user.user] : user.password
 
     if session[:user_id]
       delete :destroy

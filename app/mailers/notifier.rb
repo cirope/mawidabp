@@ -1,8 +1,7 @@
 class Notifier < ActionMailer::Base
   helper :application
-  default :from => "\"#{I18n.t('app_name')}\" <#{APP_CONFIG['support_email']}>",
-    :charset => 'UTF-8', :content_type => 'text/html',
-    :date => proc { Time.now }
+
+  default from: "'#{I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
 
   def pending_poll_email(poll)
     @poll = poll

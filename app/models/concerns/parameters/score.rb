@@ -15,17 +15,9 @@ module Parameters::Score
 
   module ClassMethods
     def scores(created)
-      APP_CONFIG['highest_score_organizations'].keys.include?(Organization.current_id) &&
-        created > APP_CONFIG['highest_score_organizations'][Organization.current_id] ?
-        HIGHEST_SCORE_TYPES : SCORE_TYPES
+      highest_score = JSON.parse ENV['HIGHEST_SCORE_ORGANIZATIONS']
+      highest_score.keys.include?(Organization.current_id.to_s) &&
+        created > highest_score[Organization.current_id.to_s] ? HIGHEST_SCORE_TYPES : SCORE_TYPES
     end
   end
 end
-
-
-
-
-
-
-
-

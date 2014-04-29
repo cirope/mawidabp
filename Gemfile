@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.3'
+gem 'rails', '~> 4.1.0'
 
 gem 'pg'
 gem 'foreigner'
@@ -22,14 +22,16 @@ gem 'unicode'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'dalli'
+gem 'figaro'
 
-gem 'sass-rails'
+gem 'sass-rails', '~> 4.0.3'
 gem 'coffee-rails'
 gem 'uglifier'
 
 gem 'unicorn'
 
 group :development do
+  gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
@@ -38,8 +40,5 @@ group :development do
 end
 
 group :test do
-  gem 'rake' # Travis CI need this
   gem 'timecop'
-  gem 'minitest', require: false
-  gem 'turn'
 end

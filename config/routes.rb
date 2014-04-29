@@ -1,4 +1,4 @@
-MawidaBP::Application.routes.draw do
+Rails.application.routes.draw do
   get '/users/login', to: redirect('/') # _Backward compatibility_
 
   # Sessions

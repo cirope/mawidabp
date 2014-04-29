@@ -81,7 +81,7 @@ class WorkflowsController < ApplicationController
   def create
     @title = t 'workflow.new_title'
     @workflow = Workflow.list.new(workflow_params)
-    @workflow.workflow_items.sort! do |wfi_a, wfi_b|
+    @workflow.workflow_items = @workflow.workflow_items.sort do |wfi_a, wfi_b|
       wfi_a.order_number.to_i <=> wfi_b.order_number.to_i
     end
 
@@ -105,7 +105,7 @@ class WorkflowsController < ApplicationController
   # * PATCH /workflows/1.xml
   def update
     @title = t 'workflow.edit_title'
-    @workflow.workflow_items.sort! do |wfi_a, wfi_b|
+    @workflow.workflow_items = @workflow.workflow_items.sort do |wfi_a, wfi_b|
       wfi_a.order_number <=> wfi_b.order_number
     end
 

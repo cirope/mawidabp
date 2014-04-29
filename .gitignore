@@ -14,3 +14,6 @@ vendor/cache/
 
 # No ignorar
 !doc/README_FOR_APP
+
+# Ignore application configuration
+/config/application.yml

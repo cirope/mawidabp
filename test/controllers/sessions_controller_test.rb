@@ -47,7 +47,7 @@ class SessionsControllerTest < ActionController::TestCase
       post :create,
         :user => {
           :user => user.user,
-          :password => PLAIN_PASSWORDS[user.user]
+          :password => ::PLAIN_PASSWORDS[user.user]
         }
       assert_response :success
       assert_select 'div.alert-danger p', I18n.t('message.invalid_user_or_password')
@@ -111,7 +111,7 @@ class SessionsControllerTest < ActionController::TestCase
       post :create,
         :user => {
           :user => users(:disabled_user).user,
-          :password => PLAIN_PASSWORDS[users(:disabled_user).user]
+          :password => ::PLAIN_PASSWORDS[users(:disabled_user).user]
         }
       error_record = ErrorRecord.where(
         :user_id => users(:disabled_user).id,
@@ -130,7 +130,7 @@ class SessionsControllerTest < ActionController::TestCase
       post :create,
         :user => {
           :user => users(:disabled_user).user,
-          :password => PLAIN_PASSWORDS[users(:disabled_user).user]
+          :password => ::PLAIN_PASSWORDS[users(:disabled_user).user]
         }
       error_record = ErrorRecord.where(
         :user_id => users(:disabled_user).id,
@@ -149,7 +149,7 @@ class SessionsControllerTest < ActionController::TestCase
       post :create,
         :user => {
           :user => users(:administrator_second_user).user,
-          :password => PLAIN_PASSWORDS[users(:administrator_second_user).user]
+          :password => ::PLAIN_PASSWORDS[users(:administrator_second_user).user]
         }
       error_record = ErrorRecord.where(
         :user_id => users(:administrator_second_user).id,
@@ -197,7 +197,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
     assert_response :success
     assert_select 'div.alert-danger p', I18n.t('message.no_organization')
@@ -207,7 +207,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
     assert_redirected_to welcome_url
@@ -223,7 +223,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => user.user,
-        :password => PLAIN_PASSWORDS[user.user]
+        :password => ::PLAIN_PASSWORDS[user.user]
       }
 
     poll = user.first_pending_poll
@@ -245,7 +245,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
     assert_redirected_to groups_url
@@ -284,7 +284,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:expired_user).user,
-        :password => PLAIN_PASSWORDS[users(:expired_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:expired_user).user]
       }
 
     assert_response :success
@@ -299,7 +299,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
     assert_redirected_to edit_password_user_url(user)
@@ -315,7 +315,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
     assert_redirected_to welcome_url
     login_record = LoginRecord.where(
@@ -339,14 +339,14 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
     assert_redirected_to welcome_url
 
     post :create, {:user => {
       :user => users(:administrator_user).user,
-      :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+      :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
     }}, {}
 
     assert_response :success
@@ -358,7 +358,7 @@ class SessionsControllerTest < ActionController::TestCase
     post :create,
       :user => {
         :user => users(:administrator_user).user,
-        :password => PLAIN_PASSWORDS[users(:administrator_user).user]
+        :password => ::PLAIN_PASSWORDS[users(:administrator_user).user]
       }
 
     assert_redirected_to welcome_url
@@ -371,7 +371,7 @@ class SessionsControllerTest < ActionController::TestCase
       post :create,
         :user => {
           :user => users(:first_time_user).user,
-          :password => PLAIN_PASSWORDS[users(:first_time_user).user]
+          :password => ::PLAIN_PASSWORDS[users(:first_time_user).user]
         }
     end
 
