@@ -362,8 +362,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_audited?
     assert @review.valid?
 
-    audited = @review.review_user_assignments.select { |a| a.audited? }
-    @review.review_user_assignments.delete audited
+    @review.review_user_assignments.delete_all(&:audited?)
 
     assert !@review.has_audited?
     assert @review.invalid?
@@ -373,11 +372,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_manager? || @review.has_supervisor?
     assert @review.valid?
 
-    managers = @review.review_user_assignments.select { |a| a.manager? || a.supervisor? }
-    @review.review_user_assignments.delete managers
-
-    supervisors = @review.review_user_assignments.select {|a| a.supervisor?}
-    @review.review_user_assignments.delete supervisors
+    @review.review_user_assignments.delete_all { |a| a.manager? || a.supervisor? }
 
     assert !@review.has_supervisor? && !@review.has_manager?
     assert @review.invalid?
@@ -387,8 +382,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.has_auditor?
     assert @review.valid?
 
-    auditors = @review.review_user_assignments.select { |a| a.auditor? }
-    @review.review_user_assignments.delete auditors
+    @review.review_user_assignments.delete_all(&:auditor?)
 
     assert !@review.has_auditor?
     assert @review.invalid?

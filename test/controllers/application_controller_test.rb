@@ -120,7 +120,7 @@ class ApplicationControllerTest < ActionController::TestCase
     @controller.send('action_name=', 'index')
 
     @controller.send(:check_privileges)
-    assert_not_nil  @controller.send(:flash)[:alert]
+    assert_not_nil @controller.send(:flash)[:alert]
     assert_redirected_to login_url
   end
 

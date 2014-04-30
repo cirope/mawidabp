@@ -1,4 +1,3 @@
-COOKIES_DOMAIN = ".#{ENV['APP_HOST'].sub /:.*/, ''}"
 # Dirección del correo electrónico de soporte
 SUPPORT_EMAIL = 'soporte@mawidabp.com'.freeze
 # Teléfono de soporte

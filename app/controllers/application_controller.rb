@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
 
   # Reinicia la sessión (conservando el contenido de flash)
   def restart_session #:doc:
-    flash_temp = Marshal::load(Marshal::dump(flash))
+    flash_temp = flash.to_hash
     reset_session if session.present?
     flash.replace flash_temp
   end

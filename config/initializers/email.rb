@@ -1,6 +1,6 @@
 Rails.application.configure do
   config.action_mailer.default_url_options = {
-    host: ENV['APP_HOST'], protocol: ENV['APP_PROTOCOL'], subdomain: 'www'
+    host: ENV['APP_HOST'], protocol: ENV['APP_PROTOCOL']
   }
   config.action_mailer.default_url_options[:port] = 3000 if Rails.env.development?
 
@@ -14,3 +14,5 @@ Rails.application.configure do
     enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO']
   }
 end
+
+ActionMailer::Base.register_observer MailObserver
