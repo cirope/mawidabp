@@ -20,5 +20,6 @@ set :keep_releases, 5
 
 namespace :deploy do
   after :publishing, :restart
-  after :finishing,  'deploy:cleanup'
+  after :finishing,  :help
+  after :finishing,  :cleanup
 end
