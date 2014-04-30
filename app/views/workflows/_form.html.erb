@@ -71,7 +71,7 @@
   </div>
 
   <div id="workflow_items">
-    <%= f.simple_fields_for :workflow_items do |wi_f| %>
+    <%= f.simple_fields_for :workflow_items, workflow_items do |wi_f| %>
       <%= render 'workflow_item', f: wi_f %>
     <% end %>
 

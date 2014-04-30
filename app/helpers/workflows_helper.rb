@@ -19,4 +19,8 @@ module WorkflowsHelper
 
     f.input :review_id, collection: collection, prompt: true, disabled: disabled
   end
+
+  def workflow_items
+    @workflow.workflow_items.sort_by(&:order_number)
+  end
 end
