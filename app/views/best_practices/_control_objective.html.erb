@@ -3,25 +3,25 @@
   <div class="form-inputs">
     <div class="row no-gutter">
       <div class="col-md-2">
-        <%= f.input :name, label: false, input_html: { autofocus: true } %>
+        <%= f.input :name, label: false, input_html: { autofocus: true, rows: 5 } %>
       </div>
 
       <%= f.simple_fields_for :control do |c_f| %>
         <div class="col-md-2">
           <%= c_f.input :order, as: :hidden %>
-          <%= c_f.input :control, label: false %>
+          <%= c_f.input :control, label: false, input_html: { rows: 5 } %>
         </div>
         <div class="col-md-1">
-          <%= c_f.input :design_tests, label: false %>
+          <%= c_f.input :design_tests, label: false, input_html: { rows: 5 } %>
         </div>
         <div class="col-md-2">
-          <%= c_f.input :compliance_tests, label: false %>
+          <%= c_f.input :compliance_tests, label: false, input_html: { rows: 5 } %>
         </div>
         <div class="col-md-1">
-          <%= c_f.input :sustantive_tests, label: false %>
+          <%= c_f.input :sustantive_tests, label: false, input_html: { rows: 5 } %>
         </div>
         <div class="col-md-1">
-          <%= c_f.input :effects, label: false %>
+          <%= c_f.input :effects, label: false, input_html: { rows: 5 } %>
         </div>
       <% end %>
 

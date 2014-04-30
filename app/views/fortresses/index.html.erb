@@ -39,6 +39,6 @@
   <%= paginate @fortresses %>
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_fortress_path(
-      :control_objective_item => params[:control_objective]) %>
+      :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
   <% end %>
 </div>

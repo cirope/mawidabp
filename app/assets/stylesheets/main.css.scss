@@ -62,3 +62,13 @@ table th.not_available {
   text-decoration: line-through;
   color: #888;
 }
+
+[data-controller="procedure_controls"],
+[data-controller="best_practices"] {
+  fieldset {
+    textarea, select {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
