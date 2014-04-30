@@ -1,6 +1,5 @@
 markdown: rdiscount
 permalink: pretty
-destination: ../../public/help
 pygments: true
 assets:
   baseurl: /help/assets/
