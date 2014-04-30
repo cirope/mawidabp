@@ -1,6 +1,5 @@
 set :stage, :sandbox
 set :rails_env, 'sandbox'
-set :branch, 'sandbox'
 set :ssh_options, port: 2222
 
 role :web, %w{deployer@localhost}
