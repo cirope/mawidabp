@@ -21,6 +21,7 @@ gem 'unicode'
 gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'figaro'
+gem 'bloggy'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 

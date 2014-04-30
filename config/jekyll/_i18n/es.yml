@@ -1,0 +1,12 @@
+app_name: 'MawidaBP Ayuda'
+app_name_html: 'MawidaBP <small>Ayuda</small>'
+faq: 'FAQ'
+guides:
+  title: 'Guías'
+  administration: 'Administración'
+  conclusion: 'Conclusión'
+  execution: 'Ejecución'
+  findings: 'Hallazgos'
+  follow_up: 'Seguimiento'
+  planification: 'Planificación'
+  tags: 'Etiquetas'

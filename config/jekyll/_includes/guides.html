@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h3 class="text-muted">{% t guides.title %}</h3>
+</div>
+
+{% sorted_for page in site.pages sort_by:guide_order %}
+  {% if page.guide_order %}
+    {% assign limit = forloop.index0 | modulo:3 %}
+    {% if limit == 0 %}
+    <div class="row">
+    {% endif %}
+      {% capture guide_name %}guides.{{ page.category }}{% endcapture %}
+      <div class="col-md-4">
+        <div class="alert alert-info text-center">
+          <h2>
+            <a class="alert-link" href="/help{{ page.url }}">{% t guide_name %}</a>
+          </h2>
+        </div>
+      </div>
+    {% if limit == 2 or forloop.last %}
+    </div>
+    {% endif %}
+  {% endif %}
+{% endsorted_for %}
