@@ -46,9 +46,7 @@
 <hr />
 
 <div>
-  <div class="pull-right">
-    <%= pagination_links @users %>
-  </div>
+  <%= paginate @users %>
   <%= link_to t('label.new'), new_user_path, class: 'btn btn-primary' %> |
   <%= link_to t('label.download'), export_to_pdf_users_path(
     :search => params[:search], :_ts => Time.now.to_i) %>

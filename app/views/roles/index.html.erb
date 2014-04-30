@@ -23,8 +23,6 @@
 <hr />
 
 <div class="form-actions form-footer">
-  <div class="pull-right">
-    <%= pagination_links(@roles) %>
-  </div>
+  <%= paginate @roles %>
   <%= link_to t('label.new'), new_role_path, class: 'btn btn-primary' %>
 </div>

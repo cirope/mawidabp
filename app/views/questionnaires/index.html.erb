@@ -21,8 +21,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right">
-    <%= pagination_links @questionnaires %>
-  </div>
+  <%= paginate @questionnaires %>
   <%= link_to t('label.new'), new_questionnaire_path, class: 'btn btn-primary' %>
 </div>

@@ -23,8 +23,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right">
-    <%= pagination_links @groups %>
-  </div>
+  <%= paginate @groups %>
   <%= link_to t('label.new'), new_group_path, class: 'btn btn-primary' %>
 </div>

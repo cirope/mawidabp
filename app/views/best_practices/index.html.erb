@@ -23,6 +23,6 @@
 <hr />
 
 <div class="form-actions form-footer">
-  <div class="pull-right"><%= pagination_links @best_practices %></div>
+  <%= paginate @best_practices %>
   <%= link_to t('label.new'), new_best_practice_path, class: 'btn btn-primary' %>
 </div>

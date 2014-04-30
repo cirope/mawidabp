@@ -28,6 +28,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right"><%= pagination_links @plans %></div>
+  <%= paginate @plans %>
   <%= link_to t('label.new'), new_plan_path, class: 'btn btn-primary' %>
 </div>

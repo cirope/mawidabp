@@ -34,9 +34,7 @@
 <hr />
 
 <div>
-  <div class="pull-right">
-    <%= pagination_links @login_records %>
-  </div>
+  <%= paginate @login_records %>
   <%= link_to t('label.back'), :action => :choose %> |
   <%= link_to t('label.download'), :action => :export_to_pdf,
     :range => {:from_date => @from_date, :to_date => @to_date},

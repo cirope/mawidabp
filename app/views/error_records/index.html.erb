@@ -36,9 +36,7 @@
 <hr />
 
 <div>
-  <div class="pull-right">
-    <%= pagination_links @error_records %>
-  </div>
+  <%= paginate @error_records %>
   <%= link_to t('label.back'), :controller => :login_records,
     :action => :choose %> |
   <%= link_to t('label.download'), { :action => :export_to_pdf,

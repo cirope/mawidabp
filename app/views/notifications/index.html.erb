@@ -29,8 +29,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right">
-    <%= pagination_links @notifications %>
-  </div>
+  <%= paginate @notifications %>
   <%= link_to_back %>
 </div>

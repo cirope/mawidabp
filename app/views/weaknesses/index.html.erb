@@ -44,9 +44,7 @@
 <hr />
 
 <div class="form-footer clearfix">
-  <div class="pull-right">
-    <%= pagination_links @weaknesses %>
-  </div>
+  <%= paginate @weaknesses %>
 
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_weakness_path(

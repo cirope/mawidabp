@@ -27,8 +27,6 @@
 <hr />
 
 <div>
-  <div class="pull-right">
-    <%= pagination_links @business_unit_types %>
-  </div>
+  <%= paginate @business_unit_types %>
   <%= link_to t('label.new'), new_business_unit_type_path, class: 'btn btn-primary' %>
 </div>

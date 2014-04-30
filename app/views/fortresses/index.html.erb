@@ -36,7 +36,7 @@
 <hr />
 
 <div class="form-footer clearfix">
-  <div class="pull-right"><%= pagination_links @fortresses %></div>
+  <%= paginate @fortresses %>
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_fortress_path(
       :control_objective_item => params[:control_objective]) %>

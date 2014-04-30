@@ -27,6 +27,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right"><%= pagination_links @periods %></div>
+  <%= paginate @periods %>
   <%= link_to t('label.new'), new_period_path, class: 'btn btn-primary' %>
 </div>

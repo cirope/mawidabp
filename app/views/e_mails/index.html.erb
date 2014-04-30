@@ -28,8 +28,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right">
-    <%= pagination_links @emails %>
-  </div>
+  <%= paginate @emails %>
   <%= link_to_back %>
 </div>

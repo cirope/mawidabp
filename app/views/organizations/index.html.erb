@@ -24,8 +24,6 @@
 <hr />
 
 <div>
-  <div class="pull-right">
-    <%= pagination_links @organizations %>
-  </div>
+  <%= paginate @organizations %>
   <%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>
 </div>

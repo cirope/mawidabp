@@ -136,25 +136,6 @@ module ApplicationHelper
       :style => 'display: none;').html_safe
   end
 
-  # Devuelve el HTML con los links para navegar una lista paginada
-  #
-  # * _objects_:: Objetos con los que se genera la lista paginada
-  def pagination_links(objects)
-    result = will_paginate objects, :inner_window => 1, :outer_window => 1
-
-    result ||= content_tag(
-      :div,
-        content_tag(:span, raw(t('will_paginate.previous_label')),
-        :class => 'disabled prev_page') +
-        content_tag(:em, 1) +
-        content_tag(:span, raw(t('will_paginate.next_label')),
-        :class => 'disabled next_page'),
-      :class => :pagination
-    )
-
-    result
-  end
-
   # Devuelve el nombre de un valor de una lista de opciones para un select.
   #
   # * _options_:: Arreglo con opciones en la forma que las recibe un select

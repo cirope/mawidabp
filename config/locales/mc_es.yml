@@ -1974,7 +1974,7 @@ mc_es:
         audit_type: "Tipo de informe"
         business_unit: "Unidad organizativa"
         period_id: "Periodo"
-        plan_item_id: "Proyecto"
+        plan_item: "Proyecto"
         file_model_id: "Anexos"
         score: "Calificación"
         work_papers: "Papeles de trabajo"
@@ -2311,8 +2311,3 @@ mc_es:
       date: '%d/%m/%Y'
       time: '%H:%M:%S'
       datetime: '%d/%m/%Y %H:%M:%S'
-
-  will_paginate:
-    previous_label: "&laquo; Anterior"
-    next_label: "Siguiente &raquo;"
-    page_gap: "..."

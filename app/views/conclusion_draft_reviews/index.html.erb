@@ -40,6 +40,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right"><%= pagination_links @conclusion_draft_reviews %></div>
+  <%= paginate @conclusion_draft_reviews %>
   <%= link_to t('label.new'), new_conclusion_draft_review_path, class: 'btn btn-primary' %>
 </div>

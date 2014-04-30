@@ -26,6 +26,6 @@
 <hr />
 
 <div class="form-footer">
-  <div class="pull-right"><%= pagination_links @procedure_controls %></div>
+  <%= paginate @procedure_controls %>
   <%= link_to t('label.new'), new_procedure_control_path, class: 'btn btn-primary' %>
 </div>

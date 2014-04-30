@@ -38,10 +38,7 @@
 <hr />
 
 <div class="form-footer clearfix">
-  <div class="pull-right">
-    <%= pagination_links @oportunities %>
-  </div>
-
+  <%= paginate @oportunities %>
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_oportunity_path(
       :control_objective_item => params[:control_objective]), class: 'btn btn-primary' %>
