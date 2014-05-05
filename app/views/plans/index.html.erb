@@ -3,8 +3,8 @@
     <tr>
       <th><%= Period.model_name.human %></th>
       <th><%= Plan.human_attribute_name :created_at %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :start %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :end %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :start %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :end %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -14,8 +14,8 @@
       <tr>
         <td><%= show_period_with_dates_as_abbr plan.period %></td>
         <td><%= l(plan.created_at, :format => :short) %></td>
-        <td class="visible-lg"><%= l(plan.period.start, :format => :short) %></td>
-        <td class="visible-lg"><%= l(plan.period.end, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(plan.period.start, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(plan.period.end, :format => :short) %></td>
         <td><%= link_to_clone new_plan_path(:clone_from => plan.id) %></td>
         <td><%= link_to_show plan %></td>
         <td><%= link_to_edit edit_plan_path(plan) %></td>

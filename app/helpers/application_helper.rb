@@ -176,7 +176,7 @@ module ApplicationHelper
 
     html_classes << (@query.blank? || columns.any?{|c| @columns.include?(c)} ?
       'selected' : 'disabled')
-    html_classes << 'visible-lg' if options['visible-lg']
+    html_classes << 'hidden-xs' if options['hidden-xs']
 
     columns.each do |column|
       content << hidden_field_tag("column_#{column}_for_filter", column)
@@ -190,7 +190,7 @@ module ApplicationHelper
     html_classes = []
 
     html_classes << :not_available unless @query.blank? && @order_by.blank?
-    html_classes << 'visible-lg' if options['visible-lg']
+    html_classes << 'hidden-xs' if options['hidden-xs']
 
     content_tag(:th, title,
       :class => (html_classes.join(' ') unless html_classes.blank?))

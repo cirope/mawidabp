@@ -35,16 +35,16 @@
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review', 'issue_date' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true }, 'project' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'hidden-xs' => true }, 'project' %>
       <%= make_filterable_column Finding.human_attribute_name(:code), nil, 'review_code' %>
-      <%= make_filterable_column Finding.human_attribute_name(:description), { 'visible-lg' => true }, 'description' %>
-      <%= make_not_available_column Finding.human_attribute_name(:state), 'visible-lg' => true %>
+      <%= make_filterable_column Finding.human_attribute_name(:description), { 'hidden-xs' => true }, 'description' %>
+      <%= make_not_available_column Finding.human_attribute_name(:state), 'hidden-xs' => true %>
       <%= make_not_available_column Finding.human_attribute_name(
-          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), 'visible-lg' => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), 'visible-lg' => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:priority), 'visible-lg' => true %>
-      <%= make_not_available_column Finding.human_attribute_name(:finding_answers), 'visible-lg' => true %>
-      <%= make_not_available_column t('finding.has_work_papers'), 'visible-lg' => true %>
+          params[:completed] == 'incomplete' ? :follow_up_date : :solution_date), 'hidden-xs' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk), 'hidden-xs' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:priority), 'hidden-xs' => true %>
+      <%= make_not_available_column Finding.human_attribute_name(:finding_answers), 'hidden-xs' => true %>
+      <%= make_not_available_column t('finding.has_work_papers'), 'hidden-xs' => true %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -55,19 +55,19 @@
         <td><%= finding_updated_at_text finding %></td>
         <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
-        <td class="visible-lg"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
+        <td class="hidden-xs"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
         <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(finding) %></td>
-        <td class="visible-lg"><%= super_truncate(finding.description, 30) %></td>
-        <td class="visible-lg"><%= finding.state_text %></td>
+        <td class="hidden-xs"><%= super_truncate(finding.description, 30) %></td>
+        <td class="hidden-xs"><%= finding.state_text %></td>
         <% if params[:completed] == 'complete' %>
-          <td class="visible-lg"><%= l(finding.solution_date, :format => :short) if finding.solution_date %></td>
+          <td class="hidden-xs"><%= l(finding.solution_date, :format => :short) if finding.solution_date %></td>
         <% else %>
-          <td class="visible-lg"><%= finding_follow_up_date_text(finding) %></td>
+          <td class="hidden-xs"><%= finding_follow_up_date_text(finding) %></td>
         <% end %>
-        <td class="visible-lg"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
-        <td class="visible-lg"><%= finding.respond_to?(:priority_text) ? finding.priority_text : '-' %></td>
-        <td class="visible-lg"><%= show_finding_answers_count(finding) %></td>
-        <td class="visible-lg"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="hidden-xs"><%= finding.respond_to?(:risk_text) ? finding.risk_text : '-' %></td>
+        <td class="hidden-xs"><%= finding.respond_to?(:priority_text) ? finding.priority_text : '-' %></td>
+        <td class="hidden-xs"><%= show_finding_answers_count(finding) %></td>
+        <td class="hidden-xs"><%= t finding.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show finding_path(params[:completed], finding, :user_id => params[:user_id]) %></td>
         <td><%= link_to_edit(edit_finding_path('incomplete', finding, :user_id => params[:user_id])) if finding.pending? && (!@auth_user.can_act_as_audited? || finding.users.reload.include?(@auth_user)) %></td>
       </tr>

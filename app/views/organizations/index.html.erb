@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th><%= Organization.human_attribute_name :name %></th>
-      <th class="visible-lg"><%= Organization.human_attribute_name :prefix %></th>
+      <th class="hidden-xs"><%= Organization.human_attribute_name :prefix %></th>
       <th><%= Organization.human_attribute_name :kind %></th>
       <th colspan="3"></th>
     </tr>
@@ -11,7 +11,7 @@
     <% @organizations.each do |organization| %>
       <tr>
         <td><%= organization.name %></td>
-        <td class="visible-lg"><strong><%= organization.prefix %></strong></td>
+        <td class="hidden-xs"><strong><%= organization.prefix %></strong></td>
         <td><%= t "activerecord.attributes.organization.kind_options.#{organization.kind}" %></td>
         <td><%= link_to_show organization %></td>
         <td><%= link_to_edit edit_organization_path(organization) %></td>

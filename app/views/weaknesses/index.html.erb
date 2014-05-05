@@ -9,14 +9,14 @@
     <tr>
       <th></th>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'visible-lg' => true}, 'project' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'hidden-xs' => true}, 'project' %>
       <%= make_filterable_column Weakness.human_attribute_name(:code), nil, 'review_code' %>
-      <%= make_filterable_column Weakness.human_attribute_name(:description), { 'visible-lg' => true}, 'description' %>
-      <%= make_not_available_column Weakness.human_attribute_name(:state), 'visible-lg' => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), 'visible-lg' => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:risk), 'visible-lg' => true %>
-      <%= make_not_available_column Weakness.human_attribute_name(:priority), 'visible-lg' => true %>
-      <%= make_not_available_column t('finding.has_work_papers'), 'visible-lg' => true %>
+      <%= make_filterable_column Weakness.human_attribute_name(:description), { 'hidden-xs' => true}, 'description' %>
+      <%= make_not_available_column Weakness.human_attribute_name(:state), 'hidden-xs' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:follow_up_date), 'hidden-xs' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:risk), 'hidden-xs' => true %>
+      <%= make_not_available_column Weakness.human_attribute_name(:priority), 'hidden-xs' => true %>
+      <%= make_not_available_column t('finding.has_work_papers'), 'hidden-xs' => true %>
       <th colspan="2" class="text-right"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
   </thead>
@@ -26,14 +26,14 @@
       <tr <%== 'class="text-muted"' if weakness.is_in_a_final_review? %>>
         <td><%= finding_updated_at_text weakness %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr weakness.review %></td>
-        <td class="visible-lg"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
+        <td class="hidden-xs"><%= super_truncate weakness.review.try(:plan_item).try(:project), 20 %></td>
         <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(weakness) %></td>
-        <td class="visible-lg"><%= super_truncate weakness.description, 20 %></td>
-        <td class="visible-lg"><%= weakness.state_text %></td>
-        <td class="visible-lg"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
-        <td class="visible-lg"><%= weakness.risk_text %></td>
-        <td class="visible-lg"><%= weakness.priority_text %></td>
-        <td class="visible-lg"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
+        <td class="hidden-xs"><%= super_truncate weakness.description, 20 %></td>
+        <td class="hidden-xs"><%= weakness.state_text %></td>
+        <td class="hidden-xs"><%= l weakness.follow_up_date, :format => :short if weakness.follow_up_date %></td>
+        <td class="hidden-xs"><%= weakness.risk_text %></td>
+        <td class="hidden-xs"><%= weakness.priority_text %></td>
+        <td class="hidden-xs"><%= t weakness.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show weakness %></td>
         <td><%= link_to_edit edit_weakness_path(weakness) %></td>
       </tr>

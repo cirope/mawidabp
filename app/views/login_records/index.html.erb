@@ -13,8 +13,8 @@
     <tr>
       <%= make_filterable_column User.model_name.human, nil, 'user' %>
       <%= make_not_available_column LoginRecord.human_attribute_name(:start) %>
-      <%= make_not_available_column LoginRecord.human_attribute_name(:end), 'visible-lg' => true %>
-      <%= make_filterable_column LoginRecord.human_attribute_name(:data), { 'visible-lg' => true }, 'data' %>
+      <%= make_not_available_column LoginRecord.human_attribute_name(:end), 'hidden-xs' => true %>
+      <%= make_filterable_column LoginRecord.human_attribute_name(:data), { 'hidden-xs' => true }, 'data' %>
       <th class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -23,8 +23,8 @@
     <tr>
       <td><%= login_record.user.user %></td>
       <td><%= l(login_record.start, :format => :short) if login_record.start %></td>
-      <td class="visible-lg"><%= l(login_record.end, :format => :short) if login_record.end %></td>
-      <td class="visible-lg"><%= super_truncate(login_record.data, 40) %></td>
+      <td class="hidden-xs"><%= l(login_record.end, :format => :short) if login_record.end %></td>
+      <td class="hidden-xs"><%= super_truncate(login_record.data, 40) %></td>
       <td><%= link_to_show login_record %></td>
     </tr>
   <% end %>

@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th><%= Period.model_name.human %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :start %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :end %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :start %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :end %></th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -12,8 +12,8 @@
     <% @procedure_controls.each do |procedure_control| %>
       <tr>
         <td><%= show_period_with_dates_as_abbr procedure_control.period %></td>
-        <td class="visible-lg"><%= l(procedure_control.period.start, :format => :short) %></td>
-        <td class="visible-lg"><%= l(procedure_control.period.end, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(procedure_control.period.start, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(procedure_control.period.end, :format => :short) %></td>
         <td><%= link_to_clone new_procedure_control_path(:clone_from => procedure_control.id) %></td>
         <td><%= link_to_show procedure_control %></td>
         <td><%= link_to_edit edit_procedure_control_path(procedure_control) %></td>

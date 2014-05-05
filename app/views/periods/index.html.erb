@@ -2,9 +2,9 @@
   <thead>
     <tr>
       <th><%= Period.human_attribute_name(:number) %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :description %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :start %></th>
-      <th class="visible-lg"><%= Period.human_attribute_name :end %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :description %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :start %></th>
+      <th class="hidden-xs"><%= Period.human_attribute_name :end %></th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -13,9 +13,9 @@
     <% @periods.each do |period| %>
       <tr>
         <td><%= period.number %></td>
-        <td class="visible-lg"><%= super_truncate period.description, 40 %></td>
-        <td class="visible-lg"><%= l(period.start, :format => :short) %></td>
-        <td class="visible-lg"><%= l(period.end, :format => :short) %></td>
+        <td class="hidden-xs"><%= super_truncate period.description, 40 %></td>
+        <td class="hidden-xs"><%= l(period.start, :format => :short) %></td>
+        <td class="hidden-xs"><%= l(period.end, :format => :short) %></td>
         <td><%= link_to_show period %></td>
         <td><%= link_to_edit edit_period_path(period) %></td>
         <td><%= link_to_destroy period %></td>
