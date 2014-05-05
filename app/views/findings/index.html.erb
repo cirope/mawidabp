@@ -80,21 +80,17 @@
 <div class="form-footer">
   <%= paginate @findings %>
 
-  <%= link_to t('finding.download'),
-    export_to_pdf_findings_path(
-      request.query_parameters.merge(:_ts => Time.now.to_i)
-  ) %> |
-  <%= link_to t('finding.download_detailed'),
-    export_to_pdf_findings_path(
-      request.query_parameters.merge(:_ts => Time.now.to_i, :include_details => 1)
-  ) %> |
-  <%= link_to t('finding.download_xml'),
-    findings_path(
-      request.query_parameters.merge(:_ts => Time.now.to_i, :format => :xml)
-  ) %> |
-  <%= link_to t('finding.download_csv'),
-    export_to_csv_findings_path(
-      request.query_parameters.merge(:format => :csv, :include_details => 1)
+  <%= render('shared/downloads',
+    links: [
+      link_to(t('finding.download'), export_to_pdf_findings_path(
+        request.query_parameters.merge(:_ts => Time.now.to_i))),
+      link_to(t('finding.download_detailed'), export_to_pdf_findings_path(
+        request.query_parameters.merge(:_ts => Time.now.to_i, :include_details => 1))),
+      link_to(t('finding.download_xml'), findings_path(
+        request.query_parameters.merge(:_ts => Time.now.to_i, :format => :xml))),
+      link_to(t('finding.download_csv'), export_to_csv_findings_path(
+        request.query_parameters.merge(:format => :csv, :include_details => 1)))
+    ]
   ) %>
 </div>
 

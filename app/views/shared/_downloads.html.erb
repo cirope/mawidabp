@@ -1,0 +1,12 @@
+<% links = links || [] %>
+<div class="dropdown dropup inline">
+  <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
+    <%= t('label.downloads') %>
+    <span class="caret"></span>
+  <% end %>
+  <ul class="dropdown-menu">
+    <% links.each do |link| %>
+      <li><%= link %></li>
+    <% end %>
+  </ul>
+</div>

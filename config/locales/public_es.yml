@@ -42,7 +42,7 @@ public_es:
     search: "Buscar"
     send: "Enviar"
     show: "Ver"
-    show_downloads: "Ver descargas"
+    downloads: "Descargas"
     update: "Actualizar"
     without_data: "Sin datos"
 

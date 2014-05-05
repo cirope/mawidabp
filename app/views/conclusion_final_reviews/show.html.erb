@@ -139,30 +139,27 @@ end %>
 
 <div class="form-footer">
   <%= link_to_edit edit_conclusion_final_review_path(@conclusion_final_review) %> |
-  <%= link_to t('label.list'), conclusion_final_reviews_path %> |
-  <div class="dropdown dropup inline">
-    <%= link_to '#', class: 'dropdown-toggle', data: { toggle: 'dropdown' } do %>
-      <%= t('label.show_downloads') %>
-      <span class="caret"></span>
-    <% end %>
-    <ul class="dropdown-menu">
-      <li><%= link_to t('label.download'), :action => :export_to_pdf,
-        :id => @conclusion_final_review, :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
+  <%= link_to_index conclusion_final_reviews_path %> |
+  <%= render('shared/downloads',
+    links: [
+      link_to(t('label.download'), :action => :export_to_pdf,
+        :id => @conclusion_final_review, :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_without_control_objectives_excluded_from_score'),
         :action => :export_to_pdf, :id => @conclusion_final_review,
         :export_options => {:hide_control_objectives_excluded_from_score => '1'},
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.generate_score_sheet'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.generate_score_sheet'),
         :action => :score_sheet, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.generate_global_score_sheet'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.generate_global_score_sheet'),
         :action => :score_sheet, :id => @conclusion_final_review, :global => 1,
-        :_ts => Time.now.to_i %></li>
-      <li><%= link_to t('conclusion_final_review.download_work_papers'),
+        :_ts => Time.now.to_i),
+      link_to(t('conclusion_final_review.download_work_papers'),
         :action => :download_work_papers, :id => @conclusion_final_review,
-        :_ts => Time.now.to_i %></li>
-    </ul>
-  </div> |
+        :_ts => Time.now.to_i)
+    ]
+  ) %>
+  <span>|</span>
   <%= link_to t('conclusion_final_review.create_bundle'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %> |
   <%= link_to_back %>
