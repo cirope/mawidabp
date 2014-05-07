@@ -37,24 +37,18 @@
         <%= f.input :survey, label: Review.human_attribute_name(:survey),
           input_html: { readonly: readonly, rows: 5 } %>
         <% f.object.build_file_model unless f.object.file_model %>
+        <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
         <%= f.simple_fields_for :file_model do |fm_f| %>
           <div class="row">
-            <div class="col-md-11">
-              <% if readonly %>
-                <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
-              <% else %>
-                <%= fm_f.label :file, Review.human_attribute_name('file_model_id') %>
-                <%= fm_f.input :file, label: false, input_html: { class: 'file' } %>
-                <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-              <% end %>
+            <div class="col-md-2">
+              <span class="file_container">
+                <%= link_to_upload(fm_f.object) %>
+                <%= fm_f.input :file, label: false, input_html: { style: 'display: none;' } %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+              </span>
             </div>
-            <div class="col-md-1">
-              <div class="show_hide">
-                <% if f.object.file_model.try(:file?) && !f.object.file_model.new_record? %>
-                  <%= link_to_download f.object.file_model.file.url %>
-                  <%= link_to_delete_attachment fm_f, :file unless readonly %>
-                <% end %>
-              </div>
+            <div class="col-md-2">
+              <%= link_to_download f.object %>
             </div>
           </div>
         <% end %>

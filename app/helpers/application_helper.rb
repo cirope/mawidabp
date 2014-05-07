@@ -210,20 +210,6 @@ module ApplicationHelper
       :style => 'display: none;')
   end
 
-  # Devuelve el HTML de un vínculo para descargar algo relacionado a un ítem.
-  #
-  # * <em>*args</em>:: Las mismas opciones que link_to sin la etiqueta
-  def link_to_download(*args)
-    options = {:label => t('label.download')}
-    html_options = {:class => :image_link}
-    options.merge!(args.shift) if args.first.kind_of?(Hash)
-    html_options.merge!(args.pop) if args.last.kind_of?(Hash)
-
-    link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-download-alt',
-      title: options.delete(:label)),
-      *(args.empty? ? [options, html_options] : args << html_options))
-  end
-
   # Devuelve el HTML de un control para mostrar y ocultar el contenido de un
   # contenedor.
   #

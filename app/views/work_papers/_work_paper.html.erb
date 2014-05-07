@@ -16,26 +16,20 @@
       <%= f.input :description, label: false, input_html: { rows: 1 } %>
     </div>
     <div class="col-md-2">
-      <% if !f.object.file_model.try(:file?) || f.object.file_model.new_record? %>
-        <% f.object.build_file_model unless f.object.file_model.try(:new_record?) %>
-        <%= f.simple_fields_for :file_model do |fm_f| %>
-          <%= fm_f.input :file, label: false %>
-          <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-        <% end %>
-      <% else %>
-        <% unless frozen %>
-          <%= f.simple_fields_for :file_model do |fm_f| %>
-            <%= fm_f.input :file, label: false %>
-            <%= fm_f.input :file_cache, as: :hidden, input_html: { title: fm_f.object.identifier } %>
-          <% end %>
+      <% unless frozen %>
+        <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
+          <span class="file_container pull-left" style="margin-right: 15px;">
+            <%= link_to_upload(fm_f.object) %>
+            <%= fm_f.input :file, label: false, input_html: { style: 'display: none;' } %>
+            <%= fm_f.input :file_cache, as: :hidden %>
+          </span>
         <% end %>
       <% end %>
+      <%= link_to_download f.object %>
     </div>
     <div class="col-md-1">
       <div class="show_hide">
         <%= f.input :lock_version, as: :hidden %>
-        <%= link_to_download f.object.file_model.file.url if f.object.file_model.file? &&
-          f.object.file_model.file.cached?.blank? %>
         <%= link_to_remove_nested_item(f) unless frozen %>
       </div>
     </div>

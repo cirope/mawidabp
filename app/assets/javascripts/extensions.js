@@ -16,9 +16,9 @@ Number.prototype.rnd = function() {
 
 Number.prototype.toPaddedString = function(length) {
   var string = this.toString(10);
-  
+
   while (string.length < length) { string = '0' + string; }
-  
+
   return string;
 }
 

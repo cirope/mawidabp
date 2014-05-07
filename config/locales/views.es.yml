@@ -12,6 +12,8 @@ es: &common
     show: 'Ver'
     back: 'Volver'
     copy: 'Copiar'
+    download: 'Descargar'
+    upload: 'Adjuntar'
 
   sessions:
     new:
