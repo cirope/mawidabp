@@ -275,7 +275,7 @@ module ApplicationHelper
 
     out << fields.hidden_field(:_destroy, :class => 'destroy',
       :value => fields.object.marked_for_destruction? ? 1 : 0) unless new_record
-    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'),
+    out << link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove-circle'),
       '#', link_options.merge(options))
   end
 
