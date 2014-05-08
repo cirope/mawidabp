@@ -73,7 +73,7 @@ class FindingsController < ApplicationController
         end
       } # index.html.erb
       format.xml  {
-        headers['Cache-Control'] = "max-age=1"
+        set_file_download_headers
         headers['Content-disposition'] = "attachment; filename=#{@title.underscore.sanitized_for_filename}.xml"
         render :xml => @findings
       }
@@ -214,8 +214,7 @@ class FindingsController < ApplicationController
 
 
     respond_with findings do |format|
-      headers['Cache-Control'] = "max-age=1"
-
+      set_file_download_headers
       format.csv { render :csv => parsed_cells, :filename => t('finding.csv_name') }
     end
   end

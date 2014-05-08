@@ -181,6 +181,14 @@ class ApplicationControllerTest < ActionController::TestCase
     assert_equal expected_search_string, generated_search_string
   end
 
+  test 'set file download headers' do
+    assert_nil response.headers['Cache-Control']
+
+    @controller.send :set_file_download_headers
+
+    assert_equal 'private, no-store', response.headers['Cache-Control']
+  end
+
   private
 
   def login_admin
