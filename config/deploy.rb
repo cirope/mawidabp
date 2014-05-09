@@ -14,7 +14,7 @@ set :linked_files, %w{config/application.yml}
 set :linked_dirs, %w{log private}
 
 set :rbenv_type, :user
-set :rbenv_ruby, '2.1.1'
+set :rbenv_ruby, '2.1.2'
 
 set :keep_releases, 5
 
