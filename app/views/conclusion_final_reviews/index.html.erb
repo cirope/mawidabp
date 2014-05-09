@@ -14,7 +14,7 @@
       <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'hidden-xs' => true }, 'project' %>
       <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), { 'hidden-xs' => true }, 'issue_date' %>
       <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), { 'hidden-xs' => true }, 'close_date' %>
-      <%= make_not_available_column Review.human_attribute_name(:score) %>
+      <%= make_not_available_column Review.human_attribute_name(:score), { 'hidden-xs' => true } %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
