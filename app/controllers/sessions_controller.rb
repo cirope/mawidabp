@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
 
     if current_organization || @group_admin_mode
       conditions = ["LOWER(#{User.table_name}.user) = :user"]
-      parameters = {user: @user.user.downcase}
+      parameters = { user: @user.user.downcase.strip }
 
       if @group_admin_mode
         conditions << "#{User.table_name}.group_admin = :true"
