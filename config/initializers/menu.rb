@@ -57,19 +57,19 @@ APP_AUDITOR_MENU_ITEMS = [
       MenuItem.new(
         :security,
         :order => 2,
-        :url => {:controller => :login_records, :action => :choose},
+        :url => {:controller => :users},
         :children => [
           MenuItem.new(
-            :reports,
-            :order => 1,
-            :controllers => [:error_records, :login_records, :versions],
-            :url => {:controller => :login_records, :action => :choose}
-          ),
-          MenuItem.new(
             :users,
-            :order => 2,
+            :order => 1,
             :controllers => :users,
             :url => {:controller => :users}
+          ),
+          MenuItem.new(
+            :reports,
+            :order => 2,
+            :controllers => [:error_records, :login_records, :versions],
+            :url => {:controller => :login_records, :action => :choose}
           ),
           MenuItem.new(
             :roles,
@@ -366,19 +366,19 @@ APP_AUDITOR_QM_MENU_ITEMS = [
       MenuItem.new(
         :security,
         :order => 2,
-        :url => {:controller => :login_records, :action => :choose},
+        :url => {:controller => :users},
         :children => [
           MenuItem.new(
-            :reports,
-            :order => 1,
-            :controllers => [:error_records, :login_records, :versions],
-            :url => {:controller => :login_records, :action => :choose}
-          ),
-          MenuItem.new(
             :users,
-            :order => 2,
+            :order => 1,
             :controllers => :users,
             :url => {:controller => :users}
+          ),
+          MenuItem.new(
+            :reports,
+            :order => 2,
+            :controllers => [:error_records, :login_records, :versions],
+            :url => {:controller => :login_records, :action => :choose}
           ),
           MenuItem.new(
             :roles,

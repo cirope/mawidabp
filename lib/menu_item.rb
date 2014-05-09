@@ -8,7 +8,7 @@ class MenuItem
   def initialize(name = nil, options = {})
     options.assert_valid_keys(:order, :controllers, :children, :url, :class,
       :extra_conditions, :exclude_from_privileges)
-    
+
     @name = name
     @order = options[:order] || 0
     @base_controllers = options[:controllers] || []
