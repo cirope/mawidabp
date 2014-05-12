@@ -173,7 +173,7 @@ class PotentialNonconformitiesController < ApplicationController
       params.require(:potential_nonconformity).permit(
         :control_objective_item_id, :review_code, :description, :answer, :audit_comments,
         :cause_analysis, :cause_analysis_date, :correction, :correction_date,
-        :state, :follow_up_date, :solution_date, :lock_version, :repeated_of_id,
+        :state, :follow_up_date, :origination_date, :solution_date, :lock_version, :repeated_of_id,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],
