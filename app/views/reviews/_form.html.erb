@@ -40,12 +40,9 @@
         <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
         <%= f.simple_fields_for :file_model do |fm_f| %>
           <div class="row">
-            <div class="col-md-2">
-              <span class="file_container">
-                <%= link_to_upload(fm_f.object) %>
-                <%= fm_f.input :file, label: false, input_html: { style: 'display: none;' } %>
-                <%= fm_f.input :file_cache, as: :hidden %>
-              </span>
+            <div class="col-md-10">
+              <%= fm_f.input :file, label: false %>
+              <%= fm_f.input :file_cache, as: :hidden %>
             </div>
             <div class="col-md-2">
               <%= link_to_download f.object %>
