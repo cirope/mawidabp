@@ -26,7 +26,7 @@
       <%= hidden_field_tag "user[#{id}][id]", user.id %>
       <div class="col-md-4">
         <% if user.can_act_as_audited? %>
-          <%= select_tag "user[#{id}]", options_from_collection_for_select(
+          <%= select_tag "user[#{id}][questionnaire_id]", options_from_collection_for_select(
             @questionnaires, :id, :name), prompt: t('label.no'), class: 'form-control' %>
         <% else %>
           &nbsp;

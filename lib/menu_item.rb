@@ -38,7 +38,7 @@ class MenuItem
 
       @ancestors << item = item.parent while item.parent
     end
-    
+
     @ancestors
   end
 
