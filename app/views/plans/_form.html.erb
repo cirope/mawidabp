@@ -79,11 +79,13 @@
   <% end %>
 
   <% if @plan.has_duplication? %>
-    <%= f.input :allow_duplication, as: :boolean %>
+    <%= f.input :allow_duplication, as: :boolean, label: false,
+      inline_label: t('plan.allow_duplication') %>
   <% end %>
 
   <% if @plan.overloaded? %>
-    <%= f.input :allow_overload, as: :boolean %>
+    <%= f.input :allow_overload, as: :boolean,
+      label: false, inline_label: t('plan.allow_overload') %>
   <% end %>
 
   <hr />
