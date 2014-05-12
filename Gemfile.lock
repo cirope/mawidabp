@@ -195,7 +195,7 @@ GEM
     tilt (1.4.1)
     timecop (0.7.1)
     timeliness (0.3.7)
-    tins (1.1.0)
+    tins (1.2.0)
     toml (0.1.1)
       parslet (~> 1.5.0)
     treetop (1.4.15)
