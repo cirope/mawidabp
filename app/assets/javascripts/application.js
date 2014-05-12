@@ -25,4 +25,3 @@
 //= require form_modification
 //= require validation
 //= require ui
-//= require file_input
