@@ -78,14 +78,26 @@
     </div>
   <% end %>
 
-  <% if @plan.has_duplication? %>
-    <%= f.input :allow_duplication, as: :boolean, label: false,
-      inline_label: t('plan.allow_duplication') %>
-  <% end %>
-
-  <% if @plan.overloaded? %>
-    <%= f.input :allow_overload, as: :boolean,
-      label: false, inline_label: t('plan.allow_overload') %>
+  <% if @plan.has_duplication? || @plan.overloaded? %>
+    <br/>
+    <div class="row">
+      <% if @plan.has_duplication? %>
+        <div class="col-md-6">
+          <div class="alert alert-sm alert-danger">
+            <%= f.input :allow_duplication, as: :boolean, label: false,
+              inline_label: t('plan.allow_duplication') %>
+          </div>
+        </div>
+      <% end %>
+      <% if @plan.overloaded? %>
+        <div class="col-md-6">
+          <div class="alert alert-sm alert-danger">
+            <%= f.input :allow_overload, as: :boolean, label: false,
+              inline_label: t('plan.allow_overload') %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 
   <hr />
@@ -93,8 +105,8 @@
   <div class="form-actions form-footer">
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
-    <%= f.input :business_unit_type, as: :hidden, input_html: { value: params[:business_unit_type] } %>
-    <%= f.input :clone_from, as: :hidden, input_html: { value: params[:clone_from] } %>
+    <%= hidden_field_tag :business_unit_type, params[:business_unit_type] %>
+    <%= hidden_field_tag :clone_from, params[:clone_from] %>
     <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
