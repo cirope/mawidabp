@@ -38,14 +38,16 @@
     </div>
   </div>
 </fieldset>
-<script type="text/javascript">
-  (function() {
-    var id = '#<%= id %>';
+<% if f.object.new_record? %>
+  <script type="text/javascript">
+    (function() {
+      var id = '#<%= id %>';
 
-    if(lastWorkPaperCode) {
-      lastWorkPaperCode = lastWorkPaperCode.next(2);
+      if(lastWorkPaperCode) {
+        lastWorkPaperCode = lastWorkPaperCode.next(2);
 
-      $(id).find('.work_paper_code').val(lastWorkPaperCode);
-    }
-  })();
-</script>
+        $(id).find('.work_paper_code').val(lastWorkPaperCode);
+      }
+    })();
+  </script>
+<% end %>
