@@ -23,15 +23,20 @@
     <div class="col-md-2">
       <% if !finding_answer.file_model.try(:file?) || finding_answer.file_model.new_record? %>
         <% if finding_answer.new_record? %>
-          <% finding_answer.build_file_model unless finding_answer.file_model.try(:new_record?) %>
-          <%= f.simple_fields_for :file_model do |fm_f| %>
-            <%= fm_f.input :file, label: false %>
-            <%= fm_f.input :file_cache, as: :hidden %>
+          <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
+            <div class="file_container pull-left">
+              <%= link_to_upload(fm_f.object) %>
+              <% unless fm_f.object.file_cache %>
+                <%= fm_f.input :file, label: false %>
+              <% else %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+              <% end %>
+            </div>
           <% end %>
         <% else %>
           ---
         <% end %>
-      <% elsif finding_answer.file_model.try(:file?) %>
+      <% else %>
         <%= link_to_download finding_answer %>
       <% end %>
     </div>

@@ -489,8 +489,8 @@ class Finding < ActiveRecord::Base
     :inverse_of => :finding
   has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
 
-  accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
-    reject_if: ->(attributes) { attributes['answer'].blank? }
+  accepts_nested_attributes_for :finding_answers, allow_destroy: false,
+    reject_if: :finding_answers_blank
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
@@ -1675,27 +1675,33 @@ class Finding < ActiveRecord::Base
 
   private
 
-  def self.to_csv(detailed = false, completed = 'incomplete')
-    column_headers = [
-      "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
-      Weakness.human_attribute_name(:review_code),
-      Weakness.human_attribute_name(:state),
-      Weakness.human_attribute_name(:risk),
-      Weakness.human_attribute_name(:priority),
-      I18n.t('finding.audited', :count => 0),
-      Finding.human_attribute_name(:description),
-      ControlObjectiveItem.human_attribute_name(:control_objective_text),
-      (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
-      Finding.human_attribute_name(:origination_date),
-      (Finding.human_attribute_name((completed == 'incomplete') ?
-        :follow_up_date : :solution_date))
-    ]
+    def self.to_csv(detailed = false, completed = 'incomplete')
+      column_headers = [
+        "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
+        Weakness.human_attribute_name(:review_code),
+        Weakness.human_attribute_name(:state),
+        Weakness.human_attribute_name(:risk),
+        Weakness.human_attribute_name(:priority),
+        I18n.t('finding.audited', :count => 0),
+        Finding.human_attribute_name(:description),
+        ControlObjectiveItem.human_attribute_name(:control_objective_text),
+        (I18n.t('weakness.previous_follow_up_dates') + " (#{Finding.human_attribute_name(:rescheduled)})"),
+        Finding.human_attribute_name(:origination_date),
+        (Finding.human_attribute_name((completed == 'incomplete') ?
+          :follow_up_date : :solution_date))
+      ]
 
-    if detailed
-      column_headers << Finding.human_attribute_name(:audit_comments)
-      column_headers << Finding.human_attribute_name(:answer)
+      if detailed
+        column_headers << Finding.human_attribute_name(:audit_comments)
+        column_headers << Finding.human_attribute_name(:answer)
+      end
+
+      column_headers
     end
 
-    column_headers
-  end
+    def finding_answers_blank(attrs)
+      attrs['answer'].blank? && attrs['file_model_attributes'] &&
+        attrs['file_model_attributes']['file'].blank? &&
+        attrs['file_model_attributes']['file_cache'].blank?
+    end
 end

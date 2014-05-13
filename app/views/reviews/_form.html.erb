@@ -38,17 +38,19 @@
           input_html: { readonly: readonly, rows: 5 } %>
         <% f.object.build_file_model unless f.object.file_model %>
         <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
-        <%= f.simple_fields_for :file_model do |fm_f| %>
-          <div class="row">
-            <div class="col-md-10">
-              <%= fm_f.input :file, label: false %>
-              <%= fm_f.input :file_cache, as: :hidden %>
+        <div class="clearfix">
+          <%= f.simple_fields_for :file_model do |fm_f| %>
+            <div class="file_container pull-left">
+              <%= link_to_upload(fm_f.object) %>
+              <% unless fm_f.object.file_cache %>
+                <%= fm_f.input :file, label: false %>
+              <% else %>
+                <%= fm_f.input :file_cache, as: :hidden %>
+              <% end %>
             </div>
-            <div class="col-md-2">
-              <%= link_to_download f.object %>
-            </div>
-          </div>
-        <% end %>
+          <% end %>
+          <%= link_to_download f.object %>
+        </div>
         <p>
           <%= link_to_unless @review.new_record?, t('review.survey.download'),
             :action => :survey_pdf, :id => @review, :_ts => Time.now.to_i %>

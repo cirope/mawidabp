@@ -21,7 +21,7 @@ module FileModelHelper
       options = { class: 'glyphicon-file', title: model.identifier.titleize }
     end
 
-    link_to '#', class: 'btn btn-default file', title: options[:title] do
+    content_tag :span, class: 'btn btn-default file', title: options[:title] do
       content_tag(:span, nil, class: "icon glyphicon #{options[:class]}")
     end
   end
