@@ -289,10 +289,14 @@ class PollsController < ApplicationController
         from_date: @from_date.to_formatted_s(:db),
         to_date: @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
-    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
+    @report_path = Prawn::Document.relative_path(t('poll.summary_pdf_name',
         from_date: @from_date.to_formatted_s(:db),
         to_date: @to_date.to_formatted_s(:db)), 'summary_by_questionnaire', 0)
 
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js   { render 'shared/pdf_report' }
+    end
   end
 
   def summary_by_answers
@@ -416,10 +420,14 @@ class PollsController < ApplicationController
     pdf.custom_save_as(t('poll.summary_pdf_name',
       from_date: @from_date.to_formatted_s(:db),
       to_date: @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
-    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
+    @report_path = Prawn::Document.relative_path(t('poll.summary_pdf_name',
       from_date: @from_date.to_formatted_s(:db),
       to_date: @to_date.to_formatted_s(:db)), 'summary_by_answers', 0)
 
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js   { render 'shared/pdf_report' }
+    end
   end
 
   def summary_by_business_unit
@@ -598,10 +606,14 @@ class PollsController < ApplicationController
         from_date: @from_date.to_formatted_s(:db),
         to_date: @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
-    redirect_to Prawn::Document.relative_path(t('poll.summary_pdf_name',
+    @report_path = Prawn::Document.relative_path(t('poll.summary_pdf_name',
         from_date: @from_date.to_formatted_s(:db),
         to_date: @to_date.to_formatted_s(:db)), 'summary_by_business_unit', 0)
 
+    respond_to do |format|
+      format.html { redirect_to @report_path }
+      format.js   { render 'shared/pdf_report' }
+    end
   end
 
   def import_csv_customers
