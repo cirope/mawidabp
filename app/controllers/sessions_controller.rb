@@ -2,22 +2,15 @@ class SessionsController < ApplicationController
   before_action :auth, only: [:destroy]
   before_action :set_admin_mode, only: [:new, :create]
 
-  layout ->(controller) { controller.request.xhr? ? false : 'application' }
-
   def new
-    auth_user = User.find(session[:user_id]) if session[:user_id]
+    redirect_to welcome_url if auth && @auth_user
 
-    if auth_user.try(:is_enable?) && auth_user.logged_in?
-      redirect_to welcome_url
-    else
-      @title = t 'user.login_title'
-      @user = User.new
-    end
+    @title = t 'user.login_title'
   end
 
   def create
     @title = t 'user.login_title'
-    @user = User.new(user_params)
+    @user = User.new user: params[:user], password: params[:password]
 
     if current_organization || @group_admin_mode
       conditions = ["LOWER(#{User.table_name}.user) = :user"]
@@ -52,8 +45,7 @@ class SessionsController < ApplicationController
         record = LoginRecord.list.new(user: auth_user, request: request)
 
         if record.save
-          days_for_password_expiration =
-            auth_user.days_for_password_expiration
+          days_for_password_expiration = auth_user.days_for_password_expiration
 
           if days_for_password_expiration
             flash.notice = t(days_for_password_expiration >= 0 ?
@@ -141,10 +133,6 @@ class SessionsController < ApplicationController
   end
 
   private
-    def user_params
-      params.require(:user).permit(:user, :password)
-    end
-
     def set_admin_mode
       @group_admin_mode = APP_ADMIN_PREFIXES.include?(request.subdomains.first)
     end

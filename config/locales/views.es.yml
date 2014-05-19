@@ -20,6 +20,7 @@ es: &common
       title: 'Ingreso'
       log_in: 'Ingresar'
       email: 'Correo'
+      user: 'Usuario'
       password: 'Contraseña'
       remember_me: 'Recordarme'
       forgot_password: '¿Olvidaste tu contraseña?'
