@@ -266,7 +266,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   private
-  
+
   def destroy_file_model
     file_model.try(:destroy!)
   end
