@@ -1,9 +1,9 @@
 class SessionsController < ApplicationController
   before_action :auth, only: [:destroy]
-  before_action :set_admin_mode, only: [:new, :create]
+  before_action :set_group_admin_mode, :set_valid_user, only: [:create]
 
   def new
-    redirect_to welcome_url if auth && @auth_user
+    redirect_to welcome_url if @auth_user
 
     @title = t 'user.login_title'
   end
@@ -12,57 +12,42 @@ class SessionsController < ApplicationController
     @title = t 'user.login_title'
     @user = User.new user: params[:user], password: params[:password]
 
-    if current_organization || @group_admin_mode
-      conditions = ["LOWER(#{User.table_name}.user) = :user"]
-      parameters = { user: @user.user.downcase.strip }
+    if current_organization || @group_admin
+      if @valid_user
+        @user.salt = @valid_user.salt
+        @user.encrypt_password
 
-      if @group_admin_mode
-        conditions << "#{User.table_name}.group_admin = :true"
-        parameters[:true] = true
-      else
-        conditions << "#{Organization.table_name}.id = :organization_id"
-        parameters[:organization_id] = current_organization.id
-      end
+        if !@group_admin && auth_user.must_change_the_password?
+          session[:user_id] = auth_user.id
+          flash.notice ||= t 'message.must_change_the_password'
+          session[:go_to] = edit_password_user_url(auth_user)
+        elsif !@group_admin_mode && auth_user.expired?
+          auth_user.is_an_important_change = false
+          auth_user.update(enable: false)
+        end
 
-      auth_user = User.includes(:organizations).where(
-        conditions.join(' AND '), parameters
-      ).references(:organizations).first
+        if !@group_admin_mode && auth_user.is_enable? && !auth_user.hidden &&
+            @user.password_was_encrypted && auth_user.password == @user.password
+          record = LoginRecord.list.new(user: auth_user, request: request)
 
-      @user.salt = auth_user.salt if auth_user
-      @user.encrypt_password
+          if record.save
+            days_for_password_expiration = auth_user.days_for_password_expiration
 
-      if !@group_admin_mode && auth_user && auth_user.must_change_the_password?
-        session[:user_id] = auth_user.id
-        flash.notice ||= t 'message.must_change_the_password'
-        session[:go_to] = edit_password_user_url(auth_user)
-      elsif !@group_admin_mode && auth_user && auth_user.expired?
-        auth_user.is_an_important_change = false
-        auth_user.update(enable: false)
-      end
+            if days_for_password_expiration
+              flash.notice = t(days_for_password_expiration >= 0 ?
+                  'message.password_expire_in_x' :
+                  'message.password_expired_x_days_ago',
+                count: days_for_password_expiration.abs)
+            end
 
-      if !@group_admin_mode && auth_user && auth_user.is_enable? && !auth_user.hidden &&
-          @user.password_was_encrypted && auth_user.password == @user.password
-        record = LoginRecord.list.new(user: auth_user, request: request)
+            unless auth_user.allow_concurrent_access?
+              auth_user = nil
+              @user = User.new
+              flash.alert = t 'message.you_are_already_logged'
 
-        if record.save
-          days_for_password_expiration = auth_user.days_for_password_expiration
+              render action: :new
+            end
 
-          if days_for_password_expiration
-            flash.notice = t(days_for_password_expiration >= 0 ?
-                'message.password_expire_in_x' :
-                'message.password_expired_x_days_ago',
-              count: days_for_password_expiration.abs)
-          end
-
-          unless auth_user.allow_concurrent_access?
-            auth_user = nil
-            @user = User.new
-            flash.alert = t 'message.you_are_already_logged'
-
-            render action: :new
-          end
-
-          if auth_user
             session[:last_access] = Time.now
             auth_user.logged_in!(session[:last_access])
             session[:user_id] = auth_user.id
@@ -76,14 +61,14 @@ class SessionsController < ApplicationController
 
             redirect_to go_to
           end
-        end
-      elsif @group_admin_mode && auth_user.try(:is_group_admin?) &&
-          auth_user.password == @user.password
-        session[:last_access] = Time.now
-        auth_user.logged_in!(session[:last_access])
-        session[:user_id] = auth_user.id
+        elsif @group_admin_mode && auth_user.is_group_admin? &&
+            auth_user.password == @user.password
+          session[:last_access] = Time.now
+          auth_user.logged_in!(session[:last_access])
+          session[:user_id] = auth_user.id
 
-        redirect_to groups_url
+          redirect_to groups_url
+        end
       else
         if (user = User.find_by(user: @user.user))
           ErrorRecord.list.create(
@@ -133,7 +118,23 @@ class SessionsController < ApplicationController
   end
 
   private
-    def set_admin_mode
-      @group_admin_mode = APP_ADMIN_PREFIXES.include?(request.subdomains.first)
+    def valid_user
+      conditions = ["LOWER(#{User.table_name}.user) = :user"]
+      parameters = { user: params[:user].to_s.downcase.strip }
+
+      if group_admin_mode
+        conditions << "#{User.table_name}.group_admin = :true"
+        parameters[:true] = true
+      else
+        conditions << "#{Organization.table_name}.id = :organization_id"
+        parameters[:organization_id] = current_organization.id
+      end
+
+      @valid_user = User.includes(:organizations).where(conditions.join(' AND '), parameters).
+        references(:organizations).first
+    end
+
+    def set_group_admin_mode
+      @group_admin = APP_ADMIN_PREFIXES.include?(request.subdomains.first)
     end
 end
