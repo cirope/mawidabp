@@ -1,6 +1,4 @@
 <%= simple_form_for @organization do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
-
   <div class="row">
     <div class="col-md-6">
       <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
@@ -10,9 +8,18 @@
       <% end %>
       <%= kind_field f %>
       <% unless @organization.new_record? %>
+        <h5>
+          <strong><%= Organization.human_attribute_name 'image_model' %></strong>
+        </h5>
+        <p>
+          <%= organization_image_tag if @organization.image_model && !@organization.image_model.image_cache %>
+        </p>
         <% @organization.build_image_model unless @organization.image_model %>
         <%= f.simple_fields_for :image_model do |im_f| %>
-          <%= im_f.input :image, label: Organization.human_attribute_name(:image_model) %>
+          <div class="file_container pull-left">
+            <%= link_to_upload(im_f.object) %>
+            <%= im_f.input :image, label: false %>
+          </div>
         <% end %>
       <% else %>
         <div class="alert alert-warning">

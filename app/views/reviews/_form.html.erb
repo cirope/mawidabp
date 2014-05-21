@@ -19,7 +19,7 @@
         <% end %>
         <% if @review.new_record? %>
           <div class="form-group">
-            <%= f.label :plan_item_id %>
+            <%= f.label :plan_item %>
             <%= review_plan_item_field(f, readonly) %>
           </div>
         <% else %>

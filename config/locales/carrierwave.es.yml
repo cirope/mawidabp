@@ -1,0 +1,14 @@
+es: &common
+  errors:
+    messages:
+      carrierwave_processing_error: 'No se puede cambiar el tamaño de la imagen'
+      carrierwave_integrity_error: 'No es una imagen'
+      carrierwave_download_error: 'No se ha podido descargar la imagen'
+      extension_white_list_error: 'No pueden subir archivos con extensión %{extension}, extensiones permitidas: %{allowed_types}'
+      extension_black_list_error: 'No pueden subir archivos con extensión %{extension}, extensiones no permitidas: %{prohibited_types}'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common
