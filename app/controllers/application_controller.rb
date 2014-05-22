@@ -26,6 +26,14 @@ class ApplicationController < ActionController::Base
       Organization.current_id = current_organization.try(:id)
     end
 
+    def set_locales
+      I18n.locale = case current_organization.try(:kind)
+        when 'public' then 'public_es'
+        when 'management_control' then 'mc_es'
+        else 'es'
+      end
+    end
+
     def load_user
       if @auth_user.nil? && session[:user_id]
         @auth_user = User.includes(
@@ -46,14 +54,7 @@ class ApplicationController < ActionController::Base
       action = (params[:action] || 'none').to_sym
 
       if login_check
-        case current_organization.try(:kind)
-        when 'public'
-          I18n.locale = :public_es
-        when 'management_control'
-          I18n.locale = :mc_es
-        else
-          I18n.locale = :es
-        end
+        set_locales
         check_access_time
 
         session[:back_to] = nil if action == :index
