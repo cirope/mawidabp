@@ -57,8 +57,8 @@
             <%= c_f.input :user_id, as: :hidden %>
           <% end %>
         <% end %>
-        <%= f.input :origination_date, as: :string, label: Finding.human_attribute_name(:origination_date), input_html: {
-          value: (l(@finding.origination_date, format: :short) if @finding.origination_date), readonly: true } %>
+        <%= f.input :origination_date, as: :date_picker,
+          label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <% if current_organization.kind.eql?('quality_management') &&
           (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
           <%= f.input :correction %>

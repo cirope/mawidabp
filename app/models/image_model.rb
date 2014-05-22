@@ -37,6 +37,10 @@ class ImageModel < ActiveRecord::Base
     version ? image.send(version) : image
   end
 
+  def identifier
+    self.image_file_name
+  end
+
   def update_image_attributes
     if image.present? && image_file_name_changed?
       self.image_content_type = image.file.content_type

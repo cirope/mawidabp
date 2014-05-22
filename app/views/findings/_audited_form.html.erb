@@ -37,8 +37,8 @@
           <%= f.label :state, Finding.human_attribute_name(:state) %>
           <%= finding_status_field(f, true, true) %>
         <% end %>
-        <%= f.input :origination_date, as: :string, label: Finding.human_attribute_name(:origination_date), input_html: {
-          value: (l(@finding.origination_date, format: :short) if @finding.origination_date), readonly: true } %>
+        <%= f.input :origination_date, as: :date_picker,
+          label: Finding.human_attribute_name(:origination_date), readonly: true %>
         <% if current_organization.kind.eql?('quality_management') &&
           (@finding.kind_of?(Weakness) || @finding.kind_of?(Nonconformity)) %>
           <%= f.input :correction %>
@@ -47,15 +47,11 @@
           <%= f.input :cause_analysis_date, as: :date_picker %>
         <% end %>
         <%= f.input :answer, input_html: { readonly: true, rows: 5 } %>
-        <%= f.input :follow_up_date, as: :string, label:
-          @finding.class.human_attribute_name(:follow_up_date), input_html: { readonly: true,
-          value: (l @finding.follow_up_date, format: :short if @finding.follow_up_date)
-        } %>
+        <%= f.input :follow_up_date, as: :date_picker, label:
+          @finding.class.human_attribute_name(:follow_up_date), readonly: true %>
         <%= show_weakness_previous_follow_up_dates(@finding) if @finding.follow_up_date %>
-        <%= f.input :solution_date, as: :string, label:
-          Finding.human_attribute_name(:solution_date), input_html: { readonly: true,
-          value: (l @finding.solution_date, format: :short if @finding.solution_date)
-        } %>
+        <%= f.input :solution_date, as: :date_picker, label:
+          Finding.human_attribute_name(:solution_date), readonly: true %>
         <%= f.input :id, as: :hidden %>
         <%= f.input :audit_comments, input_html: { readonly: true, rows: 5 } %>
       </div>

@@ -489,8 +489,8 @@ class Finding < ActiveRecord::Base
     :inverse_of => :finding
   has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
 
-  accepts_nested_attributes_for :finding_answers, allow_destroy: false,
-    reject_if: :finding_answers_blank
+  accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
+    reject_if: ->(attributes) { attributes['answer'].blank? }
   accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
@@ -1697,11 +1697,5 @@ class Finding < ActiveRecord::Base
       end
 
       column_headers
-    end
-
-    def finding_answers_blank(attrs)
-      attrs['answer'].blank? && attrs['file_model_attributes'] &&
-        attrs['file_model_attributes']['file'].blank? &&
-        attrs['file_model_attributes']['file_cache'].blank?
     end
 end
