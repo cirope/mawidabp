@@ -15,6 +15,7 @@
 //= require jquery.ui.sortable
 //= require bootstrap
 //= require autocomplete
+//= require ajax
 //= require jquery.url
 //= require jquery.mw
 //= require dynamic_form

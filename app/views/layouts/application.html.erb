@@ -23,6 +23,9 @@
   <% end %>
 </head>
 <body data-controller="<%= controller_name %>">
+  <div class="alert alert-warning hidden loading-caption">
+    <strong><%= t 'navigation.loading' %></strong>
+  </div>
   <div class="container">
     <%= render 'shared/compatibility_warning' %>
     <%= render 'shared/menu' %>
