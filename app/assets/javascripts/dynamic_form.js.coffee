@@ -2,11 +2,12 @@
   addNestedItem: (e) ->
     template = e.data('dynamic-template')
     regexp = new RegExp(e.data('id'), 'g')
+    partial = DynamicFormHelper.replaceIds(template, regexp)
 
-    if (insert_into = $(e.data('insert-into'))).length
-      insert_into.append(template)
+    if (insertInto = $(e.data('insert-into'))).length
+      insertInto.append partial
     else
-      e.before DynamicFormHelper.replaceIds(template, regexp)
+      e.before partial
 
     e.trigger('dynamic-item.added', e)
 
