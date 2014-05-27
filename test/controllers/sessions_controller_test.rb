@@ -162,13 +162,14 @@ class SessionsControllerTest < ActionController::TestCase
         assert_equal I18n.t('message.invalid_user_or_password'), flash.alert
       end
 
-      post :create, :user => user.user, :password => 'wrong password'
+      assert_redirected_to login_url
       error_record = ErrorRecord.where(
-        :user_id => user.id, :error => ErrorRecord::ERRORS[:user_disabled]
+        :user_id => users(:administrator_user).id,
+        :error => ErrorRecord::ERRORS[:user_disabled]
       ).order('created_at DESC').first
       assert_kind_of ErrorRecord, error_record
-      assert_equal max_attempts+1, user.reload.failed_attempts
-      assert !user.reload.enable?
+      assert_equal max_attempts, user.reload.failed_attempts
+      assert !user.enable?
     end
   end
 

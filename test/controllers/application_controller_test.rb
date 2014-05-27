@@ -6,8 +6,6 @@ class ApplicationControllerTest < ActionController::TestCase
   def setup
     @controller.send(:reset_session)
     @controller.send(:session)[:user_id] = users(:administrator_user).id
-    @controller.send(:session)[:organization_id] =
-      organizations(:default_organization).id
     @controller.send(:session)[:last_access] = 30.seconds.ago
     @controller.send('response=', @response)
     @controller.send('request=', @request)
@@ -17,7 +15,6 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'sucess login check function' do
     assert session[:user_id]
-    assert session[:organization_id]
 
     User.find(users(:administrator_user).id).update_attribute(:logged_in, true)
 
@@ -28,8 +25,8 @@ class ApplicationControllerTest < ActionController::TestCase
 
   test 'failed login check function' do
     assert session[:user_id]
-    assert session[:organization_id]
 
+    User.find(users(:administrator_user).id).update_attribute(:enable, false)
     assert !@controller.send(:login_check)
   end
 

@@ -18,10 +18,10 @@ class SessionsController < ApplicationController
     auth = Authentication.new params, request, current_organization, @admin_mode
 
     if auth.authenticated?
-      flash.notice = t auth.message
+      flash.notice = auth.message
       set_session_values auth.user
     else
-      flash.alert = t auth.message
+      flash.alert = auth.message
     end
 
     redirect_to auth.redirect_url

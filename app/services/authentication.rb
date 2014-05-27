@@ -18,12 +18,11 @@ class Authentication
     if @valid
       verify_days_for_password_expiration
       verify_pending_poll
-      verify_if_user_expired
       verify_if_must_change_the_password
-      @message ||= 'message.welcome'
+      @message ||= I18n.t 'message.welcome'
     else
-      @message ||= 'message.invalid_user_or_password'
-      @redirect_url = Array 'login'
+      @message ||= I18n.t 'message.invalid_user_or_password'
+      @redirect_url = { controller: 'sessions', action: 'new' }
       register_login_error
     end
 
@@ -64,7 +63,7 @@ class Authentication
 
     def concurrent_access_message
       unless @valid_user.allow_concurrent_access?
-        @message = 'message.you_are_already_logged'
+        @message = I18n.t 'message.you_are_already_logged'
       end
     end
 
@@ -81,21 +80,26 @@ class Authentication
     end
 
     def authenticate_admin_mode
-      if @valid_user.is_group_admin? && @valid_user.password == @user.password
-        @redirect_url = Array 'groups'
+      if @valid_user.is_group_admin? && valid_password?
+        @redirect_url = Group
         @valid = true
       end
     end
 
     def authenticate_normal_mode
-      if @valid_user.is_enable? && !@valid_user.hidden &&
-        @valid_user.password == @user.password
+      verify_if_user_expired
+
+      if @valid_user.is_enable? && !@valid_user.hidden && valid_password?
 
         if register_login
-          @redirect_url = Array 'welcome'
+          @redirect_url = { controller: 'welcome', action: 'index' }
           @valid = true
         end
       end
+    end
+
+    def valid_password?
+      @user.password == @valid_user.password && @user.password_was_encrypted
     end
 
     def register_login_error
@@ -103,13 +107,13 @@ class Authentication
 
       if user
         create_error_record user: user, error_type: :on_login
+        user.failed_attempts += 1
 
         if max_attempts_exceeded(user)
           user.enable = false
           create_error_record user: user, error_type: :user_disabled
         end
 
-        user.failed_attempts += 1
         user.is_an_important_change = false
         user.save(validate: false)
       else
@@ -129,8 +133,8 @@ class Authentication
 
     def verify_if_must_change_the_password
       if @valid_user.must_change_the_password?
-        @message = 'message.must_change_the_password'
-        @redirect_url = ['edit', 'password', @valid_user]
+        @message = I18n.t 'message.must_change_the_password'
+        @redirect_url = ['edit_password', @valid_user]
       end
     end
 
@@ -144,16 +148,16 @@ class Authentication
     def verify_days_for_password_expiration
       days_for_password_expiration = @valid_user.days_for_password_expiration
 
-      @message = [
+      @message = I18n.t(
         days_for_password_expiration >= 0 ? 'message.password_expire_in_x' :
           'message.password_expired_x_days_ago',
           count: days_for_password_expiration.abs
-      ] if days_for_password_expiration
+      ) if days_for_password_expiration
     end
 
     def verify_pending_poll
       if poll = @valid_user.first_pending_poll
-        @message = 'poll.must_answer_poll'
+        @message = I18n.t 'poll.must_answer_poll'
         @redirect_url = ['edit', poll, token: poll.access_token, layout: 'clean']
       end
     end
