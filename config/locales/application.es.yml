@@ -104,6 +104,7 @@ es:
     help_title: "Ayuda"
 
   message:
+    welcome: 'Bienvenido'
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
     insufficient_privileges: "No tiene permisos para realizar la operación"

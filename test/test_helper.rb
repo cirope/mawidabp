@@ -26,9 +26,7 @@ class ActiveSupport::TestCase
       assert_redirected_to login_url
     end
 
-    post :create, {
-      :user => { :user => user.user, :password => password }
-    }, {}
+    post :create, user: user.user, password: password
 
     if user == users(:poll_user)
       assert_redirected_to edit_poll_url(polls(:poll_one).id)

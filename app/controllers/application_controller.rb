@@ -46,8 +46,7 @@ class ApplicationController < ActionController::Base
       current_organization
       load_user
 
-      !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?) &&
-        @auth_user.logged_in?
+      !@auth_user.nil? && (@auth_user.is_group_admin? || @auth_user.is_enable?)
     end
 
     def auth
