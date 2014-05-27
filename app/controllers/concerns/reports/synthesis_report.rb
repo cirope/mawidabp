@@ -10,7 +10,8 @@ module Reports::SynthesisReport
       business_unit_reviews if params[:synthesis_report][:business_unit].present?
     end
 
-    @business_unit_types = @selected_business_unit ?                                                                                                                                        [@selected_business_unit] : BusinessUnitType.list
+    @business_unit_types = @selected_business_unit ?
+      [@selected_business_unit] : BusinessUnitType.list
 
     @periods.each do |period|
       @business_unit_types.each do |but|
@@ -114,7 +115,7 @@ module Reports::SynthesisReport
   def count_weaknesses(c_r)
     weaknesses_count = {}
     weaknesses = @controller.eql?('conclusion') ? c_r.review.final_weaknesses.not_revoked :
-      c_r.review.weaknesses
+      c_r.review.weaknesses.not_revoked
 
     weaknesses.each do |w|
       @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }

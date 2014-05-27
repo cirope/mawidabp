@@ -346,6 +346,14 @@ class UserTest < ActiveSupport::TestCase
     assert_equal old_name_with_function, name_from_a_minute_ago
   end
 
+  test 'confirmation_hash' do
+    @user.update(password_changed: 31.days.ago, change_password_hash: SecureRandom.urlsafe_base64)
+    assert_nil @user.confirmation_hash
+
+    @user.update(password_changed: 2.days.ago)
+    assert_not_nil @user.confirmation_hash
+  end
+
   test 'reset password' do
     assert_nil @user.change_password_hash
 

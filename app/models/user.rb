@@ -423,6 +423,10 @@ class User < ActiveRecord::Base
     is_enable? && (password_expired? || first_login?)
   end
 
+  def confirmation_hash
+    change_password_hash unless must_change_the_password?
+  end
+
   def days_for_password_expiration
     expire_notification = self.get_parameter(:expire_notification).to_i
 
