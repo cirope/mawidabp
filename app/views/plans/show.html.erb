@@ -29,8 +29,8 @@
         <td><%= plan_item.order_number %></td>
         <td><%= plan_item.business_unit.try(:name) %></td>
         <td><%= plan_item.project %></td>
-        <td><%= plan_item.start %></td>
-        <td><%= plan_item.end %></td>
+        <td><%= l plan_item.start, format: :minimal %></td>
+        <td><%= l plan_item.end, format: :minimal %></td>
         <td><%= currency_mask % plan_item.human_cost %></td>
         <td><%= currency_mask % plan_item.material_cost %></td>
         <td><%= currency_mask % plan_item.cost %></td>
