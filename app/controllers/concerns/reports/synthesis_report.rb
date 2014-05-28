@@ -150,13 +150,14 @@ module Reports::SynthesisReport
   end
 
   def get_nonconformities_count_text(c_r)
-    c_r.review.nonconformities.count > 0 ?
-      c_r.review.nonconformities.count.to_s :
+    c_r.review.nonconformities.not_revoked.count > 0 ?
+      c_r.review.nonconformities.not_revoked.count.to_s :
       t("#{@controller}_committee_report.synthesis_report.without_nonconformities")
   end
 
   def get_oportunities_count_text(c_r)
-    c_r.review.oportunities.count > 0 ?                                                                                                                                                     c_r.review.final_oportunities.count.to_s :
+    c_r.review.oportunities.not_revoked.count > 0 ?
+      c_r.review.final_oportunities.not_revoked.count.to_s :
       t("#{@controller}_committee_report.synthesis_report.without_oportunities")
   end
 
@@ -264,7 +265,8 @@ module Reports::SynthesisReport
     end
   end
 
-  def add_pdf_references(pdf)                                                                                                                                                             pdf.move_down PDF_FONT_SIZE
+  def add_pdf_references(pdf)
+    pdf.move_down PDF_FONT_SIZE
 
     references = @sqm ? t("#{@controller}_committee_report.synthesis_report.sqm_references",
       :risk_types => @risk_levels.to_sentence) :

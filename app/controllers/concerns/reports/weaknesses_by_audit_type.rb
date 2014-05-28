@@ -201,8 +201,8 @@ module Reports::WeaknessesByAuditType
               pdf.move_down PDF_FONT_SIZE
 
               bu_data[:conclusion_reviews].each do |cr|
-              
-                if @final  
+
+                if @final
                   findings_count = cr.review.final_weaknesses.size +
                     cr.review.final_oportunities.size
                 else

@@ -62,7 +62,7 @@ module Reports::WeaknessesByRiskReport
 
         conclusion_review_per_unit_type.each do |c_r|
           weaknesses_by_risk = []
-          weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses  
+          weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           report_weaknesses = weaknesses.by_risk(risk).with_pending_status_for_report
 
           report_weaknesses.each do |w|
