@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
           @auth_user.try(:privileges, current_organization) : {}
       else
         go_to = request.fullpath
-        session[:go_to] = go_to unless action == :logout || request.xhr?
+        session[:go_to] = go_to if request.get? && !request.xhr?
         @auth_user = nil
         redirect_to_login t('message.must_be_authenticated'), :alert
       end

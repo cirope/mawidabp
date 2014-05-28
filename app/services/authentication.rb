@@ -1,9 +1,9 @@
 class Authentication
   attr_reader :message, :redirect_url
 
-  def initialize params, request, current_organization, admin_mode
-    @current_organization = current_organization
-    @params, @request, @admin_mode = params, request, admin_mode
+  def initialize params, request, session, current_organization, admin_mode
+    @current_organization, @admin_mode = current_organization, admin_mode
+    @params, @request, @session = params, request, session
 
     set_resources
   end
@@ -89,12 +89,10 @@ class Authentication
     def authenticate_normal_mode
       verify_if_user_expired
 
-      if @valid_user.is_enable? && !@valid_user.hidden && valid_password?
-
-        if register_login
-          @redirect_url = { controller: 'welcome', action: 'index' }
+      if @valid_user.is_enable? && !@valid_user.hidden &&
+        valid_password? && register_login
           @valid = true
-        end
+          @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
     end
 
@@ -161,7 +159,6 @@ class Authentication
         @redirect_url = ['edit', poll, token: poll.access_token, layout: 'clean']
       end
     end
-
 
     def register_login
       LoginRecord.list.create(user: @valid_user, request: @request)

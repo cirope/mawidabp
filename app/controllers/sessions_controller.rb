@@ -15,7 +15,8 @@ class SessionsController < ApplicationController
   def create
     @title = t 'user.login_title'
 
-    auth = Authentication.new params, request, current_organization, @admin_mode
+    auth = Authentication.new params, request, session,
+      current_organization, @admin_mode
 
     if auth.authenticated?
       flash.notice = auth.message
