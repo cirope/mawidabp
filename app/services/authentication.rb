@@ -80,7 +80,7 @@ class Authentication
     end
 
     def authenticate_admin_mode
-      if @valid_user.is_group_admin? && valid_password?
+      if @valid_user.is_group_admin? && valid_password? && register_login
         @redirect_url = Group
         @valid = true
       end
