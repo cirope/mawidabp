@@ -7,7 +7,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => organizations(:default_organization).to_param}
+    id_param = {:id => organizations(:cirope).to_param}
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -43,7 +43,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'show organization' do
     login
-    get :show, :id => organizations(:default_organization).id
+    get :show, :id => organizations(:cirope).id
     assert_response :success
     assert_not_nil assigns(:organization)
     assert_template 'organizations/show'
@@ -102,7 +102,7 @@ class OrganizationsControllerTest < ActionController::TestCase
 
   test 'edit organization' do
     login
-    get :edit, :id => organizations(:default_organization).id
+    get :edit, :id => organizations(:cirope).id
     assert_response :success
     assert_not_nil assigns(:organization)
     assert_template 'organizations/edit'
@@ -111,7 +111,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'update organization' do
     login
     patch :update, {
-      :id => organizations(:default_organization).id,
+      :id => organizations(:cirope).id,
       :organization => {
         :name => 'Updated organization',
         :description => 'Updated description',
@@ -128,11 +128,11 @@ class OrganizationsControllerTest < ActionController::TestCase
     begin
       PaperTrail.enabled = false
 
-      organization = Organization.find(organizations(:second_organization).id)
+      organization = Organization.find(organizations(:google).id)
       login user: users(:administrator_second_user), prefix: organization.prefix
 
       assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
-        delete :destroy, :id => organizations(:second_organization).id
+        delete :destroy, :id => organizations(:google).id
       end
 
       assert_redirected_to organizations_url

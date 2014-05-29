@@ -4,7 +4,7 @@ current_review:
   description: Current Review
   survey: Current Review Survey
   plan_item: current_plan_item_1
-  organization: default_organization
+  organization: cirope
 
 past_review:
   period: past_period
@@ -12,7 +12,7 @@ past_review:
   description: Old Review
   survey: Past Review Survey
   plan_item: past_plan_item_1
-  organization: default_organization
+  organization: cirope
 
 review_with_conclusion:
   period: current_period
@@ -20,7 +20,7 @@ review_with_conclusion:
   description: Review With Conclusion
   survey: Review With Conclusion Survey
   plan_item: current_plan_item_2
-  organization: default_organization
+  organization: cirope
 
 review_without_conclusion:
   period: current_period
@@ -28,7 +28,7 @@ review_without_conclusion:
   description: Review Without Conclusion
   survey: Review Without Conclusion Survey
   plan_item: current_plan_item_3
-  organization: default_organization
+  organization: cirope
   
 review_without_conclusion_and_without_findings:
   period: current_period
@@ -36,7 +36,7 @@ review_without_conclusion_and_without_findings:
   description: Review Without Conclusion and Without Findings
   survey: Review Without Conclusion and Without Findings Survey
   plan_item: current_plan_item_4
-  organization: default_organization
+  organization: cirope
   
 review_approved_with_conclusion:
   period: current_period
@@ -44,4 +44,4 @@ review_approved_with_conclusion:
   description: Review Approved With Conclusion
   survey: Review Approved With Conclusion Survey
   plan_item: current_plan_item_5
-  organization: default_organization
+  organization: cirope

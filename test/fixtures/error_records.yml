@@ -2,16 +2,16 @@ administrator_user_failed_attempt:
   data: Usefull data from administrator user
   error: 1
   user: administrator_user
-  organization: default_organization
+  organization: cirope
 
 bare_user_failed_attempt:
   data: Usefull data from bare user
   error: 1
   user: bare_user
-  organization: default_organization
+  organization: cirope
 
 wrong_user_failed_attempt:
   data: "U:[wrong_user]"
   error: 1
   user:
-  organization: default_organization
+  organization: cirope

@@ -2,7 +2,7 @@
 "<%= role_name %>_role":
   name: <%= role_name.to_s.upcase %>
   role_type: <%= value %>
-  organization: default_organization
+  organization: cirope
   created_at: <%= 3.days.ago.to_s(:db) %>
   updated_at: <%= 2.days.ago.to_s(:db) %>
 <% end %>
@@ -10,14 +10,14 @@
 admin_second_role:
   name: Second Admin
   role_type: <%= Role::TYPES[:admin] %>
-  organization: second_organization 
+  organization: google 
 
 auditor_second_role:
   name: Second Auditor
   role_type: <%= Role::TYPES[:auditor_senior] %>
-  organization: second_organization
+  organization: google
 
 empty_admin_role:
   name: Empty
   role_type: <%= Role::TYPES[:admin] %>
-  organization: default_organization
+  organization: cirope

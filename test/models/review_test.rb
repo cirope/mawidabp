@@ -120,7 +120,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert_error @review, :identification, :taken
     assert_error @review, :plan_item_id, :taken
 
-    @review.period_id = periods(:current_period_second_organization).id
+    @review.period_id = periods(:current_period_google).id
     @review.period.reload
 
     assert @review.invalid?
@@ -499,7 +499,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'score sheet pdf' do
     assert_nothing_raised do
-      @review.score_sheet(organizations(:default_organization))
+      @review.score_sheet(organizations(:cirope))
     end
 
     assert File.exist?(@review.absolute_score_sheet_path)
@@ -510,7 +510,7 @@ class ReviewTest < ActiveSupport::TestCase
 
   test 'global score sheet pdf' do
     assert_nothing_raised do
-      @review.global_score_sheet(organizations(:default_organization))
+      @review.global_score_sheet(organizations(:cirope))
     end
 
     assert File.exist?(@review.absolute_global_score_sheet_path)

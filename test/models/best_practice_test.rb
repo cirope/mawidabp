@@ -28,7 +28,7 @@ class BestPracticeTest < ActiveSupport::TestCase
       )
     end
 
-    assert_equal organizations(:default_organization).id,
+    assert_equal organizations(:cirope).id,
       @best_practice.organization_id
   end
 

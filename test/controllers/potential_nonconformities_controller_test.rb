@@ -123,7 +123,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
               code: 'PTNCP 20',
               number_of_pages: '10',
               description: 'New workpaper description',
-              organization_id: organizations(:default_organization).id,
+              organization_id: organizations(:cirope).id,
               file_model_attributes: {file: Rack::Test::UploadedFile.new(
                   TEST_FILE_FULL_PATH, 'text/plain')
               }
@@ -187,7 +187,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
                 code: 'PTNCP 20',
                 number_of_pages: '10',
                 description: 'New workpaper description',
-                organization_id: organizations(:default_organization).id,
+                organization_id: organizations(:cirope).id,
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')

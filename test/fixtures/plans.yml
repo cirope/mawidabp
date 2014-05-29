@@ -1,11 +1,11 @@
 current_plan:
   period: current_period
-  organization: default_organization
+  organization: cirope
 
 past_plan:
   period: past_period
-  organization: default_organization
+  organization: cirope
 
 unrelated_plan:
   period: third_period
-  organization: default_organization
+  organization: cirope

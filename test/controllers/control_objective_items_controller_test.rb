@@ -113,7 +113,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :code => 'PTOC 20',
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
               },
@@ -122,7 +122,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :code => 'PTOC 21',
                 :number_of_pages => '10',
                 :description => 'New workpaper2 description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
 	      }

@@ -3,11 +3,11 @@ urgent_email:
   subject: Save me
   body: The house is on fire
   attachments: picture,jpg
-  organization: default_organization
+  organization: cirope
 
 notification_email:
   to: someone@mawida.com
   subject: The time is running
   body: Hurry up
   attachments: ''
-  organization: default_organization
+  organization: cirope

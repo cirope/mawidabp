@@ -24,7 +24,7 @@ class ResourceClassTest < ActiveSupport::TestCase
       ResourceClass.list.create(
         :name => 'New resource class',
         :resource_class_type => ResourceClass::TYPES[:human],
-        :organization => organizations(:default_organization)
+        :organization => organizations(:cirope)
       )
     end
   end
@@ -78,7 +78,7 @@ class ResourceClassTest < ActiveSupport::TestCase
     assert @resource_class.invalid?
     assert_error @resource_class, :name, :taken
 
-    @resource_class.organization_id = organizations(:second_organization).id
+    @resource_class.organization_id = organizations(:google).id
     assert @resource_class.valid?
   end
 

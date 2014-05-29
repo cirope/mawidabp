@@ -356,7 +356,7 @@ class NonconformityTest < ActiveSupport::TestCase
               :code => 'PTNC 20',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')
@@ -382,7 +382,7 @@ class NonconformityTest < ActiveSupport::TestCase
               :code => 'New post_workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')

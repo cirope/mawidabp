@@ -58,7 +58,7 @@ class UserTest < ActiveSupport::TestCase
         manager_id: users(:administrator_user).id,
         organization_roles_attributes: {
           new_1: {
-            organization_id: organizations(:default_organization).id,
+            organization_id: organizations(:cirope).id,
             role_id: role.id
           }
         }
@@ -362,7 +362,7 @@ class UserTest < ActiveSupport::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      @user.reset_password!(organizations(:default_organization))
+      @user.reset_password!(organizations(:cirope))
     end
 
     assert_not_nil @user.reload.change_password_hash
@@ -370,7 +370,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'privileges' do
     user = User.find users(:administrator_user).id
-    privileges = user.privileges(organizations(:default_organization))
+    privileges = user.privileges(organizations(:cirope))
 
     assert !privileges.blank?
 

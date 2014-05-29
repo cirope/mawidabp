@@ -4,7 +4,7 @@ class OrganizationTest < ActiveSupport::TestCase
   fixtures :organizations
 
   def setup
-    @organization = organizations :default_organization
+    @organization = organizations :cirope
 
     set_organization
   end
@@ -49,7 +49,7 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test 'destroy' do
-    organization = organizations :second_organization
+    organization = organizations :google
 
     assert_difference ['ImageModel.count', 'Organization.count'], -1 do
       organization.destroy

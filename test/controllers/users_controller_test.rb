@@ -7,7 +7,7 @@ class UsersControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
+    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -105,7 +105,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => true,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ],
@@ -133,7 +133,7 @@ class UsersControllerTest < ActionController::TestCase
             :send_notification_email => false,
             :organization_roles_attributes => [
               {
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :role_id => roles(:admin_role).id
               }
             ]
@@ -178,8 +178,8 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :id => organization_roles(:admin_role_for_administrator_user_in_default_organization).id,
-              :organization_id => organizations(:default_organization).id,
+              :id => organization_roles(:admin_role_for_administrator_user_in_cirope).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ],
@@ -231,7 +231,7 @@ class UsersControllerTest < ActionController::TestCase
               :send_notification_email => true,
               :organization_roles_attributes => [
                 {
-                  :organization_id => organizations(:default_organization).id,
+                  :organization_id => organizations(:cirope).id,
                   :role_id => roles(:admin_second_role).id
                 }
               ],
@@ -432,7 +432,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ]
@@ -461,7 +461,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ]
@@ -475,7 +475,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'get initial roles' do
     login
-    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+    xhr :get, :initial_roles, :id => organizations(:cirope).id,
       :format => 'json', :hash => groups(:main_group).admin_hash
     assert_response :success
     roles = ActiveSupport::JSON.decode(@response.body)
@@ -485,7 +485,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'get initial roles with invalid hash' do
     login
-    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+    xhr :get, :initial_roles, :id => organizations(:cirope).id,
       :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
 
     assert_redirected_to login_url
@@ -521,7 +521,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user findings reassignment edit' do
-    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -531,7 +531,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user finding reassignment update' do
-    login user: users(:administrator_user), prefix: organizations(:default_organization).prefix
+    login user: users(:administrator_user), prefix: organizations(:cirope).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -554,7 +554,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment edit' do
-    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -564,7 +564,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment update' do
-    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -587,7 +587,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing edit' do
-    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -597,7 +597,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing' do
-    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -727,7 +727,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'get roles' do
     login
-    xhr :get, :roles, {:id => organizations(:default_organization).id,
+    xhr :get, :roles, {:id => organizations(:cirope).id,
       :format => 'json'}
     assert_response :success
     roles = ActiveSupport::JSON.decode(@response.body)

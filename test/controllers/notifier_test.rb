@@ -35,7 +35,7 @@ class NotifierTest < ActionMailer::TestCase
 
   test 'welcome email' do
     user = User.find(users(:first_time_user).id)
-    organization = Organization.find(organizations(:default_organization).id)
+    organization = Organization.find(organizations(:cirope).id)
 
     assert ActionMailer::Base.deliveries.empty?
 
@@ -179,7 +179,7 @@ class NotifierTest < ActionMailer::TestCase
 
   test 'restore password notification' do
     user = User.find(users(:blank_password_user).id)
-    organization = Organization.find(organizations(:default_organization).id)
+    organization = Organization.find(organizations(:cirope).id)
 
     assert ActionMailer::Base.deliveries.empty?
 
@@ -233,7 +233,7 @@ class NotifierTest < ActionMailer::TestCase
 
   test 'conclusion review notification' do
     organization = Organization.find(organizations(
-          :default_organization).id)
+          :cirope).id)
     user = User.find(users(:administrator_user).id)
     conclusion_review = ConclusionFinalReview.find(conclusion_reviews(
         :conclusion_current_final_review).id)

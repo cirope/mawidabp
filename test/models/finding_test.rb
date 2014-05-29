@@ -791,7 +791,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !File.exist?(@finding.absolute_follow_up_pdf_path)
 
     assert_nothing_raised do
-      @finding.follow_up_pdf(organizations(:default_organization))
+      @finding.follow_up_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@finding.absolute_follow_up_pdf_path)
@@ -804,7 +804,7 @@ class FindingTest < ActiveSupport::TestCase
     assert !File.exist?(@finding.absolute_pdf_path)
 
     assert_nothing_raised do
-      @finding.to_pdf(organizations(:default_organization))
+      @finding.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@finding.absolute_pdf_path)
@@ -1127,7 +1127,7 @@ class FindingTest < ActiveSupport::TestCase
                 :code => 'PTO 20',
                 :number_of_pages => '10',
                 :description => 'New post_workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes => {
                   :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                     'text/plain')
@@ -1153,7 +1153,7 @@ class FindingTest < ActiveSupport::TestCase
               :code => 'New post_workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
                   'text/plain')

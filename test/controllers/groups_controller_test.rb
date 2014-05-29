@@ -107,7 +107,7 @@ class GroupsControllerTest < ActionController::TestCase
           :send_notification_email => '',
           :organizations_attributes => [
             {
-              :id => organizations(:default_organization).id,
+              :id => organizations(:cirope).id,
               :name => 'Updated default organization',
               :prefix => 'default-testing-organization',
               :description => 'Updated default organization description'
@@ -121,7 +121,7 @@ class GroupsControllerTest < ActionController::TestCase
     assert_not_nil assigns(:group)
     assert_equal 'Updated group', assigns(:group).name
     assert_equal 'Updated default organization',
-      Organization.find(organizations(:default_organization).id).name
+      Organization.find(organizations(:cirope).id).name
   end
 
   test 'destroy group' do
