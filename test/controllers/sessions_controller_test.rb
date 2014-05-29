@@ -15,34 +15,6 @@ class SessionsControllerTest < ActionController::TestCase
     assert_template 'sessions/new'
   end
 
-  test 'invalid user and password attempt' do
-    assert_difference 'ErrorRecord.count' do
-      post :create, :user => 'someone', :password => 'without authorization'
-
-      error_record = ErrorRecord.where(
-        'data LIKE :data', :data => '%someone%'
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.invalid_user_or_password'), flash.alert
-    end
-  end
-
-  test 'invalid user and password attempt in admin mode' do
-    @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
-
-    assert_difference 'ErrorRecord.count' do
-      post :create, :user => 'someone', :password => 'without authorization'
-
-      error_record = ErrorRecord.where(
-        'data LIKE :data', :data => '%someone%'
-      ).order('created_at DESC').first
-      assert_kind_of ErrorRecord, error_record
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.invalid_user_or_password'), flash.alert
-    end
-  end
-
   test 'invalid password attempt in admin mode' do
     @request.host = "#{APP_ADMIN_PREFIXES.first}.localhost.i"
 

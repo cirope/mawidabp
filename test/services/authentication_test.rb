@@ -5,7 +5,7 @@ class AuthenticationTest < ActionController::TestCase
 
   def setup
     @user = users :administrator_user
-    @organization = organizations :default_organization
+    @organization = organizations :cirope
     @params = { user: @user.user, password: ::PLAIN_PASSWORDS[@user.user] }
     Organization.current_id = @organization.id
   end
@@ -56,6 +56,13 @@ class AuthenticationTest < ActionController::TestCase
   test 'should not login with invalid password' do
     @params = { user: @user.user, password: 'wrong password' }
     @auth = Authentication.new @params, request, session, @organization, false
+
+    assert_invalid_authentication
+  end
+
+  test 'should not login with invalid password in admin mode' do
+    @params = { user: @user.user, password: 'wrong password' }
+    @auth = Authentication.new @params, request, session, @organization, true
 
     assert_invalid_authentication
   end
