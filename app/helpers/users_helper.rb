@@ -23,7 +23,7 @@ module UsersHelper
       Group.find_by_admin_hash(params[:hash])
 
     form.input :organization_id, collection: sorted_options_array_for(
-      Organization.list_for_group(group), :name, :id), prompt: true,
+      Organization.with_group(group), :name, :id), prompt: true,
       label: false, input_html: { id: "#{id}_organization_id" }
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131202121050) do
+ActiveRecord::Schema.define(version: 20140529184016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -891,8 +891,6 @@ ActiveRecord::Schema.define(version: 20131202121050) do
 
   add_foreign_key "users", "resources", name: "users_resource_id_fk", dependent: :restrict
   add_foreign_key "users", "users", name: "users_manager_id_fk", column: "manager_id", dependent: :restrict
-
-  add_foreign_key "versions", "organizations", name: "versions_organization_id_fk", dependent: :restrict
 
   add_foreign_key "work_papers", "file_models", name: "work_papers_file_model_id_fk", dependent: :restrict
   add_foreign_key "work_papers", "organizations", name: "work_papers_organization_id_fk", dependent: :restrict

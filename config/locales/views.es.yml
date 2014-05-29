@@ -15,20 +15,16 @@ es: &common
     download: 'Descargar'
     upload: 'Adjuntar'
 
-  sessions:
+  organizations:
+    index:
+      title: 'Listado de organizaciones'
+    show:
+      title: 'Detalles de la organización'
     new:
-      title: 'Ingreso'
-      log_in: 'Ingresar'
-      email: 'Correo'
-      user: 'Usuario'
-      password: 'Contraseña'
-      remember_me: 'Recordarme'
-      forgot_password: '¿Olvidaste tu contraseña?'
-    create:
-      invalid: 'Tu correo y/o contraseña no están bien =('
-      logged_in: 'Bienvenido'
-    destroy:
-      logged_out: 'Hasta la próxima'
+      title: 'Agregar organización'
+    edit:
+      title: 'Modificar organización'
+    new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
 
   password_resets:
     edit:
@@ -55,6 +51,21 @@ es: &common
   reports:
     customization_titles: 'Personalización de títulos'
     generating: 'Generando reporte...'
+
+  sessions:
+    new:
+      title: 'Ingreso'
+      log_in: 'Ingresar'
+      email: 'Correo'
+      user: 'Usuario'
+      password: 'Contraseña'
+      remember_me: 'Recordarme'
+      forgot_password: '¿Olvidaste tu contraseña?'
+    create:
+      invalid: 'Tu correo y/o contraseña no están bien =('
+      logged_in: 'Bienvenido'
+    destroy:
+      logged_out: 'Hasta la próxima'
 
 public_es:
   <<: *common

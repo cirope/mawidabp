@@ -22,6 +22,7 @@ gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'figaro'
 gem 'bloggy'
+gem 'irreverent'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 

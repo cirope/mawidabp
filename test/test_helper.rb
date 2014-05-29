@@ -20,8 +20,8 @@ class ActiveSupport::TestCase
     user.logged_in! session[:last_access]
   end
 
-  def get_test_parameter parameter_name, organization = organizations(:cirope)
-    Setting.find_by(name: parameter_name, organization_id: organization.id).value
+  def get_test_parameter name, organization = organizations(:cirope)
+    Setting.find_by(name: name, organization_id: organization.id).value
   end
 
   def backup_file file_name
