@@ -33,7 +33,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'list weaknesses' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:weaknesses)
@@ -41,7 +41,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'list weaknesses with search and sort' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4',
       columns: ['description', 'review'],
@@ -59,7 +59,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'list weaknesses for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id,
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id
@@ -74,7 +74,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'edit weakness when search match only one result' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4 y 1w',
       columns: ['description', 'review']
@@ -86,7 +86,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'show weakness' do
-    perform_auth
+    login
     get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
@@ -94,7 +94,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'new weakness' do
-    perform_auth
+    login
     get :new, control_objective_item: control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -105,7 +105,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   test 'create weakness' do
     counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count']
 
-    perform_auth
+    login
 
     assert_difference counts_array do
       post :create, {
@@ -163,7 +163,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'edit weakness' do
-    perform_auth
+    login
     get :edit, id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
     assert_not_nil assigns(:weakness)
@@ -171,7 +171,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'update weakness' do
-    perform_auth
+    login
     assert_no_difference 'Weakness.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -248,7 +248,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     weakness = Weakness.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
@@ -260,7 +260,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     weakness = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(
@@ -281,7 +281,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { q: 'adm', format: :json }
     assert_response :success
 
@@ -310,7 +310,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       q: 'O001',
       finding_id: finding.id,
@@ -368,7 +368,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       q: 'dependencia',
       review_id: reviews(:review_with_conclusion).id,

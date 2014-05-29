@@ -3,11 +3,11 @@ administrator_user_success_login_record:
   end: 2008-09-30 23:03:26
   data: Login data for administrator user
   user: administrator_user
-  organization: default_organization
+  organization: cirope
 
 bare_user_success_login_record:
   start: 2008-09-30 23:03:26
   end: 2008-09-30 23:03:26
   data: Login data for bare user
   user: bare_user
-  organization: default_organization
+  organization: cirope

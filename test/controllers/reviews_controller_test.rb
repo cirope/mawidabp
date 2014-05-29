@@ -32,7 +32,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:reviews)
@@ -41,7 +41,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list reviews with search' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2',
       columns: ['identification', 'project']
@@ -53,7 +53,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit review when search match only one result' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 1',
       columns: ['identification', 'project']
@@ -64,7 +64,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'show review' do
-    perform_auth
+    login
     get :show, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
@@ -72,7 +72,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'new review' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:review)
@@ -80,7 +80,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'clone review' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
     get :new, clone_from: review.id
@@ -96,7 +96,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create review' do
-    perform_auth
+    login
     assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
       # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
       assert_difference 'FileModel.count' do
@@ -143,7 +143,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit review' do
-    perform_auth
+    login
     get :edit, id: reviews(:current_review).id
     assert_response :success
     assert_not_nil assigns(:review)
@@ -153,7 +153,7 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'update review' do
     counts_array = ['Review.count', 'ControlObjectiveItem.count',
       'ReviewUserAssignment.count', 'FileModel.count', 'Control.count']
-    perform_auth
+    login
     assert_no_difference counts_array do
       patch :update, {
         id: reviews(:review_with_conclusion).id,
@@ -189,7 +189,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy review' do
-    perform_auth
+    login
     assert_difference 'Review.count', -1 do
       delete :destroy, id: reviews(:review_without_conclusion_and_without_findings).id
     end
@@ -198,7 +198,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'destroy with final review' do
-    perform_auth
+    login
     assert_no_difference 'Review.count' do
       delete :destroy, id: reviews(:current_review).id
     end
@@ -208,7 +208,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'review data' do
-    perform_auth
+    login
 
     review_data = nil
 
@@ -228,7 +228,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'plan item data' do
-    perform_auth
+    login
 
     plan_item_data = nil
 
@@ -244,7 +244,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'procedure control data' do
-    perform_auth
+    login
 
     get :procedure_control_data,
       id: procedure_controls(:procedure_control_iso_27001).id
@@ -254,7 +254,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'survey pdf' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
     assert_nothing_raised do
@@ -265,7 +265,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'suggested findings' do
-    perform_auth
+    login
     review = Review.find reviews(:current_review).id
 
     get :suggested_findings, id: review.plan_item_id
@@ -282,7 +282,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download work papers' do
-    perform_auth
+    login
 
     review = Review.find reviews(:current_review).id
 
@@ -294,7 +294,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'estimated amount' do
-    perform_auth
+    login
     get :estimated_amount, id: plan_items(:past_plan_item_1).id
 
     assert_response :success
@@ -302,7 +302,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { q: 'admin', format: :json }
     assert_response :success
 
@@ -328,7 +328,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for procedure control subitem' do
-    perform_auth
+    login
     get :auto_complete_for_procedure_control_subitem, {
       q: 'ges seg', period_id: periods(:past_period).id, format: :json
     }
@@ -368,7 +368,7 @@ class ReviewsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for finding relation' do
-    perform_auth
+    login
     get :auto_complete_for_finding, { q: 'O001', format: :json }
     assert_response :success
 

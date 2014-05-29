@@ -357,7 +357,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :code => 'PTOC 20',
               :number_of_pages => '10',
               :description => 'New workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
@@ -381,7 +381,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
               :code => 'New workpaper code',
               :number_of_pages => '10',
               :description => 'New post_workpaper description',
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :file_model_attributes => {
                 :file => fixture_file_upload(TEST_FILE, 'text/plain')
               }
@@ -396,7 +396,7 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert !File.exist?(@control_objective_item.absolute_pdf_path)
 
     assert_nothing_raised do
-      @control_objective_item.to_pdf(organizations(:default_organization))
+      @control_objective_item.to_pdf(organizations(:cirope))
     end
 
     assert File.exist?(@control_objective_item.absolute_pdf_path)

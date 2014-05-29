@@ -31,7 +31,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'list oportunities' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:oportunities)
@@ -39,7 +39,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'list oportunities with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
       :columns => ['description', 'review'],
@@ -58,7 +58,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit oportunity when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1o',
       :columns => ['description', 'review']
@@ -71,7 +71,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'show oportunity' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
     assert_response :success
     assert_not_nil assigns(:oportunity)
@@ -79,7 +79,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'new oportunity' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -91,7 +91,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     counts_array = ['Oportunity.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :oportunity => {
@@ -146,7 +146,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit oportunity' do
-    perform_auth
+    login
     get :edit, :id => findings(
       :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity).id
     assert_response :success
@@ -155,7 +155,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'update oportunity' do
-    perform_auth
+    login
     assert_no_difference 'Oportunity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -232,7 +232,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     oportunity = Oportunity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_oportunity).id)
 
@@ -244,7 +244,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     review = Review.find(reviews(:review_with_conclusion).id)
 
     assert_difference 'review.finding_review_assignments.count' do
@@ -273,7 +273,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
 
@@ -302,7 +302,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :q => 'O001',
       :finding_id => finding.id,
@@ -360,7 +360,7 @@ class OportunitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

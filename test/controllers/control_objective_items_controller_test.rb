@@ -30,7 +30,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'list control objective items' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:control_objectives)
@@ -38,7 +38,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'list control objective items with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'seguridad',
       :columns => ['control_objective_text', 'review']
@@ -53,7 +53,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'edit control objective item when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'dependencia y responsable',
       :columns => ['control_objective_text', 'review']
@@ -66,7 +66,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'show control_objective_item' do
-    perform_auth
+    login
     get :show, :id => control_objective_items(:bcra_A4609_security_management_responsible_dependency_item).id
     assert_response :success
     assert_not_nil assigns(:control_objective_item)
@@ -74,7 +74,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'edit control_objective_item' do
-    perform_auth
+    login
     get :edit, :id => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -85,7 +85,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   test 'update control_objective_item' do
     assert_no_difference ['ControlObjectiveItem.count', 'Control.count'] do
       assert_difference 'WorkPaper.count', 2 do
-        perform_auth
+        login
         patch :update, {
           :id => control_objective_items(
             :bcra_A4609_security_management_responsible_dependency_item_editable).id,
@@ -113,7 +113,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :code => 'PTOC 20',
                 :number_of_pages => '10',
                 :description => 'New workpaper description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
               },
@@ -122,7 +122,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
                 :code => 'PTOC 21',
                 :number_of_pages => '10',
                 :description => 'New workpaper2 description',
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :file_model_attributes =>
 	          { :file => fixture_file_upload(TEST_FILE, 'text/plain') }
 	      }
@@ -141,7 +141,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
   end
 
   test 'destroy control_objective_item' do
-    perform_auth
+    login
     assert_difference 'ControlObjectiveItem.count', -1 do
       delete :destroy, :id => control_objective_items(
         :iso_27000_security_organization_4_3_item_editable_without_findings).id

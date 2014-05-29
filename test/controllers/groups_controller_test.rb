@@ -4,35 +4,11 @@ require 'test_helper'
 class GroupsControllerTest < ActionController::TestCase
   fixtures :groups
 
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => groups(:main_group).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :new],
-      [:get, :edit, id_param],
-      [:post, :create],
-      [:patch, :update, id_param],
-      [:delete, :destroy, id_param]
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+  setup do
+    login prefix: APP_ADMIN_PREFIXES.first
   end
 
   test 'list groups' do
-    perform_auth
     get :index
     assert_response :success
     assert_not_nil assigns(:groups)
@@ -40,7 +16,6 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'show group' do
-    perform_auth
     get :show, :id => groups(:main_group).id
     assert_response :success
     assert_not_nil assigns(:group)
@@ -48,7 +23,6 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'new group' do
-    perform_auth
     get :new
     assert_response :success
     assert_not_nil assigns(:group)
@@ -64,7 +38,6 @@ class GroupsControllerTest < ActionController::TestCase
     ActionMailer::Base.deliveries = []
 
     assert_difference counts_array do
-      perform_auth
       post :create, {
         :group => {
           :name => 'New group',
@@ -77,7 +50,7 @@ class GroupsControllerTest < ActionController::TestCase
               :prefix => 'new-organization',
               :description => 'New organization description'
             }
-	  ]
+          ]
         }
       }
     end
@@ -94,7 +67,6 @@ class GroupsControllerTest < ActionController::TestCase
 
     assert_difference ['Group.count', 'Organization.count'] do
       assert_no_difference 'ActionMailer::Base.deliveries.size' do
-        perform_auth
         post :create, {
           :group => {
             :name => 'New group',
@@ -107,7 +79,7 @@ class GroupsControllerTest < ActionController::TestCase
                 :prefix => 'new-organization',
                 :description => 'New organization description'
               }
-	    ]
+            ]
           }
         }
       end
@@ -118,7 +90,6 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
   test 'edit group' do
-    perform_auth
     get :edit, :id => groups(:main_group).id
     assert_response :success
     assert_not_nil assigns(:group)
@@ -127,7 +98,6 @@ class GroupsControllerTest < ActionController::TestCase
 
   test 'update group' do
     assert_no_difference ['Group.count', 'Organization.count'] do
-      perform_auth
       patch :update, {
         :id => groups(:main_group).id,
         :group => {
@@ -137,7 +107,7 @@ class GroupsControllerTest < ActionController::TestCase
           :send_notification_email => '',
           :organizations_attributes => [
             {
-              :id => organizations(:default_organization).id,
+              :id => organizations(:cirope).id,
               :name => 'Updated default organization',
               :prefix => 'default-testing-organization',
               :description => 'Updated default organization description'
@@ -146,17 +116,15 @@ class GroupsControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to groups_url
     assert_not_nil assigns(:group)
     assert_equal 'Updated group', assigns(:group).name
     assert_equal 'Updated default organization',
-      Organization.find(organizations(:default_organization).id).name
+      Organization.find(organizations(:cirope).id).name
   end
 
   test 'destroy group' do
-    perform_auth
-    
     assert_difference 'Group.count', -1 do
       delete :destroy, :id => groups(:second_group).id
     end

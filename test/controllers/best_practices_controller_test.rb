@@ -32,7 +32,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'list best practices' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:best_practices)
@@ -40,7 +40,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'show best practice' do
-    perform_auth
+    login
     get :show, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -48,7 +48,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'new best practice' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -56,7 +56,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'create best_practice' do
-    perform_auth
+    login
     counts_array = ['BestPractice.count', 'ProcessControl.count',
       'ControlObjective.count', 'Control.count']
     assert_difference counts_array, 4 do
@@ -167,7 +167,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'edit best practice' do
-    perform_auth
+    login
     get :edit, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -175,7 +175,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'update best practice' do
-    perform_auth
+    login
     counts_array = ['BestPractice.count', 'ProcessControl.count',
       'ControlObjective.count', 'Control.count']
     assert_no_difference counts_array do
@@ -242,7 +242,7 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'destroy best_practice' do
-    perform_auth
+    login
     assert_difference 'BestPractice.count', -1 do
       delete :destroy, :id => best_practices(:useless_best_practice).id
     end

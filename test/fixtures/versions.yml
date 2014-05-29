@@ -3,7 +3,7 @@ normal_version:
   item_type: LoginRecord
   event: create
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
-  organization_id: <%= ActiveRecord::FixtureSet.identify(:default_organization) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
   important: false
   created_at: <%= Time.now.to_s(:db) %>
 
@@ -12,7 +12,7 @@ important_version:
   item_type: User
   event: create
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
-  organization_id: <%= ActiveRecord::FixtureSet.identify(:default_organization) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
   important: true
   created_at: <%= 1.hour.ago.to_s(:db) %>
 
@@ -21,7 +21,7 @@ important_new_version:
   item_type: User
   event: update
   whodunnit: <%= ActiveRecord::FixtureSet.identify(:administrator_user) %>
-  organization_id: <%= ActiveRecord::FixtureSet.identify(:default_organization) %>
+  organization_id: <%= ActiveRecord::FixtureSet.identify(:cirope) %>
   object: {name: 'new_name'}
   important: true
   created_at: <%= Time.now.to_s(:db) %>

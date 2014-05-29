@@ -27,7 +27,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list error records' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:error_records)
@@ -35,7 +35,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list error records with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'usefull',
       :columns => ['user', 'data']
@@ -49,7 +49,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show error record when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'wrong',
       :columns => ['user', 'data']
@@ -62,7 +62,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show error record' do
-    perform_auth
+    login
     get :show, :id => error_records(:administrator_user_failed_attempt).id
     assert_response :success
     assert_not_nil assigns(:error_record)
@@ -70,7 +70,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 

@@ -1,15 +1,15 @@
-default_organization:
-  name: Default Organization
-  prefix: default-testing-organization
-  description: The default organization
+cirope:
+  name: Cirope S.A.
+  prefix: cirope
+  description: ''
   image_model: image_one
   group: main_group
   kind: quality_management
 
-second_organization:
-  name: Second Organization
-  prefix: second-testing-organization
-  description: The second organization
+google:
+  name: Google Inc.
+  prefix: google
+  description: ''
   image_model: image_two
   group: second_group
   kind: private

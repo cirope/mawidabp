@@ -134,16 +134,21 @@ module Reports::QAIndicators
   end
 
   def calculate_production_level(period)
-    reviews_count = period.plans.inject(0.0) do |pt, p|
-      pt + p.plan_items.joins(
+    reviews_count = period.plans.to_a.sum do |p|
+      final_review_count = p.plan_items.joins(
         :review => :conclusion_final_review
       ).with_business_unit.between(@from_date, @to_date).count
+      last_day_count = p.plan_items.references(:conclusion_final_review).includes(
+        :review => :conclusion_final_review,
+      ).with_business_unit.between(@from_date, @to_date).where(
+        "#{ConclusionFinalReview.table_name}.review_id" => nil, end: @to_date
+      ).count
+
+      final_review_count + last_day_count
     end
 
-    plan_items_count = period.plans.inject(0.0) do |pt, p|
-      pt + p.plan_items.with_business_unit.between(
-        @from_date, @to_date
-      ).count
+    plan_items_count = period.plans.to_a.sum do |p|
+      p.plan_items.with_business_unit.between(@from_date, @to_date).count
     end
 
     @indexes[:production_level] = plan_items_count > 0 ?

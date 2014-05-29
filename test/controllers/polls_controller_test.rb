@@ -44,7 +44,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'list polls' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:polls)
@@ -52,7 +52,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :reports
     assert_response :success
     assert_not_nil assigns(:title)
@@ -60,7 +60,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'show poll' do
-    perform_auth
+    login
     get :show, id: polls(:poll_one).id
     assert_response :success
     assert_not_nil assigns(:poll)
@@ -68,7 +68,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'new poll' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:poll)
@@ -76,7 +76,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'create poll' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.deliveries = []
@@ -148,7 +148,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'destroy poll' do
-    perform_auth
+    login
     assert_difference 'Poll.count', -1 do
       assert_difference 'Answer.count', -2 do
         delete :destroy, id: polls(:poll_one).id
@@ -159,7 +159,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'summary by questionnaire' do
-    perform_auth
+    login
 
     get :summary_by_questionnaire
     assert_response :success
@@ -178,7 +178,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'filtered questionnaire report' do
-    perform_auth
+    login
     get :summary_by_questionnaire, summary_by_questionnaire: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date,
@@ -195,7 +195,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'create summary by questionnaire' do
-    perform_auth
+    login
 
     post :create_summary_by_questionnaire, summary_by_questionnaire: {
       from_date: 10.years.ago.to_date,
@@ -211,7 +211,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'summary by business_unit' do
-    perform_auth
+    login
 
     get :summary_by_business_unit
     assert_response :success
@@ -231,7 +231,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'filtered business unit report' do
-    perform_auth
+    login
     get :summary_by_business_unit, summary_by_business_unit: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date,
@@ -250,7 +250,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'create summary by business unit' do
-    perform_auth
+    login
 
     post :create_summary_by_business_unit, summary_by_business_unit: {
       from_date: 10.years.ago.to_date,
@@ -268,7 +268,7 @@ class PollsControllerTest < ActionController::TestCase
 
 
   test 'summary by answers' do
-    perform_auth
+    login
 
     get :summary_by_answers
     assert_response :success
@@ -288,7 +288,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'filtered answers report' do
-    perform_auth
+    login
     get :summary_by_answers, summary_by_answers: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date,
@@ -305,7 +305,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'create summary by answers' do
-    perform_auth
+    login
 
     post :create_summary_by_answers, summary_by_answers: {
       from_date: 10.years.ago.to_date,
@@ -322,7 +322,7 @@ class PollsControllerTest < ActionController::TestCase
   end
 
   test 'send csv polls' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.deliveries = []

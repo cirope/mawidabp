@@ -24,7 +24,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
@@ -32,7 +32,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'synthesis report' do
-    perform_auth
+    login
 
     get :synthesis_report, :controller_name => 'conclusion'
     assert_response :success
@@ -51,7 +51,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered synthesis report' do
-    perform_auth
+    login
     get :synthesis_report, :synthesis_report => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date,
@@ -67,7 +67,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'create synthesis report' do
-    perform_auth
+    login
 
     post :create_synthesis_report, :synthesis_report => {
       :from_date => 10.years.ago.to_date,
@@ -84,7 +84,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by risk report' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk_report
     assert_response :success
@@ -104,7 +104,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered weaknesses by risk report' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
@@ -120,7 +120,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by risk report' do
-    perform_auth
+    login
 
     get :create_weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
@@ -139,7 +139,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'fixed weaknesses report' do
-    perform_auth
+    login
 
     get :fixed_weaknesses_report
     assert_response :success
@@ -159,7 +159,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered fixed weaknesses report' do
-    perform_auth
+    login
 
     get :fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
@@ -175,7 +175,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'create fixed weaknesses report' do
-    perform_auth
+    login
 
     get :create_fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
@@ -194,7 +194,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats
     assert_response :success
@@ -214,7 +214,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -231,7 +231,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'create control objective stats report' do
-    perform_auth
+    login
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -250,7 +250,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats
     assert_response :success
@@ -270,7 +270,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
@@ -286,7 +286,7 @@ class ConclusionCommitteeReportsControllerTest < ActionController::TestCase
   end
 
   test 'create process control stats report' do
-    perform_auth
+    login
 
     get :create_process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,

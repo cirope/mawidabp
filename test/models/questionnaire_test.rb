@@ -18,7 +18,7 @@ class QuestionnaireTest < ActiveSupport::TestCase
     assert_difference ['Questionnaire.count', 'Question.count'] do
       Questionnaire.list.create(
         :name => 'Cuestionario de prueba',
-        :organization_id => organizations(:default_organization).id,
+        :organization_id => organizations(:cirope).id,
         :email_subject => "email@subject.com",
         :email_text => "Email text",
         :email_link => "Email link",

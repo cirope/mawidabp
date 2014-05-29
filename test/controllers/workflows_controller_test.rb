@@ -32,7 +32,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'list workflows' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:workflows)
@@ -40,7 +40,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'show workflow' do
-    perform_auth
+    login
     get :show, :id => workflows(:current_workflow).id
     assert_response :success
     assert_not_nil assigns(:workflow)
@@ -48,7 +48,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'new workflow' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:workflow)
@@ -56,7 +56,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'clone workflow' do
-    perform_auth
+    login
     workflow = Workflow.find workflows(:current_workflow).id
 
     get :new, :clone_from => workflow.id
@@ -76,7 +76,7 @@ class WorkflowsControllerTest < ActionController::TestCase
       'ResourceUtilization.material.count', 'ResourceUtilization.human.count']
 
     assert_difference counts_array do
-      perform_auth
+      login
       post :create, {
         :workflow => {
           :period_id => periods(:current_period).id,
@@ -109,7 +109,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'edit workflow' do
-    perform_auth
+    login
     get :edit, :id => workflows(:current_workflow).id
     assert_response :success
     assert_not_nil assigns(:workflow)
@@ -119,7 +119,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   test 'update workflow' do
     assert_no_difference ['Workflow.count', 'ResourceUtilization.count'] do
       assert_difference 'WorkflowItem.count', -1 do
-        perform_auth
+        login
         patch :update, {
           :id => workflows(:with_conclusion_workflow).id,
           :workflow => {
@@ -201,7 +201,7 @@ class WorkflowsControllerTest < ActionController::TestCase
     }
 
     assert_no_difference ['Workflow.count', 'WorkflowItem.count'] do
-      perform_auth
+      login
       post :create, values
     end
 
@@ -214,7 +214,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'destroy workflow' do
-    perform_auth
+    login
     assert_difference 'Workflow.count', -1 do
       delete :destroy, :id => workflows(:with_conclusion_workflow).id
     end
@@ -223,7 +223,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
 
     workflow = Workflow.find(workflows(:current_workflow).id)
 
@@ -233,7 +233,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
 
@@ -259,7 +259,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'reviews for period' do
-    perform_auth
+    login
     get :reviews_for_period, :period => periods(:current_period).id
     assert_response :success
 
@@ -275,7 +275,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'resource data' do
-    perform_auth
+    login
 
     resource_data = nil
 
@@ -290,7 +290,7 @@ class WorkflowsControllerTest < ActionController::TestCase
   end
 
   test 'estimated amount' do
-    perform_auth
+    login
     get :estimated_amount, :id => reviews(:current_review).id
 
     assert_response :success

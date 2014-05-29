@@ -24,7 +24,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
@@ -32,7 +32,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'detailed management report' do
-    perform_auth
+    login
 
     get :detailed_management_report
     assert_response :success
@@ -50,7 +50,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'create detailed management report' do
-    perform_auth
+    login
 
     post :create_detailed_management_report, detailed_management_report: {
       from_date: 10.years.ago.to_date,
@@ -67,7 +67,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by state execution report' do
-    perform_auth
+    login
 
     get :weaknesses_by_state_execution
     assert_response :success
@@ -85,7 +85,7 @@ class ExecutionReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by state execution report' do
-    perform_auth
+    login
     post :create_weaknesses_by_state_execution, weaknesses_by_state_execution: {
       from_date: 10.years.ago.to_date,
       to_date: 10.years.from_now.to_date

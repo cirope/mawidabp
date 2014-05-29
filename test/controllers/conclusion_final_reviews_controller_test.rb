@@ -7,7 +7,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
+    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -38,7 +38,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_final_reviews' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:conclusion_final_reviews)
@@ -46,7 +46,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_final_reviews with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1',
       :columns => ['identification', 'project']
@@ -58,7 +58,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_final_reviews with search by date and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -72,7 +72,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion_final_reviews when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 3',
       :columns => ['identification', 'project']
@@ -83,7 +83,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion_final_reviews when search by date match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "> #{I18n.l(5.days.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -95,7 +95,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'show conclusion_final_review' do
-    perform_auth
+    login
     get :show, :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
@@ -103,7 +103,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'new conclusion final review' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
@@ -111,7 +111,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'new json conclusion final review' do
-    perform_auth
+    login
     xhr :get, :new, :format => 'json'
     assert_response :success
     assert_nothing_raised do
@@ -120,7 +120,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'new for existent conclusion final review' do
-    perform_auth
+    login
     get :new, :review =>
       conclusion_reviews(:conclusion_past_final_review).review_id
     assert_redirected_to edit_conclusion_final_review_url(
@@ -128,7 +128,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create conclusion final review' do
-    perform_auth
+    login
     assert_difference 'ConclusionFinalReview.count' do
       post :create, {
         :conclusion_final_review => {
@@ -143,7 +143,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion final review' do
-    perform_auth
+    login
     get :edit, :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_final_review)
@@ -152,7 +152,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
   test 'update conclusion final review' do
     assert_no_difference 'ConclusionFinalReview.count' do
-      perform_auth
+      login
       patch :update, {
         :id => conclusion_reviews(:conclusion_past_final_review).id,
         :conclusion_final_review => {
@@ -171,7 +171,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export conclusion final review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
@@ -184,7 +184,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export conclusion draft review without control objectives excluded from score' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
@@ -198,7 +198,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'score sheet of final review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
@@ -218,7 +218,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download work papers' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
@@ -231,7 +231,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download bundle' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionFinalReview.find(
       conclusion_reviews(:conclusion_past_final_review).id)
@@ -246,7 +246,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'compose email' do
-    perform_auth
+    login
     get :compose_email,
       :id => conclusion_reviews(:conclusion_past_final_review).id
     assert_response :success
@@ -255,7 +255,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'send by email' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -305,7 +305,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'send by email with multiple attachments' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -362,7 +362,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export list to pdf' do
-    perform_auth
+    login
 
     assert_nothing_raised { get :export_list_to_pdf }
 
@@ -372,7 +372,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export list with search' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_list_to_pdf, :search => {
@@ -387,7 +387,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
 

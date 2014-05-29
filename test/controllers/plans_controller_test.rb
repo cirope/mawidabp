@@ -32,7 +32,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'list plans' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:plans)
@@ -40,7 +40,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'show plan' do
-    perform_auth
+    login
     get :show, :id => plans(:current_plan).id
     assert_response :success
     assert_not_nil assigns(:plan)
@@ -48,7 +48,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'new plan' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:plan)
@@ -56,7 +56,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'new plan with business unit type' do
-    perform_auth
+    login
     get :new, :business_unit_type => business_unit_types(:cycle).to_param
     assert_response :success
     assert_not_nil assigns(:plan)
@@ -64,7 +64,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'clone plan' do
-    perform_auth
+    login
     plan = Plan.find plans(:current_plan).id
 
     get :new, :clone_from => plan.id
@@ -83,7 +83,7 @@ class PlansControllerTest < ActionController::TestCase
       'ResourceUtilization.human.count', 'ResourceUtilization.material.count']
 
     assert_difference counts_array do
-      perform_auth
+      login
       post :create, {
         :plan => {
           :period_id => periods(:unused_period).id,
@@ -117,7 +117,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'edit plan' do
-    perform_auth
+    login
     get :edit, :id => plans(:past_plan).id
     assert_response :success
     assert_not_nil assigns(:plan)
@@ -126,7 +126,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'edit plan with business unit type' do
-    perform_auth
+    login
     get :edit, :id => plans(:past_plan).id,
       :business_unit_type => business_unit_types(:cycle).to_param
     assert_response :success
@@ -138,7 +138,7 @@ class PlansControllerTest < ActionController::TestCase
   test 'update plan' do
     assert_no_difference ['Plan.count', 'ResourceUtilization.count'] do
       assert_difference 'PlanItem.count', -1 do
-        perform_auth
+        login
         patch :update, {
           :id => plans(:past_plan).id,
           :plan => {
@@ -225,7 +225,7 @@ class PlansControllerTest < ActionController::TestCase
     }
 
     assert_no_difference ['Plan.count', 'PlanItem.count'] do
-      perform_auth
+      login
       post :create, values
     end
 
@@ -279,7 +279,7 @@ class PlansControllerTest < ActionController::TestCase
     }
 
     assert_no_difference ['Plan.count', 'PlanItem.count'] do
-      perform_auth
+      login
       post :create, values
     end
 
@@ -292,7 +292,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'destroy plan' do
-    perform_auth
+    login
     assert_difference 'Plan.count', -1 do
       delete :destroy, :id => plans(:unrelated_plan).id
     end
@@ -301,7 +301,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'destroy related plan' do
-    perform_auth
+    login
     assert_no_difference 'Plan.count' do
       delete :destroy, :id => plans(:current_plan).id
     end
@@ -311,7 +311,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
 
     plan = Plan.find(plans(:current_plan).id)
 
@@ -321,7 +321,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for business_unit business_unit' do
-    perform_auth
+    login
     get :auto_complete_for_business_unit_business_unit_id, {
       :q => 'fifth', :format => :json
     }
@@ -365,7 +365,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
 
@@ -391,7 +391,7 @@ class PlansControllerTest < ActionController::TestCase
   end
 
   test 'resource data' do
-    perform_auth
+    login
 
     resource_data = nil
 

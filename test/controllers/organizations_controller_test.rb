@@ -7,7 +7,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
   # y no accesibles las privadas
   test 'public and private actions' do
-    id_param = {:id => organizations(:default_organization).to_param}
+    id_param = {:id => organizations(:cirope).to_param}
     public_actions = []
     private_actions = [
       [:get, :index],
@@ -32,7 +32,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'list organizations' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:organizations)
@@ -42,15 +42,15 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'show organization' do
-    perform_auth
-    get :show, :id => organizations(:default_organization).id
+    login
+    get :show, :id => organizations(:cirope).id
     assert_response :success
     assert_not_nil assigns(:organization)
     assert_template 'organizations/show'
   end
 
   test 'new organization' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:organization)
@@ -60,7 +60,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user
+    login user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -81,7 +81,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization with wrong group' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user
+    login user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -101,17 +101,17 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'edit organization' do
-    perform_auth
-    get :edit, :id => organizations(:default_organization).id
+    login
+    get :edit, :id => organizations(:cirope).id
     assert_response :success
     assert_not_nil assigns(:organization)
     assert_template 'organizations/edit'
   end
 
   test 'update organization' do
-    perform_auth
+    login
     patch :update, {
-      :id => organizations(:default_organization).id,
+      :id => organizations(:cirope).id,
       :organization => {
         :name => 'Updated organization',
         :description => 'Updated description',
@@ -128,11 +128,11 @@ class OrganizationsControllerTest < ActionController::TestCase
     begin
       PaperTrail.enabled = false
 
-      organization = Organization.find(organizations(:second_organization).id)
-      perform_auth(users(:administrator_second_user), organization)
+      organization = Organization.find(organizations(:google).id)
+      login user: users(:administrator_second_user), prefix: organization.prefix
 
       assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
-        delete :destroy, :id => organizations(:second_organization).id
+        delete :destroy, :id => organizations(:google).id
       end
 
       assert_redirected_to organizations_url

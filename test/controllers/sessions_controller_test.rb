@@ -4,7 +4,7 @@ class SessionsControllerTest < ActionController::TestCase
   fixtures :users, :roles, :organizations
 
   def setup
-    @organization = organizations(:default_organization)
+    @organization = organizations(:cirope)
 
     @request.host = "#{@organization.prefix}.localhost.i"
   end
@@ -157,7 +157,7 @@ class SessionsControllerTest < ActionController::TestCase
     assert_redirected_to welcome_url
     login_record = LoginRecord.where(
       :user_id => users(:administrator_user).id,
-      :organization_id => organizations(:default_organization).id
+      :organization_id => organizations(:cirope).id
     ).first
     assert_kind_of LoginRecord, login_record
     assert_not_nil I18n.t('message.password_expire_in_x',
@@ -183,13 +183,13 @@ class SessionsControllerTest < ActionController::TestCase
     assert_redirected_to edit_password_user_url(users(:first_time_user))
     login_record = LoginRecord.where(
       :user_id => users(:first_time_user).id,
-      :organization_id => organizations(:default_organization).id
+      :organization_id => organizations(:cirope).id
     ).first
     assert_kind_of LoginRecord, login_record
   end
 
   test 'logout' do
-    perform_auth
+    login
     delete :destroy
     assert_nil session[:user_id]
     assert_redirected_to login_url

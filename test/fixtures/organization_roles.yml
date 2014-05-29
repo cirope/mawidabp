@@ -1,154 +1,154 @@
-admin_role_for_administrator_user_in_default_organization:
+admin_role_for_administrator_user_in_cirope:
   user: administrator_user
-  organization: default_organization
+  organization: cirope
   role: admin_role
 
-admin_role_for_administrator_user_in_second_organization:
+admin_role_for_administrator_user_in_google:
   user: administrator_user
-  organization: second_organization
+  organization: google
   role: admin_role
 
-admin_second_role_for_administrator_second_user_in_second_organization:
+admin_second_role_for_administrator_second_user_in_google:
   user: administrator_second_user
-  organization: second_organization
+  organization: google
   role: admin_second_role
 
-auditor_senior_role_for_bare_user_in_default_organization:
+auditor_senior_role_for_bare_user_in_cirope:
   user: bare_user
-  organization: default_organization
+  organization: cirope
   role: auditor_senior_role
 
-auditor_senior_role_for_first_time_user_in_default_organization:
+auditor_senior_role_for_first_time_user_in_cirope:
   user: first_time_user
-  organization: default_organization
+  organization: cirope
   role: auditor_senior_role
 
-auditor_senior_role_for_expired_user_in_default_organization:
+auditor_senior_role_for_expired_user_in_cirope:
   user: expired_user
-  organization: default_organization
+  organization: cirope
   role: auditor_senior_role
 
-admin_role_for_disabled_user_in_default_organization:
+admin_role_for_disabled_user_in_cirope:
   user: disabled_user
-  organization: default_organization
+  organization: cirope
   role: admin_role
 
-admin_role_for_blank_password_user_in_default_organization:
+admin_role_for_blank_password_user_in_cirope:
   user: blank_password_user
-  organization: default_organization
+  organization: cirope
   role: admin_role
 
-admin_role_for_expired_blank_password_user_in_default_organization:
+admin_role_for_expired_blank_password_user_in_cirope:
   user: expired_blank_password_user
-  organization: default_organization
+  organization: cirope
   role: admin_role
 
-executive_manager_role_for_general_manager_user_in_default_organization:
+executive_manager_role_for_general_manager_user_in_cirope:
   user: general_manager_user
-  organization: default_organization
+  organization: cirope
   role: executive_manager_role
 
-executive_manager_role_for_coordinator_manager_user_in_default_organization:
+executive_manager_role_for_coordinator_manager_user_in_cirope:
   user: coordinator_manager_user
-  organization: default_organization
+  organization: cirope
   role: executive_manager_role
 
-executive_manager_role_for_general_manager_user_in_second_organization:
+executive_manager_role_for_general_manager_user_in_google:
   user: general_manager_user
-  organization: second_organization
+  organization: google
   role: executive_manager_role
 
-executive_manager_role_for_coordinator_manager_user_in_second_organization:
+executive_manager_role_for_coordinator_manager_user_in_google:
   user: coordinator_manager_user
-  organization: second_organization
+  organization: google
   role: executive_manager_role
 
-executive_manager_role_for_president_user_in_second_organization:
+executive_manager_role_for_president_user_in_google:
   user: president_user
-  organization: second_organization
+  organization: google
   role: executive_manager_role
 
-executive_manager_role_for_president_user_in_second_organization:
+executive_manager_role_for_president_user_in_google:
   user: president_user
-  organization: second_organization
+  organization: google
   role: executive_manager_role
 
-executive_manager_role_for_plain_manager_user_in_default_organization:
+executive_manager_role_for_plain_manager_user_in_cirope:
   user: plain_manager_user
-  organization: default_organization
+  organization: cirope
   role: executive_manager_role
 
-executive_manager_role_for_plain_manager_second_user_in_default_organization:
+executive_manager_role_for_plain_manager_second_user_in_cirope:
   user: plain_manager_second_user
-  organization: second_organization
+  organization: google
   role: executive_manager_role
 
-manager_role_for_manager_user_in_default_organization:
+manager_role_for_manager_user_in_cirope:
   user: manager_user
-  organization: default_organization
+  organization: cirope
   role: manager_role
 
-manager_role_for_manager_user_in_second_organization:
+manager_role_for_manager_user_in_google:
   user: manager_user
-  organization: second_organization
+  organization: google
   role: manager_role
 
-manager_role_for_manager_second_user_in_default_organization:
+manager_role_for_manager_second_user_in_cirope:
   user: manager_second_user
-  organization: default_organization
+  organization: cirope
   role: manager_role
 
-supervisor_role_for_supervisor_user_in_default_organization:
+supervisor_role_for_supervisor_user_in_cirope:
   user: supervisor_user
-  organization: default_organization
+  organization: cirope
   role: supervisor_role
 
-supervisor_role_for_supervisor_user_in_second_organization:
+supervisor_role_for_supervisor_user_in_google:
   user: supervisor_user
-  organization: second_organization
+  organization: google
   role: supervisor_role
 
-supervisor_role_for_supervisor_second_user_in_default_organization:
+supervisor_role_for_supervisor_second_user_in_cirope:
   user: supervisor_second_user
-  organization: default_organization
+  organization: cirope
   role: supervisor_role
 
-audited_role_for_audited_user_in_default_organization:
+audited_role_for_audited_user_in_cirope:
   user: audited_user
-  organization: default_organization
+  organization: cirope
   role: audited_role
 
-audited_role_for_audited_user_in_second_organization:
+audited_role_for_audited_user_in_google:
   user: audited_user
-  organization: second_organization
+  organization: google
   role: audited_role
 
-audited_role_for_audited_second_user_in_default_organization:
+audited_role_for_audited_second_user_in_cirope:
   user: audited_second_user
-  organization: default_organization
+  organization: cirope
   role: audited_role
 
-audited_role_for_audited_second_user_in_second_organization:
+audited_role_for_audited_second_user_in_google:
   user: audited_second_user
-  organization: second_organization
+  organization: google
   role: audited_role
 
-committee_role_for_committee_user_in_default_organization:
+committee_role_for_committee_user_in_cirope:
   user: committee_user
-  organization: default_organization
+  organization: cirope
   role: committee_role
 
-auditor_senior_role_for_auditor_user_in_default_organization:
+auditor_senior_role_for_auditor_user_in_cirope:
   user: auditor_user
-  organization: default_organization
+  organization: cirope
   role: auditor_senior_role
 
-auditor_senior_role_for_auditor_user_in_second_organization:
+auditor_senior_role_for_auditor_user_in_google:
   user: auditor_user
-  organization: second_organization
+  organization: google
   role: auditor_senior_role
-  
-auditor_senior_role_for_poll_user_in_default_organization:
+
+auditor_senior_role_for_poll_user_in_cirope:
   user: poll_user
-  organization: default_organization
+  organization: cirope
   role: auditor_senior_role

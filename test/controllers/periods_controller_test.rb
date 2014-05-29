@@ -32,7 +32,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'list periods' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:periods)
@@ -40,7 +40,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'show period' do
-    perform_auth
+    login
     get :show, :id => periods(:current_period).id
     assert_response :success
     assert_not_nil assigns(:period)
@@ -48,7 +48,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'new period' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:period)
@@ -56,7 +56,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'create period' do
-    perform_auth
+    login
     assert_difference 'Period.count' do
       post :create, {
         :period => {
@@ -71,9 +71,9 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'back to redirection on create' do
     assert_difference 'Period.count' do
-      perform_auth
+      login
       session[:back_to] = new_period_url
-      
+
       post :create, {
         :period => {
           :number => '20',
@@ -88,7 +88,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'edit period' do
-    perform_auth
+    login
     get :edit, :id => periods(:current_period).id
     assert_response :success
     assert_not_nil assigns(:period)
@@ -97,7 +97,7 @@ class PeriodsControllerTest < ActionController::TestCase
 
   test 'update period' do
     assert_no_difference 'Period.count' do
-      perform_auth
+      login
       patch :update, {
         :id => periods(:current_period).id,
         :period => {
@@ -115,7 +115,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'destroy period' do
-    perform_auth
+    login
     assert_difference 'Period.count', -1 do
       delete :destroy, :id => periods(:unused_period).id
     end
@@ -124,7 +124,7 @@ class PeriodsControllerTest < ActionController::TestCase
   end
 
   test 'destroy asociated period' do
-    perform_auth
+    login
     period = Period.find periods(:current_period).id
     assert_no_difference 'Period.count' do
       delete :destroy, :id => period.id

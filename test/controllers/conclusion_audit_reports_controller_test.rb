@@ -26,7 +26,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
@@ -34,7 +34,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by state report' do
-    perform_auth
+    login
 
     get :weaknesses_by_state
     assert_response :success
@@ -54,7 +54,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by state report' do
-    perform_auth
+    login
 
     post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
@@ -72,7 +72,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by risk' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk
     assert_response :success
@@ -92,14 +92,14 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by risk' do
-    perform_auth
+    login
 
     post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -110,7 +110,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by audit type report' do
-    perform_auth
+    login
 
     get :weaknesses_by_audit_type
     assert_response :success
@@ -130,7 +130,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by audit type report' do
-    perform_auth
+    login
 
     post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
@@ -138,7 +138,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -149,7 +149,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'cost analysis report' do
-    perform_auth
+    login
     expected_title = I18n.t 'conclusion_audit_report.cost_analysis_title'
 
     get :cost_analysis
@@ -169,7 +169,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create cost analysis report' do
-    perform_auth
+    login
 
     post :create_cost_analysis,
       :cost_analysis => {
@@ -186,7 +186,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'detailed cost analysis report' do
-    perform_auth
+    login
     expected_title = I18n.t 'conclusion_audit_report.detailed_cost_analysis_title'
 
     get :cost_analysis, :include_details => 1
@@ -206,7 +206,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create detailed cost analysis report' do
-    perform_auth
+    login
 
     post :create_cost_analysis, :include_details => 1,
       :cost_analysis => {
@@ -223,7 +223,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by risk report' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk_report
     assert_response :success
@@ -243,7 +243,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered weaknesses by risk report' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
@@ -259,7 +259,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by risk report' do
-    perform_auth
+    login
 
     get :create_weaknesses_by_risk_report, :weaknesses_by_risk_report => {
       :from_date => 10.years.ago.to_date,
@@ -267,7 +267,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -278,7 +278,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'fixed weaknesses report' do
-    perform_auth
+    login
 
     get :fixed_weaknesses_report
     assert_response :success
@@ -298,7 +298,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered fixed weaknesses report' do
-    perform_auth
+    login
 
     get :fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
@@ -314,7 +314,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create fixed weaknesses report' do
-    perform_auth
+    login
 
     get :create_fixed_weaknesses_report, :fixed_weaknesses_report => {
       :from_date => 10.years.ago.to_date,
@@ -322,7 +322,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -333,7 +333,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats
     assert_response :success
@@ -353,7 +353,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -370,7 +370,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create control objective stats report' do
-    perform_auth
+    login
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -378,7 +378,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -389,7 +389,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats
     assert_response :success
@@ -409,7 +409,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
@@ -425,7 +425,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create process control stats report' do
-    perform_auth
+    login
 
     get :create_process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
@@ -433,7 +433,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -444,7 +444,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'nonconformities report' do
-    perform_auth
+    login
 
     get :nonconformities_report
     assert_response :success
@@ -464,7 +464,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'filtered nonconformities report' do
-    perform_auth
+    login
 
     get :nonconformities_report, :nonconformities_report => {
       :from_date => 10.years.ago.to_date,
@@ -480,7 +480,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
   end
 
   test 'create nonconformities report' do
-    perform_auth
+    login
 
     get :create_nonconformities_report, :nonconformities_report => {
       :from_date => 10.years.ago.to_date,

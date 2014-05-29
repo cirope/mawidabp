@@ -7,7 +7,7 @@ class UsersControllerTest < ActionController::TestCase
   # Inicializa de forma correcta todas las variables que se utilizan en las
   # pruebas
   def setup
-    @request.host = "#{organizations(:default_organization).prefix}.localhost.i"
+    @request.host = "#{organizations(:cirope).prefix}.localhost.i"
   end
 
   # Prueba que sin realizar autenticación esten accesibles las partes publicas
@@ -40,7 +40,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'list users' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:users)
@@ -48,7 +48,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'list users with search' do
-    perform_auth
+    login
     get :index, :search => {:query => 'manager', :columns => ['user', 'name']}
     assert_response :success
     assert_not_nil assigns(:users)
@@ -58,7 +58,7 @@ class UsersControllerTest < ActionController::TestCase
 
 
   test 'edit user when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {:query => 'admin', :columns => ['user', 'name']}
     assert_redirected_to user_url(users(:administrator_user))
     assert_not_nil assigns(:users)
@@ -66,7 +66,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'show user' do
-    perform_auth
+    login
     get :show, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
@@ -74,7 +74,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'new user' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:user)
@@ -82,7 +82,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'create user' do
-    perform_auth
+    login
     counts_array = ['User.count', 'RelatedUserRelation.count',
       'OrganizationRole.count', 'ActionMailer::Base.deliveries.size']
     ActionMailer::Base.delivery_method = :test
@@ -105,7 +105,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => true,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ],
@@ -133,7 +133,7 @@ class UsersControllerTest < ActionController::TestCase
             :send_notification_email => false,
             :organization_roles_attributes => [
               {
-                :organization_id => organizations(:default_organization).id,
+                :organization_id => organizations(:cirope).id,
                 :role_id => roles(:admin_role).id
               }
             ]
@@ -144,7 +144,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'edit user' do
-    perform_auth
+    login
     get :edit, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
@@ -152,7 +152,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'update user' do
-    perform_auth
+    login
 
     user = User.find(users(:administrator_user).id)
 
@@ -178,8 +178,8 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :id => organization_roles(:admin_role_for_administrator_user_in_default_organization).id,
-              :organization_id => organizations(:default_organization).id,
+              :id => organization_roles(:admin_role_for_administrator_user_in_cirope).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ],
@@ -205,7 +205,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'send notification on updated user' do
-    perform_auth
+    login
 
     user = User.find(users(:administrator_user).id)
 
@@ -231,7 +231,7 @@ class UsersControllerTest < ActionController::TestCase
               :send_notification_email => true,
               :organization_roles_attributes => [
                 {
-                  :organization_id => organizations(:default_organization).id,
+                  :organization_id => organizations(:cirope).id,
                   :role_id => roles(:admin_second_role).id
                 }
               ],
@@ -260,7 +260,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'disable user' do
-    perform_auth
+    login
     user = User.find(users(:supervisor_second_user).id)
 
     assert user.enable?
@@ -276,7 +276,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'disable audited user' do
-    perform_auth
+    login
     assert_no_difference 'User.count' do
       delete :destroy, :id => users(:audited_user).user
     end
@@ -286,7 +286,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'blank user password' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -324,7 +324,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'edit password' do
-    perform_auth
+    login
     get :edit_password, {:id => users(:blank_password_user).to_param}
     assert_response :success
     assert_not_nil assigns(:auth_user)
@@ -332,7 +332,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'update password' do
-    perform_auth
+    login
     assert_difference 'OldPassword.count' do
       patch :update_password, {
         :id => users(:administrator_user).to_param,
@@ -432,7 +432,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ]
@@ -461,7 +461,7 @@ class UsersControllerTest < ActionController::TestCase
           :send_notification_email => false,
           :organization_roles_attributes => [
             {
-              :organization_id => organizations(:default_organization).id,
+              :organization_id => organizations(:cirope).id,
               :role_id => roles(:admin_role).id
             }
           ]
@@ -474,8 +474,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'get initial roles' do
-    perform_auth
-    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+    login
+    xhr :get, :initial_roles, :id => organizations(:cirope).id,
       :format => 'json', :hash => groups(:main_group).admin_hash
     assert_response :success
     roles = ActiveSupport::JSON.decode(@response.body)
@@ -484,8 +484,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'get initial roles with invalid hash' do
-    perform_auth
-    xhr :get, :initial_roles, :id => organizations(:default_organization).id,
+    login
+    xhr :get, :initial_roles, :id => organizations(:cirope).id,
       :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
 
     assert_redirected_to login_url
@@ -493,7 +493,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'edit personal data' do
-    perform_auth
+    login
     get :edit_personal_data, {:id => users(:administrator_user).user}
     assert_response :success
     assert_not_nil assigns(:auth_user)
@@ -502,7 +502,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'update personal data' do
     assert_no_difference 'User.count' do
-      perform_auth
+      login
       patch :update_personal_data, {
         :id => users(:administrator_user).to_param,
         :user => {
@@ -521,8 +521,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user findings reassignment edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -532,8 +531,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user finding reassignment update' do
-    perform_auth users(:administrator_user),
-      organizations(:default_organization)
+    login user: users(:administrator_user), prefix: organizations(:cirope).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -556,8 +554,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -567,8 +564,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment update' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -591,8 +587,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -602,8 +597,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    login user: users(:administrator_second_user), prefix: organizations(:google).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -625,7 +619,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user findings release edit' do
-    perform_auth
+    login
     get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
@@ -635,7 +629,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user findings release update' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -653,7 +647,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews release edit' do
-    perform_auth
+    login
     get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
@@ -663,7 +657,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews release update' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -681,7 +675,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user release edit of nothing' do
-    perform_auth
+    login
     get :release_edit, :id => users(:auditor_user).user
 
     assert_response :success
@@ -691,7 +685,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user release update of nothing' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -709,7 +703,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
 
     assert_nothing_raised { get :export_to_pdf }
 
@@ -718,7 +712,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'export with search' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_to_pdf, :search => {
@@ -732,8 +726,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'get roles' do
-    perform_auth
-    xhr :get, :roles, {:id => organizations(:default_organization).id,
+    login
+    xhr :get, :roles, {:id => organizations(:cirope).id,
       :format => 'json'}
     assert_response :success
     roles = ActiveSupport::JSON.decode(@response.body)
@@ -742,7 +736,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'show user status' do
-    perform_auth
+    login
     get :user_status, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
@@ -750,7 +744,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'show user status without graph' do
-    perform_auth
+    login
     get :user_status_without_graph, :id => users(:administrator_user).user
     assert_response :success
     assert_not_nil assigns(:user)
@@ -758,7 +752,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
 

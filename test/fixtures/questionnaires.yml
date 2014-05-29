@@ -1,6 +1,6 @@
 questionnaire_one:
   name: Encuesta al personal de auditoría
-  organization: default_organization
+  organization: cirope
   pollable_type: ConclusionReview
   email_text: Email text
   email_link: Email link
@@ -9,7 +9,7 @@ questionnaire_one:
 
 questionnaire_two:
   name: Encuesta de fin de año
-  organization: default_organization
+  organization: cirope
   email_text: Email text
   email_link: Email link
   email_subject: Email subject

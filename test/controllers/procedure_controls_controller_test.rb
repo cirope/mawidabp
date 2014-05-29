@@ -32,7 +32,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'list procedure controls' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:procedure_controls)
@@ -40,7 +40,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'show procedure control' do
-    perform_auth
+    login
     get :show, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
@@ -48,7 +48,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'new procedure control' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:procedure_control)
@@ -56,7 +56,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'clone procedure_control' do
-    perform_auth
+    login
     procedure_control = ProcedureControl.find(
       procedure_controls(:procedure_control_iso_27001).id)
 
@@ -75,7 +75,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   test 'create procedure control' do
     counts_array = ['ProcedureControl.count', 'ProcedureControlItem.count',
       'ProcedureControlSubitem.count', 'Control.count']
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         procedure_control: {
@@ -111,7 +111,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'edit procedure control' do
-    perform_auth
+    login
     get :edit, id: procedure_controls(:procedure_control_iso_27001).id
     assert_response :success
     assert_not_nil assigns(:procedure_control)
@@ -123,7 +123,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
       'ProcedureControlSubitem.count', 'Control.count']
 
     assert_no_difference counts_array do
-      perform_auth
+      login
       patch :update, {
         id: procedure_controls(:procedure_control_iso_27001).id,
         procedure_control: {
@@ -171,7 +171,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'destroy procedure control' do
-    perform_auth
+    login
     assert_difference 'ProcedureControl.count', -1 do
       delete :destroy, id: procedure_controls(:procedure_control_iso_27001).id
     end
@@ -180,7 +180,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
 
     procedure_control = ProcedureControl.find(
       procedure_controls(:procedure_control_iso_27001).id)
@@ -194,7 +194,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'get control objectives' do
-    perform_auth
+    login
     xhr :get, :get_control_objectives, {
       process_control: process_controls(:iso_27000_security_policy).id
     }
@@ -207,7 +207,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'get control objective' do
-    perform_auth
+    login
     xhr :get, :get_control_objective, {
       control_objective: control_objectives(:iso_27000_security_policy_3_1).id
     }
@@ -220,7 +220,7 @@ class ProcedureControlsControllerTest < ActionController::TestCase
   end
 
   test 'get procedure controls' do
-    perform_auth
+    login
     xhr :get, :get_process_controls, {
       best_practice: best_practices(:iso_27001).id
     }

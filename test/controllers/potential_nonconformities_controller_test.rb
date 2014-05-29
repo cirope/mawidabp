@@ -30,7 +30,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list potential_nonconformities' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:potential_nonconformities)
@@ -38,7 +38,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list potential_nonconformities with search and sort' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4',
       columns: ['description', 'review'],
@@ -57,7 +57,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit potential_nonconformity when search match only one result' do
-    perform_auth
+    login
     get :index, search: {
       query: '1 2 4 y 1ncp',
       columns: ['description', 'review']
@@ -70,7 +70,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'show potential_nonconformity' do
-    perform_auth
+    login
     get :show, id: findings(:bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:potential_nonconformity)
@@ -78,7 +78,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'new potential_nonconformity' do
-    perform_auth
+    login
     get :new, control_objective_item: control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -90,7 +90,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     counts_array = ['PotentialNonconformity.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         potential_nonconformity: {
@@ -123,7 +123,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
               code: 'PTNCP 20',
               number_of_pages: '10',
               description: 'New workpaper description',
-              organization_id: organizations(:default_organization).id,
+              organization_id: organizations(:cirope).id,
               file_model_attributes: {file: Rack::Test::UploadedFile.new(
                   TEST_FILE_FULL_PATH, 'text/plain')
               }
@@ -141,7 +141,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit potential_nonconformity' do
-    perform_auth
+    login
     get :edit, id: findings(
       :bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity).id
     assert_response :success
@@ -150,7 +150,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'update potential nonconformity' do
-    perform_auth
+    login
     assert_no_difference 'PotentialNonconformity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -187,7 +187,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
                 code: 'PTNCP 20',
                 number_of_pages: '10',
                 description: 'New workpaper description',
-                organization_id: organizations(:default_organization).id,
+                organization_id: organizations(:cirope).id,
                 file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(
                     TEST_FILE_FULL_PATH, 'text/plain')
@@ -211,7 +211,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     potential_nonconformity = PotentialNonconformity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity).id)
 
@@ -223,7 +223,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     review = Review.find(reviews(:review_with_conclusion).id)
 
     assert_difference 'review.finding_review_assignments.count' do
@@ -252,7 +252,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { q: 'adm', format: :json }
     assert_response :success
 
@@ -279,7 +279,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
 
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_potential_nonconformity).id)
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       q: 'NCP001',
       finding_id: finding.id,
@@ -337,7 +337,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       q: 'dependencia',
       review_id: reviews(:review_with_conclusion).id,
