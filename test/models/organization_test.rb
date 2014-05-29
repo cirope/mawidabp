@@ -14,9 +14,9 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_difference 'Setting.count', DEFAULT_SETTINGS.size do
         assert_difference 'Role.count', Role::TYPES.size do
           @organization = Organization.create(
-            :name => 'new3 organization',
-            :prefix => 'newww-test-prefix',
-            :kind => 'public'
+            name: 'new3 organization',
+            prefix: 'newww-test-prefix',
+            kind: 'public'
           )
         end
       end
@@ -30,10 +30,10 @@ class OrganizationTest < ActiveSupport::TestCase
       assert_difference 'Setting.count', DEFAULT_SETTINGS.size do
         assert_difference 'Role.count', Role::TYPES.size do
           @organization = Organization.create(
-            :name => 'new3 organization',
-            :prefix => 'newww-test-prefix',
-            :kind => 'quality_management',
-            :group_id => groups(:second_group).id
+            name: 'new3 organization',
+            prefix: 'newww-test-prefix',
+            kind: 'quality_management',
+            group_id: groups(:second_group).id
           )
         end
       end
@@ -43,7 +43,7 @@ class OrganizationTest < ActiveSupport::TestCase
   end
 
   test 'update' do
-    assert @organization.update(:name => 'New name')
+    assert @organization.update(name: 'New name')
     @organization.reload
     assert_equal 'New name', @organization.name
   end
