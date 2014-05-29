@@ -1,0 +1,19 @@
+es:
+  flash:
+    actions:
+      create:
+        notice: '%{resource_name} creado'
+        alert:  ''
+      update:
+        notice: '%{resource_name} actualizado'
+        alert:  ''
+      destroy:
+        notice: '%{resource_name} eliminado'
+        alert:  '%{resource_name} no pudo ser eliminado'
+
+    organizations:
+      create:
+        notice: 'Organización agregada correctamente'
+      update:
+        notice: 'Organización actualizada correctamente'
+        stale: 'La organización no fue actualizada, intente nuevamente'

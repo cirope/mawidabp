@@ -924,16 +924,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       without_solution_date: "no tiene fecha de solución"
       without_audit_comments: "no tiene comentarios de auditoría"
 
-  organization:
-    index_title: "Listado de organizaciones"
-    show_title: "Detalles de la organización"
-    new_title: "Agregar organización"
-    edit_title: "Modificar organización"
-    correctly_created: "Organización agregada correctamente."
-    correctly_updated: "Organización actualizada correctamente."
-    stale_object_error: "La organización no fue actualizada, intente nuevamente."
-    new_organization_can_not_have_image: "Podrá cargar un isologotipo de la organización luego de haberla creado"
-
   pdf:
     export: "Exportar"
     page_pattern: "Página <PAGENUM> de <TOTALPAGENUM>"
