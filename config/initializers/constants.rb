@@ -39,8 +39,6 @@ FOREIGN_KEY_OPTIONS='ON UPDATE RESTRICT ON DELETE RESTRICT DEFERRABLE INITIALLY 
 NOTIFICATIONS_STALE_DAYS = 2
 # Cadena para separar las enumeraciones cuando son concatenadas
 APP_ENUM_SEPARATOR = ' / '.freeze
-# Tipos de parámetros
-APP_PARAMETER_TYPES = ['admin', 'security'].freeze
 # Tipos de organizaciones
 ORGANIZATION_KINDS = ['private', 'public', 'quality_management', 'management_control'].freeze
 # Márgenes a dejar en los reportes generados en PDF (T, R, B, L)
