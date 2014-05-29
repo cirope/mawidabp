@@ -66,7 +66,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
         }
       }
     end
-    
+
     assert_redirected_to inline_helps_url
   end
 

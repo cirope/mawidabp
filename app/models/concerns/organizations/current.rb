@@ -1,0 +1,29 @@
+module Organizations::Current
+  extend ActiveSupport::Concern
+
+  included do
+    before_save :change_current_organization_id
+    after_save :restore_current_organization_id
+  end
+
+  module ClassMethods
+    def current_id
+      Thread.current[:current_organization_id]
+    end
+
+    def current_id=(organization_id)
+      Thread.current[:current_organization_id] = organization_id
+    end
+  end
+
+  private
+
+    def change_current_organization_id
+      @_current_organization_id = Organization.current_id
+      Organization.current_id = id if id
+    end
+
+    def restore_current_organization_id
+      Organization.current_id = @_current_organization_id
+    end
+end

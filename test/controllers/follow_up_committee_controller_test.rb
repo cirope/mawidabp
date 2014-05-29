@@ -209,7 +209,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
       },
       :controller_name => 'follow_up',
       :final => false
-    
+
     assert_response :success
     assert_template 'follow_up_committee/fixed_weaknesses_report'
   end

@@ -99,7 +99,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -138,7 +138,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
         :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -267,7 +267,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -322,7 +322,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -378,7 +378,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(
@@ -433,7 +433,7 @@ class ConclusionAuditReportsControllerTest < ActionController::TestCase
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',
-      :controller_name => 'conclusion',                                                                                                                                                  
+      :controller_name => 'conclusion',
       :final => true
 
     assert_redirected_to Prawn::Document.relative_path(

@@ -521,8 +521,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user findings reassignment edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -532,8 +531,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user finding reassignment update' do
-    perform_auth users(:administrator_user),
-      organizations(:default_organization)
+    perform_auth user: users(:administrator_user), prefix: organizations(:default_organization).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -556,8 +554,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -567,8 +564,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reviews reassignment update' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -591,8 +587,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing edit' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
     get :reassignment_edit, :id => users(:audited_user).user
 
     assert_response :success
@@ -602,8 +597,7 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'user reassignment of nothing' do
-    perform_auth users(:administrator_second_user),
-      organizations(:second_organization)
+    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true

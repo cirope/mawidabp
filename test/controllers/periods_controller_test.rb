@@ -73,7 +73,7 @@ class PeriodsControllerTest < ActionController::TestCase
     assert_difference 'Period.count' do
       perform_auth
       session[:back_to] = new_period_url
-      
+
       post :create, {
         :period => {
           :number => '20',

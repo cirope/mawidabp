@@ -58,7 +58,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date,
     },
     :report_title => 'New title',
-    :controller_name => 'follow_up',                                                                                                                                              
+    :controller_name => 'follow_up',
     :final => false
 
 
@@ -97,7 +97,7 @@ class FollowUpAuditControllerTest < ActionController::TestCase
       :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
-      :controller_name => 'follow_up',                                                                                                                                              
+      :controller_name => 'follow_up',
       :final => false
 
     assert_redirected_to Prawn::Document.relative_path(

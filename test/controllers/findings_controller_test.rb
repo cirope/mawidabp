@@ -55,7 +55,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for follow_up_committee' do
-    perform_auth users(:committee_user)
+    perform_auth user: users(:committee_user)
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -152,7 +152,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'show finding for follow_up_committee' do
-    perform_auth users(:committee_user)
+    perform_auth user: users(:committee_user)
     get :show, :completed => 'incomplete', :id => findings(
       :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
     assert_response :success
@@ -170,7 +170,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     auditor_response = @response.body.dup
 
-    perform_auth users(:audited_user)
+    perform_auth user: users(:audited_user)
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
@@ -181,7 +181,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit finding' do
-    perform_auth users(:audited_second_user)
+    perform_auth user: users(:audited_second_user)
     get :edit, :completed => 'complete',
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
@@ -189,7 +189,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit incomplete finding' do
-    perform_auth users(:audited_user)
+    perform_auth user: users(:audited_user)
     get :edit, :completed => 'incomplete',
       :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
 
@@ -311,7 +311,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding with audited user' do
-    perform_auth users(:audited_user)
+    perform_auth user: users(:audited_user)
     no_difference_count = ['Finding.count', 'WorkPaper.count',
       'FindingRelation.count']
     difference_count = ['FindingAnswer.count', 'Cost.count', 'FileModel.count']

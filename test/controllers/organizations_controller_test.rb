@@ -60,7 +60,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user
+    perform_auth user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -81,7 +81,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization with wrong group' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user
+    perform_auth user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -129,7 +129,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       PaperTrail.enabled = false
 
       organization = Organization.find(organizations(:second_organization).id)
-      perform_auth(users(:administrator_second_user), organization)
+      perform_auth user: users(:administrator_second_user), prefix: organization.prefix
 
       assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
         delete :destroy, :id => organizations(:second_organization).id

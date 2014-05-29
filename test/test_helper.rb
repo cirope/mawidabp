@@ -12,38 +12,15 @@ class ActiveSupport::TestCase
     Organization.current_id = organization.id
   end
 
-  # Función para utilizar en las pruebas de los métodos que requieren
-  # autenticación
-  def perform_auth user = users(:administrator_user), organization = organizations(:default_organization)
-    @request.host = "#{organization.prefix}.localhost.i"
-    temp_controller, @controller = @controller, SessionsController.new
-    password = user.is_encrypted? ? ::PLAIN_PASSWORDS[user.user] : user.password
+  def perform_auth user: users(:administrator_user), prefix: organizations(:default_organization).prefix
+    @request.host         = "#{prefix}.lvh.me"
+    session[:user_id]     = user.id
+    session[:last_access] = Time.now
 
-    if session[:user_id]
-      delete :destroy
-      assert_nil session[:user_id]
-      temp_controller.instance_eval { @auth_user = nil }
-      assert_redirected_to login_url
-    end
-
-    post :create, user: user.user, password: password
-
-    if user == users(:poll_user)
-      assert_redirected_to edit_poll_url(polls(:poll_one).id)
-    else
-      assert_redirected_to welcome_url
-    end
-
-    assert_not_nil session[:user_id]
-    auth_user = User.find(session[:user_id])
-    assert_not_nil auth_user
-    assert_equal user.user, auth_user.user
-
-    @controller = temp_controller
+    user.logged_in! session[:last_access]
   end
 
   def get_test_parameter parameter_name, organization = organizations(:default_organization)
-
     Setting.find_by(name: parameter_name, organization_id: organization.id).value
   end
 
