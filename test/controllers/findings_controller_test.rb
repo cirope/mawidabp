@@ -32,7 +32,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -40,7 +40,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings in xml' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :format => :xml
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -48,14 +48,14 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings in csv' do
-    perform_auth
+    login
     get :export_to_csv, :completed => 'incomplete', :format => :csv
     assert_response :success
     assert @response.headers['Content-Type'].start_with?('text/csv')
   end
 
   test 'list findings for follow_up_committee' do
-    perform_auth user: users(:committee_user)
+    login user: users(:committee_user)
     get :index, :completed => 'incomplete'
     assert_response :success
     assert_not_nil assigns(:findings)
@@ -63,7 +63,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings with search and sort' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
       :columns => ['description', 'review'],
@@ -79,7 +79,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings with search by date and sort' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => "> #{I18n.l(4.days.ago.to_date, :format => :minimal)}",
       :columns => ['review', 'issue_date']
@@ -93,7 +93,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for user' do
-    perform_auth
+    login
     user = User.find(users(:first_time_user).id)
     get :index, :completed => 'incomplete', :user_id => user.id
     assert_response :success
@@ -104,7 +104,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for responsible auditor' do
-    perform_auth
+    login
     user = User.find(users(:first_time_user).id)
     get :index, :completed => 'incomplete', :user_id => user.id, :as_responsible => true
     assert_response :success
@@ -115,7 +115,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'list findings for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id,
       findings(:iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification).id
@@ -130,7 +130,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'edit finding when search match only one result' do
-    perform_auth
+    login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y 1w',
       :columns => ['description', 'review']
@@ -143,7 +143,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'show finding' do
-    perform_auth
+    login
     get :show, :completed => 'incomplete',
       :id => findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
@@ -152,7 +152,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'show finding for follow_up_committee' do
-    perform_auth user: users(:committee_user)
+    login user: users(:committee_user)
     get :show, :completed => 'incomplete', :id => findings(
       :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id
     assert_response :success
@@ -161,7 +161,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'edit finding' do
-    perform_auth
+    login
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
@@ -170,7 +170,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     auditor_response = @response.body.dup
 
-    perform_auth user: users(:audited_user)
+    login user: users(:audited_user)
     get :edit, :completed => 'incomplete', :id =>
       findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
     assert_response :success
@@ -181,7 +181,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit finding' do
-    perform_auth user: users(:audited_second_user)
+    login user: users(:audited_second_user)
     get :edit, :completed => 'complete',
       :id => findings(:iso_27000_security_policy_3_1_item_weakness).id
     # No está autorizado el usuario a ver la observación
@@ -189,7 +189,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'unauthorized edit incomplete finding' do
-    perform_auth user: users(:audited_user)
+    login user: users(:audited_user)
     get :edit, :completed => 'incomplete',
       :id => findings(:iso_27000_security_organization_4_2_item_editable_weakness_incomplete).id
 
@@ -198,7 +198,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -311,7 +311,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding with audited user' do
-    perform_auth user: users(:audited_user)
+    login user: users(:audited_user)
     no_difference_count = ['Finding.count', 'WorkPaper.count',
       'FindingRelation.count']
     difference_count = ['FindingAnswer.count', 'Cost.count', 'FileModel.count']
@@ -417,7 +417,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'update finding and notify to the new user' do
-    perform_auth
+    login
 
     ActionMailer::Base.delivery_method = :test
     ActionMailer::Base.perform_deliveries = true
@@ -488,7 +488,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'export list to pdf' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete'
@@ -499,7 +499,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'export detailed list to pdf' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1
@@ -510,7 +510,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'export list with search' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :search => {
@@ -525,7 +525,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'export detailed list with search' do
-    perform_auth
+    login
 
     assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
@@ -541,7 +541,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     finding = Finding.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_weakness).id)
 
@@ -553,7 +553,7 @@ class FindingsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :completed => 'incomplete', :q => 'adm', :format => :json }
     assert_response :success
 
@@ -582,7 +582,7 @@ class FindingsControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :completed => 'incomplete',
       :q => 'O001',

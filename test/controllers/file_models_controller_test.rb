@@ -35,14 +35,14 @@ class FileModelsControllerTest < ActionController::TestCase
   end
 
   test 'download file' do
-    perform_auth
+    login
     get :download, { :path => @file_model.file.url.gsub(/^\/private/, "") }
     assert_response :success
     assert_equal 'some test text', @response.body
   end
 
   test 'download unauthorized file' do
-    perform_auth user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
+    login user: users(:administrator_second_user), prefix: organizations(:second_organization).prefix
     get :download, { :path => @file_model.file.url.gsub(/^\/private/, "") }
     assert_redirected_to :controller => :welcome, :action => :index
   end

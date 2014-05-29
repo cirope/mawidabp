@@ -28,7 +28,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'list questionnaires' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:questionnaires)
@@ -36,7 +36,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'show questionnaire' do
-    perform_auth
+    login
     get :show, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
@@ -44,7 +44,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'new questionnaire' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:questionnaire)
@@ -52,7 +52,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'create questionnaire' do
-    perform_auth
+    login
     assert_difference 'Questionnaire.count' do
       assert_difference 'Question.count', 2 do
         assert_difference 'AnswerOption.count', 5 do
@@ -82,7 +82,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'edit questionnaire' do
-    perform_auth
+    login
     get :edit, id: questionnaires(:questionnaire_one).id
     assert_response :success
     assert_not_nil assigns(:questionnaire)
@@ -90,7 +90,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test "update questionnaire" do
-    perform_auth
+    login
     assert_no_difference ['Questionnaire.count', 'Question.count'] do
       patch :update, {
         id: questionnaires(:questionnaire_one).id,
@@ -116,7 +116,7 @@ class QuestionnairesControllerTest < ActionController::TestCase
     end
 
   test 'destroy questionnaire' do
-    perform_auth
+    login
     assert_difference ['Questionnaire.count'], -1 do
       assert_difference 'Question.count', -2 do
         assert_difference ['AnswerOption.count'], -5 do

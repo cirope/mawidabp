@@ -33,7 +33,7 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'list notifications' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:notifications)
@@ -41,7 +41,7 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'show notification' do
-    perform_auth
+    login
     get :show, :id => notifications(
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
@@ -50,7 +50,7 @@ class NotificationsControllerTest < ActionController::TestCase
   end
 
   test 'edit notification' do
-    perform_auth
+    login
     get :edit, :id => notifications(
       :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param
     assert_response :success
@@ -60,7 +60,7 @@ class NotificationsControllerTest < ActionController::TestCase
 
   test 'update notification' do
     assert_no_difference 'User.count' do
-      perform_auth
+      login
       patch :update, {
         :id => notifications(
           :administrator_user_bcra_A4609_security_management_responsible_dependency_weakness_being_implemented_confirmed).to_param,

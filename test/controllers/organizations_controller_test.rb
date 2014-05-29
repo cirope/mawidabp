@@ -32,7 +32,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'list organizations' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:organizations)
@@ -42,7 +42,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'show organization' do
-    perform_auth
+    login
     get :show, :id => organizations(:default_organization).id
     assert_response :success
     assert_not_nil assigns(:organization)
@@ -50,7 +50,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'new organization' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:organization)
@@ -60,7 +60,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user: user
+    login user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -81,7 +81,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   test 'create organization with wrong group' do
     user = User.find users(:administrator_user).id
 
-    perform_auth user: user
+    login user: user
 
     assert_difference ['Organization.count', 'user.organizations.count'] do
       post :create, {
@@ -101,7 +101,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'edit organization' do
-    perform_auth
+    login
     get :edit, :id => organizations(:default_organization).id
     assert_response :success
     assert_not_nil assigns(:organization)
@@ -109,7 +109,7 @@ class OrganizationsControllerTest < ActionController::TestCase
   end
 
   test 'update organization' do
-    perform_auth
+    login
     patch :update, {
       :id => organizations(:default_organization).id,
       :organization => {
@@ -129,7 +129,7 @@ class OrganizationsControllerTest < ActionController::TestCase
       PaperTrail.enabled = false
 
       organization = Organization.find(organizations(:second_organization).id)
-      perform_auth user: users(:administrator_second_user), prefix: organization.prefix
+      login user: users(:administrator_second_user), prefix: organization.prefix
 
       assert_difference ['Organization.count', 'BusinessUnitType.count'], -1 do
         delete :destroy, :id => organizations(:second_organization).id

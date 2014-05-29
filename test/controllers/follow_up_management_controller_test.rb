@@ -24,7 +24,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'list reports' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:title)
@@ -32,7 +32,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by state report' do
-    perform_auth
+    login
 
     get :weaknesses_by_state
     assert_response :success
@@ -52,7 +52,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by state report' do
-    perform_auth
+    login
     post :create_weaknesses_by_state, :weaknesses_by_state => {
       :from_date => 10.years.ago.to_date,
       :to_date => 10.years.from_now.to_date
@@ -69,7 +69,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by risk report' do
-    perform_auth
+    login
 
     get :weaknesses_by_risk
     assert_response :success
@@ -89,7 +89,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by risk report' do
-    perform_auth
+    login
 
     post :create_weaknesses_by_risk, :weaknesses_by_risk => {
       :from_date => 10.years.ago.to_date,
@@ -107,7 +107,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'weaknesses by audit type report' do
-    perform_auth
+    login
 
     get :weaknesses_by_audit_type
     assert_response :success
@@ -127,7 +127,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'create weaknesses by audit type report' do
-    perform_auth
+    login
 
     post :create_weaknesses_by_audit_type,
       :weaknesses_by_audit_type => {
@@ -146,7 +146,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats
     assert_response :success
@@ -166,7 +166,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'filtered control objective stats report' do
-    perform_auth
+    login
 
     get :control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -183,7 +183,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'create control objective stats report' do
-    perform_auth
+    login
 
     get :create_control_objective_stats, :control_objective_stats => {
       :from_date => 10.years.ago.to_date,
@@ -202,7 +202,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats
     assert_response :success
@@ -222,7 +222,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'filtered process control stats report' do
-    perform_auth
+    login
 
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
@@ -238,7 +238,7 @@ class FollowUpManagementControllerTest < ActionController::TestCase
   end
 
   test 'create process control stats report' do
-    perform_auth
+    login
 
     get :create_process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,

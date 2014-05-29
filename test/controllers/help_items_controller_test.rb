@@ -32,7 +32,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'list help items' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:help_items)
@@ -40,7 +40,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'show help item' do
-    perform_auth
+    login
     get :show, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
@@ -48,7 +48,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'new help item' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:help_item)
@@ -56,7 +56,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'create help item' do
-    perform_auth
+    login
     assert_difference 'HelpItem.count', 2 do
       post :create, {
         :help_item => {
@@ -82,7 +82,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'edit help item' do
-    perform_auth
+    login
     get :edit, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
@@ -91,7 +91,7 @@ class HelpItemsControllerTest < ActionController::TestCase
 
   test 'update help item' do
     assert_no_difference 'HelpItem.count' do
-      perform_auth
+      login
       patch :update, {
         :id => help_items(:help_item_1_es).id,
         :help_item => {
@@ -119,7 +119,7 @@ class HelpItemsControllerTest < ActionController::TestCase
   end
 
   test 'destroy help item' do
-    perform_auth
+    login
     assert_difference 'HelpItem.count', -2 do
       delete :destroy, :id => help_items(:help_item_1_es).id
     end

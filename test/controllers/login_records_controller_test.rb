@@ -29,14 +29,14 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'choose an action' do
-    perform_auth
+    login
     get :choose
     assert_response :success
     assert_template 'login_records/choose'
   end
 
   test 'list login records' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:login_records)
@@ -44,7 +44,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list login records with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'login data',
       :columns => ['user', 'data']
@@ -58,7 +58,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show login record when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => 'bare',
       :columns => ['user', 'data']
@@ -71,7 +71,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show login record' do
-    perform_auth
+    login
     get :show, :id => login_records(:administrator_user_success_login_record).id
     assert_response :success
     assert_not_nil assigns(:login_record)
@@ -79,7 +79,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    perform_auth
+    login
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 

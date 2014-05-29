@@ -5,7 +5,7 @@ class GroupsControllerTest < ActionController::TestCase
   fixtures :groups
 
   setup do
-    perform_auth prefix: APP_ADMIN_PREFIXES.first
+    login prefix: APP_ADMIN_PREFIXES.first
   end
 
   test 'list groups' do

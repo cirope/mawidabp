@@ -32,7 +32,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'list inline_helps' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:inline_helps)
@@ -40,7 +40,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'show inline_help' do
-    perform_auth
+    login
     get :show, :id => inline_helps(:es_review_identification).id
     assert_response :success
     assert_not_nil assigns(:inline_help)
@@ -48,7 +48,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'new inline_help' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:inline_help)
@@ -56,7 +56,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'create inline_help' do
-    perform_auth
+    login
     assert_difference 'InlineHelp.count' do
       post :create, {
         :inline_help => {
@@ -71,7 +71,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'edit inline_help' do
-    perform_auth
+    login
     get :edit, :id => inline_helps(:es_review_identification).id
     assert_response :success
     assert_not_nil assigns(:inline_help)
@@ -80,7 +80,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
 
   test 'update inline_help' do
     assert_no_difference 'InlineHelp.count' do
-      perform_auth
+      login
       patch :update, {
         :id => inline_helps(:es_review_identification).id,
         :inline_help => {
@@ -99,7 +99,7 @@ class InlineHelpsControllerTest < ActionController::TestCase
   end
 
   test 'destroy inline_help' do
-    perform_auth
+    login
     assert_difference 'InlineHelp.count', -1 do
       delete :destroy, :id => inline_helps(:es_review_identification).id
     end

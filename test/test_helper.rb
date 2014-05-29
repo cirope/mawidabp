@@ -12,7 +12,7 @@ class ActiveSupport::TestCase
     Organization.current_id = organization.id
   end
 
-  def perform_auth user: users(:administrator_user), prefix: organizations(:default_organization).prefix
+  def login user: users(:administrator_user), prefix: organizations(:default_organization).prefix
     @request.host         = "#{prefix}.lvh.me"
     session[:user_id]     = user.id
     session[:last_access] = Time.now

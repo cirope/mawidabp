@@ -27,7 +27,7 @@ class VersionsControllerTest < ActionController::TestCase
   end
 
   test 'show version' do
-    perform_auth
+    login
     get :show, :id => versions(:important_version).to_param
     assert_response :success
     assert_not_nil assigns(:version)
@@ -36,7 +36,7 @@ class VersionsControllerTest < ActionController::TestCase
   end
 
   test 'security changes report' do
-    perform_auth
+    login
     get :security_changes_report
     assert_response :success
     assert_not_nil assigns(:versions)
@@ -44,7 +44,7 @@ class VersionsControllerTest < ActionController::TestCase
   end
 
   test 'download security changes report' do
-    perform_auth
+    login
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 

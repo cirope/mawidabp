@@ -32,7 +32,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'list resource classes' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:resource_classes)
@@ -40,7 +40,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'show resource class' do
-    perform_auth
+    login
     get :show, id: resource_classes(:human_resources).id
     assert_response :success
     assert_not_nil assigns(:resource_class)
@@ -48,7 +48,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'new resource class' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:resource_class)
@@ -57,7 +57,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
 
   test 'create resource class' do
     assert_difference ['ResourceClass.count', 'Resource.count'] do
-      perform_auth
+      login
       post :create, {
         resource_class: {
           name: 'New resource class',
@@ -75,7 +75,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'edit resource class' do
-    perform_auth
+    login
     get :edit, id: resource_classes(:human_resources).id
     assert_response :success
     assert_not_nil assigns(:resource_class)
@@ -85,7 +85,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   test 'update resource class' do
     assert_no_difference 'ResourceClass.count' do
       assert_difference 'Resource.count' do
-        perform_auth
+        login
         patch :update, {
           id: resource_classes(:human_resources).id,
           resource_class: {
@@ -114,7 +114,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'destroy resource class' do
-    perform_auth
+    login
     assert_difference 'ResourceClass.count', -1 do
       delete :destroy, id: resource_classes(:human_resources).id
     end

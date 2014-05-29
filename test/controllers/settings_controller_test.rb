@@ -4,7 +4,7 @@ class SettingsControllerTest < ActionController::TestCase
   setup do
     @setting = settings(:parameter_finding_stale_confirmed_days_default)
 
-    perform_auth
+    login
   end
 
   test 'should get index' do

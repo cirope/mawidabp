@@ -32,7 +32,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'list help_contents' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:help_contents)
@@ -40,7 +40,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'show help_content' do
-    perform_auth
+    login
     get :show, :id => help_contents(:help_es).id
     assert_response :success
     assert_not_nil assigns(:help_content)
@@ -48,7 +48,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'show content help' do
-    perform_auth
+    login
     get :show_content, :id => help_items(:help_item_1_es).id
     assert_response :success
     assert_not_nil assigns(:help_item)
@@ -56,7 +56,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'show content help whitout id' do
-    perform_auth
+    login
     get :show_content
     assert_response :success
     assert_not_nil assigns(:help_item)
@@ -64,7 +64,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'new help_content' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:help_content)
@@ -72,7 +72,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'create help_content' do
-    perform_auth
+    login
     assert_difference ['HelpContent.count', 'HelpItem.count'] do
       post :create, {
         :help_content => {
@@ -94,7 +94,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'edit help_content' do
-    perform_auth
+    login
     get :edit, :id => help_contents(:help_es).id
     assert_response :success
     assert_not_nil assigns(:help_content)
@@ -103,7 +103,7 @@ class HelpContentsControllerTest < ActionController::TestCase
 
   test 'update help_content' do
     assert_no_difference ['HelpContent.count', 'HelpItem.count'] do
-      perform_auth
+      login
       patch :update, {
         :id => help_contents(:help_es).id,
         :help_content => {
@@ -129,7 +129,7 @@ class HelpContentsControllerTest < ActionController::TestCase
   end
 
   test 'destroy help_content' do
-    perform_auth
+    login
     assert_difference 'HelpContent.count', -1 do
       delete :destroy, :id => help_contents(:help_es).id
     end

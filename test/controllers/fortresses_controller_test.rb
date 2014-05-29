@@ -30,7 +30,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'list fortresses' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:fortresses)
@@ -38,7 +38,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'list fortresses with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
       :columns => ['description', 'review'],
@@ -57,7 +57,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'edit fortress when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1f',
       :columns => ['description', 'review']
@@ -70,7 +70,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'show fortress' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
     assert_not_nil assigns(:fortress)
@@ -78,7 +78,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'new fortress' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -90,7 +90,7 @@ class FortressesControllerTest < ActionController::TestCase
     counts_array = ['Fortress.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :fortress => {
@@ -127,7 +127,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'edit fortress' do
-    perform_auth
+    login
     get :edit, :id => findings(
       :bcra_A4609_security_management_responsible_dependency_fortress).id
     assert_response :success
@@ -136,7 +136,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'update fortress' do
-    perform_auth
+    login
     assert_no_difference 'Fortress.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -195,7 +195,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
 
@@ -221,7 +221,7 @@ class FortressesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

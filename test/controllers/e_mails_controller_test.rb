@@ -6,7 +6,7 @@ class EMailsControllerTest < ActionController::TestCase
   setup do
     @email = e_mails(:urgent_email)
 
-    perform_auth
+    login
   end
 
   test 'list e_mails' do

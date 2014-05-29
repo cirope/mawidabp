@@ -32,7 +32,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list nonconformities' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:nonconformities)
@@ -40,7 +40,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list nonconformities with search and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
       :columns => ['description', 'review'],
@@ -58,7 +58,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'list nonconformities for specific ids' do
-    perform_auth
+    login
     ids = [
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity).id,
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id
@@ -73,7 +73,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit nonconformity when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4 y 1nc',
       :columns => ['description', 'review']
@@ -85,7 +85,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'show nonconformity' do
-    perform_auth
+    login
     get :show, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
@@ -93,7 +93,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'new nonconformity' do
-    perform_auth
+    login
     get :new, :control_objective_item => control_objective_items(
       :bcra_A4609_security_management_responsible_dependency_item_editable).id
     assert_response :success
@@ -105,7 +105,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     counts_array = ['Nonconformity.count', 'WorkPaper.count',
       'FindingRelation.count']
 
-    perform_auth
+    login
     assert_difference counts_array do
       post :create, {
         :nonconformity => {
@@ -168,7 +168,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'edit nonconformity' do
-    perform_auth
+    login
     get :edit, :id => findings(:bcra_A4609_data_proccessing_impact_analisys_nonconformity).id
     assert_response :success
     assert_not_nil assigns(:nonconformity)
@@ -176,7 +176,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'update nonconformity' do
-    perform_auth
+    login
     assert_no_difference 'Nonconformity.count' do
       assert_difference ['WorkPaper.count', 'FindingRelation.count'] do
         patch :update, {
@@ -249,7 +249,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'follow up pdf' do
-    perform_auth
+    login
     nonconformity = Nonconformity.find(findings(
         :bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity).id)
 
@@ -261,7 +261,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'undo reiteration' do
-    perform_auth
+    login
     nonconformity = Finding.find(findings(
         :iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_1_notification).id)
     repeated_of = Finding.find(findings(
@@ -282,7 +282,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'adm', :format => :json }
     assert_response :success
 
@@ -311,7 +311,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity).id)
 
-    perform_auth
+    login
     get :auto_complete_for_finding_relation, {
       :q => 'NC001',
       :finding_id => finding.id,
@@ -369,7 +369,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for control objective item' do
-    perform_auth
+    login
     get :auto_complete_for_control_objective_item, {
       :q => 'dependencia',
       :review_id => reviews(:review_with_conclusion).id,

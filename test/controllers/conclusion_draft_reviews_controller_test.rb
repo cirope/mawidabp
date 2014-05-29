@@ -37,7 +37,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_draft_reviews' do
-    perform_auth
+    login
     get :index
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_reviews)
@@ -45,7 +45,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_draft_reviews with search' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2',
       :columns => ['identification', 'project']
@@ -57,7 +57,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list conclusion_draft_reviews with search by date and sort' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "> #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -71,7 +71,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion_draft_reviews when search match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 2 4',
       :columns => ['identification', 'project']
@@ -82,7 +82,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion_draft_reviews when search by date match only one result' do
-    perform_auth
+    login
     get :index, :search => {
       :query => "< #{I18n.l(3.months.ago.to_date, :format => :minimal)}",
       :columns => ['issue_date']
@@ -96,7 +96,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'list only one conclusion_draft_reviews with search on one with final' do
-    perform_auth
+    login
     get :index, :search => {
       :query => '1 1',
       :columns => ['identification', 'project']
@@ -108,7 +108,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'show conclusion_draft_review' do
-    perform_auth
+    login
     get :show, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
@@ -116,7 +116,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'new conclusion_draft_review' do
-    perform_auth
+    login
     get :new
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
@@ -124,7 +124,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'create conclusion_draft_review' do
-    perform_auth
+    login
     assert_difference 'ConclusionDraftReview.count' do
       post :create, {
         :conclusion_draft_review => {
@@ -141,7 +141,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'edit conclusion_draft_review' do
-    perform_auth
+    login
     get :edit, :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
     assert_not_nil assigns(:conclusion_draft_review)
@@ -150,7 +150,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
 
   test 'update conclusion_draft_review' do
     assert_no_difference 'ConclusionDraftReview.count' do
-      perform_auth
+      login
       patch :update, {
         :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id,
         :conclusion_draft_review => {
@@ -170,7 +170,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export conclusion draft review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
@@ -183,7 +183,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'export conclusion draft review without score' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
@@ -197,7 +197,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'score sheet of final review' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
@@ -217,7 +217,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download work papers' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
@@ -230,7 +230,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'download bundle' do
-    perform_auth
+    login
 
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_with_conclusion_draft_review).id)
@@ -245,7 +245,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'check for approval' do
-    perform_auth
+    login
     get :check_for_approval, :id => reviews(:current_review).id,
       :format => :json
     assert_response :success
@@ -263,7 +263,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'compose email' do
-    perform_auth
+    login
     get :compose_email,
       :id => conclusion_reviews(:conclusion_with_conclusion_draft_review).id
     assert_response :success
@@ -272,7 +272,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'send by email' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
@@ -323,7 +323,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'send by email with multiple attachments' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(
       conclusion_reviews(:conclusion_approved_with_conclusion_draft_review).id
     )
@@ -383,7 +383,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'can not send by email with final review' do
-    perform_auth
+    login
     conclusion_review = ConclusionDraftReview.find(conclusion_reviews(
         :conclusion_current_draft_review).id)
 
@@ -409,7 +409,7 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
   end
 
   test 'auto complete for user' do
-    perform_auth
+    login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
     assert_response :success
     

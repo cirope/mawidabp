@@ -333,7 +333,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'logout' do
-    perform_auth
+    login
     delete :destroy
     assert_nil session[:user_id]
     assert_redirected_to login_url
