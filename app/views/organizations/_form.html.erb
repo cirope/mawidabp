@@ -1,31 +1,11 @@
 <%= simple_form_for @organization do |f| %>
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
+      <%= f.input :name, input_html: { autofocus: true } %>
+      <%= f.input :prefix unless action_name.presence_in %w(edit update) %>
+      <%= f.input :kind, collection: organization_kinds, prompt: true %>
 
-      <% unless [:edit, :update].include?(controller.action_name.to_sym) %>
-        <%= f.input :prefix, input_html: { maxlength: 255 } %>
-      <% end %>
-      <%= kind_field f %>
-      <% unless @organization.new_record? %>
-        <h5>
-          <strong><%= Organization.human_attribute_name 'image_model' %></strong>
-        </h5>
-        <p>
-          <%= organization_image_tag if @organization.image_model && !@organization.image_model.image_cache %>
-        </p>
-        <% @organization.build_image_model unless @organization.image_model %>
-        <%= f.simple_fields_for :image_model do |im_f| %>
-          <div class="file_container pull-left">
-            <%= link_to_upload(im_f.object) %>
-            <%= im_f.input :image, label: false %>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="alert alert-warning">
-          <%= t('organizations.new_organization_can_not_have_image') %>
-        </div>
-      <% end %>
+      <%= render 'image_input', f: f %>
     </div>
     <div class="col-md-6">
       <%= f.input :description, input_html: { rows: 5 } %>

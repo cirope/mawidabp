@@ -1,0 +1,18 @@
+<% if @organization.persisted? %>
+  <label>
+    <%= Organization.human_attribute_name 'image_model' %>
+  </label>
+
+  <p><%= organization_image_tag %></p>
+
+  <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
+    <div class="file_container pull-left">
+      <%= link_to_upload im_f.object %>
+      <%= im_f.input :image, label: false %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="alert alert-warning">
+    <%= t 'organizations.new_organization_can_not_have_image' %>
+  </div>
+<% end %>

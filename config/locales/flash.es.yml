@@ -1,4 +1,4 @@
-es:
+es: &common
   flash:
     actions:
       create:
@@ -17,3 +17,9 @@ es:
       update:
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common
