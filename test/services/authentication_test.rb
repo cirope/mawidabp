@@ -6,7 +6,7 @@ class AuthenticationTest < ActionController::TestCase
   def setup
     @user = users :administrator_user
     @organization = organizations :cirope
-    @params = { user: @user.user, password: ::PLAIN_PASSWORDS[@user.user] }
+    @params = { user: @user.user, password: 'admin123' }
     Organization.current_id = @organization.id
   end
 
@@ -43,9 +43,8 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should show message pending poll' do
-    user = users :poll_user
-    @params = { user: user.user, password: ::PLAIN_PASSWORDS[user.user] }
-    poll = user.first_pending_poll
+    Poll.first.update_column :user_id, @user.id
+    poll = @user.first_pending_poll
     poll_redirect = ['edit', poll, token: poll.access_token, layout: 'clean']
 
     assert_valid_authentication redirect_url: poll_redirect,
@@ -92,6 +91,32 @@ class AuthenticationTest < ActionController::TestCase
     @user.update! last_access: 1.minute.ago, logged_in: true
 
     assert_invalid_authentication message: 'message.you_are_already_logged'
+  end
+
+  test 'excede maximun number off wrong attempts' do
+    max_attempts =
+      @user.get_parameter(:attempts_count, false, @organization.id).to_i
+    @params = { user: @user.user, password: 'wrong password' }
+
+    assert_difference 'ErrorRecord.count', max_attempts.next do
+      max_attempts.pred.times { assert_invalid_authentication }
+      @auth = Authentication.new @params, request, session, @organization, false
+      @auth.authenticated?
+    end
+
+    assert_kind_of ErrorRecord, error_record(:user_disabled)
+    assert_equal max_attempts, @user.reload.failed_attempts
+    assert !@user.enable?
+  end
+
+  test 'first login' do
+    @user.update_column :last_access, nil
+
+    assert_valid_authentication redirect_url: ['edit_password', @user],
+      message: 'message.must_change_the_password'
+
+    login_record = LoginRecord.find_by user: @user, organization: @organization
+    assert_kind_of LoginRecord, login_record
   end
 
   private
