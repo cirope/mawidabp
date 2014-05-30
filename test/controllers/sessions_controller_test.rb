@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class SessionsControllerTest < ActionController::TestCase
-  fixtures :users, :roles, :organizations
-
   def setup
     @organization = organizations(:cirope)
     @user = users :administrator_user

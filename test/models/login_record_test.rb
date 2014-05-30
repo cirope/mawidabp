@@ -1,10 +1,8 @@
 require 'test_helper'
 
-# Clase para probar el modelo "LoginRecord"
 class LoginRecordTest < ActiveSupport::TestCase
   fixtures :login_records, :users
 
-  # Función para inicializar las variables utilizadas en las pruebas
   def setup
     set_organization
 
@@ -12,7 +10,6 @@ class LoginRecordTest < ActiveSupport::TestCase
       login_records(:administrator_user_success_login_record).id)
   end
 
-  # Prueba que se realicen las búsquedas como se espera
   test 'search' do
     assert_kind_of LoginRecord, @login_record
     assert_equal login_records(:administrator_user_success_login_record).start,
@@ -27,7 +24,6 @@ class LoginRecordTest < ActiveSupport::TestCase
       organization_id, @login_record.organization_id
   end
 
-  # Prueba la creación de un registro de ingreso
   test 'create' do
     assert_difference 'LoginRecord.count' do
       @login_record = LoginRecord.list.create(
@@ -39,7 +35,6 @@ class LoginRecordTest < ActiveSupport::TestCase
     end
   end
 
-  # Prueba de actualización de un registro de ingreso
   test 'update' do
     assert @login_record.update(:data => 'New data'),
       @login_record.errors.full_messages.join('; ')
@@ -47,24 +42,20 @@ class LoginRecordTest < ActiveSupport::TestCase
     assert_equal 'New data', @login_record.data
   end
 
-  # Prueba de eliminación de un registro de ingreso
   test 'destroy' do
     assert_difference 'LoginRecord.count', -1 do
       @login_record.destroy
     end
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates nil attributes' do
-    @login_record.user_id = nil
-    @login_record.organization_id = nil
+  test 'validates blank attributes' do
+    @login_record = LoginRecord.new user: nil
 
     assert @login_record.invalid?
-    assert_error @login_record, :user_id, :blank
-    assert_error @login_record, :organization_id, :blank
+    assert_error @login_record, :user, :blank
+    assert_error @login_record, :organization, :blank
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates dates attributes' do
     @login_record.start = Time.now
     @login_record.end = 10.hours.ago

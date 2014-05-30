@@ -1,70 +1,37 @@
 class LoginRecordsController < ApplicationController
+  respond_to :html
+
   before_action :auth, :load_privileges, :check_privileges
+  before_action :set_login_record, only: [:show]
+  before_action :set_title
 
-  # Muestra un menú con los distintos listados disponibles (registros de ingreso
-  # y registros de errores)
-  #
-  # * GET /login_records/choose
+  # GET /login_records/choose
   def choose
-    @title = t 'login_record.choose'
-
-    respond_to do |format|
-      format.html # choose.html.erb
-    end
   end
 
-  # Lista los registros de ingreso
-  #
-  # * GET /login_records
-  # * GET /login_records.xml
+  # GET /login_records
   def index
-    @title = t 'login_record.index_title'
     @from_date, @to_date = *make_date_range(params[:index])
 
-    unless params[:search]
-      default_conditions = [
-        "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
-        :from_date => @from_date, :to_date => @to_date.to_time.end_of_day
-      ]
+    default_conditions = [
+      "#{LoginRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
+      from_date: @from_date, to_date: @to_date.to_time.end_of_day
+    ] unless params[:search]
 
-      build_search_conditions LoginRecord, default_conditions
-    else
-      build_search_conditions LoginRecord
-    end
+    build_search_conditions LoginRecord, default_conditions
+    @login_records = LoginRecord.between(@conditions).page params[:page]
 
-    @login_records = LoginRecord.list.includes(:user).where(
-      @conditions || default_conditions
-    ).order(
-      "#{LoginRecord.table_name}.start DESC"
-    ).references(:users).page(params[:page])
-
-    respond_to do |format|
-      format.html {
-        if @login_records.size == 1 && !@query.blank? && !params[:page]
-          redirect_to login_record_url(@login_records.first)
-        end
-      } # index.html.erb
-      format.xml  { render :xml => @login_records }
+    if @login_records.size == 1 && !@query.blank? && !params[:page]
+      redirect_to login_record_url(@login_records.first)
     end
   end
 
-  # Muestra el detalle de un registro de ingreso
-  #
-  # * GET /login_records/1
-  # * GET /login_records/1.xml
+  # GET /login_records/1
   def show
-    @title = t 'login_record.show_title'
-    @login_record = LoginRecord.list.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @login_record }
-    end
+    respond_with @login_record
   end
 
-  # Lista de registros de ingreso en PDF
-  #
-  # * GET /login_records/export_to_pdf
+  # GET /login_records/export_to_pdf
   def export_to_pdf
     from_date, to_date = *make_date_range(params[:range])
     login_records = LoginRecord.list.includes(:user).where(
@@ -132,7 +99,12 @@ class LoginRecordsController < ApplicationController
   end
 
   private
+
+    def set_login_record
+      @login_record = LoginRecord.list.find params[:id]
+    end
+
     def load_privileges
-      @action_privileges.update(choose: :read, export_to_pdf: :read)
+      @action_privileges.update choose: :read, export_to_pdf: :read
     end
 end

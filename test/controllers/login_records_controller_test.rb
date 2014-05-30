@@ -1,42 +1,17 @@
 require 'test_helper'
 
-# Pruebas para el controlador de registros de ingreso
 class LoginRecordsControllerTest < ActionController::TestCase
-  fixtures :login_records
-
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => login_records(:administrator_user_success_login_record).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :index],
-      [:get, :choose],
-      [:get, :export_to_pdf],
-      [:get, :show, id_param]
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+  setup do
+    login
   end
 
   test 'choose an action' do
-    login
     get :choose
     assert_response :success
     assert_template 'login_records/choose'
   end
 
   test 'list login records' do
-    login
     get :index
     assert_response :success
     assert_not_nil assigns(:login_records)
@@ -44,11 +19,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'list login records with search' do
-    login
-    get :index, :search => {
-      :query => 'login data',
-      :columns => ['user', 'data']
-    }
+    get :index, search: { query: 'login data', columns: ['user', 'data'] }
 
     assert_response :success
     assert_not_nil assigns(:login_records)
@@ -58,11 +29,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show login record when search match only one result' do
-    login
-    get :index, :search => {
-      :query => 'bare',
-      :columns => ['user', 'data']
-    }
+    get :index, search: { query: 'bare', columns: ['user', 'data'] }
 
     assert_redirected_to login_record_url(
       login_records(:bare_user_success_login_record))
@@ -71,7 +38,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'show login record' do
-    login
     get :show, :id => login_records(:administrator_user_success_login_record).id
     assert_response :success
     assert_not_nil assigns(:login_record)
@@ -79,18 +45,15 @@ class LoginRecordsControllerTest < ActionController::TestCase
   end
 
   test 'export to pdf' do
-    login
     from_date = Date.today.at_beginning_of_month
     to_date = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :export_to_pdf,
-        :range => {:from_date => from_date, :to_date => to_date}
+      get :export_to_pdf, range: { from_date: from_date, to_date: to_date }
     end
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('login_record.pdf_list_name',
-        :from_date => from_date.to_formatted_s(:db),
-        :to_date => to_date.to_formatted_s(:db)), LoginRecord.table_name)
+      I18n.t('login_record.pdf_list_name', from_date: from_date.to_formatted_s(:db),
+        to_date: to_date.to_formatted_s(:db)), LoginRecord.table_name)
   end
 end
