@@ -27,8 +27,9 @@ class AuthenticationTest < ActionController::TestCase
     @user.update_column :password_changed, password_changed
 
     days_for_password_expiration = @user.days_for_password_expiration
-    message = I18n.t(days_for_password_expiration >= 0 ? 'message.password_expire_in_x' :
-      'message.password_expired_x_days_ago', count: days_for_password_expiration.abs)
+    message = [days_for_password_expiration >= 0 ?
+      'message.password_expire_in_x' : 'message.password_expired_x_days_ago',
+      count: days_for_password_expiration.abs]
 
     assert_valid_authentication message: message
   end
@@ -38,7 +39,7 @@ class AuthenticationTest < ActionController::TestCase
       :password_expire_time).to_i.next.days.ago
 
     assert_valid_authentication redirect_url: ['edit_password', @user],
-      message: I18n.t('message.must_change_the_password')
+      message: 'message.must_change_the_password'
   end
 
   test 'should show message pending poll' do
@@ -48,7 +49,7 @@ class AuthenticationTest < ActionController::TestCase
     poll_redirect = ['edit', poll, token: poll.access_token, layout: 'clean']
 
     assert_valid_authentication redirect_url: poll_redirect,
-      message: I18n.t('poll.must_answer_poll')
+      message: 'poll.must_answer_poll'
   end
 
   test 'should not login with invalid password' do
@@ -90,7 +91,7 @@ class AuthenticationTest < ActionController::TestCase
     setting.update_column :value, 0
     @user.update! last_access: 1.minute.ago, logged_in: true
 
-    assert_invalid_authentication message: I18n.t('message.you_are_already_logged')
+    assert_invalid_authentication message: 'message.you_are_already_logged'
   end
 
   private
@@ -101,7 +102,7 @@ class AuthenticationTest < ActionController::TestCase
       assert_difference 'LoginRecord.count' do
         assert @auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'welcome', action: 'index'], @auth.redirect_url
-        assert_equal message || I18n.t('message.welcome'), @auth.message
+        assert_equal I18n.t(*message || 'message.welcome'), @auth.message
       end
     end
 
@@ -111,13 +112,13 @@ class AuthenticationTest < ActionController::TestCase
       assert_difference 'ErrorRecord.count' do
         assert !@auth.authenticated?
         assert_equal redirect_url || Hash[controller: 'sessions', action: 'new'], @auth.redirect_url
-        assert_equal message || I18n.t('message.invalid_user_or_password'), @auth.message
+        assert_equal I18n.t(*message || 'message.invalid_user_or_password'), @auth.message
         assert_kind_of ErrorRecord, error_record(:on_login)
       end
     end
 
     def error_record error_type
-      ErrorRecord.where(user_id: @user.id, error: ErrorRecord::ERRORS[error_type]).
+      ErrorRecord.where(user: @user, error: ErrorRecord::ERRORS[error_type]).
         order('created_at DESC').first
     end
 end
