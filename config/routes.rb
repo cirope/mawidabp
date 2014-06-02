@@ -408,10 +408,7 @@ Rails.application.routes.draw do
   end
 
   resources :login_records, :only => [:index, :show] do
-    collection do
-      get :choose
-      get :export_to_pdf
-    end
+    get :choose, on: :collection
   end
 
   resources :users do

@@ -206,8 +206,8 @@ class ApplicationController < ActionController::Base
 
     def make_date_range(parameters = nil)
       if parameters
-        from_date = Timeliness::Parser.parse(parameters[:from_date], :date)
-        to_date = Timeliness::Parser.parse(parameters[:to_date], :date)
+        from_date = Timeliness.parse(parameters[:from_date], :date)
+        to_date = Timeliness.parse(parameters[:to_date], :date)
       end
 
       from_date ||= Date.today.at_beginning_of_month
