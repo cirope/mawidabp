@@ -264,7 +264,7 @@ class ConclusionFinalReviewsController < ApplicationController
     unless users.blank?
       flash.notice = t('conclusion_review.review_sended')
       unless users_without_poll.empty?
-        flash.notice <<  "<br /> #{t('poll.already_exists')} #{users_without_poll.join(', ').inspect}"
+        flash.notice << "#{t('poll.already_exists')} #{users_without_poll.join(', ').inspect}"
       end
       redirect_to edit_conclusion_final_review_url(@conclusion_final_review)
     else
