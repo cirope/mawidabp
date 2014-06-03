@@ -238,7 +238,7 @@ class UsersController < ApplicationController
       login_check
     else
       @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).take
-      @current_organization = @auth_user.organizations.first if @auth_user
+      Organization.current_id = nil
     end
 
     if @auth_user
@@ -260,7 +260,7 @@ class UsersController < ApplicationController
       login_check
     else
       @auth_user = User.with_valid_confirmation_hash(user_params[:confirmation_hash]).take
-      @current_organization = @auth_user.organizations.first if @auth_user
+      Organization.current_id = nil
     end
 
     if @auth_user
