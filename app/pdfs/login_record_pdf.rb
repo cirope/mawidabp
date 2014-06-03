@@ -32,24 +32,11 @@ class LoginRecordPdf < Prawn::Document
     end
 
     def add_body
-      column_order = [['user_id', 20], ['start', 15], ['end', 15], ['data', 50]]
-      column_data, column_headers, column_widths = [], [], []
-
-      column_order.each do |col_name, col_with|
-        column_headers << LoginRecord.human_attribute_name(col_name)
-        column_widths << @pdf.percent_width(col_with)
-      end
-
-      @login_records.each do |login_record|
-        column_data << [
-          "<b>#{login_record.user.user}</b>",
-          login_record.start ? I18n.l(login_record.start, format: :minimal) : '-',
-          login_record.end ? I18n.l(login_record.end, format: :minimal) : '-',
-          login_record.data
-        ]
-      end
+      column_data = make_column_data
 
       unless column_data.blank?
+        column_headers, column_widths = *make_column_headers
+
         @pdf.move_down PDF_FONT_SIZE
         @pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = @pdf.default_table_options(column_widths)
@@ -63,6 +50,34 @@ class LoginRecordPdf < Prawn::Document
         end
       end
     end
+
+    def make_column_data
+      column_data = []
+
+      @login_records.each do |login_record|
+        column_data << [
+          "<b>#{login_record.user.user}</b>",
+          login_record.start ? I18n.l(login_record.start, format: :minimal) : '-',
+          login_record.end ? I18n.l(login_record.end, format: :minimal) : '-',
+          login_record.data
+        ]
+      end
+
+      column_data
+    end
+
+    def make_column_headers
+      column_order = [['user_id', 20], ['start', 15], ['end', 15], ['data', 50]]
+      column_headers, column_widths = [], []
+
+      column_order.each do |col_name, col_with|
+        column_headers << LoginRecord.human_attribute_name(col_name)
+        column_widths << @pdf.percent_width(col_with)
+      end
+
+      [column_headers, column_widths]
+    end
+
 
     def create_pdf
       pdf_name = I18n.t('login_record.pdf_list_name',
