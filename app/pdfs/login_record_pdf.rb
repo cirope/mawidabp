@@ -72,6 +72,6 @@ class LoginRecordPdf < Prawn::Document
 
       @pdf.custom_save_as(pdf_name, LoginRecord.table_name)
 
-      relative_path(pdf_name, LoginRecord.table_name)
+      Prawn::Document.relative_path(pdf_name, LoginRecord.table_name)
     end
 end

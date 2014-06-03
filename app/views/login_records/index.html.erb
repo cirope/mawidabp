@@ -37,6 +37,6 @@
   <%= paginate @login_records %>
   <%= link_to t('label.back'), choose_login_records_path %> |
   <%= link_to t('label.download'), login_records_path(format: :pdf,
-    range: { from_date: @from_date, to_date: @to_date }, _ts: Time.now.to_i)
+    search: params[:search], index: params[:index], _ts: Time.now.to_i)
   %>
 </div>

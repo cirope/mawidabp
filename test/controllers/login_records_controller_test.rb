@@ -28,15 +28,6 @@ class LoginRecordsControllerTest < ActionController::TestCase
     assert_template 'login_records/index'
   end
 
-  test 'show login record when search match only one result' do
-    get :index, search: { query: 'bare', columns: ['user', 'data'] }
-
-    assert_redirected_to login_record_url(
-      login_records(:bare_user_success_login_record))
-    assert_not_nil assigns(:login_records)
-    assert_equal 1, assigns(:login_records).size
-  end
-
   test 'show login record' do
     get :show, :id => login_records(:administrator_user_success_login_record).id
     assert_response :success
@@ -49,7 +40,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
     to_date = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :export_to_pdf, range: { from_date: from_date, to_date: to_date }
+      get :index, index: { from_date: from_date, to_date: to_date }, format: :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(

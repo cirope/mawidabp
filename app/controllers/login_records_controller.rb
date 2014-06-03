@@ -14,18 +14,12 @@ class LoginRecordsController < ApplicationController
     @login_records = LoginRecord.between conditions
 
     respond_to do |format|
-      format.html do
-        if @login_records.size == 1 && !@query.blank? && !params[:page]
-          redirect_to login_record_url(@login_records.first)
-        end
-        @login_records = @login_records.page(params[:page])
-      end
-
-      format.pdf do
+      format.html { @login_records = @login_records.page(params[:page]) }
+      format.pdf {
         redirect_to LoginRecordPdf.new(
           @from_date, @to_date, @login_records, current_organization
         ).generate
-      end
+      }
     end
   end
 
@@ -41,11 +35,11 @@ class LoginRecordsController < ApplicationController
     end
 
     def load_privileges
-      @action_privileges.update choose: :read, export_to_pdf: :read
+      @action_privileges.update choose: :read
     end
 
     def conditions
-      @from_date, @to_date = *make_date_range(params[:range] || params[:index])
+      @from_date, @to_date = *make_date_range(params[:search] || params[:index])
 
       unless params[:search]
         default_conditions = [
