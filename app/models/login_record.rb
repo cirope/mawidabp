@@ -3,8 +3,8 @@ class LoginRecord < ActiveRecord::Base
   include ParameterSelector
   include LoginRecords::Defaults
   include LoginRecords::Validations
-  include LoginRecords::Search
   include LoginRecords::Scopes
+  include LoginRecords::Search
 
   attr_accessor :request
 

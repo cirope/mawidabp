@@ -17,7 +17,8 @@ class LoginRecordsController < ApplicationController
       format.html { @login_records = @login_records.page(params[:page]) }
       format.pdf {
         redirect_to LoginRecordPdf.new(
-          @from_date, @to_date, @login_records, current_organization
+          from: @from_date, to: @to_date, login_records: @login_records,
+          current_organization: current_organization
         ).generate
       }
     end
@@ -39,7 +40,7 @@ class LoginRecordsController < ApplicationController
     end
 
     def conditions
-      @from_date, @to_date = *make_date_range(params[:search] || params[:index])
+      @from_date, @to_date = *make_date_range(params[:index])
 
       unless params[:search]
         default_conditions = [
