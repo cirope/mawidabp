@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :e_mails, :only => [:index, :show]
+  resources :e_mails, only: [:index, :show]
 
   resources :business_unit_types
 
@@ -121,16 +121,16 @@ Rails.application.routes.draw do
     'create_process_control_stats'
   ].each do |action|
     post "conclusion_management_reports/#{action}",
-      :as => "#{action}_conclusion_management_reports",
-      :to => "conclusion_management_reports##{action}"
+      as: "#{action}_conclusion_management_reports",
+      to: "conclusion_management_reports##{action}"
     post "conclusion_audit_reports/#{action}",
-      :as => "#{action}_conclusion_audit_reports",
-      :to => "conclusion_audit_reports##{action}"
+      as: "#{action}_conclusion_audit_reports",
+      to: "conclusion_audit_reports##{action}"
     post "follow_up_management/#{action}",
-      :as => "#{action}_follow_up_management",
-      :to => "follow_up_management##{action}"
-    post "follow_up_audit/#{action}", :as => "#{action}_follow_up_audit",
-      :to => "follow_up_audit##{action}"
+      as: "#{action}_follow_up_management",
+      to: "follow_up_management##{action}"
+    post "follow_up_audit/#{action}", as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
   end
 
   [
@@ -141,11 +141,11 @@ Rails.application.routes.draw do
     'rescheduled_being_implemented_weaknesses_report'
   ].each do |action|
     get "conclusion_committee_reports/#{action}",
-      :as => "#{action}_conclusion_committee_reports",
-      :to => "conclusion_committee_reports##{action}"
+      as: "#{action}_conclusion_committee_reports",
+      to: "conclusion_committee_reports##{action}"
     get "follow_up_committee/#{action}",
-      :as => "#{action}_follow_up_committee",
-      :to => "follow_up_committee##{action}"
+      as: "#{action}_follow_up_committee",
+      to: "follow_up_committee##{action}"
   end
 
   [
@@ -156,11 +156,11 @@ Rails.application.routes.draw do
     'create_rescheduled_being_implemented_weaknesses_report'
   ].each do |action|
     post "conclusion_committee_reports/#{action}",
-      :as => "#{action}_conclusion_committee_reports",
-      :to => "conclusion_committee_reports##{action}"
+      as: "#{action}_conclusion_committee_reports",
+      to: "conclusion_committee_reports##{action}"
     post "follow_up_committee/#{action}",
-      :as => "#{action}_follow_up_committee",
-      :to => "follow_up_committee##{action}"
+      as: "#{action}_follow_up_committee",
+      to: "follow_up_committee##{action}"
   end
 
   [
@@ -169,17 +169,17 @@ Rails.application.routes.draw do
     'nonconformities_report',
   ].each do |action|
     get "conclusion_committee_reports/#{action}",
-      :as => "#{action}_conclusion_committee_reports",
-      :to => "conclusion_committee_reports##{action}"
+      as: "#{action}_conclusion_committee_reports",
+      to: "conclusion_committee_reports##{action}"
     get "follow_up_committee/#{action}",
-      :as => "#{action}_follow_up_committee",
-      :to => "follow_up_committee##{action}"
+      as: "#{action}_follow_up_committee",
+      to: "follow_up_committee##{action}"
     get "conclusion_audit_reports/#{action}",
-      :as => "#{action}_conclusion_audit_reports",
-      :to => "conclusion_audit_reports##{action}"
+      as: "#{action}_conclusion_audit_reports",
+      to: "conclusion_audit_reports##{action}"
     get "follow_up_audit/#{action}",
-      :as => "#{action}_follow_up_audit",
-      :to => "follow_up_audit##{action}"
+      as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
   end
 
   [
@@ -188,39 +188,39 @@ Rails.application.routes.draw do
     'create_nonconformities_report'
   ].each do |action|
     post "conclusion_committee_reports/#{action}",
-      :as => "#{action}_conclusion_committee_reports",
-      :to => "conclusion_committee_reports##{action}"
+      as: "#{action}_conclusion_committee_reports",
+      to: "conclusion_committee_reports##{action}"
     post "follow_up_committee/#{action}",
-      :as => "#{action}_follow_up_committee",
-      :to => "follow_up_committee##{action}"
+      as: "#{action}_follow_up_committee",
+      to: "follow_up_committee##{action}"
     post "conclusion_audit_reports/#{action}",
-      :as => "#{action}_conclusion_audit_reports",
-      :to => "conclusion_audit_reports##{action}"
+      as: "#{action}_conclusion_audit_reports",
+      to: "conclusion_audit_reports##{action}"
     post "follow_up_audit/#{action}",
-      :as => "#{action}_follow_up_audit",
-      :to => "follow_up_audit##{action}"
+      as: "#{action}_follow_up_audit",
+      to: "follow_up_audit##{action}"
   end
 
   get "conclusion_audit_reports/cost_analysis",
-    :as => 'cost_analysis_conclusion_audit_reports',
-    :to => 'conclusion_audit_reports#cost_analysis'
+    as: 'cost_analysis_conclusion_audit_reports',
+    to: 'conclusion_audit_reports#cost_analysis'
   post "conclusion_audit_reports/create_cost_analysis",
-    :as => 'create_cost_analysis_conclusion_audit_reports',
-    :to => 'conclusion_audit_reports#create_cost_analysis'
+    as: 'create_cost_analysis_conclusion_audit_reports',
+    to: 'conclusion_audit_reports#create_cost_analysis'
   get 'conclusion_audit_reports/cost_analysis/detailed',
-    :as => 'detailed_cost_analysis_conclusion_audit_reports',
-    :to => 'conclusion_audit_reports#cost_analysis',
-    :include_details => 1
+    as: 'detailed_cost_analysis_conclusion_audit_reports',
+    to: 'conclusion_audit_reports#cost_analysis',
+    include_details: 1
 
   get 'follow_up_audit/follow_up_cost_analysis',
-    :as => 'follow_up_cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#follow_up_cost_analysis'
+    as: 'follow_up_cost_analysis_follow_up_audit',
+    to: 'follow_up_audit#follow_up_cost_analysis'
   post 'follow_up_audit/create_follow_up_cost_analysis',
-    :as => 'create_follow_up_cost_analysis_follow_up_audit',
-    :to => 'follow_up_audit#create_follow_up_cost_analysis'
+    as: 'create_follow_up_cost_analysis_follow_up_audit',
+    to: 'follow_up_audit#create_follow_up_cost_analysis'
 
-  scope ':completed', :completed => /complete|incomplete/ do
-    resources :findings, :except => [:destroy] do
+  scope ':completed', completed: /complete|incomplete/ do
+    resources :findings, except: [:destroy] do
       resources :costs
 
       member do
@@ -249,7 +249,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :conclusion_draft_reviews, :except => [:destroy] do
+  resources :conclusion_draft_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
       get :compose_email
@@ -265,7 +265,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :conclusion_final_reviews, :except => [:destroy] do
+  resources :conclusion_final_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
       get :compose_email
@@ -301,7 +301,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :weaknesses, :except => [:destroy] do
+  resources :weaknesses, except: [:destroy] do
     resources :costs
 
     collection do
@@ -316,7 +316,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :nonconformities, :except => [:destroy] do
+  resources :nonconformities, except: [:destroy] do
     resources :costs
 
     collection do
@@ -367,7 +367,7 @@ Rails.application.routes.draw do
 
   resources :periods
 
-  resources :oportunities, :except => [:destroy] do
+  resources :oportunities, except: [:destroy] do
     resources :costs
 
     member do
@@ -382,7 +382,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :potential_nonconformities, :except => [:destroy] do
+  resources :potential_nonconformities, except: [:destroy] do
     resources :costs
 
     member do
@@ -407,7 +407,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :login_records, :only => [:index, :show] do
+  resources :login_records, only: [:index, :show] do
     get :choose, on: :collection
   end
 
@@ -438,65 +438,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   get 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   get 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
   root 'sessions#new'
 
-  get 'private/:path', :to => 'file_models#download',
-    :constraints => { :path => /.+/ }
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # get ':controller(/:action(/:id(.:format)))'
+  get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 
   # Any invalid route goes to the welcome page
   get '*a' => redirect('/welcome')
