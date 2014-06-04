@@ -25,11 +25,13 @@ class LoginRecordPdf < Prawn::Document
 
     def add_description
       @pdf.move_down PDF_FONT_SIZE
-      @pdf.add_description_item(I18n.t('login_record.period.title'),
+
+      @pdf.add_description_item(
+        I18n.t('login_record.period.title'),
         I18n.t('login_record.period.range',
           from_date: I18n.l(@from, format: :long),
           to_date: I18n.l(@to, format: :long))
-        )
+      )
     end
 
     def add_body
@@ -74,13 +76,13 @@ class LoginRecordPdf < Prawn::Document
     end
 
     def generate_pdf
-      pdf_name = I18n.t('login_record.pdf_list_name',
-        from_date: @from.to_formatted_s(:db),
-        to_date: @to.to_formatted_s(:db)
-      )
-
       @pdf.custom_save_as(pdf_name, LoginRecord.table_name)
 
       Prawn::Document.relative_path(pdf_name, LoginRecord.table_name)
+    end
+
+    def pdf_name
+      I18n.t 'login_record.pdf_list_name',
+        from_date: @from.to_s(:db), to_date: @to.to_s(:db)
     end
 end

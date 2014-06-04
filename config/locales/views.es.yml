@@ -15,6 +15,14 @@ es: &common
     download: 'Descargar'
     upload: 'Adjuntar'
 
+  login_records:
+    index:
+      title: 'Listado de registros de ingreso'
+    show:
+      title: 'Detalles del registro de ingreso'
+    choose:
+      title: 'Reportes de seguridad'
+
   organizations:
     index:
       title: 'Listado de organizaciones'
