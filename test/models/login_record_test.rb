@@ -22,8 +22,8 @@ class LoginRecordTest < ActiveSupport::TestCase
   test 'update' do
     assert @login_record.update(data: 'New data'),
       @login_record.errors.full_messages.join('; ')
-    @login_record.reload
-    assert_equal 'New data', @login_record.data
+
+    assert_equal 'New data', @login_record.reload.data
   end
 
   test 'destroy' do
