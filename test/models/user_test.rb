@@ -323,10 +323,10 @@ class UserTest < ActiveSupport::TestCase
     end
 
     assert_difference 'OldPassword.count' do
-      assert @user.update(
+      @user.update!(
         {
-          password: "new_password_1230",
-          password_confirmation: "new_password_1230"
+          password: 'new_password_1230',
+          password_confirmation: 'new_password_1230'
         }
       )
     end
