@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/johncarney/validates_timeliness.git
-  revision: f983dcc9dcb06b8d050552c277da4e9f1e910e16
+  revision: 6a0efca90fc3c9521da4fa2d5ff20e7273b66b7a
+  branch: remove-deprecated-setup-method
   specs:
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.7)
