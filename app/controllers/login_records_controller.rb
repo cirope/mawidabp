@@ -16,10 +16,8 @@ class LoginRecordsController < ApplicationController
     respond_to do |format|
       format.html { @login_records = @login_records.page(params[:page]) }
       format.pdf {
-        redirect_to LoginRecordPdf.new(
-          from: @from_date, to: @to_date, login_records: @login_records,
-          current_organization: current_organization
-        ).generate
+        create_pdf
+        redirect_to @pdf.relative_path
       }
     end
   end
@@ -51,5 +49,13 @@ class LoginRecordsController < ApplicationController
       end
 
       build_search_conditions LoginRecord, default_conditions
+    end
+
+    def create_pdf
+      @pdf = LoginRecordPdf.new(
+        from: @from_date, to: @to_date, login_records: @login_records,
+        current_organization: current_organization
+      )
+      @pdf.generate
     end
 end

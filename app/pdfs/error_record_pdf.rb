@@ -1,10 +1,10 @@
-class LoginRecordPdf < Prawn::Document
+class ErrorRecordPdf < Prawn::Document
 
-  def initialize from: nil, to: nil, login_records: nil,
+  def initialize from: nil, to: nil, error_records: nil,
     current_organization: nil
 
     @current_organization = current_organization
-    @from, @to, @login_records = from, to, login_records
+    @from, @to, @error_records = from, to, error_records
 
     @pdf = Prawn::Document.create_generic_pdf :landscape
   end
@@ -17,22 +17,22 @@ class LoginRecordPdf < Prawn::Document
   end
 
   def relative_path
-    Prawn::Document.relative_path(pdf_name, LoginRecord.table_name)
+    Prawn::Document.relative_path(pdf_name, ErrorRecord.table_name)
   end
 
   private
 
     def add_header
       @pdf.add_generic_report_header @current_organization
-      @pdf.add_title I18n.t('login_record.index_title')
+      @pdf.add_title I18n.t('error_record.index_title')
     end
 
     def add_description
       @pdf.move_down PDF_FONT_SIZE
 
       @pdf.add_description_item(
-        I18n.t('login_record.period.title'),
-        I18n.t('login_record.period.range',
+        I18n.t('error_record.period.title'),
+        I18n.t('error_record.period.range',
           from_date: I18n.l(@from, format: :long),
           to_date: I18n.l(@to, format: :long))
       )
@@ -57,22 +57,22 @@ class LoginRecordPdf < Prawn::Document
     end
 
     def make_column_data
-      @login_records.map do |login_record|
+      @error_records.map do |error_record|
+        user_name = error_record.user.try(:user) || I18n.t('error_record.void_user')
         [
-          "<b>#{login_record.user.user}</b>",
-          login_record.start ? I18n.l(login_record.start, format: :minimal) : '-',
-          login_record.end ? I18n.l(login_record.end, format: :minimal) : '-',
-          login_record.data
+          "<b>#{user_name}</b>",
+          error_record.created_at ? I18n.l(error_record.created_at, format: :minimal) : '-',
+          error_record.error_text, error_record.data
         ]
       end
     end
 
     def column_order
-      { 'user_id' => 20, 'start' => 15, 'end' => 15, 'data' => 50 }
+      { 'user_id' => 20, 'created_at' => 15, 'error' => 15, 'data' => 50 }
     end
 
     def column_headers
-      column_order.keys.map { |col_name| LoginRecord.human_attribute_name(col_name) }
+      column_order.keys.map { |col_name| ErrorRecord.human_attribute_name(col_name) }
     end
 
     def column_widths
@@ -80,11 +80,11 @@ class LoginRecordPdf < Prawn::Document
     end
 
     def save
-      @pdf.custom_save_as(pdf_name, LoginRecord.table_name)
+      @pdf.custom_save_as(pdf_name, ErrorRecord.table_name)
     end
 
     def pdf_name
-      I18n.t 'login_record.pdf_list_name',
+      I18n.t 'error_record.pdf_list_name',
         from_date: @from.to_s(:db), to_date: @to.to_s(:db)
     end
 end

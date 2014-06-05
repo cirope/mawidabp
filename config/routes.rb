@@ -401,11 +401,7 @@ Rails.application.routes.draw do
 
   resources :roles
 
-  resources :error_records do
-    collection do
-      get :export_to_pdf
-    end
-  end
+  resources :error_records, only: [:index, :show]
 
   resources :login_records, only: [:index, :show] do
     get :choose, on: :collection

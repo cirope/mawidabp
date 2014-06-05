@@ -15,6 +15,12 @@ es: &common
     download: 'Descargar'
     upload: 'Adjuntar'
 
+  error_records:
+    index:
+      title: 'Listado de registros de errores'
+    show:
+      title: 'Detalles del registro de error'
+
   login_records:
     index:
       title: 'Listado de registros de ingreso'
