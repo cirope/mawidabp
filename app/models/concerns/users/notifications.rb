@@ -9,7 +9,7 @@ module Users::Notifications
     if send_notification_email.present?
       organization = Organization.find Organization.current_id
 
-      reset_password! organization, false
+      reset_password organization, notify: false
 
       Notifier.welcome_email(self).deliver
     end

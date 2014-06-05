@@ -18,7 +18,7 @@
   <hr />
   <div class="form-actions form-footer">
     <div class="pull-right">
-      <%= link_to t('user.change_password_title'), edit_password_user_path(@auth_user) %> |
+      <%= link_to t('user.change_password_title'), edit_users_password_path(@auth_user) %> |
       <%= link_to t('user.status'), user_status_user_path(@auth_user) %>
     </div>
     <%= f.input :lock_version, as: :hidden %>
