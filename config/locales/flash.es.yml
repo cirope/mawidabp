@@ -17,6 +17,9 @@ es: &common
       update:
         notice: 'Buenas prácticas actualizadas correctamente'
         stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
+      destroy:
+        notice: 'Buena práctica eliminada'
+        alert: 'La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes'
 
       add_process_control: 'Agregar proceso de negocio'
       add_control_objective: 'Agregar objetivo de control'

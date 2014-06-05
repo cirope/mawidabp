@@ -4,15 +4,16 @@ es: &common
     not_authorized: 'Debe ingresar para ver el contenido'
 
   navigation:
+    back: 'Volver'
+    copy: 'Copiar'
     destroy: 'Eliminar'
+    download: 'Descargar'
     edit: 'Editar'
     index: 'Listado'
     loading: 'Cargando...'
     logout: 'Salir'
+    new: 'Nuevo'
     show: 'Ver'
-    back: 'Volver'
-    copy: 'Copiar'
-    download: 'Descargar'
     upload: 'Adjuntar'
 
   best_practices:
@@ -24,8 +25,6 @@ es: &common
       title: "Agregar buenas prácticas"
     edit:
       title: "Modificar buenas prácticas"
-    errors:
-      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes"
 
   error_records:
     index:

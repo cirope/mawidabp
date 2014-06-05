@@ -44,9 +44,7 @@ class BestPracticesController < ApplicationController
 
   # * DELETE /best_practices/1
   def destroy
-    unless @best_practice.destroy
-      flash.alert = @best_practice.errors.full_messages.join(APP_ENUM_SEPARATOR)
-    end
+    @best_practice.destroy
 
     respond_with @best_practice, location: best_practices_url
   end
