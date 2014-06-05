@@ -34,22 +34,6 @@ es: &common
       title: 'Modificar organización'
     new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
 
-  password_resets:
-    edit:
-      title: 'Cambiar contraseña'
-      update: 'Actualizar contraseña'
-    update:
-      success: 'Contraseña cambiada correctamente'
-      expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
-    new:
-      title: 'Restablecer contraseña'
-      email: 'Correo'
-      send_instructions: 'Enviar instrucciones'
-      back: 'Volver'
-    create:
-      success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
-      not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
-
   profiles:
     edit:
       title: 'Mis datos'
@@ -74,6 +58,25 @@ es: &common
       logged_in: 'Bienvenido'
     destroy:
       logged_out: 'Hasta la próxima'
+
+  users:
+    passwords:
+      edit:
+        title: 'Cambiar contraseña'
+        update: 'Actualizar contraseña'
+      update:
+        success: 'Contraseña cambiada correctamente'
+        expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
+      new:
+        title: 'Restablecer contraseña'
+        email: 'Correo'
+        send_instructions: 'Enviar instrucciones'
+        back: 'Volver'
+        note: 'Para restablecer su contraseña ingrese su dirección de correo electrónico'
+      create:
+        success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
+        not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+
 
 public_es:
   <<: *common

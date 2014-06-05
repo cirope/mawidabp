@@ -1,11 +1,3 @@
-<%= content_for :user_actions do %>
-  <%= link_to t('user.reset_password'), { :action => :blank_password, :id => @user },
-    :data => { :confirm => t('message.confirmation_question') },
-    :method => :patch, :title => t('user.reset_password'),
-    class: 'btn btn-default'
-   %>
-<% end %>
-
 <%= content_for :form_actions do %>
   <%= link_to_destroy @user %> |
   <%= link_to_show @user %> |

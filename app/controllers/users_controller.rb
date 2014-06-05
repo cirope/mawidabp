@@ -1,25 +1,21 @@
 class UsersController < ApplicationController
-  before_action :auth, except: [
-    :edit_password, :update_password, :new_initial, :create_initial,
-    :initial_roles, :reset_password, :send_password_reset
-  ]
+  include Users::Finders
+  include Users::Params
+
+  before_action :auth, except: [:new_initial, :create_initial, :initial_roles]
   before_action :load_privileges
   before_action :check_privileges, except: [
-    :user_status, :edit_password, :user_status_without_graph,
-    :update_password, :edit_personal_data, :update_personal_data, :new_initial,
-    :create_initial, :initial_roles, :reset_password, :send_password_reset
+    :user_status, :user_status_without_graph, :edit_personal_data,
+    :update_personal_data, :new_initial, :create_initial, :initial_roles
   ]
   before_action :set_user, only: [
-    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph, :blank_password,
+    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph,
     :reassignment_edit, :reassignment_update, :release_edit, :release_update
   ]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
-  # Lista los usuarios
-  #
   # * GET /users
-  # * GET /users.xml
   def index
     @title = t 'user.index_title'
     default_conditions = [
@@ -44,15 +40,11 @@ class UsersController < ApplicationController
         if @users.size == 1 && !@query.blank? && !params[:page]
           redirect_to user_url(@users.first)
         end
-      } # index.html.erb
-      format.xml  { render xml: @users }
+      }
     end
   end
 
-  # Muestra el detalle de un usuario
-  #
   # * GET /users/1
-  # * GET /users/1.xml
   def show
     @title = t 'user.show_title'
 
@@ -190,114 +182,6 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json { render json: roles.map { |r| [r.name, r.id] } }
     end
-  end
-
-  # Blanquea la contraseña de un usuario
-  #
-  # * PATCH /users/blank_password/1
-  # * PATCH /users/blank_password/1.xml
-  def blank_password
-    if @user
-      @user.reset_password!(current_organization)
-      redirect_to_index t('user.password_reseted', user: @user.user)
-    end
-  end
-
-  # Formulario para restablecer contraseña
-  #
-  # * GET /users/reset_password
-  # * GET /users/reset_password.xml
-  def reset_password
-    @title = t 'user.reset_password_title'
-  end
-
-  # Envio de correo para restablecer contraseña
-  #
-  # * POST /users/send_password_reset
-  # * POST /users/send_password_reset.xml
-  def send_password_reset
-    @title = t 'user.reset_password_title'
-
-    @user = find_with_organization(params[:user][:email], :email)
-    if @user && !@user.hidden
-      @user.reset_password!(current_organization)
-      redirect_to_login t('user.password_reset_sended')
-    else
-      redirect_to reset_password_users_url, notice: t('user.unknown_email')
-    end
-  end
-
-  # Cambia la contraseña del usuario actual
-  #
-  # * GET /users/edit_password/1
-  # * GET /users/edit_password/1.xml
-  def edit_password
-    @title = t 'user.change_password_title'
-
-    if params[:confirmation_hash].blank?
-      login_check
-    else
-      @auth_user = User.with_valid_confirmation_hash(params[:confirmation_hash]).take
-      Organization.current_id = nil
-    end
-
-    if @auth_user
-      @auth_user.password = nil
-    else
-      restart_session
-      redirect_to_login t('user.confirmation_link_invalid'), :alert
-    end
-  end
-
-  # Cambia la contraseña del usuario actual
-  #
-  # * PATCH /users/update_password/1
-  # * PATCH /users/update_password/1.xml
-  def update_password
-    @title = t 'user.change_password_title'
-
-    if user_params[:confirmation_hash].blank?
-      login_check
-    else
-      @auth_user = User.with_valid_confirmation_hash(user_params[:confirmation_hash]).take
-      Organization.current_id = nil
-    end
-
-    if @auth_user
-      @auth_user.password = user_params[:password]
-      @auth_user.password_confirmation = user_params[:password_confirmation]
-
-      if @auth_user.valid?
-        @auth_user.encrypt_password
-        PaperTrail.whodunnit ||= @auth_user.id
-
-        if @auth_user.update(
-            password: @auth_user.password,
-            password_confirmation: @auth_user.password,
-            password_changed: Date.today,
-            change_password_hash: nil,
-            enable: true,
-            failed_attempts: 0,
-            last_access: session[:last_access] || Time.now
-          )
-
-          restart_session
-          redirect_to_login t('user.password_correctly_updated')
-        end
-      else
-        @auth_user.password = @auth_user.password_confirmation = nil
-        render action: :edit_password
-      end
-
-      @auth_user.password, @auth_user.password_confirmation = nil, nil
-    else
-      restart_session
-      redirect_to_login t('user.confirmation_link_invalid'), :alert
-    end
-
-  rescue ActiveRecord::StaleObjectError
-    flash.alert = t 'user.password_stale_object_error'
-    redirect_to edit_password_user_url(@auth_user)
   end
 
   # Crea un usuario inicial, sólo hace falta un hash válido para autenticarse
@@ -580,46 +464,6 @@ class UsersController < ApplicationController
   end
 
   private
-    # Busca el usuario indicado siempre que pertenezca a la organización. En el
-    # caso que no se encuentre (ya sea que no existe un usuario con ese ID o que
-    # no pertenece a la organización con la que se autenticó el usuario) devuelve
-    # nil.
-    # _id_:: ID (campo usuario) del usuario que se quiere recuperar
-    def find_with_organization(id, field = :user) #:doc:
-      id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
-      id_field = field == :id ?
-        "#{User.table_name}.#{field}" : "LOWER(#{User.table_name}.#{field})"
-
-      User.includes(:organizations).where(
-        [
-          "#{id_field} = :id",
-          [
-            "#{Organization.table_name}.id = :organization_id",
-            "#{Organization.table_name}.id IS NULL"
-          ].join(' OR ')
-        ].map {|c| "(#{c})"}.join(' AND '),
-        {:id => id, :organization_id => current_organization.try(:id)}
-      ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
-    end
-
-    def set_user
-      @user = User.includes(:organizations).where(
-        user: params[:id], "#{Organization.table_name}.id" => current_organization.try(:id)
-      ).references(:organizations).first if params[:id].present?
-    end
-
-    def user_params
-      params.require(:user).permit(
-        :user, :name, :last_name, :email, :language, :notes, :resource_id,
-        :manager_id, :enable, :logged_in, :password, :password_confirmation,
-        :hidden, :function, :send_notification_email, :confirmation_hash,
-        :lock_version, child_ids: [],
-        organization_roles_attributes: [
-          :id, :organization_id, :role_id, :_destroy
-        ],
-        related_user_relations_attributes: [:id, :related_user_id, :_destroy]
-      )
-    end
 
     def load_privileges #:nodoc:
       if @action_privileges
@@ -628,7 +472,6 @@ class UsersController < ApplicationController
           roles: :read,
           user_status: :read,
           export_to_pdf: :read,
-          blank_password: :modify,
           reassignment_edit: :modify,
           reassignment_update: :modify,
           release_edit: :modify,

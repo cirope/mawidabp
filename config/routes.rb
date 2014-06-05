@@ -419,18 +419,13 @@ Rails.application.routes.draw do
       get :auto_complete_for_user
       get :roles
       get :initial_roles
-      get :reset_password
-      post :send_password_reset
     end
 
     member do
       get :user_status
       get :user_status_without_graph
-      get :edit_password
-      patch :update_password
       get :edit_personal_data
       patch :update_personal_data
-      patch :blank_password
       get :reassignment_edit
       patch :reassignment_update
       get :release_edit
@@ -438,10 +433,11 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :users do
+    resources :passwords, except: [:index, :show, :destroy]
+  end
+
   root 'sessions#new'
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
-
-  # Any invalid route goes to the welcome page
-  get '*a' => redirect('/welcome')
 end
