@@ -1,23 +1,23 @@
 <% organization = @notification.findings.first.try(:organization) if @notification %>
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= @title %></h2>
-  <% if @body.kind_of?(Array) && !@body.blank? %>
+  <% if @body.kind_of?(Array) && @body.present? %>
     <ul>
       <% @body.each do |body_item| %>
         <li><%= body_item %></li>
       <% end %>
     </ul>
-  <% elsif !@body.blank? %>
+  <% elsif @body.present? %>
     <p style="margin: 1em 0em;"><%= textilize @body %></p>
   <% end %>
-  <% if @content.kind_of?(Array) && !@content.blank? %>
+  <% if @content.kind_of?(Array) && @content.present? %>
     <ul>
       <% @content.each do |content_item| %>
-        <li><%= textilize content_item %></li>
+        <li><%= textilize_without_paragraph ontent_item %></li>
       <% end %>
     </ul>
-  <% elsif !@content.blank? %>
-    <p><%= textilize @content %></p>
+  <% elsif @content.present? %>
+    <%= textilize @content %>
   <% end %>
 
   <% if @notification %>

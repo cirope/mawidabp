@@ -2,10 +2,8 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2><%= organization.name %></h2>
 
-  <p><%= textilize @body_title %></p>
+  <%= textilize @body_title %>
+  <%= textilize h(@note) unless @note.blank? %>
 
-  <% unless @note.blank? %>
-    <p><%= textilize h(@note) %></p>
-  <% end %>
   <%= render :partial => 'footer' %>
 </div>

@@ -12,10 +12,12 @@
       edit_users_password_url(@user, :confirmation_hash => @hash,
         :host => (@user.organizations.blank? ?
             URL_HOST : "#{@user.organizations.first.prefix}.#{URL_HOST}")) %>
-    <%= textilize t('notifier.restore_password.valid_until',
-      :link => edit_password_link,
-      :date => l(link_valid_until, :format => :long).strip) %>
   </p>
+
+  <%= textilize t('notifier.restore_password.valid_until',
+    :link => edit_password_link,
+    :date => l(link_valid_until, :format => :long).strip) %>
+
   <p>
     <%= t 'notifier.welcome_email.organizations_sites',
       :count => @user.organizations.count %>
