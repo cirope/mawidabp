@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ErrorRecordTest < ActiveSupport::TestCase
-
   def setup
     set_organization
 
