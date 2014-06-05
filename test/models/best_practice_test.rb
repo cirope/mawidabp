@@ -1,30 +1,17 @@
 require 'test_helper'
 
-# Clase para probar el modelo "BestPractice"
 class BestPracticeTest < ActiveSupport::TestCase
-  fixtures :best_practices, :organizations
 
-  # Función para inicializar las variables utilizadas en las pruebas
   def setup
     @best_practice = BestPractice.find best_practices(:iso_27001).id
 
     set_organization
   end
 
-  # Prueba que se realicen las búsquedas como se espera
-  test 'search' do
-    assert_kind_of BestPractice, @best_practice
-    assert_equal best_practices(:iso_27001).name, @best_practice.name
-    assert_equal best_practices(:iso_27001).description,
-      @best_practice.description
-  end
-
-  # Prueba la creación de una buena práctica
   test 'create' do
     assert_difference 'BestPractice.count' do
       @best_practice = BestPractice.list.create(
-        :name => 'New name',
-        :description => 'New description'
+        name: 'New name', description: 'New description'
       )
     end
 
@@ -32,15 +19,13 @@ class BestPracticeTest < ActiveSupport::TestCase
       @best_practice.organization_id
   end
 
-  # Prueba de actualización de una buena práctica
   test 'update' do
-    assert @best_practice.update(:name => 'Updated name'),
+    assert @best_practice.update(name: 'Updated name'),
       @best_practice.errors.full_messages.join('; ')
-    @best_practice.reload
-    assert_equal 'Updated name', @best_practice.name
+
+    assert_equal 'Updated name', @best_practice.reload.name
   end
 
-  # Prueba de eliminación de una buena práctica
   test 'destroy' do
     assert_difference 'BestPractice.count', -1 do
       BestPractice.find(best_practices(:useless_best_practice).id).destroy
@@ -57,17 +42,14 @@ class BestPracticeTest < ActiveSupport::TestCase
       @best_practice.errors.full_messages.join
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank atrtributes' do
-    @best_practice.name = nil
-    @best_practice.organization_id = '  '
+    @best_practice = BestPractice.new name: ''
 
     assert @best_practice.invalid?
     assert_error @best_practice, :name, :blank
     assert_error @best_practice, :organization_id, :blank
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @best_practice.name = 'abcdd' * 52
 
@@ -82,7 +64,6 @@ class BestPracticeTest < ActiveSupport::TestCase
     assert_error @best_practice, :organization_id, :not_a_number
   end
 
-  # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates duplicated attributes' do
     @best_practice.name = best_practices(:bcra_A4609).name
 

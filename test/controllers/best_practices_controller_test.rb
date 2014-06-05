@@ -1,38 +1,11 @@
 require 'test_helper'
 
-# Pruebas para el controlador de buenas prácticas
 class BestPracticesControllerTest < ActionController::TestCase
-  fixtures :best_practices, :process_controls, :control_objectives, :controls
-
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => best_practices(:iso_27001).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :new],
-      [:get, :edit, id_param],
-      [:post, :create],
-      [:patch, :update, id_param],
-      [:delete, :destroy, id_param]
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+  setup do
+    login
   end
 
   test 'list best practices' do
-    login
     get :index
     assert_response :success
     assert_not_nil assigns(:best_practices)
@@ -40,7 +13,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'show best practice' do
-    login
     get :show, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -48,7 +20,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'new best practice' do
-    login
     get :new
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -56,7 +27,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'create best_practice' do
-    login
     counts_array = ['BestPractice.count', 'ProcessControl.count',
       'ControlObjective.count', 'Control.count']
     assert_difference counts_array, 4 do
@@ -167,7 +137,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'edit best practice' do
-    login
     get :edit, :id => best_practices(:iso_27001).id
     assert_response :success
     assert_not_nil assigns(:best_practice)
@@ -175,7 +144,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'update best practice' do
-    login
     counts_array = ['BestPractice.count', 'ProcessControl.count',
       'ControlObjective.count', 'Control.count']
     assert_no_difference counts_array do
@@ -242,7 +210,6 @@ class BestPracticesControllerTest < ActionController::TestCase
   end
 
   test 'destroy best_practice' do
-    login
     assert_difference 'BestPractice.count', -1 do
       delete :destroy, :id => best_practices(:useless_best_practice).id
     end

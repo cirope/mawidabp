@@ -11,6 +11,18 @@ es: &common
         notice: '%{resource_name} eliminado'
         alert:  '%{resource_name} no pudo ser eliminado'
 
+    best_practices:
+      create:
+        notice: 'Buenas prácticas agregadas correctamente'
+      update:
+        notice: 'Buenas prácticas actualizadas correctamente'
+        stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
+
+      add_process_control: 'Agregar proceso de negocio'
+      add_control_objective: 'Agregar objetivo de control'
+      show_control_objectives: 'Ver objetivos de control'
+      hide_control_objectives: 'Ocultar objetivos de control'
+
     organizations:
       create:
         notice: 'Organización agregada correctamente'

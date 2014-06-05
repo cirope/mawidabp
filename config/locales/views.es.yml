@@ -15,6 +15,18 @@ es: &common
     download: 'Descargar'
     upload: 'Adjuntar'
 
+  best_practices:
+    index:
+      title: "Listado de buenas prácticas"
+    show:
+      title: "Detalle buenas prácticas"
+    new:
+      title: "Agregar buenas prácticas"
+    edit:
+      title: "Modificar buenas prácticas"
+    errors:
+      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes"
+
   error_records:
     index:
       title: 'Listado de registros de errores'
@@ -62,6 +74,7 @@ es: &common
       submit: 'Actualizar mis datos'
     update:
       success: 'Tus datos se actualizaron correctamente'
+
   reports:
     customization_titles: 'Personalización de títulos'
     generating: 'Generando reporte...'

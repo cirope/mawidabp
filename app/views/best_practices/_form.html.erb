@@ -9,7 +9,7 @@
   <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
 
   <div id="process_controls">
-    <%= f.simple_fields_for :process_controls do |p_f| %>
+    <%= f.simple_fields_for :process_controls, nested_process_controls do |p_f| %>
       <%= render 'process_control', f: p_f %>
     <% end %>
 
