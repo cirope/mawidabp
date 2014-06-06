@@ -3,7 +3,7 @@ require 'test_helper'
 class BestPracticeTest < ActiveSupport::TestCase
 
   def setup
-    @best_practice = BestPractice.find best_practices(:iso_27001).id
+    @best_practice = best_practices :iso_27001
 
     set_organization
   end
@@ -28,7 +28,7 @@ class BestPracticeTest < ActiveSupport::TestCase
 
   test 'destroy' do
     assert_difference 'BestPractice.count', -1 do
-      BestPractice.find(best_practices(:useless_best_practice).id).destroy
+      best_practices(:useless_best_practice).destroy
     end
   end
 
@@ -38,8 +38,6 @@ class BestPracticeTest < ActiveSupport::TestCase
     end
 
     assert_equal 1, @best_practice.errors.size
-    assert_equal I18n.t('control_objective.errors.related'),
-      @best_practice.errors.full_messages.join
   end
 
   test 'validates blank atrtributes' do

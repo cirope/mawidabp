@@ -7,9 +7,7 @@
           <%= show_plan_item_info(f.object) %>
         </div>
         <div class="pull-left">
-          <%= link_to_show_hide "resource_utilizations_for_#{id}",
-            t('plan.show_resource_utilization'),
-            t('plan.hide_resource_utilization') %>
+          <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
         <div class="media-body">
           <%= f.input :order_number, as: :string, label: false,

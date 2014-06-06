@@ -4,9 +4,7 @@
     <div class="col-md-11">
       <div class="media">
         <div class="pull-left show_hide">
-          <%= link_to_show_hide "control_objectives_for_#{id}",
-            t('best_practice.show_control_objectives'),
-            t('best_practice.hide_control_objectives') %>
+          <%= link_to_show_hide "control_objectives_for_#{id}" %>
         </div>
         <div class="media-body">
           <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
@@ -55,7 +53,7 @@
         <%= render 'control_objective', f: co_f %>
       <% end %>
 
-      <%= link_to_add_fields(t('best_practice.add_control_objective'), f, :control_objectives) %>
+      <%= link_to_add_fields(t('best_practices.control_objectives.new'), f, :control_objectives) %>
     </div>
   </div>
 </fieldset>

@@ -216,7 +216,7 @@ module ApplicationHelper
   # * _element_id_:: ID del elemento que se va a mostrar y ocultar
   # * _show_text_:: Texto que se va a mostrar en el title del link para mostrar
   # * _hide_text_:: Texto que se va a mostrar en el title del link para ocultar
-  def link_to_show_hide(element_id, show_text, hide_text, displayed = false)
+  def link_to_show_hide(element_id, show_text = nil, hide_text = nil, displayed = false)
     out = content_tag(:span,
       link_to(
         content_tag(:span, nil, class: 'glyphicon glyphicon-circle-arrow-right'),

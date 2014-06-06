@@ -19,12 +19,7 @@ es: &common
         stale: 'Las buenas prácticas no fueron actualizadas, intente nuevamente'
       destroy:
         notice: 'Buena práctica eliminada'
-        alert: 'La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes'
-
-      add_process_control: 'Agregar proceso de negocio'
-      add_control_objective: 'Agregar objetivo de control'
-      show_control_objectives: 'Ver objetivos de control'
-      hide_control_objectives: 'Ocultar objetivos de control'
+        alert: 'La buena práctica no puede ser eliminada, ya ha sido utilizada en informes'
 
     organizations:
       create:

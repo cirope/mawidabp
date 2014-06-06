@@ -4,9 +4,7 @@
     <div class="col-md-1">
       <div class="media">
         <div class="pull-left">
-          <%= link_to_show_hide "resource_utilizations_for_#{id}",
-            t('workflow.show_resource_utilization'),
-            t('workflow.hide_resource_utilization') %>
+          <%= link_to_show_hide "resource_utilizations_for_#{id}" %>
         </div>
         <div class="media-body">
           <%= f.input :order_number, as: :string, label: false,

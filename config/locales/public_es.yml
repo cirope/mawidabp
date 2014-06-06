@@ -167,21 +167,6 @@ public_es:
       can_not_be_destroyed: "El tipo de unidad organizativa no puede ser eliminado"
       business_unit_related: "La unidad organizativa no puede ser eliminada, se encuentra relacionada con al menos un plan de trabajo"
 
-  best_practice:
-    index_title: "Listado de buenas prácticas"
-    show_title: "Detalle buenas prácticas"
-    new_title: "Agregar buenas prácticas"
-    edit_title: "Modificar buenas prácticas"
-    correctly_created: "Buenas prácticas agregadas correctamente."
-    correctly_updated: "Buenas prácticas actualizadas correctamente."
-    stale_object_error: "Las buenas prácticas no fueron actualizadas, intente nuevamente."
-    add_process_control: "Agregar proceso"
-    add_control_objective: "Agregar objetivo de control"
-    show_control_objectives: "Ver objetivos de control"
-    hide_control_objectives: "Ocultar objetivos de control"
-    errors:
-      related_control_objectives: "La buena práctica no puede ser eliminada, contiene objetivos de control ya utilizados en informes"
-
   conclusion_draft_review:
     index_title: "Listado de informes borradores"
     show_title: "Detalle del informe borrador"

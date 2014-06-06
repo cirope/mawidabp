@@ -18,13 +18,17 @@ es: &common
 
   best_practices:
     index:
-      title: "Listado de buenas prácticas"
+      title: 'Listado de buenas prácticas'
     show:
-      title: "Detalle buenas prácticas"
+      title: 'Detalle buenas prácticas'
     new:
-      title: "Agregar buenas prácticas"
+      title: 'Agregar buenas prácticas'
     edit:
-      title: "Modificar buenas prácticas"
+      title: 'Modificar buenas prácticas'
+    process_controls:
+      new: 'Agregar proceso'
+    control_objectives:
+      new: 'Agregar objetivo'
 
   error_records:
     index:
