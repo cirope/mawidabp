@@ -98,7 +98,7 @@
           <% end %>
         </div>
         <script type="text/javascript">
-          Helper.makeSortable('#process_control_<%= pc.id %>', 'div.control_objective_item', 'a.move');
+          Helper.makeSortable('#process_control_<%= pc.id %>', 'fieldset.control_objective_item', 'a.move');
         </script>
       <% end %>
     </div>
@@ -155,7 +155,6 @@
   <% end %>
 <% end %>
 <script type="text/javascript">
-//<![CDATA[
 jQuery(function() {
   $('#review_plan_item_id').change(function() {
     var data_url = '<%= plan_item_data_reviews_path %>';
@@ -217,5 +216,4 @@ jQuery(function() {
 
   FormUtil.completeSortNumbers();
 });
-//]]>
 </script>
