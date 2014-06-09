@@ -23,7 +23,7 @@
   <tbody>
     <% @error_records.each do |error_record| %>
       <tr>
-        <td><%= error_record.user ? error_record.user.user : t('error_record.void_user') %></td>
+        <td><%= error_record %></td>
         <td><%= l(error_record.created_at, format: :short) %></td>
         <td class="hidden-xs"><%= error_record.error_text %></td>
         <td class="hidden-xs"><%= super_truncate(error_record.data, 40) %></td>

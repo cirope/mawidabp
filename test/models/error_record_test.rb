@@ -4,8 +4,7 @@ class ErrorRecordTest < ActiveSupport::TestCase
   def setup
     set_organization
 
-    @error_record = ErrorRecord.find(
-      error_records(:administrator_user_failed_attempt).id)
+    @error_record = error_records :administrator_user_failed_attempt
   end
 
   test 'create' do

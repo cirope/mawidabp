@@ -37,10 +37,19 @@ es: &common
       title: 'Detalles del correo'
 
   error_records:
+    error_on_login: 'Ingreso erróneo'
+    error_on_password_change: 'Cambio de contraseña incorrecto'
+    error_user_disabled: 'Usuario deshabilitado'
     index:
-      title: 'Listado de registros de errores'
+      title: 'Registros de error'
+    pdf_list_name: 'registros_de_error_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Intervalo'
+      range: 'desde el %{from_date} al %{to_date}'
     show:
-      title: 'Detalles del registro de error'
+      title: 'Detalles del registro'
+      list: 'Ver registros de error'
+    void_user: 'Inexistente'
 
   login_records:
     choose:

@@ -24,15 +24,15 @@ class ErrorRecordPdf < Prawn::Document
 
     def add_header
       @pdf.add_generic_report_header @current_organization
-      @pdf.add_title I18n.t('error_record.index_title')
+      @pdf.add_title I18n.t('error_records.index.title')
     end
 
     def add_description
       @pdf.move_down PDF_FONT_SIZE
 
       @pdf.add_description_item(
-        I18n.t('error_record.period.title'),
-        I18n.t('error_record.period.range',
+        I18n.t('error_records.period.title'),
+        I18n.t('error_records.period.range',
           from_date: I18n.l(@from, format: :long),
           to_date: I18n.l(@to, format: :long))
       )
@@ -58,9 +58,8 @@ class ErrorRecordPdf < Prawn::Document
 
     def make_column_data
       @error_records.map do |error_record|
-        user_name = error_record.user.try(:user) || I18n.t('error_record.void_user')
         [
-          "<b>#{user_name}</b>",
+          "<b>#{error_record}</b>",
           error_record.created_at ? I18n.l(error_record.created_at, format: :minimal) : '-',
           error_record.error_text, error_record.data
         ]
@@ -84,7 +83,7 @@ class ErrorRecordPdf < Prawn::Document
     end
 
     def pdf_name
-      I18n.t 'error_record.pdf_list_name',
+      I18n.t 'error_records.pdf_list_name',
         from_date: @from.to_s(:db), to_date: @to.to_s(:db)
     end
 end

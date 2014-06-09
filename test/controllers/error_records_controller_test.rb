@@ -38,7 +38,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('error_record.pdf_list_name',
+      I18n.t('error_records.pdf_list_name',
         from_date: from.to_s(:db), to_date: to.to_s(:db)),
       ErrorRecord.table_name)
   end

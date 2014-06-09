@@ -450,19 +450,6 @@ mc_es:
     title: "Título"
     subtitle: "Subtítulo"
 
-  error_record:
-    index_title: "Registros de error"
-    show_title: "Detalles del registro"
-    error_on_login: "Ingreso erróneo"
-    error_on_password_change: "Cambio de contraseña incorrecto"
-    error_user_disabled: "Usuario deshabilitado"
-    void_user: "Inexistente"
-    show_list: "Ver registros de error"
-    pdf_list_name: "registros_de_error_%{from_date}_%{to_date}.pdf"
-    period:
-      title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
-
   execution_reports:
     detailed_management_report:
       pdf_name: "informe_gerencial_detallado_%{from_date}_al_%{to_date}.pdf"

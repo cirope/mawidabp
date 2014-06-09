@@ -1,6 +1,6 @@
 <p>
   <strong><%= User.model_name.human %>:</strong>
-  <%= @error_record.user ? @error_record.user.user : t('error_record.void_user') %>
+  <%= @error_record %>
 </p>
 
 <p>
@@ -15,10 +15,10 @@
 
 <p>
   <strong><%= ErrorRecord.human_attribute_name 'created_at' %>:</strong>
-  <%= l @error_record.created_at, format: :short if @error_record.created_at %>
+  <%= l @error_record.created_at, format: :short %>
 </p>
 
 <hr />
 
-<%= link_to t('label.list'), error_records_path %> |
+<%= link_to_index error_records_path %> |
 <%= link_to_back %>
