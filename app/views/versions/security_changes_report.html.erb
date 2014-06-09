@@ -31,8 +31,7 @@
 
 <div>
   <%= paginate @versions %>
-  <%= link_to t('label.back'), :controller => :login_records,
-    :action => :choose %> |
+  <%= link_to t('label.back'), choose_login_records_path %> |
   <%= link_to t('label.download'), { :action => :security_changes_report,
     :security_changes_report => {:from_date => @from_date, :to_date => @to_date},
     :download => 1, :_ts => Time.now.to_i } %>

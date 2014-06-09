@@ -43,12 +43,17 @@ es: &common
       title: 'Detalles del registro de error'
 
   login_records:
-    index:
-      title: 'Listado de registros de ingreso'
-    show:
-      title: 'Detalles del registro de ingreso'
     choose:
       title: 'Reportes de seguridad'
+    index:
+      title: 'Registros de ingreso'
+    pdf_list_name: 'listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf'
+    period:
+      title: 'Intervalo'
+      range: 'desde el %{from_date} al %{to_date}'
+    show:
+      title: 'Detalles del registro de ingreso'
+      list: 'Ver registros de ingreso'
 
   organizations:
     index:

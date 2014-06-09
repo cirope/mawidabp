@@ -43,7 +43,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('login_record.pdf_list_name', from_date: from_date.to_formatted_s(:db),
+      I18n.t('login_records.pdf_list_name', from_date: from_date.to_formatted_s(:db),
         to_date: to_date.to_formatted_s(:db)), LoginRecord.table_name)
   end
 end

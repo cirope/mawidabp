@@ -782,16 +782,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     link_title: "Haga click para ver la ayuda en línea de este elemento"
     inline_title: 'Ayuda'
 
-  login_record:
-    index_title: "Registros de ingreso"
-    choose: "Reportes de seguridad"
-    show_title: "Detalles del registro de ingreso"
-    show_list: "Ver registros de ingreso"
-    pdf_list_name: "listado_de_registros_de_ingreso_%{from_date}_%{to_date}.pdf"
-    period:
-      title: "Intervalo"
-      range: "desde el %{from_date} al %{to_date}"
-
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"

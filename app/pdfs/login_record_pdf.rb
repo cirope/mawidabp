@@ -24,15 +24,15 @@ class LoginRecordPdf < Prawn::Document
 
     def add_header
       @pdf.add_generic_report_header @current_organization
-      @pdf.add_title I18n.t('login_record.index_title')
+      @pdf.add_title I18n.t('login_records.index.title')
     end
 
     def add_description
       @pdf.move_down PDF_FONT_SIZE
 
       @pdf.add_description_item(
-        I18n.t('login_record.period.title'),
-        I18n.t('login_record.period.range',
+        I18n.t('login_records.period.title'),
+        I18n.t('login_records.period.range',
           from_date: I18n.l(@from, format: :long),
           to_date: I18n.l(@to, format: :long))
       )
@@ -84,7 +84,7 @@ class LoginRecordPdf < Prawn::Document
     end
 
     def pdf_name
-      I18n.t 'login_record.pdf_list_name',
+      I18n.t 'login_records.pdf_list_name',
         from_date: @from.to_s(:db), to_date: @to.to_s(:db)
     end
 end
