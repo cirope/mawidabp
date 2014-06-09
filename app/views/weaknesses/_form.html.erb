@@ -53,8 +53,8 @@
       </div>
       <div class="col-md-6">
         <%= f.input :origination_date, as: :date_picker, input_html: { disabled: readonly } %>
-        <%= risk_field(f, { input_html: { disabled: readonly }, prompt: true }) %>
-        <%= priority_field(f, { input_html: { disabled: readonly }, prompt: true }) %>
+        <%= f.input :risk, collection: risks, prompt: true, disabled: readonly %>
+        <%= f.input :priority, collection: priorities, prompt: true, disabled: readonly %>
         <%= f.label :state, raw(Weakness.human_attribute_name(:state) +
             (show_history_changes ? finding_show_status_change_history(
               :finding_status_change_history) : '')) %>

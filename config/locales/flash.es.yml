@@ -28,6 +28,11 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    settings:
+      update:
+        notice: 'Configuración actualizada correctamente'
+        stale: 'La configuración no fue actualizada, intente nuevamente'
+
 public_es:
   <<: *common
 

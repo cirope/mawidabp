@@ -19,8 +19,8 @@
         <%= f.input :period, label: Period.model_name.human, input_html: {
           value: @control_objective_item.review.period.inspect, readonly: true
         } %>
-        <%= relevance_field f, label: ControlObjectiveItem.human_attribute_name(:relevance),
-          include_blank: t('control_objective_item.not_rated'), input_html: {  disabled: readonly } %>
+        <%= f.input :relevance, collection: relevances,
+          include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= f.input :audit_date, as: :date_picker, input_html: { disabled: readonly } %>
         <%= f.input :control_objective_text, input_html: { autofocus: true, readonly: readonly, rows: 5 } %>
 
@@ -42,15 +42,15 @@
         <% end %>
       </div>
       <div class="col-md-6">
-        <%= qualification_field f, :design_score,
+        <%= f.input :design_score, collection: qualifications,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= yield :design_tests %>
 
-        <%= qualification_field f, :compliance_score,
+        <%= f.input :compliance_score, collection: qualifications,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= yield :compliance_tests %>
 
-        <%= qualification_field f, :sustantive_score,
+        <%= f.input :sustantive_score, collection: qualifications,
           include_blank: t('control_objective_item.not_rated'), input_html: { disabled: readonly } %>
         <%= yield :sustantive_tests %>
 

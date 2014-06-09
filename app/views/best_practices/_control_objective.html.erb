@@ -26,10 +26,10 @@
       <% end %>
 
       <div class="col-md-1">
-        <%= relevance_field(f, label: false, prompt: true) %>
+        <%= f.input :relevance, collection: relevances, label: false, prompt: true %>
       </div>
       <div class="col-md-1">
-        <%= risk_field(f, label: false, prompt: true) %>
+        <%= f.input :risk, collection: risks, label: false, prompt: true %>
       </div>
       <div class="col-md-1">
         <div class="show_hide">

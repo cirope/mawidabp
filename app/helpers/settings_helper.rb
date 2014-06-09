@@ -4,43 +4,19 @@ module SettingsHelper
   include Parameters::Relevance
   include Parameters::Qualification
 
-  def relevance_field(form, *args)
-    options = args.extract_options!
-
-    collection = RELEVANCE_TYPES.map do |k,v|
-      [[t("relevance_types.#{k}"),"(#{v})"].join(' '), v]
-    end
-
-    form.input :relevance, options.merge(collection: collection)
+  def relevances
+    RELEVANCE_TYPES.map { |k,v| [[t("relevance_types.#{k}"),"(#{v})"].join(' '), v] }
   end
 
-  def qualification_field(form, field, *args)
-    options = args.extract_options!
-
-    collection = QUALIFICATION_TYPES.map do |k,v|
-      [[t("qualification_types.#{k}"), "(#{v})"].join(' '), v]
-    end
-
-    form.input field, options.merge(collection: collection)
+  def qualifications
+    QUALIFICATION_TYPES.map { |k,v| [[t("qualification_types.#{k}"),"(#{v})"].join(' '), v] }
   end
 
-  def risk_field(form, *args)
-    options = args.extract_options!
-
-    collection = RISK_TYPES.map do |k,v|
-      [[t("risk_types.#{k}"), "(#{v})"].join(' '), v]
-    end
-
-    form.input :risk, options.merge(collection: collection)
+  def risks
+    RISK_TYPES.map { |k,v| [[t("risk_types.#{k}"), "(#{v})"].join(' '), v] }
   end
 
-  def priority_field(form, *args)
-    options = args.extract_options!
-
-    collection = PRIORITY_TYPES.map do |k,v|
-      [[t("priority_types.#{k}"), "(#{v})"].join(' '), v]
-    end
-
-    form.input :priority, options.merge(collection: collection)
+  def priorities
+    PRIORITY_TYPES.map { |k,v| [[t("priority_types.#{k}"), "(#{v})"].join(' '), v] }
   end
 end

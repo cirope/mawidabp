@@ -97,6 +97,28 @@ es: &common
     destroy:
       logged_out: 'Hasta la próxima'
 
+  settings:
+    index:
+      title: 'Listado de configuraciones'
+    show:
+      title: 'Detalles de la configuración'
+    new:
+      title: 'Agregar configuración'
+    edit:
+      title: 'Modificar configuración'
+    finding_stale_confirmed_days: 'Cantidad de días que deben pasar para que una observación sin responder se considere desatendida'
+    review_code_expresion: 'Formato del código de identificación de informes'
+    account_expire_time: 'Días para la eliminación de cuentas inactivas'
+    allow_concurrent_sessions: 'Permitir sesiones simultáneas para el mismo usuario'
+    attempts_count: 'Cantidad de intentos fallidos de conexión'
+    expire_notification: 'Aviso de caducidad de la contraseña'
+    password_constraint: 'Control de composición de contraseñas'
+    password_count: 'Historia de contraseña'
+    password_expire_time: 'Duración máxima de la contraseña'
+    password_minimum_length: 'Longitud mínima de la contraseña'
+    password_minimum_time: 'Duración mínima de la contraseña'
+    session_expire_time: 'Desconexión por inactividad'
+
 public_es:
   <<: *common
 

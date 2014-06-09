@@ -49,9 +49,8 @@
     <% end %>
 
     <div class="col-md-1">
-      <%= relevance_field(
-        f, {}, label: false, prompt: true, input_html: { id: "procedure_control_subitem_#{id}_relevance" }
-      ) %>
+      <%= f.input :relevance, collection: relevances, label: false, prompt: true,
+        input_html: { id: "procedure_control_subitem_#{id}_relevance" } %>
     </div>
     <div class="col-md-1">
       <div class="show_hide">

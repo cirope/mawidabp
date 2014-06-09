@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SettingsControllerTest < ActionController::TestCase
   setup do
-    @setting = settings(:parameter_finding_stale_confirmed_days_default)
+    @setting = settings :parameter_finding_stale_confirmed_days_default
 
     login
   end
@@ -25,11 +25,7 @@ class SettingsControllerTest < ActionController::TestCase
 
   test 'should update setting' do
     patch :update, {
-      id: @setting.id,
-      setting: {
-        value: '45',
-        description: 'New description'
-      }
+      id: @setting.id, setting: { value: '45', description: 'New description' }
     }
     assert_redirected_to setting_path(assigns(:setting))
   end

@@ -1132,28 +1132,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     type_manager: "Gerente de auditoría"
     type_executive_manager: "Gerente"
 
-  setting:
-    index_title: "Listado de configuraciones"
-    show_title: "Detalles de la configuración"
-    new_title: "Agregar configuración"
-    edit_title: "Modificar configuración"
-    correctly_created: "Configuración agregada correctamente."
-    correctly_updated: "Configuración actualizada correctamente."
-    stale_object_error: "La configuración no fue actualizada, intente nuevamente."
-    finding_stale_confirmed_days: "Cantidad de días que deben pasar para que una observación sin responder se considere desatendida"
-    review_code_expresion: "Formato del código de identificación de informes"
-    account_expire_time: "Días para la eliminación de cuentas inactivas"
-    allow_concurrent_sessions: "Permitir sesiones simultáneas para el mismo usuario"
-    attempts_count: "Cantidad de intentos fallidos de conexión"
-    expire_notification: "Aviso de caducidad de la contraseña"
-    password_constraint: "Control de composición de contraseñas"
-    password_count: "Historia de contraseña"
-    password_expire_time: "Duración máxima de la contraseña"
-    password_minimum_length: "Longitud mínima de la contraseña"
-    password_minimum_time: "Duración mínima de la contraseña"
-    session_expire_time: "Desconexión por inactividad"
-
-
   user:
     enter: "Ingresar"
     index_title: "Listado de usuarios"

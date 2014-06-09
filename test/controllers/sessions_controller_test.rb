@@ -8,7 +8,7 @@ class SessionsControllerTest < ActionController::TestCase
     @request.host = "#{@organization.prefix}.localhost.i"
   end
 
-  test "should get login" do
+  test 'should get login' do
     get :new
     assert_response :success
     assert_template 'sessions/new'

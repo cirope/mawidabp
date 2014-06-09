@@ -1,4 +1,4 @@
-module Parameters::Relevance 
+module Parameters::Relevance
   extend ActiveSupport::Concern
 
   RELEVANCE_TYPES = {
