@@ -450,10 +450,6 @@ public_es:
     title: "Título"
     subtitle: "Subtítulo"
 
-  email:
-    index_title: "Listado de correos"
-    show_title: "Detalles del correo"
-
   error_record:
     index_title: "Registros de error"
     show_title: "Detalles del registro"

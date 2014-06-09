@@ -3,7 +3,7 @@ class SettingsController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_setting, only: [:show, :edit, :update]
-  before_action :set_title, except: :destroy
+  before_action :set_title
 
   # GET /settings
   def index

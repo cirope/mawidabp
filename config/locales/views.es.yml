@@ -30,6 +30,12 @@ es: &common
     control_objectives:
       new: 'Agregar objetivo'
 
+  e_mails:
+    index:
+      title: 'Listado de correos'
+    show:
+      title: 'Detalles del correo'
+
   error_records:
     index:
       title: 'Listado de registros de errores'
