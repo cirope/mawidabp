@@ -28,6 +28,16 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    resource_classes:
+      create:
+        notice: 'Clase de recurso agregada correctamente'
+      update:
+        notice: 'Clase de recurso actualizada correctamente'
+        stale: 'La clase de recurso no fue actualizada, intente nuevamente'
+      destroy:
+        notice: 'Clase de recurso eliminada'
+        alert: 'La clase de recurso no pudo ser eliminada'
+
     settings:
       update:
         notice: 'Configuración actualizada correctamente'

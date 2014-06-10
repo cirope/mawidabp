@@ -24,7 +24,6 @@ class LoginRecordsController < ApplicationController
 
   # GET /login_records/1
   def show
-    respond_with @login_record
   end
 
   private

@@ -1178,18 +1178,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
   report:
     index_title: "Listado de reportes"
 
-  resource_class:
-    index_title: "Listado de clases de recursos"
-    show_title: "Detalles de la clase de recurso"
-    new_title: "Agregar clase de recurso"
-    edit_title: "Modificar clase de recurso"
-    correctly_created: "Clase de recurso agregada correctamente."
-    correctly_updated: "Clase de recurso actualizada correctamente."
-    stale_object_error: "La clase de recurso no fue actualizada, intente nuevamente."
-    add_resource: "Agregar recurso"
-    type_human: "Personas"
-    type_material: "Materiales"
-
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"

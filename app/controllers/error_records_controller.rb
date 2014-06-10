@@ -20,7 +20,6 @@ class ErrorRecordsController < ApplicationController
 
   # * GET /error_records/1
   def show
-    respond_with @error_record
   end
 
   private

@@ -1,38 +1,13 @@
 require 'test_helper'
 
-# Pruebas para el controlador de recursos
 class ResourceClassesControllerTest < ActionController::TestCase
-  fixtures :resource_classes
+  setup do
+    @resource_class = resource_classes :human_resources
 
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {id: resource_classes(:human_resources).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :new],
-      [:get, :edit, id_param],
-      [:post, :create],
-      [:patch, :update, id_param],
-      [:delete, :destroy, id_param]
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+    login
   end
 
   test 'list resource classes' do
-    login
     get :index
     assert_response :success
     assert_not_nil assigns(:resource_classes)
@@ -40,15 +15,13 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'show resource class' do
-    login
-    get :show, id: resource_classes(:human_resources).id
+    get :show, id: @resource_class
     assert_response :success
     assert_not_nil assigns(:resource_class)
     assert_template 'resource_classes/show'
   end
 
   test 'new resource class' do
-    login
     get :new
     assert_response :success
     assert_not_nil assigns(:resource_class)
@@ -57,7 +30,6 @@ class ResourceClassesControllerTest < ActionController::TestCase
 
   test 'create resource class' do
     assert_difference ['ResourceClass.count', 'Resource.count'] do
-      login
       post :create, {
         resource_class: {
           name: 'New resource class',
@@ -75,8 +47,7 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'edit resource class' do
-    login
-    get :edit, id: resource_classes(:human_resources).id
+    get :edit, id: @resource_class
     assert_response :success
     assert_not_nil assigns(:resource_class)
     assert_template 'resource_classes/edit'
@@ -85,9 +56,8 @@ class ResourceClassesControllerTest < ActionController::TestCase
   test 'update resource class' do
     assert_no_difference 'ResourceClass.count' do
       assert_difference 'Resource.count' do
-        login
         patch :update, {
-          id: resource_classes(:human_resources).id,
+          id: @resource_class,
           resource_class: {
             name: 'Updated resource class',
             resource_class_type: ResourceClass::TYPES[:human],
@@ -114,9 +84,8 @@ class ResourceClassesControllerTest < ActionController::TestCase
   end
 
   test 'destroy resource class' do
-    login
     assert_difference 'ResourceClass.count', -1 do
-      delete :destroy, id: resource_classes(:human_resources).id
+      delete :destroy, id: @resource_class
     end
 
     assert_redirected_to resource_classes_url

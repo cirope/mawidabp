@@ -102,6 +102,21 @@ es: &common
     customization_titles: 'Personalización de títulos'
     generating: 'Generando reporte...'
 
+  resource_classes:
+    edit:
+      title: 'Modificar clase de recurso'
+    index:
+      title: 'Listado de clases de recursos'
+    new:
+      title: 'Agregar clase de recurso'
+    show:
+      title: 'Detalles de la clase de recurso'
+    resources:
+      new: 'Agregar recurso'
+    types:
+      human: 'Personas'
+      material: 'Materiales'
+
   sessions:
     new:
       title: 'Ingreso'

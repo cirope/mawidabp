@@ -8,7 +8,9 @@
           label: ResourceClass.human_attribute_name(:name) %>
       </div>
       <div class="col-md-6">
-        <%= resource_class_type_field f %>
+        <%= f.input :resource_class_type,
+          collection: sort_options_array(resource_class_types),
+          prompt: true, disabled: !f.object.new_record? %>
       </div>
     </div>
   </div>
@@ -28,18 +30,18 @@
   </div>
 
   <div id="resources">
-    <%= f.simple_fields_for :resources do |r_f| %>
+    <%= f.simple_fields_for :resources, resources do |r_f| %>
       <%= render 'resource', f: r_f %>
     <% end %>
 
-    <%= link_to_add_fields t('resource_class.add_resource'), f, :resources %>
+    <%= link_to_add_fields t('resource_classes.resources.new'), f, :resources %>
   </div>
 
   <hr />
 
   <div class="form-actions form-footer">
-    <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
   </div>
 <% end %>
