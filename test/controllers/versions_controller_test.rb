@@ -1,61 +1,38 @@
 require 'test_helper'
 
-# Pruebas para el controlador de versiones
 class VersionsControllerTest < ActionController::TestCase
-  fixtures :versions
+  setup do
+    @version = versions :important_version
 
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => versions(:important_version).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :show, id_param],
-      [:get, :security_changes_report]
-    ]
+    login
+  end
 
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+  test 'get index' do
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:versions)
+    assert_template 'versions/index'
   end
 
   test 'show version' do
-    login
-    get :show, :id => versions(:important_version).to_param
+    get :show, id: @version
     assert_response :success
     assert_not_nil assigns(:version)
     assert_select 'table.table'
     assert_template 'versions/show'
   end
 
-  test 'security changes report' do
-    login
-    get :security_changes_report
-    assert_response :success
-    assert_not_nil assigns(:versions)
-    assert_template 'versions/security_changes_report'
-  end
-
   test 'download security changes report' do
-    login
-    from_date = Date.today.at_beginning_of_month
-    to_date = Date.today.at_end_of_month
+    from = Date.today.at_beginning_of_month
+    to = Date.today.at_end_of_month
 
     assert_nothing_raised do
-      get :security_changes_report, :download => 1,
-        :range => {:from_date => from_date, :to_date => to_date}
+      get :index, index: { from_date: from, to_date: to }, format: :pdf
     end
 
     assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('version.pdf_list_name',
-        :from_date => from_date.to_formatted_s(:db),
-        :to_date => to_date.to_formatted_s(:db)), PaperTrail::Version.table_name)
+      I18n.t('versions.pdf_list_name',
+        from_date: from.to_s(:db), to_date: to.to_s(:db)
+      ), PaperTrail::Version.table_name)
   end
 end

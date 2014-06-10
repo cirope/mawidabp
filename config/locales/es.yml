@@ -1381,20 +1381,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         one: "El listado fue filtrado con la consulta '%{query}' en la columna %{columns}"
         other: "El listado fue filtrado con la consulta '%{query}' en las columnas %{columns}"
 
-  version:
-    show_title: "Detalles del registro de cambios"
-    show_security_changes_report: "Ver reporte de cambios de seguridad"
-    security_changes_report_title: "Reporte de cambios de seguridad"
-    event_create: "Alta"
-    event_update: "Modificación"
-    event_destroy: "Baja"
-    changes: "Cambios"
-    column_attribute: "Atributo"
-    column_new_value: "Valor nuevo"
-    column_old_value: "Valor anterior"
-    without_changes: "Sin cambios"
-    pdf_list_name: "reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf"
-
   weakness:
     index_title: "Listado de observaciones"
     show_title: "Detalles de la observación"

@@ -59,11 +59,7 @@ Rails.application.routes.draw do
     post "execution_reports/#{action}", to: "execution_reports##{action}", as: action
   end
 
-  resources :versions, only: [:show] do
-    collection do
-      get :security_changes_report
-    end
-  end
+  resources :versions, only: [:index, :show]
 
   resources :help_items
 
@@ -438,6 +434,5 @@ Rails.application.routes.draw do
 
   get 'private/:path', to: 'file_models#download', constraints: { path: /.+/ }
 
-  # Any invalid route goes to the welcome page
   get '*a' => redirect('/welcome')
 end
