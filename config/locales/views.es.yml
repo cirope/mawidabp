@@ -76,7 +76,24 @@ es: &common
       create:
         success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
         not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
-
+    status:
+      show:
+        title: 'Estado'
+        table: 'Ver tabla'
+        graph: 'Ver gráfico'
+        pending_weaknesses:
+          one: "*Una* observación *pendiente*"
+          other: "*%{count}* observaciones *pendientes*"
+        high_risk_weaknesses:
+          one: '*Una* observación de *riesgo alto*'
+          other: '*%{count}* observaciones de *riesgo alto*'
+        weaknesses:
+          pending:
+            one: '*Una* observación pendiente'
+            other: '*%{count}* observaciones pendientes'
+          complete:
+            one: '*Una* observación solucionada'
+            other: '*%{count}* observaciones solucionadas'
 
 public_es:
   <<: *common

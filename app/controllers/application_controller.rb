@@ -164,6 +164,7 @@ class ApplicationController < ActionController::Base
     end
 
     def load_current_module
+      controller_name = controller_path.split('/').first
       @current_module ||= module_name_for(controller_name.to_sym).try(:menu_name)
     end
 

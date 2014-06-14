@@ -1,10 +1,9 @@
 <%= content_for :form_actions do %>
   <%= link_to_destroy @user %> |
   <%= link_to_show @user %> |
-  <%= link_to t('user.status'), user_status_user_path(@user) %> |
+  <%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %> |
   <%= link_to t('label.list'), users_path %> |
-  <%= link_to t('user.reassign_to_another_user'),
-    reassignment_edit_user_path(@user) %> |
+  <%= link_to t('user.reassign_to_another_user'), reassignment_edit_user_path(@user) %> |
   <%= link_to t('user.release'), release_edit_user_path(@user) %> |
   <%= link_to_back %>
 <% end %>

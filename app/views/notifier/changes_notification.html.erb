@@ -13,7 +13,7 @@
   <% if @content.kind_of?(Array) && @content.present? %>
     <ul>
       <% @content.each do |content_item| %>
-        <li><%= textilize_without_paragraph ontent_item %></li>
+        <li><%= textilize_without_paragraph content_item %></li>
       <% end %>
     </ul>
   <% elsif @content.present? %>

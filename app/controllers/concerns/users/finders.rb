@@ -15,14 +15,14 @@ module Users::Finders
             "#{Organization.table_name}.id = :organization_id",
             "#{Organization.table_name}.id IS NULL"
           ].join(' OR ')
-        ].map {|c| "(#{c})"}.join(' AND '),
+        ].map { |c| "(#{c})" }.join(' AND '),
         { id: id, organization_id: current_organization.try(:id), false: false }
       ).references(:organizations).first || (find_with_organization(id, :id) unless field == :id)
     end
 
     def set_user
       @user = User.includes(:organizations).where(
-        user: params[:id], "#{Organization.table_name}.id" => current_organization.try(:id)
+        user: params[:id], organizations: { id: current_organization.try(:id) },
       ).references(:organizations).first if params[:id].present?
     end
 end

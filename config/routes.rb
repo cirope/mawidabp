@@ -422,8 +422,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :user_status
-      get :user_status_without_graph
       get :edit_personal_data
       patch :update_personal_data
       get :reassignment_edit
@@ -435,6 +433,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :passwords, except: [:index, :show, :destroy]
+    resources :status, only: [:show]
   end
 
   root 'sessions#new'

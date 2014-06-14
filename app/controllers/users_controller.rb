@@ -5,12 +5,12 @@ class UsersController < ApplicationController
   before_action :auth, except: [:new_initial, :create_initial, :initial_roles]
   before_action :load_privileges
   before_action :check_privileges, except: [
-    :user_status, :user_status_without_graph, :edit_personal_data,
-    :update_personal_data, :new_initial, :create_initial, :initial_roles
+    :edit_personal_data, :update_personal_data, :new_initial, :create_initial,
+    :initial_roles
   ]
   before_action :set_user, only: [
-    :show, :edit, :update, :destroy, :user_status, :user_status_without_graph,
-    :reassignment_edit, :reassignment_update, :release_edit, :release_update
+    :show, :edit, :update, :destroy, :reassignment_edit, :reassignment_update,
+    :release_edit, :release_update
   ]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -143,32 +143,6 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(users_url) }
       format.xml  { head :ok }
-    end
-  end
-
-  # Muestra el estado de un usuario
-  #
-  # * GET /users/1/user_status
-  # * GET /users/1/user_status.xml
-  def user_status
-    @title = t 'user.status_title'
-    @user = @auth_user if @auth_user.audited?
-    @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @user }
-    end
-  end
-
-  def user_status_without_graph
-    @title = t 'user.status_title'
-    @user = @auth_user if @auth_user.audited?
-    @filtered_weaknesses = @user.weaknesses.for_current_organization.finals(false).not_incomplete
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @user }
     end
   end
 
@@ -470,7 +444,6 @@ class UsersController < ApplicationController
         @action_privileges.update(
           auto_complete_for_user: :read,
           roles: :read,
-          user_status: :read,
           export_to_pdf: :read,
           reassignment_edit: :modify,
           reassignment_update: :modify,
