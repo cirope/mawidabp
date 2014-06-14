@@ -85,7 +85,7 @@
 
 <div class="form-footer">
   <%= link_to_edit edit_user_path(@user) %> |
-  <%= link_to t('user.status'), user_status_user_path(@user) %> |
+  <%= link_to t('users.status.show.title'), users_status_path(@user, graph: true) %> |
   <%= link_to t('label.list'), users_path %> |
   <%= link_to_back %>
 </div>

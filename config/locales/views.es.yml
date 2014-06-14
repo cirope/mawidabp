@@ -138,24 +138,6 @@ es: &common
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
 
-  versions:
-    index:
-      title: 'Ver reporte de cambios de seguridad'
-    security_changes_report:
-      title: 'Reporte de cambios de seguridad'
-    show:
-      title: 'Detalles del registro de cambios'
-    events:
-      create: 'Alta'
-      update: 'Modificación'
-      destroy: 'Baja'
-    changes: 'Cambios'
-    column_attribute: 'Atributo'
-    column_new_value: 'Valor nuevo'
-    column_old_value: 'Valor anterior'
-    without_changes: 'Sin cambios'
-    pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
-
   users:
     passwords:
       edit:
@@ -173,6 +155,42 @@ es: &common
       create:
         success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
         not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+    status:
+      show:
+        title: 'Estado'
+        table: 'Ver tabla'
+        graph: 'Ver gráfico'
+        pending_weaknesses:
+          one: "*Una* observación *pendiente*"
+          other: "*%{count}* observaciones *pendientes*"
+        high_risk_weaknesses:
+          one: '*Una* observación de *riesgo alto*'
+          other: '*%{count}* observaciones de *riesgo alto*'
+        weaknesses:
+          pending:
+            one: '*Una* observación pendiente'
+            other: '*%{count}* observaciones pendientes'
+          complete:
+            one: '*Una* observación solucionada'
+            other: '*%{count}* observaciones solucionadas'
+
+  versions:
+    index:
+      title: 'Ver reporte de cambios de seguridad'
+    security_changes_report:
+      title: 'Reporte de cambios de seguridad'
+    show:
+      title: 'Detalles del registro de cambios'
+    events:
+      create: 'Alta'
+      update: 'Modificación'
+      destroy: 'Baja'
+    changes: 'Cambios'
+    column_attribute: 'Atributo'
+    column_new_value: 'Valor nuevo'
+    column_old_value: 'Valor anterior'
+    without_changes: 'Sin cambios'
+    pdf_list_name: 'reporte_de_cambios_de_seguridad_%{from_date}_%{to_date}.pdf'
 
 public_es:
   <<: *common

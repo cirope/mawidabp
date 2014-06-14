@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/johncarney/validates_timeliness.git
-  revision: 6a0efca90fc3c9521da4fa2d5ff20e7273b66b7a
+  revision: 33677dbaa53cf4566fc3c18885dff5479c4cd7e4
   branch: remove-deprecated-setup-method
   specs:
     validates_timeliness (3.0.14)
@@ -212,7 +212,7 @@ GEM
     ttfunk (1.1.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uglifier (2.5.0)
+    uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unicode (0.4.4.1)

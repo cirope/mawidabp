@@ -26,24 +26,4 @@ module UsersHelper
       Organization.with_group(group), :name, :id), prompt: true,
       label: false, input_html: { id: "#{id}_organization_id" }
   end
-
-  def user_weaknesses_links(user)
-    filtered_weaknesses = user.weaknesses.for_current_organization.finals(
-      false).not_incomplete
-    pending_count = filtered_weaknesses.with_pending_status.count
-    complete_count = filtered_weaknesses.count - pending_count
-
-    pending_link = link_to_unless(pending_count == 0,
-      textilize_without_paragraph(
-        t('user.weaknesses.pending', :count => pending_count)
-      ), findings_path(:completed => 'incomplete', :user_id => user.id)
-    )
-    complete_link = link_to_unless(complete_count == 0,
-      textilize_without_paragraph(
-        t('user.weaknesses.complete', :count => complete_count)
-      ), findings_path(:completed => 'complete', :user_id => user.id)
-    )
-
-    raw("#{pending_link} | #{complete_link}")
-  end
 end

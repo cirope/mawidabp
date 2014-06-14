@@ -2,27 +2,27 @@
 APP_AUDITED_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
-    :order => 1,
-    :children => [
+    order: 1,
+    children: [
       MenuItem.new(
         :pending_findings,
-        :order => 1,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'incomplete'",
-        :url => {:controller => :findings, :completed => :incomplete}
+        order: 1,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'incomplete'",
+        url: { controller: '/findings', completed: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
-        :order => 2,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'complete'",
-        :url => {:controller => :findings, :completed => :complete}
+        order: 2,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'complete'",
+        url: { controller: '/findings', completed: :complete }
       ),
       MenuItem.new(
         :notifications,
-        :order => 3,
-        :controllers => :notifications,
-        :url => {:controller => :notifications}
+        order: 3,
+        controllers: :notifications,
+        url: { controller: '/notifications' }
       )
     ]
   )
@@ -33,96 +33,94 @@ APP_AUDITOR_MENU_ITEMS = [
   # ADMINISTRACIÓN
   MenuItem.new(
     :administration,
-    :order => 1,
-    :children => [
+    order: 1,
+    children: [
       MenuItem.new(
         :organization,
-        :order => 1,
-        :url => {:controller => :organizations},
-        :children => [
+        order: 1,
+        url: { controller: '/organizations' },
+        children: [
           MenuItem.new(
             :management,
-            :order => 1,
-            :controllers => :organizations,
-            :url => {:controller => :organizations}
+            order: 1,
+            controllers: :organizations,
+            url: { controller: '/organizations' }
           ),
           MenuItem.new(
             :business_units,
-            :order => 2,
-            :controllers => :business_unit_types,
-            :url => {:controller => :business_unit_types}
+            order: 2,
+            controllers: :business_unit_types,
+            url: { controller: '/business_unit_types' }
           )
         ]
       ),
       MenuItem.new(
         :security,
-        :order => 2,
-        :url => {:controller => :users},
-        :children => [
+        order: 2,
+        url: { controller: '/users' },
+        children: [
           MenuItem.new(
             :users,
-            :order => 1,
-            :controllers => :users,
-            :url => {:controller => :users}
+            order: 1,
+            controllers: :users,
+            url: { controller: '/users' }
           ),
           MenuItem.new(
             :reports,
-            :order => 2,
-            :controllers => [:error_records, :login_records, :versions],
-            :url => {:controller => :login_records, :action => :choose}
+            order: 2,
+            controllers: [:error_records, :login_records, :versions],
+            url: { controller: '/login_records', action: :choose }
           ),
           MenuItem.new(
             :roles,
-            :order => 3,
-            :controllers => :roles,
-            :url => {:controller => :roles}
+            order: 3,
+            controllers: :roles,
+            url: { controller: '/roles' }
           )
         ]
       ),
       MenuItem.new(
         :best_practices,
-        :order => 3,
-        :controllers => :best_practices,
-        :url => {:controller => :best_practices}
+        order: 3,
+        controllers: :best_practices,
+        url: { controller: '/best_practices' }
       ),
       MenuItem.new(
         :settings,
-        :order => 4,
-        :controllers => :settings,
-        :url => { :controller => :settings }
+        order: 4,
+        controllers: :settings,
+        url: { controller: '/settings' }
       ),
       MenuItem.new(
         :e_mails,
-        :order => 5,
-        :controllers => :e_mails,
-        :url => {:controller => :e_mails}
+        order: 5,
+        controllers: :e_mails,
+        url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        :order => 6,
-        :url => {:controller => :questionnaires},
-        :children => [
+        order: 6,
+        url: { controller: '/questionnaires' },
+        children: [
           MenuItem.new(
             :definition,
-            :order => 1,
-            :controllers => :questionnaires,
-            :url => {:controller => :questionnaires}
+            order: 1,
+            controllers: :questionnaires,
+            url: { controller: '/questionnaires' }
           ),
           MenuItem.new(
             :polls,
-            :order => 2,
-            :controllers => :polls,
-            :extra_conditions =>
-              "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
-            :url => {:controller => :polls}
+            order: 2,
+            controllers: :polls,
+            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
+            url: { controller: '/polls' }
           ),
           MenuItem.new(
             :reports,
-            :order => 3,
-            :controllers => :polls,
-            :extra_conditions =>
-              "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
-            :url => {:controller => :polls, :action => :reports}
+            order: 3,
+            controllers: :polls,
+            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
+            url: { controller: '/polls', action: :reports }
           )
         ]
       )
@@ -131,36 +129,36 @@ APP_AUDITOR_MENU_ITEMS = [
   # PLANIFICACIÓN
   MenuItem.new(
     :planning,
-    :order => 2,
-    :children => [
+    order: 2,
+    children: [
       MenuItem.new(
         :resources,
-        :order => 1,
-        :controllers => :resource_classes,
-        :url => {:controller => :resource_classes}
+        order: 1,
+        controllers: :resource_classes,
+        url: { controller: '/resource_classes' }
       ),
       MenuItem.new(
         :periods,
-        :order => 2,
-        :controllers => :periods,
-        :url => {:controller => :periods}
+        order: 2,
+        controllers: :periods,
+        url: { controller: '/periods' }
       ),
       MenuItem.new(
         :audit,
-        :order => 3,
-        :url => {:controller => :plans},
-        :children => [
+        order: 3,
+        url: { controller: '/plans' },
+        children: [
           MenuItem.new(
             :plans,
-            :order => 1,
-            :controllers => :plans,
-            :url => {:controller => :plans}
+            order: 1,
+            controllers: :plans,
+            url: { controller: '/plans' }
           ),
           MenuItem.new(
             :procedure_controls,
-            :order => 2,
-            :controllers => :procedure_controls,
-            :url => {:controller => :procedure_controls}
+            order: 2,
+            controllers: :procedure_controls,
+            url: { controller: '/procedure_controls' }
           )
         ]
       )
@@ -169,85 +167,85 @@ APP_AUDITOR_MENU_ITEMS = [
   # EJECUCIÓN
   MenuItem.new(
     :execution,
-    :order => 3,
-    :children => [
+    order: 3,
+    children: [
       MenuItem.new(
         :reviews,
-        :order => 1,
-        :controllers => :reviews,
-        :url => {:controller => :reviews}
+        order: 1,
+        controllers: :reviews,
+        url: { controller: '/reviews' }
       ),
       MenuItem.new(
         :workflows,
-        :order => 2,
-        :controllers => :workflows,
-        :url => {:controller => :workflows}
+        order: 2,
+        controllers: :workflows,
+        url: { controller: '/workflows' }
       ),
       MenuItem.new(
         :control_objectives,
-        :order => 3,
-        :controllers => :control_objective_items,
-        :url => {:controller => :control_objective_items}
+        order: 3,
+        controllers: :control_objective_items,
+        url: { controller: '/control_objective_items' }
       ),
       MenuItem.new(
         :weaknesses,
-        :order => 4,
-        :controllers => :weaknesses,
-        :url => {:controller => :weaknesses}
+        order: 4,
+        controllers: :weaknesses,
+        url: { controller: '/weaknesses' }
       ),
       MenuItem.new(
         :oportunities,
-        :order => 5,
-        :controllers => :oportunities,
-        :url => {:controller => :oportunities}
+        order: 5,
+        controllers: :oportunities,
+        url: { controller: '/oportunities' }
       ),
       MenuItem.new(
         :reports,
-        :order => 6,
-        :controllers => :execution_reports,
-        :url => {:controller => :execution_reports}
+        order: 6,
+        controllers: :execution_reports,
+        url: { controller: '/execution_reports' }
       )
     ]
   ),
   # CONCLUSIÓN
   MenuItem.new(
     :conclusion,
-    :order => 4,
-    :children => [
+    order: 4,
+    children: [
       MenuItem.new(
         :draft_reviews,
-        :order => 1,
-        :controllers => :conclusion_draft_reviews,
-        :url => {:controller => :conclusion_draft_reviews}
+        order: 1,
+        controllers: :conclusion_draft_reviews,
+        url: { controller: '/conclusion_draft_reviews' }
       ),
       MenuItem.new(
         :final_reviews,
-        :order => 2,
-        :controllers => :conclusion_final_reviews,
-        :url => {:controller => :conclusion_final_reviews}
+        order: 2,
+        controllers: :conclusion_final_reviews,
+        url: { controller: '/conclusion_final_reviews' }
       ),
       MenuItem.new(
         :reports,
-        :order => 3,
-        :url => {:controller => :conclusion_audit_reports},
-        :children => [
+        order: 3,
+        url: { controller: '/conclusion_audit_reports' },
+        children: [
           MenuItem.new(
             :audit,
-            :order => 1,
-            :controllers => :conclusion_audit_reports,
-            :url => {:controller => :conclusion_audit_reports}
+            order: 1,
+            controllers: :conclusion_audit_reports,
+            url: { controller: '/conclusion_audit_reports' }
           ),
           MenuItem.new(
             :committee,
-            :order => 2,
-            :controllers => :conclusion_committee_reports,
-            :url => {:controller => :conclusion_committee_reports}
+            order: 2,
+            controllers: :conclusion_committee_reports,
+            url: { controller: '/conclusion_committee_reports' }
           ),
           MenuItem.new(
             :management,
-            :order => 3,
-            :controllers => :conclusion_management_reports,
-            :url => {:controller => :conclusion_management_reports}
+            order: 3,
+            controllers: :conclusion_management_reports,
+            url: { controller: '/conclusion_management_reports' }
           )
         ]
       )
@@ -256,50 +254,50 @@ APP_AUDITOR_MENU_ITEMS = [
   # SEGUIMIENTO
   MenuItem.new(
     :follow_up,
-    :order => 5,
-    :children => [
+    order: 5,
+    children: [
       MenuItem.new(
         :pending_findings,
-        :order => 1,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'incomplete'",
-        :url => {:controller => :findings, :completed => :incomplete}
+        order: 1,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'incomplete'",
+        url: { controller: '/findings', completed: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
-        :order => 2,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'complete'",
-        :url => {:controller => :findings, :completed => :complete}
+        order: 2,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'complete'",
+        url: { controller: '/findings', completed: :complete }
       ),
       MenuItem.new(
         :notifications,
-        :order => 3,
-        :controllers => :notifications,
-        :url => {:controller => :notifications}
+        order: 3,
+        controllers: :notifications,
+        url: { controller: '/notifications' }
       ),
       MenuItem.new(
         :reports,
-        :order => 4,
-        :url => {:controller => :follow_up_audit},
-        :children => [
+        order: 4,
+        url: { controller: '/follow_up_audit' },
+        children: [
           MenuItem.new(
             :audit,
-            :order => 1,
-            :controllers => :follow_up_audit,
-            :url => {:controller => :follow_up_audit}
+            order: 1,
+            controllers: :follow_up_audit,
+            url: { controller: '/follow_up_audit' }
           ),
           MenuItem.new(
             :committee,
-            :order => 2,
-            :controllers => :follow_up_committee,
-            :url => {:controller => :follow_up_committee}
+            order: 2,
+            controllers: :follow_up_committee,
+            url: { controller: '/follow_up_committee' }
           ),
           MenuItem.new(
             :management,
-            :order => 3,
-            :controllers => :follow_up_management,
-            :url => {:controller => :follow_up_management}
+            order: 3,
+            controllers: :follow_up_management,
+            url: { controller: '/follow_up_management' }
           )
         ]
       )
@@ -311,27 +309,27 @@ APP_AUDITOR_MENU_ITEMS = [
 APP_AUDITED_QM_MENU_ITEMS = [
   MenuItem.new(
     :follow_up,
-    :order => 1,
-    :children => [
+    order: 1,
+    children: [
       MenuItem.new(
         :pending_findings,
-        :order => 1,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'incomplete'",
-        :url => {:controller => :findings, :completed => :incomplete}
+        order: 1,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'incomplete'",
+        url: { controller: '/findings', completed: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
-        :order => 2,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'complete'",
-        :url => {:controller => :findings, :completed => :complete}
+        order: 2,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'complete'",
+        url: { controller: '/findings', completed: :complete }
       ),
       MenuItem.new(
         :notifications,
-        :order => 3,
-        :controllers => :notifications,
-        :url => {:controller => :notifications}
+        order: 3,
+        controllers: :notifications,
+        url: { controller: '/notifications' }
       )
     ]
   )
@@ -342,96 +340,94 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   # ADMINISTRACIÓN
   MenuItem.new(
     :administration,
-    :order => 1,
-    :children => [
+    order: 1,
+    children: [
       MenuItem.new(
         :organization,
-        :order => 1,
-        :url => {:controller => :organizations},
-        :children => [
+        order: 1,
+        url: { controller: '/organizations' },
+        children: [
           MenuItem.new(
             :management,
-            :order => 1,
-            :controllers => :organizations,
-            :url => {:controller => :organizations}
+            order: 1,
+            controllers: :organizations,
+            url: { controller: '/organizations' }
           ),
           MenuItem.new(
             :business_units,
-            :order => 2,
-            :controllers => :business_unit_types,
-            :url => {:controller => :business_unit_types}
+            order: 2,
+            controllers: :business_unit_types,
+            url: { controller: '/business_unit_types' }
           )
         ]
       ),
       MenuItem.new(
         :security,
-        :order => 2,
-        :url => {:controller => :users},
-        :children => [
+        order: 2,
+        url: { controller: '/users' },
+        children: [
           MenuItem.new(
             :users,
-            :order => 1,
-            :controllers => :users,
-            :url => {:controller => :users}
+            order: 1,
+            controllers: :users,
+            url: { controller: '/users' }
           ),
           MenuItem.new(
             :reports,
-            :order => 2,
-            :controllers => [:error_records, :login_records, :versions],
-            :url => {:controller => :login_records, :action => :choose}
+            order: 2,
+            controllers: [:error_records, :login_records, :versions],
+            url: { controller: '/login_records', action: :choose }
           ),
           MenuItem.new(
             :roles,
-            :order => 3,
-            :controllers => :roles,
-            :url => {:controller => :roles}
+            order: 3,
+            controllers: :roles,
+            url: { controller: '/roles' }
           )
         ]
       ),
       MenuItem.new(
         :best_practices,
-        :order => 3,
-        :controllers => :best_practices,
-        :url => {:controller => :best_practices}
+        order: 3,
+        controllers: :best_practices,
+        url: { controller: '/best_practices' }
       ),
       MenuItem.new(
         :settings,
-        :order => 4,
-        :controllers => :settings,
-        :url => { :controller => :settings }
+        order: 4,
+        controllers: :settings,
+        url: { controller: '/settings' }
       ),
       MenuItem.new(
         :e_mails,
-        :order => 5,
-        :controllers => :e_mails,
-        :url => {:controller => :e_mails}
+        order: 5,
+        controllers: :e_mails,
+        url: { controller: '/e_mails' }
       ),
       MenuItem.new(
         :questionnaires,
-        :order => 6,
-        :url => {:controller => :questionnaires},
-        :children => [
+        order: 6,
+        url: { controller: '/questionnaires' },
+        children: [
           MenuItem.new(
             :definition,
-            :order => 1,
-            :controllers => :questionnaires,
-            :url => {:controller => :questionnaires}
+            order: 1,
+            controllers: :questionnaires,
+            url: { controller: '/questionnaires' }
           ),
           MenuItem.new(
             :polls,
-            :order => 2,
-            :controllers => :polls,
-            :extra_conditions =>
-              "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
-            :url => {:controller => :polls}
+            order: 2,
+            controllers: :polls,
+            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
+            url: { controller: '/polls' }
           ),
           MenuItem.new(
             :reports,
-            :order => 3,
-            :controllers => :polls,
-            :extra_conditions =>
-              "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
-            :url => {:controller => :polls, :action => :reports}
+            order: 3,
+            controllers: :polls,
+            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
+            url: { controller: '/polls', action: :reports }
           )
         ]
       )
@@ -440,36 +436,36 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   # PLANIFICACIÓN
   MenuItem.new(
     :planning,
-    :order => 2,
-    :children => [
+    order: 2,
+    children: [
       MenuItem.new(
         :resources,
-        :order => 1,
-        :controllers => :resource_classes,
-        :url => {:controller => :resource_classes}
+        order: 1,
+        controllers: :resource_classes,
+        url: { controller: '/resource_classes' }
       ),
       MenuItem.new(
         :periods,
-        :order => 2,
-        :controllers => :periods,
-        :url => {:controller => :periods}
+        order: 2,
+        controllers: :periods,
+        url: { controller: '/periods' }
       ),
       MenuItem.new(
         :audit,
-        :order => 3,
-        :url => {:controller => :plans},
-        :children => [
+        order: 3,
+        url: { controller: '/plans' },
+        children: [
           MenuItem.new(
             :plans,
-            :order => 1,
-            :controllers => :plans,
-            :url => {:controller => :plans}
+            order: 1,
+            controllers: :plans,
+            url: { controller: '/plans' }
           ),
           MenuItem.new(
             :procedure_controls,
-            :order => 2,
-            :controllers => :procedure_controls,
-            :url => {:controller => :procedure_controls}
+            order: 2,
+            controllers: :procedure_controls,
+            url: { controller: '/procedure_controls' }
           )
         ]
       )
@@ -478,110 +474,110 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   # EJECUCIÓN
   MenuItem.new(
     :execution,
-    :order => 3,
-    :children => [
+    order: 3,
+    children: [
       MenuItem.new(
         :reviews,
-        :order => 1,
-        :controllers => :reviews,
-        :url => {:controller => :reviews}
+        order: 1,
+        controllers: :reviews,
+        url: { controller: '/reviews' }
       ),
       MenuItem.new(
         :workflows,
-        :order => 2,
-        :controllers => :workflows,
-        :url => {:controller => :workflows}
+        order: 2,
+        controllers: :workflows,
+        url: { controller: '/workflows' }
       ),
       MenuItem.new(
         :control_objectives,
-        :order => 3,
-        :controllers => :control_objective_items,
-        :url => {:controller => :control_objective_items}
+        order: 3,
+        controllers: :control_objective_items,
+        url: { controller: '/control_objective_items' }
       ),
       MenuItem.new(
         :findings,
-        :order => 4,
-        :url => {:controller => :nonconformities},
-        :children => [
+        order: 4,
+        url: { controller: '/nonconformities' },
+        children: [
           MenuItem.new(
             :nonconformities,
-            :order => 5,
-            :controllers => :nonconformities,
-            :url => {:controller => :nonconformities}
+            order: 5,
+            controllers: :nonconformities,
+            url: { controller: '/nonconformities' }
           ),
           MenuItem.new(
             :weaknesses,
-            :order => 4,
-            :controllers => :weaknesses,
-            :url => {:controller => :weaknesses}
+            order: 4,
+            controllers: :weaknesses,
+            url: { controller: '/weaknesses' }
           ),
           MenuItem.new(
             :oportunities,
-            :order => 5,
-            :controllers => :oportunities,
-            :url => {:controller => :oportunities}
+            order: 5,
+            controllers: :oportunities,
+            url: { controller: '/oportunities' }
           ),
           MenuItem.new(
             :potential_nonconformities,
-            :order => 5,
-            :controllers => :potential_nonconformities,
-            :url => {:controller => :potential_nonconformities}
+            order: 5,
+            controllers: :potential_nonconformities,
+            url: { controller: '/potential_nonconformities' }
           ),
           MenuItem.new(
             :fortresses,
-            :order => 5,
-            :controllers => :fortresses,
-            :url => {:controller => :fortresses}
+            order: 5,
+            controllers: :fortresses,
+            url: { controller: '/fortresses' }
             ),
         ]
       ),
       MenuItem.new(
         :reports,
-        :order => 5,
-        :controllers => :execution_reports,
-        :url => {:controller => :execution_reports}
+        order: 5,
+        controllers: :execution_reports,
+        url: { controller: '/execution_reports' }
       )
     ]
   ),
   # CONCLUSIÓN
   MenuItem.new(
     :conclusion,
-    :order => 4,
-    :children => [
+    order: 4,
+    children: [
       MenuItem.new(
         :draft_reviews,
-        :order => 1,
-        :controllers => :conclusion_draft_reviews,
-        :url => {:controller => :conclusion_draft_reviews}
+        order: 1,
+        controllers: :conclusion_draft_reviews,
+        url: { controller: '/conclusion_draft_reviews' }
       ),
       MenuItem.new(
         :final_reviews,
-        :order => 2,
-        :controllers => :conclusion_final_reviews,
-        :url => {:controller => :conclusion_final_reviews}
+        order: 2,
+        controllers: :conclusion_final_reviews,
+        url: { controller: '/conclusion_final_reviews' }
       ),
       MenuItem.new(
         :reports,
-        :order => 3,
-        :url => {:controller => :conclusion_audit_reports},
-        :children => [
+        order: 3,
+        url: { controller: '/conclusion_audit_reports' },
+        children: [
           MenuItem.new(
             :audit,
-            :order => 1,
-            :controllers => :conclusion_audit_reports,
-            :url => {:controller => :conclusion_audit_reports}
+            order: 1,
+            controllers: :conclusion_audit_reports,
+            url: { controller: '/conclusion_audit_reports' }
           ),
           MenuItem.new(
             :committee,
-            :order => 2,
-            :controllers => :conclusion_committee_reports,
-            :url => {:controller => :conclusion_committee_reports}
+            order: 2,
+            controllers: :conclusion_committee_reports,
+            url: { controller: '/conclusion_committee_reports' }
           ),
           MenuItem.new(
             :management,
-            :order => 3,
-            :controllers => :conclusion_management_reports,
-            :url => {:controller => :conclusion_management_reports}
+            order: 3,
+            controllers: :conclusion_management_reports,
+            url: { controller: '/conclusion_management_reports' }
           )
         ]
       )
@@ -590,50 +586,50 @@ APP_AUDITOR_QM_MENU_ITEMS = [
   # SEGUIMIENTO
   MenuItem.new(
     :follow_up,
-    :order => 5,
-    :children => [
+    order: 5,
+    children: [
       MenuItem.new(
         :pending_findings,
-        :order => 1,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'incomplete'",
-        :url => {:controller => :findings, :completed => :incomplete}
+        order: 1,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'incomplete'",
+        url: { controller: '/findings', completed: :incomplete }
       ),
       MenuItem.new(
         :complete_findings,
-        :order => 2,
-        :controllers => :findings,
-        :extra_conditions => "params[:completed] == 'complete'",
-        :url => {:controller => :findings, :completed => :complete}
+        order: 2,
+        controllers: :findings,
+        extra_conditions: "params[:completed] == 'complete'",
+        url: { controller: '/findings', completed: :complete }
       ),
       MenuItem.new(
         :notifications,
-        :order => 3,
-        :controllers => :notifications,
-        :url => {:controller => :notifications}
+        order: 3,
+        controllers: :notifications,
+        url: { controller: '/notifications' }
       ),
       MenuItem.new(
         :reports,
-        :order => 4,
-        :url => {:controller => :follow_up_audit},
-        :children => [
+        order: 4,
+        url: { controller: '/follow_up_audit' },
+        children: [
           MenuItem.new(
             :audit,
-            :order => 1,
-            :controllers => :follow_up_audit,
-            :url => {:controller => :follow_up_audit}
+            order: 1,
+            controllers: :follow_up_audit,
+            url: { controller: '/follow_up_audit' }
           ),
           MenuItem.new(
             :committee,
-            :order => 2,
-            :controllers => :follow_up_committee,
-            :url => {:controller => :follow_up_committee}
+            order: 2,
+            controllers: :follow_up_committee,
+            url: { controller: '/follow_up_committee' }
           ),
           MenuItem.new(
             :management,
-            :order => 3,
-            :controllers => :follow_up_management,
-            :url => {:controller => :follow_up_management}
+            order: 3,
+            controllers: :follow_up_management,
+            url: { controller: '/follow_up_management' }
           )
         ]
       )
@@ -662,12 +658,12 @@ APP_MODULES = (
 ).freeze
 
 ALLOWED_MODULES_BY_TYPE = {
-  :admin => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :manager => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :supervisor => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :auditor_senior => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :auditor_junior => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :committee => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
-  :audited => (APP_AUDITED_MODULES | APP_AUDITED_QM_MODULES),
-  :executive_manager => (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES)
+  admin: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  manager: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  supervisor: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  auditor_senior: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  auditor_junior: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  committee: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES),
+  audited: (APP_AUDITED_MODULES | APP_AUDITED_QM_MODULES),
+  executive_manager: (APP_AUDITOR_MODULES | APP_AUDITOR_QM_MODULES)
 }

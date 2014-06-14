@@ -585,22 +585,6 @@ class UsersControllerTest < ActionController::TestCase
     assert roles.any? { |r| r.first == roles(:admin_role).name }
   end
 
-  test 'show user status' do
-    login
-    get :user_status, :id => users(:administrator_user).user
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_template 'users/user_status'
-  end
-
-  test 'show user status without graph' do
-    login
-    get :user_status_without_graph, :id => users(:administrator_user).user
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_template 'users/user_status_without_graph'
-  end
-
   test 'auto complete for user' do
     login
     get :auto_complete_for_user, { :q => 'admin', :format => :json }
