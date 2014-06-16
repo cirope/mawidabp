@@ -5,6 +5,7 @@ namespace :deploy do
       within release_path do
         rake 'help:install'
         rake 'help:generate'
+        rake 'help:link'
       end
     end
   end

@@ -2,41 +2,8 @@ require 'test_helper'
 
 # Pruebas para el controlador de usuarios
 class UsersControllerTest < ActionController::TestCase
-  fixtures :users, :roles, :organizations
-
-  # Inicializa de forma correcta todas las variables que se utilizan en las
-  # pruebas
   def setup
     @request.host = "#{organizations(:cirope).prefix}.localhost.i"
-  end
-
-  # Prueba que sin realizar autenticación esten accesibles las partes publicas
-  # y no accesibles las privadas
-  test 'public and private actions' do
-    id_param = {:id => users(:administrator_user).to_param}
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :new],
-      [:get, :edit, id_param],
-      [:post, :create],
-      [:patch, :update, id_param],
-      [:delete, :destroy, id_param],
-      [:patch, :blank_password, id_param],
-      [:get, :edit_password, id_param],
-      [:patch, :update_password, id_param.merge(user: id_param)],
-      [:get, :edit_personal_data, id_param],
-      [:patch, :update_personal_data, id_param],
-      [:get, :new_initial],
-      [:post, :create_initial],
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert [I18n.t('message.must_be_authenticated'),
-        I18n.t('user.confirmation_link_invalid')].include?(flash.alert)
-    end
   end
 
   test 'list users' do
@@ -283,123 +250,6 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_equal I18n.t('user.will_be_orphan_findings'), flash.alert
     assert_redirected_to users_url
-  end
-
-  test 'blank user password' do
-    login
-
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-
-    assert_difference 'ActionMailer::Base.deliveries.size' do
-      patch :blank_password, :id => users(:administrator_user).user
-    end
-
-    assert_redirected_to users_url
-    user = User.find(users(:administrator_user).id)
-    assert_not_nil user.change_password_hash
-  end
-
-  test 'reset password' do
-    get :reset_password
-    assert_response :success
-    assert_template 'users/reset_password'
-  end
-
-  test 'send password reset' do
-    ActionMailer::Base.delivery_method = :test
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.deliveries = []
-    original_hash = users(:blank_password_user).change_password_hash
-
-    assert_difference 'ActionMailer::Base.deliveries.size' do
-      post :send_password_reset, user: { email: users(:blank_password_user).email }
-    end
-
-    assert_redirected_to login_url
-    user = User.find(users(:blank_password_user).id)
-    assert_not_nil user.change_password_hash
-    assert_not_equal original_hash, user.change_password_hash
-  end
-
-  test 'edit password' do
-    login
-    get :edit_password, {:id => users(:blank_password_user).to_param}
-    assert_response :success
-    assert_not_nil assigns(:auth_user)
-    assert_template 'users/edit_password'
-  end
-
-  test 'update password' do
-    login
-    assert_difference 'OldPassword.count' do
-      patch :update_password, {
-        :id => users(:administrator_user).to_param,
-        :user => {
-          :password => 'new_password_123',
-          :password_confirmation => 'new_password_123'
-        }
-      }
-
-      user = User.find(users(:administrator_user).id)
-      assert_redirected_to login_url
-      assert_equal User.digest('new_password_123', user.salt), user.password
-    end
-  end
-
-  test 'change blank password' do
-    confirmation_hash = users(:blank_password_user).change_password_hash
-    get :edit_password, {
-      :id => users(:blank_password_user).to_param,
-      :confirmation_hash => confirmation_hash
-    }
-
-    assert_response :success
-    assert_template 'users/edit_password'
-
-    assert_difference 'OldPassword.count' do
-      patch :update_password, {
-        :id => users(:blank_password_user).to_param,
-        :user => {
-          :password => 'new_password_123',
-          :password_confirmation => 'new_password_123',
-          :confirmation_hash => users(:blank_password_user).change_password_hash
-        }
-      }
-    end
-
-    user = User.find(users(:blank_password_user).id)
-    assert_redirected_to login_url
-    assert_equal User.digest('new_password_123', user.salt), user.password
-    assert_not_nil user.last_access
-    assert_nil user.change_password_hash
-    assert_equal 0, user.failed_attempts
-
-    # No se puede usar 2 veces el mismo hash
-    get :edit_password, {
-      :id => users(:blank_password_user).to_param,
-      :confirmation_hash => confirmation_hash
-    }
-
-    assert_redirected_to login_url
-  end
-
-  test 'change expired blank password' do
-    patch :update_password, {
-      :id => users(:expired_blank_password_user).to_param,
-      :user => {
-        :password => 'new_password_123',
-        :password_confirmation => 'new_password_123'
-      },
-      :confirmation_hash =>
-        users(:expired_blank_password_user).change_password_hash
-    }
-
-
-    user = User.find(users(:expired_blank_password_user).id)
-    assert_redirected_to login_url
-    assert_not_equal User.digest('new_password_123', user.salt), user.password
   end
 
   test 'new initial' do
@@ -733,22 +583,6 @@ class UsersControllerTest < ActionController::TestCase
     roles = ActiveSupport::JSON.decode(@response.body)
     assert !roles.empty?
     assert roles.any? { |r| r.first == roles(:admin_role).name }
-  end
-
-  test 'show user status' do
-    login
-    get :user_status, :id => users(:administrator_user).user
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_template 'users/user_status'
-  end
-
-  test 'show user status without graph' do
-    login
-    get :user_status_without_graph, :id => users(:administrator_user).user
-    assert_response :success
-    assert_not_nil assigns(:user)
-    assert_template 'users/user_status_without_graph'
   end
 
   test 'auto complete for user' do

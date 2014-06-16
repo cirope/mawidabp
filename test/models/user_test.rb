@@ -263,7 +263,7 @@ class UserTest < ActiveSupport::TestCase
     assert_nil @user.change_password_hash
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      @user.reset_password! organizations(:cirope)
+      @user.reset_password organizations(:cirope)
     end
 
     assert_not_nil @user.reload.change_password_hash

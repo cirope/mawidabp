@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/johncarney/validates_timeliness.git
-  revision: 6a0efca90fc3c9521da4fa2d5ff20e7273b66b7a
+  revision: 33677dbaa53cf4566fc3c18885dff5479c4cd7e4
   branch: remove-deprecated-setup-method
   specs:
     validates_timeliness (3.0.14)
@@ -80,7 +80,7 @@ GEM
       highline (~> 1.6.11)
     dynamic_form (1.1.4)
     erubis (2.7.0)
-    execjs (2.1.0)
+    execjs (2.2.0)
     fast-stemmer (1.0.2)
     ffi (1.9.3)
     figaro (0.7.0)
@@ -167,7 +167,7 @@ GEM
     raindrops (0.13.0)
     rake (10.3.2)
     rb-fsevent (0.9.4)
-    rb-inotify (0.9.4)
+    rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rb-kqueue (0.2.3)
       ffi (>= 0.5.0)
@@ -212,7 +212,7 @@ GEM
     ttfunk (1.1.1)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uglifier (2.5.0)
+    uglifier (2.5.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unicode (0.4.4.1)

@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
         if @auth_user.try(:must_change_the_password?) &&
             ![:edit_password, :update_password].include?(action)
           flash.notice ||= t 'message.must_change_the_password'
-          redirect_to edit_password_user_url(@auth_user)
+          redirect_to edit_users_password_url(@auth_user)
         end
 
         @action_privileges = HashWithIndifferentAccess.new(:approval).update(
@@ -164,6 +164,7 @@ class ApplicationController < ActionController::Base
     end
 
     def load_current_module
+      controller_name = controller_path.split('/').first
       @current_module ||= module_name_for(controller_name.to_sym).try(:menu_name)
     end
 

@@ -83,22 +83,6 @@ es: &common
       title: 'Modificar organización'
     new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
 
-  password_resets:
-    edit:
-      title: 'Cambiar contraseña'
-      update: 'Actualizar contraseña'
-    update:
-      success: 'Contraseña cambiada correctamente'
-      expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
-    new:
-      title: 'Restablecer contraseña'
-      email: 'Correo'
-      send_instructions: 'Enviar instrucciones'
-      back: 'Volver'
-    create:
-      success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
-      not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
-
   profiles:
     edit:
       title: 'Mis datos'
@@ -176,6 +160,42 @@ es: &common
     password_minimum_length: 'Longitud mínima de la contraseña'
     password_minimum_time: 'Duración mínima de la contraseña'
     session_expire_time: 'Desconexión por inactividad'
+
+  users:
+    passwords:
+      edit:
+        title: 'Cambiar contraseña'
+        update: 'Actualizar contraseña'
+      update:
+        success: 'Contraseña cambiada correctamente'
+        expired: 'El enlace ha expirado, pida de nuevo las instrucciones'
+      new:
+        title: 'Restablecer contraseña'
+        email: 'Correo'
+        send_instructions: 'Enviar instrucciones'
+        back: 'Volver'
+        note: 'Para restablecer su contraseña ingrese su dirección de correo electrónico'
+      create:
+        success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
+        not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+    status:
+      show:
+        title: 'Estado'
+        table: 'Ver tabla'
+        graph: 'Ver gráfico'
+        pending_weaknesses:
+          one: "*Una* observación *pendiente*"
+          other: "*%{count}* observaciones *pendientes*"
+        high_risk_weaknesses:
+          one: '*Una* observación de *riesgo alto*'
+          other: '*%{count}* observaciones de *riesgo alto*'
+        weaknesses:
+          pending:
+            one: '*Una* observación pendiente'
+            other: '*%{count}* observaciones pendientes'
+          complete:
+            one: '*Una* observación solucionada'
+            other: '*%{count}* observaciones solucionadas'
 
   versions:
     index:

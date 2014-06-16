@@ -30,7 +30,7 @@ module Users::Password
     old_passwords.order('created_at DESC').limit(limit > 0 ? limit : 0)
   end
 
-  def reset_password! organization, notify = true
+  def reset_password organization, notify: true
     self.change_password_hash = SecureRandom.urlsafe_base64
     self.hash_changed = Time.now
 
