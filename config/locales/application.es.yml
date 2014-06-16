@@ -981,18 +981,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     show_procedure_control_subitems: "Ver procedimientos de control"
     hide_procedure_control_subitems: "Ocultar procedimientos de control"
 
-  questionnaire:
-    index_title: "Listado de cuestionarios"
-    edit_title: "Modificar cuestionario"
-    new_title: "Agregar cuestionario"
-    show_title: "Detalles del cuestionario"
-    correctly_created: "El cuestionario ha sido agregado correctamente."
-    correctly_updated: "El cuestionario ha sido actualizado correctamente."
-    stale_object_error: "El cuestionario no fue actualizado, intente nuevamente."
-    add_question: "Agregar cuesti√≥n"
-  report:
-    index_title: "Listado de reportes"
-
   review:
     index_title: "Listado de informes"
     show_title: "Detalles del informes"
@@ -1887,6 +1875,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
           attributes:
             control_objectives:
               locked: "no pueden ser eliminados, ya se utilizaron en al menos un informe"
+        question:
+          attributes:
+            question:
+              answered: 'No se pudo actualizar, la pregunta ya tiene respuestas'
         resource_utilization:
           attributes:
             resource_consumer:

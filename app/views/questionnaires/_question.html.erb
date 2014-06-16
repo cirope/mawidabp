@@ -2,20 +2,24 @@
 <fieldset class="question">
   <div class="form-inputs">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <%= f.input :question, label: false, input_html: { autofocus: true } %>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <%= f.input :answer_type, as: :boolean, label: false,
           inline_label: t('activerecord.models.answer_multi_choice'),
           input_html: { id: "#{id}_answer_type" }
         %>
       </div>
       <div class="col-md-1">
+        <%= link_to_move %>
+      </div>
+      <div class="col-md-1">
+        <% if f.object.answer.blank? %>
+          <%= link_to_remove_nested_item(f) %>
+        <% end %>
         <%= f.input :sort_order, as: :hidden, input_html: { class: 'sort_number' } %>
         <%= f.input :lock_version, as: :hidden %>
-        <%= link_to_remove_nested_item(f) %>
-        <%= link_to_move %>
       </div>
     </div>
   </div>

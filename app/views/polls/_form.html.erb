@@ -5,7 +5,7 @@
 
     <hr />
     <%= f.simple_fields_for :answers do |a_f| %>
-      <%= render partial: 'answer', locals: { f: a_f } %>
+      <%= render 'answer', f: a_f %>
     <% end %>
 
     <hr />

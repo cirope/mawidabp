@@ -1,34 +1,13 @@
 require 'test_helper'
 
 class QuestionnairesControllerTest < ActionController::TestCase
+  setup do
+    @questionnaire = questionnaires :questionnaire_one
 
-  test 'public and private actions' do
-    id_param = {id: questionnaires(:questionnaire_one).to_param}
-    public_actions = []
-    private_actions = [
-      [:get, :index],
-      [:get, :show, id_param],
-      [:get, :new],
-      [:get, :edit, id_param],
-      [:post, :create],
-      [:patch, :update, id_param],
-      [:delete, :destroy, id_param]
-    ]
-
-    private_actions.each do |action|
-      send *action
-      assert_redirected_to login_url
-      assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-    end
-
-    public_actions.each do |action|
-      send *action
-      assert_response :success
-    end
+    login
   end
 
   test 'list questionnaires' do
-    login
     get :index
     assert_response :success
     assert_not_nil assigns(:questionnaires)
@@ -36,15 +15,13 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'show questionnaire' do
-    login
-    get :show, id: questionnaires(:questionnaire_one).id
+    get :show, id: @questionnaire
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_template 'questionnaires/show'
   end
 
   test 'new questionnaire' do
-    login
     get :new
     assert_response :success
     assert_not_nil assigns(:questionnaire)
@@ -52,23 +29,22 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'create questionnaire' do
-    login
     assert_difference 'Questionnaire.count' do
       assert_difference 'Question.count', 2 do
         assert_difference 'AnswerOption.count', 5 do
           post :create, {
             questionnaire: {
-              name: "Nuevo cuestionario",
-              email_text: "Email text",
-              email_link: "Email link",
-              email_subject: "Email subject",
+              name: 'Nuevo cuestionario',
+              email_text: 'Email text',
+              email_link: 'Email link',
+              email_subject: 'Email subject',
               questions_attributes: [
                 {
-                  question: "Cuestion multi choice",
+                  question: 'Cuestion multi choice',
                   sort_order: 1,
                   answer_type: 1
                 }, {
-                  question: "Cuestion written",
+                  question: 'Cuestion written',
                   sort_order: 2,
                   answer_type: 0
                 }
@@ -82,18 +58,16 @@ class QuestionnairesControllerTest < ActionController::TestCase
   end
 
   test 'edit questionnaire' do
-    login
-    get :edit, id: questionnaires(:questionnaire_one).id
+    get :edit, id: @questionnaire
     assert_response :success
     assert_not_nil assigns(:questionnaire)
     assert_template 'questionnaires/edit'
   end
 
-  test "update questionnaire" do
-    login
+  test 'update questionnaire' do
     assert_no_difference ['Questionnaire.count', 'Question.count'] do
       patch :update, {
-        id: questionnaires(:questionnaire_one).id,
+        id: @questionnaire,
         questionnaire: {
           name: 'Cuestionario actualizado',
           questions_attributes: [
@@ -108,19 +82,18 @@ class QuestionnairesControllerTest < ActionController::TestCase
       }
     end
 
-    assert_redirected_to questionnaires_url
     assert_not_nil assigns(:questionnaire)
+    assert_redirected_to questionnaire_path(assigns(:questionnaire))
     assert_equal 'Cuestionario actualizado', assigns(:questionnaire).name
     assert_equal 'Cuestion updated', Question.find(
       questions(:question_multi_choice).id).question
     end
 
   test 'destroy questionnaire' do
-    login
     assert_difference ['Questionnaire.count'], -1 do
       assert_difference 'Question.count', -2 do
         assert_difference ['AnswerOption.count'], -5 do
-          delete :destroy, id: questionnaires(:questionnaire_one).id
+          delete :destroy, id: @questionnaire
         end
       end
     end

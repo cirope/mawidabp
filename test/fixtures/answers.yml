@@ -4,8 +4,8 @@ answer_written:
   question: question_written
   poll: poll_one
   type: <%= AnswerWritten.name %>
-  
-answer_multi_choice:  
+
+answer_multi_choice:
   comments: "Me agrada la forma de trabajo"
   answer_option: ao1
   question: question_multi_choice

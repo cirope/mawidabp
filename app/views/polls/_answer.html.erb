@@ -1,29 +1,31 @@
 <% question = f.object.question %>
-<div class="answer item">
-  <h4><%= "#{question.sort_order} - #{question.question}" %></h4>
-  <br />
+<% if question %>
+  <div class="answer item">
+    <h4><%= "#{question.sort_order} - #{question.question}" %></h4>
+    <br />
 
-  <div class="form-inputs">
-    <div class="row">
-      <div class="col-md-6">
-        <% if question.answer_multi_choice? %>
-          <%= answer_option_field(f) %>
-          <%= f.input :type, as: :hidden, input_html: { value: AnswerMultiChoice.name } %>
-        <% elsif question.answer_written? %>
-          <%= f.input :answer %>
-          <%= f.input :type, as: :hidden, input_html: { value: AnswerWritten.name } %>
-        <% end %>
-      </div>
-      <div class="col-md-6">
-        <%= f.input :comments, label: "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
-          input_html: { id: "answer_comments_#{f.object.id}" }
-        %>
+    <div class="form-inputs">
+      <div class="row">
+        <div class="col-md-6">
+          <% if question.answer_multi_choice? %>
+            <%= answer_option_field(f) %>
+            <%= f.input :type, as: :hidden, input_html: { value: AnswerMultiChoice.name } %>
+          <% elsif question.answer_written? %>
+            <%= f.input :answer %>
+            <%= f.input :type, as: :hidden, input_html: { value: AnswerWritten.name } %>
+          <% end %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :comments, label: "#{Answer.human_attribute_name('comments')} (#{t 'label.optional'})",
+            input_html: { id: "answer_comments_#{f.object.id}" }
+          %>
 
-        <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
-        <%= f.input :lock_version, as: :hidden %>
+          <%= f.input :question_id, as: :hidden, input_html: { value: question.id } %>
+          <%= f.input :lock_version, as: :hidden %>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<br />
-<br />
+  <br />
+  <br />
+<% end %>
