@@ -16,6 +16,14 @@ es: &common
     show: 'Ver'
     upload: 'Adjuntar'
 
+  answer_options:
+    options:
+      strongly_disagree: 'Muy en desacuerdo'
+      disagree: 'En desacuerdo'
+      neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
+      agree: 'De acuerdo'
+      strongly_agree: 'Muy de acuerdo'
+
   best_practices:
     index:
       title: 'Listado de buenas prácticas'
@@ -81,6 +89,21 @@ es: &common
       submit: 'Actualizar mis datos'
     update:
       success: 'Tus datos se actualizaron correctamente'
+
+  questionnaires:
+    index:
+      title: 'Listado de cuestionarios'
+    edit:
+      title: 'Modificar cuestionario'
+    new:
+      title: 'Agregar cuestionario'
+    show:
+      title: 'Detalles del cuestionario'
+    questions:
+      new: 'Agregar cuestión'
+
+  report:
+    index_title: 'Listado de reportes'
 
   reports:
     customization_titles: 'Personalización de títulos'

@@ -1,6 +1,4 @@
 <%= simple_form_for(@questionnaire) do |f| %>
-  <%= render 'shared/error_explanation', f: f %>
-
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
@@ -11,7 +9,7 @@
       <div class="col-md-6">
         <%= f.input :email_text, input_html: { maxlength: 255 } %>
         <%= f.input :email_clarification, input_html: { maxlength: 255 } %>
-        <%= pollable_type_field(f) %>
+        <%= f.input :pollable_type, collection: pollable_types, prompt: true %>
       </div>
     </div>
   </div>
@@ -19,9 +17,9 @@
   <hr />
 
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <h5>
-        <strong><%= t 'activerecord.attributes.questionnaire.questions' %></strong>
+        <strong><%= Question.model_name.human(count: 0) %></strong>
       </h5>
     </div>
     <div class="col-md-4">
@@ -32,8 +30,7 @@
   </div>
 
   <div id="questions">
-    <% @questionnaire.questions.build if @questionnaire.questions.empty? %>
-    <%= f.simple_fields_for :questions do |qn_f| %>
+    <%= f.simple_fields_for :questions, questions do |qn_f| %>
       <%= render 'question', f: qn_f %>
     <% end %>
 
@@ -43,9 +40,9 @@
   <hr />
 
   <div class="form-actions form-footer">
-    <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
   </div>
 <% end %>
 <script type="text/javascript">

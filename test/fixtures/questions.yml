@@ -3,7 +3,7 @@ question_multi_choice:
   sort_order: 1
   answer_type: 1
   questionnaire: questionnaire_one
-  
+
 question_written:
   question: ¿Qué sugerencias propone para el seguimiento de informes?
   sort_order: 2

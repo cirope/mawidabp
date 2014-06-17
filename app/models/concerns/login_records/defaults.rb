@@ -2,7 +2,7 @@ module LoginRecords::Defaults
   extend ActiveSupport::Concern
 
   included do
-    after_initialize :set_defaults
+    after_initialize :set_defaults, if: :new_record?
   end
 
   private

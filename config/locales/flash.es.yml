@@ -28,6 +28,13 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    questionnaires:
+      create:
+        notice: 'El cuestionario ha sido agregado correctamente'
+      update:
+        notice: 'El cuestionario ha sido actualizado correctamente'
+        stale: 'El cuestionario no fue actualizado, intente nuevamente'
+
     resource_classes:
       create:
         notice: 'Clase de recurso agregada correctamente'
