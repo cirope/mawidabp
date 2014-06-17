@@ -312,9 +312,7 @@ class PollsControllerTest < ActionController::TestCase
       to_date: 10.years.from_now.to_date,
       questionnaire: questionnaires(:questionnaire_one).id,
       answered: 'false'
-    },
-      report_title: 'New title',
-      report_subtitle: 'New subtitle'
+    }, report_title: 'New title', report_subtitle: 'New subtitle'
 
     assert_redirected_to Prawn::Document.relative_path(I18n.t('poll.summary_pdf_name',
         from_date: 10.years.ago.to_date.to_formatted_s(:db),
