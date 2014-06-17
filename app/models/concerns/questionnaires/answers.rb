@@ -28,7 +28,7 @@ module Questionnaires::Answers
     end
 
     def polls_answers polls, rates
-      polls.each do |poll|
+      polls_answered(polls).each do |poll|
         poll.answers.each do |answer|
           if answer.answer_option
             option = Question::ANSWER_OPTIONS.rindex answer.answer_option.option.to_sym
