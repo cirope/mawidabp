@@ -39,7 +39,7 @@ class ReviewUserAssignment < ActiveRecord::Base
 
       if (record.auditor? && !user.auditor?) ||
           (record.supervisor? && !user.supervisor?) ||
-          (record.manager? && !user.supervisor?) ||
+          (record.manager? && (!user.supervisor? && !user.manager?)) ||
           (record.audited? && !user.can_act_as_audited?)
         record.errors.add attr, :invalid
       end
