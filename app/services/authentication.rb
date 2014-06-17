@@ -132,7 +132,7 @@ class Authentication
     def verify_if_must_change_the_password
       if @valid_user.must_change_the_password?
         @message = I18n.t 'message.must_change_the_password'
-        @redirect_url = ['edit_password', @valid_user]
+        @redirect_url = [:edit, 'users_password', id: @valid_user]
       end
     end
 
