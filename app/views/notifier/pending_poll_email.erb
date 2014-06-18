@@ -4,13 +4,13 @@
   <p>
     <%= link_to @poll.questionnaire.email_link,
       edit_poll_url(
-        @poll,
-        :layout => 'clean',
-        :token => @poll.access_token,
-        :host => "#{@organization.prefix}.#{URL_HOST}") %>
+        @poll, token: @poll.access_token,
+        host: "#{@organization.prefix}.#{URL_HOST}"
+      )
+    %>
   </p>
   <% if @poll.questionnaire.email_clarification? %>
     <p><%= @poll.questionnaire.email_clarification %></p>
   <% end %>
-  <%= render :partial => 'footer' %>
+  <%= render 'footer' %>
 </div>

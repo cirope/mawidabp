@@ -2,15 +2,16 @@ class PollsController < ApplicationController
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
   before_action :set_poll, only: [:show, :edit, :update, :destroy]
+  before_action :set_title, except: :destroy
 
-  layout 'application'
+  respond_to :html
+
   require 'csv'
 
   # GET /polls
   # GET /polls.json
   def index
     @current_module = 'administration_questionnaires_polls'
-    @title = t 'poll.index_title'
     if params[:id]
       @polls = Poll.by_questionnaire(params[:id]).page(params[:page])
     else
@@ -18,8 +19,7 @@ class PollsController < ApplicationController
 
       unless @columns.first == 'answered' && @columns.size == 1
         @polls = Poll.list.includes(
-          :questionnaire,
-          :user
+          :questionnaire, :user
         ).where(@conditions).order(
           "#{Poll.table_name}.created_at DESC"
         ).page(params[:page])
@@ -32,116 +32,52 @@ class PollsController < ApplicationController
           default_conditions[:answered] = false
         end
 
-        @polls = Poll.list.includes(
-          :questionnaire,
-          :user
-        ).where(default_conditions).order(
+        @polls = Poll.list.includes(:questionnaire, :user).
+          where(default_conditions).order(
           "#{Poll.table_name}.created_at DESC"
         ).page(params[:page])
       end
     end
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @polls }
-    end
+    respond_with @polls
   end
 
   # GET /polls/1
-  # GET /polls/1.json
   def show
-    @title = t 'poll.show_title'
-    @layout = params[:layout].present? ? 'clean' : 'application'
-
-    respond_to do |format|
-      if @poll.present?
-        format.html { render layout: @layout } # show.html.erb
-        format.json { render json: @poll }
-      else
-        format.html { redirect_to polls_url, alert: t('poll.not_found') }
-      end
-    end
   end
 
   # GET /polls/new
-  # GET /polls/new.json
   def new
-    @title = t 'poll.new_title'
     @poll = Poll.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @poll }
-    end
   end
 
   # GET /polls/1/edit
   def edit
-    @title = t 'poll.edit_title'
-
-    if @poll.nil? || (params[:token] != @poll.access_token)
+    if @poll.nil?
       redirect_to login_url, alert: t('poll.not_found')
-    elsif @poll.answered?
-      redirect_to poll_path(@poll, layout: 'clean'), alert: t('poll.access_denied')
+    elsif @poll.answered? || (params[:token] != @poll.access_token)
+      redirect_to @poll
     end
   end
 
   # POST /polls
-  # POST /polls.json
   def create
-    @title = t 'poll.new_title'
-    @poll = Poll.list.new(poll_params)
-    polls = Poll.list.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
-      questionnaire_id: @poll.questionnaire.id, user_id: @poll.user.id
-    ) if @poll.questionnaire && @poll.user
+    @poll = Poll.list.new poll_params
 
-    respond_to do |format|
-      if polls.present?
-        format.html { redirect_to new_poll_path, alert: t('poll.already_exists') }
-      elsif @poll.save
-        format.html { redirect_to @poll, notice: t('poll.correctly_created') }
-        format.json { render json: @poll, status: :created, location: @poll }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @poll.errors, status: :unprocessable_entity }
-      end
-    end
+    @poll.save
+    respond_with @poll
   end
 
   # PATCH /polls/1
-  # PATCH /polls/1.json
   def update
-    @title = t 'poll.edit_title'
-
-    respond_to do |format|
-      if @poll.nil?
-        format.html { redirect_to login_url, alert: t('poll.not_found') }
-      elsif @poll.update(poll_params)
-        if @auth_user
-          format.html { redirect_to login_url, notice: t('poll.correctly_updated') }
-        else
-          format.html { redirect_to poll_url(@poll, layout: 'clean'), notice: t('poll.correctly_updated') }
-        end
-        format.json { head :ok }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @poll.errors, status: :unprocessable_entity }
-      end
-    end
-  rescue ActiveRecord::StaleObjectError
-    flash.alert = t 'poll.stale_object_error'
-    redirect_to action: :edit
+    update_resource @poll, poll_params
+    respond_with @poll, location: poll_url(@poll) unless response_body
   end
 
   # DELETE /polls/1
-  # DELETE /polls/1.json
   def destroy
     @poll.destroy
-
-    respond_to do |format|
-      format.html { redirect_to polls_url }
-      format.json { head :ok }
-    end
+    respond_with @poll
   end
 
    # * GET /polls/auto_complete_for_user
@@ -159,10 +95,10 @@ class PollsController < ApplicationController
     }
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.last_name) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.function) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
+        "#{User.table_name}.name LIKE :user_data_#{i}",
+        "#{User.table_name}.last_name LIKE :user_data_#{i}",
+        "#{User.table_name}.function LIKE :user_data_#{i}",
+        "#{User.table_name}.user LIKE :user_data_#{i}"
       ].join(' OR ')
 
       parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
@@ -172,7 +108,7 @@ class PollsController < ApplicationController
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
     ).order(
       ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).limit(10)
+    ).references(:organizations).limit(10)
 
     respond_to do |format|
       format.json { render json: @users }
@@ -657,6 +593,7 @@ class PollsController < ApplicationController
   end
 
   private
+
     def poll_params
       params.require(:poll).permit(
         :user_id, :questionnaire_id, :comments, :lock_version,

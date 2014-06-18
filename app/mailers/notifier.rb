@@ -20,10 +20,7 @@ class Notifier < ActionMailer::Base
       subject = poll.questionnaire.email_subject
     end
 
-    mail(
-      :to => email,
-      :subject => subject
-    )
+    mail to: email, subject: subject
   end
 
   def group_welcome_email(group)

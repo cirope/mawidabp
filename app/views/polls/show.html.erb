@@ -1,15 +1,15 @@
 <p>
   <% if @poll.user.present? %>
-    <strong><%= Poll.human_attribute_name :user_id %>: </strong>
-      <%= @poll.user.informal_name  %>
+    <strong><%= Poll.human_attribute_name :user %>:</strong>
+    <%= @poll.user.informal_name  %>
   <% elsif @poll.customer_email.present? %>
-    <strong><%= Poll.human_attribute_name :customer_email %>: </strong>
-      <%= @poll.customer_email  %>
+    <strong><%= Poll.human_attribute_name :customer_email %>:</strong>
+    <%= @poll.customer_email  %>
   <% end %>
 </p>
 <p>
-  <strong><%= Poll.human_attribute_name :answered %>: </strong>
-    <%= @poll.answered ? t('label.yes') : t('label.no')  %>
+  <strong><%= Poll.human_attribute_name :answered %>:</strong>
+  <%= @poll.answered ? t('label.yes') : t('label.no')  %>
 </p>
 <p>
   <strong><%= Questionnaire.human_attribute_name :questions %>:</strong>
@@ -18,7 +18,7 @@
   <% @poll.answers.each do |answer| %>
     <li><strong><%= answer.question.question %></strong>
       <% if @poll.answered? %>
-        <% if answer.question.answer_multi_choice? %>
+        <% if answer.question.answer_multi_choice? && answer.answer_option %>
           <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
         <% elsif answer.question.answer_written? %>
           <%= ": #{answer.answer}" %>
@@ -26,7 +26,7 @@
       <% end %>
       <% if answer.comments.present? %>
         <p>
-          <strong><%= Answer.human_attribute_name :comments %>: </strong>
+          <strong><%= Answer.human_attribute_name :comments %>:</strong>
           <%= answer.comments %>
         </p>
       <% end %>
@@ -43,7 +43,7 @@
 
 <hr />
 
-<% if @layout.eql? 'application' %>
-  <%= link_to t('label.list'), polls_path %> |
+<% if @auth_user %>
+  <%= link_to_index polls_path %> |
   <%= link_to_back %>
 <% end %>

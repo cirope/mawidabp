@@ -28,6 +28,13 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    polls:
+      create:
+        notice: 'La encuesta ha sido agregada correctamente.'
+      update:
+        notice: 'La encuesta ha sido guardada correctamente. ¡Muchas gracias!'
+        stale: 'La encuesta no fue guardada, intente nuevamente.'
+
     questionnaires:
       create:
         notice: 'El cuestionario ha sido agregado correctamente'

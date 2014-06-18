@@ -90,6 +90,18 @@ es: &common
     update:
       success: 'Tus datos se actualizaron correctamente'
 
+  polls:
+    index:
+      title: 'Listado de encuestas'
+    edit:
+      title: 'Modificar encuesta'
+    new:
+      title: 'Agregar encuesta'
+    show:
+      title: 'Detalles de la encuesta'
+    reports:
+      title: 'Reportes de encuestas'
+
   questionnaires:
     index:
       title: 'Listado de cuestionarios'
