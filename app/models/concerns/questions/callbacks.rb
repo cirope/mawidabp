@@ -5,7 +5,6 @@ module Questions::Callbacks
   included do
     before_create :set_default_answers
     before_validation :verify_multi_choice, on: :update
-    before_destroy :can_be_destroyed?
   end
 
   private
@@ -32,9 +31,5 @@ module Questions::Callbacks
       ANSWER_OPTIONS.each do |option|
         answer_options << AnswerOption.new(option: option)
       end
-    end
-
-    def can_be_destroyed?
-      answer.blank?
     end
 end

@@ -24,8 +24,8 @@ class QuestionTest < ActiveSupport::TestCase
     assert_equal 'Updated question', @question.question
   end
 
-  test 'should not delete' do
-    assert_no_difference ['Question.count', 'AnswerOption.count'] do
+  test 'should delete' do
+    assert_difference 'Question.count', -1 do
       @question.destroy
     end
   end
