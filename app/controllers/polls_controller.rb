@@ -126,60 +126,28 @@ class PollsController < ApplicationController
     @questionnaire = Questionnaire.find(params[:summary_by_questionnaire][:questionnaire]) if params[:summary_by_questionnaire]
 
     if @questionnaire
-      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
-                 ).by_questionnaire(@questionnaire)
+      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).
+        by_questionnaire(@questionnaire)
       @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
-      count = 0
-      total = 0
-      @polls.each do |poll|
-        if poll.answered?
-          poll.answers.each do |answer|
-            if answer.answer_option.present?
-              count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
-              total += 1
-            end
-          end
-        end
-      end
-      total == 0 ? @calification = 0 : @calification = (count / total).round
+      @calification = polls_calification(@polls)
     end
   end
 
   def create_summary_by_questionnaire
-    self.summary_by_questionnaire
+    summary_by_questionnaire
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
+    @pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
-
-    pdf.add_description_item(
-      t('activerecord.attributes.poll.send_date'),
-        t('conclusion_committee_report.period.range',
-        from_date: l(@from_date, format: :long),
-        to_date: l(@to_date, format: :long)))
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf_add_header
 
     if @polls.present?
-      pdf.add_description_item(
-        Questionnaire.model_name.human,
-        @questionnaire.name)
+      pdf.add_description_item(Questionnaire.model_name.human, @questionnaire.name)
 
       pdf.move_down PDF_FONT_SIZE * 2
 
       column_data, column_headers, column_widths = [], [], []
 
-      @columns = [
-        [Question.model_name.human, 40]
-      ]
+      @columns = [[Question.model_name.human, 40]]
       Question::ANSWER_OPTIONS.each do |option|
         @columns << [t("activerecord.attributes.answer_option.options.#{option}"), 12]
       end
@@ -248,55 +216,23 @@ class PollsController < ApplicationController
     end
 
     if @questionnaire
-      @polls = @answered.nil? ?
-        Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
-          ).by_questionnaire(@questionnaire) :
-        Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day
-          ).by_questionnaire(@questionnaire).answered(@answered)
+      @polls = Poll.between_dates(@from_date.at_beginning_of_day, @to_date.end_of_day).
+        by_questionnaire(@questionnaire)
+      @polls = @polls.answered(@answered) unless @answered.nil?
       @rates, @answered, @unanswered = @questionnaire.answer_rates @polls
-      count = 0
-      total = 0
-      @polls.each do |poll|
-        if poll.answered?
-          poll.answers.each do |answer|
-            if answer.answer_option.present?
-              count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
-              total += 1
-            end
-          end
-        end
-      end
-      total == 0 ? @calification = 0 : @calification = (count / total).round
+      @calification = polls_calification @polls
     end
   end
 
   def create_summary_by_answers
-    self.summary_by_answers
+    summary_by_answers
 
-    pdf = Prawn::Document.create_generic_pdf :portrait
+    @pdf = Prawn::Document.create_generic_pdf :portrait
 
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
-
-    pdf.add_description_item(
-      t('activerecord.attributes.poll.send_date'),
-        t('conclusion_committee_report.period.range',
-        from_date: l(@from_date, format: :long),
-        to_date: l(@to_date, format: :long)))
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf_add_header
 
     if @polls.present?
-      pdf.add_description_item(
-        Questionnaire.model_name.human,
-        @questionnaire.name)
+      pdf.add_description_item(Questionnaire.model_name.human, @questionnaire.name)
 
       pdf.move_down PDF_FONT_SIZE * 2
 
@@ -410,20 +346,7 @@ class PollsController < ApplicationController
             @business_unit_polls[@selected_business_unit.name][:rates] = rates
             @business_unit_polls[@selected_business_unit.name][:answered] = answered
             @business_unit_polls[@selected_business_unit.name][:unanswered] = unanswered
-            count = 0
-            total = 0
-            but_polls.each do |poll|
-              if poll.answered?
-                poll.answers.each do |answer|
-                  if answer.answer_option.present?
-                    count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
-                    total += 1
-                  end
-                end
-              end
-            end
-            total == 0 ? calification = 0 : calification = (count / total).round
-            @business_unit_polls[@selected_business_unit.name][:calification] = calification
+            @business_unit_polls[@selected_business_unit.name][:calification] = polls_calification(but_polls)
           end
         else
           BusinessUnitType.list.each do |but|
@@ -436,20 +359,7 @@ class PollsController < ApplicationController
               @business_unit_polls[but.name][:rates] = rates
               @business_unit_polls[but.name][:answered] = answered
               @business_unit_polls[but.name][:unanswered] = unanswered
-              count = 0
-              total = 0
-              but_polls.each do |poll|
-                if poll.answered?
-                  poll.answers.each do |answer|
-                    if answer.answer_option.present?
-                      count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
-                      total += 1
-                    end
-                  end
-                end
-              end
-              total == 0 ? calification = 0 : calification = (count / total).round
-              @business_unit_polls[but.name][:calification] = calification
+              @business_unit_polls[but.name][:calification] = polls_calification(but_polls)
             end
           end
         end
@@ -458,36 +368,18 @@ class PollsController < ApplicationController
   end
 
   def create_summary_by_business_unit
-    self.summary_by_business_unit
+    summary_by_business_unit
 
-    pdf = Prawn::Document.create_generic_pdf :landscape
+    @pdf = Prawn::Document.create_generic_pdf :landscape
 
-    pdf.add_generic_report_header current_organization
-
-    pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE
-
-    pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
-
-    pdf.move_down PDF_FONT_SIZE * 2
-
-    pdf.add_description_item(
-      t('activerecord.attributes.poll.send_date'),
-      t('conclusion_committee_report.period.range',
-        from_date: l(@from_date, format: :long),
-        to_date: l(@to_date, format: :long)))
-
-    pdf.move_down PDF_FONT_SIZE
+    pdf_add_header
 
     if @business_unit_polls.present?
       pdf.add_description_item(Questionnaire.model_name.human, @questionnaire.name)
 
       pdf.move_down PDF_FONT_SIZE * 2
 
-      @columns = [
-        [Question.model_name.human, 40]
-      ]
+      @columns = [[Question.model_name.human, 40]]
       Question::ANSWER_OPTIONS.each do |option|
         @columns << [t("activerecord.attributes.answer_option.options.#{option}"), 12]
       end
@@ -621,5 +513,44 @@ class PollsController < ApplicationController
           import_csv_customers: :read
         )
       end
+    end
+
+    def polls_calification polls
+      count = total = 0
+      polls.each do |poll|
+        if poll.answered?
+          poll.answers.each do |answer|
+            if answer.answer_option.present?
+              count += Question::ANSWER_OPTION_VALUES[answer.answer_option.option.to_sym]
+              total += 1
+            end
+          end
+        end
+      end
+      total == 0 ? 0 : (count / total).round
+    end
+
+    def pdf_add_header
+      pdf.add_generic_report_header current_organization
+
+      pdf.add_title params[:report_title], PDF_FONT_SIZE, :center
+
+      pdf.move_down PDF_FONT_SIZE
+
+      pdf.add_title params[:report_subtitle], PDF_FONT_SIZE, :center
+
+      pdf.move_down PDF_FONT_SIZE * 2
+
+      pdf.add_description_item(
+        t('activerecord.attributes.poll.send_date'),
+        t('conclusion_committee_report.period.range',
+          from_date: l(@from_date, format: :long),
+          to_date: l(@to_date, format: :long)))
+
+      pdf.move_down PDF_FONT_SIZE
+    end
+
+    def pdf
+      @pdf
     end
 end
