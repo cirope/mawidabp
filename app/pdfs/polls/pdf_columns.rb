@@ -18,4 +18,14 @@ module Polls::PDFColumns
   def column_widths
     columns_order.values.map { |col_with| pdf.percent_width(col_with) }
   end
+
+  def answer_options question, answers
+    new_row = [question]
+
+    Question::ANSWER_OPTIONS.each_with_index do |option, i|
+      new_row << "#{answers[i]} %"
+    end
+
+    new_row
+  end
 end

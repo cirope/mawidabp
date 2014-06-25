@@ -35,29 +35,26 @@ class Polls::BusinessUnitPdf < Prawn::Document
       @report.business_unit_polls.each_key do |but|
         pdf.text "<b>#{but}</b>", font_size: PDF_FONT_SIZE * 1.3, inline_format: true
         pdf.move_down PDF_FONT_SIZE * 2
-        column_data = []
-
-        @report.business_unit_polls[but][:rates].each do |question, answers|
-          new_row = []
-          new_row << question
-
-          Question::ANSWER_OPTIONS.each_with_index do |option, i|
-            new_row << "#{answers[i]} %"
-          end
-
-          column_data << new_row
-        end
-
-        add_columns_data column_data
+        add_columns_data but
         add_results but
       end
     end
 
-    def add_columns_data column_data
+    def column_data but
+      column_data = []
+
+      @report.business_unit_polls[but][:rates].each do |question, answers|
+        column_data << answer_options(question, answers)
+      end
+
+      column_data
+    end
+
+    def add_columns_data but
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
         table_options = pdf.default_table_options(column_widths)
 
-        pdf.table(column_data.insert(0, column_headers), table_options) do
+        pdf.table(column_data(but).insert(0, column_headers), table_options) do
           row(0).style(
             background_color: 'cccccc',
             padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]

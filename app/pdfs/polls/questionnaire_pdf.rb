@@ -50,14 +50,7 @@ class Polls::QuestionnairePdf < Prawn::Document
       column_data = []
 
       @report.rates.each do |question, answers|
-        new_row = []
-        new_row << question
-
-        Question::ANSWER_OPTIONS.each_with_index do |option, i|
-          new_row << "#{answers[i]} %"
-        end
-
-        column_data << new_row
+        column_data << answer_options(question, answers)
       end
 
       column_data
