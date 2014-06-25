@@ -29,14 +29,14 @@
       </tbody>
     </table>
     <p style="margin: 1em 0;">
-      <%= "#{t('poll.total_answered')}: #{@report.business_unit_polls[but][:answered]}" %><br />
-      <%= "#{t('poll.total_unanswered')}: #{@report.business_unit_polls[but][:unanswered]}" %><br />
-      <br /><strong><%= "#{t('poll.score')}: #{@report.business_unit_polls[but][:calification]}%" %></strong>
+      <%= "#{t('polls.total_answered')}: #{@report.business_unit_polls[but][:answered]}" %><br />
+      <%= "#{t('polls.total_unanswered')}: #{@report.business_unit_polls[but][:unanswered]}" %><br />
+      <br /><strong><%= "#{t('polls.score')}: #{@report.business_unit_polls[but][:calification]}%" %></strong>
     </p>
   <% end %>
 <% else %>
   <p style="margin: 1em 0;">
-    <em><%= t('poll.without_data') %></em>
+    <em><%= t('polls.without_data') %></em>
   </p>
 <% end %>
 

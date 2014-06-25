@@ -22,6 +22,11 @@ module Polls::PDFHeaders
     pdf.move_down PDF_FONT_SIZE * 2
   end
 
+  def pdf_name
+    I18n.t 'polls.pdf.name',
+      from_date: @report.from_date.to_s(:db), to_date: @report.to_date.to_s(:db)
+  end
+
   def pdf
     @pdf
   end

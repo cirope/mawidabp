@@ -60,14 +60,14 @@
   <% end %>
   <hr>
   <p style="margin: 1em 0;">
-    <%= "#{t('poll.total_answered')}: #{@report.answered}" %><br>
-    <%= "#{t('poll.total_unanswered')}: #{@report.unanswered}" %><br>
+    <%= "#{t('polls.total_answered')}: #{@report.answered}" %><br>
+    <%= "#{t('polls.total_unanswered')}: #{@report.unanswered}" %><br>
     <br>
-    <strong><%= "#{t('poll.score')}: #{@report.calification}%" %></strong>
+    <strong><%= "#{t('polls.score')}: #{@report.calification}%" %></strong>
   </p>
 <% else %>
   <p style="margin: 1em 0;">
-    <em><%= t('poll.without_data') %></em>
+    <em><%= t('polls.without_data') %></em>
   </p>
 <% end %>
 

@@ -91,16 +91,31 @@ es: &common
       success: 'Tus datos se actualizaron correctamente'
 
   polls:
+    answers:
+      index:
+        title: 'Resumen de respuestas'
+    business_units:
+      index:
+        title: 'Resumen por unidad de negocio'
     index:
       title: 'Listado de encuestas'
     edit:
       title: 'Modificar encuesta'
     new:
       title: 'Agregar encuesta'
-    show:
-      title: 'Detalles de la encuesta'
+    pdf:
+      name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
+    questionnaires:
+      index:
+        title: 'Resumen por tipo de cuestionario'
     reports:
       title: 'Reportes de encuestas'
+    show:
+      title: 'Detalles de la encuesta'
+    total_answered: 'Total encuestas contestadas'
+    total_unanswered: 'Total encuestas no contestadas'
+    without_data: 'Sin datos para los filtros ingresados'
+    score: 'Nivel de satisfacción promedio'
 
   questionnaires:
     index:

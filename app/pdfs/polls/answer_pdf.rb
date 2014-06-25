@@ -12,11 +12,7 @@ class Polls::AnswerPDF < Prawn::Document
   end
 
   def relative_path
-    Prawn::Document.relative_path(
-      I18n.t('poll.summary_pdf_name',
-      from_date: @report.from_date.to_s(:db), to_date: @report.to_date.to_s(:db)),
-      'answers', 0
-    )
+    Prawn::Document.relative_path(pdf_name, 'answers', 0)
   end
 
   private
@@ -29,7 +25,7 @@ class Polls::AnswerPDF < Prawn::Document
         pdf_add_body
         pdf_add_footer
       else
-        pdf.text I18n.t('poll.without_data')
+        pdf.text I18n.t('polls.without_data')
       end
 
       save
@@ -49,10 +45,10 @@ class Polls::AnswerPDF < Prawn::Document
 
     def pdf_add_footer
       pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('poll.total_answered')}: #{@report.answered}"
-      pdf.text "#{I18n.t('poll.total_unanswered')}: #{@report.unanswered}"
+      pdf.text "#{I18n.t('polls.total_answered')}: #{@report.answered}"
+      pdf.text "#{I18n.t('polls.total_unanswered')}: #{@report.unanswered}"
       pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('poll.score')}: #{@report.calification}%"
+      pdf.text "#{I18n.t('polls.score')}: #{@report.calification}%"
     end
 
     def pdf_add_comments poll
@@ -85,7 +81,7 @@ class Polls::AnswerPDF < Prawn::Document
         ans = ''
         if poll.answered?
           if answer.question.answer_multi_choice?
-            ans = "#{t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
+            ans = "#{I18n.t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
           elsif answer.question.answer_written?
             ans = answer.answer
           end
@@ -100,9 +96,6 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def save
-      pdf.custom_save_as(
-        I18n.t('poll.summary_pdf_name',
-        from_date: @report.from_date.to_s(:db), to_date: @report.to_date.to_s(:db)
-      ), 'answers', 0)
+      pdf.custom_save_as(pdf_name, 'answers', 0)
     end
 end
