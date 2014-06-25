@@ -1,5 +1,6 @@
 class Polls::AnswerPDF < Prawn::Document
   include Polls::PDFHeaders
+  include Polls::PDFScores
 
   attr_accessor :relative_path
 
@@ -12,7 +13,7 @@ class Polls::AnswerPDF < Prawn::Document
   end
 
   def relative_path
-    Prawn::Document.relative_path(pdf_name, 'answers', 0)
+    Prawn::Document.relative_path pdf_name, Answer.table_name
   end
 
   private
@@ -23,7 +24,7 @@ class Polls::AnswerPDF < Prawn::Document
       if @report.polls.present?
         pdf_add_description
         pdf_add_body
-        pdf_add_footer
+        pdf_add_scores
       else
         pdf.text I18n.t('polls.without_data')
       end
@@ -41,14 +42,6 @@ class Polls::AnswerPDF < Prawn::Document
           pdf.move_down PDF_FONT_SIZE
         end
       end
-    end
-
-    def pdf_add_footer
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('polls.total_answered')}: #{@report.answered}"
-      pdf.text "#{I18n.t('polls.total_unanswered')}: #{@report.unanswered}"
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('polls.score')}: #{@report.calification}%"
     end
 
     def pdf_add_comments poll
@@ -96,6 +89,6 @@ class Polls::AnswerPDF < Prawn::Document
     end
 
     def save
-      pdf.custom_save_as(pdf_name, 'answers', 0)
+      pdf.custom_save_as pdf_name, Answer.table_name
     end
 end

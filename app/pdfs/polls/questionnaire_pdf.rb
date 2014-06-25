@@ -1,5 +1,7 @@
 class Polls::QuestionnairePdf < Prawn::Document
   include Polls::PDFHeaders
+  include Polls::PDFScores
+  include Polls::PDFColumns
 
   attr_accessor :relative_path
 
@@ -12,7 +14,7 @@ class Polls::QuestionnairePdf < Prawn::Document
   end
 
   def relative_path
-    Prawn::Document.relative_path(pdf_name, 'questionnaire', 0)
+    Prawn::Document.relative_path pdf_name, Questionnaire.table_name
   end
 
   private
@@ -23,7 +25,7 @@ class Polls::QuestionnairePdf < Prawn::Document
       if @report.polls.present?
         pdf_add_description
         pdf_add_body
-        pdf_add_footer
+        pdf_add_scores
       else
         pdf.text I18n.t('polls.without_data')
       end
@@ -44,32 +46,6 @@ class Polls::QuestionnairePdf < Prawn::Document
       end
     end
 
-    def pdf_add_footer
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('polls.total_answered')}: #{@report.answered}"
-      pdf.text "#{I18n.t('polls.total_unanswered')}: #{@report.unanswered}"
-      pdf.move_down PDF_FONT_SIZE
-      pdf.text "#{I18n.t('polls.score')}: #{@report.calification}%"
-    end
-
-    def columns_order
-      columns = { Question.model_name.human => 40 }
-
-      Question::ANSWER_OPTIONS.each do |option|
-        columns[I18n.t("activerecord.attributes.answer_option.options.#{option}")] = 12
-      end
-
-      columns
-    end
-
-    def column_headers
-      columns_order.keys
-    end
-
-    def column_widths
-      columns_order.values.map { |col_with| pdf.percent_width(col_with) }
-    end
-
     def column_data
       column_data = []
 
@@ -88,6 +64,6 @@ class Polls::QuestionnairePdf < Prawn::Document
     end
 
     def save
-      pdf.custom_save_as(pdf_name, 'questionnaire', 0)
+      pdf.custom_save_as pdf_name, Questionnaire.table_name
     end
 end
