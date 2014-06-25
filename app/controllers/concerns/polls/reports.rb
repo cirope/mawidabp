@@ -4,7 +4,7 @@ module Polls::Reports
   included do
     before_action :auth, :check_privileges
     before_action :set_report, :set_date_range, :set_questionnaire, :set_questionnaires,
-      :set_title, :process_report
+      :set_title, :process_report, :set_pdf_report
 
     respond_to :html, :js
   end

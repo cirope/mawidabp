@@ -2,10 +2,6 @@ class Polls::BusinessUnitsController < ApplicationController
   include Polls::Reports
 
   def index
-    if request.xhr?
-      @pdf = Polls::BusinessUnitPdf.new @report, current_organization
-    end
-
     respond_to do |format|
       format.html
       format.js { render 'shared/pdf_report' }
@@ -89,6 +85,12 @@ class Polls::BusinessUnitsController < ApplicationController
           @report.business_unit_polls[but.name][:unanswered] = unanswered
           @report.business_unit_polls[but.name][:calification] = polls_calification(but_polls)
         end
+      end
+    end
+
+    def set_pdf_report
+      if request.xhr?
+        @pdf = Polls::BusinessUnitPdf.new @report, current_organization
       end
     end
 end
