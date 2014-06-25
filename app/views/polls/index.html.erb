@@ -6,11 +6,11 @@
 <table class="table table-condensed table-striped">
   <thead id="column_headers">
     <tr>
-      <%= make_filterable_column Poll.human_attribute_name(:user_id), nil, 'name', 'last_name' %>
-      <%= make_filterable_column Poll.human_attribute_name(:questionnaire_id), nil, 'questionnaire_name' %>
-      <%= make_filterable_column Poll.human_attribute_name(:answered), nil, 'answered' %>
-      <%= make_not_available_column Poll.human_attribute_name(:send_date) %>
-      <%= make_not_available_column Poll.human_attribute_name(:answer_date) %>
+      <%= make_filterable_column Poll.human_attribute_name('user'), nil, 'name', 'last_name' %>
+      <%= make_filterable_column Poll.human_attribute_name('questionnaire_id'), nil, 'questionnaire_name' %>
+      <%= make_filterable_column Poll.human_attribute_name('answered'), nil, 'answered' %>
+      <%= make_not_available_column Poll.human_attribute_name('send_date') %>
+      <%= make_not_available_column Poll.human_attribute_name('answer_date') %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>
@@ -21,8 +21,8 @@
         <td><%= poll.user ? poll.user.informal_name : poll.customer_email %></td>
         <td><%= poll.questionnaire.name %></td>
         <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
-        <td><%= l poll.created_at.to_date, :format => :long %></td>
-        <td><%= l(poll.updated_at.to_date, :format => :long) if poll.answered %></td>
+        <td><%= l poll.created_at.to_date, format: :long %></td>
+        <td><%= l(poll.updated_at.to_date, format: :long) if poll.answered %></td>
         <td><%= link_to_show poll %></td>
         <td><%= link_to_destroy poll %></td>
       </tr>

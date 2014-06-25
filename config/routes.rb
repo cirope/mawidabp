@@ -10,18 +10,18 @@ Rails.application.routes.draw do
 
   resources :questionnaires
 
+  namespace 'polls' do
+    resources :questionnaires, only: [:index]
+    resources :answers, only: [:index]
+    resources :business_units, only: [:index]
+  end
+
   resources :polls do
     collection do
       get :auto_complete_for_user
       get :import_csv_customers
       post :send_csv_polls
       get :reports
-      get :summary_by_questionnaire
-      get :summary_by_answers
-      get :summary_by_business_unit
-      post :create_summary_by_questionnaire
-      post :create_summary_by_answers
-      post :create_summary_by_business_unit
     end
   end
 

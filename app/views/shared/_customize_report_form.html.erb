@@ -2,7 +2,7 @@
   aria-labelledby="customize_report_label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <%= simple_form_for options[:form_name], url: options[:url], remote: true do |f| %>
+      <%= simple_form_for options[:form_name], method: (options[:method] || :post), url: options[:url], remote: true do |f| %>
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h3 class="modal-title" id="customize_report_label">

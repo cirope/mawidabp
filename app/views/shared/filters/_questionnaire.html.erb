@@ -6,8 +6,8 @@
         <%= f.label :questionnaire, Questionnaire.model_name.human,
           class: 'col-md-3' %>
         <div class="col-md-9">
-          <%= f.select :questionnaire, @questionnaires, { selected: selected },
-            class: 'form-control' %>
+          <%= f.select :questionnaire, @report.questionnaires,
+            { selected: selected, prompt: true }, class: 'form-control' %>
         </div>
       </div>
     </div>
