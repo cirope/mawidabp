@@ -54,7 +54,7 @@ class ConclusionReview < ActiveRecord::Base
 
     business_unit_names.each_with_index do |business_unit_name, i|
       conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
-      parameters[:"bu_#{i}"] = Unicode::downcase("%#{business_unit_name}%")
+      parameters[:"bu_#{i}"] = "%#{business_unit_name.mb_chars.downcase}%"
     end
 
     includes(:plan_item => :business_unit).where(
@@ -67,7 +67,7 @@ class ConclusionReview < ActiveRecord::Base
 
     control_objective_names.each_with_index do |control_objective_name, i|
       conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
+      parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
     includes(:review => {:control_objective_items => :control_objective}).where(

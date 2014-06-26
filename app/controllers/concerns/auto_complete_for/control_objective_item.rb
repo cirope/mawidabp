@@ -19,8 +19,7 @@ module AutoCompleteFor::ControlObjectiveItem
         "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"control_objective_item_data_#{i}"] =
-        "%#{Unicode::downcase(t)}%"
+      parameters[:"control_objective_item_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
     @control_objective_items = ControlObjectiveItem.includes(

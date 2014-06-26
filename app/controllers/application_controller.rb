@@ -233,7 +233,7 @@ class ApplicationController < ActionController::Base
       end
 
       if params[:search] && !params[:search][:query].blank?
-        raw_query = Unicode::downcase(params[:search][:query] || '')
+        raw_query = params[:search][:query].to_s.mb_chars.downcase.to_s
         and_query = raw_query.split(SEARCH_AND_REGEXP).reject { |q| q.blank? }
         @query = and_query.map do |query|
           query.split(SEARCH_OR_REGEXP).reject { |q| q.blank? }
