@@ -67,32 +67,26 @@ class Polls::BusinessUnitsController < ApplicationController
 
     def polls_business_unit
       polls = but_polls @report.selected_business_unit
-      set_report_business_unit(polls) if polls.present?
-    end
-
-    def set_report_business_unit polls
-      @report.business_unit_polls[@report.selected_business_unit.name] = {}
-      rates, answered, unanswered = @report.questionnaire.answer_rates(polls)
-      @report.business_unit_polls[@report.selected_business_unit.name][:rates] = rates
-      @report.business_unit_polls[@report.selected_business_unit.name][:answered] = answered
-      @report.business_unit_polls[@report.selected_business_unit.name][:unanswered] = unanswered
-      @report.business_unit_polls[@report.selected_business_unit.name][:calification] = polls_calification(polls)
+      if polls.present?
+        @report.business_unit_polls[@report.selected_business_unit.name] = results(polls)
+      end
     end
 
     def polls_business_unit_type
       BusinessUnitType.list.each do |but|
         polls = but_polls but
-        set_report_business_unit_type(polls) if polls.present?
+        @report.business_unit_polls[but.name] = results(polls) if polls.present?
       end
     end
 
-    def set_report_business_unit_type polls
-      @report.business_unit_polls[but.name] = {}
+    def results polls
       rates, answered, unanswered = @report.questionnaire.answer_rates(polls)
-      @report.business_unit_polls[but.name][:rates] = rates
-      @report.business_unit_polls[but.name][:answered] = answered
-      @report.business_unit_polls[but.name][:unanswered] = unanswered
-      @report.business_unit_polls[but.name][:calification] = polls_calification(polls)
+      {
+        rates: rates,
+        answered: answered,
+        unanswered: unanswered,
+        calification: polls_calification(polls)
+      }
     end
 
     def set_pdf_report
