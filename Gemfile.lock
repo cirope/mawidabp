@@ -259,7 +259,7 @@ DEPENDENCIES
   paper_trail
   pg
   prawn
-  rails (~> 4.1.1)
+  rails (= 4.1.1)
   rubyzip
   sass-rails (~> 4.0.3)
   simple_form
