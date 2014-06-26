@@ -85,6 +85,12 @@ es: &common
         with_reviews: '¿Incluir informes en ejecución?'
         submit: 'Reasignar'
       must_select_a_user: 'Debe seleccionar un usuario'
+    releases:
+      edit:
+        title: 'Liberar responsabilidades'
+        with_findings: '¿Incluir hallazgos pendientes?'
+        with_reviews: '¿Incluir informes en ejecución?'
+        submit: 'Liberar responsabilidades'
     status:
       show:
         title: 'Estado'

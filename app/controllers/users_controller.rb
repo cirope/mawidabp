@@ -8,9 +8,7 @@ class UsersController < ApplicationController
     :edit_personal_data, :update_personal_data, :new_initial, :create_initial,
     :initial_roles
   ]
-  before_action :set_user, only: [
-    :show, :edit, :update, :destroy, :release_edit, :release_update
-  ]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
 
@@ -249,37 +247,6 @@ class UsersController < ApplicationController
     redirect_to edit_personal_data_user_url(@auth_user)
   end
 
-  # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
-  # el usuario queda desligado de los eventos (como por ejemplo observaciones).
-  #
-  # * GET /users/release_edit/1
-  # * GET /users/release_edit/1.xml
-  def release_edit
-    @title = t 'user.user_release'
-  end
-
-  # Libera usuarios de las relaciones que mantienen seguimiento y por lo tanto
-  # el usuario queda desligado de los eventos (como por ejemplo observaciones).
-  #
-  # * PATCH /users/release_update/1
-  # * PATCH /users/release_update/1.xml
-  def release_update
-    @title = t 'user.user_release'
-
-    options = {
-      with_findings: params[:user][:with_findings] == '1',
-      with_reviews: params[:user][:with_reviews] == '1'
-    }
-
-    if @user.release_for_all_pending_findings(options)
-      flash.notice = t('user.user_release_completed')
-      redirect_to users_url
-    else
-      flash.alert = t('user.user_release_failed')
-      render action: :reassignment_edit
-    end
-  end
-
   # Lista las usuarios
   #
   # * GET /users/export_to_pdf
@@ -405,9 +372,7 @@ class UsersController < ApplicationController
         @action_privileges.update(
           auto_complete_for_user: :read,
           roles: :read,
-          export_to_pdf: :read,
-          release_edit: :modify,
-          release_update: :modify
+          export_to_pdf: :read
         )
       end
     end

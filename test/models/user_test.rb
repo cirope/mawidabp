@@ -311,7 +311,7 @@ class UserTest < ActiveSupport::TestCase
     assert auditor_user.reviews.list_without_final_review.any?
 
     assert_nothing_raised do
-      assert auditor_user.release_for_all_pending_findings(with_reviews: true, with_findings: true)
+      assert auditor_user.release_pendings(with_reviews: true, with_findings: true)
     end
 
     assert auditor_user.findings.reload.all_for_reallocation.empty?
@@ -327,7 +327,7 @@ class UserTest < ActiveSupport::TestCase
     assert audited_user.reviews.list_without_final_review.any?
 
     assert_nothing_raised do
-      assert !audited_user.release_for_all_pending_findings(with_reviews: true, with_findings: true)
+      assert !audited_user.release_pendings(with_reviews: true, with_findings: true)
     end
 
     assert audited_user.findings.reload.all_for_reallocation.any?

@@ -17,8 +17,8 @@ class User < ActiveRecord::Base
   include Users::Polls
   include Users::Reassigns
   include Users::Relations
+  include Users::Releases
   include Users::Resources
-  include Users::ResponsibilityRelease
   include Users::Roles
   include Users::Scopes
   include Users::Search
