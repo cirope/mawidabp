@@ -81,26 +81,15 @@ class PollsController < ApplicationController
     ext = File.extname(params[:dump_emails][:file].original_filename) rescue ''
 
     if ext.downcase == '.csv'
-      uploaded_file = params[:dump_emails][:file]
-      file_name = uploaded_file.path
-      questionnaire_id = params[:dump_emails][:questionnaire_id].to_i
+      file_name = params[:dump_emails][:file].path
 
-      text = File.read(file_name, { encoding: 'UTF-8', delimiter: ';' })
-
-      @parsed_file = CSV.parse(text)
       n = 0
-
-      @parsed_file.each  do |row|
-        poll = Poll.new(
-          questionnaire_id: questionnaire_id,
-          organization_id: current_organization.id
+      CSV.foreach(file_name, col_sep: ';', encoding: 'UTF-8').each do |row|
+        poll = current_organization.polls.build(
+          customer_email: row[0], customer_name: row[1],
+          questionnaire_id: params[:dump_emails][:questionnaire_id].to_i
         )
-        poll.customer_email = row[0]
-        poll.customer_name = row[1]
-
-        if poll.save
-          n+=1
-        end
+        n += 1 if poll.save
       end
 
       flash[:notice] = t('poll.customer_polls_sended', count: n)
