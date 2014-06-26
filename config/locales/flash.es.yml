@@ -62,6 +62,10 @@ es: &common
         update:
           notice: 'Reasignación de responsabilidades finalizada correctamente'
           alert: 'La reasignación de responsabilidades no puede realizarse'
+      releases:
+        update:
+          notice: 'Liberación de responsabilidades finalizada correctamente'
+          alert: 'La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas'
 
 public_es:
   <<: *common

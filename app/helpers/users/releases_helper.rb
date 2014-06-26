@@ -1,0 +1,2 @@
+module Users::ReleasesHelper
+end

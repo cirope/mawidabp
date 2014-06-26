@@ -1184,13 +1184,7 @@ mc_es:
     add_related_user_relations: "Agregar usuario relacionado"
     children: "Personal a cargo"
     reassign_to_another_user: "Reasignar responsabilidades"
-    release: "Liberar responsabilidades"
     unlink_manager: "Desvincular"
-    user_release: "Liberar responsabilidades"
-    user_release_failed: "La liberación de responsabilidades no puede realizarse, deberá en algunos casos reasignarlas"
-    user_release_completed: "Liberación de responsabilidades finalizada correctamente"
-    release_with_findings: "¿Incluir desvíos y oportunidades pendientes?"
-    release_with_reviews: "¿Incluir informes en ejecución?"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
     responsibility_modification:

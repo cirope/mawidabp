@@ -416,8 +416,6 @@ Rails.application.routes.draw do
     member do
       get :edit_personal_data
       patch :update_personal_data
-      get :release_edit
-      patch :release_update
     end
   end
 
@@ -425,6 +423,7 @@ Rails.application.routes.draw do
     resources :passwords, except: [:index, :show, :destroy]
     resources :status, only: [:show]
     resources :reassignments, only: [:edit, :update]
+    resources :releases, only: [:edit, :update]
   end
 
   root 'sessions#new'

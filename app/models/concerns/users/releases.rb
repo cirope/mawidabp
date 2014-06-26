@@ -1,18 +1,21 @@
-module Users::ResponsibilityRelease
+module Users::Releases
   extend ActiveSupport::Concern
 
   included do
     attr_accessor :_items_for_notification, :_organizations
   end
 
-  def release_for_all_pending_findings with_findings: false, with_reviews: false
+  def release_pendings with_findings: false, with_reviews: false
     initialize_release_attributes
 
     Finding.transaction do
       release_pending_findings if with_findings
       release_pending_reviews  if with_reviews
 
-      raise ActiveRecord::Rollback if has_reallocation_errors?
+      if has_reallocation_errors?
+        errors.add :base, 'Invalid release'
+        raise ActiveRecord::Rollback
+      end
 
       notify_release_changes
     end
