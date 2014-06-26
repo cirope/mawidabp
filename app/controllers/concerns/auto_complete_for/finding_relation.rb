@@ -27,7 +27,7 @@ module AutoCompleteFor::FindingRelation
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
-      parameters[:"finding_relation_data_#{i}"] = "%#{Unicode::downcase(t)}%"
+      parameters[:"finding_relation_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
     @findings = Finding.includes(

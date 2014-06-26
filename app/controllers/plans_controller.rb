@@ -163,7 +163,7 @@ class PlansController < ApplicationController
         "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"business_unit_data_#{i}"] = "%#{Unicode::downcase(t)}%"
+      parameters[:"business_unit_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
     @business_units = BusinessUnit.includes(:business_unit_type).where(

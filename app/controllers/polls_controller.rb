@@ -165,7 +165,7 @@ class PollsController < ApplicationController
         "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
+      parameters[:"user_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
     @users = User.includes(:organizations).where(

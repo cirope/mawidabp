@@ -255,7 +255,7 @@ class ReviewsController < ApplicationController
         "LOWER(#{Review.table_name}.identification) LIKE :finding_data_#{i}",
       ].join(' OR ')
 
-      parameters["finding_data_#{i}".to_sym] = "%#{Unicode::downcase(t)}%"
+      parameters["finding_data_#{i}".to_sym] = "%#{t.mb_chars.downcase}%"
     end
 
     @findings = Finding.includes(
@@ -291,8 +291,7 @@ class ReviewsController < ApplicationController
         "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_subitem_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"procedure_control_subitem_data_#{i}"] =
-        "%#{Unicode::downcase(t)}%"
+      parameters[:"procedure_control_subitem_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
     @procedure_control_subitems = ProcedureControlSubitem.includes(

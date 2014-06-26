@@ -35,7 +35,7 @@ class ControlObjectiveItem < ActiveRecord::Base
 
     control_objective_names.each_with_index do |control_objective_name, i|
       conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
-      parameters[:"co_#{i}"] = Unicode::downcase("%#{control_objective_name}%")
+      parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
     includes(:control_objective).where(
