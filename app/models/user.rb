@@ -24,8 +24,10 @@ class User < ActiveRecord::Base
   include Users::Search
   include Users::Validations
   include Users::Tree
+  include AttrSearchable
 
   trimmed_fields :user, :email, :name, :last_name
+  attr_searchable :user, :name, :last_name, :function
 
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy

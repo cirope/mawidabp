@@ -52,8 +52,6 @@ class Polls::BusinessUnitPdf < Prawn::Document
 
     def add_columns_data but
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
-
         pdf.table(column_data(but).insert(0, column_headers), table_options) do
           row(0).style(
             background_color: 'cccccc',
@@ -63,10 +61,18 @@ class Polls::BusinessUnitPdf < Prawn::Document
       end
     end
 
+    def table_options
+      pdf.default_table_options(column_widths)
+    end
+
     def add_results but
       pdf.move_down PDF_FONT_SIZE
       pdf.text "#{I18n.t('polls.total_answered')}: #{@report.business_unit_polls[but][:answered]}"
       pdf.text "#{I18n.t('polls.total_unanswered')}: #{@report.business_unit_polls[but][:unanswered]}"
+      add_score but
+    end
+
+    def add_score but
       pdf.move_down PDF_FONT_SIZE
       pdf.text "#{I18n.t('polls.score')}: #{@report.business_unit_polls[but][:calification]}%"
       pdf.move_down PDF_FONT_SIZE * 2

@@ -60,47 +60,21 @@ class PollsController < ApplicationController
     respond_with @poll
   end
 
-   # * GET /polls/auto_complete_for_user
-  def auto_complete_for_user
-    @tokens = params[:q][0..100].split(/[\s,]/).uniq
-    @tokens.reject! {|t| t.blank?}
-    conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
-    ]
-    conditions << "#{User.table_name}.id <> :self_id" if params[:user_id]
-    parameters = {
-      organization_id: current_organization.id,
-      self_id: params[:user_id]
-    }
-    @tokens.each_with_index do |t, i|
-      conditions << [
-        "#{User.table_name}.name ILIKE :user_data_#{i}",
-        "#{User.table_name}.last_name ILIKE :user_data_#{i}",
-        "#{User.table_name}.function ILIKE :user_data_#{i}",
-        "#{User.table_name}.user ILIKE :user_data_#{i}"
-      ].join(' OR ')
-
-      parameters[:"user_data_#{i}"] = "%#{Unicode::downcase(t)}%"
-    end
-
-    @users = User.includes(:organizations).where(
-      conditions.map {|c| "(#{c})"}.join(' AND '), parameters
-    ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
-    ).references(:organizations).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @users }
-    end
-  end
-
   def reports
     @title = t 'poll.reports_title'
   end
 
   def import_csv_customers
     @title = t('poll.import_csv_customers_title')
+  end
+
+  def auto_complete_for_user
+    @users = current_organization.users.where(hidden: false).
+      search(params[:q]).limit(10)
+
+    respond_to do |format|
+      format.json { render json: @users }
+    end
   end
 
   def send_csv_polls
