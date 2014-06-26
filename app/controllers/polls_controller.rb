@@ -81,16 +81,7 @@ class PollsController < ApplicationController
     ext = File.extname(params[:dump_emails][:file].original_filename) rescue ''
 
     if ext.downcase == '.csv'
-      file_name = params[:dump_emails][:file].path
-
-      n = 0
-      CSV.foreach(file_name, col_sep: ';', encoding: 'UTF-8').each do |row|
-        poll = current_organization.polls.build(
-          customer_email: row[0], customer_name: row[1],
-          questionnaire_id: params[:dump_emails][:questionnaire_id].to_i
-        )
-        n += 1 if poll.save
-      end
+      n = process_csv params[:dump_emails][:file].path
 
       flash[:notice] = t('poll.customer_polls_sended', count: n)
     else
@@ -116,6 +107,21 @@ class PollsController < ApplicationController
     def set_poll
       @poll = Poll.list.find(params[:id])
     end
+
+    def process_csv file_name
+      count = 0
+
+      CSV.foreach(file_name, col_sep: ',', encoding: 'UTF-8') do |row|
+        poll = current_organization.polls.new(
+          customer_email: row[0], customer_name: row[1],
+          questionnaire_id: params[:dump_emails][:questionnaire_id].to_i
+        )
+        count += 1 if poll.save
+      end
+
+      count
+    end
+
 
     def load_privileges
       if @action_privileges
