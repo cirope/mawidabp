@@ -18,6 +18,12 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    users:
+      reassignments:
+        update:
+          notice: 'Reasignación de responsabilidades finalizada correctamente'
+          alert: 'La reasignación de responsabilidades no puede realizarse'
+
 public_es:
   <<: *common
 

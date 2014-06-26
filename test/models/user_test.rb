@@ -389,6 +389,14 @@ class UserTest < ActiveSupport::TestCase
     assert reviews_to_reassign.all? { |r| r.reload.users.include?(user) }
   end
 
+  test 'reassign to none' do
+    old_user = users :audited_user
+
+    old_user.reassign_to nil, with_reviews: true
+
+    assert old_user.errors.size > 0
+  end
+
   test 'notify finding changes function' do
     Organization.current_id = nil
     user = users :administrator_user

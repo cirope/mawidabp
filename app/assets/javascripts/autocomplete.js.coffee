@@ -1,9 +1,8 @@
 jQuery ($) ->
-  $(document).on 'change', 'input.autocomplete_field', ->
-    if /^\s*$/.test($(this).val())
-      $($(this).data('autocompleteIdTarget')).val('')
+  $(document).on 'change', '[data-autocomplete-url]', ->
+    $($(this).data('autocompleteIdTarget')).val '' if $(this).val()
 
-  $(document).on 'focus', 'input.autocomplete_field:not([data-observed])', ->
+  $(document).on 'focus', '[data-autocomplete-url]:not([data-observed])', ->
     input = $(this)
 
     input.autocomplete
