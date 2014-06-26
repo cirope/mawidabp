@@ -40,8 +40,6 @@ Rails.application.routes.draw do
 
   resources :groups
 
-  resources :inline_helps
-
   get 'welcome', as: 'welcome', to: 'welcome#index'
   get 'execution_reports', as: 'execution_reports', to: 'execution_reports#index'
 
@@ -60,18 +58,6 @@ Rails.application.routes.draw do
   end
 
   resources :versions, only: [:index, :show]
-
-  resources :help_items
-
-  resources :help_contents do
-    member do
-      get :show_content
-    end
-
-    collection do
-      get :show_content
-    end
-  end
 
   resources :notifications, only: [:index, :show, :edit, :update] do
     member do

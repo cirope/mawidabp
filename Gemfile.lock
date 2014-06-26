@@ -39,7 +39,7 @@ GEM
     acts_as_tree (1.6.1)
       activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
-    attr_searchable (0.0.2)
+    attr_searchable (0.0.3)
       treetop
     blankslate (2.1.2.4)
     bloggy (0.3)
