@@ -50,6 +50,12 @@ es: &common
         notice: 'Configuración actualizada correctamente'
         stale: 'La configuración no fue actualizada, intente nuevamente'
 
+    users:
+      reassignments:
+        update:
+          notice: 'Reasignación de responsabilidades finalizada correctamente'
+          alert: 'La reasignación de responsabilidades no puede realizarse'
+
 public_es:
   <<: *common
 

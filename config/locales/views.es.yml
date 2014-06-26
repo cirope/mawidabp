@@ -178,6 +178,17 @@ es: &common
       create:
         success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
         not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
+
+    reassignments:
+      edit:
+        title: 'Reasignación de responsabilidades'
+        new_user: 'Nuevo responsable'
+        old_user: 'Responsable anterior'
+        with_findings: '¿Incluir hallazgos pendientes?'
+        with_reviews: '¿Incluir informes en ejecución?'
+        submit: 'Reasignar'
+      must_select_a_user: 'Debe seleccionar un usuario'
+
     status:
       show:
         title: 'Estado'

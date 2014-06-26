@@ -9,10 +9,12 @@ module Users::Reassigns
     initialize_reassign_attributes
 
     Finding.transaction do
-      reassign_pending_findings_to other if with_findings
-      reassign_pending_reviews_to  other if with_reviews
+      reassign_to_if other, with_findings, with_reviews
 
-      raise ActiveRecord::Rollback if reallocation_errors.present?
+      if reallocation_errors.present?
+        errors.add :base, 'Invalid reassign'
+        raise ActiveRecord::Rollback
+      end
 
       notify_reassign_changes_to_me_and other
     end
@@ -27,6 +29,15 @@ module Users::Reassigns
       self._reassigned_reviews   = []
       self._organizations        = []
       self.reallocation_errors   = []
+    end
+
+    def reassign_to_if other, with_findings, with_reviews
+      if other
+        reassign_pending_findings_to other if with_findings
+        reassign_pending_reviews_to  other if with_reviews
+      else
+        reallocation_errors << I18n.t('users.reassignments.must_select_a_user')
+      end
     end
 
     def reassign_pending_findings_to other
@@ -71,6 +82,7 @@ module Users::Reassigns
 
       unless rua.update user_id: other.id
         reallocation_errors << review_reallocation_errors_for(rua.review, rua.errors)
+        o
       end
     end
 
