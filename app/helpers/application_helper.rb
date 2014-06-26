@@ -1,6 +1,10 @@
 module ApplicationHelper
   include ParameterSelector
 
+  def t_boolean field
+    t "navigation.#{field ? '_yes' : '_no'}"
+  end
+
   def copy_attribute_errors(from, to, form_builder)
     form_builder.object.errors[from].each do |message|
       form_builder.object.errors.add(to, message)

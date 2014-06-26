@@ -82,7 +82,7 @@ class Polls::AnswerPDF < Prawn::Document
 
     def set_answer answer
       if answer.question.answer_multi_choice?
-        "#{I18n.t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
+        "#{I18n.t("answer_options.#{answer.answer_option.option}")}"
       elsif answer.question.answer_written?
         answer.answer
       end

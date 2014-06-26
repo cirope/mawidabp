@@ -3,43 +3,48 @@
   forms: { poll_date_range: true, questionnaire: true, answered: true }
 } %>
 
-<% if @report.polls.present? %>
+<br />
+<% if @report.polls.blank? %>
+  <div class="alert alert-warning"><%= t('polls.without_data') %></div>
+<% else %>
   <% @report.polls.each do |poll| %>
-    <hr />
     <p>
       <% if poll.user.present? %>
-        <strong><%= Poll.human_attribute_name :user_id %>: </strong>
-        <%= poll.user.informal_name  %>
+        <strong><%= Poll.human_attribute_name 'user' %>:</strong>
+        <%= poll.user.informal_name %>
       <% elsif poll.customer_email.present? %>
-        <strong><%= Poll.human_attribute_name :customer_email %>: </strong>
-        <%= poll.customer_email  %>
+        <strong><%= Poll.human_attribute_name 'customer_email' %>:</strong>
+        <%= poll.customer_email %>
       <% end %>
     </p>
     <p>
-      <strong><%= Poll.human_attribute_name :answered %>: </strong>
-      <%= poll.answered ? t('label.yes') : t('label.no')  %>
+      <strong><%= Poll.human_attribute_name 'answered' %>:</strong>
+      <%= t_boolean poll.answered %>
     </p>
     <p>
-      <strong><%= Poll.human_attribute_name :send_date %>: </strong>
-      <%= l poll.created_at.to_date, :format => :long %>
+      <strong><%= Poll.human_attribute_name 'send_date' %>:</strong>
+      <%= l poll.created_at.to_date, format: :long %>
     </p>
     <% if poll.answered? %>
       <p>
-        <strong><%= Poll.human_attribute_name :answer_date %>: </strong>
-        <%= l poll.updated_at.to_date, :format => :long %>
+        <strong><%= Poll.human_attribute_name 'answer_date' %>:</strong>
+        <%= l poll.updated_at.to_date, format: :long %>
       </p>
     <% end %>
     <p>
-      <strong><%= Questionnaire.human_attribute_name :questions %>:</strong>
+      <strong><%= Questionnaire.human_attribute_name 'questions' %>:</strong>
     </p>
     <ol>
       <% poll.answers.each do |answer| %>
-        <li><%= answer.question.question %>
+        <li>
+          <%= answer.question.question %>
           <% if poll.answered? %>
             <% if answer.question.answer_multi_choice? %>
-              <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
+              <strong>
+                <%= t "answer_options.#{answer.answer_option.option}" %>
+              </strong>
             <% elsif answer.question.answer_written? %>
-              <%= ": #{answer.answer}" %>
+              <%= answer.answer %>
             <% end %>
           <% end %>
           <br>
@@ -53,28 +58,30 @@
 
     <% if poll.comments.present? %>
       <p>
-        <strong><%= Poll.human_attribute_name :comments %>: </strong>
+        <strong><%= Poll.human_attribute_name :comments %>:</strong>
         <%= poll.comments %>
       </p>
     <% end %>
+    <hr />
   <% end %>
-  <hr>
-  <p style="margin: 1em 0;">
-    <%= "#{t('polls.total_answered')}: #{@report.answered}" %><br>
-    <%= "#{t('polls.total_unanswered')}: #{@report.unanswered}" %><br>
-    <br>
-    <strong><%= "#{t('polls.score')}: #{@report.calification}%" %></strong>
+  <p>
+    <strong><%= t 'polls.total_answered' %>:</strong>
+    <%= @report.answered %>
   </p>
-<% else %>
-  <p style="margin: 1em 0;">
-    <em><%= t('polls.without_data') %></em>
+  <p>
+    <strong><%= t 'polls.total_unanswered' %>:</strong>
+    <%= @report.unanswered %>
+  </p>
+  <p>
+    <strong><%= t 'polls.score' %>:</strong>
+    <%= number_to_percentage @report.calification, precision: 0 %>
   </p>
 <% end %>
 
 <hr />
 
 <div class="form-footer">
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>

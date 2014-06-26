@@ -15,14 +15,15 @@ es: &common
     new: 'Nuevo'
     show: 'Ver'
     upload: 'Adjuntar'
+    _yes: 'Si'
+    _no: 'No'
 
   answer_options:
-    options:
-      strongly_disagree: 'Muy en desacuerdo'
-      disagree: 'En desacuerdo'
-      neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
-      agree: 'De acuerdo'
-      strongly_agree: 'Muy de acuerdo'
+    strongly_disagree: 'Muy en desacuerdo'
+    disagree: 'En desacuerdo'
+    neither_agree_nor_disagree: 'Ni acuerdo ni desacuerdo'
+    agree: 'De acuerdo'
+    strongly_agree: 'Muy de acuerdo'
 
   best_practices:
     index:

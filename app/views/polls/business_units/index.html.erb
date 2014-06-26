@@ -3,17 +3,21 @@
   forms: { poll_date_range: true, business_unit: true, questionnaire: true }
 } %>
 
-<% if @report.business_unit_polls.present? %>
-  <h2><%= @report.questionnaire.name %></h2>
+<br />
+<% if @report.business_unit_polls.blank? %>
+  <div class="alert alert-warning"><%= t('polls.without_data') %></div>
+<% else %>
+  <div class="page-header">
+    <h2><%= @report.questionnaire.name %></h2>
+  </div>
   <% @report.business_unit_polls.each_key do |but| %>
-    <hr />
     <h3><%= but %>:</h3>
     <table class="table table-condensed table-striped">
       <thead>
         <tr>
           <th><%= Question.model_name.human %></th>
           <% Question::ANSWER_OPTIONS.each do |col_name| %>
-            <th><%= t "activerecord.attributes.answer_option.options.#{col_name}" %></th>
+            <th><%= t "answer_options.#{col_name}" %></th>
           <% end %>
         </tr>
       </thead>
@@ -28,16 +32,19 @@
         <% end %>
       </tbody>
     </table>
-    <p style="margin: 1em 0;">
-      <%= "#{t('polls.total_answered')}: #{@report.business_unit_polls[but][:answered]}" %><br />
-      <%= "#{t('polls.total_unanswered')}: #{@report.business_unit_polls[but][:unanswered]}" %><br />
-      <br /><strong><%= "#{t('polls.score')}: #{@report.business_unit_polls[but][:calification]}%" %></strong>
+    <p>
+      <strong><%= t 'polls.total_answered' %>:</strong>
+      <%= @report.business_unit_polls[but][:answered] %>
+    </p>
+    <p>
+      <strong><%= t 'polls.total_unanswered' %>:</strong>
+      <%= @report.business_unit_polls[but][:unanswered] %>
+    </p>
+    <p>
+      <strong><%= t 'polls.score' %>:</strong>
+      <%= number_to_percentage @report.business_unit_polls[but][:calification], precision: 0 %>
     </p>
   <% end %>
-<% else %>
-  <p style="margin: 1em 0;">
-    <em><%= t('polls.without_data') %></em>
-  </p>
 <% end %>
 
 <hr />

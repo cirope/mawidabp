@@ -3,13 +3,16 @@
   forms: { poll_date_range: true, questionnaire: true }
 } %>
 
-<% if @report.polls.present? %>
+<br />
+<% if @report.polls.blank? %>
+  <div class="alert alert-warning"><%= t('polls.without_data') %></div>
+<% else %>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
         <th><%= Question.model_name.human %></th>
         <% Question::ANSWER_OPTIONS.each do |col_name| %>
-          <th><%= t "activerecord.attributes.answer_option.options.#{col_name}" %></th>
+          <th><%= t "answer_options.#{col_name}" %></th>
         <% end %>
       </tr>
     </thead>
@@ -24,21 +27,24 @@
       <% end %>
     </tbody>
   </table>
-  <p style="margin: 1em 0;">
-    <%= "#{t('polls.total_answered')}: #{@report.answered}" %><br />
-    <%= "#{t('polls.total_unanswered')}: #{@report.unanswered}" %><br />
-    <br /><strong><%= "#{t('polls.score')}: #{@report.calification}%" %></strong>
+  <p>
+    <strong><%= t 'polls.total_answered' %>:</strong>
+    <%= @report.answered %>
   </p>
-<% else %>
-  <p style="margin: 1em 0;">
-    <em><%= t('polls.without_data') %></em>
+  <p>
+    <strong><%= t 'polls.total_unanswered' %>:</strong>
+    <%= @report.unanswered %>
+  </p>
+  <p>
+    <strong><%= t 'polls.score' %>:</strong>
+    <%= number_to_percentage @report.calification, precision: 0 %>
   </p>
 <% end %>
 
 <hr />
 
 <div class="form-footer">
-  <%= link_to t('label.back'), :action => :index %> |
+  <%= link_to t('label.back'), action: :index %> |
   <%= link_to t('label.download'), '#',
     data: { toggle: 'modal', target: "#customize_report" } %>
 </div>
