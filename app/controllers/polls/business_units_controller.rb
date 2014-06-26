@@ -20,13 +20,12 @@ class Polls::BusinessUnitsController < ApplicationController
 
       if parameters
         @report.selected_business_unit = BusinessUnitType.find_by id: parameters[:business_unit_type]
-        conclusion_reviews = set_conclusion_reviews(parameters)
+        @report.cr = ConclusionFinalReview.list_all_by_date(@from_date.months_ago(3), @to_date)
+        filter_cr parameters
 
-        if conclusion_reviews.present?
-          filtered_polls = set_polls.select { |poll| conclusion_reviews.include? poll.pollable }
-
+        if @report.cr.present?
           if @report.selected_business_unit
-            polls_business_unit filtered_polls
+            polls_business_unit
           else
             polls_business_unit_type
           end
@@ -34,22 +33,25 @@ class Polls::BusinessUnitsController < ApplicationController
       end
     end
 
-    def set_conclusion_reviews parameters
-      conclusion_reviews = ConclusionFinalReview.list_all_by_date(@from_date.months_ago(3), @to_date)
+    def filter_cr parameters
+      filter_by_selected_business_unit
+      filter_by_parameter_business_unit parameters
+    end
 
-      if @report.selected_business_unit
-        conclusion_reviews = conclusion_reviews.by_business_unit_type(@report.selected_business_unit.id)
-      end
-
+    def filter_by_parameter_business_unit parameters
       if parameters[:business_unit].present?
         business_units = parameters[:business_unit].split(SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
 
         if business_units.present?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
+          @report.cr = @report.cr.by_business_unit_names(*business_units)
         end
       end
+    end
 
-      conclusion_reviews
+    def filter_by_selected_business_unit
+      if @report.selected_business_unit
+        @report.cr = @report.cr.by_business_unit_type(@report.selected_business_unit.id)
+      end
     end
 
     def set_polls
@@ -57,33 +59,36 @@ class Polls::BusinessUnitsController < ApplicationController
         by_questionnaire(@report.questionnaire).pollables
     end
 
-    def polls_business_unit filtered_polls
-      but_polls = filtered_polls.select { |poll|
-        poll.pollable.review.plan_item.business_unit.business_unit_type == @report.selected_business_unit
-      }
+    def but_polls business_unit
+      set_polls.select do |poll|
+        poll.pollable.review.plan_item.business_unit.business_unit_type == business_unit
+      end
+    end
 
-      if but_polls.present?
+    def polls_business_unit
+      polls = but_polls @report.selected_business_unit
+
+      if polls.present?
         @report.business_unit_polls[@report.selected_business_unit.name] = {}
-        rates, answered, unanswered = @report.questionnaire.answer_rates(but_polls)
+        rates, answered, unanswered = @report.questionnaire.answer_rates(polls)
         @report.business_unit_polls[@report.selected_business_unit.name][:rates] = rates
         @report.business_unit_polls[@report.selected_business_unit.name][:answered] = answered
         @report.business_unit_polls[@report.selected_business_unit.name][:unanswered] = unanswered
-        @report.business_unit_polls[@report.selected_business_unit.name][:calification] = polls_calification(but_polls)
+        @report.business_unit_polls[@report.selected_business_unit.name][:calification] = polls_calification(polls)
       end
     end
 
     def polls_business_unit_type
       BusinessUnitType.list.each do |but|
-        but_polls = set_polls.select { |poll|
-          poll.pollable.review.plan_item.business_unit.business_unit_type == but
-        }
-        if but_polls.present?
+        polls = but_polls(but)
+
+        if polls.present?
           @report.business_unit_polls[but.name] = {}
-          rates, answered, unanswered = @report.questionnaire.answer_rates(but_polls)
+          rates, answered, unanswered = @report.questionnaire.answer_rates(polls)
           @report.business_unit_polls[but.name][:rates] = rates
           @report.business_unit_polls[but.name][:answered] = answered
           @report.business_unit_polls[but.name][:unanswered] = unanswered
-          @report.business_unit_polls[but.name][:calification] = polls_calification(but_polls)
+          @report.business_unit_polls[but.name][:calification] = polls_calification(polls)
         end
       end
     end
