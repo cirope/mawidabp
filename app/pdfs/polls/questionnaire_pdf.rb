@@ -35,8 +35,6 @@ class Polls::QuestionnairePdf < Prawn::Document
 
     def pdf_add_body
       pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
-
         pdf.table(column_data.insert(0, column_headers), table_options) do
           row(0).style(
             background_color: 'cccccc',
@@ -44,6 +42,10 @@ class Polls::QuestionnairePdf < Prawn::Document
           )
         end
       end
+    end
+
+    def table_options
+      pdf.default_table_options(column_widths)
     end
 
     def column_data

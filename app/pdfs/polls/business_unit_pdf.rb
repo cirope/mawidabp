@@ -41,13 +41,9 @@ class Polls::BusinessUnitPdf < Prawn::Document
     end
 
     def column_data but
-      column_data = []
-
-      @report.business_unit_polls[but][:rates].each do |question, answers|
-        column_data << answer_options(question, answers)
+      @report.business_unit_polls[but][:rates].each_with_object([]) do |(question, answers), data|
+        data << answer_options(question, answers)
       end
-
-      column_data
     end
 
     def add_columns_data but

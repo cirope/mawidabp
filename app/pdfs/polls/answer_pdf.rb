@@ -71,20 +71,20 @@ class Polls::AnswerPDF < Prawn::Document
       pdf.text "#{Questionnaire.human_attribute_name :questions}:"
 
       poll.answers.each do |answer|
-        ans = ''
-        if poll.answered?
-          if answer.question.answer_multi_choice?
-            ans = "#{I18n.t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
-          elsif answer.question.answer_written?
-            ans = answer.answer
-          end
-        end
-
+        ans = set_answer(answer) if poll.answered?
         pdf.text "#{answer.question.question} #{ans}"
 
         if answer.comments.present?
           pdf.text "#{Answer.human_attribute_name :comments}: #{answer.comments}"
         end
+      end
+    end
+
+    def set_answer answer
+      if answer.question.answer_multi_choice?
+        "#{I18n.t("activerecord.attributes.answer_option.options.#{answer.answer_option.option}")}"
+      elsif answer.question.answer_written?
+        answer.answer
       end
     end
 
