@@ -68,7 +68,7 @@ class FindingsController < ApplicationController
       format.html {
         @findings = @findings.page(params[:page])
 
-        if @findings.size == 1 && !@query.blank? && !params[:page]
+        if @findings.count == 1 && !@query.blank? && !params[:page]
           redirect_to finding_url(params[:completed], @findings.first)
         end
       } # index.html.erb

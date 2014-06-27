@@ -19,7 +19,7 @@ class UsersControllerTest < ActionController::TestCase
     get :index, :search => {:query => 'manager', :columns => ['user', 'name']}
     assert_response :success
     assert_not_nil assigns(:users)
-    assert_equal 5, assigns(:users).size
+    assert_equal 5, assigns(:users).count
     assert_template 'users/index'
   end
 
@@ -29,7 +29,7 @@ class UsersControllerTest < ActionController::TestCase
     get :index, :search => {:query => 'admin', :columns => ['user', 'name']}
     assert_redirected_to user_url(users(:administrator_user))
     assert_not_nil assigns(:users)
-    assert_equal 1, assigns(:users).size
+    assert_equal 1, assigns(:users).count
   end
 
   test 'show user' do

@@ -27,7 +27,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @conclusion_final_reviews.size == 1 && !@query.blank? &&
+        if @conclusion_final_reviews.count == 1 && !@query.blank? &&
             !params[:page]
           redirect_to(
             conclusion_final_review_url(@conclusion_final_reviews.first)

@@ -48,7 +48,7 @@ class OportunitiesControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:oportunities)
-    assert_equal 2, assigns(:oportunities).size
+    assert_equal 2, assigns(:oportunities).count
     assert(assigns(:oportunities).all? do |o|
       o.review.identification.match(/1 2 4/i)
     end)
@@ -67,7 +67,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_redirected_to oportunity_url(
       findings(:bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity))
     assert_not_nil assigns(:oportunities)
-    assert_equal 1, assigns(:oportunities).size
+    assert_equal 1, assigns(:oportunities).count
   end
 
   test 'show oportunity' do

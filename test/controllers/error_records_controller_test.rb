@@ -16,7 +16,7 @@ class ErrorRecordsControllerTest < ActionController::TestCase
     get :index, search: { query: 'usefull', columns: ['user', 'data'] }
 
     assert_response :success
-    assert_equal 2, assigns(:error_records).size
+    assert_equal 2, assigns(:error_records).count
     assert assigns(:error_records).all? { |er| er.data.match(/usefull/i) }
     assert_template 'error_records/index'
   end

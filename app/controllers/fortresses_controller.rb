@@ -54,7 +54,7 @@ class FortressesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @fortresses.size == 1 && !@query.blank? && !params[:page]
+        if @fortresses.count == 1 && !@query.blank? && !params[:page]
           redirect_to fortress_url(@fortresses.first)
         end
       } # index.html.erb

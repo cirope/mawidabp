@@ -66,7 +66,7 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:filters)
-    assert_equal 2, assigns(:filters).size
+    assert_equal 2, assigns(:filters).count
     assert_template 'follow_up_committee/synthesis_report'
   end
 

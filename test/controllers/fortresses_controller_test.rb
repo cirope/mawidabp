@@ -47,7 +47,7 @@ class FortressesControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:fortresses)
-    assert_equal 2, assigns(:fortresses).size
+    assert_equal 2, assigns(:fortresses).count
     assert(assigns(:fortresses).all? do |o|
       o.review.identification.match(/1 2 4/i)
     end)
@@ -66,7 +66,7 @@ class FortressesControllerTest < ActionController::TestCase
     assert_redirected_to fortress_url(
       findings(:bcra_A4609_security_management_responsible_dependency_fortress))
     assert_not_nil assigns(:fortresses)
-    assert_equal 1, assigns(:fortresses).size
+    assert_equal 1, assigns(:fortresses).count
   end
 
   test 'show fortress' do

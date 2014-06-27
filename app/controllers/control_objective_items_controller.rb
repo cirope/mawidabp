@@ -25,7 +25,7 @@ class ControlObjectiveItemsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @control_objectives.size == 1 && !@query.blank? && !params[:page]
+        if @control_objectives.count == 1 && !@query.blank? && !params[:page]
           redirect_to control_objective_item_url(@control_objectives.first)
         end
       } # index.html.erb

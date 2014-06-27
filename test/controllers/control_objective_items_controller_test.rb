@@ -45,7 +45,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:control_objectives)
-    assert_equal 5, assigns(:control_objectives).size
+    assert_equal 5, assigns(:control_objectives).count
     assert(assigns(:control_objectives).all? do |coi|
       coi.control_objective_text.match(/seguridad/i)
     end)
@@ -62,7 +62,7 @@ class ControlObjectiveItemsControllerTest < ActionController::TestCase
     assert_redirected_to control_objective_item_url(
       control_objective_items(:bcra_A4609_security_management_responsible_dependency_item))
     assert_not_nil assigns(:control_objectives)
-    assert_equal 1, assigns(:control_objectives).size
+    assert_equal 1, assigns(:control_objectives).count
   end
 
   test 'show control_objective_item' do

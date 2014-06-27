@@ -36,7 +36,7 @@ class ReviewsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_not_equal 0, assigns(:reviews).size
+    assert_not_equal 0, assigns(:reviews).count
     assert_template 'reviews/index'
   end
 
@@ -48,7 +48,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:reviews)
-    assert_equal 5, assigns(:reviews).size
+    assert_equal 5, assigns(:reviews).count
     assert_template 'reviews/index'
   end
 
@@ -60,7 +60,7 @@ class ReviewsControllerTest < ActionController::TestCase
     }
     assert_redirected_to review_url(reviews(:past_review))
     assert_not_nil assigns(:reviews)
-    assert_equal 1, assigns(:reviews).size
+    assert_equal 1, assigns(:reviews).count
   end
 
   test 'show review' do
@@ -271,7 +271,7 @@ class ReviewsControllerTest < ActionController::TestCase
     get :suggested_findings, id: review.plan_item_id
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert assigns(:findings).size > 0
+    assert assigns(:findings).count > 0
     assert assigns(:findings).all?(&:pending?)
     assert(
       assigns(:findings).all? do |f|

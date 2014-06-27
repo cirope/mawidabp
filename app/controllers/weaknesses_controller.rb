@@ -58,7 +58,7 @@ class WeaknessesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @weaknesses.size == 1 && !@query.blank? && !params[:page]
+        if @weaknesses.count == 1 && !@query.blank? && !params[:page]
           redirect_to weakness_url(@weaknesses.first)
         end
       } # index.html.erb

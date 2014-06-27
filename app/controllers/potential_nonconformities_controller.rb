@@ -57,7 +57,7 @@ class PotentialNonconformitiesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @potential_nonconformities.size == 1 && !@query.blank? && !params[:page]
+        if @potential_nonconformities.count == 1 && !@query.blank? && !params[:page]
           redirect_to potential_nonconformity_url(@potential_nonconformities.first)
         end
       } # index.html.erb

@@ -22,7 +22,7 @@ class LoginRecordsControllerTest < ActionController::TestCase
     get :index, search: { query: 'login data', columns: ['user', 'data'] }
 
     assert_response :success
-    assert_equal 2, assigns(:login_records).size
+    assert_equal 2, assigns(:login_records).count
     assert assigns(:login_records).all? { |lr| lr.data.match(/login data/i) }
     assert_template 'login_records/index'
   end

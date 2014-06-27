@@ -57,7 +57,7 @@ class NonconformitiesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @nonconformities.size == 1 && !@query.blank? && !params[:page]
+        if @nonconformities.count == 1 && !@query.blank? && !params[:page]
           redirect_to nonconformity_url(@nonconformities.first)
         end
       } # index.html.erb

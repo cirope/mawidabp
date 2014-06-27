@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html {
-        if @users.size == 1 && !@query.blank? && !params[:page]
+        if @users.count == 1 && !@query.blank? && !params[:page]
           redirect_to user_url(@users.first)
         end
       }

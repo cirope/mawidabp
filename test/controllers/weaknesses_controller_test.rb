@@ -49,7 +49,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_equal 2, assigns(:weaknesses).size
+    assert_equal 2, assigns(:weaknesses).count
     assert(assigns(:weaknesses).all? do |w|
       w.review.identification.match(/1 2 4/i)
     end)
@@ -68,7 +68,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     get :index, ids: ids
     assert_response :success
     assert_not_nil assigns(:weaknesses)
-    assert_equal 2, assigns(:weaknesses).size
+    assert_equal 2, assigns(:weaknesses).count
     assert assigns(:weaknesses).all? { |w| ids.include?(w.id) }
     assert_template 'weaknesses/index'
   end
@@ -82,7 +82,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:weaknesses)
-    assert_equal 1, assigns(:weaknesses).size
+    assert_equal 1, assigns(:weaknesses).count
   end
 
   test 'show weakness' do

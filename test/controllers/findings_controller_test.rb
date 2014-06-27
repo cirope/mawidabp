@@ -71,7 +71,7 @@ class FindingsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.identification.match(/1 2 4/i)}
     assert_equal assigns(:findings).map {|f| f.review.identification}.sort,
       assigns(:findings).map {|f| f.review.identification}
@@ -87,7 +87,7 @@ class FindingsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 10, assigns(:findings).size
+    assert_equal 10, assigns(:findings).count
     assert assigns(:findings).all? {|f| f.review.conclusion_final_review.issue_date > 4.days.ago.to_date}
     assert_template 'findings/index'
   end
@@ -98,7 +98,7 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete', :user_id => user.id
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
     assert_template 'findings/index'
   end
@@ -109,7 +109,7 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete', :user_id => user.id, :as_responsible => true
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size
+    assert_equal 1, assigns(:findings).count
     assert assigns(:findings).all? { |f| f.users.include?(user) }
     assert_template 'findings/index'
   end
@@ -124,7 +124,7 @@ class FindingsControllerTest < ActionController::TestCase
     get :index, :completed => 'incomplete', :ids => ids
     assert_response :success
     assert_not_nil assigns(:findings)
-    assert_equal 2, assigns(:findings).size
+    assert_equal 2, assigns(:findings).count
     assert assigns(:findings).all? { |f| ids.include?(f.id) }
     assert_template 'findings/index'
   end
@@ -139,7 +139,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_redirected_to finding_url('incomplete',
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))
     assert_not_nil assigns(:findings)
-    assert_equal 1, assigns(:findings).size
+    assert_equal 1, assigns(:findings).count
   end
 
   test 'show finding' do

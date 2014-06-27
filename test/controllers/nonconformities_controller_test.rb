@@ -48,7 +48,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_equal 2, assigns(:nonconformities).size
+    assert_equal 2, assigns(:nonconformities).count
     assert(assigns(:nonconformities).all? do |w|
       w.review.identification.match(/1 2 4/i)
     end)
@@ -67,7 +67,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     get :index, :ids => ids
     assert_response :success
     assert_not_nil assigns(:nonconformities)
-    assert_equal 2, assigns(:nonconformities).size
+    assert_equal 2, assigns(:nonconformities).count
     assert assigns(:nonconformities).all? { |w| ids.include?(w.id) }
     assert_template 'nonconformities/index'
   end
@@ -81,7 +81,7 @@ class NonconformitiesControllerTest < ActionController::TestCase
     assert_redirected_to nonconformity_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity))
     assert_not_nil assigns(:nonconformities)
-    assert_equal 1, assigns(:nonconformities).size
+    assert_equal 1, assigns(:nonconformities).count
   end
 
   test 'show nonconformity' do

@@ -53,7 +53,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     }
     assert_response :success
     assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 2, assigns(:conclusion_final_reviews).size
+    assert_equal 2, assigns(:conclusion_final_reviews).count
     assert_template 'conclusion_final_reviews/index'
   end
 
@@ -66,7 +66,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 2, assigns(:conclusion_final_reviews).size
+    assert_equal 2, assigns(:conclusion_final_reviews).count
     assert assigns(:conclusion_final_reviews).all? {|cfr| cfr.issue_date > 3.months.ago.to_date}
     assert_template 'conclusion_final_reviews/index'
   end
@@ -79,7 +79,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
     }
     assert_redirected_to conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 1, assigns(:conclusion_final_reviews).size
+    assert_equal 1, assigns(:conclusion_final_reviews).count
   end
 
   test 'edit conclusion_final_reviews when search by date match only one result' do
@@ -91,7 +91,7 @@ class ConclusionFinalReviewsControllerTest < ActionController::TestCase
 
     assert_redirected_to conclusion_final_review_url(conclusion_reviews(:conclusion_current_final_review))
     assert_not_nil assigns(:conclusion_final_reviews)
-    assert_equal 1, assigns(:conclusion_final_reviews).size
+    assert_equal 1, assigns(:conclusion_final_reviews).count
   end
 
   test 'show conclusion_final_review' do
