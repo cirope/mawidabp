@@ -68,15 +68,6 @@ class PollsController < ApplicationController
     @title = t('poll.import_csv_customers_title')
   end
 
-  def auto_complete_for_user
-    @users = current_organization.users.where(hidden: false).
-      search(params[:q]).limit(10)
-
-    respond_to do |format|
-      format.json { render json: @users }
-    end
-  end
-
   def send_csv_polls
     ext = File.extname(params[:dump_emails][:file].original_filename) rescue ''
 
@@ -122,14 +113,9 @@ class PollsController < ApplicationController
       count
     end
 
-
     def load_privileges
       if @action_privileges
-        @action_privileges.update(
-          reports: :read,
-          auto_complete_for_user: :read,
-          import_csv_customers: :read
-        )
+        @action_privileges.update reports: :read, import_csv_customers: :read
       end
     end
 end

@@ -21,7 +21,7 @@
             title: t('label.search'),
             data: {
               'autocomplete-params' => ({ user_id: @poll.id } unless @poll.new_record?),
-              'autocomplete-url' => auto_complete_for_user_polls_path,
+              'autocomplete-url' => polls_users_path,
               'autocomplete-id-target' => "#hidden_user_id_#{@poll.id}"
             }
           } %>

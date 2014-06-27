@@ -14,11 +14,11 @@ Rails.application.routes.draw do
     resources :questionnaires, only: [:index]
     resources :answers, only: [:index]
     resources :business_units, only: [:index]
+    resources :users, only: [:index]
   end
 
   resources :polls do
     collection do
-      get :auto_complete_for_user
       get :import_csv_customers
       post :send_csv_polls
       get :reports
