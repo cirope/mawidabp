@@ -398,18 +398,14 @@ Rails.application.routes.draw do
       get :roles
       get :initial_roles
     end
-
-    member do
-      get :edit_personal_data
-      patch :update_personal_data
-    end
   end
 
   namespace :users do
     resources :passwords, except: [:index, :show, :destroy]
-    resources :status, only: [:show]
+    resources :profiles, only: [:edit, :update]
     resources :reassignments, only: [:edit, :update]
     resources :releases, only: [:edit, :update]
+    resources :status, only: [:show]
   end
 
   root 'sessions#new'

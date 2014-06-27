@@ -7,6 +7,7 @@ es: &common
       update:
         notice: '%{resource_name} actualizado'
         alert:  ''
+        stale: '%{resource_name} no pudo ser actualizado, intente nuevamente'
       destroy:
         notice: '%{resource_name} eliminado'
         alert:  '%{resource_name} no pudo ser eliminado'
@@ -30,10 +31,10 @@ es: &common
 
     polls:
       create:
-        notice: 'La encuesta ha sido agregada correctamente.'
+        notice: 'La encuesta ha sido agregada correctamente'
       update:
         notice: 'La encuesta ha sido guardada correctamente. ¡Muchas gracias!'
-        stale: 'La encuesta no fue guardada, intente nuevamente.'
+        stale: 'La encuesta no fue guardada, intente nuevamente'
 
     questionnaires:
       create:
@@ -58,6 +59,10 @@ es: &common
         stale: 'La configuración no fue actualizada, intente nuevamente'
 
     users:
+      profiles:
+        update:
+          notice: 'Actualización de perfil correcta'
+          alert: 'No se pudo actualizar el perfil'
       reassignments:
         update:
           notice: 'Reasignación de responsabilidades finalizada correctamente'

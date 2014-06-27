@@ -1,3 +1,4 @@
+require 'prawn/table'
 require 'prawn/measurement_extensions'
 
 module Prawn

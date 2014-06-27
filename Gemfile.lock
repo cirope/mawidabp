@@ -140,9 +140,9 @@ GEM
     pg (0.17.1)
     polyglot (0.3.5)
     posix-spawn (0.3.8)
-    prawn (1.0.0)
-      pdf-core (~> 0.2.2)
-      ttfunk (~> 1.1.1)
+    prawn (1.1.0)
+      pdf-core (~> 0.2.5)
+      ttfunk (~> 1.2.0)
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
@@ -211,7 +211,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    ttfunk (1.1.1)
+    ttfunk (1.2.0)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
     uglifier (2.5.1)
@@ -255,7 +255,7 @@ DEPENDENCIES
   jquery-ui-rails
   mini_magick
   newrelic_rpm
-  paper_trail
+  paper_trail (= 3.0.2)
   pg
   prawn
   rails (~> 4.1.2)

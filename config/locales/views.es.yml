@@ -206,7 +206,9 @@ es: &common
       create:
         success: 'Se enviaron instrucciones a tu correo para restablecer la contraseña'
         not_found: 'El correo que ingresaste no está registrado, verifica que no esté mal escrito'
-
+    profiles:
+      edit:
+        title: 'Modificar información personal'
     reassignments:
       edit:
         title: 'Reasignación de responsabilidades'

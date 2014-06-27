@@ -342,34 +342,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal I18n.t('message.must_be_authenticated'), flash.alert
   end
 
-  test 'edit personal data' do
-    login
-    get :edit_personal_data, {:id => users(:administrator_user).user}
-    assert_response :success
-    assert_not_nil assigns(:auth_user)
-    assert_template 'users/edit_personal_data'
-  end
-
-  test 'update personal data' do
-    assert_no_difference 'User.count' do
-      login
-      patch :update_personal_data, {
-        :id => users(:administrator_user).to_param,
-        :user => {
-          :name => 'Updated Name',
-          :last_name => 'Updated Last Name',
-          :language => 'es',
-          :email => 'updated@email.com'
-        }
-      }
-    end
-
-    assert_response :success
-    assert_not_nil assigns(:auth_user)
-    assert_equal 'Updated Name', assigns(:auth_user).name
-    assert_template 'users/edit_personal_data'
-  end
-
   test 'export to pdf' do
     login
 

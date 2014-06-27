@@ -4,10 +4,7 @@ class UsersController < ApplicationController
 
   before_action :auth, except: [:new_initial, :create_initial, :initial_roles]
   before_action :load_privileges
-  before_action :check_privileges, except: [
-    :edit_personal_data, :update_personal_data, :new_initial, :create_initial,
-    :initial_roles
-  ]
+  before_action :check_privileges, except: [:new_initial, :create_initial, :initial_roles]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -209,42 +206,6 @@ class UsersController < ApplicationController
       restart_session
       redirect_to_login t('message.must_be_authenticated'), :alert
     end
-  end
-
-  # Cambia los datos del usuario actual
-  #
-  # * GET /users/edit_personal_data/1
-  # * GET /users/edit_personal_data/1.xml
-  def edit_personal_data
-    @title = t 'user.change_personal_data'
-  end
-
-  # Cambia los datos del usuario actual
-  #
-  # * PATCH /users/update_personal_data/1
-  # * PATCH /users/update_personal_data/1.xml
-  def update_personal_data
-    @title = t 'user.change_personal_data'
-
-    attributes = {
-      name: params[:user][:name],
-      last_name: params[:user][:last_name],
-      language: params[:user][:language],
-      email: params[:user][:email],
-      function: params[:user][:function]
-    }
-
-    @auth_user.is_an_important_change = false
-
-    if @auth_user.update(attributes)
-      flash.notice = t 'user.correctly_updated'
-    end
-
-    render action: :edit_personal_data
-
-  rescue ActiveRecord::StaleObjectError
-    flash.alert = t 'user.password_stale_object_error'
-    redirect_to edit_personal_data_user_url(@auth_user)
   end
 
   # Lista las usuarios
