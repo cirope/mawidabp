@@ -3,7 +3,7 @@ class Users::ReleasesController < ApplicationController
 
   respond_to :html
 
-  before_action :auth, :set_user, :set_title
+  before_action :auth, :check_privileges, :set_user, :set_title
 
   # * GET /users/releases/1/edit
   def edit

@@ -1,7 +1,7 @@
 class Users::ProfilesController < ApplicationController
   respond_to :html
 
-  before_action :auth, :check_privileges, :set_title
+  before_action :auth, :set_title
 
   # * GET /users/profiles/1/edit
   def edit
