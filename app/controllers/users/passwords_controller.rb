@@ -38,7 +38,7 @@ class Users::PasswordsController < ApplicationController
       render action: 'edit'
     end
   rescue ActiveRecord::StaleObjectError
-    redirect_to edit_users_password_url(@auth_user), alert: t('user.password_stale_object_error')
+    redirect_to edit_users_password_url(@auth_user), alert: t('.stale')
   end
 
   private
