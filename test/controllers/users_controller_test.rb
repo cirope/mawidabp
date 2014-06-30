@@ -255,22 +255,18 @@ class UsersControllerTest < ActionController::TestCase
   test 'index as pdf' do
     login
 
-    pdf_path = Prawn::Document.relative_path I18n.t('user.pdf.pdf_name'), User.table_name
-
     get :index, format: :pdf
-    assert_redirected_to pdf_path
+    assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'export with search' do
     login
 
-    pdf_path = Prawn::Document.relative_path I18n.t('user.pdf.pdf_name'), User.table_name
-
     get :index, format: :pdf, search: {
       query: 'manager', columns: ['user', 'name']
     }
 
-    assert_redirected_to pdf_path
+    assert_redirected_to UserPdf.new.relative_path
   end
 
   test 'auto complete for user' do
