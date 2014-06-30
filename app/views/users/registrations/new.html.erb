@@ -1,0 +1,51 @@
+<%= simple_form_for @user, url: users_registrations_path(hash: params[:hash]) do |f| %>
+  <%= render 'shared/error_explanation', f: f %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :user, input_html: { maxlength: 30, autofocus: true } %>
+        <%= f.input :name, input_html: { maxlength: 100 } %>
+        <%= f.input :last_name, input_html: { maxlength: 100 } %>
+        <%= f.input :email, input_html: { maxlength: 100 } %>
+        <%= f.input :function, input_html: { maxlength: 255 } %>
+      </div>
+      <div class="col-md-6">
+        <%= f.input :notes, input_html: { rows: 5 } %>
+        <%= user_resource_field(f) %>
+        <%= user_language_field(f) %>
+        <%= f.input :send_notification_email, as: :boolean,
+          checked_value: '1', unchecked_value: '', label: false, inline_label: true %>
+        <%= f.input :lock_version, as: :hidden %>
+      </div>
+    </div>
+  </div>
+
+  <br />
+  <div class="row">
+    <div class="col-md-6">
+      <h5>
+        <strong><%= OrganizationRole.human_attribute_name 'organization_id' %></strong>
+      </h5>
+    </div>
+    <div class="col-md-6">
+      <h5>
+        <strong><%= OrganizationRole.human_attribute_name 'role_id' %></strong>
+      </h5>
+    </div>
+  </div>
+
+  <div id="organization_roles">
+    <%= f.simple_fields_for :organization_roles, user_organization_roles do |or_f| %>
+      <%= render 'users/organization_role', f: or_f %>
+    <% end %>
+
+    <%= link_to_add_fields t('user.add_organization_role'), f, :organization_roles, 'users/organization_role' %>
+  </div>
+
+  <hr />
+
+  <div class="form-actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

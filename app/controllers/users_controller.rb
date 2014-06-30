@@ -2,9 +2,9 @@ class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
 
-  before_action :auth, except: [:new_initial, :create_initial, :initial_roles]
+  before_action :auth, except: [:initial_roles]
   before_action :load_privileges
-  before_action :check_privileges, except: [:new_initial, :create_initial, :initial_roles]
+  before_action :check_privileges, except: [:initial_roles]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -149,44 +149,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json { render json: roles.map { |r| [r.name, r.id] } }
-    end
-  end
-
-  # Crea un usuario inicial, sólo hace falta un hash válido para autenticarse
-  #
-  # * GET /users/new_initial/hash=xxxx
-  def new_initial
-    group = Group.find_by(admin_hash: params[:hash])
-
-    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
-      @user = User.new
-
-      render layout: 'clean'
-    else
-      restart_session
-      redirect_to_login t('message.must_be_authenticated'), :alert
-    end
-  end
-
-  # Crea un usuario inicial, sólo hace falta un hash válido para autenticarse
-  #
-  # * POST /users/create_initial
-  def create_initial
-    group = Group.find_by(admin_hash: params[:hash])
-
-    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
-      @user = User.new(user_params)
-
-      if @user.save && group.update(admin_hash: nil)
-        @user.send_welcome_email
-        restart_session
-        redirect_to_login t('user.correctly_created')
-      else
-        render action: :new_initial, layout: 'clean'
-      end
-    else
-      restart_session
-      redirect_to_login t('message.must_be_authenticated'), :alert
     end
   end
 

@@ -26,4 +26,9 @@ module UsersHelper
       Organization.with_group(group), :name, :id), prompt: true,
       label: false, input_html: { id: "#{id}_organization_id" }
   end
+
+  def user_organization_roles
+    @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
+      @user.organization_roles.for_group(current_organization.group_id)
+  end
 end

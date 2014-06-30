@@ -404,6 +404,7 @@ Rails.application.routes.draw do
     resources :passwords, except: [:index, :show, :destroy]
     resources :profiles, only: [:edit, :update]
     resources :reassignments, only: [:edit, :update]
+    resources :registrations, only: [:new, :create]
     resources :releases, only: [:edit, :update]
     resources :status, only: [:show]
   end

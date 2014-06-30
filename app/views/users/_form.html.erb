@@ -11,55 +11,50 @@
         <%= f.input :function, input_html: { maxlength: 255 } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :notes, input_html: { rows: 5 } %>
+        <%= f.input :notes, input_html: { rows: 3 } %>
         <%= user_resource_field(f) %>
         <%= user_language_field(f) %>
-        <%= f.input :logged_in, label: false, inline_label: true %>
         <%= f.input :enable, label: false, inline_label: true %>
         <%= f.input :hidden, label: false, inline_label: true %>
         <%= f.input :send_notification_email, as: :boolean,
-          checked_value: '1', unchecked_value: '', label: false,
-          inline_label: true %>
+          checked_value: '1', unchecked_value: '', label: false, inline_label: true %>
         <%= f.input :lock_version, as: :hidden %>
       </div>
     </div>
   </div>
 
-  <% if @auth_user %>
-    <h5><strong><%= User.human_attribute_name(:manager_id) %></strong></h5>
+  <h5><strong><%= User.human_attribute_name 'manager_id' %></strong></h5>
 
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.input :manager_id, as: :string, label: false,
-          input_html: {
-            id: 'auto_manager_id', name: 'auto_manager_id',
-            value: (@user.parent.try(:full_name_with_function) || ''),
-            class: 'autocomplete_field', title: t('label.search'),
-            data: {
-              autocomplete_params: ({ user_id: @user.id } unless @user.new_record?),
-              autocomplete_url: auto_complete_for_user_users_path,
-              autocomplete_id_target: '#user_manager_id'
-            }
-          } %>
-        <%= f.input :manager_id, as: :hidden %>
-      </div>
-
-      <div class="col-md-6">
-        <div class="show_hide">
-          <%= link_to t('user.unlink_manager'), '#', onclick:
-            "$('#auto_manager_id').val(''); $('#user_manager_id').val(''); return false;" %>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.input :manager, as: :string, label: false,
+        input_html: {
+          value: (@user.parent.try(:full_name_with_function) || ''),
+          title: t('label.search'),
+          data: {
+            autocomplete_url: auto_complete_for_user_users_path,
+            autocomplete_id_target: '#user_manager_id',
+            autocomplete_params: ({ user_id: @user.id } unless @user.new_record?)
+          }
+        } %>
+      <%= f.input :manager_id, as: :hidden %>
     </div>
 
-    <h5><strong><%= t('user.children') %></strong></h5>
-
-    <div id="children">
-      <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
-
-      <%= link_to_add_fields(t('user.add_child'), f, :children, 'new_child') %>
+    <div class="col-md-6">
+      <div class="show_hide">
+        <%= link_to t('user.unlink_manager'), '#', onclick:
+          "$('#user_manager').val(''); $('#user_manager_id').val(''); return false;" %>
+      </div>
     </div>
-  <% end %>
+  </div>
+
+  <h5><strong><%= t 'user.children' %></strong></h5>
+
+  <div id="children">
+    <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
+
+    <%= link_to_add_fields t('user.add_child'), f, :children, 'new_child' %>
+  </div>
 
   <br />
   <h5>
@@ -71,40 +66,35 @@
       <%= render 'related_user_relation', f: rur_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('user.add_related_user_relations'), f, :related_user_relations) %>
+    <%= link_to_add_fields t('user.add_related_user_relations'), f, :related_user_relations %>
   </div>
 
   <br />
   <div class="row">
     <div class="col-md-6">
       <h5>
-        <strong><%= OrganizationRole.human_attribute_name :organization_id %></strong>
+        <strong><%= OrganizationRole.human_attribute_name 'organization_id' %></strong>
       </h5>
     </div>
     <div class="col-md-6">
       <h5>
-        <strong><%= OrganizationRole.human_attribute_name :role_id %></strong>
+        <strong><%= OrganizationRole.human_attribute_name 'role_id' %></strong>
       </h5>
     </div>
   </div>
 
   <div id="organization_roles">
-    <% organization_roles =
-      @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
-      @user.organization_roles.for_group(current_organization.group_id)
-    %>
-    <%= f.simple_fields_for :organization_roles, organization_roles do |or_f| %>
+    <%= f.simple_fields_for :organization_roles, user_organization_roles do |or_f| %>
       <%= render 'organization_role', f: or_f %>
     <% end %>
 
-    <%= link_to_add_fields(t('user.add_organization_role'), f, :organization_roles) %>
+    <%= link_to_add_fields t('user.add_organization_role'), f, :organization_roles %>
   </div>
 
   <hr />
 
-  <div class="form-actions form-footer">
+  <div class="form-actions">
     <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.submit class: 'btn btn-primary' %>
-    <%= yield :user_actions %>
   </div>
 <% end %>
