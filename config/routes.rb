@@ -248,6 +248,10 @@ Rails.application.routes.draw do
     get :check_for_approval, on: :collection
   end
 
+  namespace :conclusion_final_reviews do
+    resources :users, only: [:index]
+  end
+
   resources :conclusion_final_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
@@ -258,10 +262,7 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    collection do
-      get :auto_complete_for_user
-      get :export_list_to_pdf
-    end
+    get :export_list_to_pdf, on: :collection
   end
 
   resources :reviews do

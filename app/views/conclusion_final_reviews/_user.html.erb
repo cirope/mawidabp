@@ -9,11 +9,11 @@
         <div class="col-md-6">
           <%= text_field_tag "user[#{id}][data]", '',
             id: "user_#{id}_data",
-            class: 'autocomplete_field form-control',
+            class: 'form-control',
             title: t('label.search'),
             autocomplete: :off,
             autofocus: true, data: {
-              autocomplete_url: auto_complete_for_user_conclusion_final_reviews_path,
+              autocomplete_url: conclusion_final_reviews_users_path,
               autocomplete_id_target: "#user_#{id}_id"
             } %>
         </div>

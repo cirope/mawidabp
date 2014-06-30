@@ -1,6 +1,4 @@
 class ConclusionFinalReviewsController < ApplicationController
-  include AutoCompleteFor::User
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_final_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet, :download_work_papers,
@@ -392,7 +390,6 @@ class ConclusionFinalReviewsController < ApplicationController
           bundle: :read,
           create_bundle: :read,
           export_list_to_pdf: :read,
-          auto_complete_for_user: :read,
           compose_email: :modify,
           send_by_email: :modify
         })
