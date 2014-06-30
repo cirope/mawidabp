@@ -7,13 +7,8 @@ class ErrorRecordPdf < Prawn::Document
     @from, @to, @error_records = from, to, error_records
 
     @pdf = Prawn::Document.create_generic_pdf :landscape
-  end
 
-  def generate
-    add_header
-    add_description
-    add_body
-    save
+    generate
   end
 
   def relative_path
@@ -22,15 +17,22 @@ class ErrorRecordPdf < Prawn::Document
 
   private
 
+    def generate
+      add_header
+      add_description
+      add_body
+      save
+    end
+
     def add_header
-      @pdf.add_generic_report_header @current_organization
-      @pdf.add_title I18n.t('error_records.index.title')
+      pdf.add_generic_report_header @current_organization
+      pdf.add_title I18n.t('error_records.index.title')
     end
 
     def add_description
-      @pdf.move_down PDF_FONT_SIZE
+      pdf.move_down PDF_FONT_SIZE
 
-      @pdf.add_description_item(
+      pdf.add_description_item(
         I18n.t('error_records.period.title'),
         I18n.t('error_records.period.range',
           from_date: I18n.l(@from, format: :long),
@@ -42,11 +44,11 @@ class ErrorRecordPdf < Prawn::Document
       column_data = make_column_data
 
       if column_data.present?
-        @pdf.move_down PDF_FONT_SIZE
-        @pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
+        pdf.move_down PDF_FONT_SIZE
+        pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
           table_options = @pdf.default_table_options(column_widths)
 
-          @pdf.table(column_data.insert(0, column_headers), table_options) do
+          pdf.table(column_data.insert(0, column_headers), table_options) do
             row(0).style(
               background_color: 'cccccc',
               padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
@@ -75,14 +77,18 @@ class ErrorRecordPdf < Prawn::Document
     end
 
     def column_widths
-      column_order.values.map { |col_with| @pdf.percent_width(col_with) }
+      column_order.values.map { |col_with| pdf.percent_width(col_with) }
     end
 
     def save
-      @pdf.custom_save_as(pdf_name, ErrorRecord.table_name)
+      pdf.custom_save_as(pdf_name, ErrorRecord.table_name)
     end
 
     def pdf_name
       I18n.t 'error_records.pdf_list_name', from_date: @from.to_s(:db), to_date: @to.to_s(:db)
+    end
+
+    def pdf
+      @pdf
     end
 end
