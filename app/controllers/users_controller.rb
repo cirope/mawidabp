@@ -2,14 +2,14 @@ class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
 
+  respond_to :html
+
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
-  layout ->(controller) { controller.request.xhr? ? false : 'application' }
+  before_action :set_title, except: [:destroy, :auto_complete_for_user]
 
   # * GET /users
   def index
-    @title = t 'user.index_title'
     @users = users
 
     respond_to do |format|
@@ -20,104 +20,43 @@ class UsersController < ApplicationController
 
   # * GET /users/1
   def show
-    @title = t 'user.show_title'
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @user }
-    end
   end
 
-  # Permite ingresar los datos para crear un nuevo usuario
-  #
   # * GET /users/new
-  # * GET /users/new.xml
   def new
-    @title = t 'user.new_title'
     @user = User.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render xml: @user }
-    end
   end
 
-  # Recupera los datos para modificar un usuario
-  #
   # * GET /users/1/edit
   def edit
-    @title = t 'user.edit_title'
   end
 
-  # Crea un nuevo usuario siempre que cumpla con las validaciones.
-  #
   # * POST /users
-  # * POST /users.xml
   def create
-    @title = t 'user.new_title'
-    @user = User.new(user_params)
-    @user.roles.each {|r| r.inject_auth_privileges(@auth_privileges)}
+    @user = User.new user_params
 
-    respond_to do |format|
-      if @user.save
-        @user.send_welcome_email
-        flash.notice = t 'user.correctly_created'
-        format.html { redirect_to(users_url) }
-        format.xml  { render xml: @user, status: :created, location: @user }
-      else
-        @user.password = @user.password_confirmation = nil
-        format.html { render action: :new }
-        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
-      end
-    end
+    @user.roles.each { |r| r.inject_auth_privileges @auth_privileges }
+    @user.send_welcome_email if @user.save
+    @user.password = @user.password_confirmation = nil
+
+    respond_with @user, location: users_url
   end
 
-  # Actualiza el contenido de un usuario siempre que cumpla con las
-  # validaciones.
-  #
   # * PATCH /users/1
-  # * PATCH /users/1.xml
   def update
-    @title = t 'user.edit_title'
-    params[:user][:last_access] = nil if @user.expired?
     params[:user][:child_ids] ||= []
-    # Para permitir al usuario actualmente autenticado modificar sus datos
-    if @user == @auth_user
-      params[:user].delete :lock_version
-    end
+    params[:user].delete :lock_version if @user == @auth_user
 
-    respond_to do |format|
-      if @user.update(user_params)
-        @user.send_notification_if_necesary
-        flash.notice = t 'user.correctly_updated'
-        format.html { redirect_to(users_url) }
-        format.xml  { head :ok }
-      else
-        format.html { render action: :edit }
-        format.xml  { render xml: @user.errors, status: :unprocessable_entity }
-      end
-    end
+    @user.send_notification_if_necesary if @user.update user_params
 
-  rescue ActiveRecord::StaleObjectError
-    flash.alert = t 'user.stale_object_error'
-    redirect_to edit_user_url(@user)
+    respond_with @user, location: users_url
   end
 
-  # Elimina un usuario
-  #
   # * DELETE /users/1
-  # * DELETE /users/1.xml
   def destroy
-    unless @user.disable!
-      flash.alert = @user.errors.full_messages.join(APP_ENUM_SEPARATOR)
-    else
-      flash.notice = t 'user.correctly_disabled'
-    end
+    @user.disable
 
-    respond_to do |format|
-      format.html { redirect_to(users_url) }
-      format.xml  { head :ok }
-    end
+    respond_with @user, location: users_url
   end
 
   # * GET /users/auto_complete_for_user
