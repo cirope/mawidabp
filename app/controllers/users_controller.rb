@@ -10,29 +10,11 @@ class UsersController < ApplicationController
   # * GET /users
   def index
     @title = t 'user.index_title'
-    default_conditions = [
-      [
-        [
-          "#{Organization.table_name}.id = :organization_id",
-          "#{Organization.table_name}.id IS NULL"
-        ].join(' OR '),
-        "#{User.table_name}.group_admin = :boolean_false"
-      ].join(' AND '),
-      { organization_id: current_organization.id, boolean_false: false }
-    ]
-
-    build_search_conditions User, default_conditions
-
-    @users = User.includes(:organizations).where(@conditions).not_hidden.order(
-      "#{User.table_name}.user ASC"
-    ).references(:organizations).page(params[:page])
+    @users = users
 
     respond_to do |format|
-      format.html {
-        if @users.count == 1 && !@query.blank? && !params[:page]
-          redirect_to user_url(@users.first)
-        end
-      }
+      format.html { redirect_to user_url(@users.first) if one_result?  }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -138,89 +120,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # Lista las usuarios
-  #
-  # * GET /users/export_to_pdf
-  def export_to_pdf
-    default_conditions = {
-      "#{Organization.table_name}.id" => current_organization.id
-    }
-
-    build_search_conditions User, default_conditions
-
-    users = User.includes(:organizations).where(@conditions).order(
-      "#{User.table_name}.user ASC"
-    ).references(:organizations)
-
-    pdf = Prawn::Document.create_generic_pdf :landscape
-
-    pdf.add_generic_report_header current_organization
-    pdf.add_title t('user.index_title')
-
-    column_order = [['user', 10], ['name', 10], ['last_name', 10],
-      ['email', 17], ['function', 14], ['roles', 10], ['enable', 8],
-      ['password_changed', 10], ['last_access', 11]]
-    column_data, column_headers, column_widths = [], [], []
-
-    column_order.each do |col_name, col_width|
-      column_headers << User.human_attribute_name(col_name)
-      column_widths << pdf.percent_width(col_width)
-    end
-
-    users.each do |user|
-      column_data << [
-        "<b>#{user.user}</b>",
-        user.name,
-        user.last_name,
-        user.email,
-        user.function,
-        user.roles.map(&:name).join('; '),
-        t(user.enable? ? 'label.yes' : 'label.no'),
-        user.password_changed ?
-          l(user.password_changed, format: :minimal) : '-',
-        user.last_access ?
-          l(user.last_access, format: :minimal) : '-'
-      ]
-    end
-
-    unless @columns.blank? || @query.blank?
-      pdf.move_down PDF_FONT_SIZE
-      filter_columns = @columns.map do |c|
-        "<b>#{User.human_attribute_name(c)}</b>"
-      end
-
-      pdf.text t('user.pdf.filtered_by',
-        query: @query.map {|q| "<b>#{q}</b>"}.join(', '),
-        columns: filter_columns.to_sentence, count: @columns.size),
-        font_size: (PDF_FONT_SIZE * 0.75).round,
-        inline_format: true
-    end
-
-    pdf.move_down PDF_FONT_SIZE
-
-    unless column_data.blank?
-      pdf.font_size((PDF_FONT_SIZE * 0.75).round) do
-        table_options = pdf.default_table_options(column_widths)
-
-        pdf.table(column_data.insert(0, column_headers), table_options) do
-          row(0).style(
-            background_color: 'cccccc',
-            padding: [(PDF_FONT_SIZE * 0.5).round, (PDF_FONT_SIZE * 0.3).round]
-          )
-        end
-      end
-    end
-
-    pdf.move_down PDF_FONT_SIZE
-    pdf.text t('user.pdf.users_count', count: users.size)
-
-    pdf_name = t 'user.pdf.pdf_name'
-
-    pdf.custom_save_as(pdf_name, User.table_name)
-
-    redirect_to Prawn::Document.relative_path(pdf_name, User.table_name)
-  end
-
   # * GET /users/auto_complete_for_user
   def auto_complete_for_user
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
@@ -261,9 +160,39 @@ class UsersController < ApplicationController
     def load_privileges #:nodoc:
       if @action_privileges
         @action_privileges.update(
-          auto_complete_for_user: :read,
-          export_to_pdf: :read
+          auto_complete_for_user: :read
         )
       end
+    end
+
+    def users
+      User.includes(:organizations).where(conditions).not_hidden.order(
+        "#{User.table_name}.user ASC"
+      ).references(:organizations).page(params[:page])
+    end
+
+    def one_result?
+      @users.count == 1 && !@query.blank? && !params[:page]
+    end
+
+    def pdf
+      UserPdf.create(
+        columns: @columns,
+        query: @query,
+        users: @users,
+        current_organization: current_organization
+      )
+    end
+
+    def conditions
+      default_conditions = [
+        [
+          "#{Organization.table_name}.id = :organization_id",
+          "#{Organization.table_name}.id IS NULL"
+        ].join(' OR '),
+        { organization_id: current_organization.id }
+      ]
+
+      build_search_conditions User, default_conditions
     end
 end
