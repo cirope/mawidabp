@@ -9,13 +9,9 @@ class ErrorRecordsController < ApplicationController
   def index
     @error_records = ErrorRecord.between conditions
 
-    if request.format.pdf?
-      @pdf = create_pdf
-    end
-
     respond_to do |format|
       format.html { @error_records = @error_records.page(params[:page]) }
-      format.pdf { redirect_to @pdf.relative_path }
+      format.pdf { redirect_to pdf.relative_path }
     end
   end
 
@@ -29,7 +25,7 @@ class ErrorRecordsController < ApplicationController
       @error_record = ErrorRecord.list.find params[:id]
     end
 
-    def create_pdf
+    def pdf
       ErrorRecordPdf.new(
         from: @from_date,
         to: @to_date,

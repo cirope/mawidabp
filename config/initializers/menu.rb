@@ -112,14 +112,12 @@ APP_AUDITOR_MENU_ITEMS = [
             :polls,
             order: 2,
             controllers: :polls,
-            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
             url: { controller: '/polls' }
           ),
           MenuItem.new(
             :reports,
             order: 3,
             controllers: :polls,
-            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
             url: { controller: '/polls', action: :reports }
           )
         ]
@@ -419,14 +417,12 @@ APP_AUDITOR_QM_MENU_ITEMS = [
             :polls,
             order: 2,
             controllers: :polls,
-            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].exclude?(params[:action])",
             url: { controller: '/polls' }
           ),
           MenuItem.new(
             :reports,
             order: 3,
             controllers: :polls,
-            extra_conditions: "['reports', 'summary_by_questionnaire', 'summary_by_business_unit'].include?(params[:action])",
             url: { controller: '/polls', action: :reports }
           )
         ]

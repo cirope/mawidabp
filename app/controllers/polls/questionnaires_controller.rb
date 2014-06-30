@@ -2,9 +2,11 @@ class Polls::QuestionnairesController < ApplicationController
   include Polls::Reports
 
   def index
+    @current_module = 'administration_questionnaires_reports'
+
     respond_to do |format|
       format.html
-      format.js { render 'shared/pdf_report' }
+      format.js { create_pdf and render 'shared/pdf_report' }
     end
   end
 
@@ -23,9 +25,7 @@ class Polls::QuestionnairesController < ApplicationController
       end
     end
 
-    def set_pdf_report
-      if request.xhr?
-        @pdf = Polls::QuestionnairePdf.new @report, current_organization
-      end
+    def create_pdf
+      @pdf = Polls::QuestionnairePdf.new @report, current_organization
     end
 end

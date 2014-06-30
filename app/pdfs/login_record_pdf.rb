@@ -1,4 +1,5 @@
 class LoginRecordPdf < Prawn::Document
+  attr_reader :pdf
 
   def initialize from: nil, to: nil, login_records: nil,
     current_organization: nil
@@ -88,9 +89,5 @@ class LoginRecordPdf < Prawn::Document
     def pdf_name
       I18n.t 'login_records.pdf_list_name',
         from_date: @from.to_s(:db), to_date: @to.to_s(:db)
-    end
-
-    def pdf
-      @pdf
     end
 end

@@ -1,4 +1,5 @@
 class ErrorRecordPdf < Prawn::Document
+  attr_reader :pdf
 
   def initialize from: nil, to: nil, error_records: nil,
     current_organization: nil
@@ -86,9 +87,5 @@ class ErrorRecordPdf < Prawn::Document
 
     def pdf_name
       I18n.t 'error_records.pdf_list_name', from_date: @from.to_s(:db), to_date: @to.to_s(:db)
-    end
-
-    def pdf
-      @pdf
     end
 end
