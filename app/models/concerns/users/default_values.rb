@@ -13,8 +13,9 @@ module Users::DefaultValues
       self.password_changed = Time.zone.now
       self.language ||= 'es'
 
-      if send_notification_email
+      if self.send_notification_email
         self.change_password_hash = SecureRandom.urlsafe_base64
+        self.hash_changed         = Time.zone.now
       end
     end
 end
