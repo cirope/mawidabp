@@ -1,5 +1,6 @@
 class Polls::UsersController < ApplicationController
   before_action :auth
+  before_action :check_privileges
 
   respond_to :json
 
