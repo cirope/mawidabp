@@ -24,7 +24,7 @@
     var roleSelect = $('.role_select', element.parents('.organization_role'));
 
     if(!$(element).val().match(/^\s*$/)) {
-      var url = '<%= @auth_user ? roles_users_path : initial_roles_users_path(hash: params[:hash]) %>';
+      var url = '<%= @auth_user ? users_roles_path : users_registration_roles_path(hash: params[:hash]) %>';
 
       Helper.showLoading(element);
 

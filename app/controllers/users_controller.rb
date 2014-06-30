@@ -2,9 +2,7 @@ class UsersController < ApplicationController
   include Users::Finders
   include Users::Params
 
-  before_action :auth, except: [:initial_roles]
-  before_action :load_privileges
-  before_action :check_privileges, except: [:initial_roles]
+  before_action :auth, :load_privileges, :check_privileges
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   layout ->(controller) { controller.request.xhr? ? false : 'application' }
@@ -140,36 +138,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # Lista los roles de la organización indicada
-  #
-  # * GET /users/roles/1.json
-  def roles
-    organization = Organization.find(params[:id])
-    roles = Role.list_by_organization_and_group organization, organization.group
-
-    respond_to do |format|
-      format.json { render json: roles.map { |r| [r.name, r.id] } }
-    end
-  end
-
-  # Lista los roles de la organización indicada
-  #
-  # * GET /users/initial_roles/1.json
-  def initial_roles
-    group = Group.find_by(admin_hash: params[:hash])
-
-    if group && (group.updated_at || group.created_at) >= 3.days.ago.to_time
-      roles = Role.where organization_id: params[:id]
-
-      respond_to do |format|
-        format.json { render json: roles.map { |r| [r.name, r.id] } }
-      end
-    else
-      restart_session
-      redirect_to_login t('message.must_be_authenticated'), :alert
-    end
-  end
-
   # Lista las usuarios
   #
   # * GET /users/export_to_pdf
@@ -294,7 +262,6 @@ class UsersController < ApplicationController
       if @action_privileges
         @action_privileges.update(
           auto_complete_for_user: :read,
-          roles: :read,
           export_to_pdf: :read
         )
       end

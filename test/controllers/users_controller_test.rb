@@ -252,25 +252,6 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to users_url
   end
 
-  test 'get initial roles' do
-    login
-    xhr :get, :initial_roles, :id => organizations(:cirope).id,
-      :format => 'json', :hash => groups(:main_group).admin_hash
-    assert_response :success
-    roles = ActiveSupport::JSON.decode(@response.body)
-    assert !roles.empty?
-    assert roles.any? { |r| r.first == roles(:admin_role).name }
-  end
-
-  test 'get initial roles with invalid hash' do
-    login
-    xhr :get, :initial_roles, :id => organizations(:cirope).id,
-      :format => 'json', :hash => "#{groups(:main_group).admin_hash}x"
-
-    assert_redirected_to login_url
-    assert_equal I18n.t('message.must_be_authenticated'), flash.alert
-  end
-
   test 'export to pdf' do
     login
 
@@ -292,16 +273,6 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_redirected_to Prawn::Document.relative_path(
       I18n.t('user.pdf.pdf_name'), User.table_name)
-  end
-
-  test 'get roles' do
-    login
-    xhr :get, :roles, {:id => organizations(:cirope).id,
-      :format => 'json'}
-    assert_response :success
-    roles = ActiveSupport::JSON.decode(@response.body)
-    assert !roles.empty?
-    assert roles.any? { |r| r.first == roles(:admin_role).name }
   end
 
   test 'auto complete for user' do

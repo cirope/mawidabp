@@ -390,24 +390,22 @@ Rails.application.routes.draw do
     get :choose, on: :collection
   end
 
-  resources :users do
-    collection do
-      get :new_initial
-      post :create_initial
-      get :export_to_pdf
-      get :auto_complete_for_user
-      get :roles
-      get :initial_roles
-    end
-  end
-
   namespace :users do
     resources :passwords, except: [:index, :show, :destroy]
     resources :profiles, only: [:edit, :update]
     resources :reassignments, only: [:edit, :update]
     resources :registrations, only: [:new, :create]
+    resources :registration_roles, only: [:index]
     resources :releases, only: [:edit, :update]
+    resources :roles, only: [:index]
     resources :status, only: [:show]
+  end
+
+  resources :users do
+    collection do
+      get :export_to_pdf
+      get :auto_complete_for_user
+    end
   end
 
   root 'sessions#new'
