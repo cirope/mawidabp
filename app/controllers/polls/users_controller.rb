@@ -4,7 +4,7 @@ class Polls::UsersController < ApplicationController
   respond_to :json
 
   def index
-    @users = current_organization.users.where.
+    @users = current_organization.users.not_hidden.where.
       not("#{User.table_name}.id = ?", current_user).
       search(params[:q]).limit(10)
 

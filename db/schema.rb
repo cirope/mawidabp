@@ -253,8 +253,8 @@ ActiveRecord::Schema.define(version: 20140626190610) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "process_owner",                   default: false
-    t.string   "finding_type",        limit: nil
+    t.boolean  "process_owner",       default: false
+    t.string   "finding_type"
     t.boolean  "responsible_auditor"
   end
 

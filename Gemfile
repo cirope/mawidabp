@@ -25,6 +25,7 @@ gem 'irreverent'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'attr_searchable'
+gem 'jbuilder'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'coffee-rails'
