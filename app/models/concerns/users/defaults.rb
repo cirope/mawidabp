@@ -1,4 +1,4 @@
-module Users::DefaultValues
+module Users::Defaults
   extend ActiveSupport::Concern
 
   included do

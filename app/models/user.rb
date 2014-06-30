@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   include Users::Auditable
   include Users::Authorization
   include Users::CustomAttributes
-  include Users::DefaultValues
+  include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
   include Users::JSON
