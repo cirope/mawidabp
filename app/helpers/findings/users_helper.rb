@@ -1,0 +1,2 @@
+module Findings::UsersHelper
+end

@@ -1,5 +1,4 @@
 class FindingsController < ApplicationController
-  include AutoCompleteFor::User
   include AutoCompleteFor::FindingRelation
 
   before_action :auth, :load_privileges, :check_privileges
@@ -488,7 +487,6 @@ class FindingsController < ApplicationController
         :export_to_csv => :read,
         :export_to_pdf => :read,
         :follow_up_pdf => :read,
-        :auto_complete_for_user => :read,
         :auto_complete_for_finding_relation => :read
       )
     end

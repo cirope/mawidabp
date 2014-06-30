@@ -201,18 +201,19 @@ Rails.application.routes.draw do
     as: 'create_follow_up_cost_analysis_follow_up_audit',
     to: 'follow_up_audit#create_follow_up_cost_analysis'
 
+  namespace :findings do
+    resources :users, only: [:index]
+  end
+
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs
 
-      member do
-        get :follow_up_pdf
-      end
+      get :follow_up_pdf, on: :member
 
       collection do
         get :export_to_pdf
         get :export_to_csv
-        get :auto_complete_for_user
         get :auto_complete_for_finding_relation
       end
     end
