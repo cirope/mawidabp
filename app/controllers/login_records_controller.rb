@@ -13,12 +13,13 @@ class LoginRecordsController < ApplicationController
   def index
     @login_records = LoginRecord.between conditions
 
+    if request.format.pdf?
+      @pdf = create_pdf
+    end
+
     respond_to do |format|
       format.html { @login_records = @login_records.page(params[:page]) }
-      format.pdf {
-        create_pdf
-        redirect_to @pdf.relative_path
-      }
+      format.pdf { redirect_to @pdf.relative_path }
     end
   end
 
@@ -51,10 +52,9 @@ class LoginRecordsController < ApplicationController
     end
 
     def create_pdf
-      @pdf = LoginRecordPdf.new(
+      LoginRecordPdf.new(
         from: @from_date, to: @to_date, login_records: @login_records,
         current_organization: current_organization
       )
-      @pdf.generate
     end
 end
