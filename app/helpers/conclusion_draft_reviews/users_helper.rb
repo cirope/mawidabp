@@ -1,0 +1,2 @@
+module ConclusionDraftReviews::UsersHelper
+end

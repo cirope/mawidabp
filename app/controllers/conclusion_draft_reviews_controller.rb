@@ -1,6 +1,4 @@
 class ConclusionDraftReviewsController < ApplicationController
-  include AutoCompleteFor::User
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_conclusion_draft_review, only: [
     :show, :edit, :update, :export_to_pdf, :score_sheet,
@@ -295,7 +293,6 @@ class ConclusionDraftReviewsController < ApplicationController
         download_work_papers: :read,
         bundle: :read,
         create_bundle: :read,
-        auto_complete_for_user: :read,
         check_for_approval: :read,
         compose_email: :modify,
         send_by_email: :modify

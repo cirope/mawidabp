@@ -1,4 +1,4 @@
-class Polls::UsersController < ApplicationController
+class ConclusionDraftReviews::UsersController < ApplicationController
   include Users::Searches
 
   def index

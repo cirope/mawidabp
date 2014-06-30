@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   resources :questionnaires
 
-  namespace 'polls' do
+  namespace :polls do
     resources :questionnaires, only: [:index]
     resources :answers, only: [:index]
     resources :business_units, only: [:index]
@@ -231,6 +231,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :conclusion_draft_reviews do
+    resources :users, only: [:index]
+  end
+
   resources :conclusion_draft_reviews, except: [:destroy] do
     member do
       get :export_to_pdf
@@ -241,10 +245,7 @@ Rails.application.routes.draw do
       post :create_bundle
     end
 
-    collection do
-      get :check_for_approval
-      get :auto_complete_for_user
-    end
+    get :check_for_approval, on: :collection
   end
 
   resources :conclusion_final_reviews, except: [:destroy] do

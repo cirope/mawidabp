@@ -18,7 +18,7 @@ administrator_user:
   resource: auditor_resource
   notes: User notes
   hidden: false
-  
+
 <% ::PLAIN_PASSWORDS[:poll_user] = 'poll_user123' %>
 <% salt = Digest::SHA512.hexdigest("poll_user#{rand}") %>
 poll_user:

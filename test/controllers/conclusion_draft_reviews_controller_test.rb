@@ -407,30 +407,4 @@ class ConclusionDraftReviewsControllerTest < ActionController::TestCase
     # tiene definitivo
     assert_redirected_to :action => :index
   end
-
-  test 'auto complete for user' do
-    login
-    get :auto_complete_for_user, { :q => 'admin', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 1, users.size # Administrator
-    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
-
-    get :auto_complete_for_user, { :q => 'blank', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 2, users.size # Blank and Expired blank
-    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
-
-    get :auto_complete_for_user, { :q => 'xyz', :format => :json }
-    assert_response :success
-    
-    users = ActiveSupport::JSON.decode(@response.body)
-    
-    assert_equal 0, users.size # None
-  end
 end
