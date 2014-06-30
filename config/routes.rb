@@ -403,7 +403,6 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get :export_to_pdf
       get :auto_complete_for_user
     end
   end

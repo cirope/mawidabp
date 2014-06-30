@@ -252,27 +252,25 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to users_url
   end
 
-  test 'export to pdf' do
+  test 'index as pdf' do
     login
 
-    assert_nothing_raised { get :export_to_pdf }
+    pdf_path = Prawn::Document.relative_path I18n.t('user.pdf.pdf_name'), User.table_name
 
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('user.pdf.pdf_name'), User.table_name)
+    get :index, format: :pdf
+    assert_redirected_to pdf_path
   end
 
   test 'export with search' do
     login
 
-    assert_nothing_raised do
-      get :export_to_pdf, :search => {
-        :query => 'manager',
-        :columns => ['user', 'name']
-      }
-    end
+    pdf_path = Prawn::Document.relative_path I18n.t('user.pdf.pdf_name'), User.table_name
 
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('user.pdf.pdf_name'), User.table_name)
+    get :index, format: :pdf, search: {
+      query: 'manager', columns: ['user', 'name']
+    }
+
+    assert_redirected_to pdf_path
   end
 
   test 'auto complete for user' do
