@@ -216,16 +216,17 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :workflows do
+    resources :users, only: [:index]
+  end
+
   resources :workflows do
-    member do
-      get :export_to_pdf
-    end
+    get :export_to_pdf, on: :member
 
     collection do
       get :resource_data
       get :estimated_amount
       get :reviews_for_period
-      get :auto_complete_for_user
     end
   end
 
@@ -263,6 +264,10 @@ Rails.application.routes.draw do
     get :export_list_to_pdf, on: :collection
   end
 
+  namespace :reviews do
+    resources :users, only: [:index]
+  end
+
   resources :reviews do
     member do
       get :survey_pdf
@@ -277,7 +282,6 @@ Rails.application.routes.draw do
     collection do
       get :estimated_amount
       get :plan_item_data
-      get :auto_complete_for_user
       get :auto_complete_for_finding
       get :auto_complete_for_procedure_control_subitem
     end

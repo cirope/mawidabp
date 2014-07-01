@@ -1,6 +1,4 @@
 class ReviewsController < ApplicationController
-  include AutoCompleteFor::User
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_review, only: [
     :show, :edit, :update, :destroy, :review_data, :download_work_papers,
@@ -366,7 +364,6 @@ class ReviewsController < ApplicationController
         procedure_control_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,
-        auto_complete_for_user: :read,
         auto_complete_for_finding: :read,
         auto_complete_for_procedure_control_subitem: :read,
         estimated_amount: :read

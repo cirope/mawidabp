@@ -1,6 +1,4 @@
 class WorkflowsController < ApplicationController
-  include AutoCompleteFor::User
-
   before_action :auth, :load_privileges, :check_privileges
   before_action :set_workflow, only: [
     :show, :edit, :update, :destroy, :export_to_pdf
@@ -200,7 +198,6 @@ class WorkflowsController < ApplicationController
     def load_privileges
       @action_privileges.update(
         export_to_pdf: :read,
-        auto_complete_for_user: :read,
         reviews_for_period: :read,
         resource_data: :read,
         estimated_amount: :read

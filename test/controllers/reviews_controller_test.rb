@@ -301,32 +301,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/_estimated_amount'
   end
 
-  test 'auto complete for user' do
-    login
-    get :auto_complete_for_user, { q: 'admin', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Administrator
-    assert users.all? { |u| (u['label'] + u['informal']).match /admin/i }
-
-    get :auto_complete_for_user, { q: 'blank', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 2, users.size # Blank and Expired blank
-    assert users.all? { |u| (u['label'] + u['informal']).match /blank/i }
-
-    post :auto_complete_for_user, { q: 'xyz', format: :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size
-  end
-
   test 'auto complete for procedure control subitem' do
     login
     get :auto_complete_for_procedure_control_subitem, {

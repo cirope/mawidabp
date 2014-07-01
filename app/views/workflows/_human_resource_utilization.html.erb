@@ -3,16 +3,14 @@
   <div class="row nested">
     <div class="col-md-5">
       <% if f.object.new_record? %>
-        <%= f.input :resource, as: :string, label: false,
+        <%= f.input :resource, as: :string, label: false, autofocus: true,
           input_html: {
             name: 'resource_utilization[user_data]',
             value: f.object.resource.try(:full_name_with_resource),
             id: "resource_utilization_user_#{id}",
-            class: 'autocomplete_field',
             title: t('label.search'),
-            autofocus: true,
             data: {
-              'autocomplete-url' => auto_complete_for_user_workflows_path,
+              'autocomplete-url' => workflows_users_path,
               'autocomplete-id-target' => "#hidden_resource_id_#{id}"
             }
           } %>
