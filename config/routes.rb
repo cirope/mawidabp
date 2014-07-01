@@ -392,6 +392,7 @@ Rails.application.routes.draw do
   end
 
   namespace :users do
+    resources :completions, only: [:index]
     resources :passwords, except: [:index, :show, :destroy]
     resources :profiles, only: [:edit, :update]
     resources :reassignments, only: [:edit, :update]
@@ -402,11 +403,7 @@ Rails.application.routes.draw do
     resources :status, only: [:show]
   end
 
-  resources :users do
-    collection do
-      get :auto_complete_for_user
-    end
-  end
+  resources :users
 
   root 'sessions#new'
 

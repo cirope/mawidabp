@@ -4,21 +4,21 @@
     <div class="col-md-6">
       <%= f.input :related_user_id, as: :string, label: false, input_html: {
         id: "auto_related_user_relation_#{id}", name: "auto_related_user_relation_#{id}",
-        class: 'autocomplete_field', title: t('label.search'),
+        title: t('label.search'),
         value: f.object.try(:related_user).try(:full_name_with_function),
         autofocus: true,
         data: {
-          autocomplete_params: ({ user_id: @user.id } unless @user.new_record?),
-          autocomplete_url: auto_complete_for_user_users_path,
+          autocomplete_url: users_completions_path,
           autocomplete_id_target: "#related_user_relation_#{id}"
         }
       } %>
-      <%= f.input :related_user_id, as: :hidden,
-        input_html: { id: "related_user_relation_#{id}" } %>
+      <%= f.input :related_user_id, as: :hidden, input_html: {
+        id: "related_user_relation_#{id}"
+      } %>
     </div>
     <div class="col-md-6">
       <div class="show_hide">
-        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_remove_nested_item f %>
       </div>
     </div>
   </div>
