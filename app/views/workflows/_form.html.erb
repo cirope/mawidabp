@@ -110,7 +110,7 @@ function calculateCost() {
 }
 
 jQuery(function() {
-  $(document).on('autocomplete:update', 'input.autocomplete_field', function() {
+  $(document).on('autocomplete:update', 'input[data-autocomplete-url]', function() {
     var item = $(this).data('item');
 
     if (item.cost_per_unit) {

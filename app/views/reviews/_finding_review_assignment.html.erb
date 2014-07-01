@@ -8,7 +8,6 @@
             value: f.object.try(:finding).try(:to_s),
             name: 'finding_review_assignment[finding_data]',
             id: "finding_review_assignment_finding_#{id}",
-            class: 'autocomplete_field',
             title: t('label.search'),
             autofocus: true,
             data: {
@@ -16,8 +15,7 @@
               'autocomplete-id-target' => "#hidden_finding_id_#{id}"
             }
         } %>
-        <%= f.input :finding_id, as: :hidden,
-          input_html: { id: "hidden_finding_id_#{id}", class: 'autocomplete_id' } %>
+        <%= f.input :finding_id, as: :hidden, input_html: { id: "hidden_finding_id_#{id}" } %>
       </div>
       <div class="col-md-2">
         <div class="show_hide">

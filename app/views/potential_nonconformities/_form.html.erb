@@ -25,7 +25,7 @@
           <% if !readonly && !@potential_nonconformity.new_record? %>
             <%= f.input :control_objective_item_id, label: false, input_html: {
               value: @potential_nonconformity.control_objective_item.try(:control_objective_text),
-              class: 'autocomplete_field', title: t('label.search'),
+              title: t('label.search'),
               autocomplete: :off, autofocus: true,
               data: {
                 autocomplete_params: ({ review_id: @potential_nonconformity.review.id } if @potential_nonconformity.review),

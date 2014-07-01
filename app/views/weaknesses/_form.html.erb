@@ -23,7 +23,7 @@
           <% if !readonly && !@weakness.new_record? %>
             <%= f.input :control_objective_item, label: false, input_html: {
               value: @weakness.control_objective_item.try(:control_objective_text),
-              class: 'autocomplete_field', title: t('label.search'),
+              title: t('label.search'),
               autocomplete: :off, autofocus: true,
               data: {
                 autocomplete_params: ({ review_id: @weakness.review.id } if @weakness.review),

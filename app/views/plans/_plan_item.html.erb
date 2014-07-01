@@ -19,7 +19,7 @@
       <% unless f.object.business_unit %>
         <%= f.input :business_unit_id, as: :string, label: false, input_html: {
           name: 'plan_item[business_unit_data]', id: "plan_item_business_unit_#{id}",
-          class: 'autocomplete_field', title: t('label.search'),
+          title: t('label.search'),
           autofocus: true, data: {
             autocomplete_params: ({ business_unit_type_id: @business_unit_type.id } if @business_unit_type),
             autocomplete_url: auto_complete_for_business_unit_business_unit_id_plans_path,
