@@ -185,7 +185,7 @@
 
 <hr />
 
-<div class="form-footer">
+<div>
   <%= link_to_edit edit_potential_nonconformity_path(@potential_nonconformity) %> |
   <%= link_to t('label.list'), potential_nonconformities_path %> |
   <% if !@potential_nonconformity.is_in_a_final_review? && @potential_nonconformity.pending? && !@potential_nonconformity.incomplete? %>

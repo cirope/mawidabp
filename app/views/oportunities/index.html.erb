@@ -37,7 +37,7 @@
 
 <hr />
 
-<div class="form-footer clearfix">
+<div class="clearfix">
   <%= paginate @oportunities %>
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_oportunity_path(

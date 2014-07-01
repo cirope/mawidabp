@@ -6,6 +6,7 @@ body {
 .file_container {
   position: relative;
   overflow: hidden;
+  margin-right: 15px;
 
   input[type="file"] {
     opacity: 0;
@@ -22,16 +23,8 @@ body {
   margin-bottom: 0;
 }
 
-.file_container {
-  margin-right: 15px;
-}
-
 .filter {
   margin: 0.5em 0;
-}
-
-.form-footer {
-  padding-bottom: 20px;
 }
 
 .inline {

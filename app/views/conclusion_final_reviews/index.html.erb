@@ -38,7 +38,7 @@
 
 <hr />
 
-<div class="form-footer">
+<div>
   <%= paginate @conclusion_final_reviews %>
   <%= link_to t('label.new'), new_conclusion_final_review_path, class: 'btn btn-primary' %> |
   <%= link_to t('label.download'), export_list_to_pdf_conclusion_final_reviews_path(

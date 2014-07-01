@@ -138,7 +138,7 @@ end %>
 
 <hr />
 
-<div class="form-footer">
+<div>
   <% if @conclusion_draft_review.approved? && !@conclusion_draft_review.has_final_review? %>
     <%= link_to t('conclusion_draft_review.new_conclusion_final_review'),
       new_conclusion_final_review_path(:review => @conclusion_draft_review.review_id) %> |

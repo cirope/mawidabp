@@ -37,7 +37,7 @@
 
 <hr />
 
-<div class="form-footer">
+<div>
   <%= paginate @potential_nonconformities %>
   <% if params[:control_objective].to_i > 0 %>
     <%= link_to t('label.new'), new_potential_nonconformity_path(

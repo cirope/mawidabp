@@ -34,7 +34,7 @@
 
 <% unless controller.request.xhr? %>
   <hr />
-  <div class="form-footer">
+  <div>
     <%= link_to_edit edit_procedure_control_path(@procedure_control) %> |
     <%= link_to t('label.list'), procedure_controls_path %> |
     <%= link_to t('label.download'), export_to_pdf_procedure_control_path(

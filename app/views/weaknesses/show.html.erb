@@ -225,7 +225,7 @@
 
 <hr />
 
-<div class="form-footer">
+<div>
   <%= link_to_edit edit_weakness_path(@weakness) %> |
   <%= link_to t('label.list'), weaknesses_path %> |
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>

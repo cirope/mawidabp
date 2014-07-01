@@ -185,7 +185,7 @@
 
 <hr />
 
-<div class="form-footer">
+<div>
   <%= link_to_edit edit_oportunity_path(@oportunity) %> |
   <%= link_to t('label.list'), oportunities_path %> |
   <% if !@oportunity.is_in_a_final_review? && @oportunity.pending? && !@oportunity.incomplete? %>
