@@ -212,6 +212,7 @@ es: &common
       edit:
         title: 'Cambiar contraseña'
         update: 'Actualizar contraseña'
+        new_password: 'Nueva contraseña'
       update:
         success: 'Contraseña cambiada correctamente'
         expired: 'El enlace ha expirado, pida de nuevo las instrucciones'

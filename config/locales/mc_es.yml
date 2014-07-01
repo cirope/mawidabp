@@ -1159,11 +1159,6 @@ mc_es:
     type_executive_manager: "Gerente"
 
   user:
-    enter: "Ingresar"
-    login_title: "Autenticación de usuarios"
-    new_password: "Nueva contraseña"
-    confirmation_link_invalid: "El enlace que ha utilizado está vencido o no es válido"
-    send: "Enviar"
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha desvíos / oportunidades pendientes, deberá reasignarlas primero"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"

@@ -1,20 +1,17 @@
 class SessionsController < ApplicationController
   before_action :auth, only: [:destroy]
   before_action :set_admin_mode, :set_organization, only: [:create]
+  before_action :set_title, except: [:destroy]
 
   def new
     auth_user = User.find(session[:user_id]) if session[:user_id]
 
     if auth_user && auth_user.is_enable? && auth_user.logged_in?
       redirect_to welcome_url
-    else
-      @title = t 'user.login_title'
     end
   end
 
   def create
-    @title = t 'user.login_title'
-
     auth = Authentication.new params, request, session,
       current_organization, @admin_mode
 
