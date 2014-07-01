@@ -10,7 +10,6 @@ class User < ActiveRecord::Base
   include Users::Defaults
   include Users::DestroyValidation
   include Users::Findings
-  include Users::JSON
   include Users::MarkChanges
   include Users::Name
   include Users::Notifications
