@@ -63,7 +63,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'user.reviews.count' do
-        assert !user.disable!
+        assert !user.disable
       end
     end
 
@@ -77,7 +77,7 @@ class UserTest < ActiveSupport::TestCase
 
     assert_no_difference 'ActionMailer::Base.deliveries.size' do
       assert_no_difference 'user.reviews.count' do
-        assert !user.disable!
+        assert !user.disable
       end
     end
 
@@ -87,7 +87,7 @@ class UserTest < ActiveSupport::TestCase
     user.errors.clear
 
     assert user.reassign_to(new_user, with_findings: true, with_reviews: true)
-    assert user.reload.disable!
+    assert user.reload.disable
 
     assert !user.enable?
     assert user.errors.empty?
