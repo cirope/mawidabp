@@ -12,8 +12,8 @@
       </div>
       <div class="col-md-6">
         <%= f.input :notes, input_html: { rows: 3 } %>
-        <%= user_resource_field(f) %>
-        <%= user_language_field(f) %>
+        <%= user_resource_field f %>
+        <%= user_language_field f %>
         <%= f.input :enable, label: false, inline_label: true %>
         <%= f.input :hidden, label: false, inline_label: true %>
         <%= f.input :send_notification_email, as: :boolean,
@@ -29,7 +29,7 @@
     <div class="col-md-6">
       <%= f.input :manager, as: :string, label: false,
         input_html: {
-          value: (@user.parent.try(:full_name_with_function) || ''),
+          value: @user.parent.try(:full_name_with_function),
           title: t('label.search'),
           data: {
             autocomplete_url: users_completions_path,
@@ -41,18 +41,16 @@
 
     <div class="col-md-6">
       <div class="show_hide">
-        <%= link_to t('user.unlink_manager'), '#', onclick:
-          "$('#user_manager').val(''); $('#user_manager_id').val(''); return false;" %>
+        <%= link_to t('.unlink_manager'), '#', data: { clear_user_manager: true } %>
       </div>
     </div>
   </div>
 
-  <h5><strong><%= t 'user.children' %></strong></h5>
+  <h5><strong><%= t '.children' %></strong></h5>
 
   <div id="children">
     <%= render partial: 'child', collection: @user.children, locals: { f: f } %>
-
-    <%= link_to_add_fields t('user.add_child'), f, :children, 'new_child' %>
+    <%= link_to_add_fields t('.add_child'), f, :children, 'new_child' %>
   </div>
 
   <br />
@@ -65,7 +63,7 @@
       <%= render 'related_user_relation', f: rur_f %>
     <% end %>
 
-    <%= link_to_add_fields t('user.add_related_user_relations'), f, :related_user_relations %>
+    <%= link_to_add_fields t('.add_related_user_relations'), f, :related_user_relations %>
   </div>
 
   <br />
@@ -87,7 +85,7 @@
       <%= render 'organization_role', f: or_f %>
     <% end %>
 
-    <%= link_to_add_fields t('user.add_organization_role'), f, :organization_roles %>
+    <%= link_to_add_fields t('.add_organization_role'), f, :organization_roles %>
   </div>
 
   <hr />

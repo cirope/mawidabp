@@ -18,17 +18,34 @@ module UsersHelper
    form.input :language, collection: options, prompt: true
   end
 
-  def user_organizations_field(form, id = nil )
-    group = current_organization ? current_organization.group :
+  def user_info user
+    if user.organizations.blank?
+      show_info t('user.without_organization'), class: :red
+    elsif user.notes.present?
+      show_info user.notes
+    end
+  end
+
+  def user_organizations
+    group = current_organization ?
+      current_organization.group :
       Group.find_by_admin_hash(params[:hash])
 
-    form.input :organization_id, collection: sorted_options_array_for(
-      Organization.with_group(group), :name, :id), prompt: true,
-      label: false, input_html: { id: "#{id}_organization_id" }
+    sorted_options_array_for Organization.with_group(group), :name, :id
   end
 
   def user_organization_roles
     @user.organization_roles.select { |o_r| o_r.new_record? || o_r.marked_for_destruction? } |
       @user.organization_roles.for_group(current_organization.group_id)
+  end
+
+  def roles_for organization_role
+    roles = if organization_role.organization_id
+      Role.list_by_organization organization_role.organization_id
+    else
+      Role.none
+    end
+
+    sorted_options_array_for roles, :name, :id
   end
 end

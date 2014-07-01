@@ -1169,18 +1169,10 @@ public_es:
   user:
     enter: "Ingresar"
     login_title: "Autenticación de usuarios"
-    profiles_label: "Perfiles"
-    organizations_label: "Organizaciones"
     new_password: "Nueva contraseña"
     confirmation_link_invalid: "El enlace que ha utilizado está vencido o no es válido"
     send: "Enviar"
     will_be_orphan_findings: "No se eliminó el usuario, tiene a la fecha observaciones / oportunidades pendientes, deberá reasignarlas primero"
-    add_child: "Agregar nueva persona a cargo"
-    add_organization_role: "Agregar un nuevo perfil dentro de una organización"
-    add_related_user_relations: "Agregar usuario relacionado"
-    children: "Personal a cargo"
-    reassign_to_another_user: "Reasignar responsabilidades"
-    unlink_manager: "Desvincular"
     disabled: "Deshabilitado"
     without_organization: "El usuario no tiene asignado ningún perfil, por lo tanto no pertenece a ninguna organización y no puede ingresar al sistema"
     responsibility_modification:

@@ -194,10 +194,19 @@ es: &common
       title: 'Listado de usuarios'
     show:
       title: 'Detalles de usuario'
+      profiles: 'Perfiles'
+      organizations: 'Organizaciones'
     new:
       title: 'Nuevo usuario'
     edit:
       title: 'Editar usuario'
+      other_actions: 'Acciones'
+    form:
+      unlink_manager: 'Desvincular'
+      children: 'Personal a cargo'
+      add_child: 'Agregar persona a cargo'
+      add_related_user_relations: 'Agregar usuario relacionado'
+      add_organization_role: 'Agregar un nuevo perfil'
 
     passwords:
       edit:
@@ -220,7 +229,7 @@ es: &common
         title: 'Modificar información personal'
     reassignments:
       edit:
-        title: 'Reasignación de responsabilidades'
+        title: 'Reasignar responsabilidades'
         new_user: 'Nuevo responsable'
         old_user: 'Responsable anterior'
         with_findings: '¿Incluir hallazgos pendientes?'

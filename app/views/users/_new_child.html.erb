@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= f.input :child_id, as: :string, label: false, input_html: {
-        id: "auto_user_#{id}", name: "auto_user_#{id}",
+        id: "auto_user_#{id}",
         autofocus: true,
         value: (f.object.full_name_with_function if f.object.persisted?),
         data: {
@@ -17,7 +17,7 @@
     </div>
     <div class="col-md-6">
       <div class="show_hide">
-        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_remove_nested_item f %>
       </div>
     </div>
   </div>

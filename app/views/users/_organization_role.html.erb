@@ -1,46 +1,22 @@
-<% roles = f.object.organization ? Role.list_by_organization(f.object.organization.id) : [] %>
 <% id = f.object.object_id %>
 <fieldset class="organization_role">
   <div class="row">
     <div class="col-md-6">
-      <%= user_organizations_field(f, id) %>
+      <%= f.input :organization_id, collection: user_organizations, prompt: true, label: false, input_html: {
+        id: "organization_id_#{id}", data: {
+          update_role: "#role_id_#{id}",
+          roles_url: @auth_user ? users_roles_path : users_registration_roles_path(hash: params[:hash])
+        }
+      } %>
     </div>
     <div class="col-md-4">
-      <%= f.input :role_id, collection: sorted_options_array_for(roles, :name, :id),
-        prompt: true, label: false, disabled: f.object.organization.nil?,
-        input_html: { class: :role_select }
-      %>
+      <%= f.input :role_id, collection: roles_for(f.object), prompt: true, label: false,
+        disabled: f.object.organization.nil?, input_html: { id: "role_id_#{id}" } %>
     </div>
     <div class="col-md-2">
       <div class="show_hide">
-        <%= link_to_remove_nested_item(f) %>
+        <%= link_to_remove_nested_item f %>
       </div>
     </div>
   </div>
 </fieldset>
-<script type="text/javascript">
-  $('#<%= id %>_organization_id').change(function() {
-    var element = $(this);
-    var roleSelect = $('.role_select', element.parents('.organization_role'));
-
-    if(!$(element).val().match(/^\s*$/)) {
-      var url = '<%= @auth_user ? users_roles_path : users_registration_roles_path(hash: params[:hash]) %>';
-
-      Helper.showLoading(element);
-
-      $.get(url, { id: $(element).val(), format: 'json' }, function(data) {
-        HTMLUtil.updateOptions(
-          roleSelect,
-          HTMLUtil.optionsFromArray(data)
-        );
-
-        roleSelect.val('');
-      }).complete(function() {
-        Helper.hideLoading(element);
-      });
-    } else {
-      roleSelect.html('');
-      roleSelect.attr('disabled', true);
-    }
-  });
-</script>
