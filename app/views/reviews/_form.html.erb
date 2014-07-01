@@ -40,7 +40,7 @@
         <h5><strong><%= Review.human_attribute_name 'file_model_id' %></strong></h5>
         <div class="clearfix">
           <%= f.simple_fields_for :file_model do |fm_f| %>
-            <div class="file_container pull-left">
+            <div class="file-container pull-left">
               <%= link_to_upload(fm_f.object) %>
               <% unless fm_f.object.file_cache %>
                 <%= fm_f.input :file, label: false %>

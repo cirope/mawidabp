@@ -3,7 +3,7 @@
   <div class="form-inputs row">
     <div class="col-md-11">
       <div class="media">
-        <div class="pull-left show_hide">
+        <div class="pull-left toggle-visibility">
           <%= link_to_show_hide "control_objectives_for_#{id}" %>
         </div>
         <div class="media-body">
@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-1 show_hide">
+    <div class="col-md-1 toggle-visibility">
       <%= link_to_insert_field(f) %>
       <span class="text-muted">|</span>
       <%= link_to_remove_nested_item(f) %>

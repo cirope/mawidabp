@@ -3,7 +3,7 @@ body {
   margin-bottom: 20px;
 }
 
-.file_container {
+.file-container {
   position: relative;
   overflow: hidden;
   margin-right: 15px;
@@ -55,16 +55,16 @@ body {
   margin: 0;
 }
 
-.show_hide {
-  margin-top: 7px;
-}
-
 .strike {
   text-decoration: line-through;
 }
 
 .submenu {
   margin-bottom: 15px;
+}
+
+.toggle-visibility {
+  margin-top: 7px;
 }
 
 table th.disabled {

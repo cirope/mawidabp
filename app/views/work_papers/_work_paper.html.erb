@@ -18,7 +18,7 @@
     <div class="col-md-2">
       <% unless frozen %>
         <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
-          <div class="file_container pull-left">
+          <div class="file-container pull-left">
             <%= link_to_upload(fm_f.object) %>
             <% unless fm_f.object.file_cache %>
               <%= fm_f.input :file, label: false %>
@@ -31,7 +31,7 @@
       <%= link_to_download f.object %>
     </div>
     <div class="col-md-1">
-      <div class="show_hide" style="margin-left: 15px;">
+      <div class="toggle-visibility" style="margin-left: 15px;">
         <%= f.input :lock_version, as: :hidden %>
         <%= link_to_remove_nested_item(f) unless frozen %>
       </div>

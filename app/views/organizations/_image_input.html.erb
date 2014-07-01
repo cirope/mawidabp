@@ -6,7 +6,7 @@
   <p><%= organization_image_tag %></p>
 
   <%= f.simple_fields_for :image_model, organization_image do |im_f| %>
-    <div class="file_container pull-left">
+    <div class="file-container pull-left">
       <%= link_to_upload im_f.object %>
       <%= im_f.input :image, label: false %>
     </div>
