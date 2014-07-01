@@ -136,7 +136,7 @@ class WorkflowItem < ActiveRecord::Base
   end
 
   def human_unit_cost
-    self.human_resource_utilizations.sum(&:units)
+    self.human_resource_utilizations.map(&:units).compact.sum
   end
 
   def material_cost
