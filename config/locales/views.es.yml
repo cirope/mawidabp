@@ -190,6 +190,15 @@ es: &common
     session_expire_time: 'Desconexión por inactividad'
 
   users:
+    index:
+      title: 'Listado de usuarios'
+    show:
+      title: 'Detalles de usuario'
+    new:
+      title: 'Nuevo usuario'
+    edit:
+      title: 'Editar usuario'
+
     passwords:
       edit:
         title: 'Cambiar contraseña'

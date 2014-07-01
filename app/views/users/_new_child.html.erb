@@ -4,16 +4,16 @@
     <div class="col-md-6">
       <%= f.input :child_id, as: :string, label: false, input_html: {
         id: "auto_user_#{id}", name: "auto_user_#{id}",
-        class: 'autocomplete_field', autofocus: true,
+        autofocus: true,
         value: (f.object.full_name_with_function if f.object.persisted?),
         data: {
-          autocomplete_params: ({ user_id: @user.id } unless @user.new_record?),
-          autocomplete_url: auto_complete_for_user_users_path,
+          autocomplete_url: users_completions_path,
           autocomplete_id_target: "#child_id_#{id}"
         }
       } %>
       <%= f.input :child_id, as: :hidden, input_html: {
-        name: 'user[child_ids][]', value: f.object.id, id: "child_id_#{id}" } %>
+        name: 'user[child_ids][]', value: f.object.id, id: "child_id_#{id}"
+      } %>
     </div>
     <div class="col-md-6">
       <div class="show_hide">

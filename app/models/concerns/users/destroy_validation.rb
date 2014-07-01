@@ -5,7 +5,7 @@ module Users::DestroyValidation
     before_destroy :has_not_orphan_fingings?
   end
 
-  def disable!
+  def disable
     update_column :enable, false if has_not_orphan_fingings?
   end
 

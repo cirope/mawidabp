@@ -32,7 +32,7 @@
         <%= f.input :user_data, label: false, input_html: {
           autocomplete: :off, title: t('label.search'),
           data: {
-            autocomplete_url: auto_complete_for_user_users_path,
+            autocomplete_url: users_completions_path,
             autocomplete_id_target: '#other_id'
           }
         } %>

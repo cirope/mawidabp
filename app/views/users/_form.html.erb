@@ -32,9 +32,8 @@
           value: (@user.parent.try(:full_name_with_function) || ''),
           title: t('label.search'),
           data: {
-            autocomplete_url: auto_complete_for_user_users_path,
-            autocomplete_id_target: '#user_manager_id',
-            autocomplete_params: ({ user_id: @user.id } unless @user.new_record?)
+            autocomplete_url: users_completions_path,
+            autocomplete_id_target: '#user_manager_id'
           }
         } %>
       <%= f.input :manager_id, as: :hidden %>
