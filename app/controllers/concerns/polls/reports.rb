@@ -2,8 +2,8 @@ module Polls::Reports
   extend ActiveSupport::Concern
 
   included do
-    before_action :auth, :set_report, :set_date_range, :set_questionnaire, :set_questionnaires,
-      :set_title, :process_report
+    before_action :auth, :set_current_module, :set_report, :set_date_range,
+      :set_questionnaire, :set_questionnaires, :set_title, :process_report
 
     respond_to :html, :js
   end
@@ -26,6 +26,10 @@ module Polls::Reports
   end
 
   private
+
+    def set_current_module
+      @current_module = 'administration_questionnaires_reports'
+    end
 
     def set_report
       @report = OpenStruct.new params: params

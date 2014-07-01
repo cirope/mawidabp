@@ -2,8 +2,6 @@ class Polls::QuestionnairesController < ApplicationController
   include Polls::Reports
 
   def index
-    @current_module = 'administration_questionnaires_reports'
-
     respond_to do |format|
       format.html
       format.js { create_pdf and render 'shared/pdf_report' }
