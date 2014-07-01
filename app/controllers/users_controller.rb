@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   before_action :auth, :check_privileges
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :set_title, except: [:destroy, :auto_complete_for_user]
+  before_action :set_title, except: [:destroy]
 
   # * GET /users
   def index

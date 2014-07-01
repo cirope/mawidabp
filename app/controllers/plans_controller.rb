@@ -1,6 +1,4 @@
 class PlansController < ApplicationController
-  include AutoCompleteFor::User
-
   before_action :auth, :load_privileges, :check_privileges,
     :find_business_unit_type
   before_action :set_plan, only: [
@@ -224,7 +222,6 @@ class PlansController < ApplicationController
       @action_privileges.update(
         :export_to_pdf => :read,
         :auto_complete_for_business_unit_business_unit_id => :read,
-        :auto_complete_for_user => :read,
         :resource_data => :read
       )
     end

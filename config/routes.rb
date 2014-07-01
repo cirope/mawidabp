@@ -325,15 +325,16 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :plans do
+    resources :users, only: [:index]
+  end
+
   resources :plans do
-    member do
-      get :export_to_pdf
-    end
+    get :export_to_pdf, on: :member
 
     collection do
       get :resource_data
       get :auto_complete_for_business_unit_business_unit_id
-      get :auto_complete_for_user
     end
   end
 
