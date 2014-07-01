@@ -1,0 +1,2 @@
+module Weaknesses::UsersHelper
+end

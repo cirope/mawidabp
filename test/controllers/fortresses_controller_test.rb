@@ -194,32 +194,6 @@ class FortressesControllerTest < ActionController::TestCase
     assert_equal 'F005', assigns(:fortress).review_code
   end
 
-  test 'auto complete for user' do
-    login
-    get :auto_complete_for_user, { :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :q => 'bar', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size
-    assert users.all? { |u| (u['label'] + u['informal']).match /bar/i }
-
-    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for control objective item' do
     login
     get :auto_complete_for_control_objective_item, {

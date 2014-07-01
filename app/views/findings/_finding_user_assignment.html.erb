@@ -14,10 +14,10 @@
           <%= f.input :user_id, as: :string, label: false, input_html: {
             value: finding_user.try(:full_name_with_function),
             id: "finding_user_#{id}", name: "auto_user_id_#{id}",
-            class: 'autocomplete_field', title: t('label.search'),
+            title: t('label.search'),
             autocomplete: :off, autofocus: true,
             data: {
-              autocomplete_url: url_for([:auto_complete_for_user, finding.class]),
+              autocomplete_url: url_for([finding.class.model_name.plural, :users]),
               autocomplete_id_target: "#user_id_#{id}"
             }
           } %>

@@ -1,0 +1,2 @@
+module Oportunities::UsersHelper
+end

@@ -272,32 +272,6 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_equal repeated_of_original_state, repeated_of.state
   end
 
-  test 'auto complete for user' do
-    login
-    get :auto_complete_for_user, { :q => 'adm', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Admin (Admin second es de otra organización)
-    assert users.all? { |u| (u['label'] + u['informal']).match /adm/i }
-
-    get :auto_complete_for_user, { :q => 'bare', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 1, users.size # Sólo Bare
-    assert users.all? { |u| (u['label'] + u['informal']).match /bare/i }
-
-    get :auto_complete_for_user, { :q => 'x_nobody', :format => :json }
-    assert_response :success
-
-    users = ActiveSupport::JSON.decode(@response.body)
-
-    assert_equal 0, users.size # Sin resultados
-  end
-
   test 'auto complete for finding relation' do
     finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity).id)

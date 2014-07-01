@@ -1,5 +1,4 @@
 class FortressesController < ApplicationController
-  include AutoCompleteFor::User
   include AutoCompleteFor::ControlObjectiveItem
 
   before_action :auth, :load_privileges, :check_privileges
@@ -174,7 +173,6 @@ class FortressesController < ApplicationController
 
     def load_privileges
       @action_privileges.update(
-        :auto_complete_for_user => :read,
         :auto_complete_for_control_objective_item => :read
       )
     end

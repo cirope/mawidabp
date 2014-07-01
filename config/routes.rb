@@ -29,13 +29,14 @@ Rails.application.routes.draw do
 
   resources :business_unit_types
 
+  namespace :fortresses do
+    resources :users, only: [:index]
+  end
+
   resources :fortresses do
     resources :costs
 
-    collection do
-      get :auto_complete_for_user
-      get :auto_complete_for_control_objective_item
-    end
+    get :auto_complete_for_control_objective_item, on: :collection
   end
 
   resources :groups
@@ -201,10 +202,6 @@ Rails.application.routes.draw do
     as: 'create_follow_up_cost_analysis_follow_up_audit',
     to: 'follow_up_audit#create_follow_up_cost_analysis'
 
-  namespace :findings do
-    resources :users, only: [:index]
-  end
-
   scope ':completed', completed: /complete|incomplete/ do
     resources :findings, except: [:destroy] do
       resources :costs
@@ -286,11 +283,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :weaknesses do
+    resources :users, only: [:index]
+  end
+
   resources :weaknesses, except: [:destroy] do
     resources :costs
 
     collection do
-      get :auto_complete_for_user
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
@@ -301,11 +301,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :nonconformities do
+    resources :users, only: [:index]
+  end
+
   resources :nonconformities, except: [:destroy] do
     resources :costs
 
     collection do
-      get :auto_complete_for_user
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
@@ -352,6 +355,10 @@ Rails.application.routes.draw do
 
   resources :periods
 
+  namespace :oportunities do
+    resources :users, only: [:index]
+  end
+
   resources :oportunities, except: [:destroy] do
     resources :costs
 
@@ -361,10 +368,13 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :auto_complete_for_user
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end
+  end
+
+  namespace :potential_nonconformities do
+    resources :users, only: [:index]
   end
 
   resources :potential_nonconformities, except: [:destroy] do
@@ -376,7 +386,6 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :auto_complete_for_user
       get :auto_complete_for_finding_relation
       get :auto_complete_for_control_objective_item
     end

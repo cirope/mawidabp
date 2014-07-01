@@ -1,5 +1,4 @@
 class PotentialNonconformitiesController < ApplicationController
-  include AutoCompleteFor::User
   include AutoCompleteFor::FindingRelation
   include AutoCompleteFor::ControlObjectiveItem
 
@@ -202,7 +201,6 @@ class PotentialNonconformitiesController < ApplicationController
     def load_privileges
       @action_privileges.update(
         follow_up_pdf: :read,
-        auto_complete_for_user: :read,
         auto_complete_for_finding_relation: :read,
         auto_complete_for_control_objective_item: :read,
         undo_reiteration: :modify
