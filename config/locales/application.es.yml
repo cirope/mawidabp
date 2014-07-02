@@ -735,40 +735,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
-  help_content:
-    index_title: "Listado de contenidos de ayuda"
-    show_title: "Detalles del contenido de ayuda"
-    new_title: "Agregar contenido de ayuda"
-    edit_title: "Modificar contenido de ayuda"
-    correctly_created: "Contenido de ayuda agregado correctamente."
-    correctly_updated: "Contenido de ayuda actualizado correctamente."
-    stale_object_error: "El contenido de ayuda no fue actualizado, intente nuevamente."
-    content_title: "Contenido"
-    help_title: "Ayuda"
-    last_modification: "Esta sección se modificó por última vez hace *%{last_modification}*"
-
-  help_item:
-    index_title: "Listado de registros de ayuda"
-    show_title: "Detalles del registro de ayuda"
-    new_title: "Agregar registro de ayuda"
-    edit_title: "Modificar registro de ayuda"
-    correctly_created: "Registro de ayuda agregado correctamente."
-    correctly_updated: "Registro de ayuda actualizado correctamente."
-    stale_object_error: "El registro de ayuda no fue actualizado, intente nuevamente."
-    show_help_item_children: "Ver subtemas"
-    hide_help_item_children: "Ocultar subtemas"
-
-  inline_help:
-    index_title: "Listado de registros de ayuda en línea"
-    show_title: "Detalles del registro de ayuda en línea"
-    new_title: "Agregar registro de ayuda en línea"
-    edit_title: "Modificar registro de ayuda en línea"
-    correctly_created: "Registro de ayuda en línea agregado correctamente."
-    correctly_updated: "Registro de ayuda en línea actualizado correctamente."
-    stale_object_error: "El registro de ayuda en línea no fue actualizado, intente nuevamente."
-    link_title: "Haga click para ver la ayuda en línea de este elemento"
-    inline_title: 'Ayuda'
-
   notification:
     index_title: "Listado de notificaciones"
     show_title: "Detalles de la notificación"
@@ -1173,11 +1139,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       planned_resources_utilization: "Recursos estimados en el plan de trabajo (*)"
       planned_resources_utilization_explanation: "(*) No forman parte del costo total del programa de trabajo"
 
-  attributes:
-    created_at: "Creación"
-    updated_at: "Última actualización"
-    lock_version: "Versión"
-
   activerecord:
     models:
       answer: "Respuesta"
@@ -1201,14 +1162,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding_answer: "Respuesta a observación"
       finding_review_assignment: "Asignación de observación a informe"
       group: "Grupo"
-      help_content: "Contenido de ayuda"
-      help_item: "Registro de ayuda"
-      inline_help: "Registro de ayuda en línea"
       login_record: "Registro de ingreso"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      organization: "Organización"
       period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
@@ -1444,32 +1401,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         name: "Organización (nombre)"
         prefix: "Organización (prefijo)"
         description: "Organización (descripción)"
-      help_content:
-        language: "Idioma"
-      help_content/help_items:
-        name: "Ítem (nombre)"
-        description: "Ítem (contenido)"
-        order_number: "Ítem (orden)"
-        children: "Ítem (temas incluidos)"
-      help_item:
-        name: "Nombre"
-        description: "Contenido"
-        order_number: "Orden"
-        parent: "Tema referente"
-      help_item/children:
-        one: "Temas incluidos"
-        name: "Ítem (nombre)"
-        description: "Ítem (contenido)"
-        order_number: "Ítem (orden)"
-        children: "Ítem (temas incluidos)"
       image_model:
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      inline_help:
-        language: "Idioma"
-        name: "Nombre"
-        content: "Contenido"
       login_record:
         user_id: "Usuario"
         start: "Inicio"
@@ -1869,9 +1804,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"
     groups: "Grupos"
-    help_contents: "Contenidos de ayuda"
-    help_items: "Registros de ayuda"
-    inline_helps: "Registros de ayuda en línea"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"
     oportunities: "Oportunidades de mejora"

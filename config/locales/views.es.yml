@@ -76,6 +76,11 @@ es: &common
   organizations:
     index:
       title: 'Listado de organizaciones'
+    kinds:
+      management_control: 'Control de gestión'
+      private: 'Privada'
+      public: 'Pública'
+      quality_management: 'Gestión de calidad'
     show:
       title: 'Detalles de la organización'
     new:

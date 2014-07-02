@@ -10,9 +10,7 @@ module OrganizationsHelper
   end
 
   def organization_kinds
-    collection = ORGANIZATION_KINDS.map do |kind|
-      [t("activerecord.attributes.organization.kind_options.#{kind}"), kind]
-    end
+    ORGANIZATION_KINDS.map { |k| [t("organizations.kinds.#{k}"), k] }
   end
 
   private

@@ -12,7 +12,7 @@
       <tr>
         <td><%= organization.name %></td>
         <td class="hidden-xs"><strong><%= organization.prefix %></strong></td>
-        <td><%= t "activerecord.attributes.organization.kind_options.#{organization.kind}" %></td>
+        <td><%= t "organizations.kinds.#{organization.kind}" %></td>
         <td><%= link_to_show organization %></td>
         <td><%= link_to_edit [:edit, organization] %></td>
         <td><%= link_to_destroy organization %></td>
@@ -23,7 +23,5 @@
 
 <hr />
 
-<div>
-  <%= paginate @organizations %>
-  <%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>
-</div>
+<%= paginate @organizations %>
+<%= link_to t('label.new'), new_organization_path, class: 'btn btn-primary' %>

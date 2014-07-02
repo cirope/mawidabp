@@ -1,7 +1,7 @@
 <%= simple_form_for @organization do |f| %>
   <div class="row">
     <div class="col-md-6">
-      <%= f.input :name, input_html: { autofocus: true } %>
+      <%= f.input :name, autofocus: true %>
       <%= f.input :prefix unless action_name.presence_in %w(edit update) %>
       <%= f.input :kind, collection: organization_kinds, prompt: true %>
 
@@ -15,8 +15,8 @@
   <hr />
 
   <div class="form-actions">
-    <div class="pull-right"><%= yield :form_actions %></div>
     <%= f.input :lock_version, as: :hidden %>
     <%= f.submit class: 'btn btn-primary' %>
+    <div class="pull-right"><%= yield :form_actions %></div>
   </div>
 <% end %>

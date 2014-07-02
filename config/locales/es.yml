@@ -835,40 +835,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     stale_object_error: "El grupo no fue actualizado, intente nuevamente."
     add_organization: "Agregar organización"
 
-  help_content:
-    index_title: "Listado de contenidos de ayuda"
-    show_title: "Detalles del contenido de ayuda"
-    new_title: "Agregar contenido de ayuda"
-    edit_title: "Modificar contenido de ayuda"
-    correctly_created: "Contenido de ayuda agregado correctamente."
-    correctly_updated: "Contenido de ayuda actualizado correctamente."
-    stale_object_error: "El contenido de ayuda no fue actualizado, intente nuevamente."
-    content_title: "Contenido"
-    help_title: "Ayuda"
-    last_modification: "Esta sección se modificó por última vez hace *%{last_modification}*"
-
-  help_item:
-    index_title: "Listado de registros de ayuda"
-    show_title: "Detalles del registro de ayuda"
-    new_title: "Agregar registro de ayuda"
-    edit_title: "Modificar registro de ayuda"
-    correctly_created: "Registro de ayuda agregado correctamente."
-    correctly_updated: "Registro de ayuda actualizado correctamente."
-    stale_object_error: "El registro de ayuda no fue actualizado, intente nuevamente."
-    show_help_item_children: "Ver subtemas"
-    hide_help_item_children: "Ocultar subtemas"
-
-  inline_help:
-    index_title: "Listado de registros de ayuda en línea"
-    show_title: "Detalles del registro de ayuda en línea"
-    new_title: "Agregar registro de ayuda en línea"
-    edit_title: "Modificar registro de ayuda en línea"
-    correctly_created: "Registro de ayuda en línea agregado correctamente."
-    correctly_updated: "Registro de ayuda en línea actualizado correctamente."
-    stale_object_error: "El registro de ayuda en línea no fue actualizado, intente nuevamente."
-    link_title: "Haga click para ver la ayuda en línea de este elemento"
-    inline_title: 'Ayuda'
-
   nonconformity:
     index_title: "Listado de no conformidades"
     show_title: "Detalles de la no conformidad"
@@ -1427,55 +1393,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       format:
         delimiter: ''
 
-  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
-  datetime:
-    distance_in_words:
-      half_a_minute: "medio minuto"
-      less_than_x_seconds:
-        one: "menos de 1 segundo"
-        other: "menos de %{count} segundos"
-      x_seconds:
-        one: "1 segundo"
-        other: "%{count} segundos"
-      less_than_x_minutes:
-        one: "menos de 1 minuto"
-        other: "menos de %{count} minutos"
-      x_minutes:
-        one: "1 minuto"
-        other: "%{count} minutos"
-      about_x_hours:
-        one: "alrededor de 1 hora"
-        other: "alrededor de %{count} horas"
-      x_hours:
-        one: "1 hora"
-        other: "%{count} horas"
-      x_days:
-        one: "1 día"
-        other: "%{count} días"
-      about_x_weeks:
-        one: "alrededor de 1 semana"
-        other: "alrededor de %{count} semanas"
-      x_weeks:
-        one: "1 semana"
-        other: "%{count} semanas"
-      about_x_months:
-        one: "alrededor de 1 mes"
-        other: "alrededor de %{count} meses"
-      x_months:
-        one: "1 mes"
-        other: "%{count} meses"
-      about_x_years:
-        one: "alrededor de 1 año"
-        other: "alrededor de %{count} años"
-      over_x_years:
-        one: "más de 1 año"
-        other: "más de %{count} años"
-
-  attributes:
-    created_at: "Creación"
-    updated_at: "Última actualización"
-    lock_version: "Versión"
-
   activerecord:
     models:
       answer: "Respuesta"
@@ -1500,15 +1417,11 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding_review_assignment: "Asignación de observación a informe"
       fortress: "Fortaleza"
       group: "Grupo"
-      help_content: "Contenido de ayuda"
-      help_item: "Registro de ayuda"
-      inline_help: "Registro de ayuda en línea"
       login_record: "Registro de ingreso"
       nonconformity: "No conformidad"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      organization: "Organización"
       period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
@@ -1760,32 +1673,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           name: "Organización (nombre)"
           prefix: "Organización (prefijo)"
           description: "Organización (descripción)"
-      help_content:
-        language: "Idioma"
-        help_items:
-          name: "Ítem (nombre)"
-          description: "Ítem (contenido)"
-          order_number: "Ítem (orden)"
-          children: "Ítem (temas incluidos)"
-      help_item:
-        name: "Nombre"
-        description: "Contenido"
-        order_number: "Orden"
-        children:
-          one: "Temas incluidos"
-          name: "Ítem (nombre)"
-          description: "Ítem (contenido)"
-          order_number: "Ítem (orden)"
-          children: "Ítem (temas incluidos)"
-        parent: "Tema referente"
       image_model:
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      inline_help:
-        language: "Idioma"
-        name: "Nombre"
-        content: "Contenido"
       login_record:
         user_id: "Usuario"
         start: "Inicio"
@@ -1838,21 +1729,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         origination_date: "Fecha de origen"
         follow_up_date: "Fecha de implementación/Acción de mejora"
         solution_date: "Fecha de solución"
-      organization:
-        name: "Nombre"
-        prefix: "Prefijo"
-        description: "Descripción"
-        kind: "Tipo de organización"
-        kind_options:
-          quality_management: "Gestión de calidad"
-          public: "Pública"
-          private: "Privada"
-          management_control: "Control de gestión"
-        image_model:
-          one: "Isologotipo"
-          image_file_name: "Isologotipo (nombre de archivo)"
-          image_content_type: "Isologotipo (tipo de archivo)"
-          image_file_size: "Isologotipo (tamaño)"
       organization_role:
         user_id: "Usuario"
         organization_id: "Organización"
@@ -2270,9 +2146,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     execution_reports: "Reportes de ejecución"
     findings: "Seguimiento de observaciones"
     groups: "Grupos"
-    help_contents: "Contenidos de ayuda"
-    help_items: "Registros de ayuda"
-    inline_helps: "Registros de ayuda en línea"
     login_records: "Registros de ingreso"
     notifications: "Notificaciones"
     oportunities: "Oportunidades de mejora"
@@ -2288,46 +2161,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses: "Observaciones"
     welcome: "Bienvenida"
     workflows: "Programas de trabajo"
-
-  date:
-    formats:
-      # Use the strftime parameters for formats.
-      # When no format has been given, it uses default.
-      # You can provide other formats here if you like!
-      default: "%d/%m/%Y"
-      minimal: "%d/%m/%y"
-      short: "%e de %b de %Y"
-      long: "%e de %B de %Y"
-
-    day_names: [Domingo, Lunes, Martes, Miércoles, Jueves, Viernes, Sábado]
-    abbr_day_names: [Dom, Lun, Mar, Mie, Jue, Vie, Sab]
-
-    # Don't forget the nil at the beginning; there's no such thing as a 0th month
-    month_names: [~, Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre]
-    abbr_month_names: [~, Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Sep, Oct, Nov, Dic]
-    # Used in date_select and datime_select.
-    order:
-      - day
-      - month
-      - year
-
-  helpers:
-    select:
-      prompt: "Seleccionar ..."
-    submit:
-      create: "Guardar %{model}"
-      update: "Actualizar %{model}"
-      submit: "Guardar %{model}"
-
-  time:
-    formats:
-      default: "%A, %e de %B de %Y %H:%M:%S %z"
-      minimal: "%d/%m/%y %H:%M:%S"
-      short: "%e de %b de %Y %H:%M"
-      long: "%e de %B de %Y %H:%M"
-      validation: "%d/%m/%Y %H:%M:%S"
-    am: "am"
-    pm: "pm"
 
   # Used in array.to_sentence.
   support:

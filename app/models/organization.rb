@@ -26,6 +26,10 @@ class Organization < ActiveRecord::Base
   has_many :users, -> { readonly.uniq }, through: :organization_roles
   has_many :work_papers, dependent: :destroy
 
+  def to_s
+    name
+  end
+
   def <=>(other)
     prefix <=> other.prefix
   end

@@ -1,0 +1,29 @@
+es: &common
+  attributes:
+    created_at: 'Creación'
+    updated_at: 'Última actualización'
+    lock_version: 'Versión'
+
+  activerecord:
+    models:
+      organization:
+        one: 'Organización'
+        other: 'Organizaciones'
+
+    attributes:
+      organization:
+        description: 'Descripción'
+        kind: 'Tipo de organización'
+        image_model:
+          image_file_name: 'Isologotipo (nombre de archivo)'
+          image_content_type: 'Isologotipo (tipo de archivo)'
+          image_file_size: 'Isologotipo (tamaño)'
+          one: 'Isologotipo'
+        name: 'Nombre'
+        prefix: 'Prefijo'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common
