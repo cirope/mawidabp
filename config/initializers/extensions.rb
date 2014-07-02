@@ -51,31 +51,6 @@ class ActiveRecord::Base
   end
 end
 
-# Reescribe el comportamiento por defecto del etiquetado de los campos con
-# errores de validación
-ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-    # msg = instance.error_message
-    error_class = 'error_field'
-
-    if html_tag =~ /<(input|textarea|select|label)[^>]+class=/
-        class_attribute = html_tag =~ /class=['"]/
-        html_tag.insert(class_attribute + 7, "#{error_class} ")
-    elsif html_tag =~ /<(input|textarea|select|label)/
-        first_whitespace = html_tag =~ /\s/
-        html_tag[first_whitespace] = " class=\"#{error_class}\" "
-    end
-
-    html_tag
-end
-
-module ActsAsTree
-  module InstanceMethods
-    def descendants
-      (children.to_a + children.map(&:descendants)).flatten
-    end
-  end
-end
-
 module Prawn
   class Document
     include Prawn::Mawida::Extension
@@ -116,15 +91,7 @@ class String
     ((hours + minutes / 60.0 + seconds / 3600.0) * 3600).round
   end
 
-  def split_if_no_space_in(max_characters = 50, split_character = "\n")
-    self.to_s.scan(/.{1,#{max_characters}}/).map do |chunk|
-      chunk.index(/\s/) || chunk.length < max_characters ?
-        chunk : "#{chunk}#{split_character}"
-    end.join
-  end
-
   def sanitized_for_filename
     @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
   end
 end
-
