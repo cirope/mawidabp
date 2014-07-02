@@ -6,17 +6,24 @@ class VersionPdf < Prawn::Document
     @pdf = Prawn::Document.create_generic_pdf :landscape
   end
 
-  def generate
-    add_header
-    add_body
-    save
+  def self.create attributes = nil
+    _pdf = new attributes
+
+    _pdf.send :generate
+
+    _pdf
   end
 
   def relative_path
-    Prawn::Document.relative_path(pdf_name, PaperTrail::Version.table_name)
+    Prawn::Document.relative_path pdf_name, PaperTrail::Version.table_name
   end
 
   private
+    def generate
+      add_header
+      add_body
+      save
+    end
 
     def add_header
       @pdf.add_generic_report_header @current_organization
@@ -59,19 +66,18 @@ class VersionPdf < Prawn::Document
     end
 
     def column_headers
-      column_order.keys.map { |col_name| PaperTrail::Version.human_attribute_name(col_name) }
+      column_order.keys.map { |col_name| PaperTrail::Version.human_attribute_name col_name }
     end
 
     def column_widths
-      column_order.values.map { |col_with| @pdf.percent_width(col_with) }
+      column_order.values.map { |col_with| @pdf.percent_width col_with }
     end
 
     def save
-      @pdf.custom_save_as(pdf_name, PaperTrail::Version.table_name)
+      @pdf.custom_save_as pdf_name, PaperTrail::Version.table_name
     end
 
     def pdf_name
-      I18n.t('versions.pdf_list_name',
-        from_date: @from.to_s(:db), to_date: @to.to_s(:db))
+      I18n.t 'versions.pdf_list_name', from_date: @from.to_s(:db), to_date: @to.to_s(:db)
     end
 end
