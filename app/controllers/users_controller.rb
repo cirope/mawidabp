@@ -47,7 +47,9 @@ class UsersController < ApplicationController
     params[:user][:child_ids] ||= []
     params[:user].delete :lock_version if @user == @auth_user
 
-    @user.send_notification_if_necesary if @user.update user_params
+    update_resource @user, user_params
+
+    @user.send_notification_if_necesary if @user.errors.empty?
 
     respond_with @user, location: users_url
   end

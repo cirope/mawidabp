@@ -10,7 +10,7 @@ class Users::ProfilesController < ApplicationController
   # * PATCH /users/profiles/1
   def update
     @auth_user.is_an_important_change = false
-    @auth_user.update user_params
+    update_resource @auth_user, user_params
 
     respond_with @auth_user, location: edit_users_profile_url(@auth_user)
   end
