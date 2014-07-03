@@ -156,7 +156,7 @@ class Authentication
     def verify_pending_poll
       if poll = @valid_user.first_pending_poll
         @message = I18n.t 'poll.must_answer_poll'
-        @redirect_url = ['edit', poll, token: poll.access_token, layout: 'clean']
+        @redirect_url = ['edit', poll, token: poll.access_token]
       end
     end
 
