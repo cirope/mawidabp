@@ -27,10 +27,16 @@
   <% elsif @auth_user.can_act_as_audited? %>
     <ul class="nav nav-tabs" role="tablist" data-hide-in-search>
       <li <%== 'class="active"' unless params[:as_owner] %>>
-        <%= link_to t('finding.all'), findings_path(request.query_parameters.except(:as_owner)) %>
+        <%= link_to(
+          finding_complete_or_incomplete_label,
+          findings_path(request.query_parameters.except(:as_owner))
+        ) %>
       </li>
       <li <%== 'class="active"' if params[:as_owner] %>>
-        <%= link_to t('finding.as_owner'), findings_path(request.query_parameters.merge(:as_owner => true)) %>
+        <%= link_to(
+          t('finding.as_owner', kind: finding_complete_or_incomplete_label),
+          findings_path(request.query_parameters.merge(:as_owner => true))
+        ) %>
       </li>
     </ul>
     <br />

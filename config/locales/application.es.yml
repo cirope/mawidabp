@@ -475,8 +475,9 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     edit_title: "Modificar respuesta a una observación / oportunidad de mejora"
     correctly_updated: "Respuesta a observación / oportunidad de mejora actualizada correctamente."
     stale_object_error: "La respuesta a la observación / oportunidad de mejora no fue actualizada, intente nuevamente."
-    all: "Todas"
-    as_owner: "Como dueño de proceso"
+    incomplete: "Pendientes"
+    complete: "Solucionados o reiterados"
+    as_owner: "%{kind} como dueño de proceso"
     download: "Descargar listado general"
     download_detailed: "Descargar listado detallado"
     download_xml: 'Descargar listado en XML'
