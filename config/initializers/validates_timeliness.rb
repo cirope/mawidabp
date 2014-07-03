@@ -1,6 +1,6 @@
 ValidatesTimeliness.setup do |config|
   # Extend ORM/ODMs for full support (:active_record, :mongoid).
-  config.extend_orms = [ :active_record ]
+  # config.extend_orms = [ :active_record ]
   #
   # Default timezone
   # config.default_timezone = :utc
@@ -35,5 +35,5 @@ ValidatesTimeliness.setup do |config|
   # config.parser.ambiguous_year_threshold =  30
   #
   # Treat ambiguous dates, such as 01/02/1950, as a Non-US date.
-  config.parser.use_euro_formats
+  config.parser.remove_us_formats
 end
