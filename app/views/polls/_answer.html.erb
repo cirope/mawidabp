@@ -6,7 +6,7 @@
   <div class="row form-inputs">
     <div class="col-md-6">
       <% if question.answer_multi_choice? %>
-        <%= form_radio_buttons f, :answer_option_id, answer_options(f) %>
+        <%= form_radio_buttons f, :answer_option_id, answer_options(question) %>
         <%= f.input :type, as: :hidden, input_html: { value: AnswerMultiChoice.name } %>
       <% elsif question.answer_written? %>
         <%= f.input :answer %>
