@@ -45,7 +45,7 @@ class AuthenticationTest < ActionController::TestCase
   test 'should show message pending poll' do
     Poll.first.update_column :user_id, @user.id
     poll = @user.first_pending_poll
-    poll_redirect = ['edit', poll, token: poll.access_token, layout: 'clean']
+    poll_redirect = ['edit', poll, token: poll.access_token]
 
     assert_valid_authentication redirect_url: poll_redirect,
       message: 'poll.must_answer_poll'
