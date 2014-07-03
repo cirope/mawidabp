@@ -61,23 +61,30 @@ module Findings::UpdateCallbacks
 
     def notify_changes_to_users
       unless incomplete?
-        added = finding_user_assignments.select(&:new_record?).map(&:user)
-        removed = finding_user_assignments.select(&:marked_for_destruction?).map(&:user)
-
-        notify_changes_to added, removed unless avoid_changes_notification
+        notify_changes unless avoid_changes_notification
       end
     end
 
-    def notify_changes_to added, removed
-      if added.present? && removed.present?
-        Notifier.reassigned_findings_notification(added, removed, self, false).deliver
-      elsif added.blank? && removed.present?
+    def notify_changes
+      if users_added.present? && users_removed.present?
+        Notifier.reassigned_findings_notification(
+          users_added, users_removed, self, false
+        ).deliver
+      elsif users_added.blank? && users_removed.present?
         Notifier.changes_notification(
-          removed,
+          users_removed,
           title: responsibility_removed_title,
           organizations: [organization]
         ).deliver
       end
+    end
+
+    def users_added
+      finding_user_assignments.select(&:new_record?).map &:user
+    end
+
+    def users_removed
+      finding_user_assignments.select(&:marked_for_destruction?).map &:user
     end
 
     def responsibility_removed_title

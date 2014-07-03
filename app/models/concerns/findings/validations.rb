@@ -46,19 +46,34 @@ module Findings::Validations
     def validate_state
       errors.add :state, :must_have_a_comment if must_have_a_comment?
       errors.add :state, :can_not_be_revoked  if can_not_be_revoked?
-      errors.add :state, :must_have_a_work_paper if implemented_audited? && work_papers.empty?
+
+      validate_state_work_paper_presence
+      validate_state_revocation
+      validate_state_transition
+      validate_state_repetition
+    end
+
+    def validate_state_work_paper_presence
+      if implemented_audited? && work_papers.empty?
+        errors.add :state, :must_have_a_work_paper
+      end
+    end
+
+    def validate_state_revocation
       errors.add :state, :invalid if revoked? && is_in_a_final_review?
-      errors.add :state, :inclusion if state_transition_allowed?
-      errors.add :state, :invalid if state_invalid?
     end
 
-    def state_transition_allowed?
-      state && state_changed? && next_status_list(state_was).values.exclude?(state)
+    def validate_state_transition
+      if state && state_changed? && next_status_list(state_was).values.exclude?(state)
+        errors.add :state, :inclusion
+      end
     end
 
-    def state_invalid?
+    def validate_state_repetition
       # No puede marcarse como repetida si no está en un informe definitivo
-      state && state_changed? && repeated? && !is_in_a_final_review?
+      if state && state_changed? && repeated? && !is_in_a_final_review?
+        errors.add :state, :invalid
+      end
     end
 
     def validate_review_code
