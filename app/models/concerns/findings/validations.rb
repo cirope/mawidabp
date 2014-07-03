@@ -98,10 +98,14 @@ module Findings::Validations
     end
 
     def validate_finding_user_assignments
-      users = finding_user_assignments.reject(&:marked_for_destruction?).map(&:user)
+      users = finding_user_assignments.reject(&:marked_for_destruction?).map &:user
 
-      unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) && users.any?(&:supervisor?)
+      unless all_roles_fullfilled_by? users
         errors.add :finding_user_assignments, :invalid
       end
+    end
+
+    def all_roles_fullfilled_by? users
+      users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) && users.any?(&:supervisor?)
     end
 end
