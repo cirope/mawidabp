@@ -122,20 +122,9 @@ class FortressTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @fortress.review_code = 'abcdd' * 52
-    @fortress.type = 'abcdd' * 52
 
     assert @fortress.invalid?
     assert_error @fortress, :review_code, :too_long, count: 255
-    assert_error @fortress, :review_code, :invalid
-    assert_error @fortress, :type, :too_long, count: 255
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates well formated attributes' do
-    @fortress.control_objective_item_id = '?nil'
-
-    assert @fortress.invalid?
-    assert_error @fortress, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do

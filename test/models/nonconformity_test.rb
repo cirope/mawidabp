@@ -165,12 +165,9 @@ class NonconformityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @nonconformity.review_code = 'abcdd' * 52
-    @nonconformity.type = 'abcdd' * 52
 
     assert @nonconformity.invalid?
     assert_error @nonconformity, :review_code, :too_long, count: 255
-    assert_error @nonconformity, :review_code, :invalid
-    assert_error @nonconformity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -204,11 +201,9 @@ class NonconformityTest < ActiveSupport::TestCase
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    @nonconformity.control_objective_item_id = '?nil'
     @nonconformity.review_code = 'BAD_PREFIX_2'
 
     assert @nonconformity.invalid?
-    assert_error @nonconformity, :control_objective_item_id, :not_a_number
     assert_error @nonconformity, :review_code, :invalid
   end
 

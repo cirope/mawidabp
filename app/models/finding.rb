@@ -1,15 +1,18 @@
 class Finding < ActiveRecord::Base
   include ActsAsTree
+  include Auditable
   include Comparable
+  include Findings::CreateValidation
+  include Findings::CustomAttributes
+  include Findings::DestroyValidation
+  include Findings::UpdateCallbacks
+  include Findings::Validations
+  include Findings::ValidationCallbacks
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
 
   acts_as_tree
-
-  has_paper_trail meta: {
-    organization_id: ->(model) { Organization.current_id }
-  }
 
   cattr_accessor :current_user, :current_organization
 
@@ -356,107 +359,6 @@ class Finding < ActiveRecord::Base
     )
   }
 
-  # Atributos no persistente
-  attr_accessor :nested_user, :auto_control_objective_item, :finding_prefix,
-    :avoid_changes_notification, :users_for_notification, :user_who_make_it,
-    :nested_finding_relation, :force_modification, :undoing_reiteration
-
-  # Callbacks
-  before_create :can_be_created?
-  before_save :can_be_modified?, :check_users_for_notification,
-    :check_for_reiteration
-  before_destroy :can_be_destroyed?
-  after_update :notify_changes_to_users
-  before_validation :set_proper_parent
-  before_validation :change_review_code, :on => :update
-
-  # Restricciones
-  validates :control_objective_item_id, :description, :review_code,
-    :organization_id, :presence => true
-  validates :review_code, :type, :length => {:maximum => 255},
-    :allow_nil => true, :allow_blank => true
-  validates :control_objective_item_id,
-    :numericality => {:only_integer => true},
-    :allow_nil => true, :allow_blank => true
-  validates :audit_comments, :presence => true, :if => :revoked?
-  validates_date :first_notification_date, :allow_nil => true
-  validates_date :follow_up_date, :solution_date, :origination_date,
-    :allow_nil => true, :allow_blank => true
-  validates_each :follow_up_date, :if => proc { |f|
-    !f.incomplete? && !f.revoked? && !f.repeated?
-  } do |record, attr, value|
-
-    weakness_or_nonconformity = record.kind_of?(Weakness) || record.kind_of?(Nonconformity)
-
-    if weakness_or_nonconformity
-      check_for_blank = weakness_or_nonconformity &&
-        (record.being_implemented? || record.implemented? || record.implemented_audited?)
-
-      record.errors.add attr, :blank if check_for_blank && value.blank?
-      record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
-    end
-  end
-  validates_each :solution_date, :if => proc { |f|
-    !f.incomplete? && !f.revoked? && !f.repeated?
-  } do |record, attr, value|
-    check_for_blank = record.implemented_audited? || record.assumed_risk?
-
-    record.errors.add attr, :blank if check_for_blank && value.blank?
-    record.errors.add attr, :must_be_blank if !check_for_blank && !value.blank?
-  end
-  validates_each :answer do |record, attr, value|
-    check_for_blank = record.being_implemented? ||
-      (record.state_changed? && record.state_was == STATUS[:confirmed])
-
-    record.errors.add attr, :blank if check_for_blank && value.blank?
-  end
-  validates_each :state do |record, attr, value|
-    if value && record.state_changed? &&
-        !record.next_status_list(record.state_was).values.include?(value)
-      record.errors.add attr, :inclusion
-    end
-
-    record.errors.add attr, :must_have_a_comment if record.must_have_a_comment?
-    record.errors.add attr, :can_not_be_revoked if record.can_not_be_revoked?
-
-    if record.implemented_audited? && record.work_papers.empty?
-      record.errors.add attr, :must_have_a_work_paper
-    end
-
-    # No puede marcarse como repetida si no está en un informe definitivo
-    if value && record.state_changed? && record.repeated?
-      record.errors.add attr, :invalid unless record.is_in_a_final_review?
-    end
-
-    if record.revoked? && record.is_in_a_final_review?
-      record.errors.add attr, :invalid
-    end
-  end
-  validates_each :review_code do |record, attr, value|
-    review = record.control_objective_item.try(:review)
-
-    if review
-      (review.weaknesses | review.oportunities | review.fortresses | review.nonconformities |
-       review.potential_nonconformities).each do |finding|
-        another_record = (!record.new_record? && finding.id != record.id) ||
-          (record.new_record? && finding.object_id != record.object_id)
-
-        if value == finding.review_code && another_record &&
-            (record.final == finding.final)
-          record.errors.add attr, :taken
-        end
-      end
-    end
-  end
-  validates_each :finding_user_assignments do |record, attr, value|
-    users = value.reject(&:marked_for_destruction?).map(&:user)
-
-    unless users.any?(&:can_act_as_audited?) && users.any?(&:auditor?) &&
-        users.any?(&:supervisor?)
-      record.errors.add attr, :invalid
-    end
-  end
-
   # Relaciones
   belongs_to :organization
   belongs_to :control_objective_item
@@ -637,13 +539,6 @@ class Finding < ActiveRecord::Base
     end
   end
 
-  def set_proper_parent
-    self.finding_answers.each { |fa| fa.finding = self }
-    self.finding_relations.each { |fr| fr.finding = self }
-    self.finding_user_assignments.each { |fua| fua.finding = self }
-    self.work_papers.each { |wp| wp.owner = self }
-  end
-
   def check_for_valid_relation(finding_relation)
     related_finding = finding_relation.related_finding
 
@@ -651,28 +546,6 @@ class Finding < ActiveRecord::Base
           (!related_finding.is_in_a_final_review? &&
             related_finding.review.id != self.control_objective_item.try(:review_id)))
       raise 'Invalid finding for asociation'
-    end
-  end
-
-  def check_for_reiteration
-    review = self.control_objective_item.try(:review)
-
-    if !self.undoing_reiteration && self.repeated_of_id_changed? && review
-      is_not_included = review.finding_review_assignments.empty? ||
-        !review.finding_review_assignments.detect { |fra| fra.finding == self.repeated_of }
-
-      raise 'Not included in review' if is_not_included
-
-      if self.repeated_of_id_was.nil?
-        if self.repeated_of.repeated? && !self.final
-          raise 'Original can not be repeated'
-        end
-
-        self.repeated_of.state = STATUS[:repeated]
-        self.origination_date = self.repeated_of.origination_date
-      else
-        raise 'Original finding can not be changed'
-      end
     end
   end
 
@@ -711,84 +584,8 @@ class Finding < ActiveRecord::Base
     self.updated_at = Time.now
   end
 
-  def notify_changes_to_users
-    if !self.incomplete? && !self.avoid_changes_notification
-      added = self.finding_user_assignments.select(&:new_record?).map(&:user)
-      removed = self.finding_user_assignments.select(
-        &:marked_for_destruction?).map(&:user)
-
-      if !added.blank? && !removed.blank?
-        Notifier.reassigned_findings_notification(added, removed, self,
-          false).deliver
-      elsif added.blank? && !removed.blank?
-        title = I18n.t('finding.responsibility_removed',
-          :class_name => self.class.model_name.human.downcase,
-          :review_code => self.review_code,
-          :review => self.review.try(:identification))
-
-        Notifier.changes_notification(removed, title: title,
-          organizations: [organization]).deliver
-      end
-    end
-  end
-
-  def can_be_modified?
-    if self.force_modification || self.final == false || self.final_changed? ||
-        (self.repeated? && self.state_changed?) ||
-        (!self.changed? && !self.control_objective_item.review.is_frozen?)
-      true
-    else
-      msg = I18n.t('finding.readonly')
-
-      if !self.errors.full_messages.include?(msg)
-        self.errors.add :base, msg
-      end
-
-      false
-    end
-  end
-
-  def can_be_created?
-    unless self.is_in_a_final_review? &&
-        (self.changed? || self.marked_for_destruction?)
-      true
-    else
-      msg = I18n.t('finding.readonly')
-      self.errors.add :base, msg unless self.errors.full_messages.include?(msg)
-
-      false
-    end
-  end
-
-  def allow_destruction!
-    @allow_destruction = true
-  end
-
-  def can_be_destroyed?
-    !!@allow_destruction
-  end
-
   def is_in_a_final_review?
     self.control_objective_item.try(:review).try(:has_final_review?)
-  end
-
-  def check_users_for_notification
-    if !self.incomplete? &&
-        !(self.users_for_notification || []).reject(&:blank?).empty?
-
-      self.users_for_notification.reject(&:blank?).uniq.each do |user_id|
-        finding_user_assignment = self.finding_user_assignments.detect do |fua|
-          fua.user_id == user_id.to_i
-        end
-
-        if finding_user_assignment
-          user = self.users.detect {|u| u.id == user_id.to_i} ||
-            User.find(user_id)
-
-          Notifier.notify_new_finding(user, self).deliver
-        end
-      end
-    end
   end
 
   def must_have_a_comment?
@@ -844,34 +641,6 @@ class Finding < ActiveRecord::Base
 
   def last_work_paper_code(review = nil)
     raise 'Must be implemented in the subclasses'
-  end
-
-  def change_review_code
-    if self.control_objective_item_id_changed? &&
-        self.control_objective_item_id &&
-        ControlObjectiveItem.exists?(self.control_objective_item_id)
-      old_coi = ControlObjectiveItem.find(self.control_objective_item_id_was)
-      new_coi = ControlObjectiveItem.find(self.control_objective_item_id)
-
-      unless old_coi.review_id == new_coi.review_id
-        if new_coi.review.try(:is_frozen?)
-          raise 'Can not change to a frozen review!'
-        end
-        # Cambio al anterior para que no lo tome en cuenta en el código
-
-        self.control_objective_item = old_coi
-        self.review_code = self.next_code(new_coi.review)
-
-        # Para evitar que sea tenido en cuenta en la próxima iteración
-        self.work_papers.each { |wp| wp.code = nil }
-        self.work_papers.each do |wp|
-          wp.code = self.last_work_paper_code(new_coi.review).next
-        end
-
-        self.control_objective_item = new_coi
-
-      end
-    end
   end
 
   STATUS.each do |status_type, status_value|

@@ -135,12 +135,9 @@ class OportunityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @oportunity.review_code = 'abcdd' * 52
-    @oportunity.type = 'abcdd' * 52
 
     assert @oportunity.invalid?
     assert_error @oportunity, :review_code, :too_long, count: 255
-    assert_error @oportunity, :review_code, :invalid
-    assert_error @oportunity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -149,14 +146,6 @@ class OportunityTest < ActiveSupport::TestCase
 
     assert @oportunity.invalid?
     assert_error @oportunity, :state, :inclusion
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates well formated attributes' do
-    @oportunity.control_objective_item_id = '?nil'
-
-    assert @oportunity.invalid?
-    assert_error @oportunity, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do

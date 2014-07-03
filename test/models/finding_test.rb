@@ -194,26 +194,26 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @finding.review_code = 'abcdd' * 52
-    @finding.type = 'abcdd' * 52
 
     assert @finding.invalid?
     assert_error @finding, :review_code, :too_long, count: 255
-    assert_error @finding, :review_code, :invalid
-    assert_error @finding, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates well formated attributes' do
-    assert @finding.update_attribute :state, Finding::STATUS[:incomplete]
+    @finding.update_column :state, Finding::STATUS[:incomplete]
+    @finding.reload
 
-    @finding.control_objective_item_id = '?nil'
-    @finding.first_notification_date = '15/13/12'
-    @finding.follow_up_date = '15/13/12'
-    @finding.solution_date = '15/13/12'
-    @finding.origination_date = '15/13/12'
+    @finding.first_notification_date = '13/13/13'
+    @finding.follow_up_date          = '13/13/13'
+    @finding.solution_date           = '13/13/13'
+    @finding.origination_date        = '13/13/13'
 
     assert @finding.invalid?
-    assert_error @finding, :control_objective_item_id, :not_a_number
+    assert_error @finding, :first_notification_date, :invalid_date
+    assert_error @finding, :follow_up_date,          :invalid_date
+    assert_error @finding, :solution_date,           :invalid_date
+    assert_error @finding, :origination_date,        :invalid_date
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

@@ -222,7 +222,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new(
@@ -239,7 +239,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -252,7 +252,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert finding.save(:validate => false) # Forzado para que no se validen los datos
     assert !@review.reload.must_be_approved?
     assert !@review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -266,7 +266,7 @@ class ReviewTest < ActiveSupport::TestCase
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(
@@ -283,7 +283,7 @@ class ReviewTest < ActiveSupport::TestCase
     assert !@review.reload.must_be_approved?
     assert_equal 2, @review.approval_errors.size
     assert !@review.can_be_approved_by_force
-    assert finding.allow_destruction!
+    def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
     finding = Weakness.new finding.attributes.merge(

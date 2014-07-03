@@ -134,12 +134,9 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @potential_nonconformity.review_code = 'abcdd' * 52
-    @potential_nonconformity.type = 'abcdd' * 52
 
     assert @potential_nonconformity.invalid?
     assert_error @potential_nonconformity, :review_code, :too_long, count: 255
-    assert_error @potential_nonconformity, :review_code, :invalid
-    assert_error @potential_nonconformity, :type, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -148,14 +145,6 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
 
     assert @potential_nonconformity.invalid?
     assert_error @potential_nonconformity, :state, :inclusion
-  end
-
-  # Prueba que las validaciones del modelo se cumplan como es esperado
-  test 'validates well formated attributes' do
-    @potential_nonconformity.control_objective_item_id = '?nil'
-
-    assert @potential_nonconformity.invalid?
-    assert_error @potential_nonconformity, :control_objective_item_id, :not_a_number
   end
 
   test 'next code' do
