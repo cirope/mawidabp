@@ -11,6 +11,7 @@ class Finding < ActiveRecord::Base
   include Findings::UpdateCallbacks
   include Findings::Validations
   include Findings::ValidationCallbacks
+  include Findings::Versions
   include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
@@ -613,26 +614,6 @@ class Finding < ActiveRecord::Base
     allowed_keys = STATUS_TRANSITIONS[state_key]
 
     STATUS.reject {|k,| !allowed_keys.include?(k.to_sym)}
-  end
-
-  def versions_between(start_date = nil, end_date = nil)
-    conditions = []
-    conditions << 'created_at >= :filter_start' if start_date
-    conditions << 'created_at <= :filter_end' if end_date
-    conditions.blank? ? self.versions : self.versions.where(
-      conditions.join(' AND '),
-      {:filter_start => start_date, :filter_end => end_date}
-    )
-  end
-
-  def versions_after_final_review(end_date = nil)
-    self.versions_between(self.control_objective_item.try(:review).try(
-        :conclusion_final_review).try(:created_at), end_date)
-  end
-
-  def versions_before_final_review(start_date = nil)
-    self.versions_between(start_date, self.control_objective_item.try(
-        :review).try(:conclusion_final_review).try(:created_at))
   end
 
   def status_change_history
