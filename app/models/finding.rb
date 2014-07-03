@@ -5,9 +5,12 @@ class Finding < ActiveRecord::Base
   include Findings::CreateValidation
   include Findings::CustomAttributes
   include Findings::DestroyValidation
+  include Findings::JSON
+  include Findings::SortColumns
   include Findings::UpdateCallbacks
   include Findings::Validations
   include Findings::ValidationCallbacks
+  include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
   include ParameterSelector
@@ -418,51 +421,6 @@ class Finding < ActiveRecord::Base
     self.finding_prefix ||= false
   end
 
-  def self.columns_for_sort
-    HashWithIndifferentAccess.new(
-      :risk_asc => {
-        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.ascendant')})",
-        :field => [
-          "#{Finding.table_name}.risk ASC",
-          "#{Finding.table_name}.priority ASC",
-          "#{Finding.table_name}.state ASC"
-        ]
-      },
-      :risk_desc => {
-        :name => "#{Finding.human_attribute_name(:risk)} - #{Finding.human_attribute_name(:priority)} (#{I18n.t('label.descendant')})",
-        :field => [
-          "#{Finding.table_name}.risk DESC",
-          "#{Finding.table_name}.priority DESC",
-          "#{Finding.table_name}.state ASC"
-        ]
-      },
-      :state => {
-        :name => Finding.human_attribute_name(:state),
-        :field => "#{Finding.table_name}.state ASC"
-      },
-      :review => {
-        :name => Review.model_name.human,
-        :field => "#{Review.table_name}.identification ASC"
-      },
-      :updated_at_asc => {
-        :name => "#{Finding.human_attribute_name(:updated_at)}  (#{I18n.t('label.ascendant')})",
-        :field => "#{Finding.table_name}.updated_at ASC"
-      },
-      :updated_at_desc => {
-        :name => "#{Finding.human_attribute_name(:updated_at)}  (#{I18n.t('label.descendant')})",
-        :field => "#{Finding.table_name}.updated_at DESC"
-      },
-      :follow_up_date_asc => {
-        :name => "#{Finding.human_attribute_name(:follow_up_date)}  (#{I18n.t('label.ascendant')})",
-        :field => "#{Finding.table_name}.follow_up_date ASC"
-      },
-      :follow_up_date_desc => {
-        :name => "#{Finding.human_attribute_name(:follow_up_date)}  (#{I18n.t('label.descendant')})",
-        :field => "#{Finding.table_name}.follow_up_date DESC"
-      }
-    )
-  end
-
   def <=>(other)
     other.kind_of?(Finding) ? self.id <=> other.id : -1
   end
@@ -472,49 +430,6 @@ class Finding < ActiveRecord::Base
   end
 
   alias_method :label, :to_s
-
-  def to_xml(options = {})
-    default_options = { :skip_types => true, :only => [:solution_date] }
-
-    super(default_options.merge(options)) do |xml|
-      # Para mantener siempre el mismo orden (ocurrencias ajenas)
-      xml.tag! 'origination-date', self.origination_date
-      xml.tag! 'id', self.id
-      xml.tag! 'follow-up-date', self.follow_up_date
-      xml.tag! 'description', self.description
-      xml.tag! 'review-code', self.review_code
-      xml.tag! 'answer', self.answer
-      xml.tag! 'risk-text', (self.risk_text if self.respond_to?(:risk_text))
-      xml.tag! 'state-text', self.state_text
-      xml.tag! 'review-text', self.review_text
-
-      if self.finding_user_assignments.empty?
-        xml.tag! 'users' # empty tag
-      else
-        xml.users do
-          self.finding_user_assignments.each do |fua|
-            xml.user do
-              xml.tag! 'name', fua.user.full_name
-              xml.tag! 'user', fua.user.user
-              xml.tag! 'function', fua.user.function
-              xml.tag! 'process_owner', fua.process_owner
-            end
-          end
-        end
-      end
-
-      yield(xml) if block_given?
-    end
-  end
-
-  def as_json(options = nil)
-    default_options = {
-      :only => [:id],
-      :methods => [:label, :informal]
-    }
-
-    super(default_options.merge(options || {}))
-  end
 
   def informal
     text = "<strong>#{Finding.human_attribute_name(:description)}</strong>: "
