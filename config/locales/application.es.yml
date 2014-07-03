@@ -1682,13 +1682,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         total_resources_cost: "Costo total"
 
     errors:
-      template:
-        header:
-          one: "No se realizaron cambios porque se encontró un error"
-          other: "No se realizaron cambios porque se encontraron %{count} errores"
-        # The variable :count is also available
-        body: "Los siguientes problemas deben solucionarse:"
-
       # Append your own errors here or at the model/attributes scope.
       models:
         best_practice:
