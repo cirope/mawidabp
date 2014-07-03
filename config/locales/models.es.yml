@@ -18,6 +18,9 @@ es: &common
       user:
         one: 'Usuario'
         other: 'Usuarios'
+      paper_trail/version:
+        one: 'Versión'
+        other: 'Versiones'
 
     attributes:
       error_record:
@@ -60,6 +63,11 @@ es: &common
         roles: 'Perfiles'
         send_notification_email: 'Enviar notificación'
         user: 'Usuario'
+      paper_trail/version:
+        created_at: 'Fecha'
+        event: 'Evento'
+        item: 'Objeto'
+        whodunnit: 'Ejecutor'
 
 public_es:
   <<: *common

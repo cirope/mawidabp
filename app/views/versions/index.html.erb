@@ -29,9 +29,7 @@
 
 <hr />
 
-<div>
-  <%= paginate @versions %>
-  <%= link_to t('label.back'), choose_login_records_path %> |
-  <%= link_to t('label.download'), { action: :index, index: params[:index],
-    format: :pdf, _ts: Time.now.to_i } %>
-</div>
+<%= paginate @versions %>
+<%= link_to t('label.back'), choose_login_records_path %> |
+<%= link_to t('label.download'), { action: :index, index: params[:index],
+  format: :pdf, _ts: Time.now.to_i } %>

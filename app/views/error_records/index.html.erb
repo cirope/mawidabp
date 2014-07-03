@@ -35,9 +35,7 @@
 
 <hr />
 
-<div>
-  <%= paginate @error_records %>
-  <%= link_to t('label.back'), choose_login_records_path %> |
-  <%= link_to t('label.download'), error_records_path(format: :pdf,
-    index: params[:index], search: params[:search], _ts: Time.now.to_i) %>
-</div>
+<%= paginate @error_records %>
+<%= link_to t('label.back'), choose_login_records_path %> |
+<%= link_to t('label.download'), error_records_path(format: :pdf,
+  index: params[:index], search: params[:search], _ts: Time.now.to_i) %>

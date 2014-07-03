@@ -1676,11 +1676,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      paper_trail/version:
-        item: "Objeto"
-        event: "Evento"
-        whodunnit: "Ejecutor"
-        created_at: "Fecha"
       period:
         number: "Número"
         description: "Descripción"

@@ -1,21 +1,21 @@
 <p>
-  <strong><%= PaperTrail::Version.human_attribute_name 'created_at' %>:</strong>
+  <strong><%= PaperTrail::Version.human_attribute_name 'created_at' %></strong>:
   <%= l @version.created_at, format: :long %>
 </p>
 
 <p>
-  <strong><%= PaperTrail::Version.human_attribute_name 'whodunnit' %>:</strong>
+  <strong><%= PaperTrail::Version.human_attribute_name 'whodunnit' %></strong>:
   <%= show_whodunnit(@version.whodunnit) %>
 </p>
 
 <p>
-  <strong><%= PaperTrail::Version.human_attribute_name 'item' %>:</strong>
+  <strong><%= PaperTrail::Version.human_attribute_name 'item' %></strong>:
   <%= @version.item ?
     "#{@version.item.class.model_name.human} (#{@version.reify(has_one: false) || @version.item})" : '-' %>
 </p>
 
 <p>
-  <strong><%= PaperTrail::Version.human_attribute_name 'event' %>:</strong>
+  <strong><%= PaperTrail::Version.human_attribute_name 'event' %></strong>:
   <%= t("versions.events.#{@version.event}") %>
 </p>
 
@@ -47,7 +47,5 @@
 
 <hr />
 
-<div>
-  <%= link_to_index versions_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_index versions_path %> |
+<%= link_to_back %>
