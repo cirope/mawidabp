@@ -1,4 +1,4 @@
-<%= simple_form_for(@poll) do |f| %>
+<%= simple_form_for @poll do |f| %>
   <%= render 'shared/error_explanation', f: f %>
 
   <% if @poll.persisted? %>

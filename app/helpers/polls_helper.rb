@@ -1,9 +1,7 @@
 module PollsHelper
-  def answer_option_field(form)
-    collection = form.object.question.answer_options.map do |o|
-      [t("activerecord.attributes.answer_option.options.#{o.option}"), o.id]
+  def answer_options form
+    form.object.question.answer_options.map do |o|
+      [o.id, t("activerecord.attributes.answer_option.options.#{o.option}")]
     end
-
-    form.input :answer_option_id, collection: collection, as: :radio_buttons, label: false
   end
 end

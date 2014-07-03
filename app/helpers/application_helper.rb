@@ -1,6 +1,13 @@
 module ApplicationHelper
   include ParameterSelector
 
+  def form_radio_buttons form, field, collection
+    form.collection_radio_buttons(
+      field, collection, :first, :last,
+      item_wrapper_tag: :div, item_wrapper_class: :radio
+    )
+  end
+
   def t_boolean field
     t "navigation.#{field ? '_yes' : '_no'}"
   end
