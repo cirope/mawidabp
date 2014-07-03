@@ -2,6 +2,7 @@ class Finding < ActiveRecord::Base
   include ActsAsTree
   include Auditable
   include Comparable
+  include Findings::Confirmation
   include Findings::CreateValidation
   include Findings::CustomAttributes
   include Findings::DestroyValidation
@@ -515,39 +516,6 @@ class Finding < ActiveRecord::Base
 
   def audited_and_system_quality_management?
     current_user.try(:can_act_as_audited?) && self.organization.kind.eql?('quality_management')
-  end
-
-  def mark_as_unconfirmed!
-    self.first_notification_date = Date.today unless self.unconfirmed?
-    self.state = STATUS[:unconfirmed] if self.notify?
-
-    self.save(:validate => false)
-
-  rescue ActiveRecord::StaleObjectError
-    self.review.reload
-    self.save(:validate => false)
-  end
-
-  def confirmed!(user = nil)
-    if self.unconfirmed? || self.notify?
-      self.update_attribute :state, STATUS[:confirmed]
-
-      if self.confirmation_date.blank?
-        self.update_attribute :confirmation_date, Date.today
-      end
-
-      if user
-        self.notifications.not_confirmed.each do |notification|
-          if notification.user.can_act_as_audited?
-            notification.update!(
-              :status => Notification::STATUS[:confirmed],
-              :confirmation_date => notification.confirmation_date || Time.now,
-              :user_who_confirm => user
-            )
-          end
-        end
-      end
-    end
   end
 
   def next_code(review = nil)
