@@ -9,6 +9,9 @@ es: &common
       organization:
         one: 'Organización'
         other: 'Organizaciones'
+      user:
+        one: 'Usuario'
+        other: 'Usuarios'
 
     attributes:
       organization:
@@ -21,6 +24,27 @@ es: &common
           one: 'Isologotipo'
         name: 'Nombre'
         prefix: 'Prefijo'
+      user:
+        email: 'Correo'
+        enable: 'Habilitado'
+        failed_attempts: 'Intentos fallidos'
+        function: 'Cargo'
+        hidden: 'Oculto'
+        language: 'Lenguaje'
+        last_access: 'Último acceso'
+        last_name: 'Apellido'
+        logged_in: 'Conectado'
+        manager_id: 'Superior'
+        name: 'Nombre'
+        notes: 'Notas'
+        organization_roles: 'Perfiles'
+        password: 'Contraseña'
+        password_changed: 'Contraseña cambiada'
+        password_confirmation: 'Confirmación'
+        resource: 'Tipo de recurso'
+        roles: 'Perfiles'
+        send_notification_email: 'Enviar notificación'
+        user: 'Usuario'
 
 public_es:
   <<: *common
