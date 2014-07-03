@@ -114,6 +114,16 @@ class FindingsControllerTest < ActionController::TestCase
     assert_template 'findings/index'
   end
 
+  test 'list findings for process owner' do
+    user = users :audited_user
+
+    login user: user
+    get :index, :completed => 'incomplete', :as_owner => true
+    assert_response :success
+    assert assigns(:findings).any?
+    assert assigns(:findings).all? { |f| f.finding_user_assignments.owners.map(&:user).include?(user) }
+  end
+
   test 'list findings for specific ids' do
     login
     ids = [

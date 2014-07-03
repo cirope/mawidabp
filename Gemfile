@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.2'
+gem 'rails', '~> 4.1.4'
 
 gem 'pg'
 gem 'foreigner'
@@ -27,7 +27,7 @@ gem 'will_paginate-bootstrap'
 gem 'attr_searchable'
 gem 'jbuilder'
 
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 

@@ -17,18 +17,15 @@ class FindingsController < ApplicationController
     @selected_user = User.find(params[:user_id]) if params[:user_id]
     @self_and_descendants = @auth_user.descendants + [@auth_user]
     @related_users = @auth_user.related_users_and_descendants
-    @is_responsible = params[:as_responsible]
     default_conditions = { final: false }
 
     if @auth_user.committee? || @selected_user
       if @selected_user
-          default_conditions[User.table_name] = {:id => params[:user_id]}
+        default_conditions[User.table_name] = { :id => params[:user_id] }
 
-          if @is_responsible
-            default_conditions[FindingUserAssignment.table_name] = {
-              :responsible_auditor => true
-            }
-          end
+        if params[:as_responsible]
+          default_conditions[FindingUserAssignment.table_name] = { :responsible_auditor => true }
+        end
       end
     else
       self_and_descendants_ids = @self_and_descendants.map(&:id) +
@@ -37,6 +34,10 @@ class FindingsController < ApplicationController
         :id => self_and_descendants_ids.include?(@selected_user.try(:id)) ?
           @selected_user.id : self_and_descendants_ids
       }
+    end
+
+    if params[:as_owner]
+      default_conditions[FindingUserAssignment.table_name] = { :process_owner => true }
     end
 
     if params[:ids]
@@ -61,7 +62,7 @@ class FindingsController < ApplicationController
         "#{Finding.table_name}.state ASC",
         "#{Finding.table_name}.review_code ASC"
       ]
-   ).references(:control_objective_items, :reviews)
+   ).references(:users, :control_objective_items, :reviews, :finding_user_assignments)
 
     respond_to do |format|
       format.html {
@@ -178,6 +179,10 @@ class FindingsController < ApplicationController
         Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
     end
 
+    if params[:as_owner]
+      default_conditions[FindingUserAssignment.table_name] = { :process_owner => true }
+    end
+
     build_search_conditions Finding, default_conditions
 
     findings = Finding.list.includes(
@@ -247,6 +252,10 @@ class FindingsController < ApplicationController
       default_conditions[:state] = params[:completed] == 'incomplete' ?
         Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
         Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
+    end
+
+    if params[:as_owner]
+      default_conditions[FindingUserAssignment.table_name] = { :process_owner => true }
     end
 
     build_search_conditions Finding, default_conditions

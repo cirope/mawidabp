@@ -380,8 +380,8 @@ var Search = {
         }
       });
 
-      if($('#filter_box').length > 0) {
-        $('#filter_box').hide();
+      if($('[data-hide-in-search]').length > 0) {
+        $('[data-hide-in-search]').hide();
         $(search).fadeIn(300, function() {$('#search_query').focus();});
       } else {
         search.fadeIn(300, function() {$('#search_query').focus();});

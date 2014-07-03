@@ -91,6 +91,13 @@ class String
     ((hours + minutes / 60.0 + seconds / 3600.0) * 3600).round
   end
 
+  def split_if_no_space_in(max_characters = 50, split_character = "\n")
+    self.to_s.scan(/.{1,#{max_characters}}/).map do |chunk|
+      chunk.index(/\s/) || chunk.length < max_characters ?
+        chunk : "#{chunk}#{split_character}"
+    end.join
+  end
+
   def sanitized_for_filename
     @_sanitized_for_filename ||= self.gsub /[^A-Za-z0-9\.\-]+/, '_'
   end

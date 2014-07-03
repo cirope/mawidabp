@@ -9,10 +9,7 @@ class VersionsController < ApplicationController
 
     respond_to do |format|
       format.html { @versions = @versions.page(params[:page]) }
-      format.pdf {
-        create_pdf
-        redirect_to @pdf.relative_path
-      }
+      format.pdf  { redirect_to pdf.relative_path }
     end
   end
 
@@ -25,11 +22,8 @@ class VersionsController < ApplicationController
 
   private
 
-    def create_pdf
-      @pdf = VersionPdf.new(from: @from_date, to: @to_date, versions: @versions,
-        current_organization: current_organization)
-
-      @pdf.generate
+    def pdf
+      VersionPdf.create from: @from_date, to: @to_date, versions: @versions, current_organization: current_organization
     end
 
     def search

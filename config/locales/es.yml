@@ -517,6 +517,8 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     edit_title: "Modificar respuesta a un hallazgo"
     correctly_updated: "Respuesta a hallazgo actualizada correctamente."
     stale_object_error: "La respuesta al hallazgo no fue actualizada, intente nuevamente."
+    all: "Todas"
+    as_owner: "Como dueño de proceso"
     download: "Descargar listado general"
     download_detailed: "Descargar listado detallado"
     download_xml: "Descargar listado en XML"

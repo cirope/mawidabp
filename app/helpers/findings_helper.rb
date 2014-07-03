@@ -142,7 +142,12 @@ module FindingsHelper
         u.full_name_with_function, {:user_id => u.id}.to_json
       ]
 
-      unless u.can_act_as_audited?
+      if u.can_act_as_audited?
+        users << [
+          "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.process_owner')}",
+          {:user_id => u.id, :as_owner => true}.to_json
+        ]
+      else
         users << [
           "#{u.full_name_with_function} - #{t('activerecord.attributes.finding_user_assignment.responsible_auditor')}",
           {:user_id => u.id, :as_responsible => true}.to_json
