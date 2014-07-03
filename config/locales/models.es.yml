@@ -6,6 +6,9 @@ es: &common
 
   activerecord:
     models:
+      login_record:
+        one: 'Registro de ingreso'
+        other: 'Registros de ingreso'
       organization:
         one: 'Organización'
         other: 'Organizaciones'
@@ -14,6 +17,11 @@ es: &common
         other: 'Usuarios'
 
     attributes:
+      login_record:
+        data: 'Datos'
+        end: 'Fin'
+        start: 'Inicio'
+        user_id: 'Usuario'
       organization:
         description: 'Descripción'
         kind: 'Tipo de organización'

@@ -1,4 +1,4 @@
-es:
+es: &common
   will_paginate:
     next_label: 'Siguiente &raquo;'
     page_entries_info:
@@ -14,3 +14,9 @@ es:
         zero: 'Sin resultados'
     page_gap: '&hellip;'
     previous_label: '&laquo; Anterior'
+
+public_es:
+  <<: *common
+
+mc_es:
+  <<: *common

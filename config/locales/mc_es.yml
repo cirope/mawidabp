@@ -1242,7 +1242,6 @@ mc_es:
       finding_answer: "Respuesta a desvío"
       finding_review_assignment: "Asignación de desvío a informe"
       group: "Grupo"
-      login_record: "Registro de ingreso"
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
@@ -1487,11 +1486,6 @@ mc_es:
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      login_record:
-        user_id: "Usuario"
-        start: "Inicio"
-        end: "Fin"
-        data: "Datos"
       notification:
         status: "Estado"
         confirmation_hash: "Cadena de confirmación"

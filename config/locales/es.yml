@@ -1372,7 +1372,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       finding_review_assignment: "Asignación de observación a informe"
       fortress: "Fortaleza"
       group: "Grupo"
-      login_record: "Registro de ingreso"
       nonconformity: "No conformidad"
       notification: "Notificación"
       old_password: "Contraseña anterior"
@@ -1631,11 +1630,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         uploaded_data: "Imagen"
         content_type: "Imagen (tipo)"
         size: "Imagen (tamaño)"
-      login_record:
-        user_id: "Usuario"
-        start: "Inicio"
-        end: "Fin"
-        data: "Datos"
       nonconformity:
         control_objective_item_id: "Objetivo de control"
         description: "No conformidad"
@@ -1994,8 +1988,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         review:
           attributes:
             review_user_assignments:
-              invalid: "debe tener al menos un auditor, un gerente y un auditado o
-                un auditor, un supervisor y un auditado"
+              invalid: "debe tener al menos un auditor, un gerente y un auditado o un auditor, un supervisor y un auditado"
             plan_item:
               invalid: "debe tener una unidad de negocio asignada en la planificación"
         review_user_assignment:
