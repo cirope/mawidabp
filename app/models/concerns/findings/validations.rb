@@ -44,40 +44,37 @@ module Findings::Validations
     end
 
     def validate_state
-      if state && state_changed? && next_status_list(state_was).values.exclude?(state)
-        errors.add :state, :inclusion
-      end
-
       errors.add :state, :must_have_a_comment if must_have_a_comment?
       errors.add :state, :can_not_be_revoked  if can_not_be_revoked?
+      errors.add :state, :must_have_a_work_paper if implemented_audited? && work_papers.empty?
+      errors.add :state, :invalid if revoked? && is_in_a_final_review?
+      errors.add :state, :inclusion if state_transition_allowed?
+      errors.add :state, :invalid if state_invalid?
+    end
 
-      if implemented_audited? && work_papers.empty?
-        errors.add :state, :must_have_a_work_paper
-      end
+    def state_transition_allowed?
+      state && state_changed? && next_status_list(state_was).values.exclude?(state)
+    end
 
+    def state_invalid?
       # No puede marcarse como repetida si no está en un informe definitivo
-      if state && state_changed? && repeated?
-        errors.add :state, :invalid unless is_in_a_final_review?
-      end
-
-      if revoked? && is_in_a_final_review?
-        errors.add :state, :invalid
-      end
+      state && state_changed? && repeated? && !is_in_a_final_review?
     end
 
     def validate_review_code
       review = control_objective_item.try(:review)
 
       if review
-        findings_for(review).each do |finding|
-          another_record = (persisted? && finding.id != id) ||
-                           (new_record? && finding.object_id != object_id)
-
-          if review_code == finding.review_code && another_record && final == finding.final
+        findings_for(review).each do |f|
+          if review_code == f.review_code && not_equal_to(f) && final == f.final
             errors.add :review_code, :taken
           end
         end
       end
+    end
+
+    def not_equal_to finding
+      (persisted? && finding.id != id) || (new_record? && finding.object_id != object_id)
     end
 
     def findings_for review
