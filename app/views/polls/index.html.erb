@@ -20,7 +20,7 @@
       <tr>
         <td><%= poll.user ? poll.user.informal_name : poll.customer_email %></td>
         <td><%= poll.questionnaire.name %></td>
-        <td><%= poll.answered ? t('label.yes') : t('label.no')  %></td>
+        <td><%= t_boolean poll.answered %></td>
         <td><%= l poll.created_at.to_date, format: :long %></td>
         <td><%= l(poll.updated_at.to_date, format: :long) if poll.answered %></td>
         <td><%= link_to_show poll %></td>

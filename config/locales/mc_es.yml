@@ -1573,7 +1573,7 @@ mc_es:
         answer_date: "Fecha contestación"
         answered: "Contestada"
         questionnaire_id: "Cuestionario"
-        user_id: "Usuario"
+        user: "Usuario"
         answers:
           answer: "Respuesta"
           answer_option: "Opción"
