@@ -159,4 +159,7 @@ module FindingsHelper
       {:name => :user_id, :id => :user_id_select, :class => 'form-control'}
   end
 
+  def finding_complete_or_incomplete_label
+    t "finding.#{params[:completed]}"
+  end
 end
