@@ -1,7 +1,6 @@
 GIT
-  remote: git://github.com/johncarney/validates_timeliness.git
-  revision: 33677dbaa53cf4566fc3c18885dff5479c4cd7e4
-  branch: remove-deprecated-setup-method
+  remote: git://github.com/francocatena/validates_timeliness.git
+  revision: 0bf3b50e0d51f7a6890c3984147ecd05547746cb
   specs:
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.7)
@@ -36,7 +35,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    acts_as_tree (1.6.1)
+    acts_as_tree (2.0.0)
       activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
     attr_searchable (0.0.3)
@@ -112,7 +111,7 @@ GEM
     jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    jquery-ui-rails (4.2.1)
+    jquery-ui-rails (5.0.0)
       railties (>= 3.2.16)
     json (1.8.1)
     kgio (2.9.2)
