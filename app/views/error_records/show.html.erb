@@ -1,20 +1,20 @@
 <p>
-  <strong><%= User.model_name.human %>:</strong>
+  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
   <%= @error_record %>
 </p>
 
 <p>
-  <strong><%= ErrorRecord.human_attribute_name 'error' %>:</strong>
+  <strong><%= ErrorRecord.human_attribute_name 'error' %></strong>:
   <%= @error_record.error_text %>
 </p>
 
 <p>
-  <strong><%= ErrorRecord.human_attribute_name 'data' %>:</strong>
+  <strong><%= ErrorRecord.human_attribute_name 'data' %></strong>:
   <%= @error_record.data %>
 </p>
 
 <p>
-  <strong><%= ErrorRecord.human_attribute_name 'created_at' %>:</strong>
+  <strong><%= ErrorRecord.human_attribute_name 'created_at' %></strong>:
   <%= l @error_record.created_at, format: :short %>
 </p>
 

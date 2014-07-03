@@ -1366,7 +1366,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       control_objective_item: "Objetivo de control"
       cost: "Costo"
       e_mail: "Correo"
-      error_record: "Registro de error"
       finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
@@ -1512,10 +1511,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         subject: "Asunto"
         body: "Contenido"
         attachments: "Adjuntos"
-      error_record:
-        user_id: "Usuario"
-        error: "Error"
-        data: "Datos"
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"

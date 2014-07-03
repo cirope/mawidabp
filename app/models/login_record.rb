@@ -10,4 +10,8 @@ class LoginRecord < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :organization
+
+  def to_s
+    user
+  end
 end

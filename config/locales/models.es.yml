@@ -6,6 +6,9 @@ es: &common
 
   activerecord:
     models:
+      error_record:
+        one: 'Registro de error'
+        other: 'Registros de errores'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
@@ -17,6 +20,10 @@ es: &common
         other: 'Usuarios'
 
     attributes:
+      error_record:
+        data: 'Datos'
+        error: 'Error'
+        user_id: 'Usuario'
       login_record:
         data: 'Datos'
         end: 'Fin'

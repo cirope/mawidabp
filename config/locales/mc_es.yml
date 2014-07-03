@@ -1237,7 +1237,6 @@ mc_es:
       control_objective_item: "Objetivo/Meta"
       cost: "Costo"
       e_mail: "Correo"
-      error_record: "Registro de error"
       finding: "Desvío / Oportunidad"
       finding_answer: "Respuesta a desvío"
       finding_review_assignment: "Asignación de desvío a informe"
@@ -1376,10 +1375,6 @@ mc_es:
         subject: "Asunto"
         body: "Contenido"
         attachments: "Adjuntos"
-      error_record:
-        user_id: "Usuario"
-        error: "Error"
-        data: "Datos"
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"

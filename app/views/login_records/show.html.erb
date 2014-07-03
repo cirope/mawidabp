@@ -1,15 +1,20 @@
 <p>
-  <strong><%= LoginRecord.human_attribute_name 'start' %>:</strong>
-  <%= l(@login_record.start, :format => :short) if @login_record.start %>
+  <strong><%= ErrorRecord.human_attribute_name 'user_id' %></strong>:
+  <%= @login_record %>
 </p>
 
 <p>
-  <strong><%= LoginRecord.human_attribute_name 'end' %>:</strong>
-  <%= l(@login_record.end, :format => :short) if @login_record.end %>
+  <strong><%= LoginRecord.human_attribute_name 'start' %></strong>:
+  <%= l(@login_record.start, format: :short) if @login_record.start %>
 </p>
 
 <p>
-  <strong><%= LoginRecord.human_attribute_name 'data' %>:</strong>
+  <strong><%= LoginRecord.human_attribute_name 'end' %></strong>:
+  <%= l(@login_record.end, format: :short) if @login_record.end %>
+</p>
+
+<p>
+  <strong><%= LoginRecord.human_attribute_name 'data' %></strong>:
   <%= @login_record.data %>
 </p>
 
