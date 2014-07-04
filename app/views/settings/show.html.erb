@@ -3,18 +3,16 @@
 </div>
 
 <p>
-  <strong><%= Setting.human_attribute_name 'description' %>:</strong>
+  <strong><%= Setting.human_attribute_name 'description' %></strong>:
   <%= @setting.description %>
 </p>
 <p>
-  <strong><%= Setting.human_attribute_name 'value' %>:</strong>
+  <strong><%= Setting.human_attribute_name 'value' %></strong>:
   <%= @setting.value %>
 </p>
 
 <hr />
 
-<div>
-  <%= link_to_edit edit_setting_path(@setting) %> |
-  <%= link_to_index settings_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_edit edit_setting_path(@setting) %> |
+<%= link_to_index settings_path %> |
+<%= link_to_back %>

@@ -1389,7 +1389,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       resource: "Recurso"
       resource_class: "Clase de recurso"
       role: "Perfil"
-      setting: 'Configuración'
       weakness: "Observación"
       workflow: "Programa de trabajo"
       workflow_item: "Registro de programa de trabajo"
