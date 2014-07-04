@@ -14,6 +14,7 @@ class Finding < ActiveRecord::Base
   include Findings::Validations
   include Findings::ValidationCallbacks
   include Findings::Versions
+  include Findings::WorkPapers
   include Findings::XML
   include Parameters::Risk
   include Parameters::Priority
@@ -378,9 +379,6 @@ class Finding < ActiveRecord::Base
   has_many :notifications, -> { order('created_at').uniq },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
-  has_many :work_papers, -> { order('code ASC') }, :as => :owner,
-    :dependent => :destroy, :before_add => [:prepare_work_paper, :check_for_final_review],
-    :before_remove => :check_for_final_review
   has_many :comments, -> { order('created_at ASC') }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
@@ -392,7 +390,6 @@ class Finding < ActiveRecord::Base
 
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
     reject_if: ->(attributes) { attributes['answer'].blank? }
-  accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
   accepts_nested_attributes_for :finding_user_assignments,
@@ -453,10 +450,6 @@ class Finding < ActiveRecord::Base
     self.review.try(:organization)
   end
 
-  def prepare_work_paper(work_paper)
-    work_paper.code_prefix ||= I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up')
-  end
-
   def answer_added(finding_answer)
     if (self.unconfirmed? || self.notify?) && !finding_answer.answer.blank? &&
         finding_answer.user.try(:can_act_as_audited?)
@@ -485,10 +478,6 @@ class Finding < ActiveRecord::Base
   end
 
   def next_code(review = nil)
-    raise 'Must be implemented in the subclasses'
-  end
-
-  def last_work_paper_code(review = nil)
     raise 'Must be implemented in the subclasses'
   end
 
