@@ -62,9 +62,6 @@ es: &common
         audit: 'Reportes de auditoría'
         management: 'Reportes de la gerencia'
     help_title: 'Ayuda'
-    exit: 'Salir'
-    show_menu: 'Ver menú'
-    hide_menu: 'Ocultar menú'
 
 public_es:
   <<: *common
