@@ -47,62 +47,6 @@ es:
     public_es: 'Público'
     mc_es: 'Control de gestión'
 
-  menu:
-    exit: "Salir"
-    show_menu: "Ver menú"
-    hide_menu: "Ocultar menú"
-    administration_title: "Administración"
-    administration:
-      organization_title: "Organización"
-      organization:
-        management: "Gestión"
-        business_units: "Unidades de negocio"
-      security_title: "Seguridad"
-      security:
-        reports: "Reportes de seguridad"
-        users: "Usuarios"
-        roles: "Perfiles y Privilegios"
-      best_practices: "Buenas prácticas"
-      settings: 'Configuraciones'
-      e_mails: "Correos"
-      questionnaires: "Cuestionarios"
-    planning_title: "Planificación"
-    planning:
-      periods: "Periodos"
-      resources: "Recursos"
-      audit_title: "Plan de auditoría"
-      audit:
-        plans: "Plan de trabajo"
-        procedure_controls: "Procedimientos y pruebas de control"
-    execution_title: "Ejecución"
-    execution:
-      reviews: "Informes"
-      workflows: "Programa de trabajo"
-      control_objectives: "Objetivos de control"
-      weaknesses: "Observaciones"
-      oportunities: "Oportunidades de mejora"
-      reports: "Reportes"
-    conclusion_title: "Conclusión"
-    conclusion:
-      draft_reviews: "Informe borrador"
-      final_reviews: "Informe definitivo"
-      reports_title: "Reportes"
-      reports:
-        audit: "Reportes de auditoría"
-        committee: "Reportes de comité"
-        management: "Reportes de la gerencia"
-    follow_up_title: "Seguimiento"
-    follow_up:
-      pending_findings: "Hallazgos pendientes"
-      complete_findings: "Hallazgos solucionados"
-      notifications: "Notificaciones"
-      reports_title: "Reportes"
-      reports:
-        committee: "Reportes de comité"
-        audit: "Reportes de auditoría"
-        management: "Reportes de la gerencia"
-    help_title: "Ayuda"
-
   message:
     welcome: 'Bienvenido'
     confirmation_question: "¿Está seguro?"

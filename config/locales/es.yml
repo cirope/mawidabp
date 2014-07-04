@@ -48,69 +48,6 @@
     public_es: 'Público'
     mc_es: 'Control de gestión'
 
-  menu:
-    exit: "Salir"
-    administration_title: "Administración"
-    administration:
-      organization_title: "Organización"
-      organization:
-        management: "Gestión"
-        business_units: "Unidades de negocio"
-      security_title: "Seguridad"
-      security:
-        reports: "Reportes de seguridad"
-        users: "Usuarios"
-        roles: "Perfiles y Privilegios"
-      best_practices: "Buenas prácticas"
-      settings: 'Configuraciones'
-      e_mails: "Correos"
-      questionnaires_title: "Cuestionarios"
-      questionnaires:
-        definition: "Definición"
-        polls: "Encuestas"
-        reports: "Reportes"
-    planning_title: "Planificación"
-    planning:
-      periods: "Periodos"
-      resources: "Recursos"
-      audit_title: "Plan de auditoría"
-      audit:
-        plans: "Plan de trabajo"
-        procedure_controls: "Procedimientos y pruebas de control"
-    execution_title: "Ejecución"
-    execution:
-      findings_title: "Hallazgos"
-      reviews: "Informes"
-      workflows: "Programa de trabajo"
-      control_objectives: "Objetivos de control"
-      findings:
-        weaknesses: "Observaciones"
-        oportunities: "Oportunidades de mejora"
-        fortresses: "Fortalezas"
-        nonconformities: "No conformidades"
-        potential_nonconformities: "No conformidades potenciales"
-      reports: "Reportes"
-    conclusion_title: "Conclusión"
-    conclusion:
-      draft_reviews: "Informe borrador"
-      final_reviews: "Informe definitivo"
-      reports_title: "Reportes"
-      reports:
-        audit: "Reportes de auditoría"
-        committee: "Reportes de comité"
-        management: "Reportes de la gerencia"
-    follow_up_title: "Seguimiento"
-    follow_up:
-      pending_findings: "Hallazgos pendientes"
-      complete_findings: "Hallazgos solucionados o reiterados"
-      notifications: "Notificaciones"
-      reports_title: "Reportes"
-      reports:
-        committee: "Reportes de comité"
-        audit: "Reportes de auditoría"
-        management: "Reportes de la gerencia"
-    help_title: "Ayuda"
-
   message:
     change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
