@@ -392,7 +392,6 @@ class Finding < ActiveRecord::Base
 
   accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
     reject_if: ->(attributes) { attributes['answer'].blank? }
-  accepts_nested_attributes_for :finding_relations, :allow_destroy => true
   accepts_nested_attributes_for :work_papers, :allow_destroy => true
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false

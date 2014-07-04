@@ -4,6 +4,8 @@ module Findings::Relations
   included do
     has_many :finding_relations, dependent: :destroy, before_add: :check_for_valid_relation
     has_many :inverse_finding_relations, foreign_key: 'related_finding_id', class_name: 'FindingRelation'
+
+    accepts_nested_attributes_for :finding_relations, allow_destroy: true
   end
 
   private
