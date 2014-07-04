@@ -2,7 +2,7 @@ module Findings::UpdateCallbacks
   extend ActiveSupport::Concern
 
   included do
-    before_save :can_be_modified?, :users_notification, :check_for_reiteration
+    before_save :can_be_modified?, :users_notification
     after_update :notify_changes_to_users
   end
 
@@ -33,29 +33,6 @@ module Findings::UpdateCallbacks
         if users_for_notification.to_a.map(&:to_i).include? fua.user_id
           Notifier.notify_new_finding(fua.user, self).deliver
         end
-      end
-    end
-
-    def check_for_reiteration
-      if reiteration?
-        raise 'Not included in review' unless review_include_repeated?
-        raise 'Original finding can not be changed' if repeated_of_id_was
-        raise 'Original can not be repeated' if repeated_of.repeated? && !final
-
-        self.repeated_of.state = Finding::STATUS[:repeated]
-        self.origination_date  = repeated_of.origination_date
-      end
-    end
-
-    def reiteration?
-      !undoing_reiteration && repeated_of_id_changed? && control_objective_item.try(:review)
-    end
-
-    def review_include_repeated?
-      review = control_objective_item.try(:review)
-
-      review.finding_review_assignments.any? do |fra|
-        fra.finding_id == repeated_of_id
       end
     end
 

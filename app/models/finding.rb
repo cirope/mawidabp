@@ -7,6 +7,8 @@ class Finding < ActiveRecord::Base
   include Findings::CustomAttributes
   include Findings::DestroyValidation
   include Findings::JSON
+  include Findings::Reiterations
+  include Findings::Relations
   include Findings::SortColumns
   include Findings::UpdateCallbacks
   include Findings::Validations
@@ -367,20 +369,12 @@ class Finding < ActiveRecord::Base
   # Relaciones
   belongs_to :organization
   belongs_to :control_objective_item
-  belongs_to :repeated_of, :foreign_key => 'repeated_of_id',
-    :dependent => :destroy, :autosave => true, :class_name => 'Finding'
-  has_one :repeated_in, :foreign_key => 'repeated_of_id',
-    :class_name => 'Finding'
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
   has_many :finding_answers, -> { order('created_at ASC') }, :dependent => :destroy,
     :after_add => :answer_added
   has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :finding_relations, :dependent => :destroy,
-    :before_add => :check_for_valid_relation
-  has_many :inverse_finding_relations, -> { readonly },
-    :foreign_key => :related_finding_id, :class_name => 'FindingRelation'
   has_many :notifications, -> { order('created_at').uniq },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
@@ -453,34 +447,6 @@ class Finding < ActiveRecord::Base
   def check_for_final_review(_)
     if self.final? && self.review && self.review.is_frozen?
       raise 'Conclusion Final Review frozen'
-    end
-  end
-
-  def check_for_valid_relation(finding_relation)
-    related_finding = finding_relation.related_finding
-
-    if related_finding && (related_finding.final? ||
-          (!related_finding.is_in_a_final_review? &&
-            related_finding.review.id != self.control_objective_item.try(:review_id)))
-      raise 'Invalid finding for asociation'
-    end
-  end
-
-  def undo_reiteration
-    versions  = self.repeated_of.versions.select do |v|
-      finding = v.reify(:has_one => false)
-      finding.try(:state) && !finding.repeated?
-    end
-
-    if !versions.blank?
-      self.repeated_of.update_attribute(
-        :state, versions.last.reify(:has_one => false).state
-      )
-      self.undoing_reiteration = true
-      self.update_attribute :repeated_of_id, nil
-      self.update_attribute :origination_date, nil
-    else
-      raise 'Unknown previous repeated state'
     end
   end
 
@@ -690,24 +656,6 @@ class Finding < ActiveRecord::Base
 
   def responsible_auditors
     self.finding_user_assignments.responsibles.map(&:user)
-  end
-
-  def repeated_ancestors
-    node, nodes = self, []
-    nodes << node = node.repeated_of while node.repeated_of
-    nodes
-  end
-
-  def repeated_root
-    node = self
-    node = node.repeated_of while node.repeated_of
-    node
-  end
-
-  def repeated_children
-    node, nodes = self, []
-    nodes << node = node.repeated_in while node.repeated_in
-    nodes
   end
 
   def all_follow_up_dates(end_date = nil, reload = false)
