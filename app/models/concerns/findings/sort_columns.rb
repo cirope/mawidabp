@@ -18,21 +18,22 @@ module Findings::SortColumns
     private
 
       def risk_asc_options
-        {
-          name: "#{human_attribute_name(:risk)} - #{human_attribute_name(:priority)} (#{I18n.t('label.ascendant')})",
-          field: ["#{table_name}.risk ASC", "#{table_name}.priority ASC", "#{table_name}.state ASC"]
-        }
+        risk_options
       end
 
       def risk_desc_options
+        risk_options order: 'DESC'
+      end
+
+      def risk_options order: 'ASC'
         {
-          name: "#{human_attribute_name(:risk)} - #{human_attribute_name(:priority)} (#{I18n.t('label.descendant')})",
-          field: ["#{table_name}.risk DESC", "#{table_name}.priority DESC", "#{table_name}.state ASC"]
+          name: "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
+          field: ["#{table_name}.risk #{order}", "#{table_name}.priority #{order}", "#{table_name}.state ASC"]
         }
       end
 
       def state_options
-        { name: human_attribute_name(:state), field: "#{table_name}.state ASC" }
+        options_for_attribute :state, order: false
       end
 
       def review_options
@@ -43,31 +44,32 @@ module Findings::SortColumns
       end
 
       def updated_at_asc_options
-        {
-          name: "#{human_attribute_name(:updated_at)} (#{I18n.t('label.ascendant')})",
-          field: "#{table_name}.updated_at ASC"
-        }
+        options_for_attribute :updated_at
       end
 
       def updated_at_desc_options
-        {
-          name: "#{human_attribute_name(:updated_at)} (#{I18n.t('label.descendant')})",
-          field: "#{table_name}.updated_at DESC"
-        }
+        options_for_attribute :updated_at, order: 'DESC'
       end
 
       def follow_up_date_asc_options
-        {
-          name: "#{human_attribute_name(:follow_up_date)}  (#{I18n.t('label.ascendant')})",
-          field: "#{table_name}.follow_up_date ASC"
-        }
+        options_for_attribute :follow_up_date
       end
 
       def follow_up_date_desc_options
+        options_for_attribute :follow_up_date, order: 'DESC'
+      end
+
+      def options_for_attribute attribute, order: 'ASC'
         {
-          name: "#{human_attribute_name(:follow_up_date)}  (#{I18n.t('label.descendant')})",
-          field: "#{table_name}.follow_up_date DESC"
+          name:  "#{human_attribute_name attribute}#{order_label order}",
+          field: "#{table_name}.#{attribute} #{order || 'ASC'}"
         }
+      end
+
+      def order_label order
+        order_label = { 'ASC' => 'ascendant', 'DESC' => 'descendant' }[order]
+
+        " (#{I18n.t "label.#{order_label}"})" if order
       end
   end
 end
