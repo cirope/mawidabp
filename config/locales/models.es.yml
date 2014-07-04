@@ -12,6 +12,9 @@ es: &common
       control_objective:
         one: 'Objetivo de control'
         other: 'Objetivos de control'
+      e_mail:
+        one: 'Correo'
+        other: 'Correos'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
@@ -50,6 +53,11 @@ es: &common
         name: 'Objetivo de control'
         relevance: 'Importancia'
         risk: 'Riesgo'
+      e_mail:
+        to: 'Para'
+        subject: 'Asunto'
+        body: 'Contenido'
+        attachments: 'Adjuntos'
       error_record:
         data: 'Datos'
         error: 'Error'

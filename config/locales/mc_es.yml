@@ -1174,7 +1174,6 @@ mc_es:
       control: "Descripción de metas"
       control_objective_item: "Objetivo/Meta"
       cost: "Costo"
-      e_mail: "Correo"
       finding: "Desvío / Oportunidad"
       finding_answer: "Respuesta a desvío"
       finding_review_assignment: "Asignación de desvío a informe"
@@ -1289,11 +1288,6 @@ mc_es:
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      e_mail:
-        to: "Para"
-        subject: "Asunto"
-        body: "Contenido"
-        attachments: "Adjuntos"
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"

@@ -1,26 +1,24 @@
 <p>
-  <strong><%= EMail.human_attribute_name 'to' %>:</strong>
+  <strong><%= EMail.human_attribute_name 'to' %></strong>:
   <%= @email.to %>
 </p>
 
 <p>
-  <strong><%= EMail.human_attribute_name 'subject' %>:</strong>
+  <strong><%= EMail.human_attribute_name 'subject' %></strong>:
   <%= @email.subject %>
 </p>
 
 <p>
-  <strong><%= EMail.human_attribute_name 'body' %>:</strong>
+  <strong><%= EMail.human_attribute_name 'body' %></strong>:
   <%= raw @email.body %>
 </p>
 
 <p>
-  <strong><%= EMail.human_attribute_name 'attachments' %>:</strong>
+  <strong><%= EMail.human_attribute_name 'attachments' %></strong>:
   <%= @email.attachments %>
 </p>
 
 <hr />
 
-<div>
-  <%= link_to_index e_mails_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_index e_mails_path %> |
+<%= link_to_back %>

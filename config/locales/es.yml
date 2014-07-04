@@ -1300,7 +1300,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       control: "Control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
-      e_mail: "Correo"
       finding: "Hallazgo"
       finding_answer: "Respuesta a hallazgo"
       finding_review_assignment: "Asignación de observación a informe"
@@ -1421,11 +1420,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         item_id: "Item"
         item_type: "Item (tipo)"
-      e_mail:
-        to: "Para"
-        subject: "Asunto"
-        body: "Contenido"
-        attachments: "Adjuntos"
       file_model:
         uploaded_data: "Archivo"
         content_type: "Archivo (tipo)"
