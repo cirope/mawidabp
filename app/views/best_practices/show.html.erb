@@ -7,13 +7,13 @@
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
-        <th><%= ControlObjective.human_attribute_name :name %></th>
-        <th><%= Control.human_attribute_name :control %></th>
-        <th><%= Control.human_attribute_name :design_tests %></th>
-        <th><%= Control.human_attribute_name :compliance_tests %></th>
-        <th><%= Control.human_attribute_name :sustantive_tests %></th>
-        <th><%= Control.human_attribute_name :effects %></th>
-        <th><%= ControlObjective.human_attribute_name :risk %></th>
+        <th><%= ControlObjective.human_attribute_name 'name' %></th>
+        <th><%= Control.human_attribute_name 'control' %></th>
+        <th><%= Control.human_attribute_name 'design_tests' %></th>
+        <th><%= Control.human_attribute_name 'compliance_tests' %></th>
+        <th><%= Control.human_attribute_name 'sustantive_tests' %></th>
+        <th><%= Control.human_attribute_name 'effects' %></th>
+        <th><%= ControlObjective.human_attribute_name 'risk' %></th>
       </tr>
     </thead>
     <tbody>
@@ -34,8 +34,6 @@
 
 <hr />
 
-<div>
-  <%= link_to_edit edit_best_practice_path(@best_practice) %> |
-  <%= link_to_index best_practices_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_edit edit_best_practice_path(@best_practice) %> |
+<%= link_to_index best_practices_path %> |
+<%= link_to_back %>

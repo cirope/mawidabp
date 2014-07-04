@@ -3,12 +3,11 @@
   <div class="form-inputs">
     <div class="row no-gutter">
       <div class="col-md-2">
-        <%= f.input :name, label: false, input_html: { autofocus: true, rows: 5 } %>
+        <%= f.input :name, label: false, autofocus: true, input_html: { rows: 5 } %>
       </div>
 
       <%= f.simple_fields_for :control do |c_f| %>
         <div class="col-md-2">
-          <%= c_f.input :order, as: :hidden %>
           <%= c_f.input :control, label: false, input_html: { rows: 5 } %>
         </div>
         <div class="col-md-1">
@@ -23,6 +22,7 @@
         <div class="col-md-1">
           <%= c_f.input :effects, label: false, input_html: { rows: 5 } %>
         </div>
+        <%= c_f.input :order, as: :hidden %>
       <% end %>
 
       <div class="col-md-1">
@@ -33,7 +33,7 @@
       </div>
       <div class="col-md-1">
         <div class="toggle-visibility">
-          <%= f.input :order, as: :hidden, input_html: { class: :sort_number } %>
+          <%= f.input :order, as: :hidden, input_html: { class: 'sort_number' } %>
           <%= link_to_insert_field(f) %>
           <span class="text-muted">|</span>
           <%= link_to_remove_nested_item(f) %>

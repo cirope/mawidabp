@@ -7,7 +7,7 @@
           <%= link_to_show_hide "control_objectives_for_#{id}" %>
         </div>
         <div class="media-body">
-          <%= f.input :name, label: false, input_html: { maxlength: 255, autofocus: true } %>
+          <%= f.input :name, label: false, input_html: { maxlength: 255 } %>
         </div>
       </div>
     </div>
@@ -23,38 +23,39 @@
   <div id="control_objectives_for_<%= id %>" class="nested" style="display: none;">
     <div class="row">
       <div class="col-md-2">
-        <h5><strong><%= ControlObjective.human_attribute_name :name %></strong></h5>
+        <h5><strong><%= ControlObjective.human_attribute_name 'name' %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= Control.human_attribute_name :control %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'control' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :design_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'design_tests' %></strong></h5>
       </div>
       <div class="col-md-2">
-        <h5><strong><%= Control.human_attribute_name :compliance_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'compliance_tests' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :sustantive_tests %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'sustantive_tests' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= Control.human_attribute_name :effects %></strong></h5>
+        <h5><strong><%= Control.human_attribute_name 'effects' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= ControlObjective.human_attribute_name :relevance %></strong></h5>
+        <h5><strong><%= ControlObjective.human_attribute_name 'relevance' %></strong></h5>
       </div>
       <div class="col-md-1">
-        <h5><strong><%= ControlObjective.human_attribute_name :risk %></strong></h5>
+        <h5><strong><%= ControlObjective.human_attribute_name 'risk' %></strong></h5>
       </div>
     </div>
 
-    <div class="control_objectives" style="margin-bottom: 1em;">
+    <div class="control_objectives">
       <%= f.simple_fields_for :control_objectives do |co_f| %>
         <%= render 'control_objective', f: co_f %>
       <% end %>
 
-      <%= link_to_add_fields(t('best_practices.control_objectives.new'), f, :control_objectives) %>
+      <%= link_to_add_fields t('best_practices.control_objectives.new'), f, :control_objectives %>
     </div>
+    <br />
   </div>
 </fieldset>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>

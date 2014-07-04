@@ -1354,7 +1354,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       answer_multi_choice: "Múltiple opción"
       answer_option: "Opción de respuesta"
       answer_written: "Respuesta escrita"
-      best_practice: "Buena práctica"
       business_unit: "Unidad de negocio"
       business_unit_type: "Tipo de unidad de negocio"
       comment: "Comentario"
@@ -1362,7 +1361,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       conclusion_final_review: "Informe definitivo"
       conclusion_draft_review: "Informe borrador"
       control: "Control"
-      control_objective: "Objetivo de control"
       control_objective_item: "Objetivo de control"
       cost: "Costo"
       e_mail: "Correo"
@@ -1384,7 +1382,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       procedure_control: "Procedimientos y pruebas de control"
       procedure_control_item: "Registro del procedimiento de control"
       procedure_control_subitem: "Subítem del procedimiento de control"
-      process_control: "Proceso de negocio"
       question: "Pregunta"
       questionnaire: "Cuestionario"
       review: "Informe"
@@ -1411,20 +1408,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
           neither_agree_nor_disagree: "Ni acuerdo ni desacuerdo"
           agree: "De acuerdo"
           strongly_agree: "Muy de acuerdo"
-      best_practice:
-        name: "Nombre"
-        description: "Descripción"
-        process_controls:
-          one: "Proceso de negocio"
-          other: "Procesos de negocio"
-          name: "Proceso de negocio"
-          order: "Proceso de negocio (orden)"
-          control_objectives:
-            one: "Objetivo de control"
-            other: "Objetivos de control"
-            name: "Objetivo de control"
-            relevance: "Objetivo de control (importancia)"
-            risk: "Objetivo de control (riesgo)"
       business_unit:
         name: "Nombre"
       business_unit_type:
@@ -1459,10 +1442,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         design_tests: "Evaluación de diseño"
         compliance_tests: "Pruebas de cumplimiento"
         sustantive_tests: "Pruebas sustantivas"
-      control_objective:
-        name: "Objetivo de control"
-        relevance: "Importancia"
-        risk: "Riesgo"
       control_objective_item:
         control_objective_id: "Objetivo de control"
         control_objective_text: "Objetivo de control"
@@ -1766,10 +1745,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         control_objective_text: "Objetivo de control"
         relevance: "Importancia"
         control_objective_id: "Objetivo de control"
-      process_control:
-        name: "Proceso de negocio"
-        order: "Orden"
-        control_objectives: "Objetivos de control"
       question:
         sort_order: "Orden"
         question: "Pregunta"

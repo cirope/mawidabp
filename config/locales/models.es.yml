@@ -6,6 +6,12 @@ es: &common
 
   activerecord:
     models:
+      best_practice:
+        one: 'Buena práctica'
+        other: 'Buenas prácticas'
+      control_objective:
+        one: 'Objetivo de control'
+        other: 'Objetivos de control'
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
@@ -21,8 +27,26 @@ es: &common
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
+      process_control:
+        one: 'Proceso'
+        other: 'Procesos'
 
     attributes:
+      best_practice:
+        name: 'Nombre'
+        description: 'Descripción'
+      best_practice/process_controls:
+        name: 'Proceso'
+        order: 'Proceso (orden)'
+        control_objectives: 'Objetivos de control'
+      best_practice/process_controls/control_objectives:
+        name: 'Objetivo de control'
+        relevance: 'Objetivo de control (importancia)'
+        risk: 'Objetivo de control (riesgo)'
+      control_objective:
+        name: 'Objetivo de control'
+        relevance: 'Importancia'
+        risk: 'Riesgo'
       error_record:
         data: 'Datos'
         error: 'Error'
@@ -68,6 +92,10 @@ es: &common
         event: 'Evento'
         item: 'Objeto'
         whodunnit: 'Ejecutor'
+      process_control:
+        name: 'Proceso'
+        order: 'Orden'
+        control_objectives: 'Objetivos de control'
 
 public_es:
   <<: *common
