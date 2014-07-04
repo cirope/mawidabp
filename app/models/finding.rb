@@ -2,6 +2,7 @@ class Finding < ActiveRecord::Base
   include ActsAsTree
   include Auditable
   include Comparable
+  include Findings::Answers
   include Findings::Confirmation
   include Findings::CreateValidation
   include Findings::CustomAttributes
@@ -373,8 +374,6 @@ class Finding < ActiveRecord::Base
   has_one :review, :through => :control_objective_item
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
-  has_many :finding_answers, -> { order('created_at ASC') }, :dependent => :destroy,
-    :after_add => :answer_added
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :notifications, -> { order('created_at').uniq },
     :through => :notification_relations
@@ -448,15 +447,6 @@ class Finding < ActiveRecord::Base
 
   def organization
     self.review.try(:organization)
-  end
-
-  def answer_added(finding_answer)
-    if (self.unconfirmed? || self.notify?) && !finding_answer.answer.blank? &&
-        finding_answer.user.try(:can_act_as_audited?)
-      self.confirmed! finding_answer.user
-    end
-
-    self.updated_at = Time.now
   end
 
   def is_in_a_final_review?
