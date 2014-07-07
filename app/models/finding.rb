@@ -11,6 +11,7 @@ class Finding < ActiveRecord::Base
   include Findings::JSON
   include Findings::Reiterations
   include Findings::Relations
+  include Findings::Search
   include Findings::SortColumns
   include Findings::State
   include Findings::UpdateCallbacks
@@ -26,33 +27,6 @@ class Finding < ActiveRecord::Base
   acts_as_tree
 
   cattr_accessor :current_user, :current_organization
-
-  # Constantes
-  COLUMNS_FOR_SEARCH = {
-    :issue_date => {
-      :column => "#{ConclusionReview.table_name}.issue_date",
-      :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
-      conversion_method: ->(value) { Timeliness.parse(value, :date).to_s(:db) },
-      :regexp => SEARCH_DATE_REGEXP
-    },
-    :review => {
-      :column => "LOWER(#{Review.table_name}.identification)",
-      :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
-      :regexp => /.*/
-    },
-    :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :review_code => {
-      :column => "LOWER(#{table_name}.review_code)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    },
-    :description => {
-      :column => "LOWER(#{table_name}.description)", :operator => 'LIKE',
-      :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
-    }
-  }.with_indifferent_access
 
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }
