@@ -7,6 +7,7 @@ class Finding < ActiveRecord::Base
   include Findings::CreateValidation
   include Findings::CustomAttributes
   include Findings::DestroyValidation
+  include Findings::ImportantDates
   include Findings::JSON
   include Findings::Reiterations
   include Findings::Relations
@@ -510,42 +511,6 @@ class Finding < ActiveRecord::Base
 
   def issue_date
     review.try(:conclusion_final_review).try(:issue_date)
-  end
-
-  def important_dates
-    important_dates = []
-
-    if first_notification_date
-      important_dates << I18n.t('finding.important_dates.notification_date',
-        :date => I18n.l(self.first_notification_date, :format => :long).strip)
-    end
-
-    if confirmation_date
-      important_dates << I18n.t('finding.important_dates.confirmation_date',
-        :date => I18n.l(confirmation_date, :format => :long).strip)
-    end
-
-    if self.confirmed? || self.unconfirmed?
-      if self.confirmation_date
-        max_notification_date = self.stale_confirmed_days.days.
-          ago_in_business.to_date
-        expiration_diff = self.confirmation_date.try(:diff_in_business,
-          max_notification_date)
-      else
-        max_notification_date = (FINDING_STALE_UNCONFIRMED_DAYS +
-            self.stale_confirmed_days).days.ago_in_business.to_date
-        expiration_diff = self.first_notification_date.try(:diff_in_business,
-          max_notification_date)
-      end
-
-      if expiration_diff && expiration_diff >= 0
-        important_dates << I18n.t('finding.important_dates.expiration_date',
-          :date => I18n.l(expiration_diff.days.from_now_in_business.to_date,
-            :format => :long).strip)
-      end
-    end
-
-    important_dates
   end
 
   def stale_confirmed_days
