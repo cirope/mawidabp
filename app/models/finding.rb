@@ -59,16 +59,6 @@ class Finding < ActiveRecord::Base
   scope :with_prefix, ->(prefix) {
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
-  scope :revoked, -> { where(:state => STATUS[:revoked]) }
-  scope :not_revoked, -> { where('state <> ?', STATUS[:revoked]) }
-  scope :with_pending_status_for_report, -> { where(
-    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
-    )
-  }
-  scope :with_pending_status, -> { where(
-    :state => PENDING_STATUS - [STATUS[:incomplete]]
-    )
-  }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
       :reviews => { :id => review.id }, :state => PENDING_STATUS, :final => false

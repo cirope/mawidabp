@@ -7,10 +7,8 @@ module Findings::State
     PENDING_STATUS              = pending_status
     EXCLUDE_FROM_REPORTS_STATUS = exclude_from_reports_status
 
-    STATUS.each do |type, value|
-      define_method("#{type}?")     { state     == value }
-      define_method("was_#{type}?") { state_was == value }
-    end
+    define_state_scopes
+    define_state_methods
   end
 
   module ClassMethods
@@ -54,6 +52,20 @@ module Findings::State
           STATUS[:unconfirmed], STATUS[:confirmed], STATUS[:unanswered],
           STATUS[:incomplete]
         ]
+      end
+
+      def define_state_scopes
+        scope :revoked,     -> { where     state: STATUS[:revoked] }
+        scope :not_revoked, -> { where.not state: STATUS[:revoked] }
+        scope :with_pending_status, -> { where state: visible_pending_status }
+        scope :with_pending_status_for_report, -> { where state: report_pending_status }
+      end
+
+      def define_state_methods
+        STATUS.each do |type, value|
+          define_method("#{type}?")     { state     == value }
+          define_method("was_#{type}?") { state_was == value }
+        end
       end
 
       def exclude_from_reports_status
@@ -102,6 +114,14 @@ module Findings::State
 
       def revoked_transitions
         [:revoked]
+      end
+
+      def visible_pending_status
+        PENDING_STATUS - [STATUS[:incomplete]]
+      end
+
+      def report_pending_status
+        STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values & PENDING_STATUS
       end
   end
 
