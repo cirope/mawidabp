@@ -2,6 +2,9 @@ module Findings::Reiterations
   extend ActiveSupport::Concern
 
   included do
+    scope :repeated,     -> { where     state: Finding::STATUS[:repeated] }
+    scope :not_repeated, -> { where.not state: Finding::STATUS[:repeated] }
+
     before_save :check_for_reiteration
 
     belongs_to :repeated_of, foreign_key: 'repeated_of_id', class_name: 'Finding', dependent: :destroy, autosave: true

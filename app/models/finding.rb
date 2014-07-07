@@ -12,6 +12,7 @@ class Finding < ActiveRecord::Base
   include Findings::Reiterations
   include Findings::Relations
   include Findings::SortColumns
+  include Findings::State
   include Findings::UpdateCallbacks
   include Findings::Validations
   include Findings::ValidationCallbacks
@@ -53,108 +54,11 @@ class Finding < ActiveRecord::Base
     }
   }.with_indifferent_access
 
-  STATUS = {
-    :confirmed => -3,
-    :unconfirmed => -2,
-    :unanswered => -1,
-    :being_implemented => 0,
-    :implemented => 1,
-    :implemented_audited => 2,
-    :assumed_risk => 3,
-    :notify => 4,
-    :incomplete => 5,
-    :repeated => 6,
-    :revoked => 7
-  }.with_indifferent_access.freeze
-
-  STATUS_TRANSITIONS = {
-    :confirmed => [
-      :confirmed,
-      :unanswered,
-      :being_implemented,
-      :implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :revoked
-    ],
-    :unconfirmed => [
-      :unconfirmed,
-      :confirmed,
-      :unanswered
-    ],
-    :unanswered => [
-      :unanswered,
-      :being_implemented,
-      :implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :revoked
-    ],
-    :being_implemented => [
-      :being_implemented,
-      :implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :repeated,
-      :revoked
-    ],
-    :implemented => [
-      :implemented,
-      :being_implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :repeated,
-      :revoked
-    ],
-    :implemented_audited => [
-      :implemented_audited
-    ],
-    :assumed_risk => [
-      :assumed_risk
-    ],
-    :notify => [
-      :notify,
-      :incomplete,
-      :being_implemented,
-      :implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :revoked
-    ],
-    :incomplete => [
-      :incomplete,
-      :notify,
-      :being_implemented,
-      :implemented,
-      :implemented_audited,
-      :assumed_risk,
-      :revoked
-    ],
-    :repeated => [
-      :repeated
-    ],
-    :revoked => [
-      :revoked
-    ]
-  }.with_indifferent_access.freeze
-
-  PENDING_STATUS = [
-    STATUS[:being_implemented], STATUS[:notify], STATUS[:implemented],
-    STATUS[:unconfirmed], STATUS[:confirmed], STATUS[:unanswered],
-    STATUS[:incomplete]
-  ]
-
-  EXCLUDE_FROM_REPORTS_STATUS = [
-    :unconfirmed, :confirmed, :notify, :incomplete, :repeated, :revoked
-  ]
-
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :with_prefix, ->(prefix) {
     where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
   }
-  scope :repeated, -> { where(:state => STATUS[:repeated]) }
-  scope :not_repeated, -> { where('state <> ?', STATUS[:repeated]) }
   scope :revoked, -> { where(:state => STATUS[:revoked]) }
   scope :not_revoked, -> { where('state <> ?', STATUS[:revoked]) }
   scope :with_pending_status_for_report, -> { where(
@@ -472,15 +376,6 @@ class Finding < ActiveRecord::Base
     raise 'Must be implemented in the subclasses'
   end
 
-  STATUS.each do |status_type, status_value|
-    define_method("#{status_type}?") { self.state == status_value }
-    define_method("was_#{status_type}?") { self.state_was == status_value }
-  end
-
-  def state_text
-    state ? I18n.t("finding.status_#{STATUS.invert[state]}") : '-'
-  end
-
   def stale?
     being_implemented? && follow_up_date && follow_up_date < Date.today
   end
@@ -516,36 +411,6 @@ class Finding < ActiveRecord::Base
   def stale_confirmed_days
     self.parameter_in(self.review.organization.id,
       'finding_stale_confirmed_days').to_i
-  end
-
-  def next_status_list(state = nil)
-    state_key = STATUS.invert[state || self.state]
-    allowed_keys = STATUS_TRANSITIONS[state_key]
-
-    STATUS.reject {|k,| !allowed_keys.include?(k.to_sym)}
-  end
-
-  def status_change_history
-    last_state = nil
-    findings_with_status_changed = []
-
-    self.versions.each do |version|
-      finding = version.reify(:has_one => false)
-
-      if finding && finding.state != last_state
-        last_state = finding.state
-
-        if version.previous.try(:whodunnit)
-          finding.user_who_make_it = User.find(version.previous.whodunnit)
-        end
-
-        findings_with_status_changed << finding
-      end
-    end
-
-    findings_with_status_changed << self if last_state != self.state
-
-    findings_with_status_changed
   end
 
   def users_for_scaffold_notification(level = 1)

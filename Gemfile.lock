@@ -38,7 +38,7 @@ GEM
     acts_as_tree (2.0.0)
       activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
-    attr_searchable (0.0.3)
+    attr_searchable (0.0.4)
       treetop
     blankslate (2.1.2.4)
     bloggy (0.3)
@@ -230,7 +230,7 @@ GEM
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
     will_paginate (3.0.7)
-    will_paginate-bootstrap (1.0.0)
+    will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
     ya2yaml (0.31)
     yajl-ruby (1.1.0)
