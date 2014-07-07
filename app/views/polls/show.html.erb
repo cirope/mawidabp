@@ -9,7 +9,7 @@
 </p>
 <p>
   <strong><%= Poll.human_attribute_name :answered %>:</strong>
-  <%= @poll.answered ? t('label.yes') : t('label.no')  %>
+  <%= t_boolean @poll.answered %>
 </p>
 <p>
   <strong><%= Questionnaire.human_attribute_name :questions %>:</strong>
@@ -19,7 +19,7 @@
     <li><strong><%= answer.question.question %></strong>
       <% if @poll.answered? %>
         <% if answer.question.answer_multi_choice? && answer.answer_option %>
-          <%= ": #{t "activerecord.attributes.answer_option.options.#{answer.answer_option.option}"}" %>
+          <%= ": #{t "answer_options.#{answer.answer_option.option}"}" %>
         <% elsif answer.question.answer_written? %>
           <%= ": #{answer.answer}" %>
         <% end %>

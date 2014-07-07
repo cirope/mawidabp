@@ -1,44 +1,51 @@
 <p>
-  <strong><%= Questionnaire.human_attribute_name :name %>:</strong>
+  <strong><%= Questionnaire.human_attribute_name 'name' %></strong>:
   <%= @questionnaire.name %>
 </p>
+
 <p>
-  <strong><%= Questionnaire.human_attribute_name :email_subject %>:</strong>
+  <strong><%= Questionnaire.human_attribute_name 'email_subject' %></strong>:
   <%= @questionnaire.email_subject %>
 </p>
+
 <p>
-  <strong><%= Questionnaire.human_attribute_name :email_link %>:</strong>
+  <strong><%= Questionnaire.human_attribute_name 'email_link' %></strong>:
   <%= @questionnaire.email_link %>
 </p>
+
 <% if @questionnaire.email_text? %>
   <p>
-    <strong><%= Questionnaire.human_attribute_name :email_text %>:</strong>
+    <strong><%= Questionnaire.human_attribute_name 'email_text' %></strong>:
     <%= @questionnaire.email_text %>
   </p>
 <% end %>
+
 <% if @questionnaire.email_clarification? %>
   <p>
-    <strong><%= Questionnaire.human_attribute_name :email_clarification %>:</strong>
+    <strong><%= Questionnaire.human_attribute_name 'email_clarification' %></strong>:
     <%= @questionnaire.email_clarification %>
   </p>
 <% end %>
+
 <% if @questionnaire.pollable_type? %>
   <p>
-    <strong><%= Questionnaire.human_attribute_name :pollable_type %>:</strong>
+    <strong><%= Questionnaire.human_attribute_name 'pollable_type' %></strong>:
     <%= @questionnaire.pollable_type.constantize.model_name.human %>
   </p>
 <% end %>
+
 <p>
-  <strong><%= Questionnaire.human_attribute_name :questions %>:</strong>
+  <strong><%= Questionnaire.human_attribute_name 'questions' %></strong>:
 </p>
+
 <ol>
   <% @questionnaire.questions.each do |question| %>
     <li>
       <strong><%= question.question %></strong>
-      <% if question.answer_type # Si es multi choice %>
-        <ul style="padding: 1em 3em;">
+      <% if question.answer_type %>
+        <ul class="list-padding">
           <% question.answer_options.each do |ao| %>
-            <li><%= t "activerecord.attributes.answer_option.options.#{ao.option}" %></li>
+            <li><%= t "answer_options.#{ao.option}" %></li>
           <% end %>
         </ul>
       <% end %>
@@ -48,11 +55,12 @@
 
 <hr />
 
-<div>
-  <%= link_to_edit edit_questionnaire_path(@questionnaire) %> |
-  <%= link_to t('label.list'), questionnaires_path %> |
-  <% if @questionnaire.polls.present? %>
-  <%= link_to t('activerecord.attributes.questionnaire.polls'), polls_path, :id => @questionnaire.id %> |
-  <% end %>
-  <%= link_to_back %>
-</div>
+<%= link_to_edit edit_questionnaire_path(@questionnaire) %> |
+<%= link_to_index questionnaires_path %> |
+
+<% if @questionnaire.polls.present? %>
+  <%= link_to Poll.model_name.human(count: 0),
+    questionnaire_polls_path(@questionnaire) %> |
+<% end %>
+
+<%= link_to_back %>

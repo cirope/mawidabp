@@ -6,6 +6,18 @@ es: &common
 
   activerecord:
     models:
+      answer:
+        one: 'Respuesta'
+        other: 'Respuestas'
+      answer_multi_choice:
+        one: 'Múltiple opción'
+        other: 'Múltiples opciones'
+      answer_option:
+        one: 'Opción de respuesta'
+        other: 'Opciones de respuesta'
+      answer_written:
+        one: 'Respuesta escrita'
+        other: 'Respuestas escritas'
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
@@ -33,11 +45,26 @@ es: &common
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
+      poll:
+        one: 'Encuesta'
+        other: 'Encuestas'
       process_control:
         one: 'Proceso'
         other: 'Procesos'
+      question:
+        one: 'Pregunta'
+        other: 'Preguntas'
+      questionnaire:
+        one: 'Cuestionario'
+        other: 'Cuestionarios'
 
     attributes:
+      answer:
+        answer: 'Respuesta'
+        comments: 'Comentarios respuesta'
+        question: 'Pregunta'
+      answers:
+        answer_option: 'Opción'
       best_practice:
         name: 'Nombre'
         description: 'Descripción'
@@ -107,10 +134,34 @@ es: &common
         event: 'Evento'
         item: 'Objeto'
         whodunnit: 'Ejecutor'
+      poll:
+        comments: 'Comentarios'
+        customer_email: 'Correo cliente'
+        send_date: 'Fecha envío'
+        answer_date: 'Fecha contestación'
+        answered: 'Contestada'
+        questionnaire: 'Cuestionario'
+        user: 'Usuario'
+        answers:
+          answer: 'Respuesta'
+          answer_option: 'Opción'
       process_control:
         name: 'Proceso'
         order: 'Orden'
         control_objectives: 'Objetivos de control'
+      question:
+        sort_order: 'Orden'
+        question: 'Pregunta'
+        answer_type: 'Tipo de respuesta'
+      questionnaire:
+        name: 'Nombre'
+        questions: 'Preguntas'
+        polls: 'Encuestas'
+        pollable_type: 'Clase encuestable'
+        email_subject: 'Asunto del correo'
+        email_link: 'Texto del enlace'
+        email_text: 'Texto del correo'
+        email_clarification: 'Aclaración del correo'
 
 public_es:
   <<: *common

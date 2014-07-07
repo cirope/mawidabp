@@ -1,16 +1,19 @@
-<%= simple_form_for :dump_emails, url: { action: 'send_csv_polls' }, html: { multipart: true } do |f| %>
-  <div class="form-inputs">
-    <%= f.input :questionnaire_id, collection: Questionnaire.list, label: Poll.human_attribute_name(:questionnaire_id), prompt: true %>
-    <%= f.input :file, as: :file, label: t('poll.import_csv_customers_title') %>
+<%= simple_form_for :poll, url: { action: 'send_csv_polls' } do |f| %>
+  <div class="form-inputs row">
+    <div class="col-md-6">
+      <%= f.input :questionnaire, collection: Questionnaire.list,
+        label: Questionnaire.model_name.human(count: 1), prompt: true %>
+      <%= f.input :file, as: :file, label: t('polls.import_csv') %>
+    </div>
   </div>
 
   <hr />
 
   <div class="form-actions">
+    <%= f.button :submit, t('label.attach_csv'), class: 'btn-primary' %>
     <div class="pull-right">
-      <%= link_to t('label.list'), polls_path %> |
+      <%= link_to_index polls_path %> |
       <%= link_to_back %>
     </div>
-    <%= f.button :submit, t('label.attach_csv'), class: 'btn-primary' %>
   </div>
 <% end %>

@@ -2,7 +2,7 @@ module Polls::Validations
   extend ActiveSupport::Concern
 
   included do
-    validates :organization_id, :questionnaire_id, presence: true
+    validates :organization_id, :questionnaire, presence: true
     validates :comments, length: { maximum: 255 }, allow_nil: true,
       allow_blank: true
     validates :customer_email, format: { with: EMAIL_REGEXP , multiline: true },

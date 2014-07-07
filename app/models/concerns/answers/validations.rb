@@ -15,7 +15,7 @@ module Answers::Validations
 
     def answer_options
       if question.answer_multi_choice? && answer_option.blank?
-        errors.add(:answer_option_id, :blank)
+        errors.add(:answer_option, :blank)
       end
     end
 end

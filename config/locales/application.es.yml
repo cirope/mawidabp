@@ -869,17 +869,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
 
-  poll:
-    answer_poll: "¿Contestar encuesta?"
-    index_title: "Listado de encuestas"
-    edit_title: "Modificar encuesta"
-    new_title: "Agregar encuesta"
-    show_title: "Detalles de la encuesta"
-    correctly_created: "La encuesta ha sido agregada correctamente."
-    correctly_updated: "La encuesta ha sido guardada correctamente."
-    stale_object_error: "La encuesta no fue guardada, intente nuevamente."
-    must_answer_poll: "Debe contestar la siguiente encuesta para poder ingresar
-      al sistema"
   procedure_control:
     index_title: "Listado de procedimientos y pruebas de control"
     show_title: "Detalles del procedimiento y prueba de control"
@@ -1088,10 +1077,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
 
   activerecord:
     models:
-      answer: "Respuesta"
-      answer_multi_choice: "Múltiple opción"
-      answer_option: "Opción de respuesta"
-      answer_written: "Respuesta escrita"
       business_unit: "Unidad de negocio"
       business_unit_type: "Tipo de unidad de negocio"
       comment: "Comentario"
@@ -1111,13 +1096,10 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
-      poll: "Encuesta"
       privilege: "Privilegio"
       procedure_control: "Procedimientos y pruebas de control"
       procedure_control_item: "Registro del procedimiento de control"
       procedure_control_subitem: "Subítem del procedimiento de control"
-      question: "Cuestión"
-      questionnaire: "Cuestionario"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
       resource: "Recurso"
@@ -1129,18 +1111,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       work_paper: "Papel de trabajo"
 
     attributes:
-      answer:
-        comments: "Comentarios respuesta"
-        answer: "Respuesta"
-        question: "Cuestión"
-      answer_option:
-        option: "Opción"
-        options:
-          strongly_disagree: "Muy en desacuerdo"
-          disagree: "En desacuerdo"
-          neither_agree_nor_disagree: "Ni acuerdo ni desacuerdo"
-          agree: "De acuerdo"
-          strongly_agree: "Muy de acuerdo"
       business_unit:
         name: "Nombre"
       business_unit_type:
@@ -1396,10 +1366,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         human_resources_cost: "Costo recursos humanos"
         material_resources_cost: "Costo recursos materiales"
         total_resources_cost: "Costo total"
-      poll:
-        comments: "Comentarios encuesta"
-        answered: "Contestada"
-        questionnaire: "Cuestionario"
       privilege:
         module: "Módulo"
         read: "Lectura"
@@ -1428,14 +1394,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         control_objective_text: "Objetivo de control"
         relevance: "Importancia"
         control_objective_id: "Objetivo de control"
-      question:
-        sort_order: "Orden"
-        question: "Cuestión"
-        answer_type: "Tipo de respuesta"
-      questionnaire:
-        name: "Nombre"
-        questions: "Cuestiones"
-        polls: "Encuestas"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
