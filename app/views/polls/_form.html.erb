@@ -26,8 +26,8 @@
             }
           } %>
           <%= f.input :user_id, as: :hidden %>
-          <%= f.input :questionnaire_id, collection: Questionnaire.list.pluck(:name, :id),
-            prompt: true
+          <%= f.association :questionnaire,
+            collection: Questionnaire.list.pluck(:name, :id), prompt: true
           %>
         <% else %>
           <%= f.input :comments, label: "#{Poll.human_attribute_name :comments} (#{t 'label.optional'})" %>

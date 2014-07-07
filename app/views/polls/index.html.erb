@@ -7,7 +7,7 @@
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Poll.human_attribute_name('user'), nil, 'name', 'last_name' %>
-      <%= make_filterable_column Poll.human_attribute_name('questionnaire_id'), nil, 'questionnaire_name' %>
+      <%= make_filterable_column Poll.human_attribute_name('questionnaire'), nil, 'questionnaire_name' %>
       <%= make_filterable_column Poll.human_attribute_name('answered'), nil, 'answered' %>
       <%= make_not_available_column Poll.human_attribute_name('send_date') %>
       <%= make_not_available_column Poll.human_attribute_name('answer_date') %>
@@ -32,9 +32,6 @@
 
 <hr />
 
-<div>
-  <%= paginate @polls %>
-  <%= link_to t('label.new'), new_poll_path, class: 'btn btn-primary' %> |
-  <%= link_to t('poll.import_csv_customers_title'),
-    import_csv_customers_polls_path %>
-</div>
+<%= paginate @polls %>
+<%= link_to_new new_poll_path, class: 'btn btn-primary' %> |
+<%= link_to t('polls.import_csv'), import_csv_customers_polls_path %>

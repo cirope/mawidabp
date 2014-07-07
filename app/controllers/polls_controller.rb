@@ -2,7 +2,9 @@ class PollsController < ApplicationController
   before_action :load_privileges, :auth, except: [:edit, :update, :show]
   before_action :check_privileges, except: [:edit, :update, :show]
   before_action :set_poll, only: [:show, :edit, :update, :destroy]
+  before_action :set_questionnaire, only: [:index]
   before_action :set_title, except: :destroy
+  before_action :set_current_module, except: [:reports]
 
   respond_to :html
 
@@ -11,11 +13,11 @@ class PollsController < ApplicationController
   # GET /polls
   # GET /polls.json
   def index
-    @current_module = 'administration_questionnaires_polls'
+    @polls = @questionnaire.polls if @questionnaire
 
     build_search_conditions Poll
 
-    @polls = Poll.list.includes(:questionnaire, :user).
+    @polls = (@polls || Poll.list).includes(:questionnaire, :user).
       where(@conditions).order("#{Poll.table_name}.created_at DESC").
       references(:questionnaire, :user).page(params[:page])
 
@@ -34,7 +36,7 @@ class PollsController < ApplicationController
   # GET /polls/1/edit
   def edit
     if @poll.nil?
-      redirect_to login_url, alert: t('poll.not_found')
+      redirect_to login_url, alert: t('polls.not_found')
     elsif @poll.answered? || (params[:token] != @poll.access_token)
       redirect_to @poll
     end
@@ -44,8 +46,19 @@ class PollsController < ApplicationController
   def create
     @poll = Poll.list.new poll_params
 
-    @poll.save
-    respond_with @poll
+    polls = Poll.between_dates(Date.today.at_beginning_of_day, Date.today.end_of_day).where(
+      questionnaire_id: @poll.questionnaire_id, user_id: @poll.user_id
+    )
+
+    respond_to do |format|
+      if polls.present?
+        format.html { redirect_to new_poll_path, alert: t('polls.already_exists') }
+      elsif @poll.save
+        format.html { redirect_to @poll }
+      else
+        format.html { render 'new' }
+      end
+    end
   end
 
   # PATCH /polls/1
@@ -61,26 +74,25 @@ class PollsController < ApplicationController
   end
 
   def reports
-    @title = t 'poll.reports_title'
   end
 
   def import_csv_customers
-    @title = t('poll.import_csv_customers_title')
+    @title = t('polls.import_csv')
   end
 
   def send_csv_polls
-    ext = File.extname(params[:dump_emails][:file].original_filename) rescue ''
+    ext = File.extname(params[:poll][:file].original_filename) rescue ''
 
     if ext.downcase == '.csv'
-      n = process_csv params[:dump_emails][:file].path
+      n = process_csv params[:poll][:file].path
 
-      flash[:notice] = t('poll.customer_polls_sended', count: n)
+      flash[:notice] = t('polls.customer_polls_sended', count: n)
     else
-      flash[:alert] = t('poll.error_csv_file_extension')
+      flash[:alert] = t('polls.error_csv_file_extension')
     end
 
     respond_to do |format|
-      format.html { redirect_to polls_path }
+      format.html { redirect_to import_csv_customers_polls_path }
     end
   end
 
@@ -95,8 +107,12 @@ class PollsController < ApplicationController
       )
     end
 
+    def set_questionnaire
+      @questionnaire = Questionnaire.list.find_by id: params[:questionnaire_id]
+    end
+
     def set_poll
-      @poll = Poll.list.find(params[:id])
+      @poll = Poll.list.find params[:id]
     end
 
     def process_csv file_name
@@ -105,7 +121,7 @@ class PollsController < ApplicationController
       CSV.foreach(file_name, col_sep: ',', encoding: 'UTF-8') do |row|
         poll = current_organization.polls.new(
           customer_email: row[0], customer_name: row[1],
-          questionnaire_id: params[:dump_emails][:questionnaire_id].to_i
+          questionnaire_id: params[:poll][:questionnaire].to_i
         )
         count += 1 if poll.save
       end
@@ -113,9 +129,13 @@ class PollsController < ApplicationController
       count
     end
 
+    def set_current_module
+      @current_module = 'administration_questionnaires_polls'
+    end
+
     def load_privileges
       if @action_privileges
         @action_privileges.update reports: :read, import_csv_customers: :read
       end
     end
-end
+ end

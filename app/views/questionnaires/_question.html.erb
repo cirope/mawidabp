@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-4">
         <%= f.input :answer_type, as: :boolean, label: false,
-          inline_label: t('activerecord.models.answer_multi_choice'),
+          inline_label: AnswerMultiChoice.model_name.human(count: 1),
           input_html: { id: "#{id}_answer_type" }
         %>
       </div>

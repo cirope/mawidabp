@@ -97,18 +97,26 @@ es: &common
       success: 'Tus datos se actualizaron correctamente'
 
   polls:
+    access_denied: 'La encuesta ya ha sido contestada.'
+    already_exists: 'La encuesta ya existe y no fue enviada al usuario'
+    answer_poll: '¿Contestar encuesta?'
     answers:
       index:
         title: 'Resumen de respuestas'
     business_units:
       index:
-        title: 'Resumen por unidad de negocio'
+        title: 'Resumen por unidad organizativa'
+    customer_polls_sended: 'Se enviaron satisfactoriamente %{count} encuestas'
     index:
       title: 'Listado de encuestas'
+    import_csv: 'Importar clientes CSV'
     edit:
       title: 'Modificar encuesta'
+    error_csv_file_extension: 'Debe seleccionar un archivo CSV'
+    must_answer_poll: 'Tiene una encuesta pendiente por responder.'
     new:
       title: 'Agregar encuesta'
+    not_found: 'No se encontró la encuesta o la misma ya ha sido contestada.'
     pdf:
       name: 'resumen_encuestas_del_%{from_date}_al_%{to_date}.pdf'
     questionnaires:

@@ -8,7 +8,9 @@ Rails.application.routes.draw do
 
   resources :settings, only: [:index, :show, :edit, :update]
 
-  resources :questionnaires
+  resources :questionnaires do
+    resources :polls, only: [:index]
+  end
 
   namespace :polls do
     resources :questionnaires, only: [:index]

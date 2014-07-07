@@ -46,7 +46,7 @@ class PollTest < ActiveSupport::TestCase
     @poll = Poll.new
 
     assert @poll.invalid?
-    assert_error @poll, :questionnaire_id, :blank
+    assert_error @poll, :questionnaire, :blank
     assert_error @poll, :organization_id, :blank
     assert_error @poll, :base, :invalid
 

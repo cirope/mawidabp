@@ -8,8 +8,6 @@ module PollsHelper
   end
 
   def answer_options question
-    question.answer_options.map do |o|
-      [o.id, t("activerecord.attributes.answer_option.options.#{o.option}")]
-    end
+    question.answer_options.map { |o| [o.id, t("answer_options.#{o.option}")] }
   end
 end

@@ -35,6 +35,9 @@ es: &common
       update:
         notice: 'La encuesta ha sido guardada correctamente. ¡Muchas gracias!'
         stale: 'La encuesta no fue guardada, intente nuevamente'
+      destroy:
+        notice: 'Encuesta eliminada'
+        alert: 'La encuesta no pudo ser eliminada'
 
     questionnaires:
       create:
