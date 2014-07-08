@@ -1,10 +1,10 @@
 class ResourceClass < ActiveRecord::Base
   include Auditable
-  include Trimmer
   include ParameterSelector
   include ResourceClasses::Scopes
   include ResourceClasses::Validations
   include ResourceClasses::Resources
+  include Trimmer
 
   attr_readonly :resource_class_type
 

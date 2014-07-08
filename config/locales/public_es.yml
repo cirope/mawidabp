@@ -1173,8 +1173,6 @@ public_es:
       procedure_control_subitem: "Subítem del procedimiento de control"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
-      resource: "Recurso"
-      resource_class: "Clase de recurso"
       role: "Perfil"
       weakness: "Observación"
       workflow: "Programa de trabajo"
@@ -1462,28 +1460,6 @@ public_es:
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
-      resource:
-        name: "Recurso"
-        description: "Descripción"
-        cost_per_unit: "Costo por unidad"
-        resource_class_id: "Clase"
-      resource_class:
-        name: "Clase de recurso"
-        unit: "Unidad de medida"
-        resource_class_type: "Tipo"
-        resources:
-          one: "Recurso"
-          other: "Recursos"
-          name: "Recurso"
-          description: "Recurso (descripción)"
-          cost_per_unit: "Recurso (costo por unidad)"
-      resource_utilization:
-        units: "Cantidad de unidades"
-        cost_per_unit: "Costo por unidad"
-        cost: "Costo"
-        resource_id: "Recurso"
-        resource_consumer_id: "Consumidor de recurso"
-        resource_consumer: "Utilización de recurso"
       review:
         identification: "Identificación"
         description: "Descripción"

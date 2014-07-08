@@ -57,6 +57,12 @@ es: &common
       questionnaire:
         one: 'Cuestionario'
         other: 'Cuestionarios'
+      resource:
+        one: 'Recurso'
+        other: 'Recursos'
+      resource_class:
+        one: 'Clase de recurso'
+        other: 'Clases de recursos'
 
     attributes:
       answer:
@@ -162,6 +168,24 @@ es: &common
         email_link: 'Texto del enlace'
         email_text: 'Texto del correo'
         email_clarification: 'Aclaración del correo'
+      resource:
+        name: 'Recurso'
+        description: 'Descripción'
+        cost_per_unit: 'Costo por unidad'
+        resource_class: 'Clase'
+      resource_class:
+        name: 'Clase de recurso'
+        unit: 'Unidad de medida'
+        resource_class_type: 'Tipo'
+      resource_class/resources:
+        name: 'Recurso'
+        resource_class: 'Clase'
+      resource_utilization:
+        units: 'Cantidad de unidades'
+        cost_per_unit: 'Costo por unidad'
+        cost: 'Costo'
+        resource: 'Recurso'
+        resource_consumer: 'Utilización de recurso'
 
 public_es:
   <<: *common

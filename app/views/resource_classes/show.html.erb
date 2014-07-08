@@ -1,14 +1,13 @@
-<p>
-  <strong><%= ResourceClass.human_attribute_name(:name) %>:</strong>
-  <%= @resource_class.name %>
-</p>
+<div class="page-header">
+  <h2><%= @resource_class.name %></h2>
+</div>
 
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <th><%= Resource.human_attribute_name :name %></th>
-      <th><%= Resource.human_attribute_name :description %></th>
-      <th><%= Resource.human_attribute_name :cost_per_unit %></th>
+      <th><%= Resource.human_attribute_name 'name' %></th>
+      <th><%= Resource.human_attribute_name 'description' %></th>
+      <th><%= Resource.human_attribute_name 'cost_per_unit' %></th>
     </tr>
   </thead>
   <tbody>
@@ -24,8 +23,6 @@
 
 <hr />
 
-<div>
-  <%= link_to_edit edit_resource_class_path(@resource_class) %> |
-  <%= link_to t('label.list'), resource_classes_path %> |
-  <%= link_to_back %>
-</div>
+<%= link_to_edit edit_resource_class_path(@resource_class) %> |
+<%= link_to_index resource_classes_path %> |
+<%= link_to_back %>
