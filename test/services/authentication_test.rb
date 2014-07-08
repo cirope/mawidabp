@@ -48,7 +48,7 @@ class AuthenticationTest < ActionController::TestCase
     poll_redirect = ['edit', poll, token: poll.access_token]
 
     assert_valid_authentication redirect_url: poll_redirect,
-      message: 'poll.must_answer_poll'
+      message: 'polls.must_answer_poll'
   end
 
   test 'should not login with invalid password' do
