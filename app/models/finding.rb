@@ -11,6 +11,7 @@ class Finding < ActiveRecord::Base
   include Findings::JSON
   include Findings::Reiterations
   include Findings::Relations
+  include Findings::ScaffoldNotifications
   include Findings::Search
   include Findings::SortColumns
   include Findings::State
@@ -256,8 +257,6 @@ class Finding < ActiveRecord::Base
     :inverse_of => :finding
   has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
 
-  accepts_nested_attributes_for :finding_answers, :allow_destroy => false,
-    reject_if: ->(attributes) { attributes['answer'].blank? }
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false
   accepts_nested_attributes_for :finding_user_assignments,
@@ -375,46 +374,6 @@ class Finding < ActiveRecord::Base
   def stale_confirmed_days
     self.parameter_in(self.review.organization.id,
       'finding_stale_confirmed_days').to_i
-  end
-
-  def users_for_scaffold_notification(level = 1)
-    users = self.finding_user_assignments.map(&:user).select(
-      &:can_act_as_audited?)
-    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
-    level_overflow = false
-
-    level.times do
-      users |= (highest_users = highest_users.map(&:parent).compact.uniq.select {|u|
-                  u.organizations.include? self.review.organization
-                })
-
-      level_overflow ||= highest_users.empty?
-    end
-
-    level_overflow ? [] : users.uniq
-  end
-
-  def manager_users_for_level(level = 1)
-    users = self.finding_user_assignments.map(&:user).select(
-      &:can_act_as_audited?)
-    highest_users = users.reject {|u| u.ancestors.any? {|p| users.include?(p)}}
-
-    level.times { highest_users = highest_users.map(&:parent).compact.uniq }
-
-    highest_users.reject { |u| self.users.include?(u) || !(u.organizations.include? self.review.organization) }
-  end
-
-  def notification_date_for_level(level = 1)
-    date_for_notification = self.first_notification_date.try(:dup) || Date.today
-    days_to_add = (self.stale_confirmed_days +
-        self.stale_confirmed_days * level).next
-
-    until days_to_add == 0
-      date_for_notification += 1
-      days_to_add -= 1 unless [0, 6].include?(date_for_notification.wday)
-    end
-
-    date_for_notification
   end
 
   def commitment_date
@@ -918,32 +877,6 @@ class Finding < ActiveRecord::Base
         findings_for_user = findings.select { |f| f.users.include?(user) }
 
         Notifier.unanswered_findings_notification(user, findings_for_user).deliver
-      end
-    end
-  end
-
-  def self.notify_manager_if_necesary
-    # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include?(Date.today.wday)
-      Finding.transaction do
-        n = 0
-
-        until (findings = Finding.unanswered_and_stale(n += 1)).empty?
-          findings.each do |finding|
-            users = finding.users_for_scaffold_notification(n)
-            has_audited_comments = finding.finding_answers.reload.any? do |fa|
-              fa.user.can_act_as_audited?
-            end
-
-            # No notificar si no hace falta
-            if !users.empty? && !has_audited_comments
-              Notifier.unanswered_finding_to_manager_notification(finding,
-                users | finding.users, n).deliver
-            end
-
-            finding.update_attribute :notification_level, users.empty? ? -1 : n
-          end
-        end
       end
     end
   end
