@@ -1,6 +1,5 @@
 <% readonly = @oportunity.final? %>
-<% review = @oportunity.review || (@oportunity.control_objective_item ?
-    @oportunity.control_objective_item.review : nil) %>
+<% review = @oportunity.review || @oportunity.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @oportunity.repeated? %>
 <% show_history_changes = @oportunity.status_change_history.size > 1 %>
 

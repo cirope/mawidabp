@@ -1,6 +1,5 @@
 <% readonly = @potential_nonconformity.final? %>
-<% review = @potential_nonconformity.review || (@potential_nonconformity.control_objective_item ?
-    @potential_nonconformity.control_objective_item.review : nil) %>
+<% review = @potential_nonconformity.review || @potential_nonconformity.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) || @potential_nonconformity.repeated? %>
 <% show_history_changes = @potential_nonconformity.status_change_history.size > 1 %>
 
@@ -23,7 +22,7 @@
             <%= ControlObjective.model_name.human %>
           </label>
           <% if !readonly && !@potential_nonconformity.new_record? %>
-            <%= f.input :control_objective_item_id, label: false, input_html: {
+            <%= f.input :control_objective_item, label: false, input_html: {
               value: @potential_nonconformity.control_objective_item.try(:control_objective_text),
               title: t('label.search'),
               autocomplete: :off, autofocus: true,

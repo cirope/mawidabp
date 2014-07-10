@@ -1,11 +1,13 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @nonconformity %> |
   <%= link_to_index nonconformities_path %> |
-  <%= link_to_edit edit_control_objective_item_path(@nonconformity.control_objective_item) %> |
+  <% if @nonconformity.control_objective_item %>
+    <%= link_to_edit edit_control_objective_item_path(@nonconformity.control_objective_item) %> |
+  <% end %>
   <% if !@nonconformity.is_in_a_final_review? && @nonconformity.pending? && !@nonconformity.incomplete? %>
     <%= link_to t('nonconformity.edit_follow_up'), edit_finding_path('incomplete', @nonconformity) %> |
   <% end %>
   <%= link_to_back %>
 <% end %>
 
-<%= render partial: 'form' %>
+<%= render 'form' %>

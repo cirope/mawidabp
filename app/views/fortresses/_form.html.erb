@@ -1,6 +1,5 @@
 <% readonly = @fortress.final? %>
-<% review = @fortress.review || (@fortress.control_objective_item ?
-    @fortress.control_objective_item.review : nil) %>
+<% review = @fortress.review || @fortress.control_objective_item.try(:review) %>
 <% frozen = review.try(:is_frozen?) %>
 <% show_history_changes = @fortress.status_change_history.size > 1 %>
 
