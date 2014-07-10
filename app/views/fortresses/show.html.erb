@@ -57,7 +57,7 @@
 
 <div>
   <%= link_to_edit edit_fortress_path(@fortress) %> |
-  <%= link_to t('label.list'), fortresses_path %> |
+  <%= link_to_index fortresses_path %> |
   <% if !@fortress.is_in_a_final_review? %>
     <%= link_to t('fortress.show_follow_up'), finding_path('incomplete', @fortress) %> |
   <% end %>

@@ -1,5 +1,5 @@
 <%= content_for :form_actions do %>
-  <%= link_to t('label.list'), fortresses_path %> |
+  <%= link_to_index fortresses_path %> |
   <% if @fortress.control_objective_item %>
     <%= link_to t('fortress.edit_control_objective'),
       edit_control_objective_item_path(@fortress.control_objective_item) %> |

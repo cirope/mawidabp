@@ -1,5 +1,5 @@
 <%= content_for :form_actions do %>
-  <%= link_to t('label.list'), oportunities_path %> |
+  <%= link_to_index oportunities_path %> |
   <% if @oportunity.control_objective_item %>
     <%= link_to t('oportunity.edit_control_objective'),
       edit_control_objective_item_path(@oportunity.control_objective_item) %> |

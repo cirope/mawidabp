@@ -1,6 +1,6 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @potential_nonconformity %> |
-  <%= link_to t('label.list'), oportunities_path %> |
+  <%= link_to_index oportunities_path %> |
   <%= link_to t('potential_nonconformity.edit_control_objective'),
     edit_control_objective_item_path(@potential_nonconformity.control_objective_item) %> |
   <% if !@potential_nonconformity.is_in_a_final_review? && @potential_nonconformity.pending? && !@potential_nonconformity.incomplete? %>

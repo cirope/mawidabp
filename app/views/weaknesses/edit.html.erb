@@ -1,6 +1,6 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @weakness %> |
-  <%= link_to t('label.list'), weaknesses_path %> |
+  <%= link_to_index weaknesses_path %> |
   <%= link_to t('weakness.edit_control_objective'),
     edit_control_objective_item_path(@weakness.control_objective_item) %> |
   <% if !@weakness.is_in_a_final_review? && @weakness.pending? && !@weakness.incomplete? %>

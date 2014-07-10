@@ -83,7 +83,7 @@
 
 <div>
   <%= link_to_edit edit_workflow_path(@workflow) %> |
-  <%= link_to t('label.list'), workflows_path %> |
+  <%= link_to_index workflows_path %> |
   <%= link_to t('workflow.download_global_workflow'),
     export_to_pdf_workflow_path(:_ts => Time.now.to_i) %> |
   <%= link_to t('workflow.download_detailed_workflow'),

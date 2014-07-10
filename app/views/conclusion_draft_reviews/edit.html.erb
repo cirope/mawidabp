@@ -1,6 +1,6 @@
 <%= content_for :form_actions do %>
   <%= link_to_show @conclusion_draft_review %> |
-  <%= link_to t('label.list'), conclusion_draft_reviews_path %> |
+  <%= link_to_index conclusion_draft_reviews_path %> |
   <%= render('shared/downloads',
     links: [
       link_to(t('label.download'), :action => :export_to_pdf,

@@ -227,7 +227,7 @@
 
 <div>
   <%= link_to_edit edit_nonconformity_path(@nonconformity) %> |
-  <%= link_to t('label.list'), nonconformities_path %> |
+  <%= link_to_index nonconformities_path %> |
   <% if !@nonconformity.is_in_a_final_review? && @nonconformity.pending? && !@nonconformity.incomplete? %>
     <%= link_to t('nonconformity.show_follow_up'), finding_path('incomplete', @nonconformity) %> |
   <% end %>
