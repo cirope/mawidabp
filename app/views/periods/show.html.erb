@@ -1,21 +1,23 @@
-<h2><%= @period.number %></h2>
+<div class="page-header">
+  <h2><%= @period.number %></h2>
+</div>
 
 <p class="lead">
   <%= @period.description %>
 </p>
 
 <p>
-  <strong><%= Period.human_attribute_name :start %>:</strong>
-  <%=l @period.start, :format => :long %>
+  <strong><%= Period.human_attribute_name 'start' %></strong>:
+  <%= l @period.start, format: :long %>
 </p>
 
 <p>
-  <strong><%= Period.human_attribute_name :end %>:</strong>
-  <%=l @period.end, :format => :long %>
+  <strong><%= Period.human_attribute_name 'end' %></strong>:
+  <%= l @period.end, format: :long %>
 </p>
 
 <hr />
 
 <%= link_to_edit edit_period_path(@period) %> |
-<%= link_to t('label.list'), periods_path %> |
+<%= link_to_index periods_path %> |
 <%= link_to_back %>

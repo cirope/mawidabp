@@ -959,27 +959,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     review_identification: "Número de informe %{review}"
     draft: "Borrador"
 
-  period:
-    index_title: "Listado de periodos"
-    show_title: "Detalles del periodo"
-    new_title: "Agregar periodo"
-    edit_title: "Modificar periodo"
-    correctly_created: "Periodo agregado correctamente."
-    correctly_updated: "Periodo actualizado correctamente."
-    stale_object_error: "El periodo no fue actualizado, intente nuevamente."
-    errors:
-      can_not_be_destroyed: "El periodo no puede ser eliminado"
-      has_plans:
-        one: "Tiene un plan asociado"
-        other: "Tiene %{count} planes asociados"
-      has_procedure_controls: "Está asociado a procedimientos y pruebas de control (%{count})"
-      has_reviews:
-        one: "Tiene un informe asociado"
-        other: "Tiene %{count} informes asociados"
-      has_workflows:
-        one: "Tiene un programa de trabajo asociado"
-        other: "Tiene %{count} programas de trabajo asociados"
-
   plan:
     index_title: "Listado de planes de trabajo"
     show_title: "Detalles del plan de trabajo"
@@ -1284,7 +1263,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
       notification: "Notificación"
       old_password: "Contraseña anterior"
       oportunity: "Oportunidad de mejora"
-      period: "Periodo"
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
       potential_nonconformity: "No conformidad potencial"
@@ -1543,11 +1521,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         user_id: "Usuario"
         organization_id: "Organización"
         role_id: "Perfil"
-      period:
-        number: "Número"
-        description: "Descripción"
-        start: "Inicio"
-        end: "Fin"
       plan:
         organization_id: "Organización"
         period_id: "Periodo"

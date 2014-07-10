@@ -45,6 +45,9 @@ es: &common
       paper_trail/version:
         one: 'Versión'
         other: 'Versiones'
+      period:
+        one: 'Período'
+        other: 'Periodos'
       poll:
         one: 'Encuesta'
         other: 'Encuestas'
@@ -140,6 +143,11 @@ es: &common
         event: 'Evento'
         item: 'Objeto'
         whodunnit: 'Ejecutor'
+      period:
+        number: 'Número'
+        description: 'Descripción'
+        start: 'Inicio'
+        end: 'Fin'
       poll:
         comments: 'Comentarios'
         customer_email: 'Correo cliente'

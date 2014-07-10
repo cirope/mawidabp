@@ -89,6 +89,28 @@ es: &common
       title: 'Modificar organización'
     new_organization_can_not_have_image: 'Podrá cargar un isologotipo de la organización luego de haberla creado'
 
+  periods:
+    edit:
+      title: 'Modificar período'
+    errors:
+      can_not_be_destroyed: 'El período no puede ser eliminado'
+      plans:
+        one: 'Tiene un plan asociado'
+        other: 'Tiene %{count} planes asociados'
+      procedure_controls: 'Está asociado a procedimientos y pruebas de control (%{count})'
+      reviews:
+        one: 'Tiene un informe asociado'
+        other: 'Tiene %{count} informes asociados'
+      workflows:
+        one: 'Tiene un programa de trabajo asociado'
+        other: 'Tiene %{count} programas de trabajo asociados'
+    index:
+      title: 'Listado de periodos'
+    new:
+      title: 'Agregar período'
+    show:
+      title: 'Detalles del período'
+
   profiles:
     edit:
       title: 'Mis datos'

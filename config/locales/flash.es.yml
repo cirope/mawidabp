@@ -29,6 +29,13 @@ es: &common
         notice: 'Organización actualizada correctamente'
         stale: 'La organización no fue actualizada, intente nuevamente'
 
+    periods:
+      create:
+        notice: 'Período agregado correctamente'
+      update:
+        notice: 'Período actualizado correctamente'
+        stale: 'El período no fue actualizado, intente nuevamente'
+
     polls:
       create:
         notice: 'La encuesta ha sido agregada correctamente'
