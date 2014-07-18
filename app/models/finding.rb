@@ -15,6 +15,7 @@ class Finding < ActiveRecord::Base
   include Findings::Search
   include Findings::SortColumns
   include Findings::State
+  include Findings::Unanswered
   include Findings::UpdateCallbacks
   include Findings::Validations
   include Findings::ValidationCallbacks
@@ -107,79 +108,6 @@ class Finding < ActiveRecord::Base
     ].join(' AND ')
 
     includes(:control_objective_item => { :review => :period }).where(
-      [
-        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
-      ].join(' AND '),
-      parameters
-    ).references(:periods)
-  }
-  scope :unconfirmed_and_stale, -> {
-    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
-    pre_conditions = []
-    parameters = {
-      :state => STATUS[:unconfirmed],
-      :boolean_false => false
-    }
-
-    stale_parameters.each_with_index do |stale_parameter, i|
-      stale_days = stale_parameter[:parameter].to_i
-      parameters[:"stale_unconfirmed_date_#{i}"] =
-        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
-      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
-
-      pre_conditions << [
-        "first_notification_date < :stale_unconfirmed_date_#{i}",
-        "#{Period.table_name}.organization_id = :organization_id_#{i}",
-      ].join(' AND ')
-    end
-
-    fix_conditions = [
-      'state = :state',
-      'final = :boolean_false'
-    ].join(' AND ')
-
-    includes(:control_objective_item => { :review => :period }).where(
-      [
-        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
-      ].join(' AND '),
-      parameters
-    ).references(:periods)
-  }
-  scope :confirmed_and_stale, -> {
-    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
-    pre_conditions = []
-    parameters = {
-      :state => STATUS[:confirmed],
-      :boolean_false => false,
-      :notification_level => 0
-    }
-
-    stale_parameters.each_with_index do |stale_parameter, i|
-      stale_days = stale_parameter[:parameter].to_i
-      parameters[:"stale_confirmed_date_#{i}"] =
-        stale_days.days.ago_in_business.to_date
-      parameters[:"stale_first_notification_date_#{i}"] =
-        (FINDING_STALE_UNCONFIRMED_DAYS + stale_days).days.ago_in_business.to_date
-      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
-
-      pre_conditions << [
-        [
-          "confirmation_date < :stale_confirmed_date_#{i}",
-          "first_notification_date < :stale_first_notification_date_#{i}"
-        ].join(' OR '),
-        "#{Period.table_name}.organization_id = :organization_id_#{i}",
-      ].map {|c| "(#{c})"}.join(' AND ')
-    end
-
-    fix_conditions = [
-      'state = :state',
-      'final = :boolean_false',
-      'notification_level = :notification_level'
-    ].join(' AND ')
-
-    includes(
-      :finding_answers, {:control_objective_item => {:review => :period}}
-    ).where(
       [
         "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
       ].join(' AND '),
@@ -847,36 +775,6 @@ class Finding < ActiveRecord::Base
         end
 
         users.each { |user| Notifier.stale_notification(user).deliver }
-      end
-    end
-  end
-
-  def self.mark_as_unanswered_if_necesary
-    # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include?(Date.today.wday)
-      findings, users = [], []
-
-      Finding.transaction do
-        findings |= Finding.confirmed_and_stale.reject do |c_f|
-          # Si o si hacer un reload, sino trae la asociación de la consulta
-          c_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
-        end
-
-        findings |= Finding.unconfirmed_and_stale.reject do |u_f|
-          # Si o si hacer un reload, sino trae la asociación de la consulta
-          u_f.finding_answers.reload.any? { |fa| fa.user.can_act_as_audited? }
-        end
-
-        users = findings.inject([]) do |u, finding|
-          finding.update_attribute :state, Finding::STATUS[:unanswered]
-          u | finding.users
-        end
-      end
-
-      users.each do |user|
-        findings_for_user = findings.select { |f| f.users.include?(user) }
-
-        Notifier.unanswered_findings_notification(user, findings_for_user).deliver
       end
     end
   end
