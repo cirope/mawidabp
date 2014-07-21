@@ -38,7 +38,7 @@ GEM
     acts_as_tree (2.0.0)
       activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
-    attr_searchable (0.0.4)
+    attr_searchable (0.0.5)
       treetop
     blankslate (2.1.2.4)
     bloggy (0.3)
@@ -216,7 +216,7 @@ GEM
     ttfunk (1.2.0)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
-    uglifier (2.5.1)
+    uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     unicorn (4.8.3)

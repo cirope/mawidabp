@@ -1,6 +1,6 @@
 public_es:
   app_name: "Mawidabp"
-  app_copyright: "Copyright © 2008-%{year} Mawidabp. Todos los derechos reservados."
+  app_copyright: "Copyright © 2008-%{year} Cirope S.A. Todos los derechos reservados."
 
   label:
     attach_csv: "Importar CSV"
