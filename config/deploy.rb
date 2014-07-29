@@ -11,7 +11,7 @@ set :deploy_via, :remote_cache
 set :scm, :git
 
 set :linked_files, %w{config/application.yml}
-set :linked_dirs, %w{log private}
+set :linked_dirs, %w{log private tmp/pids}
 
 set :rbenv_type, :user
 set :rbenv_ruby, '2.1.2'
