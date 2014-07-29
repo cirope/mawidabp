@@ -131,14 +131,15 @@ class ReviewUserAssignment < ActiveRecord::Base
             :responsible => new_user.full_name_with_function)
         ]
 
-        Notifier.changes_notification([new_user, old_user],
+        NotifierMailer.delay.changes_notification([new_user, old_user],
           title: notification_title, body: notification_body,
           content: notification_content,
-          organizations: [review.organization]).deliver
+          organizations: [review.organization])
 
         unless unconfirmed_findings.blank?
-          Notifier.reassigned_findings_notification(new_user, old_user,
-            unconfirmed_findings).deliver
+          NotifierMailer.delay.reassigned_findings_notification(
+            new_user, old_user, unconfirmed_findings
+          )
         end
       else
         self.errors.add :base,
@@ -177,8 +178,8 @@ class ReviewUserAssignment < ActiveRecord::Base
       title = I18n.t('review_user_assignment.responsibility_removed',
         :review => self.review.try(:identification))
 
-      Notifier.changes_notification(self.user, title: title,
-        organizations: [review.organization]).deliver
+      NotifierMailer.delay.changes_notification(self.user, title: title,
+        organizations: [review.organization])
     end
 
     all_valid

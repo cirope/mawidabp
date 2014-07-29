@@ -728,7 +728,7 @@ mc_es:
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier:
+  notifier_mailer:
     notify_new_finding:
       title: "Tiene un nuevo desvío / oportunidad de mejora"
       created_title: "Nuevo desvío / oportunidad de mejora"

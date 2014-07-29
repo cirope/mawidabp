@@ -697,7 +697,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     status_rejected: "Rechazada"
     type: "Tipo"
 
-  notifier:
+  notifier_mailer:
     notify_new_finding:
       title: "Tiene una nueva observación / oportunidad de mejora"
       created_title: "Nueva observación / oportunidad de mejora"

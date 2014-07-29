@@ -1,4 +1,4 @@
-class Notifier < ActionMailer::Base
+class NotifierMailer < ActionMailer::Base
   helper :application
 
   default from: "'#{I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
@@ -31,7 +31,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [group.admin_email],
       :subject => prefixes.upcase + t(
-        'notifier.group_welcome_email.title', :name => group.name
+        'notifier_mailer.group_welcome_email.title', :name => group.name
       )
     )
   end
@@ -44,7 +44,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [user.email],
       :subject => prefixes.upcase + t(
-        'notifier.welcome_email.title', :name => user.informal_name
+        'notifier_mailer.welcome_email.title', :name => user.informal_name
       )
     )
   end
@@ -60,7 +60,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefixes.upcase + t('notifier.notify_new_findings.title')
+      :subject => prefixes.upcase + t('notifier_mailer.notify_new_findings.title')
     )
   end
 
@@ -71,7 +71,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefix.upcase + t('notifier.notify_new_finding.title')
+      :subject => prefix.upcase + t('notifier_mailer.notify_new_finding.title')
     )
   end
 
@@ -82,7 +82,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
       :subject => prefix.upcase + t(
-        'notifier.notify_new_finding_answer.title',
+        'notifier_mailer.notify_new_finding_answer.title',
         :review => finding_answer.finding.review.to_s
       )
     )
@@ -98,7 +98,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefixes.upcase + t('notifier.notification.pending')
+      :subject => prefixes.upcase + t('notifier_mailer.notification.pending')
     )
   end
 
@@ -112,7 +112,7 @@ class Notifier < ActionMailer::Base
 
       mail(
         :to => [user.email],
-        :subject => prefixes.upcase + t('notifier.unanswered_findings.title')
+        :subject => prefixes.upcase + t('notifier_mailer.unanswered_findings.title')
       )
     else
       raise 'Findings and user mismatch'
@@ -125,7 +125,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => users.map(&:email),
-      :subject => prefix + t('notifier.unanswered_finding_to_manager.title')
+      :subject => prefix + t('notifier_mailer.unanswered_finding_to_manager.title')
     )
   end
 
@@ -142,7 +142,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [new_users, old_users].flatten.compact.map(&:email),
       :subject => prefixes.upcase + t(
-        'notifier.reassigned_findings.title',
+        'notifier_mailer.reassigned_findings.title',
         :count => findings_array.size
       )
     )
@@ -155,7 +155,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => [user.email],
-      :subject => prefix.upcase + t('notifier.restore_password.title')
+      :subject => prefix.upcase + t('notifier_mailer.restore_password.title')
     )
   end
 
@@ -175,7 +175,7 @@ class Notifier < ActionMailer::Base
 
     mail(
       :to => users.kind_of?(Array) ? users.map(&:email) : [users.email],
-      :subject => prefixes.upcase + t('notifier.changes_notification.title')
+      :subject => prefixes.upcase + t('notifier_mailer.changes_notification.title')
     )
   end
 
@@ -183,7 +183,7 @@ class Notifier < ActionMailer::Base
     raise 'lala' if options.has_key?(:notify)
     prefix = "[#{conclusion_review.review.organization.prefix}] "
     title = I18n.t(
-      'notifier.conclusion_review_notification.title',
+      'notifier_mailer.conclusion_review_notification.title',
       :review => conclusion_review.review.identification
     )
     elements = [
@@ -198,7 +198,7 @@ class Notifier < ActionMailer::Base
       elements << "*#{I18n.t('conclusion_review.global_score_sheet')}*"
     end
 
-    body_title = I18n.t('notifier.conclusion_review_notification.body_title',
+    body_title = I18n.t('notifier_mailer.conclusion_review_notification.body_title',
       :elements => elements.to_sentence)
 
     @conclusion_review = conclusion_review
@@ -233,7 +233,7 @@ class Notifier < ActionMailer::Base
     mail(
       :to => [user.email],
       :subject => prefixes.upcase + t(
-        'notifier.findings_expiration_warning.title'
+        'notifier_mailer.findings_expiration_warning.title'
       )
     )
   end
@@ -242,7 +242,7 @@ class Notifier < ActionMailer::Base
     @cfr = cfr
     mail(
       :to => [user.email],
-         :subject => "[#{@cfr.review.organization.prefix.upcase}] #{t('notifier.conclusion_final_review_expiration_warning.title')}"
+         :subject => "[#{@cfr.review.organization.prefix.upcase}] #{t('notifier_mailer.conclusion_final_review_expiration_warning.title')}"
     )
   end
 end

@@ -1,7 +1,9 @@
-ENV['RAILS_ENV'] = 'test'
+ENV['RAILS_ENV'] ||= 'test'
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'minitest/pride'
+require 'sidekiq/testing/inline'
 
 class ActiveSupport::TestCase
   set_fixture_class versions: PaperTrail::Version

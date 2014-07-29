@@ -22,7 +22,7 @@
 
   <% if @notification %>
   <p>
-    <%= link_to t('notifier.notification.confirm'),
+    <%= link_to t('notifier_mailer.notification.confirm'),
       confirm_notification_url(@notification,
         :host => (organization ? "#{organization.prefix}.#{URL_HOST}" : URL_HOST)) %>
   </p>

@@ -845,7 +845,7 @@ class FindingTest < ActiveSupport::TestCase
     response = ActionMailer::Base.deliveries.first
 
     assert response.subject.include?(
-      I18n.t('notifier.notify_new_finding.title')
+      I18n.t('notifier_mailer.notify_new_finding.title')
     )
   end
 

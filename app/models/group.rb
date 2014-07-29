@@ -46,7 +46,7 @@ class Group < ActiveRecord::Base
         self.send_notification_email = true
       end
 
-      Notifier.group_welcome_email(self).deliver
+      NotifierMailer.delay.group_welcome_email(self)
     end
   end
 end

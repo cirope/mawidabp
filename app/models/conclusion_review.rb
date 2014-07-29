@@ -138,7 +138,7 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def send_by_email_to(user, options = {})
-    Notifier.conclusion_review_notification(user, self, options).deliver
+    NotifierMailer.delay.conclusion_review_notification(user, self, options)
   end
 
   def to_pdf(organization = nil, *args)

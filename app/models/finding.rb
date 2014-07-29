@@ -774,7 +774,7 @@ class Finding < ActiveRecord::Base
           end
         end
 
-        users.each { |user| Notifier.stale_notification(user).deliver }
+        users.each { |user| NotifierMailer.delay.stale_notification(user) }
       end
     end
   end
@@ -787,8 +787,7 @@ class Finding < ActiveRecord::Base
       end
 
       users.each do |user|
-        Notifier.findings_expiration_warning(user,
-          user.findings.next_to_expire).deliver
+        NotifierMailer.delay.findings_expiration_warning(user, user.findings.next_to_expire.to_a)
       end
     end
   end

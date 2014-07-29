@@ -4,7 +4,6 @@ gem 'rails', '~> 4.1.4'
 
 gem 'pg'
 gem 'foreigner'
-gem 'ya2yaml'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'mini_magick'
@@ -21,12 +20,13 @@ gem 'rubyzip', require: 'zip'
 gem 'prawn'
 gem 'prawn-table'
 gem 'figaro'
-gem 'bloggy'
+gem 'bloggy', require: false
 gem 'irreverent'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'attr_searchable'
 gem 'jbuilder'
+gem 'sidekiq'
 
 gem 'sass-rails'
 gem 'coffee-rails'
@@ -40,6 +40,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+  gem 'capistrano-sidekiq'
   gem 'unicorn-rails'
 end
 

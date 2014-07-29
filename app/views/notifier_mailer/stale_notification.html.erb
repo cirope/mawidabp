@@ -1,7 +1,7 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
-  <h2><%= t 'notifier.notification.unconfirmed' %></h2>
+  <h2><%= t 'notifier_mailer.notification.unconfirmed' %></h2>
   <h3 style="text-decoration: underline;">
-    <%= t 'notifier.notification.the_following_findings_are_still_unconfirmed' %>
+    <%= t 'notifier_mailer.notification.the_following_findings_are_still_unconfirmed' %>
   </h3>
   <% @notifications.each do |n| %>
     <% n.findings.unconfirmed_for_notification.group_by(&:organization).each do |organization, findings| %>
@@ -12,7 +12,7 @@
         <%= render :partial => 'finding', :locals => {:finding => finding} %><br />
       <% end %>
       <p>
-        <%= link_to t('notifier.notification.confirm'),
+        <%= link_to t('notifier_mailer.notification.confirm'),
           confirm_notification_url(n, :host => "#{organization.prefix}.#{URL_HOST}") %>
       </p>
     <% end %>

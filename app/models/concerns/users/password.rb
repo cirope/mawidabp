@@ -34,7 +34,7 @@ module Users::Password
     self.change_password_hash = SecureRandom.urlsafe_base64
     self.hash_changed = Time.now
 
-    Notifier.restore_password(self, organization).deliver if notify
+    NotifierMailer.delay.restore_password(self, organization) if notify
 
     save!
   end

@@ -2,7 +2,7 @@ module Users::Notifications
   extend ActiveSupport::Concern
 
   def send_welcome_email
-    Notifier.welcome_email(self).deliver unless send_notification_email.blank?
+    NotifierMailer.delay.welcome_email(self) unless send_notification_email.blank?
   end
 
   def send_notification_if_necesary
@@ -11,7 +11,7 @@ module Users::Notifications
 
       reset_password organization, notify: false
 
-      Notifier.welcome_email(self).deliver
+      NotifierMailer.delay.welcome_email(self)
     end
   end
 
@@ -21,15 +21,13 @@ module Users::Notifications
         emails, findings = [], []
 
         all_with_findings_for_notification.each do |user|
-          emails << Notifier.notify_new_findings(user)
+          NotifierMailer.delay.notify_new_findings(user)
 
           findings |= user.findings.for_notification
         end
 
         Finding.transaction do
           raise ActiveRecord::Rollback unless findings.all? &:mark_as_unconfirmed!
-
-          emails.each &:deliver
         end
       end
     end

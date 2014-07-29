@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class NotifierTest < ActionMailer::TestCase
+class NotifierMailerTest < ActionMailer::TestCase
   fixtures :users, :findings, :organizations, :groups
 
   test 'pending poll email' do
@@ -8,7 +8,7 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.pending_poll_email(poll).deliver
+    response = NotifierMailer.pending_poll_email(poll).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert_equal [poll.user.email], response.to
@@ -22,13 +22,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.group_welcome_email(group).deliver
+    response = NotifierMailer.group_welcome_email(group).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.group_welcome_email.title', :name => group.name)
+      I18n.t('notifier_mailer.group_welcome_email.title', :name => group.name)
     )
-    assert_match %r{#{I18n.t('notifier.group_welcome_email.initial_user')}},
+    assert_match %r{#{I18n.t('notifier_mailer.group_welcome_email.initial_user')}},
       response.body.decoded
     assert response.to.include?(group.admin_email)
   end
@@ -39,13 +39,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.welcome_email(user).deliver
+    response = NotifierMailer.welcome_email(user).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.welcome_email.title', :name => user.informal_name)
+      I18n.t('notifier_mailer.welcome_email.title', :name => user.informal_name)
     )
-    assert_match Regexp.new(I18n.t('notifier.welcome_email.initial_password')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.welcome_email.initial_password')),
       response.body.decoded
     assert response.to.include?(user.email)
   end
@@ -56,13 +56,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.notify_new_findings(user).deliver
+    response = NotifierMailer.notify_new_findings(user).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.notify_new_findings.title')
+      I18n.t('notifier_mailer.notify_new_findings.title')
     )
-    assert_match Regexp.new(I18n.t('notifier.notify_new_findings.created_title',
+    assert_match Regexp.new(I18n.t('notifier_mailer.notify_new_findings.created_title',
         :count => finding.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -72,13 +72,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.notify_new_finding(user, user.findings.first).deliver
+    response = NotifierMailer.notify_new_finding(user, user.findings.first).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.notify_new_finding.title')
+      I18n.t('notifier_mailer.notify_new_finding.title')
     )
-    assert_match Regexp.new(I18n.t('notifier.notify_new_finding.title')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.notify_new_finding.title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -90,16 +90,16 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.notify_new_finding_answer(user, finding_answer).deliver
+    response = NotifierMailer.notify_new_finding_answer(user, finding_answer).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
       I18n.t(
-        'notifier.notify_new_finding_answer.title',
+        'notifier_mailer.notify_new_finding_answer.title',
         :review => finding_answer.finding.review.to_s
       )
     )
-    assert_match Regexp.new(I18n.t('notifier.notify_new_finding_answer.finding_link')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.notify_new_finding_answer.finding_link')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -109,11 +109,11 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.stale_notification(user).deliver
+    response = NotifierMailer.stale_notification(user).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(I18n.t('notifier.notification.pending'))
-    assert_match Regexp.new(I18n.t('notifier.notification.unconfirmed')),
+    assert response.subject.include?(I18n.t('notifier_mailer.notification.pending'))
+    assert_match Regexp.new(I18n.t('notifier_mailer.notification.unconfirmed')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -126,13 +126,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.unanswered_findings_notification(user, finding).deliver
+    response = NotifierMailer.unanswered_findings_notification(user, finding).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.unanswered_findings.title')
+      I18n.t('notifier_mailer.unanswered_findings.title')
     )
-    assert_match Regexp.new(I18n.t('notifier.unanswered_findings.title')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.unanswered_findings.title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -144,15 +144,15 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.unanswered_finding_to_manager_notification(finding, users,
+    response = NotifierMailer.unanswered_finding_to_manager_notification(finding, users,
       1).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.unanswered_finding_to_manager.title')
+      I18n.t('notifier_mailer.unanswered_finding_to_manager.title')
     )
     assert_match Regexp.new(
-      I18n.t('notifier.unanswered_finding_to_manager.the_following_finding_is_stale_and_unanswered')
+      I18n.t('notifier_mailer.unanswered_finding_to_manager.the_following_finding_is_stale_and_unanswered')
     ), response.body.decoded
     assert !users.empty?
     assert users.map(&:email).all? { |email| response.to.include?(email) }
@@ -164,14 +164,14 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.reassigned_findings_notification(user, old_user,
+    response = NotifierMailer.reassigned_findings_notification(user, old_user,
       user.findings).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.reassigned_findings.title', :count => user.findings.size)
+      I18n.t('notifier_mailer.reassigned_findings.title', :count => user.findings.size)
     )
-    assert_match Regexp.new(I18n.t('notifier.reassigned_findings.title',
+    assert_match Regexp.new(I18n.t('notifier_mailer.reassigned_findings.title',
         :count => user.findings.size)),
       response.body.decoded
     assert_equal user.email, response.to.first
@@ -183,13 +183,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.restore_password(user, organization).deliver
+    response = NotifierMailer.restore_password(user, organization).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
-    assert response.subject.include?(I18n.t('notifier.restore_password.title'))
+    assert response.subject.include?(I18n.t('notifier_mailer.restore_password.title'))
     assert response.body.decoded.include?(
       I18n.t(
-        'notifier.restore_password.body_title',
+        'notifier_mailer.restore_password.body_title',
         :user_name => user.informal_name, :user => user.user
       )
     )
@@ -201,7 +201,7 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.changes_notification(
+    response = NotifierMailer.changes_notification(
       user,
       :title => 'test title',
       :content => 'test content',
@@ -213,7 +213,7 @@ class NotifierTest < ActionMailer::TestCase
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.changes_notification.title')
+      I18n.t('notifier_mailer.changes_notification.title')
     )
     assert_match /test title/, response.body.decoded
     assert_match /test content/, response.body.decoded
@@ -221,7 +221,7 @@ class NotifierTest < ActionMailer::TestCase
     assert_equal user.email, response.to.first
 
     assert_difference 'ActionMailer::Base.deliveries.size' do
-      response = Notifier.changes_notification(
+      response = NotifierMailer.changes_notification(
         [user, User.find(users(:audited_user).id)], :title => 'test title',
         :content => ['test content 1', 'test content 2']).deliver
     end
@@ -251,10 +251,10 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.conclusion_review_notification(user, conclusion_review,
+    response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true, :include_global_score_sheet => true,
       :note => 'note in *textile*').deliver
-    title = I18n.t('notifier.conclusion_review_notification.title',
+    title = I18n.t('notifier_mailer.conclusion_review_notification.title',
       :review => conclusion_review.review.identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
@@ -268,9 +268,9 @@ class NotifierTest < ActionMailer::TestCase
       assert text_part.include?(element)
     end
 
-    response = Notifier.conclusion_review_notification(user, conclusion_review,
+    response = NotifierMailer.conclusion_review_notification(user, conclusion_review,
       :include_score_sheet => true).deliver
-    title = I18n.t('notifier.conclusion_review_notification.title',
+    title = I18n.t('notifier_mailer.conclusion_review_notification.title',
       :review => conclusion_review.review.identification)
     elements.delete(I18n.t('conclusion_review.global_score_sheet'))
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
@@ -286,9 +286,9 @@ class NotifierTest < ActionMailer::TestCase
 
     assert !text_part.include?(I18n.t('conclusion_review.global_score_sheet'))
 
-    response = Notifier.conclusion_review_notification(user,
+    response = NotifierMailer.conclusion_review_notification(user,
       conclusion_review).deliver
-    title = I18n.t('notifier.conclusion_review_notification.title',
+    title = I18n.t('notifier_mailer.conclusion_review_notification.title',
       :review => conclusion_review.review.identification)
     text_part = response.parts.detect {|p| p.content_type.match(/text/)}.body.decoded
 
@@ -312,13 +312,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.findings_expiration_warning(user, user.findings).deliver
+    response = NotifierMailer.findings_expiration_warning(user, user.findings).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.findings_expiration_warning.title')
+      I18n.t('notifier_mailer.findings_expiration_warning.title')
     )
-    assert_match Regexp.new(I18n.t('notifier.findings_expiration_warning.body_title',
+    assert_match Regexp.new(I18n.t('notifier_mailer.findings_expiration_warning.body_title',
         :count => user.findings.size)), response.body.decoded
     assert_equal user.email, response.to.first
   end
@@ -329,13 +329,13 @@ class NotifierTest < ActionMailer::TestCase
 
     assert ActionMailer::Base.deliveries.empty?
 
-    response = Notifier.conclusion_final_review_expiration_warning(user, cfr).deliver
+    response = NotifierMailer.conclusion_final_review_expiration_warning(user, cfr).deliver
 
     assert !ActionMailer::Base.deliveries.empty?
     assert response.subject.include?(
-      I18n.t('notifier.conclusion_final_review_expiration_warning.title')
+      I18n.t('notifier_mailer.conclusion_final_review_expiration_warning.title')
     )
-    assert_match Regexp.new(I18n.t('notifier.conclusion_final_review_expiration_warning.body_title')),
+    assert_match Regexp.new(I18n.t('notifier_mailer.conclusion_final_review_expiration_warning.body_title')),
       response.body.decoded
     assert_equal user.email, response.to.first
   end
