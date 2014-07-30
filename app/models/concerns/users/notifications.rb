@@ -18,10 +18,10 @@ module Users::Notifications
   module ClassMethods
     def notify_new_findings
       unless [0, 6].include?(Date.today.wday)
-        emails, findings = [], []
+        users, findings = [], []
 
         all_with_findings_for_notification.each do |user|
-          NotifierMailer.delay.notify_new_findings(user)
+          users << user
 
           findings |= user.findings.for_notification
         end
@@ -29,6 +29,8 @@ module Users::Notifications
         Finding.transaction do
           raise ActiveRecord::Rollback unless findings.all? &:mark_as_unconfirmed!
         end
+
+        users.each { |user| NotifierMailer.delay.notify_new_findings(user) }
       end
     end
   end

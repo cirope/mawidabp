@@ -42,6 +42,13 @@ class Finding < ActiveRecord::Base
   }
   scope :all_for_reallocation, -> { where(:state => PENDING_STATUS, :final => false) }
   scope :for_notification, -> { where(:state => STATUS[:notify], :final => false) }
+  scope :recently_notified, -> {
+    where(
+      :state => STATUS[:unconfirmed],
+      :final => false,
+      :first_notification_date => Time.zone.today
+    )
+  }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
   scope :sort_by_code, -> { order('review_code ASC') }
   scope :for_current_organization, -> { list }

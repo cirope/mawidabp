@@ -50,7 +50,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def notify_new_findings(user)
-    findings = user.findings.for_notification
+    findings = user.findings.recently_notified
 
     @user = user
     @grouped_findings = findings.group_by(&:organization)
