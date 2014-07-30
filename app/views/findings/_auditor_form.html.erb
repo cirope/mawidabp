@@ -191,7 +191,7 @@
     <div class="col-md-2">
       <h5><strong><%= User.model_name.human %></strong></h5>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
       <h5><strong><%= FindingAnswer.human_attribute_name 'answer' %></strong></h5>
     </div>
     <div class="col-md-2">
@@ -211,8 +211,6 @@
     <%= f.simple_fields_for :finding_answers do |fa_f| %>
       <%= render 'finding_answer', f: fa_f, parent: f %>
     <% end %>
-
-    <%= link_to_add_fields(t('finding.add_finding_answer'), f, :finding_answers) %>
   </div>
 
   <br />
