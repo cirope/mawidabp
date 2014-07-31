@@ -24,7 +24,7 @@ gem 'bloggy', require: false
 gem 'irreverent'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
-gem 'attr_searchable'
+gem 'search_cop'
 gem 'jbuilder'
 gem 'sidekiq'
 

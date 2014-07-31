@@ -38,8 +38,6 @@ GEM
     acts_as_tree (2.0.0)
       activerecord (>= 3.0.0)
     arel (5.0.1.20140414130214)
-    attr_searchable (0.0.5)
-      treetop
     blankslate (2.1.2.4)
     bloggy (0.3)
       jekyll (~> 1.4.2)
@@ -195,6 +193,8 @@ GEM
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
+    search_cop (1.0.0)
+      treetop
     sidekiq (3.2.1)
       celluloid (>= 0.15.2)
       connection_pool (>= 2.0.0)
@@ -257,7 +257,6 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   acts_as_tree
-  attr_searchable
   bloggy
   capistrano
   capistrano-bundler
@@ -282,6 +281,7 @@ DEPENDENCIES
   rails (~> 4.1.4)
   rubyzip
   sass-rails
+  search_cop
   sidekiq
   simple_form (= 3.1.0.rc2)
   spring

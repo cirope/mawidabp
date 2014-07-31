@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   include ActsAsTree
-  include AttrSearchable
   include Comparable
   include ParameterSelector
+  include SearchCop
   include Trimmer
   include Users::Auditable
   include Users::Authorization
@@ -26,7 +26,10 @@ class User < ActiveRecord::Base
   include Users::Tree
 
   trimmed_fields :user, :email, :name, :last_name
-  attr_searchable :user, :name, :last_name, :function
+
+  search_scope :search do
+    attributes :user, :name, :last_name, :function
+  end
 
   has_many :login_records, dependent: :destroy
   has_many :error_records, dependent: :destroy
