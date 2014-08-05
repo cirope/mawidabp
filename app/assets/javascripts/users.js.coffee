@@ -1,5 +1,5 @@
 jQuery ($) ->
-  if $('[data-controller="users"]').length
+  if $('[data-controller="users"], [data-controller="registrations"]').length
     $(document).on 'click', '[data-clear-user-manager]', (event) ->
       $('#user_manager, #user_manager_id').val ''
       event.preventDefault()
