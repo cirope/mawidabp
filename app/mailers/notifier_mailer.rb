@@ -180,7 +180,9 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def conclusion_review_notification(user, conclusion_review, options = {})
-    raise 'lala' if options.has_key?(:notify)
+    Organization.current_id = options.delete :organization_id
+    PaperTrail.whodunnit    = options.delete :user_id
+
     prefix = "[#{conclusion_review.review.organization.prefix}] "
     title = I18n.t(
       'notifier_mailer.conclusion_review_notification.title',
