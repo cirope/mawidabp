@@ -16,7 +16,7 @@
 
   <% if @finding.organization %>
     <% Organization.current_id = @finding.organization.id %>
-    <h2 style="margin-bottom: 1em;"><%=h @finding.organization.name %></h2>
+    <h2 style="margin-bottom: 1em;"><%= @finding.organization.name %></h2>
   <% end %>
 
   <%= render :partial => 'finding', :locals => {:finding => @finding} %><br />

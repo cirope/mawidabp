@@ -22,6 +22,12 @@
           ) %>
         </ul>
         <%= render partial: 'shared/user_actions', locals: { user: @auth_user } %>
+      <% elsif @auth_user && @auth_user.password %>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <%= link_to t('navigation.logout'), logout_path, data: { method: :delete } %>
+          </li>
+        </ul>
       <% end %>
     </div>
   </div>

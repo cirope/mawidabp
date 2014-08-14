@@ -151,7 +151,7 @@ class NotifierMailer < ActionMailer::Base
   def restore_password(user, organization)
     @user, @hash = user, user.change_password_hash
     @organization = organization
-    prefix = "[#{organization.prefix}] "
+    prefix = organization ? "[#{organization.prefix}] " : ''
 
     mail(
       :to => [user.email],
