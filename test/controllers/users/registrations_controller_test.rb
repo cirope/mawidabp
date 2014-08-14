@@ -50,7 +50,8 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to login_url
-    assert_equal I18n.t('user.correctly_created'), flash.notice
+    assert_equal I18n.t('flash.actions.create.notice', resource_name: User.model_name.human),
+      flash.notice
   end
 
   test 'create with invalid hash' do
