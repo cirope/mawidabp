@@ -438,9 +438,7 @@ class FindingsController < ApplicationController
         }
       end
 
-      conditions[:state] = params[:completed] == 'incomplete' ?
-        Finding::PENDING_STATUS - [Finding::STATUS[:incomplete]] :
-        Finding::STATUS.values - Finding::PENDING_STATUS + [nil]
+      conditions[:state] = Finding::STATUS.values - [Finding::STATUS[:incomplete]] + [nil]
 
       @finding = Finding.includes(includes).where(conditions).references(
         :periods, :organizations
