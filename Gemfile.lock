@@ -77,7 +77,7 @@ GEM
     coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.7.1)
+    coffee-script-source (1.8.0)
     colorator (0.1)
     colorize (0.7.3)
     commander (4.1.6)
@@ -136,7 +136,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    newrelic_rpm (3.9.2.239)
+    newrelic_rpm (3.9.3.241)
     paper_trail (3.0.3)
       activerecord (>= 3.0, < 5.0)
       activesupport (>= 3.0, < 5.0)
@@ -230,7 +230,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    ttfunk (1.2.0)
+    ttfunk (1.2.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.3)
