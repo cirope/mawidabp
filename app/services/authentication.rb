@@ -161,8 +161,9 @@ class Authentication
     end
 
     def register_login
-      @session[:record_id] = LoginRecord.list.create!(
-        user: @valid_user, request: @request
-      ).id
+      if @current_organization
+        login_record = LoginRecord.list.create!(user: @valid_user, request: @request)
+        @session[:record_id] = login_record.id
+      end
     end
 end
