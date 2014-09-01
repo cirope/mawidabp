@@ -50,7 +50,7 @@ module UsersHelper
   end
 
   def user_roles_path
-    if APP_ADMIN_PREFIXES.include? request.subdomains.first
+    if params[:hash].present?
       users_registration_roles_path hash: params[:hash]
     else
       users_roles_path
