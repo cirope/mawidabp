@@ -573,7 +573,7 @@ class Finding < ActiveRecord::Base
 
       column_names.each do |col_name, col_size|
         column_headers << (col_name == 'attribute' ?
-          '' : I18n.t("version.column_#{col_name}"))
+          '' : I18n.t("versions.column_#{col_name}"))
         column_widths << pdf.percent_width(col_size)
       end
 

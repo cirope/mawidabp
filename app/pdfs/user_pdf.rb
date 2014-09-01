@@ -31,7 +31,7 @@ class UserPdf < Prawn::Document
 
     def add_header
       pdf.add_generic_report_header @current_organization
-      pdf.add_title I18n.t('user.index_title')
+      pdf.add_title I18n.t('users.index.title')
     end
 
     def add_filter_text
