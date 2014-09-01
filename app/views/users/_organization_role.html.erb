@@ -3,10 +3,7 @@
   <div class="row">
     <div class="col-md-6">
       <%= f.input :organization_id, collection: user_organizations, prompt: true, label: false, input_html: {
-        id: "organization_id_#{id}", data: {
-          update_role: "#role_id_#{id}",
-          roles_url: @auth_user ? users_roles_path : users_registration_roles_path(hash: params[:hash])
-        }
+        id: "organization_id_#{id}", data: { update_role: "#role_id_#{id}", roles_url: user_roles_path }
       } %>
     </div>
     <div class="col-md-4">
