@@ -22,8 +22,10 @@
           <%= link_to_move %>
           <span class="text-muted">|</span>
           <%= link_to_edit edit_control_objective_item_path(control_objective_item) %>
-          <span class="text-muted">|</span>
-          <%= link_to_remove_nested_item(f) %>
+          <% if control_objective_item.can_be_destroyed? %>
+            <span class="text-muted">|</span>
+            <%= link_to_remove_nested_item(f)  %>
+          <% end %>
           <%= f.input :id, as: :hidden %>
           <%= f.input :order_number, as: :hidden, input_html: { class: 'sort_number' } %>
         <% end %>
