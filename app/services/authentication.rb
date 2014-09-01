@@ -80,7 +80,8 @@ class Authentication
     end
 
     def authenticate_admin_mode
-      if @valid_user.is_group_admin? && valid_password? && register_login
+      if @valid_user.is_group_admin? && valid_password?
+        register_login
         @redirect_url = Group
         @valid = true
       end
@@ -89,8 +90,8 @@ class Authentication
     def authenticate_normal_mode
       verify_if_user_expired
 
-      if @valid_user.is_enable? && !@valid_user.hidden &&
-        valid_password? && register_login
+      if @valid_user.is_enable? && !@valid_user.hidden && valid_password?
+          register_login
           @valid = true
           @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
