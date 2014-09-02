@@ -87,40 +87,6 @@ class Finding < ActiveRecord::Base
       }
     )
   }
-  scope :unanswered_and_stale, ->(factor) {
-    stale_parameters = Organization.all_parameters('finding_stale_confirmed_days')
-    pre_conditions = []
-    parameters = {
-      :state => STATUS[:unanswered],
-      :boolean_false => false,
-      :notification_level => factor - 1
-    }
-
-    stale_parameters.each_with_index do |stale_parameter, i|
-      stale_days = stale_parameter[:parameter].to_i
-      parameters[:"stale_unanswered_date_#{i}"] =
-        (stale_days + stale_days * factor).days.ago_in_business.to_date
-      parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
-
-      pre_conditions << [
-        "first_notification_date < :stale_unanswered_date_#{i}",
-        "#{Period.table_name}.organization_id = :organization_id_#{i}",
-      ].join(' AND ')
-    end
-
-    fix_conditions = [
-      'state = :state',
-      'final = :boolean_false',
-      'notification_level = :notification_level'
-    ].join(' AND ')
-
-    includes(:control_objective_item => { :review => :period }).where(
-      [
-        "(#{pre_conditions.map { |c| "(#{c})" }.join(' OR ')})", fix_conditions
-      ].join(' AND '),
-      parameters
-    ).references(:periods)
-  }
   scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
   scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
   scope :list_all_by_date, ->(from_date, to_date, order) {

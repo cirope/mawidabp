@@ -6,6 +6,13 @@ module Findings::ScaffoldNotifications
       notify_managers if [0, 6].exclude? Time.zone.today.wday
     end
 
+    def unanswered_and_stale factor
+      includes(control_objective_item: { review: :period }).where(
+        unanswered_and_stale_conditions,
+        unanswered_and_stale_parameters(factor)
+      ).references(:periods)
+    end
+
     private
 
       def notify_managers
@@ -16,6 +23,50 @@ module Findings::ScaffoldNotifications
             findings.each { |finding| finding.notify_for_level n }
           end
         end
+      end
+
+      def stale_parameters
+        Organization.all_parameters 'finding_stale_confirmed_days'
+      end
+
+      def unanswered_and_stale_conditions
+        [
+          unanswered_and_stale_variable_conditions,
+          unanswered_and_stale_fix_conditions
+        ].join(' AND ')
+      end
+
+      def unanswered_and_stale_variable_conditions
+        conditions = stale_parameters.each_with_index.map do |stale_parameter, i|
+          [
+            "first_notification_date < :stale_unanswered_date_#{i}",
+            "#{Period.table_name}.organization_id = :organization_id_#{i}",
+          ].join(' AND ')
+        end
+
+        "(#{conditions.map { |c| "(#{c})" }.join(' OR ')})"
+      end
+
+      def unanswered_and_stale_fix_conditions
+        [
+          'state = :state',
+          'final = :false',
+          'notification_level = :notification_level'
+        ].join(' AND ')
+      end
+
+      def unanswered_and_stale_parameters factor
+        parameters = {
+          state: Finding::STATUS[:unanswered], false: false, notification_level: factor - 1
+        }
+
+        stale_parameters.each_with_index do |stale_parameter, i|
+          stale_days = stale_parameter[:parameter].to_i
+          parameters[:"stale_unanswered_date_#{i}"] = (stale_days + stale_days * factor).days.ago_in_business.to_date
+          parameters[:"organization_id_#{i}"] = stale_parameter[:organization].id
+        end
+
+        parameters
       end
   end
 
