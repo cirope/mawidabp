@@ -1366,19 +1366,22 @@ class Review < ActiveRecord::Base
       end
 
       if self.has_final_review?
-        weaknesses = self.final_weaknesses
-        oportunities = self.final_oportunities
-        fortresses = self.final_fortresses
-        nonconformities = self.final_nonconformities
-        potential_nonconformities = self.final_potential_nonconformities
-        findings = self.weaknesses + self.oportunities + self.fortresses + self.nonconformities +
-          self.potential_nonconformities
+        weaknesses = self.final_weaknesses.not_revoked
+        oportunities = self.final_oportunities.not_revoked
+        fortresses = self.final_fortresses.not_revoked
+        nonconformities = self.final_nonconformities.not_revoked
+        potential_nonconformities = self.final_potential_nonconformities.not_revoked
+        findings = self.weaknesses.not_revoked +
+          self.oportunities.not_revoked +
+          self.fortresses.not_revoked +
+          self.nonconformities.not_revoked +
+          self.potential_nonconformities.not_revoked
       else
-        weaknesses = self.weaknesses
-        oportunities = self.oportunities
-        fortresses = self.fortresses
-        nonconformities = self.nonconformities
-        potential_nonconformities = self.potential_nonconformities
+        weaknesses = self.weaknesses.not_revoked
+        oportunities = self.oportunities.not_revoked
+        fortresses = self.fortresses.not_revoked
+        nonconformities = self.nonconformities.not_revoked
+        potential_nonconformities = self.potential_nonconformities.not_revoked
         findings = []
       end
 
