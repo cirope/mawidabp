@@ -12,6 +12,7 @@ class Finding < ActiveRecord::Base
   include Findings::JSON
   include Findings::Reiterations
   include Findings::Relations
+  include Findings::ReportScopes
   include Findings::ScaffoldNotifications
   include Findings::Search
   include Findings::SortColumns
@@ -19,6 +20,7 @@ class Finding < ActiveRecord::Base
   include Findings::Unanswered
   include Findings::Unconfirmed
   include Findings::UpdateCallbacks
+  include Findings::UserScopes
   include Findings::Validations
   include Findings::ValidationCallbacks
   include Findings::Versions
@@ -42,74 +44,9 @@ class Finding < ActiveRecord::Base
       :reviews => { :id => review.id }, :state => PENDING_STATUS, :final => false
     )
   }
-  scope :all_for_reallocation, -> { where(:state => PENDING_STATUS, :final => false) }
-  scope :for_notification, -> { where(:state => STATUS[:notify], :final => false) }
-  scope :recently_notified, -> {
-    where(
-      :state => STATUS[:unconfirmed],
-      :final => false,
-      :first_notification_date => Time.zone.today
-    )
-  }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
   scope :sort_by_code, -> { order('review_code ASC') }
   scope :for_current_organization, -> { list }
-  scope :for_period, ->(period) {
-    includes(:control_objective_item => { :review =>:period }).where(
-      "#{Period.table_name}.id" => period.id
-    ).references(:periods)
-  }
-  scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
-  scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
-  scope :list_all_by_date, ->(from_date, to_date, order) {
-    list.includes(
-      review: [:period, :conclusion_final_review, {:plan_item => :business_unit}]
-    ).where(
-      "#{ConclusionReview.table_name}.issue_date BETWEEN :begin AND :end",
-      { :begin => from_date, :end => to_date }
-    ).references(:conslusion_reviews, :periods).order(
-      order ?
-        ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"] : nil
-    )
-  }
-  scope :with_status_for_report, -> {
-    where(:state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values)
-  }
-  scope :list_all_in_execution_by_date, ->(from_date, to_date) {
-    list.includes(
-      :control_objective_item => {:review => [:period, :conclusion_final_review]}
-    ).where(
-      [
-        "#{Review.table_name}.created_at BETWEEN :begin AND :end",
-        "#{ConclusionFinalReview.table_name}.review_id IS NULL"
-      ].join(' AND '),
-      { :begin => from_date, :end => to_date }
-    ).references(:reviews, :periods, :conclusion_reviews)
-  }
-  scope :internal_audit, -> {
-    includes(
-      :control_objective_item => {
-        :review => {:plan_item => {:business_unit => :business_unit_type}}
-      }
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
-      :business_unit_types
-    )
-  }
-  scope :external_audit, -> {
-    includes(
-      :control_objective_item => {
-        :review => {:plan_item => {:business_unit => :business_unit_type}}
-      }
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
-      :business_unit_types
-    )
-  }
-  scope :with_solution_date_between, ->(from_date, to_date) {
-    where(
-      "#{table_name}.solution_date BETWEEN :from_date AND :to_date",
-      :from_date => from_date, :to_date => to_date
-    )
-  }
 
   # Relaciones
   belongs_to :organization
