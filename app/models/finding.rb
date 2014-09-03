@@ -17,6 +17,7 @@ class Finding < ActiveRecord::Base
   include Findings::SortColumns
   include Findings::State
   include Findings::Unanswered
+  include Findings::Unconfirmed
   include Findings::UpdateCallbacks
   include Findings::Validations
   include Findings::ValidationCallbacks
@@ -57,21 +58,6 @@ class Finding < ActiveRecord::Base
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
     ).references(:periods)
-  }
-  scope :unconfirmed_for_notification, -> {
-    where(
-      [
-        'first_notification_date >= :stale_unconfirmed_date',
-        'state = :state',
-        'final = :boolean_false'
-      ].join(' AND '),
-      {
-        :state => STATUS[:unconfirmed],
-        :boolean_false => false,
-        :stale_unconfirmed_date =>
-          FINDING_STALE_UNCONFIRMED_DAYS.days.ago_in_business.to_date
-      }
-    )
   }
   scope :being_implemented, -> { where(:state => STATUS[:being_implemented]) }
   scope :not_incomplete, -> { where("state <> ?", Finding::STATUS[:incomplete]) }
@@ -719,23 +705,6 @@ class Finding < ActiveRecord::Base
     code = self.review_code.sanitized_for_filename
 
     I18n.t('finding.follow_up_report.pdf_name', :code => code)
-  end
-
-  def self.notify_for_unconfirmed_for_notification_findings
-    # Sólo si no es sábado o domingo
-    unless [0, 6].include?(Date.today.wday)
-      Finding.transaction do
-        users = Finding.unconfirmed_for_notification.inject([]) do |u, finding|
-          u | finding.users.select do |user|
-            user.notifications.not_confirmed.any? do |n|
-              n.findings.include?(finding)
-            end
-          end
-        end
-
-        users.each { |user| NotifierMailer.delay.stale_notification(user) }
-      end
-    end
   end
 
   def to_csv(detailed = false, completed = 'incomplete')
