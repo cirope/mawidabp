@@ -7,6 +7,7 @@ class Finding < ActiveRecord::Base
   include Findings::CreateValidation
   include Findings::CustomAttributes
   include Findings::DestroyValidation
+  include Findings::Expiration
   include Findings::ImportantDates
   include Findings::JSON
   include Findings::Reiterations
@@ -56,21 +57,6 @@ class Finding < ActiveRecord::Base
     includes(:control_objective_item => { :review =>:period }).where(
       "#{Period.table_name}.id" => period.id
     ).references(:periods)
-  }
-  scope :next_to_expire, -> {
-    where(
-      [
-        'follow_up_date = :warning_date',
-        'state = :being_implemented_state',
-        'final = :boolean_false'
-      ].join(' AND '),
-      {
-        :warning_date =>
-          FINDING_WARNING_EXPIRE_DAYS.days.from_now_in_business.to_date,
-        :being_implemented_state => STATUS[:being_implemented],
-        :boolean_false => false
-      }
-    )
   }
   scope :unconfirmed_for_notification, -> {
     where(
@@ -748,19 +734,6 @@ class Finding < ActiveRecord::Base
         end
 
         users.each { |user| NotifierMailer.delay.stale_notification(user) }
-      end
-    end
-  end
-
-  def self.warning_users_about_expiration
-    # Sólo si no es sábado o domingo (porque no tiene sentido)
-    unless [0, 6].include?(Date.today.wday)
-      users = Finding.next_to_expire.inject([]) do |u, finding|
-        u | finding.users
-      end
-
-      users.each do |user|
-        NotifierMailer.delay.findings_expiration_warning(user, user.findings.next_to_expire.to_a)
       end
     end
   end
