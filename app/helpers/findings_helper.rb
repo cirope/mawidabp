@@ -112,7 +112,7 @@ module FindingsHelper
     users = finding.users.map do |u|
       if finding.process_owners.include?(u)
         content_tag(:b, u.full_name_with_function +
-            " | #{FindingUserAssignment.human_attribute_name(:process_owner)}")
+            " | #{FindingUserAssignment.human_attribute_name('process_owner')}")
       else
         u.full_name_with_function
       end

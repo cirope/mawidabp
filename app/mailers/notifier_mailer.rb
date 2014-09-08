@@ -1,5 +1,5 @@
 class NotifierMailer < ActionMailer::Base
-  helper :application
+  helper :application, :notifier_mailer
 
   default from: "'#{I18n.t('app_name')}' <#{ENV['EMAIL_ADDRESS']}>"
 
