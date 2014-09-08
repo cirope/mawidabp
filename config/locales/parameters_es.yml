@@ -1,7 +1,7 @@
 es: &common
   approach_types:
     control: 'Control'
-    sustantive: 'Sustativo'
+    sustantive: 'Sustantivo'
     control_sustantive: 'Control/Sustantivo'
   frequency_types:
     monthly: 'Mensual'
