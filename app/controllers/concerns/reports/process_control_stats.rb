@@ -12,7 +12,7 @@ module Reports::ProcessControlStats
     @risk_levels = []
     @filters = []
     @columns = [
-      ['process_control', BestPractice.human_attribute_name(:process_controls), 60],
+      ['process_control', BestPractice.human_attribute_name('process_controls.name'), 60],
       ['effectiveness', t("#{@controller}_committee_report.process_control_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count'), 20]
     ]
@@ -25,25 +25,20 @@ module Reports::ProcessControlStats
     reviews_score_data = {}
 
     if params[:process_control_stats]
-      unless params[:process_control_stats][:business_unit_type].blank?
-        @selected_business_unit = BusinessUnitType.find(
-          params[:process_control_stats][:business_unit_type])
-        conclusion_reviews = conclusion_reviews.by_business_unit_type(
-          @selected_business_unit.id)
-        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = " +
-          "\"#{@selected_business_unit.name.strip}\""
+      if params[:process_control_stats][:business_unit_type].present?
+        @selected_business_unit = BusinessUnitType.find(params[:process_control_stats][:business_unit_type])
+        conclusion_reviews = conclusion_reviews.by_business_unit_type(@selected_business_unit.id)
+        @filters << "<b>#{BusinessUnitType.model_name.human}</b> = \"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:process_control_stats][:business_unit].blank?
+      if params[:process_control_stats][:business_unit].present?
         business_units = params[:process_control_stats][:business_unit].split(
           SPLIT_AND_TERMS_REGEXP
         ).uniq.map(&:strip)
 
         unless business_units.empty?
-          conclusion_reviews = conclusion_reviews.by_business_unit_names(
-            *business_units)
-          @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
-            "\"#{params[:process_control_stats][:business_unit].strip}\""
+          conclusion_reviews = conclusion_reviews.by_business_unit_names(*business_units)
+          @filters << "<b>#{BusinessUnit.model_name.human}</b> = \"#{params[:process_control_stats][:business_unit].strip}\""
         end
       end
     end

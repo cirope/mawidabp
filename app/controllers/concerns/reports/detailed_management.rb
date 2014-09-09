@@ -70,8 +70,7 @@ module Reports::DetailedManagement
     @columns = {
       'business_unit_report_name' => [but_label, 15],
       'review' => [Review.model_name.human, 16],
-      'process_control' =>
-        ["#{BestPractice.human_attribute_name(:process_controls)}", 45],
+      'process_control' => ["#{BestPractice.human_attribute_name('process_controls.name')}", 45],
       'weaknesses_count' => ["#{t('review.weaknesses_count')} (1)", 12]
     }
     if @sqm

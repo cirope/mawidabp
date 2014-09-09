@@ -58,7 +58,7 @@ module Reports::ControlObjectiveStats
     @risk_levels |= RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map { |r| r.first }
     @filters = []
     @columns = [
-      ['process_control', BestPractice.human_attribute_name(:process_controls), 20],
+      ['process_control', BestPractice.human_attribute_name('process_controls.name'), 20],
       ['control_objective', ControlObjective.model_name.human, 40],
       ['effectiveness', t("#{@controller}_committee_report.control_objective_stats.average_effectiveness"), 20],
       ['weaknesses_count', t('review.weaknesses_count_by_state'), 20]
