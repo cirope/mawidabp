@@ -1,11 +1,3 @@
-= MawidaBP
-
-Audit assistant web application
-
-=== Build Status {<img src="https://secure.travis-ci.org/cirope/mawidabp.png"/>}[http://travis-ci.org/cirope/mawidabp]
-
-== (The MIT License)
-
 Copyright (c) 2008-2014 Cirope S.A.
 
 Permission is hereby granted, free of charge, to any person obtaining
