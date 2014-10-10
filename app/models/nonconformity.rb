@@ -3,9 +3,6 @@ class Nonconformity < Finding
   # Acceso a los atributos
   attr_reader :approval_errors
 
-  # Callbacks
-  before_save :assign_highest_risk
-
   # Named scopes
   scope :all_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
@@ -36,7 +33,6 @@ class Nonconformity < Finding
     super(attributes, options, import_users)
 
     self.review_code ||= self.next_code
-    self.risk = self.assign_highest_risk
   end
 
   def self.columns_for_sort
@@ -52,10 +48,6 @@ class Nonconformity < Finding
     work_paper.code_prefix = self.finding_prefix ?
       I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
       work_paper_prefix
-  end
-
-  def assign_highest_risk
-    self.highest_risk = self.class.risks_values.max
   end
 
   def risk_text
