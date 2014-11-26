@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.7'
+gem 'rails', '~> 4.1.8'
 
 gem 'pg'
 gem 'foreigner'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'mini_magick'
-gem 'simple_form', '3.1.0.rc2'
+gem 'simple_form'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
