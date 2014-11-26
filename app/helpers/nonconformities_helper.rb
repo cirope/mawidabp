@@ -24,7 +24,7 @@ module NonconformitiesHelper
   def next_nonconformity_work_paper_code(nonconformity, follow_up = false)
     review = nonconformity.control_objective_item.try(:review)
     code_prefix = follow_up ?
-      t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      t('code_prefixes.work_papers_in_nonconformities') :
       nonconformity.work_paper_prefix
 
     code_from_review = review ?

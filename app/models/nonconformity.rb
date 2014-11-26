@@ -46,7 +46,7 @@ class Nonconformity < Finding
 
   def prepare_work_paper(work_paper)
     work_paper.code_prefix = self.finding_prefix ?
-      I18n.t('code_prefixes.work_papers_in_weaknesses_follow_up') :
+      I18n.t('code_prefixes.work_papers_in_nonconformities') :
       work_paper_prefix
   end
 

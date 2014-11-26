@@ -42,8 +42,9 @@
   <script type="text/javascript">
     (function() {
       var id = '#<%= id %>';
+      var workPaperCode = $(id).find('.work_paper_code').val();
 
-      if(lastWorkPaperCode) {
+      if(lastWorkPaperCode && !workPaperCode) {
         lastWorkPaperCode = lastWorkPaperCode.next(2);
 
         $(id).find('.work_paper_code').val(lastWorkPaperCode);
