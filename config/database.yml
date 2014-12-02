@@ -10,12 +10,12 @@
 #       Install PostgreSQL and put its /bin directory on your path.
 
 development:
-  database: mawida_development
+  database: mawidabp_development
   adapter: postgresql
   encoding: utf8
   pool: 5
-  username: mawida
-  password: mawida
+  username: mawidabp
+  password: mawidabp
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -36,12 +36,12 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  database: mawida_test
+  database: mawidabp_test
   adapter: postgresql
   encoding: utf8
   pool: 5
-  username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawida' %>
-  password: <%= ENV['TRAVIS'] ? '' : 'mawida' %>
+  username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawidabp' %>
+  password: <%= ENV['TRAVIS'] ? '' : 'mawidabp' %>
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -59,12 +59,12 @@ test:
   #min_messages: warning
 
 production:
-  database: mawida_production
+  database: mawidabp_production
   adapter: postgresql
   encoding: utf8
   pool: 5
-  username: mawida
-  password: mawida
+  username: mawidabp
+  password: mawidabp
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
