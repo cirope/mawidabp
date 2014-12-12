@@ -9,7 +9,7 @@ module ConclusionFinalReviewsHelper
   end
 
   def conclusion_review_score_details_table(review)
-    scores = review.class.scores(review.created_at).to_a
+    scores = review.class.scores.to_a
     review_score = review.score_array.first
     header = String.new.html_safe
     footer = String.new.html_safe

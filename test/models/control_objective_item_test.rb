@@ -227,15 +227,15 @@ class ControlObjectiveItemTest < ActiveSupport::TestCase
     assert @control_objective_item.errors[:sustantive_score].blank?
     assert_error @control_objective_item.control, :design_tests, :blank
   end
-  
+
   test 'validations when is excluded from score' do
     @control_objective_item.finished = false
     @control_objective_item.auditor_comment = '   '
-    
+
     assert @control_objective_item.valid?
-    
+
     @control_objective_item.exclude_from_score = true
-    
+
     assert @control_objective_item.invalid?
     assert_error @control_objective_item, :auditor_comment, :blank
   end
