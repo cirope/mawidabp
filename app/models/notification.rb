@@ -69,7 +69,11 @@ class Notification < ActiveRecord::Base
   end
 
   def <=>(other)
-    self.id <=> other.id
+    if other.kind_of?(Notification)
+      self.id <=> other.id
+    else
+      -1
+    end
   end
 
   def to_param

@@ -70,7 +70,7 @@ class WorkPaper < ActiveRecord::Base
   end
 
   def <=>(other)
-    if self.owner_id == other.owner_id && self.owner_type == other.owner_type
+    if other.kind_of?(WorkPaper) && self.owner_id == other.owner_id && self.owner_type == other.owner_type
       self.code <=> other.code
     else
       -1

@@ -106,7 +106,11 @@ class WorkflowItem < ActiveRecord::Base
   accepts_nested_attributes_for :resource_utilizations, :allow_destroy => true
 
   def <=>(other)
-    self.order_number <=> other.order_number
+    if other.kind_of?(WorkflowItem)
+      self.order_number <=> other.order_number
+    else
+      -1
+    end
   end
 
   def material_resource_utilizations

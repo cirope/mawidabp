@@ -11,10 +11,14 @@ module Periods::Overrides
   end
 
   def <=>(other)
-    start_result = start <=> other.start
-    end_result = self.end <=> other.end if start_result == 0
+    if other.kind_of?(Period)
+      start_result = start <=> other.start
+      end_result = self.end <=> other.end if start_result == 0
 
-    end_result || start_result
+      end_result || start_result
+    else
+      -1
+    end
   end
 
   def contains? date

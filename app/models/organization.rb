@@ -31,6 +31,10 @@ class Organization < ActiveRecord::Base
   end
 
   def <=>(other)
-    prefix <=> other.prefix
+    if other.kind_of?(Organization)
+      prefix <=> other.prefix
+    else
+      -1
+    end
   end
 end

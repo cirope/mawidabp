@@ -41,7 +41,11 @@ class ProcedureControlItem < ActiveRecord::Base
     :allow_destroy => true
 
   def <=>(other)
-    self.order <=> other.order
+    if other.kind_of?(ProcedureControlItem)
+      self.order <=> other.order
+    else
+      -1
+    end
   end
 
   def assign_procedure_control_item(procedure_control_subitem)
