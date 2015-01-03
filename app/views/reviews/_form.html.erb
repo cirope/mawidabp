@@ -105,15 +105,21 @@
   <% end %>
 
   <% unless readonly %>
-    <div class="row">
-      <div class="col-md-10">
-        <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
-      </div>
-    </div>
+    <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
 
     <div id="control_objectives">
       <%= link_to_add_fields(
         t('review.add_control_objective'), f, :control_objective_items, 'procedure_control_subitem'
+      ) %>
+    </div>
+
+    <hr />
+
+    <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
+
+    <div id="process_controls">
+      <%= link_to_add_fields(
+        t('review.add_process_control'), f, :control_objective_items, 'procedure_control_item'
       ) %>
     </div>
   <% end %>

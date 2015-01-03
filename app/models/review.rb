@@ -36,8 +36,10 @@ class Review < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
-  attr_reader :approval_errors, :procedure_control_subitem_ids
-  attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
+  attr_reader :approval_errors, :procedure_control_subitem_ids,
+    :procedure_control_item_ids
+  attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data,
+    :procedure_control_item_data
   attr_readonly :plan_item_id
 
   # Named scopes
@@ -215,6 +217,37 @@ class Review < ActiveRecord::Base
     finding_review_assignment.finding.tap do |f|
       if f && !f.is_in_a_final_review?
         raise 'The finding must be in a final review'
+      end
+    end
+  end
+
+  def procedure_control_item_ids=(ids)
+    (ids || []).uniq.each do |pc_id|
+      if ProcedureControlItem.exists?(pc_id)
+        cois = []
+        pc = ProcedureControlItem.find(pc_id)
+        control_objective_ids = self.control_objective_items.map(
+          &:control_objective_id
+        )
+
+        pc.procedure_control_subitems.each do |pcs|
+          if control_objective_ids.exclude?(pcs.control_objective_id)
+            cois << {
+              :control_objective_id => pcs.control_objective_id,
+              :control_objective_text => pcs.control_objective_text,
+              :relevance => pcs.relevance,
+              :control_attributes => {
+                :control => pcs.control.control,
+                :effects => pcs.control.effects,
+                :design_tests => pcs.control.design_tests,
+                :compliance_tests => pcs.control.compliance_tests,
+                :sustantive_tests => pcs.control.sustantive_tests
+              }
+            }
+          end
+        end
+
+        self.control_objective_items.build(cois) unless cois.empty?
       end
     end
   end

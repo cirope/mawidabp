@@ -388,6 +388,19 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
+  test 'procedure control item ids' do
+    assert !@review.control_objective_items.empty?
+    assert_difference '@review.control_objective_items.size', 2 do
+      @review.procedure_control_item_ids =
+        [procedure_control_items(:procedure_control_item_iso_27001_2).id]
+    end
+
+    assert_no_difference '@review.control_objective_items.size' do
+      @review.procedure_control_item_ids =
+        [procedure_control_items(:procedure_control_item_iso_27001_2).id]
+    end
+  end
+
   test 'procedure control subitem ids' do
     assert !@review.control_objective_items.empty?
     assert_difference '@review.control_objective_items.size' do

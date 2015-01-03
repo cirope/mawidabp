@@ -309,6 +309,40 @@ class ReviewsController < ApplicationController
     end
   end
 
+  # * GET /reviews/auto_complete_for_procedure_control_item
+  def auto_complete_for_procedure_control_item
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
+    @tokens.reject! {|t| t.blank?}
+    conditions = [
+      "#{BestPractice.table_name}.organization_id = :organization_id",
+      "#{ProcedureControl.table_name}.period_id = :period_id"
+    ]
+    parameters = {organization_id: current_organization.id}
+    parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
+
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_item_data_#{i}"
+      ].join(' OR ')
+
+      parameters[:"procedure_control_item_data_#{i}"] = "%#{t.mb_chars.downcase}%"
+    end
+
+    @procedure_control_items = ProcedureControlItem.includes(
+      :procedure_control, { :process_control => :best_practice }
+    ).where(
+      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
+    ).order(
+      [
+        "#{ProcessControl.table_name}.name ASC"
+      ]
+    ).references(:process_control).limit(10)
+
+    respond_to do |format|
+      format.json { render json: @procedure_control_items }
+    end
+  end
+
   # * GET /reviews/estimated_amount/1
   def estimated_amount
     plan_item = PlanItem.find(params[:id]) unless params[:id].blank?
@@ -320,7 +354,7 @@ class ReviewsController < ApplicationController
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :procedure_control_subitem_ids, :lock_version,
+        :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
@@ -334,6 +368,7 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
+        procedure_control_item_ids: [],
         procedure_control_subitem_ids: []
       )
     end
@@ -365,6 +400,7 @@ class ReviewsController < ApplicationController
         survey_pdf: :read,
         suggested_findings: :read,
         auto_complete_for_finding: :read,
+        auto_complete_for_procedure_control_item: :read,
         auto_complete_for_procedure_control_subitem: :read,
         estimated_amount: :read
       )

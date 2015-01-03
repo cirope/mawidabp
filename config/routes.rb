@@ -285,6 +285,7 @@ Rails.application.routes.draw do
       get :estimated_amount
       get :plan_item_data
       get :auto_complete_for_finding
+      get :auto_complete_for_procedure_control_item
       get :auto_complete_for_procedure_control_subitem
     end
   end

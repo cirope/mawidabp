@@ -1044,6 +1044,7 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnolog√≠a Inform√
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos de control"
     add_control_objective: "Agregar un nuevo objetivo de control"
+    add_process_control: "Agregar un nuevo proceso"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"

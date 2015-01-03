@@ -98,45 +98,49 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'create review' do
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
-      # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
-      assert_difference 'FileModel.count' do
-        assert_difference 'ReviewUserAssignment.count', 4 do
-          post :create, {
-            review: {
-              identification: 'New Identification',
-              description: 'New Description',
-              survey: 'New survey',
-              period_id: periods(:current_period).id,
-              plan_item_id: plan_items(:past_plan_item_3).id,
-              procedure_control_subitem_ids:
-                [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
-              file_model_attributes: {
-                  file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-              },
-              finding_review_assignments_attributes: [
-                {
-                  finding_id:
-                    findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
-                }
-              ],
-              review_user_assignments_attributes: [
-                {
-                  assignment_type: ReviewUserAssignment::TYPES[:auditor],
-                  user_id: users(:first_time_user).id
-                }, {
-                  assignment_type:
-                    ReviewUserAssignment::TYPES[:supervisor],
-                  user_id: users(:supervisor_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:manager],
-                  user_id: users(:supervisor_second_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:audited],
-                  user_id: users(:audited_user).id
-                }
-              ]
+      # Se crean 2 con el 'procedure_control_item_ids' y uno con 'procedure_control_subitem_ids'
+      assert_difference 'ControlObjectiveItem.count', 3 do
+        assert_difference 'FileModel.count' do
+          assert_difference 'ReviewUserAssignment.count', 4 do
+            post :create, {
+              review: {
+                identification: 'New Identification',
+                description: 'New Description',
+                survey: 'New survey',
+                period_id: periods(:current_period).id,
+                plan_item_id: plan_items(:past_plan_item_3).id,
+                procedure_control_item_ids:
+                  [procedure_control_items(:procedure_control_item_iso_27001_2).id],
+                procedure_control_subitem_ids:
+                  [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
+                file_model_attributes: {
+                    file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
+                },
+                finding_review_assignments_attributes: [
+                  {
+                    finding_id:
+                      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                  }
+                ],
+                review_user_assignments_attributes: [
+                  {
+                    assignment_type: ReviewUserAssignment::TYPES[:auditor],
+                    user_id: users(:first_time_user).id
+                  }, {
+                    assignment_type:
+                      ReviewUserAssignment::TYPES[:supervisor],
+                    user_id: users(:supervisor_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:manager],
+                    user_id: users(:supervisor_second_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:audited],
+                    user_id: users(:audited_user).id
+                  }
+                ]
+              }
             }
-          }
+          end
         end
       end
     end
@@ -299,6 +303,46 @@ class ReviewsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template 'reviews/_estimated_amount'
+  end
+
+  test 'auto complete for procedure control item' do
+    login
+    get :auto_complete_for_procedure_control_item, {
+      q: 'seg', period_id: periods(:current_period).id, format: :json
+    }
+    assert_response :success
+
+    procedure_control_items = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 2, procedure_control_items.size
+    assert(
+      procedure_control_items.all? do
+        |pcs| (pcs['label'] + pcs['informal']).match /seg/i
+      end
+    )
+
+    get :auto_complete_for_procedure_control_item, {
+      q: 'procesamiento de datos', period_id: periods(:past_period).id, format: :json
+    }
+    assert_response :success
+
+    procedure_control_items = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, procedure_control_items.size # Operaciones y procesamiento de datos
+    assert(
+      procedure_control_items.all? do
+        |pcs| (pcs['label'] + pcs['informal']).match /procesamiento de datos/i
+      end
+    )
+
+    get :auto_complete_for_procedure_control_item, {
+      q: 'xyz', period_id: periods(:past_period).id, format: :json
+    }
+    assert_response :success
+
+    procedure_control_items = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, procedure_control_items.size # None
   end
 
   test 'auto complete for procedure control subitem' do

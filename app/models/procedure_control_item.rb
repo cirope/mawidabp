@@ -48,6 +48,23 @@ class ProcedureControlItem < ActiveRecord::Base
     end
   end
 
+  def label
+    process_control.name
+  end
+
+  def informal
+    best_practice.name
+  end
+
+  def as_json(options = nil)
+    default_options = {
+      :only => [:id],
+      :methods => [:label, :informal]
+    }
+
+    super(default_options.merge(options || {}))
+  end
+
   def assign_procedure_control_item(procedure_control_subitem)
     procedure_control_subitem.procedure_control_item = self
   end
