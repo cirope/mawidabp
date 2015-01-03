@@ -51,6 +51,7 @@ module Findings::Validations
       validate_state_revocation
       validate_state_transition
       validate_state_repetition
+      validate_state_user_if_final
     end
 
     def validate_state_work_paper_presence
@@ -73,6 +74,12 @@ module Findings::Validations
       # No puede marcarse como repetida si no está en un informe definitivo
       if state && state_changed? && repeated? && !is_in_a_final_review?
         errors.add :state, :invalid
+      end
+    end
+
+    def validate_state_user_if_final
+      if state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
+        errors.add :state, :must_be_done_by_supervisor unless current_user.try(:supervisor?)
       end
     end
 

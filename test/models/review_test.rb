@@ -255,6 +255,8 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
+    Finding.current_user = users :supervisor_user
+
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
     )
@@ -263,6 +265,8 @@ class ReviewTest < ActiveSupport::TestCase
     )
 
     assert finding.save
+
+    Finding.current_user = nil
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?

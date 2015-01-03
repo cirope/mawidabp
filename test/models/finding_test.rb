@@ -6,8 +6,7 @@ class FindingTest < ActiveSupport::TestCase
 
   # Función para inicializar las variables utilizadas en las pruebas
   def setup
-    @finding = Finding.find(
-      findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id)
+    @finding = Finding.find findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id
 
     set_organization
   end
@@ -144,10 +143,14 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :follow_up_date, :blank
     assert_error @finding, :answer, :blank
 
+    Finding.current_user = users :supervisor_user
+
     assert @finding.reload.update(
       :state => Finding::STATUS[:implemented_audited],
       :solution_date => 1.month.from_now)
     @finding.solution_date = nil
+
+    Finding.current_user = nil
 
     assert @finding.invalid?
     assert_error @finding, :solution_date, :blank
@@ -306,6 +309,23 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :finding_user_assignments, :invalid
   end
 
+  test 'validate final state change only by supervisors' do
+    Finding.current_user = users :auditor_user
+
+    @finding = Finding.find(
+      findings(:bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id
+    )
+    @finding.state = Finding::STATUS[:implemented_audited]
+    @finding.solution_date = 1.month.from_now
+
+    assert @finding.invalid?
+    assert_error @finding, :state, :must_be_done_by_supervisor
+
+    Finding.current_user = users :supervisor_user
+
+    assert @finding.valid?
+  end
+
   test 'stale function' do
     @finding = Finding.find(findings(
         :bcra_A4609_security_management_responsible_dependency_weakness_being_implemented).id)
@@ -460,9 +480,14 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal 1, @finding.status_change_history.size
     assert @finding.update(:audit_comments => 'Updated comments')
     assert_equal 1, @finding.status_change_history.size
+
+    Finding.current_user = users :supervisor_user
+
     assert @finding.update(:state => Finding::STATUS[:assumed_risk],
       :solution_date => Date.today)
     assert_equal 2, @finding.status_change_history.size
+
+    Finding.current_user = nil
   end
 
   test 'mark as unconfirmed' do

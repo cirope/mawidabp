@@ -4,6 +4,7 @@ module Findings::State
   included do
     STATUS                      = status
     STATUS_TRANSITIONS          = status_transitions
+    FINAL_STATUS                = final_status
     PENDING_STATUS              = pending_status
     EXCLUDE_FROM_REPORTS_STATUS = exclude_from_reports_status
 
@@ -44,6 +45,10 @@ module Findings::State
           repeated:             repeated_transitions,
           revoked:              revoked_transitions
         }.with_indifferent_access.freeze
+      end
+
+      def final_status
+        [STATUS[:implemented_audited], STATUS[:assumed_risk], STATUS[:revoked]]
       end
 
       def pending_status
