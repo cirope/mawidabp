@@ -339,8 +339,7 @@ class FindingTest < ActiveSupport::TestCase
 
   test 'next status list function' do
     Finding::STATUS.each do |status, value|
-      @finding.state = value
-      keys = @finding.next_status_list.keys
+      keys = @finding.next_status_list(value).keys
       expected_keys = Finding::STATUS_TRANSITIONS[status].map(&:to_s)
 
       assert_equal expected_keys.size, keys.size
