@@ -131,7 +131,7 @@ module Findings::State
   end
 
   def next_status_list state = nil
-    state_key    = STATUS.invert[state || self.state]
+    state_key    = STATUS.invert[state || state_was || self.state]
     allowed_keys = STATUS_TRANSITIONS[state_key]
 
     STATUS.select { |k,| allowed_keys.include? k.to_sym }
