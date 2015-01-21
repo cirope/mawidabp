@@ -4,6 +4,7 @@ bcra_A4609_security_management_responsible_dependency:
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
   process_control: bcra_A4609_security_management
+  obsolete: false
 
 bcra_A4609_data_proccessing_impact_analisys:
   name: Análisis de impacto
@@ -11,6 +12,7 @@ bcra_A4609_data_proccessing_impact_analisys:
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
   process_control: bcra_A4609_security_management
+  obsolete: false
 
 iso_27000_security_policy_3_1:
   name: "3.1) Política de seguridad de la información.\nProporcionar orientación y apoyo a la alta dirección de la seguridad de la información."
@@ -18,6 +20,7 @@ iso_27000_security_policy_3_1:
   risk: <%= ControlObjective.risks_values.last %>
   order: 1
   process_control: iso_27000_security_policy
+  obsolete: false
 
 iso_27000_security_organization_4_1:
   name: "4.1) Infraestructura de seguridad de la información."
@@ -25,6 +28,7 @@ iso_27000_security_organization_4_1:
   risk: <%= ControlObjective.risks_values.last %>
   order: 2
   process_control: iso_27000_security_policy
+  obsolete: false
 
 iso_27000_security_organization_4_2:
   name: "4.2) Seguridad frente al acceso por parte de terceros."
@@ -32,6 +36,7 @@ iso_27000_security_organization_4_2:
   risk: <%= ControlObjective.risks_values.last %>
   order: 3
   process_control: iso_27000_security_policy
+  obsolete: false
 
 iso_27000_security_organization_4_3:
   name: "4.3) Seguridad frente al acceso por parte de terceros."
@@ -39,10 +44,12 @@ iso_27000_security_organization_4_3:
   risk: <%= ControlObjective.risks_values.last %>
   order: 4
   process_control: iso_27000_security_policy
-  
+  obsolete: false
+
 iso_27000_security_organization_4_4:
   name: "4.4) Seguridad frente al acceso por parte de terceros."
   relevance: <%= ControlObjective.relevances_values.last %>
   risk: <%= ControlObjective.risks_values.last %>
   order: 5
   process_control: iso_27000_security_policy
+  obsolete: false

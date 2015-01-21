@@ -27,4 +27,5 @@
 //= require validation
 //= require ui
 //= require file_input
+//= require best_practices
 //= require users

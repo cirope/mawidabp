@@ -84,7 +84,7 @@ GEM
     colorize (0.7.5)
     commander (4.1.6)
       highline (~> 1.6.11)
-    connection_pool (2.1.0)
+    connection_pool (2.1.1)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (2.2.2)
