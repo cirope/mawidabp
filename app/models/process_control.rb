@@ -15,13 +15,12 @@ class ProcessControl < ActiveRecord::Base
   scope :list, -> {
     order(['best_practice_id ASC', "#{table_name}.order ASC"])
   }
-  scope :list_for_log, ->(id) { where(:id => id)  }
+  scope :list_for_log, ->(id) { where(id: id)  }
 
   # Restricciones
-  validates :name, :order, :presence => true
-  validates :name, :length => {:maximum => 255}, :allow_nil => true,
-    :allow_blank => true
-  validates :order, :numericality => {:only_integer => true}
+  validates :name, :order, presence: true
+  validates :name, length: { maximum: 255 }, allow_nil: true, allow_blank: true
+  validates :order, numericality: { only_integer: true }
   validates_each :name do |record, attr, value|
     best_practice = record.best_practice
 
@@ -36,7 +35,7 @@ class ProcessControl < ActiveRecord::Base
     record.errors.add attr, :taken if is_duplicated
   end
   validates_each :control_objectives do |record, attr, value|
-    unless value.all? {|co| !co.marked_for_destruction? || co.can_be_destroyed?}
+    unless value.all? { |co| !co.marked_for_destruction? || co.can_be_destroyed? }
       record.errors.add attr, :locked
     end
   end
@@ -44,9 +43,9 @@ class ProcessControl < ActiveRecord::Base
   # Relaciones
   belongs_to :best_practice
   has_many :control_objectives, -> { order("#{ControlObjective.table_name}.order ASC") },
-    :dependent => :destroy
+    dependent: :destroy
 
-  accepts_nested_attributes_for :control_objectives, :allow_destroy => true
+  accepts_nested_attributes_for :control_objectives, allow_destroy: true
 
   def <=>(other)
     if other.kind_of?(ProcessControl)
@@ -62,8 +61,8 @@ class ProcessControl < ActiveRecord::Base
 
   def as_json(options = nil)
     default_options = {
-      :only => [:id],
-      :methods => [:label, :informal]
+      only: [:id],
+      methods: [:label, :informal]
     }
 
     super(default_options.merge(options || {}))
