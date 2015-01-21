@@ -142,23 +142,10 @@ APP_AUDITOR_MENU_ITEMS = [
         url: { controller: '/periods' }
       ),
       MenuItem.new(
-        :audit,
+        :plans,
         order: 3,
-        url: { controller: '/plans' },
-        children: [
-          MenuItem.new(
-            :plans,
-            order: 1,
-            controllers: :plans,
-            url: { controller: '/plans' }
-          ),
-          MenuItem.new(
-            :procedure_controls,
-            order: 2,
-            controllers: :procedure_controls,
-            url: { controller: '/procedure_controls' }
-          )
-        ]
+        controllers: :plans,
+        url: { controller: '/plans' }
       )
     ]
   ),
@@ -447,23 +434,10 @@ APP_AUDITOR_QM_MENU_ITEMS = [
         url: { controller: '/periods' }
       ),
       MenuItem.new(
-        :audit,
+        :plans,
         order: 3,
-        url: { controller: '/plans' },
-        children: [
-          MenuItem.new(
-            :plans,
-            order: 1,
-            controllers: :plans,
-            url: { controller: '/plans' }
-          ),
-          MenuItem.new(
-            :procedure_controls,
-            order: 2,
-            controllers: :procedure_controls,
-            url: { controller: '/procedure_controls' }
-          )
-        ]
+        controllers: :plans,
+        url: { controller: '/plans' }
       )
     ]
   ),

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121160722) do
+ActiveRecord::Schema.define(version: 20150121213653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -490,45 +490,6 @@ ActiveRecord::Schema.define(version: 20150121160722) do
 
   add_index "privileges", ["role_id"], name: "index_privileges_on_role_id", using: :btree
 
-  create_table "procedure_control_items", force: true do |t|
-    t.integer  "aproach"
-    t.integer  "frequency"
-    t.integer  "order"
-    t.integer  "process_control_id"
-    t.integer  "procedure_control_id"
-    t.integer  "lock_version",         default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "procedure_control_items", ["procedure_control_id"], name: "index_procedure_control_items_on_procedure_control_id", using: :btree
-  add_index "procedure_control_items", ["process_control_id"], name: "index_procedure_control_items_on_process_control_id", using: :btree
-
-  create_table "procedure_control_subitems", force: true do |t|
-    t.text     "control_objective_text"
-    t.integer  "order"
-    t.integer  "control_objective_id"
-    t.integer  "procedure_control_item_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "relevance"
-  end
-
-  add_index "procedure_control_subitems", ["control_objective_id"], name: "index_procedure_control_subitems_on_control_objective_id", using: :btree
-  add_index "procedure_control_subitems", ["procedure_control_item_id"], name: "index_procedure_control_subitems_on_procedure_control_item_id", using: :btree
-
-  create_table "procedure_controls", force: true do |t|
-    t.integer  "period_id"
-    t.integer  "lock_version",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "organization_id"
-  end
-
-  add_index "procedure_controls", ["created_at"], name: "index_procedure_controls_on_created_at", using: :btree
-  add_index "procedure_controls", ["organization_id"], name: "index_procedure_controls_on_organization_id", using: :btree
-  add_index "procedure_controls", ["period_id"], name: "index_procedure_controls_on_period_id", using: :btree
-
   create_table "process_controls", force: true do |t|
     t.string   "name"
     t.integer  "order"
@@ -832,14 +793,6 @@ ActiveRecord::Schema.define(version: 20150121160722) do
   add_foreign_key "plans", "periods", name: "plans_period_id_fk", dependent: :restrict
 
   add_foreign_key "privileges", "roles", name: "privileges_role_id_fk", dependent: :restrict
-
-  add_foreign_key "procedure_control_items", "procedure_controls", name: "procedure_control_items_procedure_control_id_fk", dependent: :restrict
-  add_foreign_key "procedure_control_items", "process_controls", name: "procedure_control_items_process_control_id_fk", dependent: :restrict
-
-  add_foreign_key "procedure_control_subitems", "control_objectives", name: "procedure_control_subitems_control_objective_id_fk", dependent: :restrict
-  add_foreign_key "procedure_control_subitems", "procedure_control_items", name: "procedure_control_subitems_procedure_control_item_id_fk", dependent: :restrict
-
-  add_foreign_key "procedure_controls", "periods", name: "procedure_controls_period_id_fk", dependent: :restrict
 
   add_foreign_key "process_controls", "best_practices", name: "process_controls_best_practice_id_fk", dependent: :restrict
 

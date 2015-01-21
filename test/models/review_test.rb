@@ -392,29 +392,25 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
-  test 'procedure control item ids' do
-    assert !@review.control_objective_items.empty?
-    assert_difference '@review.control_objective_items.size', 2 do
-      @review.procedure_control_item_ids =
-        [procedure_control_items(:procedure_control_item_iso_27001_2).id]
+  test 'process control ids' do
+    assert @review.control_objective_items.present?
+    assert_difference '@review.control_objective_items.size', 5 do
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.procedure_control_item_ids =
-        [procedure_control_items(:procedure_control_item_iso_27001_2).id]
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
     end
   end
 
   test 'procedure control subitem ids' do
-    assert !@review.control_objective_items.empty?
+    assert @review.control_objective_items.present?
     assert_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id]
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id]
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
     end
   end
 

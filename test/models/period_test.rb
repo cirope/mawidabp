@@ -33,14 +33,12 @@ class PeriodTest < ActiveSupport::TestCase
   test 'destroy asociated period' do
     assert_no_difference('Period.count') { @period.destroy }
 
-    assert_equal 4, @period.errors.size
+    assert_equal 3, @period.errors.size
     assert_equal [
       I18n.t('periods.errors.reviews', count: @period.reviews.size),
       I18n.t('periods.errors.plans', count: @period.plans.size),
-      I18n.t('periods.errors.workflows', count: @period.workflows.size),
-      I18n.t('periods.errors.procedure_controls',
-        count: @period.procedure_controls.size)].sort,
-      @period.errors.full_messages.sort
+      I18n.t('periods.errors.workflows', count: @period.workflows.size)
+    ].sort, @period.errors.full_messages.sort
   end
 
   test 'validates formated attributes' do

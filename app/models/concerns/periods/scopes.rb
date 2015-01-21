@@ -28,11 +28,6 @@ module Periods::Scopes
         reorder(order_by_dates).references(:plans)
     end
 
-    def list_all_without_procedure_controls
-      list.includes(:procedure_controls).where(procedure_controls: { period_id: nil }).
-        order(order_by_dates).references(:procedure_controls)
-    end
-
     private
 
       def order_by_dates

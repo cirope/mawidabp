@@ -36,10 +36,9 @@ class Review < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
-  attr_reader :approval_errors, :procedure_control_subitem_ids,
-    :procedure_control_item_ids
-  attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data,
-    :procedure_control_item_data
+  attr_reader :approval_errors, :control_objective_ids, :process_control_ids
+  attr_accessor :can_be_approved_by_force, :control_objective_data,
+    :process_control_data
   attr_readonly :plan_item_id
 
   # Named scopes
@@ -221,27 +220,25 @@ class Review < ActiveRecord::Base
     end
   end
 
-  def procedure_control_item_ids=(ids)
+  def process_control_ids=(ids)
     (ids || []).uniq.each do |pc_id|
-      if ProcedureControlItem.exists?(pc_id)
+      if ProcessControl.exists?(pc_id)
         cois = []
-        pc = ProcedureControlItem.find(pc_id)
-        control_objective_ids = self.control_objective_items.map(
-          &:control_objective_id
-        )
+        pc = ProcessControl.find(pc_id)
+        control_objective_ids = control_objective_items.map(&:control_objective_id)
 
-        pc.procedure_control_subitems.each do |pcs|
-          if control_objective_ids.exclude?(pcs.control_objective_id)
+        pc.control_objectives.each do |co|
+          if control_objective_ids.exclude?(co.id)
             cois << {
-              :control_objective_id => pcs.control_objective_id,
-              :control_objective_text => pcs.control_objective_text,
-              :relevance => pcs.relevance,
+              :control_objective_id => co.id,
+              :control_objective_text => co.name,
+              :relevance => co.relevance,
               :control_attributes => {
-                :control => pcs.control.control,
-                :effects => pcs.control.effects,
-                :design_tests => pcs.control.design_tests,
-                :compliance_tests => pcs.control.compliance_tests,
-                :sustantive_tests => pcs.control.sustantive_tests
+                :control => co.control.control,
+                :effects => co.control.effects,
+                :design_tests => co.control.design_tests,
+                :compliance_tests => co.control.compliance_tests,
+                :sustantive_tests => co.control.sustantive_tests
               }
             }
           end
@@ -252,26 +249,23 @@ class Review < ActiveRecord::Base
     end
   end
 
-  def procedure_control_subitem_ids=(ids)
-    (ids || []).uniq.each do |pcs_id|
-      if pcs_id.respond_to?(:to_i) &&
-          ProcedureControlSubitem.exists?(pcs_id.to_i)
-        pcs = ProcedureControlSubitem.find(pcs_id)
-        control_objective_ids = self.control_objective_items.map(
-          &:control_objective_id
-        )
+  def control_objective_ids=(ids)
+    (ids || []).uniq.each do |co_id|
+      if co_id.respond_to?(:to_i) && ControlObjective.exists?(co_id)
+        co = ControlObjective.find co_id
+        control_objective_ids = control_objective_items.map(&:control_objective_id)
 
-        unless control_objective_ids.include?(pcs.control_objective_id)
-          self.control_objective_items.build(
-            :control_objective_id => pcs.control_objective_id,
-            :control_objective_text => pcs.control_objective_text,
-            :relevance => pcs.relevance,
+        unless control_objective_ids.include?(co.id)
+          control_objective_items.build(
+            :control_objective_id => co.id,
+            :control_objective_text => co.name,
+            :relevance => co.relevance,
             :control_attributes => {
-              :control => pcs.control.control,
-              :effects => pcs.control.effects,
-              :design_tests => pcs.control.design_tests,
-              :compliance_tests => pcs.control.compliance_tests,
-              :sustantive_tests => pcs.control.sustantive_tests
+              :control => co.control.control,
+              :effects => co.control.effects,
+              :design_tests => co.control.design_tests,
+              :compliance_tests => co.control.compliance_tests,
+              :sustantive_tests => co.control.sustantive_tests
             }
           )
         end

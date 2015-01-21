@@ -96,13 +96,12 @@ class PeriodsControllerTest < ActionController::TestCase
       delete :destroy, id: @period
     end
 
-    assert_equal [I18n.t('periods.errors.can_not_be_destroyed'),
+    assert_equal [
+      I18n.t('periods.errors.can_not_be_destroyed'),
       I18n.t('periods.errors.reviews', count: @period.reviews.size),
       I18n.t('periods.errors.plans', count: @period.plans.size),
-      I18n.t('periods.errors.workflows', count: @period.workflows.size),
-      I18n.t('periods.errors.procedure_controls',
-        count: @period.procedure_controls.size)].join(APP_ENUM_SEPARATOR),
-      flash.alert
+      I18n.t('periods.errors.workflows', count: @period.workflows.size)
+    ].join(APP_ENUM_SEPARATOR), flash.alert
     assert_redirected_to periods_url
   end
 end

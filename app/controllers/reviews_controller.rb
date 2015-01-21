@@ -173,18 +173,6 @@ class ReviewsController < ApplicationController
     }.to_json
   end
 
-  # Devuelve los datos del procedimiento y prueba de control
-  #
-  # * GET /reviews/procedure_control_data/1
-  def procedure_control_data
-    @procedure_control = ProcedureControl.includes(:period).where(
-      id: params[:id],
-      "#{Period.table_name}.organization_id" => current_organization.id
-    ).references(:periods).first
-
-    render template: 'procedure_controls/show'
-  end
-
   # Crea el documento de relevamiento del informe
   #
   # * GET /reviews/survey_pdf/1
@@ -272,29 +260,27 @@ class ReviewsController < ApplicationController
     end
   end
 
-  # * GET /reviews/auto_complete_for_procedure_control_subitem
-  def auto_complete_for_procedure_control_subitem
+  # * GET /reviews/auto_complete_for_control_objective
+  def auto_complete_for_control_objective
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{BestPractice.table_name}.organization_id = :organization_id",
-      "#{ProcedureControl.table_name}.period_id = :period_id"
+      "#{ControlObjective.table_name}.obsolete = :false"
     ]
-    parameters = {organization_id: current_organization.id}
-    parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
+    parameters = { organization_id: current_organization.id, false: false }
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{ProcedureControlSubitem.table_name}.control_objective_text) LIKE :procedure_control_subitem_data_#{i}",
-        "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_subitem_data_#{i}"
+        "LOWER(#{ControlObjective.table_name}.name) LIKE :control_objective_data_#{i}",
+        "LOWER(#{ProcessControl.table_name}.name) LIKE :control_objective_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"procedure_control_subitem_data_#{i}"] = "%#{t.mb_chars.downcase}%"
+      parameters[:"control_objective_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
-    @procedure_control_subitems = ProcedureControlSubitem.includes(
-      control_objective: {process_control: :best_practice},
-      procedure_control_item: :procedure_control
+    @control_objectives = ControlObjective.includes(
+      process_control: :best_practice
     ).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
@@ -302,44 +288,42 @@ class ReviewsController < ApplicationController
         "#{ProcessControl.table_name}.name ASC",
         "#{ControlObjective.table_name}.name ASC"
       ]
-    ).references(:best_practices, :procedure_controls, :control_objectives).limit(10)
+    ).references(:best_practices, :process_control).limit(10)
 
     respond_to do |format|
-      format.json { render json: @procedure_control_subitems }
+      format.json { render json: @control_objectives }
     end
   end
 
-  # * GET /reviews/auto_complete_for_procedure_control_item
-  def auto_complete_for_procedure_control_item
+  # * GET /reviews/auto_complete_for_process_control
+  def auto_complete_for_process_control
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
       "#{BestPractice.table_name}.organization_id = :organization_id",
-      "#{ProcedureControl.table_name}.period_id = :period_id"
+      "#{ProcessControl.table_name}.obsolete = :false"
     ]
-    parameters = {organization_id: current_organization.id}
-    parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
+    parameters = { organization_id: current_organization.id, false: false }
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_item_data_#{i}"
+        "LOWER(#{BestPractice.table_name}.name) LIKE :process_control_data_#{i}",
+        "LOWER(#{ProcessControl.table_name}.name) LIKE :process_control_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"procedure_control_item_data_#{i}"] = "%#{t.mb_chars.downcase}%"
+      parameters[:"process_control_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
-    @procedure_control_items = ProcedureControlItem.includes(
-      :procedure_control, { :process_control => :best_practice }
+    @process_control = ProcessControl.includes(
+      :best_practice
     ).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      [
-        "#{ProcessControl.table_name}.name ASC"
-      ]
-    ).references(:process_control).limit(10)
+      "#{ProcessControl.table_name}.name ASC"
+    ).references(:best_practice).limit(10)
 
     respond_to do |format|
-      format.json { render json: @procedure_control_items }
+      format.json { render json: @process_control }
     end
   end
 
@@ -351,6 +335,7 @@ class ReviewsController < ApplicationController
   end
 
   private
+
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
@@ -368,8 +353,8 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
-        procedure_control_item_ids: [],
-        procedure_control_subitem_ids: []
+        control_objective_ids: [],
+        process_control_ids: []
       )
     end
 
@@ -396,12 +381,11 @@ class ReviewsController < ApplicationController
         review_data: :read,
         download_work_papers: :read,
         plan_item_data: :read,
-        procedure_control_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,
         auto_complete_for_finding: :read,
-        auto_complete_for_procedure_control_item: :read,
-        auto_complete_for_procedure_control_subitem: :read,
+        auto_complete_for_control_objective: :read,
+        auto_complete_for_process_control: :read,
         estimated_amount: :read
       )
     end
