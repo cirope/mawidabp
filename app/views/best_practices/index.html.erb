@@ -9,7 +9,7 @@
 
   <tbody>
     <% @best_practices.each do |best_practice| %>
-      <tr <%== 'class="text-muted"' if best_practice.obsolete %>>
+      <tr <%== 'class="text-muted strike"' if best_practice.obsolete %>>
         <td><%= super_truncate(best_practice.name, 40) %></td>
         <td class="hidden-xs"><%= super_truncate(best_practice.description, 40) %></td>
         <td><%= link_to_show best_practice %></td>
