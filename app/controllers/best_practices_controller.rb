@@ -7,8 +7,9 @@ class BestPracticesController < ApplicationController
 
   # * GET /best_practices
   def index
-    @best_practices =
-      BestPractice.list.reorder('created_at DESC').page(params[:page])
+    @best_practices = BestPractice.list.reorder(
+      ['obsolete ASC', 'name ASC']
+    ).page(params[:page])
   end
 
   # * GET /best_practices/1
