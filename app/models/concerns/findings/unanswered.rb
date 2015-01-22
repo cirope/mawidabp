@@ -60,7 +60,7 @@ module Findings::Unanswered
         users.each do |user|
           findings_for_user = findings.select { |f| f.users.include? user }
 
-          NotifierMailer.delay.unanswered_findings_notification(user, findings_for_user)
+          NotifierMailer.unanswered_findings_notification(user, findings_for_user).deliver_later
         end
       end
 

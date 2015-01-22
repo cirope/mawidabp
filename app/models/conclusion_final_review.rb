@@ -220,7 +220,7 @@ class ConclusionFinalReview < ConclusionReview
           ruas.each do |rua|
             # si no es gerente o auditado
             unless rua.assignment_type == 2 || rua.assignment_type == -1
-              NotifierMailer.delay.conclusion_final_review_expiration_warning(rua.user, cfr)
+              NotifierMailer.conclusion_final_review_expiration_warning(rua.user, cfr).deliver_later
             end
           end
         end

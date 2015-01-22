@@ -20,7 +20,7 @@ module Findings::Expiration
         end
 
         users.each do |user|
-          NotifierMailer.delay.findings_expiration_warning user, user.findings.next_to_expire.to_a
+          NotifierMailer.findings_expiration_warning(user, user.findings.next_to_expire.to_a).deliver_later
         end
       end
     end

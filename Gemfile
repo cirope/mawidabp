@@ -1,18 +1,19 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.1.9'
+gem 'rails', '~> 4.2.0'
 
 gem 'pg'
 gem 'foreigner'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'responders'
 gem 'mini_magick'
 gem 'simple_form'
 gem 'newrelic_rpm'
 gem 'validates_timeliness', github: 'francocatena/validates_timeliness'
 gem 'RedCloth'
 gem 'whenever'
-gem 'paper_trail'
+gem 'paper_trail', '4.0.0.beta2'
 gem 'carrierwave'
 gem 'dynamic_form'
 gem 'acts_as_tree'
@@ -35,7 +36,6 @@ gem 'uglifier'
 gem 'unicorn'
 
 group :development do
-  gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
@@ -46,4 +46,10 @@ end
 
 group :test do
   gem 'timecop'
+end
+
+group :development, :test do
+  gem 'spring'
+  gem 'byebug'
+  gem 'web-console'
 end

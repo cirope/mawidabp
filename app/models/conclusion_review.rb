@@ -138,10 +138,10 @@ class ConclusionReview < ActiveRecord::Base
   end
 
   def send_by_email_to(user, options = {})
-    NotifierMailer.delay.conclusion_review_notification(
+    NotifierMailer.conclusion_review_notification(
       user, self,
       options.merge(organization_id: Organization.current_id, user_id: PaperTrail.whodunnit)
-    )
+    ).deliver_later
   end
 
   def to_pdf(organization = nil, *args)

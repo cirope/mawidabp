@@ -99,13 +99,13 @@ module Users::Reassigns
     end
 
     def send_reassign_mail other
-      NotifierMailer.delay.changes_notification(
+      NotifierMailer.changes_notification(
         [other, self],
         title:         mail_title_for_reassign,
         body:          mail_body_from_reviews,
         content:       mail_content_for_reassign_to(other),
         organizations: affected_organizations_on_reassign_to(other)
-      )
+      ).deliver_later
     end
 
     def send_reassign_mail? other
@@ -171,12 +171,12 @@ module Users::Reassigns
     end
 
     def notify_unconfirmed_findings_to other
-      NotifierMailer.delay.changes_notification(
+      NotifierMailer.changes_notification(
         other,
         title: mail_title_for_unconfirmed_findings,
         content: mail_content_for_unconfirmed_findings,
         notification: notification_for_unconfirmed_findings_to(other)
-      ) if _unconfirmed_findings.present?
+      ).deliver_later if _unconfirmed_findings.present?
     end
 
     def mail_title_for_unconfirmed_findings
