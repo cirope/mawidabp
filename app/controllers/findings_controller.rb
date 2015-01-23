@@ -453,9 +453,10 @@ class FindingsController < ApplicationController
 
     def finding_params
       params.require(:finding).permit(
-        :id, :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
-        :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :correction, :correction_date, :cause_analysis, :cause_analysis_date,
+        :id, :control_objective_item_id, :review_code, :title, :description,
+        :answer, :audit_comments, :state, :origination_date, :solution_date,
+        :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
+        :correction, :correction_date, :cause_analysis, :cause_analysis_date,
         :nested_user, :lock_version, users_for_notification: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy

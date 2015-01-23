@@ -98,6 +98,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'OM020',
+          :title => 'Title',
           :description => 'New description',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
@@ -165,6 +166,7 @@ class OportunitiesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'OM020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',

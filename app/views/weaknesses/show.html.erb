@@ -13,6 +13,11 @@
   <%= @weakness.review_code %>
 </p>
 
+<p>
+  <strong><%= Weakness.human_attribute_name :title %>:</strong>
+  <%= @weakness.title %>
+</p>
+
 <div>
   <strong><%= Weakness.human_attribute_name :description %>:</strong>
   <%= simple_format @weakness.description %>

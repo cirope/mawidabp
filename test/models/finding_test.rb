@@ -18,6 +18,7 @@ class FindingTest < ActiveSupport::TestCase
     assert_equal finding.repeated_of_id, @finding.repeated_of_id
     assert_equal finding.control_objective_item_id,
       @finding.control_objective_item_id
+    assert_equal finding.title, @finding.title
     assert_equal finding.review_code, @finding.review_code
     assert_equal finding.description, @finding.description
     assert_equal finding.answer, @finding.answer
@@ -38,6 +39,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -82,6 +84,7 @@ class FindingTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'O020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -115,6 +118,13 @@ class FindingTest < ActiveSupport::TestCase
 
     # Y tampoco se puede eliminar si NO está en un informe definitivo
     assert_no_difference('Finding.count') { @finding.destroy }
+  end
+
+  test 'validates blank attributes on new record' do
+    @finding = Finding.new
+
+    assert @finding.invalid?
+    assert_error @finding, :title, :blank
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -197,9 +207,11 @@ class FindingTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @finding.review_code = 'abcdd' * 52
+    @finding.title = 'abcdd' * 52
 
     assert @finding.invalid?
     assert_error @finding, :review_code, :too_long, count: 255
+    assert_error @finding, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado
@@ -577,6 +589,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas
@@ -880,6 +893,7 @@ class FindingTest < ActiveSupport::TestCase
     finding = @finding.class.new(@finding.attributes.merge(
         'state' => Finding::STATUS[:incomplete],
         'review_code' => 'O099',
+        'title' => 'Title',
         'control_objective_item_id' => control_objective_items(
           :bcra_A4609_security_management_responsible_dependency_item_editable).id,
         'finding_user_assignments_attributes' => fuas

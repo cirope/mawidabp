@@ -14,11 +14,18 @@
   <div class="form-inputs">
     <div class="row">
       <div class="col-md-6">
-        <%= f.input :review, label: Review.model_name.human, input_html: {
-          value: @finding.review.try(:identification), readonly: true } %>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :review, label: Review.model_name.human, input_html: {
+              value: @finding.review.try(:identification), readonly: true } %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :review_code, input_html: { readonly: true } %>
+          </div>
+        </div>
+        <%= f.input :title, input_html: { readonly: true } %>
         <%= f.input :project, label: PlanItem.human_attribute_name(:project),
           input_html: { value: @finding.review.try(:plan_item).try(:project), readonly: true } %>
-        <%= f.input :review_code, input_html: { readonly: true } %>
         <%= f.input :issue_date, label:
           ConclusionFinalReview.human_attribute_name(:issue_date), input_html: { readonly: true,
             value: (@finding.issue_date ? l(@finding.issue_date, format: :long) :

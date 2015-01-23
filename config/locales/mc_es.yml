@@ -1223,6 +1223,7 @@ mc_es:
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío / Oportunidad"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1339,6 +1340,7 @@ mc_es:
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta"
@@ -1438,6 +1440,7 @@ mc_es:
         privileges: "Privilegios"
       weakness:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones"

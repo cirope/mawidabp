@@ -18,6 +18,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
     assert_equal potential_nonconformity.control_objective_item_id,
       @potential_nonconformity.control_objective_item_id
     assert_equal potential_nonconformity.review_code, @potential_nonconformity.review_code
+    assert_equal potential_nonconformity.title, @potential_nonconformity.title
     assert_equal potential_nonconformity.description, @potential_nonconformity.description
     assert_equal potential_nonconformity.answer, @potential_nonconformity.answer
     assert_equal potential_nonconformity.state, @potential_nonconformity.state
@@ -32,6 +33,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'NCP20',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -67,6 +69,7 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'NCP20',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -134,9 +137,11 @@ class PotentialNonconformityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @potential_nonconformity.review_code = 'abcdd' * 52
+    @potential_nonconformity.title = 'abcdd' * 52
 
     assert @potential_nonconformity.invalid?
     assert_error @potential_nonconformity, :review_code, :too_long, count: 255
+    assert_error @potential_nonconformity, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

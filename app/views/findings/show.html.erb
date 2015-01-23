@@ -10,6 +10,10 @@
   <strong><%= Finding.human_attribute_name :review_code %></strong>
   <%= @finding.review_code %>
 </p>
+<p>
+  <strong><%= Finding.human_attribute_name :title %></strong>
+  <%= @finding.title %>
+</p>
 <% if @finding.control_objective_item %>
   <div>
     <strong><%= ControlObjective.model_name.human %></strong>:

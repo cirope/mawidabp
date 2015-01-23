@@ -18,6 +18,7 @@ class FortressTest < ActiveSupport::TestCase
     assert_equal fortress.control_objective_item_id,
       @fortress.control_objective_item_id
     assert_equal fortress.review_code, @fortress.review_code
+    assert_equal fortress.title, @fortress.title
     assert_equal fortress.description, @fortress.description
     assert_equal fortress.origination_date, @fortress.origination_date
   end
@@ -29,6 +30,7 @@ class FortressTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'F20',
+        :title => 'Title',
         :description => 'New description',
         :finding_user_assignments_attributes => {
           :new_1 => {
@@ -61,6 +63,7 @@ class FortressTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'F20',
+        :title => 'Title',
         :description => 'New description',
         :origination_date => 35.days.from_now.to_date,
         :finding_user_assignments_attributes => {
@@ -122,9 +125,11 @@ class FortressTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @fortress.review_code = 'abcdd' * 52
+    @fortress.title = 'abcdd' * 52
 
     assert @fortress.invalid?
     assert_error @fortress, :review_code, :too_long, count: 255
+    assert_error @fortress, :title, :too_long, count: 255
   end
 
   test 'next code' do

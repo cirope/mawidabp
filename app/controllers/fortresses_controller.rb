@@ -154,8 +154,8 @@ class FortressesController < ApplicationController
 
     def fortress_params
       params.require(:fortress).permit(
-        :control_objective_item_id, :review_code, :description, :origination_date,
-        :lock_version,
+        :control_objective_item_id, :review_code, :title, :description,
+        :origination_date, :lock_version,
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy
         ],

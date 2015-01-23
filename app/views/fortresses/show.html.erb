@@ -13,6 +13,11 @@
   <%= @fortress.review_code %>
 </p>
 
+<p>
+  <strong><%= Fortress.human_attribute_name :title %>:</strong>
+  <%= @fortress.title %>
+</p>
+
 <div>
   <strong><%= Fortress.human_attribute_name :description %>:</strong>
   <%= simple_format @fortress.description %>
