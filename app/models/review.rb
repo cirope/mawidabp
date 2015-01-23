@@ -228,7 +228,7 @@ class Review < ActiveRecord::Base
         control_objective_ids = control_objective_items.map(&:control_objective_id)
 
         pc.control_objectives.each do |co|
-          if control_objective_ids.exclude?(co.id)
+          if !co.obsolete && control_objective_ids.exclude?(co.id)
             cois << {
               :control_objective_id => co.id,
               :control_objective_text => co.name,
