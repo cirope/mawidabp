@@ -3,7 +3,7 @@ module Findings::Validations
 
   included do
     validates :control_objective_item_id, :description, :review_code, :organization_id, presence: true
-    validates :title, presence: true, if: :new_record? # TODO: remove new_record
+    validates :title, presence: true, unless: :final?
     validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :revoked?
     validates :follow_up_date, :solution_date, :origination_date, :first_notification_date,

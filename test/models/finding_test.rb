@@ -120,23 +120,18 @@ class FindingTest < ActiveSupport::TestCase
     assert_no_difference('Finding.count') { @finding.destroy }
   end
 
-  test 'validates blank attributes on new record' do
-    @finding = Finding.new
-
-    assert @finding.invalid?
-    assert_error @finding, :title, :blank
-  end
-
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates blank attributes' do
     @finding.control_objective_item_id = nil
     @finding.review_code = '   '
+    @finding.title = '   '
     @finding.description = '   '
 
     assert @finding.invalid?
     assert_error @finding, :control_objective_item_id, :blank
     assert_error @finding, :review_code, :blank
     assert_error @finding, :review_code, :invalid
+    assert_error @finding, :title, :blank
     assert_error @finding, :description, :blank
   end
 

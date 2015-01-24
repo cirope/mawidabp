@@ -15,7 +15,6 @@
       <%= make_not_available_column Nonconformity.human_attribute_name(:state), 'hidden-xs' => true %>
       <%= make_not_available_column Nonconformity.human_attribute_name(:follow_up_date), 'hidden-xs' => true %>
       <%= make_not_available_column Nonconformity.human_attribute_name(:risk), 'hidden-xs' => true %>
-      <%= make_not_available_column Nonconformity.human_attribute_name(:priority), 'hidden-xs' => true %>
       <%= make_not_available_column t('finding.has_work_papers'), 'hidden-xs' => true %>
       <th colspan="2" style="text-align: right;"><%= link_to_search if params[:control_objective].blank? %></th>
     </tr>
@@ -32,7 +31,6 @@
         <td class="hidden-xs"><%= nonconformity.state_text %></td>
         <td class="hidden-xs"><%= l nonconformity.follow_up_date, :format => :short if nonconformity.follow_up_date %></td>
         <td class="hidden-xs"><%= nonconformity.risk_text %></td>
-        <td class="hidden-xs"><%= nonconformity.priority_text %></td>
         <td class="hidden-xs"><%= t nonconformity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
         <td><%= link_to_show nonconformity %></td>
         <td><%= link_to_edit edit_nonconformity_path(nonconformity) %></td>
