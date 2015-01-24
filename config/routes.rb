@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get '/touch', to: 'touch#index', as: 'touch'
+
   get '/users/login', to: redirect('/') # _Backward compatibility_
 
   # Sessions
