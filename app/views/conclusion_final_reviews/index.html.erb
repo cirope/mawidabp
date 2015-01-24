@@ -10,11 +10,11 @@
     <tr>
       <%= make_filterable_column Review.human_attribute_name(:period_id), nil, 'period' %>
       <%= make_filterable_column Review.human_attribute_name(:identification), nil, 'identification' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { 'hidden-xs' => true }, 'business_unit' %>
-      <%= make_filterable_column PlanItem.human_attribute_name(:project), { 'hidden-xs' => true }, 'project' %>
-      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), { 'hidden-xs' => true }, 'issue_date' %>
-      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), { 'hidden-xs' => true }, 'close_date' %>
-      <%= make_not_available_column Review.human_attribute_name(:score), { 'hidden-xs' => true } %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:business_unit_id), { :class => 'hidden-xs' }, 'business_unit' %>
+      <%= make_filterable_column PlanItem.human_attribute_name(:project), { :class => 'hidden-xs' }, 'project' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:issue_date), { :class => 'hidden-xs' }, 'issue_date' %>
+      <%= make_filterable_column ConclusionDraftReview.human_attribute_name(:close_date), { :class => 'hidden-xs' }, 'close_date' %>
+      <%= make_not_available_column Review.human_attribute_name(:score), { :class => 'hidden-xs' } %>
       <th colspan="2" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

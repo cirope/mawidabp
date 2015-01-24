@@ -44,7 +44,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4',
-      columns: ['description', 'review'],
+      columns: ['title', 'review'],
       order: 'review'
     }
     assert_response :success
@@ -77,7 +77,7 @@ class WeaknessesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4 y 1w',
-      columns: ['description', 'review']
+      columns: ['title', 'review']
     }
     assert_redirected_to weakness_url(
       findings(:bcra_A4609_data_proccessing_impact_analisys_editable_weakness))

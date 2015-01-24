@@ -42,7 +42,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
@@ -61,7 +61,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4 y 1o',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to oportunity_url(

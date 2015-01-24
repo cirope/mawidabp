@@ -284,7 +284,7 @@ class FindingsController < ApplicationController
           PlanItem.human_attribute_name(:project)].to_sentence, 0],
       ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 0],
-      ['description', Finding.human_attribute_name(:description),
+      ['title', Finding.human_attribute_name(:title),
         detailed ? 48 : 80]
     ]
 

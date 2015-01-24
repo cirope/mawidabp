@@ -2,7 +2,7 @@
 bcra_A4609_security_management_responsible_dependency_weakness_being_implemented:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w
@@ -27,7 +27,7 @@ bcra_A4609_security_management_responsible_dependency_weakness_being_implemented
 iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 2w iso
   review_code: O002
   description: Description 2w iso
   answer: Answer 2w
@@ -54,7 +54,7 @@ iso_27000_security_policy_3_1_item_weakness_unconfirmed_for_notification:
 iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_<%= level %>_notification:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title <%= level %>w
   review_code: <%= "O00#{level}" %>
   description: Description <%= level %>w
   answer: Answer <%= level %>w
@@ -82,7 +82,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_unanswered_for_level_
 iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
   type: Weakness
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title incomplete_w
   review_code: O005
   description: Description incomplete_w
   answer: Answer incomplete_w
@@ -108,7 +108,7 @@ iso_27000_security_organization_4_2_item_editable_weakness_incomplete:
 iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 3w iso
   review_code: O003
   description: Description 3w iso
   answer: Answer 3w
@@ -133,7 +133,7 @@ iso_27000_security_policy_3_1_item_weakness_2_unconfirmed_for_notification:
 bcra_A4609_security_management_responsible_dependency_fortress:
   type: Fortress
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 1f
   review_code: F001
   description: Description 1f
   answer:
@@ -157,7 +157,7 @@ bcra_A4609_security_management_responsible_dependency_fortress:
 bcra_A4609_security_management_responsible_dependency_fortress_2:
   type: Fortress
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 2f
   review_code: F002
   description: Description 2f
   answer:
@@ -181,7 +181,7 @@ bcra_A4609_security_management_responsible_dependency_fortress_2:
 bcra_A4609_security_management_responsible_dependency_nonconformity_being_implemented:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 1nc bcra
   review_code: NC001
   description: Description 1nc bcra
   answer: Answer 1nc
@@ -205,7 +205,7 @@ bcra_A4609_security_management_responsible_dependency_nonconformity_being_implem
 iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 2nc
   review_code: NC002
   description: Description 2nc
   answer: Answer 2nc
@@ -232,7 +232,7 @@ iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
 iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_<%= level %>_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title nc iso 2700
   review_code: <%= "NC00#{level}" %>
   description: Description <%= level %>nc iso 2700
   answer: Answer <%= level %>nc
@@ -259,7 +259,7 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_l
 iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
   type: Nonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title incomplete_nc
   review_code: NC005
   description: Description incomplete_nc
   answer: Answer incomplete_nc
@@ -284,7 +284,7 @@ iso_27000_security_organization_4_2_item_editable_nonconformity_incomplete:
 iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 3nc iso
   review_code: NC003
   description: Description 3nc iso
   answer: Answer 3nc
@@ -309,7 +309,7 @@ iso_27000_security_policy_3_1_item_nonconformity_2_unconfirmed_for_notification:
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 3nc bcra
   review_code: NC003
   description: Description 3nc bcra
   answer: Answer 3nc
@@ -333,7 +333,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
 bcra_A4609_data_proccessing_impact_analisys_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  title: Title
+  title: Title 2nc bcra
   review_code: NC002
   description: Description 2nc bcra
   answer: Answer 2nc
@@ -357,7 +357,7 @@ bcra_A4609_data_proccessing_impact_analisys_nonconformity:
 bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  title: Title
+  title: Title 1nc
   review_code: NC001
   description: Description 1nc
   answer: Answer 1nc
@@ -382,7 +382,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_nonconformity:
 iso_27000_security_policy_3_1_item_nonconformity:
   type: Nonconformity
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 1nc iso
   review_code: NC001
   description: Description 1nc iso
   answer: Answer 1nc
@@ -406,7 +406,7 @@ iso_27000_security_policy_3_1_item_nonconformity:
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_nonconformity:
   type: Nonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
-  title: Title
+  title: Title 1nc bi
   review_code: NC001
   description: Description 1nc bi
   answer: Answer 1nc
@@ -430,7 +430,7 @@ bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 5ncp
   review_code: NCP005
   description: Description 5ncp
   answer: Answer 5ncp
@@ -445,7 +445,7 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
 bcra_A4609_security_management_responsible_dependency_notify_potential_nonconformity_2:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 4ncp
   review_code: NCP004
   description: Description 4ncp
   answer: Answer 4ncp
@@ -460,7 +460,7 @@ bcra_A4609_security_management_responsible_dependency_notify_potential_nonconfor
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 1ncp
   review_code: NCP001
   description: Description 1ncp
   answer: Answer 1ncp
@@ -475,7 +475,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
 bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  title: Title
+  title: Title 3ncp
   review_code: NCP003
   description: Description 3ncp
   answer: Answer 3ncp
@@ -492,7 +492,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_potential_nonconformity:
 iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title ncp
   review_code: NCP001
   description: Description ncp
   answer: Answer ncp
@@ -508,7 +508,7 @@ iso_27000_security_organization_4_2_item_editable_potential_nonconformity:
 bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  title: Title
+  title: Title ncp
   review_code: NCP001
   description: Description ncp
   answer: Answer ncp
@@ -524,7 +524,7 @@ bcra_A4609_data_proccessing_impact_analisys_item_potential_nonconformity:
 bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
   type: PotentialNonconformity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  title: Title
+  title: Title ncp006
   review_code: NCP006
   description: Description ncp006
   answer: Answer 5ncp
@@ -540,7 +540,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_potential_nonconformity:
 bcra_A4609_security_management_responsible_dependency_notify_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
@@ -555,7 +555,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity:
 bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item
-  title: Title
+  title: Title 3o
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
@@ -570,7 +570,7 @@ bcra_A4609_security_management_responsible_dependency_notify_oportunity_2:
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 1o
   review_code: OM001
   description: Description 1o
   answer: Answer 1o
@@ -585,7 +585,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
 bcra_A4609_security_management_responsible_dependency_item_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_editable
-  title: Title
+  title: Title 3w bcra
   review_code: O003
   description: Description 3w bcra
   answer: Answer 3w
@@ -609,7 +609,7 @@ bcra_A4609_security_management_responsible_dependency_item_editable_being_implem
 bcra_A4609_data_proccessing_impact_analisys_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  title: Title
+  title: Title 2w bcra
   review_code: O002
   description: Description 2w bcra
   answer: Answer 2w
@@ -629,7 +629,7 @@ bcra_A4609_data_proccessing_impact_analisys_weakness:
 bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  title: Title
+  title: Title 1w bi
   review_code: O001
   description: Description 1w bi
   answer: Answer 1w
@@ -649,7 +649,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_weakness:
 bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item_editable
-  title: Title
+  title: Title 3o
   review_code: OM003
   description: Description 3o
   answer: Answer 3o
@@ -666,7 +666,7 @@ bcra_A4609_data_proccessing_impact_analisys_editable_oportunity:
 iso_27000_security_organization_4_2_item_editable_oportunity:
   type: Oportunity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title
+  title: Title o
   review_code: OM001
   description: Description o
   answer: Answer o
@@ -682,7 +682,7 @@ iso_27000_security_organization_4_2_item_editable_oportunity:
 bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
   type: Oportunity
   control_objective_item: bcra_A4609_data_proccessing_impact_analisys_item
-  title: Title
+  title: Title 2o
   review_code: OM002
   description: Description 2o
   answer: Answer 2o
@@ -698,7 +698,7 @@ bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity:
 iso_27000_security_policy_3_1_item_weakness:
   type: Weakness
   control_objective_item: iso_27000_security_policy_3_1_item
-  title: Title
+  title: Title 1wx
   review_code: O001
   description: Description 1wx
   answer: Answer 1w
@@ -722,7 +722,7 @@ iso_27000_security_policy_3_1_item_weakness:
 bcra_A4609_security_management_responsible_dependency_item_approved_and_editable_being_implemented_weakness:
   type: Weakness
   control_objective_item: bcra_A4609_security_management_responsible_dependency_item_approved_and_editable
-  title: Title
+  title: Title 1w
   review_code: O001
   description: Description 1w
   answer: Answer 1w

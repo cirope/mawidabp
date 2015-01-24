@@ -41,7 +41,7 @@ class FortressesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
@@ -60,7 +60,7 @@ class FortressesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4 y 1f',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to fortress_url(

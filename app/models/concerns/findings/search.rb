@@ -7,7 +7,7 @@ module Findings::Search
       review:      review_options,
       project:     project_options,
       review_code: review_code_options,
-      description: description_options
+      title:       title_options
     }.with_indifferent_access
   end
 
@@ -36,8 +36,8 @@ module Findings::Search
         string_column_options_for "#{table_name}.review_code"
       end
 
-      def description_options
-        string_column_options_for "#{table_name}.description"
+      def title_options
+        string_column_options_for "#{table_name}.title"
       end
 
       def string_column_options_for column
