@@ -367,6 +367,8 @@ class Finding < ActiveRecord::Base
       "#{self.review.long_identification} (#{issue_date})", 0, false)
     pdf.add_description_item(Finding.human_attribute_name(:review_code),
       self.review_code, 0, false)
+    pdf.add_description_item(Finding.human_attribute_name(:title),
+      self.title, 0, false)
 
     pdf.add_description_item(ProcessControl.model_name.human,
       self.control_objective_item.process_control.name, 0, false)

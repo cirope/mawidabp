@@ -232,7 +232,7 @@ iso_27000_security_policy_3_1_item_nonconformity_unconfirmed_for_notification:
 iso_27000_security_organization_4_2_item_editable_nonconformity_unanswered_for_level_<%= level %>_notification:
   type: Nonconformity
   control_objective_item: iso_27000_security_organization_4_2_item_editable
-  title: Title nc iso 2700
+  title: Title <%= level %>nc iso 2700
   review_code: <%= "NC00#{level}" %>
   description: Description <%= level %>nc iso 2700
   answer: Answer <%= level %>nc

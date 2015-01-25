@@ -428,6 +428,11 @@ class ControlObjectiveItem < ActiveRecord::Base
     head = []
     body = "<b>#{ControlObjective.model_name.human}:</b> #{self.to_s}\n"
 
+    if finding.title.present?
+      body << "<b>#{finding.class.human_attribute_name(:title)}:</b> " +
+        "#{finding.title.chomp}\n"
+    end
+
     if finding.description.present?
       body << "<b>#{finding.class.human_attribute_name(:description)}:</b> " +
         "#{finding.description.chomp}\n"
