@@ -90,9 +90,9 @@ class ApplicationController < ActionController::Base
     # expirado. Puede deshabilitarse con el parámetro
     # :_session_expire_time_
     def check_access_time #:doc:
-      session_expire = current_organization ? parameter_in(current_organization.id,
-        :session_expire_time).to_i : 30
-      last_access = session[:last_access] || 10.years.ago
+      last_access    = session[:last_access] || 10.years.ago
+      session_expire = current_organization ?
+        parameter_in(current_organization.id, :session_expire_time).to_i : 30
 
       if session_expire == 0 || last_access >= session_expire.minutes.ago
         session[:last_access] = Time.now
