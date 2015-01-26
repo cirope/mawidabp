@@ -362,14 +362,15 @@ class Review < ActiveRecord::Base
         unless w.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Weakness.model_name.human} #{w.review_code}", w.approval_errors
+            "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
+            w.approval_errors
           ]
         end
       end
 
       coi.weaknesses.select(&:unconfirmed?).each do |w|
         errors << [
-          "#{Weakness.model_name.human} #{w.review_code}",
+          "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
           [I18n.t('weakness.errors.is_unconfirmed')]
         ]
       end
@@ -378,14 +379,15 @@ class Review < ActiveRecord::Base
         unless nc.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Nonconformity.model_name.human} #{nc.review_code}", nc.approval_errors
+            "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
+            nc.approval_errors
           ]
         end
       end
 
       coi.nonconformities.select(&:unconfirmed?).each do |nc|
         errors << [
-          "#{Nonconformity.model_name.human} #{nc.review_code}",
+          "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
           [I18n.t('nonconformity.errors.is_unconfirmed')]
         ]
       end
@@ -393,7 +395,8 @@ class Review < ActiveRecord::Base
       coi.oportunities.each do |o|
         unless o.must_be_approved?
           errors << [
-            "#{Oportunity.model_name.human} #{o.review_code}", o.approval_errors
+            "#{Oportunity.model_name.human} #{o.review_code} - #{o.title}",
+            o.approval_errors
           ]
         end
       end
@@ -401,7 +404,8 @@ class Review < ActiveRecord::Base
       coi.potential_nonconformities.each do |p_nc|
         unless p_nc.must_be_approved?
           errors << [
-            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code}", p_nc.approval_errors
+            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code} - #{p_nc.title}",
+            p_nc.approval_errors
           ]
         end
       end
@@ -417,7 +421,7 @@ class Review < ActiveRecord::Base
     self.finding_review_assignments.each do |fra|
       if !fra.finding.repeated? && !fra.finding.implemented_audited?
         errors << [
-          "#{Finding.model_name.human} #{fra.finding.review_code} [#{fra.finding.review}]",
+          "#{Finding.model_name.human} #{fra.finding.review_code} - #{fra.finding.title} [#{fra.finding.review}]",
           [I18n.t('review.errors.related_finding_incomplete')]
         ]
       end
@@ -695,7 +699,9 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -708,11 +714,8 @@ class Review < ActiveRecord::Base
       end
 
       weaknesses.each do |weakness|
-        description = "<b>#{Weakness.human_attribute_name('review_code')}</b>: "
-        description << "#{weakness.review_code}\n#{weakness.description}"
-
         column_data << [
-          description,
+          "<b>#{weakness.review_code}</b>: #{weakness.title}",
           weakness.risk_text,
           weakness.state_text
         ]
@@ -746,11 +749,8 @@ class Review < ActiveRecord::Base
       end
 
       nonconformities.each do |nonconformity|
-        description = "<b>#{Nonconformity.human_attribute_name('review_code')}</b>: "
-        description << "#{nonconformity.review_code}\n#{nonconformity.description}"
-
         column_data << [
-          description,
+          "<b>#{nonconformity.review_code}</b>: #{nonconformity.title}",
           nonconformity.risk_text,
           nonconformity.state_text
         ]
@@ -785,11 +785,8 @@ class Review < ActiveRecord::Base
       end
 
       oportunities.each do |oportunity|
-        description = "<b>#{Oportunity.human_attribute_name('review_code')}</b>"
-        description << ": #{oportunity.review_code}\n#{oportunity.description}"
-
         column_data << [
-          description,
+          "<b>#{oportunity.review_code}</b>: #{oportunity.title}",
           oportunity.state_text
         ]
       end
@@ -823,8 +820,8 @@ class Review < ActiveRecord::Base
       end
 
       potential_nonconformities.each do |potential_nonconformity|
-        description = "<b>#{PotentialNonconformity.human_attribute_name('review_code')}</b>"
-        description << ": #{potential_nonconformity.review_code}\n#{potential_nonconformity.description}"
+        description = "<b>#{potential_nonconformity.review_code}</b>: "
+        description << "#{potential_nonconformity.title}"
 
         column_data << [
           description,
@@ -861,12 +858,7 @@ class Review < ActiveRecord::Base
       end
 
       fortresses.each do |fortress|
-        description = "<b>#{Fortress.human_attribute_name('review_code')}</b>"
-        description << ": #{fortress.review_code}\n#{fortress.description}"
-
-        column_data << [
-          description
-        ]
+        column_data << ["<b>#{fortress.review_code}</b>: #{fortress.title}"]
       end
 
       unless column_data.blank?
@@ -962,7 +954,9 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1082,7 +1076,9 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 

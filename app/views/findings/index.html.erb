@@ -77,7 +77,7 @@
         <td class="nowrap"><%= show_review_with_conclusion_status_as_abbr(
           finding.control_objective_item.review) %></td>
         <td class="hidden-xs"><%= super_truncate(finding.control_objective_item.try(:review).try(:plan_item).try(:project), 20) %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(finding) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(finding) %></td>
         <td class="hidden-xs"><%= super_truncate(finding.title, 20) %></td>
         <td class="hidden-xs"><%= finding.state_text %></td>
         <% if params[:completed] == 'complete' %>

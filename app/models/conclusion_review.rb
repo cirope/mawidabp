@@ -776,7 +776,7 @@ class ConclusionReview < ActiveRecord::Base
               :left => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
-            pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
+            pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
               :left => PDF_FONT_SIZE * 6
 
             unless w.work_papers.blank?
@@ -802,7 +802,7 @@ class ConclusionReview < ActiveRecord::Base
           pdf.text "<b>#{title}</b>:", :left => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-            pdf.text [o.review_code, o.state_text].join(' - '),
+            pdf.text [o.review_code, o.title, o.state_text].join(' - '),
               :left => PDF_FONT_SIZE * 6
 
             unless o.work_papers.blank?
@@ -861,8 +861,8 @@ class ConclusionReview < ActiveRecord::Base
 
       pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-      weaknesses.sort {|w1, w2| w1.review_code <=> w2.review_code}.each do |w|
-        pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
+      weaknesses.sort { |w1, w2| w1.review_code <=> w2.review_code }.each do |w|
+        pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
           :font_size => PDF_FONT_SIZE
 
         w.work_papers.each do |wp|
@@ -900,14 +900,14 @@ class ConclusionReview < ActiveRecord::Base
 
     weaknesses = weaknesses.select do |w|
       w.implemented? || w.being_implemented? || w.unanswered?
-    end.sort {|w1, w2| w1.review_code <=> w2.review_code}
+    end.sort { |w1, w2| w1.review_code <=> w2.review_code }
     oportunities = oportunities.select do |o|
       o.implemented? || o.being_implemented? || o.unanswered?
-    end.sort {|o1, o2| o1.review_code <=> o2.review_code}
+    end.sort { |o1, o2| o1.review_code <=> o2.review_code }
 
     unless (weaknesses + oportunities).blank?
       pdf = Prawn::Document.create_generic_pdf(:portrait, false)
-      column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
+      column_order = [['review_code', 20], ['title', 40], ['risk', 20], ['state', 20]]
       column_data, column_widths, column_headers = [], [], []
       pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
       pdf.add_review_header organization || self.organization,
@@ -930,6 +930,7 @@ class ConclusionReview < ActiveRecord::Base
       weaknesses.each do |weakness|
         column_data << [
           weakness.review_code,
+          weakness.title,
           weakness.risk_text,
           weakness.state_text
         ]
@@ -963,6 +964,7 @@ class ConclusionReview < ActiveRecord::Base
       oportunities.each do |oportunity|
         column_data << [
           oportunity.review_code,
+          oportunity.title,
           oportunity.state_text
         ]
       end
@@ -994,9 +996,8 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
-          :justification => :center
+        pdf.text [weakness.review_code, weakness.title, weakness.risk_text, weakness.state_text].join(' - '),
+          :font_size => PDF_FONT_SIZE, :justification => :center
       end
 
       oportunities.each do |oportunity|
@@ -1009,7 +1010,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [oportunity.review_code, oportunity.state_text].join(' - '),
+        pdf.text [oportunity.review_code, oportunity.title, oportunity.state_text].join(' - '),
           :font_size => PDF_FONT_SIZE, :justification => :center
       end
 

@@ -75,6 +75,7 @@ module Reports::FixedWeaknessesReport
             fixed_weaknesses << [
               "\n<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
+              "<b>#{Weakness.human_attribute_name(:title)}</b>: #{w.title}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               "<b>#{Weakness.human_attribute_name(:solution_date)}</b>: #{l(w.solution_date, :format => :long)}",

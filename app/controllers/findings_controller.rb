@@ -284,8 +284,7 @@ class FindingsController < ApplicationController
           PlanItem.human_attribute_name(:project)].to_sentence, 0],
       ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 0],
-      ['title', Finding.human_attribute_name(:title),
-        detailed ? 48 : 80]
+      ['title', Finding.human_attribute_name(:title), detailed ? 48 : 80]
     ]
 
     column_data, column_headers, column_widths = [], [], []
@@ -352,6 +351,7 @@ class FindingsController < ApplicationController
       finding_data =
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
+        "<b>#{Weakness.human_attribute_name(:title)}</b>: #{finding.title}",
         "<b>#{finding.class.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}",
         ("<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}" unless is_fortress),
         ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l finding.origination_date, :format => :long}" if finding.origination_date),

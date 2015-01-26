@@ -80,7 +80,7 @@ module Users::Releases
     def finding_description_for finding
       [
         finding.class.model_name.human,
-        "*#{finding.review_code.strip}*",
+        "*#{[finding.review_code.strip, finding.title.strip].join(' - ')}*",
         "(#{Review.model_name.human} *#{finding.review.identification.strip}*)"
       ].join ' '
     end

@@ -23,7 +23,7 @@
         <td><%= finding_updated_at_text fortress %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr fortress.review %></td>
         <td class="hidden-xs"><%= super_truncate fortress.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(fortress) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(fortress) %></td>
         <td class="hidden-xs"><%= super_truncate fortress.title, 20 %></td>
         <td class="hidden-xs"><%= fortress.work_papers.blank? ? t('label.no') : t('label.yes') %></td>
         <td><%= link_to_show fortress %></td>

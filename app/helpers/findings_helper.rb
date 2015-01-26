@@ -86,11 +86,8 @@ module FindingsHelper
     content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
-  def show_finding_review_code_with_control_objective_as_abbr(finding)
-    control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
-      finding.control_objective_item.to_s
-
-    content_tag(:abbr, h(finding.review_code), :title => control_objective_text)
+  def show_finding_review_code_with_decription_as_abbr(finding)
+    content_tag(:abbr, finding.review_code, :title => finding.description)
   end
 
 

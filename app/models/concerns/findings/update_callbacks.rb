@@ -68,7 +68,7 @@ module Findings::UpdateCallbacks
       I18n.t(
         'finding.responsibility_removed',
         class_name: self.class.model_name.human.downcase,
-        review_code: review_code,
+        review_code: [review_code, title].join(' - '),
         review: review.try(:identification)
       )
     end

@@ -24,7 +24,7 @@
         <td><%= finding_updated_at_text potential_nonconformity %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr potential_nonconformity.review %></td>
         <td class="hidden-xs"><%= super_truncate potential_nonconformity.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(potential_nonconformity) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(potential_nonconformity) %></td>
         <td class="hidden-xs"><%= super_truncate potential_nonconformity.title, 20 %></td>
         <td class="hidden-xs"><%= potential_nonconformity.state_text %></td>
         <td class="hidden-xs"><%= t potential_nonconformity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>

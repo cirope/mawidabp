@@ -95,14 +95,14 @@ class Finding < ActiveRecord::Base
   end
 
   def to_s
-    "#{self.review_code} - #{self.control_objective_item.try(:review)}"
+    "#{review_code} - #{title} - #{control_objective_item.try(:review)}"
   end
 
   alias_method :label, :to_s
 
   def informal
-    text = "<strong>#{Finding.human_attribute_name(:description)}</strong>: "
-    text << self.description
+    text = "<strong>#{Finding.human_attribute_name(:title)}</strong>: "
+    text << self.title.to_s
     text << "<br /><strong>#{Finding.human_attribute_name(:review_code)}</strong>: "
     text << self.review_code
     text << "<br /><strong>#{Review.model_name.human}</strong>: "
@@ -244,6 +244,8 @@ class Finding < ActiveRecord::Base
       self.control_objective_item.to_s, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('review_code'),
       self.review_code, 0, false)
+    pdf.add_description_item(self.class.human_attribute_name('title'),
+      self.title, 0, false)
     pdf.add_description_item(self.class.human_attribute_name('description'),
       self.description, 0, false)
 
@@ -317,7 +319,7 @@ class Finding < ActiveRecord::Base
 
       pdf.add_title(ControlObjectiveItem.human_attribute_name('work_papers'),
         (PDF_FONT_SIZE * 1.5).round, :center, false)
-      pdf.add_title("#{self.class.model_name.human} #{self.review_code}",
+      pdf.add_title("#{self.class.model_name.human} #{review_code} - #{title}",
         (PDF_FONT_SIZE * 1.5).round, :center, false)
 
       pdf.move_down PDF_FONT_SIZE * 3
@@ -691,6 +693,7 @@ class Finding < ActiveRecord::Base
     column_data = [
       self.review.to_s,
       self.review_code,
+      self.title,
       self.kind_of?(Fortress) ? '' : self.state_text,
       self.respond_to?(:risk_text) ? self.risk_text : '',
       self.respond_to?(:risk_text) ? self.priority_text : '',
@@ -716,6 +719,7 @@ class Finding < ActiveRecord::Base
       column_headers = [
         "#{Review.model_name.human} - #{PlanItem.human_attribute_name(:project)}",
         Weakness.human_attribute_name(:review_code),
+        Weakness.human_attribute_name(:title),
         Weakness.human_attribute_name(:state),
         Weakness.human_attribute_name(:risk),
         Weakness.human_attribute_name(:priority),

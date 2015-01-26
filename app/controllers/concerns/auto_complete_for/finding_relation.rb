@@ -22,7 +22,7 @@ module AutoCompleteFor::FindingRelation
     @tokens.each_with_index do |t, i|
       conditions << [
         "LOWER(#{Finding.table_name}.review_code) LIKE :finding_relation_data_#{i}",
-        "LOWER(#{Finding.table_name}.description) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Finding.table_name}.title) LIKE :finding_relation_data_#{i}",
         "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :finding_relation_data_#{i}",
         "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')

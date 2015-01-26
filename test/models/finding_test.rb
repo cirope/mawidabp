@@ -850,17 +850,17 @@ class FindingTest < ActiveSupport::TestCase
     header = Finding.to_csv(detailed, 'incomplete')
     row = @finding.to_csv(detailed, 'incomplete')
 
-    assert_equal header[10], 'Fecha de implementación'
-    assert_equal header.count, 13
-    assert_equal row.count, 13
+    assert_equal header[11], 'Fecha de implementación'
+    assert_equal header.count, 14
+    assert_equal row.count, 14
 
     detailed = false
     header = Finding.to_csv(detailed, 'complete')
     row = @finding.to_csv(detailed, 'complete')
 
-    assert_equal header[10], 'Fecha de solución'
-    assert_equal header.count, 11
-    assert_equal row.count, 11
+    assert_equal header[11], 'Fecha de solución'
+    assert_equal header.count, 12
+    assert_equal row.count, 12
   end
 
   test 'notify users if they are selected for notification' do

@@ -26,7 +26,7 @@
         <td><%= finding_updated_at_text nonconformity %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr nonconformity.review %></td>
         <td class="hidden-xs"><%= super_truncate nonconformity.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(nonconformity) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(nonconformity) %></td>
         <td class="hidden-xs"><%= super_truncate nonconformity.title, 20 %></td>
         <td class="hidden-xs"><%= nonconformity.state_text %></td>
         <td class="hidden-xs"><%= l nonconformity.follow_up_date, :format => :short if nonconformity.follow_up_date %></td>

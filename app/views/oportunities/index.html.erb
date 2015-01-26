@@ -24,7 +24,7 @@
         <td><%= finding_updated_at_text oportunity %></td>
         <td class="nowrap"><%= show_review_with_close_date_as_abbr oportunity.review %></td>
         <td class="hidden-xs"><%= super_truncate oportunity.review.try(:plan_item).try(:project), 20 %></td>
-        <td class="nowrap"><%= show_finding_review_code_with_control_objective_as_abbr(oportunity) %></td>
+        <td class="nowrap"><%= show_finding_review_code_with_decription_as_abbr(oportunity) %></td>
         <td class="hidden-xs"><%= super_truncate oportunity.title, 20 %></td>
         <td class="hidden-xs"><%= oportunity.state_text %></td>
         <td class="hidden-xs"><%= t oportunity.work_papers.blank? ? 'label.no' : 'label.yes' %></td>
