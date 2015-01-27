@@ -28,4 +28,5 @@
 //= require ui
 //= require file_input
 //= require best_practices
+//= require touch
 //= require users
