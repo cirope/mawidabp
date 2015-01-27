@@ -4,19 +4,19 @@ module Users::Search
   included do
     COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
       user: {
-        column: "LOWER(#{table_name}.user)", operator: 'LIKE',
+        column: "LOWER(#{quoted_table_name}.#{qcn('user')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       name: {
-        column: "LOWER(#{table_name}.name)", operator: 'LIKE',
+        column: "LOWER(#{quoted_table_name}.#{qcn('name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       last_name: {
-        column: "LOWER(#{table_name}.last_name)", operator: 'LIKE',
+        column: "LOWER(#{quoted_table_name}.#{qcn('last_name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       function: {
-        column: "LOWER(#{table_name}.function)", operator: 'LIKE',
+        column: "LOWER(#{quoted_table_name}.#{qcn('function')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       }
     )

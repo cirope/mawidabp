@@ -39,7 +39,7 @@ class Nonconformity < Finding
     Finding.columns_for_sort.dup.merge(
       :follow_up_date => {
         :name => Nonconformity.human_attribute_name(:follow_up_date),
-        :field => "#{Nonconformity.table_name}.follow_up_date ASC"
+        :field => "#{Nonconformity.quoted_table_name}.#{Nonconformity.qcn('follow_up_date')} ASC"
       }
     )
   end

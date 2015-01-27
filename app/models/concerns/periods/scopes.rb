@@ -9,8 +9,8 @@ module Periods::Scopes
     def list_by_date from_date, to_date
       list.where(
         [
-          "#{table_name}.start BETWEEN :from_date AND :to_date",
-          "#{table_name}.end BETWEEN :from_date AND :to_date"
+          "#{quoted_table_name}.#{qcn('start')} BETWEEN :from_date AND :to_date",
+          "#{quoted_table_name}.#{qcn('end')} BETWEEN :from_date AND :to_date"
         ].join(' OR '), { from_date: from_date, to_date: to_date }
       ).reorder order_by_dates
     end
@@ -18,7 +18,7 @@ module Periods::Scopes
     def currents
       list.where(
         [
-          "#{table_name}.start <= :today", "#{table_name}.end >= :today"
+          "#{quoted_table_name}.#{qcn('start')} <= :today", "#{quoted_table_name}.#{qcn('end')} >= :today"
         ].join(' AND '), { today: Date.today }
       ).reorder order_by_dates
     end
@@ -31,7 +31,7 @@ module Periods::Scopes
     private
 
       def order_by_dates
-        ["#{table_name}.start ASC", "#{table_name}.end ASC"]
+        ["#{quoted_table_name}.#{qcn('start')} ASC", "#{quoted_table_name}.#{qcn('end')} ASC"]
       end
   end
 end

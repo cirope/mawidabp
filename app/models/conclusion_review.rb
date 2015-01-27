@@ -8,7 +8,7 @@ class ConclusionReview < ActiveRecord::Base
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
     :issue_date => {
-      :column => "#{table_name}.issue_date",
+      :column => "#{quoted_table_name}.#{qcn('issue_date')}",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
       :conversion_method => lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -16,20 +16,20 @@ class ConclusionReview < ActiveRecord::Base
       :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
-      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
     },
     :identification => {
-      :column => "LOWER(#{Review.table_name}.identification)",
+      :column => "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
       :regexp => /.*/
     },
     :business_unit => {
-      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   }.with_indifferent_access
@@ -38,14 +38,14 @@ class ConclusionReview < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :for_period, ->(period) {
     includes(:review =>:period).where(
-      "#{Period.table_name}.id" => period.id
+      "#{Period.quoted_table_name}.id" => period.id
     ).references(:periods)
   }
   scope :by_business_unit_type, ->(business_unit_type) {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     ).where(
-      "#{BusinessUnitType.table_name}.id" => business_unit_type
+      "#{BusinessUnitType.quoted_table_name}.id" => business_unit_type
     ).references(:bussiness_unit_types)
   }
   scope :by_business_unit_names, ->(*business_unit_names) {
@@ -53,7 +53,7 @@ class ConclusionReview < ActiveRecord::Base
     parameters = {}
 
     business_unit_names.each_with_index do |business_unit_name, i|
-      conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
+      conditions << "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')}) LIKE :bu_#{i}"
       parameters[:"bu_#{i}"] = "%#{business_unit_name.mb_chars.downcase}%"
     end
 
@@ -66,7 +66,7 @@ class ConclusionReview < ActiveRecord::Base
     parameters = {}
 
     control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
+      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
       parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
@@ -78,12 +78,12 @@ class ConclusionReview < ActiveRecord::Base
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
      ).where(
-       "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
+       "#{Weakness.quoted_table_name}.#{Weakness.qcn('risk')} = #{Weakness.quoted_table_name}.#{Weakness.qcn('highest_risk')}"
     ).references(:findings)
   }
   scope :with_business_unit_type, ->(but_id) {
     includes(:review => :business_unit).where(
-      "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
+      "#{BusinessUnit.quoted_table_name}.business_unit_type_id" => but_id
     ).references(:business_units)
   }
 
@@ -110,15 +110,15 @@ class ConclusionReview < ActiveRecord::Base
     HashWithIndifferentAccess.new({
       :issue_date => {
         :name => ConclusionReview.human_attribute_name(:issue_date),
-        :field => "#{ConclusionReview.table_name}.issue_date ASC"
+        :field => "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')} ASC"
       },
       :period => {
         :name => Period.model_name.human,
-        :field => "#{Period.table_name}.number ASC"
+        :field => "#{Period.quoted_table_name}.#{Period.qcn('number')} ASC"
       },
       :identification => {
         :name => Review.human_attribute_name(:identification),
-        :field => "#{Review.table_name}.identification ASC"
+        :field => "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
       }
     })
   end

@@ -2,7 +2,7 @@ module BestPractices::ProcessControls
   extend ActiveSupport::Concern
 
   included do
-    has_many :process_controls, -> { order("#{ProcessControl.table_name}.order ASC") },
+    has_many :process_controls, -> { order("#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('order')} ASC") },
       dependent: :destroy, after_add: :assign_best_practice
 
     accepts_nested_attributes_for :process_controls, allow_destroy: true

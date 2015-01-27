@@ -28,7 +28,7 @@ module Findings::SortColumns
       def risk_options order: 'ASC'
         {
           name: "#{human_attribute_name :risk} - #{human_attribute_name :priority}#{order_label order}",
-          field: ["#{table_name}.risk #{order}", "#{table_name}.priority #{order}", "#{table_name}.state ASC"]
+          field: ["#{quoted_table_name}.#{qcn('risk')} #{order}", "#{quoted_table_name}.#{qcn('priority')} #{order}", "#{quoted_table_name}.#{qcn('state')} ASC"]
         }
       end
 
@@ -39,7 +39,7 @@ module Findings::SortColumns
       def review_options
         {
           name: Review.model_name.human,
-          field: "#{Review.table_name}.identification ASC"
+          field: "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
         }
       end
 
@@ -62,7 +62,7 @@ module Findings::SortColumns
       def options_for_attribute attribute, order: 'ASC'
         {
           name:  "#{human_attribute_name attribute}#{order_label order}",
-          field: "#{table_name}.#{attribute} #{order || 'ASC'}"
+          field: "#{quoted_table_name}.#{qcn(attribute)} #{order || 'ASC'}"
         }
       end
 

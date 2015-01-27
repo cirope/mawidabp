@@ -71,7 +71,7 @@ module Findings::Unanswered
               "confirmation_date < :stale_confirmed_date_#{i}",
               "first_notification_date < :stale_first_notification_date_#{i}"
             ].join(' OR '),
-            "#{Period.table_name}.organization_id = :organization_id_#{i}",
+            "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].map { |c| "(#{c})" }.join(' AND ')
         end
       end
@@ -106,7 +106,7 @@ module Findings::Unanswered
         stale_parameters.each_with_index.map do |stale_parameter, i|
           [
             "first_notification_date < :stale_unconfirmed_date_#{i}",
-            "#{Period.table_name}.organization_id = :organization_id_#{i}",
+            "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].join(' AND ')
         end
       end

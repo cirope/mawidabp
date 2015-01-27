@@ -11,7 +11,7 @@ module Organizations::Scopes
     end
 
     def by_subdomain subdomain
-      where("LOWER(prefix) = ?", subdomain.to_s.downcase).take
+      where("LOWER(#{qcn('prefix')}) = ?", subdomain.to_s.downcase).take
     end
   end
 end

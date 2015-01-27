@@ -4,7 +4,7 @@ module Users::Tree
   included do
     acts_as_tree foreign_key: 'manager_id',
       readonly: true,
-      order: "#{table_name}.last_name ASC, #{table_name}.name ASC",
+      order: "#{quoted_table_name}.#{qcn('last_name')} ASC, #{quoted_table_name}.#{qcn('name')} ASC",
       dependent: :nullify
   end
 end

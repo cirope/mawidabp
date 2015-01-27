@@ -40,7 +40,7 @@ module Findings::ScaffoldNotifications
         conditions = stale_parameters.each_with_index.map do |stale_parameter, i|
           [
             "first_notification_date < :stale_unanswered_date_#{i}",
-            "#{Period.table_name}.organization_id = :organization_id_#{i}",
+            "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id_#{i}",
           ].join(' AND ')
         end
 

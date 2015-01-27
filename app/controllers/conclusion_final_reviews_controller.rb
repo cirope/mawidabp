@@ -16,7 +16,7 @@ class ConclusionFinalReviewsController < ApplicationController
     build_search_conditions ConclusionFinalReview
 
     order = @order_by || "issue_date DESC"
-    order << ", #{ConclusionFinalReview.table_name}.created_at DESC"
+    order << ", #{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]

@@ -26,8 +26,8 @@ class ConclusionDraftReviewsController < ApplicationController
       :reviews, :business_units
     ).order(
       [
-        "#{ConclusionDraftReview.table_name}.issue_date DESC",
-        "#{ConclusionFinalReview.table_name}.created_at DESC"
+        "#{ConclusionDraftReview.quoted_table_name}.#{ConclusionDraftReview.qcn('issue_date')} DESC",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
       ].join(', ')
     ).page(params[:page])
 
@@ -248,7 +248,7 @@ class ConclusionDraftReviewsController < ApplicationController
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
         id: params[:id],
-        "#{Period.table_name}.organization_id" => current_organization.id
+        "#{Period.quoted_table_name}.organization_id" => current_organization.id
       ).references(:periods).first
 
       response = {

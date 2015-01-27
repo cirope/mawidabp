@@ -14,7 +14,7 @@ module Findings::ReportScopes
   module ClassMethods
     def for_period period
       includes(control_objective_item: { review: :period }).where(
-        "#{Period.table_name}.id" => period.id
+        "#{Period.quoted_table_name}.id" => period.id
       ).references(:periods)
     end
 
@@ -22,9 +22,9 @@ module Findings::ReportScopes
       list.includes(
         review: [:period, :conclusion_final_review, {plan_item: :business_unit}]
       ).where(
-        "#{ConclusionReview.table_name}.issue_date" => from_date..to_date
+        "#{ConclusionReview.quoted_table_name}.issue_date" => from_date..to_date
       ).references(:conslusion_reviews, :periods).order(
-        order && ["#{Period.table_name}.start ASC", "#{Period.table_name}.end ASC"]
+        order && ["#{Period.quoted_table_name}.#{Period.qcn('start')} ASC", "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"]
       )
     end
 
@@ -33,15 +33,15 @@ module Findings::ReportScopes
         control_objective_item: { review: [:period, :conclusion_final_review] }
       ).where(
         [
-          "#{Review.table_name}.created_at BETWEEN :begin AND :end",
-          "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+          "#{Review.quoted_table_name}.#{Review.qcn('created_at')} BETWEEN :begin AND :end",
+          "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('review_id')} IS NULL"
         ].join(' AND '),
         { begin: from_date, end: to_date }
       ).references(:reviews, :periods, :conclusion_reviews)
     end
 
     def with_solution_date_between from_date, to_date
-      where "#{table_name}.solution_date" => from_date..to_date
+      where "#{quoted_table_name}.solution_date" => from_date..to_date
     end
 
     def with_business_unit_external external
@@ -52,7 +52,7 @@ module Findings::ReportScopes
           }
         }
       ).where(
-        "#{BusinessUnitType.table_name}.external" => external
+        "#{BusinessUnitType.quoted_table_name}.external" => external
       ).references(:business_unit_types)
     end
   end
