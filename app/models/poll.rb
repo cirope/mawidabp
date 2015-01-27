@@ -14,7 +14,7 @@ class Poll < ActiveRecord::Base
   belongs_to :organization
   belongs_to :pollable, polymorphic: true
   has_many :answers, -> {
-    includes(:question).order("#{Question.table_name}.sort_order ASC").
+    includes(:question).order("#{Question.quoted_table_name}.#{Question.qcn('sort_order')} ASC").
     references(:questions)
   }, dependent: :destroy
   accepts_nested_attributes_for :answers

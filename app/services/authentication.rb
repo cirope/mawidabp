@@ -41,14 +41,14 @@ class Authentication
     end
 
     def set_valid_user
-      conditions = ["LOWER(#{User.table_name}.user) = :user"]
+      conditions = ["LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) = :user"]
       parameters = { user: @params[:user].to_s.downcase.strip }
 
       if @admin_mode
-        conditions << "#{User.table_name}.group_admin = :true"
+        conditions << "#{User.quoted_table_name}.#{User.qcn('group_admin')} = :true"
         parameters[:true] = true
       else
-        conditions << "#{Organization.table_name}.id = :organization_id"
+        conditions << "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id"
         parameters[:organization_id] = @current_organization.id
       end
 

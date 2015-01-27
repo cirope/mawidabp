@@ -11,17 +11,17 @@ class ControlObjectiveItem < ActiveRecord::Base
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     review: {
-      column: "LOWER(#{Review.table_name}.identification)",
+      column: "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
       operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
       regexp: /.*/
     },
     process_control: {
-      column: "LOWER(#{ProcessControl.table_name}.name)",
+      column: "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')})",
       operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
       regexp: /.*/
     },
     control_objective_text: {
-      column: "LOWER(#{table_name}.control_objective_text)",
+      column: "LOWER(#{quoted_table_name}.#{qcn('control_objective_text')})",
       operator: 'LIKE', mask: "%%%s%%", conversion_method: :to_s,
       regexp: /.*/
     }
@@ -34,7 +34,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     parameters = {}
 
     control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
+      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
       parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
@@ -117,7 +117,7 @@ class ControlObjectiveItem < ActiveRecord::Base
   has_many :work_papers, -> { order('code ASC') }, as: :owner, dependent: :destroy,
     before_add: [:check_for_final_review, :prepare_work_paper],
     before_remove: :check_for_final_review
-  has_one :control, -> { order("#{Control.table_name}.order ASC") }, as: :controllable,
+  has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") }, as: :controllable,
     dependent: :destroy
 
   accepts_nested_attributes_for :control, allow_destroy: true

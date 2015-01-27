@@ -13,7 +13,7 @@ class ProcessControl < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    order(['best_practice_id ASC', "#{table_name}.order ASC"])
+    order(['best_practice_id ASC', "#{quoted_table_name}.#{qcn('order')} ASC"])
   }
   scope :list_for_log, ->(id) { where(id: id)  }
 
@@ -42,7 +42,7 @@ class ProcessControl < ActiveRecord::Base
 
   # Relaciones
   belongs_to :best_practice
-  has_many :control_objectives, -> { order("#{ControlObjective.table_name}.order ASC") },
+  has_many :control_objectives, -> { order("#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC") },
     dependent: :destroy
 
   accepts_nested_attributes_for :control_objectives, allow_destroy: true

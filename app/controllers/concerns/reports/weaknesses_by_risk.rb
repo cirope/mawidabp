@@ -40,7 +40,7 @@ module Reports::WeaknessesByRisk
         unless audit_type.last.empty?
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
-            conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
+            conditions = {"#{BusinessUnitType.quoted_table_name}.id" => audit_types.last}
             being_implemented_counts = {:current => 0, :stale => 0,
               :current_rescheduled => 0, :stale_rescheduled => 0}
             highest_being_implemented_counts = {:current => 0, :stale => 0,

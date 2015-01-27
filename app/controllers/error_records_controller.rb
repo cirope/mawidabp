@@ -39,7 +39,7 @@ class ErrorRecordsController < ApplicationController
 
       unless params[:search]
         default_conditions = [
-          "#{ErrorRecord.table_name}.created_at BETWEEN :from_date AND :to_date",
+          "#{ErrorRecord.quoted_table_name}.#{ErrorRecord.qcn('created_at')} BETWEEN :from_date AND :to_date",
           from_date: @from_date.to_time.at_beginning_of_day,
           to_date: @to_date.to_time.at_end_of_day
         ]

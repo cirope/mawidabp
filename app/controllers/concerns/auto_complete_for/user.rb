@@ -5,16 +5,16 @@ module AutoCompleteFor::User
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      "#{Organization.table_name}.id = :organization_id",
-      "#{User.table_name}.hidden = false"
+      "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id",
+      "#{User.quoted_table_name}.#{User.qcn('hidden')} = false"
     ]
     parameters = { organization_id: current_organization.id }
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{User.table_name}.name) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.last_name) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.function) LIKE :user_data_#{i}",
-        "LOWER(#{User.table_name}.user) LIKE :user_data_#{i}"
+        "LOWER(#{User.quoted_table_name}.#{User.qcn('name')}) LIKE :user_data_#{i}",
+        "LOWER(#{User.quoted_table_name}.#{User.qcn('last_name')}) LIKE :user_data_#{i}",
+        "LOWER(#{User.quoted_table_name}.#{User.qcn('function')}) LIKE :user_data_#{i}",
+        "LOWER(#{User.quoted_table_name}.#{User.qcn('user')}) LIKE :user_data_#{i}"
       ].join(' OR ')
 
       parameters[:"user_data_#{i}"] = "%#{t.mb_chars.downcase}%"
@@ -23,7 +23,7 @@ module AutoCompleteFor::User
     @users = User.includes(:organizations).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
-      ["#{User.table_name}.last_name ASC", "#{User.table_name}.name ASC"]
+      ["#{User.quoted_table_name}.#{User.qcn('last_name')} ASC", "#{User.table_name}.name ASC"]
     ).limit(10).references(:organizations)
 
     respond_to do |format|

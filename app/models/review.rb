@@ -13,19 +13,19 @@ class Review < ActiveRecord::Base
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :period => {
-      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
     },
     :identification => {
-      :column => "LOWER(#{table_name}.identification)", :operator => 'LIKE',
+      :column => "LOWER(#{quoted_table_name}.#{qcn('identification')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :business_unit => {
-      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   })
@@ -52,17 +52,17 @@ class Review < ActiveRecord::Base
   }
   scope :list_with_final_review, -> {
     list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_without_final_review, -> {
     list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_without_draft_review, -> {
     list.includes(:conclusion_draft_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
@@ -72,39 +72,39 @@ class Review < ActiveRecord::Base
       }
     ).where(
       [
-        "#{table_name}.created_at BETWEEN :from_date AND :to_date",
-        "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+        "#{quoted_table_name}.#{qcn('created_at')} BETWEEN :from_date AND :to_date",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('review_id')} IS NULL"
       ].join(' AND '),
       { :from_date => from_date, :to_date => to_date.to_time.end_of_day }
     ).order(
       [
-        "#{Period.table_name}.start ASC",
-        "#{Period.table_name}.end ASC",
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
-        "#{table_name}.created_at ASC"
+        "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
+        "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
+        "#{quoted_table_name}.#{qcn('created_at')} ASC"
       ]
     ).references(:conclusion_reviews, :business_unit_types)
   }
   scope :list_all_without_workflow, ->(period_id) {
     list.includes(:workflow).list.where(
       [
-        "#{table_name}.period_id = :period_id",
-        "#{Workflow.table_name}.review_id IS NULL"
+        "#{quoted_table_name}.#{qcn('period_id')} = :period_id",
+        "#{Workflow.quoted_table_name}.#{Workflow.qcn('review_id')} IS NULL"
       ].join(' AND '), { :period_id => period_id }
     ).references(:workflows)
   }
   scope :internal_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.external" => false).references(
       :business_unit_types
     )
   }
   scope :external_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.external" => true).references(
       :business_unit_types
     )
   }
@@ -123,7 +123,7 @@ class Review < ActiveRecord::Base
     reviews = Review.list.where(
       [
         'identification = :identification',
-        (record.id ? "#{table_name}.id != :id" : "#{table_name}.id IS NOT NULL")
+        (record.id ? "#{quoted_table_name}.#{qcn('id')} != :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
       ].join(' AND '), { :identification => value, :id => record.id }
     )
     record.errors.add attr, :taken if reviews.count > 0

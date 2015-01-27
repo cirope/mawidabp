@@ -2,7 +2,7 @@ class ConclusionFinalReview < ConclusionReview
   # Constantes
   COLUMNS_FOR_SEARCH = {
     close_date: {
-      column: "#{table_name}.close_date",
+      column: "#{quoted_table_name}.#{qcn('close_date')}",
       operator: SEARCH_ALLOWED_OPERATORS.values, mask: "%s",
       conversion_method: lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -22,8 +22,8 @@ class ConclusionFinalReview < ConclusionReview
       from_date: from_date, to_date: to_date
     ).references(:business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
         'issue_date ASC'
       ]
     )
@@ -35,12 +35,12 @@ class ConclusionFinalReview < ConclusionReview
         { control_objective_items: :weaknesses }
       ]
     ).where(
-      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
       from_date: from_date, to_date: to_date
     ).references(:findings, :business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
         'issue_date ASC'
       ]
     )
@@ -52,12 +52,12 @@ class ConclusionFinalReview < ConclusionReview
         { control_objective_items: :final_weaknesses }
       ]
     ).where(
-      "#{Weakness.table_name}.solution_date BETWEEN :from_date AND :to_date",
+      "#{Weakness.quoted_table_name}.#{Weakness.qcn('solution_date')} BETWEEN :from_date AND :to_date",
       from_date: from_date, to_date: to_date
     ).references(:findings, :business_unit_types).order(
       [
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
         'issue_date ASC'
       ]
     )
@@ -65,14 +65,14 @@ class ConclusionFinalReview < ConclusionReview
   scope :internal_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => false).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.external" => false).references(
       :business_unit_types
     )
   }
   scope :external_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.table_name}.external" => true).references(
+    ).where("#{BusinessUnitType.quoted_table_name}.external" => true).references(
       :business_unit_types
     )
   }
@@ -117,7 +117,7 @@ class ConclusionFinalReview < ConclusionReview
     ConclusionReview.columns_for_sort.dup.merge(
       close_date: {
         name: ConclusionReview.human_attribute_name(:close_date),
-        field: "#{ConclusionReview.table_name}.close_date ASC"
+        field: "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('close_date')} ASC"
       }
     )
   end

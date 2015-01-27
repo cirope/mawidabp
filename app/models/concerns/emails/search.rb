@@ -4,11 +4,11 @@ module Emails::Search
   included do
     COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
       to: {
-        column: "LOWER(#{EMail.table_name}.to)", operator: 'LIKE',
+        column: "LOWER(#{EMail.quoted_table_name}.#{EMail.qcn('to')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       subject: {
-        column: "LOWER(#{EMail.table_name}.subject)", operator: 'LIKE',
+        column: "LOWER(#{EMail.quoted_table_name}.#{EMail.qcn('subject')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       }
     )

@@ -5,15 +5,16 @@ module Users::Finders
 
     def find_with_organization id, field = :user
       id = field == :id ? id.to_i : id.try(:downcase).try(:strip)
-      id_field = field == :id ? "#{User.table_name}.#{field}" : "LOWER(#{User.table_name}.#{field})"
+      quoted_field = "#{User.quoted_table_name}.#{User.qcn(field)}"
+      id_field = field == :id ? quoted_field : "LOWER(#{quoted_field})"
 
       User.includes(:organizations).where(
         [
           "#{id_field} = :id",
-          "#{User.table_name}.hidden = :false",
+          "#{User.quoted_table_name}.#{User.qcn('hidden')} = :false",
           [
-            "#{Organization.table_name}.id = :organization_id",
-            "#{Organization.table_name}.id IS NULL"
+            "#{Organization.quoted_table_name}.#{Organization.qcn('id')} = :organization_id",
+            "#{Organization.quoted_table_name}.#{Organization.qcn('id')} IS NULL"
           ].join(' OR ')
         ].map { |c| "(#{c})" }.join(' AND '),
         { id: id, organization_id: current_organization.try(:id), false: false }

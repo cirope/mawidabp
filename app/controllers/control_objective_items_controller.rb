@@ -15,12 +15,12 @@ class ControlObjectiveItemsController < ApplicationController
     build_search_conditions ControlObjectiveItem
 
     @control_objectives = ControlObjectiveItem.list.includes(
-        :weaknesses,
-        :work_papers,
-        {review: :period},
-        {control_objective: :process_control}
-    ).where(@conditions).order(
-      "#{Review.table_name}.identification DESC"
+      :weaknesses,
+      :work_papers,
+      { review: :period },
+      { control_objective: :process_control }
+    ).where(@conditions).references(:review).order(
+      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
     ).page(params[:page])
 
     respond_to do |format|

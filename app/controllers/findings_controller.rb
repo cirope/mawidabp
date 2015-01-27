@@ -58,9 +58,9 @@ class FindingsController < ApplicationController
       }, :users
     ).where(@conditions).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
    ).references(:users, :control_objective_items, :reviews, :finding_user_assignments)
 
@@ -193,9 +193,9 @@ class FindingsController < ApplicationController
       }, :users
     ).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).where(@conditions).references(:reviews)
 
@@ -268,9 +268,9 @@ class FindingsController < ApplicationController
       }, :users
     ).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).where(@conditions).references(:reviews)
 
