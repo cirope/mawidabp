@@ -1,16 +1,15 @@
 common: &common
-  adapter: postgresql
-  encoding: unicode
+  adapter: oracle_enhanced
   pool: 5
-  username: <%= ENV['TRAVIS'] ? 'postgres' : 'mawidabp' %>
-  password: <%= ENV['TRAVIS'] ? '' : 'mawidabp' %>
+  username: <%= ENV['TRAVIS'] ? 'postgres' : 'system' %>
+  password: <%= ENV['TRAVIS'] ? '' : 'oracle' %>
 
 development:
-  database: mawidabp_development
+  database: xe
   <<: *common
 
 test:
-  database: mawidabp_test
+  database: xe
   <<: *common
 
 production:

@@ -8,8 +8,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.integer :lock_version, :default => 0
       t.timestamps
     end
-    
-    add_index :questions, [:question, :questionnaire_id]
-    
+
+    add_index :questions, :questionnaire_id
   end
 end

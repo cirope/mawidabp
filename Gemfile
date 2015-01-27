@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.1.9'
 
-gem 'pg'
-gem 'foreigner'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'mini_magick'
@@ -46,4 +44,26 @@ end
 
 group :test do
   gem 'timecop'
+end
+
+# Include database gems for the adapters found in the database configuration file
+require 'erb'
+require 'yaml'
+
+database_file = File.join(File.dirname(__FILE__), 'config/database.yml')
+
+if File.exist? database_file
+  database_config = YAML::load ERB.new(IO.read(database_file)).result
+  adapters        = database_config.values.map { |c| c['adapter'] }.compact.uniq
+
+  adapters.each do |adapter|
+    case adapter
+    when /postgresql/
+      gem 'pg'
+      gem 'foreigner'
+    when /oracle/
+      gem 'ruby-oci8'
+      gem 'activerecord-oracle_enhanced-adapter'
+    end
+  end
 end

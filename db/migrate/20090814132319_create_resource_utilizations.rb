@@ -11,9 +11,9 @@ class CreateResourceUtilizations < ActiveRecord::Migration
 
     add_index :resource_utilizations, [:resource_consumer_id,
       :resource_consumer_type],
-      :name => 'resource_utilizations_consumer_consumer_type_idx'
+      :name => 'ru_consumer_consumer_type_idx'
     add_index :resource_utilizations, [:resource_id, :resource_type],
-      :name => 'resource_utilizations_resource_resource_type_idx'
+      :name => 'ru_resource_resource_type_idx'
   end
 
   def self.down

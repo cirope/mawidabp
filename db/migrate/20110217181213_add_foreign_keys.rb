@@ -60,7 +60,7 @@ class AddForeignKeys < ActiveRecord::Migration
     add_foreign_key :procedure_control_items, :process_controls,
       :options => FOREIGN_KEY_OPTIONS
     add_foreign_key :procedure_control_items, :procedure_controls,
-      :options => FOREIGN_KEY_OPTIONS
+      :options => FOREIGN_KEY_OPTIONS, :name => 'pci_pro_controls'
 
     # Tabla procedure_controls
     add_foreign_key :procedure_controls, :periods, :options => FOREIGN_KEY_OPTIONS

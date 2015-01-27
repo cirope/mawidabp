@@ -6,8 +6,7 @@ class CreateAnswerOptions < ActiveRecord::Migration
       t.integer :lock_version, :default => 0
       t.timestamps
     end
-    
-    add_index :answer_options, [:option, :question_id]
-    
+
+    add_index :answer_options, :question_id
   end
 end

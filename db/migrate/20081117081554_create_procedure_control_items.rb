@@ -12,7 +12,7 @@ class CreateProcedureControlItems < ActiveRecord::Migration
     end
 
     add_index :procedure_control_items, :process_control_id
-    add_index :procedure_control_items, :procedure_control_id
+    add_index :procedure_control_items, :procedure_control_id, :name => 'pci_procedure_control_id'
   end
 
   def self.down
