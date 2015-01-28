@@ -214,13 +214,10 @@ class WorkPaper < ActiveRecord::Base
       FileUtils.rm pdf_filename if File.exists?(pdf_filename)
       FileUtils.rm original_filename if File.exists?(original_filename)
 
+      self.file_model.file_file_size = File.size(zip_filename)
 
-      self.file_model.file_content_type = 'application/zip'
-      self.file_model.file_file_size  = File.size(zip_filename)
-
-      if self.file_model.save!
-        self.file_model.update_column :file_file_name, File.basename(zip_filename)
-      end
+      self.file_model.save!
+      self.file_model.update_column :file_file_name, File.basename(zip_filename)
     end
 
     FileUtils.chmod 0640, zip_filename if File.exist?(zip_filename)
@@ -246,7 +243,6 @@ class WorkPaper < ActiveRecord::Base
 
           if File.basename(filename) != self.pdf_cover_name
             self.file_model.update_column :file_file_name, File.basename(filename)
-            self.file_model.file_content_type = Mime::Type.lookup_by_extension ext
             self.file_model.file_file_size = File.size(filename)
             self.file_model.save!
           end
