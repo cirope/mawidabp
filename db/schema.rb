@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "lock_version",    precision: 38, scale: 0, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "obsolete",        precision: 1,  scale: 0, default: false
+    t.boolean  "obsolete",                                 default: false
   end
 
   add_index "best_practices", ["created_at"], name: "i_best_practices_created_at"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
 
   create_table "business_unit_types", force: true do |t|
     t.string   "name"
-    t.boolean  "external",            precision: 1,  scale: 0, default: false, null: false
+    t.boolean  "external",                                     default: false, null: false
     t.string   "business_unit_label"
     t.string   "project_label"
     t.integer  "organization_id",     precision: 38, scale: 0
@@ -94,11 +94,11 @@ ActiveRecord::Schema.define(version: 20150123035232) do
   create_table "conclusion_reviews", force: true do |t|
     t.string   "type"
     t.integer  "review_id",          precision: 38, scale: 0
-    t.datetime "issue_date"
-    t.datetime "close_date"
+    t.date     "issue_date"
+    t.date     "close_date"
     t.text     "applied_procedures"
     t.text     "conclusion"
-    t.boolean  "approved",           precision: 1,  scale: 0
+    t.boolean  "approved"
     t.integer  "lock_version",       precision: 38, scale: 0, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -118,15 +118,15 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "design_score",           precision: 38, scale: 0
     t.integer  "compliance_score",       precision: 38, scale: 0
     t.integer  "sustantive_score",       precision: 38, scale: 0
-    t.datetime "audit_date"
+    t.date     "audit_date"
     t.text     "auditor_comment"
-    t.boolean  "finished",               precision: 1,  scale: 0
+    t.boolean  "finished"
     t.integer  "control_objective_id",   precision: 38, scale: 0
     t.integer  "review_id",              precision: 38, scale: 0
     t.integer  "lock_version",           precision: 38, scale: 0, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "exclude_from_score",     precision: 1,  scale: 0, default: false, null: false
+    t.boolean  "exclude_from_score",                              default: false, null: false
     t.integer  "organization_id",        precision: 38, scale: 0
   end
 
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "process_control_id", precision: 38, scale: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "obsolete",           precision: 1,  scale: 0, default: false
+    t.boolean  "obsolete",                                    default: false
   end
 
   add_index "control_objectives", ["obsolete"], name: "i_control_objectives_obsolete"
@@ -275,7 +275,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
   create_table "finding_answers", force: true do |t|
     t.text     "answer"
     t.text     "auditor_comments"
-    t.datetime "commitment_date"
+    t.date     "commitment_date"
     t.integer  "finding_id",       precision: 38, scale: 0
     t.integer  "user_id",          precision: 38, scale: 0
     t.integer  "file_model_id",    precision: 38, scale: 0
@@ -308,13 +308,13 @@ ActiveRecord::Schema.define(version: 20150123035232) do
   add_index "finding_review_assignments", ["finding_id", "review_id"], name: "i_fin_rev_ass_fin_id_rev_id"
 
   create_table "finding_user_assignments", force: true do |t|
-    t.boolean  "process_owner",       precision: 1,  scale: 0, default: false
+    t.boolean  "process_owner",                                default: false
     t.integer  "finding_id",          precision: 38, scale: 0
     t.string   "finding_type"
     t.integer  "user_id",             precision: 38, scale: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "responsible_auditor", precision: 1,  scale: 0
+    t.boolean  "responsible_auditor"
   end
 
   add_index "finding_user_assignments", ["finding_id", "finding_type", "user_id"], name: "fua_on_id_type_and_user_id"
@@ -326,11 +326,11 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.text     "description"
     t.text     "answer"
     t.text     "audit_comments"
-    t.datetime "solution_date"
-    t.datetime "first_notification_date"
-    t.datetime "confirmation_date"
-    t.datetime "origination_date"
-    t.boolean  "final",                     precision: 1,  scale: 0
+    t.date     "solution_date"
+    t.date     "first_notification_date"
+    t.date     "confirmation_date"
+    t.date     "origination_date"
+    t.boolean  "final"
     t.integer  "parent_id",                 precision: 38, scale: 0
     t.integer  "state",                     precision: 38, scale: 0
     t.integer  "notification_level",        precision: 38, scale: 0, default: 0
@@ -341,12 +341,12 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "risk",                      precision: 38, scale: 0
     t.integer  "highest_risk",              precision: 38, scale: 0
     t.integer  "priority",                  precision: 38, scale: 0
-    t.datetime "follow_up_date"
+    t.date     "follow_up_date"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "repeated_of_id",            precision: 38, scale: 0
-    t.datetime "correction_date"
-    t.datetime "cause_analysis_date"
+    t.date     "correction_date"
+    t.date     "cause_analysis_date"
     t.integer  "organization_id",           precision: 38, scale: 0
     t.text     "correction"
     t.text     "cause_analysis"
@@ -418,7 +418,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "status",              precision: 38, scale: 0
     t.string   "confirmation_hash"
     t.text     "notes"
-    t.datetime "confirmation_date"
+    t.date     "confirmation_date"
     t.integer  "user_id",             precision: 38, scale: 0
     t.integer  "user_who_confirm_id", precision: 38, scale: 0
     t.integer  "lock_version",        precision: 38, scale: 0, default: 0
@@ -462,8 +462,8 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "lock_version",              precision: 38, scale: 0, default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "public",                    precision: 1,  scale: 0, default: false
-    t.boolean  "system_quality_management", precision: 1,  scale: 0
+    t.boolean  "public",                                             default: false
+    t.boolean  "system_quality_management"
     t.text     "kind",                                               default: "private"
   end
 
@@ -516,7 +516,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
 
   create_table "polls", force: true do |t|
     t.text     "comments"
-    t.boolean  "answered",         precision: 1,  scale: 0, default: false
+    t.boolean  "answered",                                  default: false
     t.integer  "lock_version",     precision: 38, scale: 0, default: 0
     t.integer  "user_id",          precision: 38, scale: 0
     t.integer  "questionnaire_id", precision: 38, scale: 0
@@ -535,10 +535,10 @@ ActiveRecord::Schema.define(version: 20150123035232) do
 
   create_table "privileges", force: true do |t|
     t.string   "module",     limit: 100
-    t.boolean  "read",                   precision: 1,  scale: 0, default: false
-    t.boolean  "modify",                 precision: 1,  scale: 0, default: false
-    t.boolean  "erase",                  precision: 1,  scale: 0, default: false
-    t.boolean  "approval",               precision: 1,  scale: 0, default: false
+    t.boolean  "read",                                            default: false
+    t.boolean  "modify",                                          default: false
+    t.boolean  "erase",                                           default: false
+    t.boolean  "approval",                                        default: false
     t.integer  "role_id",                precision: 38, scale: 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -552,7 +552,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "best_practice_id", precision: 38, scale: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "obsolete",         precision: 1,  scale: 0, default: false
+    t.boolean  "obsolete",                                  default: false
   end
 
   add_index "process_controls", ["best_practice_id"], name: "i_pro_con_bes_pra_id"
@@ -703,9 +703,9 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.string   "salt"
     t.string   "change_password_hash"
     t.datetime "password_changed"
-    t.boolean  "enable",                           precision: 1,  scale: 0, default: false
-    t.boolean  "logged_in",                        precision: 1,  scale: 0, default: false
-    t.boolean  "group_admin",                      precision: 1,  scale: 0, default: false
+    t.boolean  "enable",                                                    default: false
+    t.boolean  "logged_in",                                                 default: false
+    t.boolean  "group_admin",                                               default: false
     t.integer  "resource_id",                      precision: 38, scale: 0
     t.datetime "last_access"
     t.integer  "manager_id",                       precision: 38, scale: 0
@@ -715,7 +715,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "hash_changed"
-    t.boolean  "hidden",                           precision: 1,  scale: 0, default: false
+    t.boolean  "hidden",                                                    default: false
   end
 
   add_index "users", ["change_password_hash"], name: "i_users_change_password_hash", unique: true
@@ -733,7 +733,7 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.integer  "whodunnit",       precision: 38, scale: 0
     t.text     "object"
     t.datetime "created_at"
-    t.boolean  "important",       precision: 1,  scale: 0
+    t.boolean  "important"
     t.integer  "organization_id", precision: 38, scale: 0
   end
 

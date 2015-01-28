@@ -43,6 +43,8 @@ group :development do
 end
 
 group :test do
+  gem 'sqlite3'
+  gem 'foreigner'
   gem 'timecop'
 end
 
@@ -50,7 +52,7 @@ end
 require 'erb'
 require 'yaml'
 
-database_file = File.join(File.dirname(__FILE__), 'config/database.yml')
+database_file = File.join File.dirname(__FILE__), 'config/database.yml'
 
 if File.exist? database_file
   database_config = YAML::load ERB.new(IO.read(database_file)).result

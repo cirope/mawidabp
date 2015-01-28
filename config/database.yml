@@ -9,8 +9,8 @@ development:
   <<: *common
 
 test:
-  database: xe
-  <<: *common
+  adapter: sqlite3
+  database: db/test.sqlite3
 
 production:
   database: mawidabp_production
