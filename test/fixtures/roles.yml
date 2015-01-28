@@ -1,5 +1,5 @@
 <% Role::TYPES.each do |role_name, value| %>
-"<%= role_name %>_role":
+<%= role_name %>_role:
   name: <%= role_name.to_s.upcase %>
   role_type: <%= value %>
   organization: cirope
