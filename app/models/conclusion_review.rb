@@ -38,14 +38,14 @@ class ConclusionReview < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :for_period, ->(period) {
     includes(:review =>:period).where(
-      "#{Period.quoted_table_name}.id" => period.id
+      "#{Period.table_name}.id" => period.id
     ).references(:periods)
   }
   scope :by_business_unit_type, ->(business_unit_type) {
     includes(
       :review => {:plan_item => {:business_unit => :business_unit_type}}
     ).where(
-      "#{BusinessUnitType.quoted_table_name}.id" => business_unit_type
+      "#{BusinessUnitType.table_name}.id" => business_unit_type
     ).references(:bussiness_unit_types)
   }
   scope :by_business_unit_names, ->(*business_unit_names) {
@@ -83,7 +83,7 @@ class ConclusionReview < ActiveRecord::Base
   }
   scope :with_business_unit_type, ->(but_id) {
     includes(:review => :business_unit).where(
-      "#{BusinessUnit.quoted_table_name}.business_unit_type_id" => but_id
+      "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
     ).references(:business_units)
   }
 

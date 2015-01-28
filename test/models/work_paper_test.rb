@@ -173,11 +173,14 @@ class WorkPaperTest < ActiveSupport::TestCase
     )
 
     assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
     assert @work_paper.update(:number_of_pages => 1234)
     assert @work_paper.update(:name => 'Updated test name')
-    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
     assert_nothing_raised { @work_paper.unzip_if_necesary }
-    assert_equal '.zip', File.extname(@work_paper.file_model.file.path)
+    assert_equal '.zip', File.extname(@work_paper.reload.file_model.file.path)
+    assert_equal 'application/zip', @work_paper.file_model.file.content_type
 
     count = 0
 

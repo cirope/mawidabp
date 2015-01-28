@@ -97,14 +97,14 @@ class Review < ActiveRecord::Base
   scope :internal_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.quoted_table_name}.external" => false).references(
+    ).where("#{BusinessUnitType.table_name}.external" => false).references(
       :business_unit_types
     )
   }
   scope :external_audit, -> {
     includes(
       :plan_item => {:business_unit => :business_unit_type}
-    ).where("#{BusinessUnitType.quoted_table_name}.external" => true).references(
+    ).where("#{BusinessUnitType.table_name}.external" => true).references(
       :business_unit_types
     )
   }
@@ -123,7 +123,7 @@ class Review < ActiveRecord::Base
     reviews = Review.list.where(
       [
         'identification = :identification',
-        (record.id ? "#{quoted_table_name}.#{qcn('id')} != :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
+        (record.id ? "#{quoted_table_name}.#{qcn('id')} <> :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
       ].join(' AND '), { :identification => value, :id => record.id }
     )
     record.errors.add attr, :taken if reviews.count > 0

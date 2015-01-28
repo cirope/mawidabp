@@ -2,7 +2,7 @@ class ConclusionFinalReview < ConclusionReview
   # Constantes
   COLUMNS_FOR_SEARCH = {
     close_date: {
-      column: "#{quoted_table_name}.#{qcn('close_date')}",
+      column: "#{table_name}.#{qcn('close_date')}",
       operator: SEARCH_ALLOWED_OPERATORS.values, mask: "%s",
       conversion_method: lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -65,14 +65,14 @@ class ConclusionFinalReview < ConclusionReview
   scope :internal_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.quoted_table_name}.external" => false).references(
+    ).where("#{BusinessUnitType.table_name}.external" => false).references(
       :business_unit_types
     )
   }
   scope :external_audit, -> {
     includes(
       review: {plan_item: {business_unit: :business_unit_type}}
-    ).where("#{BusinessUnitType.quoted_table_name}.external" => true).references(
+    ).where("#{BusinessUnitType.table_name}.external" => true).references(
       :business_unit_types
     )
   }
