@@ -7,7 +7,7 @@
             <strong><%= Notification.human_attribute_name :findings %>:</strong>
           </p>
           <ul>
-            <% @notification.findings.map do |f| %>
+            <% @notification.findings.uniq.map do |f| %>
               <li><%= link_to_if f.users.include?(@auth_user),
                 "#{f.review_code} - #{f.title} (#{f.review.identification})",
                 finding_path(f.try(:pending?) ? 'incomplete' : 'complete', f) %></li>

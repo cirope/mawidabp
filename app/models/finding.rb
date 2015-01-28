@@ -55,7 +55,7 @@ class Finding < ActiveRecord::Base
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
   has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, -> { order('created_at').uniq },
+  has_many :notifications, -> { order('created_at') },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
   has_many :comments, -> { order('created_at ASC') }, :as => :commentable,

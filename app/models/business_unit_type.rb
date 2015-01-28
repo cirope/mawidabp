@@ -38,7 +38,6 @@ class BusinessUnitType < ActiveRecord::Base
   # Relaciones
   belongs_to :organization
   has_many :business_units, -> { order('name ASC') }, :dependent => :destroy
-  has_many :plan_items, -> { uniq }, :through => :business_units
 
   accepts_nested_attributes_for :business_units, :allow_destroy => true
 
