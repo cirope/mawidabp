@@ -6,5 +6,4 @@ before_install:
   - sudo apt-get install -qq imagemagick
 before_script:
   - 'cp config/application.example.yml config/application.yml'
-  - "psql -c 'create database mawidabp_test;' -U postgres"
   - 'bundle exec rake db:migrate'
