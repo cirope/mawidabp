@@ -14,7 +14,7 @@ module Findings::ReportScopes
   module ClassMethods
     def for_period period
       includes(control_objective_item: { review: :period }).where(
-        "#{Period.quoted_table_name}.id" => period.id
+        "#{Period.table_name}.id" => period.id
       ).references(:periods)
     end
 
@@ -22,7 +22,7 @@ module Findings::ReportScopes
       list.includes(
         review: [:period, :conclusion_final_review, {plan_item: :business_unit}]
       ).where(
-        "#{ConclusionReview.quoted_table_name}.issue_date" => from_date..to_date
+        "#{ConclusionReview.table_name}.issue_date" => from_date..to_date
       ).references(:conslusion_reviews, :periods).order(
         order && ["#{Period.quoted_table_name}.#{Period.qcn('start')} ASC", "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"]
       )
@@ -41,7 +41,7 @@ module Findings::ReportScopes
     end
 
     def with_solution_date_between from_date, to_date
-      where "#{quoted_table_name}.solution_date" => from_date..to_date
+      where "#{table_name}.solution_date" => from_date..to_date
     end
 
     def with_business_unit_external external
@@ -52,7 +52,7 @@ module Findings::ReportScopes
           }
         }
       ).where(
-        "#{BusinessUnitType.quoted_table_name}.external" => external
+        "#{BusinessUnitType.table_name}.external" => external
       ).references(:business_unit_types)
     end
   end

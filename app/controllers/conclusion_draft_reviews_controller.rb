@@ -248,7 +248,7 @@ class ConclusionDraftReviewsController < ApplicationController
     if params[:id] && params[:id].to_i > 0
       review = Review.includes(:period).where(
         id: params[:id],
-        "#{Period.quoted_table_name}.organization_id" => current_organization.id
+        "#{Period.table_name}.organization_id" => current_organization.id
       ).references(:periods).first
 
       response = {

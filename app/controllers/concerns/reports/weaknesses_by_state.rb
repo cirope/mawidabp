@@ -31,14 +31,13 @@ module Reports::WeaknessesByState
         unless audit_type.last.empty?
           audit_type.last.each do |audit_types|
             key = "#{audit_type_symbol}_#{audit_types.last}"
-            conditions = {"#{BusinessUnitType.quoted_table_name}.id" => audit_types.last}
+            conditions = {"#{BusinessUnitType.table_name}.id" => audit_types.last}
             @weaknesses_counts[period]['total_weaknesses'] ||= {}
             @weaknesses_counts[period]['total_oportunities'] ||= {}
             @weaknesses_counts[period]["#{key}_weaknesses"] =
               Weakness.list_all_by_date(@from_date, @to_date, false).
                 with_status_for_report.send("#{audit_type_symbol}_audit").
-                for_period(period).finals(final).where(conditions).group(
-                :state).count
+                for_period(period).finals(final).where(conditions).group(:state).count
             @weaknesses_counts[period]["#{key}_oportunities"] =
               Oportunity.list_all_by_date(@from_date, @to_date, false).
               with_status_for_report.send("#{audit_type_symbol}_audit").

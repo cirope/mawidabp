@@ -4,19 +4,19 @@ module Polls::Search
   included do
     COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new(
       name: {
-        column: "#{User.quoted_table_name}.#{User.qcn('name')}", operator: 'ILIKE',
+        column: "LOWER(#{User.quoted_table_name}.#{User.qcn('name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       last_name: {
-        column: "#{User.quoted_table_name}.#{User.qcn('last_name')}", operator: 'ILIKE',
+        column: "LOWER(#{User.quoted_table_name}.#{User.qcn('last_name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       questionnaire_name: {
-        column: "#{Questionnaire.quoted_table_name}.#{Questionnaire.qcn('name')}", operator: 'ILIKE',
+        column: "LOWER(#{Questionnaire.quoted_table_name}.#{Questionnaire.qcn('name')})", operator: 'LIKE',
         mask: "%%%s%%", conversion_method: :to_s, regexp: /.*/
       },
       answered: {
-        column: "#{Poll.quoted_table_name}.#{Poll.qcn('answered')}", operator: '=',
+        column: "#{Poll.table_name}.#{Poll.qcn('answered')}", operator: '=',
         mask: '%s', regexp: /\Asi|no\z/i,
         conversion_method: ->(value) { value.downcase == 'si' }
       }
