@@ -40,7 +40,7 @@ class NotifierMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user, @hash = user, user.change_password_hash
-    prefixes = user.organizations.map {|o| "[#{o.prefix}]" }.join(' ')
+    prefixes = user.organizations.uniq.map { |o| "[#{o.prefix}]" }.join(' ')
     prefixes << ' ' unless prefixes.blank?
 
     mail(
@@ -52,7 +52,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def notify_new_findings(user)
-    findings = user.findings.recently_notified
+    findings = user.findings.recently_notified.uniq
 
     @user = user
     @grouped_findings = findings.group_by(&:organization)
@@ -169,7 +169,7 @@ class NotifierMailer < ActionMailer::Base
     option_organizations = options[:organizations] ?
       options[:organizations].uniq : []
     organizations = @notification ?
-      @notification.findings.map(&:organization).uniq : []
+      @notification.findings.uniq.map(&:organization).uniq : []
     organizations += option_organizations
 
     prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')

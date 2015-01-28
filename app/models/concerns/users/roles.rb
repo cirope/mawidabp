@@ -7,7 +7,7 @@ module Users::Roles
     before_validation :inject_auth_privileges_in_roles, :set_proper_parent
     before_update :check_roles_changes
 
-    has_many :organizations, -> { uniq }, through: :organization_roles
+    has_many :organizations, through: :organization_roles
     has_many :organization_roles, dependent: :destroy,
       after_add:    :mark_roles_as_changed,
       after_remove: :mark_roles_as_changed
