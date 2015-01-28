@@ -64,8 +64,10 @@ if File.exist? database_file
       gem 'pg'
       gem 'foreigner'
     when /oracle/
-      gem 'ruby-oci8'
-      gem 'activerecord-oracle_enhanced-adapter'
+      unless ENV['TRAVIS']
+        gem 'ruby-oci8'
+        gem 'activerecord-oracle_enhanced-adapter'
+      end
     end
   end
 end
