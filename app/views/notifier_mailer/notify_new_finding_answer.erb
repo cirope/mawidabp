@@ -9,8 +9,8 @@
     <%= textilize_without_paragraph(
       t(
         'notifier_mailer.notify_new_finding_answer.finding_data',
-        :review => h(finding.review.to_s),
-        :finding_code => [finding.review_code, finding.title].join(' - ')
+        :review => finding.review.to_s,
+        :finding_code => [finding.review_code, finding.title].reject(&:blank?).join(' - ')
       )
     ) %>
   </h3>
