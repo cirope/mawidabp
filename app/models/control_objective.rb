@@ -13,21 +13,22 @@ class ControlObjective < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    order(['process_control_id ASC', "#{quoted_table_name}.#{qcn('order')} ASC"])
+    order([
+      "#{quoted_table_name}.#{qcn('process_control_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
   scope :list_for_process_control, ->(process_control) {
-    where(process_control_id: process_control.id).order(
-      ['process_control_id ASC', "#{quoted_table_name}.#{qcn('order')} ASC"]
-    )
+    where(process_control_id: process_control.id).order([
+      "#{quoted_table_name}.#{qcn('process_control_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
 
   # Restricciones
   validates :name, presence: true
   validates :relevance, :risk, numericality: { only_integer: true },
     allow_nil: true, allow_blank: true
-  validates :name, uniqueness: {
-    case_sensitive: false, scope: :process_control_id
-  }
   validates_each :control do |record, attr, value|
     has_active_control = value && !value.marked_for_destruction?
 
