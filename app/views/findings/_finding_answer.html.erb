@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-6">
       <% if finding_answer.new_record? %>
-        <%= f.input :answer, label: false, input_html: { autofocus: true } %>
+        <%= f.input :answer, label: false %>
       <% else %>
         <%= finding_answer.answer %>
       <% end %>
