@@ -22,9 +22,10 @@ module AutoCompleteFor::User
 
     @users = User.includes(:organizations).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
-    ).order(
-      ["#{User.quoted_table_name}.#{User.qcn('last_name')} ASC", "#{User.table_name}.name ASC"]
-    ).limit(10).references(:organizations)
+    ).order([
+      "#{User.quoted_table_name}.#{User.qcn('last_name')} ASC",
+      "#{User.quoted_table_name}.#{User.qcn('name')} ASC"
+    ]).limit(10).references(:organizations)
 
     respond_to do |format|
       format.json { render json: @users }

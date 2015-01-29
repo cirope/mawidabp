@@ -43,7 +43,7 @@ class Review < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    where(organization_id: Organization.current_id).order('identification ASC')
+    where(organization_id: Organization.current_id).order(identification: :asc)
   }
   scope :list_with_approved_draft, -> {
     list.includes(:conclusion_draft_review).where(
@@ -1508,7 +1508,7 @@ class Review < ActiveRecord::Base
   end
 
   def next_finding_code(prefix, findings)
-    last_review_code = findings.order('review_code ASC').last.try(:review_code)
+    last_review_code = findings.order(:review_code => :asc).last.try(:review_code)
     last_number = (last_review_code || '0').match(/\d+\Z/)[0].to_i || 0
 
     raise 'A review can not have more than 999 findings' if last_number > 999

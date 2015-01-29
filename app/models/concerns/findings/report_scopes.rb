@@ -24,7 +24,10 @@ module Findings::ReportScopes
       ).where(
         "#{ConclusionReview.table_name}.issue_date" => from_date..to_date
       ).references(:conslusion_reviews, :periods).order(
-        order && ["#{Period.quoted_table_name}.#{Period.qcn('start')} ASC", "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"]
+        order && [
+          "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
+          "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC"
+        ]
       )
     end
 

@@ -34,7 +34,7 @@ class PlanItem < ActiveRecord::Base
 
     includes(:business_unit).where(
       condition, :but_id => business_unit_type.to_i
-    ).order('order_number ASC').references(:business_units)
+    ).order(:order_number => :asc).references(:business_units)
   }
   scope :with_business_unit, -> { where("#{quoted_table_name}.#{qcn('business_unit_id')} IS NOT NULL") }
 

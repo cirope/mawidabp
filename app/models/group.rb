@@ -22,7 +22,7 @@ class Group < ActiveRecord::Base
     allow_nil: true, allow_blank: true
 
   # Relaciones
-  has_many :organizations, -> { order('name ASC') }, dependent: :destroy
+  has_many :organizations, -> { order(name: :asc) }, dependent: :destroy
 
   accepts_nested_attributes_for :organizations, allow_destroy: true
 

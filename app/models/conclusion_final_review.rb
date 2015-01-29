@@ -24,7 +24,7 @@ class ConclusionFinalReview < ConclusionReview
       [
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        'issue_date ASC'
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }
@@ -41,7 +41,7 @@ class ConclusionFinalReview < ConclusionReview
       [
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        'issue_date ASC'
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }
@@ -58,7 +58,7 @@ class ConclusionFinalReview < ConclusionReview
       [
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
         "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
-        'issue_date ASC'
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')}"
       ]
     )
   }

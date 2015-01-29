@@ -15,7 +15,7 @@ class ConclusionFinalReviewsController < ApplicationController
 
     build_search_conditions ConclusionFinalReview
 
-    order = @order_by || "issue_date DESC"
+    order = @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
     order << ", #{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('created_at')} DESC"
 
     @conclusion_final_reviews = ConclusionFinalReview.list.includes(
@@ -279,7 +279,7 @@ class ConclusionFinalReviewsController < ApplicationController
     conclusion_final_reviews = ConclusionFinalReview.list.includes(
       review: [:period, { plan_item: :business_unit }]
     ).where(@conditions).references(:periods, :reviews, :business_units).order(
-      @order_by || 'issue_date DESC'
+      @order_by || "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('issue_date')} DESC"
     )
 
     pdf = Prawn::Document.create_generic_pdf :landscape

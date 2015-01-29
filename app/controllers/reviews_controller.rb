@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
 
     @reviews = Review.list.includes(
       :period, { plan_item: :business_unit }
-    ).where(@conditions).reorder('identification DESC').page(
+    ).where(@conditions).reorder(identification: :desc).page(
       params[:page]
     ).references(:periods)
 
@@ -286,7 +286,7 @@ class ReviewsController < ApplicationController
     ).order(
       [
         "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')} ASC",
-        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')} ASC"
+        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC"
       ]
     ).references(:best_practices, :process_control).limit(10)
 

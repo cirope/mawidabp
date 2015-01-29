@@ -8,7 +8,7 @@ class WorkPaper < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }
-  scope :sorted_by_code, -> { order('code ASC') }
+  scope :sorted_by_code, -> { order(code: :asc) }
   scope :with_prefix, ->(prefix) {
     where('code LIKE :code', :code => "#{prefix}%").sorted_by_code
   }

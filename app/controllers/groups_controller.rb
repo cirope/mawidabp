@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
   # * GET /groups.xml
   def index
     @title = t 'group.index_title'
-    @groups = Group.order('name ASC').page(params[:page])
+    @groups = Group.order(name: :asc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

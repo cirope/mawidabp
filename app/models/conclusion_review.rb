@@ -266,7 +266,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             fortresses = (
               use_finals ? coi.final_fortresses : coi.fortresses
-            ).order('review_code ASC')
+            ).order(review_code: :asc)
 
             fortresses.each do |f|
               column_data = []
@@ -324,7 +324,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             nonconformities = (
               use_finals ? coi.final_nonconformities : coi.nonconformities
-            ).not_revoked.order('review_code ASC')
+            ).not_revoked.order(review_code: :asc)
 
             nonconformities.each do |nc|
               column_data = []
@@ -374,8 +374,7 @@ class ConclusionReview < ActiveRecord::Base
         if has_observations
           pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
           header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
@@ -383,7 +382,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             weaknesses = (
               use_finals ? coi.final_weaknesses : coi.weaknesses
-            ).not_revoked.order('review_code ASC')
+            ).not_revoked.order(review_code: :asc)
 
             weaknesses.each do |w|
               column_data = []

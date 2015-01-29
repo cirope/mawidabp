@@ -114,7 +114,7 @@ class ControlObjectiveItem < ActiveRecord::Base
     dependent: :destroy, class_name: 'Nonconformity'
   has_many :final_potential_nonconformities, -> { where(final: true) },
     dependent: :destroy, class_name: 'PotentialNonconformity'
-  has_many :work_papers, -> { order('code ASC') }, as: :owner, dependent: :destroy,
+  has_many :work_papers, -> { order(code: :asc) }, as: :owner, dependent: :destroy,
     before_add: [:check_for_final_review, :prepare_work_paper],
     before_remove: :check_for_final_review
   has_one :control, -> { order("#{Control.quoted_table_name}.#{Control.qcn('order')} ASC") }, as: :controllable,

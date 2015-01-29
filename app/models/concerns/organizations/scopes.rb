@@ -2,7 +2,7 @@ module Organizations::Scopes
   extend ActiveSupport::Concern
 
   included do
-    scope :ordered, -> { order 'name ASC' }
+    scope :ordered, -> { order name: :asc }
   end
 
   module ClassMethods
