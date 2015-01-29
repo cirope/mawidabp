@@ -135,6 +135,17 @@ class FindingTest < ActiveSupport::TestCase
     assert_error @finding, :description, :blank
   end
 
+  test 'avoid title validation when audited' do
+    Finding.current_user = users :audited_user
+
+    @finding.title = '  '
+    @finding.valid?
+
+    assert @finding.errors[:title].blank?
+
+    Finding.current_user = nil
+  end
+
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates special blank attributes' do
     # En estado "En proceso de implementación"
