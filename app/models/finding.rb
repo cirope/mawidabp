@@ -37,7 +37,9 @@ class Finding < ActiveRecord::Base
   # Named scopes
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :with_prefix, ->(prefix) {
-    where('review_code LIKE ?', "#{prefix}%").order('review_code ASC')
+    where(
+      "#{quoted_table_name}.#{qcn('review_code')} LIKE ?", "#{prefix}%"
+    ).order(review_code: :asc)
   }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
@@ -45,7 +47,7 @@ class Finding < ActiveRecord::Base
     )
   }
   scope :finals, ->(use_finals) { where(:final => use_finals) }
-  scope :sort_by_code, -> { order('review_code ASC') }
+  scope :sort_by_code, -> { order(review_code: :asc) }
   scope :for_current_organization, -> { list }
 
   # Relaciones
@@ -55,17 +57,17 @@ class Finding < ActiveRecord::Base
   has_one :control_objective, :through => :control_objective_item,
     :class_name => 'ControlObjective'
   has_many :notification_relations, :as => :model, :dependent => :destroy
-  has_many :notifications, -> { order('created_at') },
+  has_many :notifications, -> { order(:created_at) },
     :through => :notification_relations
   has_many :costs, :as => :item, :dependent => :destroy
-  has_many :comments, -> { order('created_at ASC') }, :as => :commentable,
+  has_many :comments, -> { order(:created_at => :asc) }, :as => :commentable,
     :dependent => :destroy
   has_many :finding_user_assignments, :dependent => :destroy,
     :inverse_of => :finding, :before_add => :check_for_final_review,
     :before_remove => :check_for_final_review
   has_many :finding_review_assignments, :dependent => :destroy,
     :inverse_of => :finding
-  has_many :users, -> { order('last_name ASC') }, :through => :finding_user_assignments
+  has_many :users, -> { order(:last_name => :asc) }, :through => :finding_user_assignments
 
   accepts_nested_attributes_for :costs, :allow_destroy => false
   accepts_nested_attributes_for :comments, :allow_destroy => false

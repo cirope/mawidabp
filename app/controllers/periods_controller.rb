@@ -7,7 +7,7 @@ class PeriodsController < ApplicationController
 
   # * GET /periods
   def index
-    @periods = Period.list.reorder('start DESC').page(params[:page])
+    @periods = Period.list.reorder(start: :desc).page(params[:page])
 
     respond_with @periods
   end

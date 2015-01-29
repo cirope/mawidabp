@@ -9,7 +9,7 @@ class Weakness < Finding
   scope :all_for_report, -> { where(
     :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
     :final => true
-    ).order(['risk DESC', 'state ASC'])
+    ).order(:risk => :desc, :state => :asc)
   }
   scope :with_highest_risk, -> { where(
     "#{quoted_table_name}.#{qcn('highest_risk')} = #{table_name}.risk"

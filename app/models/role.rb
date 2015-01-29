@@ -19,9 +19,9 @@ class Role < ActiveRecord::Base
   }
 
   # Named scopes
-  scope :list, -> { where(organization_id: Organization.current_id).order('name ASC') }
+  scope :list, -> { where(organization_id: Organization.current_id).order(:name => :asc) }
   scope :list_by_organization, ->(organization_id) {
-    where(organization_id: organization_id).order('name ASC')
+    where(organization_id: organization_id).order(:name => :asc)
   }
   scope :list_by_organization_and_group, ->(organization, group) {
     includes(:organization).where(

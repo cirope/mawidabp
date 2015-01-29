@@ -56,7 +56,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.list.includes(:review).where(
         control_objective_id: params[:control_objective],
         review_id: params[:review]
-      ).order('created_at DESC').first
+      ).order(created_at: :desc).first
       session[:back_to] = edit_review_url(params[:review].to_i)
     end
 

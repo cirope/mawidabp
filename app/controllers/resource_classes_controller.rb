@@ -7,7 +7,7 @@ class ResourceClassesController < ApplicationController
 
   # * GET /resource_classes
   def index
-    @resource_classes = ResourceClass.list.order('name ASC').page(params[:page])
+    @resource_classes = ResourceClass.list.order(name: :asc).page(params[:page])
   end
 
   # * GET /resource_classes/1

@@ -29,7 +29,7 @@ class VersionsController < ApplicationController
     def search
       @from_date, @to_date = *make_date_range(params[:index])
 
-      PaperTrail::Version.where(conditions, parameters).order('created_at DESC')
+      PaperTrail::Version.where(conditions, parameters).order(created_at: :desc)
     end
 
     def conditions

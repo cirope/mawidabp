@@ -7,7 +7,7 @@ class NotificationsController < ApplicationController
   def index
     @title = t 'notification.index_title'
     @notifications = Notification.where(:user_id => @auth_user.id).order(
-      ['status ASC', 'created_at DESC']
+      :status => :asc, :created_at => :desc
     ).page(params[:page])
 
     respond_to do |format|

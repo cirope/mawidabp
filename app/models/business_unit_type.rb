@@ -10,7 +10,7 @@ class BusinessUnitType < ActiveRecord::Base
   # Named scopes
   scope :list, -> {
     where(organization_id: Organization.current_id).order(
-      ['external ASC', 'name ASC']
+      :external => :asc, :name => :asc
     )
   }
   scope :internal_audit, -> { where( external: false) }
@@ -37,7 +37,7 @@ class BusinessUnitType < ActiveRecord::Base
 
   # Relaciones
   belongs_to :organization
-  has_many :business_units, -> { order('name ASC') }, :dependent => :destroy
+  has_many :business_units, -> { order(name: :asc) }, :dependent => :destroy
 
   accepts_nested_attributes_for :business_units, :allow_destroy => true
 

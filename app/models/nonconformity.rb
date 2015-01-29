@@ -4,10 +4,11 @@ class Nonconformity < Finding
   attr_reader :approval_errors
 
   # Named scopes
-  scope :all_for_report, -> { where(
-    :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
-    :final => true
-    ).order(['risk DESC', 'state ASC'])
+  scope :all_for_report, -> {
+    where(
+      :state => STATUS.except(*EXCLUDE_FROM_REPORTS_STATUS).values,
+      :final => true
+    ).order(:risk => :desc, :state => :asc)
   }
 
   # Restricciones

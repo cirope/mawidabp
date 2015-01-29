@@ -13,7 +13,10 @@ class ProcessControl < ActiveRecord::Base
 
   # Named scopes
   scope :list, -> {
-    order(['best_practice_id ASC', "#{quoted_table_name}.#{qcn('order')} ASC"])
+    order([
+      "#{quoted_table_name}.#{qcn('best_practice_id')} ASC",
+      "#{quoted_table_name}.#{qcn('order')} ASC"
+    ])
   }
   scope :list_for_log, ->(id) { where(id: id)  }
 
