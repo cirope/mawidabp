@@ -161,6 +161,14 @@ class PlanItem < ActiveRecord::Base
     end
   end
 
+  def start
+    super.try :to_date
+  end
+
+  def end
+    super.try :to_date
+  end
+
   def material_resource_utilizations
     self.resource_utilizations.select(&:material?)
   end
