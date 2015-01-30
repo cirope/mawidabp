@@ -78,6 +78,19 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_template 'oportunities/show'
   end
 
+  test 'show oportunity in json' do
+    oportunity = findings :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+
+    login
+    get :show, :completed => 'incomplete', :id => oportunity.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:oportunity)
+
+    decoded_oportunity = ActiveSupport::JSON.decode @response.body
+
+    assert_equal oportunity.id, decoded_oportunity['id']
+  end
+
   test 'new oportunity' do
     login
     get :new, :control_objective_item => control_objective_items(

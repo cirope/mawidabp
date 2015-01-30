@@ -42,9 +42,10 @@ module FindingsHelper
         fra.finding.repeated?
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
+      url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
 
       form.input :repeated_of_id, collection: findings, prompt: true,
-        label: false, input_html: { disabled: readonly }
+        label: false, input_html: { disabled: readonly, data: { repeated_url: url } }
     end
   end
 

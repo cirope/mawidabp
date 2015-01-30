@@ -1,0 +1,20 @@
+jQuery ($) ->
+  $(document).on 'change', '[data-repeated-url]', ->
+    repeatedSelect = $(this)
+    repeatedId     = repeatedSelect.val()
+    urlTemplate    = decodeURI repeatedSelect.data('repeatedUrl')
+    url            = urlTemplate.replace '[FINDING_ID]', repeatedId
+    fields         = [
+      'title', 'description', 'effect', 'audit_recommendations', 'risk',
+      'priority', 'answer', 'audit_comments'
+    ]
+
+    if repeatedId
+      repeatedSelect.prop 'disabled', true
+
+      $.getJSON url, (finding) ->
+        $.each fields, (i, field) ->
+          $("[name$=\"[#{field}]\"]").val finding[field]
+      .always -> repeatedSelect.prop 'disabled', false
+    else
+      $.each fields, (i, field) -> $("[name$=\"[#{field}]\"]").val ''

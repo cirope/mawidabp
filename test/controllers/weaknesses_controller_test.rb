@@ -93,6 +93,19 @@ class WeaknessesControllerTest < ActionController::TestCase
     assert_template 'weaknesses/show'
   end
 
+  test 'show weakness in json' do
+    weakness = findings :bcra_A4609_data_proccessing_impact_analisys_weakness
+
+    login
+    get :show, :completed => 'incomplete', :id => weakness.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:weakness)
+
+    decoded_weakness = ActiveSupport::JSON.decode @response.body
+
+    assert_equal weakness.id, decoded_weakness['id']
+  end
+
   test 'new weakness' do
     login
     get :new, control_objective_item: control_objective_items(
