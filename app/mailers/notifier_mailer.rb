@@ -52,7 +52,7 @@ class NotifierMailer < ActionMailer::Base
   end
 
   def notify_new_findings(user)
-    findings = user.findings.recently_notified.uniq
+    findings = user.findings.recently_notified
 
     @user = user
     @grouped_findings = findings.group_by(&:organization)
@@ -169,7 +169,7 @@ class NotifierMailer < ActionMailer::Base
     option_organizations = options[:organizations] ?
       options[:organizations].uniq : []
     organizations = @notification ?
-      @notification.findings.uniq.map(&:organization).uniq : []
+      @notification.findings.map(&:organization).uniq : []
     organizations += option_organizations
 
     prefixes = organizations.uniq.map {|o| "[#{o.prefix}]" }.join(' ')

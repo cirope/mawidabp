@@ -5,8 +5,7 @@
     <div class="row">
       <div class="col-md-6">
         <% unless @conclusion_draft_review.review %>
-          <%= f.input :review_id, collection:
-            Review.list_without_draft_review.map { |r| [r.identification, r.id] },
+          <%= f.input :review_id, collection: Review.list_without_draft_review.map { |r| [r.identification, r.id] },
             prompt: true, input_html: { autofocus: true } %>
         <% else %>
           <%= f.input :review, label: ConclusionDraftReview.human_attribute_name(:review_id),
@@ -24,8 +23,8 @@
           readonly: true } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :applied_procedures, input_html: { rows: 5 } %>
-        <%= f.input :conclusion, input_html: { rows: 5 } %>
+        <%= f.input :applied_procedures, input_html: { rows: 3 } %>
+        <%= f.input :conclusion, input_html: { rows: 3 } %>
         <%= f.input :issue_date, as: :date_picker %>
       </div>
     </div>
