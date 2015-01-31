@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150123035232) do
+ActiveRecord::Schema.define(version: 20150131163147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -333,6 +333,18 @@ ActiveRecord::Schema.define(version: 20150123035232) do
     t.datetime "updated_at"
     t.datetime "image_updated_at"
   end
+
+  create_table "ldap_configs", force: true do |t|
+    t.string   "hostname",                null: false
+    t.integer  "port",                    null: false
+    t.string   "basedn",                  null: false
+    t.string   "username_ldap_attribute", null: false
+    t.integer  "organization_id",         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ldap_configs", ["organization_id"], name: "index_ldap_configs_on_organization_id", using: :btree
 
   create_table "login_records", force: true do |t|
     t.integer  "user_id"
@@ -768,6 +780,8 @@ ActiveRecord::Schema.define(version: 20150123035232) do
 
   add_foreign_key "findings", "control_objective_items", name: "findings_control_objective_item_id_fk", dependent: :restrict
   add_foreign_key "findings", "findings", name: "findings_repeated_of_id_fk", column: "repeated_of_id", dependent: :restrict
+
+  add_foreign_key "ldap_configs", "organizations", name: "ldap_configs_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "login_records", "organizations", name: "login_records_organization_id_fk", dependent: :restrict
   add_foreign_key "login_records", "users", name: "login_records_user_id_fk", dependent: :restrict

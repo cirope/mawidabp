@@ -1,0 +1,6 @@
+cirope_ldap:
+  hostname: localhost
+  port: 389
+  basedn: ou=groups,dc=ldap,dc=cirope,dc=com
+  username_ldap_attribute: uid
+  organization: cirope
