@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class AuthenticationTest < ActionController::TestCase
-  fixtures :users, :roles, :organizations
-
   def setup
     @user = users :administrator_user
     @organization = organizations :cirope
@@ -12,6 +10,14 @@ class AuthenticationTest < ActionController::TestCase
 
   test 'should authenticate' do
     assert_valid_authentication redirect_url: Group, admin_mode: true
+    assert_valid_authentication
+  end
+
+  test 'should authenticate via ldap' do
+    @organization = organizations :google
+    @params = { user: @user.user, password: 'admin123' }
+    Organization.current_id = @organization.id
+
     assert_valid_authentication
   end
 
@@ -35,8 +41,7 @@ class AuthenticationTest < ActionController::TestCase
   end
 
   test 'should show message must change the password' do
-    @user.update_column :password_changed, get_test_parameter(
-      :password_expire_time).to_i.next.days.ago
+    @user.update_column :password_changed, get_test_parameter(:password_expire_time).to_i.next.days.ago
 
     assert_valid_authentication redirect_url: [:edit, 'users_password', id: @user],
       message: 'message.must_change_the_password'
@@ -56,6 +61,14 @@ class AuthenticationTest < ActionController::TestCase
 
     assert_invalid_authentication
     assert_invalid_authentication admin_mode: true
+  end
+
+  test 'should not authenticate via ldap with invalid password' do
+    @organization = organizations :google
+    @params = { user: @user.user, password: 'wrong password' }
+    Organization.current_id = @organization.id
+
+    assert_invalid_authentication
   end
 
   test 'should not login if user expired' do

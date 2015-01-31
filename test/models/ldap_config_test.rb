@@ -2,7 +2,7 @@ require 'test_helper'
 
 class LdapConfigTest < ActiveSupport::TestCase
   setup do
-    @ldap_config = ldap_configs :cirope_ldap
+    @ldap_config = ldap_configs :google_ldap
   end
 
   test 'validates presence' do
@@ -41,5 +41,17 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :port, :less_than, count: 65536
+  end
+
+  test 'ldap bind' do
+    ldap = @ldap_config.ldap 'admin', 'admin123'
+
+    assert ldap.bind
+  end
+
+  test 'ldap no bind if wrong password' do
+    ldap = @ldap_config.ldap 'admin', 'wrong'
+
+    assert !ldap.bind
   end
 end

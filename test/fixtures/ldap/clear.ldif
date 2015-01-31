@@ -1,0 +1,26 @@
+dn: cn=admins,ou=groups,dc=test,dc=com
+changetype: delete
+
+dn: cn=users,ou=groups,dc=test,dc=com
+changetype: delete
+
+dn: cn=general_manager_user,ou=people,dc=test,dc=com
+changetype: delete
+
+dn: cn=admin,ou=people,dc=test,dc=com
+changetype: delete
+
+dn: cn=admin_second,ou=others,dc=test,dc=com
+changetype: delete
+
+dn: ou=groups,dc=test,dc=com
+changetype: delete
+
+dn: ou=people,dc=test,dc=com
+changetype: delete
+
+dn: ou=others,dc=test,dc=com
+changetype: delete
+
+dn: dc=test,dc=com
+changetype: delete

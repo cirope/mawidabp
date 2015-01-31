@@ -1,0 +1,61 @@
+# ldapadd -x -h localhost -p 389 -D "cn=admin,dc=test,dc=com" -w secret -f base.ldif
+
+dn: dc=test,dc=com
+objectClass: dcObject
+objectClass: organizationalUnit
+dc: test
+ou: Test
+
+dn: ou=people,dc=test,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=others,dc=test,dc=com
+objectClass: organizationalUnit
+ou: others
+
+dn: ou=groups,dc=test,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+dn: cn=admin,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+sn: User
+uid: admin
+mail: administrator@administrator.com
+cn: admin
+userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
+
+dn: cn=admin_second,ou=others,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+sn: Other
+uid: admin_second
+mail: administrator_second@administrator.com
+cn: admin_second
+userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
+
+dn: cn=general_manager_user,ou=people,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+sn: Admin
+uid: general_manager_user
+cn: general_manager_user
+userPassword: {SSHA}pULtb+MrlssbA09LY4j5OfaVWI8NUC0k
+
+dn: cn=admins,ou=groups,dc=test,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=admin,ou=people,dc=test,dc=com
+uniqueMember: cn=admin_second,ou=people,dc=test,dc=com
+cn: admins
+
+dn: cn=users,ou=groups,dc=test,dc=com
+objectClass: groupOfUniqueNames
+objectClass: top
+uniqueMember: cn=general_manager_user,ou=people,dc=test,dc=com
+cn: users
