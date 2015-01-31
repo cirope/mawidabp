@@ -1,9 +1,0 @@
-<%= content_for :form_actions do %>
-  <%= link_to_show @procedure_control %> |
-  <%= link_to_index procedure_controls_path %> |
-  <%= link_to t('label.download'), export_to_pdf_procedure_control_path(
-    @procedure_control, :_ts => Time.now.to_i) %> |
-  <%= link_to_back %>
-<% end %>
-
-<%= render 'form' %>

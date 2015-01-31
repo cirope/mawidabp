@@ -15,12 +15,12 @@ class ControlObjectiveItemsController < ApplicationController
     build_search_conditions ControlObjectiveItem
 
     @control_objectives = ControlObjectiveItem.list.includes(
-        :weaknesses,
-        :work_papers,
-        {review: :period},
-        {control_objective: :process_control}
-    ).where(@conditions).order(
-      "#{Review.table_name}.identification DESC"
+      :weaknesses,
+      :work_papers,
+      { review: :period },
+      { control_objective: :process_control }
+    ).where(@conditions).references(:review).order(
+      "#{Review.quoted_table_name}.#{Review.qcn('identification')} DESC"
     ).page(params[:page])
 
     respond_to do |format|
@@ -56,7 +56,7 @@ class ControlObjectiveItemsController < ApplicationController
       @control_objective_item = ControlObjectiveItem.list.includes(:review).where(
         control_objective_id: params[:control_objective],
         review_id: params[:review]
-      ).order('created_at DESC').first
+      ).order(created_at: :desc).first
       session[:back_to] = edit_review_url(params[:review].to_i)
     end
 

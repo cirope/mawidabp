@@ -13,19 +13,19 @@ class Review < ActiveRecord::Base
   # Constantes
   COLUMNS_FOR_SEARCH = HashWithIndifferentAccess.new({
     :period => {
-      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
     },
     :identification => {
-      :column => "LOWER(#{table_name}.identification)", :operator => 'LIKE',
+      :column => "LOWER(#{quoted_table_name}.#{qcn('identification')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :business_unit => {
-      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   })
@@ -36,13 +36,14 @@ class Review < ActiveRecord::Base
   before_destroy :can_be_destroyed?
 
   # Acceso a los atributos
-  attr_reader :approval_errors, :procedure_control_subitem_ids
-  attr_accessor :can_be_approved_by_force, :procedure_control_subitem_data
+  attr_reader :approval_errors, :control_objective_ids, :process_control_ids
+  attr_accessor :can_be_approved_by_force, :control_objective_data,
+    :process_control_data
   attr_readonly :plan_item_id
 
   # Named scopes
   scope :list, -> {
-    where(organization_id: Organization.current_id).order('identification ASC')
+    where(organization_id: Organization.current_id).order(identification: :asc)
   }
   scope :list_with_approved_draft, -> {
     list.includes(:conclusion_draft_review).where(
@@ -51,17 +52,17 @@ class Review < ActiveRecord::Base
   }
   scope :list_with_final_review, -> {
     list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_without_final_review, -> {
     list.includes(:conclusion_final_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_without_draft_review, -> {
     list.includes(:conclusion_draft_review).where(
-      "#{ConclusionReview.table_name}.review_id IS NULL"
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL"
     ).references(:conclusion_reviews)
   }
   scope :list_all_without_final_review_by_date, ->(from_date, to_date) {
@@ -71,25 +72,25 @@ class Review < ActiveRecord::Base
       }
     ).where(
       [
-        "#{table_name}.created_at BETWEEN :from_date AND :to_date",
-        "#{ConclusionFinalReview.table_name}.review_id IS NULL"
+        "#{quoted_table_name}.#{qcn('created_at')} BETWEEN :from_date AND :to_date",
+        "#{ConclusionFinalReview.quoted_table_name}.#{ConclusionFinalReview.qcn('review_id')} IS NULL"
       ].join(' AND '),
       { :from_date => from_date, :to_date => to_date.to_time.end_of_day }
     ).order(
       [
-        "#{Period.table_name}.start ASC",
-        "#{Period.table_name}.end ASC",
-        "#{BusinessUnitType.table_name}.external ASC",
-        "#{BusinessUnitType.table_name}.name ASC",
-        "#{table_name}.created_at ASC"
+        "#{Period.quoted_table_name}.#{Period.qcn('start')} ASC",
+        "#{Period.quoted_table_name}.#{Period.qcn('end')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('external')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC",
+        "#{quoted_table_name}.#{qcn('created_at')} ASC"
       ]
     ).references(:conclusion_reviews, :business_unit_types)
   }
   scope :list_all_without_workflow, ->(period_id) {
     list.includes(:workflow).list.where(
       [
-        "#{table_name}.period_id = :period_id",
-        "#{Workflow.table_name}.review_id IS NULL"
+        "#{quoted_table_name}.#{qcn('period_id')} = :period_id",
+        "#{Workflow.quoted_table_name}.#{Workflow.qcn('review_id')} IS NULL"
       ].join(' AND '), { :period_id => period_id }
     ).references(:workflows)
   }
@@ -122,7 +123,7 @@ class Review < ActiveRecord::Base
     reviews = Review.list.where(
       [
         'identification = :identification',
-        (record.id ? "#{table_name}.id != :id" : "#{table_name}.id IS NOT NULL")
+        (record.id ? "#{quoted_table_name}.#{qcn('id')} <> :id" : "#{quoted_table_name}.#{qcn('id')} IS NOT NULL")
       ].join(' AND '), { :identification => value, :id => record.id }
     )
     record.errors.add attr, :taken if reviews.count > 0
@@ -219,26 +220,52 @@ class Review < ActiveRecord::Base
     end
   end
 
-  def procedure_control_subitem_ids=(ids)
-    (ids || []).uniq.each do |pcs_id|
-      if pcs_id.respond_to?(:to_i) &&
-          ProcedureControlSubitem.exists?(pcs_id.to_i)
-        pcs = ProcedureControlSubitem.find(pcs_id)
-        control_objective_ids = self.control_objective_items.map(
-          &:control_objective_id
-        )
+  def process_control_ids=(ids)
+    (ids || []).uniq.each do |pc_id|
+      if ProcessControl.exists?(pc_id)
+        cois = []
+        pc = ProcessControl.find(pc_id)
+        control_objective_ids = control_objective_items.map(&:control_objective_id)
 
-        unless control_objective_ids.include?(pcs.control_objective_id)
-          self.control_objective_items.build(
-            :control_objective_id => pcs.control_objective_id,
-            :control_objective_text => pcs.control_objective_text,
-            :relevance => pcs.relevance,
+        pc.control_objectives.each do |co|
+          if !co.obsolete && control_objective_ids.exclude?(co.id)
+            cois << {
+              :control_objective_id => co.id,
+              :control_objective_text => co.name,
+              :relevance => co.relevance,
+              :control_attributes => {
+                :control => co.control.control,
+                :effects => co.control.effects,
+                :design_tests => co.control.design_tests,
+                :compliance_tests => co.control.compliance_tests,
+                :sustantive_tests => co.control.sustantive_tests
+              }
+            }
+          end
+        end
+
+        self.control_objective_items.build(cois) unless cois.empty?
+      end
+    end
+  end
+
+  def control_objective_ids=(ids)
+    (ids || []).uniq.each do |co_id|
+      if co_id.respond_to?(:to_i) && ControlObjective.exists?(co_id)
+        co = ControlObjective.find co_id
+        control_objective_ids = control_objective_items.map(&:control_objective_id)
+
+        unless control_objective_ids.include?(co.id)
+          control_objective_items.build(
+            :control_objective_id => co.id,
+            :control_objective_text => co.name,
+            :relevance => co.relevance,
             :control_attributes => {
-              :control => pcs.control.control,
-              :effects => pcs.control.effects,
-              :design_tests => pcs.control.design_tests,
-              :compliance_tests => pcs.control.compliance_tests,
-              :sustantive_tests => pcs.control.sustantive_tests
+              :control => co.control.control,
+              :effects => co.control.effects,
+              :design_tests => co.control.design_tests,
+              :compliance_tests => co.control.compliance_tests,
+              :sustantive_tests => co.control.sustantive_tests
             }
           )
         end
@@ -335,14 +362,15 @@ class Review < ActiveRecord::Base
         unless w.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Weakness.model_name.human} #{w.review_code}", w.approval_errors
+            "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
+            w.approval_errors
           ]
         end
       end
 
       coi.weaknesses.select(&:unconfirmed?).each do |w|
         errors << [
-          "#{Weakness.model_name.human} #{w.review_code}",
+          "#{Weakness.model_name.human} #{w.review_code} - #{w.title}",
           [I18n.t('weakness.errors.is_unconfirmed')]
         ]
       end
@@ -351,14 +379,15 @@ class Review < ActiveRecord::Base
         unless nc.must_be_approved?
           self.can_be_approved_by_force = false
           errors << [
-            "#{Nonconformity.model_name.human} #{nc.review_code}", nc.approval_errors
+            "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
+            nc.approval_errors
           ]
         end
       end
 
       coi.nonconformities.select(&:unconfirmed?).each do |nc|
         errors << [
-          "#{Nonconformity.model_name.human} #{nc.review_code}",
+          "#{Nonconformity.model_name.human} #{nc.review_code} - #{nc.title}",
           [I18n.t('nonconformity.errors.is_unconfirmed')]
         ]
       end
@@ -366,7 +395,8 @@ class Review < ActiveRecord::Base
       coi.oportunities.each do |o|
         unless o.must_be_approved?
           errors << [
-            "#{Oportunity.model_name.human} #{o.review_code}", o.approval_errors
+            "#{Oportunity.model_name.human} #{o.review_code} - #{o.title}",
+            o.approval_errors
           ]
         end
       end
@@ -374,7 +404,8 @@ class Review < ActiveRecord::Base
       coi.potential_nonconformities.each do |p_nc|
         unless p_nc.must_be_approved?
           errors << [
-            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code}", p_nc.approval_errors
+            "#{PotentialNonconformity.model_name.human} #{p_nc.review_code} - #{p_nc.title}",
+            p_nc.approval_errors
           ]
         end
       end
@@ -390,7 +421,7 @@ class Review < ActiveRecord::Base
     self.finding_review_assignments.each do |fra|
       if !fra.finding.repeated? && !fra.finding.implemented_audited?
         errors << [
-          "#{Finding.model_name.human} #{fra.finding.review_code} [#{fra.finding.review}]",
+          "#{Finding.model_name.human} #{fra.finding.review_code} - #{fra.finding.title} [#{fra.finding.review}]",
           [I18n.t('review.errors.related_finding_incomplete')]
         ]
       end
@@ -668,7 +699,9 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -681,11 +714,8 @@ class Review < ActiveRecord::Base
       end
 
       weaknesses.each do |weakness|
-        description = "<b>#{Weakness.human_attribute_name('review_code')}</b>: "
-        description << "#{weakness.review_code}\n#{weakness.description}"
-
         column_data << [
-          description,
+          "<b>#{weakness.review_code}</b>: #{weakness.title}",
           weakness.risk_text,
           weakness.state_text
         ]
@@ -719,11 +749,8 @@ class Review < ActiveRecord::Base
       end
 
       nonconformities.each do |nonconformity|
-        description = "<b>#{Nonconformity.human_attribute_name('review_code')}</b>: "
-        description << "#{nonconformity.review_code}\n#{nonconformity.description}"
-
         column_data << [
-          description,
+          "<b>#{nonconformity.review_code}</b>: #{nonconformity.title}",
           nonconformity.risk_text,
           nonconformity.state_text
         ]
@@ -758,11 +785,8 @@ class Review < ActiveRecord::Base
       end
 
       oportunities.each do |oportunity|
-        description = "<b>#{Oportunity.human_attribute_name('review_code')}</b>"
-        description << ": #{oportunity.review_code}\n#{oportunity.description}"
-
         column_data << [
-          description,
+          "<b>#{oportunity.review_code}</b>: #{oportunity.title}",
           oportunity.state_text
         ]
       end
@@ -796,8 +820,8 @@ class Review < ActiveRecord::Base
       end
 
       potential_nonconformities.each do |potential_nonconformity|
-        description = "<b>#{PotentialNonconformity.human_attribute_name('review_code')}</b>"
-        description << ": #{potential_nonconformity.review_code}\n#{potential_nonconformity.description}"
+        description = "<b>#{potential_nonconformity.review_code}</b>: "
+        description << "#{potential_nonconformity.title}"
 
         column_data << [
           description,
@@ -834,12 +858,7 @@ class Review < ActiveRecord::Base
       end
 
       fortresses.each do |fortress|
-        description = "<b>#{Fortress.human_attribute_name('review_code')}</b>"
-        description << ": #{fortress.review_code}\n#{fortress.description}"
-
-        column_data << [
-          description
-        ]
+        column_data << ["<b>#{fortress.review_code}</b>: #{fortress.title}"]
       end
 
       unless column_data.blank?
@@ -935,7 +954,9 @@ class Review < ActiveRecord::Base
     weaknesses = self.final_weaknesses.all_for_report
 
     unless weaknesses.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.weaknesses_count_summary',
         :risks => risk_levels_text), PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1055,7 +1076,9 @@ class Review < ActiveRecord::Base
     oportunities = self.final_oportunities.all_for_report
 
     unless oportunities.blank?
-      risk_levels_text = RISK_TYPES.sort {|r1, r2| r2[1] <=> r1[1]}.map {|r| r[0]}.join(', ')
+      risk_levels_text = RISK_TYPES.sort { |r1, r2| r2[1] <=> r1[1] }.map do |r|
+        I18n.t("risk_types.#{r[0]}")
+      end.join(', ')
       pdf.add_subtitle I18n.t('review.oportunities_count_summary'),
         PDF_FONT_SIZE, PDF_FONT_SIZE
 
@@ -1485,7 +1508,7 @@ class Review < ActiveRecord::Base
   end
 
   def next_finding_code(prefix, findings)
-    last_review_code = findings.order('review_code ASC').last.try(:review_code)
+    last_review_code = findings.order(:review_code => :asc).last.try(:review_code)
     last_number = (last_review_code || '0').match(/\d+\Z/)[0].to_i || 0
 
     raise 'A review can not have more than 999 findings' if last_number > 999

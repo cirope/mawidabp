@@ -3,10 +3,7 @@
   <%= link_to_index reviews_path %> |
   <%= link_to t('review.download_work_papers'),
     :action => :download_work_papers, :id => @review, :_ts => Time.now.to_i %> |
-  <%= link_to_procedure_control_for_review @review %> |
   <%= link_to_back %>
 <% end %>
 
 <%= render 'form' %>
-
-<div id="procedure_control_data"></div>

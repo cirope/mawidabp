@@ -97,7 +97,6 @@ es: &common
       plans:
         one: 'Tiene un plan asociado'
         other: 'Tiene %{count} planes asociados'
-      procedure_controls: 'Está asociado a procedimientos y pruebas de control (%{count})'
       reviews:
         one: 'Tiene un informe asociado'
         other: 'Tiene %{count} informes asociados'

@@ -3,7 +3,8 @@ module Findings::Validations
 
   included do
     validates :control_objective_item_id, :description, :review_code, :organization_id, presence: true
-    validates :review_code, length: { maximum: 255 }, allow_blank: true
+    validates :title, presence: true, if: :title_should_be_present?
+    validates :review_code, :title, length: { maximum: 255 }, allow_blank: true
     validates :audit_comments, presence: true, if: :revoked?
     validates :follow_up_date, :solution_date, :origination_date, :first_notification_date,
       timeliness: { type: :date }, allow_blank: true
@@ -19,6 +20,10 @@ module Findings::Validations
 
     def check_dates?
       !incomplete? && !revoked? && !repeated?
+    end
+
+    def title_should_be_present?
+      !final? && !current_user.try(:audited?)
     end
 
     def validate_follow_up_date
@@ -51,6 +56,7 @@ module Findings::Validations
       validate_state_revocation
       validate_state_transition
       validate_state_repetition
+      validate_state_user_if_final
     end
 
     def validate_state_work_paper_presence
@@ -73,6 +79,12 @@ module Findings::Validations
       # No puede marcarse como repetida si no está en un informe definitivo
       if state && state_changed? && repeated? && !is_in_a_final_review?
         errors.add :state, :invalid
+      end
+    end
+
+    def validate_state_user_if_final
+      if state && state_changed? && state.presence_in(Finding::FINAL_STATUS)
+        errors.add :state, :must_be_done_by_supervisor unless current_user.try(:supervisor?)
       end
     end
 

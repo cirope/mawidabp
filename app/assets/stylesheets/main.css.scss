@@ -47,6 +47,10 @@ body {
   z-index: 1100;
 }
 
+.navbar-brand {
+  padding-right: 15px;
+}
+
 .nested {
   padding-left: 2em;
 }
@@ -84,7 +88,6 @@ table th.not_available {
   color: #888;
 }
 
-[data-controller="procedure_controls"],
 [data-controller="best_practices"] {
   fieldset {
     textarea, select {

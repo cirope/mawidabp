@@ -21,7 +21,7 @@ class FindingReviewAssignment < ActiveRecord::Base
   belongs_to :review
 
   def <=>(other)
-    if self.finding_id == other.finding_id
+    if other.kind_of?(FindingReviewAssignment) && self.finding_id == other.finding_id
       self.review_id <=> other.review_id
     else
       -1

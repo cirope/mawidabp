@@ -255,6 +255,8 @@ class ReviewTest < ActiveSupport::TestCase
     def finding.can_be_destroyed?; true; end
     assert finding.destroy
 
+    Finding.current_user = users :supervisor_user
+
     finding = Weakness.new finding.attributes.merge(
       'state' => Finding::STATUS[:assumed_risk]
     )
@@ -263,6 +265,8 @@ class ReviewTest < ActiveSupport::TestCase
     )
 
     assert finding.save
+
+    Finding.current_user = nil
 
     assert @review.reload.must_be_approved?
     assert @review.approval_errors.blank?
@@ -388,16 +392,25 @@ class ReviewTest < ActiveSupport::TestCase
     assert @review.invalid?
   end
 
-  test 'procedure control subitem ids' do
-    assert !@review.control_objective_items.empty?
-    assert_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_iso_27001_1_1).id]
+  test 'process control ids' do
+    assert @review.control_objective_items.present?
+    assert_difference '@review.control_objective_items.size', 5 do
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
     end
 
     assert_no_difference '@review.control_objective_items.size' do
-      @review.procedure_control_subitem_ids =
-        [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id]
+      @review.process_control_ids = [process_controls(:iso_27000_security_policy).id]
+    end
+  end
+
+  test 'procedure control subitem ids' do
+    assert @review.control_objective_items.present?
+    assert_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
+    end
+
+    assert_no_difference '@review.control_objective_items.size' do
+      @review.control_objective_ids = [control_objectives(:iso_27000_security_organization_4_1).id]
     end
   end
 

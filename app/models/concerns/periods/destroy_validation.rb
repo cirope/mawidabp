@@ -8,7 +8,7 @@ module Periods::DestroyValidation
   private
 
     def can_be_destroyed?
-      [:reviews, :plans, :workflows, :procedure_controls].each do |method|
+      [:reviews, :plans, :workflows].each do |method|
         collection = send(method)
 
         unless collection.blank?

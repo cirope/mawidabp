@@ -8,7 +8,7 @@ class ConclusionReview < ActiveRecord::Base
   # Constantes
   GENERIC_COLUMNS_FOR_SEARCH = {
     :issue_date => {
-      :column => "#{table_name}.issue_date",
+      :column => "#{quoted_table_name}.#{qcn('issue_date')}",
       :operator => SEARCH_ALLOWED_OPERATORS.values, :mask => "%s",
       :conversion_method => lambda { |value|
         Timeliness.parse(value, :date).to_s(:db)
@@ -16,20 +16,20 @@ class ConclusionReview < ActiveRecord::Base
       :regexp => SEARCH_DATE_REGEXP
     },
     :period => {
-      :column => "#{Period.table_name}.number", :operator => '=', :mask => "%d",
+      :column => "#{Period.quoted_table_name}.#{Period.qcn('number')}", :operator => '=', :mask => "%d",
       :conversion_method => :to_i, :regexp => /\A\s*\d+\s*\Z/
     },
     :identification => {
-      :column => "LOWER(#{Review.table_name}.identification)",
+      :column => "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')})",
       :operator => 'LIKE', :mask => "%%%s%%", :conversion_method => :to_s,
       :regexp => /.*/
     },
     :business_unit => {
-      :column => "LOWER(#{BusinessUnit.table_name}.name)", :operator => 'LIKE',
+      :column => "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     },
     :project => {
-      :column => "LOWER(#{PlanItem.table_name}.project)", :operator => 'LIKE',
+      :column => "LOWER(#{PlanItem.quoted_table_name}.#{PlanItem.qcn('project')})", :operator => 'LIKE',
       :mask => "%%%s%%", :conversion_method => :to_s, :regexp => /.*/
     }
   }.with_indifferent_access
@@ -53,7 +53,7 @@ class ConclusionReview < ActiveRecord::Base
     parameters = {}
 
     business_unit_names.each_with_index do |business_unit_name, i|
-      conditions << "LOWER(#{BusinessUnit.table_name}.name) LIKE :bu_#{i}"
+      conditions << "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')}) LIKE :bu_#{i}"
       parameters[:"bu_#{i}"] = "%#{business_unit_name.mb_chars.downcase}%"
     end
 
@@ -66,7 +66,7 @@ class ConclusionReview < ActiveRecord::Base
     parameters = {}
 
     control_objective_names.each_with_index do |control_objective_name, i|
-      conditions << "LOWER(#{ControlObjective.table_name}.name) LIKE :co_#{i}"
+      conditions << "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :co_#{i}"
       parameters[:"co_#{i}"] = "%#{control_objective_name.mb_chars.downcase}%"
     end
 
@@ -78,7 +78,7 @@ class ConclusionReview < ActiveRecord::Base
      includes(:review => {
          :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
      ).where(
-       "#{Weakness.table_name}.risk = #{Weakness.table_name}.highest_risk"
+       "#{Weakness.quoted_table_name}.#{Weakness.qcn('risk')} = #{Weakness.quoted_table_name}.#{Weakness.qcn('highest_risk')}"
     ).references(:findings)
   }
   scope :with_business_unit_type, ->(but_id) {
@@ -110,15 +110,15 @@ class ConclusionReview < ActiveRecord::Base
     HashWithIndifferentAccess.new({
       :issue_date => {
         :name => ConclusionReview.human_attribute_name(:issue_date),
-        :field => "#{ConclusionReview.table_name}.issue_date ASC"
+        :field => "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('issue_date')} ASC"
       },
       :period => {
         :name => Period.model_name.human,
-        :field => "#{Period.table_name}.number ASC"
+        :field => "#{Period.quoted_table_name}.#{Period.qcn('number')} ASC"
       },
       :identification => {
         :name => Review.human_attribute_name(:identification),
-        :field => "#{Review.table_name}.identification ASC"
+        :field => "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC"
       }
     })
   end
@@ -266,7 +266,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             fortresses = (
               use_finals ? coi.final_fortresses : coi.fortresses
-            ).order('review_code ASC')
+            ).order(review_code: :asc)
 
             fortresses.each do |f|
               column_data = []
@@ -324,7 +324,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             nonconformities = (
               use_finals ? coi.final_nonconformities : coi.nonconformities
-            ).not_revoked.order('review_code ASC')
+            ).not_revoked.order(review_code: :asc)
 
             nonconformities.each do |nc|
               column_data = []
@@ -374,8 +374,7 @@ class ConclusionReview < ActiveRecord::Base
         if has_observations
           pc_id = process_control.id.to_s
           column_headers, column_widths = [], []
-          header = "<b><i>#{ProcessControl.model_name.human}: " +
-              "#{process_control.name}</i></b>"
+          header = "<b><i>#{ProcessControl.model_name.human}: #{process_control.name}</i></b>"
           header += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
           column_headers << header
           column_widths << pdf.percent_width(100)
@@ -383,7 +382,7 @@ class ConclusionReview < ActiveRecord::Base
           cois.each do |coi|
             weaknesses = (
               use_finals ? coi.final_weaknesses : coi.weaknesses
-            ).not_revoked.order('review_code ASC')
+            ).not_revoked.order(review_code: :asc)
 
             weaknesses.each do |w|
               column_data = []
@@ -776,7 +775,7 @@ class ConclusionReview < ActiveRecord::Base
               :left => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
-            pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
+            pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
               :left => PDF_FONT_SIZE * 6
 
             unless w.work_papers.blank?
@@ -802,7 +801,7 @@ class ConclusionReview < ActiveRecord::Base
           pdf.text "<b>#{title}</b>:", :left => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
-            pdf.text [o.review_code, o.state_text].join(' - '),
+            pdf.text [o.review_code, o.title, o.state_text].join(' - '),
               :left => PDF_FONT_SIZE * 6
 
             unless o.work_papers.blank?
@@ -861,8 +860,8 @@ class ConclusionReview < ActiveRecord::Base
 
       pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-      weaknesses.sort {|w1, w2| w1.review_code <=> w2.review_code}.each do |w|
-        pdf.text [w.review_code, w.risk_text, w.state_text].join(' - '),
+      weaknesses.sort { |w1, w2| w1.review_code <=> w2.review_code }.each do |w|
+        pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
           :font_size => PDF_FONT_SIZE
 
         w.work_papers.each do |wp|
@@ -900,14 +899,14 @@ class ConclusionReview < ActiveRecord::Base
 
     weaknesses = weaknesses.select do |w|
       w.implemented? || w.being_implemented? || w.unanswered?
-    end.sort {|w1, w2| w1.review_code <=> w2.review_code}
+    end.sort { |w1, w2| w1.review_code <=> w2.review_code }
     oportunities = oportunities.select do |o|
       o.implemented? || o.being_implemented? || o.unanswered?
-    end.sort {|o1, o2| o1.review_code <=> o2.review_code}
+    end.sort { |o1, o2| o1.review_code <=> o2.review_code }
 
     unless (weaknesses + oportunities).blank?
       pdf = Prawn::Document.create_generic_pdf(:portrait, false)
-      column_order = [['review_code', 30], ['risk', 30], ['state', 40]]
+      column_order = [['review_code', 20], ['title', 40], ['risk', 20], ['state', 20]]
       column_data, column_widths, column_headers = [], [], []
       pdf.add_watermark(I18n.t('pdf.draft')) unless use_finals
       pdf.add_review_header organization || self.organization,
@@ -930,6 +929,7 @@ class ConclusionReview < ActiveRecord::Base
       weaknesses.each do |weakness|
         column_data << [
           weakness.review_code,
+          weakness.title,
           weakness.risk_text,
           weakness.state_text
         ]
@@ -963,6 +963,7 @@ class ConclusionReview < ActiveRecord::Base
       oportunities.each do |oportunity|
         column_data << [
           oportunity.review_code,
+          oportunity.title,
           oportunity.state_text
         ]
       end
@@ -994,9 +995,8 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [weakness.review_code, weakness.risk_text,
-          weakness.state_text].join(' - '), :font_size => PDF_FONT_SIZE,
-          :justification => :center
+        pdf.text [weakness.review_code, weakness.title, weakness.risk_text, weakness.state_text].join(' - '),
+          :font_size => PDF_FONT_SIZE, :justification => :center
       end
 
       oportunities.each do |oportunity|
@@ -1009,7 +1009,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
-        pdf.text [oportunity.review_code, oportunity.state_text].join(' - '),
+        pdf.text [oportunity.review_code, oportunity.title, oportunity.state_text].join(' - '),
           :font_size => PDF_FONT_SIZE, :justification => :center
       end
 

@@ -16,6 +16,10 @@ class ActiveRecord::Base
     end
   end
 
+  def self.qcn(name)
+    connection.quote_table_name(name)
+  end
+
   def self.prepare_search_conditions(*conditions)
     (conditions.reject(&:blank?) || []).map { |c| "(#{sanitize_sql(c)})" }.join(' AND ')
   end

@@ -41,7 +41,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4',
-      columns: ['description', 'review'],
+      columns: ['title', 'review'],
       order: 'review'
     }
 
@@ -60,7 +60,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
     login
     get :index, search: {
       query: '1 2 4 y 1ncp',
-      columns: ['description', 'review']
+      columns: ['title', 'review']
     }
 
     assert_redirected_to potential_nonconformity_url(
@@ -97,6 +97,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
           control_objective_item_id: control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           review_code: 'NCP020',
+          :title => 'Title',
           description: 'New description',
           answer: 'New answer',
           audit_comments: 'New audit comments',
@@ -160,6 +161,7 @@ class PotentialNonconformitiesControllerTest < ActionController::TestCase
             control_objective_item_id: control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             review_code: 'NCP020',
+            :title => 'Title',
             description: 'Updated description',
             answer: 'Updated answer',
             audit_comments: 'Updated audit comments',

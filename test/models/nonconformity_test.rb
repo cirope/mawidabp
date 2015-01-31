@@ -18,6 +18,7 @@ class NonconformityTest < ActiveSupport::TestCase
     assert_equal nonconformity.control_objective_item_id,
       @nonconformity.control_objective_item_id
     assert_equal nonconformity.review_code, @nonconformity.review_code
+    assert_equal nonconformity.title, @nonconformity.title
     assert_equal nonconformity.description, @nonconformity.description
     assert_equal nonconformity.answer, @nonconformity.answer
     assert_equal nonconformity.state, @nonconformity.state
@@ -37,6 +38,7 @@ class NonconformityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
         :review_code => 'NC020',
+        :title => 'Title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -81,6 +83,7 @@ class NonconformityTest < ActiveSupport::TestCase
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
         :review_code => 'New review code',
+        :title => 'New title',
         :description => 'New description',
         :answer => 'New answer',
         :audit_comments => 'New audit comments',
@@ -165,9 +168,11 @@ class NonconformityTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @nonconformity.review_code = 'abcdd' * 52
+    @nonconformity.title = 'abcdd' * 52
 
     assert @nonconformity.invalid?
     assert_error @nonconformity, :review_code, :too_long, count: 255
+    assert_error @nonconformity, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

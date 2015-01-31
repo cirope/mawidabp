@@ -1,7 +1,7 @@
 encoding: utf-8
 markdown: rdiscount
 permalink: pretty
-pygments: true
+highlighter: pygments
 assets:
   baseurl: /help/assets/
   js_compressor: uglifier

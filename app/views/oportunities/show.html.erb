@@ -13,6 +13,11 @@
   <%= @oportunity.review_code %>
 </p>
 
+<p>
+  <strong><%= Oportunity.human_attribute_name :title %>:</strong>
+  <%= @oportunity.title %>
+</p>
+
 <div>
   <strong><%= Oportunity.human_attribute_name :description %>:</strong>
   <%= simple_format @oportunity.description %>

@@ -5,9 +5,9 @@ module AutoCompleteFor::ControlObjectiveItem
     @tokens = params[:q][0..100].split(SEARCH_AND_REGEXP).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      "#{Period.table_name}.organization_id = :organization_id",
-      "#{ConclusionReview.table_name}.review_id IS NULL",
-      "#{ControlObjectiveItem.table_name}.review_id = :review_id"
+      "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id",
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NULL",
+      "#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('review_id')} = :review_id"
     ]
     parameters = {
       organization_id: current_organization.id,
@@ -16,7 +16,7 @@ module AutoCompleteFor::ControlObjectiveItem
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :control_objective_item_data_#{i}"
+        "LOWER(#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('control_objective_text')}) LIKE :control_objective_item_data_#{i}"
       ].join(' OR ')
 
       parameters[:"control_objective_item_data_#{i}"] = "%#{t.mb_chars.downcase}%"
@@ -26,7 +26,7 @@ module AutoCompleteFor::ControlObjectiveItem
       review: [:period, :conclusion_final_review]
     ).where(
       conditions.map {|c| "(#{c})"}.join(' AND '), parameters
-    ).order("#{Review.table_name}.identification ASC").references(
+    ).order("#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC").references(
       :periods, :conclusion_reviews, :control_objective_items
     ).limit(10)
 

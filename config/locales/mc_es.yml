@@ -894,20 +894,6 @@ mc_es:
       can_not_be_destroyed: "El plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
       plan_item_related: "El item del plan no puede ser eliminado, se encuentra relacionado con al menos un informe"
 
-  procedure_control:
-    index_title: "Listado de procedimientos y pruebas de control"
-    show_title: "Detalles del procedimiento y prueba de control"
-    new_title: "Agregar procedimiento y prueba de control"
-    edit_title: "Modificar procedimiento y prueba de control"
-    correctly_created: "Procedimiento y prueba de control agregado correctamente."
-    correctly_updated: "Procedimiento y prueba de control actualizado correctamente."
-    stale_object_error: "El procedimiento y prueba de control no fue actualizado, intente nuevamente."
-    copy: "Copiar"
-    add_procedure_control_item: "Agregar proceso"
-    add_procedure_control_subitem: "Agregar procedimiento de control"
-    show_procedure_control_subitems: "Ver procedimientos de control"
-    hide_procedure_control_subitems: "Ocultar procedimientos de control"
-
   questionnaire:
     index_title: "Listado de cuestionarios"
     edit_title: "Modificar cuestionario"
@@ -933,11 +919,11 @@ mc_es:
     stale_object_error: "El informe no fue actualizado, intente nuevamente."
     control_objective_items_label: "Objetivos/Metas"
     add_control_objective: "Agregar un nuevo objetivo/meta"
+    add_process_control: "Agregar un nuevo proceso"
     associated: "Asociados"
     available: "Disponibles"
     bundle: "Legajo"
     copy: "Copiar"
-    view_procedure_control_for_the_period: "Ver procedimientos y pruebas definidos para el periodo"
     findings_label: "Desvíos / Oportunidades de mejora pendientes"
     add_finding_assignment: "Agregar desvío / oportunidad de mejora pendiente"
     add_user_assignment: "Agregar usuario relacionado"
@@ -1147,9 +1133,6 @@ mc_es:
       plan: "Plan de trabajo"
       plan_item: "Registro de plan"
       privilege: "Privilegio"
-      procedure_control: "Procedimientos y pruebas de control"
-      procedure_control_item: "Registro del procedimiento de control"
-      procedure_control_subitem: "Subítem del procedimiento de control"
       review: "Informe"
       review_user_assignment: "Asignación de usuario a informe"
       role: "Perfil"
@@ -1240,6 +1223,7 @@ mc_es:
         file: "Archivo"
       finding:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío / Oportunidad"
         type: "Tipo"
         repeated_of_id: "Reiterada de"
@@ -1356,6 +1340,7 @@ mc_es:
         password: "Contraseña"
       oportunity:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Oportunidad de mejora"
         review_code: "Código en el informe"
         answer: "Respuesta"
@@ -1414,28 +1399,6 @@ mc_es:
         modify: "Modificación"
         erase: "Baja"
         approval: "Aprobación"
-      procedure_control:
-        period_id: "Periodo"
-        procedure_control_items:
-          one: "Proceso"
-          other: "Procesos"
-          process_control_id: "Proceso"
-          aproach: "Proceso (enfoque)"
-          frequency: "Proceso (frecuencia)"
-          procedure_control_subitems:
-            one: "Procedimiento de control"
-            other: "Procedimientos de control"
-            control_objective_text: "Procedimiento de control (objetivo/meta)"
-            relevance: "Procedimiento de control (importancia)"
-            control_objective_id: "Procedimiento de control (objetivo/meta)"
-      procedure_control_item:
-        aproach: "Enfoque"
-        frequency: "Frecuencia"
-        process_control_id: "Proceso"
-      procedure_control_subitem:
-        control_objective_text: "Objetivo/Meta"
-        relevance: "Importancia"
-        control_objective_id: "Objetivo/Meta"
       related_user_relation:
         user_id: 'Usuario'
         related_user_id: 'Usuario relacionado'
@@ -1477,6 +1440,7 @@ mc_es:
         privileges: "Privilegios"
       weakness:
         control_objective_item_id: "Objetivo/Meta"
+        title: "Título"
         description: "Desvío"
         review_code: "Código en el informe"
         audit_recommendations: "Recomendaciones"
@@ -1563,6 +1527,7 @@ mc_es:
               must_have_a_comment: "debe tener adjunto un comentario para esta transición"
               can_not_be_revoked: "no puede ser 'Anulado', posiblemente se deba a una reiteración o a que el desvío ya se encuentra en un informe definitivo"
               must_have_a_work_paper: "debe tener asociado al menos un papel de trabajo"
+              must_be_done_by_supervisor: "solo puede ser cambiado por un usuario supervisor"
             users:
               invalid: "debe contener como mínimo un auditor, un auditado, un gerente y un supervisor"
         finding_user_assignment:
@@ -1657,7 +1622,6 @@ mc_es:
     organizations: "Organizaciones"
     periods: "Periodos"
     plans: "Planes de trabajo"
-    procedure_controls: "Procedimientos y pruebas de control"
     resource_classes: "Recursos"
     reviews: "Informes"
     roles: "Perfiles"

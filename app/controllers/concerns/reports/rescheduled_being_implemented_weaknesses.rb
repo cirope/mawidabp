@@ -79,6 +79,7 @@ module Reports::RescheduledBeingImplementedWeaknesses
     @rescheduled_being_implemented_weaknesses =
       "<strong>#{Review.model_name.human}</strong>: #{w.review.to_s}",
       "<strong>#{Weakness.human_attribute_name(:review_code)}</strong>: #{w.review_code}",
+      "<strong>#{Weakness.human_attribute_name(:title)}</strong>: #{w.title}",
       "<strong>#{Weakness.human_attribute_name(:state)}</strong>: #{w.state_text}",
       "<strong>#{Weakness.human_attribute_name(:risk)}</strong>: #{w.risk_text}",
       "<strong>#{Weakness.human_attribute_name(:priority)}</strong>: #{w.priority_text}",

@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
 
     @reviews = Review.list.includes(
       :period, { plan_item: :business_unit }
-    ).where(@conditions).reorder('identification DESC').page(
+    ).where(@conditions).reorder(identification: :desc).page(
       params[:page]
     ).references(:periods)
 
@@ -173,18 +173,6 @@ class ReviewsController < ApplicationController
     }.to_json
   end
 
-  # Devuelve los datos del procedimiento y prueba de control
-  #
-  # * GET /reviews/procedure_control_data/1
-  def procedure_control_data
-    @procedure_control = ProcedureControl.includes(:period).where(
-      id: params[:id],
-      "#{Period.table_name}.organization_id" => current_organization.id
-    ).references(:periods).first
-
-    render template: 'procedure_controls/show'
-  end
-
   # Crea el documento de relevamiento del informe
   #
   # * GET /reviews/survey_pdf/1
@@ -201,10 +189,10 @@ class ReviewsController < ApplicationController
     plan_item = PlanItem.find(params[:id])
     @findings = Finding.where(
       [
-        "#{Finding.table_name}.final = :boolean_false",
-        "#{Finding.table_name}.state IN(:states)",
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        "#{BusinessUnit.table_name}.id = :business_unit_id"
+        "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+        "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('id')} = :business_unit_id"
       ].join(' AND '),
       boolean_false: false,
       states: [
@@ -221,8 +209,8 @@ class ReviewsController < ApplicationController
       }
     ).order(
       [
-        "#{Review.table_name}.identification ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
@@ -233,10 +221,10 @@ class ReviewsController < ApplicationController
       SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
-      "#{Finding.table_name}.final = :boolean_false",
-      "#{Finding.table_name}.state IN(:states)",
-      "#{Period.table_name}.organization_id = :organization_id",
-      "#{ConclusionReview.table_name}.review_id IS NOT NULL"
+      "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+      "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+      "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id",
+      "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL"
     ].compact
     parameters = {
       boolean_false: false,
@@ -247,10 +235,10 @@ class ReviewsController < ApplicationController
     }
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{Finding.table_name}.review_code) LIKE :finding_data_#{i}",
-        "LOWER(#{Finding.table_name}.description) LIKE :finding_data_#{i}",
-        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :finding_data_#{i}",
-        "LOWER(#{Review.table_name}.identification) LIKE :finding_data_#{i}",
+        "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('review_code')}) LIKE :finding_data_#{i}",
+        "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('title')}) LIKE :finding_data_#{i}",
+        "LOWER(#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('control_objective_text')}) LIKE :finding_data_#{i}",
+        "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')}) LIKE :finding_data_#{i}",
       ].join(' OR ')
 
       parameters["finding_data_#{i}".to_sym] = "%#{t.mb_chars.downcase}%"
@@ -260,8 +248,8 @@ class ReviewsController < ApplicationController
       control_objective_item: {review: [:period, :conclusion_final_review]}
     ).where([conditions.map {|c| "(#{c})"}.join(' AND '), parameters]).order(
       [
-        "#{Review.table_name}.identification ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).references(
       :reviews, :control_objective_items, :periods, :conclusion_reviews
@@ -272,40 +260,70 @@ class ReviewsController < ApplicationController
     end
   end
 
-  # * GET /reviews/auto_complete_for_procedure_control_subitem
-  def auto_complete_for_procedure_control_subitem
+  # * GET /reviews/auto_complete_for_control_objective
+  def auto_complete_for_control_objective
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      "#{BestPractice.table_name}.organization_id = :organization_id",
-      "#{ProcedureControl.table_name}.period_id = :period_id"
+      "#{BestPractice.quoted_table_name}.#{BestPractice.qcn('organization_id')} = :organization_id",
+      "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('obsolete')} = :false"
     ]
-    parameters = {organization_id: current_organization.id}
-    parameters[:period_id] = params[:period_id] unless params[:period_id].blank?
+    parameters = { organization_id: current_organization.id, false: false }
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{ProcedureControlSubitem.table_name}.control_objective_text) LIKE :procedure_control_subitem_data_#{i}",
-        "LOWER(#{ProcessControl.table_name}.name) LIKE :procedure_control_subitem_data_#{i}"
+        "LOWER(#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('name')}) LIKE :control_objective_data_#{i}",
+        "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')}) LIKE :control_objective_data_#{i}"
       ].join(' OR ')
 
-      parameters[:"procedure_control_subitem_data_#{i}"] = "%#{t.mb_chars.downcase}%"
+      parameters[:"control_objective_data_#{i}"] = "%#{t.mb_chars.downcase}%"
     end
 
-    @procedure_control_subitems = ProcedureControlSubitem.includes(
-      control_objective: {process_control: :best_practice},
-      procedure_control_item: :procedure_control
+    @control_objectives = ControlObjective.includes(
+      process_control: :best_practice
     ).where(
       conditions.map { |c| "(#{c})" }.join(' AND '), parameters
     ).order(
       [
-        "#{ProcessControl.table_name}.name ASC",
-        "#{ControlObjective.table_name}.name ASC"
+        "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')} ASC",
+        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('order')} ASC"
       ]
-    ).references(:best_practices, :procedure_controls, :control_objectives).limit(10)
+    ).references(:best_practices, :process_control).limit(10)
 
     respond_to do |format|
-      format.json { render json: @procedure_control_subitems }
+      format.json { render json: @control_objectives }
+    end
+  end
+
+  # * GET /reviews/auto_complete_for_process_control
+  def auto_complete_for_process_control
+    @tokens = params[:q][0..100].split(/[\s,]/).uniq
+    @tokens.reject! {|t| t.blank?}
+    conditions = [
+      "#{BestPractice.quoted_table_name}.#{BestPractice.qcn('organization_id')} = :organization_id",
+      "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('obsolete')} = :false"
+    ]
+    parameters = { organization_id: current_organization.id, false: false }
+
+    @tokens.each_with_index do |t, i|
+      conditions << [
+        "LOWER(#{BestPractice.quoted_table_name}.#{BestPractice.qcn('name')}) LIKE :process_control_data_#{i}",
+        "LOWER(#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')}) LIKE :process_control_data_#{i}"
+      ].join(' OR ')
+
+      parameters[:"process_control_data_#{i}"] = "%#{t.mb_chars.downcase}%"
+    end
+
+    @process_control = ProcessControl.includes(
+      :best_practice
+    ).where(
+      conditions.map { |c| "(#{c})" }.join(' AND '), parameters
+    ).order(
+      "#{ProcessControl.quoted_table_name}.#{ProcessControl.qcn('name')} ASC"
+    ).references(:best_practice).limit(10)
+
+    respond_to do |format|
+      format.json { render json: @process_control }
     end
   end
 
@@ -317,10 +335,11 @@ class ReviewsController < ApplicationController
   end
 
   private
+
     def review_params
       params.require(:review).permit(
         :identification, :description, :survey, :period_id, :plan_item_id,
-        :procedure_control_subitem_ids, :lock_version,
+        :lock_version,
         file_model_attributes: [:id, :file, :file_cache, :_destroy],
         finding_review_assignments_attributes: [
           :id, :finding_id, :_destroy, :lock_version
@@ -334,7 +353,8 @@ class ReviewsController < ApplicationController
             :control, :effects, :design_tests, :compliance_tests, :sustantive_tests
           ]
         ],
-        procedure_control_subitem_ids: []
+        control_objective_ids: [],
+        process_control_ids: []
       )
     end
 
@@ -361,11 +381,11 @@ class ReviewsController < ApplicationController
         review_data: :read,
         download_work_papers: :read,
         plan_item_data: :read,
-        procedure_control_data: :read,
         survey_pdf: :read,
         suggested_findings: :read,
         auto_complete_for_finding: :read,
-        auto_complete_for_procedure_control_subitem: :read,
+        auto_complete_for_control_objective: :read,
+        auto_complete_for_process_control: :read,
         estimated_amount: :read
       )
     end

@@ -13,7 +13,7 @@
         </div>
 
         <div class="form-actions">
-          <%= hidden_field_tag :confirmation_hash, confirmation_hash %>
+          <%= hidden_field_tag :confirmation_hash, params[:confirmation_hash] %>
           <%= f.input :lock_version, as: :hidden %>
           <%= f.submit t('.update'), class: 'btn btn-default' %>
         </div>

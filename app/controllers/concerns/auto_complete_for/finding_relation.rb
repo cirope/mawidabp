@@ -5,12 +5,12 @@ module AutoCompleteFor::FindingRelation
     @tokens = params[:q][0..100].split(SPLIT_AND_TERMS_REGEXP).uniq.map(&:strip)
     @tokens.reject! { |t| t.blank? }
     conditions = [
-      ("#{Finding.table_name}.id <> :finding_id" unless params[:finding_id].blank?),
-      "#{Finding.table_name}.final = :boolean_false",
-      "#{Period.table_name}.organization_id = :organization_id",
+      ("#{Finding.quoted_table_name}.#{Finding.qcn('id')} <> :finding_id" unless params[:finding_id].blank?),
+      "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :boolean_false",
+      "#{Period.quoted_table_name}.#{Period.qcn('organization_id')} = :organization_id",
       [
-        "#{ConclusionReview.table_name}.review_id IS NOT NULL",
-        ("#{Review.table_name}.id = :review_id" unless params[:review_id].blank?)
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+        ("#{Review.quoted_table_name}.#{Review.qcn('id')} = :review_id" unless params[:review_id].blank?)
       ].compact.join(' OR ')
     ].compact
     parameters = {
@@ -21,10 +21,10 @@ module AutoCompleteFor::FindingRelation
     }
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{Finding.table_name}.review_code) LIKE :finding_relation_data_#{i}",
-        "LOWER(#{Finding.table_name}.description) LIKE :finding_relation_data_#{i}",
-        "LOWER(#{ControlObjectiveItem.table_name}.control_objective_text) LIKE :finding_relation_data_#{i}",
-        "LOWER(#{Review.table_name}.identification) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('review_code')}) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Finding.quoted_table_name}.#{Finding.qcn('title')}) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{ControlObjectiveItem.quoted_table_name}.#{ControlObjectiveItem.qcn('control_objective_text')}) LIKE :finding_relation_data_#{i}",
+        "LOWER(#{Review.quoted_table_name}.#{Review.qcn('identification')}) LIKE :finding_relation_data_#{i}",
       ].join(' OR ')
 
       parameters[:"finding_relation_data_#{i}"] = "%#{t.mb_chars.downcase}%"
@@ -34,8 +34,8 @@ module AutoCompleteFor::FindingRelation
       control_objective_item: { review: [:period, :conclusion_final_review] }
     ).where(conditions.map {|c| "(#{c})"}.join(' AND '), parameters).order(
       [
-        "#{Review.table_name}.identification ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).references(:control_objective_items, :reviews, :periods).limit(5)
 

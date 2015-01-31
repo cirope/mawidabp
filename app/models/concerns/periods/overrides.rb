@@ -10,11 +10,23 @@ module Periods::Overrides
     "#{number} (#{dates_range_text})"
   end
 
-  def <=>(other)
-    start_result = start <=> other.start
-    end_result = self.end <=> other.end if start_result == 0
+  def start
+    super.try :to_date
+  end
 
-    end_result || start_result
+  def end
+    super.try :to_date
+  end
+
+  def <=>(other)
+    if other.kind_of?(Period)
+      start_result = start <=> other.start
+      end_result = self.end <=> other.end if start_result == 0
+
+      end_result || start_result
+    else
+      -1
+    end
   end
 
   def contains? date
@@ -32,10 +44,8 @@ module Periods::Overrides
     end
 
     def long_dates_range_text
-      start_text =
-        "#{Period.human_attribute_name('start')}: #{I18n.l(start, format: :long)}"
-      end_text =
-        "#{Period.human_attribute_name('end')}: #{I18n.l(self.end, format: :long)}"
+      start_text = "#{Period.human_attribute_name('start')}: #{I18n.l(start, format: :long)}"
+      end_text   = "#{Period.human_attribute_name('end')}: #{I18n.l(self.end, format: :long)}"
 
       "#{start_text} | #{end_text}"
     end

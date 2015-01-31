@@ -75,6 +75,7 @@ module Reports::WeaknessesByRiskReport
             weaknesses_by_risk << [
               "\n<b>#{Review.model_name.human}</b>: #{w.review.to_s}",
               "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{w.review_code}",
+              "<b>#{Weakness.human_attribute_name(:title)}</b>: #{w.title}",
               "<b>#{Weakness.human_attribute_name(:state)}</b>: #{w.state_text}",
               "<b>#{Weakness.human_attribute_name(:risk)}</b>: #{w.risk_text}",
               ("<b>#{Weakness.human_attribute_name(:follow_up_date)}</b>: #{l(w.follow_up_date, :format => :long)}" if w.follow_up_date),

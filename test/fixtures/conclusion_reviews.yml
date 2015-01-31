@@ -46,7 +46,7 @@ conclusion_with_conclusion_draft_review:
   conclusion: With Conclusion Draft Conclusion
   approved: true
   organization: cirope
-  
+
 conclusion_approved_with_conclusion_draft_review:
   type: ConclusionDraftReview
   review: review_approved_with_conclusion

@@ -77,6 +77,7 @@ es: &common
       best_practice:
         name: 'Nombre'
         description: 'Descripción'
+        obsolete: 'Obsoleta'
       best_practice/process_controls:
         name: 'Proceso'
         order: 'Proceso (orden)'
@@ -89,6 +90,7 @@ es: &common
         name: 'Objetivo de control'
         relevance: 'Importancia'
         risk: 'Riesgo'
+        obsolete: 'Obsoleto'
       e_mail:
         to: 'Para'
         subject: 'Asunto'
@@ -163,6 +165,7 @@ es: &common
         name: 'Proceso'
         order: 'Orden'
         control_objectives: 'Objetivos de control'
+        obsolete: 'Obsoleto'
       question:
         sort_order: 'Orden'
         question: 'Pregunta'

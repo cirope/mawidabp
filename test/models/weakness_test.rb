@@ -18,6 +18,7 @@ class WeaknessTest < ActiveSupport::TestCase
     assert_kind_of Weakness, @weakness
     assert_equal weakness.control_objective_item_id,
       @weakness.control_objective_item_id
+    assert_equal weakness.title, @weakness.title
     assert_equal weakness.review_code, @weakness.review_code
     assert_equal weakness.description, @weakness.description
     assert_equal weakness.answer, @weakness.answer
@@ -37,6 +38,7 @@ class WeaknessTest < ActiveSupport::TestCase
       @weakness = Weakness.list.new(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item_editable),
+        :title => 'Title',
         :review_code => 'O020',
         :description => 'New description',
         :answer => 'New answer',
@@ -81,6 +83,7 @@ class WeaknessTest < ActiveSupport::TestCase
       Weakness.create(
         :control_objective_item =>
           control_objective_items(:bcra_A4609_data_proccessing_impact_analisys_item),
+        :title => 'New title',
         :review_code => 'New review code',
         :description => 'New description',
         :answer => 'New answer',
@@ -189,9 +192,11 @@ class WeaknessTest < ActiveSupport::TestCase
   # Prueba que las validaciones del modelo se cumplan como es esperado
   test 'validates length of attributes' do
     @weakness.review_code = 'abcdd' * 52
+    @weakness.title = 'abcdd' * 52
 
     assert @weakness.invalid?
     assert_error @weakness, :review_code, :too_long, count: 255
+    assert_error @weakness, :title, :too_long, count: 255
   end
 
   # Prueba que las validaciones del modelo se cumplan como es esperado

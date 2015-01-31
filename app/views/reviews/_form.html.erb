@@ -105,15 +105,21 @@
   <% end %>
 
   <% unless readonly %>
-    <div class="row">
-      <div class="col-md-10">
-        <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
-      </div>
-    </div>
+    <h5><strong><%= ControlObjective.model_name.human %></strong></h5>
 
     <div id="control_objectives">
       <%= link_to_add_fields(
-        t('review.add_control_objective'), f, :control_objective_items, 'procedure_control_subitem'
+        t('review.add_control_objective'), f, :control_objective_items, 'control_objective'
+      ) %>
+    </div>
+
+    <hr />
+
+    <h5><strong><%= ProcessControl.model_name.human %></strong></h5>
+
+    <div id="process_controls">
+      <%= link_to_add_fields(
+        t('review.add_process_control'), f, :control_objective_items, 'process_control'
       ) %>
     </div>
   <% end %>
@@ -204,10 +210,6 @@ jQuery(function() {
 
   $('#link_to_suggested_findings').bind('ajax:success', function(event, data) {
     $('#suggested_findings').html(data);
-  });
-
-  $(document).on('ajax:success', '#procedure_control_link', function(event, data) {
-    $('#procedure_control_data').html(data);
   });
 
   Helper.makeSortable(

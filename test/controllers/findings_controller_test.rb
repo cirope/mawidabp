@@ -66,7 +66,7 @@ class FindingsControllerTest < ActionController::TestCase
     login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
     assert_response :success
@@ -143,7 +143,7 @@ class FindingsControllerTest < ActionController::TestCase
     login
     get :index, :completed => 'incomplete', :search => {
       :query => '1 2 4 y 1w',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to finding_url('incomplete',
@@ -228,6 +228,7 @@ class FindingsControllerTest < ActionController::TestCase
               :control_objective_item_id => control_objective_items(
                 :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
               :review_code => 'O020',
+              :title => 'Title',
               :description => 'Updated description',
               :answer => 'Updated answer',
               :audit_comments => 'Updated audit comments',
@@ -336,6 +337,7 @@ class FindingsControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
             :review_code => 'O020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -443,6 +445,7 @@ class FindingsControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'O020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',
@@ -525,7 +528,7 @@ class FindingsControllerTest < ActionController::TestCase
     assert_nothing_raised do
       get :export_to_pdf, :completed => 'incomplete', :search => {
       :query => '1 2 4 y w',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
     end
@@ -541,7 +544,7 @@ class FindingsControllerTest < ActionController::TestCase
       get :export_to_pdf, :completed => 'incomplete', :include_details => 1,
         :search => {
           :query => '1 2 4 y w',
-          :columns => ['description', 'review'],
+          :columns => ['title', 'review'],
           :order => 'review'
         }
     end

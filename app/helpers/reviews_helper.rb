@@ -61,24 +61,6 @@ module ReviewsHelper
       "#{code_prefix} 0".strip
   end
 
-  def link_to_procedure_control_for_review(review)
-    procedure_control = ProcedureControl.list_by_period(review.period_id).first
-
-    if procedure_control
-      link_to(
-        t('review.view_procedure_control_for_the_period'),
-        {
-          :action => :procedure_control_data,
-          :id => procedure_control,
-          :format => :html
-        },
-        :remote => true, :id => :procedure_control_link
-      )
-    else
-      content_tag :span, t('review.view_procedure_control_for_the_period')
-    end
-  end
-
   def show_readonly_review_survey(review)
     link_for_download = link_to(
       t('label.download'),

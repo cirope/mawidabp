@@ -35,7 +35,7 @@ class FindingUserAssignment < ActiveRecord::Base
   belongs_to :user
 
   def <=>(other)
-    if self.finding_id == other.finding_id
+    if other.kind_of?(FindingUserAssignment) && self.finding_id == other.finding_id
       self.user_id <=> other.user_id
     else
       -1

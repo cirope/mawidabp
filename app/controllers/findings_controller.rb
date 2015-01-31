@@ -58,9 +58,9 @@ class FindingsController < ApplicationController
       }, :users
     ).where(@conditions).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
    ).references(:users, :control_objective_items, :reviews, :finding_user_assignments)
 
@@ -193,9 +193,9 @@ class FindingsController < ApplicationController
       }, :users
     ).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).where(@conditions).references(:reviews)
 
@@ -268,9 +268,9 @@ class FindingsController < ApplicationController
       }, :users
     ).order(
       @order_by || [
-        "#{Review.table_name}.created_at DESC",
-        "#{Finding.table_name}.state ASC",
-        "#{Finding.table_name}.review_code ASC"
+        "#{Review.quoted_table_name}.#{Review.qcn('created_at')} DESC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
       ]
     ).where(@conditions).references(:reviews)
 
@@ -284,8 +284,7 @@ class FindingsController < ApplicationController
           PlanItem.human_attribute_name(:project)].to_sentence, 0],
       ['project', PlanItem.human_attribute_name(:project), 0],
       ['review_code', Finding.human_attribute_name(:review_code), 0],
-      ['description', Finding.human_attribute_name(:description),
-        detailed ? 48 : 80]
+      ['title', Finding.human_attribute_name(:title), detailed ? 48 : 80]
     ]
 
     column_data, column_headers, column_widths = [], [], []
@@ -352,6 +351,7 @@ class FindingsController < ApplicationController
       finding_data =
         "<b>#{[Review.model_name.human, PlanItem.human_attribute_name(:project)].to_sentence}</b>: #{finding.review.to_s}",
         "<b>#{Weakness.human_attribute_name(:review_code)}</b>: #{finding.review_code}",
+        "<b>#{Weakness.human_attribute_name(:title)}</b>: #{finding.title}",
         "<b>#{finding.class.human_attribute_name(:description)}</b>: #{finding.description.gsub(/\n/,'')}",
         ("<b>#{Weakness.human_attribute_name(:state)}</b>: #{finding.state_text}" unless is_fortress),
         ("<b>#{Weakness.human_attribute_name(:origination_date)}</b>: #{l finding.origination_date, :format => :long}" if finding.origination_date),
@@ -453,9 +453,10 @@ class FindingsController < ApplicationController
 
     def finding_params
       params.require(:finding).permit(
-        :id, :control_objective_item_id, :review_code, :description, :answer, :audit_comments, :state,
-        :origination_date, :solution_date, :audit_recommendations, :effect, :risk, :priority,
-        :follow_up_date, :correction, :correction_date, :cause_analysis, :cause_analysis_date,
+        :id, :control_objective_item_id, :review_code, :title, :description,
+        :answer, :audit_comments, :state, :origination_date, :solution_date,
+        :audit_recommendations, :effect, :risk, :priority, :follow_up_date,
+        :correction, :correction_date, :cause_analysis, :cause_analysis_date,
         :nested_user, :lock_version, users_for_notification: [],
         finding_user_assignments_attributes: [
           :id, :user_id, :process_owner, :responsible_auditor, :_destroy

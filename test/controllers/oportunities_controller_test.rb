@@ -42,7 +42,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4',
-      :columns => ['description', 'review'],
+      :columns => ['title', 'review'],
       :order => 'review'
     }
 
@@ -61,7 +61,7 @@ class OportunitiesControllerTest < ActionController::TestCase
     login
     get :index, :search => {
       :query => '1 2 4 y 1o',
-      :columns => ['description', 'review']
+      :columns => ['title', 'review']
     }
 
     assert_redirected_to oportunity_url(
@@ -76,6 +76,19 @@ class OportunitiesControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:oportunity)
     assert_template 'oportunities/show'
+  end
+
+  test 'show oportunity in json' do
+    oportunity = findings :bcra_A4609_data_proccessing_impact_analisys_confirmed_oportunity
+
+    login
+    get :show, :completed => 'incomplete', :id => oportunity.id, :format => :json
+    assert_response :success
+    assert_not_nil assigns(:oportunity)
+
+    decoded_oportunity = ActiveSupport::JSON.decode @response.body
+
+    assert_equal oportunity.id, decoded_oportunity['id']
   end
 
   test 'new oportunity' do
@@ -98,6 +111,7 @@ class OportunitiesControllerTest < ActionController::TestCase
           :control_objective_item_id => control_objective_items(
             :bcra_A4609_data_proccessing_impact_analisys_item_editable).id,
           :review_code => 'OM020',
+          :title => 'Title',
           :description => 'New description',
           :answer => 'New answer',
           :audit_comments => 'New audit comments',
@@ -165,6 +179,7 @@ class OportunitiesControllerTest < ActionController::TestCase
             :control_objective_item_id => control_objective_items(
               :bcra_A4609_data_proccessing_impact_analisys_item).id,
             :review_code => 'OM020',
+            :title => 'Title',
             :description => 'Updated description',
             :answer => 'Updated answer',
             :audit_comments => 'Updated audit comments',

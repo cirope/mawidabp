@@ -98,45 +98,46 @@ class ReviewsControllerTest < ActionController::TestCase
   test 'create review' do
     login
     assert_difference ['Review.count', 'FindingReviewAssignment.count'] do
-      # Se crean 2 con los datos y uno con 'procedure_control_subitem_ids'
-      assert_difference 'FileModel.count' do
-        assert_difference 'ReviewUserAssignment.count', 4 do
-          post :create, {
-            review: {
-              identification: 'New Identification',
-              description: 'New Description',
-              survey: 'New survey',
-              period_id: periods(:current_period).id,
-              plan_item_id: plan_items(:past_plan_item_3).id,
-              procedure_control_subitem_ids:
-                [procedure_control_subitems(:procedure_control_subitem_bcra_A4609_1_1).id],
-              file_model_attributes: {
+      # Se crean 2 con el 'process_control_ids' y uno con 'control_objective_ids'
+      assert_difference 'ControlObjectiveItem.count', 3 do
+        assert_difference 'FileModel.count' do
+          assert_difference 'ReviewUserAssignment.count', 4 do
+            post :create, {
+              review: {
+                identification: 'New Identification',
+                description: 'New Description',
+                survey: 'New survey',
+                period_id: periods(:current_period).id,
+                plan_item_id: plan_items(:past_plan_item_3).id,
+                process_control_ids: [process_controls(:bcra_A4609_security_management).id],
+                control_objective_ids: [control_objectives(:iso_27000_security_policy_3_1).id],
+                file_model_attributes: {
                   file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
-              },
-              finding_review_assignments_attributes: [
-                {
-                  finding_id:
-                    findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
-                }
-              ],
-              review_user_assignments_attributes: [
-                {
-                  assignment_type: ReviewUserAssignment::TYPES[:auditor],
-                  user_id: users(:first_time_user).id
-                }, {
-                  assignment_type:
-                    ReviewUserAssignment::TYPES[:supervisor],
-                  user_id: users(:supervisor_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:manager],
-                  user_id: users(:supervisor_second_user).id
-                }, {
-                  assignment_type: ReviewUserAssignment::TYPES[:audited],
-                  user_id: users(:audited_user).id
-                }
-              ]
+                },
+                finding_review_assignments_attributes: [
+                  {
+                    finding_id: findings(:bcra_A4609_data_proccessing_impact_analisys_weakness).id.to_s
+                  }
+                ],
+                review_user_assignments_attributes: [
+                  {
+                    assignment_type: ReviewUserAssignment::TYPES[:auditor],
+                    user_id: users(:first_time_user).id
+                  }, {
+                    assignment_type:
+                      ReviewUserAssignment::TYPES[:supervisor],
+                    user_id: users(:supervisor_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:manager],
+                    user_id: users(:supervisor_second_user).id
+                  }, {
+                    assignment_type: ReviewUserAssignment::TYPES[:audited],
+                    user_id: users(:audited_user).id
+                  }
+                ]
+              }
             }
-          }
+          end
         end
       end
     end
@@ -243,16 +244,6 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_not_nil plan_item_data['business_unit_type']
   end
 
-  test 'procedure control data' do
-    login
-
-    get :procedure_control_data,
-      id: procedure_controls(:procedure_control_iso_27001).id
-    assert_response :success
-    assert_not_nil assigns(:procedure_control)
-    assert_template 'procedure_controls/show'
-  end
-
   test 'survey pdf' do
     login
     review = Review.find reviews(:current_review).id
@@ -301,44 +292,84 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/_estimated_amount'
   end
 
-  test 'auto complete for procedure control subitem' do
+  test 'auto complete for control objectives' do
     login
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'ges seg', period_id: periods(:past_period).id, format: :json
+    get :auto_complete_for_control_objective, {
+      q: 'acceso', format: :json
     }
     assert_response :success
 
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 2, procedure_control_subitems.size # Gestión de la seguridad
+    assert_equal 3, control_objectives.size
     assert(
-      procedure_control_subitems.all? do
-        |pcs| (pcs['label'] + pcs['informal']).match /ges.*seg/i
+      control_objectives.all? do |co|
+        (co['label'] + co['informal']).match /acceso/i
       end
     )
 
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'depen', period_id: periods(:past_period).id, format: :json
+    get :auto_complete_for_control_objective, {
+      q: 'responsable', format: :json
     }
     assert_response :success
 
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 1, procedure_control_subitems.size # Dependencia del área responsable
+    assert_equal 1, control_objectives.size
     assert(
-      procedure_control_subitems.all? do
-        |pcs| (pcs['label'] + pcs['informal']).match /depen/i
+      control_objectives.all? do |co|
+        (co['label'] + co['informal']).match /responsable/i
       end
     )
 
-    get :auto_complete_for_procedure_control_subitem, {
-      q: 'xyz', period_id: periods(:past_period).id, format: :json
+    get :auto_complete_for_control_objective, {
+      q: 'xyz', format: :json
     }
     assert_response :success
 
-    procedure_control_subitems = ActiveSupport::JSON.decode(@response.body)
+    control_objectives = ActiveSupport::JSON.decode(@response.body)
 
-    assert_equal 0, procedure_control_subitems.size # None
+    assert_equal 0, control_objectives.size # None
+  end
+
+  test 'auto complete for process controls' do
+    login
+    get :auto_complete_for_process_control, {
+      q: 'seg', format: :json
+    }
+    assert_response :success
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 3, process_controls.size
+    assert(
+      process_controls.all? do |pc|
+        (pc['label'] + pc['informal']).match /seg/i
+      end
+    )
+
+    get :auto_complete_for_process_control, {
+      q: 'clasi', format: :json
+    }
+    assert_response :success
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 1, process_controls.size
+    assert(
+      process_controls.all? do |pc|
+        (pc['label'] + pc['informal']).match /clasi/i
+      end
+    )
+
+    get :auto_complete_for_process_control, {
+      q: 'xyz', format: :json
+    }
+    assert_response :success
+
+    process_controls = ActiveSupport::JSON.decode(@response.body)
+
+    assert_equal 0, process_controls.size # None
   end
 
   test 'auto complete for finding relation' do

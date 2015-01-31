@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get '/touch', to: 'touch#index', as: 'touch'
+
   get '/users/login', to: redirect('/') # _Backward compatibility_
 
   # Sessions
@@ -278,14 +280,14 @@ Rails.application.routes.draw do
       get :weaknesses_and_oportunities
       get :download_work_papers
       get :estimated_amount
-      get :procedure_control_data
     end
 
     collection do
       get :estimated_amount
       get :plan_item_data
       get :auto_complete_for_finding
-      get :auto_complete_for_procedure_control_subitem
+      get :auto_complete_for_process_control
+      get :auto_complete_for_control_objective
     end
   end
 
@@ -345,18 +347,6 @@ Rails.application.routes.draw do
   end
 
   resources :resource_classes
-
-  resources :procedure_controls do
-    member do
-      get :export_to_pdf
-    end
-
-    collection do
-      get :get_control_objective
-      get :get_control_objectives
-      get :get_process_controls
-    end
-  end
 
   resources :best_practices
 

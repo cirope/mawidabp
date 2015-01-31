@@ -9,7 +9,11 @@ class ResourceUtilization < ActiveRecord::Base
   belongs_to :resource_consumer, polymorphic: true
 
   def <=>(other)
-    resource_id <=> other.resource_id
+    if other.kind_of?(ResourceUtilization)
+      resource_id <=> other.resource_id
+    else
+      -1
+    end
   end
 
   def cost

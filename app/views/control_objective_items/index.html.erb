@@ -6,13 +6,13 @@
   <thead id="column_headers">
     <tr>
       <%= make_filterable_column Review.model_name.human, nil, 'review' %>
-      <%= make_filterable_column ProcessControl.model_name.human, { 'hidden-xs' => true }, 'process_control' %>
+      <%= make_filterable_column ProcessControl.model_name.human, { :class => 'hidden-xs' }, 'process_control' %>
       <%= make_filterable_column ControlObjective.model_name.human, nil, 'control_objective_text' %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), 'hidden-xs' => true %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), 'hidden-xs' => true %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), 'hidden-xs' => true %>
-      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), 'hidden-xs' => true %>
-      <%= make_not_available_column t('control_objective_item.has_work_papers'), 'hidden-xs' => true %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:finished), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:relevance), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:effectiveness), :class => 'hidden-xs' %>
+      <%= make_not_available_column ControlObjectiveItem.human_attribute_name(:weaknesses), :class => 'hidden-xs' %>
+      <%= make_not_available_column t('control_objective_item.has_work_papers'), :class => 'hidden-xs' %>
       <th colspan="3" class="text-right"><%= link_to_search %></th>
     </tr>
   </thead>

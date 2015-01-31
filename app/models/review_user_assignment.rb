@@ -51,7 +51,7 @@ class ReviewUserAssignment < ActiveRecord::Base
   belongs_to :user
 
   def <=>(other)
-    if self.review_id == other.review_id
+    if other.kind_of?(ReviewUserAssignment) && self.review_id == other.review_id
       self.user_id <=> other.user_id
     else
       -1

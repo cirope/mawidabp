@@ -13,8 +13,8 @@ class PlansController < ApplicationController
   # * GET /plans.xml
   def index
     @title = t 'plan.index_title'
-    @plans = Plan.list.includes(:period).order(
-      "#{Period.table_name}.start DESC"
+    @plans = Plan.list.includes(:period).references(:period).order(
+      "#{Period.quoted_table_name}.#{Period.qcn('start')} DESC"
     ).page(params[:page])
 
     respond_to do |format|
@@ -147,18 +147,18 @@ class PlansController < ApplicationController
     @tokens = params[:q][0..100].split(/[\s,]/).uniq
     @tokens.reject! {|t| t.blank?}
     conditions = [
-      "#{BusinessUnitType.table_name}.organization_id = :organization_id"
+      "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('organization_id')} = :organization_id"
     ]
     parameters = {:organization_id => current_organization.id}
 
     if params[:business_unit_type_id].to_i > 0
-      conditions << "#{BusinessUnitType.table_name}.id = :but_id"
+      conditions << "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('id')} = :but_id"
       parameters[:but_id] = params[:business_unit_type_id].to_i
     end
 
     @tokens.each_with_index do |t, i|
       conditions << [
-        "LOWER(#{BusinessUnit.table_name}.name) LIKE :business_unit_data_#{i}"
+        "LOWER(#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')}) LIKE :business_unit_data_#{i}"
       ].join(' OR ')
 
       parameters[:"business_unit_data_#{i}"] = "%#{t.mb_chars.downcase}%"
@@ -168,10 +168,10 @@ class PlansController < ApplicationController
       [conditions.map {|c| "(#{c})"}.join(' AND '), parameters]
     ).order(
       [
-        "#{BusinessUnit.table_name}.name ASC",
-        "#{BusinessUnitType.table_name}.name ASC"
+        "#{BusinessUnit.quoted_table_name}.#{BusinessUnit.qcn('name')} ASC",
+        "#{BusinessUnitType.quoted_table_name}.#{BusinessUnitType.qcn('name')} ASC"
       ]
-    ).limit(10)
+    ).references(:business_unit_type).limit(10)
 
     respond_to do |format|
       format.json { render :json => @business_units }

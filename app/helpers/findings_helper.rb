@@ -42,9 +42,10 @@ module FindingsHelper
         fra.finding.repeated?
       end
       findings = fras.map { |fra| [fra.finding, fra.finding_id.to_i] }
+      url = url_for controller: form.object.class.to_s.tableize, action: :show, id: '[FINDING_ID]'
 
       form.input :repeated_of_id, collection: findings, prompt: true,
-        label: false, input_html: { disabled: readonly }
+        label: false, input_html: { disabled: readonly, data: { repeated_url: url } }
     end
   end
 
@@ -86,11 +87,8 @@ module FindingsHelper
     content_tag(:abbr, h(review.identification), :title => review_data)
   end
 
-  def show_finding_review_code_with_control_objective_as_abbr(finding)
-    control_objective_text = "#{ControlObjectiveItem.model_name.human}: " +
-      finding.control_objective_item.to_s
-
-    content_tag(:abbr, h(finding.review_code), :title => control_objective_text)
+  def show_finding_review_code_with_decription_as_abbr(finding)
+    content_tag(:abbr, finding.review_code, :title => finding.description)
   end
 
 

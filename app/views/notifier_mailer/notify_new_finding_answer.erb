@@ -5,10 +5,15 @@
 <div style="font-family: verdana, sans-serif, arial, helvetica;">
   <h2 style="margin-bottom: 1em;"><%= organization.name %></h2>
 
-  <h3 style="font-weight: normal;"><%= textilize_without_paragraph(
-    t('notifier_mailer.notify_new_finding_answer.finding_data',
-    :review => h(finding.review.to_s),
-    :finding_code => h(finding.review_code))) %></h3>
+  <h3 style="font-weight: normal;">
+    <%= textilize_without_paragraph(
+      t(
+        'notifier_mailer.notify_new_finding_answer.finding_data',
+        :review => finding.review.to_s,
+        :finding_code => [finding.review_code, finding.title].reject(&:blank?).join(' - ')
+      )
+    ) %>
+  </h3>
 
   <p>
     <b><%= FindingAnswer.human_attribute_name(:user_id) %></b>:

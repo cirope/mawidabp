@@ -13,6 +13,11 @@
   <%= @nonconformity.review_code %>
 </p>
 
+<p>
+  <strong><%= Nonconformity.human_attribute_name :title %>:</strong>
+  <%= @nonconformity.title %>
+</p>
+
 <div>
   <strong><%= Nonconformity.human_attribute_name :description %>:</strong>
   <%= simple_format @nonconformity.description %>

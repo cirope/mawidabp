@@ -1,35 +1,25 @@
 <% id = f.object.object_id %>
+<% process_control_id = process_control_id %>
 <fieldset class="control_objective">
   <div class="form-inputs">
-    <div class="row no-gutter">
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.input :name, autofocus: true, input_html: { rows: 4 } %>
+      </div>
+
       <div class="col-md-2">
-        <%= f.input :name, label: false, autofocus: true, input_html: { rows: 5 } %>
+        <%= f.input :relevance, collection: relevances, prompt: true %>
       </div>
-
-      <%= f.simple_fields_for :control do |c_f| %>
-        <div class="col-md-2">
-          <%= c_f.input :control, label: false, input_html: { rows: 5 } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :design_tests, label: false, input_html: { rows: 5 } %>
-        </div>
-        <div class="col-md-2">
-          <%= c_f.input :compliance_tests, label: false, input_html: { rows: 5 } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :sustantive_tests, label: false, input_html: { rows: 5 } %>
-        </div>
-        <div class="col-md-1">
-          <%= c_f.input :effects, label: false, input_html: { rows: 5 } %>
-        </div>
-        <%= c_f.input :order, as: :hidden %>
-      <% end %>
-
-      <div class="col-md-1">
-        <%= f.input :relevance, collection: relevances, label: false, prompt: true %>
+      <div class="col-md-2">
+        <%= f.input :risk, collection: risks, prompt: true %>
       </div>
       <div class="col-md-1">
-        <%= f.input :risk, collection: risks, label: false, prompt: true %>
+        <label for="control_objective_obsolete_<%= id %>">
+          <%= ControlObjective.human_attribute_name 'obsolete' %>
+        </label>
+        <div>
+          <%= f.check_box :obsolete, id: "control_objective_obsolete_#{id}", data: { process_control_id: process_control_id } %>
+        </div>
       </div>
       <div class="col-md-1">
         <div class="toggle-visibility">
@@ -40,6 +30,29 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <%= f.simple_fields_for :control do |c_f| %>
+        <div class="col-md-3">
+          <%= c_f.input :control, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-2">
+          <%= c_f.input :design_tests, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-3">
+          <%= c_f.input :compliance_tests, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-2">
+          <%= c_f.input :sustantive_tests, input_html: { rows: 4 } %>
+        </div>
+        <div class="col-md-2">
+          <%= c_f.input :effects, input_html: { rows: 4 } %>
+        </div>
+        <%= c_f.input :order, as: :hidden %>
+      <% end %>
+    </div>
   </div>
+
+  <hr>
 </fieldset>
 <script type="text/javascript">FormUtil.completeSortNumbers();</script>

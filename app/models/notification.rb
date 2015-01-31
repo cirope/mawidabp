@@ -69,7 +69,11 @@ class Notification < ActiveRecord::Base
   end
 
   def <=>(other)
-    self.id <=> other.id
+    if other.kind_of?(Notification)
+      self.id <=> other.id
+    else
+      -1
+    end
   end
 
   def to_param
@@ -88,7 +92,7 @@ class Notification < ActiveRecord::Base
         self.findings.each do |finding|
           finding.confirmed! if self.user.can_act_as_audited?
 
-          finding.notifications.each do |notification|
+          finding.notifications.uniq.each do |notification|
             restrictions = !notification.notified? && notification != self &&
               self.user.can_act_as_audited? &&
               !notification.user.can_act_as_audited?

@@ -2,23 +2,28 @@ iso_27000_security_policy:
   name: Política de seguridad
   order: 1
   best_practice: iso_27001
+  obsolete: false
 
 iso_27000_security_organization:
   name: Organización de la Seguridad
   order: 2
   best_practice: iso_27001
+  obsolete: false
 
 iso_27000_assets_control:
   name: Clasificación y control de activos
   order: 3
   best_practice: iso_27001
+  obsolete: false
 
 bcra_A4609_security_management:
   name: Gestión de la Seguridad
   order: 1
   best_practice: bcra_A4609
+  obsolete: false
 
 bcra_A4609_data_proccessing:
   name: Operaciones y procesamiento de datos
   order: 2
   best_practice: bcra_A4609
+  obsolete: false
