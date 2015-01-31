@@ -10,6 +10,14 @@ module Periods::Overrides
     "#{number} (#{dates_range_text})"
   end
 
+  def start
+    super.try :to_date
+  end
+
+  def end
+    super.try :to_date
+  end
+
   def <=>(other)
     if other.kind_of?(Period)
       start_result = start <=> other.start
@@ -36,10 +44,8 @@ module Periods::Overrides
     end
 
     def long_dates_range_text
-      start_text =
-        "#{Period.human_attribute_name('start')}: #{I18n.l(start, format: :long)}"
-      end_text =
-        "#{Period.human_attribute_name('end')}: #{I18n.l(self.end, format: :long)}"
+      start_text = "#{Period.human_attribute_name('start')}: #{I18n.l(start, format: :long)}"
+      end_text   = "#{Period.human_attribute_name('end')}: #{I18n.l(self.end, format: :long)}"
 
       "#{start_text} | #{end_text}"
     end
