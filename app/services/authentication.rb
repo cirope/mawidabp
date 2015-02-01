@@ -88,6 +88,8 @@ class Authentication
 
         @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
       end
+    rescue Net::LDAP::Error
+      @message = I18n.t 'message.ldap_error'
     end
 
     def local_auth

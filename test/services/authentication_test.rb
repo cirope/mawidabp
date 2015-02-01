@@ -71,6 +71,16 @@ class AuthenticationTest < ActionController::TestCase
     assert_invalid_authentication
   end
 
+  test 'should show a message when ldap is not reacheble' do
+    @organization = organizations :google
+    @params = { user: @user.user, password: 'wrong password' }
+    Organization.current_id = @organization.id
+
+    @organization.ldap_config.update port: 1
+
+    assert_invalid_authentication message: 'message.ldap_error'
+  end
+
   test 'should not login if user expired' do
     @user.update_column :last_access,
       get_test_parameter(:account_expire_time).to_i.days.ago.yesterday

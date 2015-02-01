@@ -52,6 +52,8 @@ mc_es:
     mc_es: 'Control de gestión'
 
   message:
+    welcome: 'Bienvenido'
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     change_weakness_risk: "El riesgo del desvío ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"
