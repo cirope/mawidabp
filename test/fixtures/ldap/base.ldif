@@ -10,10 +10,6 @@ dn: ou=people,dc=test,dc=com
 objectClass: organizationalUnit
 ou: people
 
-dn: ou=others,dc=test,dc=com
-objectClass: organizationalUnit
-ou: others
-
 dn: ou=groups,dc=test,dc=com
 objectClass: organizationalUnit
 ou: groups
@@ -26,7 +22,7 @@ mail: administrator@administrator.com
 cn: admin
 userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
 
-dn: cn=admin_second,ou=others,dc=test,dc=com
+dn: cn=admin_second,ou=people,dc=test,dc=com
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
@@ -35,7 +31,7 @@ sn: Other
 uid: admin_second
 mail: administrator_second@administrator.com
 cn: admin_second
-userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
+userPassword: {SSHA}jZeYUeNAd/8acSrOfPNWxWbxKyaQgxRP
 
 dn: cn=general_manager_user,ou=people,dc=test,dc=com
 objectClass: inetOrgPerson

@@ -44,13 +44,13 @@ class LdapConfigTest < ActiveSupport::TestCase
   end
 
   test 'ldap bind' do
-    ldap = @ldap_config.ldap 'admin', 'admin123'
+    ldap = @ldap_config.ldap 'admin_second', 'admin123'
 
     assert ldap.bind
   end
 
   test 'ldap no bind if wrong password' do
-    ldap = @ldap_config.ldap 'admin', 'wrong'
+    ldap = @ldap_config.ldap 'admin_second', 'wrong'
 
     assert !ldap.bind
   end

@@ -10,16 +10,13 @@ changetype: delete
 dn: cn=admin,ou=people,dc=test,dc=com
 changetype: delete
 
-dn: cn=admin_second,ou=others,dc=test,dc=com
+dn: cn=admin_second,ou=people,dc=test,dc=com
 changetype: delete
 
 dn: ou=groups,dc=test,dc=com
 changetype: delete
 
 dn: ou=people,dc=test,dc=com
-changetype: delete
-
-dn: ou=others,dc=test,dc=com
 changetype: delete
 
 dn: dc=test,dc=com
