@@ -1,6 +1,6 @@
 google_ldap:
   hostname: localhost
-  port: 389
+  port: <%= ENV['TRAVIS'] ? 3389 : 389 %>
   basedn: ou=people,dc=test,dc=com
   username_ldap_attribute: cn
   organization: google

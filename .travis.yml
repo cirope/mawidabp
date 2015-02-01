@@ -8,4 +8,5 @@ before_script:
   - 'cp config/application.example.yml config/application.yml'
   - "psql -c 'create database mawidabp_test;' -U postgres"
   - 'bundle exec rake db:migrate'
+  - 'slapd -f test/fixtures/ldap/slapd.conf -h ldap://localhost:3389'
   - 'bundle exec rake ldap:reset'
