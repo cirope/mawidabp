@@ -11,10 +11,12 @@
     </a>
 
     <ul class="dropdown-menu">
-      <li>
-        <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user) %>
-      </li>
-      <li class="divider"></li>
+      <% if current_organization && current_organization.ldap_config.blank? %>
+        <li>
+          <%= link_to t('users.profiles.edit.title'), edit_users_profile_path(user) %>
+        </li>
+        <li class="divider"></li>
+      <% end %>
       <li>
         <%= link_to t('navigation.logout'), logout_path, data: { method: :delete } %>
       </li>
