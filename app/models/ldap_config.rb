@@ -4,7 +4,8 @@ class LdapConfig < ActiveRecord::Base
   include LdapConfigs::LDAP
   include LdapConfigs::Validation
 
-  trimmed_fields :hostname, :basedn, :username_ldap_attribute
+  trimmed_fields :hostname, :basedn, :login_mask, :username_attribute,
+    :name_attribute, :last_name_attribute, :email_attribute, :roles_attribute
 
   belongs_to :organization
 end

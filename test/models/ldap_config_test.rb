@@ -9,26 +9,48 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.hostname = ''
     @ldap_config.port = nil
     @ldap_config.basedn = ''
-    @ldap_config.username_ldap_attribute = ''
+    @ldap_config.login_mask = ''
+    @ldap_config.username_attribute = ''
+    @ldap_config.name_attribute = ''
+    @ldap_config.last_name_attribute = ''
+    @ldap_config.email_attribute = ''
+    @ldap_config.roles_attribute = ''
     @ldap_config.organization = nil
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :hostname, :blank
     assert_error @ldap_config, :port, :blank
     assert_error @ldap_config, :basedn, :blank
-    assert_error @ldap_config, :username_ldap_attribute, :blank
+    assert_error @ldap_config, :login_mask, :blank
+    assert_error @ldap_config, :username_attribute, :blank
+    assert_error @ldap_config, :name_attribute, :blank
+    assert_error @ldap_config, :last_name_attribute, :blank
+    assert_error @ldap_config, :email_attribute, :blank
+    assert_error @ldap_config, :roles_attribute, :blank
     assert_error @ldap_config, :organization, :blank
   end
 
   test 'validates formats' do
     @ldap_config.port = 'xx'
     @ldap_config.basedn = 'dc=name,noway'
-    @ldap_config.username_ldap_attribute = '?'
+    @ldap_config.username_attribute = '?'
+    @ldap_config.name_attribute = '?'
+    @ldap_config.last_name_attribute = '?'
+    @ldap_config.email_attribute = '?'
+    @ldap_config.function_attribute = '?'
+    @ldap_config.roles_attribute = '?'
+    @ldap_config.manager_attribute = '?'
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :port, :not_a_number
     assert_error @ldap_config, :basedn, :invalid
-    assert_error @ldap_config, :username_ldap_attribute, :invalid
+    assert_error @ldap_config, :username_attribute, :invalid
+    assert_error @ldap_config, :name_attribute, :invalid
+    assert_error @ldap_config, :last_name_attribute, :invalid
+    assert_error @ldap_config, :email_attribute, :invalid
+    assert_error @ldap_config, :function_attribute, :invalid
+    assert_error @ldap_config, :roles_attribute, :invalid
+    assert_error @ldap_config, :manager_attribute, :invalid
   end
 
   test 'validates port range' do

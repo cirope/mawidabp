@@ -106,8 +106,15 @@ es: &common
       ldap_config:
         hostname: 'Dirección del servidor'
         port: 'Puerto'
-        basedn: 'Nombre distinguido de base (DN)'
-        username_ldap_attribute: 'Atributo LDAP del usuario (UID)'
+        basedn: 'Nombre distinguido de base'
+        login_mask: 'Máscara de autenticación'
+        username_attribute: 'Atributo con el nombre de usuario'
+        name_attribute: 'Atributo con el nombre'
+        last_name_attribute: 'Atributo con el apellido'
+        email_attribute: 'Atributo con el correo electrónico'
+        function_attribute: 'Atributo con el cargo'
+        roles_attribute: 'Atributo con los perfiles'
+        manager_attribute: 'Atributo con el superior'
       login_record:
         data: 'Datos'
         end: 'Fin'

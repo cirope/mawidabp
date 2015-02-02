@@ -2,5 +2,12 @@ google_ldap:
   hostname: localhost
   port: <%= ENV['TRAVIS'] ? 3389 : 389 %>
   basedn: ou=people,dc=test,dc=com
-  username_ldap_attribute: cn
+  login_mask: "cn=%{user},%{basedn}"
+  username_attribute: cn
+  name_attribute: givenname
+  last_name_attribute: sn
+  email_attribute: mail
+  function_attribute: title
+  roles_attribute: memberof
+  manager_attribute: manager
   organization: google
