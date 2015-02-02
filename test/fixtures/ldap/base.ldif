@@ -16,10 +16,14 @@ ou: groups
 
 dn: cn=admin,ou=people,dc=test,dc=com
 objectClass: inetOrgPerson
-sn: User
+sn: Doe
+givenname: John
+title: Administrator
+description: cn=Administrator Second,ou=people,dc=test,dc=com
+description: cn=Auditor Second,ou=people,dc=test,dc=com
 uid: admin@test.com
 mail: administrator@administrator.com
-cn: admin@test.com
+cn: admin
 userPassword: {SSHA}e1GIPfRS5AhGYeKAYi7cTJEaQWMbELnJ
 
 dn: cn=admin_second,ou=people,dc=test,dc=com
@@ -28,9 +32,12 @@ objectClass: organizationalPerson
 objectClass: person
 objectClass: top
 sn: Other
+givenname: John
+title: Another administrator
+description: cn=Administrator Second,ou=people,dc=test,dc=com
 uid: admin_second@test.com
 mail: administrator_second@administrator.com
-cn: admin_second@test.com
+cn: admin_second
 userPassword: {SSHA}jZeYUeNAd/8acSrOfPNWxWbxKyaQgxRP
 
 dn: cn=general_manager_user,ou=people,dc=test,dc=com
@@ -38,10 +45,14 @@ objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
-sn: Admin
-uid: general_manager_user@test.com
-cn: general_manager_user@test.com
-mail: general_manager_user@test.com
+sn: New
+givenname: User
+title: This should be imported as new
+description: cn=Auditor Second,ou=people,dc=test,dc=com
+manager: cn=admin,ou=people,dc=test,dc=com
+uid: new_user@test.com
+cn: new_user
+mail: new_user@test.com
 userPassword: {SSHA}pULtb+MrlssbA09LY4j5OfaVWI8NUC0k
 
 dn: cn=admins,ou=groups,dc=test,dc=com

@@ -76,4 +76,20 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert !ldap.bind
   end
+
+  test 'import' do
+    set_organization organizations(:google)
+
+    user = users :administrator_user
+    role = roles :admin_second_role
+
+    assert user.organization_roles.map(&:role_id).exclude?(role.id)
+
+    assert_difference 'User.count' do
+      @ldap_config.import 'admin', 'admin123'
+    end
+
+    assert user.reload.organization_roles.map(&:role_id).include?(role.id)
+    assert_equal user.id, User.find_by(user: 'new_user').manager_id
+  end
 end

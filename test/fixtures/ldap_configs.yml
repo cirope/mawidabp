@@ -8,6 +8,6 @@ google_ldap:
   last_name_attribute: sn
   email_attribute: mail
   function_attribute: title
-  roles_attribute: memberof
+  roles_attribute: description
   manager_attribute: manager
   organization: google

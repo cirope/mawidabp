@@ -2,6 +2,7 @@ class LdapConfig < ActiveRecord::Base
   include Auditable
   include Trimmer
   include LdapConfigs::LDAP
+  include LdapConfigs::LDAPImport
   include LdapConfigs::Validation
 
   trimmed_fields :hostname, :basedn, :login_mask, :username_attribute,
