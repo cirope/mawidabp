@@ -29,5 +29,6 @@
 //= require file_input
 //= require best_practices
 //= require findings
+//= require organizations
 //= require touch
 //= require users

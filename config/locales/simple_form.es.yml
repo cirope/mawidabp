@@ -29,6 +29,21 @@ es: &common
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+    hints:
+      ldap_config:
+        hostname: 'Dominio o dirección IP'
+        port: 'Por ejemplo: 389'
+        basedn: 'CN=Users,DC=dominio,DC=com'
+        login_mask: '%{user}@dominio.com, Dominio\%{user} o %{user},%{basedn}'
+        username_attribute: 'Por ejemplo: cn'
+        name_attribute: 'Por ejemplo: givenname'
+        last_name_attribute: 'Por ejemplo: sn'
+        email_attribute: 'Por ejemplo: mail'
+        function_attribute: 'Por ejemplo: title'
+        roles_attribute: 'Por ejemplo: memberof'
+        manager_attribute: 'Por ejemplo: manager'
+        test_user: 'Usuario válido en el servidor para probar la conexión'
+        test_password: 'Contraseña del usuario para probar la conexión'
 
 public_es:
   <<: *common

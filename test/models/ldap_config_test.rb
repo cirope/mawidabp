@@ -15,7 +15,6 @@ class LdapConfigTest < ActiveSupport::TestCase
     @ldap_config.last_name_attribute = ''
     @ldap_config.email_attribute = ''
     @ldap_config.roles_attribute = ''
-    @ldap_config.organization = nil
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :hostname, :blank
@@ -27,7 +26,6 @@ class LdapConfigTest < ActiveSupport::TestCase
     assert_error @ldap_config, :last_name_attribute, :blank
     assert_error @ldap_config, :email_attribute, :blank
     assert_error @ldap_config, :roles_attribute, :blank
-    assert_error @ldap_config, :organization, :blank
   end
 
   test 'validates formats' do
@@ -63,6 +61,17 @@ class LdapConfigTest < ActiveSupport::TestCase
 
     assert @ldap_config.invalid?
     assert_error @ldap_config, :port, :less_than, count: 65536
+  end
+
+  test 'validates that can connect' do
+    @ldap_config.test_user = 'admin'
+    @ldap_config.test_password = 'wrong'
+
+    assert @ldap_config.invalid?
+    assert_equal @ldap_config.errors[:base], [I18n.t('message.ldap_error')]
+
+    @ldap_config.test_password = 'admin123'
+    assert @ldap_config.valid?
   end
 
   test 'ldap bind' do

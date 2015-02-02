@@ -1,0 +1,39 @@
+<a href="#ldap_config" data-toggle="collapse">
+  <h3>
+    <%= LdapConfig.model_name.human count: 1 %>
+    <b class="caret"></b>
+  </h3>
+</a>
+
+<% @organization.build_ldap_config unless @organization.ldap_config %>
+<%= f.simple_fields_for :ldap_config do |l_f| %>
+  <% if l_f.object.errors[:base].present? %>
+    <div class="alert alert-danger">
+      <%= l_f.object.errors[:base].to_sentence %>
+    </div>
+  <% end %>
+  <div id="ldap_config" class="collapse <%= 'in' if l_f.object.errors.present? %>">
+    <%=  %>
+    <fieldset <%= 'disabled' if l_f.object.errors.empty? %>>
+      <%= l_f.input :hostname %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= l_f.input :port %>
+          <%= l_f.input :basedn %>
+          <%= l_f.input :login_mask %>
+          <%= l_f.input :username_attribute %>
+          <%= l_f.input :name_attribute %>
+          <%= l_f.input :test_user %>
+        </div>
+        <div class="col-md-6">
+          <%= l_f.input :last_name_attribute %>
+          <%= l_f.input :email_attribute %>
+          <%= l_f.input :function_attribute %>
+          <%= l_f.input :roles_attribute %>
+          <%= l_f.input :manager_attribute %>
+          <%= l_f.input :test_password %>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+<% end %>

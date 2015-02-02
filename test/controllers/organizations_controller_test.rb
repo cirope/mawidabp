@@ -40,6 +40,37 @@ class OrganizationsControllerTest < ActionController::TestCase
     assert_equal groups(:main_group).id, assigns(:organization).reload.group_id
   end
 
+  test 'create organization with LDAP config' do
+    assert_difference ['Organization.count', 'LdapConfig.count'] do
+      post :create, {
+        organization: {
+          name: 'New organization',
+          prefix: 'new-prefix',
+          description: 'New description',
+          group_id: groups(:main_group).id,
+          image_model_id: image_models(:image_one).id,
+          ldap_config_attributes: {
+            hostname: 'localhost',
+            port: ENV['TRAVIS'] ? 3389 : 389,
+            basedn: 'ou=people,dc=test,dc=com',
+            login_mask: 'cn=%{user},%{basedn}',
+            username_attribute: 'cn',
+            name_attribute: 'givenname',
+            last_name_attribute: 'sn',
+            email_attribute: 'mail',
+            function_attribute: 'title',
+            roles_attribute: 'description',
+            manager_attribute: 'manager',
+            test_user: 'admin',
+            test_password: 'admin123'
+          }
+        }
+      }
+    end
+
+    assert_equal groups(:main_group).id, assigns(:organization).reload.group_id
+  end
+
   test 'create organization with wrong group' do
     assert_difference 'Organization.count' do
       post :create, {

@@ -115,6 +115,8 @@ es: &common
         function_attribute: 'Atributo con el cargo'
         roles_attribute: 'Atributo con los perfiles'
         manager_attribute: 'Atributo con el superior'
+        test_user: 'Usuario'
+        test_password: 'Contraseña'
       login_record:
         data: 'Datos'
         end: 'Fin'
