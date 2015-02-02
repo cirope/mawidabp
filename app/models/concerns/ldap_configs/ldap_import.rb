@@ -32,8 +32,8 @@ module LdapConfigs::LDAPImport
   private
 
     def process_entry entry
-      role_names = entry[roles_attribute].map { |r| r.sub(/.*?cn=(.*?),.*/i, '\1') }
-      manager_dn = manager_attribute && entry[manager_attribute].first
+      role_names = entry[roles_attribute].map { |r| r.try(:force_encoding, 'UTF-8').sub(/.*?cn=(.*?),.*/i, '\1') }
+      manager_dn = manager_attribute && entry[manager_attribute].first.try(:force_encoding, 'UTF-8')
       data       = trivial_data entry
       roles      = Role.list.where name: role_names
       user       = User.where(email: data[:email]).take
@@ -50,11 +50,11 @@ module LdapConfigs::LDAPImport
 
     def trivial_data entry
       {
-        user:      entry[username_attribute].first,
-        name:      entry[name_attribute].first,
-        last_name: entry[last_name_attribute].first,
-        email:     entry[email_attribute].first,
-        function:  function_attribute && entry[function_attribute].first,
+        user:      entry[username_attribute].first.try(:force_encoding, 'UTF-8'),
+        name:      entry[name_attribute].first.try(:force_encoding, 'UTF-8'),
+        last_name: entry[last_name_attribute].first.try(:force_encoding, 'UTF-8'),
+        email:     entry[email_attribute].first.try(:force_encoding, 'UTF-8'),
+        function:  function_attribute && entry[function_attribute].first.try(:force_encoding, 'UTF-8'),
         enable:    true
       }
     end
