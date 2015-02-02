@@ -25,6 +25,9 @@
         </div>
       <% end %>
     </div>
-    <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+
+    <% if current_organization.blank? || current_organization.ldap_config.blank? %>
+      <%= link_to t('sessions.new.forgot_password'), new_users_password_path %>
+    <% end %>
   </div>
 </div>

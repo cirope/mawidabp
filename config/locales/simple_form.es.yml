@@ -35,7 +35,7 @@ es: &common
         port: 'Por ejemplo: 389'
         basedn: 'CN=Users,DC=dominio,DC=com'
         login_mask: '%{user}@dominio.com, Dominio\%{user} o %{user},%{basedn}'
-        username_attribute: 'Por ejemplo: cn'
+        username_attribute: 'Por ejemplo: samaccountname'
         name_attribute: 'Por ejemplo: givenname'
         last_name_attribute: 'Por ejemplo: sn'
         email_attribute: 'Por ejemplo: mail'
@@ -44,6 +44,8 @@ es: &common
         manager_attribute: 'Por ejemplo: manager'
         test_user: 'Usuario válido en el servidor para probar la conexión'
         test_password: 'Contraseña del usuario para probar la conexión'
+      import:
+        username: 'Usuario con permisos para consultar la base de usuarios LDAP'
 
 public_es:
   <<: *common

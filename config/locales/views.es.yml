@@ -226,6 +226,7 @@ es: &common
   users:
     index:
       title: 'Listado de usuarios'
+      import_from_ldap: 'Importar desde LDAP'
     show:
       title: 'Detalles de usuario'
       profiles: 'Perfiles'
@@ -242,6 +243,20 @@ es: &common
       add_related_user_relations: 'Agregar usuario relacionado'
       add_organization_role: 'Agregar un nuevo perfil'
 
+    imports:
+      new:
+        title: 'Importar usuarios desde LDAP'
+        credentials: 'Credenciales'
+        import: 'Importar'
+      create:
+        title: 'Resultados de la importación'
+        empty: 'No se importó ningún usuario'
+        connection: 'No se pudo conectar con el servidor, revise el usuario y la contraseña'
+        record_invalid: 'Se produjo un error en la importación, algunos usuarios tienen campos no válidos'
+        created: 'Creado'
+        updated: 'Actualizado'
+        error: 'Con errores'
+        deprecated_users: 'Usuarios ausentes en el servidor LDAP'
     passwords:
       edit:
         title: 'Cambiar contraseña'

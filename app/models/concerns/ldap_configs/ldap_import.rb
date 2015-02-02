@@ -6,20 +6,27 @@ module LdapConfigs::LDAPImport
     filter      = Net::LDAP::Filter.eq 'CN', '*'
     users_by_dn = {}
     managers    = {}
+    users       = []
 
     User.transaction do
       ldap.search(base: basedn, filter: filter) do |entry|
         if entry[email_attribute].present?
-          result = process_entry entry
+          users << (result = process_entry entry)
           user   = result[:user]
 
-          users_by_dn[entry.dn] = user.id
-          managers[user]        = result[:manager_dn] if result[:manager_dn]
+          if user.persisted?
+            users_by_dn[entry.dn] = user.id
+            managers[user]        = result[:manager_dn] if result[:manager_dn]
+          end
         end
       end
 
+      raise Net::LDAP::Error.new unless ldap.get_operation_result.code == 0
+
       assign_managers managers, users_by_dn
     end
+
+    users
   end
 
   private
@@ -30,7 +37,7 @@ module LdapConfigs::LDAPImport
       data       = trivial_data entry
       roles      = Role.list.where name: role_names
       user       = User.where(email: data[:email]).take
-      new        = !!user
+      new        = !user
 
       if user
         update_user user: user, data: data, roles: roles
@@ -47,7 +54,8 @@ module LdapConfigs::LDAPImport
         name:      entry[name_attribute].first,
         last_name: entry[last_name_attribute].first,
         email:     entry[email_attribute].first,
-        function:  function_attribute && entry[function_attribute].first
+        function:  function_attribute && entry[function_attribute].first,
+        enable:    true
       }
     end
 
@@ -64,7 +72,7 @@ module LdapConfigs::LDAPImport
       end
       data[:organization_roles_attributes] = new_roles.compact + removed_roles.compact
 
-      user.update! data
+      user.update data
     end
 
     def create_user user: nil, data: nil, roles: nil
@@ -72,7 +80,7 @@ module LdapConfigs::LDAPImport
         { organization_id: r.organization_id, role_id: r.id }
       end.compact
 
-      user = User.create! data
+      user = User.create data
     end
 
     def assign_managers managers, users_by_dn

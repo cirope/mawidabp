@@ -60,7 +60,8 @@ class ApplicationController < ActionController::Base
 
         session[:back_to] = nil if action == :index
 
-        if @auth_user.try(:must_change_the_password?) &&
+        if current_organization.try(:ldap_config).blank? &&
+            @auth_user.try(:must_change_the_password?) &&
             ![:edit_password, :update_password].include?(action)
           flash.notice ||= t 'message.must_change_the_password'
           redirect_to edit_users_password_url(@auth_user)

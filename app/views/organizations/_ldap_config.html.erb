@@ -12,9 +12,10 @@
       <%= l_f.object.errors[:base].to_sentence %>
     </div>
   <% end %>
-  <div id="ldap_config" class="collapse <%= 'in' if l_f.object.errors.present? %>">
+  <% collapse_in = l_f.object.persisted? || l_f.object.errors.present? %>
+  <div id="ldap_config" class="collapse <%= 'in' if collapse_in %>">
     <%=  %>
-    <fieldset <%= 'disabled' if l_f.object.errors.empty? %>>
+    <fieldset <%= 'disabled' unless collapse_in %>>
       <%= l_f.input :hostname %>
       <div class="row">
         <div class="col-md-6">
