@@ -4,7 +4,9 @@ rvm:
 bundler_args: '--without development production'
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq imagemagick
+  - sudo apt-get install -qq imagemagick slapd ldap-utils
 before_script:
   - 'cp config/application.example.yml config/application.yml'
   - 'bundle exec rake db:migrate'
+  - 'slapd -f test/fixtures/ldap/slapd.conf -h ldap://localhost:3389'
+  - 'bundle exec rake ldap:reset'

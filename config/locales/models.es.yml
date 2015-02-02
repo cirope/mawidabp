@@ -30,6 +30,9 @@ es: &common
       error_record:
         one: 'Registro de error'
         other: 'Registros de errores'
+      ldap_config:
+        one: 'Configuración LDAP'
+        other: 'Configuraciones LDAP'
       login_record:
         one: 'Registro de ingreso'
         other: 'Registros de ingreso'
@@ -100,6 +103,20 @@ es: &common
         data: 'Datos'
         error: 'Error'
         user_id: 'Usuario'
+      ldap_config:
+        hostname: 'Dirección del servidor'
+        port: 'Puerto'
+        basedn: 'Nombre distinguido de base'
+        login_mask: 'Máscara de autenticación'
+        username_attribute: 'Atributo con el nombre de usuario'
+        name_attribute: 'Atributo con el nombre'
+        last_name_attribute: 'Atributo con el apellido'
+        email_attribute: 'Atributo con el correo electrónico'
+        function_attribute: 'Atributo con el cargo'
+        roles_attribute: 'Atributo con los perfiles'
+        manager_attribute: 'Atributo con el superior'
+        test_user: 'Usuario'
+        test_password: 'Contraseña'
       login_record:
         data: 'Datos'
         end: 'Fin'

@@ -53,6 +53,7 @@ public_es:
 
   message:
     welcome: 'Bienvenido'
+    ldap_error: 'El servidor de autenticación no está disponible, intente nuevamente más tarde'
     change_weakness_risk: "El riesgo de la observación ha cambiado"
     confirmation_question: "¿Está seguro?"
     download: "Descargar"

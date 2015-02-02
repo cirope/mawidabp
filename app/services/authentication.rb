@@ -16,9 +16,12 @@ class Authentication
     authenticate
 
     if @valid
-      verify_days_for_password_expiration
-      verify_pending_poll
-      verify_if_must_change_the_password
+      unless @current_organization.ldap_config
+        verify_days_for_password_expiration
+        verify_pending_poll
+        verify_if_must_change_the_password
+      end
+
       @message ||= I18n.t 'message.welcome'
     else
       @message ||= I18n.t 'message.invalid_user_or_password'
@@ -68,6 +71,28 @@ class Authentication
     end
 
     def authenticate
+      if @current_organization.ldap_config
+        ldap_auth
+      else
+        local_auth
+      end
+    end
+
+    def ldap_auth
+      ldap = @current_organization.ldap_config.ldap @user.user, @user.password
+
+      @valid = ldap.bind
+
+      if @valid
+        register_login
+
+        @redirect_url = @session[:go_to] || { controller: 'welcome', action: 'index' }
+      end
+    rescue Net::LDAP::Error
+      @message = I18n.t 'message.ldap_error'
+    end
+
+    def local_auth
       if @valid_user && !concurrent_access_message
         encrypt_password
 
@@ -104,7 +129,7 @@ class Authentication
     def register_login_error
       user = User.find_by user: @user.user
 
-      if user
+      if user && @current_organization.ldap_config.blank?
         create_error_record user: user, error_type: :on_login
         user.failed_attempts += 1
 
@@ -127,7 +152,7 @@ class Authentication
     end
 
     def create_error_record parameters
-      ErrorRecord.list.create parameters.merge(request: @request)
+      ErrorRecord.list.create! parameters.merge(request: @request)
     end
 
     def verify_if_must_change_the_password

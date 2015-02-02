@@ -8,12 +8,12 @@
 <% end %>
 
 admin_second_role:
-  name: Second Admin
+  name: Administrator Second
   role_type: <%= Role::TYPES[:admin] %>
-  organization: google 
+  organization: google
 
 auditor_second_role:
-  name: Second Auditor
+  name: Auditor Second
   role_type: <%= Role::TYPES[:auditor_senior] %>
   organization: google
 

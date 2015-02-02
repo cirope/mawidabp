@@ -7,6 +7,7 @@ class Organization < ActiveRecord::Base
   include Organizations::DestroyValidation
   include Organizations::Group
   include Organizations::Images
+  include Organizations::LdapConfigs
   include Organizations::Parameters
   include Organizations::Roles
   include Organizations::Scopes

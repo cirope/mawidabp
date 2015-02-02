@@ -408,6 +408,7 @@ Rails.application.routes.draw do
     resources :releases, only: [:edit, :update]
     resources :roles, only: [:index]
     resources :status, only: [:show]
+    resources :imports, only: [:new, :create]
   end
 
   resources :users
