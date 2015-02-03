@@ -1,7 +1,7 @@
 jQuery ($) ->
   $(document).on 'keyup', '[data-work-paper-description]', ->
     description = $(this).val() || ''
-    urlMatch    = description.match /(ftp|file|http|https):\/\/[\\\w\-.]+(\/\S*)?/
+    urlMatch    = description.match /(ftp|file|http|https):\/\/[\\\w\-.%]+(\/\S*)?/
     fileUrl     = urlMatch && urlMatch[0]
     fileInput   = $(this).closest('.work_paper').find '[data-file-url]'
 
