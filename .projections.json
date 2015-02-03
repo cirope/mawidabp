@@ -1,0 +1,19 @@
+{
+  "app/services/*.rb": {
+    "type": "service",
+    "alternate": "test/services/{}_test.rb",
+    "template": [
+      "class {underscore|camelcase}",
+      "end"
+    ]
+  },
+  "test/services/*_test.rb": {
+    "type": "servicetest",
+    "alternate": "app/services/{}.rb",
+    "template": [
+      "require 'test_helper'\n",
+      "class {underscore|camelcase}Test < ActionController::TestCase",
+      "end"
+    ]
+  }
+}
