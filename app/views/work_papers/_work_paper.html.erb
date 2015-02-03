@@ -13,22 +13,23 @@
       <%= f.input :number_of_pages, as: :string, label: false %>
     </div>
     <div class="col-md-4">
-      <%= f.input :description, label: false, input_html: { rows: 1 } %>
+      <%= f.input :description, as: :string, label: false, input_html: { data: { work_paper_description: true } } %>
     </div>
     <div class="col-md-2">
       <% unless frozen %>
         <%= f.simple_fields_for :file_model, file_model(f.object) do |fm_f| %>
           <div class="file-container pull-left">
-            <%= link_to_upload(fm_f.object) %>
-            <% unless fm_f.object.file_cache %>
-              <%= fm_f.input :file, label: false %>
-            <% else %>
+            <%= link_to_upload fm_f.object %>
+            <% if fm_f.object.file_cache %>
               <%= fm_f.input :file_cache, as: :hidden %>
+            <% else %>
+              <%= fm_f.input :file, label: false %>
             <% end %>
           </div>
         <% end %>
       <% end %>
       <%= link_to_download f.object %>
+      <%= link_to_file f.object.description.to_s %>
     </div>
     <div class="col-md-1">
       <div class="toggle-visibility" style="margin-left: 15px;">

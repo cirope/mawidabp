@@ -27,4 +27,16 @@ module FileModelHelper
       content_tag(:span, nil, class: "icon glyphicon #{options[:class]}")
     end
   end
+
+  def link_to_file description
+    file_url = description.match(/(ftp|file|http|https):\/\/[\\\w\-.]+(\/\S*)?/) && $~[0]
+    url      = file_url ? file_url.strip : '#'
+    classes  = 'btn btn-default'
+
+    classes << ' hidden' unless file_url
+
+    link_to url, class: classes, target: '_blank', data: { file_url: true } do
+      content_tag :span, nil, class: 'icon glyphicon glyphicon-download-alt'
+    end
+  end
 end

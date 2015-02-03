@@ -32,3 +32,4 @@
 //= require organizations
 //= require touch
 //= require users
+//= require work_papers
