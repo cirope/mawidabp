@@ -215,6 +215,30 @@ class ReviewsController < ApplicationController
     ).references(:reviews, :periods, :conclusion_reviews, :business_units)
   end
 
+  def suggested_process_control_findings
+    @process_control = ProcessControl.find params[:id]
+    @findings = Finding.where(
+      [
+        "#{Finding.quoted_table_name}.#{Finding.qcn('final')} = :false",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('state')} IN(:states)",
+        "#{ConclusionReview.quoted_table_name}.#{ConclusionReview.qcn('review_id')} IS NOT NULL",
+        "#{ControlObjective.quoted_table_name}.#{ControlObjective.qcn('process_control_id')} = :process_control_id"
+      ].join(' AND '),
+      false: false,
+      states: [Finding::STATUS[:being_implemented], Finding::STATUS[:implemented]],
+      process_control_id: @process_control.id
+    ).includes(
+      control_objective_item: [
+        :control_objective, { review: :conclusion_final_review }
+      ]
+    ).order(
+      [
+        "#{Review.quoted_table_name}.#{Review.qcn('identification')} ASC",
+        "#{Finding.quoted_table_name}.#{Finding.qcn('review_code')} ASC"
+      ]
+    ).references(:reviews, :conclusion_reviews, :control_objectives)
+  end
+
   # * GET /reviews/auto_complete_for_finding
   def auto_complete_for_finding
     @tokens = params[:q][0..100].split(

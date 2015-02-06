@@ -54,8 +54,7 @@ class Finding < ActiveRecord::Base
   belongs_to :organization
   belongs_to :control_objective_item
   has_one :review, :through => :control_objective_item
-  has_one :control_objective, :through => :control_objective_item,
-    :class_name => 'ControlObjective'
+  has_one :control_objective, :through => :control_objective_item
   has_many :notification_relations, :as => :model, :dependent => :destroy
   has_many :notifications, -> { order(:created_at) },
     :through => :notification_relations

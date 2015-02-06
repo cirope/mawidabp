@@ -272,6 +272,23 @@ class ReviewsControllerTest < ActionController::TestCase
     assert_template 'reviews/suggested_findings'
   end
 
+  test 'suggested process control findings' do
+    login
+    process_control = process_controls :iso_27000_security_policy
+
+    get :suggested_process_control_findings, id: process_control.id
+    assert_response :success
+    assert_not_nil assigns(:findings)
+    assert assigns(:findings).count > 0
+    assert assigns(:findings).all?(&:pending?)
+    assert(
+      assigns(:findings).all? do |f|
+        f.control_objective.process_control_id == process_control.id
+      end
+    )
+    assert_template 'reviews/suggested_process_control_findings'
+  end
+
   test 'download work papers' do
     login
 
