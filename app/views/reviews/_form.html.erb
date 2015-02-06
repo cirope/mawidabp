@@ -90,8 +90,11 @@
       <% @review.grouped_control_objective_items.each do |pc, cois| %>
         <div id="process_control_<%= pc.id %>" class="process_control">
           <h4>
-            <%= pc.name %>
-            <%= link_to_move :class => 'process_control_move' unless readonly %>
+            <%= pc.name %> |
+            <% unless readonly %>
+              <%= link_to_suggested_process_control_findings(pc) %> |
+              <%= link_to_move :class => 'process_control_move' %>
+            <% end %>
           </h4>
           <%= f.simple_fields_for :control_objective_items, cois.sort do |coi_f| %>
             <%= render 'control_objective_item', f: coi_f, readonly: readonly %>
@@ -128,6 +131,7 @@
 
   <hr />
 
+  <div id="suggested_process_control_findings"></div>
   <div id="suggested_findings"></div>
 
   <% finding_relations = @review.finding_review_assignments.reject(&:marked_for_destruction?) %>

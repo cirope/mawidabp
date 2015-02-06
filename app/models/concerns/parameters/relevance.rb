@@ -21,6 +21,6 @@ module Parameters::Relevance
   end
 
   def relevance_label
-    I18n.t "relevance_types.#{RELEVANCE_TYPES.invert[self.relevance]}"
+    I18n.t "relevance_types.#{RELEVANCE_TYPES.invert[relevance]}" if relevance
   end
 end

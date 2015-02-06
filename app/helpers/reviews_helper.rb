@@ -77,4 +77,15 @@ module ReviewsHelper
 
     raw(out + simple_format(review.survey))
   end
+
+  def link_to_suggested_process_control_findings(process_control)
+    options = {
+      title: t('review.suggested_findings_for', process_control: process_control.name),
+      data:  { remote: true }
+    }
+
+    link_to suggested_process_control_findings_review_path(process_control.id), options do
+      content_tag :span, nil, class: 'glyphicon glyphicon-eye-open'
+    end
+  end
 end

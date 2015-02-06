@@ -88,7 +88,7 @@ GEM
     connection_pool (2.1.1)
     dynamic_form (1.1.4)
     erubis (2.7.0)
-    execjs (2.2.2)
+    execjs (2.3.0)
     fast-stemmer (1.0.2)
     ffi (1.9.6)
     figaro (1.1.0)
@@ -187,7 +187,7 @@ GEM
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
     ruby-oci8 (2.1.7)
-    rubyzip (1.1.6)
+    rubyzip (1.1.7)
     safe_yaml (0.9.7)
     sass (3.4.11)
     sass-rails (5.0.1)
@@ -198,7 +198,7 @@ GEM
       tilt (~> 1.1)
     search_cop (1.0.5)
       treetop
-    sidekiq (3.3.1)
+    sidekiq (3.3.2)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
       json

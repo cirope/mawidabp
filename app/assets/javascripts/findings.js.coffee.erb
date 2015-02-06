@@ -15,6 +15,12 @@ jQuery ($) ->
       $.getJSON url, (finding) ->
         $.each fields, (i, field) ->
           $("[name$=\"[#{field}]\"]").val finding[field]
+
+        followUpDate = new Date finding['follow_up_date']
+
+        followUpDate.setMinutes new Date().getTimezoneOffset()
+        $('[name$="[follow_up_date]"]').datepicker()
+        $('[name$="[follow_up_date]"]').datepicker('setDate', followUpDate)
       .always -> repeatedSelect.prop 'disabled', false
     else
       $.each fields, (i, field) -> $("[name$=\"[#{field}]\"]").val ''
