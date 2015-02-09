@@ -205,19 +205,28 @@ class ConclusionReview < ActiveRecord::Base
       process_control_text = "<b>#{ProcessControl.model_name.human}: " +
           "<i>#{process_control.name}</i></b>"
       process_control_text += " (#{process_control.best_practice.name})" if current_organization.kind.eql?('public')
-      pdf.text process_control_text, :justification => :full,
+      pdf.text process_control_text, :align => :justify,
           :inline_format => true
 
+      coi_columns = []
+
       cois.sort.each do |coi|
-        pdf.text " • #{coi}", :left => PDF_FONT_SIZE * 2,
-          :justification => :full
+        coi_columns << ['•', coi.to_s]
+      end
+
+      if coi_columns.present?
+        pdf.indent(PDF_FONT_SIZE) do
+          pdf.table coi_columns, :cell_style => {
+            :align => :justify, :border_width => 0, :padding => [0, 0, 5, 0]
+          }
+        end
       end
     end
 
     unless self.applied_procedures.blank?
       pdf.add_subtitle I18n.t('conclusion_review.applied_procedures'),
         PDF_FONT_SIZE
-      pdf.text self.applied_procedures, :justification => :full
+      pdf.text self.applied_procedures, :align => :justify
     end
 
     pdf.add_subtitle I18n.t('conclusion_review.conclusion'), PDF_FONT_SIZE
@@ -230,13 +239,13 @@ class ConclusionReview < ActiveRecord::Base
 
       pdf.font_size((PDF_FONT_SIZE * 0.6).round) do
         pdf.text "<i>#{I18n.t('review.review_qualification_explanation')}</i>",
-          :justification => :full, :inline_format => true
+          :align => :justify, :inline_format => true
       end
     end
 
     unless self.conclusion.blank?
       pdf.move_down PDF_FONT_SIZE
-      pdf.text self.conclusion, :justification => :full,
+      pdf.text self.conclusion, :align => :justify,
         :font_size => PDF_FONT_SIZE
     end
 
@@ -291,7 +300,7 @@ class ConclusionReview < ActiveRecord::Base
               end
 
               pdf.move_down PDF_FONT_SIZE
-              pdf.text f_data[:text], :justification => :full, :inline_format => true
+              pdf.text f_data[:text], :align => :justify, :inline_format => true
             end
           end
         end
@@ -349,7 +358,7 @@ class ConclusionReview < ActiveRecord::Base
               end
 
               pdf.move_down PDF_FONT_SIZE
-              pdf.text nc_data[:text], :justification => :full, :inline_format => true
+              pdf.text nc_data[:text], :align => :justify, :inline_format => true
             end
           end
         end
@@ -407,7 +416,7 @@ class ConclusionReview < ActiveRecord::Base
               end
 
               pdf.move_down PDF_FONT_SIZE
-              pdf.text w_data[:text], :justification => :full, :inline_format => true
+              pdf.text w_data[:text], :align => :justify, :inline_format => true
             end
           end
         end
@@ -462,7 +471,7 @@ class ConclusionReview < ActiveRecord::Base
               end
 
               pdf.move_down PDF_FONT_SIZE
-              pdf.text pnc_data[:text], :justification => :full, :inline_format => true
+              pdf.text pnc_data[:text], :align => :justify, :inline_format => true
             end
           end
         end
@@ -519,7 +528,7 @@ class ConclusionReview < ActiveRecord::Base
               end
 
               pdf.move_down PDF_FONT_SIZE
-              pdf.text o_data[:text], :justification => :full, :inline_format => true
+              pdf.text o_data[:text], :align => :justify, :inline_format => true
             end
           end
         end
@@ -761,10 +770,10 @@ class ConclusionReview < ActiveRecord::Base
           pdf.move_down PDF_FONT_SIZE
           pdf.text "<b>#{I18n.t(
             'conclusion_review.workflow.control_objective_work_papers')}</b>:",
-              :left => PDF_FONT_SIZE * 4, :inline_format => true
+              :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           coi.work_papers.each do |wp|
-            pdf.text wp.inspect, :left => PDF_FONT_SIZE * 6, :inline_format => true
+            pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 6, :inline_format => true
           end
         end
 
@@ -772,20 +781,20 @@ class ConclusionReview < ActiveRecord::Base
           pdf.move_down PDF_FONT_SIZE
           pdf.text "<b>#{I18n.t(
             'conclusion_review.workflow.control_objective_weaknesses')}</b>:",
-              :left => PDF_FONT_SIZE * 4, :inline_format => true
+              :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_weaknesses : coi.weaknesses).each do |w|
             pdf.text [w.review_code, w.title, w.risk_text, w.state_text].join(' - '),
-              :left => PDF_FONT_SIZE * 6
+              :indent_paragraphs => PDF_FONT_SIZE * 6
 
             unless w.work_papers.blank?
               pdf.move_down PDF_FONT_SIZE
               pdf.text "<b>#{I18n.t(
                 'conclusion_review.workflow.weakness_work_papers')}</b>:",
-                  :left => PDF_FONT_SIZE * 8, :inline_format => true
+                  :indent_paragraphs => PDF_FONT_SIZE * 8, :inline_format => true
 
               w.work_papers.each do |wp|
-                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10
+                pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 10
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -798,20 +807,20 @@ class ConclusionReview < ActiveRecord::Base
             'conclusion_review.workflow.control_objective_oportunities')
 
           pdf.move_down PDF_FONT_SIZE
-          pdf.text "<b>#{title}</b>:", :left => PDF_FONT_SIZE * 4, :inline_format => true
+          pdf.text "<b>#{title}</b>:", :indent_paragraphs => PDF_FONT_SIZE * 4, :inline_format => true
 
           (use_finals ? coi.final_oportunities : coi.oportunities).each do |o|
             pdf.text [o.review_code, o.title, o.state_text].join(' - '),
-              :left => PDF_FONT_SIZE * 6
+              :indent_paragraphs => PDF_FONT_SIZE * 6
 
             unless o.work_papers.blank?
               pdf.move_down PDF_FONT_SIZE
               pdf.text "• <b>#{I18n.t(
                 'conclusion_review.workflow.oportunity_work_papers')}</b>:",
-                  :left => PDF_FONT_SIZE * 8, :inline_format => true
+                  :indent_paragraphs => PDF_FONT_SIZE * 8, :inline_format => true
 
               o.work_papers.each do |wp|
-                pdf.text wp.inspect, :left => PDF_FONT_SIZE * 10, :inline_format => true
+                pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 10, :inline_format => true
               end
 
               pdf.move_down PDF_FONT_SIZE
@@ -865,7 +874,7 @@ class ConclusionReview < ActiveRecord::Base
           :font_size => PDF_FONT_SIZE
 
         w.work_papers.each do |wp|
-          pdf.text wp.inspect, :left => PDF_FONT_SIZE * 2
+          pdf.text wp.inspect, :indent_paragraphs => PDF_FONT_SIZE * 2
         end
       end
 
@@ -949,7 +958,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify
       end
 
       column_data = []
@@ -982,7 +991,7 @@ class ConclusionReview < ActiveRecord::Base
 
         pdf.text "\n#{
           I18n.t('conclusion_review.findings_follow_up.index_clarification')}",
-            :font_size => (PDF_FONT_SIZE * 0.75), :justification => :full
+            :font_size => (PDF_FONT_SIZE * 0.75), :align => :justify
       end
 
       weaknesses.each do |weakness|
@@ -996,7 +1005,7 @@ class ConclusionReview < ActiveRecord::Base
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
         pdf.text [weakness.review_code, weakness.title, weakness.risk_text, weakness.state_text].join(' - '),
-          :font_size => PDF_FONT_SIZE, :justification => :center
+          :font_size => PDF_FONT_SIZE, :align => :center
       end
 
       oportunities.each do |oportunity|
@@ -1010,7 +1019,7 @@ class ConclusionReview < ActiveRecord::Base
         pdf.move_down((PDF_FONT_SIZE * 1.5).round)
 
         pdf.text [oportunity.review_code, oportunity.title, oportunity.state_text].join(' - '),
-          :font_size => PDF_FONT_SIZE, :justification => :center
+          :font_size => PDF_FONT_SIZE, :align => :center
       end
 
       pdf.custom_save_as self.findings_follow_up_name(index),
