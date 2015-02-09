@@ -130,7 +130,7 @@ GEM
       mime-types (>= 1.16, < 3)
     maruku (0.7.2)
     mime-types (2.4.3)
-    mini_magick (4.0.3)
+    mini_magick (4.0.4)
     minitest (5.5.1)
     multi_json (1.10.1)
     net-ldap (0.11)
@@ -197,7 +197,7 @@ GEM
       tilt (~> 1.1)
     search_cop (1.0.5)
       treetop
-    sidekiq (3.3.1)
+    sidekiq (3.3.2)
       celluloid (>= 0.16.0)
       connection_pool (>= 2.1.1)
       json
@@ -285,7 +285,7 @@ DEPENDENCIES
   search_cop
   sidekiq
   simple_form
-  spring
+  spring (~> 1.2.0)
   timecop
   uglifier
   unicorn

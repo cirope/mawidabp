@@ -397,7 +397,7 @@ class ControlObjectiveItem < ActiveRecord::Base
       pdf.move_down PDF_FONT_SIZE * 3
 
       self.work_papers.each do |wp|
-        pdf.text wp.inspect, justification: :center,
+        pdf.text wp.inspect, align: :center,
           font_size: PDF_FONT_SIZE
       end
     else

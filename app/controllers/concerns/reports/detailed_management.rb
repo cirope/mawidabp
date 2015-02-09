@@ -227,11 +227,11 @@ module Reports::DetailedManagement
     pdf.move_down PDF_FONT_SIZE
     if @sqm
       pdf.text t('execution_reports.detailed_management_report.sqm_references'),
-        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
+        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
     else
       pdf.text t('execution_reports.detailed_management_report.references',
         risk_types: @risk_levels.to_sentence),
-        font_size: (PDF_FONT_SIZE * 0.75).round, justification: :full
+        font_size: (PDF_FONT_SIZE * 0.75).round, align: :justify
     end
   end
 

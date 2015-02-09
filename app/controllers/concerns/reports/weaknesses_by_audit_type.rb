@@ -217,7 +217,7 @@ module Reports::WeaknessesByAuditType
                   text << " (#{t("#{@controller}_committee_report.weaknesses_by_audit_type.without_weaknesses")})"
                 end
 
-                pdf.text text, :left => PDF_FONT_SIZE * 2, :inline_format => true
+                pdf.text text, :indent_paragraphs => PDF_FONT_SIZE * 2, :inline_format => true
               end
 
               pdf.move_down PDF_FONT_SIZE
