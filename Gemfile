@@ -36,7 +36,7 @@ gem 'uglifier'
 gem 'unicorn'
 
 group :development do
-  gem 'spring', '~> 1.2.0'
+  gem 'spring'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
