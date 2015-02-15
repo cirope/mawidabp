@@ -285,7 +285,7 @@ module Reports::Pdf
     pdf.move_down PDF_FONT_SIZE
     pdf.text t("#{controller}_committee_report.applied_filters",
       :filters => filters.to_sentence, :count => filters.size),
-      :font_size => (PDF_FONT_SIZE * 0.75).round, :justification => :full,
+      :font_size => (PDF_FONT_SIZE * 0.75).round, :align => :justify,
       :inline_format => true
   end
 
