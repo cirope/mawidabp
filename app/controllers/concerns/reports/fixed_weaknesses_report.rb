@@ -57,7 +57,7 @@ module Reports::FixedWeaknessesReport
         column_data = []
         name = but.name
         conclusion_review_per_unit_type =
-          conclusion_reviews.for_period(period).with_business_unit_type(but.id)
+          conclusion_reviews.for_period(period).by_business_unit_type(but.id)
 
         conclusion_review_per_unit_type.each do |c_r|
           fixed_weaknesses = []

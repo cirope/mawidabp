@@ -10,18 +10,18 @@ module Reports::WeaknessesByRiskReport
     @title = t("#{@controller}_committee_report.weaknesses_by_risk_report_title")
     @from_date, @to_date = *make_date_range(params[:weaknesses_by_risk_report])
     @periods = periods_for_interval
-    @column_order = ['business_unit_report_name', 'score',
-      'weaknesses_by_risk']
+    @column_order = ['business_unit_report_name', 'score', 'weaknesses_by_risk']
     @filters = []
     @notorious_reviews = {}
     conclusion_reviews = ConclusionFinalReview.list_all_by_date(
       @from_date, @to_date
-    ).notorious(true)
+    )
+    weaknesses_conditions = {}
 
     if params[:weaknesses_by_risk_report]
       risk = params[:weaknesses_by_risk_report][:risk]
 
-      unless params[:weaknesses_by_risk_report][:business_unit_type].blank?
+      if params[:weaknesses_by_risk_report][:business_unit_type].present?
         @selected_business_unit = BusinessUnitType.find(
           params[:weaknesses_by_risk_report][:business_unit_type])
         conclusion_reviews = conclusion_reviews.by_business_unit_type(
@@ -30,18 +30,31 @@ module Reports::WeaknessesByRiskReport
           "\"#{@selected_business_unit.name.strip}\""
       end
 
-      unless params[:weaknesses_by_risk_report][:business_unit].blank?
+      if params[:weaknesses_by_risk_report][:business_unit].present?
         business_units =
           params[:weaknesses_by_risk_report][:business_unit].split(
             SPLIT_AND_TERMS_REGEXP
           ).uniq.map(&:strip)
 
-        unless business_units.empty?
+        if business_units.present?
           conclusion_reviews = conclusion_reviews.by_business_unit_names(
             *business_units)
           @filters << "<b>#{BusinessUnit.model_name.human}</b> = " +
             "\"#{params[:weaknesses_by_risk_report][:business_unit].strip}\""
         end
+      end
+
+      if params[:weaknesses_by_risk_report][:finding_status].present?
+        weaknesses_conditions[:state] = params[:weaknesses_by_risk_report][:finding_status]
+        state_text = t "finding.status_#{Finding::STATUS.invert[weaknesses_conditions[:state].to_i]}"
+
+        @filters << "<b>#{Finding.human_attribute_name('state')}</b> = \"#{state_text}\""
+      end
+
+      if params[:weaknesses_by_risk_report][:finding_title].present?
+        weaknesses_conditions[:title] = params[:weaknesses_by_risk_report][:finding_title]
+
+        @filters << "<b>#{Finding.human_attribute_name('title')}</b> = \"#{weaknesses_conditions[:title]}\""
       end
     end
 
@@ -57,13 +70,15 @@ module Reports::WeaknessesByRiskReport
         }
         column_data = []
         name = but.name
-        conclusion_review_per_unit_type =
-          conclusion_reviews.for_period(period).with_business_unit_type(but.id)
+        conclusion_review_per_unit_type = conclusion_reviews.for_period(period).by_business_unit_type(but.id)
+
 
         conclusion_review_per_unit_type.each do |c_r|
           weaknesses_by_risk = []
           weaknesses = final ? c_r.review.final_weaknesses : c_r.review.weaknesses
           report_weaknesses = weaknesses.by_risk(risk).with_pending_status_for_report
+          report_weaknesses = report_weaknesses.where(state: weaknesses_conditions[:state]) if weaknesses_conditions[:state]
+          report_weaknesses = report_weaknesses.with_title(weaknesses_conditions[:title])   if weaknesses_conditions[:title]
 
           report_weaknesses.each do |w|
             audited = w.users.select(&:audited?).map do |u|
@@ -87,7 +102,7 @@ module Reports::WeaknessesByRiskReport
             ].compact.join("\n")
           end
 
-          unless weaknesses_by_risk.blank?
+          if weaknesses_by_risk.present?
             column_data << [
               c_r.review.business_unit.name,
               c_r.review.reload.score_text,
@@ -96,7 +111,7 @@ module Reports::WeaknessesByRiskReport
           end
         end
 
-        unless column_data.blank?
+        if column_data.present?
           @notorious_reviews[period] ||= []
           @notorious_reviews[period] << {
             :name => name,

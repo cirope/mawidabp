@@ -38,15 +38,13 @@ class ConclusionReview < ActiveRecord::Base
   scope :list, -> { where(organization_id: Organization.current_id) }
   scope :for_period, ->(period) {
     includes(:review =>:period).where(
-      "#{Period.table_name}.id" => period.id
+      :periods => { :id => period.id }
     ).references(:periods)
   }
-  scope :by_business_unit_type, ->(business_unit_type) {
-    includes(
-      :review => {:plan_item => {:business_unit => :business_unit_type}}
-    ).where(
-      "#{BusinessUnitType.table_name}.id" => business_unit_type
-    ).references(:bussiness_unit_types)
+  scope :by_business_unit_type, ->(business_unit_type_id) {
+    includes(:review => { :plan_item => :business_unit }).where(
+      :business_units => { :business_unit_type_id => business_unit_type_id }
+    ).references(:business_units)
   }
   scope :by_business_unit_names, ->(*business_unit_names) {
     conditions = []
@@ -80,11 +78,6 @@ class ConclusionReview < ActiveRecord::Base
      ).where(
        "#{Weakness.quoted_table_name}.#{Weakness.qcn('risk')} = #{Weakness.quoted_table_name}.#{Weakness.qcn('highest_risk')}"
     ).references(:findings)
-  }
-  scope :with_business_unit_type, ->(but_id) {
-    includes(:review => :business_unit).where(
-      "#{BusinessUnit.table_name}.business_unit_type_id" => but_id
-    ).references(:business_units)
   }
 
   # Callbacks

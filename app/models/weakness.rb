@@ -20,7 +20,7 @@ class Weakness < Finding
     )
   }
   scope :by_risk, ->(risk) {
-    where("#{quoted_table_name}.#{qcn('risk')} = #{risk}")
+    where("#{quoted_table_name}.#{qcn('risk')} = ?", risk)
   }
 
   # Restricciones
