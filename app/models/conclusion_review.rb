@@ -72,13 +72,6 @@ class ConclusionReview < ActiveRecord::Base
       conditions.join(' OR '), parameters
     ).references(:control_objectives)
   }
-  scope :notorious, ->(final) {
-     includes(:review => {
-         :control_objective_items => (final ? :final_weaknesses : :weaknesses)}
-     ).where(
-       "#{Weakness.quoted_table_name}.#{Weakness.qcn('risk')} = #{Weakness.quoted_table_name}.#{Weakness.qcn('highest_risk')}"
-    ).references(:findings)
-  }
 
   # Callbacks
   before_destroy :can_be_destroyed?
