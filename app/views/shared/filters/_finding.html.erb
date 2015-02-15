@@ -5,8 +5,12 @@
           <% selected = params[action] ? params[action][:finding_status] : nil %>
           <%= f.label :finding_status, Finding.human_attribute_name('state'), class: 'col-md-3' %>
           <div class="col-md-9">
-            <%= f.select :finding_status, finding_status_options,
-              { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
+            <%= f.select(
+              :finding_status,
+              action == :fixed_weaknesses_report ? finding_fixed_status_options : finding_status_options,
+              { include_blank: t('helpers.select.prompt'), selected: selected },
+              class: 'form-control'
+            ) %>
           </div>
        </div>
     </div>
@@ -15,8 +19,7 @@
         <% finding_title = params[action] ? params[action][:finding_title] : nil %>
         <%= f.label :finding_title, Finding.human_attribute_name('title'), class: 'col-md-3' %>
         <div class="col-md-9">
-          <%= f.text_field :finding_title, value: finding_title, maxlength: 255,
-          class: 'form-control' %>
+          <%= f.text_field :finding_title, value: finding_title, maxlength: 255, class: 'form-control' %>
         </div>
       </div>
     </div>

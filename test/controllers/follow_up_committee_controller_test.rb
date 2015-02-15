@@ -189,8 +189,8 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :fixed_weaknesses_report, :fixed_weaknesses_report => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -204,10 +204,12 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
     login
 
     get :fixed_weaknesses_report, :fixed_weaknesses_report => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'three'
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'three',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false
