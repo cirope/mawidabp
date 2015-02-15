@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6">
        <div class="form-group">
-          <% selected = params[action] ? params[action][:finding_status].try(:to_i) : nil %>
+          <% selected = params[action] ? params[action][:finding_status] : nil %>
           <%= f.label :finding_status, Finding.human_attribute_name('state'), class: 'col-md-3' %>
           <div class="col-md-9">
             <%= f.select :finding_status, finding_status_options,

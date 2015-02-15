@@ -163,7 +163,7 @@ module FindingsHelper
 
   def finding_status_options
     Finding::STATUS.except(*Finding::EXCLUDE_FROM_REPORTS_STATUS).map do |k, v|
-      [t("finding.status_#{k}"), v]
+      [t("finding.status_#{k}"), v.to_s]
     end
   end
 end
