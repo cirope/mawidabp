@@ -356,8 +356,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     assert_nothing_raised do
       get :process_control_stats, :process_control_stats => {
-        :from_date => 10.years.ago.to_date,
-        :to_date => 10.years.from_now.to_date
+          :from_date => 10.years.ago.to_date,
+          :to_date => 10.years.from_now.to_date
         },
         :controller_name => 'follow_up',
         :final => false
@@ -372,9 +372,11 @@ class FollowUpAuditControllerTest < ActionController::TestCase
 
     get :process_control_stats, :process_control_stats => {
       :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date,
-      :business_unit_type => business_unit_types(:cycle).id,
-      :business_unit => 'one'
+        :to_date => 10.years.from_now.to_date,
+        :business_unit_type => business_unit_types(:cycle).id,
+        :business_unit => 'one',
+        :finding_status => Finding::STATUS[:being_implemented],
+        :finding_title => 'a'
       },
       :controller_name => 'follow_up',
       :final => false
@@ -387,8 +389,8 @@ class FollowUpAuditControllerTest < ActionController::TestCase
     login
 
     get :create_process_control_stats, :process_control_stats => {
-      :from_date => 10.years.ago.to_date,
-      :to_date => 10.years.from_now.to_date
+        :from_date => 10.years.ago.to_date,
+        :to_date => 10.years.from_now.to_date
       },
       :report_title => 'New title',
       :report_subtitle => 'New subtitle',

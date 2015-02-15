@@ -6,6 +6,6 @@ module MenuHelper
   end
 
   def show_logout?
-    @auth_user && @auth_user.password 
+    @auth_user && @auth_user.password
   end
 end

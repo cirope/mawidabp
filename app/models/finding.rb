@@ -41,6 +41,9 @@ class Finding < ActiveRecord::Base
       "#{quoted_table_name}.#{qcn('review_code')} LIKE ?", "#{prefix}%"
     ).order(review_code: :asc)
   }
+  scope :with_title, ->(title) {
+    where "#{quoted_table_name}.#{qcn('title')} LIKE ?", "%#{title}%"
+  }
   scope :all_for_reallocation_with_review, ->(review) {
     includes(:control_objective_item => :review).references(:reviews).where(
       :reviews => { :id => review.id }, :state => PENDING_STATUS, :final => false

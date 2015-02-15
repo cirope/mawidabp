@@ -132,6 +132,7 @@ module Reports::Pdf
 
     total_weaknesses = weaknesses_count.values.sum
     total_oportunities = oportunities_count.values.sum
+
     if sqm
       total_nonconformities = nonconformities_count.values.sum
       total_potential_nonconformities = potential_nonconformities_count.values.sum

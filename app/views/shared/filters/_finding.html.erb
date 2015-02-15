@@ -1,0 +1,24 @@
+<div id="finding_filter" class="filter" <%= 'style="display: none;"' unless display %>>
+  <div class="row">
+    <div class="col-md-6">
+       <div class="form-group">
+          <% selected = params[action] ? params[action][:finding_status].try(:to_i) : nil %>
+          <%= f.label :finding_status, Finding.human_attribute_name('state'), class: 'col-md-3' %>
+          <div class="col-md-9">
+            <%= f.select :finding_status, finding_status_options,
+              { include_blank: t('helpers.select.prompt'), selected: selected }, class: 'form-control' %>
+          </div>
+       </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <% finding_title = params[action] ? params[action][:finding_title] : nil %>
+        <%= f.label :finding_title, Finding.human_attribute_name('title'), class: 'col-md-3' %>
+        <div class="col-md-9">
+          <%= f.text_field :finding_title, value: finding_title, maxlength: 255,
+          class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
