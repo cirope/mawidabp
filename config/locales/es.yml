@@ -590,8 +590,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
     weaknesses_by_risk_report_title: "Observaciones por riesgo"
     fixed_weaknesses_report_title: "Observaciones por riesgo solucionadas"
     detailed_report: "Reporte detallado"
-    rescheduled_being_implemented_weaknesses_report_title: "Observaciones en proceso reprogramadas"
-    rescheduling : "Reprogramaciones"
     qa_indicators_title: "Indicadores de calidad"
     weakness_summary: "Resumen de observaciones"
     weaknesses_by_risk: "Observaciones por riesgo"
@@ -701,10 +699,6 @@ Centralizados, Riesgos, Sucursales - Centros de Servicios, y Tecnología Inform�
         oportunities_solution_rate: "Solución de Oportunidades de Mejora"
         ancient_medium_risk_weaknesses: "Anticuación de Observaciones de Riesgo Medio"
         ancient_highest_risk_weaknesses: "Anticuación de Observaciones de Riesgo Alto"
-    rescheduled_being_implemented_weaknesses_report:
-      without_data: "Sin datos para el rango de fechas ingresado"
-      title: "INFORME DE OBSERVACIONES EN PROCESO REPROGRAMADAS"
-      pdf_name: "observaciones_reprogramadas_%{from_date}_al_%{to_date}.pdf"
     synthesis_report:
       pdf_name: "informe_de_sintesis_%{from_date}_al_%{to_date}.pdf"
       internal_audit_weaknesses: "Hallazgos Auditoría Interna"

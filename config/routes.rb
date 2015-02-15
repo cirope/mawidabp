@@ -124,8 +124,7 @@ Rails.application.routes.draw do
     'qa_indicators',
     'synthesis_report',
     'control_objective_stats',
-    'process_control_stats',
-    'rescheduled_being_implemented_weaknesses_report'
+    'process_control_stats'
   ].each do |action|
     get "conclusion_committee_reports/#{action}",
       as: "#{action}_conclusion_committee_reports",
@@ -139,8 +138,7 @@ Rails.application.routes.draw do
     'create_qa_indicators',
     'create_synthesis_report',
     'create_control_objective_stats',
-    'create_process_control_stats',
-    'create_rescheduled_being_implemented_weaknesses_report'
+    'create_process_control_stats'
   ].each do |action|
     post "conclusion_committee_reports/#{action}",
       as: "#{action}_conclusion_committee_reports",

@@ -5,7 +5,6 @@ class FollowUpCommitteeController < ApplicationController
   include Reports::FixedWeaknessesReport
   include Reports::SynthesisReport
   include Reports::QAIndicators
-  include Reports::RescheduledBeingImplementedWeaknesses
   include Parameters::Risk
 
   before_action :auth, :load_privileges, :check_privileges
@@ -35,9 +34,7 @@ class FollowUpCommitteeController < ApplicationController
         :control_objective_stats => :read,
         :create_control_objective_stats => :read,
         :process_control_stats => :read,
-        :create_process_control_stats => :read,
-        :rescheduled_being_implemented_weaknesses_report => :read,
-        :create_rescheduled_being_implemented_weaknesses_report => :read
+        :create_process_control_stats => :read
       )
     end
 end

@@ -9,10 +9,9 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
   test 'public and private actions' do
     public_actions = []
     private_actions = [:index, :synthesis_report, :weaknesses_by_risk_report,
-      :fixed_weaknesses_report, :rescheduled_being_implemented_weaknesses_report,
-      :control_objective_stats, :process_control_stats, :create_synthesis_report,
+      :fixed_weaknesses_report, :control_objective_stats,
+      :process_control_stats, :create_synthesis_report,
       :create_weaknesses_by_risk_report, :create_fixed_weaknesses_report,
-      :create_rescheduled_being_implemented_weaknesses_report,
       :create_control_objective_stats, :create_process_control_stats]
 
     private_actions.each do |action|
@@ -235,60 +234,6 @@ class FollowUpCommitteeControllerTest < ActionController::TestCase
         :from_date => 10.years.ago.to_date.to_formatted_s(:db),
         :to_date => 10.years.from_now.to_date.to_formatted_s(:db)),
       'fixed_weaknesses_report', 0)
-  end
-
-  test 'rescheduled being implemented weaknesses report' do
-    login
-
-    get :rescheduled_being_implemented_weaknesses_report
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-
-    assert_nothing_raised do
-      get :rescheduled_being_implemented_weaknesses_report,
-        :rescheduled_being_implemented_weaknesses_report => {
-          :from_date => 10.years.ago.to_date,
-          :to_date => 10.years.from_now.to_date
-          }
-    end
-
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-  end
-
-  test 'filtered rescheduled weaknesses report' do
-    login
-
-    get :rescheduled_being_implemented_weaknesses_report,
-      :rescheduled_being_implemented_weaknesses_report => {
-        :from_date => 2.years.ago.to_date,
-        :to_date => 2.years.from_now.to_date,
-        :rescheduling => 2,
-        :detailed => 1
-      }
-
-    assert_response :success
-    assert_template 'follow_up_committee/rescheduled_being_implemented_weaknesses_report'
-  end
-
-  test 'create rescheduled weaknesses report' do
-    login
-
-    get :create_rescheduled_being_implemented_weaknesses_report,
-    :rescheduled_being_implemented_weaknesses_report => {
-      :from_date => 2.years.ago.to_date,
-      :to_date => 2.years.from_now.to_date,
-      :rescheduling => 1,
-      :detailed => 1
-      },
-      :report_title => 'New title',
-      :report_subtitle => 'New subtitle'
-
-    assert_redirected_to Prawn::Document.relative_path(
-      I18n.t('follow_up_committee_report.rescheduled_being_implemented_weaknesses_report.pdf_name',
-        :from_date => 2.years.ago.to_date.to_formatted_s(:db),
-        :to_date => 2.years.from_now.to_date.to_formatted_s(:db)),
-      'rescheduled_being_implemented_weaknesses_report', 0)
   end
 
   test 'control objective stats report' do
