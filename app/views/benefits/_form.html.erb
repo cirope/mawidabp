@@ -7,7 +7,7 @@
         <%= f.input :name, input_html: { maxlength: 255, autofocus: true } %>
       </div>
       <div class="col-md-6">
-        <%= f.input :kind, collection: benefit_kinds %>
+        <%= f.input :kind, collection: benefit_kinds, prompt: true, disabled: !allow_benefit_kind_edition? %>
       </div>
     </div>
   </div>

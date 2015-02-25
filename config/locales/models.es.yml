@@ -6,6 +6,9 @@ es: &common
 
   activerecord:
     models:
+      achievement:
+        one: 'Beneficio estimado'
+        other: 'Beneficios estimados'
       answer:
         one: 'Respuesta'
         other: 'Respuestas'
@@ -74,6 +77,10 @@ es: &common
         other: 'Clases de recursos'
 
     attributes:
+      achievement:
+        benefit: 'Beneficio estimado'
+        amount: 'Monto'
+        comment: 'Comentario'
       answer:
         answer: 'Respuesta'
         comments: 'Comentarios respuesta'

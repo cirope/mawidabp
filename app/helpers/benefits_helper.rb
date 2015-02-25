@@ -4,4 +4,8 @@ module BenefitsHelper
       [t("benefits.kinds.#{k}"), k]
     end
   end
+
+  def allow_benefit_kind_edition?
+    @benefit.achievements.empty?
+  end
 end

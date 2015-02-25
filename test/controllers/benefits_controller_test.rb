@@ -46,6 +46,8 @@ class BenefitsControllerTest < ActionController::TestCase
   end
 
   test 'should destroy benefit' do
+    @benefit.achievements.clear
+
     assert_difference 'Benefit.count', -1 do
       delete :destroy, id: @benefit
     end

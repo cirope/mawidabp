@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150224180124) do
+ActiveRecord::Schema.define(version: 20150225025253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "achievements", force: true do |t|
+    t.integer  "benefit_id",                          null: false
+    t.decimal  "amount",     precision: 15, scale: 2
+    t.text     "comment"
+    t.integer  "finding_id",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "achievements", ["benefit_id"], name: "index_achievements_on_benefit_id", using: :btree
+  add_index "achievements", ["finding_id"], name: "index_achievements_on_finding_id", using: :btree
 
   create_table "answer_options", force: true do |t|
     t.text     "option"
@@ -763,6 +775,9 @@ ActiveRecord::Schema.define(version: 20150224180124) do
   add_index "workflows", ["review_id"], name: "index_workflows_on_review_id", using: :btree
 
   Foreigner.load
+  add_foreign_key "achievements", "benefits", name: "achievements_benefit_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+  add_foreign_key "achievements", "findings", name: "achievements_finding_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
   add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
 
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict

@@ -20,4 +20,16 @@ class BenefitTest < ActiveSupport::TestCase
     assert @benefit.invalid?
     assert_error @benefit, :kind, :inclusion
   end
+
+  test 'can not be destroyed when achievements' do
+    assert_no_difference 'Benefit.count' do
+      @benefit.destroy
+    end
+
+    @benefit.achievements.clear
+
+    assert_difference 'Benefit.count', -1 do
+      @benefit.destroy
+    end
+  end
 end

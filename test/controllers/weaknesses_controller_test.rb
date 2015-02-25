@@ -116,7 +116,7 @@ class WeaknessesControllerTest < ActionController::TestCase
   end
 
   test 'create weakness' do
-    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count']
+    counts_array = ['Weakness.count', 'WorkPaper.count', 'FindingRelation.count', 'Achievement.count']
 
     login
 
@@ -153,6 +153,12 @@ class WeaknessesControllerTest < ActionController::TestCase
               user_id: users(:administrator_user).id, process_owner: '0'
             }
           ],
+          achievements_attributes: [
+            {
+              benefit_id: benefits(:productivity).id,
+              amount: '2000.01'
+            }
+          ],
           work_papers_attributes: [
             {
               name: 'New workpaper name',
@@ -160,8 +166,7 @@ class WeaknessesControllerTest < ActionController::TestCase
               number_of_pages: '10',
               description: 'New workpaper description',
               file_model_attributes: {
-                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH,
-                  'text/plain')
+                file: Rack::Test::UploadedFile.new(TEST_FILE_FULL_PATH, 'text/plain')
               }
             }
           ],

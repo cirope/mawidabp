@@ -2,6 +2,7 @@ class Finding < ActiveRecord::Base
   include ActsAsTree
   include Auditable
   include Comparable
+  include Findings::Achievements
   include Findings::Answers
   include Findings::Confirmation
   include Findings::CreateValidation
