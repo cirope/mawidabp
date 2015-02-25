@@ -16,6 +16,7 @@ class Organization < ActiveRecord::Base
 
   trimmed_fields :name, :prefix
 
+  has_many :benefits, dependent: :destroy
   has_many :best_practices, dependent: :destroy
   has_many :business_unit_types, -> { order(name: :asc) }, dependent: :destroy
   has_many :error_records, dependent: :destroy

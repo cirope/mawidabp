@@ -1,14 +1,14 @@
 Rails.application.routes.draw do
   get '/touch', to: 'touch#index', as: 'touch'
 
-  get '/users/login', to: redirect('/') # _Backward compatibility_
-
   # Sessions
   get    'login',    to: 'sessions#new',     as: 'login'
   post   'sessions', to: 'sessions#create',  as: 'sessions'
   delete 'logout',   to: 'sessions#destroy', as: 'logout'
 
   resources :settings, only: [:index, :show, :edit, :update]
+
+  resources :benefits
 
   resources :questionnaires do
     resources :polls, only: [:index]

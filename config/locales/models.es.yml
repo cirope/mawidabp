@@ -18,6 +18,9 @@ es: &common
       answer_written:
         one: 'Respuesta escrita'
         other: 'Respuestas escritas'
+      benefit:
+        one: 'Beneficio'
+        other: 'Beneficios'
       best_practice:
         one: 'Buena práctica'
         other: 'Buenas prácticas'
@@ -77,6 +80,9 @@ es: &common
         question: 'Pregunta'
       answers:
         answer_option: 'Opción'
+      benefit:
+        name: 'Nombre'
+        kind: 'Tipo'
       best_practice:
         name: 'Nombre'
         description: 'Descripción'

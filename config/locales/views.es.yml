@@ -25,6 +25,19 @@ es: &common
     agree: 'De acuerdo'
     strongly_agree: 'Muy de acuerdo'
 
+  benefits:
+    index:
+      title: 'Listado de beneficios'
+    kinds:
+      tangible: 'Tangible'
+      intangible: 'Intangible'
+    show:
+      title: 'Detalles del beneficio'
+    new:
+      title: 'Agregar beneficio'
+    edit:
+      title: 'Modificar beneficio'
+
   best_practices:
     index:
       title: 'Listado de buenas prácticas'

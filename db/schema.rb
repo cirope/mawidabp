@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209161808) do
+ActiveRecord::Schema.define(version: 20150224180124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 20150209161808) do
   add_index "answers", ["poll_id"], name: "index_answers_on_poll_id", using: :btree
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
   add_index "answers", ["type", "id"], name: "index_answers_on_type_and_id", using: :btree
+
+  create_table "benefits", force: true do |t|
+    t.string   "name",            null: false
+    t.string   "kind",            null: false
+    t.integer  "organization_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "benefits", ["organization_id"], name: "index_benefits_on_organization_id", using: :btree
 
   create_table "best_practices", force: true do |t|
     t.string   "name"
@@ -753,6 +763,8 @@ ActiveRecord::Schema.define(version: 20150209161808) do
   add_index "workflows", ["review_id"], name: "index_workflows_on_review_id", using: :btree
 
   Foreigner.load
+  add_foreign_key "benefits", "organizations", name: "benefits_organization_id_fk", dependent: :restrict, options: "ON UPDATE RESTRICT DEFERRABLE INITIALLY DEFERRED"
+
   add_foreign_key "best_practices", "organizations", name: "best_practices_organization_id_fk", dependent: :restrict
 
   add_foreign_key "business_unit_types", "organizations", name: "business_unit_types_organization_id_fk", dependent: :restrict
